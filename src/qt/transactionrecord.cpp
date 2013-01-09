@@ -179,7 +179,7 @@ void TransactionRecord::updateStatus(const CWalletTx &wtx)
         if (wtx.nLockTime < LOCKTIME_THRESHOLD)
         {
             status.status = TransactionStatus::OpenUntilBlock;
-            status.open_for = nBestHeight - wtx.nLockTime;
+            status.open_for = wtx.nLockTime - nBestHeight + 1;
         }
         else
         {
