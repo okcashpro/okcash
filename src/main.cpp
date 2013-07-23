@@ -1615,7 +1615,7 @@ bool static Reorganize(CTxDB& txdb, CBlockIndex* pindexNew)
     printf("REORGANIZE: Connect %"PRIszu" blocks; %s..%s\n", vConnect.size(), pfork->GetBlockHash().ToString().substr(0,20).c_str(), pindexNew->GetBlockHash().ToString().substr(0,20).c_str());
 
     // Disconnect shorter branch
-    vector<CTransaction> vResurrect;
+    list<CTransaction> vResurrect;
     BOOST_FOREACH(CBlockIndex* pindex, vDisconnect)
     {
         CBlock block;
@@ -1627,9 +1627,9 @@ bool static Reorganize(CTxDB& txdb, CBlockIndex* pindexNew)
         // Queue memory transactions to resurrect.
         // We only do this for blocks after the last checkpoint (reorganisation before that
         // point should only happen with -reindex/-loadblock, or a misbehaving peer.
-        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+        BOOST_REVERSE_FOREACH(const CTransaction& tx, block.vtx)
             if (!(tx.IsCoinBase() || tx.IsCoinStake()) && pindex->nHeight > Checkpoints::GetTotalBlocksEstimate())
-                vResurrect.push_back(tx);
+                vResurrect.push_front(tx);
     }
 
     // Connect longer branch
