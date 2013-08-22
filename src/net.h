@@ -142,6 +142,8 @@ public:
     bool fInbound;
     int nStartingHeight;
     int nMisbehavior;
+    double dPingTime;
+    double dPingWait;
 };
 
 
@@ -249,6 +251,12 @@ public:
     CCriticalSection cs_inventory;
     std::multimap<int64_t, CInv> mapAskFor;
 
+    // Ping time measurement
+    uint64_t nPingNonceSent;
+    int64_t nPingUsecStart;
+    int64_t nPingUsecTime;
+    bool fPingQueued;
+
     CNode(SOCKET hSocketIn, CAddress addrIn, std::string addrNameIn = "", bool fInboundIn=false) : ssSend(SER_NETWORK, INIT_PROTO_VERSION), setAddrKnown(5000)
     {
         nServices = 0;
@@ -279,6 +287,10 @@ public:
         nMisbehavior = 0;
         hashCheckpointKnown = 0;
         setInventoryKnown.max_size(SendBufferSize() / 1000);
+        nPingNonceSent = 0;
+        nPingUsecStart = 0;
+        nPingUsecTime = 0;
+        fPingQueued = false;
 
         // Be shy and don't send version until we hear
         if (hSocket != INVALID_SOCKET && !fInbound)
