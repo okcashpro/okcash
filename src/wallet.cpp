@@ -34,6 +34,7 @@ struct CompareValueOnly
 
 CPubKey CWallet::GenerateNewKey()
 {
+    AssertLockHeld(cs_wallet); // mapKeyMetadata
     bool fCompressed = CanSupportFeature(FEATURE_COMPRPUBKEY); // default to compressed public keys if we want 0.6.0 wallets
 
     RandAddSeedPerfmon();
@@ -59,6 +60,8 @@ CPubKey CWallet::GenerateNewKey()
 
 bool CWallet::AddKey(const CKey& key)
 {
+    AssertLockHeld(cs_wallet); // mapKeyMetadata
+
     CPubKey pubkey = key.GetPubKey();
 
     if (!CCryptoKeyStore::AddKey(key))
@@ -88,6 +91,7 @@ bool CWallet::AddCryptedKey(const CPubKey &vchPubKey, const vector<unsigned char
 
 bool CWallet::LoadKeyMetadata(const CPubKey &pubkey, const CKeyMetadata &meta)
 {
+    AssertLockHeld(cs_wallet); // mapKeyMetadata
     if (meta.nCreateTime && (!nTimeFirstKey || meta.nCreateTime < nTimeFirstKey))
         nTimeFirstKey = meta.nCreateTime;
 
@@ -191,6 +195,7 @@ void CWallet::SetBestChain(const CBlockLocator& loc)
 
 bool CWallet::SetMinVersion(enum WalletFeature nVersion, CWalletDB* pwalletdbIn, bool fExplicit)
 {
+    AssertLockHeld(cs_wallet); // nWalletVersion
     if (nWalletVersion >= nVersion)
         return true;
 
@@ -217,6 +222,7 @@ bool CWallet::SetMinVersion(enum WalletFeature nVersion, CWalletDB* pwalletdbIn,
 
 bool CWallet::SetMaxVersion(int nVersion)
 {
+    AssertLockHeld(cs_wallet); // nWalletVersion, nWalletMaxVersion
     // cannot downgrade below current version
     if (nWalletVersion > nVersion)
         return false;
@@ -309,6 +315,7 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
 
 int64_t CWallet::IncOrderPosNext(CWalletDB *pwalletdb)
 {
+    AssertLockHeld(cs_wallet); // nOrderPosNext
     int64_t nRet = nOrderPosNext++;
     if (pwalletdb) {
         pwalletdb->WriteOrderPosNext(nOrderPosNext);
@@ -320,6 +327,7 @@ int64_t CWallet::IncOrderPosNext(CWalletDB *pwalletdb)
 
 CWallet::TxItems CWallet::OrderedTxItems(std::list<CAccountingEntry>& acentries, std::string strAccount)
 {
+    AssertLockHeld(cs_wallet); // mapWallet
     CWalletDB walletdb(strWalletFile);
 
     // First: get all CWalletTx and CAccountingEntry into a sorted-by-order multimap.
@@ -1856,6 +1864,7 @@ string CWallet::SendMoneyToDestination(const CTxDestination& address, int64_t nV
 
 DBErrors CWallet::LoadWallet(bool& fFirstRunRet)
 {
+    AssertLockHeld(cs_wallet); // setKeyPool
     if (!fFileBacked)
         return DB_LOAD_OK;
     fFirstRunRet = false;
@@ -1882,6 +1891,7 @@ DBErrors CWallet::LoadWallet(bool& fFirstRunRet)
 
 bool CWallet::SetAddressBookName(const CTxDestination& address, const string& strName)
 {
+    AssertLockHeld(cs_wallet); // mapAddressBook
     std::map<CTxDestination, std::string>::iterator mi = mapAddressBook.find(address);
     mapAddressBook[address] = strName;
     NotifyAddressBookChanged(this, address, strName, ::IsMine(*this, address), (mi == mapAddressBook.end()) ? CT_NEW : CT_UPDATED);
@@ -1892,6 +1902,7 @@ bool CWallet::SetAddressBookName(const CTxDestination& address, const string& st
 
 bool CWallet::DelAddressBookName(const CTxDestination& address)
 {
+    AssertLockHeld(cs_wallet); // mapAddressBook
     mapAddressBook.erase(address);
     NotifyAddressBookChanged(this, address, "", ::IsMine(*this, address), CT_DELETED);
     if (!fFileBacked)
@@ -2154,6 +2165,7 @@ std::map<CTxDestination, int64_t> CWallet::GetAddressBalances()
 
 set< set<CTxDestination> > CWallet::GetAddressGroupings()
 {
+    AssertLockHeld(cs_wallet); // mapWallet
     set< set<CTxDestination> > groupings;
     set<CTxDestination> grouping;
 
@@ -2376,6 +2388,7 @@ void CWallet::UpdatedTransaction(const uint256 &hashTx)
 }
 
 void CWallet::GetKeyBirthTimes(std::map<CKeyID, int64_t> &mapKeyBirth) const {
+    AssertLockHeld(cs_wallet); // mapKeyMetadata
     mapKeyBirth.clear();
 
     // get birth times for keys with metadata
