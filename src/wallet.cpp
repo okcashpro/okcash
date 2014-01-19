@@ -1502,26 +1502,6 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64_t& nMinWeight, ui
 
     vector<const CWalletTx*> vwtxPrev;
 
-/*
- * TODO: performance comparison
-
-    static set<pair<const CWalletTx*,unsigned int> > setCoins;
-    static uint256 hashPrevBlock;
-    static int64_t nValueIn = 0;
-
-    // Cache outputs unless best block changed
-    if (hashPrevBlock != pindexBest->GetBlockHash())
-    {
-        if (!SelectCoinsSimple(nBalance - nReserveBalance, GetAdjustedTime(), nCoinbaseMaturity + 10, setCoins, nValueIn))
-            return false;
-
-        if (setCoins.empty())
-            return false;
-
-        hashPrevBlock == pindexBest->GetBlockHash();
-    }
-*/
-
     set<pair<const CWalletTx*,unsigned int> > setCoins;
     int64_t nValueIn = 0;
 
@@ -1568,6 +1548,7 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64_t& nMinWeight, ui
 
 bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, int64_t nFees, CTransaction& txNew, CKey& key)
 {
+    CBlockIndex* pindexPrev = pindexBest;
     CBigNum bnTargetPerCoinDay;
     bnTargetPerCoinDay.SetCompact(nBits);
 
@@ -1586,26 +1567,6 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         return false;
 
     vector<const CWalletTx*> vwtxPrev;
-
-/*
- * TODO: performance comparison
-
-    static set<pair<const CWalletTx*,unsigned int> > setCoins;
-    static uint256 hashPrevBlock;
-    static int64_t nValueIn = 0;
-
-    // Cache outputs unless best block changed
-    if (hashPrevBlock != pindexBest->GetBlockHash())
-    {
-        if (!SelectCoinsSimple(nBalance - nReserveBalance, txNew.nTime, nCoinbaseMaturity + 10, setCoins, nValueIn))
-            return false;
-
-        if (setCoins.empty())
-            return false;
-
-        hashPrevBlock == pindexBest->GetBlockHash();
-    }
-*/
 
     set<pair<const CWalletTx*,unsigned int> > setCoins;
     int64_t nValueIn = 0;
@@ -1642,7 +1603,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             continue; // only count coins meeting min age requirement
 
         bool fKernelFound = false;
-        for (unsigned int n=0; n<min(nSearchInterval,(int64_t)nMaxStakeSearchInterval) && !fKernelFound && !fShutdown; n++)
+        for (unsigned int n=0; n<min(nSearchInterval,(int64_t)nMaxStakeSearchInterval) && !fKernelFound && !fShutdown && pindexPrev == pindexBest; n++)
         {
             // Search backward in time from the given txNew timestamp 
             // Search nSearchInterval seconds back up to nMaxStakeSearchInterval

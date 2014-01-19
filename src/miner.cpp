@@ -575,7 +575,5 @@ void StakeMiner(CWallet *pwallet)
         }
         else
             MilliSleep(nMinerSleep);
-
-        continue;
     }
 }
