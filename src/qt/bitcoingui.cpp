@@ -44,6 +44,7 @@
 #include <QPushButton>
 #include <QLocale>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QProgressBar>
 #include <QStackedWidget>
 #include <QDateTime>
