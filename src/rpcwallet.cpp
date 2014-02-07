@@ -298,9 +298,6 @@ Value sendtoaddress(const Array& params, bool fHelp)
     // Amount
     int64 nAmount = AmountFromValue(params[1]);
 
-    if (nAmount < MIN_TXOUT_AMOUNT)
-        throw JSONRPCError(-101, "Send amount too small");
-
     // Wallet comments
     CWalletTx wtx;
     if (params.size() > 2 && params[2].type() != null_type && !params[2].get_str().empty())
@@ -606,9 +603,6 @@ Value movecmd(const Array& params, bool fHelp)
     string strTo = AccountFromValue(params[1]);
     int64 nAmount = AmountFromValue(params[2]);
 
-    if (nAmount < MIN_TXOUT_AMOUNT)
-        throw JSONRPCError(-101, "Send amount too small");
-
     if (params.size() > 3)
         // unused parameter, used to be nMinDepth, keep type-checking it though
         (void)params[3].get_int();
@@ -662,9 +656,6 @@ Value sendfrom(const Array& params, bool fHelp)
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NovaCoin address");
     int64 nAmount = AmountFromValue(params[2]);
-
-    if (nAmount < MIN_TXOUT_AMOUNT)
-        throw JSONRPCError(-101, "Send amount too small");
 
     int nMinDepth = 1;
     if (params.size() > 3)
@@ -729,9 +720,6 @@ Value sendmany(const Array& params, bool fHelp)
         CScript scriptPubKey;
         scriptPubKey.SetDestination(address.Get());
         int64 nAmount = AmountFromValue(s.value_);
-
-        if (nAmount < MIN_TXOUT_AMOUNT)
-            throw JSONRPCError(-101, "Send amount too small");
 
         totalAmount += nAmount;
 
