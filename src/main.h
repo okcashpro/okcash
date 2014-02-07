@@ -110,8 +110,8 @@ bool LoadExternalBlockFile(FILE* fileIn);
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake);
-int64 GetProofOfWorkReward();
-int64 GetProofOfStakeReward(int64 nCoinAge);
+int64 GetProofOfWorkReward(int64 nFees);
+int64 GetProofOfStakeReward(int64 nCoinAge, int64 nFees);
 unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
 unsigned int ComputeMinStake(unsigned int nBase, int64 nTime, unsigned int nBlockTime);
 int GetNumBlocksOfPeers();
@@ -1076,7 +1076,7 @@ public:
     bool CheckBlock(bool fCheckPOW=true, bool fCheckMerkleRoot=true, bool fCheckSig=true) const;
     bool AcceptBlock();
     bool GetCoinAge(uint64& nCoinAge) const; // ppcoin: calculate total coin age spent in block
-    bool SignBlock(CWallet& keystore);
+    bool SignBlock(CWallet& keystore, int64 nFees);
     bool CheckBlockSignature(bool fProofOfStake) const;
 
 private:
