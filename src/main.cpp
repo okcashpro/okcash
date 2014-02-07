@@ -40,9 +40,9 @@ CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // "standard" scrypt target limit
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 27); // proof of stake target limit since 20 June 2013, equal to 0.03125  proof of stake difficulty
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 
+unsigned int nTargetSpacing = 1 * 60; // 1 minute
 unsigned int nStakeMinAge = 60 * 60 * 24 * 30; // 30 days as zero time weight
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 90; // 90 days as full weight
-unsigned int nStakeTargetSpacing = 10 * 60; // 10-minute stakes spacing
 unsigned int nModifierInterval = 6 * 60 * 60; // time to elapse before new modifier is computed
 
 int nCoinbaseMaturity = 500;
@@ -955,13 +955,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge)
     return nSubsidy;
 }
 
-static const int64 nTargetTimespan = 7 * 24 * 60 * 60;  // one week
-
-// get proof of work blocks max spacing according to hard-coded conditions
-int64 inline GetTargetSpacingWorkMax(int nHeight, unsigned int nTime)
-{
-    return 3 * nStakeTargetSpacing; // 30 minutes
-}
+static const int64 nTargetTimespan = 16 * 60;  // 16 mins
 
 //
 // maximum nBits value could possible be required nTime after
@@ -1029,7 +1023,6 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     // ppcoin: retarget with exponential moving toward target spacing
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
-    int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(GetTargetSpacingWorkMax(pindexLast->nHeight, pindexLast->nTime), (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
     int64 nInterval = nTargetTimespan / nTargetSpacing;
     bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
     bnNew /= ((nInterval + 1) * nTargetSpacing);
@@ -2470,7 +2463,6 @@ bool LoadBlockIndex(bool fAllowNew)
         nStakeMinAge = 2 * 60 * 60; // test net min age is 2 hours
         nModifierInterval = 20 * 60; // test modifier interval is 20 minutes
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
-        nStakeTargetSpacing = 5 * 60; // test block spacing is 5 minutes
     }
     else
     {

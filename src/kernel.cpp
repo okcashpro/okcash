@@ -10,7 +10,7 @@
 using namespace std;
 
 extern int nStakeMaxAge;
-extern int nStakeTargetSpacing;
+extern unsigned int nTargetSpacing;
 
 typedef std::map<int, unsigned int> MapModifierCheckpoints;
 
@@ -155,7 +155,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64& nStakeModif
 
     // Sort candidate blocks by timestamp
     vector<pair<int64, uint256> > vSortedByTimestamp;
-    vSortedByTimestamp.reserve(64 * nModifierInterval / nStakeTargetSpacing);
+    vSortedByTimestamp.reserve(64 * nModifierInterval / nTargetSpacing);
     int64 nSelectionInterval = GetStakeModifierSelectionInterval();
     int64 nSelectionIntervalStart = (pindexPrev->GetBlockTime() / nModifierInterval) * nModifierInterval - nSelectionInterval;
     const CBlockIndex* pindex = pindexPrev;
