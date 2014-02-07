@@ -68,9 +68,6 @@ Value getpeerinfo(const Array& params, bool fHelp)
 
     return ret;
 }
-
-extern CCriticalSection cs_mapAlerts;
-extern map<uint256, CAlert> mapAlerts;
  
 // ppcoin: send alert.  
 // There is a known deadlock situation with ThreadMessageHandler
