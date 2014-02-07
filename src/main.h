@@ -36,14 +36,6 @@ static const int64 MIN_RELAY_TX_FEE = CENT;
 static const int64 MAX_MONEY = 2000000000 * COIN;
 static const int64 COIN_YEAR_REWARD = 1 * CENT; // 1% per year
 
-static const unsigned int ENTROPY_SWITCH_TIME = 1362791041; // Sat, 09 Mar 2013 01:04:01 GMT
-static const unsigned int STAKE_SWITCH_TIME = 1371686400; // Thu, 20 Jun 2013 00:00:00 GMT
-static const unsigned int TARGETS_SWITCH_TIME = 1374278400; // Sat, 20 Jul 2013 00:00:00 GMT
-static const unsigned int CHAINCHECKS_SWITCH_TIME = 1379635200; // Fri, 20 Sep 2013 00:00:00 GMT
-static const unsigned int STAKECURVE_SWITCH_TIME = 1382227200; // Sun, 20 Oct 2013 00:00:00 GMT
-static const unsigned int OUTPUT_SWITCH_TIME = 1398916800; // Thu, 01 May 2014 04:00:00 GMT
-
-
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
@@ -915,23 +907,11 @@ public:
     // ppcoin: entropy bit for stake modifier if chosen by modifier
     unsigned int GetStakeEntropyBit(unsigned int nTime) const
     {
-        // Protocol switch to support p2pool at novacoin block #9689
-        if (nTime >= ENTROPY_SWITCH_TIME || fTestNet)
-        {
-            // Take last bit of block hash as entropy bit
-            unsigned int nEntropyBit = ((GetHash().Get64()) & 1llu);
-            if (fDebug && GetBoolArg("-printstakemodifier"))
-                printf("GetStakeEntropyBit: nTime=%u hashBlock=%s nEntropyBit=%u\n", nTime, GetHash().ToString().c_str(), nEntropyBit);
-            return nEntropyBit;
-        }
-        // Before novacoin block #9689 - old protocol
-        uint160 hashSig = Hash160(vchBlockSig);
+        // Take last bit of block hash as entropy bit
+        unsigned int nEntropyBit = ((GetHash().Get64()) & 1llu);
         if (fDebug && GetBoolArg("-printstakemodifier"))
-            printf("GetStakeEntropyBit: hashSig=%s", hashSig.ToString().c_str());
-        hashSig >>= 159; // take the first bit of the hash
-        if (fDebug && GetBoolArg("-printstakemodifier"))
-            printf(" entropybit=%"PRI64d"\n", hashSig.Get64());
-        return hashSig.Get64();
+            printf("GetStakeEntropyBit: nTime=%u hashBlock=%s nEntropyBit=%u\n", nTime, GetHash().ToString().c_str(), nEntropyBit);
+        return nEntropyBit;
     }
 
     // ppcoin: two types of block: proof-of-work or proof-of-stake

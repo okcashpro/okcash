@@ -37,11 +37,7 @@ set<pair<COutPoint, unsigned int> > setStakeSeen;
 libzerocoin::Params* ZCParams;
 
 CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // "standard" scrypt target limit for proof of work, results with 0,000244140625 proof-of-work difficulty
-CBigNum bnProofOfStakeLegacyLimit(~uint256(0) >> 24); // proof of stake target limit from block #15000 and until 20 June 2013, results with 0,00390625 proof of stake difficulty
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 27); // proof of stake target limit since 20 June 2013, equal to 0.03125  proof of stake difficulty
-CBigNum bnProofOfStakeHardLimit(~uint256(0) >> 30); // disabled temporarily, will be used in the future to fix minimal proof of stake difficulty at 0.25
-uint256 nPoWBase = uint256("0x00000000ffff0000000000000000000000000000000000000000000000000000"); // difficulty-1 target
-
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 
 unsigned int nStakeMinAge = 60 * 60 * 24 * 30; // 30 days as zero time weight
@@ -937,21 +933,6 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     return pblockOrphan->hashPrevBlock;
 }
 
-// select stake target limit according to hard-coded conditions
-CBigNum inline GetProofOfStakeLimit(int nHeight, unsigned int nTime)
-{
-    if(fTestNet) // separate proof of stake target limit for testnet
-        return bnProofOfStakeLimit;
-    if(nTime > TARGETS_SWITCH_TIME) // 27 bits since 20 July 2013
-        return bnProofOfStakeLimit;
-    if(nHeight + 1 > 15000) // 24 bits since block 15000
-        return bnProofOfStakeLegacyLimit;
-    if(nHeight + 1 > 14060) // 31 bits since block 14060 until 15000
-        return bnProofOfStakeHardLimit;
-
-    return bnProofOfWorkLimit; // return bnProofOfWorkLimit of none matched
-}
-
 // miner's coin base reward
 int64 GetProofOfWorkReward()
 {
@@ -979,13 +960,7 @@ static const int64 nTargetTimespan = 7 * 24 * 60 * 60;  // one week
 // get proof of work blocks max spacing according to hard-coded conditions
 int64 inline GetTargetSpacingWorkMax(int nHeight, unsigned int nTime)
 {
-    if(nTime > TARGETS_SWITCH_TIME)
-        return 3 * nStakeTargetSpacing; // 30 minutes on mainNet since 20 Jul 2013 00:00:00
-
-    if(fTestNet)
-        return 3 * nStakeTargetSpacing; // 15 minutes on testNet
-
-    return 12 * nStakeTargetSpacing; // 2 hours otherwise
+    return 3 * nStakeTargetSpacing; // 30 minutes
 }
 
 //
@@ -1022,7 +997,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 //
 unsigned int ComputeMinStake(unsigned int nBase, int64 nTime, unsigned int nBlockTime)
 {
-    return ComputeMaxBits(GetProofOfStakeLimit(0, nBlockTime), nBase, nTime);
+    return ComputeMaxBits(bnProofOfStakeLimit, nBase, nTime);
 }
 
 
@@ -1036,7 +1011,7 @@ const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfSta
 
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
-    CBigNum bnTargetLimit = !fProofOfStake ? bnProofOfWorkLimit : GetProofOfStakeLimit(pindexLast->nHeight, pindexLast->nTime);
+    CBigNum bnTargetLimit = fProofOfStake ? bnProofOfStakeLimit : bnProofOfWorkLimit;
 
     if (pindexLast == NULL)
         return bnTargetLimit.GetCompact(); // genesis block
@@ -1397,8 +1372,8 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs, map<uint256, CTx
             if (nTxFee < 0)
                 return DoS(100, error("ConnectInputs() : %s nTxFee < 0", GetHash().ToString().substr(0,10).c_str()));
 
-            // enforce transaction fees for every block until 1 May 2014 04:00:00 GMT
-            if (!fTestNet && nTxFee < GetMinFee() && nTime < OUTPUT_SWITCH_TIME)
+            // enforce transaction fees for every block
+            if (nTxFee < GetMinFee())
                 return fBlock? DoS(100, error("ConnectInputs() : %s not paying required fee=%s, paid=%s", GetHash().ToString().substr(0,10).c_str(), FormatMoney(GetMinFee()).c_str(), FormatMoney(nTxFee).c_str())) : false;
 
             nFees += nTxFee;
@@ -2055,21 +2030,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
             return DoS(50, error("CheckBlock() : coinbase reward exceeded (actual=%"PRI64d" vs calculated=%"PRI64d")",
                    vtx[0].GetValueOut(),
                    nReward));
-
-        // Should we check proof-of-work block signature or not?
-        //
-        // * Always skip on TestNet
-        // * Perform checking for the first 9689 blocks
-        // * Perform checking since last checkpoint until 20 Sep 2013 (will be removed after)
-
-        if(!fTestNet && fCheckSig)
-        {
-            bool checkEntropySig = (GetBlockTime() < ENTROPY_SWITCH_TIME);
-
-            // NovaCoin: check proof-of-work block signature
-            if (checkEntropySig && !CheckBlockSignature(false))
-                return DoS(100, error("CheckBlock() : bad proof-of-work block signature"));
-        }
     }
 
     // Check transactions
