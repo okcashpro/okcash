@@ -13,7 +13,7 @@
 
 namespace Checkpoints
 {
-    typedef std::map<int, std::pair<uint256, unsigned int> > MapCheckpoints;
+    typedef std::map<int, uint256> MapCheckpoints;
 
     //
     // What makes a good checkpoint block?
@@ -24,18 +24,18 @@ namespace Checkpoints
     //
     static MapCheckpoints mapCheckpoints =
         boost::assign::map_list_of
-        ( 0,     std::make_pair(hashGenesisBlock, 1360105017) )
-        ( 9690,  std::make_pair(uint256("0x00000000026561450859c46868099e0df6068a538f038cb18988fd8d47dcdaf5"), 1362791423) )
-        ( 13560, std::make_pair(uint256("0xa1591a0fcbf11f282d671581edb9f0aadcd06fee69761081e0a3245914c13729"), 1364674052) )
-        ( 37092, std::make_pair(uint256("0x0000000000a38c2f98556f46793b453e92d8fab2d31c0b93fd08bcf78e56099d"), 1376677203) )
-        ( 44200, std::make_pair(uint256("0xc9bda7232a18b9c1f5ff974a9e5566b2d1879ceb8fc0e9e61fba9038a25b8447"), 1380145962) )
-        ( 65000, std::make_pair(uint256("0xfb2b51a2fd65062c98a7a6053cde46aeaefebb95ba2f680e85a29ee25b1dcf05"), 1388526385) )
+        ( 0,     hashGenesisBlock )
+        ( 9690,  uint256("0x00000000026561450859c46868099e0df6068a538f038cb18988fd8d47dcdaf5") )
+        ( 13560, uint256("0xa1591a0fcbf11f282d671581edb9f0aadcd06fee69761081e0a3245914c13729") )
+        ( 37092, uint256("0x0000000000a38c2f98556f46793b453e92d8fab2d31c0b93fd08bcf78e56099d") )
+        ( 44200, uint256("0xc9bda7232a18b9c1f5ff974a9e5566b2d1879ceb8fc0e9e61fba9038a25b8447") )
+        ( 65000, uint256("0xfb2b51a2fd65062c98a7a6053cde46aeaefebb95ba2f680e85a29ee25b1dcf05") )
     ;
 
     // TestNet has no checkpoints
     static MapCheckpoints mapCheckpointsTestnet =
         boost::assign::map_list_of
-        ( 0, std::make_pair(hashGenesisBlockTestNet, 1360105017) )
+        ( 0, hashGenesisBlockTestNet )
         ;
 
     bool CheckHardened(int nHeight, const uint256& hash)
@@ -44,7 +44,7 @@ namespace Checkpoints
 
         MapCheckpoints::const_iterator i = checkpoints.find(nHeight);
         if (i == checkpoints.end()) return true;
-        return hash == i->second.first;
+        return hash == i->second;
     }
 
     int GetTotalBlocksEstimate()
@@ -54,20 +54,13 @@ namespace Checkpoints
         return checkpoints.rbegin()->first;
     }
 
-    int GetLastCheckpointTime()
-    {
-        MapCheckpoints& checkpoints = (fTestNet ? mapCheckpointsTestnet : mapCheckpoints);
-
-        return checkpoints.rbegin()->second.second;
-    }
-
     CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex)
     {
         MapCheckpoints& checkpoints = (fTestNet ? mapCheckpointsTestnet : mapCheckpoints);
 
         BOOST_REVERSE_FOREACH(const MapCheckpoints::value_type& i, checkpoints)
         {
-            const uint256& hash = i.second.first;
+            const uint256& hash = i.second;
             std::map<uint256, CBlockIndex*>::const_iterator t = mapBlockIndex.find(hash);
             if (t != mapBlockIndex.end())
                 return t->second;
@@ -251,7 +244,7 @@ namespace Checkpoints
     bool ResetSyncCheckpoint()
     {
         LOCK(cs_hashSyncCheckpoint);
-        const uint256& hash = mapCheckpoints.rbegin()->second.first;
+        const uint256& hash = mapCheckpoints.rbegin()->second;
         if (mapBlockIndex.count(hash) && !mapBlockIndex[hash]->IsInMainChain())
         {
             // checkpoint block accepted but not yet in main chain
@@ -275,7 +268,7 @@ namespace Checkpoints
 
         BOOST_REVERSE_FOREACH(const MapCheckpoints::value_type& i, mapCheckpoints)
         {
-            const uint256& hash = i.second.first;
+            const uint256& hash = i.second;
             if (mapBlockIndex.count(hash) && mapBlockIndex[hash]->IsInMainChain())
             {
                 if (!WriteSyncCheckpoint(hash))
