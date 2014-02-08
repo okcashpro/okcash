@@ -31,8 +31,8 @@
 typedef long long  int64;
 typedef unsigned long long  uint64;
 
-static const int64 COIN = 1000000;
-static const int64 CENT = 10000;
+static const int64 COIN = 100000000;
+static const int64 CENT = 1000000;
 
 #define BEGIN(a)            ((char*)&(a))
 #define END(a)              ((char*)&((&(a))[1]))
