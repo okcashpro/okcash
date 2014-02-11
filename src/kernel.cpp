@@ -9,7 +9,7 @@
 
 using namespace std;
 
-extern int nStakeMaxAge;
+extern unsigned int nStakeMaxAge;
 extern unsigned int nTargetSpacing;
 
 typedef std::map<int, unsigned int> MapModifierCheckpoints;
@@ -29,11 +29,9 @@ static std::map<int, unsigned int> mapStakeModifierCheckpointsTestNet =
 // Get time weight
 int64 GetWeight(int64 nIntervalBeginning, int64 nIntervalEnd)
 {
-    // Kernel hash weight starts from 0 at the 30-day min age
+    // Kernel hash weight starts from 0 at the min age
     // this change increases active coins participating the hash and helps
     // to secure the network when proof-of-stake difficulty is low
-    //
-    // Maximum TimeWeight is 90 days.
 
     return min(nIntervalEnd - nIntervalBeginning - nStakeMinAge, (int64)nStakeMaxAge);
 }
