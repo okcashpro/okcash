@@ -7,7 +7,7 @@ cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP
 software written by Thomas Bernard.
 
 
-See readme-qt.rst for instructions on building Bitcoin QT, the
+See readme-qt.rst for instructions on building BlackCoin QT, the
 graphical user interface.
 
 WINDOWS BUILD NOTES
@@ -76,9 +76,9 @@ make -f Makefile.mingw
 mkdir miniupnpc
 cp *.h miniupnpc/
 
-Bitcoin
+BlackCoin
 -------
 DOS prompt:
-cd \bitcoin\src
+cd \blackcoin\src
 mingw32-make -f makefile.mingw
-strip bitcoind.exe
+strip blackcoind.exe
