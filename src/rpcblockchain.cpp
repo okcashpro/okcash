@@ -89,7 +89,7 @@ double GetPoSKernelPS()
         pindex = pindex->pprev;
     }
 
-    return dStakeKernelsTriedAvg / nStakesTime;
+    return nStakesTime ? dStakeKernelsTriedAvg / nStakesTime : 0;
 }
 
 Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool fPrintTransactionDetail)
