@@ -537,7 +537,8 @@ void StakeMiner(CWallet *pwallet)
                 return;
         }
 
-        while (vNodes.empty() || IsInitialBlockDownload())
+        while (vNodes.empty() || IsInitialBlockDownload()
+                || pindexBest->nHeight < MODIFIER_INTERVAL_SWITCH)
         {
             Sleep(1000);
             if (fShutdown)
