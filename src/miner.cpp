@@ -537,6 +537,8 @@ void StakeMiner(CWallet *pwallet)
                 return;
         }
 
+        strMintWarning = "";
+
         while (vNodes.empty() || IsInitialBlockDownload()
                 || pindexBest->nHeight < MODIFIER_INTERVAL_SWITCH)
         {
@@ -544,8 +546,6 @@ void StakeMiner(CWallet *pwallet)
             if (fShutdown)
                 return;
         }
-
-        strMintWarning = "";
 
         //
         // Create new block
