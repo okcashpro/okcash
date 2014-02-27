@@ -15,7 +15,6 @@ using namespace std;
 // BitcoinMiner
 //
 
-string strMintMessage = "Stake miner suspended due to locked wallet.";
 string strMintWarning;
 
 extern unsigned int nMinerSleep;
@@ -531,13 +530,10 @@ void StakeMiner(CWallet *pwallet)
 
         while (pwallet->IsLocked())
         {
-            strMintWarning = strMintMessage;
             Sleep(1000);
             if (fShutdown)
                 return;
         }
-
-        strMintWarning = "";
 
         while (vNodes.empty() || IsInitialBlockDownload()
                 || pindexBest->nHeight < MODIFIER_INTERVAL_SWITCH)

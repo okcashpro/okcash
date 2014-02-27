@@ -2705,7 +2705,6 @@ bool LoadExternalBlockFile(FILE* fileIn)
 extern map<uint256, CAlert> mapAlerts;
 extern CCriticalSection cs_mapAlerts;
 
-extern string strMintMessage;
 extern string strMintWarning;
 
 string GetWarnings(string strFor)
