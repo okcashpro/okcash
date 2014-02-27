@@ -15,8 +15,6 @@ using namespace std;
 // BitcoinMiner
 //
 
-string strMintWarning;
-
 extern unsigned int nMinerSleep;
 
 int static FormatHashBlocks(void* pbuffer, unsigned int len)
@@ -557,7 +555,6 @@ void StakeMiner(CWallet *pwallet)
         // Trying to sign a block
         if (pblock->SignBlock(*pwallet, nFees))
         {
-            strMintWarning = _("Stake generation: new block found!");
             SetThreadPriority(THREAD_PRIORITY_NORMAL);
             CheckStake(pblock.get(), *pwallet);
             SetThreadPriority(THREAD_PRIORITY_LOWEST);
