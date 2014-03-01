@@ -5,13 +5,12 @@
 #else
 #define UNUSED
 #endif
-static const char UNUSED *bitcoin_strings[] = {QT_TRANSLATE_NOOP("bitcoin-core", "Stake generation: new block found!"),
-QT_TRANSLATE_NOOP("bitcoin-core", "To use the %s option"),
+static const char UNUSED *bitcoin_strings[] = {QT_TRANSLATE_NOOP("bitcoin-core", "To use the %s option"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
 "%s, you must set a rpcpassword in the configuration file:\n"
 " %s\n"
 "It is recommended you use the following random password:\n"
-"rpcuser=bitcoinrpc\n"
+"rpcuser=blackcoinrpc\n"
 "rpcpassword=%s\n"
 "(you do not need to remember this password)\n"
 "If the file does not exist, create it with owner-readable-only file "
@@ -58,6 +57,7 @@ QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using internet relay chat (default
 QT_TRANSLATE_NOOP("bitcoin-core", "Accept connections from outside (default: 1 if no -proxy or -connect)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Bind to given address. Use [host]:port notation for IPv6"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using DNS lookup (default: 1)"),
+QT_TRANSLATE_NOOP("bitcoin-core", "Stake your coins to support network and gain reward (default: 1)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Sync checkpoints policy (default: permissive)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Threshold for disconnecting misbehaving peers (default: 100)"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""

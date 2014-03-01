@@ -21,7 +21,7 @@ Copyright © 2012-2014 The NovaCoin developers</source>
 Все права защищены © 2012-2014 Разработчики NovaCoin</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+14"/>
         <source>
 This is experimental software.
 
@@ -142,7 +142,7 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>AddressTableModel</name>
     <message>
-        <location filename="../addresstablemodel.cpp" line="+142"/>
+        <location filename="../addresstablemodel.cpp" line="+144"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
@@ -301,7 +301,7 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+258"/>
+        <location filename="../bitcoingui.cpp" line="+275"/>
         <source>Sign &amp;message...</source>
         <translation>&amp;Подписать сообщение</translation>
     </message>
@@ -465,7 +465,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Проверить сообщение...</translation>
     </message>
     <message>
-        <location line="-186"/>
+        <location line="-197"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -475,7 +475,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Бумажник</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="+179"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;О BlackCoin</translation>
     </message>
@@ -535,8 +535,40 @@ This product includes software developed by the OpenSSL Project for use in the O
         <source>Downloaded %1 blocks of transaction history.</source>
         <translation>Загружено %1 блоков истории транзакций.</translation>
     </message>
+    <message>
+        <source>Staking.
+ Your weight is %1
+ Network weight is %2
+Estimate time to earn reward is %3</source>
+        <translation type="obsolete">Участвуем в доле.\n Ваш вес %1\n Вес сети %2\n Ожидаемое время награды %3</translation>
+    </message>
+    <message>
+        <location line="+402"/>
+        <source>Not staking because wallet is locked</source>
+        <translation>Не участвуем в доле, так как кошелёк заблокирован</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because wallet is offline</source>
+        <translation>Не участвуем в доле, так как кошелёк оффлайн</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because wallet is syncing</source>
+        <translation>Не участвуем в доле, так как кошелёк синхронизируется</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because waiting for hardfork</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because you don&apos;t have mature coins</source>
+        <translation>Не участвуем в доле, так как нет зрелых монет</translation>
+    </message>
     <message numerus="yes">
-        <location line="+22"/>
+        <location line="-388"/>
         <source>%n second(s) ago</source>
         <translation>
             <numerusform>%n секунду назад</numerusform>
@@ -661,6 +693,54 @@ Address: %4
         <source>There was an error trying to save the wallet data to the new location.</source>
         <translation>При попытке сохранения данных бумажника в новое место произошла ошибка.</translation>
     </message>
+    <message numerus="yes">
+        <location line="+65"/>
+        <source>%n second(s)</source>
+        <translation>
+            <numerusform>%n секунда</numerusform>
+            <numerusform>%n секунды</numerusform>
+            <numerusform>%n секунд</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n minute(s)</source>
+        <translation>
+            <numerusform>%n минута</numerusform>
+            <numerusform>%n минуты</numerusform>
+            <numerusform>%n минут</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n hour(s)</source>
+        <translation>
+            <numerusform>%n час</numerusform>
+            <numerusform>%n часа</numerusform>
+            <numerusform>%n часов</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n day(s)</source>
+        <translation>
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дня</numerusform>
+            <numerusform>%n дней</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
+        <translation>Участвуем в доле.&lt;br&gt;Ваш вес %1&lt;br&gt;Вес сети %2&lt;br&gt;Ожидаемое время получения награды %3</translation>
+    </message>
+    <message>
+        <source>Staking.
+ Your weight is %1
+ Network weight is %2
+Expected time to earn reward is %3</source>
+        <translation type="obsolete">Участвуем в доле.\n Ваш вес %1\n Вес сети %2\n Ожидаемое время награды %3</translation>
+    </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
@@ -685,7 +765,7 @@ Address: %4
     <message>
         <location line="+3"/>
         <source>Copy transaction ID</source>
-        <translation type="unfinished">Скопировать ID транзакции</translation>
+        <translation>Скопировать ID транзакции</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -710,37 +790,37 @@ Address: %4
     <message>
         <location line="+319"/>
         <source>highest</source>
-        <translation type="unfinished"></translation>
+        <translation>наивысший</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>high</source>
-        <translation type="unfinished"></translation>
+        <translation>высокий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>medium-high</source>
-        <translation type="unfinished"></translation>
+        <translation>выше среднего</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>medium</source>
-        <translation type="unfinished"></translation>
+        <translation>средний</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>low-medium</source>
-        <translation type="unfinished"></translation>
+        <translation>ниже среднего</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>low</source>
-        <translation type="unfinished"></translation>
+        <translation>низкий</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>lowest</source>
-        <translation type="unfinished"></translation>
+        <translation>наименьший</translation>
     </message>
     <message>
         <location line="+155"/>
@@ -992,17 +1072,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Изменение адреса для отправки</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+76"/>
         <source>The entered address &quot;%1&quot; is already in the address book.</source>
         <translation>Введённый адрес «%1» уже находится в адресной книге.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-5"/>
         <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
         <translation>Введённый адрес &quot;%1&quot; не является правильным BlackCoin-адресом.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Could not unlock wallet.</source>
         <translation>Не удается разблокировать бумажник.</translation>
     </message>
@@ -1627,7 +1707,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>medium</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">средний</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -2558,7 +2638,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 <context>
     <name>bitcoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+30"/>
+        <location filename="../bitcoinstrings.cpp" line="+29"/>
         <source>BlackCoin version</source>
         <translation>Версия</translation>
     </message>
@@ -2570,7 +2650,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Send command to -server or blackcoind</source>
-        <translation type="unfinished">Отправить команду на -server или blackcoind</translation>
+        <translation>Отправить команду на -server или blackcoind</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2601,7 +2681,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+2"/>
         <source>Specify wallet file (within data directory)</source>
-        <translation type="unfinished">Указать файл кошелька (в пределах DATA директории)</translation>
+        <translation>Указать файл кошелька (в пределах DATA директории)</translation>
     </message>
     <message>
         <location line="-1"/>
@@ -2609,7 +2689,19 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Укажите каталог данных</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-30"/>
+        <source>%s, you must set a rpcpassword in the configuration file:
+ %s
+It is recommended you use the following random password:
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(you do not need to remember this password)
+If the file does not exist, create it with owner-readable-only file permissions.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+32"/>
         <source>Set database cache size in megabytes (default: 25)</source>
         <translation>Установить размер кэша базы данных в мегабайтах (по умолчанию: 25)</translation>
     </message>
@@ -2644,7 +2736,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Привязаться (bind) к указанному адресу. Используйте запись вида [хост]:порт для IPv6</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
+        <source>Stake your coins to support network and gain reward (default: 1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
         <translation>Порог для отключения неправильно ведущих себя узлов (по умолчанию: 100)</translation>
     </message>
@@ -2654,7 +2751,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Число секунд блокирования неправильно ведущих себя узлов (по умолчанию: 86400)</translation>
     </message>
     <message>
-        <location line="-40"/>
+        <location line="-41"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv4: %s</source>
         <translation>Произошла ошибка при открытии RPC-порта %u для прослушивания на IPv4: %s</translation>
     </message>
@@ -2664,7 +2761,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Произошла ошибка при открытии на прослушивание IPv6 RCP-порта %u, возвращаемся к IPv4: %s</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+51"/>
         <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
         <translation>Отключить базы данных блоков и адресов. Увеличивает время завершения работы (по умолчанию: 0)</translation>
     </message>
@@ -2728,12 +2825,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Использовать тестовую сеть</translation>
     </message>
     <message>
-        <location line="-20"/>
+        <location line="-21"/>
         <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
         <translation>Принимать подключения извне (по умолчанию: 1, если не используется -proxy или -connect)</translation>
     </message>
     <message>
-        <location line="+119"/>
+        <location line="+120"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>Ошибка: В транзакции отказано.  Такое может произойти, если некоторые монеты уже были потрачены, например, если Вы используете одну копию файла wallet.dat, а монеты были потрачены из другой копии, но не были отмечены как потраченные в этой.</translation>
     </message>
@@ -2767,7 +2864,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Параметры создания блоков:</translation>
     </message>
     <message>
-        <location line="-55"/>
+        <location line="-56"/>
         <source>Connect only to the specified node(s)</source>
         <translation>Подключаться только к указанному узлу(ам)</translation>
     </message>
@@ -2777,7 +2874,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Определить свой IP (по умолчанию: 1 при прослушивании и если не используется -externalip)</translation>
     </message>
     <message>
-        <location line="+119"/>
+        <location line="+120"/>
         <source>Error: Transaction creation failed  </source>
         <translation>Ошибка: Создание транзакции не удалось  </translation>
     </message>
@@ -2792,16 +2889,16 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Не удалось начать прослушивание на порту. Используйте -listen=0 если вас это устраивает.</translation>
     </message>
     <message>
-        <location line="-83"/>
+        <location line="-84"/>
         <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished">Искать узлы с помощью DNS (по умолчанию: 1)</translation>
+        <translation>Искать узлы с помощью DNS (по умолчанию: 1)</translation>
     </message>
     <message>
         <source>Sync checkpoints policy (default: strict)</source>
         <translation type="obsolete">Политика синхронизированных меток (по умолчанию: strict)</translation>
     </message>
     <message>
-        <location line="+81"/>
+        <location line="+82"/>
         <source>Invalid -tor address: &apos;%s&apos;</source>
         <translation>Неверный адрес -tor: &apos;%s&apos;</translation>
     </message>
@@ -2821,12 +2918,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Максимальный размер буфера отправки на соединение, &lt;n&gt;*1000 байт (по умолчанию: 1000)</translation>
     </message>
     <message>
-        <location line="-12"/>
+        <location line="-13"/>
         <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
         <translation>Подключаться только к узлам из сети &lt;net&gt; (IPv4, IPv6 или Tor)</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Output extra debugging information. Implies all other -debug* options</source>
         <translation>Выводить больше отладочной информации. Включает все остальные опции -debug*</translation>
     </message>
@@ -2847,12 +2944,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 Параметры SSL: (см. Bitcoin Wiki для инструкций по настройке SSL)</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-68"/>
         <source>Select the version of socks proxy to use (4-5, default: 5)</source>
         <translation>Выберите версию SOCKS-прокси (4-5, по умолчанию: 5)</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+38"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
         <translation>Выводить информацию трассировки/отладки на консоль вместо файла debug.log</translation>
     </message>
@@ -2877,12 +2974,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Сжимать файл debug.log при запуске клиента (по умолчанию: 1, если нет -debug)</translation>
     </message>
     <message>
-        <location line="-38"/>
+        <location line="-39"/>
         <source>Specify connection timeout in milliseconds (default: 5000)</source>
         <translation>Таймаут соединения в миллисекундах (по умолчанию: 5000)</translation>
     </message>
     <message>
-        <location line="+102"/>
+        <location line="+103"/>
         <source>Unable to sign checkpoint, wrong checkpointkey?
 </source>
         <translation type="unfinished"></translation>
@@ -2898,12 +2995,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Использовать UPnP для проброса порта (по умолчанию: 1, если используется прослушивание)</translation>
     </message>
     <message>
-        <location line="-21"/>
+        <location line="-22"/>
         <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
         <translation>Использовать прокси для скрытых сервисов (по умолчанию: тот же, что и в -proxy)</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+39"/>
         <source>Username for JSON-RPC connections</source>
         <translation>Имя для подключений JSON-RPC</translation>
     </message>
@@ -2938,12 +3035,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Пароль для подключений JSON-RPC</translation>
     </message>
     <message>
-        <location line="-78"/>
-        <source>Stake generation: new block found!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+53"/>
+        <location line="-25"/>
         <source>Sync checkpoints policy (default: permissive)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2970,7 +3062,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
-        <translation type="unfinished">Выполнить команду, когда получена новая транзакция (%s в команде заменяется на ID транзакции)</translation>
+        <translation>Выполнить команду, когда получена новая транзакция (%s в команде заменяется на ID транзакции)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3038,14 +3130,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-152"/>
+        <location line="-153"/>
         <source>This help message</source>
         <translation>Эта справка</translation>
     </message>
     <message>
-        <location line="+88"/>
+        <location line="+89"/>
         <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished">Кошелек %s находится вне рабочей директории %s.</translation>
+        <translation>Кошелек %s находится вне рабочей директории %s.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3053,17 +3145,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Невозможно установить блокировку на рабочую директорию %s.  Возможно, бумажник уже запущен.</translation>
     </message>
     <message>
-        <location line="-91"/>
+        <location line="-92"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
     <message>
-        <location line="+133"/>
+        <location line="+134"/>
         <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
         <translation>Невозможно привязаться к %s на этом компьютере (bind вернул ошибку %d, %s)</translation>
     </message>
     <message>
-        <location line="-123"/>
+        <location line="-124"/>
         <source>Connect through socks proxy</source>
         <translation>Подключаться через socks прокси</translation>
     </message>
@@ -3073,7 +3165,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Разрешить поиск в DNS для -addnode, -seednode и -connect</translation>
     </message>
     <message>
-        <location line="+115"/>
+        <location line="+116"/>
         <source>Loading addresses...</source>
         <translation>Загрузка адресов...</translation>
     </message>
@@ -3158,22 +3250,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Загрузка индекса блоков...</translation>
     </message>
     <message>
-        <location line="-96"/>
+        <location line="-97"/>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation>Добавить узел для подключения и пытаться поддерживать соединение открытым</translation>
     </message>
     <message>
-        <location line="+115"/>
+        <location line="+116"/>
         <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
         <translation>Невозможно привязаться к %s на этом компьютере.  Возможно, BlackCoin уже работает.</translation>
     </message>
     <message>
-        <location line="-109"/>
+        <location line="-110"/>
         <source>Find peers using internet relay chat (default: 1)</source>
         <translation>Найти участников через IRC (по умолчанию: 1)</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>Fee per KB to add to transactions you send</source>
         <translation>Комиссия на килобайт, добавляемая к вашим транзакциям</translation>
     </message>
@@ -3213,12 +3305,11 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Загрузка завершена</translation>
     </message>
     <message>
-        <location line="-156"/>
+        <location line="-157"/>
         <source>To use the %s option</source>
         <translation>Чтобы использовать опцию %s</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
@@ -3227,7 +3318,7 @@ rpcpassword=%s
 (you do not need to remember this password)
 If the file does not exist, create it with owner-readable-only file permissions.
 </source>
-        <translation>%s, вы должны установить опцию rpcpassword в конфигурационном файле:
+        <translation type="vanished">%s, вы должны установить опцию rpcpassword в конфигурационном файле:
  %s
 Рекомендуется использовать следующий случайный пароль:
 rpcuser=bitcoinrpc
@@ -3237,7 +3328,7 @@ rpcpassword=%s
 </translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
