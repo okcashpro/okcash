@@ -3162,7 +3162,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             }
         }
     }
-#if 0
     else if (strCommand == "checkpoint")
     {
         CSyncCheckpoint checkpoint;
@@ -3177,7 +3176,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 checkpoint.RelayTo(pnode);
         }
     }
-#endif
+
     else if (strCommand == "getheaders")
     {
         CBlockLocator locator;
