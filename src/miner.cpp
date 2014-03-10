@@ -114,6 +114,8 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
     if (!pblock.get())
         return NULL;
 
+    CBlockIndex* pindexPrev = pindexBest;
+
     // Create coinbase tx
     CTransaction txNew;
     txNew.vin.resize(1);
@@ -126,7 +128,13 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
         txNew.vout[0].scriptPubKey.SetDestination(reservekey.GetReservedKey().GetID());
     }
     else
+    {
+        // Height first in coinbase required for block.version=2
+        txNew.vin[0].scriptSig = (CScript() << pindexPrev->nHeight+1) + COINBASE_FLAGS;
+        assert(txNew.vin[0].scriptSig.size() <= 100);
+
         txNew.vout[0].SetEmpty();
+    }
 
     // Add our coinbase tx as first transaction
     pblock->vtx.push_back(txNew);
@@ -155,15 +163,12 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
     if (mapArgs.count("-mintxfee"))
         ParseMoney(mapArgs["-mintxfee"], nMinTxFee);
 
-    CBlockIndex* pindexPrev = pindexBest;
-
     pblock->nBits = GetNextTargetRequired(pindexPrev, fProofOfStake);
 
     // Collect memory pool transactions into the block
     int64 nFees = 0;
     {
         LOCK2(cs_main, mempool.cs);
-        CBlockIndex* pindexPrev = pindexBest;
         CTxDB txdb("r");
 
         // Priority order to process transactions
@@ -518,9 +523,6 @@ void StakeMiner(CWallet *pwallet)
     // Make this thread recognisable as the mining thread
     RenameThread("blackcoin-miner");
 
-    // Each thread has its own counter
-    unsigned int nExtraNonce = 0;
-
     while (true)
     {
         if (fShutdown)
@@ -544,13 +546,10 @@ void StakeMiner(CWallet *pwallet)
         //
         // Create new block
         //
-        CBlockIndex* pindexPrev = pindexBest;
-
         int64 nFees;
         auto_ptr<CBlock> pblock(CreateNewBlock(pwallet, true, &nFees));
         if (!pblock.get())
             return;
-        IncrementExtraNonce(pblock.get(), pindexPrev, nExtraNonce);
 
         // Trying to sign a block
         if (pblock->SignBlock(*pwallet, nFees))
