@@ -827,7 +827,8 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     CScript inner;
     inner.SetMultisig(nRequired, pubkeys);
     CScriptID innerID = inner.GetID();
-    pwalletMain->AddCScript(inner);
+    if (!pwalletMain->AddCScript(inner))
+        throw runtime_error("AddCScript() failed");
 
     pwalletMain->SetAddressBookName(innerID, strAccount);
     return CBitcoinAddress(innerID).ToString();
@@ -851,7 +852,8 @@ Value addredeemscript(const Array& params, bool fHelp)
     vector<unsigned char> innerData = ParseHexV(params[0], "redeemScript");
     CScript inner(innerData.begin(), innerData.end());
     CScriptID innerID = inner.GetID();
-    pwalletMain->AddCScript(inner);
+    if (!pwalletMain->AddCScript(inner))
+        throw runtime_error("AddCScript() failed");
 
     pwalletMain->SetAddressBookName(innerID, strAccount);
     return CBitcoinAddress(innerID).ToString();
