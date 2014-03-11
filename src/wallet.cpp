@@ -1840,7 +1840,7 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey)
         if (!wtxNew.AcceptToMemoryPool())
         {
             // This must not fail. The transaction has already been signed and recorded.
-            printf("CommitTransaction() : Error: Transaction not valid");
+            printf("CommitTransaction() : Error: Transaction not valid\n");
             return false;
         }
         wtxNew.RelayWalletTransaction();
