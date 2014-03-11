@@ -915,7 +915,7 @@ void CWallet::ReacceptWalletTransactions()
             {
                 // Re-accept any txes of ours that aren't already in a block
                 if (!(wtx.IsCoinBase() || wtx.IsCoinStake()))
-                    wtx.AcceptWalletTransaction(txdb, false);
+                    wtx.AcceptWalletTransaction(txdb);
             }
         }
         if (!vMissingTx.empty())
