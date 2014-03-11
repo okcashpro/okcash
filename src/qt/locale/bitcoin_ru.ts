@@ -301,17 +301,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+275"/>
+        <location filename="../bitcoingui.cpp" line="+277"/>
         <source>Sign &amp;message...</source>
         <translation>&amp;Подписать сообщение</translation>
     </message>
     <message>
-        <location line="+237"/>
+        <location line="+239"/>
         <source>Synchronizing with network...</source>
         <translation>Синхронизация с сетью...</translation>
     </message>
     <message>
-        <location line="-299"/>
+        <location line="-303"/>
         <source>&amp;Overview</source>
         <translation>О&amp;бзор</translation>
     </message>
@@ -401,7 +401,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Изменить пароль</translation>
     </message>
     <message numerus="yes">
-        <location line="+241"/>
+        <location line="+245"/>
         <source>~%n block(s) remaining</source>
         <translation>
             <numerusform>остался ~%n блок</numerusform>
@@ -415,12 +415,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Загружено %1 из %2 блоков истории операций (%3% завершено).</translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-244"/>
         <source>&amp;Export...</source>
         <translation>&amp;Экспорт...</translation>
     </message>
     <message>
-        <location line="-58"/>
+        <location line="-60"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Отправить монеты на указанный адрес BlackCoin</translation>
     </message>
@@ -430,12 +430,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Изменить параметры конфигурации BlackCoin</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+16"/>
         <source>Export the data in the current tab to a file</source>
         <translation>Экспортировать данные из вкладки в файл</translation>
     </message>
     <message>
-        <location line="-10"/>
+        <location line="-12"/>
         <source>Encrypt or decrypt wallet</source>
         <translation>Зашифровать или расшифровать бумажник</translation>
     </message>
@@ -450,7 +450,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Изменить пароль шифрования бумажника</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>&amp;Debug window</source>
         <translation>&amp;Окно отладки</translation>
     </message>
@@ -465,7 +465,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Проверить сообщение...</translation>
     </message>
     <message>
-        <location line="-197"/>
+        <location line="-198"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -475,7 +475,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Бумажник</translation>
     </message>
     <message>
-        <location line="+179"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;О BlackCoin</translation>
     </message>
@@ -485,7 +485,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Показать / Скрыть</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
@@ -495,7 +495,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>&amp;Help</source>
         <translation>&amp;Помощь</translation>
     </message>
@@ -543,7 +543,7 @@ Estimate time to earn reward is %3</source>
         <translation type="obsolete">Участвуем в доле.\n Ваш вес %1\n Вес сети %2\n Ожидаемое время награды %3</translation>
     </message>
     <message>
-        <location line="+402"/>
+        <location line="+408"/>
         <source>Not staking because wallet is locked</source>
         <translation>Не участвуем в доле, так как кошелёк заблокирован</translation>
     </message>
@@ -568,7 +568,7 @@ Estimate time to earn reward is %3</source>
         <translation>Не участвуем в доле, так как нет зрелых монет</translation>
     </message>
     <message numerus="yes">
-        <location line="-388"/>
+        <location line="-394"/>
         <source>%n second(s) ago</source>
         <translation>
             <numerusform>%n секунду назад</numerusform>
@@ -576,8 +576,18 @@ Estimate time to earn reward is %3</source>
             <numerusform>%n секунд назад</numerusform>
         </translation>
     </message>
+    <message>
+        <location line="-279"/>
+        <source>&amp;Unlock Wallet...</source>
+        <translation>&amp;Разблокировать бумажник</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Unlock wallet for staking</source>
+        <translation>Разблокировать бумажник для участия в доле</translation>
+    </message>
     <message numerus="yes">
-        <location line="+4"/>
+        <location line="+282"/>
         <source>%n minute(s) ago</source>
         <translation>
             <numerusform>%n минуту назад</numerusform>
@@ -664,17 +674,17 @@ Address: %4
         <translation>Не удалось обработать URI! Это может быть связано с неверным адресом BlackCoin или неправильными параметрами URI.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
         <translation>Бумажник &lt;b&gt;зашифрован&lt;/b&gt; и в настоящее время &lt;b&gt;разблокирован&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Бумажник &lt;b&gt;зашифрован&lt;/b&gt; и в настоящее время &lt;b&gt;заблокирован&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+24"/>
         <source>Backup Wallet</source>
         <translation>Сделать резервную копию бумажника</translation>
     </message>
@@ -694,7 +704,7 @@ Address: %4
         <translation>При попытке сохранения данных бумажника в новое место произошла ошибка.</translation>
     </message>
     <message numerus="yes">
-        <location line="+65"/>
+        <location line="+68"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -1755,12 +1765,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Очистить &amp;всё</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+28"/>
         <source>Balance:</source>
         <translation>Баланс:</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+16"/>
         <source>123.456 BC</source>
         <translation>123.456 BC</translation>
     </message>
@@ -1787,7 +1797,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Copy fee</source>
-        <translation type="unfinished">Копировать комиссию</translation>
+        <translation>Копировать комиссию</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1812,7 +1822,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished">Копировать сдачу</translation>
+        <translation>Копировать сдачу</translation>
     </message>
     <message>
         <location line="+86"/>
@@ -1882,7 +1892,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+4"/>
         <source>WARNING: unknown change address</source>
-        <translation type="unfinished"></translation>
+        <translation>ПРЕДУПРЕЖДЕНИЕ: неизвестный адрес для сдачи</translation>
     </message>
 </context>
 <context>
@@ -2147,8 +2157,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+8"/>
+        <source>conflicted</source>
+        <translation>конфликт</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>%1/offline</source>
-        <translation>%1/отключен</translation>
+        <translation>%1/оффлайн</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2262,7 +2277,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+2"/>
         <source>Comment</source>
-        <translation>Комментарий:</translation>
+        <translation>Комментарий</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2271,12 +2286,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 520 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Сгенерированные монеты должны подождать 520 блоков, прежде чем они могут быть потрачены. Когда Вы сгенерировали этот блок, он был отправлен в сеть для добавления в цепочку блоков. Если данная процедура не удастся, статус изменится на «не подтверждено», и монеты будут недействительны. Это иногда происходит в случае, если другой узел сгенерирует блок на несколько секунд раньше вас.</translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Сгенерированные монеты должны подождать 510 блоков, прежде чем они могут быть потрачены. Когда Вы сгенерировали этот блок, он был отправлен в сеть для добавления в цепочку блоков. Если данная процедура не удастся, статус изменится на «не подтверждено», и монеты будут недействительны. Это иногда происходит в случае, если другой узел сгенерирует блок на несколько секунд раньше вас.</translation>
     </message>
     <message>
-        <source>Staked coins must wait 520 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \&quot;not accepted\&quot; and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</source>
-        <translation type="obsolete">Использованные в Proof-of-Stake монеты должны подождать 520 блоков, прежде чем они вернутся на баланс и смогут быть потрачены. Когда вы сгенерировали этот proof-of-stake блок, он был отправлен в сеть для добавления в цепочку блоков. Если данная процедура не удается, статус изменится на \&quot;не подтверждени\&quot; и блок будет недействителен. Это иногда происходит в случае, если другой узел сгенерирует блок на несколько секунд раньше вас.</translation>
+        <source>Staked coins must wait 510 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \&quot;not accepted\&quot; and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</source>
+        <translation type="obsolete">Использованные в Proof-of-Stake монеты должны подождать 510 блоков, прежде чем они вернутся на баланс и смогут быть потрачены. Когда вы сгенерировали этот proof-of-stake блок, он был отправлен в сеть для добавления в цепочку блоков. Если данная процедура не удается, статус изменится на \&quot;не подтверждени\&quot; и блок будет недействителен. Это иногда происходит в случае, если другой узел сгенерирует блок на несколько секунд раньше вас.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2355,45 +2370,75 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Количество</translation>
     </message>
     <message numerus="yes">
-        <location line="+57"/>
         <source>Open for %n block(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Открыто для %n блока</numerusform>
             <numerusform>Открыто для %n блоков</numerusform>
             <numerusform>Открыто для %n блоков</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+60"/>
         <source>Open until %1</source>
         <translation>Открыто до %1</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Offline (%1 confirmations)</source>
-        <translation>Оффлайн (%1 подтверждений)</translation>
+        <translation type="vanished">Оффлайн (%1 подтверждений)</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Unconfirmed (%1 of %2 confirmations)</source>
-        <translation>Не подтверждено (%1 из %2 подтверждений)</translation>
+        <translation type="vanished">Не подтверждено (%1 из %2 подтверждений)</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+12"/>
         <source>Confirmed (%1 confirmations)</source>
         <translation>Подтверждено (%1 подтверждений)</translation>
     </message>
     <message numerus="yes">
-        <location line="+9"/>
         <source>Mined balance will be available when it matures in %n more block(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Добытыми монетами можно будет воспользоваться через %n блок</numerusform>
             <numerusform>Добытыми монетами можно будет воспользоваться через %n блока</numerusform>
             <numerusform>Добытыми монетами можно будет воспользоваться через %n блоков</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <location line="-15"/>
+        <source>Open for %n more block(s)</source>
+        <translation>
+            <numerusform>Открыто для ещё %n блока</numerusform>
+            <numerusform>Открыто для ещё %n блоков</numerusform>
+            <numerusform>Открыто для ещё %n блоков</numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
+        <source>Offline</source>
+        <translation>Оффлайн</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Unconfirmed</source>
+        <translation>Не подтверждено</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Confirming (%1 of %2 recommended confirmations)</source>
+        <translation>Подтверждается (%1 из %2 рекомендованных подтверждений)</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Conflicted</source>
+        <translation>Конфликт</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Immature (%1 confirmations, will be available after %2)</source>
+        <translation>Незрелые (%1 подтверждений, будут доступны после %2)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>This block was not received by any other nodes and will probably not be accepted!</source>
         <translation>Этот блок не был получен другими узлами и, возможно, не будет принят!</translation>
     </message>
@@ -2403,7 +2448,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Сгенерировано, но не подтверждено</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+42"/>
         <source>Received with</source>
         <translation>Получено</translation>
     </message>
@@ -2433,7 +2478,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>[не доступно]</translation>
     </message>
     <message>
-        <location line="+198"/>
+        <location line="+190"/>
         <source>Transaction status. Hover over this field to show number of confirmations.</source>
         <translation>Статус транзакции. Подведите курсор к нужному полю для того, чтобы увидеть количество подтверждений.</translation>
     </message>
@@ -2894,11 +2939,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Искать узлы с помощью DNS (по умолчанию: 1)</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="obsolete">Политика синхронизированных меток (по умолчанию: strict)</translation>
+        <translation>Политика синхронизированных меток (по умолчанию: strict)</translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+80"/>
         <source>Invalid -tor address: &apos;%s&apos;</source>
         <translation>Неверный адрес -tor: &apos;%s&apos;</translation>
     </message>
@@ -3035,12 +3081,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Пароль для подключений JSON-RPC</translation>
     </message>
     <message>
-        <location line="-25"/>
-        <source>Sync checkpoints policy (default: permissive)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+12"/>
+        <location line="-13"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3187,7 +3228,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
     <message>
         <location line="+1"/>
         <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation>Необходимо перезаписать бумажник, перезапустите BlackCoin для завершения операции.</translation>
+        <translation>Необходимо перезаписать бумажник, перезапустите BlackCoin для завершения операции</translation>
     </message>
     <message>
         <location line="+1"/>
