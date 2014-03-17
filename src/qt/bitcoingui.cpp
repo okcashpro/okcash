@@ -942,8 +942,6 @@ void BitcoinGUI::updateStakingIcon()
             labelStakingIcon->setToolTip(tr("Not staking because wallet is offline"));
         else if (IsInitialBlockDownload())
             labelStakingIcon->setToolTip(tr("Not staking because wallet is syncing"));
-        else if (!pindexBest || pindexBest->nHeight < MODIFIER_INTERVAL_SWITCH)
-            labelStakingIcon->setToolTip(tr("Not staking because waiting for hardfork"));
         else
             labelStakingIcon->setToolTip(tr("Not staking because you don't have mature coins"));
     }
