@@ -73,7 +73,7 @@ const string strMessageMagic = "BlackCoin Signed Message:\n";
 
 // Settings
 int64 nTransactionFee = MIN_TX_FEE;
-int64 nMinimumInputValue = MIN_TX_FEE;
+int64 nMinimumInputValue = 0;
 
 extern enum Checkpoints::CPMode CheckpointsMode;
 
