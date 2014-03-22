@@ -25,7 +25,7 @@ Dependencies
  Library     Purpose           Description
  -------     -------           -----------
  libssl      SSL Support       Secure communications
- libdb4.8    Berkeley DB       Blockchain & wallet storage
+ libdb       Berkeley DB       Blockchain & wallet storage
  libboost    Boost             C++ Library
  miniupnpc   UPnP Support      Optional firewall-jumping support
  libqrencode QRCode generation Optional QRCode generation
@@ -63,10 +63,8 @@ Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
 sudo apt-get install build-essential
 sudo apt-get install libssl-dev
-sudo apt-get install libdb4.8-dev
-sudo apt-get install libdb4.8++-dev
- Boost 1.40+: sudo apt-get install libboost-all-dev
- or Boost 1.37: sudo apt-get install libboost1.37-dev
+sudo apt-get install libdb++-dev
+sudo apt-get install libboost-all-dev
 sudo apt-get install libqrencode-dev
 
 If using Boost 1.37, append -mt to the boost libraries in the makefile.
@@ -79,7 +77,7 @@ Note: If you just want to install blackcoind on Gentoo, you can add the BlackCoi
       overlay and use your package manager:
           layman -a blackcoin && emerge blackcoind
 
-emerge -av1 --noreplace boost glib openssl sys-libs/db:4.8
+emerge -av1 --noreplace boost glib openssl sys-libs/db
 
 Take the following steps to build (no UPnP support):
  cd ${BLACKCOIN_DIR}/src
