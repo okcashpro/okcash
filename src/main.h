@@ -81,6 +81,7 @@ extern std::map<uint256, CBlock*> mapOrphanBlocks;
 
 // Settings
 extern int64 nTransactionFee;
+extern int64 nReserveBalance;
 extern int64 nMinimumInputValue;
 extern bool fUseFastIndex;
 extern unsigned int nDerivationMethodIndex;

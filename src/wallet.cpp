@@ -1495,13 +1495,6 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64& nMinWeight, uint
 {
     // Choose coins to use
     int64 nBalance = GetBalance();
-    int64 nReserveBalance = 0;
-
-    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
-    {
-        error("GetStakeWeight : invalid reserve balance amount");
-        return false;
-    }
 
     if (nBalance <= nReserveBalance)
         return false;
@@ -1587,10 +1580,6 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
     // Choose coins to use
     int64 nBalance = GetBalance();
-    int64 nReserveBalance = 0;
-
-    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
-        return error("CreateCoinStake : invalid reserve balance amount");
 
     if (nBalance <= nReserveBalance)
         return false;

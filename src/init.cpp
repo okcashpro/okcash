@@ -669,7 +669,6 @@ bool AppInit2()
 
     if (mapArgs.count("-reservebalance")) // ppcoin: reserve balance amount
     {
-        int64 nReserveBalance = 0;
         if (!ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
         {
             InitError(_("Invalid amount for -reservebalance=<amount>"));
