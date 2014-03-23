@@ -559,16 +559,11 @@ Estimate time to earn reward is %3</source>
     </message>
     <message>
         <location line="+2"/>
-        <source>Not staking because waiting for hardfork</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
         <source>Not staking because you don&apos;t have mature coins</source>
         <translation>Не участвуем в доле, так как нет зрелых монет</translation>
     </message>
     <message numerus="yes">
-        <location line="-394"/>
+        <location line="-392"/>
         <source>%n second(s) ago</source>
         <translation>
             <numerusform>%n секунду назад</numerusform>
@@ -885,7 +880,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>(change)</source>
-        <translation type="unfinished"></translation>
+        <translation>(сдача)</translation>
     </message>
     <message>
         <location line="-593"/>
@@ -1170,6 +1165,16 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+31"/>
+        <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
+        <translation>Зарезервированная сумма не участвует в доле, и поэтому может быть потрачена в любое время.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Reserve</source>
+        <translation>Зарезервировать</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
         <translation>Автоматически запускать BlackCoin после входа в систему</translation>
     </message>
@@ -1334,7 +1339,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>по умолчанию</translation>
     </message>
     <message>
-        <location line="+148"/>
+        <location line="+149"/>
         <location line="+9"/>
         <source>Warning</source>
         <translation>Внимание</translation>
@@ -1712,12 +1717,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-191"/>
         <source>Priority:</source>
-        <translation type="unfinished">Приоритет:</translation>
+        <translation>Приоритет:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>medium</source>
-        <translation type="unfinished">средний</translation>
+        <translation>средний</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -2445,7 +2450,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Generated but not accepted</source>
-        <translation>Сгенерировано, но не подтверждено</translation>
+        <translation>Сгенерировано, но не принято</translation>
     </message>
     <message>
         <location line="+42"/>

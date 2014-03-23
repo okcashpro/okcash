@@ -555,16 +555,11 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+2"/>
-        <source>Not staking because waiting for hardfork</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+2"/>
         <source>Not staking because you don&apos;t have mature coins</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location line="-394"/>
+        <location line="-392"/>
         <source>%n second(s) ago</source>
         <translation>
             <numerusform>%n second ago</numerusform>
@@ -1146,6 +1141,16 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+31"/>
+        <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Reserve</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
         <translation>Automatically start BlackCoin after logging in to the system.</translation>
     </message>
@@ -1310,7 +1315,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>default</translation>
     </message>
     <message>
-        <location line="+148"/>
+        <location line="+149"/>
         <location line="+9"/>
         <source>Warning</source>
         <translation>Warning</translation>
