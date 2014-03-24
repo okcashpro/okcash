@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = blackcoin-qt
-VERSION = 1.0.4
+VERSION = 1.0.5
 INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
