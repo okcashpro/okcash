@@ -163,9 +163,9 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         case ProxySocksVersion:
             return settings.value("nSocksVersion", 5);
         case Fee:
-            return QVariant(nTransactionFee);
+            return QVariant((qint64) nTransactionFee);
         case ReserveBalance:
-            return QVariant(nReserveBalance);
+            return QVariant((qint64) nReserveBalance);
         case DisplayUnit:
             return QVariant(nDisplayUnit);
         case DisplayAddresses:
@@ -244,12 +244,12 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         break;
         case Fee:
             nTransactionFee = value.toLongLong();
-            settings.setValue("nTransactionFee", nTransactionFee);
+            settings.setValue("nTransactionFee", (qint64) nTransactionFee);
             emit transactionFeeChanged(nTransactionFee);
             break;
         case ReserveBalance:
             nReserveBalance = value.toLongLong();
-            settings.setValue("nReserveBalance", nReserveBalance);
+            settings.setValue("nReserveBalance", (qint64) nReserveBalance);
             emit reserveBalanceChanged(nReserveBalance);
             break;
         case DisplayUnit:

@@ -78,9 +78,9 @@ public:
 };
 
 
-uint64 nLastBlockTx = 0;
-uint64 nLastBlockSize = 0;
-int64 nLastCoinStakeSearchInterval = 0;
+uint64_t nLastBlockTx = 0;
+uint64_t nLastBlockSize = 0;
+int64_t nLastCoinStakeSearchInterval = 0;
  
 // We want to sort transactions by priority and fee, so:
 typedef boost::tuple<double, double, CTransaction*> TxPriority;
@@ -107,7 +107,7 @@ public:
 };
 
 // CreateNewBlock: create new block (without proof-of-work/proof-of-stake)
-CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
+CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
 {
     // Create new block
     auto_ptr<CBlock> pblock(new CBlock());
@@ -159,14 +159,14 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
     // a transaction spammer can cheaply fill blocks using
     // 1-satoshi-fee transactions. It should be set above the real
     // cost to you of processing a transaction.
-    int64 nMinTxFee = MIN_TX_FEE;
+    int64_t nMinTxFee = MIN_TX_FEE;
     if (mapArgs.count("-mintxfee"))
         ParseMoney(mapArgs["-mintxfee"], nMinTxFee);
 
     pblock->nBits = GetNextTargetRequired(pindexPrev, fProofOfStake);
 
     // Collect memory pool transactions into the block
-    int64 nFees = 0;
+    int64_t nFees = 0;
     {
         LOCK2(cs_main, mempool.cs);
         CTxDB txdb("r");
@@ -186,7 +186,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
 
             COrphan* porphan = NULL;
             double dPriority = 0;
-            int64 nTotalIn = 0;
+            int64_t nTotalIn = 0;
             bool fMissingInputs = false;
             BOOST_FOREACH(const CTxIn& txin, tx.vin)
             {
@@ -220,7 +220,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
                     nTotalIn += mempool.mapTx[txin.prevout.hash].vout[txin.prevout.n].nValue;
                     continue;
                 }
-                int64 nValueIn = txPrev.vout[txin.prevout.n].nValue;
+                int64_t nValueIn = txPrev.vout[txin.prevout.n].nValue;
                 nTotalIn += nValueIn;
 
                 int nConf = txindex.GetDepthInMainChain();
@@ -248,8 +248,8 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
 
         // Collect transactions into block
         map<uint256, CTxIndex> mapTestPool;
-        uint64 nBlockSize = 1000;
-        uint64 nBlockTx = 0;
+        uint64_t nBlockSize = 1000;
+        uint64_t nBlockTx = 0;
         int nBlockSigOps = 100;
         bool fSortedByFee = (nBlockPrioritySize <= 0);
 
@@ -281,7 +281,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
                 continue;
 
             // Transaction fee
-            int64 nMinFee = tx.GetMinFee(nBlockSize, GMF_BLOCK);
+            int64_t nMinFee = tx.GetMinFee(nBlockSize, GMF_BLOCK);
 
             // Skip free transactions if we're past the minimum block size:
             if (fSortedByFee && (dFeePerKb < nMinTxFee) && (nBlockSize + nTxSize >= nBlockMinSize))
@@ -305,7 +305,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
             if (!tx.FetchInputs(txdb, mapTestPoolTmp, false, true, mapInputs, fInvalid))
                 continue;
 
-            int64 nTxFees = tx.GetValueIn(mapInputs)-tx.GetValueOut();
+            int64_t nTxFees = tx.GetValueIn(mapInputs)-tx.GetValueOut();
             if (nTxFees < nMinFee)
                 continue;
 
@@ -354,7 +354,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64* pFees)
         nLastBlockSize = nBlockSize;
 
         if (fDebug && GetBoolArg("-printpriority"))
-            printf("CreateNewBlock(): total size %"PRI64u"\n", nBlockSize);
+            printf("CreateNewBlock(): total size %"PRIu64"\n", nBlockSize);
 
         if (!fProofOfStake)
             pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(nFees);
@@ -545,7 +545,7 @@ void StakeMiner(CWallet *pwallet)
         //
         // Create new block
         //
-        int64 nFees;
+        int64_t nFees;
         auto_ptr<CBlock> pblock(CreateNewBlock(pwallet, true, &nFees));
         if (!pblock.get())
             return;

@@ -42,7 +42,7 @@ std::time_t pt_to_time_t(const bt::ptime& pt)
     return diff.ticks()/bt::time_duration::rep_type::ticks_per_second;
 }
 
-int64 DecodeDumpTime(const std::string& s)
+int64_t DecodeDumpTime(const std::string& s)
 {
     bt::ptime pt;
 
@@ -57,7 +57,7 @@ int64 DecodeDumpTime(const std::string& s)
     return pt_to_time_t(pt);
 }
 
-std::string static EncodeDumpTime(int64 nTime) {
+std::string static EncodeDumpTime(int64_t nTime) {
     return DateTimeStrFormat("%Y-%m-%dT%H:%M:%SZ", nTime);
 }
 
@@ -91,7 +91,7 @@ class CTxDump
 {
 public:
     CBlockIndex *pindex;
-    int64 nValue;
+    int64_t nValue;
     bool fSpent;
     CWalletTx* ptx;
     int nOut;
@@ -158,7 +158,7 @@ Value importwallet(const Array& params, bool fHelp)
     if (!file.is_open())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Cannot open wallet dump file");
 
-    int64 nTimeBegin = pindexBest->nTime;
+    int64_t nTimeBegin = pindexBest->nTime;
 
     bool fGood = true;
 
@@ -186,7 +186,7 @@ Value importwallet(const Array& params, bool fHelp)
             printf("Skipping import of %s (key already present)\n", CBitcoinAddress(keyid).ToString().c_str());
             continue;
         }
-        int64 nTime = DecodeDumpTime(vstr[1]);
+        int64_t nTime = DecodeDumpTime(vstr[1]);
         std::string strLabel;
         bool fLabel = true;
         for (unsigned int nStr = 2; nStr < vstr.size(); nStr++) {
@@ -268,7 +268,7 @@ Value dumpwallet(const Array& params, bool fHelp)
     if (!file.is_open())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Cannot open wallet dump file");
 
-    std::map<CKeyID, int64> mapKeyBirth;
+    std::map<CKeyID, int64_t> mapKeyBirth;
 
     std::set<CKeyID> setKeyPool;
 
@@ -277,8 +277,8 @@ Value dumpwallet(const Array& params, bool fHelp)
     pwalletMain->GetAllReserveKeys(setKeyPool);
 
     // sort time/key pairs
-    std::vector<std::pair<int64, CKeyID> > vKeyBirth;
-    for (std::map<CKeyID, int64>::const_iterator it = mapKeyBirth.begin(); it != mapKeyBirth.end(); it++) {
+    std::vector<std::pair<int64_t, CKeyID> > vKeyBirth;
+    for (std::map<CKeyID, int64_t>::const_iterator it = mapKeyBirth.begin(); it != mapKeyBirth.end(); it++) {
         vKeyBirth.push_back(std::make_pair(it->second, it->first));
     }
     mapKeyBirth.clear();
@@ -290,7 +290,7 @@ Value dumpwallet(const Array& params, bool fHelp)
     file << strprintf("# * Best block at time of backup was %i (%s),\n", nBestHeight, hashBestChain.ToString().c_str());
     file << strprintf("#   mined on %s\n", EncodeDumpTime(pindexBest->nTime).c_str());
     file << "\n";
-    for (std::vector<std::pair<int64, CKeyID> >::const_iterator it = vKeyBirth.begin(); it != vKeyBirth.end(); it++) {
+    for (std::vector<std::pair<int64_t, CKeyID> >::const_iterator it = vKeyBirth.begin(); it != vKeyBirth.end(); it++) {
         const CKeyID &keyid = it->second;
         std::string strTime = EncodeDumpTime(it->first);
         std::string strAddr = CBitcoinAddress(keyid).ToString();
