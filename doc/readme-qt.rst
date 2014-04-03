@@ -1,4 +1,4 @@
-BlackCoin-qt: Qt4 GUI for BlackCoin
+BlackCoin-qt: Qt5 GUI for BlackCoin
 ===============================
 
 Build instructions
@@ -7,14 +7,15 @@ Build instructions
 Debian
 -------
 
-First, make sure that the required packages for Qt4 development of your
+First, make sure that the required packages for Qt5 development of your
 distribution are installed, for Debian and Ubuntu these are:
 
 ::
 
-    apt-get install qt4-qmake libqt4-dev build-essential libboost-dev libboost-system-dev \
+    apt-get install qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools \
+        build-essential libboost-dev libboost-system-dev \
         libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb4.8++-dev
+        libssl-dev libdb++-dev
 
 then execute the following:
 
@@ -123,7 +124,7 @@ Berkely DB version warning
 
 A warning for people using the *static binary* version of BlackCoin on a Linux/UNIX-ish system (tl;dr: **Berkely DB databases are not forward compatible**).
 
-The static binary version of BlackCoin is linked against libdb4.8 (see also `this Debian issue`_).
+The static binary version of BlackCoin is linked against libdb 5.0 (see also `this Debian issue`_).
 
 Now the nasty thing is that databases from 5.X are not compatible with 4.X.
 
