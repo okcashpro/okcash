@@ -867,7 +867,9 @@ void BitcoinGUI::unlockWallet()
     // Unlock wallet when requested by wallet model
     if(walletModel->getEncryptionStatus() == WalletModel::Locked)
     {
-        AskPassphraseDialog dlg(AskPassphraseDialog::Unlock, this);
+        AskPassphraseDialog::Mode mode = sender() == unlockWalletAction ?
+              AskPassphraseDialog::UnlockStaking : AskPassphraseDialog::Unlock;
+        AskPassphraseDialog dlg(mode, this);
         dlg.setModel(walletModel);
         dlg.exec();
     }
