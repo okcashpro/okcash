@@ -479,12 +479,12 @@ void GetAccountAddresses(string strAccount, set<CTxDestination>& setAddress)
 
 Value getreceivedbyaccount(const Array& params, bool fHelp)
 {
-    accountingDeprecationCheck();
-
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "getreceivedbyaccount <account> [minconf=1]\n"
             "Returns the total amount received by addresses with <account> in transactions with at least [minconf] confirmations.");
+
+    accountingDeprecationCheck();
 
     // Minimum confirmations
     int nMinDepth = 1;
@@ -604,12 +604,12 @@ Value getbalance(const Array& params, bool fHelp)
 
 Value movecmd(const Array& params, bool fHelp)
 {
-    accountingDeprecationCheck();
-
     if (fHelp || params.size() < 3 || params.size() > 5)
         throw runtime_error(
             "move <fromaccount> <toaccount> <amount> [minconf=1] [comment]\n"
             "Move from one account in your wallet to another.");
+
+    accountingDeprecationCheck();
 
     string strFrom = AccountFromValue(params[0]);
     string strTo = AccountFromValue(params[1]);
@@ -973,8 +973,6 @@ Value listreceivedbyaddress(const Array& params, bool fHelp)
 
 Value listreceivedbyaccount(const Array& params, bool fHelp)
 {
-    accountingDeprecationCheck();
-
     if (fHelp || params.size() > 2)
         throw runtime_error(
             "listreceivedbyaccount [minconf=1] [includeempty=false]\n"
@@ -984,6 +982,8 @@ Value listreceivedbyaccount(const Array& params, bool fHelp)
             "  \"account\" : the account of the receiving addresses\n"
             "  \"amount\" : total amount received by addresses with this account\n"
             "  \"confirmations\" : number of confirmations of the most recent transaction included");
+
+    accountingDeprecationCheck();
 
     return ListReceived(params, true);
 }
@@ -1138,12 +1138,12 @@ Value listtransactions(const Array& params, bool fHelp)
 
 Value listaccounts(const Array& params, bool fHelp)
 {
-    accountingDeprecationCheck();
-
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "listaccounts [minconf=1]\n"
             "Returns Object that has account names as keys, account balances as values.");
+
+    accountingDeprecationCheck();
 
     int nMinDepth = 1;
     if (params.size() > 0)
