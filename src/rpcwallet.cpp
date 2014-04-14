@@ -1026,6 +1026,7 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Received
     if (listReceived.size() > 0 && wtx.GetDepthInMainChain() >= nMinDepth)
     {
+        bool stop = false;
         BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64_t)& r, listReceived)
         {
             string account;
@@ -1052,11 +1053,16 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
                 if (!wtx.IsCoinStake())
                     entry.push_back(Pair("amount", ValueFromAmount(r.second)));
                 else
+                {
                     entry.push_back(Pair("amount", ValueFromAmount(-nFee)));
+                    stop = true; // only one coinstake output
+                }
                 if (fLong)
                     WalletTxToJSON(wtx, entry);
                 ret.push_back(entry);
             }
+            if (stop)
+                break;
         }
     }
 }
