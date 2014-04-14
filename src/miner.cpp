@@ -532,6 +532,7 @@ void StakeMiner(CWallet *pwallet)
 
         while (pwallet->IsLocked())
         {
+            nLastCoinStakeSearchInterval = 0;
             MilliSleep(1000);
             if (fShutdown)
                 return;
@@ -539,6 +540,7 @@ void StakeMiner(CWallet *pwallet)
 
         while (vNodes.empty() || IsInitialBlockDownload())
         {
+            nLastCoinStakeSearchInterval = 0;
             fTryToSync = true;
             MilliSleep(1000);
             if (fShutdown)
