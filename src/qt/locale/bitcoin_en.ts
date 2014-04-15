@@ -180,7 +180,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Repeat new passphrase</translation>
     </message>
     <message>
-        <location filename="../askpassphrasedialog.cpp" line="+33"/>
+        <location line="+33"/>
+        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>For staking only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../askpassphrasedialog.cpp" line="+35"/>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;10 or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
         <translation>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;10 or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</translation>
     </message>
@@ -190,7 +200,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Encrypt wallet</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
         <translation>This operation needs your wallet passphrase to unlock the wallet.</translation>
     </message>
@@ -240,49 +250,49 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation></translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+103"/>
         <location line="+24"/>
         <source>Warning: The Caps Lock key is on!</source>
         <translation>Warning: The Caps Lock key is on!</translation>
     </message>
     <message>
-        <location line="-130"/>
-        <location line="+58"/>
+        <location line="-133"/>
+        <location line="+60"/>
         <source>Wallet encrypted</source>
         <translation>Wallet encrypted</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-58"/>
         <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
         <translation>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</translation>
     </message>
     <message>
         <location line="+13"/>
         <location line="+7"/>
-        <location line="+42"/>
+        <location line="+44"/>
         <location line="+6"/>
         <source>Wallet encryption failed</source>
         <translation>Wallet encryption failed</translation>
     </message>
     <message>
-        <location line="-54"/>
+        <location line="-56"/>
         <source>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</source>
         <translation>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+48"/>
+        <location line="+50"/>
         <source>The supplied passphrases do not match.</source>
         <translation>The supplied passphrases do not match.</translation>
     </message>
     <message>
-        <location line="-37"/>
+        <location line="-38"/>
         <source>Wallet unlock failed</source>
         <translation>Wallet unlock failed</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+11"/>
+        <location line="+12"/>
         <location line="+19"/>
         <source>The passphrase entered for the wallet decryption was incorrect.</source>
         <translation>The passphrase entered for the wallet decryption was incorrect.</translation>
@@ -301,17 +311,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+277"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>Sign &amp;message...</translation>
     </message>
     <message>
-        <location line="+239"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Synchronizing with network...</translation>
     </message>
     <message>
-        <location line="-303"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Overview</translation>
     </message>
@@ -401,7 +411,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Change Passphrase...</translation>
     </message>
     <message numerus="yes">
-        <location line="+245"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation>
             <numerusform>~%n block remaining</numerusform>
@@ -414,12 +424,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Downloaded %1 of %2 blocks of transaction history (%3% done).</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>&amp;Export...</translation>
     </message>
     <message>
-        <location line="-60"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Send coins to a BlackCoin address</translation>
     </message>
@@ -429,12 +439,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Modify configuration options for BlackCoin</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+18"/>
         <source>Export the data in the current tab to a file</source>
         <translation>Export the data in the current tab to a file</translation>
     </message>
     <message>
-        <location line="-12"/>
+        <location line="-14"/>
         <source>Encrypt or decrypt wallet</source>
         <translation>Encrypt or decrypt wallet</translation>
     </message>
@@ -449,7 +459,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Change the passphrase used for wallet encryption</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+10"/>
         <source>&amp;Debug window</source>
         <translation>&amp;Debug window</translation>
     </message>
@@ -464,7 +474,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Verify message...</translation>
     </message>
     <message>
-        <location line="-198"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -484,7 +494,22 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Show / Hide</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+9"/>
+        <source>Unlock wallet</source>
+        <translation type="unfinished">Unlock wallet</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Lock Wallet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Lock wallet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
@@ -494,7 +519,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
@@ -521,7 +546,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>BlackCoin client</translation>
     </message>
     <message numerus="yes">
-        <location line="+69"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation>
             <numerusform>%n active connection to BlackCoin network</numerusform>
@@ -534,7 +559,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Downloaded %1 blocks of transaction history.</translation>
     </message>
     <message>
-        <location line="+402"/>
+        <location line="+413"/>
         <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
         <translation></translation>
     </message>
@@ -559,7 +584,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location line="-392"/>
+        <location line="-403"/>
         <source>%n second(s) ago</source>
         <translation>
             <numerusform>%n second ago</numerusform>
@@ -567,17 +592,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         </translation>
     </message>
     <message>
-        <location line="-279"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation></translation>
     </message>
-    <message>
-        <location line="+1"/>
-        <source>Unlock wallet for staking</source>
-        <translation></translation>
-    </message>
     <message numerus="yes">
-        <location line="+282"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation>
             <numerusform>%n minute ago</numerusform>
@@ -661,17 +681,17 @@ Address: %4
         <translation>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
         <translation>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Backup Wallet</source>
         <translation>Backup Wallet</translation>
     </message>
@@ -691,7 +711,7 @@ Address: %4
         <translation>There was an error trying to save the wallet data to the new location.</translation>
     </message>
     <message numerus="yes">
-        <location line="+68"/>
+        <location line="+76"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n second</numerusform>
@@ -721,6 +741,11 @@ Address: %4
             <numerusform>%n day</numerusform>
             <numerusform>%n days</numerusform>
         </translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Not staking</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
@@ -1341,27 +1366,25 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+33"/>
-        <location line="+212"/>
+        <location line="+231"/>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
         <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</translation>
     </message>
     <message>
-        <location line="-170"/>
         <source>Balance:</source>
-        <translation>Balance:</translation>
+        <translation type="vanished">Balance:</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="-160"/>
         <source>Stake:</source>
         <translation>Stake:</translation>
     </message>
     <message>
-        <location line="+84"/>
         <source>Number of transactions:</source>
-        <translation>Number of transactions:</translation>
+        <translation type="vanished">Number of transactions:</translation>
     </message>
     <message>
-        <location line="-55"/>
+        <location line="+29"/>
         <source>Unconfirmed:</source>
         <translation>Unconfirmed:</translation>
     </message>
@@ -1371,7 +1394,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Wallet</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+49"/>
+        <source>Spendable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Your current spendable balance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+71"/>
         <source>Immature:</source>
         <translation>Immature:</translation>
     </message>
@@ -1381,17 +1414,26 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Mined balance that has not yet matured</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+20"/>
+        <source>Total:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Your current total balance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+46"/>
         <source>&lt;b&gt;Recent transactions&lt;/b&gt;</source>
         <translation>&lt;b&gt;Recent transactions&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="-147"/>
         <source>Your current balance</source>
-        <translation>Your current balance</translation>
+        <translation type="vanished">Your current balance</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
         <translation>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</translation>
     </message>
@@ -1401,9 +1443,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Total of coins that was staked, and do not yet count toward the current balance</translation>
     </message>
     <message>
-        <location line="+75"/>
         <source>Total number of transactions in wallet</source>
-        <translation>Total number of transactions in wallet</translation>
+        <translation type="vanished">Total number of transactions in wallet</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -2689,7 +2730,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 <context>
     <name>bitcoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+29"/>
+        <location filename="../bitcoinstrings.cpp" line="+33"/>
         <source>BlackCoin version</source>
         <translation>BlackCoin version</translation>
     </message>
@@ -2739,19 +2780,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Specify data directory</translation>
     </message>
     <message>
-        <location line="-30"/>
-        <source>%s, you must set a rpcpassword in the configuration file:
- %s
-It is recommended you use the following random password:
-rpcuser=blackcoinrpc
-rpcpassword=%s
-(you do not need to remember this password)
-If the file does not exist, create it with owner-readable-only file permissions.
-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="+32"/>
+        <location line="+2"/>
         <source>Set database cache size in megabytes (default: 25)</source>
         <translation>Set database cache size in megabytes (default: 25)</translation>
     </message>
@@ -2791,7 +2820,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+5"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
         <translation>Threshold for disconnecting misbehaving peers (default: 100)</translation>
     </message>
@@ -2801,17 +2830,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Number of seconds to keep misbehaving peers from reconnecting (default: 86400)</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-44"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv4: %s</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+51"/>
         <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
         <translation>Detach block and address databases. Increases shutdown time (default: 0)</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+110"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation></translation>
     </message>
@@ -2826,7 +2855,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="-83"/>
+        <location line="-86"/>
         <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
         <translation></translation>
     </message>
@@ -2836,7 +2865,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Accept command line and JSON-RPC commands</translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+102"/>
         <source>Error: Transaction creation failed  </source>
         <translation></translation>
     </message>
@@ -2860,7 +2889,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-88"/>
         <source>Run in the background as a daemon and accept commands</source>
         <translation>Run in the background as a daemon and accept commands</translation>
     </message>
@@ -2870,7 +2899,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Use the test network</translation>
     </message>
     <message>
-        <location line="-21"/>
+        <location line="-24"/>
         <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
         <translation>Accept connections from outside (default: 1 if no -proxy or -connect)</translation>
     </message>
@@ -2880,7 +2909,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+117"/>
         <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
         <translation></translation>
     </message>
@@ -2924,7 +2953,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Block creation options:</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-62"/>
         <source>Connect only to the specified node(s)</source>
         <translation>Connect only to the specified node(s)</translation>
     </message>
@@ -2934,22 +2963,22 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Discover own IP address (default: 1 when listening and no -externalip)</translation>
     </message>
     <message>
-        <location line="+88"/>
+        <location line="+94"/>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
         <translation>Failed to listen on any port. Use -listen=0 if you want this.</translation>
     </message>
     <message>
-        <location line="-84"/>
+        <location line="-90"/>
         <source>Find peers using DNS lookup (default: 1)</source>
         <translation>Find peers using DNS lookup (default: 1)</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+5"/>
         <source>Sync checkpoints policy (default: strict)</source>
         <translation>Sync checkpoints policy (default: strict)</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+83"/>
         <source>Invalid -tor address: &apos;%s&apos;</source>
         <translation>Invalid -tor address: &apos;%s&apos;</translation>
     </message>
@@ -2959,7 +2988,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-82"/>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</source>
         <translation>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</translation>
     </message>
@@ -2969,12 +2998,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Maximum per-connection send buffer, &lt;n&gt;*1000 bytes (default: 1000)</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-16"/>
         <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
         <translation>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Output extra debugging information. Implies all other -debug* options</source>
         <translation>Output extra debugging information. Implies all other -debug* options</translation>
     </message>
@@ -2989,17 +3018,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Prepend debug output with timestamp</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+35"/>
         <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
         <translation>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</translation>
     </message>
     <message>
-        <location line="-68"/>
+        <location line="-74"/>
         <source>Select the version of socks proxy to use (4-5, default: 5)</source>
         <translation>Select the version of socks proxy to use (4-5, default: 5)</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
         <translation>Send trace/debug info to console instead of debug.log file</translation>
     </message>
@@ -3009,7 +3038,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Send trace/debug info to debugger</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Set maximum block size in bytes (default: 250000)</source>
         <translation>Set maximum block size in bytes (default: 250000)</translation>
     </message>
@@ -3019,23 +3048,23 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Set minimum block size in bytes (default: 0)</translation>
     </message>
     <message>
-        <location line="-26"/>
+        <location line="-29"/>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Shrink debug.log file on client startup (default: 1 when no -debug)</translation>
     </message>
     <message>
-        <location line="-39"/>
+        <location line="-42"/>
         <source>Specify connection timeout in milliseconds (default: 5000)</source>
         <translation>Specify connection timeout in milliseconds (default: 5000)</translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+109"/>
         <source>Unable to sign checkpoint, wrong checkpointkey?
 </source>
         <translation></translation>
     </message>
     <message>
-        <location line="-77"/>
+        <location line="-80"/>
         <source>Use UPnP to map the listening port (default: 0)</source>
         <translation>Use UPnP to map the listening port (default: 0)</translation>
     </message>
@@ -3045,17 +3074,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Use UPnP to map the listening port (default: 1 when listening)</translation>
     </message>
     <message>
-        <location line="-22"/>
+        <location line="-25"/>
         <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
         <translation>Use proxy to reach tor hidden services (default: same as -proxy)</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>Username for JSON-RPC connections</source>
         <translation>Username for JSON-RPC connections</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+47"/>
         <source>Verifying database integrity...</source>
         <translation></translation>
     </message>
@@ -3080,12 +3109,37 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="-51"/>
+        <location line="-54"/>
         <source>Password for JSON-RPC connections</source>
         <translation>Password for JSON-RPC connections</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-84"/>
+        <source>%s, you must set a rpcpassword in the configuration file:
+ %s
+It is recommended you use the following random password:
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(you do not need to remember this password)
+The username and password MUST NOT be the same.
+If the file does not exist, create it with owner-readable-only file permissions.
+It is also recommended to set alertnotify so you are notified of problems;
+for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Find peers using internet relay chat (default: 0)</source>
+        <translation type="unfinished">Find peers using internet relay chat (default: 1) {0)?}</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
         <translation></translation>
     </message>
@@ -3121,6 +3175,11 @@ If the file does not exist, create it with owner-readable-only file permissions.
     </message>
     <message>
         <location line="+2"/>
+        <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Upgrade wallet to latest format</source>
         <translation>Upgrade wallet to latest format</translation>
     </message>
@@ -3175,12 +3234,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation></translation>
     </message>
     <message>
-        <location line="-153"/>
+        <location line="-159"/>
         <source>This help message</source>
         <translation>This help message</translation>
     </message>
     <message>
-        <location line="+89"/>
+        <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
         <translation>Wallet %s resides outside data directory %s.</translation>
     </message>
@@ -3190,17 +3249,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</translation>
     </message>
     <message>
-        <location line="-92"/>
+        <location line="-98"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
     <message>
-        <location line="+134"/>
+        <location line="+140"/>
         <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
         <translation>Unable to bind to %s on this computer (bind returned error %d, %s)</translation>
     </message>
     <message>
-        <location line="-124"/>
+        <location line="-130"/>
         <source>Connect through socks proxy</source>
         <translation>Connect through socks proxy</translation>
     </message>
@@ -3210,7 +3269,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Allow DNS lookups for -addnode, -seednode and -connect</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+122"/>
         <source>Loading addresses...</source>
         <translation>Loading addresses...</translation>
     </message>
@@ -3295,27 +3354,26 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Loading block index...</translation>
     </message>
     <message>
-        <location line="-97"/>
+        <location line="-103"/>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation>Add a node to connect to and attempt to keep the connection open</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+122"/>
         <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
         <translation>Unable to bind to %s on this computer. BlackCoin is probably already running.</translation>
     </message>
     <message>
-        <location line="-110"/>
         <source>Find peers using internet relay chat (default: 1)</source>
-        <translation>Find peers using internet relay chat (default: 1)</translation>
+        <translation type="vanished">Find peers using internet relay chat (default: 1)</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="-97"/>
         <source>Fee per KB to add to transactions you send</source>
         <translation>Fee per KB to add to transactions you send</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+55"/>
         <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
         <translation></translation>
     </message>
@@ -3350,7 +3408,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Done loading</translation>
     </message>
     <message>
-        <location line="-157"/>
+        <location line="-167"/>
         <source>To use the %s option</source>
         <translation>To use the %s option</translation>
     </message>
@@ -3373,7 +3431,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
 </translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+14"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>

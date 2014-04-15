@@ -180,7 +180,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Повторите новый пароль</translation>
     </message>
     <message>
-        <location filename="../askpassphrasedialog.cpp" line="+33"/>
+        <location line="+33"/>
+        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>For staking only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../askpassphrasedialog.cpp" line="+35"/>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;10 or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
         <translation>Введите новый пароль для бумажника. &lt;br/&gt; Пожалуйста, используйте фразы из &lt;b&gt;10 или более случайных символов,&lt;/b&gt; или &lt;b&gt;восьми и более слов.&lt;/b&gt;</translation>
     </message>
@@ -190,7 +200,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Зашифровать бумажник</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+7"/>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
         <translation>Для выполнения операции требуется пароль вашего бумажника.</translation>
     </message>
@@ -240,49 +250,49 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>ВАЖНО: все предыдущие резервные копии вашего кошелька должны быть заменены новым зашифрованным файлом. В целях безопасности предыдущие резервные копии нешифрованного кошелька станут бесполезны, как только вы начнёте использовать новый шифрованный кошелёк.</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+103"/>
         <location line="+24"/>
         <source>Warning: The Caps Lock key is on!</source>
         <translation>Внимание: Caps Lock включен!</translation>
     </message>
     <message>
-        <location line="-130"/>
-        <location line="+58"/>
+        <location line="-133"/>
+        <location line="+60"/>
         <source>Wallet encrypted</source>
         <translation>Бумажник зашифрован</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-58"/>
         <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
         <translation>Сейчас программа закроется для завершения процесса шифрования. Помните, что шифрование вашего бумажника не может полностью защитить ваши монеты от кражи с помощью инфицирования вашего компьютера вредоносным ПО.</translation>
     </message>
     <message>
         <location line="+13"/>
         <location line="+7"/>
-        <location line="+42"/>
+        <location line="+44"/>
         <location line="+6"/>
         <source>Wallet encryption failed</source>
         <translation>Не удалось зашифровать бумажник</translation>
     </message>
     <message>
-        <location line="-54"/>
+        <location line="-56"/>
         <source>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</source>
         <translation>Шифрование бумажника не удалось из-за внутренней ошибки. Ваш бумажник не был зашифрован.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+48"/>
+        <location line="+50"/>
         <source>The supplied passphrases do not match.</source>
         <translation>Введённые пароли не совпадают.</translation>
     </message>
     <message>
-        <location line="-37"/>
+        <location line="-38"/>
         <source>Wallet unlock failed</source>
         <translation>Разблокировка бумажника не удалась</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+11"/>
+        <location line="+12"/>
         <location line="+19"/>
         <source>The passphrase entered for the wallet decryption was incorrect.</source>
         <translation>Указанный пароль не подходит.</translation>
@@ -301,17 +311,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+277"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>&amp;Подписать сообщение</translation>
     </message>
     <message>
-        <location line="+239"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Синхронизация с сетью...</translation>
     </message>
     <message>
-        <location line="-303"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>О&amp;бзор</translation>
     </message>
@@ -401,7 +411,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Изменить пароль</translation>
     </message>
     <message numerus="yes">
-        <location line="+245"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation>
             <numerusform>остался ~%n блок</numerusform>
@@ -415,12 +425,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Загружено %1 из %2 блоков истории операций (%3% завершено).</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>&amp;Экспорт...</translation>
     </message>
     <message>
-        <location line="-60"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Отправить монеты на указанный адрес BlackCoin</translation>
     </message>
@@ -430,12 +440,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Изменить параметры конфигурации BlackCoin</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+18"/>
         <source>Export the data in the current tab to a file</source>
         <translation>Экспортировать данные из вкладки в файл</translation>
     </message>
     <message>
-        <location line="-12"/>
+        <location line="-14"/>
         <source>Encrypt or decrypt wallet</source>
         <translation>Зашифровать или расшифровать бумажник</translation>
     </message>
@@ -450,7 +460,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Изменить пароль шифрования бумажника</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+10"/>
         <source>&amp;Debug window</source>
         <translation>&amp;Окно отладки</translation>
     </message>
@@ -465,7 +475,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Проверить сообщение...</translation>
     </message>
     <message>
-        <location line="-198"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -485,7 +495,22 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Показать / Скрыть</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+9"/>
+        <source>Unlock wallet</source>
+        <translation type="unfinished">Разблокировать бумажник</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Lock Wallet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Lock wallet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
@@ -495,7 +520,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>&amp;Help</source>
         <translation>&amp;Помощь</translation>
     </message>
@@ -522,7 +547,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>BlackCoin клиент</translation>
     </message>
     <message numerus="yes">
-        <location line="+69"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation>
             <numerusform>%n активное соединение с сетью</numerusform>
@@ -543,7 +568,7 @@ Estimate time to earn reward is %3</source>
         <translation type="obsolete">Участвуем в доле.\n Ваш вес %1\n Вес сети %2\n Ожидаемое время награды %3</translation>
     </message>
     <message>
-        <location line="+408"/>
+        <location line="+419"/>
         <source>Not staking because wallet is locked</source>
         <translation>Не участвуем в доле, так как кошелёк заблокирован</translation>
     </message>
@@ -563,7 +588,7 @@ Estimate time to earn reward is %3</source>
         <translation>Не участвуем в доле, так как нет зрелых монет</translation>
     </message>
     <message numerus="yes">
-        <location line="-392"/>
+        <location line="-403"/>
         <source>%n second(s) ago</source>
         <translation>
             <numerusform>%n секунду назад</numerusform>
@@ -572,17 +597,16 @@ Estimate time to earn reward is %3</source>
         </translation>
     </message>
     <message>
-        <location line="-279"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>&amp;Разблокировать бумажник</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Unlock wallet for staking</source>
-        <translation>Разблокировать бумажник для участия в доле</translation>
+        <translation type="vanished">Разблокировать бумажник для участия в доле</translation>
     </message>
     <message numerus="yes">
-        <location line="+282"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation>
             <numerusform>%n минуту назад</numerusform>
@@ -669,17 +693,17 @@ Address: %4
         <translation>Не удалось обработать URI! Это может быть связано с неверным адресом BlackCoin или неправильными параметрами URI.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
         <translation>Бумажник &lt;b&gt;зашифрован&lt;/b&gt; и в настоящее время &lt;b&gt;разблокирован&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Бумажник &lt;b&gt;зашифрован&lt;/b&gt; и в настоящее время &lt;b&gt;заблокирован&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Backup Wallet</source>
         <translation>Сделать резервную копию бумажника</translation>
     </message>
@@ -699,7 +723,7 @@ Address: %4
         <translation>При попытке сохранения данных бумажника в новое место произошла ошибка.</translation>
     </message>
     <message numerus="yes">
-        <location line="+68"/>
+        <location line="+76"/>
         <source>%n second(s)</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -738,6 +762,11 @@ Address: %4
         <location line="+4"/>
         <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
         <translation>Участвуем в доле.&lt;br&gt;Ваш вес %1&lt;br&gt;Вес сети %2&lt;br&gt;Ожидаемое время получения награды %3</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Not staking</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Staking.
@@ -1365,27 +1394,25 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+33"/>
-        <location line="+212"/>
+        <location line="+231"/>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
         <translation>Отображаемая информация может быть устаревшей. Ваш бумажник автоматически синхронизируется с сетью BlackCoin после подключения, но этот процесс пока не завершён.</translation>
     </message>
     <message>
-        <location line="-170"/>
         <source>Balance:</source>
-        <translation>Баланс:</translation>
+        <translation type="vanished">Баланс:</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="-160"/>
         <source>Stake:</source>
         <translation>Доля:</translation>
     </message>
     <message>
-        <location line="+84"/>
         <source>Number of transactions:</source>
-        <translation>Количество транзакций:</translation>
+        <translation type="vanished">Количество транзакций:</translation>
     </message>
     <message>
-        <location line="-55"/>
+        <location line="+29"/>
         <source>Unconfirmed:</source>
         <translation>Не подтверждено:</translation>
     </message>
@@ -1395,7 +1422,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Бумажник</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+49"/>
+        <source>Spendable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Your current spendable balance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+71"/>
         <source>Immature:</source>
         <translation>Незрелые:</translation>
     </message>
@@ -1405,17 +1442,26 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Баланс добытых монет, который ещё не созрел</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+20"/>
+        <source>Total:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Your current total balance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+46"/>
         <source>&lt;b&gt;Recent transactions&lt;/b&gt;</source>
         <translation>&lt;b&gt;Последние транзакции&lt;/b&gt;</translation>
     </message>
     <message>
-        <location line="-147"/>
         <source>Your current balance</source>
-        <translation>Ваш текущий баланс</translation>
+        <translation type="vanished">Ваш текущий баланс</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
         <translation>Общая сумма всех транзакций, которые до сих пор не подтверждены, и до сих пор не учитываются в текущем балансе</translation>
     </message>
@@ -1425,9 +1471,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Общая сумма всех монет, используемых для Proof-of-Stake, и не учитывающихся на балансе</translation>
     </message>
     <message>
-        <location line="+75"/>
         <source>Total number of transactions in wallet</source>
-        <translation>Общее количество транзакций в Вашем бумажнике</translation>
+        <translation type="vanished">Общее количество транзакций в Вашем бумажнике</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -2688,7 +2733,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 <context>
     <name>bitcoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+29"/>
+        <location filename="../bitcoinstrings.cpp" line="+33"/>
         <source>BlackCoin version</source>
         <translation>Версия</translation>
     </message>
@@ -2739,19 +2784,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Укажите каталог данных</translation>
     </message>
     <message>
-        <location line="-30"/>
-        <source>%s, you must set a rpcpassword in the configuration file:
- %s
-It is recommended you use the following random password:
-rpcuser=blackcoinrpc
-rpcpassword=%s
-(you do not need to remember this password)
-If the file does not exist, create it with owner-readable-only file permissions.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+32"/>
+        <location line="+2"/>
         <source>Set database cache size in megabytes (default: 25)</source>
         <translation>Установить размер кэша базы данных в мегабайтах (по умолчанию: 25)</translation>
     </message>
@@ -2791,7 +2824,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+5"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
         <translation>Порог для отключения неправильно ведущих себя узлов (по умолчанию: 100)</translation>
     </message>
@@ -2801,7 +2834,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Число секунд блокирования неправильно ведущих себя узлов (по умолчанию: 86400)</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-44"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv4: %s</source>
         <translation>Произошла ошибка при открытии RPC-порта %u для прослушивания на IPv4: %s</translation>
     </message>
@@ -2811,12 +2844,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Произошла ошибка при открытии на прослушивание IPv6 RCP-порта %u, возвращаемся к IPv4: %s</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+54"/>
         <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
         <translation>Отключить базы данных блоков и адресов. Увеличивает время завершения работы (по умолчанию: 0)</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
         <translation>Ошибка инициализации окружения БД %s! Для восстановления СДЕЛАЙТЕ РЕЗЕРВНУЮ КОПИЮ этой директории, затем удалите из нее все, кроме wallet.dat.</translation>
     </message>
@@ -2826,12 +2859,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-83"/>
+        <location line="-86"/>
         <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
         <translation>Прослушивать подключения JSON-RPC на &lt;порту&gt; (по умолчанию: 15715 или для testnet: 25715)</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+67"/>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
         <translation>Внимание: ошибка чтения wallet.dat! Все ключи восстановлены, но записи в адресной книге и истории транзакций могут быть некорректными.</translation>
     </message>
@@ -2841,12 +2874,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Внимание: wallet.dat был поврежден, данные восстановлены! Оригинальный wallet.dat сохранен как wallet.{timestamp}.bak в %s;, если ваши транзакции или баланс отображаются неправильно, следует восстановить его из данной копии.</translation>
     </message>
     <message>
-        <location line="-57"/>
+        <location line="-60"/>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Принимать командную строку и команды JSON-RPC</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+30"/>
         <source>Attempt to recover private keys from a corrupt wallet.dat</source>
         <translation>Попытка восстановления ключей из поврежденного wallet.dat</translation>
     </message>
@@ -2865,7 +2898,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Импортируется bootstrap-файл цепи блоков.</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-88"/>
         <source>Run in the background as a daemon and accept commands</source>
         <translation>Запускаться в фоне как демон и принимать команды</translation>
     </message>
@@ -2875,12 +2908,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Использовать тестовую сеть</translation>
     </message>
     <message>
-        <location line="-21"/>
+        <location line="-24"/>
         <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
         <translation>Принимать подключения извне (по умолчанию: 1, если не используется -proxy или -connect)</translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="+126"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>Ошибка: В транзакции отказано.  Такое может произойти, если некоторые монеты уже были потрачены, например, если Вы используете одну копию файла wallet.dat, а монеты были потрачены из другой копии, но не были отмечены как потраченные в этой.</translation>
     </message>
@@ -2914,7 +2947,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Параметры создания блоков:</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-62"/>
         <source>Connect only to the specified node(s)</source>
         <translation>Подключаться только к указанному узлу(ам)</translation>
     </message>
@@ -2924,7 +2957,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Определить свой IP (по умолчанию: 1 при прослушивании и если не используется -externalip)</translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="+126"/>
         <source>Error: Transaction creation failed  </source>
         <translation>Ошибка: Создание транзакции не удалось  </translation>
     </message>
@@ -2939,17 +2972,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Не удалось начать прослушивание на порту. Используйте -listen=0 если вас это устраивает.</translation>
     </message>
     <message>
-        <location line="-84"/>
+        <location line="-90"/>
         <source>Find peers using DNS lookup (default: 1)</source>
         <translation>Искать узлы с помощью DNS (по умолчанию: 1)</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+5"/>
         <source>Sync checkpoints policy (default: strict)</source>
         <translation>Политика синхронизированных меток (по умолчанию: strict)</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+83"/>
         <source>Invalid -tor address: &apos;%s&apos;</source>
         <translation>Неверный адрес -tor: &apos;%s&apos;</translation>
     </message>
@@ -2959,7 +2992,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-82"/>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</source>
         <translation>Максимальный размер буфера приёма на соединение, &lt;n&gt;*1000 байт (по умолчанию: 5000)</translation>
     </message>
@@ -2969,12 +3002,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Максимальный размер буфера отправки на соединение, &lt;n&gt;*1000 байт (по умолчанию: 1000)</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-16"/>
         <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
         <translation>Подключаться только к узлам из сети &lt;net&gt; (IPv4, IPv6 или Tor)</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Output extra debugging information. Implies all other -debug* options</source>
         <translation>Выводить больше отладочной информации. Включает все остальные опции -debug*</translation>
     </message>
@@ -2989,18 +3022,18 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Дописывать отметки времени к отладочному выводу</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+35"/>
         <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
         <translation>
 Параметры SSL: (см. Bitcoin Wiki для инструкций по настройке SSL)</translation>
     </message>
     <message>
-        <location line="-68"/>
+        <location line="-74"/>
         <source>Select the version of socks proxy to use (4-5, default: 5)</source>
         <translation>Выберите версию SOCKS-прокси (4-5, по умолчанию: 5)</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
         <translation>Выводить информацию трассировки/отладки на консоль вместо файла debug.log</translation>
     </message>
@@ -3010,7 +3043,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Отправлять информацию трассировки/отладки в отладчик</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Set maximum block size in bytes (default: 250000)</source>
         <translation>Максимальный размер блока в байтах (по умолчанию: 250000)</translation>
     </message>
@@ -3020,23 +3053,23 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Минимальный размер блока в байтах (по умолчанию: 0)</translation>
     </message>
     <message>
-        <location line="-26"/>
+        <location line="-29"/>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Сжимать файл debug.log при запуске клиента (по умолчанию: 1, если нет -debug)</translation>
     </message>
     <message>
-        <location line="-39"/>
+        <location line="-42"/>
         <source>Specify connection timeout in milliseconds (default: 5000)</source>
         <translation>Таймаут соединения в миллисекундах (по умолчанию: 5000)</translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+109"/>
         <source>Unable to sign checkpoint, wrong checkpointkey?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-77"/>
+        <location line="-80"/>
         <source>Use UPnP to map the listening port (default: 0)</source>
         <translation>Использовать UPnP для проброса порта (по умолчанию: 0)</translation>
     </message>
@@ -3046,17 +3079,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Использовать UPnP для проброса порта (по умолчанию: 1, если используется прослушивание)</translation>
     </message>
     <message>
-        <location line="-22"/>
+        <location line="-25"/>
         <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
         <translation>Использовать прокси для скрытых сервисов (по умолчанию: тот же, что и в -proxy)</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>Username for JSON-RPC connections</source>
         <translation>Имя для подключений JSON-RPC</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+47"/>
         <source>Verifying database integrity...</source>
         <translation>Проверка целостности базы данных...</translation>
     </message>
@@ -3081,12 +3114,37 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>wallet.dat поврежден, восстановление не удалось</translation>
     </message>
     <message>
-        <location line="-51"/>
+        <location line="-54"/>
         <source>Password for JSON-RPC connections</source>
         <translation>Пароль для подключений JSON-RPC</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-84"/>
+        <source>%s, you must set a rpcpassword in the configuration file:
+ %s
+It is recommended you use the following random password:
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(you do not need to remember this password)
+The username and password MUST NOT be the same.
+If the file does not exist, create it with owner-readable-only file permissions.
+It is also recommended to set alertnotify so you are notified of problems;
+for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Find peers using internet relay chat (default: 0)</source>
+        <translation type="unfinished">Найти участников через IRC (по умолчанию: 1) {0)?}</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3122,6 +3180,11 @@ If the file does not exist, create it with owner-readable-only file permissions.
     </message>
     <message>
         <location line="+2"/>
+        <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Upgrade wallet to latest format</source>
         <translation>Обновить бумажник до последнего формата</translation>
     </message>
@@ -3176,12 +3239,12 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-153"/>
+        <location line="-159"/>
         <source>This help message</source>
         <translation>Эта справка</translation>
     </message>
     <message>
-        <location line="+89"/>
+        <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
         <translation>Кошелек %s находится вне рабочей директории %s.</translation>
     </message>
@@ -3191,17 +3254,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Невозможно установить блокировку на рабочую директорию %s.  Возможно, бумажник уже запущен.</translation>
     </message>
     <message>
-        <location line="-92"/>
+        <location line="-98"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
     <message>
-        <location line="+134"/>
+        <location line="+140"/>
         <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
         <translation>Невозможно привязаться к %s на этом компьютере (bind вернул ошибку %d, %s)</translation>
     </message>
     <message>
-        <location line="-124"/>
+        <location line="-130"/>
         <source>Connect through socks proxy</source>
         <translation>Подключаться через socks прокси</translation>
     </message>
@@ -3211,7 +3274,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Разрешить поиск в DNS для -addnode, -seednode и -connect</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+122"/>
         <source>Loading addresses...</source>
         <translation>Загрузка адресов...</translation>
     </message>
@@ -3296,27 +3359,26 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Загрузка индекса блоков...</translation>
     </message>
     <message>
-        <location line="-97"/>
+        <location line="-103"/>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation>Добавить узел для подключения и пытаться поддерживать соединение открытым</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+122"/>
         <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
         <translation>Невозможно привязаться к %s на этом компьютере.  Возможно, BlackCoin уже работает.</translation>
     </message>
     <message>
-        <location line="-110"/>
         <source>Find peers using internet relay chat (default: 1)</source>
-        <translation>Найти участников через IRC (по умолчанию: 1)</translation>
+        <translation type="vanished">Найти участников через IRC (по умолчанию: 1)</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="-97"/>
         <source>Fee per KB to add to transactions you send</source>
         <translation>Комиссия на килобайт, добавляемая к вашим транзакциям</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+55"/>
         <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3351,7 +3413,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>Загрузка завершена</translation>
     </message>
     <message>
-        <location line="-157"/>
+        <location line="-167"/>
         <source>To use the %s option</source>
         <translation>Чтобы использовать опцию %s</translation>
     </message>
@@ -3374,7 +3436,7 @@ rpcpassword=%s
 </translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+14"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>

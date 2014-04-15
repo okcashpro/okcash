@@ -13,8 +13,12 @@ QT_TRANSLATE_NOOP("bitcoin-core", ""
 "rpcuser=blackcoinrpc\n"
 "rpcpassword=%s\n"
 "(you do not need to remember this password)\n"
+"The username and password MUST NOT be the same.\n"
 "If the file does not exist, create it with owner-readable-only file "
-"permissions.\n"),
+"permissions.\n"
+"It is also recommended to set alertnotify so you are notified of problems;\n"
+"for example: alertnotify=echo %%s | mail -s \"BlackCoin Alert\" admin@foo."
+"com\n"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Error"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
 "An error occurred while setting up the RPC port %u for listening on IPv6, "
@@ -53,11 +57,14 @@ QT_TRANSLATE_NOOP("bitcoin-core", "Connect to a node to retrieve peer addresses,
 QT_TRANSLATE_NOOP("bitcoin-core", "Specify your own public address"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Only connect to nodes in network <net> (IPv4, IPv6 or Tor)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Discover own IP address (default: 1 when listening and no -externalip)"),
-QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using internet relay chat (default: 1)"),
+QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using internet relay chat (default: 0)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Accept connections from outside (default: 1 if no -proxy or -connect)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Bind to given address. Use [host]:port notation for IPv6"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using DNS lookup (default: 1)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Stake your coins to support network and gain reward (default: 1)"),
+QT_TRANSLATE_NOOP("bitcoin-core", ""
+"Sync time with other nodes. Disable if time on your system is precise e.g. "
+"syncing with NTP (default: 1)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Sync checkpoints policy (default: strict)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Threshold for disconnecting misbehaving peers (default: 100)"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
@@ -97,6 +104,9 @@ QT_TRANSLATE_NOOP("bitcoin-core", ""
 QT_TRANSLATE_NOOP("bitcoin-core", "Require a confirmations for change (default: 0)"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
 "Enforce transaction scripts to use canonical PUSH operators (default: 1)"),
+QT_TRANSLATE_NOOP("bitcoin-core", ""
+"Execute command when a relevant alert is received (%s in cmd is replaced by "
+"message)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Upgrade wallet to latest format"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Set key pool size to <n> (default: 100)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Rescan the block chain for missing wallet transactions"),
