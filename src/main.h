@@ -477,6 +477,7 @@ public:
 
     bool IsFinal(int nBlockHeight=0, int64_t nBlockTime=0) const
     {
+        AssertLockHeld(cs_main);
         // Time based nLockTime implemented in 0.1.6
         if (nLockTime == 0)
             return true;
