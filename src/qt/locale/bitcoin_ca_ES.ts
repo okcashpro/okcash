@@ -1,27 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca_ES">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca_ES" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Bitcoin Core</source>
-        <translation type="vanished">Sobre el Nucli de Bitcoin</translation>
-    </message>
-    <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About BlackCoin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobre BlackCoin</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation type="unfinished"></translation>
+        <translation>versió &lt;b&gt;BlackCoin&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2009-2014 The Bitcoin developers
+Copyright © 2012-2014 The NovaCoin developers</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -31,11 +26,7 @@ This is experimental software.
 Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</source>
-        <translation>\n Aquest és software experimental.\n\n Distribuït sota llicència de software MIT/11, veure l&apos;arxiu COPYING o http://www.opensource.org/licenses/mit-license.php.\n\nAquest producte inclou software desarrollat pel projecte OpenSSL per a l&apos;ús de OppenSSL Toolkit (http://www.openssl.org/) i de softwqre criptogràfic escrit per l&apos;Eric Young (eay@cryptsoft.com) i software UPnP escrit per en Thomas Bernard.</translation>
-    </message>
-    <message>
-        <source>Copyright</source>
-        <translation type="vanished">Copyright</translation>
+        <translation>\n Aquest és software experimental.\n\n Distribuït sota llicència de software MIT/11, veure l&apos;arxiu COPYING o http://www.opensource.org/licenses/mit-license.php.\n\nAquest producte inclou software desarrollat pel projecte OpenSSL per a l&apos;ús de OppenSSL Toolkit (http://www.openssl.org/) i de software criptogràfic escrit per l&apos;Eric Young (eay@cryptsoft.com) i software UPnP escrit per en Thomas Bernard.</translation>
     </message>
 </context>
 <context>
@@ -43,15 +34,10 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
         <source>Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Llibreta d&apos;adreces</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
+        <location line="+22"/>
         <source>Double-click to edit address or label</source>
         <translation>Feu doble clic per editar l&apos;adreça o l&apos;etiqueta</translation>
     </message>
@@ -61,90 +47,59 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Crear una nova adreça</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>&amp;New Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">&amp;Nou</translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>Copy the currently selected address to the system clipboard</source>
         <translation>Copiar l&apos;adreça seleccionada al porta-retalls del sistema</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation type="vanished">&amp;Copiar</translation>
+        <location line="-11"/>
+        <source>&amp;New Address</source>
+        <translation>&amp;Nova adreça</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="-46"/>
+        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Aquestes són les teves adreces de BlackCoin per rebre els pagaments. És possible que vulgueu donar una diferent a cada remitent per a poder realitzar un seguiment de qui li está pagant.</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>&amp;Copy Address</source>
         <translation>&amp;Copiar adreça</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra el códi &amp;QR</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation type="unfinished"></translation>
+        <translation>Signar un missatge per demostrar que és propietari d&apos;una adreça BlackCoin</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation type="unfinished">Signar &amp;Missatge</translation>
+        <translation>Signar &amp;Message</translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>&amp;Verify Message</source>
-        <translation type="unfinished">&amp;Verificar el missatge</translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+25"/>
         <source>Delete the currently selected address from the list</source>
         <translation>Esborrar l&apos;adreça sel·leccionada</translation>
     </message>
     <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="vanished">Exportar les dades de la pestanya actual a un arxiu</translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="vanished">&amp;Exportar</translation>
+        <location line="-14"/>
+        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
+        <translation>Comproveu el missatge per assegurar-se que es va signar amb una adreça BlackCoin especificada.</translation>
     </message>
     <message>
         <location line="+3"/>
+        <source>&amp;Verify Message</source>
+        <translation>&amp;Verificar el missatge</translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>&amp;Delete</source>
         <translation>&amp;Esborrar</translation>
-    </message>
-    <message>
-        <source>Choose the address to send coins to</source>
-        <translation type="vanished">Escull una adreça a la qual enviar coins</translation>
-    </message>
-    <message>
-        <source>Choose the address to receive coins with</source>
-        <translation type="vanished">Escull l&apos;adreça a la quals vols rebre coins</translation>
-    </message>
-    <message>
-        <source>Sending addresses</source>
-        <translation type="vanished">Enviant adreces</translation>
-    </message>
-    <message>
-        <source>Receiving addresses</source>
-        <translation type="vanished">Rebent adreces</translation>
-    </message>
-    <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation type="vanished">Aquestes són la seva adreça de Bitcoin per enviar els pagaments. Sempre revisi la quantitat i l&apos;adreça del destinatari abans transferència de monedes.</translation>
     </message>
     <message>
         <location filename="../addressbookpage.cpp" line="+65"/>
@@ -159,26 +114,22 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+250"/>
         <source>Export Address Book Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar dades de la llibreta d&apos;adreces </translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+1"/>
+        <source>Comma separated file (*.csv)</source>
+        <translation>Arxiu de separació per comes (*.csv)</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Error exporting</source>
-        <translation type="unfinished"></translation>
+        <translation>Error a l&apos;exportar</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export Address List</source>
-        <translation type="vanished">Exportar la llista d&apos;adre</translation>
-    </message>
-    <message>
-        <location line="-13"/>
-        <source>Comma separated file (*.csv)</source>
-        <translation>Arxiu de separació per comes (*.csv)</translation>
+        <translation>No s&apos;ha pogut escriure al fitxer %1.</translation>
     </message>
 </context>
 <context>
@@ -224,12 +175,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+33"/>
         <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveix per desactivar l&apos;enviament trivial de diners quan el compte del sistema operatiu ha estat compromès. No ofereix seguretat real.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>For staking only</source>
-        <translation type="unfinished"></translation>
+        <translation>Per entrar al joc només</translation>
     </message>
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+35"/>
@@ -277,26 +228,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Confirmar l&apos;encriptació del moneder</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation type="vanished">Advertència: Si encripteu el vostre moneder i perdeu la constrasenya, &lt;b&gt;PERDREU TOTS ELS VOSTRES BITCOINS&lt;/b&gt;!</translation>
+        <location line="+1"/>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
+        <translation>Avís: Si xifra la seva cartera i perd la contrasenya, podrà &lt;b&gt; PERDRE TOTES LES SEVES MONEDES &lt;/ b&gt;!</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Esteu segur que voleu encriptar el vostre moneder?</translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+15"/>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>IMPORTANT: Tota copia de seguretat que hagis realitzat hauria de ser reemplaçada pel, recentment generat, arxiu encriptat del moneder.</translation>
     </message>
@@ -313,11 +255,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Moneder encriptat</translation>
     </message>
     <message>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
-        <translation type="vanished">Bitcoin es tancarà ara per acabar el procés d&apos;encriptació. Recorda que encriptar el teu moneder no protegeix completament els teus bitcoins de ser robades per programari maliciós instal·lat al teu ordinador.</translation>
+        <location line="-58"/>
+        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>BlackCoin tancarà ara per acabar el procés de xifrat. Recordeu que l&apos;encriptació de la seva cartera no pot protegir completament les seves monedes de ser robades pel malware que pugui infectar al seu equip.</translation>
     </message>
     <message>
-        <location line="-45"/>
+        <location line="+13"/>
         <location line="+7"/>
         <location line="+44"/>
         <location line="+6"/>
@@ -376,10 +319,6 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Panorama general</translation>
     </message>
     <message>
-        <source>Node</source>
-        <translation type="vanished">Node</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>Show general overview of wallet</source>
         <translation>Mostra panorama general del moneder</translation>
@@ -395,7 +334,32 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Cerca a l&apos;historial de transaccions</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+5"/>
+        <source>&amp;Address Book</source>
+        <translation>&amp;Llibreta d&apos;adreces</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Edit the list of stored addresses and labels</source>
+        <translation>Edició de la llista d&apos;adreces i etiquetes emmagatzemades</translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <source>&amp;Receive coins</source>
+        <translation>&amp;Rebre monedes</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show the list of addresses for receiving payments</source>
+        <translation>Mostra la llista d&apos;adreces per rebre pagaments</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>&amp;Send coins</source>
+        <translation>&amp;Enviar monedes</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>E&amp;xit</source>
         <translation>S&amp;ortir</translation>
     </message>
@@ -405,11 +369,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Sortir de l&apos;aplicació</translation>
     </message>
     <message>
-        <source>Show information about Bitcoin</source>
-        <translation type="vanished">Mostra informació sobre Bitcoin</translation>
+        <location line="+4"/>
+        <source>Show information about BlackCoin</source>
+        <translation>Mostra informació sobre BlackCoin</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+2"/>
         <source>About &amp;Qt</source>
         <translation>Sobre &amp;Qt</translation>
     </message>
@@ -438,24 +403,43 @@ This product includes software developed by the OpenSSL Project for use in the O
         <source>&amp;Change Passphrase...</source>
         <translation>&amp;Canviar contrasenya...</translation>
     </message>
-    <message>
-        <source>Importing blocks from disk...</source>
-        <translation type="vanished">Important blocs del disc..</translation>
+    <message numerus="yes">
+        <location line="+250"/>
+        <source>~%n block(s) remaining</source>
+        <translation><numerusform>~%n bloc restant</numerusform><numerusform>~%n blocs restants</numerusform></translation>
     </message>
     <message>
-        <source>Reindexing blocks on disk...</source>
-        <translation type="vanished">Re-indexant blocs al disc...</translation>
+        <location line="+6"/>
+        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
+        <translation>Descarregats %1 de %2 blocs d&apos;historial de transaccions (%3% completat).</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
-        <translation type="vanished">Enviar monedes a una adreça Bitcoin</translation>
+        <location line="-247"/>
+        <source>&amp;Export...</source>
+        <translation>&amp;Exportar...</translation>
     </message>
     <message>
-        <source>Modify configuration options for Bitcoin</source>
-        <translation type="vanished">Modificar les opcions de configuració per bitcoin</translation>
+        <location line="-62"/>
+        <source>Send coins to a BlackCoin address</source>
+        <translation>Enviar monedes a una adreça BlackCoin</translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="+45"/>
+        <source>Modify configuration options for BlackCoin</source>
+        <translation>Modificar les opcions de configuració per a BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Export the data in the current tab to a file</source>
+        <translation>Exportar les dades de la pestanya actual a un arxiu</translation>
+    </message>
+    <message>
+        <location line="-14"/>
+        <source>Encrypt or decrypt wallet</source>
+        <translation>Xifrar o desxifrar cartera</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Backup wallet to another location</source>
         <translation>Realitzar còpia de seguretat del moneder a un altre directori</translation>
     </message>
@@ -480,45 +464,42 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Verifica el missatge..</translation>
     </message>
     <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">Bitcoin</translation>
+        <location line="-200"/>
+        <source>BlackCoin</source>
+        <translation>BlackCoin</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="+0"/>
         <source>Wallet</source>
         <translation>Moneder</translation>
     </message>
     <message>
-        <source>&amp;Send</source>
-        <translation type="vanished">&amp;Enviar</translation>
+        <location line="+178"/>
+        <source>&amp;About BlackCoin</source>
+        <translation>&amp;Sobre BlackCoin</translation>
     </message>
     <message>
-        <source>&amp;Receive</source>
-        <translation type="vanished">&amp;Rebre</translation>
-    </message>
-    <message>
-        <location line="+187"/>
+        <location line="+9"/>
         <source>&amp;Show / Hide</source>
         <translation>&amp;Mostrar / Amagar</translation>
     </message>
     <message>
-        <source>Show or hide the main Window</source>
-        <translation type="vanished">Mostrar o amagar la finestra principal</translation>
+        <location line="+9"/>
+        <source>Unlock wallet</source>
+        <translation>Desbloquejar la cartera</translation>
     </message>
     <message>
-        <source>Encrypt the private keys that belong to your wallet</source>
-        <translation type="vanished">Xifrar les claus privades pertanyents al seu moneder</translation>
+        <location line="+1"/>
+        <source>&amp;Lock Wallet</source>
+        <translation>&amp;Bloquejar cartera</translation>
     </message>
     <message>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation type="vanished">Signa el missatges amb la seva adreça de Bitcoin per provar que les poseeixes</translation>
+        <location line="+1"/>
+        <source>Lock wallet</source>
+        <translation>Bloquejar cartera</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation type="vanished">Verificar els missatges per assegurar-te que han estat signades amb una adreça Bitcoin específica.</translation>
-    </message>
-    <message>
-        <location line="+45"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Arxiu</translation>
     </message>
@@ -538,244 +519,81 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Barra d&apos;eines de seccions</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+8"/>
+        <source>Actions toolbar</source>
+        <translation>Barra d&apos;eines d&apos;accions</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <location line="+9"/>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
     <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">Nucli de Bitcoin</translation>
-    </message>
-    <message>
-        <source>Bitcoin client</source>
-        <translation type="vanished">Client Bitcoin</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation type="vanished">
-            <numerusform>%n connexió activa a la xarxa Bitcoin</numerusform>
-            <numerusform>%n connexions actives a la xarxa Bitcoin</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Processed %1 of %2 (estimated) blocks of transaction history.</source>
-        <translation type="vanished">Processat el %1 de %2 (estimat) dels blocs del històric de transaccions.</translation>
-    </message>
-    <message>
-        <source>Processed %1 blocks of transaction history.</source>
-        <translation type="vanished">Proccessats %1 blocs del històric de transaccions.</translation>
-    </message>
-    <message numerus="yes">
-        <location line="+575"/>
-        <source>%n hour(s)</source>
-        <translation>
-            <numerusform>%n hora</numerusform>
-            <numerusform>%n hores</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location line="+4"/>
-        <source>%n day(s)</source>
-        <translation>
-            <numerusform>%n dia</numerusform>
-            <numerusform>%n dies</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n week(s)</source>
-        <translation type="vanished">
-            <numerusform>%n setmana</numerusform>
-            <numerusform>%n setmanes</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>%1 behind</source>
-        <translation type="vanished">%1 radera</translation>
-    </message>
-    <message>
-        <source>Last received block was generated %1 ago.</source>
-        <translation type="vanished">Lúltim bloc rebut ha estat generat fa %1.</translation>
-    </message>
-    <message>
-        <source>Transactions after this will not yet be visible.</source>
-        <translation type="vanished">Les transaccions a partir d&apos;això no seràn visibles.</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Error</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Avís</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Informació</translation>
-    </message>
-    <message>
-        <location line="-866"/>
-        <source>BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+139"/>
-        <source>&amp;Send coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Send coins to a BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>&amp;Receive coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show the list of addresses for receiving payments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>&amp;Address Book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Edit the list of stored addresses and labels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>&amp;About BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Modify configuration options for BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Encrypt or decrypt wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>&amp;Unlock Wallet...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Unlock wallet</source>
-        <translation type="unfinished">Desbloqueja el moneder</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>&amp;Lock Wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Lock wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>&amp;Export...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="unfinished">Exportar les dades de la pestanya actual a un arxiu</translation>
-    </message>
-    <message>
-        <location line="+62"/>
-        <source>Actions toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+22"/>
+        <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client BlackCoin</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n conexió activa a la xarxa BlackCoin</numerusform><numerusform>%n conexions actives a la xarxa BlackCoin</numerusform></translation>
     </message>
-    <message numerus="yes">
-        <location line="+26"/>
-        <source>~%n block(s) remaining</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+    <message>
+        <location line="+40"/>
+        <source>Downloaded %1 blocks of transaction history.</source>
+        <translation>Descarregats %1 blocs d&apos;historial de transaccions</translation>
+    </message>
+    <message>
+        <location line="+413"/>
+        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
+        <translation>En joc.&lt;br&gt;El teu pes és %1&lt;br&gt;El pes de la xarxa és %2&lt;br&gt;El temps estimat per a guanyar una recompensa és 3%</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation type="unfinished"></translation>
+        <source>Not staking because wallet is locked</source>
+        <translation>No s&apos;està en joc perquè la cartera esa bloquejada</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>Downloaded %1 blocks of transaction history.</source>
-        <translation type="unfinished"></translation>
+        <location line="+2"/>
+        <source>Not staking because wallet is offline</source>
+        <translation>No s&apos;està en joc perquè la cartera està fora de línia</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because wallet is syncing</source>
+        <translation>No s&apos;està en joc perquè la cartera està sincronitzant</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because you don&apos;t have mature coins</source>
+        <translation>No s&apos;està en joc perquè no tens monedes madures</translation>
     </message>
     <message numerus="yes">
-        <location line="+22"/>
+        <location line="-403"/>
         <source>%n second(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>fa %n segon</numerusform><numerusform>fa %n segons</numerusform></translation>
+    </message>
+    <message>
+        <location line="-284"/>
+        <source>&amp;Unlock Wallet...</source>
+        <translation>&amp;Desbloquejar cartera</translation>
     </message>
     <message numerus="yes">
-        <location line="+4"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>fa %n minut</numerusform><numerusform>fa %n minuts</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>fa %n hora</numerusform><numerusform>fa %n hores</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>fa %n dia</numerusform><numerusform>fa %n dies</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
@@ -790,17 +608,17 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+10"/>
         <source>Last received block was generated %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>El darrer bloc rebut s&apos;ha generat %1.</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>This transaction is over the size limit.  You can still send it for a fee of %1, which goes to the nodes that process your transaction and helps to support the network.  Do you want to pay the fee?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aquesta transacció es troba sobre el límit de mida. Encara pot enviar-la amb una comisió de 1%, aquesta va als nodes que processen la seva transacció i ajuda a mantenir la xarxa. Vol pagar la quota?</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmeu comisió</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -825,13 +643,13 @@ Address: %4
         <location line="+100"/>
         <location line="+15"/>
         <source>URI handling</source>
-        <translation type="unfinished">Manejant URI</translation>
+        <translation>Manejant URI</translation>
     </message>
     <message>
         <location line="-15"/>
         <location line="+15"/>
         <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation type="unfinished"></translation>
+        <translation>l&apos;URI no es pot analitzar! Això pot ser causat per una adreça BlackCoin no vàlida o paràmetres URI malformats.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -846,79 +664,52 @@ Address: %4
     <message>
         <location line="+25"/>
         <source>Backup Wallet</source>
-        <translation type="unfinished">Realitzar còpia de seguretat del moneder</translation>
+        <translation>Realitzar còpia de seguretat del moneder</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Wallet Data (*.dat)</source>
-        <translation type="unfinished">Dades del moneder (*.dat)</translation>
+        <translation>Dades del moneder (*.dat)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Backup Failed</source>
-        <translation type="unfinished">Còpia de seguretat faillida</translation>
+        <translation>Còpia de seguretat fallida</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi ha un error al tractar de salvar les dades de la seva cartera a la nova ubicació.</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
         <source>%n second(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n segon</numerusform><numerusform>%n segons</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n minute(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n minut</numerusform><numerusform>%n minuts</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n hour(s)</source>
+        <translation><numerusform>%n hora</numerusform><numerusform>%n hores</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n day(s)</source>
+        <translation><numerusform>%n dia</numerusform><numerusform>%n dies</numerusform></translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Not staking because wallet is locked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because wallet is offline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because wallet is syncing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because you don&apos;t have mature coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+18"/>
         <source>Not staking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
-        <translation type="vanished">Ha tingut lloc un error fatal. Bitcoin no pot continuar executant-se de manera segura i es tancará.</translation>
+        <translation>No s&apos;està en joc</translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha produït un error fatal. BlackCoin ja no pot continuar de forma segura i es tancarà.</translation>
     </message>
 </context>
 <context>
@@ -934,7 +725,7 @@ Address: %4
     <message>
         <location filename="../forms/coincontroldialog.ui" line="+14"/>
         <source>Coin Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcions del control de monedes</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -945,7 +736,7 @@ Address: %4
         <location line="+19"/>
         <location line="+32"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -963,7 +754,7 @@ Address: %4
         <location line="+86"/>
         <location line="+38"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"></translation>
+        <translation>123.456 BC {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -978,10 +769,16 @@ Address: %4
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortida baixa:</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+22"/>
+        <location filename="../coincontroldialog.cpp" line="+551"/>
+        <source>no</source>
+        <translation>no</translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <source>After Fee:</source>
         <translation>Quota posterior:</translation>
     </message>
@@ -993,7 +790,7 @@ Address: %4
     <message>
         <location line="+69"/>
         <source>(un)select all</source>
-        <translation type="unfinished"></translation>
+        <translation>(de)seleccionar tot</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1013,7 +810,7 @@ Address: %4
     <message>
         <location line="+5"/>
         <source>Label</source>
-        <translation type="unfinished">Etiqueta</translation>
+        <translation>Etiqueta</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1041,7 +838,7 @@ Address: %4
         <translation>Prioritat</translation>
     </message>
     <message>
-        <location filename="../coincontroldialog.cpp" line="+36"/>
+        <location filename="../coincontroldialog.cpp" line="-515"/>
         <source>Copy address</source>
         <translation>Copiar adreça </translation>
     </message>
@@ -1064,37 +861,37 @@ Address: %4
     <message>
         <location line="+24"/>
         <source>Copy quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar quantitat</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Copy fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar comisió</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar després de comisió</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar bytes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar prioritat</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy low output</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar sortida baixa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar canvi</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -1102,50 +899,7 @@ Address: %4
         <translation>El més alt</translation>
     </message>
     <message>
-        <location line="+164"/>
-        <source>DUST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>This label turns red, if the transaction size is bigger than 10000 bytes.
-
- This means a fee of at least %1 per kb is required.
-
- Can vary +/- 1 Byte per input.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+1"/>
-        <source>Transactions with higher priority get more likely into a block.
-
-This label turns red, if the priority is smaller than &quot;medium&quot;.
-
- This means a fee of at least %1 per kb is required.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This label turns red, if any recipient receives an amount smaller than %1.
-
- This means a fee of at least %2 is required. 
-
- Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This label turns red, if the change is smaller than %1.
-
- This means a fee of at least %2 is required.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>higher</source>
-        <translation type="vanished">Més alt</translation>
-    </message>
-    <message>
-        <location line="-176"/>
         <source>high</source>
         <translation>Alt</translation>
     </message>
@@ -1170,35 +924,70 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>baix</translation>
     </message>
     <message>
-        <source>lower</source>
-        <translation type="vanished">més baix</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>lowest</source>
         <translation>el més baix</translation>
     </message>
     <message>
-        <source>Dust</source>
-        <translation type="vanished">Pols</translation>
+        <location line="+155"/>
+        <source>DUST</source>
+        <translation>POLS</translation>
     </message>
     <message>
-        <location line="+155"/>
+        <location line="+0"/>
         <source>yes</source>
         <translation>si</translation>
     </message>
     <message>
-        <location filename="../forms/coincontroldialog.ui" line="-235"/>
-        <location filename="../coincontroldialog.cpp" line="+0"/>
-        <source>no</source>
-        <translation>no</translation>
+        <location line="+10"/>
+        <source>This label turns red, if the transaction size is bigger than 10000 bytes.
+
+ This means a fee of at least %1 per kb is required.
+
+ Can vary +/- 1 Byte per input.</source>
+        <translation>Aquesta etiqueta es tornarà vermell, si la mida de la transacció és més gran que 10000 bytes.
+
+En aquest cas es requereix una comisió d&apos;almenys el 1% per kb. 
+
+Pot variar + / - 1 Byte per entrada.</translation>
     </message>
     <message>
-        <source>This label turns red, if the transaction size is greater than 1000 bytes.</source>
-        <translation type="vanished">Aquesta etiqueta es posa de color vermell si la mida de la transacció és més gran de 1000 bytes.</translation>
+        <location line="+1"/>
+        <source>Transactions with higher priority get more likely into a block.
+
+This label turns red, if the priority is smaller than &quot;medium&quot;.
+
+ This means a fee of at least %1 per kb is required.</source>
+        <translation>Les operacions amb més prioritat entren mes facilment a un bloc. 
+
+Aquesta etiqueta es torna vermella, si la prioritat és menor que &quot;mitja&quot;.
+
+En aquest cas es requereix una comisió d&apos;almenys el 1% per kb.</translation>
     </message>
     <message>
-        <location filename="../coincontroldialog.cpp" line="+50"/>
+        <location line="+1"/>
+        <source>This label turns red, if any recipient receives an amount smaller than %1.
+
+ This means a fee of at least %2 is required. 
+
+ Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
+        <translation>Aquesta etiqueta es torna vermella, si qualsevol beneficiari rep una quantitat inferior a 1%.
+
+En aquest cas es requereix una comisió d&apos;almenys 2%.
+
+Les quantitats inferiors a 0.546 vegades la quota mínima del relé es mostren com a POLS.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This label turns red, if the change is smaller than %1.
+
+ This means a fee of at least %2 is required.</source>
+        <translation>Aquesta etiqueta es torna vermella, si el canvi és menor que 1%.
+
+En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
         <location line="+66"/>
         <source>(no label)</source>
         <translation>(sense etiqueta)</translation>
@@ -1206,7 +995,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-9"/>
         <source>change from %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>canvi desde %1 (%2)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1229,17 +1018,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;etiqueta associada amb aquesta entrada de la llibreta d&apos;adreces</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-10"/>
+        <location line="+7"/>
         <source>&amp;Address</source>
         <translation>&amp;Direcció</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
+        <translation>La direcció associada amb aquesta entrada de la llibreta d&apos;adreces. Només pot ser modificada per a l&apos;enviament d&apos;adreces.</translation>
     </message>
     <message>
         <location filename="../editaddressdialog.cpp" line="+20"/>
@@ -1262,21 +1051,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Editar adreces d&apos;enviament</translation>
     </message>
     <message>
-        <location line="+71"/>
-        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+76"/>
         <source>The entered address &quot;%1&quot; is already in the address book.</source>
         <translation>L&apos;adreça introduïda &quot;%1&quot; ja és present a la llibreta d&apos;adreces.</translation>
     </message>
     <message>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation type="vanished">L&apos;adreça introduida &quot;%1&quot; no és una adreça Bitcoin valida.</translation>
+        <location line="-5"/>
+        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
+        <translation>La direcció introduïda &quot;%1&quot; no és una adreça BlackCoin vàlida.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Could not unlock wallet.</source>
         <translation>No s&apos;ha pogut desbloquejar el moneder.</translation>
     </message>
@@ -1287,127 +1072,47 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>FreespaceChecker</name>
-    <message>
-        <source>name</source>
-        <translation type="vanished">nom</translation>
-    </message>
-    <message>
-        <source>Directory already exists. Add %1 if you intend to create a new directory here.</source>
-        <translation type="vanished">El directori ja existeix. Afegeix %1 si vols crear un nou directori en aquesta ubicació.</translation>
-    </message>
-</context>
-<context>
     <name>GUIUtil::HelpMessageBox</name>
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
         <source>BlackCoin-Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>BlackCoin-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
         <source>version</source>
-        <translation type="unfinished">versió</translation>
+        <translation>versió</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Usage:</source>
-        <translation type="unfinished">Ús:</translation>
+        <translation>Ús:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>command-line options</source>
-        <translation type="unfinished">Opcions de la línia d&apos;ordres</translation>
+        <translation>Opcions de la línia d&apos;ordres</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>UI options</source>
-        <translation type="unfinished">Opcions de IU</translation>
+        <translation>Opcions de IU</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation type="unfinished">Definir llenguatge, per exemple &quot;de_DE&quot; (per defecte: Preferències locals de sistema)</translation>
+        <translation>Definir llenguatge, per exemple &quot;de_DE&quot; (per defecte: Preferències locals de sistema)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start minimized</source>
-        <translation type="unfinished">Iniciar minimitzat</translation>
+        <translation>Iniciar minimitzat</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show splash screen on startup (default: 1)</source>
-        <translation type="unfinished">Mostrar finestra de benvinguda a l&apos;inici (per defecte: 1)</translation>
-    </message>
-</context>
-<context>
-    <name>HelpMessageDialog</name>
-    <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">Nucli de Bitcoin</translation>
-    </message>
-    <message>
-        <source>version</source>
-        <translation type="vanished">versió</translation>
-    </message>
-    <message>
-        <source>Usage:</source>
-        <translation type="vanished">Ús:</translation>
-    </message>
-    <message>
-        <source>command-line options</source>
-        <translation type="vanished">Opcions de la línia d&apos;ordres</translation>
-    </message>
-    <message>
-        <source>UI options</source>
-        <translation type="vanished">Opcions de IU</translation>
-    </message>
-    <message>
-        <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation type="vanished">Definir llenguatge, per exemple &quot;de_DE&quot; (per defecte: Preferències locals de sistema)</translation>
-    </message>
-    <message>
-        <source>Start minimized</source>
-        <translation type="vanished">Iniciar minimitzat</translation>
-    </message>
-    <message>
-        <source>Show splash screen on startup (default: 1)</source>
-        <translation type="vanished">Mostrar finestra de benvinguda a l&apos;inici (per defecte: 1)</translation>
-    </message>
-</context>
-<context>
-    <name>Intro</name>
-    <message>
-        <source>Welcome</source>
-        <translation type="vanished">Benvingut</translation>
-    </message>
-    <message>
-        <source>Welcome to Bitcoin Core.</source>
-        <translation type="vanished">Benvingut a Bitcoin Core.</translation>
-    </message>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">Bitcoin</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Error</translation>
-    </message>
-    <message>
-        <source>GB of free space available</source>
-        <translation type="vanished">GB d&apos;espai lliure disponible</translation>
-    </message>
-    <message>
-        <source>(of %1GB needed)</source>
-        <translation type="vanished">(d&apos; %1GB necessari)</translation>
-    </message>
-</context>
-<context>
-    <name>OpenURIDialog</name>
-    <message>
-        <source>URI:</source>
-        <translation type="vanished">URI:</translation>
+        <translation>Mostrar finestra de benvinguda a l&apos;inici (per defecte: 1)</translation>
     </message>
 </context>
 <context>
@@ -1423,78 +1128,54 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Principal</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+6"/>
+        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
+        <translation>Comisió opcional per kB que ajuda a assegurar-se que les seves transaccions es processen ràpidament. La majoria de les transaccions són 1 kB. Comisió d&apos;0.01 recomenada.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Pay transaction &amp;fee</source>
         <translation>Pagar &amp;comisió de transacció</translation>
     </message>
     <message>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
-        <translation type="vanished">Iniciar automàticament Bitcoin després de l&apos;inici de sessió del sistema.</translation>
-    </message>
-    <message>
-        <source>&amp;Start Bitcoin on system login</source>
-        <translation type="vanished">&amp;Iniciar Bitcoin al inici de sessió del sistema.</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">MB</translation>
-    </message>
-    <message>
-        <source>Reset all client options to default.</source>
-        <translation type="vanished">Reestablir totes les opcions del client.</translation>
-    </message>
-    <message>
-        <source>&amp;Reset Options</source>
-        <translation type="vanished">&amp;Reestablir Opcions</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>&amp;Network</source>
-        <translation>&amp;Xarxa</translation>
-    </message>
-    <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="vanished">Obrir el port del client de Bitcoin al router de forma automàtica. Això només funciona quan el teu router implementa UPnP i l&apos;opció està activada.</translation>
-    </message>
-    <message>
-        <location line="-126"/>
-        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation type="unfinished"></translation>
+        <translation>La quantitat reservada no participa en el joc i per tant es pot gastar en qualsevol moment.</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation type="unfinished"></translation>
+        <translation>Reserva</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicia automàticament BlackCoin després d&apos;entrar en el sistema.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Start BlackCoin on system login</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Iniciar BlackCoin amb l&apos;inici de sessió</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation type="unfinished"></translation>
+        <translation>Separeu el bloc i les bases de dades d&apos;adreces en apagar l&apos;equip. En aquest cas es pot moure a un altre directori de dades, però alenteix l&apos;apagada. La cartera està sempre separada.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Detach databases at shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Separar bases de dades a l&apos;apagar l&apos;equip</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+21"/>
+        <source>&amp;Network</source>
+        <translation>&amp;Xarxa</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir automàticament el port de client BlackCoin en el router. Això només funciona quan el router és compatible amb UPnP i està habilitat.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1504,12 +1185,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecteu-vos a la xarxa BlackCoin través d&apos;un proxy SOCKS (per exemple, quan es connecta a través de Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Connect through SOCKS proxy:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Conectar a través d&apos;un proxy SOCKS:</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -1519,7 +1200,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>IP address of the proxy (e.g. 127.0.0.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adreça IP del servidor proxy (per exemple, 127.0.0.1)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1579,29 +1260,10 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;idioma de la interfície d&apos;usuari es pot configurar aquí. Aquesta configuració s&apos;aplicarà després de reiniciar BlackCoin.</translation>
     </message>
     <message>
-        <location line="+33"/>
-        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Display coin &amp;control features (experts only!)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+88"/>
-        <source>&amp;Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting Bitcoin.</source>
-        <translation type="vanished">Aquí pots definir el llenguatge de l&apos;aplicatiu. Aquesta configuració tindrà efecte un cop es reiniciï Bitcoin.</translation>
-    </message>
-    <message>
-        <location line="-123"/>
+        <location line="+11"/>
         <source>&amp;Unit to show amounts in:</source>
         <translation>&amp;Unitats per mostrar les quantitats en:</translation>
     </message>
@@ -1611,21 +1273,27 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Sel·lecciona la unitat de subdivisió per defecte per mostrar en la interficie quan s&apos;envien monedes.</translation>
     </message>
     <message>
-        <source>Whether to show Bitcoin addresses in the transaction list or not.</source>
-        <translation type="vanished">Mostrar adreces Bitcoin als llistats de transaccions o no.</translation>
+        <location line="+9"/>
+        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
+        <translation>Per mostrar BlackCoin adreces a la llista de transaccions o no.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+3"/>
         <source>&amp;Display addresses in transaction list</source>
         <translation>&amp;Mostrar adreces al llistat de transaccions</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Whether to show coin control features or not.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per mostrar les característiques de control de la moneda o no.</translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+3"/>
+        <source>Display coin &amp;control features (experts only!)</source>
+        <translation>Mostrar controls i característiques de la moneda (només per a experts!)</translation>
+    </message>
+    <message>
+        <location line="+71"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
@@ -1633,6 +1301,11 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+7"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancel·la</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>&amp;Apply</source>
+        <translation>&amp;Aplicar</translation>
     </message>
     <message>
         <location filename="../optionsdialog.cpp" line="+55"/>
@@ -1643,17 +1316,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+149"/>
         <location line="+9"/>
         <source>Warning</source>
-        <translation type="unfinished">Avís</translation>
+        <translation>Avís</translation>
     </message>
     <message>
         <location line="-9"/>
         <location line="+9"/>
         <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Confirm options reset</source>
-        <translation type="vanished">Confirmi el reestabliment de les opcions</translation>
+        <translation>Aquesta configuració s&apos;aplicarà després de reiniciar BlackCoin.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1669,52 +1338,38 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Formulari</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="vanished">La informació mostrada pot no estar al día. El teu moneder es sincronitza automàticament amb la xarxa Bitcoin un cop s&apos;ha establert connexió, però aquest proces no s&apos;ha completat encara.</translation>
+        <location line="+33"/>
+        <location line="+231"/>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>La informació mostrada pot estar fora de data. La seva cartera es sincronitza automàticament amb la xarxa BlackCoin després d&apos;establir una connexió, però aquest procés no s&apos;ha completat encara.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="-160"/>
+        <source>Stake:</source>
+        <translation>En joc:</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Unconfirmed:</source>
+        <translation>Sense confirmar:</translation>
+    </message>
+    <message>
+        <location line="-107"/>
         <source>Wallet</source>
         <translation>Moneder</translation>
     </message>
     <message>
-        <location line="+65"/>
-        <source>Your current spendable balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-58"/>
-        <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-189"/>
+        <location line="+49"/>
         <source>Spendable:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <source>Stake:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pot gastar-se:</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation type="unfinished"></translation>
+        <source>Your current spendable balance</source>
+        <translation>El balanç de saldo actual que pot gastar-se</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>Unconfirmed:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
+        <location line="+71"/>
         <source>Immature:</source>
         <translation>Immatur:</translation>
     </message>
@@ -1731,12 +1386,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+16"/>
         <source>Your current total balance</source>
-        <translation type="unfinished"></translation>
+        <translation>El seu balanç total</translation>
     </message>
     <message>
         <location line="+46"/>
         <source>&lt;b&gt;Recent transactions&lt;/b&gt;</source>
         <translation>&lt;b&gt;Transaccions recents&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location line="-108"/>
+        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
+        <translation>Total de transaccions que encara no s&apos;han confirmat, i encara no compten per al balanç actual</translation>
+    </message>
+    <message>
+        <location line="-29"/>
+        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
+        <translation>Total de les monedes que s&apos;han posat en joc, i encara no compten per al balanç actual</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -1746,118 +1411,61 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>PaymentServer</name>
-    <message>
-        <source>URI handling</source>
-        <translation type="vanished">Manejant URI</translation>
-    </message>
-    <message>
-        <source>URI can not be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
-        <translation type="vanished">la URI no pot ser processada! Això es pot ser causat per una adreça Bitcoin invalida o paràmetres URI malformats.</translation>
-    </message>
-    <message>
-        <source>Payment request error</source>
-        <translation type="vanished">Error en la sol·licitud de pagament</translation>
-    </message>
-    <message>
-        <source>Cannot start bitcoin: click-to-pay handler</source>
-        <translation type="vanished">No es pot iniciar bitcoin: manejador clicla-per-pagar</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation type="vanished">Reemborsament de %1</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation type="vanished">Pagament notificat</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation type="vanished">Error en la sol·licitud de xarxa</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">Bitcoin</translation>
-    </message>
-    <message>
-        <source>Error: Specified data directory &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">Error: El directori de dades específiques &quot;%1! no existeix.</translation>
-    </message>
-    <message>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">Introdueixi una adreça de Bitcoin (per exemple 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
-    </message>
-</context>
-<context>
     <name>QRCodeDialog</name>
     <message>
         <location filename="../forms/qrcodedialog.ui" line="+14"/>
         <source>QR Code Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diàleg de codi QR</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>Request Payment</source>
-        <translation type="unfinished"></translation>
+        <translation>Sol·licitud de pagament</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+56"/>
+        <source>Amount:</source>
+        <translation>Quantitat:</translation>
+    </message>
+    <message>
+        <location line="-44"/>
         <source>Label:</source>
-        <translation type="unfinished"></translation>
+        <translation>Etiqueta:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Message:</source>
-        <translation type="unfinished">Missatge:</translation>
+        <translation>Missatge:</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <source>Amount:</source>
-        <translation type="unfinished">Quantitat:</translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+71"/>
         <source>&amp;Save As...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Desa com ...</translation>
     </message>
     <message>
         <location filename="../qrcodedialog.cpp" line="+62"/>
         <source>Error encoding URI into QR Code.</source>
-        <translation type="unfinished">Error codificant la URI en un codi QR.</translation>
+        <translation>Error codificant la URI en un codi QR.</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>The entered amount is invalid, please check.</source>
-        <translation type="unfinished"></translation>
+        <translation>La quantitat introduïda no és vàlida, comproveu-ho si us plau.</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="unfinished">URI resultant massa llarga, intenta reduir el text per a la etiqueta / missatge</translation>
+        <translation>URI resultant massa llarga, intenta reduir el text per a la etiqueta / missatge</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Save QR Code</source>
-        <translation type="unfinished">Desar codi QR</translation>
+        <translation>Desar codi QR</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>PNG Images (*.png)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QRImageWidget</name>
-    <message>
-        <source>Save QR Code</source>
-        <translation type="vanished">Desar codi QR</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png)</source>
-        <translation type="vanished">Imatge PNG (*.png)</translation>
+        <translation>Imatges PNG (*.png)</translation>
     </message>
 </context>
 <context>
@@ -1892,14 +1500,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Informació</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation type="vanished">Depura finestra</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="vanished">General</translation>
-    </message>
-    <message>
         <location line="+68"/>
         <source>Using OpenSSL version</source>
         <translation>Utilitzant OpenSSL versió</translation>
@@ -1915,28 +1515,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Xarxa</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
-    <message>
-        <location line="-156"/>
-        <source>BlackCoin - Debug window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>BlackCoin Core</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+138"/>
+        <location line="+7"/>
         <source>Number of connections</source>
         <translation>Nombre de connexions</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>On testnet</source>
-        <translation type="unfinished"></translation>
+        <translation>A testnet</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -1959,29 +1545,24 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Últim temps de bloc</translation>
     </message>
     <message>
-        <location line="+49"/>
-        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+52"/>
         <source>&amp;Open</source>
         <translation>&amp;Obrir</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Command-line options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opcions de la línia d&apos;ordres</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra el missatge d&apos;ajuda de BlackCoin-Qt per obtenir una llista amb les possibles opcions de línia d&apos;ordres BlackCoin.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mostra</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -1989,44 +1570,39 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Consola</translation>
     </message>
     <message>
-        <source>Totals</source>
-        <translation type="vanished">Totals</translation>
-    </message>
-    <message>
-        <source>In:</source>
-        <translation type="vanished">Dins:</translation>
-    </message>
-    <message>
-        <source>Out:</source>
-        <translation type="vanished">Fora:</translation>
-    </message>
-    <message>
         <location line="-260"/>
         <source>Build date</source>
         <translation>Data de compilació</translation>
     </message>
     <message>
-        <location line="+200"/>
+        <location line="-104"/>
+        <source>BlackCoin - Debug window</source>
+        <translation>BlackCoin - Finestra Depuració</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>BlackCoin Core</source>
+        <translation>Nucli BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+279"/>
         <source>Debug log file</source>
         <translation>Dietàri de debug</translation>
     </message>
     <message>
-        <source>Open the Bitcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="vanished">Obrir el dietari de debug de Bitcoin del directori de dades actual. Aixó pot trigar uns quants segons per a dietàris grossos.</translation>
+        <location line="+7"/>
+        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Obriu el fitxer de registre de depuració BlackCoin des del directori de dades actual. Això pot trigar uns segons en els arxius de registre de grans dimensions.</translation>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+102"/>
         <source>Clear console</source>
         <translation>Netejar consola</translation>
     </message>
     <message>
-        <source>Welcome to the Bitcoin RPC console.</source>
-        <translation type="vanished">Benvingut a la consola RPC de Bitcoin</translation>
-    </message>
-    <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
         <source>Welcome to the BlackCoin RPC console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Benvingut a la consola RPC de BlackCoin.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2037,151 +1613,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+1"/>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>Escriu &lt;b&gt;help&lt;\b&gt; per a obtenir una llistat de les ordres disponibles.</translation>
-    </message>
-    <message>
-        <source>%1 B</source>
-        <translation type="vanished">%1 B</translation>
-    </message>
-    <message>
-        <source>%1 KB</source>
-        <translation type="vanished">%1 KB</translation>
-    </message>
-    <message>
-        <source>%1 MB</source>
-        <translation type="vanished">%1 MB</translation>
-    </message>
-    <message>
-        <source>%1 GB</source>
-        <translation type="vanished">%1 GB</translation>
-    </message>
-    <message>
-        <source>%1 m</source>
-        <translation type="vanished">%1 m</translation>
-    </message>
-    <message>
-        <source>%1 h %2 m</source>
-        <translation type="vanished">%1 h %2 m</translation>
-    </message>
-</context>
-<context>
-    <name>ReceiveCoinsDialog</name>
-    <message>
-        <source>&amp;Amount:</source>
-        <translation type="vanished">&amp;Quantitat:</translation>
-    </message>
-    <message>
-        <source>&amp;Label:</source>
-        <translation type="vanished">&amp;Etiqueta:</translation>
-    </message>
-    <message>
-        <source>&amp;Message:</source>
-        <translation type="vanished">&amp;Missatge:</translation>
-    </message>
-    <message>
-        <source>Clear all fields of the form.</source>
-        <translation type="vanished">Esborra tots els camps del formuari.</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Esborra</translation>
-    </message>
-    <message>
-        <source>&amp;Request payment</source>
-        <translation type="vanished">&amp;Sol·licitud de pagament</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="vanished">Mostra</translation>
-    </message>
-    <message>
-        <source>Remove the selected entries from the list</source>
-        <translation type="vanished">Esborra les entrades seleccionades de la llista</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">Esborra</translation>
-    </message>
-    <message>
-        <source>Copy label</source>
-        <translation type="vanished">Copiar etiqueta</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation type="vanished">Copiar quantitat</translation>
-    </message>
-</context>
-<context>
-    <name>ReceiveRequestDialog</name>
-    <message>
-        <source>QR Code</source>
-        <translation type="vanished"> Codi QR</translation>
-    </message>
-    <message>
-        <source>Copy &amp;URI</source>
-        <translation type="vanished">Copiar &amp;URI</translation>
-    </message>
-    <message>
-        <source>Copy &amp;Address</source>
-        <translation type="vanished">Copiar &amp;Adress</translation>
-    </message>
-    <message>
-        <source>Payment information</source>
-        <translation type="vanished">Informació de pagament</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation type="vanished">URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adreça</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="vanished">Quantitat</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="vanished">Etiqueta</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">Missatge</translation>
-    </message>
-    <message>
-        <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="vanished">URI resultant massa llarga, intenta reduir el text per a la etiqueta / missatge</translation>
-    </message>
-    <message>
-        <source>Error encoding URI into QR Code.</source>
-        <translation type="vanished">Error codificant la URI en un codi QR.</translation>
-    </message>
-</context>
-<context>
-    <name>RecentRequestsTableModel</name>
-    <message>
-        <source>Date</source>
-        <translation type="vanished">Data</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="vanished">Etiqueta</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">Missatge</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="vanished">Quantitat</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation type="vanished">(sense etiqueta)</translation>
-    </message>
-    <message>
-        <source>(no message)</source>
-        <translation type="vanished">(sense missatge)</translation>
     </message>
 </context>
 <context>
@@ -2227,7 +1658,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+22"/>
         <location line="+35"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -2245,7 +1676,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+86"/>
         <location line="+32"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"></translation>
+        <translation>123.456 BC {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -2255,7 +1686,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>medium</source>
-        <translation type="unfinished">mig</translation>
+        <translation>mig</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -2265,12 +1696,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortida baixa:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>no</source>
-        <translation type="unfinished">no</translation>
+        <translation>no</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -2280,24 +1711,15 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+35"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Canvi</translation>
     </message>
     <message>
         <location line="+50"/>
         <source>custom change address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adreça de canvi pròpia</translation>
     </message>
     <message>
-        <location line="+129"/>
-        <source>Remove all transaction fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation type="vanished">Canvi:</translation>
-    </message>
-    <message>
-        <location line="-23"/>
+        <location line="+106"/>
         <source>Send to multiple recipients at once</source>
         <translation>Enviar a multiples destinataris al mateix temps</translation>
     </message>
@@ -2307,11 +1729,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Affegir &amp;Destinatari</translation>
     </message>
     <message>
-        <source>Clear all fields of the form.</source>
-        <translation type="vanished">Netejar tots els camps del formulari.</translation>
+        <location line="+20"/>
+        <source>Remove all transaction fields</source>
+        <translation>Traieu tots els camps de transacció</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+3"/>
         <source>Clear &amp;All</source>
         <translation>Esborrar &amp;Tot</translation>
     </message>
@@ -2323,7 +1746,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+16"/>
         <source>123.456 BC</source>
-        <translation type="unfinished"></translation>
+        <translation>123.456 BC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -2336,19 +1759,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>E&amp;nviar</translation>
     </message>
     <message>
-        <location filename="../sendcoinsdialog.cpp" line="-60"/>
-        <source>Confirm send coins</source>
-        <translation>Confirmar l&apos;enviament de monedes</translation>
-    </message>
-    <message>
-        <location line="-113"/>
+        <location filename="../sendcoinsdialog.cpp" line="-173"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Introdueix una adreça BlackCoin (p.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Copy quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar quantitat</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2358,74 +1776,55 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Copy fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar comisió</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar després de comisió</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar bytes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar prioritat</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy low output</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar sortida baixa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar canvi</translation>
     </message>
     <message>
         <location line="+86"/>
         <source>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; a %2 (%3)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+5"/>
+        <source>Confirm send coins</source>
+        <translation>Confirmar l&apos;enviament de monedes</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Are you sure you want to send %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Esteu segur que voleu enviar %1?</translation>
     </message>
     <message>
         <location line="+0"/>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation>i</translation>
     </message>
     <message>
-        <location line="+55"/>
-        <source>Error: Transaction creation failed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+251"/>
-        <source>WARNING: Invalid BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>WARNING: unknown change address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>or</source>
-        <translation type="vanished">o</translation>
-    </message>
-    <message>
-        <location line="-299"/>
+        <location line="+29"/>
         <source>The recipient address is not valid, please recheck.</source>
         <translation>L&apos;adreça remetent no és vàlida, si us plau comprovi-la.</translation>
     </message>
@@ -2450,27 +1849,40 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>S&apos;ha trobat una adreça duplicada, tan sols es pot enviar a cada adreça un cop per ordre de enviament.</translation>
     </message>
     <message>
-        <location line="+274"/>
+        <location line="+5"/>
+        <source>Error: Transaction creation failed.</source>
+        <translation>Error: La creació de transacció ha fallat.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Error: La transacció ha sigut rebutjada. Això pot passar si algunes de les monedes a la cartera ja s&apos;han gastat, per exemple, si vostè utilitza una còpia del wallet.dat i les monedes han estat gastades a la cópia pero no s&apos;han marcat com a gastades aqui.</translation>
+    </message>
+    <message>
+        <location line="+251"/>
+        <source>WARNING: Invalid BlackCoin address</source>
+        <translation>ADVERTÈNCIA: Direcció BlackCoin invàlida</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>(no label)</source>
         <translation>(sense etiqueta)</translation>
     </message>
     <message>
-        <source>Are you sure you want to send?</source>
-        <translation type="vanished">Estàs segur que ho vols enviar?</translation>
-    </message>
-    <message>
-        <source>added as transaction fee</source>
-        <translation type="vanished">S&apos;ha afegit una taxa de transacció</translation>
-    </message>
-    <message>
-        <source>Payment request expired</source>
-        <translation type="vanished">La sol·licitud de pagament ha caducat</translation>
+        <location line="+4"/>
+        <source>WARNING: unknown change address</source>
+        <translation>ADVERTÈNCIA: direcció de canvi desconeguda</translation>
     </message>
 </context>
 <context>
     <name>SendCoinsEntry</name>
     <message>
-        <location filename="../forms/sendcoinsentry.ui" line="+29"/>
+        <location filename="../forms/sendcoinsentry.ui" line="+14"/>
+        <source>Form</source>
+        <translation>Formulari</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>A&amp;mount:</source>
         <translation>Q&amp;uantitat:</translation>
     </message>
@@ -2478,10 +1890,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+13"/>
         <source>Pay &amp;To:</source>
         <translation>Pagar &amp;A:</translation>
-    </message>
-    <message>
-        <source>The address to send the payment to (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">La adreça a on envia el pagament (per exemple: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -2495,23 +1903,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Etiqueta:</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation type="vanished">Escull una adreça feta servir anteriorment</translation>
-    </message>
-    <message>
-        <location line="-61"/>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <location line="+79"/>
+        <location line="+18"/>
         <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;adreça per a enviar el pagament (per exemple: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Choose address from address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Trieu la direcció de la llibreta d&apos;adreces</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2531,20 +1930,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Remove this recipient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Message:</source>
-        <translation type="vanished">Missatge:</translation>
-    </message>
-    <message>
-        <source>Pay To:</source>
-        <translation type="vanished">Paga a:</translation>
+        <translation>Eliminar aquest destinatari</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Introdueix una adreça BlackCoin (p.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
 </context>
 <context>
@@ -2566,23 +1957,15 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Pots signar missatges amb la teva adreça per provar que són teus. Sigues cautelòs al signar qualsevol cosa, ja que els atacs phising poden intentar confondre&apos;t per a que els hi signis amb la teva identitat. Tan sols signa als documents completament detallats amb els que hi estàs d&apos;acord.</translation>
     </message>
     <message>
-        <source>The address to sign the message with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">La adreça amb la que signat els missatges (per exemple 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation type="vanished">Escull adreces fetes servir amb anterioritat</translation>
-    </message>
-    <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;adreça per a signar el missatge (per exemple B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
         <location line="+203"/>
         <source>Choose an address from the address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Trieu una adreça de la llibreta d&apos;adreces</translation>
     </message>
     <message>
         <location line="-193"/>
@@ -2606,39 +1989,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Introdueix aqui el missatge que vols signar</translation>
     </message>
     <message>
-        <location line="+45"/>
-        <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+106"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signature</source>
-        <translation type="vanished">Signatura</translation>
-    </message>
-    <message>
-        <location line="-167"/>
+        <location line="+24"/>
         <source>Copy the current signature to the system clipboard</source>
         <translation>Copiar la signatura actual al porta-retalls del sistema</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Bitcoin address</source>
-        <translation type="vanished">Signa el missatge per provar que ets propietari d&apos;aquesta adreça Bitcoin</translation>
+        <location line="+21"/>
+        <source>Sign the message to prove you own this BlackCoin address</source>
+        <translation>Signar un missatge per demostrar que és propietari d&apos;aquesta adreça BlackCoin</translation>
     </message>
     <message>
-        <source>Sign &amp;Message</source>
-        <translation type="vanished">Signar &amp;Missatge</translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+17"/>
         <source>Reset all sign message fields</source>
         <translation>Neteja tots els camps de clau</translation>
     </message>
@@ -2660,31 +2021,25 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Introdueixi l&apos;adreça signant, missatge (assegura&apos;t que copies salts de línia, espais, tabuladors, etc excactament tot el text) i la signatura a sota per verificar el missatge. Per evitar ser enganyat per un atac home-entre-mig, vés amb compte de no llegir més en la signatura del que hi ha al missatge signat mateix.</translation>
     </message>
     <message>
-        <source>The address the message was signed with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">La adreça amb el que el missatge va ser signat (per exemple 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <location line="+21"/>
+        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <translation>La direcció que va ser signada amb un missatge (per exemple B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation type="vanished">Verificar el missatge per assegurar-se que ha estat signat amb una adreça Bitcoin específica</translation>
+        <location line="+40"/>
+        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
+        <translation>Comproveu el missatge per assegurar-se que es va signar amb l&apos;adreça BlackCoin especificada.</translation>
     </message>
     <message>
-        <source>Verify &amp;Message</source>
-        <translation type="vanished">Verificar &amp;Missatge</translation>
-    </message>
-    <message>
-        <location line="+78"/>
+        <location line="+17"/>
         <source>Reset all verify message fields</source>
         <translation>Neteja tots els camps de verificació de missatge</translation>
-    </message>
-    <message>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">Introdueixi una adreça de Bitcoin (per exemple 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Introdueix una adreça BlackCoin (p.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2694,7 +2049,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Enter BlackCoin signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Introduïu la signatura BlackCoin</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2764,39 +2119,21 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>SplashScreen</name>
-    <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">Nucli de Bitcoin</translation>
-    </message>
-</context>
-<context>
-    <name>TrafficGraphWidget</name>
-    <message>
-        <source>KB/s</source>
-        <translation type="vanished">KB/s</translation>
-    </message>
-</context>
-<context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <location filename="../transactiondesc.cpp" line="+17"/>
-        <source>Open for %n block(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location line="+2"/>
+        <location filename="../transactiondesc.cpp" line="+19"/>
         <source>Open until %1</source>
         <translation>Obert fins %1</translation>
     </message>
+    <message numerus="yes">
+        <location line="-2"/>
+        <source>Open for %n block(s)</source>
+        <translation><numerusform>Obert per a %n bloc</numerusform><numerusform>Obert per a %n blocs</numerusform></translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>conflicted</source>
-        <translation type="unfinished"></translation>
+        <translation>conflicte</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2821,11 +2158,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message numerus="yes">
         <location line="+7"/>
         <source>, broadcast through %n node(s)</source>
-        <translation>
-            <numerusform>, difusió a través de %n node</numerusform>
-            <numerusform>, difusió a través de %n nodes</numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>, transmès a través de %n node</numerusform><numerusform>, transmès a través de %n nodes</numerusform></translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2878,11 +2211,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message numerus="yes">
         <location line="-102"/>
         <source>matures in %n more block(s)</source>
-        <translation>
-            <numerusform>disponible en %n bloc més</numerusform>
-            <numerusform>disponibles en %n blocs més</numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>madura en %n bloc més</numerusform><numerusform>madura en %n blocs més</numerusform></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2925,11 +2254,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation type="vanished">Mercader</translation>
+        <translation>Les monedes generades han de madurar 510 blocs abans de poder-se gastar. En generar aquest bloc, que va ser transmès a la xarxa per ser afegit a la cadena de bloc. Si no aconsegueix entrar a la cadena, el seu estat canviarà a &quot;no acceptat&quot; i no es podrà gastar. Això pot succeir de tant en tant si un altre node genera un bloc a pocs segons del seu.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2965,14 +2290,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="-211"/>
         <source>, has not been successfully broadcast yet</source>
         <translation>, encara no ha estat emès correctement</translation>
-    </message>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation type="vanished">
-            <numerusform>Obre per %n bloc més</numerusform>
-            <numerusform>Obre per %n blocs més</numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
     <message>
         <location line="+35"/>
@@ -3016,21 +2333,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Quantitat</translation>
     </message>
     <message>
-        <location line="+78"/>
-        <source>Immature (%1 confirmations, will be available after %2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location line="-21"/>
-        <source>Open for %n more block(s)</source>
-        <translation>
-            <numerusform>Obre per %n bloc més</numerusform>
-            <numerusform>Obre per %n blocs més</numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+60"/>
         <source>Open until %1</source>
         <translation>Obert fins %1</translation>
     </message>
@@ -3039,8 +2342,38 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <source>Confirmed (%1 confirmations)</source>
         <translation>Confirmat (%1 confirmacions)</translation>
     </message>
+    <message numerus="yes">
+        <location line="-15"/>
+        <source>Open for %n more block(s)</source>
+        <translation><numerusform>Obert per a %n bloc més</numerusform><numerusform>Obert per a %n blocs més</numerusform></translation>
+    </message>
     <message>
-        <location line="+9"/>
+        <location line="+6"/>
+        <source>Offline</source>
+        <translation>Desconnectat</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Unconfirmed</source>
+        <translation>Sense confirmar</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Confirming (%1 of %2 recommended confirmations)</source>
+        <translation>Confirmant (%1 de %2 confirmacions recomanat)</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Conflicted</source>
+        <translation>Conflicte</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Immature (%1 confirmations, will be available after %2)</source>
+        <translation>Immadurs (%1 confirmacions, estaran disponibles després de %2)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>This block was not received by any other nodes and will probably not be accepted!</source>
         <translation>Aquest bloc no ha estat rebut per cap altre node i probablement no serà acceptat!</translation>
     </message>
@@ -3050,27 +2383,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Generat però no acceptat</translation>
     </message>
     <message>
-        <location line="-21"/>
-        <source>Offline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Unconfirmed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Confirming (%1 of %2 recommended confirmations)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Conflicted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+51"/>
+        <location line="+42"/>
         <source>Received with</source>
         <translation>Rebut amb</translation>
     </message>
@@ -3231,7 +2544,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+144"/>
         <source>Export Transaction Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportació de dades de transaccions</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3276,12 +2589,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+4"/>
         <source>Error exporting</source>
-        <translation type="unfinished"></translation>
+        <translation>Error a l&apos;exportar</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha pogut escriure al fitxer %1.</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -3297,51 +2610,30 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 <context>
     <name>WalletModel</name>
     <message>
-        <source>Send Coins</source>
-        <translation type="vanished">Enviar monedes</translation>
-    </message>
-    <message>
         <location filename="../walletmodel.cpp" line="+206"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WalletView</name>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="vanished">&amp;Exportar</translation>
-    </message>
-    <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="vanished">Exportar les dades de la pestanya actual a un arxiu</translation>
-    </message>
-    <message>
-        <source>Backup Wallet</source>
-        <translation type="vanished">Realitzar còpia de seguretat del moneder</translation>
-    </message>
-    <message>
-        <source>Wallet Data (*.dat)</source>
-        <translation type="vanished">Dades del moneder (*.dat)</translation>
-    </message>
-    <message>
-        <source>Backup Failed</source>
-        <translation type="vanished">Còpia de seguretat faillida</translation>
-    </message>
-    <message>
-        <source>Backup Successful</source>
-        <translation type="vanished">Copia de seguretat realitzada correctament</translation>
+        <translation>Enviant...</translation>
     </message>
 </context>
 <context>
     <name>bitcoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+34"/>
+        <location filename="../bitcoinstrings.cpp" line="+33"/>
+        <source>BlackCoin version</source>
+        <translation>versió BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Usage:</source>
         <translation>Ús:</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Send command to -server or blackcoind</source>
+        <translation>Enviar comandes a -server o blackcoind</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>List commands</source>
         <translation>Llista d&apos;ordres</translation>
     </message>
@@ -3356,15 +2648,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Opcions:</translation>
     </message>
     <message>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation type="vanished">Especificat arxiu de configuració (per defecte: bitcoin.conf)</translation>
+        <location line="+2"/>
+        <source>Specify configuration file (default: blackcoin.conf)</source>
+        <translation>Especifiqueu el fitxer de configuració (per defecte: blackcoin.conf)</translation>
     </message>
     <message>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation type="vanished">Especificar arxiu pid (per defecte: bitcoind.pid)</translation>
+        <location line="+1"/>
+        <source>Specify pid file (default: blackcoind.pid)</source>
+        <translation>Especificar arxiu pid (per defecte: blackcoind.pid)</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
+        <source>Specify wallet file (within data directory)</source>
+        <translation>Especifica un arxiu de moneder (dintre del directori de les dades)</translation>
+    </message>
+    <message>
+        <location line="-1"/>
         <source>Specify data directory</source>
         <translation>Especificar directori de dades</translation>
     </message>
@@ -3374,11 +2673,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Establir tamany de la memoria cau en megabytes (per defecte: 25)</translation>
     </message>
     <message>
-        <source>Listen for connections on &lt;port&gt; (default: 8333 or testnet: 18333)</source>
-        <translation type="vanished">Escoltar connexions a &lt;port&gt; (per defecte: 8333 o testnet: 18333)</translation>
+        <location line="+1"/>
+        <source>Set database disk log size in megabytes (default: 100)</source>
+        <translation>Configurar la mida del registre en disc de la base de dades en megabytes (per defecte: 100)</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+6"/>
+        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
+        <translation>Escoltar connexions en &lt;port&gt; (per defecte: 15714 o testnet: 25714)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Maintain at most &lt;n&gt; connections to peers (default: 125)</source>
         <translation>Mantenir com a molt &lt;n&gt; connexions a peers (per defecte: 125)</translation>
     </message>
@@ -3393,7 +2698,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Especificar la teva adreça pública</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+5"/>
+        <source>Bind to given address. Use [host]:port notation for IPv6</source>
+        <translation>Enllaçar a l&apos;adreça donada. Utilitzeu la notació [host]:port per a IPv6</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Stake your coins to support network and gain reward (default: 1)</source>
+        <translation>Posa les teves monedes en joc per donar suport a la xarxa i obtenir una recompensa (per defecte: 1)</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
         <translation>Límit per a desconectar connexions errònies (per defecte: 100)</translation>
     </message>
@@ -3408,16 +2723,52 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Ha sorgit un error al configurar el port RPC %u escoltant a IPv4: %s</translation>
     </message>
     <message>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 8332 or testnet: 18332)</source>
-        <translation type="vanished">Escoltar connexions JSON-RPC al port &lt;port&gt; (per defecte: 8332 o testnet:18332)</translation>
+        <location line="+51"/>
+        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
+        <translation>Separeu el bloc i les bases de dades d&apos;adreces. Augmenta el temps d&apos;apagada (per defecte: 0)</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
+        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Error: La transacció ha sigut rebutjada. Això pot passar si algunes de les monedes a la cartera ja s&apos;han gastat, per exemple, si vostè utilitza una còpia del wallet.dat i les monedes han estat gastades a la cópia pero no s&apos;han marcat com a gastades aqui.</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
+        <translation>Error: Aquesta transacció requereix una comisió d&apos;almenys %s degut a la seva quantitat, complexitat, o l&apos;ús dels fons rebuts recentment</translation>
+    </message>
+    <message>
+        <location line="-87"/>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
+        <translation>Escoltar connexions JSON-RPC al port &lt;port&gt; (per defecte: 15715 o testnet: 25715)</translation>
+    </message>
+    <message>
+        <location line="-11"/>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Acceptar línia d&apos;ordres i ordres JSON-RPC </translation>
     </message>
     <message>
+        <location line="+101"/>
+        <source>Error: Transaction creation failed  </source>
+        <translation>Error: La creació de transacció ha fallat.</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Error: Wallet locked, unable to create transaction  </source>
+        <translation>Error: Cartera bloquejada, no es pot de crear la transacció</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <source>Importing blockchain data file.</source>
+        <translation>Important fitxer de dades de la cadena de blocs</translation>
+    </message>
+    <message>
         <location line="+1"/>
+        <source>Importing bootstrap blockchain data file.</source>
+        <translation>Important fitxer de dades d&apos;arrencada de la cadena de blocs</translation>
+    </message>
+    <message>
+        <location line="-88"/>
         <source>Run in the background as a daemon and accept commands</source>
         <translation>Executar en segon pla com a programa dimoni i acceptar ordres</translation>
     </message>
@@ -3432,60 +2783,32 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Aceptar connexions d&apos;afora (per defecte: 1 si no -proxy o -connect)</translation>
     </message>
     <message>
-        <source>%s, you must set a rpcpassword in the configuration file:
-%s
-It is recommended you use the following random password:
-rpcuser=bitcoinrpc
-rpcpassword=%s
-(you do not need to remember this password)
-The username and password MUST NOT be the same.
-If the file does not exist, create it with owner-readable-only file permissions.
-It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com
-</source>
-        <translation type="vanished">%s has de establir una contrasenya RPC a l&apos;arxiu de configuració:\n%s\nEs recomana que useu la següent constrasenya aleatòria:\nrpcuser=bitcoinrpc\nrpcpassword=%s\n(no necesiteu recordar aquesta contrsenya)\nEl nom d&apos;usuari i contrasenya NO HAN de ser els mateixos.\nSi l&apos;arxiu no existeix, crea&apos;l amb els permisos d&apos;arxiu de només lectura per al propietari.\nTambé es recomana establir la notificació d&apos;alertes i així seràs notificat de les incidències;\nper exemple: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com</translation>
-    </message>
-    <message>
         <location line="-38"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv6, falling back to IPv4: %s</source>
         <translation>Ha sorgit un error al configurar el port RPC %u escoltant a IPv6, retrocedint a IPv4: %s</translation>
     </message>
     <message>
-        <source>Bind to given address and always listen on it. Use [host]:port notation for IPv6</source>
-        <translation type="vanished">Vincular a una adreça específica i sempre escoltar-hi. Utilitza la notació [host]:port per IPv6</translation>
+        <location line="+117"/>
+        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
+        <translation>Error en inicialitzar l&apos;entorn de base de dades %s! Per recuperar, FACI UNA COPIA DE SEGURETAT D&apos;AQUEST DIRECTORI, a continuació, retiri tot d&apos;ella excepte l&apos;arxiu wallet.dat.</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. Bitcoin is probably already running.</source>
-        <translation type="vanished">No es pot bloquejar el directori de dades %s. Probablement Bitcoin ja estigui en execució.</translation>
+        <location line="-20"/>
+        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
+        <translation>Establir la grandària màxima de les transaccions alta-prioritat/baixa-comisió en bytes (per defecte: 27000)</translation>
     </message>
     <message>
-        <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="vanished">Error: La transacció ha estat rebutjada. Això pot passar si alguna de les monedes del teu moneder ja s&apos;han gastat, com si haguesis usat una copia de l&apos;arxiu wallet.dat i s&apos;haguessin gastat monedes de la copia però sense marcar com gastades en aquest.</translation>
-    </message>
-    <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation type="vanished">Error: Aquesta transacció requereix una comissió d&apos;almenys %s degut al seu import, complexitat o per l&apos;ús de fons recentment rebuts!</translation>
-    </message>
-    <message>
-        <location line="+78"/>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
-        <translation>Executar una ordre quan una transacció del moneder canviï (%s in cmd es canvia per TxID)</translation>
-    </message>
-    <message>
-        <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
-        <translation type="vanished">Aquesta és una versió de pre-llançament - utilitza-la sota la teva responsabilitat - No usar per a minería o aplicacions de compra-venda</translation>
-    </message>
-    <message>
-        <location line="+30"/>
+        <location line="+11"/>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
         <translation>Advertència: el -paytxfee és molt elevat! Aquesta és la comissió de transacció que pagaràs quan enviis una transacció.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Bitcoin will not work properly.</source>
-        <translation type="vanished">Advertència: Si us plau comprovi que la data i hora del seu computador siguin correctes! Si el seu rellotge està mal configurat, Bitcoin no funcionará de manera apropiada.</translation>
+        <location line="+61"/>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
+        <translation>Avís: Comproveu que la data i hora de l&apos;equip siguin correctes! Si el seu rellotge és erroni BlackCoin no funcionarà correctament.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="-31"/>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
         <translation>Advertència: Error llegint l&apos;arxiu wallet.dat!! Totes les claus es llegeixen correctament, però hi ha dades de transaccions o entrades del llibre d&apos;adreces absents o bé son incorrectes.</translation>
     </message>
@@ -3500,10 +2823,6 @@ for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.
         <translation>Intentar recuperar les claus privades d&apos;un arxiu wallet.dat corrupte</translation>
     </message>
     <message>
-        <source>Bitcoin RPC client version</source>
-        <translation type="vanished">Versió RPC del client Bitcoin</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Block creation options:</source>
         <translation>Opcions de la creació de blocs:</translation>
@@ -3514,45 +2833,9 @@ for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.
         <translation>Connectar només al(s) node(s) especificats</translation>
     </message>
     <message>
-        <source>Corrupted block database detected</source>
-        <translation type="vanished">S&apos;ha detectat una base de dades de blocs corrupta</translation>
-    </message>
-    <message>
         <location line="+4"/>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
         <translation>Descobrir la pròpia adreça IP (per defecte: 1 quan escoltant i no -externalip)</translation>
-    </message>
-    <message>
-        <source>Do you want to rebuild the block database now?</source>
-        <translation type="vanished">Vols reconstruir la base de dades de blocs ara?</translation>
-    </message>
-    <message>
-        <source>Error initializing block database</source>
-        <translation type="vanished">Error carregant la base de dades de blocs</translation>
-    </message>
-    <message>
-        <source>Error initializing wallet database environment %s!</source>
-        <translation type="vanished">Error inicialitzant l&apos;entorn de la base de dades del moneder %s!</translation>
-    </message>
-    <message>
-        <source>Error loading block database</source>
-        <translation type="vanished">Error carregant la base de dades del bloc</translation>
-    </message>
-    <message>
-        <source>Error opening block database</source>
-        <translation type="vanished">Error obrint la base de dades de blocs</translation>
-    </message>
-    <message>
-        <source>Error: Disk space is low!</source>
-        <translation type="vanished">Error: Espai al disc baix!</translation>
-    </message>
-    <message>
-        <source>Error: Wallet locked, unable to create transaction!</source>
-        <translation type="vanished">Error: El moneder està blocat, no és possible crear la transacció!</translation>
-    </message>
-    <message>
-        <source>Error: system error: </source>
-        <translation type="vanished">Error: error de sistema:</translation>
     </message>
     <message>
         <location line="+94"/>
@@ -3560,104 +2843,27 @@ for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.
         <translation>Error al escoltar a qualsevol port. Utilitza -listen=0 si vols això.</translation>
     </message>
     <message>
-        <source>Failed to read block info</source>
-        <translation type="vanished">Ha fallat la lectura de la informació del bloc</translation>
+        <location line="-90"/>
+        <source>Find peers using DNS lookup (default: 1)</source>
+        <translation>Trobar companys utilitzant la recerca de DNS (per defecte: 1)</translation>
     </message>
     <message>
-        <source>Failed to read block</source>
-        <translation type="vanished">Ha fallat la lectura del bloc</translation>
+        <location line="+5"/>
+        <source>Sync checkpoints policy (default: strict)</source>
+        <translation>Política dels punts de control de sincronització (per defecte: estricta)</translation>
     </message>
     <message>
-        <source>Failed to sync block index</source>
-        <translation type="vanished">Ha fallat la sincronització de l&apos;índex de bloc</translation>
+        <location line="+83"/>
+        <source>Invalid -tor address: &apos;%s&apos;</source>
+        <translation>Adreça -tor invalida: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Failed to write block index</source>
-        <translation type="vanished">Ha fallat la escriptura de l&apos;índex de blocs</translation>
+        <location line="+4"/>
+        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
+        <translation>Quantitat invalida per a -reservebalance=&lt;amount&gt;</translation>
     </message>
     <message>
-        <source>Failed to write block info</source>
-        <translation type="vanished">Ha fallat la escriptura de la informació de bloc</translation>
-    </message>
-    <message>
-        <source>Failed to write block</source>
-        <translation type="vanished">Ha fallat l&apos;escriptura del bloc</translation>
-    </message>
-    <message>
-        <source>Failed to write file info</source>
-        <translation type="vanished">Ha fallat l&apos;escriptura de l&apos;arxiu info</translation>
-    </message>
-    <message>
-        <source>Failed to write to coin database</source>
-        <translation type="vanished">Ha fallat l&apos;escriptura de la basse de dades de monedes</translation>
-    </message>
-    <message>
-        <source>Failed to write transaction index</source>
-        <translation type="vanished">Ha fallat l&apos;escriptura de l&apos;índex de transaccions</translation>
-    </message>
-    <message>
-        <source>Failed to write undo data</source>
-        <translation type="vanished">Ha fallat el desfer de dades</translation>
-    </message>
-    <message>
-        <source>Find peers using DNS lookup (default: 1 unless -connect)</source>
-        <translation type="vanished">Cerca punts de connexió usant rastreig de DNS (per defecte: 1 tret d&apos;usar -connect)</translation>
-    </message>
-    <message>
-        <source>Generate coins (default: 0)</source>
-        <translation type="vanished">Generar monedes (estàndard: 0)</translation>
-    </message>
-    <message>
-        <source>How many blocks to check at startup (default: 288, 0 = all)</source>
-        <translation type="vanished">Quants blocs s&apos;han de confirmar a l&apos;inici (per defecte: 288, 0 = tots)</translation>
-    </message>
-    <message>
-        <source>How thorough the block verification is (0-4, default: 3)</source>
-        <translation type="vanished">Com verificar el bloc (0-4, per defecte 3)</translation>
-    </message>
-    <message>
-        <source>Rebuild block chain index from current blk000??.dat files</source>
-        <translation type="vanished">Reconstruir l&apos;índex de la cadena de blocs dels arxius actuals blk000??.dat</translation>
-    </message>
-    <message>
-        <source>Send command to Bitcoin server</source>
-        <translation type="vanished">Enviar comandament al servidor de Bitcoin</translation>
-    </message>
-    <message>
-        <source>Set the number of threads to service RPC calls (default: 4)</source>
-        <translation type="vanished">Estableix el nombre de fils per atendre trucades RPC (per defecte: 4)</translation>
-    </message>
-    <message>
-        <location line="-109"/>
-        <source>Specify wallet file (within data directory)</source>
-        <translation>Especifica un arxiu de moneder (dintre del directori de les dades)</translation>
-    </message>
-    <message>
-        <source>Start Bitcoin server</source>
-        <translation type="vanished">Arranca el servidor de Bitcoin</translation>
-    </message>
-    <message>
-        <source>Verifying blocks...</source>
-        <translation type="vanished">Verificant blocs...</translation>
-    </message>
-    <message>
-        <source>Verifying wallet...</source>
-        <translation type="vanished">Verificant moneder...</translation>
-    </message>
-    <message>
-        <source>Imports blocks from external blk000??.dat file</source>
-        <translation type="vanished">Importa blocs de un fitxer blk000??.dat extern</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">&amp;Informació</translation>
-    </message>
-    <message>
-        <source>Maintain a full transaction index (default: 0)</source>
-        <translation type="vanished">Mantenir tot l&apos;índex de transaccions (per defecte: 0)</translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="-82"/>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</source>
         <translation>Mida màxima del buffer de recepció per a cada connexió, &lt;n&gt;*1000 bytes (default: 5000)</translation>
     </message>
@@ -3667,26 +2873,52 @@ for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.
         <translation>Mida màxima del buffer d&apos;enviament per a cada connexió, &lt;n&gt;*1000 bytes (default: 5000)</translation>
     </message>
     <message>
-        <source>Only accept block chain matching built-in checkpoints (default: 1)</source>
-        <translation type="vanished">Tan sols acceptar cadenes de blocs que coincideixin amb els punts de prova (per defecte: 1)</translation>
-    </message>
-    <message>
         <location line="-16"/>
         <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
         <translation>Només connectar als nodes de la xarxa &lt;net&gt; (IPv4, IPv6 o Tor)</translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+28"/>
+        <source>Output extra debugging information. Implies all other -debug* options</source>
+        <translation>Sortida d&apos;informació de depuració extra. Implica totes les opcions de depuracó -debug*</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Output extra network debugging information</source>
+        <translation>Sortida d&apos;informació de depuració de xarxa addicional</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Prepend debug output with timestamp</source>
+        <translation>Anteposar marca de temps a la sortida de depuració</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
         <translation>Opcions SSL: (veure la Wiki de Bitcoin per a instruccions de configuració SSL)</translation>
     </message>
     <message>
-        <location line="-33"/>
+        <location line="-74"/>
+        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
+        <translation>Seleccioneu la versió de proxy socks per utilitzar (4-5, per defecte: 5)</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
         <translation>Enviar informació de traça/debug a la consola en comptes del arxiu debug.log</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Send trace/debug info to debugger</source>
+        <translation>Enviar informació de traça/depuració al depurador</translation>
+    </message>
+    <message>
         <location line="+28"/>
+        <source>Set maximum block size in bytes (default: 250000)</source>
+        <translation>Establir una mida máxima de bloc en bytes (per defecte: 250000)</translation>
+    </message>
+    <message>
+        <location line="-1"/>
         <source>Set minimum block size in bytes (default: 0)</source>
         <translation>Establir una mida mínima de bloc en bytes (per defecte: 0)</translation>
     </message>
@@ -3701,11 +2933,14 @@ for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.
         <translation>Especificar el temps limit per a un intent de connexió en milisegons (per defecte: 5000)</translation>
     </message>
     <message>
-        <source>System error: </source>
-        <translation type="vanished">Error de sistema:</translation>
+        <location line="+109"/>
+        <source>Unable to sign checkpoint, wrong checkpointkey?
+</source>
+        <translation>No es pot signar el punt de control, la clau del punt de control esta malament?
+</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="-80"/>
         <source>Use UPnP to map the listening port (default: 0)</source>
         <translation>Utilitza UPnP per a mapejar els ports d&apos;escolta (per defecte: 0)</translation>
     </message>
@@ -3715,25 +2950,37 @@ for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.
         <translation>Utilitza UPnP per a mapejar els ports d&apos;escolta (per defecte: 1 quan s&apos;escolta)</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="-25"/>
+        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
+        <translation>Utilitza proxy per arribar als serveis ocults de Tor (per defecte: la mateixa que -proxy)</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Username for JSON-RPC connections</source>
         <translation>Nom d&apos;usuari per a connexions JSON-RPC</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="vanished">Avís</translation>
+        <location line="+47"/>
+        <source>Verifying database integrity...</source>
+        <translation>Comprovant la integritat de la base de dades ...</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+57"/>
+        <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
+        <translation>ADVERTÈNCIA: violació de punt de control sincronitzat detectada, es saltarà!</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Warning: Disk space is low!</source>
+        <translation>Avís: L&apos;espai en disc és baix!</translation>
+    </message>
+    <message>
+        <location line="-2"/>
         <source>Warning: This version is obsolete, upgrade required!</source>
         <translation>Advertència: Aquetsa versió està obsoleta, és necessari actualitzar!</translation>
     </message>
     <message>
-        <source>version</source>
-        <translation type="vanished">versió</translation>
-    </message>
-    <message>
-        <location line="-49"/>
+        <location line="-48"/>
         <source>wallet.dat corrupt, salvage failed</source>
         <translation>L&apos;arxiu wallet.data és corrupte, el rescat de les dades ha fallat</translation>
     </message>
@@ -3755,130 +3002,35 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
 </source>
-        <translation type="unfinished"></translation>
+        <translation>%s, ha d&apos;establir un rpcpassword al fitxer de configuració:
+%s
+Es recomana utilitzar la següent contrasenya aleatòria:
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(No cal recordar aquesta contrasenya)
+El nom d&apos;usuari i contrasenya NO HA DE SER el mateix.
+Si no hi ha l&apos;arxiu, s&apos;ha de crear amb els permisos de només lectura per al propietari.
+També es recomana establir alertnotify per a que se li notifiquin els problemes;
+per exemple: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+</translation>
     </message>
     <message>
-        <location line="+24"/>
-        <source>BlackCoin version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Send command to -server or blackcoind</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Set database disk log size in megabytes (default: 100)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Connect through socks proxy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation type="unfinished">Escoltar connexions a &lt;port&gt; (per defecte: 8333 o testnet: 18333) {15714 ?} {25714)?}</translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location line="+51"/>
         <source>Find peers using internet relay chat (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Trobar companys utilitzant l&apos;IRC (per defecte: 1) {0)?}</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Bind to given address. Use [host]:port notation for IPv6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Stake your coins to support network and gain reward (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sincronitzar el temps amb altres nodes. Desactivar si el temps al seu sistema és precís, per exemple, si fa ús de sincronització amb NTP (per defecte: 1)</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Fee per KB to add to transactions you send</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation type="unfinished"></translation>
+        <translation>En crear transaccions, ignorar les entrades amb valor inferior a aquesta (per defecte: 0.01)</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Output extra debugging information. Implies all other -debug* options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Output extra network debugging information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Prepend debug output with timestamp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Send trace/debug info to debugger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation type="unfinished">Escoltar connexions JSON-RPC al port &lt;port&gt; (per defecte: 8332 o testnet:18332) {15715 ?} {25715)?}</translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Allow JSON-RPC connections from specified IP address</source>
         <translation>Permetre connexions JSON-RPC d&apos;adreces IP específiques</translation>
     </message>
@@ -3893,19 +3045,25 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Executar orde quan el millor bloc canviï (%s al cmd es reemplaça per un bloc de hash)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+3"/>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <translation>Executar una ordre quan una transacció del moneder canviï (%s in cmd es canvia per TxID)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Require a confirmations for change (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Requerir les confirmacions de canvi (per defecte: 0)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enforce transaction scripts to use canonical PUSH operators (default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fer complir als scripts de transaccions d&apos;utilitzar operadors PUSH canòniques (per defecte: 1)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Executar una ordre quan es rep un avís rellevant (%s en cmd es substitueix per missatge)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3925,30 +3083,20 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+2"/>
         <source>How many blocks to check at startup (default: 2500, 0 = all)</source>
-        <translation type="unfinished">Quants blocs s&apos;han de confirmar a l&apos;inici (per defecte: 288, 0 = tots) {2500, 0 ?}</translation>
+        <translation>Quants blocs s&apos;han de confirmar a l&apos;inici (per defecte: 2500, 0 = tots)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>How thorough the block verification is (0-6, default: 1)</source>
-        <translation type="unfinished">Com verificar el bloc (0-4, per defecte 3) {0-6,?} {1)?}</translation>
+        <translation>Com és de minuciosa la verificació del bloc (0-6, per defecte: 1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Imports blocks from external blk000?.dat file</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar blocs desde l&apos;arxiu extern blk000?.dat</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Set maximum block size in bytes (default: 250000)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+8"/>
         <source>Use OpenSSL (https) for JSON-RPC connections</source>
         <translation>Utilitzar OpenSSL (https) per a connexions JSON-RPC</translation>
     </message>
@@ -3963,37 +3111,52 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Clau privada del servidor (per defecte: server.pem)</translation>
     </message>
     <message>
-        <location line="+67"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+1"/>
-        <source>Warning: Disk space is low!</source>
-        <translation type="unfinished"></translation>
+        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
+        <translation>Xifres acceptables (per defecte: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+53"/>
+        <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
-        <translation type="unfinished"></translation>
+        <translation>ADVERTÈNCIA: Punt de control invàlid! Les transaccions mostrades podríen no ser correctes! Podria ser necessari actualitzar o notificar-ho als desenvolupadors.</translation>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-158"/>
         <source>This help message</source>
         <translation>Aquest misatge d&apos;ajuda</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+95"/>
+        <source>Wallet %s resides outside data directory %s.</source>
+        <translation>La cartera %s resideix fora del directori de dades %s.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
+        <translation>No es pot obtenir un bloqueig en el directori de dades %s. BlackCoin probablement ja estigui en funcionament.</translation>
+    </message>
+    <message>
+        <location line="-98"/>
+        <source>BlackCoin</source>
+        <translation>BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+140"/>
         <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
         <translation>Impossible d&apos;unir %s a aquest ordinador (s&apos;ha retornat l&apos;error %d, %s)</translation>
     </message>
     <message>
-        <location line="-127"/>
+        <location line="-130"/>
+        <source>Connect through socks proxy</source>
+        <translation>Conectar a través d&apos;un proxy SOCKS</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
         <translation>Permetre consultes DNS per a -addnode, -seednode i -connect</translation>
     </message>
@@ -4003,20 +3166,27 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Carregant adreces...</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-15"/>
+        <source>Error loading blkindex.dat</source>
+        <translation>Error carregant blkindex.dat</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Error loading wallet.dat: Wallet corrupted</source>
         <translation>Error carregant wallet.dat: Moneder corrupte</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation type="vanished">Error carregant wallet.dat: El moneder requereix una versió de Bitcoin més moderna</translation>
+        <location line="+4"/>
+        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
+        <translation>Error en carregar wallet.dat: La cartera requereix la versió més recent de BlackCoin</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
-        <translation type="vanished">El moneder necesita ser re-escrit: re-inicia Bitcoin per a completar la tasca</translation>
+        <location line="+1"/>
+        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
+        <translation>La cartera necessita ser reescrita: reiniciar BlackCoin per completar</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Error loading wallet.dat</source>
         <translation>Error carregant wallet.dat</translation>
     </message>
@@ -4036,42 +3206,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>S&apos;ha demanat una versió desconeguda de -socks proxy: %i</translation>
     </message>
     <message>
-        <location line="-21"/>
-        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Verifying database integrity...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Invalid -tor address: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+4"/>
         <source>Cannot resolve -bind address: &apos;%s&apos;</source>
         <translation>No es pot resoldre l&apos;adreça -bind: &apos;%s&apos;</translation>
     </message>
@@ -4086,88 +3221,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Quantitat invalida per a -paytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Unable to sign checkpoint, wrong checkpointkey?
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Error loading blkindex.dat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Cannot initialize keypool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Importing blockchain data file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Importing bootstrap blockchain data file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+44"/>
         <source>Error: could not start node</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: no s&apos;ha pogut iniciar el node</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Error: Wallet locked, unable to create transaction  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Error: Wallet unlocked for block minting only, unable to create transaction.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Error: Transaction creation failed  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+11"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviant...</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Invalid amount</source>
         <translation>Quanitat invalida</translation>
     </message>
@@ -4177,7 +3241,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Balanç insuficient</translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="-34"/>
         <source>Loading block index...</source>
         <translation>Carregant índex de blocs...</translation>
     </message>
@@ -4187,11 +3251,22 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Afegir un node per a connectar&apos;s-hi i intentar mantenir la connexió oberta</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. Bitcoin is probably already running.</source>
-        <translation type="vanished">Impossible d&apos;unir %s en aquest ordinador. Probablement Bitcoin ja estigui en execució.</translation>
+        <location line="+122"/>
+        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
+        <translation>No es pot enllaçar a %s en aquest equip. BlackCoin probablement ja estigui en funcionament.</translation>
     </message>
     <message>
-        <location line="+105"/>
+        <location line="-97"/>
+        <source>Fee per KB to add to transactions you send</source>
+        <translation>Comisió per KB per a afegir a les transaccions que enviï</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Quantitat invalida per a -mininput=&lt;amount&gt;: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+25"/>
         <source>Loading wallet...</source>
         <translation>Carregant moneder...</translation>
     </message>
@@ -4201,7 +3276,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>No es pot reduir la versió del moneder</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Cannot initialize keypool</source>
+        <translation>No es pot inicialitzar el keypool</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Cannot write default address</source>
         <translation>No es pot escriure l&apos;adreça per defecte</translation>
     </message>

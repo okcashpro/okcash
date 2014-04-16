@@ -1,31 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sl_SI">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl_SI" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Bitcoin Core</source>
-        <translation type="vanished">O jedru Bitcoina</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Bitcoin Core&lt;/b&gt; version</source>
-        <translation type="vanished">&lt;b&gt;Jedro Bitcoina&lt;/b&gt; različica</translation>
-    </message>
-    <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About BlackCoin</source>
-        <translation type="unfinished"></translation>
+        <translation>O BlackCoin</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;BlackCoin&lt;/b&gt; verzija</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright © 2009-2014 Bitcoin programerji
+Copyright © 2012-2014 NovaCoin programerji</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -35,11 +26,12 @@ This is experimental software.
 Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> (%1-bit)</source>
-        <translation type="vanished">(%1-bitov)</translation>
+        <translation>
+To je poizkusen softver. 
+
+Distribuiran pod MIT/X11 softversko licenco, glej priloženo datoteko COPYING ali http://www.opensource.org/licenses/mit-license.php.
+
+Ta proizvod vključuje softver razvit s strani projekta OpenSSL za uporabo v OpenSSL Toolkit (http://www.openssl.org/) in kriptografski softver, ki ga je napisal Eric Young (eay@cryptsoft.com), ter UPnP softver, ki ga je napisal Thomas Bernard.</translation>
     </message>
 </context>
 <context>
@@ -47,17 +39,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
         <source>Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Imenik</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
+        <location line="+22"/>
         <source>Double-click to edit address or label</source>
-        <translation>Dvakrat klikni za urejanje naslovov ali oznak</translation>
+        <translation>Dvakrat kliknite za urejanje naslovov ali oznak</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -65,94 +52,59 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Ustvari nov naslov</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>&amp;New Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">&amp;Novo</translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>Copy the currently selected address to the system clipboard</source>
         <translation>Kopiraj trenutno izbrani naslov v odložišče</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation type="vanished">&amp;Kopiraj</translation>
+        <location line="-11"/>
+        <source>&amp;New Address</source>
+        <translation>&amp;Nov naslov</translation>
     </message>
     <message>
-        <source>C&amp;lose</source>
-        <translation type="vanished">&amp;Zapri (close)</translation>
+        <location line="-46"/>
+        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>To so vaši BlackCoin naslovi za prejemanje plačil. Priporočeno je da vsakemu pošiljatelju namenite drugega in tako dobite večji pregled nad svojimi nakazili.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+60"/>
         <source>&amp;Copy Address</source>
         <translation>&amp;Kopiraj naslov</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikaži &amp;QR kodo</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation type="unfinished"></translation>
+        <translation>Podpišite sporočilo, kot dokazilo lastništva BlackCoin naslova</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation type="unfinished">Podpiši &amp;sporočilo</translation>
+        <translation>Podpiši &amp;sporočilo</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+25"/>
+        <source>Delete the currently selected address from the list</source>
+        <translation>Izbriši izbran naslov iz seznama</translation>
+    </message>
+    <message>
+        <location line="-14"/>
         <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation type="unfinished"></translation>
+        <translation>Potrdi sporočilo, da zagotovite, da je bilo podpisano z izbranim BlackCoin naslovom</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Verify Message</source>
-        <translation type="unfinished">&amp;Preveri sporočilo</translation>
+        <translation>&amp;Potrdi sporočilo</translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Delete the currently selected address from the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="vanished">&amp;Izvozi</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+14"/>
         <source>&amp;Delete</source>
-        <translation>&amp;Zbriši</translation>
-    </message>
-    <message>
-        <source>Choose the address to send coins to</source>
-        <translation type="vanished">Izberi naslov prejemnika kovancev</translation>
-    </message>
-    <message>
-        <source>Choose the address to receive coins with</source>
-        <translation type="vanished">Izberi naslov pošiljatelja kovancev</translation>
-    </message>
-    <message>
-        <source>C&amp;hoose</source>
-        <translation type="vanished">&amp;Izberi</translation>
-    </message>
-    <message>
-        <source>Sending addresses</source>
-        <translation type="vanished">Pošiljati naslove</translation>
-    </message>
-    <message>
-        <source>Receiving addresses</source>
-        <translation type="vanished">Prejemati naslovi</translation>
-    </message>
-    <message>
-        <source>These are your Bitcoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation type="vanished">To so vaši Bitcoin naslovi za prejemanje plačil. Priporočljivo je uporabljati nov prejemni naslov za vsako izmed transakcij.</translation>
+        <translation>&amp;Izbriši</translation>
     </message>
     <message>
         <location filename="../addressbookpage.cpp" line="+65"/>
@@ -167,30 +119,22 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+250"/>
         <source>Export Address Book Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Izvozi podatke imenika</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <source>Error exporting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Could not write to file %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export Address List</source>
-        <translation type="vanished">Izvozi seznam naslovov</translation>
-    </message>
-    <message>
-        <location line="-13"/>
+        <location line="+1"/>
         <source>Comma separated file (*.csv)</source>
         <translation>Datoteka s podatki, ločenimi z vejico (*.csv)</translation>
     </message>
     <message>
-        <source>Exporting Failed</source>
-        <translation type="vanished">Neuspešen izvoz</translation>
+        <location line="+13"/>
+        <source>Error exporting</source>
+        <translation>Napaka pri izvozu datoteke</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Could not write to file %1.</source>
+        <translation>Napaka pri pisanju na datoteko %1.</translation>
     </message>
 </context>
 <context>
@@ -236,12 +180,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+33"/>
         <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation type="unfinished"></translation>
+        <translation>Služi kot onemogočenje pošiljanja prostega denarja, v primerih okužbe operacijskega sistema. Ne ponuja prave zaščite.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>For staking only</source>
-        <translation type="unfinished"></translation>
+        <translation>Samo za staking.</translation>
     </message>
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+35"/>
@@ -290,23 +234,18 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+1"/>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
+        <translation>Opozorilo: Če šifrirate svojo denarnico in izgubite svoje geslo, boste &lt;b&gt; IZGUBILI VSE SVOJE KOVANCE&lt;/b&gt;!</translation>
+    </message>
+    <message>
+        <location line="+0"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Ali ste prepričani, da želite šifrirati vašo denarnico?</translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+15"/>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>POMEMBNO: Vsaka predhodna varnostna kopija datoteke denarnice mora biti nadomeščena z novo datoteko šifrirane denarnice. Zaradi varnostnih razlogov bodo namreč prejšnje varnostne kopije datoteke nešifrirane denarnice postale neuporabne takoj ko boste pričeli uporabljati novo, šifrirano denarnico.</translation>
     </message>
     <message>
         <location line="+103"/>
@@ -321,21 +260,22 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Denarnica šifrirana</translation>
     </message>
     <message>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
-        <translation type="vanished">Bitcoin se bo zaprl, da bi dokončal proces šifriranja. Zapomnite si, da šifriranje vaše denarnice ne more popolnoma zaščititi pred krajami zlonamernih programov, ki bi lahko bili nameščeni na vašem računalniku.</translation>
+        <location line="-58"/>
+        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>BlackCoin se bo sedaj zaprl, da dokonča proces šifriranje. Pomnite, da tudi šifriranje vaše denarnice ne more v celoti zaščititi vaših kovancev pred krajo z zlonamernimi programi in računalniškimi virusi, če ti okužijo vaš računalnik.</translation>
     </message>
     <message>
-        <location line="-45"/>
+        <location line="+13"/>
         <location line="+7"/>
         <location line="+44"/>
         <location line="+6"/>
         <source>Wallet encryption failed</source>
-        <translation>Šifriranje denarnice spodletelo</translation>
+        <translation>Šifriranje denarnice je spodletelo</translation>
     </message>
     <message>
         <location line="-56"/>
         <source>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</source>
-        <translation>Šifriranje denarnice spodletelo zaradi notranje napake. Vaša denarnica ni šifrirana.</translation>
+        <translation>Šifriranje denarnice spodletelo je zaradi notranje napake. Vaša denarnica ni šifrirana.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -358,12 +298,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-20"/>
         <source>Wallet decryption failed</source>
-        <translation>Dešifriranje denarnice spodletelo</translation>
+        <translation>Dešifriranje denarnice je spodletelo</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Wallet passphrase was successfully changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geslo denarnice je bilo uspešno spremenjeno.</translation>
     </message>
 </context>
 <context>
@@ -399,7 +339,32 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Brskaj po zgodovini transakcij</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+5"/>
+        <source>&amp;Address Book</source>
+        <translation>&amp;Imenik</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Edit the list of stored addresses and labels</source>
+        <translation>Uredi seznam shranjenih naslovov in oznak</translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <source>&amp;Receive coins</source>
+        <translation>&amp;Prejmi kovance</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show the list of addresses for receiving payments</source>
+        <translation>Prikaži seznam naslovov za prejemanje plačil. </translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>&amp;Send coins</source>
+        <translation>&amp;Pošlji kovance</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>E&amp;xit</source>
         <translation>I&amp;zhod</translation>
     </message>
@@ -409,11 +374,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Izhod iz aplikacije</translation>
     </message>
     <message>
-        <source>Show information about Bitcoin</source>
-        <translation type="vanished">Pokaži informacije o Bitcoinu</translation>
+        <location line="+4"/>
+        <source>Show information about BlackCoin</source>
+        <translation>Pokaži informacije o BlackCoin</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+2"/>
         <source>About &amp;Qt</source>
         <translation>O &amp;Qt</translation>
     </message>
@@ -435,31 +401,50 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+3"/>
         <source>&amp;Backup Wallet...</source>
-        <translation>&amp;Napravi varnostno kopijo denarnice ...</translation>
+        <translation>&amp;Ustvari varnostno kopijo denarnice ...</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Change Passphrase...</source>
         <translation>&amp;Spremeni geslo ...</translation>
     </message>
-    <message>
-        <source>&amp;Sending addresses...</source>
-        <translation type="vanished">&amp;Pošiljanje naslovov...</translation>
+    <message numerus="yes">
+        <location line="+250"/>
+        <source>~%n block(s) remaining</source>
+        <translation><numerusform>Ostaja ~%n bloka </numerusform><numerusform>Ostaja ~%n blokov</numerusform><numerusform>Ostaja ~%n blokov</numerusform><numerusform>Ostaja ~%n blokov </numerusform></translation>
     </message>
     <message>
-        <source>&amp;Receiving addresses...</source>
-        <translation type="vanished">&amp;Prejemanje naslovov...</translation>
+        <location line="+6"/>
+        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
+        <translation>Prenešen %1 od %2 blokov transakcijske zgodovine (%3% opravljeno).</translation>
     </message>
     <message>
-        <source>Open &amp;URI...</source>
-        <translation type="vanished">Odpri &amp;URI...</translation>
+        <location line="-247"/>
+        <source>&amp;Export...</source>
+        <translation>&amp;Izvozi...</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
-        <translation type="vanished">Pošlji kovance na Bitcoin naslov</translation>
+        <location line="-62"/>
+        <source>Send coins to a BlackCoin address</source>
+        <translation>Pošlji kovance na BlackCoin naslov</translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="+45"/>
+        <source>Modify configuration options for BlackCoin</source>
+        <translation>Spremeni nastavitve za Blackcoin</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Export the data in the current tab to a file</source>
+        <translation>Izvozi podatke v izbranem zavihku v datoteko</translation>
+    </message>
+    <message>
+        <location line="-14"/>
+        <source>Encrypt or decrypt wallet</source>
+        <translation>Šifriraj ali dešifriraj denarnico</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Backup wallet to another location</source>
         <translation>Napravi varnostno kopijo denarnice na drugo lokacijo</translation>
     </message>
@@ -481,40 +466,45 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-5"/>
         <source>&amp;Verify message...</source>
-        <translation>%Preveri sporočilo ...</translation>
-    </message>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">Bitcoin</translation>
+        <translation>%Potrdi sporočilo ...</translation>
     </message>
     <message>
         <location line="-200"/>
+        <source>BlackCoin</source>
+        <translation>BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+0"/>
         <source>Wallet</source>
         <translation>Denarnica</translation>
     </message>
     <message>
-        <source>&amp;Send</source>
-        <translation type="vanished">&amp;Pošlji</translation>
+        <location line="+178"/>
+        <source>&amp;About BlackCoin</source>
+        <translation>&amp;O BlackCoin</translation>
     </message>
     <message>
-        <source>&amp;Receive</source>
-        <translation type="vanished">&amp;Sprejmi</translation>
-    </message>
-    <message>
-        <location line="+187"/>
+        <location line="+9"/>
         <source>&amp;Show / Hide</source>
         <translation>&amp;Prikaži / Skrij</translation>
     </message>
     <message>
-        <source>Show or hide the main Window</source>
-        <translation type="vanished">Prikaži ali skrij glavno okno</translation>
+        <location line="+9"/>
+        <source>Unlock wallet</source>
+        <translation>Odkleni denarnico</translation>
     </message>
     <message>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation type="vanished">Za dokaz, da ste lastniki sporočil, se podpišite z Bitcoin naslovom</translation>
+        <location line="+1"/>
+        <source>&amp;Lock Wallet</source>
+        <translation>&amp;Zakleni denarnico</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+1"/>
+        <source>Lock wallet</source>
+        <translation>Zakleni denarnico</translation>
+    </message>
+    <message>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Datoteka</translation>
     </message>
@@ -534,267 +524,81 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Orodna vrstica zavihkov</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+8"/>
+        <source>Actions toolbar</source>
+        <translation>Orodna vrsticai</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <location line="+9"/>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
     <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">Jedro Bitcoina</translation>
-    </message>
-    <message>
-        <source>&amp;About Bitcoin Core</source>
-        <translation type="vanished">&amp;O jedru Bitcoina</translation>
-    </message>
-    <message>
-        <source>Show the list of used sending addresses and labels</source>
-        <translation type="vanished">Prikaži seznam uporabljenih naslovov za pošiljanje in oznak</translation>
-    </message>
-    <message>
-        <source>Show the list of used receiving addresses and labels</source>
-        <translation type="vanished">Prikaži seznam uporabljenih sprejemnih naslovov in oznak</translation>
-    </message>
-    <message>
-        <source>Open a bitcoin: URI or payment request</source>
-        <translation type="vanished">Odpri Bitcoin: URI ali zahteva o plačilu</translation>
-    </message>
-    <message>
-        <source>Bitcoin client</source>
-        <translation type="vanished">Bitcoin odjemalec</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation type="vanished">
-            <numerusform>%n aktivna povezava v bitcoin omrežje</numerusform>
-            <numerusform>%n aktivni povezavi v bitcoin omrežje</numerusform>
-            <numerusform>%n aktivnih povezav v bitcoin omrežje</numerusform>
-            <numerusform>%n aktivnih povezav v bitcoin omrežje</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location line="+575"/>
-        <source>%n hour(s)</source>
-        <translation>
-            <numerusform>%n ura</numerusform>
-            <numerusform>%n uri</numerusform>
-            <numerusform>%n ure</numerusform>
-            <numerusform>%n ura</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location line="+4"/>
-        <source>%n day(s)</source>
-        <translation>
-            <numerusform>%n dan</numerusform>
-            <numerusform>%n dneva</numerusform>
-            <numerusform>%n dnevi</numerusform>
-            <numerusform>%n dni</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n week(s)</source>
-        <translation type="vanished">
-            <numerusform>%n teden</numerusform>
-            <numerusform>%n tedna</numerusform>
-            <numerusform>%n tedni</numerusform>
-            <numerusform>%n tednov</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n year(s)</source>
-        <translation type="vanished">
-            <numerusform>%n leto</numerusform>
-            <numerusform>%n leti</numerusform>
-            <numerusform>%n leta</numerusform>
-            <numerusform>%n let</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>%1 behind</source>
-        <translation type="vanished">%1 odzadaj</translation>
-    </message>
-    <message>
-        <source>Transactions after this will not yet be visible.</source>
-        <translation type="vanished">Transkacija za tem ne bo bila še na voljo.</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Napaka</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Opozorilo</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Informacije</translation>
-    </message>
-    <message>
-        <location line="-866"/>
-        <source>BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+139"/>
-        <source>&amp;Send coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Send coins to a BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>&amp;Receive coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show the list of addresses for receiving payments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>&amp;Address Book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Edit the list of stored addresses and labels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>&amp;About BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Modify configuration options for BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Encrypt or decrypt wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>&amp;Unlock Wallet...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Unlock wallet</source>
-        <translation type="unfinished">Odkleni denarnico</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>&amp;Lock Wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Lock wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>&amp;Export...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+62"/>
-        <source>Actions toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+22"/>
+        <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation type="unfinished"></translation>
+        <translation>BlackCoin program</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n aktivne povezave na BlackCoin omrežje</numerusform><numerusform>%n aktivnih povezav na BlackCoin omrežje</numerusform><numerusform>%n aktivnih povezav na BlackCoin omrežje</numerusform><numerusform>%n aktivnih povezav na BlackCoin omrežje</numerusform></translation>
     </message>
-    <message numerus="yes">
-        <location line="+26"/>
-        <source>~%n block(s) remaining</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+    <message>
+        <location line="+40"/>
+        <source>Downloaded %1 blocks of transaction history.</source>
+        <translation>Prenešenih %1 blokov transakcijske zgodovine.</translation>
+    </message>
+    <message>
+        <location line="+413"/>
+        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
+        <translation>Deležeje [Staking].&lt;br&gt;Teža vašega deleženja je %1&lt;br&gt;Teža celotne mreže deleženja je %2&lt;br&gt;Pričakovan čas do prejema nagrade %3</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation type="unfinished"></translation>
+        <source>Not staking because wallet is locked</source>
+        <translation>Ne deležite ker je denarnica zakljenjena</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>Downloaded %1 blocks of transaction history.</source>
-        <translation type="unfinished"></translation>
+        <location line="+2"/>
+        <source>Not staking because wallet is offline</source>
+        <translation>Ne deležite ker denarnica ni povezana</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because wallet is syncing</source>
+        <translation>Ne deležite ker se denarnica sinhronizira z omrežjem</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because you don&apos;t have mature coins</source>
+        <translation>Ne deležite ker nimate zrelih kovancev. </translation>
     </message>
     <message numerus="yes">
-        <location line="+22"/>
+        <location line="-403"/>
         <source>%n second(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>pred %n sekundo</numerusform><numerusform>pred %n sekundama</numerusform><numerusform>pred %n sekundami</numerusform><numerusform>pred %n sekundami </numerusform></translation>
+    </message>
+    <message>
+        <location line="-284"/>
+        <source>&amp;Unlock Wallet...</source>
+        <translation>&amp;Odkleni denarnico...</translation>
     </message>
     <message numerus="yes">
-        <location line="+4"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Pred %n minuto</numerusform><numerusform>Pred %n minutama</numerusform><numerusform>Pred %n minutami</numerusform><numerusform>Pred %n minutami</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Pred %n uro.</numerusform><numerusform>Pred %n urama.</numerusform><numerusform>Pred %n urami.</numerusform><numerusform>Pred %n urami.</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Pred %n dnevom.</numerusform><numerusform>Pred %n dnevoma.</numerusform><numerusform>Pred %n dnevi.</numerusform><numerusform>Pred %n dnevi.</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
@@ -809,17 +613,17 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+10"/>
         <source>Last received block was generated %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadnji prejeti blok je bil ustvarjen %1.</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>This transaction is over the size limit.  You can still send it for a fee of %1, which goes to the nodes that process your transaction and helps to support the network.  Do you want to pay the fee?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta transakcija je prekoračila limit. Še vedno jo lahko pošljete za plačilo %1 transakcije, ki je plačano vsem delom omrežja kot deležnina in pomaga zagotavljati njegovo varnost. Ali želite plačati provizijo?</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Potrdi transakcijsko provizijo</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -848,13 +652,13 @@ Naslov: %4
         <location line="+100"/>
         <location line="+15"/>
         <source>URI handling</source>
-        <translation type="unfinished">Rokovanje z URI</translation>
+        <translation>Rokovanje z URI</translation>
     </message>
     <message>
         <location line="-15"/>
         <location line="+15"/>
         <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation type="unfinished"></translation>
+        <translation>URI ne more biti razčlenjen! To se lahko zgodi zaradi neveljavnega BlackCoin naslova ali slabih parametrov URI.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -869,77 +673,52 @@ Naslov: %4
     <message>
         <location line="+25"/>
         <source>Backup Wallet</source>
-        <translation type="unfinished">Napravi varnostno kopijo denarnice</translation>
+        <translation>Napravi varnostno kopijo denarnice</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Wallet Data (*.dat)</source>
-        <translation type="unfinished">Podatki denarnice (*.dat)</translation>
+        <translation>Datoteka denarnice (*.dat)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Backup Failed</source>
-        <translation type="unfinished">Varnostna kopijo neuspešna</translation>
+        <translation>Ustvarjanje varnostne kopije je spodeltelo </translation>
     </message>
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prišlo je do napake ob poskušanju shranjevanja datoteke denarnice na novo lokacijo.</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
         <source>%n second(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n sekundo</numerusform><numerusform>%n sekundama</numerusform><numerusform>%n sekund</numerusform><numerusform>%n sekund</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n minute(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n minuto</numerusform><numerusform>%n minutama</numerusform><numerusform>%n minut</numerusform><numerusform>%n minut</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n hour(s)</source>
+        <translation><numerusform>%n ura</numerusform><numerusform>%n uri</numerusform><numerusform>%n ure</numerusform><numerusform>%n ura</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n day(s)</source>
+        <translation><numerusform>%n dan</numerusform><numerusform>%n dneva</numerusform><numerusform>%n dnevi</numerusform><numerusform>%n dni</numerusform></translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Not staking because wallet is locked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because wallet is offline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because wallet is syncing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because you don&apos;t have mature coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+18"/>
         <source>Not staking</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne deležite</translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prišlo je do usodne napake. Program BlackCoin se ne more več varno nadaljevati in se bo zato zaprl. </translation>
     </message>
 </context>
 <context>
@@ -955,7 +734,7 @@ Naslov: %4
     <message>
         <location filename="../forms/coincontroldialog.ui" line="+14"/>
         <source>Coin Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrola kovancev</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -966,7 +745,7 @@ Naslov: %4
         <location line="+19"/>
         <location line="+32"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -984,7 +763,7 @@ Naslov: %4
         <location line="+86"/>
         <location line="+38"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"></translation>
+        <translation>123.456 BC {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -999,12 +778,18 @@ Naslov: %4
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nizek output:</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+22"/>
+        <location filename="../coincontroldialog.cpp" line="+551"/>
+        <source>no</source>
+        <translation>ne</translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <source>After Fee:</source>
-        <translation type="unfinished"></translation>
+        <translation>Po proviziji:</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -1014,17 +799,17 @@ Naslov: %4
     <message>
         <location line="+69"/>
         <source>(un)select all</source>
-        <translation type="unfinished"></translation>
+        <translation>od/obkljukaj vse</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Tree mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Drevo</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>List mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Seznam</translation>
     </message>
     <message>
         <location line="+45"/>
@@ -1034,7 +819,7 @@ Naslov: %4
     <message>
         <location line="+5"/>
         <source>Label</source>
-        <translation type="unfinished">Oznaka</translation>
+        <translation>Oznaka</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1062,7 +847,7 @@ Naslov: %4
         <translation>Prednostno mesto</translation>
     </message>
     <message>
-        <location filename="../coincontroldialog.cpp" line="+36"/>
+        <location filename="../coincontroldialog.cpp" line="-515"/>
         <source>Copy address</source>
         <translation>Kopiraj naslov</translation>
     </message>
@@ -1095,7 +880,7 @@ Naslov: %4
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj po proviziji</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1110,12 +895,12 @@ Naslov: %4
     <message>
         <location line="+1"/>
         <source>Copy low output</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj nizek output:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj spremembo</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -1123,50 +908,7 @@ Naslov: %4
         <translation>najvišja</translation>
     </message>
     <message>
-        <location line="+164"/>
-        <source>DUST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>This label turns red, if the transaction size is bigger than 10000 bytes.
-
- This means a fee of at least %1 per kb is required.
-
- Can vary +/- 1 Byte per input.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+1"/>
-        <source>Transactions with higher priority get more likely into a block.
-
-This label turns red, if the priority is smaller than &quot;medium&quot;.
-
- This means a fee of at least %1 per kb is required.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This label turns red, if any recipient receives an amount smaller than %1.
-
- This means a fee of at least %2 is required. 
-
- Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This label turns red, if the change is smaller than %1.
-
- This means a fee of at least %2 is required.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>higher</source>
-        <translation type="vanished">višja</translation>
-    </message>
-    <message>
-        <location line="-176"/>
         <source>high</source>
         <translation>visoka</translation>
     </message>
@@ -1191,39 +933,70 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>nizka</translation>
     </message>
     <message>
-        <source>lower</source>
-        <translation type="vanished">nižja</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>lowest</source>
         <translation>najnižja</translation>
     </message>
     <message>
-        <source>(%1 locked)</source>
-        <translation type="vanished">(%1 zaklenjeno)</translation>
-    </message>
-    <message>
-        <source>Dust</source>
-        <translation type="vanished">Prah</translation>
-    </message>
-    <message>
         <location line="+155"/>
+        <source>DUST</source>
+        <translation>PRAH</translation>
+    </message>
+    <message>
+        <location line="+0"/>
         <source>yes</source>
         <translation>da</translation>
     </message>
     <message>
-        <location filename="../forms/coincontroldialog.ui" line="-235"/>
-        <location filename="../coincontroldialog.cpp" line="+0"/>
-        <source>no</source>
-        <translation>ne</translation>
+        <location line="+10"/>
+        <source>This label turns red, if the transaction size is bigger than 10000 bytes.
+
+ This means a fee of at least %1 per kb is required.
+
+ Can vary +/- 1 Byte per input.</source>
+        <translation>Ta oznakla se obarva rdeče, če je transakcija večja od 10000 bajtov.
+
+ To pomeni, da je zahtevana provizija vsaj %1 na kb.
+
+ Lahko variira +/- 1 Bajt na vnos.</translation>
     </message>
     <message>
-        <source>This label turns red, if the transaction size is greater than 1000 bytes.</source>
-        <translation type="vanished">V primeru, da je velikost transakcije večja od 1000 bitov, se ta oznaka se obarva rdeče.</translation>
+        <location line="+1"/>
+        <source>Transactions with higher priority get more likely into a block.
+
+This label turns red, if the priority is smaller than &quot;medium&quot;.
+
+ This means a fee of at least %1 per kb is required.</source>
+        <translation>Transakcije z višjo prioriteto imajo višjo verjetnost, da so vključene v blok.
+
+Ta oznaka se obarva rdeče, če je prioriteta manjša kot &quot;srednja&quot;.
+
+ To pomeni, da je zahtevana provizija vsaj %1 na kb.</translation>
     </message>
     <message>
-        <location filename="../coincontroldialog.cpp" line="+50"/>
+        <location line="+1"/>
+        <source>This label turns red, if any recipient receives an amount smaller than %1.
+
+ This means a fee of at least %2 is required. 
+
+ Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
+        <translation>Ta oznaka se obarva rdeče, če prejemnik dobi količino manjšo od %1.
+
+ To pomeni, da je potrebna vsaj %2 provizija.  
+
+ Zneski pod 0.546 krat minimalna transakcijska provizija so prikazani kot PRAH.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This label turns red, if the change is smaller than %1.
+
+ This means a fee of at least %2 is required.</source>
+        <translation>Ta oznakla se obarva rdeče, če je sprememba manjša od %1.
+
+ To pomeni, da je zahtevana provizija vsaj %2.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
         <location line="+66"/>
         <source>(no label)</source>
         <translation>(ni oznake)</translation>
@@ -1231,12 +1004,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-9"/>
         <source>change from %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>spremeni iz %1 (%2)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>(change)</source>
-        <translation type="unfinished"></translation>
+        <translation>(spremeni)</translation>
     </message>
 </context>
 <context>
@@ -1254,21 +1027,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Oznaka povezana s tem vnosom v imeniku</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The label associated with this address list entry</source>
-        <translation type="vanished">Oznaka je povezana s tem vnosom seznama naslovov</translation>
-    </message>
-    <message>
-        <location line="-10"/>
+        <location line="+7"/>
         <source>&amp;Address</source>
         <translation>&amp;Naslov</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
+        <translation>Naslov povezan s tem vnosom v imeniku. Spremenite ga lahko le za naslove odlivov.</translation>
     </message>
     <message>
         <location filename="../editaddressdialog.cpp" line="+20"/>
@@ -1291,35 +1060,24 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Uredi naslov za odlive</translation>
     </message>
     <message>
-        <location line="+71"/>
-        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+76"/>
         <source>The entered address &quot;%1&quot; is already in the address book.</source>
         <translation>Vnešeni naslov &quot;&amp;1&quot; je že v imeniku.</translation>
     </message>
     <message>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation type="vanished">Vnešeni naslov &quot;%1&quot; ni veljaven Bitcoin naslov.</translation>
+        <location line="-5"/>
+        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
+        <translation>Vneseni naslov &quot;%1&quot; ni veljaven BlackCoin naslov.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Could not unlock wallet.</source>
-        <translation>Ni bilo moč odkleniti denarnice.</translation>
+        <translation>Denarnice ni bilo mogoče odkleniti.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>New key generation failed.</source>
-        <translation>Generiranje novega ključa je spodletelo.</translation>
-    </message>
-</context>
-<context>
-    <name>FreespaceChecker</name>
-    <message>
-        <source>name</source>
-        <translation type="vanished">ime</translation>
+        <translation>Ustvarjanje novega ključa je spodletelo.</translation>
     </message>
 </context>
 <context>
@@ -1328,111 +1086,42 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
         <source>BlackCoin-Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>BlackCoin-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
         <source>version</source>
-        <translation type="unfinished">različica</translation>
+        <translation>različica</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Usage:</source>
-        <translation type="unfinished">Uporaba:</translation>
+        <translation>Uporaba:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>command-line options</source>
-        <translation type="unfinished">možnosti ukazne vrstice</translation>
+        <translation>možnosti ukazne vrstice</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>UI options</source>
-        <translation type="unfinished">možnosti uporabniškega vmesnika</translation>
+        <translation>možnosti uporabniškega vmesnika</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation type="unfinished">Nastavi jezik, npr. &quot;sl_SI&quot; (privzeto: jezikovna oznaka sistema)</translation>
+        <translation>Nastavi jezik, npr. &quot;sl_SI&quot; (privzeto: jezikovna oznaka sistema)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Start minimized</source>
-        <translation type="unfinished">Zaženi pomanjšano</translation>
+        <translation>Zaženi pomanjšano</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show splash screen on startup (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>HelpMessageDialog</name>
-    <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">Jedro Bitcoina</translation>
-    </message>
-    <message>
-        <source>version</source>
-        <translation type="vanished">različica</translation>
-    </message>
-    <message>
-        <source>Usage:</source>
-        <translation type="vanished">Uporaba:</translation>
-    </message>
-    <message>
-        <source>command-line options</source>
-        <translation type="vanished">možnosti ukazne vrstice</translation>
-    </message>
-    <message>
-        <source>UI options</source>
-        <translation type="vanished">možnosti uporabniškega vmesnika</translation>
-    </message>
-    <message>
-        <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation type="vanished">Nastavi jezik, npr. &quot;sl_SI&quot; (privzeto: jezikovna oznaka sistema)</translation>
-    </message>
-    <message>
-        <source>Start minimized</source>
-        <translation type="vanished">Zaženi pomanjšano</translation>
-    </message>
-</context>
-<context>
-    <name>Intro</name>
-    <message>
-        <source>Welcome</source>
-        <translation type="vanished">Dobrodošli</translation>
-    </message>
-    <message>
-        <source>Welcome to Bitcoin Core.</source>
-        <translation type="vanished">Dobrodošli v jedru Bitcoina</translation>
-    </message>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">Bitcoin</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">Napaka</translation>
-    </message>
-    <message>
-        <source>GB of free space available</source>
-        <translation type="vanished">GB prostora na voljo</translation>
-    </message>
-</context>
-<context>
-    <name>OpenURIDialog</name>
-    <message>
-        <source>Open URI</source>
-        <translation type="vanished">Odpri URl</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation type="vanished">Odpri zahtevo o plačilo od ORI ali datoteke</translation>
-    </message>
-    <message>
-        <source>URI:</source>
-        <translation type="vanished">URI:</translation>
+        <translation>Prikaži splash screen ob zagonu (default: 1)</translation>
     </message>
 </context>
 <context>
@@ -1448,95 +1137,79 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Glavno</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+6"/>
+        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
+        <translation>Izbirne transakcijske provizije za kB, ki pomagajo pri tem, da so vaše transakcije procesirane hitreje. Večina transakcij je velikih 1 kB. Priporočena je provizija 0.01.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Pay transaction &amp;fee</source>
         <translation>Nakazilo plačila &amp; provizija</translation>
     </message>
     <message>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
-        <translation type="vanished">Po prijavi v sistem samodejno zaženite Bitcoin.</translation>
-    </message>
-    <message>
-        <source>&amp;Start Bitcoin on system login</source>
-        <translation type="vanished">&amp;Zaženi Bitcoin ob prijavi v sistem</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">megabite</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>&amp;Network</source>
-        <translation>&amp;Omrežje</translation>
-    </message>
-    <message>
-        <source>W&amp;allet</source>
-        <translation type="vanished">&amp;Denarnica</translation>
-    </message>
-    <message>
-        <location line="-126"/>
-        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezervirana količina ne deleži in je tako na voljo za potrošnjo.</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezerva</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avtomatično zaženi BlackCoin ob zagonu sistema.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Start BlackCoin on system login</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zaženi BlackCoin ob prijavi v sistem</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation type="unfinished"></translation>
+        <translation>Loči podatkovne baze blokov in naslovov ob zaustavitvi. To pomeni da jih lahko prenesete na drugo lokacijo, a upočasni zaustavitev. Denarnica je vedno ločena. </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Detach databases at shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Loči podatkovne baze ob zaustavitvi</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+21"/>
+        <source>&amp;Network</source>
+        <translation>&amp;Omrežje</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avtomatično odpri vrata na routerju za BlackCoin program. To deluje le če vaš router podpira UPnP in je ta omogočen. </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Map port using &amp;UPnP</source>
-        <translation type="unfinished"></translation>
+        <translation>Začrtaj vrata z &amp;UPnP</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation type="unfinished"></translation>
+        <translation>Poveži se na BlackCoin omrežje skozi SOCKS proxy (npr. ko se povezujete prek Tora)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Connect through SOCKS proxy:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Poveži se skozi SOCKS proxy:</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Proxy &amp;IP:</source>
-        <translation>IP posredniškega strežnika:</translation>
+        <translation>Proxy &amp;IP:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>IP address of the proxy (e.g. 127.0.0.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>IP naslov proxy strežnika (npr. 127.0.0.1)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1556,7 +1229,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+13"/>
         <source>SOCKS version of the proxy (e.g. 5)</source>
-        <translation>SOCKS različica posredniškega strežnika (npr.: 5)</translation>
+        <translation>SOCKS različica proxya (npr.: 5)</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -1566,22 +1239,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Show only a tray icon after minimizing the window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ob pomanjšanju okna prikaži le ikono v odlagališču.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Minimize to the tray instead of the taskbar</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pomanjšaj v odlagališče namesto v opravilno vrstico</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Minimize instead of exit the application when the window is closed. When this option is enabled, the application will be closed only after selecting Quit in the menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomanjšaj aplikacijo, ko je okno zaprto. Ko je omogočena ta možnost lahko aplikacijo zaprete le tako, da izberete Izhod v meniju.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>M&amp;inimize on close</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;omanjšaj ko zapreš</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1591,50 +1264,45 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+8"/>
         <source>User Interface &amp;language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabniški vmesnik &amp;jezik:</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu lahko nastavite jezik uporabniškega vmesnika. Nastavitve bodo pričele delovati ob ponovnem zagonu BlackCoin aplikacije. </translation>
     </message>
     <message>
-        <location line="+33"/>
-        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Display coin &amp;control features (experts only!)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+88"/>
-        <source>&amp;Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-123"/>
+        <location line="+11"/>
         <source>&amp;Unit to show amounts in:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Enota prikaza količin:</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite privzeto delitev enot, ki naj bodo prikazane v vmesniku ob pošiljanju kovancev.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
+        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
+        <translation>Izbira prikaza BlackCoin naslovov v seznamu transakcij.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>&amp;Display addresses in transaction list</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Prikaz naslovov v seznamu transakcij</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Whether to show coin control features or not.</source>
-        <translation type="unfinished"></translation>
+        <translation>Izbira prikaza lastnosti kontrole kovancev.</translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+3"/>
+        <source>Display coin &amp;control features (experts only!)</source>
+        <translation>Prikaži lastnosti &amp;kontrole kovancev (samo za strokovnjake!)</translation>
+    </message>
+    <message>
+        <location line="+71"/>
         <source>&amp;OK</source>
         <translation>&amp;Potrdi</translation>
     </message>
@@ -1642,6 +1310,11 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+7"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Prekini</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>&amp;Apply</source>
+        <translation>&amp;Uporabi</translation>
     </message>
     <message>
         <location filename="../optionsdialog.cpp" line="+55"/>
@@ -1652,18 +1325,18 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+149"/>
         <location line="+9"/>
         <source>Warning</source>
-        <translation type="unfinished">Opozorilo</translation>
+        <translation>Opozorilo</translation>
     </message>
     <message>
         <location line="-9"/>
         <location line="+9"/>
         <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta nastavitev bo pričela delovati ob ponovnem zagonu BlackCoin aplikacije</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>The supplied proxy address is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podan naslov proxy strežnika je neveljaven.</translation>
     </message>
 </context>
 <context>
@@ -1674,67 +1347,45 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Oblika</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="vanished">Prikazanim podatkom je lahko potekel rok. Vaša denarnica bo po vzpostavitvi povezave samodejno sinhronizirana z Bitcoin omrežjem, ampak ta proces še ni bil zaključen.</translation>
+        <location line="+33"/>
+        <location line="+231"/>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Prikazane informacije so morda zastarele. Vaša denarnica se avtomatično sinhronizira z BlackCoin omrežjem, ko je vzpostavljena povezava, toda ta proces še ni bil zaključen.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="-160"/>
+        <source>Stake:</source>
+        <translation>Deleženje:</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Unconfirmed:</source>
+        <translation>Nepotrjeni:</translation>
+    </message>
+    <message>
+        <location line="-107"/>
         <source>Wallet</source>
         <translation>Denarnica</translation>
     </message>
     <message>
-        <source>Available:</source>
-        <translation type="vanished">Razpoložljivost:</translation>
+        <location line="+49"/>
+        <source>Spendable:</source>
+        <translation>Razpoložljivi:</translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+16"/>
         <source>Your current spendable balance</source>
         <translation>Vaše trenutno razpoložljivo stanje</translation>
     </message>
     <message>
-        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</source>
-        <translation type="vanished">Skupno število potrjenih transakcij, ki sicer niso bile prištete k razpoložljivem stanju</translation>
-    </message>
-    <message>
-        <location line="-58"/>
-        <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-189"/>
-        <source>Spendable:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <source>Stake:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Unconfirmed:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
+        <location line="+71"/>
         <source>Immature:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nezreli:</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Mined balance that has not yet matured</source>
-        <translation type="unfinished"></translation>
+        <translation>Z deleženjem pridobljeni kovanci, ki še niso dozoreli.</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -1752,56 +1403,20 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&lt;b&gt;Pogoste transakcije&lt;/&gt;</translation>
     </message>
     <message>
+        <location line="-108"/>
+        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
+        <translation>Znesek transakcij, ki še niso bile potrjene in se še ne upoštevajo v trenutnem stanju na računu.</translation>
+    </message>
+    <message>
+        <location line="-29"/>
+        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
+        <translation>Znesek kovancev, ki so bili v deleženju in se še ne upoštevajo v trenutnem stanju na računu.</translation>
+    </message>
+    <message>
         <location filename="../overviewpage.cpp" line="+113"/>
         <location line="+1"/>
         <source>out of sync</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PaymentServer</name>
-    <message>
-        <source>URI handling</source>
-        <translation type="vanished">Rokovanje z URI</translation>
-    </message>
-    <message>
-        <source>Payment request error</source>
-        <translation type="vanished">Napaka pri zahtevi plačila</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation type="vanished">Napaka pri povezavi z  %1: %2</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation type="vanished">Slab odziv strežnika %1</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation type="vanished">Plačilo priznano</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation type="vanished">Napaka omrežne zahteve</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">Bitcoin</translation>
-    </message>
-    <message>
-        <source>Error: Specified data directory &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">Napaka: Želena nahajališče datoteke &quot;%1&quot; ne obstaja.</translation>
-    </message>
-    <message>
-        <source>Error: Invalid combination of -regtest and -testnet.</source>
-        <translation type="vanished">Napaka: Neveljavna kombinacija -regtest and -testnet</translation>
-    </message>
-    <message>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">Vnesite bitcoin naslov (npr.: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <translation>nesinhronizirano</translation>
     </message>
 </context>
 <context>
@@ -1809,76 +1424,57 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../forms/qrcodedialog.ui" line="+14"/>
         <source>QR Code Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>QR koda </translation>
     </message>
     <message>
         <location line="+59"/>
         <source>Request Payment</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahtevaj plačilo</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+56"/>
+        <source>Amount:</source>
+        <translation>Znesek:</translation>
+    </message>
+    <message>
+        <location line="-44"/>
         <source>Label:</source>
-        <translation type="unfinished"></translation>
+        <translation>Oznaka:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Message:</source>
-        <translation type="unfinished">Sporočilo:</translation>
+        <translation>Sporočilo:</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <source>Amount:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+71"/>
         <source>&amp;Save As...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Shrani kot...</translation>
     </message>
     <message>
         <location filename="../qrcodedialog.cpp" line="+62"/>
         <source>Error encoding URI into QR Code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Napaka pri šifriranju URI v QR kodo.</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>The entered amount is invalid, please check.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesen znesek je neveljaven, prosimo preverite vnos.</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="unfinished">URI predolg, skušajte zmanjšati besedilo oznake/sporočila.</translation>
+        <translation>URI predolg, skušajte zmanjšati besedilo oznake/sporočila.</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Save QR Code</source>
-        <translation type="unfinished">Shrani QR kodo</translation>
+        <translation>Shrani QR kodo</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>PNG Images (*.png)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QRImageWidget</name>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation type="vanished">&amp;Shrani sliko...</translation>
-    </message>
-    <message>
-        <source>&amp;Copy Image</source>
-        <translation type="vanished">&amp;Kopiraj sliko</translation>
-    </message>
-    <message>
-        <source>Save QR Code</source>
-        <translation type="vanished">Shrani QR kodo</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png)</source>
-        <translation type="vanished">PNG slika (*.png)</translation>
+        <translation>PNG slike (*.png)</translation>
     </message>
 </context>
 <context>
@@ -1928,29 +1524,19 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Omrežje</translation>
     </message>
     <message>
-        <location line="-156"/>
-        <source>BlackCoin - Debug window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>BlackCoin Core</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+138"/>
+        <location line="+7"/>
         <source>Number of connections</source>
         <translation>Število povezav</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>On testnet</source>
-        <translation type="unfinished"></translation>
+        <translation>Na testnet</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Block chain</source>
-        <translation type="unfinished"></translation>
+        <translation>veriga blokov</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1960,37 +1546,32 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+23"/>
         <source>Estimated total blocks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocena vseh blokov</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Last block time</source>
-        <translation type="unfinished"></translation>
+        <translation>Čas zadnjega bloka</translation>
     </message>
     <message>
-        <location line="+49"/>
-        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+52"/>
         <source>&amp;Open</source>
         <translation>&amp;Odpri</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Command-line options</source>
-        <translation type="unfinished"></translation>
+        <translation>Možnosti ukazne vrstice.</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikaži BlackCoin-Qt sporočilo za pomoč , ki prikaže vse možnosti ukazne vrstice BlackCoin aplikacije</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Prikaži</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -1998,199 +1579,49 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Konzola</translation>
     </message>
     <message>
-        <source>&amp;Network Traffic</source>
-        <translation type="vanished">&amp;Omrežni promet</translation>
-    </message>
-    <message>
-        <source>&amp;Clear</source>
-        <translation type="vanished">&amp;Pošisti</translation>
-    </message>
-    <message>
-        <source>Totals</source>
-        <translation type="vanished">Vsote</translation>
-    </message>
-    <message>
         <location line="-260"/>
         <source>Build date</source>
         <translation>Datum izgradnje</translation>
     </message>
     <message>
-        <location line="+200"/>
+        <location line="-104"/>
+        <source>BlackCoin - Debug window</source>
+        <translation>BlackCoin - okno za odpravljanje napak</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>BlackCoin Core</source>
+        <translation>BlackCoin jedro</translation>
+    </message>
+    <message>
+        <location line="+279"/>
         <source>Debug log file</source>
         <translation>Razhroščevalna dnevniška datoteka</translation>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+7"/>
+        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Odpri BlackCoin datoteko zapisov odpravljanja napak iz trenutnega direktorija podatkov. Če so datoteke zapisov velike, to lahko traja nekaj sekund.</translation>
+    </message>
+    <message>
+        <location line="+102"/>
         <source>Clear console</source>
         <translation>Počisti konzolo</translation>
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
         <source>Welcome to the BlackCoin RPC console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dobrodošli v BlackCoin RPC konzoli.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Use up and down arrows to navigate history, and &lt;b&gt;Ctrl-L&lt;/b&gt; to clear screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za navigiranje po zgodovini uporabite puščici gor in dol, in  &lt;b&gt;Ctrl-L&lt;/b&gt; za izpraznjenje zaslona.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>Vtipkaj &lt;b&gt;pomoč&lt;/b&gt; za vpogled v razpožljive ukaze.</translation>
-    </message>
-    <message>
-        <source>%1 B</source>
-        <translation type="vanished">%1 bitov</translation>
-    </message>
-    <message>
-        <source>%1 KB</source>
-        <translation type="vanished">%1 kilobitov</translation>
-    </message>
-    <message>
-        <source>%1 MB</source>
-        <translation type="vanished">%1 megabitov</translation>
-    </message>
-    <message>
-        <source>%1 GB</source>
-        <translation type="vanished">%1 gigabitov</translation>
-    </message>
-    <message>
-        <source>%1 m</source>
-        <translation type="vanished">%1 minut</translation>
-    </message>
-    <message>
-        <source>%1 h</source>
-        <translation type="vanished">%1 ur</translation>
-    </message>
-    <message>
-        <source>%1 h %2 m</source>
-        <translation type="vanished">%1 ur %2 minut</translation>
-    </message>
-</context>
-<context>
-    <name>ReceiveCoinsDialog</name>
-    <message>
-        <source>&amp;Amount:</source>
-        <translation type="vanished">&amp;Količina:</translation>
-    </message>
-    <message>
-        <source>&amp;Label:</source>
-        <translation type="vanished">&amp;Oznaka:</translation>
-    </message>
-    <message>
-        <source>&amp;Message:</source>
-        <translation type="vanished">&amp;Sporočilo:</translation>
-    </message>
-    <message>
-        <source>An optional label to associate with the new receiving address.</source>
-        <translation type="vanished">Pomožna oznaka je povezana z novim sprejemnim naslovom.</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Počisti</translation>
-    </message>
-    <message>
-        <source>&amp;Request payment</source>
-        <translation type="vanished">&amp;Zahtevaj plačilo</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="vanished">Pokaži</translation>
-    </message>
-    <message>
-        <source>Remove the selected entries from the list</source>
-        <translation type="vanished">Odstrani označene vnose iz seznama</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">Odstrani</translation>
-    </message>
-    <message>
-        <source>Copy label</source>
-        <translation type="vanished">Kopiraj oznako</translation>
-    </message>
-    <message>
-        <source>Copy message</source>
-        <translation type="vanished">Kopiraj sporočilo</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation type="vanished">Kopiraj količino</translation>
-    </message>
-</context>
-<context>
-    <name>ReceiveRequestDialog</name>
-    <message>
-        <source>QR Code</source>
-        <translation type="vanished">QR Koda</translation>
-    </message>
-    <message>
-        <source>Copy &amp;URI</source>
-        <translation type="vanished">Kopraj &amp;URl</translation>
-    </message>
-    <message>
-        <source>Copy &amp;Address</source>
-        <translation type="vanished">Kopiraj &amp;Naslov</translation>
-    </message>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation type="vanished">&amp;Shrani sliko..</translation>
-    </message>
-    <message>
-        <source>Payment information</source>
-        <translation type="vanished">Informacija o plačilu</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Naslov</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="vanished">Količina</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="vanished">Oznaka</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">Sporočilo</translation>
-    </message>
-    <message>
-        <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="vanished">URI predolg, skušajte zmanjšati besedilo oznake/sporočila.</translation>
-    </message>
-</context>
-<context>
-    <name>RecentRequestsTableModel</name>
-    <message>
-        <source>Date</source>
-        <translation type="vanished">Datum</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="vanished">Oznaka</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">Sporočilo</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="vanished">Količina</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation type="vanished">(ni oznake)</translation>
-    </message>
-    <message>
-        <source>(no message)</source>
-        <translation type="vanished">(ni sporočila)</translation>
-    </message>
-    <message>
-        <source>(no amount)</source>
-        <translation type="vanished">(brez količine)</translation>
     </message>
 </context>
 <context>
@@ -2210,7 +1641,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+76"/>
         <source>Coin Control Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funkcije kontrole kovancev</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -2236,7 +1667,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+22"/>
         <location line="+35"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -2254,7 +1685,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+86"/>
         <location line="+32"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"></translation>
+        <translation>123.456 BC {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -2264,7 +1695,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>medium</source>
-        <translation type="unfinished">srednje</translation>
+        <translation>srednje</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -2274,39 +1705,30 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nizek output:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>no</source>
-        <translation type="unfinished">ne</translation>
+        <translation>ne</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>After Fee:</source>
-        <translation type="unfinished"></translation>
+        <translation>Po proviziji:</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprememba</translation>
     </message>
     <message>
         <location line="+50"/>
         <source>custom change address</source>
-        <translation type="unfinished"></translation>
+        <translation>izbira spremembe naslova</translation>
     </message>
     <message>
-        <location line="+129"/>
-        <source>Remove all transaction fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation type="vanished">Sprememba:</translation>
-    </message>
-    <message>
-        <location line="-23"/>
+        <location line="+106"/>
         <source>Send to multiple recipients at once</source>
         <translation>Pošlji več prejemnikom hkrati</translation>
     </message>
@@ -2316,7 +1738,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Dodaj &amp;prejemnika</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+20"/>
+        <source>Remove all transaction fields</source>
+        <translation>Odstrani vsa polja transakcij</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Clear &amp;All</source>
         <translation>Počisti &amp;vse</translation>
     </message>
@@ -2328,7 +1755,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+16"/>
         <source>123.456 BC</source>
-        <translation type="unfinished"></translation>
+        <translation>123.456 BC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -2341,14 +1768,9 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>P&amp;ošlji</translation>
     </message>
     <message>
-        <location filename="../sendcoinsdialog.cpp" line="-60"/>
-        <source>Confirm send coins</source>
-        <translation>Potrdi odliv kovancev </translation>
-    </message>
-    <message>
-        <location line="-113"/>
+        <location filename="../sendcoinsdialog.cpp" line="-173"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesite BlackCoin naslov (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -2368,7 +1790,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj po proviziji</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2383,56 +1805,37 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Copy low output</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj nizek output</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj spremembo</translation>
     </message>
     <message>
         <location line="+86"/>
         <source>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+5"/>
+        <source>Confirm send coins</source>
+        <translation>Potrdi odliv kovancev </translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Are you sure you want to send %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali ste prepričani, da želite poslati %1?</translation>
     </message>
     <message>
         <location line="+0"/>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation>in</translation>
     </message>
     <message>
-        <location line="+55"/>
-        <source>Error: Transaction creation failed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+251"/>
-        <source>WARNING: Invalid BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>WARNING: unknown change address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>or</source>
-        <translation type="vanished">ali</translation>
-    </message>
-    <message>
-        <location line="-299"/>
+        <location line="+29"/>
         <source>The recipient address is not valid, please recheck.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prejemnikov naslov ni veljaven, prosimo če ga ponovno preverite.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2447,7 +1850,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+5"/>
         <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seštevek presega vaše stanje na računu ko je vključen %1 provizije na transakcijo. </translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2455,35 +1858,40 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Najdena kopija naslova, možnost pošiljanja na vsakega izmed naslov le enkrat ob pošiljanju.</translation>
     </message>
     <message>
-        <source>Warning: Invalid Bitcoin address</source>
-        <translation type="vanished">Opozorilo: Neveljaven Bitcoin naslov</translation>
+        <location line="+5"/>
+        <source>Error: Transaction creation failed.</source>
+        <translation>Napaka: Ustvarjanje transakcije spodletelo</translation>
     </message>
     <message>
-        <location line="+274"/>
+        <location line="+5"/>
+        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Napaka: Transakcija je bila zavrnjena. To se je lahko zgodilo, če so bili kovanci v vaši denarnici že zapravljeni, na primer če ste uporabili kopijo wallet.dat in so bili kovanci zapravljeni v kopiji, a tu še niso bili označeni kot zapravljeni.</translation>
+    </message>
+    <message>
+        <location line="+251"/>
+        <source>WARNING: Invalid BlackCoin address</source>
+        <translation>OPOZORILO: Neveljaven BlackCoin naslov</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>(no label)</source>
         <translation>(ni oznake)</translation>
     </message>
     <message>
-        <source>Are you sure you want to send?</source>
-        <translation type="vanished">Ali ste prepričani, da želite poslati?</translation>
-    </message>
-    <message>
-        <source>added as transaction fee</source>
-        <translation type="vanished">dodano kot provizija transakcije</translation>
-    </message>
-    <message>
-        <source>Payment request expired</source>
-        <translation type="vanished">Zahteva plačila je potekla</translation>
-    </message>
-    <message>
-        <source>Invalid payment address %1</source>
-        <translation type="vanished">Neveljaven naslov plačila %1</translation>
+        <location line="+4"/>
+        <source>WARNING: unknown change address</source>
+        <translation>OPOZORILO: neznana sprememba naslova</translation>
     </message>
 </context>
 <context>
     <name>SendCoinsEntry</name>
     <message>
-        <location filename="../forms/sendcoinsentry.ui" line="+29"/>
+        <location filename="../forms/sendcoinsentry.ui" line="+14"/>
+        <source>Form</source>
+        <translation>Oblika</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>A&amp;mount:</source>
         <translation>K&amp;oličina:</translation>
     </message>
@@ -2504,23 +1912,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&amp;Oznaka:</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation type="vanished">Izberi zadnje uporabljen naslov</translation>
-    </message>
-    <message>
-        <location line="-61"/>
-        <source>Form</source>
-        <translation type="unfinished">Oblika</translation>
-    </message>
-    <message>
-        <location line="+79"/>
+        <location line="+18"/>
         <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Naslov kamor želite poslati plačilo (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Choose address from address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite naslov iz imenika</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2540,27 +1939,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Remove this recipient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Message:</source>
-        <translation type="vanished">Sporočilo:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to the list of used addresses</source>
-        <translation type="vanished">Vnesite oznako za ta naslov, ki bo shranjena v seznam uporabljenih naslovov</translation>
+        <translation>Odstrani tega prejemnika</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ShutdownWindow</name>
-    <message>
-        <source>Do not shut down the computer until this window disappears.</source>
-        <translation type="vanished">Ne zaustavite računalnika dokler to okno ne izgine.</translation>
+        <translation>Vnesite BlackCoin naslov (npr. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
 </context>
 <context>
@@ -2568,7 +1952,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../forms/signverifymessagedialog.ui" line="+14"/>
         <source>Signatures - Sign / Verify a Message</source>
-        <translation>Podpisi - Podpiši/preveri sporočilo</translation>
+        <translation>Podpisi - Podpiši/potrdi sporočilo</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2579,22 +1963,18 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-118"/>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation type="vanished">Izberi zadnje uporabljen naslov</translation>
+        <translation>Sporočila lahko podpišete s svojim naslovom, da dokažete lastništvo. Bodite previdni, saj vas lahko phishing napadi skušajo pretentati v to, da jim prepišete svojo identiteto. Podpisujte le jasne in razločne izjave, s katerimi se strinjate.</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Naslov s katerim želite podpisati sporočilo (npr. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
         <location line="+203"/>
         <source>Choose an address from the address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite naslov iz imenika</translation>
     </message>
     <message>
         <location line="-193"/>
@@ -2615,40 +1995,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+12"/>
         <source>Enter the message you want to sign here</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesite sporočilo, ki ga želite podpisati</translation>
     </message>
     <message>
-        <location line="+45"/>
-        <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+106"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signature</source>
-        <translation type="vanished">Podpis</translation>
-    </message>
-    <message>
-        <location line="-167"/>
+        <location line="+24"/>
         <source>Copy the current signature to the system clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiraj trenutno izbrani naslov v odložišče</translation>
     </message>
     <message>
-        <source>Sign &amp;Message</source>
-        <translation type="vanished">Podpiši &amp;sporočilo</translation>
+        <location line="+21"/>
+        <source>Sign the message to prove you own this BlackCoin address</source>
+        <translation>Podpišite sporočilo, kot dokazilo lastništva BlackCoin naslova</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+17"/>
         <source>Reset all sign message fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponastavite vse polja sporočila s podpisom</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2660,31 +2022,33 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="-87"/>
         <location line="+70"/>
         <source>&amp;Verify Message</source>
-        <translation>&amp;Preveri sporočilo</translation>
+        <translation>&amp;Potrdi sporočilo</translation>
     </message>
     <message>
         <location line="-64"/>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesite naslov za podpis, sporočilo (poskribte da točno skopirate presledke med vrsticami, črkami, itd.) in podpis spodaj, da potrdite sporočilo Da se ognete napadom posrednika, bodite pozorni, da ne boste v podpisu ugledali več, kot je v podpisanemu sporočilu samem.</translation>
     </message>
     <message>
-        <source>Verify &amp;Message</source>
-        <translation type="vanished">Preveri &amp;Sporočilo</translation>
+        <location line="+21"/>
+        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <translation>Naslov s katerim je bilo podpisano sporočilo (npr. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+40"/>
+        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
+        <translation>Potrdite sporočilo, da zagotovite, da je bilo podpisano z izbranim BlackCoin naslovom</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Reset all verify message fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">Vnesite bitcoin naslov (npr.: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <translation>Ponastavite vse polja sporočila potrditve</translation>
     </message>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesite BlackCoin naslov (npr. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2694,7 +2058,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Enter BlackCoin signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesite BlackCoin podpis</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2714,7 +2078,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="-81"/>
         <location line="+81"/>
         <source>The entered address does not refer to a key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnešen naslov se ne nanaša na ključ.</translation>
     </message>
     <message>
         <location line="-73"/>
@@ -2750,7 +2114,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+0"/>
         <source>The signature did not match the message digest.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podpis se ni ujemal s povzetkom sporočila.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2764,42 +2128,26 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>SplashScreen</name>
-    <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">Jedro Bitcoina</translation>
-    </message>
-    <message>
-        <source>[testnet]</source>
-        <translation type="vanished">[testnet]</translation>
-    </message>
-</context>
-<context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <location filename="../transactiondesc.cpp" line="+17"/>
-        <source>Open for %n block(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location line="+2"/>
+        <location filename="../transactiondesc.cpp" line="+19"/>
         <source>Open until %1</source>
         <translation>Odpri enoto %1</translation>
     </message>
+    <message numerus="yes">
+        <location line="-2"/>
+        <source>Open for %n block(s)</source>
+        <translation><numerusform>Odprt za %n blok</numerusform><numerusform>Odprt za %n bloka</numerusform><numerusform>Odprt za %n blokov</numerusform><numerusform>Odprt za %n blokov</numerusform></translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>conflicted</source>
-        <translation type="unfinished"></translation>
+        <translation>sporen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>%1/offline</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/offline</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2819,12 +2167,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message numerus="yes">
         <location line="+7"/>
         <source>, broadcast through %n node(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>, predvajanje skozi %n vozlišče</numerusform><numerusform>, predvajanje skozi %n vozlišči</numerusform><numerusform>, predvajanje skozi %n vozlišč</numerusform><numerusform>, predvajanje skozi %n vozlišč</numerusform></translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2872,17 +2215,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+17"/>
         <location line="+30"/>
         <source>Credit</source>
-        <translation type="unfinished"></translation>
+        <translation>Kredit</translation>
     </message>
     <message numerus="yes">
         <location line="-102"/>
         <source>matures in %n more block(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>dozori čez %n blok</numerusform><numerusform>dozori čez %n bloka</numerusform><numerusform>dozori čez %n blokov</numerusform><numerusform>dozori čez %n blokov</numerusform></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2925,11 +2263,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation type="vanished">Trgovec</translation>
+        <translation>Ustvarjeni kovanci morajo zoreti 510 blokov preden so lahko potrošeni. Ko ustvarite ta blok, je predvajan po mreži in nanizan v verigo blokov. Če mu priključitev na verigo spodleti, se bo njegovo stanje spremenilo v &quot;ni sprejet&quot; in ne bo razpoložljiv. To se lahko občasno zgodi, če drugo vozlišče ustvari blok par sekund pred vami. </translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2964,7 +2298,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-211"/>
         <source>, has not been successfully broadcast yet</source>
-        <translation>, še ni bila uspešno raznešena</translation>
+        <translation>, še ni bil uspešno predvajan</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -3008,22 +2342,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Količina</translation>
     </message>
     <message>
-        <location line="+78"/>
-        <source>Immature (%1 confirmations, will be available after %2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location line="-21"/>
-        <source>Open for %n more block(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+60"/>
         <source>Open until %1</source>
         <translation>Odpri enoto %1</translation>
     </message>
@@ -3032,20 +2351,15 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <source>Confirmed (%1 confirmations)</source>
         <translation>Potrjeno (%1 potrdil)</translation>
     </message>
-    <message>
-        <location line="+9"/>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>Ta blok ni prejelo še nobeno vozlišče. Najverjetneje ne bo sprejet!</translation>
+    <message numerus="yes">
+        <location line="-15"/>
+        <source>Open for %n more block(s)</source>
+        <translation><numerusform>Odprt še  %n blok</numerusform><numerusform>Odprt še  %n bloka</numerusform><numerusform>Odprt še  %n blokov</numerusform><numerusform>Odprt še  %n blokov</numerusform></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Generated but not accepted</source>
-        <translation>Generirano, toda ne sprejeto</translation>
-    </message>
-    <message>
-        <location line="-21"/>
+        <location line="+6"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepovezan</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3055,15 +2369,30 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Confirming (%1 of %2 recommended confirmations)</source>
-        <translation type="unfinished"></translation>
+        <translation>Potrjuje  (%1 od %2 priporočenih potrditev)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Conflicted</source>
-        <translation type="unfinished"></translation>
+        <translation>Sporen</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+3"/>
+        <source>Immature (%1 confirmations, will be available after %2)</source>
+        <translation>Nezrel (%1 potrditev, na voljo bo po %2)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>This block was not received by any other nodes and will probably not be accepted!</source>
+        <translation>Ta blok ni prejelo še nobeno vozlišče. Najverjetneje ne bo sprejet!</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Generated but not accepted</source>
+        <translation>Generirano, toda ne sprejeto</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Received with</source>
         <translation>Prejeto z</translation>
     </message>
@@ -3224,19 +2553,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+144"/>
         <source>Export Transaction Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation type="vanished">Neuspešen izvoz</translation>
-    </message>
-    <message>
-        <source>Exporting Successful</source>
-        <translation type="vanished">Uspešen izvoz</translation>
-    </message>
-    <message>
-        <source>The transaction history was successfully saved to %1.</source>
-        <translation type="vanished">Zgodovina poteklih transakcij je bila uspešno shranjena na %1.</translation>
+        <translation>Izvozi podatke transakcij</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3281,12 +2598,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+4"/>
         <source>Error exporting</source>
-        <translation type="unfinished"></translation>
+        <translation>Napaka pri izvažanju podatkov</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Napaka pri pisanju na datoteko %1.</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -3302,55 +2619,30 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 <context>
     <name>WalletModel</name>
     <message>
-        <source>Send Coins</source>
-        <translation type="vanished">Pošlji kovance</translation>
-    </message>
-    <message>
         <location filename="../walletmodel.cpp" line="+206"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WalletView</name>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="vanished">&amp;Izvozi</translation>
-    </message>
-    <message>
-        <source>Backup Wallet</source>
-        <translation type="vanished">Napravi varnostno kopijo denarnice</translation>
-    </message>
-    <message>
-        <source>Wallet Data (*.dat)</source>
-        <translation type="vanished">Podatki denarnice (*.dat)</translation>
-    </message>
-    <message>
-        <source>Backup Failed</source>
-        <translation type="vanished">Varnostna kopijo neuspešna</translation>
-    </message>
-    <message>
-        <source>There was an error trying to save the wallet data to %1.</source>
-        <translation type="vanished">Prišlo je do napake pri shranjevanju podatkov denarnice na %1.</translation>
-    </message>
-    <message>
-        <source>The wallet data was successfully saved to %1.</source>
-        <translation type="vanished">Podatki denarnice so bili uspešno shranjena na %1.</translation>
-    </message>
-    <message>
-        <source>Backup Successful</source>
-        <translation type="vanished">Varnostna kopija uspešna</translation>
+        <translation>Pošiljanje...</translation>
     </message>
 </context>
 <context>
     <name>bitcoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+34"/>
+        <location filename="../bitcoinstrings.cpp" line="+33"/>
+        <source>BlackCoin version</source>
+        <translation>BlackCoin različica</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Usage:</source>
         <translation>Uporaba:</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Send command to -server or blackcoind</source>
+        <translation>Pošlji ukaz na -server ali blackoind</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>List commands</source>
         <translation>Prikaži ukaze</translation>
     </message>
@@ -3365,15 +2657,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Možnosti:</translation>
     </message>
     <message>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation type="vanished">Določi datoteko z nastavitvami (privzeta: bitcoin.conf)</translation>
+        <location line="+2"/>
+        <source>Specify configuration file (default: blackcoin.conf)</source>
+        <translation>Določi konfiguracijsko datoteko (privzeto: blackcoin.conf)</translation>
     </message>
     <message>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation type="vanished">Določi pid datoteko (privzeta: bitcoin.pid)</translation>
+        <location line="+1"/>
+        <source>Specify pid file (default: blackcoind.pid)</source>
+        <translation>Določi pid datoteko (privzeto: blackcoin.pid)</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
+        <source>Specify wallet file (within data directory)</source>
+        <translation>Določi datoteko denarnice (znotraj imenika s podatki)</translation>
+    </message>
+    <message>
+        <location line="-1"/>
         <source>Specify data directory</source>
         <translation>Določi podatkovni imenik</translation>
     </message>
@@ -3383,18 +2682,24 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Nastavi pomnilnik podatkovne zbirke v megabajtih (privzeto: 25)</translation>
     </message>
     <message>
-        <source>Listen for connections on &lt;port&gt; (default: 8333 or testnet: 18333)</source>
-        <translation type="vanished">Sprejmi povezave na &lt;port&gt; (privzeta vrata: 8333 ali testnet: 18333)</translation>
+        <location line="+1"/>
+        <source>Set database disk log size in megabytes (default: 100)</source>
+        <translation>Nastavi velikost zapisa podatkovne baze na disku v megabajtih (privzeto: 100)</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+6"/>
+        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
+        <translation>Sprejmi povezave na &lt;port&gt; (privzeta vrata: 15714 ali testnet: 25714) </translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Maintain at most &lt;n&gt; connections to peers (default: 125)</source>
         <translation>Obdrži maksimalno število &lt;n&gt; povezav (privzeto: 125)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Connect to a node to retrieve peer addresses, and disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Poveži se na vozlišče da pridobiš naslove soležnikov in prekini povezavo</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3402,27 +2707,77 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Določite vaš lasten javni naslov</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+5"/>
+        <source>Bind to given address. Use [host]:port notation for IPv6</source>
+        <translation>Naveži na dani naslov. Uporabi [host]:port ukaz za IPv6</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Stake your coins to support network and gain reward (default: 1)</source>
+        <translation>Deleži svoje kovance za podporo omrežja in pridobi nagrado (default: 1)</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
         <translation>Prag za prekinitev povezav s slabimi odjemalci (privzeto: 1000)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Number of seconds to keep misbehaving peers from reconnecting (default: 86400)</source>
-        <translation type="unfinished"></translation>
+        <translation>Število sekund preden se ponovno povežejo neodzivni soležniki (privzeto: 86400)</translation>
     </message>
     <message>
         <location line="-44"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv4: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Prišlo je do napake pri nastavljanju RPC porta %u za vhodne povezave na IPv4: %s</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+51"/>
+        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
+        <translation>Loči podatkovne baze blokov in naslovov. Podaljša čas zaustavitve (privzeto: 0)</translation>
+    </message>
+    <message>
+        <location line="+109"/>
+        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Napaka: Transakcija je bila zavrnjena. To se je lahko zgodilo, če so bili kovanci v vaši denarnici že zapravljeni, na primer če ste uporabili kopijo wallet.dat in so bili kovanci zapravljeni v kopiji, a tu še niso bili označeni kot zapravljeni.</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
+        <translation>Napaka: Ta transakcija zahteva transakcijsko provizijo vsaj %s zaradi svoje količine, kompleksnosti ali uporabo sredstev, ki ste jih prejeli pred kratkim. </translation>
+    </message>
+    <message>
+        <location line="-87"/>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
+        <translation>Sprejmi povezave na &lt;port&gt; (privzeta vrata: 15714 ali testnet: 25714) </translation>
+    </message>
+    <message>
+        <location line="-11"/>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Sprejmi ukaze iz ukazne vrstice in JSON-RPC</translation>
     </message>
     <message>
+        <location line="+101"/>
+        <source>Error: Transaction creation failed  </source>
+        <translation>Napaka: Ustvarjanje transakcije spodletelo</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Error: Wallet locked, unable to create transaction  </source>
+        <translation>Napaka: Zaklenjena denarnica, ni mogoče opraviti transakcije</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <source>Importing blockchain data file.</source>
+        <translation>Uvažanje blockchain podatkovne datoteke.</translation>
+    </message>
+    <message>
         <location line="+1"/>
+        <source>Importing bootstrap blockchain data file.</source>
+        <translation>Uvažanje podatkovne datoteke verige blokov.</translation>
+    </message>
+    <message>
+        <location line="-88"/>
         <source>Run in the background as a daemon and accept commands</source>
         <translation>Teci v ozadju in sprejemaj ukaze</translation>
     </message>
@@ -3434,53 +2789,47 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-24"/>
         <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprejmi zunanje povezave (privzeto: 1 če ni nastavljen -proxy ali -connect)</translation>
     </message>
     <message>
         <location line="-38"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv6, falling back to IPv4: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Prišlo je do napake pri nastavljanju RPC porta %u za vhodne povezave na IPv6: %s</translation>
     </message>
     <message>
-        <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="vanished">Napaka: Transakcija ni bila sprejeta! To se je morebiti zgodilo, ker so nekateri kovanci v vaši denarnici bili že porabljeni, na primer če ste uporabili kopijo wallet.dat in so tako kovanci bili porabljeni v kopiji, ostali pa označeni kot neporabljeni.</translation>
+        <location line="+117"/>
+        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
+        <translation>Napaka pri zagonu podatkovne baze okolja %s! Za popravilo, NAPRAVITE VARNOSTNO KOPIJO IMENIKA, in iz njega odstranite vse razen datoteke wallet.dat</translation>
     </message>
     <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation type="vanished">Napaka: Ta transakcija potrebuje povizijo, ki je najmanj %s zaradi svoje količine, kompliciranosti, ali zaradi uporabe prejetih sredstev.</translation>
+        <location line="-20"/>
+        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
+        <translation>Nastavi maksimalno velikost visoke-prioritete/nizke-provizije transakcij v bajtih (privzeto: 27000)</translation>
     </message>
     <message>
-        <location line="+78"/>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
-        <translation>Izvedi ukaz, ko bo transakcija denarnice se spremenila (V cmd je bil TxID zamenjan za %s)</translation>
-    </message>
-    <message>
-        <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
-        <translation type="vanished">To je pred izdana poizkusna verzija - uporaba na lastno odgovornost - ne uporabljajte je za rudarstvo ali trgovske aplikacije</translation>
-    </message>
-    <message>
-        <location line="+30"/>
+        <location line="+11"/>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opozorilo: -paytxfee je nastavljen zelo visoko! To je transakcijska provizija, ki jo boste plačali ob pošiljanju transakcije.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+61"/>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
+        <translation>Opozorilo: Prosimo preverite svoj datum in čas svojega računalnika! Če je vaša ura nastavljena napačno BlackCoin ne bo deloval.</translation>
+    </message>
+    <message>
+        <location line="-31"/>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
         <translation>Opozorilo: napaka pri branju wallet.dat! Vsi ključi so bili pravilno prebrani, podatki o transakciji ali imenik vnešenih naslovov so morda izgubljeni ali nepravilni.</translation>
     </message>
     <message>
         <location line="-18"/>
         <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;category&gt; can be:</source>
-        <translation type="vanished">&lt;kategorija&gt; je lahko:</translation>
+        <translation>Opozorilo: wallet.dat je pokvarjena, podatki rešeni! Originalna wallet.dat je bila shranjena kot denarnica. {timestamp}.bak v %s; če imate napačno prikazano stanje na računu ali v transakcijah prenovite datoteko z varnostno kopijo. </translation>
     </message>
     <message>
         <location line="-30"/>
         <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation type="unfinished"></translation>
+        <translation>Poizkusi rešiti zasebni ključ iz pokvarjene wallet.dat </translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3490,149 +2839,157 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-62"/>
         <source>Connect only to the specified node(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Poveži se samo na določena vozlišče(a)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error: Disk space is low!</source>
-        <translation type="vanished">Opozorilo: Premalo prostora na disku!</translation>
-    </message>
-    <message>
-        <source>Error: Wallet locked, unable to create transaction!</source>
-        <translation type="vanished">Opozorilo: Denarnica je zaklenjena, ni mogoče opraviti transkacijo! </translation>
-    </message>
-    <message>
-        <source>Error: system error: </source>
-        <translation type="vanished">Napaka: sistemska napaka:</translation>
+        <translation>Odkrij svoj IP naslov (privzeto: 1 ob poslušanju, ko ni aktiviran -externalip)</translation>
     </message>
     <message>
         <location line="+94"/>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Poslušanje za vrata je spodletelo. Če želite lahko uporabite ukaz -listen=0.</translation>
     </message>
     <message>
-        <source>Failed to write file info</source>
-        <translation type="vanished">Zapisovanje informacij o datoteki neuspešno</translation>
+        <location line="-90"/>
+        <source>Find peers using DNS lookup (default: 1)</source>
+        <translation>Najdi soležnike z uporabno DNS vpogleda (privzeto: 1)</translation>
     </message>
     <message>
-        <source>Failed to write to coin database</source>
-        <translation type="vanished">Neuspešno zapisovanje na bazi podatkov kovancev</translation>
+        <location line="+5"/>
+        <source>Sync checkpoints policy (default: strict)</source>
+        <translation>Sinhronizacija načina točk preverjanja (privzeto: strogo)</translation>
     </message>
     <message>
-        <source>Generate coins (default: 0)</source>
-        <translation type="vanished">Ustvari kovance (privzeto: 0)</translation>
+        <location line="+83"/>
+        <source>Invalid -tor address: &apos;%s&apos;</source>
+        <translation>Neveljaven -tor naslov: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Send command to Bitcoin server</source>
-        <translation type="vanished">Pošlji ukaz na Bitcoin strežnik</translation>
+        <location line="+4"/>
+        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
+        <translation>Neveljavni znesek za -reservebalance=&lt;amount&gt;</translation>
     </message>
     <message>
-        <location line="-109"/>
-        <source>Specify wallet file (within data directory)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start Bitcoin server</source>
-        <translation type="vanished">Zaženi Bitcoin strežnik</translation>
-    </message>
-    <message>
-        <source>Wait for RPC server to start</source>
-        <translation type="vanished">Počakajte na zagon RPC strežnika</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">Informacije</translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="-82"/>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Največji sprejemni medpomnilnik glede na povezavo, &lt;n&gt;*1000 bytov (privzeto: 5000)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Maximum per-connection send buffer, &lt;n&gt;*1000 bytes (default: 1000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Največji oddajni medpomnilnik glede na povezavo, &lt;n&gt;*1000 bytov (privzeto: 1000)</translation>
     </message>
     <message>
         <location line="-16"/>
         <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
-        <translation type="unfinished"></translation>
+        <translation>Poveži se samo z vozlišči v omrežju &lt;net&gt; (IPv4, IPv6 in Tor)</translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+28"/>
+        <source>Output extra debugging information. Implies all other -debug* options</source>
+        <translation>Output dodatnih informacij razhroščevanja. Obsega vse druge -debug* možnosti.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Output extra network debugging information</source>
+        <translation>Output dodatnih informacij razhroščevanja omrežja. </translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Prepend debug output with timestamp</source>
+        <translation>Opremi output rahroščevanja s časovnim žigom. </translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
         <translation>SSL možnosti: (glejte Bitcoin Wiki za navodla, kako nastaviti SSL)</translation>
     </message>
     <message>
-        <location line="-33"/>
+        <location line="-74"/>
+        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
+        <translation>Izberi verzijo socks proxya za uporabo (4-5, privzeto: 5)</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
         <translation>Pošlji sledilne/razhroščevalne informacije v konzolo namesto jih shraniti v debug.log datoteko</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Send trace/debug info to debugger</source>
+        <translation>Pošlji sledilne/razhroščevalne informacije v razhroščevalnik</translation>
+    </message>
+    <message>
         <location line="+28"/>
+        <source>Set maximum block size in bytes (default: 250000)</source>
+        <translation>Nastavi največjo velikost bloka v bajtih (privzeto: 250000)</translation>
+    </message>
+    <message>
+        <location line="-1"/>
         <source>Set minimum block size in bytes (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavi najmanjšo velikost bloka v bajtih (privzeto: 0)</translation>
     </message>
     <message>
         <location line="-29"/>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrči debug.log datoteko ob zagonu aplikacije (privzeto: 1 ko ni aktiviran -debug)</translation>
     </message>
     <message>
         <location line="-42"/>
         <source>Specify connection timeout in milliseconds (default: 5000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Določi čas pavze povezovanja v milisekundah (privzeto: 5000)</translation>
     </message>
     <message>
-        <source>System error: </source>
-        <translation type="vanished">Sistemska napaka:</translation>
+        <location line="+109"/>
+        <source>Unable to sign checkpoint, wrong checkpointkey?
+</source>
+        <translation>Ni bilo mogoče vpisati točke preverjanja, napačen ključ za točko preverjanja?
+</translation>
     </message>
     <message>
-        <source>Transaction amount too small</source>
-        <translation type="vanished">Količina transakcije je pramajhna</translation>
-    </message>
-    <message>
-        <source>Transaction amounts must be positive</source>
-        <translation type="vanished">Količina transkacije mora biti pozitivna</translation>
-    </message>
-    <message>
-        <source>Transaction too large</source>
-        <translation type="vanished">Transkacija je prevelika</translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="-80"/>
         <source>Use UPnP to map the listening port (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabi UPnP za mapiranje vrat poslušanja (privzeto: 0)</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabi UPnP za mapiranje vrat poslušanja (privzeto: 1 med poslušanjem)</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="-25"/>
+        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
+        <translation>Uporabi proxy za povezavo s skritimi storitvami tora (privzeto: isto kot -proxy) </translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Username for JSON-RPC connections</source>
         <translation>Uporabniško ime za JSON-RPC povezave</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="vanished">Opozorilo</translation>
+        <location line="+47"/>
+        <source>Verifying database integrity...</source>
+        <translation>Potrdite neoporečnost baze podatkov...</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+57"/>
+        <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
+        <translation>OPOZORILO: zaznana je bila kršitev s sinhronizirami točkami preverjanja, a je bila izpuščena.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Warning: Disk space is low!</source>
+        <translation>Opozorilo: Malo prostora na disku!</translation>
+    </message>
+    <message>
+        <location line="-2"/>
         <source>Warning: This version is obsolete, upgrade required!</source>
         <translation>Opozorilo: ta različica je zastarela, potrebna je nadgradnja!</translation>
     </message>
     <message>
-        <source>version</source>
-        <translation type="vanished">različica</translation>
-    </message>
-    <message>
-        <location line="-49"/>
+        <location line="-48"/>
         <source>wallet.dat corrupt, salvage failed</source>
         <translation>wallet.dat poškodovana, neuspešna obnova</translation>
     </message>
@@ -3654,130 +3011,35 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
 </source>
-        <translation type="unfinished"></translation>
+        <translation>%s, nastaviti morate rpcgeslo v konfiguracijski datoteki: 
+ %s
+Priporočeno je, da uporabite naslednje naključno geslo:
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(tega gesla si vam ni potrebno zapomniti)
+Uporabniško ime in geslo NE SMETA biti ista. 
+Če datoteka ne obstaja, jo ustvarite z lastniškimi dovoljenji za datoteke. 
+Prav tako je priporočeno, da nastavite alernotify, tkako da vas opozori na probleme;
+na primer: alertnotify=echo %%s | mail -s &quot;BlackCoin Alarm&quot; admin@foo.com
+</translation>
     </message>
     <message>
-        <location line="+24"/>
-        <source>BlackCoin version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Send command to -server or blackcoind</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Set database disk log size in megabytes (default: 100)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Connect through socks proxy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation type="unfinished">Sprejmi povezave na &lt;port&gt; (privzeta vrata: 8333 ali testnet: 18333) {15714 ?} {25714)?}</translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location line="+51"/>
         <source>Find peers using internet relay chat (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Najdi soležnike prek irca (privzeto: 0)</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Bind to given address. Use [host]:port notation for IPv6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Stake your coins to support network and gain reward (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinhroniziraj čas z drugimi vozlišči. Onemogoči, če je čas na vašem sistemu točno nastavljen, npr. sinhroniziranje z NTP (privzeto: 1)</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Fee per KB to add to transactions you send</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ob ustvarjanju transakcij, prezri vnose z manjšo vrednostjo kot (privzeto: 0.01)</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Output extra debugging information. Implies all other -debug* options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Output extra network debugging information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Prepend debug output with timestamp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Send trace/debug info to debugger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Allow JSON-RPC connections from specified IP address</source>
         <translation>Dovoli JSON-RPC povezave z določenega IP naslova</translation>
     </message>
@@ -3789,22 +3051,27 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Execute command when the best block changes (%s in cmd is replaced by block hash)</source>
-        <translation type="unfinished"></translation>
+        <translation>Izvrši ukaz, ko se najboljši blok spremeni (%s je v cmd programu nadomeščen z zgoščenimi bloki).</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+3"/>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <translation>Izvedi ukaz, ko bo transakcija denarnice se spremenila (V cmd je bil TxID zamenjan za %s)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Require a confirmations for change (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahtevaj potrditve za spremembo (default: 0)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enforce transaction scripts to use canonical PUSH operators (default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahtevaj da transakcijske skripte uporabljajo operatorje canonical PUSH (privzeto: 1)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
-        <translation type="unfinished"></translation>
+        <translation>Izvrši ukaz, ko je prejet relevanten alarm (%s je v cmd programu nadomeščen s sporočilom)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3824,30 +3091,20 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+2"/>
         <source>How many blocks to check at startup (default: 2500, 0 = all)</source>
-        <translation type="unfinished"></translation>
+        <translation>Koliko blokov naj preveri ob zagonu aplikacije (privzeto: 2500, 0 = vse)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>How thorough the block verification is (0-6, default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kako temeljito naj bo preverjanje blokov (0-6, privzeto: 1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Imports blocks from external blk000?.dat file</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvozi bloke iz zunanje blk000?.dat datoteke</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Set maximum block size in bytes (default: 250000)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+8"/>
         <source>Use OpenSSL (https) for JSON-RPC connections</source>
         <translation>Uporabi OpenSSL (https) za JSON-RPC povezave</translation>
     </message>
@@ -3862,39 +3119,54 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Zasebni ključ strežnika (privzet: server.pem)</translation>
     </message>
     <message>
-        <location line="+67"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+1"/>
-        <source>Warning: Disk space is low!</source>
-        <translation type="unfinished"></translation>
+        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
+        <translation>Dovoljeni kodirniki (privzeti: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+53"/>
+        <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
-        <translation type="unfinished"></translation>
+        <translation>OPOZORILO: Najdene so bile neveljavne točke preverjanja! Prikazane transakcije so morda napačne! Poiščite novo različico aplikacije ali pa obvestite razvijalce.</translation>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-158"/>
         <source>This help message</source>
         <translation>To sporočilo pomoči</translation>
     </message>
     <message>
-        <location line="+138"/>
-        <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
-        <translation type="unfinished"></translation>
+        <location line="+95"/>
+        <source>Wallet %s resides outside data directory %s.</source>
+        <translation>Denarnica %s se nahaja zunaj datotečnega imenika %s.</translation>
     </message>
     <message>
-        <location line="-127"/>
+        <location line="+1"/>
+        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
+        <translation>Ni bilo mogoče najti podatkovnega imenika %s. Aplikacija BlackCoin je verjetno že zagnana.</translation>
+    </message>
+    <message>
+        <location line="-98"/>
+        <source>BlackCoin</source>
+        <translation>BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+140"/>
+        <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
+        <translation>Na tem računalniku je bilo nemogoče vezati na %s (bind returned error %d, %s)</translation>
+    </message>
+    <message>
+        <location line="-130"/>
+        <source>Connect through socks proxy</source>
+        <translation>Poveži se skozi socks proxy</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Omogoči DNS povezave za -addnode, -seednode in -connect</translation>
     </message>
     <message>
         <location line="+122"/>
@@ -3902,171 +3174,72 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Nalaganje naslovov ...</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-15"/>
+        <source>Error loading blkindex.dat</source>
+        <translation>Napaka pri nalaganju blkindex.dat</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Error loading wallet.dat: Wallet corrupted</source>
         <translation>Napaka pri nalaganju wallet.dat: denarnica pokvarjena</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation type="vanished">Napaka pri nalaganju wallet.dat: denarnica zahteva novejšo različico Bitcoina</translation>
+        <location line="+4"/>
+        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
+        <translation>Napaka pri nalaganju wallet.dat: denarnica zahteva novejšo verzijo BlackCoin</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
-        <translation type="vanished">Denarnica mora biti prepisana: ponovno zaženite Bitcoin za doknčanje</translation>
+        <location line="+1"/>
+        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
+        <translation>Denarnica mora biti prepisana: ponovno odprite BlackCoin za dokončanje</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Error loading wallet.dat</source>
         <translation>Napaka pri nalaganju wallet.dat</translation>
     </message>
     <message>
         <location line="-16"/>
         <source>Invalid -proxy address: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Neveljaven -proxy naslov: &apos;%s&apos;</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Unknown network specified in -onlynet: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznano omrežje določeno v -onlynet: &apos;%s&apos;</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Unknown -socks proxy version requested: %i</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahtevana neznana -socks proxy različica: %i</translation>
     </message>
     <message>
-        <location line="-21"/>
-        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Verifying database integrity...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Invalid -tor address: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+4"/>
         <source>Cannot resolve -bind address: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ni mogoče določiti -bind naslova: &apos;%s&apos;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Cannot resolve -externalip address: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ni mogoče določiti -externalip naslova: &apos;%s&apos;</translation>
     </message>
     <message>
         <location line="-24"/>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Neveljavni znesek za -paytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Unable to sign checkpoint, wrong checkpointkey?
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Error loading blkindex.dat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Cannot initialize keypool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Importing blockchain data file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Importing bootstrap blockchain data file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+44"/>
         <source>Error: could not start node</source>
-        <translation type="unfinished"></translation>
+        <translation>Napaka: ni mogoče zagnati vozlišča</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Error: Wallet locked, unable to create transaction  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Error: Wallet unlocked for block minting only, unable to create transaction.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Error: Transaction creation failed  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+11"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
+        <translation>Pošiljanje...</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Invalid amount</source>
         <translation>Neveljavna količina</translation>
     </message>
@@ -4076,7 +3249,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Premalo sredstev</translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="-34"/>
         <source>Loading block index...</source>
         <translation>Nalaganje indeksa blokov ...</translation>
     </message>
@@ -4086,7 +3259,22 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Dodaj vozlišče za povezavo nanj in skušaj le to obdržati odprto</translation>
     </message>
     <message>
-        <location line="+105"/>
+        <location line="+122"/>
+        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
+        <translation>Navezava v %s  na tem računalniku ni mogoča BlackCoin aplikacija je verjetno že zagnana.</translation>
+    </message>
+    <message>
+        <location line="-97"/>
+        <source>Fee per KB to add to transactions you send</source>
+        <translation>Provizija na KB ki jo morate dodati transakcijam, ki jih pošiljate</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Neveljavni znesek za -miniput=&lt;amount&gt;: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+25"/>
         <source>Loading wallet...</source>
         <translation>Nalaganje denarnice ...</translation>
     </message>
@@ -4096,9 +3284,14 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Ne morem </translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Cannot initialize keypool</source>
+        <translation>Ni mogoče zagnati keypoola</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Cannot write default address</source>
-        <translation type="unfinished"></translation>
+        <translation>Ni mogoče zapisati privzetega naslova</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4113,7 +3306,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="-167"/>
         <source>To use the %s option</source>
-        <translation type="unfinished"></translation>
+        <translation>Za uporabo %s opcije</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -4125,7 +3318,9 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <source>You must set rpcpassword=&lt;password&gt; in the configuration file:
 %s
 If the file does not exist, create it with owner-readable-only file permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastaviti morate rpcpassword=&lt;password&gt; v konfiguracijski datoteki: 
+%s
+Če datoteka ne obstaja, jo ustvarite z lastniškimi dovoljenji za datoteke.</translation>
     </message>
 </context>
 </TS>

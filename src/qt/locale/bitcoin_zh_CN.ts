@@ -1,31 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>About Bitcoin Core</source>
-        <translation type="vanished">关于比特币核心</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Bitcoin Core&lt;/b&gt; version</source>
-        <translation type="vanished">&lt;b&gt;比特币核心&lt;/b&gt; 版本</translation>
-    </message>
-    <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About BlackCoin</source>
-        <translation type="unfinished"></translation>
+        <translation>关于黑币</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation type="unfinished"></translation>
+        <translation>黑币客户端 版本</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation type="unfinished"></translation>
+        <translation>版权所有 2009-2014 比特币Bitcoin开发组
+版权所有 2012-2014 新星币Novacoin开发组</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -42,33 +33,16 @@ Distributed under the MIT/X11 software license, see the accompanying file COPYIN
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</translation>
     </message>
-    <message>
-        <source>Copyright</source>
-        <translation type="vanished">版权</translation>
-    </message>
-    <message>
-        <source>The Bitcoin Core developers</source>
-        <translation type="vanished">Bitcoin Core 的开发者</translation>
-    </message>
-    <message>
-        <source> (%1-bit)</source>
-        <translation type="vanished">(%1 -比特)</translation>
-    </message>
 </context>
 <context>
     <name>AddressBookPage</name>
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
         <source>Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>地址簿</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
+        <location line="+22"/>
         <source>Double-click to edit address or label</source>
         <translation>双击编辑地址或标签</translation>
     </message>
@@ -78,102 +52,59 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>创建新地址</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>&amp;New Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">新建(&amp;N)</translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>Copy the currently selected address to the system clipboard</source>
         <translation>复制当前选中的地址到系统剪贴板</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation type="vanished">复制(&amp;C)</translation>
+        <location line="-11"/>
+        <source>&amp;New Address</source>
+        <translation>新建地址(&amp;N)</translation>
     </message>
     <message>
-        <source>C&amp;lose</source>
-        <translation type="vanished">关闭(&amp;C)</translation>
+        <location line="-46"/>
+        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>这是您用来接收支付的黑币地址列表。为不同的支付方建立不同的地址以便于了解支付来源。</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+60"/>
         <source>&amp;Copy Address</source>
         <translation>复制地址(&amp;C)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"></translation>
+        <translation>显示二维码(&amp;Q)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation type="unfinished"></translation>
+        <translation>对信息进行签名以证明您对该黑币地址的所有权</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation type="unfinished">消息签名(&amp;M)</translation>
+        <translation>签名(&amp;M)</translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>&amp;Verify Message</source>
-        <translation type="unfinished">验证消息(&amp;V)</translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+25"/>
         <source>Delete the currently selected address from the list</source>
         <translation>从列表中删除选中的地址</translation>
     </message>
     <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="vanished">导出当前数据到文件</translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="vanished">导出(&amp;E)</translation>
+        <location line="-14"/>
+        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
+        <translation>验证信息以保证其经过指定黑币地址的签名</translation>
     </message>
     <message>
         <location line="+3"/>
+        <source>&amp;Verify Message</source>
+        <translation>验证消息(&amp;V)</translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>&amp;Delete</source>
         <translation>删除(&amp;D)</translation>
-    </message>
-    <message>
-        <source>Choose the address to send coins to</source>
-        <translation type="vanished">选择发款地址</translation>
-    </message>
-    <message>
-        <source>Choose the address to receive coins with</source>
-        <translation type="vanished">选择收款地址</translation>
-    </message>
-    <message>
-        <source>C&amp;hoose</source>
-        <translation type="vanished">选择(&amp;H)</translation>
-    </message>
-    <message>
-        <source>Sending addresses</source>
-        <translation type="vanished">正在发送地址</translation>
-    </message>
-    <message>
-        <source>Receiving addresses</source>
-        <translation type="vanished">正在接收地址</translation>
-    </message>
-    <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation type="vanished">这是您用来付款的比特币地址。在付款前，请总是核实付款金额和收款地址。</translation>
-    </message>
-    <message>
-        <source>These are your Bitcoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation type="vanished">这些都是您的比特币地址，可用于收款。建议对每笔交易都使用一个新的地址。</translation>
     </message>
     <message>
         <location filename="../addressbookpage.cpp" line="+65"/>
@@ -188,34 +119,22 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+250"/>
         <source>Export Address Book Data</source>
-        <translation type="unfinished"></translation>
+        <translation>导出地址簿数据</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <source>Error exporting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Could not write to file %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export Address List</source>
-        <translation type="vanished">导出地址列表</translation>
-    </message>
-    <message>
-        <location line="-13"/>
+        <location line="+1"/>
         <source>Comma separated file (*.csv)</source>
         <translation>逗号分隔文件 (*.csv)</translation>
     </message>
     <message>
-        <source>Exporting Failed</source>
-        <translation type="vanished">导出失败</translation>
+        <location line="+13"/>
+        <source>Error exporting</source>
+        <translation>导出时发生错误</translation>
     </message>
     <message>
-        <source>There was an error trying to save the address list to %1.</source>
-        <translation type="vanished">地址列表保存至 %1 时发生错误。</translation>
+        <location line="+0"/>
+        <source>Could not write to file %1.</source>
+        <translation>无法写入文件 %1 。</translation>
     </message>
 </context>
 <context>
@@ -261,12 +180,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+33"/>
         <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
         <source>For staking only</source>
-        <translation type="unfinished"></translation>
+        <translation>仅用于权益增值</translation>
     </message>
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+35"/>
@@ -314,26 +233,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>确认加密钱包</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation type="vanished">警告：如果您加密了您的钱包，但是忘记了密码，你将会&lt;b&gt;丢失所有的比特币&lt;/b&gt;！</translation>
+        <location line="+1"/>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
+        <translation>警告：如果您丢失了加密该钱包的密码，其中所有的黑币将会丢失！</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+0"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>您确定需要为钱包加密吗？</translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+15"/>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>重要提示：您以前备份的钱包文件应该替换成最新生成的加密钱包文件（重新备份）。从安全性上考虑，您以前备份的未加密的钱包文件，在您使用新的加密钱包后将无效，请重新备份。</translation>
     </message>
@@ -350,11 +260,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>钱包已加密</translation>
     </message>
     <message>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
-        <translation type="vanished">比特币客户端将关闭软件以完成加密过程。请您谨记：钱包加密并不是万能的，电脑中毒等原因仍可能导致您的比特币意外丢失。</translation>
+        <location line="-58"/>
+        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>黑币客户端即将关闭以完成加密过程。请记住，加密钱包并不能完全防止您的电子货币被入侵您计算机的木马软件盗窃。</translation>
     </message>
     <message>
-        <location line="-45"/>
+        <location line="+13"/>
         <location line="+7"/>
         <location line="+44"/>
         <location line="+6"/>
@@ -413,10 +324,6 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>概况(&amp;O)</translation>
     </message>
     <message>
-        <source>Node</source>
-        <translation type="vanished">节点</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>Show general overview of wallet</source>
         <translation>显示钱包概况</translation>
@@ -432,7 +339,32 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>查看交易历史</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+5"/>
+        <source>&amp;Address Book</source>
+        <translation>地址簿(&amp;A)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Edit the list of stored addresses and labels</source>
+        <translation>管理已储存的地址和标签</translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <source>&amp;Receive coins</source>
+        <translation>接收黑币(&amp;R)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show the list of addresses for receiving payments</source>
+        <translation>显示用于接收支付的地址列表</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>&amp;Send coins</source>
+        <translation>发送货币(&amp;S)</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>E&amp;xit</source>
         <translation>退出(&amp;X)</translation>
     </message>
@@ -442,11 +374,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>退出程序</translation>
     </message>
     <message>
-        <source>Show information about Bitcoin</source>
-        <translation type="vanished">显示比特币的相关信息</translation>
+        <location line="+4"/>
+        <source>Show information about BlackCoin</source>
+        <translation>显示关于黑币的信息</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+2"/>
         <source>About &amp;Qt</source>
         <translation>关于 &amp;Qt</translation>
     </message>
@@ -475,36 +408,43 @@ This product includes software developed by the OpenSSL Project for use in the O
         <source>&amp;Change Passphrase...</source>
         <translation>更改密码(&amp;C)...</translation>
     </message>
-    <message>
-        <source>&amp;Sending addresses...</source>
-        <translation type="vanished">&amp;付款地址 </translation>
+    <message numerus="yes">
+        <location line="+250"/>
+        <source>~%n block(s) remaining</source>
+        <translation><numerusform>~%n 个区块未完成</numerusform></translation>
     </message>
     <message>
-        <source>&amp;Receiving addresses...</source>
-        <translation type="vanished">&amp;收款地址</translation>
+        <location line="+6"/>
+        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
+        <translation>交易记录已下载%3% (%1 / %2 个区块)</translation>
     </message>
     <message>
-        <source>Open &amp;URI...</source>
-        <translation type="vanished">打开 &amp;URI...</translation>
+        <location line="-247"/>
+        <source>&amp;Export...</source>
+        <translation>导出(&amp;E)</translation>
     </message>
     <message>
-        <source>Importing blocks from disk...</source>
-        <translation type="vanished">正在从磁盘导入数据块...</translation>
+        <location line="-62"/>
+        <source>Send coins to a BlackCoin address</source>
+        <translation>向指定的地址发送黑币</translation>
     </message>
     <message>
-        <source>Reindexing blocks on disk...</source>
-        <translation type="vanished">正在为数据块建立索引...</translation>
+        <location line="+45"/>
+        <source>Modify configuration options for BlackCoin</source>
+        <translation>更改设置选项</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
-        <translation type="vanished">向一个比特币地址发送比特币</translation>
+        <location line="+18"/>
+        <source>Export the data in the current tab to a file</source>
+        <translation>导出当前标签页的数据</translation>
     </message>
     <message>
-        <source>Modify configuration options for Bitcoin</source>
-        <translation type="vanished">设置选项</translation>
+        <location line="-14"/>
+        <source>Encrypt or decrypt wallet</source>
+        <translation>加密/解密钱包</translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="+3"/>
         <source>Backup wallet to another location</source>
         <translation>备份钱包到其他文件夹</translation>
     </message>
@@ -529,45 +469,42 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>验证消息(&amp;V)...</translation>
     </message>
     <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">比特币</translation>
+        <location line="-200"/>
+        <source>BlackCoin</source>
+        <translation>黑币</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="+0"/>
         <source>Wallet</source>
         <translation>钱包</translation>
     </message>
     <message>
-        <source>&amp;Send</source>
-        <translation type="vanished">发送(&amp;S)</translation>
+        <location line="+178"/>
+        <source>&amp;About BlackCoin</source>
+        <translation>关于黑币(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Receive</source>
-        <translation type="vanished">接收(&amp;R)</translation>
-    </message>
-    <message>
-        <location line="+187"/>
+        <location line="+9"/>
         <source>&amp;Show / Hide</source>
         <translation>显示 / 隐藏(&amp;S)</translation>
     </message>
     <message>
-        <source>Show or hide the main Window</source>
-        <translation type="vanished">显示或隐藏主窗口</translation>
+        <location line="+9"/>
+        <source>Unlock wallet</source>
+        <translation>解锁钱包</translation>
     </message>
     <message>
-        <source>Encrypt the private keys that belong to your wallet</source>
-        <translation type="vanished">对钱包中的私钥加密</translation>
+        <location line="+1"/>
+        <source>&amp;Lock Wallet</source>
+        <translation>锁定钱包(&amp;L)</translation>
     </message>
     <message>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation type="vanished">用比特币地址关联的私钥为消息签名，以证明您拥有这个比特币地址</translation>
+        <location line="+1"/>
+        <source>Lock wallet</source>
+        <translation>锁定钱包</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation type="vanished">校验消息，确保该消息是由指定的比特币地址所有者签名的</translation>
-    </message>
-    <message>
-        <location line="+45"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
@@ -587,266 +524,81 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>分页工具栏</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+8"/>
+        <source>Actions toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+13"/>
         <location line="+9"/>
         <source>[testnet]</source>
         <translation>[测试网络]</translation>
     </message>
     <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">比特币核心</translation>
-    </message>
-    <message>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation type="vanished">请求支付（生成二维码和 bitcoin: URI）</translation>
-    </message>
-    <message>
-        <source>&amp;About Bitcoin Core</source>
-        <translation type="vanished">关于比特币核心(&amp;A)</translation>
-    </message>
-    <message>
-        <source>Show the list of used sending addresses and labels</source>
-        <translation type="vanished">显示用过的发送地址和标签的列表</translation>
-    </message>
-    <message>
-        <source>Show the list of used receiving addresses and labels</source>
-        <translation type="vanished">显示用过的接收地址和标签的列表</translation>
-    </message>
-    <message>
-        <source>Open a bitcoin: URI or payment request</source>
-        <translation type="vanished">打开一个比特币：URI 或支付请求</translation>
-    </message>
-    <message>
-        <source>&amp;Command-line options</source>
-        <translation type="vanished">&amp;命令行 选项</translation>
-    </message>
-    <message>
-        <source>Show the Bitcoin Core help message to get a list with possible Bitcoin command-line options</source>
-        <translation type="vanished">显示比特币核心 程序帮助信息，获取可用的命令行选项 </translation>
-    </message>
-    <message>
-        <source>Bitcoin client</source>
-        <translation type="vanished">比特币客户端</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation type="vanished">
-            <numerusform>%n条到比特币网络的活动连接</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>No block source available...</source>
-        <translation type="vanished">No block source available...</translation>
-    </message>
-    <message>
-        <source>Processed %1 of %2 (estimated) blocks of transaction history.</source>
-        <translation type="vanished">%1 / %2 个交易历史的区块已下载</translation>
-    </message>
-    <message>
-        <source>Processed %1 blocks of transaction history.</source>
-        <translation type="vanished">已处理 %1 个交易历史数据块。</translation>
-    </message>
-    <message numerus="yes">
-        <location line="+575"/>
-        <source>%n hour(s)</source>
-        <translation>
-            <numerusform>%n 小时前</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location line="+4"/>
-        <source>%n day(s)</source>
-        <translation>
-            <numerusform>%n 天前</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n week(s)</source>
-        <translation type="vanished">
-            <numerusform>%n 周前</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>%1 and %2</source>
-        <translation type="vanished">%1 和 %2</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n year(s)</source>
-        <translation type="vanished">
-            <numerusform>%n 年</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>%1 behind</source>
-        <translation type="vanished">落后 %1 </translation>
-    </message>
-    <message>
-        <source>Last received block was generated %1 ago.</source>
-        <translation type="vanished">最新收到的区块产生于 %1。</translation>
-    </message>
-    <message>
-        <source>Transactions after this will not yet be visible.</source>
-        <translation type="vanished">在此之后的交易尚未可见</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">错误</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">警告</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">信息</translation>
-    </message>
-    <message>
-        <location line="-866"/>
-        <source>BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+139"/>
-        <source>&amp;Send coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Send coins to a BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>&amp;Receive coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show the list of addresses for receiving payments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>&amp;Address Book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Edit the list of stored addresses and labels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>&amp;About BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Modify configuration options for BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Encrypt or decrypt wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>&amp;Unlock Wallet...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Unlock wallet</source>
-        <translation type="unfinished">解锁钱包</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>&amp;Lock Wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Lock wallet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>&amp;Export...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="unfinished">导出当前数据到文件</translation>
-    </message>
-    <message>
-        <location line="+62"/>
-        <source>Actions toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+22"/>
+        <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation type="unfinished"></translation>
+        <translation>黑币客户端</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>与黑币网络建立了 %n 个连接</numerusform></translation>
     </message>
-    <message numerus="yes">
-        <location line="+26"/>
-        <source>~%n block(s) remaining</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+    <message>
+        <location line="+40"/>
+        <source>Downloaded %1 blocks of transaction history.</source>
+        <translation>已下载 %1 个区块的交易记录</translation>
+    </message>
+    <message>
+        <location line="+413"/>
+        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
+        <translation>权益增值中 &lt;br&gt;您的权重为 %1 &lt;br&gt;网络总权重为 %2&lt;br&gt;预计将在 %3 之后获得收益</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation type="unfinished"></translation>
+        <source>Not staking because wallet is locked</source>
+        <translation>未进行权益增值，因为钱包已锁定</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>Downloaded %1 blocks of transaction history.</source>
-        <translation type="unfinished"></translation>
+        <location line="+2"/>
+        <source>Not staking because wallet is offline</source>
+        <translation>未进行权益增值，因为钱包处于离线状态</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because wallet is syncing</source>
+        <translation>未进行权益增值，因为钱包正在同步</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Not staking because you don&apos;t have mature coins</source>
+        <translation>未进行权益增值，因为钱包中没有成熟的黑币</translation>
     </message>
     <message numerus="yes">
-        <location line="+22"/>
+        <location line="-403"/>
         <source>%n second(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n 秒前</numerusform></translation>
+    </message>
+    <message>
+        <location line="-284"/>
+        <source>&amp;Unlock Wallet...</source>
+        <translation>解锁钱包(&amp;U)</translation>
     </message>
     <message numerus="yes">
-        <location line="+4"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n 分钟前</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n 小时前</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n 天前</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
@@ -861,17 +613,17 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+10"/>
         <source>Last received block was generated %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>最近生成的区块接收于%1</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>This transaction is over the size limit.  You can still send it for a fee of %1, which goes to the nodes that process your transaction and helps to support the network.  Do you want to pay the fee?</source>
-        <translation type="unfinished"></translation>
+        <translation>该笔交易数据量太大，需支付%1手续费给执行该笔交易的网络结点。您愿意支付吗？</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation type="unfinished"></translation>
+        <translation>手续费确认</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -900,13 +652,13 @@ Address: %4
         <location line="+100"/>
         <location line="+15"/>
         <source>URI handling</source>
-        <translation type="unfinished">URI 处理</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-15"/>
         <location line="+15"/>
         <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+18"/>
@@ -921,75 +673,52 @@ Address: %4
     <message>
         <location line="+25"/>
         <source>Backup Wallet</source>
-        <translation type="unfinished">备份钱包</translation>
+        <translation>备份钱包</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Wallet Data (*.dat)</source>
-        <translation type="unfinished">钱包文件(*.dat)</translation>
+        <translation>钱包数据文件(*.dat)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Backup Failed</source>
-        <translation type="unfinished">备份失败</translation>
+        <translation>备份失败</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation type="unfinished"></translation>
+        <translation>试图将钱包地址保存到新位置时出现错误</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
         <source>%n second(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n秒</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n minute(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n 分钟</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n hour(s)</source>
+        <translation><numerusform>%n 小时</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+4"/>
+        <source>%n day(s)</source>
+        <translation><numerusform>%n 天</numerusform></translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Not staking because wallet is locked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because wallet is offline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because wallet is syncing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Not staking because you don&apos;t have mature coins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+18"/>
         <source>Not staking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
-        <translation type="vanished">发生严重错误。</translation>
+        <translation>未进行权益增值</translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation type="unfinished"></translation>
+        <translation>发生严重错误，黑币客户端即将关闭。</translation>
     </message>
 </context>
 <context>
@@ -1003,13 +732,9 @@ Address: %4
 <context>
     <name>CoinControlDialog</name>
     <message>
-        <source>Coin Control Address Selection</source>
-        <translation type="vanished">选择交易源地址</translation>
-    </message>
-    <message>
         <location filename="../forms/coincontroldialog.ui" line="+14"/>
         <source>Coin Control</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+31"/>
@@ -1020,7 +745,7 @@ Address: %4
         <location line="+19"/>
         <location line="+32"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-19"/>
@@ -1038,7 +763,7 @@ Address: %4
         <location line="+86"/>
         <location line="+38"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-191"/>
@@ -1056,7 +781,13 @@ Address: %4
         <translation>低输出</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+22"/>
+        <location filename="../coincontroldialog.cpp" line="+551"/>
+        <source>no</source>
+        <translation>否</translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <source>After Fee:</source>
         <translation>加上交易费用后:</translation>
     </message>
@@ -1088,7 +819,7 @@ Address: %4
     <message>
         <location line="+5"/>
         <source>Label</source>
-        <translation type="unfinished">标签</translation>
+        <translation>标签</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1116,7 +847,7 @@ Address: %4
         <translation>优先级</translation>
     </message>
     <message>
-        <location filename="../coincontroldialog.cpp" line="+36"/>
+        <location filename="../coincontroldialog.cpp" line="-515"/>
         <source>Copy address</source>
         <translation>复制地址</translation>
     </message>
@@ -1135,14 +866,6 @@ Address: %4
         <location line="-25"/>
         <source>Copy transaction ID</source>
         <translation>复制交易编号</translation>
-    </message>
-    <message>
-        <source>Lock unspent</source>
-        <translation type="vanished">锁定未花费</translation>
-    </message>
-    <message>
-        <source>Unlock unspent</source>
-        <translation type="vanished">解锁未花费</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -1185,50 +908,7 @@ Address: %4
         <translation>最高</translation>
     </message>
     <message>
-        <location line="+164"/>
-        <source>DUST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>This label turns red, if the transaction size is bigger than 10000 bytes.
-
- This means a fee of at least %1 per kb is required.
-
- Can vary +/- 1 Byte per input.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+1"/>
-        <source>Transactions with higher priority get more likely into a block.
-
-This label turns red, if the priority is smaller than &quot;medium&quot;.
-
- This means a fee of at least %1 per kb is required.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This label turns red, if any recipient receives an amount smaller than %1.
-
- This means a fee of at least %2 is required. 
-
- Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This label turns red, if the change is smaller than %1.
-
- This means a fee of at least %2 is required.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>higher</source>
-        <translation type="vanished">更高</translation>
-    </message>
-    <message>
-        <location line="-176"/>
         <source>high</source>
         <translation>高</translation>
     </message>
@@ -1253,75 +933,56 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>低</translation>
     </message>
     <message>
-        <source>lower</source>
-        <translation type="vanished">更低</translation>
-    </message>
-    <message>
         <location line="+1"/>
         <source>lowest</source>
         <translation>最低</translation>
     </message>
     <message>
-        <source>(%1 locked)</source>
-        <translation type="vanished">(%1 锁定)</translation>
-    </message>
-    <message>
-        <source>none</source>
-        <translation type="vanished">无</translation>
-    </message>
-    <message>
-        <source>Dust</source>
-        <translation type="vanished">尘埃交易</translation>
-    </message>
-    <message>
         <location line="+155"/>
+        <source>DUST</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+0"/>
         <source>yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../forms/coincontroldialog.ui" line="-235"/>
-        <location filename="../coincontroldialog.cpp" line="+0"/>
-        <source>no</source>
-        <translation>否</translation>
+        <location line="+10"/>
+        <source>This label turns red, if the transaction size is bigger than 10000 bytes.
+
+ This means a fee of at least %1 per kb is required.
+
+ Can vary +/- 1 Byte per input.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>This label turns red, if the transaction size is greater than 1000 bytes.</source>
-        <translation type="vanished">如果这笔交易大于1000字节，标签会变成红色。</translation>
+        <location line="+1"/>
+        <source>Transactions with higher priority get more likely into a block.
+
+This label turns red, if the priority is smaller than &quot;medium&quot;.
+
+ This means a fee of at least %1 per kb is required.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>This means a fee of at least %1 per kB is required.</source>
-        <translation type="vanished">这意味着将对交易收取 %1/千字节 的交易费。</translation>
+        <location line="+1"/>
+        <source>This label turns red, if any recipient receives an amount smaller than %1.
+
+ This means a fee of at least %2 is required. 
+
+ Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Can vary +/- 1 byte per input.</source>
-        <translation type="vanished">每笔输入可能会有 正负1字节的偏差。</translation>
+        <location line="+1"/>
+        <source>This label turns red, if the change is smaller than %1.
+
+ This means a fee of at least %2 is required.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Transactions with higher priority are more likely to get included into a block.</source>
-        <translation type="vanished">交易的优先级越高，被矿工收入数据块的速度也越快。</translation>
-    </message>
-    <message>
-        <source>This label turns red, if the priority is smaller than &quot;medium&quot;.</source>
-        <translation type="vanished">如果优先级小于&quot;中位数&quot; ，标签将变成红色。</translation>
-    </message>
-    <message>
-        <source>This label turns red, if any recipient receives an amount smaller than %1.</source>
-        <translation type="vanished">如果收款地址收到小于%1的比特币，标签将变成红色。</translation>
-    </message>
-    <message>
-        <source>This means a fee of at least %1 is required.</source>
-        <translation type="vanished">这意味着至少需要 %1的交易费。</translation>
-    </message>
-    <message>
-        <source>Amounts below 0.546 times the minimum relay fee are shown as dust.</source>
-        <translation type="vanished">小于最小转发交易费的0.546倍的 转账金额将被视为 尘埃交易。</translation>
-    </message>
-    <message>
-        <source>This label turns red, if the change is smaller than %1.</source>
-        <translation type="vanished">如果零钱小于 %1，标签将变成红色。</translation>
-    </message>
-    <message>
-        <location filename="../coincontroldialog.cpp" line="+50"/>
+        <location line="+37"/>
         <location line="+66"/>
         <source>(no label)</source>
         <translation>(没有标签)</translation>
@@ -1352,25 +1013,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+17"/>
-        <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The label associated with this address list entry</source>
-        <translation type="vanished">与此地址相关的标签项</translation>
-    </message>
-    <message>
-        <source>The address associated with this address list entry. This can only be modified for sending addresses.</source>
-        <translation type="vanished">该地址已与地址列表中的条目关联，只能被发送地址修改。</translation>
-    </message>
-    <message>
-        <location line="-10"/>
+        <location line="+7"/>
         <source>&amp;Address</source>
         <translation>地址(&amp;A)</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../editaddressdialog.cpp" line="+20"/>
@@ -1393,21 +1046,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>编辑发送地址</translation>
     </message>
     <message>
-        <location line="+71"/>
-        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+76"/>
         <source>The entered address &quot;%1&quot; is already in the address book.</source>
         <translation>输入的地址“%1”已经存在于地址簿中。</translation>
     </message>
     <message>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation type="vanished">您输入的“%1”不是有效的比特币地址。</translation>
+        <location line="-5"/>
+        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>Could not unlock wallet.</source>
         <translation>无法解锁钱包</translation>
     </message>
@@ -1418,185 +1067,47 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>FreespaceChecker</name>
-    <message>
-        <source>A new data directory will be created.</source>
-        <translation type="vanished">一个新的数据目录将被创建。</translation>
-    </message>
-    <message>
-        <source>name</source>
-        <translation type="vanished">名称</translation>
-    </message>
-    <message>
-        <source>Directory already exists. Add %1 if you intend to create a new directory here.</source>
-        <translation type="vanished">目录已存在。如果您打算在这里创建一个新目录，添加 %1。</translation>
-    </message>
-    <message>
-        <source>Path already exists, and is not a directory.</source>
-        <translation type="vanished">路径已存在，并且不是一个目录。</translation>
-    </message>
-    <message>
-        <source>Cannot create data directory here.</source>
-        <translation type="vanished">无法在此创建数据目录。</translation>
-    </message>
-</context>
-<context>
     <name>GUIUtil::HelpMessageBox</name>
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
         <source>BlackCoin-Qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-12"/>
         <source>version</source>
-        <translation type="unfinished">版本</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+2"/>
         <source>Usage:</source>
-        <translation type="unfinished">使用：</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>command-line options</source>
-        <translation type="unfinished">命令行选项</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+4"/>
         <source>UI options</source>
-        <translation type="unfinished">UI选项</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation type="unfinished">设置语言, 例如“zh-TW”（默认为系统语言）</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>Start minimized</source>
-        <translation type="unfinished">启动时最小化
-</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>Show splash screen on startup (default: 1)</source>
-        <translation type="unfinished">启动时显示版权页 (缺省: 1)</translation>
-    </message>
-</context>
-<context>
-    <name>HelpMessageDialog</name>
-    <message>
-        <source>Bitcoin Core - Command-line options</source>
-        <translation type="vanished">比特币核心程序 - 命令行选项</translation>
-    </message>
-    <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">比特币核心</translation>
-    </message>
-    <message>
-        <source>version</source>
-        <translation type="vanished">版本</translation>
-    </message>
-    <message>
-        <source>Usage:</source>
-        <translation type="vanished">使用：</translation>
-    </message>
-    <message>
-        <source>command-line options</source>
-        <translation type="vanished">命令行选项</translation>
-    </message>
-    <message>
-        <source>UI options</source>
-        <translation type="vanished">UI选项</translation>
-    </message>
-    <message>
-        <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation type="vanished">设置语言, 例如“zh-TW”（默认为系统语言）</translation>
-    </message>
-    <message>
-        <source>Start minimized</source>
-        <translation type="vanished">启动时最小化
-</translation>
-    </message>
-    <message>
-        <source>Show splash screen on startup (default: 1)</source>
-        <translation type="vanished">启动时显示版权页 (缺省: 1)</translation>
-    </message>
-    <message>
-        <source>Choose data directory on startup (default: 0)</source>
-        <translation type="vanished">在启动时选择数据目录（默认：0）</translation>
-    </message>
-</context>
-<context>
-    <name>Intro</name>
-    <message>
-        <source>Welcome</source>
-        <translation type="vanished">欢迎</translation>
-    </message>
-    <message>
-        <source>Welcome to Bitcoin Core.</source>
-        <translation type="vanished">欢迎使用 比特币核心 程序。</translation>
-    </message>
-    <message>
-        <source>As this is the first time the program is launched, you can choose where Bitcoin Core will store its data.</source>
-        <translation type="vanished">由于这是第一次运行 比特币核心 程序，您可以选择数据存储目录。</translation>
-    </message>
-    <message>
-        <source>Bitcoin Core will download and store a copy of the Bitcoin block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation type="vanished">比特币核心 程序会下载储存一份数据块链(blockchain)。至少需要 %1 GB的存储空间，随着时间推移会需要更多的存储空间。钱包文件也储存在该目录。</translation>
-    </message>
-    <message>
-        <source>Use the default data directory</source>
-        <translation type="vanished">使用默认的数据目录</translation>
-    </message>
-    <message>
-        <source>Use a custom data directory:</source>
-        <translation type="vanished">使用自定义的数据目录：</translation>
-    </message>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">比特币</translation>
-    </message>
-    <message>
-        <source>Error: Specified data directory &quot;%1&quot; can not be created.</source>
-        <translation type="vanished">错误：指定的数据目录“%1”无法创建。</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="vanished">错误</translation>
-    </message>
-    <message>
-        <source>GB of free space available</source>
-        <translation type="vanished">可用空间（GB）</translation>
-    </message>
-    <message>
-        <source>(of %1GB needed)</source>
-        <translation type="vanished">（需要 %1GB）</translation>
-    </message>
-</context>
-<context>
-    <name>OpenURIDialog</name>
-    <message>
-        <source>Open URI</source>
-        <translation type="vanished">打开 URI</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation type="vanished">打开来自URI或文件的付款请求 </translation>
-    </message>
-    <message>
-        <source>URI:</source>
-        <translation type="vanished">URI: </translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation type="vanished">选择付款请求文件 </translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation type="vanished">选择需要打开的付款请求文件 </translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1612,122 +1123,54 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>主要(&amp;M)</translation>
     </message>
     <message>
-        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB.</source>
-        <translation type="vanished">可选的每 kB 交易费，这有助于您的交易被更快的处理。大多数交易都是 1 kB。</translation>
+        <location line="+6"/>
+        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+15"/>
         <source>Pay transaction &amp;fee</source>
         <translation>支付交易费用(&amp;F)</translation>
     </message>
     <message>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
-        <translation type="vanished">登录系统后自动开启比特币客户端</translation>
-    </message>
-    <message>
-        <source>&amp;Start Bitcoin on system login</source>
-        <translation type="vanished">系统启动时运行(&amp;S)</translation>
-    </message>
-    <message>
-        <source>Size of &amp;database cache</source>
-        <translation type="vanished">数据库缓存大小(&amp;D)</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">MB</translation>
-    </message>
-    <message>
-        <source>Number of script &amp;verification threads</source>
-        <translation type="vanished">脚本&amp;验证 进程数 </translation>
-    </message>
-    <message>
-        <source>Set the number of script verification threads (up to 16, 0 = auto, &lt;0 = leave that many cores free, default: 0)</source>
-        <translation type="vanished">设置脚本验证线程数量（最多16，0 = 自动，&lt;0 = 留下许多空闲核心，默认为 0）</translation>
-    </message>
-    <message>
-        <source>&amp;Spend unconfirmed change (experts only)</source>
-        <translation type="vanished">&amp;使用未确认的零钱 (仅限专家使用) </translation>
-    </message>
-    <message>
-        <source>Connect to the Bitcoin network through a SOCKS proxy.</source>
-        <translation type="vanished">通过 SOCKS 代理连接到比特币网络。</translation>
-    </message>
-    <message>
-        <source>&amp;Connect through SOCKS proxy (default proxy):</source>
-        <translation type="vanished">通过 SO&amp;CKS 代理连接 (默认代理):</translation>
-    </message>
-    <message>
-        <source>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</source>
-        <translation type="vanished">代理的 IP 地址 (例如 IPv4: 127.0.0.1 / IPv6: ::1)</translation>
-    </message>
-    <message>
-        <source>Active command-line options that override above options:</source>
-        <translation type="vanished">有效的命令行参数覆盖上述选项:</translation>
-    </message>
-    <message>
-        <source>Reset all client options to default.</source>
-        <translation type="vanished">恢复客户端的缺省设置</translation>
-    </message>
-    <message>
-        <source>&amp;Reset Options</source>
-        <translation type="vanished">恢复缺省设置(&amp;R)</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>&amp;Network</source>
-        <translation>网络(&amp;N)</translation>
-    </message>
-    <message>
-        <source>W&amp;allet</source>
-        <translation type="vanished">&amp;钱包</translation>
-    </message>
-    <message>
-        <source>If you disable the spending of unconfirmed change, the change from a transaction cannot be used until that transaction has at least one confirmation. This also affects how your balance is computed.</source>
-        <translation type="vanished">如果禁用未确认的零钱，则零钱至少需要1个确认才能使用。同时账户余额显示会受到影响。</translation>
-    </message>
-    <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="vanished">自动在路由器中打开比特币端口。只有当您的路由器开启了 UPnP 选项时此功能才有效。</translation>
-    </message>
-    <message>
-        <location line="-126"/>
-        <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Start BlackCoin on system login</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Detach databases at shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+21"/>
+        <source>&amp;Network</source>
+        <translation>网络(&amp;N)</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
@@ -1737,12 +1180,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Connect through SOCKS proxy:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+9"/>
@@ -1752,7 +1195,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>IP address of the proxy (e.g. 127.0.0.1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+7"/>
@@ -1812,29 +1255,10 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+33"/>
-        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Display coin &amp;control features (experts only!)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+88"/>
-        <source>&amp;Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting Bitcoin.</source>
-        <translation type="vanished">在这里设置用户界面的语言。设置将在客户端重启后生效。</translation>
-    </message>
-    <message>
-        <location line="-123"/>
+        <location line="+11"/>
         <source>&amp;Unit to show amounts in:</source>
         <translation>比特币金额单位(&amp;U)：</translation>
     </message>
@@ -1844,11 +1268,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>选择比特币单位。</translation>
     </message>
     <message>
-        <source>Whether to show Bitcoin addresses in the transaction list or not.</source>
-        <translation type="vanished">是否需要在交易清单中显示比特币地址。</translation>
+        <location line="+9"/>
+        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+3"/>
         <source>&amp;Display addresses in transaction list</source>
         <translation>在交易清单中显示比特币地址(&amp;D)</translation>
     </message>
@@ -1858,11 +1283,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>是否需要交易源地址控制功能。</translation>
     </message>
     <message>
-        <source>Display coin &amp;control features (experts only)</source>
-        <translation type="vanished">使用交易源地址控制功能 (仅限专家使用) </translation>
+        <location line="+3"/>
+        <source>Display coin &amp;control features (experts only!)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+71"/>
         <source>&amp;OK</source>
         <translation>确定(&amp;O)</translation>
     </message>
@@ -1870,6 +1296,11 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+7"/>
         <source>&amp;Cancel</source>
         <translation>取消(&amp;C)</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>&amp;Apply</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../optionsdialog.cpp" line="+55"/>
@@ -1880,33 +1311,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+149"/>
         <location line="+9"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-9"/>
         <location line="+9"/>
         <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>none</source>
-        <translation type="vanished">无</translation>
-    </message>
-    <message>
-        <source>Confirm options reset</source>
-        <translation type="vanished">确认恢复缺省设置</translation>
-    </message>
-    <message>
-        <source>Client restart required to activate changes.</source>
-        <translation type="vanished">更改生效需要重启客户端。</translation>
-    </message>
-    <message>
-        <source>Client will be shutdown, do you want to proceed?</source>
-        <translation type="vanished">客户端即将关闭，确定继续吗？</translation>
-    </message>
-    <message>
-        <source>This change would require a client restart.</source>
-        <translation type="vanished">此更改需要重启客户端。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+29"/>
@@ -1922,64 +1333,38 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>表单</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="vanished">现在显示的消息可能是过期的. 在连接上比特币网络节点后，您的钱包将自动与网络同步，但是这个过程还没有完成。</translation>
+        <location line="+33"/>
+        <location line="+231"/>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="-160"/>
+        <source>Stake:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Unconfirmed:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-107"/>
         <source>Wallet</source>
         <translation>钱包</translation>
     </message>
     <message>
-        <source>Available:</source>
-        <translation type="vanished">可使用的余额：</translation>
+        <location line="+49"/>
+        <source>Spendable:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+16"/>
         <source>Your current spendable balance</source>
         <translation>您当前可使用的余额</translation>
     </message>
     <message>
-        <source>Pending:</source>
-        <translation type="vanished">等待中的余额：</translation>
-    </message>
-    <message>
-        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</source>
-        <translation type="vanished">尚未确认的交易总额，未计入当前余额</translation>
-    </message>
-    <message>
-        <location line="-58"/>
-        <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-189"/>
-        <source>Spendable:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <source>Stake:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Unconfirmed:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+13"/>
+        <location line="+71"/>
         <source>Immature:</source>
         <translation>未成熟的：</translation>
     </message>
@@ -2004,6 +1389,16 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&lt;b&gt;最近交易记录&lt;/b&gt;</translation>
     </message>
     <message>
+        <location line="-108"/>
+        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-29"/>
+        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../overviewpage.cpp" line="+113"/>
         <location line="+1"/>
         <source>out of sync</source>
@@ -2011,170 +1406,61 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>PaymentServer</name>
-    <message>
-        <source>URI handling</source>
-        <translation type="vanished">URI 处理</translation>
-    </message>
-    <message>
-        <source>URI can not be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
-        <translation type="vanished">URI无法解析！原因可能是比特币地址不正确，或者URI参数错误。</translation>
-    </message>
-    <message>
-        <source>Requested payment amount of %1 is too small (considered dust).</source>
-        <translation type="vanished">请求支付的金额 %1 太小（就像尘埃）。</translation>
-    </message>
-    <message>
-        <source>Payment request error</source>
-        <translation type="vanished">支付请求出错</translation>
-    </message>
-    <message>
-        <source>Cannot start bitcoin: click-to-pay handler</source>
-        <translation type="vanished">暂时无法启动比特币：点击支付功能</translation>
-    </message>
-    <message>
-        <source>Net manager warning</source>
-        <translation type="vanished">网络管理器警告</translation>
-    </message>
-    <message>
-        <source>Your active proxy doesn&apos;t support SOCKS5, which is required for payment requests via proxy.</source>
-        <translation type="vanished">您的活动代理不支持 SOCKS5，而通过代理进行支付请求时这是必须的。</translation>
-    </message>
-    <message>
-        <source>Payment request fetch URL is invalid: %1</source>
-        <translation type="vanished">付款请求URI链接非法: %1</translation>
-    </message>
-    <message>
-        <source>Payment request file handling</source>
-        <translation type="vanished">付款请求文件处理 </translation>
-    </message>
-    <message>
-        <source>Payment request file can not be read or processed! This can be caused by an invalid payment request file.</source>
-        <translation type="vanished">付款请求文件不能读取或无法识别！这可能是个不合格的付款请求文件。</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation type="vanished">不支持到自定义付款脚本的未验证付款请求。</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation type="vanished">退款来自 %1</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation type="vanished">%1: %2 通讯出错</translation>
-    </message>
-    <message>
-        <source>Payment request can not be parsed or processed!</source>
-        <translation type="vanished">支付请求不能被解析或处理！</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation type="vanished">来自 %1 服务器的错误响应</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation type="vanished">支付已到账</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation type="vanished">网络请求出错</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Bitcoin</source>
-        <translation type="vanished">比特币</translation>
-    </message>
-    <message>
-        <source>Error: Specified data directory &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">错误：指定的数据目录“%1”不存在。</translation>
-    </message>
-    <message>
-        <source>Error: Invalid combination of -regtest and -testnet.</source>
-        <translation type="vanished">错误：无效的 -regtest 与 -testnet 结合体。</translation>
-    </message>
-    <message>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">请输入比特币地址（例如: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L）</translation>
-    </message>
-</context>
-<context>
     <name>QRCodeDialog</name>
     <message>
         <location filename="../forms/qrcodedialog.ui" line="+14"/>
         <source>QR Code Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+59"/>
         <source>Request Payment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+56"/>
+        <source>Amount:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-44"/>
         <source>Label:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+19"/>
         <source>Message:</source>
-        <translation type="unfinished">消息：</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+25"/>
-        <source>Amount:</source>
-        <translation type="unfinished">金额：</translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+71"/>
         <source>&amp;Save As...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../qrcodedialog.cpp" line="+62"/>
         <source>Error encoding URI into QR Code.</source>
-        <translation type="unfinished">将 URI 转为二维码失败。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+40"/>
         <source>The entered amount is invalid, please check.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+23"/>
         <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="unfinished">URI 太长，请试着精简标签或消息文本。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+25"/>
         <source>Save QR Code</source>
-        <translation type="unfinished">保存二维码</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+0"/>
         <source>PNG Images (*.png)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QRImageWidget</name>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation type="vanished">保存图片(&amp;S)...</translation>
-    </message>
-    <message>
-        <source>&amp;Copy Image</source>
-        <translation type="vanished">复制图片(&amp;C)</translation>
-    </message>
-    <message>
-        <source>Save QR Code</source>
-        <translation type="vanished">保存二维码</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png)</source>
-        <translation type="vanished">PNG图片(*.png)</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2209,14 +1495,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>信息(&amp;I)</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation type="vanished">调试窗口</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="vanished">常规</translation>
-    </message>
-    <message>
         <location line="+68"/>
         <source>Using OpenSSL version</source>
         <translation>使用 OpenSSL 版本</translation>
@@ -2232,28 +1510,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>网络</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="vanished">姓名</translation>
-    </message>
-    <message>
-        <location line="-156"/>
-        <source>BlackCoin - Debug window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>BlackCoin Core</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+138"/>
+        <location line="+7"/>
         <source>Number of connections</source>
         <translation>连接数</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>On testnet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+23"/>
@@ -2276,29 +1540,24 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>上一数据块时间</translation>
     </message>
     <message>
-        <location line="+49"/>
-        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+52"/>
         <source>&amp;Open</source>
         <translation>打开(&amp;O)</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Command-line options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+7"/>
         <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+24"/>
@@ -2306,52 +1565,39 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>控制台(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Network Traffic</source>
-        <translation type="vanished">网络流量(&amp;N)</translation>
-    </message>
-    <message>
-        <source>&amp;Clear</source>
-        <translation type="vanished">清除(&amp;C)</translation>
-    </message>
-    <message>
-        <source>Totals</source>
-        <translation type="vanished">总数</translation>
-    </message>
-    <message>
-        <source>In:</source>
-        <translation type="vanished">输入：</translation>
-    </message>
-    <message>
-        <source>Out:</source>
-        <translation type="vanished">输出：</translation>
-    </message>
-    <message>
         <location line="-260"/>
         <source>Build date</source>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location line="+200"/>
+        <location line="-104"/>
+        <source>BlackCoin - Debug window</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>BlackCoin Core</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+279"/>
         <source>Debug log file</source>
         <translation>调试日志文件</translation>
     </message>
     <message>
-        <source>Open the Bitcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="vanished">打开当前目录中的调试日志文件。日志文件大的话可能要等上几秒钟。</translation>
+        <location line="+7"/>
+        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+102"/>
         <source>Clear console</source>
         <translation>清空控制台</translation>
     </message>
     <message>
-        <source>Welcome to the Bitcoin RPC console.</source>
-        <translation type="vanished">欢迎来到 RPC 控制台。</translation>
-    </message>
-    <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
         <source>Welcome to the BlackCoin RPC console.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
@@ -2362,203 +1608,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+1"/>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>使用 &lt;b&gt;help&lt;/b&gt; 命令显示帮助信息。</translation>
-    </message>
-    <message>
-        <source>%1 B</source>
-        <translation type="vanished">%1 字节</translation>
-    </message>
-    <message>
-        <source>%1 KB</source>
-        <translation type="vanished">%1 KB</translation>
-    </message>
-    <message>
-        <source>%1 MB</source>
-        <translation type="vanished">%1 MB</translation>
-    </message>
-    <message>
-        <source>%1 GB</source>
-        <translation type="vanished">%1 GB</translation>
-    </message>
-    <message>
-        <source>%1 m</source>
-        <translation type="vanished">%1 分钟</translation>
-    </message>
-    <message>
-        <source>%1 h</source>
-        <translation type="vanished">%1 小时</translation>
-    </message>
-    <message>
-        <source>%1 h %2 m</source>
-        <translation type="vanished">%1 小时 %2 分钟</translation>
-    </message>
-</context>
-<context>
-    <name>ReceiveCoinsDialog</name>
-    <message>
-        <source>&amp;Amount:</source>
-        <translation type="vanished">总额(&amp;A)：</translation>
-    </message>
-    <message>
-        <source>&amp;Label:</source>
-        <translation type="vanished">标签(&amp;L)：</translation>
-    </message>
-    <message>
-        <source>&amp;Message:</source>
-        <translation type="vanished">消息(&amp;M)：</translation>
-    </message>
-    <message>
-        <source>Reuse one of the previously used receiving addresses. Reusing addresses has security and privacy issues. Do not use this unless re-generating a payment request made before.</source>
-        <translation type="vanished">重复使用以前用过的接收地址。重用地址有安全和隐私方面的隐患。除非是为重复生成同一项支付请求，否则请不要这样做。</translation>
-    </message>
-    <message>
-        <source>R&amp;euse an existing receiving address (not recommended)</source>
-        <translation type="vanished">重用现有的接收地址（不推荐）</translation>
-    </message>
-    <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
-        <translation type="vanished">可在付款请求上备注一条信息，在打开付款请求时可以看到。注意：该消息不是通过比特币网络传送。</translation>
-    </message>
-    <message>
-        <source>An optional label to associate with the new receiving address.</source>
-        <translation type="vanished">可为新建的收款地址添加一个标签。</translation>
-    </message>
-    <message>
-        <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
-        <translation type="vanished">使用此表单要求付款。所有字段都是&lt;b&gt;可选&lt;/b&gt;。</translation>
-    </message>
-    <message>
-        <source>An optional amount to request. Leave this empty or zero to not request a specific amount.</source>
-        <translation type="vanished">可选的请求金额。留空或填零为不要求具体金额。</translation>
-    </message>
-    <message>
-        <source>Clear all fields of the form.</source>
-        <translation type="vanished">清空此表单的所有字段。</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">清除</translation>
-    </message>
-    <message>
-        <source>Requested payments history</source>
-        <translation type="vanished">请求付款的历史</translation>
-    </message>
-    <message>
-        <source>&amp;Request payment</source>
-        <translation type="vanished">请求付款(&amp;R)</translation>
-    </message>
-    <message>
-        <source>Show the selected request (does the same as double clicking an entry)</source>
-        <translation type="vanished">显示选中的请求 (双击也可以显示)</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation type="vanished">显示</translation>
-    </message>
-    <message>
-        <source>Remove the selected entries from the list</source>
-        <translation type="vanished">从列表中移除选中的条目</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">移除</translation>
-    </message>
-    <message>
-        <source>Copy label</source>
-        <translation type="vanished">复制标签</translation>
-    </message>
-    <message>
-        <source>Copy message</source>
-        <translation type="vanished">复制消息 </translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation type="vanished">复制金额</translation>
-    </message>
-</context>
-<context>
-    <name>ReceiveRequestDialog</name>
-    <message>
-        <source>QR Code</source>
-        <translation type="vanished">二维码</translation>
-    </message>
-    <message>
-        <source>Copy &amp;URI</source>
-        <translation type="vanished">复制 URI(&amp;U)</translation>
-    </message>
-    <message>
-        <source>Copy &amp;Address</source>
-        <translation type="vanished">复制地址(&amp;A)</translation>
-    </message>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation type="vanished">保存图片(&amp;S)...</translation>
-    </message>
-    <message>
-        <source>Request payment to %1</source>
-        <translation type="vanished">请求付款到 %1</translation>
-    </message>
-    <message>
-        <source>Payment information</source>
-        <translation type="vanished">付款信息</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation type="vanished">URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">地址</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="vanished">金额</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="vanished">标签</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">消息</translation>
-    </message>
-    <message>
-        <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="vanished">URI 太长，请试着精简标签或消息文本。</translation>
-    </message>
-    <message>
-        <source>Error encoding URI into QR Code.</source>
-        <translation type="vanished">将 URI 转为二维码失败。</translation>
-    </message>
-</context>
-<context>
-    <name>RecentRequestsTableModel</name>
-    <message>
-        <source>Date</source>
-        <translation type="vanished">日期</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="vanished">标签</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">消息</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="vanished">金额</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation type="vanished">(没有标签)</translation>
-    </message>
-    <message>
-        <source>(no message)</source>
-        <translation type="vanished">(无消息)</translation>
-    </message>
-    <message>
-        <source>(no amount)</source>
-        <translation type="vanished">(无金额) </translation>
     </message>
 </context>
 <context>
@@ -2604,7 +1653,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+22"/>
         <location line="+35"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-19"/>
@@ -2622,7 +1671,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+86"/>
         <location line="+32"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-191"/>
@@ -2632,7 +1681,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>medium</source>
-        <translation type="unfinished">中等</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+32"/>
@@ -2647,7 +1696,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>no</source>
-        <translation type="unfinished">否</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+32"/>
@@ -2657,32 +1706,15 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+35"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+50"/>
         <source>custom change address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+129"/>
-        <source>Remove all transaction fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation type="vanished">变更 : </translation>
-    </message>
-    <message>
-        <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
-        <translation type="vanished">如果激活该选项，但是零钱地址用光或者非法，将会新生成零钱地址，转入零钱。</translation>
-    </message>
-    <message>
-        <source>Custom change address</source>
-        <translation type="vanished">自定义零钱地址</translation>
-    </message>
-    <message>
-        <location line="-23"/>
+        <location line="+106"/>
         <source>Send to multiple recipients at once</source>
         <translation>一次发送给多个接收者</translation>
     </message>
@@ -2692,11 +1724,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>添加收款人(&amp;R)</translation>
     </message>
     <message>
-        <source>Clear all fields of the form.</source>
-        <translation type="vanished">清除此表单的所有字段。</translation>
+        <location line="+20"/>
+        <source>Remove all transaction fields</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+3"/>
         <source>Clear &amp;All</source>
         <translation>清除所有(&amp;A)</translation>
     </message>
@@ -2708,7 +1741,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+16"/>
         <source>123.456 BC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+31"/>
@@ -2721,18 +1754,9 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>发送(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../sendcoinsdialog.cpp" line="-60"/>
-        <source>Confirm send coins</source>
-        <translation>确认发送货币</translation>
-    </message>
-    <message>
-        <source>%1 to %2</source>
-        <translation type="vanished">%1 到 %2</translation>
-    </message>
-    <message>
-        <location line="-113"/>
+        <location filename="../sendcoinsdialog.cpp" line="-173"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+15"/>
@@ -2777,48 +1801,25 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+86"/>
         <source>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+5"/>
+        <source>Confirm send coins</source>
+        <translation>确认发送货币</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Are you sure you want to send %1?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+0"/>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+55"/>
-        <source>Error: Transaction creation failed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+251"/>
-        <source>WARNING: Invalid BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>WARNING: unknown change address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total Amount %1 (= %2)</source>
-        <translation type="vanished">总额 %1 (= %2)</translation>
-    </message>
-    <message>
-        <source>or</source>
-        <translation type="vanished">或</translation>
-    </message>
-    <message>
-        <location line="-299"/>
+        <location line="+29"/>
         <source>The recipient address is not valid, please recheck.</source>
         <translation>收款人地址不合法，请检查。</translation>
     </message>
@@ -2843,47 +1844,40 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>发现重复的地址, 每次只能对同一地址发送一次。</translation>
     </message>
     <message>
-        <source>Transaction creation failed!</source>
-        <translation type="vanished">交易创建失败！</translation>
+        <location line="+5"/>
+        <source>Error: Transaction creation failed.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="vanished">错误：该交易被拒绝！发生这种错误的原因可能是：钱包中的比特币已经被用掉，有可能您复制了wallet.dat钱包文件，然后用复制的钱包文件支付了比特币，但是这个钱包文件中没有记录。</translation>
+        <location line="+5"/>
+        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Warning: Invalid Bitcoin address</source>
-        <translation type="vanished">警告：无效的比特币地址</translation>
+        <location line="+251"/>
+        <source>WARNING: Invalid BlackCoin address</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+274"/>
+        <location line="+13"/>
         <source>(no label)</source>
         <translation>(没有标签)</translation>
     </message>
     <message>
-        <source>Warning: Unknown change address</source>
-        <translation type="vanished">警告：未知的更改地址</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to send?</source>
-        <translation type="vanished">您确定要发出吗？</translation>
-    </message>
-    <message>
-        <source>added as transaction fee</source>
-        <translation type="vanished">已添加交易费</translation>
-    </message>
-    <message>
-        <source>Payment request expired</source>
-        <translation type="vanished">支付请求已过期</translation>
-    </message>
-    <message>
-        <source>Invalid payment address %1</source>
-        <translation type="vanished">无效的付款地址 %1</translation>
+        <location line="+4"/>
+        <source>WARNING: unknown change address</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SendCoinsEntry</name>
     <message>
-        <location filename="../forms/sendcoinsentry.ui" line="+29"/>
+        <location filename="../forms/sendcoinsentry.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>A&amp;mount:</source>
         <translation>金额(&amp;M)</translation>
     </message>
@@ -2891,10 +1885,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+13"/>
         <source>Pay &amp;To:</source>
         <translation>付给(&amp;T)：</translation>
-    </message>
-    <message>
-        <source>The address to send the payment to (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">付款给这个地址  (例如 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -2908,27 +1898,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>标签(&amp;L)：</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation type="vanished">选择以前用过的地址</translation>
-    </message>
-    <message>
-        <source>This is a normal payment.</source>
-        <translation type="vanished">这是笔正常的支付。</translation>
-    </message>
-    <message>
-        <location line="-61"/>
-        <source>Form</source>
-        <translation type="unfinished">表单</translation>
-    </message>
-    <message>
-        <location line="+79"/>
+        <location line="+18"/>
         <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+10"/>
         <source>Choose address from address book</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+10"/>
@@ -2948,55 +1925,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Remove this recipient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove this entry</source>
-        <translation type="vanished">移除此项</translation>
-    </message>
-    <message>
-        <source>Message:</source>
-        <translation type="vanished">消息：</translation>
-    </message>
-    <message>
-        <source>This is a verified payment request.</source>
-        <translation type="vanished">这是个有效的支付请求。</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to the list of used addresses</source>
-        <translation type="vanished">请为此地址输入一个标签以将它加入用过的地址列表</translation>
-    </message>
-    <message>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
-        <translation type="vanished">bitcoin:URI 附带的备注信息，将会和交易一起存储，备查。 注意：该消息不会通过比特币网络传输。</translation>
-    </message>
-    <message>
-        <source>This is an unverified payment request.</source>
-        <translation type="vanished">这是个非有效的支付请求。</translation>
-    </message>
-    <message>
-        <source>Pay To:</source>
-        <translation type="vanished">支付给:</translation>
-    </message>
-    <message>
-        <source>Memo:</source>
-        <translation type="vanished">便条：</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ShutdownWindow</name>
-    <message>
-        <source>Bitcoin Core is shutting down...</source>
-        <translation type="vanished">比特币核心正在关机...</translation>
-    </message>
-    <message>
-        <source>Do not shut down the computer until this window disappears.</source>
-        <translation type="vanished">在此窗口消失前不要关闭计算机。</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3018,23 +1952,15 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>您可以用你的地址对消息进行签名，以证明您是该地址的所有人。注意不要对模棱两可的消息签名，以免遭受钓鱼式攻击。请确保消息内容准确的表达了您的真实意愿。</translation>
     </message>
     <message>
-        <source>The address to sign the message with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">用于签名消息的地址（例如: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L）</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation type="vanished">选择以前用过的地址</translation>
-    </message>
-    <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+10"/>
         <location line="+203"/>
         <source>Choose an address from the address book</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-193"/>
@@ -3058,39 +1984,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>请输入您要发送的签名消息</translation>
     </message>
     <message>
-        <location line="+45"/>
-        <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+106"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signature</source>
-        <translation type="vanished">签名</translation>
-    </message>
-    <message>
-        <location line="-167"/>
+        <location line="+24"/>
         <source>Copy the current signature to the system clipboard</source>
         <translation>复制当前签名至剪切板</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Bitcoin address</source>
-        <translation type="vanished">签名消息，证明这个地址属于您。</translation>
+        <location line="+21"/>
+        <source>Sign the message to prove you own this BlackCoin address</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Sign &amp;Message</source>
-        <translation type="vanished">消息签名(&amp;M)</translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+17"/>
         <source>Reset all sign message fields</source>
         <translation>清空所有签名消息栏</translation>
     </message>
@@ -3112,31 +2016,25 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>在下面输入签名地址，消息（请确保换行符、空格符、制表符等等一个不漏）和签名以验证消息。请确保签名信息准确，提防中间人攻击。</translation>
     </message>
     <message>
-        <source>The address the message was signed with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">用于签名消息的地址(例如: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <location line="+21"/>
+        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation type="vanished">验证消息，确保消息是由指定的比特币地址签名过的。</translation>
+        <location line="+40"/>
+        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Verify &amp;Message</source>
-        <translation type="vanished">验证消息签名(&amp;M)</translation>
-    </message>
-    <message>
-        <location line="+78"/>
+        <location line="+17"/>
         <source>Reset all verify message fields</source>
         <translation>清空所有验证消息栏</translation>
-    </message>
-    <message>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation type="vanished">请输入比特币地址 (例如: 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="-2"/>
@@ -3146,7 +2044,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Enter BlackCoin signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+82"/>
@@ -3216,43 +2114,19 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>SplashScreen</name>
-    <message>
-        <source>Bitcoin Core</source>
-        <translation type="vanished">比特币核心</translation>
-    </message>
-    <message>
-        <source>The Bitcoin Core developers</source>
-        <translation type="vanished">Bitcoin Core 的开发者</translation>
-    </message>
-    <message>
-        <source>[testnet]</source>
-        <translation type="vanished">[testnet]</translation>
-    </message>
-</context>
-<context>
-    <name>TrafficGraphWidget</name>
-    <message>
-        <source>KB/s</source>
-        <translation type="vanished">KB/s</translation>
-    </message>
-</context>
-<context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <location filename="../transactiondesc.cpp" line="+17"/>
-        <source>Open for %n block(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location line="+2"/>
+        <location filename="../transactiondesc.cpp" line="+19"/>
         <source>Open until %1</source>
         <translation>至 %1 个数据块时开启</translation>
     </message>
+    <message numerus="yes">
+        <location line="-2"/>
+        <source>Open for %n block(s)</source>
+        <translation type="unfinished"><numerusform></numerusform></translation>
+    </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>conflicted</source>
         <translation>发现冲突</translation>
     </message>
@@ -3279,9 +2153,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message numerus="yes">
         <location line="+7"/>
         <source>, broadcast through %n node(s)</source>
-        <translation>
-            <numerusform>通过 %n 个节点广播</numerusform>
-        </translation>
+        <translation><numerusform>通过 %n 个节点广播</numerusform></translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3334,9 +2206,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message numerus="yes">
         <location line="-102"/>
         <source>matures in %n more block(s)</source>
-        <translation>
-            <numerusform>将在 %n 个数据块后成熟</numerusform>
-        </translation>
+        <translation><numerusform>将在 %n 个数据块后成熟</numerusform></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3379,15 +2249,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation type="vanished">商店</translation>
-    </message>
-    <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="vanished">生成的比特币在可以使用前必须有 %1 个成熟的区块。当您生成了此区块后，它将被广播到网络中以加入区块链。如果它未成功进入区块链，其状态将变更为“不接受”并且不可使用。这可能偶尔会发生，如果另一个节点比你早几秒钟成功生成一个区块。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+7"/>
@@ -3423,12 +2285,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="-211"/>
         <source>, has not been successfully broadcast yet</source>
         <translation>，未被成功广播</translation>
-    </message>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation type="vanished">
-            <numerusform>Open for %n more block</numerusform>
-        </translation>
     </message>
     <message>
         <location line="+35"/>
@@ -3472,19 +2328,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>数量</translation>
     </message>
     <message>
-        <location line="+78"/>
-        <source>Immature (%1 confirmations, will be available after %2)</source>
-        <translation>未成熟 (%1 个确认，将在 %2 个后可用)</translation>
-    </message>
-    <message numerus="yes">
-        <location line="-21"/>
-        <source>Open for %n more block(s)</source>
-        <translation>
-            <numerusform>Open for %n more block</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+60"/>
         <source>Open until %1</source>
         <translation>至 %1 个数据块时开启</translation>
     </message>
@@ -3493,18 +2337,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <source>Confirmed (%1 confirmations)</source>
         <translation>已确认 (%1 条确认信息)</translation>
     </message>
-    <message>
-        <location line="+9"/>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>此数据块未被任何其他节点接收，可能不被接受！</translation>
+    <message numerus="yes">
+        <location line="-15"/>
+        <source>Open for %n more block(s)</source>
+        <translation><numerusform>Open for %n more block</numerusform></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Generated but not accepted</source>
-        <translation>已生成但未被接受</translation>
-    </message>
-    <message>
-        <location line="-21"/>
+        <location line="+6"/>
         <source>Offline</source>
         <translation>掉线</translation>
     </message>
@@ -3524,7 +2363,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>冲突的</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+3"/>
+        <source>Immature (%1 confirmations, will be available after %2)</source>
+        <translation>未成熟 (%1 个确认，将在 %2 个后可用)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>This block was not received by any other nodes and will probably not be accepted!</source>
+        <translation>此数据块未被任何其他节点接收，可能不被接受！</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Generated but not accepted</source>
+        <translation>已生成但未被接受</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Received with</source>
         <translation>接收于</translation>
     </message>
@@ -3685,27 +2539,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+144"/>
         <source>Export Transaction Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export Transaction History</source>
-        <translation type="vanished">导出交易历史</translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation type="vanished">导出失败</translation>
-    </message>
-    <message>
-        <source>There was an error trying to save the transaction history to %1.</source>
-        <translation type="vanished">导出交易历史到 %1 时发生错误。</translation>
-    </message>
-    <message>
-        <source>Exporting Successful</source>
-        <translation type="vanished">导出成功</translation>
-    </message>
-    <message>
-        <source>The transaction history was successfully saved to %1.</source>
-        <translation type="vanished">交易历史已成功保存到 %1。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
@@ -3750,12 +2584,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+4"/>
         <source>Error exporting</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+100"/>
@@ -3769,68 +2603,32 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
 </context>
 <context>
-    <name>WalletFrame</name>
-    <message>
-        <source>No wallet has been loaded.</source>
-        <translation type="vanished">没有载入钱包。</translation>
-    </message>
-</context>
-<context>
     <name>WalletModel</name>
-    <message>
-        <source>Send Coins</source>
-        <translation type="vanished">发送比特币</translation>
-    </message>
     <message>
         <location filename="../walletmodel.cpp" line="+206"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WalletView</name>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="vanished">导出(&amp;E)</translation>
-    </message>
-    <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation type="vanished">导出当前数据到文件</translation>
-    </message>
-    <message>
-        <source>Backup Wallet</source>
-        <translation type="vanished">备份钱包</translation>
-    </message>
-    <message>
-        <source>Wallet Data (*.dat)</source>
-        <translation type="vanished">钱包文件(*.dat)</translation>
-    </message>
-    <message>
-        <source>Backup Failed</source>
-        <translation type="vanished">备份失败</translation>
-    </message>
-    <message>
-        <source>There was an error trying to save the wallet data to %1.</source>
-        <translation type="vanished">尝试保存钱包数据至 %1 时发生错误。</translation>
-    </message>
-    <message>
-        <source>The wallet data was successfully saved to %1.</source>
-        <translation type="vanished">钱包数据成功保存至 %1 。</translation>
-    </message>
-    <message>
-        <source>Backup Successful</source>
-        <translation type="vanished">备份成功</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>bitcoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+34"/>
+        <location filename="../bitcoinstrings.cpp" line="+33"/>
+        <source>BlackCoin version</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Usage:</source>
         <translation>使用：</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Send command to -server or blackcoind</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>List commands</source>
         <translation>列出命令
 </translation>
@@ -3848,17 +2646,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
 </translation>
     </message>
     <message>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation type="vanished">指定配置文件 (默认为 bitcoin.conf)
-</translation>
+        <location line="+2"/>
+        <source>Specify configuration file (default: blackcoin.conf)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation type="vanished">指定 pid 文件 (默认为 bitcoind.pid)
-</translation>
+        <location line="+1"/>
+        <source>Specify pid file (default: blackcoind.pid)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
+        <source>Specify wallet file (within data directory)</source>
+        <translation>指定钱包文件（数据目录内）</translation>
+    </message>
+    <message>
+        <location line="-1"/>
         <source>Specify data directory</source>
         <translation>指定数据目录
 </translation>
@@ -3869,11 +2672,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>设置数据库缓冲区大小 (缺省: 25MB)</translation>
     </message>
     <message>
-        <source>Listen for connections on &lt;port&gt; (default: 8333 or testnet: 18333)</source>
-        <translation type="vanished">监听端口连接 &lt;port&gt;（缺省: 8333 或测试网络: 18333）</translation>
+        <location line="+1"/>
+        <source>Set database disk log size in megabytes (default: 100)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+6"/>
+        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Maintain at most &lt;n&gt; connections to peers (default: 125)</source>
         <translation>最大连接数 &lt;n&gt; （缺省: 125）</translation>
     </message>
@@ -3888,7 +2697,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>指定您的公共地址</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+5"/>
+        <source>Bind to given address. Use [host]:port notation for IPv6</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Stake your coins to support network and gain reward (default: 1)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
         <translation>断开行为不端对端阀值（缺省: 100）</translation>
     </message>
@@ -3903,17 +2722,53 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>设置RPC监听端口%u时发生错误, IPv4:%s</translation>
     </message>
     <message>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 8332 or testnet: 18332)</source>
-        <translation type="vanished">JSON-RPC连接监听端口&lt;port&gt; (缺省：8332　testnet：18332)</translation>
+        <location line="+51"/>
+        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
+        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-87"/>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-11"/>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>接受命令行和 JSON-RPC 命令
 </translation>
     </message>
     <message>
+        <location line="+101"/>
+        <source>Error: Transaction creation failed  </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-5"/>
+        <source>Error: Wallet locked, unable to create transaction  </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-8"/>
+        <source>Importing blockchain data file.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location line="+1"/>
+        <source>Importing bootstrap blockchain data file.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-88"/>
         <source>Run in the background as a daemon and accept commands</source>
         <translation>在后台运行并接受命令
 
@@ -3931,94 +2786,32 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>接受来自外部的连接 (缺省: 如果不带 -proxy or -connect 参数设置为1)</translation>
     </message>
     <message>
-        <source>%s, you must set a rpcpassword in the configuration file:
-%s
-It is recommended you use the following random password:
-rpcuser=bitcoinrpc
-rpcpassword=%s
-(you do not need to remember this password)
-The username and password MUST NOT be the same.
-If the file does not exist, create it with owner-readable-only file permissions.
-It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com
-</source>
-        <translation type="vanished">%s, 您必须在配置文件设置rpcpassword:
- %s
-建议您使用下面的随机密码:
-rpcuser=bitcoinrpc
-rpcpassword=%s
-(您无需记住此密码)
-用户名和密码 必! 须! 不一样。
-如果配置文件不存在，请自行建立一个只有所有者拥有只读权限的文件。
-推荐您开启提示通知以便收到错误通知，
-像这样: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com
-</translation>
-    </message>
-    <message>
-        <source>Acceptable ciphers (default: TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH)</source>
-        <translation type="vanished">可接受的密码（默认：TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH）</translation>
-    </message>
-    <message>
         <location line="-38"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv6, falling back to IPv4: %s</source>
         <translation>在IPv6模式下设置RPC监听端口 %u 失败，返回到IPv4模式: %s</translation>
     </message>
     <message>
-        <source>Bind to given address and always listen on it. Use [host]:port notation for IPv6</source>
-        <translation type="vanished">绑定指定的IP地址开始监听。IPv6地址请使用[host]:port 格式</translation>
+        <location line="+117"/>
+        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. Bitcoin is probably already running.</source>
-        <translation type="vanished">无法给数据目录 %s上锁。本软件可能已经在运行。</translation>
+        <location line="-20"/>
+        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Enter regression test mode, which uses a special chain in which blocks can be solved instantly. This is intended for regression testing tools and app development.</source>
-        <translation type="vanished">进入回归测试模式，它采用一种特殊的可立即解决的区块链模拟情况。这是为了回归测试工具和应用的开发所设。</translation>
-    </message>
-    <message>
-        <source>Enter regression test mode, which uses a special chain in which blocks can be solved instantly.</source>
-        <translation type="vanished">进入回归测试模式，它采用一种特殊的可立即解决的区块链模拟情况。</translation>
-    </message>
-    <message>
-        <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="vanished">错误：该交易被拒绝！发生这种错误的原因可能是：钱包中的比特币已经被用掉，有可能您复制了wallet.dat钱包文件，然后用复制的钱包文件支付了比特币，但是这个钱包文件中没有记录。</translation>
-    </message>
-    <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation type="vanished">错误：因为该交易的数量、复杂度或者动用了刚收到不久的资金，您需要支付不少于%s的交易费用。</translation>
-    </message>
-    <message>
-        <location line="+78"/>
-        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
-        <translation>当最佳区块变化时执行命令 (命令行中的 %s 会被替换成区块哈希值)</translation>
-    </message>
-    <message>
-        <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
-        <translation type="vanished">这是测试用的预发布版本 - 请谨慎使用 - 不要用来挖矿，或者在正式商用环境下使用</translation>
-    </message>
-    <message>
-        <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: -proxy)</source>
-        <translation type="vanished">连接至 Tor隐藏服务器时 使用不同的SOCKS5代理 (缺省: -proxy) </translation>
-    </message>
-    <message>
-        <location line="+30"/>
+        <location line="+11"/>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
         <translation>警告：-paytxfee 交易费设置得太高了！每笔交易都将支付交易费。</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Bitcoin will not work properly.</source>
-        <translation type="vanished">警告：请检查电脑的日期时间设置是否正确！时间错误可能会导致比特币客户端运行异常。</translation>
+        <location line="+61"/>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
-        <translation type="vanished">警告：网络似乎并不完全同意！有些矿工似乎遇到了问题。</translation>
-    </message>
-    <message>
-        <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
-        <translation type="vanished">警告：我们的同行似乎不完全同意！您可能需要升级，或者其他节点可能需要升级。</translation>
-    </message>
-    <message>
-        <location line="+30"/>
+        <location line="-31"/>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
         <translation>警告：钱包文件wallet.dat读取失败！最重要的公钥、私钥数据都没有问题，但是交易记录或地址簿数据不正确，或者存在数据丢失。</translation>
     </message>
@@ -4028,21 +2821,9 @@ rpcpassword=%s
         <translation>警告：钱包文件wallet.dat损坏! 原始的钱包文件已经备份到%s目录下并重命名为{timestamp}.bak 。如果您的账户余额或者交易记录不正确，请使用您的钱包备份文件恢复。</translation>
     </message>
     <message>
-        <source>&lt;category&gt; can be:</source>
-        <translation type="vanished">&lt;category&gt; 可能是：</translation>
-    </message>
-    <message>
         <location line="-30"/>
         <source>Attempt to recover private keys from a corrupt wallet.dat</source>
         <translation>尝试从损坏的钱包文件wallet.dat中恢复私钥</translation>
-    </message>
-    <message>
-        <source>Bitcoin Core Daemon</source>
-        <translation type="vanished">比特币核心 守护程序</translation>
-    </message>
-    <message>
-        <source>Bitcoin RPC client version</source>
-        <translation type="vanished">Bitcoin RPC 客户端版本</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -4050,25 +2831,9 @@ rpcpassword=%s
         <translation>数据块创建选项：</translation>
     </message>
     <message>
-        <source>Clear list of wallet transactions (diagnostic tool; implies -rescan)</source>
-        <translation type="vanished">清除钱包中的交易记录 (诊断用，意味着需要重新扫描 -rescan)</translation>
-    </message>
-    <message>
         <location line="-62"/>
         <source>Connect only to the specified node(s)</source>
         <translation>仅连接到指定节点</translation>
-    </message>
-    <message>
-        <source>Connect through SOCKS proxy</source>
-        <translation type="vanished">通过Socks代理连接:</translation>
-    </message>
-    <message>
-        <source>Connect to JSON-RPC on &lt;port&gt; (default: 8332 or testnet: 18332)</source>
-        <translation type="vanished">连接到 JSON-RPC 于 &lt;port&gt;（默认: 8332，或测试网络: 18332）</translation>
-    </message>
-    <message>
-        <source>Corrupted block database detected</source>
-        <translation type="vanished">检测发现数据块数据库损坏。请使用 -reindex参数重启客户端。</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -4076,237 +2841,32 @@ rpcpassword=%s
         <translation>发现自己的IP地址(缺省:不带 -externalip 参数监听时设置为1)</translation>
     </message>
     <message>
-        <source>Do not load the wallet and disable wallet RPC calls</source>
-        <translation type="vanished">不要加载钱包和禁用钱包的 RPC 调用</translation>
-    </message>
-    <message>
-        <source>Do you want to rebuild the block database now?</source>
-        <translation type="vanished">你想现在就重建块数据库吗？</translation>
-    </message>
-    <message>
-        <source>Error initializing block database</source>
-        <translation type="vanished">初始化数据块数据库出错</translation>
-    </message>
-    <message>
-        <source>Error initializing wallet database environment %s!</source>
-        <translation type="vanished">Error initializing wallet database environment %s!</translation>
-    </message>
-    <message>
-        <source>Error loading block database</source>
-        <translation type="vanished">导入数据块数据库出错</translation>
-    </message>
-    <message>
-        <source>Error opening block database</source>
-        <translation type="vanished">导入数据块数据库出错</translation>
-    </message>
-    <message>
-        <source>Error: Disk space is low!</source>
-        <translation type="vanished">错误：磁盘剩余空间低!</translation>
-    </message>
-    <message>
-        <source>Error: Wallet locked, unable to create transaction!</source>
-        <translation type="vanished">错误：钱包被锁定，无法创建交易！</translation>
-    </message>
-    <message>
-        <source>Error: system error: </source>
-        <translation type="vanished">错误：系统出错。</translation>
-    </message>
-    <message>
         <location line="+94"/>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
         <translation>监听端口失败。请使用 -listen=0 参数。</translation>
     </message>
     <message>
-        <source>Failed to read block info</source>
-        <translation type="vanished">无法读取数据块信息</translation>
+        <location line="-90"/>
+        <source>Find peers using DNS lookup (default: 1)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Failed to read block</source>
-        <translation type="vanished">读取数据块失败</translation>
+        <location line="+5"/>
+        <source>Sync checkpoints policy (default: strict)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Failed to sync block index</source>
-        <translation type="vanished">无法同步数据块索引</translation>
+        <location line="+83"/>
+        <source>Invalid -tor address: &apos;%s&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Failed to write block index</source>
-        <translation type="vanished">无法写入数据块索引</translation>
+        <location line="+4"/>
+        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Failed to write block info</source>
-        <translation type="vanished">无法写入数据块信息</translation>
-    </message>
-    <message>
-        <source>Failed to write block</source>
-        <translation type="vanished">无法写数据块</translation>
-    </message>
-    <message>
-        <source>Failed to write file info</source>
-        <translation type="vanished">无法写入文件信息</translation>
-    </message>
-    <message>
-        <source>Failed to write to coin database</source>
-        <translation type="vanished">无法写入coin数据库</translation>
-    </message>
-    <message>
-        <source>Failed to write transaction index</source>
-        <translation type="vanished">无法写入交易索引</translation>
-    </message>
-    <message>
-        <source>Failed to write undo data</source>
-        <translation type="vanished">无法写入回滚信息</translation>
-    </message>
-    <message>
-        <source>Fee per kB to add to transactions you send</source>
-        <translation type="vanished">为付款交易支付比特币(每kb)</translation>
-    </message>
-    <message>
-        <source>Find peers using DNS lookup (default: 1 unless -connect)</source>
-        <translation type="vanished">通过DNS查找节点(缺省：1 除非使用 -connect 选项)</translation>
-    </message>
-    <message>
-        <source>Generate coins (default: 0)</source>
-        <translation type="vanished">生成比特币（默认为 0）</translation>
-    </message>
-    <message>
-        <source>How many blocks to check at startup (default: 288, 0 = all)</source>
-        <translation type="vanished">启动时检测多少个数据块(缺省：288，0=所有)</translation>
-    </message>
-    <message>
-        <source>How thorough the block verification is (0-4, default: 3)</source>
-        <translation type="vanished">How thorough the block verification is (0-4, default: 3)</translation>
-    </message>
-    <message>
-        <source>If &lt;category&gt; is not supplied, output all debugging information.</source>
-        <translation type="vanished">如果&lt;category&gt;未提供，将输出所有调试信息。</translation>
-    </message>
-    <message>
-        <source>Incorrect or no genesis block found. Wrong datadir for network?</source>
-        <translation type="vanished">不正确或没有找到起源区块。网络错误？</translation>
-    </message>
-    <message>
-        <source>Invalid -onion address: &apos;%s&apos;</source>
-        <translation type="vanished">无效的 -onion 地址：“%s”</translation>
-    </message>
-    <message>
-        <source>Not enough file descriptors available.</source>
-        <translation type="vanished">没有足够的文件描述符可用。</translation>
-    </message>
-    <message>
-        <source>Prepend debug output with timestamp (default: 1)</source>
-        <translation type="vanished">调试信息输出时，前面加上时间戳 (缺省: 1)</translation>
-    </message>
-    <message>
-        <source>RPC client options:</source>
-        <translation type="vanished">RPC 客户端选项：</translation>
-    </message>
-    <message>
-        <source>Rebuild block chain index from current blk000??.dat files</source>
-        <translation type="vanished">重新为当前的blk000??.dat文件建立索引</translation>
-    </message>
-    <message>
-        <source>Select SOCKS version for -proxy (4 or 5, default: 5)</source>
-        <translation type="vanished">用 -proxy 选择 SOCKS 版本（4 或 5，默认为 5）</translation>
-    </message>
-    <message>
-        <source>Send command to Bitcoin server</source>
-        <translation type="vanished">发送命令到比特币服务器</translation>
-    </message>
-    <message>
-        <source>Set maximum block size in bytes (default: %d)</source>
-        <translation type="vanished">设置最大区块大小 (默认: %d，单位字节)</translation>
-    </message>
-    <message>
-        <source>Set the number of threads to service RPC calls (default: 4)</source>
-        <translation type="vanished">设置使用调用服务 RPC 的线程数量（默认：4）</translation>
-    </message>
-    <message>
-        <location line="-109"/>
-        <source>Specify wallet file (within data directory)</source>
-        <translation>指定钱包文件（数据目录内）</translation>
-    </message>
-    <message>
-        <source>Spend unconfirmed change when sending transactions (default: 1)</source>
-        <translation type="vanished">付款时允许使用未确认的零钱 (缺省: 1)</translation>
-    </message>
-    <message>
-        <source>Start Bitcoin server</source>
-        <translation type="vanished">启动比特币服务器</translation>
-    </message>
-    <message>
-        <source>This is intended for regression testing tools and app development.</source>
-        <translation type="vanished">这是用于回归测试和应用开发目的。</translation>
-    </message>
-    <message>
-        <source>Usage (deprecated, use bitcoin-cli):</source>
-        <translation type="vanished">用法（不推荐，请使用 bitcoin-cli）：</translation>
-    </message>
-    <message>
-        <source>Verifying blocks...</source>
-        <translation type="vanished">正在验证数据库的完整性...</translation>
-    </message>
-    <message>
-        <source>Verifying wallet...</source>
-        <translation type="vanished">正在检测钱包的完整性...</translation>
-    </message>
-    <message>
-        <source>Wait for RPC server to start</source>
-        <translation type="vanished">等待 RPC 服务器</translation>
-    </message>
-    <message>
-        <source>Wallet %s resides outside data directory %s</source>
-        <translation type="vanished">钱包 %s 在外部的数据目录 %s</translation>
-    </message>
-    <message>
-        <source>Wallet options:</source>
-        <translation type="vanished">钱包选项:</translation>
-    </message>
-    <message>
-        <source>Warning: Deprecated argument -debugnet ignored, use -debug=net</source>
-        <translation type="vanished">警告：已废弃的 -debugnet 参数已忽略，请用 -debug=net</translation>
-    </message>
-    <message>
-        <source>You need to rebuild the database using -reindex to change -txindex</source>
-        <translation type="vanished">您需要将 -reindex 改为 -txindex 以重建数据库</translation>
-    </message>
-    <message>
-        <source>Imports blocks from external blk000??.dat file</source>
-        <translation type="vanished">从blk000??.dat文件导入数据块</translation>
-    </message>
-    <message>
-        <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
-        <translation type="vanished">当收到相关提醒或者我们看到一个长分叉时执行命令（%s 将替换为消息）</translation>
-    </message>
-    <message>
-        <source>Output debugging information (default: 0, supplying &lt;category&gt; is optional)</source>
-        <translation type="vanished">输出调试信息（默认为0，提供  &lt;category&gt; 是可选的）</translation>
-    </message>
-    <message>
-        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
-        <translation type="vanished">设置 高优先级/低交易费 交易的最大字节  (缺省: %d)</translation>
-    </message>
-    <message>
-        <source>Set the number of script verification threads (up to 16, 0 = auto, &lt;0 = leave that many cores free, default: 0)</source>
-        <translation type="vanished">设置脚本验证线程数量（最多16，0 = 自动，&lt;0 = 留下许多空闲核心，默认为 0）</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation type="vanished">信息</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="vanished">-minrelaytxfee=&lt;amount&gt;: &apos;%s&apos; 无效的金额</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="vanished">-mintxfee=&lt;amount&gt;: &apos;%s&apos; 无效的金额</translation>
-    </message>
-    <message>
-        <source>Maintain a full transaction index (default: 0)</source>
-        <translation type="vanished">维护一份完整的交易索引(缺省：0)</translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="-82"/>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</source>
         <translation>每个连接的最大接收缓存，&lt;n&gt;*1000 字节(缺省：5000)</translation>
     </message>
@@ -4316,26 +2876,52 @@ rpcpassword=%s
         <translation>每个连接的最大发送缓存，&lt;n&gt;*1000 字节(缺省：1000)</translation>
     </message>
     <message>
-        <source>Only accept block chain matching built-in checkpoints (default: 1)</source>
-        <translation type="vanished">仅接受符合客户端检查点设置的数据块文件</translation>
-    </message>
-    <message>
         <location line="-16"/>
         <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
         <translation>仅连接至指定网络的节点&lt;net&gt;(IPv4, IPv6 或者 Tor)</translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+28"/>
+        <source>Output extra debugging information. Implies all other -debug* options</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Output extra network debugging information</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Prepend debug output with timestamp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
         <translation>SSL选项：(参见Bitcoin Wiki关于SSL设置栏目)</translation>
     </message>
     <message>
-        <location line="-33"/>
+        <location line="-74"/>
+        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
         <translation>跟踪/调试信息输出到控制台，不输出到 debug.log 文件</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Send trace/debug info to debugger</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location line="+28"/>
+        <source>Set maximum block size in bytes (default: 250000)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-1"/>
         <source>Set minimum block size in bytes (default: 0)</source>
         <translation>设置最小数据块大小(缺省:0)</translation>
     </message>
@@ -4345,32 +2931,18 @@ rpcpassword=%s
         <translation>客户端启动时压缩debug.log文件(缺省：no-debug模式时为1)</translation>
     </message>
     <message>
-        <source>Signing transaction failed</source>
-        <translation type="vanished">签署交易失败</translation>
-    </message>
-    <message>
         <location line="-42"/>
         <source>Specify connection timeout in milliseconds (default: 5000)</source>
         <translation>设置连接超时时间(缺省：5000毫秒)</translation>
     </message>
     <message>
-        <source>System error: </source>
-        <translation type="vanished">系统错误：</translation>
+        <location line="+109"/>
+        <source>Unable to sign checkpoint, wrong checkpointkey?
+</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Transaction amount too small</source>
-        <translation type="vanished">交易量太小</translation>
-    </message>
-    <message>
-        <source>Transaction amounts must be positive</source>
-        <translation type="vanished">交易金额必须是积极的</translation>
-    </message>
-    <message>
-        <source>Transaction too large</source>
-        <translation type="vanished">交易太大</translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="-80"/>
         <source>Use UPnP to map the listening port (default: 0)</source>
         <translation>使用UPnP映射监听端口 (缺省: 0)</translation>
     </message>
@@ -4380,29 +2952,37 @@ rpcpassword=%s
         <translation>使用UPnp映射监听端口(缺省: 监听状态设为1)</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="-25"/>
+        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Username for JSON-RPC connections</source>
         <translation>JSON-RPC 连接用户名</translation>
     </message>
     <message>
-        <source>Warning</source>
-        <translation type="vanished">警告</translation>
+        <location line="+47"/>
+        <source>Verifying database integrity...</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+57"/>
+        <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Warning: Disk space is low!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-2"/>
         <source>Warning: This version is obsolete, upgrade required!</source>
         <translation>警告：该软件版本已过时，请升级！</translation>
     </message>
     <message>
-        <source>Zapping all transactions from wallet...</source>
-        <translation type="vanished">Zapping all transactions from wallet...</translation>
-    </message>
-    <message>
-        <source>version</source>
-        <translation type="vanished">版本</translation>
-    </message>
-    <message>
-        <location line="-49"/>
+        <location line="-48"/>
         <source>wallet.dat corrupt, salvage failed</source>
         <translation>钱包文件wallet.dat损坏，抢救备份失败</translation>
     </message>
@@ -4425,130 +3005,25 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+24"/>
-        <source>BlackCoin version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Send command to -server or blackcoind</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Set database disk log size in megabytes (default: 100)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Connect through socks proxy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation type="unfinished">监听端口连接 &lt;port&gt;（缺省: 8333 或测试网络: 18333） {15714 ?} {25714)?}</translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location line="+51"/>
         <source>Find peers using internet relay chat (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Bind to given address. Use [host]:port notation for IPv6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Stake your coins to support network and gain reward (default: 1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Fee per KB to add to transactions you send</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Output extra debugging information. Implies all other -debug* options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Output extra network debugging information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Prepend debug output with timestamp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Send trace/debug info to debugger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation type="unfinished">JSON-RPC连接监听端口&lt;port&gt; (缺省：8332　testnet：18332) {15715 ?} {25715)?}</translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Allow JSON-RPC connections from specified IP address</source>
         <translation>允许从指定IP接受到的 JSON-RPC 连接</translation>
     </message>
@@ -4563,19 +3038,24 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>当最佳数据块变化时执行命令 (命令行中的 %s 会被替换成数据块哈希值)</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+3"/>
+        <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
+        <translation>当最佳区块变化时执行命令 (命令行中的 %s 会被替换成区块哈希值)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Require a confirmations for change (default: 0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>Enforce transaction scripts to use canonical PUSH operators (default: 1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+2"/>
         <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
@@ -4596,30 +3076,20 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+2"/>
         <source>How many blocks to check at startup (default: 2500, 0 = all)</source>
-        <translation type="unfinished">启动时检测多少个数据块(缺省：288，0=所有) {2500, 0 ?}</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>How thorough the block verification is (0-6, default: 1)</source>
-        <translation type="unfinished">How thorough the block verification is (0-4, default: 3) {0-6,?} {1)?}</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
         <source>Imports blocks from external blk000?.dat file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Set maximum block size in bytes (default: 250000)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+8"/>
         <source>Use OpenSSL (https) for JSON-RPC connections</source>
         <translation>为 JSON-RPC 连接使用 OpenSSL (https) 连接</translation>
     </message>
@@ -4636,38 +3106,53 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
 </translation>
     </message>
     <message>
-        <location line="+67"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+1"/>
-        <source>Warning: Disk space is low!</source>
-        <translation type="unfinished"></translation>
+        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+53"/>
+        <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-158"/>
         <source>This help message</source>
         <translation>本帮助信息
 </translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+95"/>
+        <source>Wallet %s resides outside data directory %s.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="-98"/>
+        <source>BlackCoin</source>
+        <translation>黑币</translation>
+    </message>
+    <message>
+        <location line="+140"/>
         <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
         <translation>无法绑定本机端口 %s  (返回错误消息 %d, %s)</translation>
     </message>
     <message>
-        <location line="-127"/>
+        <location line="-130"/>
+        <source>Connect through socks proxy</source>
+        <translation>通过socks代理连接</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
         <translation>使用 -addnode, -seednode 和 -connect 选项时允许查询DNS</translation>
     </message>
@@ -4677,20 +3162,27 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>正在加载地址簿...</translation>
     </message>
     <message>
-        <location line="-13"/>
+        <location line="-15"/>
+        <source>Error loading blkindex.dat</source>
+        <translation>blkindex.dat 文件加载出错</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Error loading wallet.dat: Wallet corrupted</source>
         <translation>wallet.dat 钱包文件加载出错：钱包损坏</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation type="vanished">wallet.dat 钱包文件加载错误：请升级到最新版Bitcoin客户端</translation>
+        <location line="+4"/>
+        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
+        <translation>wallet.dat 钱包文件加载出错：需要新版本的客户端</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
-        <translation type="vanished">钱包文件需要被重写：请退出并重新启动Bitcoin客户端</translation>
+        <location line="+1"/>
+        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
+        <translation>需要重写钱包，重启客户端以完成该操作。</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>Error loading wallet.dat</source>
         <translation>wallet.dat 钱包文件加载出错</translation>
     </message>
@@ -4710,42 +3202,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>被指定的是未知socks代理版本: %i</translation>
     </message>
     <message>
-        <location line="-21"/>
-        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Verifying database integrity...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Invalid -tor address: &apos;%s&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+4"/>
         <source>Cannot resolve -bind address: &apos;%s&apos;</source>
         <translation>无法解析 -bind 端口地址: &apos;%s&apos;</translation>
     </message>
@@ -4760,88 +3217,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>非法金额 -paytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Unable to sign checkpoint, wrong checkpointkey?
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Error loading blkindex.dat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Cannot initialize keypool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Importing blockchain data file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Importing bootstrap blockchain data file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+44"/>
         <source>Error: could not start node</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Error: Wallet locked, unable to create transaction  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Error: Wallet unlocked for block minting only, unable to create transaction.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Error: Transaction creation failed  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+11"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在发送</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Invalid amount</source>
         <translation>无效金额</translation>
     </message>
@@ -4851,7 +3237,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>金额不足</translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="-34"/>
         <source>Loading block index...</source>
         <translation>正在加载数据块索引...</translation>
     </message>
@@ -4861,11 +3247,22 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>添加节点并与其保持连接</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. Bitcoin is probably already running.</source>
-        <translation type="vanished">无法在本机绑定 %s 端口。比特币客户端软件可能已经在运行。</translation>
+        <location line="+122"/>
+        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+105"/>
+        <location line="-97"/>
+        <source>Fee per KB to add to transactions you send</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+25"/>
         <source>Loading wallet...</source>
         <translation>正在加载钱包...</translation>
     </message>
@@ -4875,7 +3272,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>无法降级钱包</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>Cannot initialize keypool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Cannot write default address</source>
         <translation>无法写入默认地址</translation>
     </message>

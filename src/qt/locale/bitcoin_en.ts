@@ -1371,17 +1371,9 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</translation>
     </message>
     <message>
-        <source>Balance:</source>
-        <translation type="vanished">Balance:</translation>
-    </message>
-    <message>
         <location line="-160"/>
         <source>Stake:</source>
         <translation>Stake:</translation>
-    </message>
-    <message>
-        <source>Number of transactions:</source>
-        <translation type="vanished">Number of transactions:</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1429,10 +1421,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>&lt;b&gt;Recent transactions&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>Your current balance</source>
-        <translation type="vanished">Your current balance</translation>
-    </message>
-    <message>
         <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
         <translation>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</translation>
@@ -1443,45 +1431,10 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Total of coins that was staked, and do not yet count toward the current balance</translation>
     </message>
     <message>
-        <source>Total number of transactions in wallet</source>
-        <translation type="vanished">Total number of transactions in wallet</translation>
-    </message>
-    <message>
         <location filename="../overviewpage.cpp" line="+113"/>
         <location line="+1"/>
         <source>out of sync</source>
         <translation>out of sync</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message numerus="yes">
-        <source>%n second(s)</source>
-        <translation type="vanished">
-            <numerusform>%n second</numerusform>
-            <numerusform>%n seconds</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n minute(s)</source>
-        <translation type="vanished">
-            <numerusform>%n minute</numerusform>
-            <numerusform>%n minutes</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hour(s)</source>
-        <translation type="vanished">
-            <numerusform>%n hour</numerusform>
-            <numerusform>%n hours</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n day(s)</source>
-        <translation type="vanished">
-            <numerusform>%n day</numerusform>
-            <numerusform>%n days</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -2340,10 +2293,6 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
     </message>
     <message>
-        <source>Staked coins must wait 510 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \&quot;not accepted\&quot; and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</source>
-        <translation type="obsolete">Staked coins must wait 510 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \&quot;not accepted\&quot; and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</translation>
-    </message>
-    <message>
         <location line="+7"/>
         <source>Debug information</source>
         <translation>Debug information</translation>
@@ -2419,37 +2368,15 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <source>Amount</source>
         <translation>Amount</translation>
     </message>
-    <message numerus="yes">
-        <source>Open for %n block(s)</source>
-        <translation type="vanished">
-            <numerusform>Open for %n block</numerusform>
-            <numerusform>Open for %n blocks</numerusform>
-        </translation>
-    </message>
     <message>
         <location line="+60"/>
         <source>Open until %1</source>
         <translation>Open until %1</translation>
     </message>
     <message>
-        <source>Offline (%1 confirmations)</source>
-        <translation type="vanished">Offline (%1 confirmations)</translation>
-    </message>
-    <message>
-        <source>Unconfirmed (%1 of %2 confirmations)</source>
-        <translation type="vanished">Unconfirmed (%1 of %2 confirmations)</translation>
-    </message>
-    <message>
         <location line="+12"/>
         <source>Confirmed (%1 confirmations)</source>
         <translation>Confirmed (%1 confirmations)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Mined balance will be available when it matures in %n more block(s)</source>
-        <translation type="vanished">
-            <numerusform>Mined balance will be available when it matures in %n more block</numerusform>
-            <numerusform>Mined balance will be available when it matures in %n more blocks</numerusform>
-        </translation>
     </message>
     <message numerus="yes">
         <location line="-15"/>
@@ -2840,7 +2767,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Detach block and address databases. Increases shutdown time (default: 0)</translation>
     </message>
     <message>
-        <location line="+110"/>
+        <location line="+109"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation></translation>
     </message>
@@ -2850,12 +2777,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation></translation>
     </message>
     <message>
-        <location line="-2"/>
-        <source>Error: Wallet unlocked for block minting only, unable to create transaction.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location line="-86"/>
+        <location line="-87"/>
         <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
         <translation></translation>
     </message>
@@ -2865,18 +2787,14 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Accept command line and JSON-RPC commands</translation>
     </message>
     <message>
-        <location line="+102"/>
+        <location line="+101"/>
         <source>Error: Transaction creation failed  </source>
         <translation></translation>
     </message>
     <message>
-        <location line="-6"/>
+        <location line="-5"/>
         <source>Error: Wallet locked, unable to create transaction  </source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Find peers using DNS lookup (default: 0)</source>
-        <translation type="obsolete">Find peers using DNS lookup (default: 1) {0)?}</translation>
     </message>
     <message>
         <location line="-8"/>
@@ -2924,16 +2842,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</translation>
     </message>
     <message>
-        <source>Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.</source>
-        <translation type="obsolete">Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.</translation>
-    </message>
-    <message>
-        <location line="+62"/>
+        <location line="+61"/>
         <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
         <translation>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</translation>
     </message>
     <message>
-        <location line="-32"/>
+        <location line="-31"/>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
         <translation>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</translation>
     </message>
@@ -3089,7 +3003,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation></translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+57"/>
         <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
         <translation></translation>
     </message>
@@ -3104,7 +3018,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <translation>Warning: This version is obsolete, upgrade required!</translation>
     </message>
     <message>
-        <location line="-49"/>
+        <location line="-48"/>
         <source>wallet.dat corrupt, salvage failed</source>
         <translation></translation>
     </message>
@@ -3229,12 +3143,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+53"/>
+        <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-158"/>
         <source>This help message</source>
         <translation>This help message</translation>
     </message>
@@ -3334,7 +3253,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Error: could not start node</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+11"/>
         <source>Sending...</source>
         <translation>Sending...</translation>
     </message>
@@ -3349,7 +3268,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <translation>Insufficient funds</translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="-34"/>
         <source>Loading block index...</source>
         <translation>Loading block index...</translation>
     </message>
@@ -3362,10 +3281,6 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <location line="+122"/>
         <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
         <translation>Unable to bind to %s on this computer. BlackCoin is probably already running.</translation>
-    </message>
-    <message>
-        <source>Find peers using internet relay chat (default: 1)</source>
-        <translation type="vanished">Find peers using internet relay chat (default: 1)</translation>
     </message>
     <message>
         <location line="-97"/>
@@ -3411,24 +3326,6 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
         <location line="-167"/>
         <source>To use the %s option</source>
         <translation>To use the %s option</translation>
-    </message>
-    <message>
-        <source>%s, you must set a rpcpassword in the configuration file:
- %s
-It is recommended you use the following random password:
-rpcuser=bitcoinrpc
-rpcpassword=%s
-(you do not need to remember this password)
-If the file does not exist, create it with owner-readable-only file permissions.
-</source>
-        <translation type="vanished">%s, you must set a rpcpassword in the configuration file:
- %s
-It is recommended you use the following random password:
-rpcuser=bitcoinrpc
-rpcpassword=%s
-(you do not need to remember this password)
-If the file does not exist, create it with owner-readable-only file permissions.
-</translation>
     </message>
     <message>
         <location line="+14"/>
