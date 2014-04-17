@@ -22,7 +22,7 @@ BEGIN
             VALUE "FileDescription",    "BlackCoin-Qt (OSS GUI client for BlackCoin)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "blackcoin-qt"
-            VALUE "LegalCopyright",     "2009-2012 The Bitcoin developers, 2012-2013 The NovaCoin & PPCoin developers"
+            VALUE "LegalCopyright",     "2009-2014 The Bitcoin developers, 2012-2014 The NovaCoin & PPCoin developers, 2014 The BlackCoin developers"
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "blackcoin-qt.exe"
             VALUE "ProductName",        "BlackCoin-Qt"
