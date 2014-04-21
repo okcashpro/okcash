@@ -14,12 +14,14 @@
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers</translation>
+Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2014 The BlackCoin developers</source>
+        <translation>コピーライト © 2009-2014 The Bitcoin developers
+コピーライト © 2012-2014 The NovaCoin developers
+コピーライト © 2014 The BlackCoin developers</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>
 This is experimental software.
 
@@ -79,12 +81,12 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation>所有権の証明するためのメサッジをサインする。</translation>
+        <translation>所有権の証明するためのメサッジを署名する。</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation>メサッジをサインする。</translation>
+        <translation>メサッジを署名する。</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -94,7 +96,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
     <message>
         <location line="-14"/>
         <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation>受け取ったメッセージのサインを確保のため、メッセージを確認する。</translation>
+        <translation>受け取ったメッセージの署名を確保のため、メッセージを確認する。</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -309,17 +311,17 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+280"/>
+        <location filename="../bitcoingui.cpp" line="+282"/>
         <source>Sign &amp;message...</source>
         <translation>メッセージの署名... (&amp;m)</translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+251"/>
         <source>Synchronizing with network...</source>
         <translation>ネットワークに同期中……</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-319"/>
         <source>&amp;Overview</source>
         <translation>概要(&amp;O)</translation>
     </message>
@@ -331,12 +333,12 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
     <message>
         <location line="+17"/>
         <source>&amp;Transactions</source>
-        <translation>取引(&amp;T)</translation>
+        <translation>処理(&amp;T)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Browse transaction history</source>
-        <translation>取引履歴を閲覧</translation>
+        <translation>処理履歴を閲覧</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -374,7 +376,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>アプリケーションを終了</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Show information about BlackCoin</source>
         <translation>ブラックコインの情報を表示</translation>
     </message>
@@ -409,27 +411,27 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>パスフレーズの変更... (&amp;C)</translation>
     </message>
     <message numerus="yes">
-        <location line="+250"/>
+        <location line="+259"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n ブロックが残っている</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation>取引履歴の%1 / %2 ブロックをダウンロードしました。(%3% 完成）</translation>
+        <translation>処理の履歴の%1 / %2 ブロックをダウンロードしました。(%3% 完成）</translation>
     </message>
     <message>
-        <location line="-247"/>
+        <location line="-256"/>
         <source>&amp;Export...</source>
         <translation>(&amp;E)書き出す...</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-64"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>ブラックコインアドレスへコインを送る</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>ブラックコインの設定を変化する</translation>
     </message>
@@ -469,7 +471,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>メッセージの検証... (&amp;V)</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-202"/>
         <source>BlackCoin</source>
         <translation>ブラックコイン</translation>
     </message>
@@ -479,7 +481,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ウォレット</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+180"/>
         <source>&amp;About BlackCoin</source>
         <translation>ブラックコインについて</translation>
     </message>
@@ -504,7 +506,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ウォレットをロックする</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
@@ -519,7 +521,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+12"/>
         <source>Tabs toolbar</source>
         <translation>タブツールバー</translation>
     </message>
@@ -541,14 +543,14 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ブラックコインクライアントソフトウェア</translation>
     </message>
     <message numerus="yes">
-        <location line="+70"/>
+        <location line="+75"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>ブラックコインネットワークへの%n アクティブな接続</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Downloaded %1 blocks of transaction history.</source>
-        <translation>取引履歴の%1ブロックをダウンロードしました。</translation>
+        <translation>処理履歴の%1ブロックをダウンロードしました。</translation>
     </message>
     <message>
         <location line="+413"/>
@@ -581,12 +583,22 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation><numerusform>%n 秒前</numerusform></translation>
     </message>
     <message>
-        <location line="-284"/>
+        <location line="-312"/>
+        <source>About BlackCoin card</source>
+        <translation>ブラックコインカードについて</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show information about BlackCoin card</source>
+        <translation>バラックコインカードの情報を表示する</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>&amp;ウォレットをアンロック...</translation>
     </message>
     <message numerus="yes">
-        <location line="+288"/>
+        <location line="+297"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n 分前</numerusform></translation>
     </message>
@@ -618,22 +630,22 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
     <message>
         <location line="+59"/>
         <source>This transaction is over the size limit.  You can still send it for a fee of %1, which goes to the nodes that process your transaction and helps to support the network.  Do you want to pay the fee?</source>
-        <translation>この取引は大きさの制限を超えている。%1料金を払ったばい、通信可能性です。料金は手続きをするノードへ支払って、ネットワークのサッポートになります。料金を払いますか。</translation>
+        <translation>この処理は大きさの制限を超えている。%1料金を払ったばい、通信可能性です。料金は手続きをするノードへ支払って、ネットワークのサッポートになります。料金を払いますか。</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation>取引手数料を確認する</translation>
+        <translation>処理手数料を確認する</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Sent transaction</source>
-        <translation>送金取引</translation>
+        <translation>送金処理</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Incoming transaction</source>
-        <translation>着金取引</translation>
+        <translation>着金処理</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -687,7 +699,7 @@ Address: %4
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation>ウォレットのデータが新しい場所へ保存するにはエーラになりました。</translation>
+        <translation>ウォレットのデータが新しい場所へ保存するにはエラーになりました。</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
@@ -741,13 +753,7 @@ Address: %4
         <translation>数量：</translation>
     </message>
     <message>
-        <location line="+19"/>
         <location line="+32"/>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <location line="-19"/>
         <source>Bytes:</source>
         <translation>バイト</translation>
     </message>
@@ -757,15 +763,7 @@ Address: %4
         <translation>総額:</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location line="+80"/>
-        <location line="+86"/>
-        <location line="+38"/>
-        <source>0.00 BC</source>
-        <translation>123.456 BC {0.00 ?}</translation>
-    </message>
-    <message>
-        <location line="-191"/>
+        <location line="+32"/>
         <source>Priority:</source>
         <translation>優先:</translation>
     </message>
@@ -780,13 +778,12 @@ Address: %4
         <translation>アウトプット低い:</translation>
     </message>
     <message>
-        <location line="+22"/>
         <location filename="../coincontroldialog.cpp" line="+551"/>
         <source>no</source>
         <translation>いいえ</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location filename="../forms/coincontroldialog.ui" line="+51"/>
         <source>After Fee:</source>
         <translation>料金の後</translation>
     </message>
@@ -864,7 +861,7 @@ Address: %4
     <message>
         <location line="-25"/>
         <source>Copy transaction ID</source>
-        <translation>取引 ID をコピー</translation>
+        <translation>処理のIDをコピー</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -953,7 +950,7 @@ Address: %4
  This means a fee of at least %1 per kb is required.
 
  Can vary +/- 1 Byte per input.</source>
-        <translation>このラベルが赤くなったら、トランザクションの大きさは10000バイトより大きいです。
+        <translation>このラベルが赤くなったら、処理の大きさは10000バイトより大きいです。
 
 少なくとも%1 KBあたりの料金は必要となります。
 
@@ -966,7 +963,7 @@ Address: %4
 This label turns red, if the priority is smaller than &quot;medium&quot;.
 
  This means a fee of at least %1 per kb is required.</source>
-        <translation>高い優先ありのトランザクションの方はブロックに書き込み可能性が高い。
+        <translation>高い優先ありの処理の方はブロックに書き込み可能性が高い。
 
 このラベルは優先の設定は中より低いです。
 
@@ -1138,7 +1135,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
-        <translation>手続きを早めるためのオプショナル料金。だいたいのトランザクションは1KB。料金の0.01が勧めです。</translation>
+        <translation>手続きを早めるためのオプショナル料金。だいたいの処理は1KB。料金の0.01が勧めです。</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1148,12 +1145,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation type="unfinished"/>
+        <translation>貯金は賭ける参加しないため、いつでも支出できる。</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation>準備金</translation>
+        <translation>貯金</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1168,12 +1165,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation type="unfinished"/>
+        <translation>シャットダウンするとき、ブロックとアドレスのデータベースを切り離す。すると、別のディレクトリへ移動できますが、シャットダウンは少し遅れます。ウォレットはいつも切り離します。</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Detach databases at shutdown</source>
-        <translation type="unfinished"/>
+        <translation>シャットダウンするとき、データベースを切り離す</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1183,7 +1180,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished"/>
+        <translation>自動的にルーターでブラックコインクライエントソフトウェアのポートを開く。ルーターはUPnPのサポートあり、UPnPを有効にするならできる。</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1268,7 +1265,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"/>
+        <translation>ユーザのインターフェースの言語の設定です。リスタートの後、有効します。</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1283,17 +1280,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+9"/>
         <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation type="unfinished"/>
+        <translation>処理の歴史でブラックコインのアドレスを表示する／しない。</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Display addresses in transaction list</source>
-        <translation>取引履歴にアドレスを表示 (&amp;D)</translation>
+        <translation>処理の履歴にアドレスを表示 (&amp;D)</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Whether to show coin control features or not.</source>
-        <translation type="unfinished"/>
+        <translation>コインコントロールを表示する／しない。</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1330,7 +1327,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="-9"/>
         <location line="+9"/>
         <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"/>
+        <translation>この設定はブラックコインをリスタートした後に有効する。</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1349,7 +1346,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+33"/>
         <location line="+231"/>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished"/>
+        <translation>表示されている情報は時間遅れている。接続したら、ウォレットは自動的にブラックコインネットワークと同期しますが過程は完了してません。</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1399,17 +1396,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+46"/>
         <source>&lt;b&gt;Recent transactions&lt;/b&gt;</source>
-        <translation>&lt;b&gt;最近の取引&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;最近の処理&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation type="unfinished"/>
+        <translation>未確認の合計で、まだ現在の残高に含まれていない。</translation>
     </message>
     <message>
         <location line="-29"/>
         <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation type="unfinished"/>
+        <translation>賭けているコインの合計で、まだ現在の残高に含まれていない。</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -1453,7 +1450,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../qrcodedialog.cpp" line="+62"/>
         <source>Error encoding URI into QR Code.</source>
-        <translation type="unfinished"/>
+        <translation>URIからQRコードにエンコードするエラー。</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -1463,7 +1460,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+23"/>
         <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="unfinished"/>
+        <translation>URIは長過ぎて、ラベル文字の長さを短くしてください。</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -1565,7 +1562,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation type="unfinished"/>
+        <translation>ブラックコインQTのコマンドラインのヘルプ情報を表示する。</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1600,7 +1597,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="unfinished"/>
+        <translation>現行のディレクトリからデバッグログファイルを開く。大きなファイルのばい、少し時間かかる。</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1610,7 +1607,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
         <source>Welcome to the BlackCoin RPC console.</source>
-        <translation type="unfinished"/>
+        <translation>ブラックコインRPCコンソールへようこそ。</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1739,7 +1736,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+20"/>
         <source>Remove all transaction fields</source>
-        <translation type="unfinished"/>
+        <translation>全分の処理欄を削除する</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1849,7 +1846,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+5"/>
         <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>%1 の取引手数料を含めると額が残高を超えています。</translation>
+        <translation>%1 の処理手数料を含めると額が残高を超えています。</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -1859,12 +1856,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+5"/>
         <source>Error: Transaction creation failed.</source>
-        <translation>エラー：取引を失敗しました。</translation>
+        <translation>エラー：処理を失敗しました。</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"/>
+        <translation>エラー：処理は拒否されました。ウォレットのコインをすでに費やした可能性で、wallet.datのコピーで費やしたが、現行のwallet.datとはアップデートされていない。</translation>
     </message>
     <message>
         <location line="+251"/>
@@ -1967,7 +1964,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>メッセージの署名するアドレス(例：B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2004,12 +2001,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+21"/>
         <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation>所有権の証明するためこのメサッジをサインする</translation>
+        <translation>所有権の証明するためこのメサッジを署名する</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Reset all sign message fields</source>
-        <translation>入力項目の内容をすべて消去します</translation>
+        <translation>メッセージ署名の内容をすべて消去します</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2031,12 +2028,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+21"/>
         <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>メッセージの署名するアドレス(例：B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>受け取ったメッセージの署名を確保のため、メッセージを確認する。</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2047,7 +2044,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>ブラックコインのアドレスを入力(例：B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2057,7 +2054,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Enter BlackCoin signature</source>
-        <translation type="unfinished"/>
+        <translation>ブラックコインのデジタル署名を入力</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2136,12 +2133,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message numerus="yes">
         <location line="-2"/>
         <source>Open for %n block(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>%n ブロックに開いている</numerusform></translation>
     </message>
     <message>
         <location line="+8"/>
         <source>conflicted</source>
-        <translation type="unfinished"/>
+        <translation>相違</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2237,7 +2234,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-39"/>
         <source>Transaction fee</source>
-        <translation>取引手数料</translation>
+        <translation>処理の手数料</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -2257,12 +2254,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+2"/>
         <source>Transaction ID</source>
-        <translation>取引 ID</translation>
+        <translation>処理のID</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished"/>
+        <translation>コインを費やす前に発現されたコインは510ブロック間成熟しなければなりません。このブロックを発現させたときに、ブロックチェインに足すためにネットワークへ放送しました。ブロックチェインに追加失敗したばい、レベルは「受け入られていない」に変わって、費やせられない状況になります。自分のノードと他のノードと同時に新しいブロックを発現させたときに、時折に起こること。</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2272,7 +2269,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+8"/>
         <source>Transaction</source>
-        <translation>取引</translation>
+        <translation>処理</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2310,12 +2307,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../forms/transactiondescdialog.ui" line="+14"/>
         <source>Transaction details</source>
-        <translation>取引の詳細</translation>
+        <translation>処理の詳細</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>This pane shows a detailed description of the transaction</source>
-        <translation>ここでは取引の詳細を表示しています</translation>
+        <translation>ここでは処理の詳細を表示しています</translation>
     </message>
 </context>
 <context>
@@ -2373,7 +2370,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Conflicted</source>
-        <translation type="unfinished"/>
+        <translation>相違</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2423,22 +2420,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+190"/>
         <source>Transaction status. Hover over this field to show number of confirmations.</source>
-        <translation>取引の状況。このフィールドの上にカーソルを置くと検証の数を表示します。</translation>
+        <translation>処理の状況。この欄の上にカーソルを置くと検証の数を表示します。</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Date and time that the transaction was received.</source>
-        <translation>取引を受信した日時。</translation>
+        <translation>処理を受信した日時。</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Type of transaction.</source>
-        <translation>取引の種類。</translation>
+        <translation>処理の種類。</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Destination address of transaction.</source>
-        <translation>取引の宛先アドレス。</translation>
+        <translation>処理の宛先アドレス。</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2537,7 +2534,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Copy transaction ID</source>
-        <translation>取引 ID をコピー</translation>
+        <translation>処理IDをコピー</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2547,12 +2544,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Show transaction details</source>
-        <translation>取引の詳細を表示</translation>
+        <translation>処理の詳細を表示</translation>
     </message>
     <message>
         <location line="+144"/>
         <source>Export Transaction Data</source>
-        <translation>元帳データを書き出す</translation>
+        <translation>処理のデータを書き出す</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2638,7 +2635,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Send command to -server or blackcoind</source>
-        <translation type="unfinished"/>
+        <translation>-server か blackcoindへコマンドを送る。</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2658,12 +2655,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+2"/>
         <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation type="unfinished"/>
+        <translation>設定ファイルを特定する (デファルト: blackcoin.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation type="unfinished"/>
+        <translation>pid ファイルを特定する (デフォルト: blackcoind.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2683,12 +2680,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Set database disk log size in megabytes (default: 100)</source>
-        <translation type="unfinished"/>
+        <translation>メガバイトでのデータベースのログザイズの大きさの設定(デファルト：100)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation type="unfinished"/>
+        <translation>&lt;port&gt; で 接続をリスン (デフォルト: 15714かtestnet は 25714)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2708,12 +2705,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+5"/>
         <source>Bind to given address. Use [host]:port notation for IPv6</source>
-        <translation type="unfinished"/>
+        <translation>アドレスに結ぶ。IPv6のばい、[host]:port 表記法を使ってください。</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Stake your coins to support network and gain reward (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>褒奨金をもらうためと、ブラックコインネットワークをサッポートするために、コインを賭ける(デファルト：1)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2733,17 +2730,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+51"/>
         <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>ブロックとアドレスのデータベースを切り離す。この設定はシャットダウンの時間を伸ばさせます。(デファルト：0)</translation>
     </message>
     <message>
         <location line="+109"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"/>
+        <translation>エラー：処理は拒否されました。ウォレットのコインをすでに費やした可能性で、wallet.datのコピーで費やしたが、現行のwallet.datとはアップデートされていない。</translation>
     </message>
     <message>
         <location line="-5"/>
         <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation type="unfinished"/>
+        <translation>エラー：額,複雑,最近もらった資金、どれかの理由で処理は少なくとも %sの料金が必要です。</translation>
     </message>
     <message>
         <location line="-87"/>
@@ -2758,12 +2755,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+101"/>
         <source>Error: Transaction creation failed  </source>
-        <translation type="unfinished"/>
+        <translation>エラー：処理を失敗しました。</translation>
     </message>
     <message>
         <location line="-5"/>
         <source>Error: Wallet locked, unable to create transaction  </source>
-        <translation type="unfinished"/>
+        <translation>エラー：ウォレットはロックされたために、処理を作られなかった。</translation>
     </message>
     <message>
         <location line="-8"/>
@@ -2773,7 +2770,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Importing bootstrap blockchain data file.</source>
-        <translation type="unfinished"/>
+        <translation>ブートストラップなブロックチェインのファイルを読み込んでいる。</translation>
     </message>
     <message>
         <location line="-88"/>
@@ -2798,32 +2795,32 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+117"/>
         <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
-        <translation type="unfinished"/>
+        <translation>データベース%sを初期化するにエラーになりました。直すためにディレクトリをバックアップして、そしてwallet.dat意外のファイルを取り除いてください。</translation>
     </message>
     <message>
         <location line="-20"/>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
-        <translation type="unfinished"/>
+        <translation>バイトで、最優先、低料金の処理の最大サイズの設定(デファルト：27000)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
-        <translation>警告: -paytxfee が非常に高く設定されています! これは取引を送信する場合に支払う取引手数料です。</translation>
+        <translation>警告: -paytxfee が非常に高く設定されています! これは処理を送信する場合に支払う取引手数料です。</translation>
     </message>
     <message>
         <location line="+61"/>
         <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation type="unfinished"/>
+        <translation> 警告：コンピュータの日付と時間を調べてください。時間ずらしかったばい、ブラックコイン QTは正しく行動しない。</translation>
     </message>
     <message>
         <location line="-31"/>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>警告: wallet.dat の読み込みエラー! すべてのキーは正しく読み取れますが、取引データやアドレス帳のエントリが失われたか、正しくない可能性があります。</translation>
+        <translation>警告: wallet.dat の読み込みエラー! すべてのキーは正しく読み取れますが、処理のデータやアドレス帳のエントリが失われたか、正しくない可能性があります。</translation>
     </message>
     <message>
         <location line="-18"/>
         <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>警告: wallet.dat が壊れたのでデータを復旧しました! オリジナルの wallet.dat は wallet.{timestamp}.bak として %s に保存されました; もしもあなたの残高や取引が正しくないならバックアップから復元してください。</translation>
+        <translation>警告: wallet.dat のデータはの汚染で、でデータを復旧しました！ オリジナルの wallet.dat は wallet.{timestamp}.bak として %s に保存されました; もしもあなたの残高や処理が正しくないばい、バックアップから復元してください。</translation>
     </message>
     <message>
         <location line="-30"/>
@@ -2853,12 +2850,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-90"/>
         <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>DNSルックアップでピーアを探す(デファルト：1)</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="unfinished"/>
+        <translation>同期チェックポイント方針(デファルト：厳しい)</translation>
     </message>
     <message>
         <location line="+83"/>
@@ -2888,17 +2885,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+28"/>
         <source>Output extra debugging information. Implies all other -debug* options</source>
-        <translation type="unfinished"/>
+        <translation>余分なデバッグ情報を出力する。この設定はすべてのdebug* の設定を有効にする。</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Output extra network debugging information</source>
-        <translation type="unfinished"/>
+        <translation>余分なネットワークのデバッグ情報を出力する</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Prepend debug output with timestamp</source>
-        <translation type="unfinished"/>
+        <translation>デバッグのアウトプットはタイムスタンプで先頭に追加する</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -2908,7 +2905,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-74"/>
         <source>Select the version of socks proxy to use (4-5, default: 5)</source>
-        <translation type="unfinished"/>
+        <translation>SOCKSプロクシーのバージョンを選択する (4-5、 デファルト: 5)</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -2918,7 +2915,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Send trace/debug info to debugger</source>
-        <translation type="unfinished"/>
+        <translation>デバッガへ追跡とデバッグ情報を送る。</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -2944,7 +2941,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+109"/>
         <source>Unable to sign checkpoint, wrong checkpointkey?
 </source>
-        <translation type="unfinished"/>
+        <translation>チェックポイントを署名できません。checkpointkeyは違いますか。
+</translation>
     </message>
     <message>
         <location line="-80"/>
@@ -2974,7 +2972,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+57"/>
         <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
-        <translation type="unfinished"/>
+        <translation>警告：シンクロナイズドチェックポイント違反を検出したが、チェックポイントを飛ばした。</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3009,7 +3007,17 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
 </source>
-        <translation type="unfinished"/>
+        <translation>%s, 設定ファイル：%sでrpcpasswordのパスワードを入力しなければならい
+
+このランダムパスワードのおすすめです：
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(このパサワードを覚えなくても大丈夫です)
+ユーザ名とパスワードは同じであってはなりません。
+ファイルは存在しないばいは、所有者が読み取り可能な専用のファイルを作成してください。
+問題のことを知らせるために、alertnotifyの設定を有効にしたほうがいいです。
+例：alertnotify=echo %%s | mail -s &quot;ブラックコイン警告&quot; admin@foo.com
+</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -3019,12 +3027,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+5"/>
         <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>他のノードと時刻の同期する。確な時刻のコンピューターのばい、無効する。例：NTP同期設定有効ある(デファルト：1)</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation type="unfinished"/>
+        <translation>処理を作ると、この額より少ない数字を無視する (デファルト：0.01)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -3044,22 +3052,22 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+3"/>
         <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
-        <translation>ウォレットの取引を変更する際にコマンドを実行 (cmd の %s は TxID に置換される)</translation>
+        <translation>ウォレットの処理を変更する際にコマンドを実行 (cmd の %s は TxID に置換される)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Require a confirmations for change (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>変更するために、確認を必要とする (デファルト：0)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enforce transaction scripts to use canonical PUSH operators (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>処理のスクリプトコマンドで標準的なPUSHオペレータを施行する(デファルト：1)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
-        <translation type="unfinished"/>
+        <translation>関連した警告をもらったら、コマンドを実行する (cmdの中で%sにメッセージを交換される)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3074,22 +3082,22 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Rescan the block chain for missing wallet transactions</source>
-        <translation>失ったウォレットの取引のブロック チェーンを再スキャン</translation>
+        <translation>失ったウォレットの処理のブロック チェーンを再スキャン</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>How many blocks to check at startup (default: 2500, 0 = all)</source>
-        <translation type="unfinished"/>
+        <translation>スタートのときに、いくつのブロックを調べます　(デファルト：2500、 0 = すべて )</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>How thorough the block verification is (0-6, default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>ブロック検証の徹底の程度　(0-6 、デファルト：1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Imports blocks from external blk000?.dat file</source>
-        <translation type="unfinished"/>
+        <translation>外部 blk000?.dat ファイルからブロックを読み込む。</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -3114,12 +3122,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+53"/>
         <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
-        <translation type="unfinished"/>
+        <translation>エラー：アンロックされたウォレットは賭けるためだけで、処理を作られない。</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
-        <translation>警告：無効なチェックポイントを見つかりました！表示された取引は正しくない可能性がある！アップグレードするか、デベロッパーに報告する必要があります。</translation>
+        <translation>警告：無効なチェックポイントを見つかりました！表示された処理は正しくない可能性がある！アップグレードするか、デベロッパーに報告する必要があります。</translation>
     </message>
     <message>
         <location line="-158"/>
@@ -3129,12 +3137,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished"/>
+        <translation>%sウォレットはディレクトリ%sの外にあります。</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation type="unfinished"/>
+        <translation>%sディレクトリにをロックオンできない。ブラックコインQTは、もう発行してるでしょう。</translation>
     </message>
     <message>
         <location line="-98"/>
@@ -3249,12 +3257,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+122"/>
         <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation type="unfinished"/>
+        <translation>このコンピューターで%sに結ぶことができなかった。ブラックコインQTは、もう発行してるでしょう。</translation>
     </message>
     <message>
         <location line="-97"/>
         <source>Fee per KB to add to transactions you send</source>
-        <translation>送る取引を足して、KBあたりの料金</translation>
+        <translation>送る処理を足して、KBあたりの料金</translation>
     </message>
     <message>
         <location line="+55"/>

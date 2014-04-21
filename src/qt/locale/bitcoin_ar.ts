@@ -14,11 +14,12 @@
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers</source>
+Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2014 The BlackCoin developers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>
 This is experimental software.
 
@@ -48,17 +49,17 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+14"/>
         <source>Copy the currently selected address to the system clipboard</source>
-        <translation>قم بنسخ القوانين المختارة لحافظة النظام</translation>
+        <translation>قم بنسخ العنوان المختار لحافظة النظام</translation>
     </message>
     <message>
         <location line="-11"/>
         <source>&amp;New Address</source>
-        <translation type="unfinished"/>
+        <translation>&amp;عنوان جديد</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation type="unfinished"/>
+        <translation>هذه هي عناوين البلاك كوين لاستقبال الدفعات. يمكن أن تعطي عنوان مختلف لكل مرسل من اجل أن تتابع من يرسل لك.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -68,32 +69,32 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"/>
+        <translation>اظهار &amp;رمز الاستجابة السريعة</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>التوقيع علي رسالة لاثبات بانك تملك عنوان البلاك كوين</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation type="unfinished"/>
+        <translation>وقع &amp;الرسالة</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Delete the currently selected address from the list</source>
-        <translation type="unfinished"/>
+        <translation>خذف العنوان الحالي التي تم اختياره من القائمة</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>تحقق من الرسالة لتثبت بانه تم توقيعه بعنوان بلاك كوين محدد</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Verify Message</source>
-        <translation type="unfinished"/>
+        <translation>&amp;تحقق الرسالة</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -103,7 +104,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location filename="../addressbookpage.cpp" line="+65"/>
         <source>Copy &amp;Label</source>
-        <translation type="unfinished"/>
+        <translation>نسخ &amp;التسمية</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -113,7 +114,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+250"/>
         <source>Export Address Book Data</source>
-        <translation type="unfinished"/>
+        <translation>تصدير بيانات كتاب العناوين</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -123,12 +124,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+13"/>
         <source>Error exporting</source>
-        <translation type="unfinished"/>
+        <translation>خطا في التصدير</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"/>
+        <translation>لا يمكن الكتابة الي الملف %1.</translation>
     </message>
 </context>
 <context>
@@ -299,23 +300,23 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+14"/>
         <source>Wallet passphrase was successfully changed.</source>
-        <translation type="unfinished"/>
+        <translation>كلمة مرور المحفظة تم تغييره بشكل ناجح</translation>
     </message>
 </context>
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+280"/>
+        <location filename="../bitcoingui.cpp" line="+282"/>
         <source>Sign &amp;message...</source>
         <translation>التوقيع و الرسائل</translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+251"/>
         <source>Synchronizing with network...</source>
         <translation>مزامنة مع شبكة ...</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-319"/>
         <source>&amp;Overview</source>
         <translation>نظرة عامة</translation>
     </message>
@@ -370,7 +371,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>الخروج من التطبيق</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Show information about BlackCoin</source>
         <translation>اظهار المعلومات عن البلاك كوين</translation>
     </message>
@@ -405,7 +406,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>تغيير كلمة المرور</translation>
     </message>
     <message numerus="yes">
-        <location line="+250"/>
+        <location line="+259"/>
         <source>~%n block(s) remaining</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -415,17 +416,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-247"/>
+        <location line="-256"/>
         <source>&amp;Export...</source>
         <translation>&amp;تصدير...</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-64"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>ارسال البلاك كوين الي عنوان اخر</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>تعديل خيارات التكوين للبلاك كوين</translation>
     </message>
@@ -465,7 +466,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>تأكيد الرسالة</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-202"/>
         <source>BlackCoin</source>
         <translation>البلاك كوين</translation>
     </message>
@@ -475,7 +476,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>محفظة</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+180"/>
         <source>&amp;About BlackCoin</source>
         <translation>عن البلاك كوين</translation>
     </message>
@@ -500,7 +501,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>قفل المحفظة</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <source>&amp;File</source>
         <translation>ملف</translation>
     </message>
@@ -515,7 +516,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>مساعدة</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+12"/>
         <source>Tabs toolbar</source>
         <translation>شريط أدوات علامات التبويب</translation>
     </message>
@@ -534,10 +535,10 @@ This product includes software developed by the OpenSSL Project for use in the O
         <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation type="unfinished"/>
+        <translation>برنامج البلاك كوين</translation>
     </message>
     <message numerus="yes">
-        <location line="+70"/>
+        <location line="+75"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -577,12 +578,22 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location line="-284"/>
+        <location line="-312"/>
+        <source>About BlackCoin card</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show information about BlackCoin card</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>&amp;Unlock Wallet...</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location line="+288"/>
+        <location line="+297"/>
         <source>%n minute(s) ago</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -619,7 +630,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation type="unfinished"/>
+        <translation>تأكيد رسوم المعاملة</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -665,22 +676,22 @@ Address: %4
     <message>
         <location line="+25"/>
         <source>Backup Wallet</source>
-        <translation type="unfinished"/>
+        <translation>النسخ الاحتياطي للمحفظة</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Wallet Data (*.dat)</source>
-        <translation type="unfinished"/>
+        <translation>بيانات المحفظة (*.dat)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Backup Failed</source>
-        <translation type="unfinished"/>
+        <translation>فشل الدعم</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation type="unfinished"/>
+        <translation>خطا في محاولة حفظ بيانات الحفظة في مكان جديد</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
@@ -710,7 +721,7 @@ Address: %4
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation type="unfinished"/>
+        <translation>خطا فادح! بلاك كوين لا يمكن أن يستمر جاري الاغلاق</translation>
     </message>
 </context>
 <context>
@@ -718,7 +729,7 @@ Address: %4
     <message>
         <location filename="../clientmodel.cpp" line="+90"/>
         <source>Network Alert</source>
-        <translation type="unfinished"/>
+        <translation>تحذير الشبكة</translation>
     </message>
 </context>
 <context>
@@ -726,46 +737,32 @@ Address: %4
     <message>
         <location filename="../forms/coincontroldialog.ui" line="+14"/>
         <source>Coin Control</source>
-        <translation type="unfinished"/>
+        <translation>سيطرة الكوين</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Quantity:</source>
-        <translation type="unfinished"/>
+        <translation>الكمية:</translation>
     </message>
     <message>
-        <location line="+19"/>
         <location line="+32"/>
-        <source>0</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="-19"/>
         <source>Bytes:</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+48"/>
         <source>Amount:</source>
-        <translation type="unfinished"/>
+        <translation>المبلغ:</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location line="+80"/>
-        <location line="+86"/>
-        <location line="+38"/>
-        <source>0.00 BC</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="-191"/>
+        <location line="+32"/>
         <source>Priority:</source>
-        <translation type="unfinished"/>
+        <translation>اهمية:</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>Fee:</source>
-        <translation type="unfinished"/>
+        <translation>رسوم:</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -773,20 +770,19 @@ Address: %4
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+22"/>
         <location filename="../coincontroldialog.cpp" line="+551"/>
         <source>no</source>
         <translation>لا</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location filename="../forms/coincontroldialog.ui" line="+51"/>
         <source>After Fee:</source>
-        <translation type="unfinished"/>
+        <translation>بعد الرسوم:</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Change:</source>
-        <translation type="unfinished"/>
+        <translation>تغيير:</translation>
     </message>
     <message>
         <location line="+69"/>
@@ -1123,7 +1119,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+15"/>
         <source>Pay transaction &amp;fee</source>
-        <translation type="unfinished"/>
+        <translation>ادفع &amp;رسوم المعاملة</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1133,12 +1129,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation type="unfinished"/>
+        <translation>حجز</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation type="unfinished"/>
+        <translation>بد البلاك كوين تلقائي عند الدخول الي الجهاز</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1158,7 +1154,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+21"/>
         <source>&amp;Network</source>
-        <translation type="unfinished"/>
+        <translation>&amp;الشبكة</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -1369,7 +1365,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+20"/>
         <source>Total:</source>
-        <translation type="unfinished"/>
+        <translation>الكامل:</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1893,12 +1889,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+18"/>
         <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>العنوان لارسال المعاملة الي (مثلا B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Choose address from address book</source>
-        <translation type="unfinished"/>
+        <translation>اختيار عنوان من كتاب العناوين</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1918,12 +1914,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Remove this recipient</source>
-        <translation type="unfinished"/>
+        <translation>خذف هذا المستخدم</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>ادخال عنوان البلاك كوين (مثلا B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
 </context>
 <context>
@@ -1931,13 +1927,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../forms/signverifymessagedialog.ui" line="+14"/>
         <source>Signatures - Sign / Verify a Message</source>
-        <translation type="unfinished"/>
+        <translation>التواقيع - التوقيع /تأكيد الرسالة</translation>
     </message>
     <message>
         <location line="+13"/>
         <location line="+124"/>
         <source>&amp;Sign Message</source>
-        <translation type="unfinished"/>
+        <translation>&amp;وقع الرسالة</translation>
     </message>
     <message>
         <location line="-118"/>
@@ -1953,7 +1949,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+10"/>
         <location line="+203"/>
         <source>Choose an address from the address book</source>
-        <translation type="unfinished"/>
+        <translation>اختيار عنوان من كتاب العناوين</translation>
     </message>
     <message>
         <location line="-193"/>
@@ -3159,7 +3155,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation type="unfinished"/>
+        <translation>المحفظة يجب أن يعاد كتابته : أعد البلاك كوين لتكتمل</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3204,17 +3200,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+11"/>
         <source>Sending...</source>
-        <translation type="unfinished"/>
+        <translation>ارسال....</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Invalid amount</source>
-        <translation type="unfinished"/>
+        <translation>مبلغ خاطئ</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Insufficient funds</source>
-        <translation type="unfinished"/>
+        <translation>حسابك لا يكفي</translation>
     </message>
     <message>
         <location line="-34"/>

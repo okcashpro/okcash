@@ -14,12 +14,14 @@
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation>Copyright © 2009-2014 De Bitcoin developers%s
-Copyright © 2012-2014 De NovaCoin developers</translation>
+Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2014 The BlackCoin developers</source>
+        <translation>Copyright © 2009-2014 De Bitcoin ontwikkelaars
+Copyright © 2012-2014 De NovaCoin ontwikkelaars
+Copyright © 2014 De BlackCoin ontwikkelaars</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>
 This is experimental software.
 
@@ -309,17 +311,17 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+280"/>
+        <location filename="../bitcoingui.cpp" line="+282"/>
         <source>Sign &amp;message...</source>
         <translation>&amp;Onderteken bericht...</translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+251"/>
         <source>Synchronizing with network...</source>
         <translation>Synchroniseren met netwerk...</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-319"/>
         <source>&amp;Overview</source>
         <translation>&amp;Overzicht</translation>
     </message>
@@ -374,7 +376,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>Programma afsluiten</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Show information about BlackCoin</source>
         <translation>Toon informatie over BlackCoin</translation>
     </message>
@@ -409,7 +411,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>&amp;Wijzig Wachtwoord</translation>
     </message>
     <message numerus="yes">
-        <location line="+250"/>
+        <location line="+259"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n blok nodig</numerusform><numerusform>~%n blokken nodig</numerusform></translation>
     </message>
@@ -419,17 +421,17 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>%1 van %2 aan transactie historie blokken gedownload (%3% klaar).</translation>
     </message>
     <message>
-        <location line="-247"/>
+        <location line="-256"/>
         <source>&amp;Export...</source>
         <translation>&amp;Exporteren...</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-64"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Verstuur munten naar een BlackCoin adres</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Verander configuratie opties voor BlackCoin</translation>
     </message>
@@ -469,7 +471,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>&amp;Verifiëer bericht...</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-202"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -479,7 +481,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>Portemonnee</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+180"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;Over BlackCoin</translation>
     </message>
@@ -504,7 +506,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>Sluit portemonnee</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
@@ -519,7 +521,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>&amp;Hulp</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+12"/>
         <source>Tabs toolbar</source>
         <translation>Tab-werkbalk</translation>
     </message>
@@ -541,9 +543,9 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation>BlackCoin client</translation>
     </message>
     <message numerus="yes">
-        <location line="+70"/>
+        <location line="+75"/>
         <source>%n active connection(s) to BlackCoin network</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n actieve verbinding naar BlackCoin netwerk</numerusform><numerusform>%n actieve verbindingen naar BlackCoin netwerk</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -553,7 +555,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
     <message>
         <location line="+413"/>
         <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
-        <translation type="unfinished"/>
+        <translation>Staking. &lt;br&gt; Uw gewicht wordt  %1 &lt;br&gt; Network gewicht is %2 &lt;br&gt; Verwachte tijd om beloning te verdienen is %3</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -581,12 +583,22 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
         <translation><numerusform>%n seconden geleden</numerusform><numerusform>%n seconden geleden</numerusform></translation>
     </message>
     <message>
-        <location line="-284"/>
+        <location line="-312"/>
+        <source>About BlackCoin card</source>
+        <translation>Over BlackCoin card</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show information about BlackCoin card</source>
+        <translation>Toon informatie over BlackCoin card</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>Ontgrendel portemonnee...</translation>
     </message>
     <message numerus="yes">
-        <location line="+288"/>
+        <location line="+297"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minuut geleden</numerusform><numerusform>%n minuten geleden</numerusform></translation>
     </message>
@@ -618,7 +630,7 @@ Dit product bevat software ontwikkeld door het OpenSSL Project voor gebruik in d
     <message>
         <location line="+59"/>
         <source>This transaction is over the size limit.  You can still send it for a fee of %1, which goes to the nodes that process your transaction and helps to support the network.  Do you want to pay the fee?</source>
-        <translation type="unfinished"/>
+        <translation>De grootte van deze transactie overschrijdt de limiet. U kan deze transactie laten uitvoeren voor een meerkost van %1, dewelke doorgestuurd wordt naar de nodes die uw transactie verwerken, alsook ter ondersteuning van het netwerk. Wil u deze meerkost betalen?</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -658,7 +670,7 @@ Adres: %4
         <location line="-15"/>
         <location line="+15"/>
         <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation type="unfinished"/>
+        <translation>URI kan niet ontleedt worden! Mogelijke oorzaken zijn een ongeldig BlackCoin adres of incorrecte URI parameters.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -718,7 +730,7 @@ Adres: %4
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation type="unfinished"/>
+        <translation>Een fatale fout . Blackcoin kan niet langer veilig doorgaan en sluit af.</translation>
     </message>
 </context>
 <context>
@@ -734,7 +746,7 @@ Adres: %4
     <message>
         <location filename="../forms/coincontroldialog.ui" line="+14"/>
         <source>Coin Control</source>
-        <translation type="unfinished"/>
+        <translation>Coin controle opties</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -742,13 +754,7 @@ Adres: %4
         <translation>Kwantiteit</translation>
     </message>
     <message>
-        <location line="+19"/>
         <location line="+32"/>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <location line="-19"/>
         <source>Bytes:</source>
         <translation>Bytes:</translation>
     </message>
@@ -758,15 +764,7 @@ Adres: %4
         <translation>Bedrag:</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location line="+80"/>
-        <location line="+86"/>
-        <location line="+38"/>
-        <source>0.00 BC</source>
-        <translation>0.00 BC </translation>
-    </message>
-    <message>
-        <location line="-191"/>
+        <location line="+32"/>
         <source>Priority:</source>
         <translation>Prioriteit:</translation>
     </message>
@@ -781,13 +779,12 @@ Adres: %4
         <translation>Lage uitvoer:</translation>
     </message>
     <message>
-        <location line="+22"/>
         <location filename="../coincontroldialog.cpp" line="+551"/>
         <source>no</source>
         <translation>nee</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location filename="../forms/coincontroldialog.ui" line="+51"/>
         <source>After Fee:</source>
         <translation>Na vergoeding:</translation>
     </message>
@@ -940,7 +937,7 @@ Adres: %4
     <message>
         <location line="+155"/>
         <source>DUST</source>
-        <translation type="unfinished"/>
+        <translation>STOF</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -967,7 +964,11 @@ Kan varieren van +/- 1 Byte per invulling</translation>
 This label turns red, if the priority is smaller than &quot;medium&quot;.
 
  This means a fee of at least %1 per kb is required.</source>
-        <translation type="unfinished"/>
+        <translation>Transacties met hogere prioriteit komen sneller in een blok
+
+Dit label wordt rood, als de prioriteit kleiner is dan &quot;normaal&quot;.
+
+Dit betekend een fee van minimaal %1 per kb is noodzakelijk.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -976,14 +977,20 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
  This means a fee of at least %2 is required. 
 
  Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
-        <translation type="unfinished"/>
+        <translation>Dit label wordt rood, als elke ontvanger ontvangt een bedrag dat kleiner is dan 1%. 
+
+Dit betekent dat een vergoeding van ten minste 2% is vereist. 
+
+Bedragen onder 0.546 keer het minimum vergoeding worden weergegeven als DUST.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>This label turns red, if the change is smaller than %1.
 
  This means a fee of at least %2 is required.</source>
-        <translation type="unfinished"/>
+        <translation>Dit label wordt rood, als de verandering kleiner is dan %1.
+
+Dit betekend dat een fee van %2 is vereist.</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -1017,7 +1024,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation type="unfinished"/>
+        <translation>Het label geassocieerd met deze notitie in het adresboek</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1027,7 +1034,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
-        <translation type="unfinished"/>
+        <translation>Het adres geassocieerd met deze notitie in het adresboek. Dit kan enkel aangepast worden bij verzend-adressen.</translation>
     </message>
     <message>
         <location filename="../editaddressdialog.cpp" line="+20"/>
@@ -1129,7 +1136,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
-        <translation type="unfinished"/>
+        <translation>Optioneel transactiekosten per kB dat helpt ervoor zorgen dat uw transacties worden snel verwerkt. De meeste transacties zijn 1 kB. Fee 0.01 aanbevolen.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1139,12 +1146,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation type="unfinished"/>
+        <translation>Gereserveerde hoeveelheid doet niet mee in staking en is daarom altijd uitgeefbaar.</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation type="unfinished"/>
+        <translation>Gereserveerd</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1159,12 +1166,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation type="unfinished"/>
+        <translation>Los blok en adressenbestanden bij het afsluiten. Dit betekent dat ze naar een ander data-map worden verplaatst, maar het vertraagt ​​shutdown. De portemonnee is altijd vrijstaand.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Detach databases at shutdown</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Koppel database los bij afsluiten</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1174,7 +1181,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished"/>
+        <translation>De BlackCoin client poort automatisch openen op de router. Dit werkt alleen wanneer uw router UPnP ondersteunt en deze is ingeschakeld.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1184,7 +1191,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation type="unfinished"/>
+        <translation>Verbinding maken met het BlackCoin netwerk via een SOCKS proxy (bijvoorbeeld als U gebruik maakt van Tor)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1259,7 +1266,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"/>
+        <translation>De user interface-taal kan hier ingesteld worden. Deze instelling word toegepast na BlackCoin opnieuw op te starten.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1274,7 +1281,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+9"/>
         <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin adressen in de transactielijst weergeven of niet</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1289,7 +1296,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Display coin &amp;control features (experts only!)</source>
-        <translation type="unfinished"/>
+        <translation>Laat coin &amp; control functies zien (enkel voor gevorderden!)</translation>
     </message>
     <message>
         <location line="+71"/>
@@ -1340,12 +1347,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+33"/>
         <location line="+231"/>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished"/>
+        <translation>De weergegeven informatie kan verouderd zijn, Je portemonnee synchroniseerd automatisch met het BlackCoin netwerk nadat er verbindig is gemaakt, maar dit proces is nog niet voltooid.</translation>
     </message>
     <message>
         <location line="-160"/>
         <source>Stake:</source>
-        <translation type="unfinished"/>
+        <translation>Stake:</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1360,7 +1367,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+49"/>
         <source>Spendable:</source>
-        <translation type="unfinished"/>
+        <translation>Uitgeefbaar:</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1395,12 +1402,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation type="unfinished"/>
+        <translation>Totaal van de transacties die nog moeten worden bevestigd, en nog niet mee voor het huidige balans</translation>
     </message>
     <message>
         <location line="-29"/>
         <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation type="unfinished"/>
+        <translation>Totaal aantal munten dat was staked, en nog niet telt voor huidige balans.</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -1414,12 +1421,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../forms/qrcodedialog.ui" line="+14"/>
         <source>QR Code Dialog</source>
-        <translation type="unfinished"/>
+        <translation>QR Code Scherm</translation>
     </message>
     <message>
         <location line="+59"/>
         <source>Request Payment</source>
-        <translation type="unfinished"/>
+        <translation>Vraag betaling</translation>
     </message>
     <message>
         <location line="+56"/>
@@ -1444,17 +1451,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../qrcodedialog.cpp" line="+62"/>
         <source>Error encoding URI into QR Code.</source>
-        <translation type="unfinished"/>
+        <translation>Fout tijdens encoderen URI in QR-code</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>The entered amount is invalid, please check.</source>
-        <translation type="unfinished"/>
+        <translation>De ingevoerde hoeveel is ongeldig, controleer aub.</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation type="unfinished"/>
+        <translation>Resulterende URI te lang, probeer de tekst korter te maken voor het label/bericht.</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -1521,7 +1528,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+23"/>
         <source>On testnet</source>
-        <translation type="unfinished"/>
+        <translation>Op testnetwerk</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -1561,7 +1568,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Show</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -1581,7 +1588,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+25"/>
         <source>BlackCoin Core</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin Kern</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1657,7 +1664,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+22"/>
         <location line="+35"/>
         <source>0</source>
-        <translation type="unfinished"/>
+        <translation>0</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -1675,7 +1682,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+86"/>
         <location line="+32"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"/>
+        <translation>123.456 BC</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -1715,7 +1722,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+50"/>
         <source>custom change address</source>
-        <translation type="unfinished"/>
+        <translation>handmatig veranderen adres</translation>
     </message>
     <message>
         <location line="+106"/>
@@ -1745,7 +1752,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+16"/>
         <source>123.456 BC</source>
-        <translation type="unfinished"/>
+        <translation>123.456 BC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1805,7 +1812,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+86"/>
         <source>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt; %1 &lt;/b&gt; to %2 (%3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1929,7 +1936,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Remove this recipient</source>
-        <translation type="unfinished"/>
+        <translation>Verwijder deze ontvanger</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
@@ -1958,7 +1965,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>Het adres om het bericht te ondertekenen (bijv. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i) </translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2022,7 +2029,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+21"/>
         <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>Het adres van het bericht is ondertekend met (bijv. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -2048,7 +2055,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Enter BlackCoin signature</source>
-        <translation type="unfinished"/>
+        <translation>Voer BlackCoin handtekening in</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2132,7 +2139,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+8"/>
         <source>conflicted</source>
-        <translation type="unfinished"/>
+        <translation>conflicted</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2253,7 +2260,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished"/>
+        <translation>Gegenereerd munten moeten 510 blokken maturen voordat ze kunnen worden besteed. Wanneer je een blok genereerd, het naar het netwerk is verzonden en toegevoegd aan de blokketen, zal de status veranderen naar &quot;niet geaccepteerd&quot;and kan het niet uitgegeven worden.  Dit kan soms gebeuren als een ander knooppunt genereert een blok binnen een paar seconden na jou.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2364,7 +2371,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+6"/>
         <source>Conflicted</source>
-        <translation type="unfinished"/>
+        <translation>Conflicted</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2724,17 +2731,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+51"/>
         <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>Ontkoppel blok en adressenbestanden. Verhoogt shutdown tijd (standaard: 0)</translation>
     </message>
     <message>
         <location line="+109"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"/>
+        <translation>Fout: De transactie was geweigerd, Dit kan gebeuren als sommige munten in je portemonnee al gebruikt zijn, door het gebruik van een kopie van wallet.dat en de munten in de kopie zijn niet gemarkeerd als gebruikt.</translation>
     </message>
     <message>
         <location line="-5"/>
         <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation type="unfinished"/>
+        <translation>Fout: Deze transactie vereist een transactie vergoeding van ten minste %s vanwege de hoeveelheid, complexiteit, of het gebruik van recent ontvangen gelden</translation>
     </message>
     <message>
         <location line="-87"/>
@@ -2764,7 +2771,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Importing bootstrap blockchain data file.</source>
-        <translation type="unfinished"/>
+        <translation>Importeren van blokketen data bestand.</translation>
     </message>
     <message>
         <location line="-88"/>
@@ -2789,12 +2796,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+117"/>
         <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
-        <translation type="unfinished"/>
+        <translation>Fout bij het ​​initialiseren van de database omgeving %s! Om te herstellen, BACKUP die directory, verwijder dan alles van behalve het wallet.dat.</translation>
     </message>
     <message>
         <location line="-20"/>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
-        <translation type="unfinished"/>
+        <translation>Stel maximale grootte van high-priority/low-fee transacties in bytes (standaard: 27000)</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -2804,7 +2811,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+61"/>
         <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation type="unfinished"/>
+        <translation>Waarschuwing: Controleer of de datum en tijd van de computer juist zijn! Als uw klok verkeerd is BlackCoin zal niet goed werken.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2844,22 +2851,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-90"/>
         <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Zoek peers doormiddel van DNS lookup (standaard: 1)</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="unfinished"/>
+        <translation>Sync checkpoints beleid (standaard: strikt)</translation>
     </message>
     <message>
         <location line="+83"/>
         <source>Invalid -tor address: &apos;%s&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ongeldig-tor adres: &apos;%s&apos;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Ongeldig bedrag voor -reservebalance = &lt;bedrag&gt;</translation>
     </message>
     <message>
         <location line="-82"/>
@@ -2879,17 +2886,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+28"/>
         <source>Output extra debugging information. Implies all other -debug* options</source>
-        <translation type="unfinished"/>
+        <translation>Geef extra debugging informatie weer. Impliceert alle andere debug * opties</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Output extra network debugging information</source>
-        <translation type="unfinished"/>
+        <translation>Geef extra netwerk debug informatie weer</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Prepend debug output with timestamp</source>
-        <translation type="unfinished"/>
+        <translation>Voeg een tijdstempel toe aan debug output</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -2899,7 +2906,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-74"/>
         <source>Select the version of socks proxy to use (4-5, default: 5)</source>
-        <translation type="unfinished"/>
+        <translation>Selecteer de versie van socks proxy (4-5, default: 5)</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -2909,7 +2916,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Send trace/debug info to debugger</source>
-        <translation type="unfinished"/>
+        <translation>Stuur trace/debug info naar de debugger</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -2935,7 +2942,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+109"/>
         <source>Unable to sign checkpoint, wrong checkpointkey?
 </source>
-        <translation type="unfinished"/>
+        <translation>Kan checkpoint niet ondertekenen, verkeerde checkpoint sleutel? 
+</translation>
     </message>
     <message>
         <location line="-80"/>
@@ -2950,7 +2958,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-25"/>
         <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
-        <translation type="unfinished"/>
+        <translation>Gebruik proxy tor verborgen diensten (standaard: zelfde als -proxy)</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -2960,12 +2968,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+47"/>
         <source>Verifying database integrity...</source>
-        <translation type="unfinished"/>
+        <translation>Database integriteit wordt geverifieërd</translation>
     </message>
     <message>
         <location line="+57"/>
         <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
-        <translation type="unfinished"/>
+        <translation>WAARSCHUWING: gesynchroniseerd checkpoint overtreding is geconstateerd, maar overgeslagen!</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3000,22 +3008,31 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
 </source>
-        <translation type="unfinished"/>
+        <translation>%s, u moet een rpcpassword instellen in het configuratiebestand: 
+%s 
+Het wordt aanbevolen de volgende willekeurig wachtwoord gebruiken: 
+rpcuser = blackcoinrpc 
+rpcpassword = %s 
+(je hoeft niet dit wachtwoord te onthouden) 
+De gebruikersnaam en het wachtwoord MAG NIET hetzelfde zijn. 
+Als het bestand niet bestaat, maakt u met leesbare-alleen-eigenaar bestandsbeheermachtigingen.  
+Het wordt ook aanbevolen om alertnotify instellen zodat u een melding van problemen;  
+bijvoorbeeld: alertnotify = echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com </translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Find peers using internet relay chat (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>Zoek peers door gebruik van Internet Relay Chat (standaard: 1) {? 0)}</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Sync time with other nodes. Disable if time on your system is precise e.g. syncing with NTP (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Synchroniseer tijd met andere connecties. Uitschakelen als de tijd op uw systeem nauwkeurig is bijv. synchroniseren met NTP (standaard: 1)</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation type="unfinished"/>
+        <translation>Bij het maken van transacties, negeer ingangen met waarde minder dan dit (standaard: 0,01)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -3040,17 +3057,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+3"/>
         <source>Require a confirmations for change (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>Vereist een bevestiging voor verandering (standaard: 0)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enforce transaction scripts to use canonical PUSH operators (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Dwing transactie scripts gebruik van canonieke PUSH operatoren (standaard: 1)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Execute command when a relevant alert is received (%s in cmd is replaced by message)</source>
-        <translation type="unfinished"/>
+        <translation>Voer opdracht uit zodra een relevante waarschuwing wordt ontvangen (%s in cmd wordt vervangen door bericht)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3075,12 +3092,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>How thorough the block verification is (0-6, default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Hoe grondig het blokverificatie is (0-6, standaard: 1)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Imports blocks from external blk000?.dat file</source>
-        <translation type="unfinished"/>
+        <translation>Importeer blokken van extern blk000?.dat bestand</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -3100,17 +3117,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
-        <translation type="unfinished"/>
+        <translation>Aanvaardbare cijfers (standaard: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
     </message>
     <message>
         <location line="+53"/>
         <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
-        <translation type="unfinished"/>
+        <translation>Fout: Portemonnee ontgrendeld voor alleen staking, niet in staat om de transactie te maken.</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
-        <translation type="unfinished"/>
+        <translation>WAARSCHUWING: Ongeldig controlepunt gevonden! Weergegeven transacties kunnen niet kloppen! Het is mogelijk dat je moet upgraden, of developers moet waarschuwen.</translation>
     </message>
     <message>
         <location line="-158"/>
@@ -3120,12 +3137,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished"/>
+        <translation>Portemonnee %s bevindt zich buiten de datamap %s.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation type="unfinished"/>
+        <translation>Kan een slot op data directory %s niet verkrijgen. BlackCoin wordt waarschijnlijk al uitgevoerd.</translation>
     </message>
     <message>
         <location line="-98"/>
@@ -3245,12 +3262,12 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="-97"/>
         <source>Fee per KB to add to transactions you send</source>
-        <translation type="unfinished"/>
+        <translation>Vergoeding per KB toe te voegen aan de transacties die u verzendt</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>Invalid amount for -mininput=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ongeldig bedrag voor -mininput = &lt;bedrag&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -3265,7 +3282,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Cannot initialize keypool</source>
-        <translation type="unfinished"/>
+        <translation>Kan keypool niet initialiseren</translation>
     </message>
     <message>
         <location line="+1"/>

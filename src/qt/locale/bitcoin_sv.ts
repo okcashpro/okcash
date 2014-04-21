@@ -14,11 +14,14 @@
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation type="unfinished"/>
+Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2014 The BlackCoin developers</source>
+        <translation>Copyright © 2009-2014 The Bitcoin developers
+Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2014 The BlackCoin developers</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>
 This is experimental software.
 
@@ -309,17 +312,17 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+280"/>
+        <location filename="../bitcoingui.cpp" line="+282"/>
         <source>Sign &amp;message...</source>
         <translation>Signera &amp;meddelande...</translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+251"/>
         <source>Synchronizing with network...</source>
         <translation>Synkroniserar med nätverk...</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-319"/>
         <source>&amp;Overview</source>
         <translation>&amp;Översikt</translation>
     </message>
@@ -374,7 +377,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>Avsluta programmet</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Show information about BlackCoin</source>
         <translation>Visa information om BlackCoin</translation>
     </message>
@@ -409,7 +412,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>&amp;Byt Lösenord...</translation>
     </message>
     <message numerus="yes">
-        <location line="+250"/>
+        <location line="+259"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n block remaining</numerusform><numerusform>~%n block kvar</numerusform></translation>
     </message>
@@ -419,17 +422,17 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>Laddat ner %1 av %2 block av transaktions-historiken (%3% klart)</translation>
     </message>
     <message>
-        <location line="-247"/>
+        <location line="-256"/>
         <source>&amp;Export...</source>
         <translation>&amp;Exportera...</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-64"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Skicka coins till en BlackCoin adress</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Modifiera konfigurations-alternativ för BlackCoin</translation>
     </message>
@@ -469,7 +472,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>&amp;Verifiera meddelande...</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-202"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -479,7 +482,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>Plånbok</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+180"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;Om BlackCoin</translation>
     </message>
@@ -504,7 +507,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>Lås plånbok</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <source>&amp;File</source>
         <translation>&amp;Arkiv</translation>
     </message>
@@ -519,7 +522,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>&amp;Hjälp</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+12"/>
         <source>Tabs toolbar</source>
         <translation>Verktygsfält för Tabbar</translation>
     </message>
@@ -541,7 +544,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation>BlackCoin klient</translation>
     </message>
     <message numerus="yes">
-        <location line="+70"/>
+        <location line="+75"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>%n aktiv anslutning till BlackCoin nätverket</numerusform><numerusform>%n aktiva anslutning till BlackCoin nätverket</numerusform></translation>
     </message>
@@ -581,12 +584,22 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
         <translation><numerusform>%n sekund sen</numerusform><numerusform>%n sekunder sen</numerusform></translation>
     </message>
     <message>
-        <location line="-284"/>
+        <location line="-312"/>
+        <source>About BlackCoin card</source>
+        <translation>Om BlackCoin kortet</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show information about BlackCoin card</source>
+        <translation>Via information om BlackCoin kortet</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>Lås &amp;Upp plånboken</translation>
     </message>
     <message numerus="yes">
-        <location line="+288"/>
+        <location line="+297"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minut sen</numerusform><numerusform>%n minuter sen</numerusform></translation>
     </message>
@@ -742,13 +755,7 @@ Adress: %4
         <translation>Antal:</translation>
     </message>
     <message>
-        <location line="+19"/>
         <location line="+32"/>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <location line="-19"/>
         <source>Bytes:</source>
         <translation>Bytes:</translation>
     </message>
@@ -758,15 +765,7 @@ Adress: %4
         <translation>Belopp:</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location line="+80"/>
-        <location line="+86"/>
-        <location line="+38"/>
-        <source>0.00 BC</source>
-        <translation>123.456 BC {0.00 ?}</translation>
-    </message>
-    <message>
-        <location line="-191"/>
+        <location line="+32"/>
         <source>Priority:</source>
         <translation>Prioritet:</translation>
     </message>
@@ -781,13 +780,12 @@ Adress: %4
         <translation>Låg utskrift:</translation>
     </message>
     <message>
-        <location line="+22"/>
         <location filename="../coincontroldialog.cpp" line="+551"/>
         <source>no</source>
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location filename="../forms/coincontroldialog.ui" line="+51"/>
         <source>After Fee:</source>
         <translation>Efter avgift:</translation>
     </message>
@@ -940,7 +938,7 @@ Adress: %4
     <message>
         <location line="+155"/>
         <source>DUST</source>
-        <translation type="unfinished"/>
+        <translation>STOFT</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -1149,7 +1147,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation type="unfinished"/>
+        <translation>Reserverad mängd deltar inte i stake-processen och kan därför spenderas när som helst.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1169,7 +1167,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation type="unfinished"/>
+        <translation>Koppla ifrån block och adress-databaserna vid nedstängning. Detta betyder att det kan flyttas till en annan datamapp men saktar ner avstängningen. Plånboken är alltid frånkopplad.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1184,7 +1182,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation type="unfinished"/>
+        <translation>Öppna automatiskt BlackCoin klientens port på routern. Detta fungerar endast om din router stödjer UPnP och det är aktiverat.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1194,7 +1192,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+7"/>
         <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation type="unfinished"/>
+        <translation>Anslut till BlackCoin nätverket via en SOCKS proxy (t.ex. när du ansluter genom Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1269,7 +1267,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation type="unfinished"/>
+        <translation>Användargränssnittets språk kan ställas in här. Inställningen börjar gälla efter omstart av BlackCoin.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1284,7 +1282,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+9"/>
         <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation type="unfinished"/>
+        <translation>Om BlackCoin adresser skall visas i transaktionslistan eller inte.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1294,12 +1292,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+7"/>
         <source>Whether to show coin control features or not.</source>
-        <translation type="unfinished"/>
+        <translation>Om coin kontrollinställningar skall visas eller inte.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Display coin &amp;control features (experts only!)</source>
-        <translation type="unfinished"/>
+        <translation>Visa coin kontrollinställningar (endast avancerade användare!)</translation>
     </message>
     <message>
         <location line="+71"/>
@@ -1350,17 +1348,17 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
         <location line="+33"/>
         <location line="+231"/>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation type="unfinished"/>
+        <translation>Den visade informationen kan vara gammal. Din plånbok synkroniseras automatiskt med BlackCoin nätverket efter att en anslutning skapats, men denna process är inte klar än.</translation>
     </message>
     <message>
         <location line="-160"/>
         <source>Stake:</source>
-        <translation type="unfinished"/>
+        <translation>Stake:</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>Unconfirmed:</source>
-        <translation type="unfinished"/>
+        <translation>Obekräftat:</translation>
     </message>
     <message>
         <location line="-107"/>
@@ -1370,7 +1368,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+49"/>
         <source>Spendable:</source>
-        <translation type="unfinished"/>
+        <translation>Spenderbart:</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1405,12 +1403,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation type="unfinished"/>
+        <translation>Totala antalet transaktioner inte har blivit bekräftade än och därför inte räknas mot det totala saldot</translation>
     </message>
     <message>
         <location line="-29"/>
         <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation type="unfinished"/>
+        <translation>Antal coins som var i stake-processen, och räknas ännu inte till nuvarande saldo</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -1561,12 +1559,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+16"/>
         <source>Command-line options</source>
-        <translation type="unfinished"/>
+        <translation>Kommandoradsalternativ</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation type="unfinished"/>
+        <translation>Visa BlackCoin-Qt hjälp meddelandet för att få en lista över möjliga BlackCoin kommandoradsalternativ.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1586,12 +1584,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="-104"/>
         <source>BlackCoin - Debug window</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin - Felsökningsfönster</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>BlackCoin Core</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin Core</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1601,7 +1599,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+7"/>
         <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation type="unfinished"/>
+        <translation>Öppna BlackCoin felsöknings-loggfilen från nuvarande data mapp. Detta kan kan ta ett par minuter för stora log filer.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1611,7 +1609,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
         <source>Welcome to the BlackCoin RPC console.</source>
-        <translation type="unfinished"/>
+        <translation>Välkommen till BlackCoin RPC konsoll.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1641,38 +1639,38 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+76"/>
         <source>Coin Control Features</source>
-        <translation type="unfinished"/>
+        <translation>Coin kontrollinställningar</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Inputs...</source>
-        <translation type="unfinished"/>
+        <translation>Ingångar...</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>automatically selected</source>
-        <translation type="unfinished"/>
+        <translation>automatiskt vald</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Insufficient funds!</source>
-        <translation type="unfinished"/>
+        <translation>Otillräckligt saldo!</translation>
     </message>
     <message>
         <location line="+77"/>
         <source>Quantity:</source>
-        <translation type="unfinished"/>
+        <translation>Antal:</translation>
     </message>
     <message>
         <location line="+22"/>
         <location line="+35"/>
         <source>0</source>
-        <translation type="unfinished"/>
+        <translation>0</translation>
     </message>
     <message>
         <location line="-19"/>
         <source>Bytes:</source>
-        <translation type="unfinished"/>
+        <translation>Bytes:</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -1685,47 +1683,47 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
         <location line="+86"/>
         <location line="+32"/>
         <source>0.00 BC</source>
-        <translation type="unfinished"/>
+        <translation>123.456 BC {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
         <source>Priority:</source>
-        <translation type="unfinished"/>
+        <translation>Prioritet:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>medium</source>
-        <translation type="unfinished"/>
+        <translation>mellan</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Fee:</source>
-        <translation type="unfinished"/>
+        <translation>Avgift:</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation type="unfinished"/>
+        <translation>Låg utmatning:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>no</source>
-        <translation type="unfinished"/>
+        <translation>nej</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>After Fee:</source>
-        <translation type="unfinished"/>
+        <translation>Efter avgift:</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Change</source>
-        <translation type="unfinished"/>
+        <translation>Ändra</translation>
     </message>
     <message>
         <location line="+50"/>
         <source>custom change address</source>
-        <translation type="unfinished"/>
+        <translation>egen ändringsadress</translation>
     </message>
     <message>
         <location line="+106"/>
@@ -1740,7 +1738,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+20"/>
         <source>Remove all transaction fields</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort alla transaktionsfält</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1755,7 +1753,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+16"/>
         <source>123.456 BC</source>
-        <translation type="unfinished"/>
+        <translation>123.456 BC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1770,12 +1768,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation type="unfinished"/>
+        <translation>Fyll i en BlackCoin adress (t.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Copy quantity</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera antal</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1785,37 +1783,37 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+1"/>
         <source>Copy fee</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera avgift</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera efter avgift</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy bytes</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera bytes</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy priority</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera prioritet</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy low output</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera låg utmatning</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished"/>
+        <translation>Kopiera ändring</translation>
     </message>
     <message>
         <location line="+86"/>
         <source>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt; till %2 (%3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1825,12 +1823,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+1"/>
         <source>Are you sure you want to send %1?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker att du vill skicka %1?</translation>
     </message>
     <message>
         <location line="+0"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>och</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1860,17 +1858,17 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+5"/>
         <source>Error: Transaction creation failed.</source>
-        <translation type="unfinished"/>
+        <translation>Fel: Transaktionen kunde inte skapas.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"/>
+        <translation>Fel: Transaktionen nekades. Detta kan hända om vissa av mynten i din plånbok redan är använda, t.ex om du använder en kopia av wallet.dat och mynten redan var använda i kopia men inte markerade som använda här.</translation>
     </message>
     <message>
         <location line="+251"/>
         <source>WARNING: Invalid BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>VARNING: Ogiltig BlackCoin adress</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1880,7 +1878,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+4"/>
         <source>WARNING: unknown change address</source>
-        <translation type="unfinished"/>
+        <translation>VARNING: okänd ändringsadress</translation>
     </message>
 </context>
 <context>
@@ -1888,7 +1886,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location filename="../forms/sendcoinsentry.ui" line="+14"/>
         <source>Form</source>
-        <translation type="unfinished"/>
+        <translation>Formulär</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -2263,7 +2261,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation type="unfinished"/>
+        <translation>Genererad mynt måste mogna i 510 block före de kan användas. När du genererade detta blocket sändes det ut till nätverket för att läggas till i blockkedjan. Om det inte kan läggas till i kedjan kommer dess status att ändras till &quot;Ej accepterat&quot; och det kommer inte gå att använda. Detta kan hända imellanåt om en annan klient genererar ett block inom ett par sekunder från ditt.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2709,12 +2707,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+5"/>
         <source>Bind to given address. Use [host]:port notation for IPv6</source>
-        <translation type="unfinished"/>
+        <translation>Bind till angiven adress. Använd [host]:port för IPv6</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Stake your coins to support network and gain reward (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Använd dina coins för stake-processen, du upprätthåller då nätverket och får belöning (förval: 1)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2734,22 +2732,22 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+51"/>
         <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>Koppla ifrån block och adress databaser. Ökar nedstängningstid (standard: 0)</translation>
     </message>
     <message>
         <location line="+109"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished"/>
+        <translation>Fel: Transaktionen nekades. Detta kan hända om vissa av mynten i din plånbok redan är använda, t.ex om du använder en kopia av wallet.dat och mynten redan var använda i kopia men inte markerade som använda här.</translation>
     </message>
     <message>
         <location line="-5"/>
         <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation type="unfinished"/>
+        <translation>Fel: Transaktionen kräver en transaktionsavgift på min %s på grund av dess storlek, komplexitet eller användning av nyligen mottagna kapital</translation>
     </message>
     <message>
         <location line="-87"/>
         <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation type="unfinished"/>
+        <translation>Lyssna efter JSON-RPC anslutningar på &lt;port&gt; (standard: 15715 eller testnät: 25715)</translation>
     </message>
     <message>
         <location line="-11"/>
@@ -2759,7 +2757,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+101"/>
         <source>Error: Transaction creation failed  </source>
-        <translation type="unfinished"/>
+        <translation>Fel: Skapandet av transaktion misslyckades</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -2854,12 +2852,12 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="-90"/>
         <source>Find peers using DNS lookup (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Hitta andra klienter via DNS uppsökning (standard: 1)</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Sync checkpoints policy (default: strict)</source>
-        <translation type="unfinished"/>
+        <translation>Synka kontrollpunkts policy (standard: strict)</translation>
     </message>
     <message>
         <location line="+83"/>
@@ -2889,7 +2887,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+28"/>
         <source>Output extra debugging information. Implies all other -debug* options</source>
-        <translation type="unfinished"/>
+        <translation>Skriv ut extra debug information. Betyder alla andra -debug* alternativ </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2961,7 +2959,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="-25"/>
         <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
-        <translation type="unfinished"/>
+        <translation>Använd proxy för att nå Tor gömda servicer (standard: samma som -proxy)</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -2976,7 +2974,7 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     <message>
         <location line="+57"/>
         <source>WARNING: syncronized checkpoint violation detected, but skipped!</source>
-        <translation type="unfinished"/>
+        <translation>VARNING: synkroniserad kontrollpunkts brott upptäckt, men hoppades över!</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3011,12 +3009,22 @@ If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
 for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
 </source>
-        <translation type="unfinished"/>
+        <translation>%s, du måste sätta rpcpassword i konfigurationsfilen:
+ %s
+Det är rekommenderat att du använder följande slumpmässiga lösenord:
+rpcuser=blackcoinrpc
+rpcpassword=%s
+(du behöver inte komma ihåg detta lösenord)
+Användarnamnet och lösenordet FÅR INTE vara samma.
+Om filen inte finns, skapa den med endast ägarrättigheter.
+Det är också rekommenderat att sätta alertnotify så du blir notifierad om problem;
+till exempel: alertnotify=echo %%s | mail -s &quot;BlackCoin Varning&quot; admin@foo.com
+</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Find peers using internet relay chat (default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>Hitta andra klienter genom internet relay chat (standard: 1) {0)?}</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -3026,7 +3034,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation type="unfinished"/>
+        <translation>När transaktioner skapas, ignorera värden som är lägre än detta (standard: 0.01)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -3056,7 +3064,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Enforce transaction scripts to use canonical PUSH operators (default: 1)</source>
-        <translation type="unfinished"/>
+        <translation>Tvinga transaktionsskript att använda kanoniska PUSH operatörer (standard: 1)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3111,17 +3119,17 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
-        <translation type="unfinished"/>
+        <translation>Godtagbara chiffer (standard: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
     </message>
     <message>
         <location line="+53"/>
         <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
-        <translation type="unfinished"/>
+        <translation>Fel: Plånboken öppnad endast för stake-process, kan inte skapa transaktion.</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>WARNING: Invalid checkpoint found! Displayed transactions may not be correct! You may need to upgrade, or notify developers.</source>
-        <translation type="unfinished"/>
+        <translation>VARNING: Felaktig kontrollpunkt hittad! Visade transaktioner kan vara felaktiga! Du kan behöva uppgradera eller kontakta utvecklarna.</translation>
     </message>
     <message>
         <location line="-158"/>

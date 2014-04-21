@@ -9,17 +9,19 @@
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;BlackCoin&lt;/b&gt; version</translation>
+        <translation>Version de &lt;b&gt;BlackCoin&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
-Copyright © 2012-2014 The NovaCoin developers</source>
-        <translation>Copyright © 2009-2014 Développeurs Bitcoin
-Copyright © 2012-2014 Développeurs NovaCoin</translation>
+Copyright © 2012-2014 The NovaCoin developers
+Copyright © 2014 The BlackCoin developers</source>
+        <translation>Copyright © 2009-2014 Les développeurs Bitcoin
+Copyright © 2012-2014 Les développeurs NovaCoin
+Copyright © 2014 Les développeurs BlackCoin</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>
 This is experimental software.
 
@@ -54,7 +56,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+14"/>
         <source>Copy the currently selected address to the system clipboard</source>
-        <translation>Copier l&apos;adresse courante sélectionnée dans le presse-papier</translation>
+        <translation>Copier l&apos;adresse sélectionnée vers le presse-papier système</translation>
     </message>
     <message>
         <location line="-11"/>
@@ -64,7 +66,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-46"/>
         <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Ce sont vos adresses pour recevoir vos paiements. Vous pouvez souhaiter utiliser une adresse différente pour chaque réception afin d&apos;identifier facilement le payeur.</translation>
+        <translation>Ce sont vos adresses pour recevoir vos paiements. Vous pouvez utiliser une adresse différente pour chaque réception afin d&apos;identifier facilement le payeur.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -124,12 +126,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Comma separated file (*.csv)</source>
-        <translation>Valeurs séparées par des virgules (*.csv)</translation>
+        <translation>Fichier de valeurs séparées par des virgules (*.csv)</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Error exporting</source>
-        <translation>Erreur d&apos;exportation</translation>
+        <translation>Erreur lors de l&apos;export</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -185,7 +187,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+3"/>
         <source>For staking only</source>
-        <translation>Pour &quot;stacking&quot; seulement</translation>
+        <translation>Pour &quot;staking&quot; seulement</translation>
     </message>
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+35"/>
@@ -235,7 +237,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation>ATTENTION : Si vous chiffrez votre portefeuille et perdez votre passphrase, vous ne pourrez plus accéder à vos BlackCoins</translation>
+        <translation>Avertissement : Si vous chiffrez votre portefeuille et perdez votre passphrase, vous ne pourrez &lt;b&gt;plus accéder à vos BlackCoins&lt;/b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -245,7 +247,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+15"/>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
-        <translation>IMPORTANT : Toute sauvegarde précédente de votre fichier de portefeuille devrait être remplacée par le nouveau fichier de portefeuille chiffré. Pour des raisons de sécurité, les sauvegardes précédentes de votre fichier de portefeuille non chiffré deviendront inutilisables dès que vous commencerez à utiliser le nouveau portefeuille chiffré.</translation>
+        <translation>IMPORTANT : Toute sauvegarde précédente de votre fichier de portefeuille devrait être remplacée par le nouveau fichier de portefeuille chiffré. Pour des raisons de sécurité, les sauvegardes précédentes de votre fichier de portefeuille non chiffré deviendront inutilisables dès lors que vous commencerez à utiliser le nouveau portefeuille chiffré.</translation>
     </message>
     <message>
         <location line="+103"/>
@@ -293,7 +295,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <location line="+12"/>
         <location line="+19"/>
         <source>The passphrase entered for the wallet decryption was incorrect.</source>
-        <translation>La phrase de passe saisie pour déchiffrer le portefeuille était incorrecte.</translation>
+        <translation>La phrase de passe saisie pour déchiffrer le portefeuille est incorrecte.</translation>
     </message>
     <message>
         <location line="-20"/>
@@ -309,17 +311,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+280"/>
+        <location filename="../bitcoingui.cpp" line="+282"/>
         <source>Sign &amp;message...</source>
         <translation>Signer le &amp;message...</translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+251"/>
         <source>Synchronizing with network...</source>
         <translation>Synchronisation avec le réseau en cours…</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-319"/>
         <source>&amp;Overview</source>
         <translation>&amp;Vue d&apos;ensemble</translation>
     </message>
@@ -346,7 +348,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Edit the list of stored addresses and labels</source>
-        <translation>Éditer la liste d&apos;adresses et libellés</translation>
+        <translation>Éditer la liste d&apos;adresses et étiquettes</translation>
     </message>
     <message>
         <location line="-13"/>
@@ -356,7 +358,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Show the list of addresses for receiving payments</source>
-        <translation>Montrer la liste d&apos;adresses de réception des paiements</translation>
+        <translation>Montrer la liste d&apos;adresses de réception de paiements</translation>
     </message>
     <message>
         <location line="-7"/>
@@ -374,7 +376,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Quitter l’application</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Show information about BlackCoin</source>
         <translation>Afficher des informations au sujet de BlackCoin</translation>
     </message>
@@ -386,7 +388,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Show information about Qt</source>
-        <translation>Afficher des informations sur Qt</translation>
+        <translation>Afficher les informations au sujet de Qt</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -409,7 +411,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Changer la phrase de passe...</translation>
     </message>
     <message numerus="yes">
-        <location line="+250"/>
+        <location line="+259"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n blocks restants</numerusform><numerusform>~%n blocs restants</numerusform></translation>
     </message>
@@ -419,29 +421,29 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Téléchargement des blocks de l&apos;historique des transactions : 1% sur 2% (%3% effectués).</translation>
     </message>
     <message>
-        <location line="-247"/>
+        <location line="-256"/>
         <source>&amp;Export...</source>
-        <translation>&amp;Export...</translation>
+        <translation>&amp;Exporter...</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-64"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Envoyer des monnaies vers une adresse BlackCoin</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Modification des options de configuration de BlackCoin</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Export the data in the current tab to a file</source>
-        <translation>Export des données de l&apos;onglet courant vers fichier</translation>
+        <translation>Export des données de l&apos;onglet courant vers un fichier</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Encrypt or decrypt wallet</source>
-        <translation>Chiffrer ou dé-chiffrerr le portefeuille</translation>
+        <translation>Chiffrer ou déchiffrer le portefeuille</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -461,7 +463,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Open debugging and diagnostic console</source>
-        <translation>Ouvrir une console de débogage et de diagnostic</translation>
+        <translation>Ouvrir la console de débogage et de diagnostic</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -469,7 +471,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Vérifier un message...</translation>
     </message>
     <message>
-        <location line="-200"/>
+        <location line="-202"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -479,14 +481,14 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Portefeuille</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+180"/>
         <source>&amp;About BlackCoin</source>
-        <translation>A propos de BlackCoin</translation>
+        <translation>&amp;Au sujet de BlackCoin</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&amp;Show / Hide</source>
-        <translation>&amp;Afficher / Cacher</translation>
+        <translation>&amp;Montrer / Masquer</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -504,14 +506,14 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Verrouiller le portefeuille</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+35"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Réglages</translation>
+        <translation>&amp;Paramètres</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -519,9 +521,9 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+12"/>
         <source>Tabs toolbar</source>
-        <translation>Barre d&apos;outils des onglets</translation>
+        <translation>Barre d&apos;onglets</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -541,7 +543,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Client BlackCoin</translation>
     </message>
     <message numerus="yes">
-        <location line="+70"/>
+        <location line="+75"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>%n connexion active au réseau BlackCoin</numerusform><numerusform>%n connexions actives au réseau BlackCoin</numerusform></translation>
     </message>
@@ -558,22 +560,22 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+6"/>
         <source>Not staking because wallet is locked</source>
-        <translation>Ne stack pas, votre portefeuilles est verouillé</translation>
+        <translation>Pas de staking car votre portefeuille est verouillé</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because wallet is offline</source>
-        <translation>Ne stack pas, votre portefeuilles est hors ligne</translation>
+        <translation> Pas de staking car votre portefeuille est hors ligne</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because wallet is syncing</source>
-        <translation>Ne stack pas, votre portefeuille est en cours de synchronisation</translation>
+        <translation>Pas de staking car votre portefeuille est en cours de synchronisation</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because you don&apos;t have mature coins</source>
-        <translation>Ne stack pas, vos monnaies ne sont pas encore matures</translation>
+        <translation>Pas de staking car vos monnaies ne sont pas encore matures</translation>
     </message>
     <message numerus="yes">
         <location line="-403"/>
@@ -581,12 +583,22 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation><numerusform>il y a %n seconde</numerusform><numerusform>il y a %n secondes</numerusform></translation>
     </message>
     <message>
-        <location line="-284"/>
+        <location line="-312"/>
+        <source>About BlackCoin card</source>
+        <translation>Au sujet de la carte BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show information about BlackCoin card</source>
+        <translation>Informations sur la carte BlackCoin</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>&amp;Unlock Wallet...</source>
-        <translation>&amp;Dévérouiiler le portefeuille</translation>
+        <translation>&amp;Déverrouiller le portefeuille</translation>
     </message>
     <message numerus="yes">
-        <location line="+288"/>
+        <location line="+297"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>il y a %n minute</numerusform><numerusform>il y a %n minutes</numerusform></translation>
     </message>
@@ -618,12 +630,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+59"/>
         <source>This transaction is over the size limit.  You can still send it for a fee of %1, which goes to the nodes that process your transaction and helps to support the network.  Do you want to pay the fee?</source>
-        <translation>Cette transaction dépasse la limite autorisée. Vous pouvez tout de même effectuer cette opération, moyennant %1 de frais, qui seront envoyés aux noeuds qui valideront cette transaction, et dont l&apos;objectif vise à supporter le réseau. Etes-vous d&apos;accord pour payer cette taxe ?</translation>
+        <translation>Cette transaction dépasse la limite autorisée. Vous pouvez tout de même effectuer cette opération, moyennant %1 de frais, qui seront envoyés aux noeuds qui valideront cette transaction, et dont l&apos;objectif vise à supporter le réseau. Souhaitez-vous payer ces frais ?</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation>Confirmer le Paiement des frais de transaction</translation>
+        <translation>Confirmer le paiement des frais de transaction</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -688,7 +700,7 @@ Adresse : %4
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation>Une erreur a été rencontrée lors de la tentative de sauvegarde du portefeuille vers la nouvelle destination.</translation>
+        <translation>Une erreur a été rencontrée lors de la  sauvegarde du portefeuille vers la nouvelle destination.</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
@@ -713,7 +725,7 @@ Adresse : %4
     <message>
         <location line="+18"/>
         <source>Not staking</source>
-        <translation>Pas de stacking</translation>
+        <translation>Pas de staking</translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
@@ -742,13 +754,7 @@ Adresse : %4
         <translation>Quantité :</translation>
     </message>
     <message>
-        <location line="+19"/>
         <location line="+32"/>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <location line="-19"/>
         <source>Bytes:</source>
         <translation>Octets :</translation>
     </message>
@@ -758,15 +764,7 @@ Adresse : %4
         <translation>Montant :</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <location line="+80"/>
-        <location line="+86"/>
-        <location line="+38"/>
-        <source>0.00 BC</source>
-        <translation>123.456 BC {0.00 ?}</translation>
-    </message>
-    <message>
-        <location line="-191"/>
+        <location line="+32"/>
         <source>Priority:</source>
         <translation>Priorité :</translation>
     </message>
@@ -778,16 +776,15 @@ Adresse : %4
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation>Sortie faible :</translation>
+        <translation>Sortie faible</translation>
     </message>
     <message>
-        <location line="+22"/>
         <location filename="../coincontroldialog.cpp" line="+551"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location filename="../forms/coincontroldialog.ui" line="+51"/>
         <source>After Fee:</source>
         <translation>Après les frais :</translation>
     </message>
@@ -819,7 +816,7 @@ Adresse : %4
     <message>
         <location line="+5"/>
         <source>Label</source>
-        <translation>Intitulé</translation>
+        <translation>Étiquette</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -954,7 +951,7 @@ Adresse : %4
  This means a fee of at least %1 per kb is required.
 
  Can vary +/- 1 Byte per input.</source>
-        <translation>Cet intitulé passe au rouge, si la taille de la transaction est supérieure à 10000 bytes.
+        <translation>Cette étiquette passe au rouge, si la taille de la transaction est supérieure à 10000 bytes.
 
 Cela implique que des frais à hauteur d&apos;au moins %1 par kb seront nécessaires.
 
@@ -969,9 +966,9 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
  This means a fee of at least %1 per kb is required.</source>
         <translation>Les transactions avec une priorité haute ont plus de chances d&apos;être traitées en un block.
 
- Rouge si votre priorité est plus petite que &quot;moyenne&quot;.
+L&apos;étiquette passe au rouge si votre priorité est plus basse que la &quot;moyenne&quot;.
 
-Cela veut dire que des frais d&apos;un minimum de %1 par kb sont requis</translation>
+Cela implique que des frais d&apos;un minimum de %1 par kb sont requis</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -980,9 +977,9 @@ Cela veut dire que des frais d&apos;un minimum de %1 par kb sont requis</transla
  This means a fee of at least %2 is required. 
 
  Amounts below 0.546 times the minimum relay fee are shown as DUST.</source>
-        <translation>Ce label passe au rouge, Lorsqu&apos;un destinataire reçoit un montant inférieur à %1.
+        <translation>Cette étiquette passe au rouge, Lorsqu&apos;un destinataire reçoit un montant inférieur à %1.
 
- Cela implique que des frais à hauteur de %2 seront nécessaire 
+Cela implique que des frais à hauteur de %2 seront nécessaire 
 
 Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent en tant que DUST.</translation>
     </message>
@@ -991,9 +988,9 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
         <source>This label turns red, if the change is smaller than %1.
 
  This means a fee of at least %2 is required.</source>
-        <translation>Ce label passe au rouge, lorsque la différence est inférieure à %1.
+        <translation>Cette étiquette passe au rouge, lorsque la différence est inférieure à %1.
 
- Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</translation>
+Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -1027,7 +1024,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation>L&apos;intitulé associé à cette entrée du carnet d&apos;adresse</translation>
+        <translation>L&apos;étiquette associée à cette entrée du carnet d&apos;adresse</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1037,7 +1034,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+10"/>
         <source>The address associated with this address book entry. This can only be modified for sending addresses.</source>
-        <translation>L&apos;intitulé associé à cette entrée du carnet d&apos;adresse. Seules les adresses d&apos;envoi peuvent être modifiées.</translation>
+        <translation>L&apos;adresse associée à cette entrée du carnet d&apos;adresse. Seules les adresses d&apos;envoi peuvent être modifiées.</translation>
     </message>
     <message>
         <location filename="../editaddressdialog.cpp" line="+20"/>
@@ -1139,7 +1136,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+6"/>
         <source>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1 kB. Fee 0.01 recommended.</source>
-        <translation>Frais de transaction optionnels par kB afin d&apos;assurer la rapidité de traitement de votre transaction. La plupart des transactions sont de 1 kB. Frais de  0.01 recommandés.</translation>
+        <translation>Frais de transaction optionnels par kB permettant d&apos;assurer la rapidité de traitement de votre transaction. La plupart des transactions sont de 1 kB. Frais de  0.01 recommandés.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1149,7 +1146,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation>Montant réservé qui ne &quot;stake&quot; pas est reste utilisable pour réalisés des envois à tout moment.</translation>
+        <translation>Montants réservés ne participant pas au &quot;staking&quot; pouvant être utilisés pour dépensés à tout moment.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1159,12 +1156,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+31"/>
         <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation>Démarrage automatique de BlackCoin lors de la connexion au système</translation>
+        <translation>Démarrage automatique du client BlackCoin lors de la connexion au système</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Start BlackCoin on system login</source>
-        <translation>&amp;Démarrage de BlackCoin à la connexion au système</translation>
+        <translation>&amp;Démarrage du client BlackCoin à la connexion au système</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1174,7 +1171,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+3"/>
         <source>&amp;Detach databases at shutdown</source>
-        <translation>&amp;Détacher la base de données à la fermeture</translation>
+        <translation>&amp;Détacher la base de données lors de la fermeture du logiciel</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1204,7 +1201,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+9"/>
         <source>Proxy &amp;IP:</source>
-        <translation>&amp;IP du serveur mandataire :</translation>
+        <translation>&amp;IP du serveur Proxy mandataire :</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -1214,12 +1211,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+7"/>
         <source>&amp;Port:</source>
-        <translation>&amp;Port :</translation>
+        <translation>&amp;Port:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Port of the proxy (e.g. 9050)</source>
-        <translation>Port du serveur mandataire (par ex. 9050)</translation>
+        <translation>Port du serveur Proxy mandataire (par ex. 9050)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1269,12 +1266,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+13"/>
         <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation>La langue d&apos;interface de de l&apos;utilisateur peut être définie ici. Ces modification seront effectives après redémarrage de l&apos;application BlackCoin</translation>
+        <translation>La langue d&apos;interface de l&apos;utilisateur peut être définie ici. Les modification seront prises en compte après redémarrage de l&apos;application BlackCoin</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>&amp;Unit to show amounts in:</source>
-        <translation>&amp;Unité d&apos;affichage des montants :</translation>
+        <translation>&amp;Unité d&apos;affichage des montants:</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1309,12 +1306,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+7"/>
         <source>&amp;Cancel</source>
-        <translation>A&amp;nnuler</translation>
+        <translation>&amp;Annuler</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>&amp;Apply</source>
-        <translation>&amp;Exécuter</translation>
+        <translation>&amp;Appliquer</translation>
     </message>
     <message>
         <location filename="../optionsdialog.cpp" line="+55"/>
@@ -1331,12 +1328,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
         <location line="-9"/>
         <location line="+9"/>
         <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation>Les paramètres prendront effet après redémarrage de l&apos;application BlackCoin</translation>
+        <translation>Les paramètres prendront effet après redémarrage du client BlackCoin</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>The supplied proxy address is invalid.</source>
-        <translation>L&apos;adresse de serveur mandataire fournie est invalide.</translation>
+        <translation>L&apos;adresse de serveur mandataire -proxy- fournie est invalide.</translation>
     </message>
 </context>
 <context>
@@ -1380,17 +1377,17 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+71"/>
         <source>Immature:</source>
-        <translation>Immature :</translation>
+        <translation>Immature:</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Mined balance that has not yet matured</source>
-        <translation>Le solde généré n&apos;est pas encore mûr</translation>
+        <translation>Le solde généré n&apos;est pas encore mature</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Total:</source>
-        <translation>Total :</translation>
+        <translation>Total:</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1405,12 +1402,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-108"/>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
-        <translation>Montant total des transactions nécessitant confirmation, et ne figurant pas encore dans la balance actuelle</translation>
+        <translation>Montant total des transactions nécessitant confirmation, et ne figurant pas encore dans le solde actuel</translation>
     </message>
     <message>
         <location line="-29"/>
         <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation>Montant total des transactions en &quot;staking&quot; et ne figurant pas encore dans la balance actuelle</translation>
+        <translation>Montant total des transactions en &quot;staking&quot; et ne figurant pas encore dans le solde actuel</translation>
     </message>
     <message>
         <location filename="../overviewpage.cpp" line="+113"/>
@@ -1434,12 +1431,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+56"/>
         <source>Amount:</source>
-        <translation>Montant :</translation>
+        <translation>Montant:</translation>
     </message>
     <message>
         <location line="-44"/>
         <source>Label:</source>
-        <translation>Intitulé:</translation>
+        <translation>Étiquette:</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -1546,7 +1543,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+23"/>
         <source>Estimated total blocks</source>
-        <translation>Nombre total estimé de blocs</translation>
+        <translation>Nombre total de blocs estimé</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -1611,7 +1608,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
         <source>Welcome to the BlackCoin RPC console.</source>
-        <translation>Bienvenue sur la console BlackCoin RPC.</translation>
+        <translation>Bienvenue sur la console RPC de BlackCoin.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1636,12 +1633,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
         <location line="+5"/>
         <location line="+5"/>
         <source>Send Coins</source>
-        <translation>Envoyer des pièces</translation>
+        <translation>Envoyer des monnaies</translation>
     </message>
     <message>
         <location line="+76"/>
         <source>Coin Control Features</source>
-        <translation>Fonctions de contrôle des pièces</translation>
+        <translation>Fonctions de contrôle des monnaies</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -1656,12 +1653,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+19"/>
         <source>Insufficient funds!</source>
-        <translation>Fonds insuffisants !</translation>
+        <translation>Fonds insuffisants!</translation>
     </message>
     <message>
         <location line="+77"/>
         <source>Quantity:</source>
-        <translation>Quantité :</translation>
+        <translation>Quantité:</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -1672,12 +1669,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-19"/>
         <source>Bytes:</source>
-        <translation>Octets :</translation>
+        <translation>Octets:</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Amount:</source>
-        <translation>Montant :</translation>
+        <translation>Montant:</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -1690,7 +1687,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-191"/>
         <source>Priority:</source>
-        <translation>Priorité :</translation>
+        <translation>Priorité:</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -1700,7 +1697,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+32"/>
         <source>Fee:</source>
-        <translation>Frais :</translation>
+        <translation>Frais:</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -1715,7 +1712,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+32"/>
         <source>After Fee:</source>
-        <translation>Après les frais :</translation>
+        <translation>Après frais:</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -1725,7 +1722,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+50"/>
         <source>custom change address</source>
-        <translation>votre propre adresse</translation>
+        <translation>adresse de change personnalisée</translation>
     </message>
     <message>
         <location line="+106"/>
@@ -1735,7 +1732,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+3"/>
         <source>Add &amp;Recipient</source>
-        <translation>Ajouter un &amp;destinataire</translation>
+        <translation>Ajouter un &amp;Destinataire</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -1750,7 +1747,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+28"/>
         <source>Balance:</source>
-        <translation>Solde :</translation>
+        <translation>Solde:</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1770,7 +1767,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1815,7 +1812,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+86"/>
         <source>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; to %2 (%3)</translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; à %2 (%3)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1880,7 +1877,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+4"/>
         <source>WARNING: unknown change address</source>
-        <translation>AVERTISSEMET: Adresse BlackCoin Invalide</translation>
+        <translation>AVERTISSEMENT: Adresse BlackCoin Invalide</translation>
     </message>
 </context>
 <context>
@@ -1893,12 +1890,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+15"/>
         <source>A&amp;mount:</source>
-        <translation>&amp;Montant :</translation>
+        <translation>&amp;Montant:</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Pay &amp;To:</source>
-        <translation>&amp;Payer à :</translation>
+        <translation>&amp;Payer à:</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -1909,12 +1906,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+9"/>
         <source>&amp;Label:</source>
-        <translation>É&amp;tiquette :</translation>
+        <translation>&amp;Étiquette :</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Adresse destinataire du paiement ( ex : B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Adresse destinataire du paiement (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1944,7 +1941,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Entrer une adresse BlackCoin (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
 </context>
 <context>
@@ -1963,12 +1960,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-118"/>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Vous pouvez signer des messages avec vos adresses pour prouver que vous les détenez. Faites attention de ne pas signer de vague car des attaques d&apos;hameçonnage peuvent essayer d&apos;usurper votre identité par votre signature. Ne signez que des déclarations entièrement détaillées et avec lesquelles vous serez d&apos;accord.</translation>
+        <translation>Vous pouvez signer des messages avec vos adresses pour prouver que vous les détenez. Faites attention de ne rien signer de suspect car des attaques d&apos;hameçonnage peuvent essayer d&apos;usurper votre identité par votre signature. Ne signez que des déclarations entièrement détaillées et avec lesquelles vous serez d&apos;accord.</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Entrer une adresse BlackCoin (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2005,7 +2002,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+21"/>
         <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation>Signer le message afin de prouver l&apos;appartenance de cette adresse BlackCoin</translation>
+        <translation>Signer le message afin de prouver l&apos;identité de votre adresse BlackCoin</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2037,7 +2034,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+40"/>
         <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation>Vérifier un message pour s&apos;assurer qu&apos;il vient d&apos;un adresse BlackCoin spécifique.</translation>
+        <translation>Vérifier le message afin de vous assurer qu&apos;il provient de l&apos;adresse BlackCoin spécifiée.</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2053,7 +2050,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-2"/>
         <source>Click &quot;Sign Message&quot; to generate signature</source>
-        <translation>Cliquez sur « Signer le message » pour générer la signature</translation>
+        <translation>Cliquer sur « Signer le message » pour générer la signature</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2137,7 +2134,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message numerus="yes">
         <location line="-2"/>
         <source>Open for %n block(s)</source>
-        <translation><numerusform>Ouvert pour %n bloc</numerusform><numerusform>Ouvert pour %n blocs</numerusform></translation>
+        <translation><numerusform>Ouvert pour %n bloc</numerusform><numerusform>Ouvert pour %n blocks</numerusform></translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2220,7 +2217,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message numerus="yes">
         <location line="-102"/>
         <source>matures in %n more block(s)</source>
-        <translation><numerusform>arrive à maturité dans %n bloc de plus</numerusform><numerusform>arrive à maturité dans %n blocs de plus</numerusform></translation>
+        <translation><numerusform>arrive à maturité dans %n bloc de plus</numerusform><numerusform>arrive à maturité dans %n blocks supplémentaires</numerusform></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2263,7 +2260,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Les pièces de monnaie générées nécessitent une maturation de 510 blocs avant de pouvoir être utilisées. Lors de la génération d&apos;un bloc, celui-ci est diffusé sur le réseau afin d&apos;être ajouté à la chaîne de bloc. En cas d&apos;échec, son état passera en &quot;non accepté&quot; et celui-ci ne pourra pas être dépensé. Cela peut occasionnellement se produire, lorsqu&apos;un noeud différent génère un bloc à quelques secondes d&apos;intervalle du vôtre.</translation>
+        <translation>Les pièces de monnaie générées nécessitent une maturation de 510 blocks avant de pouvoir être utilisées. Lors de la génération d&apos;un blokc, celui-ci est diffusé sur le réseau afin d&apos;être ajouté à la chaîne de blocks. En cas d&apos;échec, son état passera en &quot;non accepté&quot; et celui-ci ne pourra pas être dépensé. Cela peut occasionnellement se produire, lorsqu&apos;un noeud différent génère un block à quelques secondes d&apos;intervalle du vôtre.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2369,7 +2366,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+3"/>
         <source>Confirming (%1 of %2 recommended confirmations)</source>
-        <translation>Confirmation (%1 sur %2 confirmations recommandées)</translation>
+        <translation>En cours de confirmation (%1 sur %2 confirmations recommandées)</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2384,7 +2381,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+3"/>
         <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>Ce bloc n’a été reçu par aucun autre nœud et ne sera probablement pas accepté !</translation>
+        <translation>Ce bloc n’a été reçu par aucun autre nœud et ne sera probablement pas accepté!</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2608,7 +2605,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+100"/>
         <source>Range:</source>
-        <translation>Intervalle :</translation>
+        <translation>Intervalle:</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2634,7 +2631,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+1"/>
         <source>Usage:</source>
-        <translation>Utilisation :</translation>
+        <translation>Utilisation:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2654,23 +2651,22 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+2"/>
         <source>Options:</source>
-        <translation>Options :</translation>
+        <translation>Options:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation>Spécifier le fichier de configuration (defaut: blackcoin.conf)</translation>
+        <translation>Spécifier le fichier de configuration (par défaut: blackcoin.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation>Spécifier le fichier pid (defaut: blackcoind.pid)
-</translation>
+        <translation>Spécifier le fichier pid (par défaut: blackcoind.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Specify wallet file (within data directory)</source>
-        <translation>Spécifiez le fichier de portefeuille (dans le répertoire de données)</translation>
+        <translation>Spécifier le fichier de portefeuille (dans le répertoire de données)</translation>
     </message>
     <message>
         <location line="-1"/>
@@ -2680,17 +2676,17 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+2"/>
         <source>Set database cache size in megabytes (default: 25)</source>
-        <translation>Définir la taille du tampon en mégaoctets (par défaut : 25)</translation>
+        <translation>Définir la taille du cache de base de données en mégaoctets (par défaut : 25)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Set database disk log size in megabytes (default: 100)</source>
-        <translation>Définir la taille du tampon en mégaoctets (par défaut : 100)</translation>
+        <translation>Définir la taille du journal de base de données en mégaoctets (par défaut : 100)</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation>Écouter les connexions sur le &lt;port&gt; (default: 15714 or testnet: 25714)</translation>
+        <translation>Écouter les connexions sur le &lt;port&gt; (par défault: 15714 ou testnet: 25714)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2715,7 +2711,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+2"/>
         <source>Stake your coins to support network and gain reward (default: 1)</source>
-        <translation>Stacker vos monnaies afin de soutenir le réseau et d&apos;obtenir des intérêts  (default: 1)</translation>
+        <translation>Placer vos monnaies en staking, afin de soutenir le réseau et obtenir des intérêts (par défault: 1)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2730,7 +2726,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-44"/>
         <source>An error occurred while setting up the RPC port %u for listening on IPv4: %s</source>
-        <translation>Une erreur est survenue lors du réglage du port RPC %u pour écouter sur IPv4 : %s</translation>
+        <translation>Une erreur est survenue lors du positionnement du port RPC %u pour écouter sur une adresse IPv4 : %s</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -2770,12 +2766,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-8"/>
         <source>Importing blockchain data file.</source>
-        <translation>Importation du fichier blockchain</translation>
+        <translation>Import en cours du fichier de chaîne de blocs</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Importing bootstrap blockchain data file.</source>
-        <translation>Importation du fichier blockchain</translation>
+        <translation>Import en masse du fichier de chaîne bloc</translation>
     </message>
     <message>
         <location line="-88"/>
@@ -2805,7 +2801,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-20"/>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
-        <translation>Fixer la taille maximale d&apos;un block en bytes (default: 27000)</translation>
+        <translation>Fixer la taille maximale d&apos;un bloc en octets (par défault: 27000)</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -2835,7 +2831,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+4"/>
         <source>Block creation options:</source>
-        <translation>Options de création de bloc :</translation>
+        <translation>Options de création de bloc:</translation>
     </message>
     <message>
         <location line="-62"/>
@@ -2845,7 +2841,7 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="+4"/>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
-        <translation>Découvrir sa propre adresse IP (par défaut : 1 lors de l&apos;écoute et si aucun -externalip)</translation>
+        <translation>Découvrir sa propre adresse IP (par défaut: 1 lors de l&apos;écoute et si aucun -externalip)</translation>
     </message>
     <message>
         <location line="+94"/>
@@ -2935,12 +2931,12 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-29"/>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
-        <translation>Réduire le fichier debug.log lors du démarrage du client (par défaut : 1 lorsque -debug n&apos;est pas présent)</translation>
+        <translation>Réduire le fichier debug.log lors du démarrage du client (par défaut : 1 lorsque -debug n&apos;est pas présente)</translation>
     </message>
     <message>
         <location line="-42"/>
         <source>Specify connection timeout in milliseconds (default: 5000)</source>
-        <translation>Spécifier le délai d&apos;expiration de la connexion en millisecondes (par défaut : 5 000)</translation>
+        <translation>Spécifier le délai d&apos;expiration de la connexion en millisecondes (par défaut: 5000)</translation>
     </message>
     <message>
         <location line="+109"/>
@@ -2952,17 +2948,17 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     <message>
         <location line="-80"/>
         <source>Use UPnP to map the listening port (default: 0)</source>
-        <translation>Utiliser l&apos;UPnP pour rediriger le port d&apos;écoute (par défaut : 0)</translation>
+        <translation>Utiliser l&apos;UPnP pour rediriger le port d&apos;écoute (par défaut: 0)</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation>Utiliser l&apos;UPnP pour rediriger le port d&apos;écoute (par défaut : 1 lors de l&apos;écoute)</translation>
+        <translation>Utiliser l&apos;UPnP pour rediriger le port d&apos;écoute (par défaut: 1 lors de l&apos;écoute)</translation>
     </message>
     <message>
         <location line="-25"/>
         <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
-        <translation>Utiliser un proxy pour atteindre les services cachés (défaut: équivalent à -proxy)</translation>
+        <translation>Utiliser un proxy pour atteindre les services cachés (par défaut: équivalent à -proxy)</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -3127,7 +3123,7 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+53"/>
         <source>Error: Wallet unlocked for staking only, unable to create transaction.</source>
-        <translation type="unfinished"/>
+        <translation>Erreur: Portefeuille déverrouillé uniquement pour &quot;staking&quot; , impossible d&apos;effectuer cette transaction</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -3182,7 +3178,7 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+2"/>
         <source>Error loading wallet.dat: Wallet corrupted</source>
-        <translation>Erreur lors du chargement de wallet.dat : portefeuille corrompu</translation>
+        <translation>Erreur lors du chargement de wallet.dat: portefeuille corrompu</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3192,12 +3188,12 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+1"/>
         <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation>le portefeuille nécessite d&apos;être réédité : Merci de relancer l&apos;application BlackCoin</translation>
+        <translation>Le portefeuille nécessite d&apos;être réédité : Merci de relancer l&apos;application BlackCoin</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Error loading wallet.dat</source>
-        <translation>Erreur lors du chargement de wallet.dat</translation>
+        <translation>Erreur lors du chargement du fichier wallet.dat</translation>
     </message>
     <message>
         <location line="-16"/>
