@@ -76,18 +76,21 @@ void WalletModel::updateStatus()
 
 void WalletModel::pollBalanceChanged()
 {
-    bool heightChanged = false;
+    // Get required locks upfront. This avoids the GUI from getting stuck on
+    // periodical polls if the core is holding the locks for a longer time -
+    // for example, during a wallet rescan.
+    TRY_LOCK(cs_main, lockMain);
+    if(!lockMain)
+        return;
+    TRY_LOCK(wallet->cs_wallet, lockWallet);
+    if(!lockWallet)
+        return;
+
+    if(nBestHeight != cachedNumBlocks)
     {
-        LOCK(cs_main);
-        if(nBestHeight != cachedNumBlocks)
-        {
-            // Balance and number of transactions might have changed
-            cachedNumBlocks = nBestHeight;
-            heightChanged = true;
-        }
-    }
-    if(heightChanged)
-    {
+        // Balance and number of transactions might have changed
+        cachedNumBlocks = nBestHeight;
+
         checkBalanceChanged();
         if(transactionTableModel)
             transactionTableModel->updateConfirmations();
