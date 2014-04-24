@@ -256,8 +256,6 @@ void BitcoinGUI::createActions()
     quitAction->setToolTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutCardAction = new QAction(tr("About BlackCoin card"), this);
-    aboutCardAction->setToolTip(tr("Show information about BlackCoin card"));
     aboutAction = new QAction(QIcon(":/icons/bitcoin"), tr("&About BlackCoin"), this);
     aboutAction->setToolTip(tr("Show information about BlackCoin"));
     aboutAction->setMenuRole(QAction::AboutRole);
@@ -288,7 +286,6 @@ void BitcoinGUI::createActions()
     openRPCConsoleAction->setToolTip(tr("Open debugging and diagnostic console"));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-    connect(aboutCardAction, SIGNAL(triggered()), this, SLOT(aboutCardClicked()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(optionsClicked()));
@@ -332,9 +329,6 @@ void BitcoinGUI::createMenuBar()
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(openRPCConsoleAction);
     help->addSeparator();
-#ifdef WIN32
-    help->addAction(aboutCardAction);
-#endif
     help->addAction(aboutAction);
     help->addAction(aboutQtAction);
 }
@@ -480,11 +474,6 @@ void BitcoinGUI::optionsClicked()
     OptionsDialog dlg;
     dlg.setModel(clientModel->getOptionsModel());
     dlg.exec();
-}
-
-void BitcoinGUI::aboutCardClicked()
-{
-    QDesktopServices::openUrl(QUrl("http://www.blackcoincard.com/"));
 }
 
 void BitcoinGUI::aboutClicked()
