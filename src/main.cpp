@@ -2046,10 +2046,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
             if (vtx[i].IsCoinStake())
                 return DoS(100, error("CheckBlock() : more than one coinstake"));
 
-        // Check coinstake timestamp
-        if (!CheckCoinStakeTimestamp(GetBlockTime(), (int64_t)vtx[1].nTime))
-            return DoS(50, error("CheckBlock() : coinstake timestamp violation nTimeBlock=%"PRId64" nTimeTx=%u", GetBlockTime(), vtx[1].nTime));
-
         // NovaCoin: check proof-of-stake block signature
         if (fCheckSig && !CheckBlockSignature())
             return DoS(100, error("CheckBlock() : bad proof-of-stake block signature"));
@@ -2122,6 +2118,10 @@ bool CBlock::AcceptBlock()
     if (GetBlockTime() > FutureDrift((int64_t)vtx[0].nTime, nHeight))
         return DoS(50, error("AcceptBlock() : coinbase timestamp is too early"));
 
+    // Check coinstake timestamp
+    if (IsProofOfStake() && !CheckCoinStakeTimestamp(nHeight, GetBlockTime(), (int64_t)vtx[1].nTime))
+        return DoS(50, error("AcceptBlock() : coinstake timestamp violation nTimeBlock=%"PRId64" nTimeTx=%u", GetBlockTime(), vtx[1].nTime));
+
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
         return DoS(100, error("AcceptBlock() : incorrect %s", IsProofOfWork() ? "proof-of-work" : "proof-of-stake"));
@@ -2144,7 +2144,7 @@ bool CBlock::AcceptBlock()
     if (IsProofOfStake())
     {
         uint256 targetProofOfStake;
-        if (!CheckProofOfStake(vtx[1], nBits, hashProof, targetProofOfStake))
+        if (!CheckProofOfStake(pindexPrev, vtx[1], nBits, hashProof, targetProofOfStake))
         {
             printf("WARNING: AcceptBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str());
             return false; // do not error here as we expect this during initial block download

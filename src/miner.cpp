@@ -491,7 +491,7 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
         return error("CheckStake() : %s is not a proof-of-stake block", hashBlock.GetHex().c_str());
 
     // verify hash target and signature of coinstake tx
-    if (!CheckProofOfStake(pblock->vtx[1], pblock->nBits, proofHash, hashTarget))
+    if (!CheckProofOfStake(mapBlockIndex[pblock->hashPrevBlock], pblock->vtx[1], pblock->nBits, proofHash, hashTarget))
         return error("CheckStake() : proof-of-stake checking failed");
 
     //// debug print
