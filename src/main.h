@@ -905,6 +905,11 @@ public:
 
     uint256 GetHash() const
     {
+        return GetPoWHash();
+    }
+
+    uint256 GetPoWHash() const
+    {
         return scrypt_blockhash(CVOIDBEGIN(nVersion));
     }
 
@@ -1047,7 +1052,7 @@ public:
         }
 
         // Check the header
-        if (fReadTransactions && IsProofOfWork() && !CheckProofOfWork(GetHash(), nBits))
+        if (fReadTransactions && IsProofOfWork() && !CheckProofOfWork(GetPoWHash(), nBits))
             return error("CBlock::ReadFromDisk() : errors in block header");
 
         return true;
@@ -1081,7 +1086,7 @@ public:
     bool ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck=false);
     bool ReadFromDisk(const CBlockIndex* pindex, bool fReadTransactions=true);
     bool SetBestChain(CTxDB& txdb, CBlockIndex* pindexNew);
-    bool AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const uint256& hashProofOfStake);
+    bool AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const uint256& hashProof);
     bool CheckBlock(bool fCheckPOW=true, bool fCheckMerkleRoot=true, bool fCheckSig=true) const;
     bool AcceptBlock();
     bool GetCoinAge(uint64_t& nCoinAge) const; // ppcoin: calculate total coin age spent in block
@@ -1132,7 +1137,8 @@ public:
     // proof-of-stake specific fields
     COutPoint prevoutStake;
     unsigned int nStakeTime;
-    uint256 hashProofOfStake;
+
+    uint256 hashProof;
 
     // block header
     int nVersion;
@@ -1155,7 +1161,7 @@ public:
         nFlags = 0;
         nStakeModifier = 0;
         nStakeModifierChecksum = 0;
-        hashProofOfStake = 0;
+        hashProof = 0;
         prevoutStake.SetNull();
         nStakeTime = 0;
 
@@ -1180,7 +1186,7 @@ public:
         nFlags = 0;
         nStakeModifier = 0;
         nStakeModifierChecksum = 0;
-        hashProofOfStake = 0;
+        hashProof = 0;
         if (block.IsProofOfStake())
         {
             SetProofOfStake();
@@ -1318,12 +1324,12 @@ public:
 
     std::string ToString() const
     {
-        return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016"PRIx64", nStakeModifierChecksum=%08x, hashProofOfStake=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s)",
+        return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016"PRIx64", nStakeModifierChecksum=%08x, hashProof=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s)",
             pprev, pnext, nFile, nBlockPos, nHeight,
             FormatMoney(nMint).c_str(), FormatMoney(nMoneySupply).c_str(),
             GeneratedStakeModifier() ? "MOD" : "-", GetStakeEntropyBit(), IsProofOfStake()? "PoS" : "PoW",
             nStakeModifier, nStakeModifierChecksum, 
-            hashProofOfStake.ToString().c_str(),
+            hashProof.ToString().c_str(),
             prevoutStake.ToString().c_str(), nStakeTime,
             hashMerkleRoot.ToString().c_str(),
             GetBlockHash().ToString().c_str());
@@ -1377,14 +1383,13 @@ public:
         {
             READWRITE(prevoutStake);
             READWRITE(nStakeTime);
-            READWRITE(hashProofOfStake);
         }
         else if (fRead)
         {
             const_cast<CDiskBlockIndex*>(this)->prevoutStake.SetNull();
             const_cast<CDiskBlockIndex*>(this)->nStakeTime = 0;
-            const_cast<CDiskBlockIndex*>(this)->hashProofOfStake = 0;
         }
+        READWRITE(hashProof);
 
         // block header
         READWRITE(this->nVersion);

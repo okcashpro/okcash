@@ -1954,7 +1954,7 @@ bool CBlock::GetCoinAge(uint64_t& nCoinAge) const
     return true;
 }
 
-bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const uint256& hashProofOfStake)
+bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const uint256& hashProof)
 {
     // Check for duplicate
     uint256 hash = GetHash();
@@ -1980,8 +1980,8 @@ bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const u
     if (!pindexNew->SetStakeEntropyBit(GetStakeEntropyBit()))
         return error("AddToBlockIndex() : SetStakeEntropyBit() failed");
 
-    // ppcoin: record proof-of-stake hash value
-    pindexNew->hashProofOfStake = hashProofOfStake;
+    // Record proof hash value
+    pindexNew->hashProof = hashProof;
 
     // ppcoin: compute stake modifier
     uint64_t nStakeModifier = 0;
@@ -2037,7 +2037,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         return DoS(100, error("CheckBlock() : size limits failed"));
 
     // Check proof of work matches claimed amount
-    if (fCheckPOW && IsProofOfWork() && !CheckProofOfWork(GetHash(), nBits))
+    if (fCheckPOW && IsProofOfWork() && !CheckProofOfWork(GetPoWHash(), nBits))
         return DoS(50, error("CheckBlock() : proof of work failed"));
 
     // Check timestamp
@@ -2151,15 +2151,21 @@ bool CBlock::AcceptBlock()
     if (!Checkpoints::CheckHardened(nHeight, hash))
         return DoS(100, error("AcceptBlock() : rejected by hardened checkpoint lock-in at %d", nHeight));
 
+    uint256 hashProof;
     // Verify hash target and signature of coinstake tx
-    uint256 hashProofOfStake = 0, targetProofOfStake = 0;
     if (IsProofOfStake())
     {
-        if (!CheckProofOfStake(vtx[1], nBits, hashProofOfStake, targetProofOfStake))
+        uint256 targetProofOfStake;
+        if (!CheckProofOfStake(vtx[1], nBits, hashProof, targetProofOfStake))
         {
             printf("WARNING: AcceptBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str());
             return false; // do not error here as we expect this during initial block download
         }
+    }
+    // PoW is checked in CheckBlock()
+    if (IsProofOfWork())
+    {
+        hashProof = GetPoWHash();
     }
 
     bool cpSatisfies = Checkpoints::CheckSync(hash, pindexPrev);
@@ -2184,7 +2190,7 @@ bool CBlock::AcceptBlock()
     unsigned int nBlockPos = 0;
     if (!WriteToDisk(nFile, nBlockPos))
         return error("AcceptBlock() : WriteToDisk failed");
-    if (!AddToBlockIndex(nFile, nBlockPos, hashProofOfStake))
+    if (!AddToBlockIndex(nFile, nBlockPos, hashProof))
         return error("AcceptBlock() : AddToBlockIndex failed");
 
     // Relay inventory, but don't relay old inventory during initial block download
@@ -2562,7 +2568,7 @@ bool LoadBlockIndex(bool fAllowNew)
         unsigned int nBlockPos;
         if (!block.WriteToDisk(nFile, nBlockPos))
             return error("LoadBlockIndex() : writing genesis block to disk failed");
-        if (!block.AddToBlockIndex(nFile, nBlockPos, 0))
+        if (!block.AddToBlockIndex(nFile, nBlockPos, hashGenesisBlock))
             return error("LoadBlockIndex() : genesis block not accepted");
 
         // ppcoin: initialize synchronized checkpoint
