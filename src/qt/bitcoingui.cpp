@@ -931,8 +931,7 @@ void BitcoinGUI::updateWeight()
     if (!lockWallet)
         return;
 
-    uint64_t nMinWeight = 0, nMaxWeight = 0;
-    pwalletMain->GetStakeWeight(*pwalletMain, nMinWeight, nMaxWeight, nWeight);
+    pwalletMain->GetStakeWeight(nWeight);
 }
 
 void BitcoinGUI::updateStakingIcon()

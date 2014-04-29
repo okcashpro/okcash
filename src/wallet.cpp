@@ -1501,8 +1501,7 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, int64_t nValue, CWalletTx&
     return CreateTransaction(vecSend, wtxNew, reservekey, nFeeRet, coinControl);
 }
 
-// NovaCoin: get current stake weight
-bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64_t& nMinWeight, uint64_t& nMaxWeight, uint64_t& nWeight)
+bool CWallet::GetStakeWeight(uint64_t& nWeight)
 {
     // Choose coins to use
     int64_t nBalance = GetBalance();
@@ -1521,37 +1520,33 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64_t& nMinWeight, ui
     if (setCoins.empty())
         return false;
 
-    nMinWeight = nMaxWeight = nWeight = 0;
+    nWeight = 0;
 
+    int64_t nCurrentTime = GetTime();
     CTxDB txdb("r");
+
+    LOCK2(cs_main, cs_wallet);
     BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
     {
         CTxIndex txindex;
+        if (!txdb.ReadTxIndex(pcoin.first->GetHash(), txindex))
+            continue;
+
+        if (IsProtocolV2(nBestHeight+1))
         {
-            LOCK2(cs_main, cs_wallet);
-            if (!txdb.ReadTxIndex(pcoin.first->GetHash(), txindex))
-                continue;
+            if (nCurrentTime - pcoin.first->nTime > nStakeMinAge)
+                nWeight += pcoin.first->vout[pcoin.second].nValue;
         }
-
-        int64_t nTimeWeight = GetWeight((int64_t)pcoin.first->nTime, (int64_t)GetTime());
-        CBigNum bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
-
-        // Weight is greater than zero
-        if (nTimeWeight > 0)
+        else
         {
-            nWeight += bnCoinDayWeight.getuint64();
-        }
+            int64_t nTimeWeight = GetWeight((int64_t)pcoin.first->nTime, nCurrentTime);
+            CBigNum bnWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
 
-        // Weight is greater than zero, but the maximum value isn't reached yet
-        if (nTimeWeight > 0 && nTimeWeight < nStakeMaxAge)
-        {
-            nMinWeight += bnCoinDayWeight.getuint64();
-        }
-
-        // Maximum weight was reached
-        if (nTimeWeight == nStakeMaxAge)
-        {
-            nMaxWeight += bnCoinDayWeight.getuint64();
+            // Weight is greater than zero
+            if (nTimeWeight > 0)
+            {
+                nWeight += bnWeight.getuint64();
+            }
         }
     }
 
