@@ -134,6 +134,10 @@ Value importprivkey(const Array& params, bool fHelp)
         pwalletMain->MarkDirty();
         pwalletMain->SetAddressBookName(vchAddress, strLabel);
 
+        // Don't throw error in case a key is already there
+        if (pwalletMain->HaveKey(vchAddress))
+            return Value::null;
+
         pwalletMain->mapKeyMetadata[vchAddress].nCreateTime = 1;
 
         if (!pwalletMain->AddKey(key))
