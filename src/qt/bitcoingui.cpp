@@ -61,7 +61,6 @@
 
 extern CWallet* pwalletMain;
 extern int64_t nLastCoinStakeSearchInterval;
-extern unsigned int nTargetSpacing;
 double GetPoSKernelPS();
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):

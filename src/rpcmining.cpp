@@ -13,8 +13,6 @@
 using namespace json_spirit;
 using namespace std;
 
-extern unsigned int nTargetSpacing;
-
 Value getsubsidy(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
