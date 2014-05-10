@@ -311,10 +311,10 @@ static bool IsCanonicalSignature(const valtype &vchSig) {
     if (nLenS > 1 && (S[0] == 0x00) && !(S[1] & 0x80))
         return error("Non-canonical signature: S value excessively padded");
 
-    // If the above rules hold, and the S data is 33 bytes (or more), then
-    // the S value is above 2^255, which isn't necessary (its negative
-    // modulo the order of the curve could have been used).
-    if (nLenS > 32)
+    // If the S value is above the order of the curve divided by two, its
+    // complement modulo the order could have been used instead, which is
+    // one byte shorter when encoded correctly.
+    if (!CKey::CheckSignatureElement(S, nLenS, true))
         return error("Non-canonical signature: S value is unnecessarily high");
 
     return true;
