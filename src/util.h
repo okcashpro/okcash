@@ -181,7 +181,6 @@ bool ATTR_WARN_PRINTF(1,2) error(const char *format, ...);
  */
 #define printf OutputDebugStringF
 
-void LogException(std::exception* pex, const char* pszThread);
 void PrintException(std::exception* pex, const char* pszThread);
 void PrintExceptionContinue(std::exception* pex, const char* pszThread);
 void ParseString(const std::string& str, char c, std::vector<std::string>& v);
