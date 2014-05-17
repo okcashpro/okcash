@@ -74,7 +74,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     aboutQtAction(0),
     trayIcon(0),
     notificator(0),
-    rpcConsole(0)
+    rpcConsole(0),
+    nWeight(0)
 {
     resize(850, 550);
     setWindowTitle(tr("BlackCoin") + " - " + tr("Wallet"));
@@ -917,11 +918,26 @@ void BitcoinGUI::toggleHidden()
     showNormalIfMinimized(true);
 }
 
+void BitcoinGUI::updateWeight()
+{
+    if (!pwalletMain)
+        return;
+
+    TRY_LOCK(cs_main, lockMain);
+    if (!lockMain)
+        return;
+
+    TRY_LOCK(pwalletMain->cs_wallet, lockWallet);
+    if (!lockWallet)
+        return;
+
+    uint64_t nMinWeight = 0, nMaxWeight = 0;
+    pwalletMain->GetStakeWeight(*pwalletMain, nMinWeight, nMaxWeight, nWeight);
+}
+
 void BitcoinGUI::updateStakingIcon()
 {
-    uint64_t nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
-    if (pwalletMain)
-        pwalletMain->GetStakeWeight(*pwalletMain, nMinWeight, nMaxWeight, nWeight);
+    updateWeight();
 
     if (nLastCoinStakeSearchInterval && nWeight)
     {

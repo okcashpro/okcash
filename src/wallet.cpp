@@ -1516,6 +1516,8 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64_t& nMinWeight, ui
     if (setCoins.empty())
         return false;
 
+    nMinWeight = nMaxWeight = nWeight = 0;
+
     CTxDB txdb("r");
     BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
     {
