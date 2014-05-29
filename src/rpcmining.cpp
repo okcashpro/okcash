@@ -20,18 +20,6 @@ Value getsubsidy(const Array& params, bool fHelp)
             "getsubsidy [nTarget]\n"
             "Returns proof-of-work subsidy value for the specified value of target.");
 
-    unsigned int nBits = 0;
-
-    if (params.size() != 0)
-    {
-        CBigNum bnTarget(uint256(params[0].get_str()));
-        nBits = bnTarget.GetCompact();
-    }
-    else
-    {
-        nBits = GetNextTargetRequired(pindexBest, false);
-    }
-
     return (uint64_t)GetProofOfWorkReward(0);
 }
 
