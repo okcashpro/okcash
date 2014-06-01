@@ -28,7 +28,6 @@ using namespace boost;
 
 CWallet* pwalletMain;
 CClientUIInterface uiInterface;
-std::string strWalletFileName;
 bool fConfChange;
 bool fEnforceCanonical;
 unsigned int nNodeLifespan;
