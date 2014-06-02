@@ -451,19 +451,6 @@ public:
         LEAVE_CRITICAL_SECTION(cs_vSend);
     }
 
-    void EndMessageAbortIfEmpty()
-    {
-        if (nHeaderStart < 0)
-            return;
-        int nSize = vSend.size() - nMessageStart;
-        if (nSize > 0)
-            EndMessage();
-        else
-            AbortMessage();
-    }
-
-
-
     void PushVersion();
 
 
