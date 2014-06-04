@@ -38,6 +38,7 @@ libzerocoin::Params* ZCParams;
 
 CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // "standard" scrypt target limit for proof of work, results with 0,000244140625 proof-of-work difficulty
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
+CBigNum bnProofOfStakeLimitV2(~uint256(0) >> 48);
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 
 unsigned int nStakeMinAge = 8 * 60 * 60; // 8 hours
@@ -996,6 +997,14 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     return pblockOrphan->hashPrevBlock;
 }
 
+static CBigNum GetProofOfStakeLimit(int nHeight)
+{
+    if (IsProtocolV2(nHeight))
+        return bnProofOfStakeLimitV2;
+    else
+        return bnProofOfStakeLimit;
+}
+
 // miner's coin base reward
 int64_t GetProofOfWorkReward(int64_t nFees)
 {
@@ -1099,7 +1108,7 @@ static unsigned int GetNextTargetRequiredV1(const CBlockIndex* pindexLast, bool 
 
 static unsigned int GetNextTargetRequiredV2(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
-    CBigNum bnTargetLimit = fProofOfStake ? bnProofOfStakeLimit : bnProofOfWorkLimit;
+    CBigNum bnTargetLimit = fProofOfStake ? GetProofOfStakeLimit(pindexLast->nHeight) : bnProofOfWorkLimit;
 
     if (pindexLast == NULL)
         return bnTargetLimit.GetCompact(); // genesis block
