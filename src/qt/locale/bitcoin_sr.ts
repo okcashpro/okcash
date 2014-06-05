@@ -4,7 +4,7 @@
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>О BlackCoin-u</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -34,7 +34,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
         <source>Address Book</source>
-        <translation type="unfinished"/>
+        <translation>Адресар</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -54,7 +54,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-11"/>
         <source>&amp;New Address</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Нова адреса</translation>
     </message>
     <message>
         <location line="-46"/>
@@ -64,12 +64,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+60"/>
         <source>&amp;Copy Address</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Прекопирај адресу</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"/>
+        <translation>Прикажи &amp;QR код</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -84,7 +84,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+25"/>
         <source>Delete the currently selected address from the list</source>
-        <translation type="unfinished"/>
+        <translation>Уклони обележену адресу из листе</translation>
     </message>
     <message>
         <location line="-14"/>
@@ -94,7 +94,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+3"/>
         <source>&amp;Verify Message</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Потврди поруку</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -104,12 +104,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location filename="../addressbookpage.cpp" line="+65"/>
         <source>Copy &amp;Label</source>
-        <translation type="unfinished"/>
+        <translation>Копирај &amp;етикету</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Измени</translation>
     </message>
     <message>
         <location line="+250"/>
@@ -304,17 +304,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Синхронизација са мрежом у току...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Општи преглед</translation>
     </message>
@@ -369,7 +369,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Напустите програм</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation type="unfinished"/>
     </message>
@@ -404,7 +404,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Промени &amp;лозинку...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -414,17 +414,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation type="unfinished"/>
     </message>
@@ -464,7 +464,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation type="unfinished"/>
     </message>
@@ -474,7 +474,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>новчаник</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation type="unfinished"/>
     </message>
@@ -499,7 +499,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Фајл</translation>
     </message>
@@ -514,7 +514,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>П&amp;омоћ</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Трака са картицама</translation>
     </message>
@@ -536,7 +536,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -576,22 +576,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>

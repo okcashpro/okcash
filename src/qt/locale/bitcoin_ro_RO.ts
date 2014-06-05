@@ -311,17 +311,17 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>Semnează &amp;mesaj...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Se sincronizează cu rețeaua...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Imagine de ansamblu</translation>
     </message>
@@ -376,7 +376,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>Închide aplicația</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation>Arată informații despre BlackCoin</translation>
     </message>
@@ -411,7 +411,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>S&amp;chimbă parola...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n bloc rămas</numerusform><numerusform>~%n blocuri rămase</numerusform><numerusform>~%n blocuri rămase</numerusform></translation>
     </message>
@@ -421,17 +421,17 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>Descărcat %1 din %2  blocuri din istoricul tranzacțiilor(%3% terminat).</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>&amp;Exportă</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Trimite monede către o adresă BlackCoin</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Modifică opțiuni de configurare pentru BlackCoin</translation>
     </message>
@@ -471,7 +471,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>&amp;Verifică mesajul...</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -481,7 +481,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>Portofelul</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>Despre BlackCoin</translation>
     </message>
@@ -506,7 +506,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>Blochează portofelul</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Fișier</translation>
     </message>
@@ -521,7 +521,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>A&amp;jutor</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Bara de file</translation>
     </message>
@@ -543,7 +543,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation>Clientul BlackCoin</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>%n conexiune activă la reteaua BlackCoin</numerusform><numerusform>%n conexiuni active la reteaua BlackCoin</numerusform><numerusform>%n conexiuni active la reteaua BlackCoin</numerusform></translation>
     </message>
@@ -583,22 +583,12 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
         <translation><numerusform>%n secundă în urmă</numerusform><numerusform>%n secunde în urmă</numerusform><numerusform>%n secunde în urmă</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation>Despre cardul BlackCoin</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation>Arată informații despre card BlackCoin</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>&amp;Deblochează portofelul</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minut în urmă</numerusform><numerusform>%n minute în urmă</numerusform><numerusform>%n minute în urmă</numerusform></translation>
     </message>

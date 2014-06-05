@@ -4,12 +4,12 @@
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>Om BlackCoin</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;BlackCoin&lt;/b&gt; versjon</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -39,7 +39,7 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
         <source>Address Book</source>
-        <translation type="unfinished"/>
+        <translation>Adressebok</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -59,12 +59,12 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="-11"/>
         <source>&amp;New Address</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ny Adresse</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation type="unfinished"/>
+        <translation>Dette er adressene for å motta betalinger. Du ønsker kanskje å gi ulike adresser til hver avsender så du lettere kan holde øye med hvem som betaler deg.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -74,17 +74,17 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"/>
+        <translation>Vis &amp;QR Kode</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>Signer en melding for å bevise din egen BlackCoin adresse.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation type="unfinished"/>
+        <translation>Signer &amp;Melding</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -94,12 +94,12 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="-14"/>
         <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>Verifiser en melding får å forsikre deg om at den er signert med en spesifikk BlackCoin adresse</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Verify Message</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Verifiser en melding</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -119,7 +119,7 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="+250"/>
         <source>Export Address Book Data</source>
-        <translation type="unfinished"/>
+        <translation>Eksporter Adressebok</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -129,12 +129,12 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="+13"/>
         <source>Error exporting</source>
-        <translation type="unfinished"/>
+        <translation>Feil under eksportering</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke skrive til filen %1</translation>
     </message>
 </context>
 <context>
@@ -309,17 +309,17 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>Signer &amp;melding...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Synkroniserer med nettverk...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Oversikt</translation>
     </message>
@@ -341,27 +341,27 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="+5"/>
         <source>&amp;Address Book</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Adressebok</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Edit the list of stored addresses and labels</source>
-        <translation type="unfinished"/>
+        <translation>Endre listen med lagrede adresser og merkelapper</translation>
     </message>
     <message>
         <location line="-13"/>
         <source>&amp;Receive coins</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Mottatte coins</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show the list of addresses for receiving payments</source>
-        <translation type="unfinished"/>
+        <translation>Vis listen med adresser for å motta betalinger</translation>
     </message>
     <message>
         <location line="-7"/>
         <source>&amp;Send coins</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Send coins</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -374,9 +374,9 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
         <translation>Avslutt applikasjonen</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>Vis info om BlackCoin</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -409,39 +409,39 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
         <translation>&amp;Endre Adgangsfrase...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>~%n blokker igjen</numerusform><numerusform>~%n blokker igjen</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation type="unfinished"/>
+        <translation>Lastet ned %1 av %2 blokker med transaksjonshistorie (%3 ferdig).</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Eksporter...</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>Send coins til en BlackCoin adresse</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>Endre innstillingene til BlackCoin</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Export the data in the current tab to a file</source>
-        <translation type="unfinished"/>
+        <translation>Eksporter dataene i nåværende fane til en fil</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Encrypt or decrypt wallet</source>
-        <translation type="unfinished"/>
+        <translation>Krypter eller dekrypter lommeboken</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -469,9 +469,9 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
         <translation>&amp;Verifiser melding...</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -479,9 +479,9 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
         <translation>Lommebok</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Om BlackCoin</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -491,20 +491,20 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message>
         <location line="+9"/>
         <source>Unlock wallet</source>
-        <translation type="unfinished"/>
+        <translation>Lås opp lommebok</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Lock Wallet</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lås Lommeboken</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lock wallet</source>
-        <translation type="unfinished"/>
+        <translation>Lås lommeboken</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Fil</translation>
     </message>
@@ -519,7 +519,7 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
         <translation>&amp;Hjelp</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Verktøylinje for faner</translation>
     </message>
@@ -538,17 +538,17 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
         <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin klient</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n aktiv tilkobling til BlackCoin nettverket</numerusform><numerusform>%n aktive tilkoblinger til BlackCoin nettverket</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Downloaded %1 blocks of transaction history.</source>
-        <translation type="unfinished"/>
+        <translation>Lastet ned %1 blokker med transaksjonshistorie</translation>
     </message>
     <message>
         <location line="+413"/>
@@ -578,37 +578,27 @@ Dette produktet inneholder programvare utviklet av OpenSSL prosjektet for bruk i
     <message numerus="yes">
         <location line="-403"/>
         <source>%n second(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n sekunder siden</numerusform><numerusform>%n sekunder siden</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lås opp lommeboken</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n minutt siden</numerusform><numerusform>%n minutter siden</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n time siden</numerusform><numerusform>%n timer siden</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n dag siden</numerusform><numerusform>%n dager siden</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
@@ -693,7 +683,7 @@ Adresse: %4
     <message>
         <location line="+3"/>
         <source>Backup Failed</source>
-        <translation type="unfinished"/>
+        <translation>Backup Mislyktes</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -703,12 +693,12 @@ Adresse: %4
     <message numerus="yes">
         <location line="+76"/>
         <source>%n second(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n sekund</numerusform><numerusform>%n sekunder</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n minute(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n minutt</numerusform><numerusform>%n minutter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
@@ -814,7 +804,7 @@ Adresse: %4
     <message>
         <location line="+5"/>
         <source>Label</source>
-        <translation type="unfinished"/>
+        <translation>Merkelapp</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -875,7 +865,7 @@ Adresse: %4
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"/>
+        <translation>Kopier etter gebyr</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -885,7 +875,7 @@ Adresse: %4
     <message>
         <location line="+1"/>
         <source>Copy priority</source>
-        <translation type="unfinished"/>
+        <translation>Kopier prioritet</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -895,7 +885,7 @@ Adresse: %4
     <message>
         <location line="+1"/>
         <source>Copy change</source>
-        <translation type="unfinished"/>
+        <translation>Kopier veksel</translation>
     </message>
     <message>
         <location line="+317"/>
@@ -974,7 +964,9 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <source>This label turns red, if the change is smaller than %1.
 
  This means a fee of at least %2 is required.</source>
-        <translation type="unfinished"/>
+        <translation>Denne merkelappen blir rød, viss endringen er mindre enn %1
+
+Dette betyr at det trengs en avgift på minimum %2.</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -1008,7 +1000,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>The label associated with this address book entry</source>
-        <translation type="unfinished"/>
+        <translation>Navnet assosiert med denne adressen</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1048,7 +1040,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-5"/>
         <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation type="unfinished"/>
+        <translation>Den angitte adressen &quot;%1&quot; er ikke en gyldig BlackCoin adresse.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1067,17 +1059,17 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
         <source>BlackCoin-Qt</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
         <source>version</source>
-        <translation type="unfinished"/>
+        <translation>versjon</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Usage:</source>
-        <translation type="unfinished"/>
+        <translation>Bruk:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1097,7 +1089,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Start minimized</source>
-        <translation type="unfinished"/>
+        <translation>Start Minimert</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1145,7 +1137,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>&amp;Start BlackCoin on system login</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Start Blackcoin ved innlogging</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1180,7 +1172,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>&amp;Connect through SOCKS proxy:</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Koble til via en SOCKS proxy:</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -1295,7 +1287,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>&amp;Apply</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Bruk</translation>
     </message>
     <message>
         <location filename="../optionsdialog.cpp" line="+55"/>
@@ -1306,7 +1298,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+149"/>
         <location line="+9"/>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Advarsel</translation>
     </message>
     <message>
         <location line="-9"/>
@@ -1341,7 +1333,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+29"/>
         <source>Unconfirmed:</source>
-        <translation type="unfinished"/>
+        <translation>Ubekreftet:</translation>
     </message>
     <message>
         <location line="-107"/>
@@ -1351,7 +1343,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+49"/>
         <source>Spendable:</source>
-        <translation type="unfinished"/>
+        <translation>Disponibelt:</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1415,22 +1407,22 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+56"/>
         <source>Amount:</source>
-        <translation type="unfinished"/>
+        <translation>Beløp:</translation>
     </message>
     <message>
         <location line="-44"/>
         <source>Label:</source>
-        <translation type="unfinished"/>
+        <translation>Merkelapp:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Message:</source>
-        <translation type="unfinished"/>
+        <translation>Melding:</translation>
     </message>
     <message>
         <location line="+71"/>
         <source>&amp;Save As...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lagre som...</translation>
     </message>
     <message>
         <location filename="../qrcodedialog.cpp" line="+62"/>
@@ -1455,7 +1447,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+0"/>
         <source>PNG Images (*.png)</source>
-        <translation type="unfinished"/>
+        <translation>PNG Bilder (*.png)</translation>
     </message>
 </context>
 <context>
@@ -1552,7 +1544,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Vis</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -1691,7 +1683,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+19"/>
         <source>no</source>
-        <translation type="unfinished"/>
+        <translation>nei</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -1806,12 +1798,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Are you sure you want to send %1?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på du ønsker å sende %1?</translation>
     </message>
     <message>
         <location line="+0"/>
         <source> and </source>
-        <translation type="unfinished"/>
+        <translation>og</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1851,7 +1843,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+251"/>
         <source>WARNING: Invalid BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>ADVARSEL: Ugyldig BlackCoin adresse</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1900,7 +1892,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+10"/>
         <source>Choose address from address book</source>
-        <translation type="unfinished"/>
+        <translation>Velg adresse fra adresseboken</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1920,7 +1912,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+7"/>
         <source>Remove this recipient</source>
-        <translation type="unfinished"/>
+        <translation>Fjern denne mottakeren</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
@@ -1955,7 +1947,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+10"/>
         <location line="+203"/>
         <source>Choose an address from the address book</source>
-        <translation type="unfinished"/>
+        <translation>Velg en adresse fra adresseboken</translation>
     </message>
     <message>
         <location line="-193"/>
@@ -2345,12 +2337,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+3"/>
         <source>Unconfirmed</source>
-        <translation type="unfinished"/>
+        <translation>Ubekreftet</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Confirming (%1 of %2 recommended confirmations)</source>
-        <translation type="unfinished"/>
+        <translation>Bekrefter (%1 av %2 anbefalte bekreftelser)</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2584,7 +2576,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke skrive til filen %1</translation>
     </message>
     <message>
         <location line="+100"/>
@@ -2602,7 +2594,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../walletmodel.cpp" line="+206"/>
         <source>Sending...</source>
-        <translation type="unfinished"/>
+        <translation>Sender...</translation>
     </message>
 </context>
 <context>
@@ -2610,7 +2602,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
         <source>BlackCoin version</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin versjon</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2740,7 +2732,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+101"/>
         <source>Error: Transaction creation failed  </source>
-        <translation type="unfinished"/>
+        <translation>Feil: Opprettelse av transaksjonen mislyktes</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -2951,7 +2943,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+47"/>
         <source>Verifying database integrity...</source>
-        <translation type="unfinished"/>
+        <translation>Verifiserer databasens integritet...</translation>
     </message>
     <message>
         <location line="+57"/>
@@ -2961,7 +2953,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Warning: Disk space is low!</source>
-        <translation type="unfinished"/>
+        <translation>Advarsel: Lite lagringsplass!</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -3111,7 +3103,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
-        <translation type="unfinished"/>
+        <translation>Lommeboken %s holder til utenfor data mappen %s.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3121,7 +3113,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="-98"/>
         <source>BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3206,7 +3198,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="+11"/>
         <source>Sending...</source>
-        <translation type="unfinished"/>
+        <translation>Sender...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -3236,7 +3228,7 @@ for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@fo
     <message>
         <location line="-97"/>
         <source>Fee per KB to add to transactions you send</source>
-        <translation type="unfinished"/>
+        <translation>Gebyr per KB som skal legges til transaksjoner du sender</translation>
     </message>
     <message>
         <location line="+55"/>

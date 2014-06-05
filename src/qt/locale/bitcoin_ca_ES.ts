@@ -192,7 +192,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Encrypt wallet</source>
-        <translation>Xifrar la cartera</translation>
+        <translation>Xifrar el moneder</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -232,7 +232,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation>Avís: Si xifra la seva cartera i perd la contrasenya, podrà &lt;b&gt; PERDRE TOTES LES SEVES MONEDES &lt;/ b&gt;!</translation>
+        <translation>Avís: Si xifra el seu moneder i perd la contrasenya, podrà &lt;b&gt; PERDRE TOTES LES SEVES MONEDES &lt;/ b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -259,7 +259,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-58"/>
         <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>BlackCoin tancarà ara per acabar el procés de xifrat. Recordeu que l&apos;encriptació de la seva cartera no pot protegir completament les seves monedes de ser robades pel malware que pugui infectar al seu equip.</translation>
+        <translation>BlackCoin tancarà ara per acabar el procés de xifrat. Recordeu que l&apos;encriptació del seu moneder no pot protegir completament les seves monedes de ser robades pel malware que pugui infectar al seu equip.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -306,17 +306,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>Signar &amp;missatge...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Sincronitzant amb la xarxa ...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Panorama general</translation>
     </message>
@@ -371,7 +371,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Sortir de l&apos;aplicació</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation>Mostra informació sobre BlackCoin</translation>
     </message>
@@ -398,7 +398,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+3"/>
         <source>&amp;Backup Wallet...</source>
-        <translation>&amp;Realitzant copia de seguretat del moneder...</translation>
+        <translation>&amp;Realitzar copia de seguretat del moneder...</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -406,7 +406,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Canviar contrasenya...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n bloc restant</numerusform><numerusform>~%n blocs restants</numerusform></translation>
     </message>
@@ -416,17 +416,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Descarregats %1 de %2 blocs d&apos;historial de transaccions (%3% completat).</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>&amp;Exportar...</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Enviar monedes a una adreça BlackCoin</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Modificar les opcions de configuració per a BlackCoin</translation>
     </message>
@@ -438,7 +438,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-14"/>
         <source>Encrypt or decrypt wallet</source>
-        <translation>Xifrar o desxifrar cartera</translation>
+        <translation>Xifrar o desxifrar moneder</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -453,12 +453,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+10"/>
         <source>&amp;Debug window</source>
-        <translation>&amp;Finestra de debug</translation>
+        <translation>&amp;Finestra de depuració</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open debugging and diagnostic console</source>
-        <translation>Obrir la consola de diagnòstic i debugging</translation>
+        <translation>Obrir la consola de diagnòstic i depuració</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -466,7 +466,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Verifica el missatge..</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -476,7 +476,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Moneder</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;Sobre BlackCoin</translation>
     </message>
@@ -488,20 +488,20 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+9"/>
         <source>Unlock wallet</source>
-        <translation>Desbloquejar la cartera</translation>
+        <translation>Desbloquejar el moneder</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Lock Wallet</source>
-        <translation>&amp;Bloquejar cartera</translation>
+        <translation>&amp;Bloquejar moneder</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lock wallet</source>
-        <translation>Bloquejar cartera</translation>
+        <translation>Bloquejar moneder</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Arxiu</translation>
     </message>
@@ -516,7 +516,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Ajuda</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Barra d&apos;eines de seccions</translation>
     </message>
@@ -538,7 +538,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Client BlackCoin</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>%n conexió activa a la xarxa BlackCoin</numerusform><numerusform>%n conexions actives a la xarxa BlackCoin</numerusform></translation>
     </message>
@@ -555,17 +555,17 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+6"/>
         <source>Not staking because wallet is locked</source>
-        <translation>No s&apos;està fent &quot;stake&quot; perquè la cartera esa bloquejada</translation>
+        <translation>No s&apos;està fent &quot;stake&quot; perquè el moneder esa bloquejat</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because wallet is offline</source>
-        <translation>No s&apos;està fent &quot;stake&quot; perquè la cartera està fora de línia</translation>
+        <translation>No s&apos;està fent &quot;stake&quot; perquè el moneder està fora de línia</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because wallet is syncing</source>
-        <translation>No s&apos;està fent &quot;stake&quot; perquè la cartera està sincronitzant</translation>
+        <translation>No s&apos;està fent &quot;stake&quot; perquè el moneder està sincronitzant</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -578,22 +578,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation><numerusform>fa %n segon</numerusform><numerusform>fa %n segons</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation>Sobre la tarjeta BlackCoin</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation>Mostra informació sobre la tarjeta BlackCoin</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
-        <translation>&amp;Desbloquejar cartera</translation>
+        <translation>&amp;Desbloquejar moneder</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>fa %n minut</numerusform><numerusform>fa %n minuts</numerusform></translation>
     </message>
@@ -691,7 +681,7 @@ Address: %4
     <message>
         <location line="+0"/>
         <source>There was an error trying to save the wallet data to the new location.</source>
-        <translation>Hi ha un error al tractar de salvar les dades de la seva cartera a la nova ubicació.</translation>
+        <translation>Hi ha un error al tractar de salvar les dades del seu moneder a la nova ubicació.</translation>
     </message>
     <message numerus="yes">
         <location line="+76"/>
@@ -1137,7 +1127,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+31"/>
         <source>Reserved amount does not participate in staking and is therefore spendable at any time.</source>
-        <translation>La quantitat reservada no participa en fer &quot;stake&quot; i per tant es pot gastar en qualsevol moment.</translation>
+        <translation>La quantitat reservada no participa en fer &quot;stake&quot; i per tant esta disponible en qualsevol moment.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1157,7 +1147,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation>Separeu el bloc i les bases de dades d&apos;adreces en apagar l&apos;equip. En aquest cas es pot moure a un altre directori de dades, però alenteix l&apos;apagada. La cartera està sempre separada.</translation>
+        <translation>Separeu el bloc i les bases de dades d&apos;adreces en apagar l&apos;equip. En aquest cas es pot moure a un altre directori de dades, però alenteix l&apos;apagada. El moneder està sempre separat.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1177,7 +1167,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+3"/>
         <source>Map port using &amp;UPnP</source>
-        <translation>Port obert amb &amp;UPnP</translation>
+        <translation>Obrir ports amb &amp;UPnP</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1338,7 +1328,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
         <location line="+33"/>
         <location line="+231"/>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>La informació mostrada pot estar fora de data. La seva cartera es sincronitza automàticament amb la xarxa BlackCoin després d&apos;establir una connexió, però aquest procés no s&apos;ha completat encara.</translation>
+        <translation>La informació mostrada pot estar fora de data. El seu moneder es sincronitza automàticament amb la xarxa BlackCoin després d&apos;establir una connexió, però aquest procés no s&apos;ha completat encara.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1358,12 +1348,12 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+49"/>
         <source>Spendable:</source>
-        <translation>Pot gastar-se:</translation>
+        <translation>Disponible:</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Your current spendable balance</source>
-        <translation>El balanç de saldo actual que pot gastar-se</translation>
+        <translation>El balanç de saldo actual disponible</translation>
     </message>
     <message>
         <location line="+71"/>
@@ -1584,7 +1574,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+279"/>
         <source>Debug log file</source>
-        <translation>Dietàri de debug</translation>
+        <translation>Dietàri de depuració</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1723,7 +1713,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+3"/>
         <source>Add &amp;Recipient</source>
-        <translation>Affegir &amp;Destinatari</translation>
+        <translation>Afegir &amp;Destinatari</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -1853,7 +1843,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+5"/>
         <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Error: La transacció ha sigut rebutjada. Això pot passar si algunes de les monedes a la cartera ja s&apos;han gastat, per exemple, si vostè utilitza una còpia del wallet.dat i les monedes han estat gastades a la cópia pero no s&apos;han marcat com a gastades aqui.</translation>
+        <translation>Error: La transacció ha sigut rebutjada. Això pot passar si algunes de les monedes al moneder ja s&apos;han gastat, per exemple, si vostè utilitza una còpia del wallet.dat i les monedes han estat gastades a la cópia pero no s&apos;han marcat com a gastades aqui.</translation>
     </message>
     <message>
         <location line="+251"/>
@@ -2251,12 +2241,12 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+3"/>
         <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Les monedes generades han de madurar 510 blocs abans de poder-se gastar. En generar aquest bloc, que va ser transmès a la xarxa per ser afegit a la cadena de bloc. Si no aconsegueix entrar a la cadena, el seu estat canviarà a &quot;no acceptat&quot; i no es podrà gastar. Això pot succeir de tant en tant si un altre node genera un bloc a pocs segons del seu.</translation>
+        <translation>Les monedes generades han de madurar 510 blocs abans per a poder estar disponibles. En generar aquest bloc, que va ser transmès a la xarxa per ser afegit a la cadena de bloc. Si no aconsegueix entrar a la cadena, el seu estat canviarà a &quot;no acceptat&quot; i no es podrà gastar. Això pot succeir de tant en tant si un altre node genera un bloc a pocs segons del seu.</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Debug information</source>
-        <translation>Informació de debug</translation>
+        <translation>Informació de depuració</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2382,7 +2372,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+42"/>
         <source>Received with</source>
-        <translation>Rebut amb</translation>
+        <translation>Rebut desde</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2476,7 +2466,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+11"/>
         <source>Received with</source>
-        <translation>Rebut amb</translation>
+        <translation>Rebut desde</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2727,7 +2717,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+109"/>
         <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Error: La transacció ha sigut rebutjada. Això pot passar si algunes de les monedes a la cartera ja s&apos;han gastat, per exemple, si vostè utilitza una còpia del wallet.dat i les monedes han estat gastades a la cópia pero no s&apos;han marcat com a gastades aqui.</translation>
+        <translation>Error: La transacció ha sigut rebutjada. Això pot passar si algunes de les monedes al moneder ja s&apos;han gastat, per exemple, si vostè utilitza una còpia del wallet.dat i les monedes han estat gastades a la cópia pero no s&apos;han marcat com a gastades aqui.</translation>
     </message>
     <message>
         <location line="-5"/>
@@ -2752,7 +2742,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="-5"/>
         <source>Error: Wallet locked, unable to create transaction  </source>
-        <translation>Error: Cartera bloquejada, no es pot de crear la transacció</translation>
+        <translation>Error: Moneder bloquejat, no es pot de crear la transacció</translation>
     </message>
     <message>
         <location line="-8"/>
@@ -2902,7 +2892,7 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+41"/>
         <source>Send trace/debug info to console instead of debug.log file</source>
-        <translation>Enviar informació de traça/debug a la consola en comptes del arxiu debug.log</translation>
+        <translation>Enviar informació de traça/depuració a la consola en comptes del arxiu debug.log</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3130,7 +3120,7 @@ Executar una ordre quan es rep un avís rellevant (%s en cmd es substitueix per 
     <message>
         <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
-        <translation>La cartera %s resideix fora del directori de dades %s.</translation>
+        <translation>El moneder %s resideix fora del directori de dades %s.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3175,12 +3165,12 @@ Executar una ordre quan es rep un avís rellevant (%s en cmd es substitueix per 
     <message>
         <location line="+4"/>
         <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation>Error en carregar wallet.dat: La cartera requereix la versió més recent de BlackCoin</translation>
+        <translation>Error en carregar wallet.dat: El moneder requereix la versió més recent de BlackCoin</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation>La cartera necessita ser reescrita: reiniciar BlackCoin per completar</translation>
+        <translation>El moneder necessita ser reescrita: reiniciar BlackCoin per completar</translation>
     </message>
     <message>
         <location line="+1"/>

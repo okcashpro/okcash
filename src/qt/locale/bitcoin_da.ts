@@ -311,19 +311,19 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>Underskriv besked...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Synkroniserer med netværk...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
-        <translation>Oversigt</translation>
+        <translation>&amp;Oversigt</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -333,7 +333,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     <message>
         <location line="+17"/>
         <source>&amp;Transactions</source>
-        <translation>Transaktioner</translation>
+        <translation>&amp;Transaktioner</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -343,7 +343,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     <message>
         <location line="+5"/>
         <source>&amp;Address Book</source>
-        <translation>&amp;Adresse Bog</translation>
+        <translation>&amp;Adressebog</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -376,7 +376,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation>Afslut program</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation>Vis oplysninger om BlackCoin</translation>
     </message>
@@ -393,7 +393,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     <message>
         <location line="+2"/>
         <source>&amp;Options...</source>
-        <translation>Indstillinger...</translation>
+        <translation>&amp;Indstillinger...</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -411,27 +411,27 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation>Skift adgangskode...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n blok resterer</numerusform><numerusform>~%n blokke resterende</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation>Downloadet% 1 af% 2 blokke af transaktions historie (% 3% færdig).</translation>
+        <translation>Overført %1 af %2 blokke af transaktions historie (%3% færdig).</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
-        <translation>&amp;Eksporter ...</translation>
+        <translation>&amp;Eksporter...</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Send mønter til en BlackCoin adresse</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Ændre indstillingsmuligheder for BlackCoin</translation>
     </message>
@@ -471,7 +471,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation>Verificér besked...</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -481,7 +481,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation>Tegnebog</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;Om BlackCoin</translation>
     </message>
@@ -506,7 +506,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation>Lås tegnebog</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>Fil</translation>
     </message>
@@ -521,7 +521,7 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation>Hjælp</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Faneværktøjslinje</translation>
     </message>
@@ -540,10 +540,10 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation>BlackCoin Klient</translation>
+        <translation>BlackCoin klient</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>%n aktiv forbindelse til BlackCoin netværk</numerusform><numerusform>%n aktive forbindelser til BlackCoin netværk</numerusform></translation>
     </message>
@@ -583,22 +583,12 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
         <translation><numerusform>%n sekund siden</numerusform><numerusform>%n sekunder siden</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation>Om BlackCoin kort</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation>Vis oplysninger om BlackCoin kort</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>Lås tegnebog op</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minut siden</numerusform><numerusform>%n minutter siden</numerusform></translation>
     </message>
@@ -690,7 +680,7 @@ Adresse: %4
     <message>
         <location line="+0"/>
         <source>Wallet Data (*.dat)</source>
-        <translation>Wallet Data (*.dat)</translation>
+        <translation>Tegnebogsdata (*.dat)</translation>
     </message>
     <message>
         <location line="+3"/>

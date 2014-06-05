@@ -9,7 +9,7 @@
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation>黑币客户端 版本</translation>
+        <translation>&lt;b&gt;黑币客户端&lt;/b&gt; 版本</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -311,17 +311,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>消息签名(&amp;M)...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>正在与网络同步...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>概况(&amp;O)</translation>
     </message>
@@ -363,7 +363,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="-7"/>
         <source>&amp;Send coins</source>
-        <translation>发送货币(&amp;S)</translation>
+        <translation>发送黑币(&amp;S)</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -376,7 +376,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>退出程序</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation>显示关于黑币的信息</translation>
     </message>
@@ -411,7 +411,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>更改密码(&amp;C)...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n 个区块未完成</numerusform></translation>
     </message>
@@ -421,17 +421,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>交易记录已下载%3% (%1 / %2 个区块)</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>导出(&amp;E)</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>向指定的地址发送黑币</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>更改设置选项</translation>
     </message>
@@ -471,7 +471,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>验证消息(&amp;V)...</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>黑币</translation>
     </message>
@@ -481,7 +481,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>钱包</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>关于黑币(&amp;A)</translation>
     </message>
@@ -506,7 +506,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>锁定钱包</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
@@ -521,7 +521,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>分页工具栏</translation>
     </message>
@@ -543,7 +543,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>黑币客户端</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>与黑币网络建立了 %n 个连接</numerusform></translation>
     </message>
@@ -583,22 +583,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation><numerusform>%n 秒前</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation>关于黑币卡</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation>显示关于黑币卡的信息</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>解锁钱包(&amp;U)</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n 分钟前</numerusform></translation>
     </message>

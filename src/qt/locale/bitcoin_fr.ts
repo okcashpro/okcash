@@ -311,17 +311,17 @@ This product includes software developed by the OpenSSL Project for use in the O
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>Signer le &amp;message...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Synchronisation avec le réseau en cours…</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Vue d&apos;ensemble</translation>
     </message>
@@ -376,7 +376,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Quitter l’application</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation>Afficher des informations au sujet de BlackCoin</translation>
     </message>
@@ -411,7 +411,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Changer la phrase de passe...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n blocks restants</numerusform><numerusform>~%n blocs restants</numerusform></translation>
     </message>
@@ -421,17 +421,17 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Téléchargement des blocks de l&apos;historique des transactions : 1% sur 2% (%3% effectués).</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>&amp;Exporter...</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>Envoyer des monnaies vers une adresse BlackCoin</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>Modification des options de configuration de BlackCoin</translation>
     </message>
@@ -471,7 +471,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Vérifier un message...</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>BlackCoin</translation>
     </message>
@@ -481,7 +481,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Portefeuille</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>&amp;Au sujet de BlackCoin</translation>
     </message>
@@ -506,7 +506,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Verrouiller le portefeuille</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
@@ -521,7 +521,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Barre d&apos;onglets</translation>
     </message>
@@ -543,7 +543,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>Client BlackCoin</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>%n connexion active au réseau BlackCoin</numerusform><numerusform>%n connexions actives au réseau BlackCoin</numerusform></translation>
     </message>
@@ -583,22 +583,12 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation><numerusform>il y a %n seconde</numerusform><numerusform>il y a %n secondes</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation>Au sujet de la carte BlackCoin</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation>Informations sur la carte BlackCoin</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
-        <translation>&amp;Déverrouiller le portefeuille</translation>
+        <translation>&amp;Déverrouiller le portefeuille...</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>il y a %n minute</numerusform><numerusform>il y a %n minutes</numerusform></translation>
     </message>
@@ -730,7 +720,7 @@ Adresse : %4
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
         <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation>Une erreur fatale a été rencontrée. L&apos;application BlackCoin ne peut plus être s&apos;exécuter de façon correcte et doit se terminer.</translation>
+        <translation>Une erreur fatale a été rencontrée. L&apos;application BlackCoin ne peut plus être s&apos;exécuter de façon correcte et va se terminer.</translation>
     </message>
 </context>
 <context>
@@ -776,7 +766,7 @@ Adresse : %4
     <message>
         <location line="+35"/>
         <source>Low Output:</source>
-        <translation>Sortie faible</translation>
+        <translation>Sortie faible:</translation>
     </message>
     <message>
         <location filename="../coincontroldialog.cpp" line="+551"/>
@@ -1108,7 +1098,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+1"/>
         <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
-        <translation>Définir la langue, par exemple « fr_FR » (par défaut : la langue du système)</translation>
+        <translation>Définir la langue, par exemple « fr_FR » (par défaut: la langue du système)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1118,7 +1108,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+1"/>
         <source>Show splash screen on startup (default: 1)</source>
-        <translation>Affichage de l&apos;écran de démarrage (défaut: 1)</translation>
+        <translation>Affichage de l&apos;écran de démarrage (par défaut: 1)</translation>
     </message>
 </context>
 <context>
@@ -1166,7 +1156,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+7"/>
         <source>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</source>
-        <translation>Détacher la base des block et adresses à la fermeture. Vous pourrez les utiliser dans un autre dossier mais cela ralenti la fermeture. Le portefeuille est lui toujours détaché.</translation>
+        <translation>Détacher la base des blocs et adresses à la fermeture. Vous pourrez les utiliser dans un autre dossier mais cela ralentit la fermeture. Le portefeuille est lui toujours détaché.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1181,7 +1171,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+6"/>
         <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Ouverture automatique du port client de BlackCoin sur le routeur. Ceci ne fonctionne que dans le cas où le support UPnP sur votre routeur existe et est actif.</translation>
+        <translation>Ouvrir automatiquemwnr le port client de BlackCoin sur le routeur. Ceci ne fonctionne que dans le cas où le support UPnP sur votre routeur existe et est actif.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1911,7 +1901,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+18"/>
         <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Adresse destinataire du paiement (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Adresse destinataire du paiement (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1941,7 +1931,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
 </context>
 <context>
@@ -1965,7 +1955,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+18"/>
         <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2034,7 +2024,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+40"/>
         <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation>Vérifier le message afin de vous assurer qu&apos;il provient de l&apos;adresse BlackCoin spécifiée.</translation>
+        <translation>Vérifiez le message afin de vous assurer qu&apos;il provient de l&apos;adresse BlackCoin spécifiée.</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2045,12 +2035,12 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
         <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
     </message>
     <message>
         <location line="-2"/>
         <source>Click &quot;Sign Message&quot; to generate signature</source>
-        <translation>Cliquer sur « Signer le message » pour générer la signature</translation>
+        <translation>Cliquez sur « Signer le message » pour générer la signature</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2555,7 +2545,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+1"/>
         <source>Comma separated file (*.csv)</source>
-        <translation>Valeurs séparées par des virgules (*.csv)</translation>
+        <translation>Fichier de valeurs séparées par des virgules (*.csv)</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2676,7 +2666,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+2"/>
         <source>Set database cache size in megabytes (default: 25)</source>
-        <translation>Définir la taille du cache de base de données en mégaoctets (par défaut : 25)</translation>
+        <translation>Définir la taille du tampon de base de données en mégaoctets (par défaut : 25)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3023,7 +3013,7 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+51"/>
         <source>Find peers using internet relay chat (default: 0)</source>
-        <translation>Find peers using internet relay chat (default: 1) {0)?}</translation>
+        <translation>Trouvez des pairs utilisant DNS lookup (par défault: 1) {0)?}</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -3033,7 +3023,7 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+15"/>
         <source>When creating transactions, ignore inputs with value less than this (default: 0.01)</source>
-        <translation>Lors de la création de transactions, ignore les entrées dont la valeur sont inférieures (défaut: 0.01)</translation>
+        <translation>Lors de la création de transactions, ignorer les entrées dont la valeur sont inférieures (défaut: 0.01)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -3053,12 +3043,12 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+3"/>
         <source>Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)</source>
-        <translation>Exécuter la commande lorsqu&apos;une transaction de portefeuille change (%s dans la commande est remplacée par TxID)</translation>
+        <translation>Exécuter la commande lorsqu&apos;une transaction du portefeuille change (%s dans la commande est remplacée par TxID)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Require a confirmations for change (default: 0)</source>
-        <translation>Nécessite a confirmations pour modification (défaut: 0)</translation>
+        <translation>Nécessite a confirmations pour modification (par défaut: 0)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3088,7 +3078,7 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+2"/>
         <source>How many blocks to check at startup (default: 2500, 0 = all)</source>
-        <translation>Nombre de blocs à vérifier loes du démarrage (défaut: 2500, 0 = tous)</translation>
+        <translation>Nombre de blocs à vérifier lors du démarrage (par défaut: 2500, 0 = tous)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3118,7 +3108,7 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+1"/>
         <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
-        <translation>Algorithmes de  chiffrements acceptés (défaut: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
+        <translation>Algorithmes de  chiffrements acceptés (par défaut: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
     </message>
     <message>
         <location line="+53"/>
@@ -3138,12 +3128,12 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     <message>
         <location line="+95"/>
         <source>Wallet %s resides outside data directory %s.</source>
-        <translation>Le portefeuille %s réside en dehors répertoire de données %s</translation>
+        <translation>Le portefeuille %s est situé en dehors du répertoire de données %s</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation>Echec lors de la tentative de verrouillage des données du répertoire %s. L&apos;application BlackCoin est probablement déjà en cours d&apos;exécution</translation>
+        <translation>Echec lors de la tentative de verrou des données du répertoire %s. L&apos;application BlackCoin est probablement déjà en cours d&apos;exécution</translation>
     </message>
     <message>
         <location line="-98"/>

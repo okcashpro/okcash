@@ -4,12 +4,12 @@
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
         <source>About BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>Acerca de Blackcoin</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation type="unfinished"/>
+        <translation>Versión &lt;b&gt;BlackCoin&lt;/b&gt; .</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -39,7 +39,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location filename="../forms/addressbookpage.ui" line="+14"/>
         <source>Address Book</source>
-        <translation type="unfinished"/>
+        <translation>Libreta de direccións</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -59,12 +59,12 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="-11"/>
         <source>&amp;New Address</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nova dirección.</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation type="unfinished"/>
+        <translation>Estas son as túas dIreccións de Blackcoin para recibir os pagos. Pode que quieras asignarlle unha a cada remitente e así reconocer quen te está a pagar.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -74,17 +74,17 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+11"/>
         <source>Show &amp;QR Code</source>
-        <translation type="unfinished"/>
+        <translation>Amosar &amp;QR Code</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>Firma a mensaxe para probar que tes unha dirección Blackcoin</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Sign &amp;Message</source>
-        <translation type="unfinished"/>
+        <translation>Firmar &amp;Mensaxe</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -94,12 +94,12 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="-14"/>
         <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>Verifica a mensaxe para asegurar que foi asinada por unha concreta dirección de Blackcoin</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Verify Message</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Verificar Mensaxe.</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -119,7 +119,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+250"/>
         <source>Export Address Book Data</source>
-        <translation type="unfinished"/>
+        <translation>Exportar datos da libreta de direccións.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -129,12 +129,12 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+13"/>
         <source>Error exporting</source>
-        <translation type="unfinished"/>
+        <translation>Error exportando</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not write to file %1.</source>
-        <translation type="unfinished"/>
+        <translation>Non se puido escribir a arquivo %1</translation>
     </message>
 </context>
 <context>
@@ -185,7 +185,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+3"/>
         <source>For staking only</source>
-        <translation type="unfinished"/>
+        <translation>Para &quot;staking&quot; só</translation>
     </message>
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+35"/>
@@ -235,7 +235,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+1"/>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation type="unfinished"/>
+        <translation>Coidado: Se enctriptas a tua carteira e perdes o contrasinal, &lt;b&gt;PERDERÁS TODAS AS TÚAS MOEDAS&lt;/b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -262,7 +262,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="-58"/>
         <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin pecharase agora para rematar o proceso de encriptación. Recorda que encriptar a túa carteira non te protexe na totalidade do roubo das tuas moedas por infeccións de malware no teu ordenador.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -309,17 +309,17 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>&amp;Asinar mensaxe...</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>Sincronizando coa rede...</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>&amp;Vista xeral</translation>
     </message>
@@ -341,27 +341,27 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+5"/>
         <source>&amp;Address Book</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Libreta de Direccións</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Edit the list of stored addresses and labels</source>
-        <translation type="unfinished"/>
+        <translation>Edita a lista de direccións e etiquetas almaceadas</translation>
     </message>
     <message>
         <location line="-13"/>
         <source>&amp;Receive coins</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Recibe moedas</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show the list of addresses for receiving payments</source>
-        <translation type="unfinished"/>
+        <translation>Amosa a lista de dirección para recibir os pagos</translation>
     </message>
     <message>
         <location line="-7"/>
         <source>&amp;Send coins</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Enviar moedas</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -374,9 +374,9 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
         <translation>Saír da aplicación</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>Amosa información sobre BlackCoin</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -409,39 +409,39 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
         <translation>&amp;Cambiar contrasinal...</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>~%n bloque restante</numerusform><numerusform>~%n bloques restantes</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation type="unfinished"/>
+        <translation>Descargado %1 de %2 bloques de historial de transaccións (%3% feito).</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Exportar...</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
-        <translation type="unfinished"/>
+        <translation>Enviar moedas a unha dirección Blackcoin</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>Modificar opcións de configuración para BlackCoin</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Export the data in the current tab to a file</source>
-        <translation type="unfinished"/>
+        <translation>Exportar datos da pestana actual a un arquivo</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Encrypt or decrypt wallet</source>
-        <translation type="unfinished"/>
+        <translation>Encriptar ou desencriptar carteira</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -469,9 +469,9 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
         <translation>&amp;Verificar mensaxe...</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -479,9 +479,9 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
         <translation>Moedeiro</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Sobre BlackCoin</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -491,20 +491,20 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+9"/>
         <source>Unlock wallet</source>
-        <translation type="unfinished"/>
+        <translation>Desbloquear carteira</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Lock Wallet</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Bloquear Carteira</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Lock wallet</source>
-        <translation type="unfinished"/>
+        <translation>Bloquear carteira</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>&amp;Arquivo</translation>
     </message>
@@ -519,7 +519,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
         <translation>A&amp;xuda</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>Barra de ferramentas</translation>
     </message>
@@ -538,77 +538,67 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
         <location line="+0"/>
         <location line="+60"/>
         <source>BlackCoin client</source>
-        <translation type="unfinished"/>
+        <translation>Cliente BlackCoin</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n conexión activa á red de BlackCoin</numerusform><numerusform>%n conexións activas á red de BlackCoin</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Downloaded %1 blocks of transaction history.</source>
-        <translation type="unfinished"/>
+        <translation>Descargados %1 bloques do historial de transaccións.</translation>
     </message>
     <message>
         <location line="+413"/>
         <source>Staking.&lt;br&gt;Your weight is %1&lt;br&gt;Network weight is %2&lt;br&gt;Expected time to earn reward is %3</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Staking&quot;.&lt;br&gt;O teu peso na rede é %1&lt;br&gt;O peso da rede é %2&lt;br&gt;Tempo esperado para gañar a recompensa %3</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Not staking because wallet is locked</source>
-        <translation type="unfinished"/>
+        <translation>Non &quot;staking&quot; porque a carteira está bloqueada</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because wallet is offline</source>
-        <translation type="unfinished"/>
+        <translation>Non &quot;staking&quot; porque a carteira está sen conexión</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because wallet is syncing</source>
-        <translation type="unfinished"/>
+        <translation>Non &quot;staking&quot; porque a carteira está a sincronizar.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Not staking because you don&apos;t have mature coins</source>
-        <translation type="unfinished"/>
+        <translation>Non &quot;staking&quot; porque non tes moedas maduras</translation>
     </message>
     <message numerus="yes">
         <location line="-403"/>
         <source>%n second(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fai %n segundo</numerusform><numerusform>Fai %n segundos</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Desbloquear Carteira...</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fai %n minuto</numerusform><numerusform>Fai %n minutos</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n hour(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fai %n hora</numerusform><numerusform>Fai %n horas</numerusform></translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fai %n día</numerusform><numerusform>Fai %n días</numerusform></translation>
     </message>
     <message>
         <location line="+6"/>
@@ -623,7 +613,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+10"/>
         <source>Last received block was generated %1.</source>
-        <translation type="unfinished"/>
+        <translation>Último bloque recibido foi generado %1.</translation>
     </message>
     <message>
         <location line="+59"/>
@@ -633,7 +623,7 @@ Este produto inclúe software desenvolvido polo OpenSSL Project para o uso no Op
     <message>
         <location line="+5"/>
         <source>Confirm transaction fee</source>
-        <translation type="unfinished"/>
+        <translation>Confirmar cuota da transacción</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -723,7 +713,7 @@ Dirección: %4
     <message>
         <location line="+18"/>
         <source>Not staking</source>
-        <translation type="unfinished"/>
+        <translation>Non &quot;staking&quot;</translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
@@ -1067,7 +1057,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
         <source>BlackCoin-Qt</source>
-        <translation type="unfinished"/>
+        <translation>BlackCoin-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1087,7 +1077,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+4"/>
         <source>UI options</source>
-        <translation type="unfinished"/>
+        <translation>Opcións UI</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1097,7 +1087,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+1"/>
         <source>Start minimized</source>
-        <translation type="unfinished"/>
+        <translation>Comezar minimizado</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1135,7 +1125,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+15"/>
         <source>Reserve</source>
-        <translation type="unfinished"/>
+        <translation>Reserva</translation>
     </message>
     <message>
         <location line="+31"/>

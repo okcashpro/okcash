@@ -311,17 +311,17 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+282"/>
+        <location filename="../bitcoingui.cpp" line="+280"/>
         <source>Sign &amp;message...</source>
         <translation>メッセージの署名... (&amp;m)</translation>
     </message>
     <message>
-        <location line="+251"/>
+        <location line="+242"/>
         <source>Synchronizing with network...</source>
         <translation>ネットワークに同期中……</translation>
     </message>
     <message>
-        <location line="-319"/>
+        <location line="-308"/>
         <source>&amp;Overview</source>
         <translation>概要(&amp;O)</translation>
     </message>
@@ -376,7 +376,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>アプリケーションを終了</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Show information about BlackCoin</source>
         <translation>ブラックコインの情報を表示</translation>
     </message>
@@ -411,7 +411,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>パスフレーズの変更... (&amp;C)</translation>
     </message>
     <message numerus="yes">
-        <location line="+259"/>
+        <location line="+250"/>
         <source>~%n block(s) remaining</source>
         <translation><numerusform>~%n ブロックが残っている</numerusform></translation>
     </message>
@@ -421,17 +421,17 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>処理の履歴の%1 / %2 ブロックをダウンロードしました。(%3% 完成）</translation>
     </message>
     <message>
-        <location line="-256"/>
+        <location line="-247"/>
         <source>&amp;Export...</source>
         <translation>(&amp;E)書き出す...</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-62"/>
         <source>Send coins to a BlackCoin address</source>
         <translation>ブラックコインアドレスへコインを送る</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+45"/>
         <source>Modify configuration options for BlackCoin</source>
         <translation>ブラックコインの設定を変化する</translation>
     </message>
@@ -471,7 +471,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>メッセージの検証... (&amp;V)</translation>
     </message>
     <message>
-        <location line="-202"/>
+        <location line="-200"/>
         <source>BlackCoin</source>
         <translation>ブラックコイン</translation>
     </message>
@@ -481,7 +481,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ウォレット</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+178"/>
         <source>&amp;About BlackCoin</source>
         <translation>ブラックコインについて</translation>
     </message>
@@ -506,7 +506,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ウォレットをロックする</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+34"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
@@ -521,7 +521,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Tabs toolbar</source>
         <translation>タブツールバー</translation>
     </message>
@@ -543,7 +543,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation>ブラックコインクライアントソフトウェア</translation>
     </message>
     <message numerus="yes">
-        <location line="+75"/>
+        <location line="+70"/>
         <source>%n active connection(s) to BlackCoin network</source>
         <translation><numerusform>ブラックコインネットワークへの%n アクティブな接続</numerusform></translation>
     </message>
@@ -583,22 +583,12 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
         <translation><numerusform>%n 秒前</numerusform></translation>
     </message>
     <message>
-        <location line="-312"/>
-        <source>About BlackCoin card</source>
-        <translation>ブラックコインカードについて</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Show information about BlackCoin card</source>
-        <translation>バラックコインカードの情報を表示する</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location line="-284"/>
         <source>&amp;Unlock Wallet...</source>
         <translation>&amp;ウォレットをアンロック...</translation>
     </message>
     <message numerus="yes">
-        <location line="+297"/>
+        <location line="+288"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n 分前</numerusform></translation>
     </message>
