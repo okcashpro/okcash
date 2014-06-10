@@ -118,6 +118,22 @@ bool CWallet::AddCScript(const CScript& redeemScript)
 // provides no real security
 bool fWalletUnlockStakingOnly = false;
 
+bool CWallet::LoadCScript(const CScript& redeemScript)
+{
+    /* A sanity check was added in pull #3843 to avoid adding redeemScripts
+     * that never can be redeemed. However, old wallets may still contain
+     * these. Do not add them to the wallet and warn. */
+    if (redeemScript.size() > MAX_SCRIPT_ELEMENT_SIZE)
+    {
+        std::string strAddr = CBitcoinAddress(redeemScript.GetID()).ToString();
+        printf("%s: Warning: This wallet contains a redeemScript of size %"PRIszu" which exceeds maximum size %i thus can never be redeemed. Do not use address %s.\n",
+            __func__, redeemScript.size(), MAX_SCRIPT_ELEMENT_SIZE, strAddr.c_str());
+        return true;
+    }
+
+    return CCryptoKeyStore::AddCScript(redeemScript);
+}
+
 bool CWallet::Unlock(const SecureString& strWalletPassphrase)
 {
     if (!IsLocked())
