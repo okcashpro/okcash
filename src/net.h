@@ -111,7 +111,6 @@ enum threadId
     THREAD_MAX
 };
 
-extern bool fClient;
 extern bool fDiscover;
 extern bool fUseUPnP;
 extern uint64_t nLocalServices;

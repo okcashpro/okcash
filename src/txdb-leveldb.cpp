@@ -198,21 +198,17 @@ bool CTxDB::ScanBatch(const CDataStream &key, string *value, bool *deleted) cons
 
 bool CTxDB::ReadTxIndex(uint256 hash, CTxIndex& txindex)
 {
-    assert(!fClient);
     txindex.SetNull();
     return Read(make_pair(string("tx"), hash), txindex);
 }
 
 bool CTxDB::UpdateTxIndex(uint256 hash, const CTxIndex& txindex)
 {
-    assert(!fClient);
     return Write(make_pair(string("tx"), hash), txindex);
 }
 
 bool CTxDB::AddTxIndex(const CTransaction& tx, const CDiskTxPos& pos, int nHeight)
 {
-    assert(!fClient);
-
     // Add to tx index
     uint256 hash = tx.GetHash();
     CTxIndex txindex(pos, tx.vout.size());
@@ -221,7 +217,6 @@ bool CTxDB::AddTxIndex(const CTransaction& tx, const CDiskTxPos& pos, int nHeigh
 
 bool CTxDB::EraseTxIndex(const CTransaction& tx)
 {
-    assert(!fClient);
     uint256 hash = tx.GetHash();
 
     return Erase(make_pair(string("tx"), hash));
@@ -229,13 +224,11 @@ bool CTxDB::EraseTxIndex(const CTransaction& tx)
 
 bool CTxDB::ContainsTx(uint256 hash)
 {
-    assert(!fClient);
     return Exists(make_pair(string("tx"), hash));
 }
 
 bool CTxDB::ReadDiskTx(uint256 hash, CTransaction& tx, CTxIndex& txindex)
 {
-    assert(!fClient);
     tx.SetNull();
     if (!ReadTxIndex(hash, txindex))
         return false;
