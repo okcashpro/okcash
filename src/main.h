@@ -685,7 +685,7 @@ public:
                        std::map<uint256, CTxIndex>& mapTestPool, const CDiskTxPos& posThisTx,
                        const CBlockIndex* pindexBlock, bool fBlock, bool fMiner);
     bool CheckTransaction() const;
-    bool AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs=true, bool* pfMissingInputs=NULL);
+    bool AcceptToMemoryPool(CTxDB& txdb, bool* pfMissingInputs=NULL);
     bool GetCoinAge(CTxDB& txdb, uint64_t& nCoinAge) const;  // ppcoin: get transaction coin age
 
 protected:
@@ -748,7 +748,7 @@ public:
     int GetDepthInMainChain() const { CBlockIndex *pindexRet; return GetDepthInMainChain(pindexRet); }
     bool IsInMainChain() const { CBlockIndex *pindexRet; return GetDepthInMainChainINTERNAL(pindexRet) > 0; }
     int GetBlocksToMaturity() const;
-    bool AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs=true);
+    bool AcceptToMemoryPool(CTxDB& txdb);
     bool AcceptToMemoryPool();
 };
 
@@ -1565,7 +1565,7 @@ public:
     std::map<COutPoint, CInPoint> mapNextTx;
 
     bool accept(CTxDB& txdb, CTransaction &tx,
-                bool fCheckInputs, bool* pfMissingInputs);
+                bool* pfMissingInputs);
     bool addUnchecked(const uint256& hash, CTransaction &tx);
     bool remove(const CTransaction &tx, bool fRecursive = false);
     bool removeConflicts(const CTransaction &tx);
