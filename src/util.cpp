@@ -55,11 +55,6 @@ namespace boost {
 # include <sys/prctl.h>
 #endif
 
-#ifndef WIN32
-#include <execinfo.h>
-#endif
-
-
 using namespace std;
 
 map<string, string> mapArgs;
@@ -198,7 +193,6 @@ uint256 GetRandHash()
 
 
 
-static FILE* fileout = NULL;
 
 inline int OutputDebugStringF(const char* pszFormat, ...)
 {
@@ -214,6 +208,7 @@ inline int OutputDebugStringF(const char* pszFormat, ...)
     else if (!fPrintToDebugger)
     {
         // print to debug.log
+        static FILE* fileout = NULL;
 
         if (!fileout)
         {
@@ -977,19 +972,6 @@ void PrintException(std::exception* pex, const char* pszThread)
     fprintf(stderr, "\n\n************************\n%s\n", message.c_str());
     strMiscWarning = message;
     throw;
-}
-
-void LogStackTrace() {
-    printf("\n\n******* exception encountered *******\n");
-    if (fileout)
-    {
-#ifndef WIN32
-        void* pszBuffer[32];
-        size_t size;
-        size = backtrace(pszBuffer, 32);
-        backtrace_symbols_fd(pszBuffer, size, fileno(fileout));
-#endif
-    }
 }
 
 void PrintExceptionContinue(std::exception* pex, const char* pszThread)
