@@ -69,10 +69,7 @@ AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget *parent) :
 
 AskPassphraseDialog::~AskPassphraseDialog()
 {
-    // Attempt to overwrite text so that they do not linger around in memory
-    ui->passEdit1->setText(QString(" ").repeated(ui->passEdit1->text().size()));
-    ui->passEdit2->setText(QString(" ").repeated(ui->passEdit2->text().size()));
-    ui->passEdit3->setText(QString(" ").repeated(ui->passEdit3->text().size()));
+    secureClearPassFields();
     delete ui;
 }
 
@@ -94,6 +91,8 @@ void AskPassphraseDialog::accept()
     oldpass.assign(ui->passEdit1->text().toStdString().c_str());
     newpass1.assign(ui->passEdit2->text().toStdString().c_str());
     newpass2.assign(ui->passEdit3->text().toStdString().c_str());
+
+    secureClearPassFields();
 
     switch(mode)
     {
@@ -254,4 +253,16 @@ bool AskPassphraseDialog::eventFilter(QObject *object, QEvent *event)
         }
     }
     return QDialog::eventFilter(object, event);
+}
+
+void AskPassphraseDialog::secureClearPassFields()
+{
+    // Attempt to overwrite text so that they do not linger around in memory
+    ui->passEdit1->setText(QString(" ").repeated(ui->passEdit1->text().size()));
+    ui->passEdit2->setText(QString(" ").repeated(ui->passEdit2->text().size()));
+    ui->passEdit3->setText(QString(" ").repeated(ui->passEdit3->text().size()));
+
+    ui->passEdit1->clear();
+    ui->passEdit2->clear();
+    ui->passEdit3->clear();
 }

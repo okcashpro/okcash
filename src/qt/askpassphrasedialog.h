@@ -41,6 +41,7 @@ private slots:
     void textChanged();
     bool event(QEvent *event);
     bool eventFilter(QObject *, QEvent *event);
+    void secureClearPassFields();
 };
 
 #endif // ASKPASSPHRASEDIALOG_H
