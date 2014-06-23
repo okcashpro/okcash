@@ -38,11 +38,9 @@ Windows build instructions:
 
 - Compile openssl, boost and dbcxx.
 
-- Copy the contents of the folder "deps" to "X:\\QtSDK\\mingw", replace X:\\ with the location where you installed the Qt SDK. Make sure that the contents of "deps\\include" end up in the current "include" directory.
-
 - Open the .pro file in QT creator and build as normal (ctrl-B)
 
-.. _`QT Windows SDK`: http://qt.nokia.com/downloads/sdk-windows-cpp
+.. _`QT Windows SDK`: http://qt-project.org/downloads
 
 
 Mac OS X
@@ -61,7 +59,7 @@ Mac OS X
 
 - Open the .pro file in Qt Creator and build as normal (cmd-B)
 
-.. _`Qt Mac OS X SDK`: http://qt.nokia.com/downloads/sdk-mac-os-cpp
+.. _`Qt Mac OS X SDK`: http://qt-project.org/downloads
 .. _`MacPorts`: http://www.macports.org/install.php
 
 
