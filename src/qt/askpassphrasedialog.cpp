@@ -27,6 +27,8 @@ AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget *parent) :
     ui->passEdit2->installEventFilter(this);
     ui->passEdit3->installEventFilter(this);
 
+    ui->stakingCheckBox->setChecked(fWalletUnlockStakingOnly);
+
     switch(mode)
     {
         case Encrypt: // Ask passphrase x2
