@@ -316,6 +316,10 @@ bool IsStandardTx(const CTransaction& tx)
     if (!IsFinalTx(tx, nBestHeight + 1)) {
         return false;
     }
+    // nTime has different purpose from nLockTime but can be used in similar attacks
+    if (tx.nTime > FutureDrift(GetAdjustedTime())) {
+        return false;
+    }
 
     // Extremely large transactions with lots of inputs can cost the network
     // almost as much to process as they cost the sender in fees, because
