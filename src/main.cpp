@@ -574,7 +574,7 @@ int64_t CTransaction::GetMinFee(unsigned int nBlockSize, enum GetMinFee_mode mod
 }
 
 
-bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
+bool AcceptToMemoryPool(CTxMemPool& pool, CTransaction &tx,
                         bool* pfMissingInputs)
 {
     AssertLockHeld(cs_main);
@@ -582,37 +582,33 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
         *pfMissingInputs = false;
 
     if (!tx.CheckTransaction())
-        return error("CTxMemPool::accept() : CheckTransaction failed");
+        return error("AcceptToMemoryPool : CheckTransaction failed");
 
     // Coinbase is only valid in a block, not as a loose transaction
     if (tx.IsCoinBase())
-        return tx.DoS(100, error("CTxMemPool::accept() : coinbase as individual tx"));
+        return tx.DoS(100, error("AcceptToMemoryPool : coinbase as individual tx"));
 
     // ppcoin: coinstake is also only valid in a block, not as a loose transaction
     if (tx.IsCoinStake())
-        return tx.DoS(100, error("CTxMemPool::accept() : coinstake as individual tx"));
+        return tx.DoS(100, error("AcceptToMemoryPool : coinstake as individual tx"));
 
     // Rather not work on nonstandard transactions (unless -testnet)
     if (!fTestNet && !IsStandardTx(tx))
-        return error("CTxMemPool::accept() : nonstandard transaction type");
+        return error("AcceptToMemoryPool : nonstandard transaction type");
 
-    // Do we already have it?
+    // is it already in the memory pool?
     uint256 hash = tx.GetHash();
-    {
-        LOCK(cs);
-        if (mapTx.count(hash))
-            return false;
-    }
-
-    if (txdb.ContainsTx(hash))
+    if (pool.exists(hash))
         return false;
 
     // Check for conflicts with in-memory transactions
     CTransaction* ptxOld = NULL;
+    {
+    LOCK(pool.cs); // protect pool.mapNextTx
     for (unsigned int i = 0; i < tx.vin.size(); i++)
     {
         COutPoint outpoint = tx.vin[i].prevout;
-        if (mapNextTx.count(outpoint))
+        if (pool.mapNextTx.count(outpoint))
         {
             // Disable replacement feature for now
             return false;
@@ -620,7 +616,7 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
             // Allow replacing with a newer version of the same transaction
             if (i != 0)
                 return false;
-            ptxOld = mapNextTx[outpoint].ptx;
+            ptxOld = pool.mapNextTx[outpoint].ptx;
             if (IsFinalTx(*ptxOld))
                 return false;
             if (!tx.IsNewerThan(*ptxOld))
@@ -628,21 +624,28 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
             for (unsigned int i = 0; i < tx.vin.size(); i++)
             {
                 COutPoint outpoint = tx.vin[i].prevout;
-                if (!mapNextTx.count(outpoint) || mapNextTx[outpoint].ptx != ptxOld)
+                if (!pool.mapNextTx.count(outpoint) || pool.mapNextTx[outpoint].ptx != ptxOld)
                     return false;
             }
             break;
         }
     }
+    }
 
     {
+        CTxDB txdb("r");
+
+        // do we already have it?
+        if (txdb.ContainsTx(hash))
+            return false;
+
         MapPrevTx mapInputs;
         map<uint256, CTxIndex> mapUnused;
         bool fInvalid = false;
         if (!tx.FetchInputs(txdb, mapUnused, false, false, mapInputs, fInvalid))
         {
             if (fInvalid)
-                return error("CTxMemPool::accept() : FetchInputs found invalid tx %s", hash.ToString().substr(0,10).c_str());
+                return error("AcceptToMemoryPool : FetchInputs found invalid tx %s", hash.ToString().substr(0,10).c_str());
             if (pfMissingInputs)
                 *pfMissingInputs = true;
             return false;
@@ -650,7 +653,7 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
 
         // Check for non-standard pay-to-script-hash in inputs
         if (!tx.AreInputsStandard(mapInputs) && !fTestNet)
-            return error("CTxMemPool::accept() : nonstandard transaction input");
+            return error("AcceptToMemoryPool : nonstandard transaction input");
 
         // Note: if you modify this code to accept non-standard transactions, then
         // you should add code here to check that the transaction does a
@@ -662,7 +665,7 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
         // Don't accept it if it can't get into a block
         int64_t txMinFee = tx.GetMinFee(1000, GMF_RELAY, nSize);
         if (nFees < txMinFee)
-            return error("CTxMemPool::accept() : not enough fees %s, %"PRId64" < %"PRId64,
+            return error("AcceptToMemoryPool : not enough fees %s, %"PRId64" < %"PRId64,
                          hash.ToString().c_str(),
                          nFees, txMinFee);
 
@@ -677,14 +680,14 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
             int64_t nNow = GetTime();
 
             {
-                LOCK(cs);
+                LOCK(pool.cs);
                 // Use an exponentially decaying ~10-minute window:
                 dFreeCount *= pow(1.0 - 1.0/600.0, (double)(nNow - nLastTime));
                 nLastTime = nNow;
                 // -limitfreerelay unit is thousand-bytes-per-minute
                 // At default rate it would take over a month to fill 1GB
                 if (dFreeCount > GetArg("-limitfreerelay", 15)*10*1000 && !IsFromMe(tx))
-                    return error("CTxMemPool::accept() : free transaction rejected by rate limiter");
+                    return error("AcceptToMemoryPool : free transaction rejected by rate limiter");
                 if (fDebug)
                     printf("Rate limit dFreeCount: %g => %g\n", dFreeCount, dFreeCount+nSize);
                 dFreeCount += nSize;
@@ -695,19 +698,19 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
         if (!tx.ConnectInputs(txdb, mapInputs, mapUnused, CDiskTxPos(1,1,1), pindexBest, false, false))
         {
-            return error("CTxMemPool::accept() : ConnectInputs failed %s", hash.ToString().substr(0,10).c_str());
+            return error("AcceptToMemoryPool : ConnectInputs failed %s", hash.ToString().substr(0,10).c_str());
         }
     }
 
     // Store transaction in memory
     {
-        LOCK(cs);
+        LOCK(pool.cs);
         if (ptxOld)
         {
-            printf("CTxMemPool::accept() : replacing tx %s with new version\n", ptxOld->GetHash().ToString().c_str());
-            remove(*ptxOld);
+            printf("AcceptToMemoryPool : replacing tx %s with new version\n", ptxOld->GetHash().ToString().c_str());
+            pool.remove(*ptxOld);
         }
-        addUnchecked(hash, tx);
+        pool.addUnchecked(hash, tx);
     }
 
     ///// are we sure this is ok when loading transactions or restoring block txes
@@ -715,21 +718,16 @@ bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx,
     if (ptxOld)
         EraseFromWallets(ptxOld->GetHash());
 
-    printf("CTxMemPool::accept() : accepted %s (poolsz %"PRIszu")\n",
+    printf("AcceptToMemoryPool : accepted %s (poolsz %"PRIszu")\n",
            hash.ToString().substr(0,10).c_str(),
-           mapTx.size());
+           pool.mapTx.size());
     return true;
-}
-
-bool CTransaction::AcceptToMemoryPool(CTxDB& txdb, bool* pfMissingInputs)
-{
-    return mempool.accept(txdb, *this, pfMissingInputs);
 }
 
 bool CTxMemPool::addUnchecked(const uint256& hash, CTransaction &tx)
 {
     // Add to memory pool without checking anything.  Don't call this directly,
-    // call CTxMemPool::accept to properly check the transaction first.
+    // call AcceptToMemoryPool to properly check the transaction first.
     {
         mapTx[hash] = tx;
         for (unsigned int i = 0; i < tx.vin.size(); i++)
@@ -844,15 +842,9 @@ int CMerkleTx::GetBlocksToMaturity() const
 }
 
 
-bool CMerkleTx::AcceptToMemoryPool(CTxDB& txdb)
-{
-    return CTransaction::AcceptToMemoryPool(txdb);
-}
-
 bool CMerkleTx::AcceptToMemoryPool()
 {
-    CTxDB txdb("r");
-    return AcceptToMemoryPool(txdb);
+    return ::AcceptToMemoryPool(mempool, *this, NULL);
 }
 
 
@@ -868,10 +860,10 @@ bool CWalletTx::AcceptWalletTransaction(CTxDB& txdb)
             {
                 uint256 hash = tx.GetHash();
                 if (!mempool.exists(hash) && !txdb.ContainsTx(hash))
-                    tx.AcceptToMemoryPool(txdb);
+                    tx.AcceptToMemoryPool();
             }
         }
-        return AcceptToMemoryPool(txdb);
+        return AcceptToMemoryPool();
     }
     return false;
 }
@@ -1697,7 +1689,7 @@ bool static Reorganize(CTxDB& txdb, CBlockIndex* pindexNew)
 
     // Resurrect memory transactions that were in the disconnected branch
     BOOST_FOREACH(CTransaction& tx, vResurrect)
-        tx.AcceptToMemoryPool(txdb);
+        AcceptToMemoryPool(mempool, tx, NULL);
 
     // Delete redundant memory transactions that are in the connected branch
     BOOST_FOREACH(CTransaction& tx, vDelete) {
@@ -3235,7 +3227,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     {
         vector<uint256> vWorkQueue;
         vector<uint256> vEraseQueue;
-        CTxDB txdb("r");
         CTransaction tx;
         vRecv >> tx;
 
@@ -3243,7 +3234,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         pfrom->AddInventoryKnown(inv);
 
         bool fMissingInputs = false;
-        if (tx.AcceptToMemoryPool(txdb, &fMissingInputs))
+        if (AcceptToMemoryPool(mempool, tx, &fMissingInputs))
         {
             SyncWithWallets(tx, NULL, true);
             RelayTransaction(tx, inv.hash);
@@ -3263,7 +3254,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                     CTransaction& orphanTx = mapOrphanTransactions[orphanTxHash];
                     bool fMissingInputs2 = false;
 
-                    if (orphanTx.AcceptToMemoryPool(txdb, &fMissingInputs2))
+                    if (AcceptToMemoryPool(mempool, orphanTx, &fMissingInputs2))
                     {
                         printf("   accepted orphan tx %s\n", orphanTxHash.ToString().substr(0,10).c_str());
                         SyncWithWallets(tx, NULL, true);
