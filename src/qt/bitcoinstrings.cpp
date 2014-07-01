@@ -61,7 +61,6 @@ QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using internet relay chat (default
 QT_TRANSLATE_NOOP("bitcoin-core", "Accept connections from outside (default: 1 if no -proxy or -connect)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Bind to given address. Use [host]:port notation for IPv6"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Find peers using DNS lookup (default: 1)"),
-QT_TRANSLATE_NOOP("bitcoin-core", "Stake your coins to support network and gain reward (default: 1)"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
 "Sync time with other nodes. Disable if time on your system is precise e.g. "
 "syncing with NTP (default: 1)"),
@@ -74,8 +73,6 @@ QT_TRANSLATE_NOOP("bitcoin-core", "Maximum per-connection receive buffer, <n>*10
 QT_TRANSLATE_NOOP("bitcoin-core", "Maximum per-connection send buffer, <n>*1000 bytes (default: 1000)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Use UPnP to map the listening port (default: 1 when listening)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Use UPnP to map the listening port (default: 0)"),
-QT_TRANSLATE_NOOP("bitcoin-core", ""
-"Detach block and address databases. Increases shutdown time (default: 0)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Fee per KB to add to transactions you send"),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
 "When creating transactions, ignore inputs with value less than this "
@@ -132,6 +129,7 @@ QT_TRANSLATE_NOOP("bitcoin-core", ""
 "Warning: -paytxfee is set very high! This is the transaction fee you will "
 "pay if you send a transaction."),
 QT_TRANSLATE_NOOP("bitcoin-core", "Invalid amount for -mininput=<amount>: '%s'"),
+QT_TRANSLATE_NOOP("bitcoin-core", "Initialization sanity check failed. BlackCoin is shutting down."),
 QT_TRANSLATE_NOOP("bitcoin-core", "Wallet %s resides outside data directory %s."),
 QT_TRANSLATE_NOOP("bitcoin-core", ""
 "Cannot obtain a lock on data directory %s.  BlackCoin is probably already "
@@ -165,7 +163,6 @@ QT_TRANSLATE_NOOP("bitcoin-core", "Error loading wallet.dat: Wallet requires new
 QT_TRANSLATE_NOOP("bitcoin-core", "Wallet needed to be rewritten: restart BlackCoin to complete"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Error loading wallet.dat"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Cannot downgrade wallet"),
-QT_TRANSLATE_NOOP("bitcoin-core", "Cannot initialize keypool"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Cannot write default address"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Rescanning..."),
 QT_TRANSLATE_NOOP("bitcoin-core", "Importing blockchain data file."),
