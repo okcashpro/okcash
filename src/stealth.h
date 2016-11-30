@@ -1,5 +1,5 @@
 // Copyright (c) 2014 The Shadowcoin developers
-// Copyright (c) 2014 The PimpCash developers
+// Copyright (c) 2014-2015 The PimpCash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file license.txt or http://www.opensource.org/licenses/mit-license.php.
 

@@ -101,8 +101,8 @@ background-color: #4A4949;\
 border: 1px solid gray;\
 }"
 #define HORIZONTAL_TOOLBAR_STYLESHEET "QToolBar {\
-    border: 1px solid #393838;\
-    background: 1px solid #302F2F;\
+    border: 1px solid #000000;\
+    background: 1px solid #000000;\
     font-weight: bold;\
 }"
 
