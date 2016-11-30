@@ -25,6 +25,9 @@ class CInv;
 class CRequestTracker;
 class CNode;
 
+static const int THIRY_BLOCK = 1523771; // + 1 year blocks average
+static const int SECOY_BLOCK = 1022514; // + 1 year blocks average
+static const int FIRSY_BLOCK = 521257;  // 501257 blocks/year + 20000 blocks (15 days) first year
 static const int LAST_POW_BLOCK = 33186;
 static const int LAST_FAIR_LAUNCH_BLOCK = 30;
 static const int DEV_FUND_BLOCK = 1;
@@ -37,7 +40,10 @@ static const unsigned int MAX_INV_SZ = 50000;
 static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 static const int64_t MAX_MONEY = 105000000 * COIN;  //  105 million OKCash Total
-static const int64_t COIN_YEAR_REWARD = 69 * CENT; // 69% 1st Year : 20% 2nd : 10% 3rd : 6% 4th onwards  
+static const int64_t COIN_YEAR_REWARD = 69 * CENT; // 69% 1st Year  
+static const int64_t SCOIN_YEAR_REWARD = 20 * CENT; // 20% 2nd Year
+static const int64_t CCOIN_YEAR_REWARD = 10 * CENT; // 10% 3rd Year
+static const int64_t KCOIN_YEAR_REWARD = 6 * CENT;  //   6% 4th Year and onwards
 
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -110,7 +116,7 @@ bool LoadExternalBlockFile(FILE* fileIn);
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake);
 int64_t GetProofOfWorkReward(int nHeight, int64_t nFees);
-int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees);
+int64_t GetProofOfStakeReward(int nHeight, int64_t nCoinAge, int64_t nFees);
 unsigned int ComputeMinWork(unsigned int nBase, int64_t nTime);
 unsigned int ComputeMinStake(unsigned int nBase, int64_t nTime, unsigned int nBlockTime);
 int GetNumBlocksOfPeers();
