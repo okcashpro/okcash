@@ -14,10 +14,10 @@ To Build
 --------
 
 cd src/
-make -f makefile.unix            # Headless pimpcash
+make -f makefile.unix            # Headless okcash
 
-See readme-qt.rst for instructions on building PimpCash QT,
-the graphical pimpcash.
+See readme-qt.rst for instructions on building OKCash QT,
+the graphical okcash.
 
 Dependencies
 ------------
@@ -76,14 +76,14 @@ Dependency Build Instructions: Gentoo
 emerge -av1 --noreplace boost openssl sys-libs/db
 
 Take the following steps to build (no UPnP support):
- cd ${PimpCash_DIR}/src
+ cd ${OKCash_DIR}/src
  make -f makefile.unix USE_UPNP=
- strip pimpcashd
+ strip okcashd
 
 
 Notes
 -----
-The release is built with GCC and then "strip pimpcashd" to strip the debug
+The release is built with GCC and then "strip okcashd" to strip the debug
 symbols, which reduces the executable size by about 90%.
 
 
@@ -113,7 +113,7 @@ sudo su
 
 Security
 --------
-To help make your pimpcash installation more secure by making certain attacks impossible to
+To help make your okcash installation more secure by making certain attacks impossible to
 exploit even if a vulnerability is found, you can take the following measures:
 
 * Position Independent Executable
@@ -130,7 +130,7 @@ exploit even if a vulnerability is found, you can take the following measures:
     make -f makefile.unix ... -e PIE=1
 
     To test that you have built PIE executable, install scanelf, part of paxutils, and use:
-    scanelf -e ./pimpcash
+    scanelf -e ./okcash
 
     The output should contain:
      TYPE
@@ -138,13 +138,13 @@ exploit even if a vulnerability is found, you can take the following measures:
 
 * Non-executable Stack
     If the stack is executable then trivial stack based buffer overflow exploits are possible if
-    vulnerable buffers are found. By default, pimpcash should be built with a non-executable stack
+    vulnerable buffers are found. By default, okcash should be built with a non-executable stack
     but if one of the libraries it uses asks for an executable stack or someone makes a mistake
     and uses a compiler extension which requires an executable stack, it will silently build an
     executable without the non-executable stack protection.
 
     To verify that the stack is non-executable after compiling use:
-    scanelf -e ./pimpcash
+    scanelf -e ./okcash
 
     the output should contain:
     STK/REL/PTL

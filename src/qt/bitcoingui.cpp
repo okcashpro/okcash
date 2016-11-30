@@ -78,8 +78,8 @@ text-align: left;\
 QToolButton {\
 min-width:180px;\
 background-color: transparent;\
-border: 1px solid #ffffff;\
-border-radius: 3px;\
+border: 1px solid #0193c9;\
+border-radius: 0px;\
 margin: 3px;\
 padding-left: 5px;\
 /*padding-right:50px;*/\
@@ -89,20 +89,20 @@ text-align: left;\
 padding-bottom:5px;\
 }\
 QToolButton:pressed {\
-background-color: #f0fcfc;\
-border: 1px solid white;\
+background-color: #02c0ec;\
+border: 1px solid #02c0ec;\
 }\
 QToolButton:checked {\
-background-color: #f0fcfc;\
-border: 1px solid white;\
+background-color: #02c0ec;\
+border: 1px solid #02c0ec;\
 }\
 QToolButton:hover {\
-background-color: #f0fcfc;\
-border: 1px solid white;\
+background-color: #02c0ec;\
+border: 1px solid #02c0ec;\
 }"
 #define HORIZONTAL_TOOLBAR_STYLESHEET "QToolBar {\
-    border: 1px solid #ffffff;\
-    background: 1px solid #ffffff;\
+    border: 1px solid #0193c9;\
+    background: 1px solid #0193c9;\
     font-weight: bold;\
 }"
 
@@ -130,7 +130,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     nWeight(0)
 {
     resize(950, 550);
-    setWindowTitle(tr("PimpCash") + " - " + tr("Wallet"));
+    setWindowTitle(tr("OKCash") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
     qApp->setWindowIcon(QIcon(":icons/bitcoin"));
     setWindowIcon(QIcon(":icons/bitcoin"));
@@ -295,7 +295,7 @@ void BitcoinGUI::createActions()
     tabGroup->addAction(overviewAction);
 
     sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send coins"), this);
-    sendCoinsAction->setToolTip(tr("Send coins to a PimpCash address"));
+    sendCoinsAction->setToolTip(tr("Send coins to an OKCash address"));
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
@@ -341,14 +341,14 @@ void BitcoinGUI::createActions()
     quitAction->setToolTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/bitcoin"), tr("&About PimpCash"), this);
-    aboutAction->setToolTip(tr("Show information about PimpCash"));
+    aboutAction = new QAction(QIcon(":/icons/bitcoin"), tr("&About OKCash"), this);
+    aboutAction->setToolTip(tr("Show information about OKCash"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
     aboutQtAction->setToolTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
     optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
-    optionsAction->setToolTip(tr("Modify configuration options for PimpCash"));
+    optionsAction->setToolTip(tr("Modify configuration options for OKCash"));
     optionsAction->setMenuRole(QAction::PreferencesRole);
     toggleHideAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Show / Hide"), this);
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
@@ -421,7 +421,7 @@ void BitcoinGUI::createMenuBar()
 void BitcoinGUI::createToolBars()
 {
     mainIcon = new QLabel (this);
-    mainIcon->setPixmap(QPixmap(":images/pimp-vertical"));
+    mainIcon->setPixmap(QPixmap(":images/ok-vertical"));
     mainIcon->show();
 
     mainToolbar = addToolBar(tr("Tabs toolbar"));
@@ -465,7 +465,7 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
 #endif
             if(trayIcon)
             {
-                trayIcon->setToolTip(tr("PimpCash client") + QString(" ") + tr("[testnet]"));
+                trayIcon->setToolTip(tr("OKCash client") + QString(" ") + tr("[testnet]"));
                 trayIcon->setIcon(QIcon(":/icons/toolbar_testnet"));
                 toggleHideAction->setIcon(QIcon(":/icons/toolbar_testnet"));
             }
@@ -542,7 +542,7 @@ void BitcoinGUI::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIconMenu = new QMenu(this);
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setToolTip(tr("PimpCash client"));
+    trayIcon->setToolTip(tr("OKCash client"));
     trayIcon->setIcon(QIcon(":/icons/toolbar"));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -612,7 +612,7 @@ void BitcoinGUI::setNumConnections(int count)
     default: icon = ":/icons/connect_4"; break;
     }
     labelConnectionsIcon->setPixmap(QIcon(icon).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to PimpCash network", "", count));
+    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to OKCash network", "", count));
 }
 
 void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
@@ -941,7 +941,7 @@ void BitcoinGUI::dropEvent(QDropEvent *event)
         if (nValidUrisFound)
             gotoSendCoinsPage();
         else
-            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters."));
+            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters."));
     }
 
     event->acceptProposedAction();
@@ -956,21 +956,21 @@ void BitcoinGUI::handleURI(QString strURI)
         gotoSendCoinsPage();
     }
     else
-        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters."));
+        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters."));
 }
 
 void BitcoinGUI::mainToolbarOrientation(Qt::Orientation orientation)
 {
     if(orientation == Qt::Horizontal)
     {
-        mainIcon->setPixmap(QPixmap(":images/pimp-horizontal"));
+        mainIcon->setPixmap(QPixmap(":images/ok-vertical"));
         mainIcon->show();
         mainToolbar->setStyleSheet(HORIZONTAL_TOOLBAR_STYLESHEET);
         messageAction->setIconText(tr("&Messages"));
     }
     else
     {
-        mainIcon->setPixmap(QPixmap(":images/pimp-vertical"));
+        mainIcon->setPixmap(QPixmap(":images/ok-vertical"));
         mainIcon->show();
 
         mainToolbar->setStyleSheet(VERTICAL_TOOBAR_STYLESHEET);

@@ -959,7 +959,7 @@ static std::string FormatException(std::exception* pex, const char* pszThread)
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "pimpcash";
+    const char* pszModule = "okcash";
 #endif
     if (pex)
         return strprintf(
@@ -989,13 +989,13 @@ void PrintExceptionContinue(std::exception* pex, const char* pszThread)
 boost::filesystem::path GetDefaultDataDir()
 {
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\PimpCash
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\PimpCash
-    // Mac: ~/Library/Application Support/PimpCash
-    // Unix: ~/.pimpcash
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\OKCash
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\OKCash
+    // Mac: ~/Library/Application Support/OKCash
+    // Unix: ~/.okcash
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "PimpCash";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "OKCash";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -1007,10 +1007,10 @@ boost::filesystem::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     fs::create_directory(pathRet);
-    return pathRet / "PimpCash";
+    return pathRet / "OKCash";
 #else
     // Unix
-    return pathRet / ".pimpcash";
+    return pathRet / ".okcash";
 #endif
 #endif
 }
@@ -1052,7 +1052,7 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific)
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", "pimpcash.conf"));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", "okcash.conf"));
     if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir(false) / pathConfigFile;
     return pathConfigFile;
 }
@@ -1083,7 +1083,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", "pimpcashd.pid"));
+    boost::filesystem::path pathPidFile(GetArg("-pid", "okcashd.pid"));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }
@@ -1213,10 +1213,10 @@ void AddTimeData(const CNetAddr& ip, int64_t nTime)
                 if (!fMatch)
                 {
                     fDone = true;
-                    string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong PimpCash will not work properly.");
+                    string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong OKCash will not work properly.");
                     strMiscWarning = strMessage;
                     printf("*** %s\n", strMessage.c_str());
-                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("PimpCash"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION);
+                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("OKCash"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION);
                 }
             }
         }

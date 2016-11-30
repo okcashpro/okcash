@@ -3,23 +3,23 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About PimpCash</source>
-        <translation>О PimpCash</translation>
+        <source>About OKCash</source>
+        <translation>О OKCash</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;PimpCash&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;PimpCash&lt;/b&gt; версия</translation>
+        <source>&lt;b&gt;OKCash&lt;/b&gt; version</source>
+        <translation>&lt;b&gt;OKCash&lt;/b&gt; версия</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
 Copyright © 2014 The BlackCoin developers
-Copyright © 2014-2015 The PimpCash developers</source>
+Copyright © 2014-2015 The OKCash developers</source>
         <translation>Все права защищены © 2009-2014 Разработчики Bitcoin
 Все права защищены © 2012-2014 Разработчики NovaCoin
-Все права защищены © 2014 Разработчики PimpCash</translation>
+Все права защищены © 2014 Разработчики OKCash</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -66,7 +66,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your PimpCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <source>These are your OKCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
         <translation>Это Ваши адреса для получения платежей. Вы можете дать разные адреса отправителям, чтобы отслеживать, кто именно вам платит.</translation>
     </message>
     <message>
@@ -81,8 +81,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a PimpCash address</source>
-        <translation>Подписать сообщение, чтобы доказать владение адресом PimpCash</translation>
+        <source>Sign a message to prove you own an OKCash address</source>
+        <translation>Подписать сообщение, чтобы доказать владение адресом OKCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -96,8 +96,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified PimpCash address</source>
-        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом PimpCash</translation>
+        <source>Verify a message to ensure it was signed with a specified OKCash address</source>
+        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом OKCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -264,7 +264,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>PimpCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <source>OKCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
         <translation>Сейчас программа закроется для завершения процесса шифрования. Помните, что шифрование вашего бумажника не может полностью защитить ваши монеты от кражи с помощью инфицирования вашего компьютера вредоносным ПО.</translation>
     </message>
     <message>
@@ -378,8 +378,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about PimpCash</source>
-        <translation>Показать информацию о PimpCash&apos;е</translation>
+        <source>Show information about OKCash</source>
+        <translation>Показать информацию о OKCash&apos;е</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -428,13 +428,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a PimpCash address</source>
-        <translation>Отправить монеты на указанный адрес PimpCash</translation>
+        <source>Send coins to an OKCash address</source>
+        <translation>Отправить монеты на указанный адрес OKCash</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for PimpCash</source>
-        <translation>Изменить параметры конфигурации PimpCash</translation>
+        <source>Modify configuration options for OKCash</source>
+        <translation>Изменить параметры конфигурации OKCash</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -473,8 +473,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-200"/>
-        <source>PimpCash</source>
-        <translation>PimpCash</translation>
+        <source>OKCash</source>
+        <translation>OKCash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -483,8 +483,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About PimpCash</source>
-        <translation>&amp;О PimpCash</translation>
+        <source>&amp;About OKCash</source>
+        <translation>&amp;О OKCash</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -540,12 +540,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>PimpCash client</source>
-        <translation>PimpCash клиент</translation>
+        <source>OKCash client</source>
+        <translation>OKCash клиент</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to PimpCash network</source>
+        <source>%n active connection(s) to OKCash network</source>
         <translation><numerusform>%n активное соединение с сетью</numerusform><numerusform>%n активных соединений с сетью</numerusform><numerusform>%n активных соединений с сетью</numerusform></translation>
     </message>
     <message>
@@ -660,8 +660,8 @@ Address: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters.</source>
-        <translation>Не удалось обработать URI! Это может быть связано с неверным адресом PimpCash или неправильными параметрами URI.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters.</source>
+        <translation>Не удалось обработать URI! Это может быть связано с неверным адресом OKCash или неправильными параметрами URI.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -720,8 +720,8 @@ Address: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. PimpCash can no longer continue safely and will quit.</source>
-        <translation>Произошла неисправимая ошибка. PimpCash не может безопасно продолжать работу и будет закрыт.</translation>
+        <source>A fatal error occurred. OKCash can no longer continue safely and will quit.</source>
+        <translation>Произошла неисправимая ошибка. OKCash не может безопасно продолжать работу и будет закрыт.</translation>
     </message>
 </context>
 <context>
@@ -1040,8 +1040,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid PimpCash address.</source>
-        <translation>Введённый адрес &quot;%1&quot; не является правильным PimpCash-адресом.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid OKCash address.</source>
+        <translation>Введённый адрес &quot;%1&quot; не является правильным OKCash-адресом.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1059,8 +1059,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>PimpCash-Qt</source>
-        <translation>PimpCash-Qt</translation>
+        <source>OKCash-Qt</source>
+        <translation>OKCash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1132,13 +1132,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start PimpCash after logging in to the system.</source>
-        <translation>Автоматически запускать PimpCash после входа в систему</translation>
+        <source>Automatically start OKCash after logging in to the system.</source>
+        <translation>Автоматически запускать OKCash после входа в систему</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start PimpCash on system login</source>
-        <translation>&amp;Запускать PimpCash при входе в систему</translation>
+        <source>&amp;Start OKCash on system login</source>
+        <translation>&amp;Запускать OKCash при входе в систему</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1157,8 +1157,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the PimpCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Автоматически открыть порт для PimpCash-клиента на роутере. Работает только если Ваш роутер поддерживает UPnP, и данная функция включена.</translation>
+        <source>Automatically open the OKCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Автоматически открыть порт для OKCash-клиента на роутере. Работает только если Ваш роутер поддерживает UPnP, и данная функция включена.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1167,8 +1167,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the PimpCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Подключаться к сети PimpCash через прокси SOCKS (например, при подключении через Tor).</translation>
+        <source>Connect to the OKCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Подключаться к сети OKCash через прокси SOCKS (например, при подключении через Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1242,8 +1242,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting PimpCash.</source>
-        <translation>Здесь можно выбрать язык интерфейса. Настройки вступят в силу после перезапуска PimpCash.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting OKCash.</source>
+        <translation>Здесь можно выбрать язык интерфейса. Настройки вступят в силу после перезапуска OKCash.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1257,8 +1257,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show PimpCash addresses in the transaction list or not.</source>
-        <translation>Показывать ли адреса PimpCash в списке транзакций.</translation>
+        <source>Whether to show OKCash addresses in the transaction list or not.</source>
+        <translation>Показывать ли адреса OKCash в списке транзакций.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1304,8 +1304,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting PimpCash.</source>
-        <translation>Эта настройка вступит в силу после перезапуска PimpCash</translation>
+        <source>This setting will take effect after restarting OKCash.</source>
+        <translation>Эта настройка вступит в силу после перезапуска OKCash</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1323,8 +1323,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PimpCash network after a connection is established, but this process has not completed yet.</source>
-        <translation>Отображаемая информация может быть устаревшей. Ваш бумажник автоматически синхронизируется с сетью PimpCash после подключения, но этот процесс пока не завершён.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the OKCash network after a connection is established, but this process has not completed yet.</source>
+        <translation>Отображаемая информация может быть устаревшей. Ваш бумажник автоматически синхронизируется с сетью OKCash после подключения, но этот процесс пока не завершён.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1539,8 +1539,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the PimpCash-Qt help message to get a list with possible PimpCash command-line options.</source>
-        <translation>Показать помощь по PimpCash-Qt, чтобы получить список доступных параметров командной строки.</translation>
+        <source>Show the OKCash-Qt help message to get a list with possible OKCash command-line options.</source>
+        <translation>Показать помощь по OKCash-Qt, чтобы получить список доступных параметров командной строки.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1559,13 +1559,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-104"/>
-        <source>PimpCash - Debug window</source>
-        <translation>PimpCash - Окно отладки</translation>
+        <source>OKCash - Debug window</source>
+        <translation>OKCash - Окно отладки</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>PimpCash Core</source>
-        <translation>Ядро PimpCash</translation>
+        <source>OKCash Core</source>
+        <translation>Ядро OKCash</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1574,8 +1574,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the PimpCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Открыть отладочный лог-файл PimpCash из текущего каталога данных. Это может занять несколько секунд для больших лог-файлов.</translation>
+        <source>Open the OKCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Открыть отладочный лог-файл OKCash из текущего каталога данных. Это может занять несколько секунд для больших лог-файлов.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1584,8 +1584,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the PimpCash RPC console.</source>
-        <translation>Добро пожаловать в RPC-консоль PimpCash.</translation>
+        <source>Welcome to the OKCash RPC console.</source>
+        <translation>Добро пожаловать в RPC-консоль OKCash.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1658,7 +1658,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+86"/>
         <location line="+86"/>
         <location line="+32"/>
-        <source>0.00 PIMP</source>
+        <source>0.00 OK</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1728,8 +1728,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+16"/>
-        <source>123.456 PIMP</source>
-        <translation>123.456 PIMP</translation>
+        <source>123.456 OK</source>
+        <translation>123.456 OK</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1743,8 +1743,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Введите PimpCash-адрес (например PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Введите OKCash-адрес (например PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1843,7 +1843,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid PimpCash address</source>
+        <source>WARNING: Invalid OKCash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1917,8 +1917,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Введите PimpCash-адрес (например PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Введите OKCash-адрес (например PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1978,8 +1978,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this PimpCash address</source>
-        <translation>Подписать сообщение, чтобы доказать владение адресом PimpCash</translation>
+        <source>Sign the message to prove you own this OKCash address</source>
+        <translation>Подписать сообщение, чтобы доказать владение адресом OKCash</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2010,8 +2010,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified PimpCash address</source>
-        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом PimpCash</translation>
+        <source>Verify the message to ensure it was signed with the specified OKCash address</source>
+        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом OKCash</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2021,8 +2021,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Введите адрес PimpCash (напр. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Введите адрес OKCash (напр. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2031,8 +2031,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter PimpCash signature</source>
-        <translation>Введите подпись PimpCash</translation>
+        <source>Enter OKCash signature</source>
+        <translation>Введите подпись OKCash</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2602,7 +2602,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>PimpCash version</source>
+        <source>OKCash version</source>
         <translation>Версия</translation>
     </message>
     <message>
@@ -2612,8 +2612,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+1"/>
-        <source>Send command to -server or pimpcashd</source>
-        <translation>Отправить команду на -server или pimpcashd</translation>
+        <source>Send command to -server or okcashd</source>
+        <translation>Отправить команду на -server или okcashd</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2633,13 +2633,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+2"/>
-        <source>Specify configuration file (default: pimpcash.conf)</source>
-        <translation>Указать конфигурационный файл (по умолчанию: pimpcash.conf)</translation>
+        <source>Specify configuration file (default: okcash.conf)</source>
+        <translation>Указать конфигурационный файл (по умолчанию: okcash.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Specify pid file (default: pimpcashd.pid)</source>
-        <translation>Указать pid-файл (по умолчанию: pimpcashd.pid)</translation>
+        <source>Specify pid file (default: okcashd.pid)</source>
+        <translation>Указать pid-файл (по умолчанию: okcashd.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2788,8 +2788,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong PimpCash will not work properly.</source>
-        <translation>Внимание: убедитесь, что дата и время на Вашем компьютере выставлены верно. Если Ваши часы идут неправильно, PimpCash будет работать некорректно.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong OKCash will not work properly.</source>
+        <translation>Внимание: убедитесь, что дата и время на Вашем компьютере выставлены верно. Если Ваши часы идут неправильно, OKCash будет работать некорректно.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2978,13 +2978,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=pimpcashrpc
+rpcuser=okcashrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.com
 </source>
         <translation type="unfinished"/>
     </message>
@@ -3110,13 +3110,13 @@ for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  PimpCash is probably already running.</source>
+        <source>Cannot obtain a lock on data directory %s.  OKCash is probably already running.</source>
         <translation>Невозможно установить блокировку на рабочую директорию %s.  Возможно, бумажник уже запущен.</translation>
     </message>
     <message>
         <location line="-98"/>
-        <source>PimpCash</source>
-        <translation>PimpCash</translation>
+        <source>OKCash</source>
+        <translation>OKCash</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3150,13 +3150,13 @@ for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of PimpCash</source>
-        <translation>Ошибка загрузки wallet.dat: бумажник требует более новую версию PimpCash</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of OKCash</source>
+        <translation>Ошибка загрузки wallet.dat: бумажник требует более новую версию OKCash</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart PimpCash to complete</source>
-        <translation>Необходимо перезаписать бумажник, перезапустите PimpCash для завершения операции</translation>
+        <source>Wallet needed to be rewritten: restart OKCash to complete</source>
+        <translation>Необходимо перезаписать бумажник, перезапустите OKCash для завершения операции</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3225,8 +3225,8 @@ for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. PimpCash is probably already running.</source>
-        <translation>Невозможно привязаться к %s на этом компьютере.  Возможно, PimpCash уже работает.</translation>
+        <source>Unable to bind to %s on this computer. OKCash is probably already running.</source>
+        <translation>Невозможно привязаться к %s на этом компьютере.  Возможно, OKCash уже работает.</translation>
     </message>
     <message>
         <location line="-97"/>

@@ -1,5 +1,5 @@
 // Copyright (c) 2014 The Shadowcoin developers
-// Copyright (c) 2014-2015 The PimpCash developers
+// Copyright (c) 2014-2015 The OKCash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -589,7 +589,7 @@ bool SecMsgDB::EraseSmesg(unsigned char* chKey)
 void ThreadSecureMsg(void* parg)
 {
     // -- bucket management thread
-    RenameThread("pimpcash-smsg"); // Make this thread recognisable
+    RenameThread("okcash-smsg"); // Make this thread recognisable
     
     uint32_t delay = 0;
     
@@ -700,7 +700,7 @@ void ThreadSecureMsg(void* parg)
 void ThreadSecureMsgPow(void* parg)
 {
     // -- proof of work thread
-    RenameThread("pimpcash-smsg-pow"); // Make this thread recognisable
+    RenameThread("okcash-smsg-pow"); // Make this thread recognisable
     
     int rv;
     std::vector<unsigned char> vchKey;

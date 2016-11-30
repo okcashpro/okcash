@@ -67,7 +67,7 @@ struct MessageTableEntry
     }
 };
 
-/** Interface to PimpCash Secure Messaging from Qt view code. */
+/** Interface to OKCash Secure Messaging from Qt view code. */
 class MessageModel : public QAbstractTableModel
 {
     Q_OBJECT

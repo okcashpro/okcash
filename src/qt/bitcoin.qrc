@@ -1,9 +1,9 @@
 <RCC>
     <qresource prefix="/icons">
-        <file alias="bitcoin">res/icons/pimpcash-80.png</file>
-        <file alias="bitcoin_testnet">res/icons/pimpcash-80.png</file>
-        <file alias="toolbar">res/icons/pimpcash-16.png</file>
-        <file alias="toolbar_testnet">res/icons/pimpcash-16.png</file>
+        <file alias="bitcoin">res/icons/okcash-80.png</file>
+        <file alias="bitcoin_testnet">res/icons/okcash-80.png</file>
+        <file alias="toolbar">res/icons/okcash-16.png</file>
+        <file alias="toolbar_testnet">res/icons/okcash-16.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
         <file alias="quit">res/icons/quit.png</file>
         <file alias="send">res/icons/send.png</file>
@@ -47,8 +47,8 @@
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
         <file alias="splash">res/images/splash.png</file>
-        <file alias="pimp-vertical">res/images/pimp-vertical.png</file>
-        <file alias="pimp-horizontal">res/images/pimp-horizontal.png</file>
+        <file alias="ok-vertical">res/images/ok-vertical.png</file>
+        <file alias="ok-horizontal">res/images/ok-horizontal.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>

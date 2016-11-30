@@ -150,12 +150,12 @@ no_smgroup:
     Pop $R0
 SectionEnd
 
-# Installer functions
+# Installer function
 Function .onInit
     InitPluginsDir
 FunctionEnd
 
-# Uninstaller functions
+# Uninstaller function
 Function un.onInit
     ReadRegStr $INSTDIR HKCU "${REGKEY}" Path
     !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuGroup

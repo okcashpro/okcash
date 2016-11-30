@@ -7,12 +7,12 @@ software written by Eric Young (eay@cryptsoft.com) and UPnP software written by
 Thomas Bernard.
 
 
-Mac OS X pimpcashd build instructions
+Mac OS X okcashd build instructions
 Laszlo Hanyecz <solar@heliacal.net>
 Douglas Huff <dhuff@jrbobdobbs.org>
 
 
-See readme-qt.rst for instructions on building PimpCash QT, the
+See readme-qt.rst for instructions on building OKCash QT, the
 graphical user interface.
 
 Tested on 10.5 and 10.6 intel.  PPC is not supported because it's big-endian.
@@ -39,14 +39,14 @@ sudo port install boost db48 openssl miniupnpc
 Optionally install qrencode (and set USE_QRCODE=1):
 sudo port install qrencode
 
-4.  Now you should be able to build pimpcashd:
+4.  Now you should be able to build okcashd:
 
-cd pimpcash/src
+cd okcash/src
 make -f makefile.osx
 
 Run:
-  ./pimpcashd --help  # for a list of command-line options.
+  ./okcashd --help  # for a list of command-line options.
 Run
-  ./pimpcashd -daemon # to start the pimpcash daemon.
+  ./okcashd -daemon # to start the okcash daemon.
 Run
-  ./pimpcashd help # When the daemon is running, to get a list of RPC commands
+  ./okcashd help # When the daemon is running, to get a list of RPC commands

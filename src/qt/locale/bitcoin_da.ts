@@ -3,24 +3,24 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About PimpCash</source>
-        <translation>Om PimpCash</translation>
+        <source>About OKCash</source>
+        <translation>Om OKCash</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;PimpCash&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;PimpCash&lt;/b&gt; version</translation>
+        <source>&lt;b&gt;OKCash&lt;/b&gt; version</source>
+        <translation>&lt;b&gt;OKCash&lt;/b&gt; version</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
 Copyright © 2014 The BlackCoin developers
-Copyright © 2014-2015 The PimpCash developers</source>
+Copyright © 2014-2015 The OKCash developers</source>
         <translation>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
 Copyright © 2014 The BlackCoin developers
-Copyright © 2014-2015 The PimpCash developers</translation>
+Copyright © 2014-2015 The OKCash developers</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -67,8 +67,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your PimpCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Dette er dine PimpCash adresser til at modtage betalinger. Du ønsker måske at give en anden en til af hver afsender, så du kan holde styr på hvem der betaler dig.</translation>
+        <source>These are your OKCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Dette er dine OKCash adresser til at modtage betalinger. Du ønsker måske at give en anden en til af hver afsender, så du kan holde styr på hvem der betaler dig.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -82,8 +82,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a PimpCash address</source>
-        <translation>Signerer en meddelelse for at bevise du ejer en PimpCash adresse</translation>
+        <source>Sign a message to prove you own an OKCash address</source>
+        <translation>Signerer en meddelelse for at bevise du ejer en OKCash adresse</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -97,8 +97,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified PimpCash address</source>
-        <translation>Bekræft en meddelelse for at sikre, den blev underskrevet med en specificeret PimpCash adresse</translation>
+        <source>Verify a message to ensure it was signed with a specified OKCash address</source>
+        <translation>Bekræft en meddelelse for at sikre, den blev underskrevet med en specificeret OKCash adresse</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -265,8 +265,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="-58"/>
-        <source>PimpCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>PimpCash lukker nu for at afslutte krypteringen. Husk at en krypteret  tegnebog ikke fuldt ud beskytter dine mønter mod at blive stjålet af malware som har inficeret din computer.</translation>
+        <source>OKCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>OKCash lukker nu for at afslutte krypteringen. Husk at en krypteret  tegnebog ikke fuldt ud beskytter dine mønter mod at blive stjålet af malware som har inficeret din computer.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -379,8 +379,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about PimpCash</source>
-        <translation>Vis oplysninger om PimpCash</translation>
+        <source>Show information about OKCash</source>
+        <translation>Vis oplysninger om OKCash</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -429,13 +429,13 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a PimpCash address</source>
-        <translation>Send mønter til en PimpCash adresse</translation>
+        <source>Send coins to an OKCash address</source>
+        <translation>Send mønter til en OKCash adresse</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for PimpCash</source>
-        <translation>Ændre indstillingsmuligheder for PimpCash</translation>
+        <source>Modify configuration options for OKCash</source>
+        <translation>Ændre indstillingsmuligheder for OKCash</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -474,8 +474,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="-200"/>
-        <source>PimpCash</source>
-        <translation>PimpCash</translation>
+        <source>OKCash</source>
+        <translation>OKCash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -484,8 +484,8 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About PimpCash</source>
-        <translation>&amp;Om PimpCash</translation>
+        <source>&amp;About OKCash</source>
+        <translation>&amp;Om OKCash</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -541,13 +541,13 @@ Produktet indeholder software, som er udviklet af OpenSSL Project til brug i Ope
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>PimpCash client</source>
-        <translation>PimpCash klient</translation>
+        <source>OKCash client</source>
+        <translation>OKCash klient</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to PimpCash network</source>
-        <translation><numerusform>%n aktiv forbindelse til PimpCash netværk</numerusform><numerusform>%n aktive forbindelser til PimpCash netværk</numerusform></translation>
+        <source>%n active connection(s) to OKCash network</source>
+        <translation><numerusform>%n aktiv forbindelse til OKCash netværk</numerusform><numerusform>%n aktive forbindelser til OKCash netværk</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -661,8 +661,8 @@ Adresse: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters.</source>
-        <translation>URI kan ikke tolkes! Dette kan skyldes en ugyldig PimpCash adresse eller misdannede URI parametre.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters.</source>
+        <translation>URI kan ikke tolkes! Dette kan skyldes en ugyldig OKCash adresse eller misdannede URI parametre.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -721,7 +721,7 @@ Adresse: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. PimpCash can no longer continue safely and will quit.</source>
+        <source>A fatal error occurred. OKCash can no longer continue safely and will quit.</source>
         <translation>Der opstod en fejl under forsøg på at gemme dataene i tegnebogen til den nye placering.</translation>
     </message>
 </context>
@@ -1055,8 +1055,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid PimpCash address.</source>
-        <translation>Den indtastede adresse &quot;%1&quot; er ikke en gyldig PimpCash adresse.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid OKCash address.</source>
+        <translation>Den indtastede adresse &quot;%1&quot; er ikke en gyldig OKCash adresse.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1074,8 +1074,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>PimpCash-Qt</source>
-        <translation>PimpCash-Qt</translation>
+        <source>OKCash-Qt</source>
+        <translation>OKCash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1147,13 +1147,13 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start PimpCash after logging in to the system.</source>
-        <translation>Automatisk start PimpCash efter at have logget ind på systemet.</translation>
+        <source>Automatically start OKCash after logging in to the system.</source>
+        <translation>Automatisk start OKCash efter at have logget ind på systemet.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start PimpCash on system login</source>
-        <translation>&amp;Start PimpCash ved systems login</translation>
+        <source>&amp;Start OKCash on system login</source>
+        <translation>&amp;Start OKCash ved systems login</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1172,8 +1172,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the PimpCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatisk åbne PimpCash klient-port på routeren. Dette virker kun, når din router understøtter UPnP og er det er aktiveret.</translation>
+        <source>Automatically open the OKCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automatisk åbne OKCash klient-port på routeren. Dette virker kun, når din router understøtter UPnP og er det er aktiveret.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1182,8 +1182,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the PimpCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Opret forbindelse til PimpCash netværk via en SOCKS proxy (fx ved tilslutning gennem Tor).</translation>
+        <source>Connect to the OKCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Opret forbindelse til OKCash netværk via en SOCKS proxy (fx ved tilslutning gennem Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1257,8 +1257,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting PimpCash.</source>
-        <translation>Sproget i brugergrænsefladen kan indstilles her. Denne indstilling vil træde i kraft efter genstart af PimpCash tegnebog.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting OKCash.</source>
+        <translation>Sproget i brugergrænsefladen kan indstilles her. Denne indstilling vil træde i kraft efter genstart af OKCash tegnebog.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1272,8 +1272,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show PimpCash addresses in the transaction list or not.</source>
-        <translation>Få vist PimpCash adresser på listen over transaktioner eller ej.</translation>
+        <source>Whether to show OKCash addresses in the transaction list or not.</source>
+        <translation>Få vist OKCash adresser på listen over transaktioner eller ej.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1319,8 +1319,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting PimpCash.</source>
-        <translation>Denne indstilling vil træde i kraft efter genstart af PimpCash.</translation>
+        <source>This setting will take effect after restarting OKCash.</source>
+        <translation>Denne indstilling vil træde i kraft efter genstart af OKCash.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1338,8 +1338,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PimpCash network after a connection is established, but this process has not completed yet.</source>
-        <translation>De viste oplysninger kan være forældet. Din tegnebog synkroniserer automatisk med PimpCash netværket efter en forbindelse er etableret, men denne proces er ikke afsluttet endnu.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the OKCash network after a connection is established, but this process has not completed yet.</source>
+        <translation>De viste oplysninger kan være forældet. Din tegnebog synkroniserer automatisk med OKCash netværket efter en forbindelse er etableret, men denne proces er ikke afsluttet endnu.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1554,8 +1554,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the PimpCash-Qt help message to get a list with possible PimpCash command-line options.</source>
-        <translation>Vis PimpCash-Qt hjælpe besked for at få en liste med mulige PimpCash kommandolinjeparametre.</translation>
+        <source>Show the OKCash-Qt help message to get a list with possible OKCash command-line options.</source>
+        <translation>Vis OKCash-Qt hjælpe besked for at få en liste med mulige OKCash kommandolinjeparametre.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1574,13 +1574,13 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="-104"/>
-        <source>PimpCash - Debug window</source>
-        <translation>PimpCash - Debug vindue</translation>
+        <source>OKCash - Debug window</source>
+        <translation>OKCash - Debug vindue</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>PimpCash Core</source>
-        <translation>PimpCash Kerne</translation>
+        <source>OKCash Core</source>
+        <translation>OKCash Kerne</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1589,8 +1589,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the PimpCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Åbn PimpCash debug logfilen fra den nuværende data mappe. Dette kan tage et par sekunder for store logfiler.</translation>
+        <source>Open the OKCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Åbn OKCash debug logfilen fra den nuværende data mappe. Dette kan tage et par sekunder for store logfiler.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1599,8 +1599,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the PimpCash RPC console.</source>
-        <translation>Velkommen til PimpCash RPC-konsol.</translation>
+        <source>Welcome to the OKCash RPC console.</source>
+        <translation>Velkommen til OKCash RPC-konsol.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1673,8 +1673,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
         <location line="+86"/>
         <location line="+86"/>
         <location line="+32"/>
-        <source>0.00 PIMP</source>
-        <translation>123.456 PIMP {0.00 ?}</translation>
+        <source>0.00 OK</source>
+        <translation>123.456 OK {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -1743,8 +1743,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>123.456 PIMP</source>
-        <translation>123.456 PIMP</translation>
+        <source>123.456 OK</source>
+        <translation>123.456 OK</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1758,8 +1758,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Indtast en PimpCash-adresse (f.eks PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Indtast en OKCash-adresse (f.eks PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1858,8 +1858,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid PimpCash address</source>
-        <translation>ADVARSEL: Ugyldig PimpCash adresse</translation>
+        <source>WARNING: Invalid OKCash address</source>
+        <translation>ADVARSEL: Ugyldig OKCash adresse</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1932,8 +1932,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Indtast en PimpCash-adresse (f.eks PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Indtast en OKCash-adresse (f.eks PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1993,8 +1993,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this PimpCash address</source>
-        <translation>Underskriv brevet for at bevise du ejer denne PimpCash adresse</translation>
+        <source>Sign the message to prove you own this OKCash address</source>
+        <translation>Underskriv brevet for at bevise du ejer denne OKCash adresse</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2025,8 +2025,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified PimpCash address</source>
-        <translation>Kontroller meddelelsen for at sikre, at den blev indgået med den angivne PimpCash adresse</translation>
+        <source>Verify the message to ensure it was signed with the specified OKCash address</source>
+        <translation>Kontroller meddelelsen for at sikre, at den blev indgået med den angivne OKCash adresse</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2036,8 +2036,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Indtast en PimpCash-adresse (f.eks PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Indtast en OKCash-adresse (f.eks PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2046,8 +2046,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter PimpCash signature</source>
-        <translation>Indtast PimpCash underskrift</translation>
+        <source>Enter OKCash signature</source>
+        <translation>Indtast OKCash underskrift</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2617,8 +2617,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>PimpCash version</source>
-        <translation>PimpCash version</translation>
+        <source>OKCash version</source>
+        <translation>OKCash version</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2627,8 +2627,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Send command to -server or pimpcashd</source>
-        <translation>Send kommando til-server eller pimpcashd</translation>
+        <source>Send command to -server or okcashd</source>
+        <translation>Send kommando til-server eller okcashd</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2647,13 +2647,13 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>Specify configuration file (default: pimpcash.conf)</source>
-        <translation>Angiv konfigurationsfil (default: pimpcash.conf)</translation>
+        <source>Specify configuration file (default: okcash.conf)</source>
+        <translation>Angiv konfigurationsfil (default: okcash.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Specify pid file (default: pimpcashd.pid)</source>
-        <translation>Angiv pid fil (standard: pimpcashd.pid)</translation>
+        <source>Specify pid file (default: okcashd.pid)</source>
+        <translation>Angiv pid fil (standard: okcashd.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2802,8 +2802,8 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong PimpCash will not work properly.</source>
-        <translation>Advarsel: Kontroller venligst, at computerens dato og klokkeslæt er korrekt! Hvis dit ur er forkert vil PimpCash ikke fungere korrekt.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong OKCash will not work properly.</source>
+        <translation>Advarsel: Kontroller venligst, at computerens dato og klokkeslæt er korrekt! Hvis dit ur er forkert vil OKCash ikke fungere korrekt.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2992,24 +2992,24 @@ Det betyder, at et gebyr på mindst %2 er påkrævet.</translation>
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=pimpcashrpc
+rpcuser=okcashrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.com
 </source>
         <translation>% s, skal du indstille et rpcpassword i konfigurationsfilen: 
 % s 
 Det anbefales at bruge følgende tilfældig adgangskode: 
-rpcuser = pimpcashrpc  
+rpcuser = okcashrpc  
 rpcpassword =% s  
 (du behøver ikke at huske denne adgangskode)  
 Brugernavn og adgangskode må ikke være den samme.  
 Hvis filen ikke findes, skal du oprette den med filtilladelser ejer-læsbar-kun. 
 Det kan også anbefales at sætte alertnotify så du får besked om problemer; 
-for eksempel: alertnotify = echo%% s | mail-s &quot;PimpCash Alert&quot; admin@foo.com 
+for eksempel: alertnotify = echo%% s | mail-s &quot;OKCash Alert&quot; admin@foo.com 
 </translation>
     </message>
     <message>
@@ -3134,13 +3134,13 @@ for eksempel: alertnotify = echo%% s | mail-s &quot;PimpCash Alert&quot; admin@f
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  PimpCash is probably already running.</source>
-        <translation>Kan ikke få en lås på data mappe% s. PimpCash kører sikkert allerede.</translation>
+        <source>Cannot obtain a lock on data directory %s.  OKCash is probably already running.</source>
+        <translation>Kan ikke få en lås på data mappe% s. OKCash kører sikkert allerede.</translation>
     </message>
     <message>
         <location line="-98"/>
-        <source>PimpCash</source>
-        <translation>PimpCash</translation>
+        <source>OKCash</source>
+        <translation>OKCash</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3174,13 +3174,13 @@ for eksempel: alertnotify = echo%% s | mail-s &quot;PimpCash Alert&quot; admin@f
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of PimpCash</source>
-        <translation>Fejl ved indlæsning af wallet.dat: Wallet kræver en nyere version af PimpCash</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of OKCash</source>
+        <translation>Fejl ved indlæsning af wallet.dat: Wallet kræver en nyere version af OKCash</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart PimpCash to complete</source>
-        <translation>Det er nødvendig for wallet at blive omskrevet: Genstart PimpCash for fuldføre</translation>
+        <source>Wallet needed to be rewritten: restart OKCash to complete</source>
+        <translation>Det er nødvendig for wallet at blive omskrevet: Genstart OKCash for fuldføre</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3249,8 +3249,8 @@ for eksempel: alertnotify = echo%% s | mail-s &quot;PimpCash Alert&quot; admin@f
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. PimpCash is probably already running.</source>
-        <translation>Kunne ikke binde sig til% s på denne computer. PimpCash kører sikkert allerede.</translation>
+        <source>Unable to bind to %s on this computer. OKCash is probably already running.</source>
+        <translation>Kunne ikke binde sig til% s på denne computer. OKCash kører sikkert allerede.</translation>
     </message>
     <message>
         <location line="-97"/>

@@ -140,7 +140,7 @@ OBJS= \
     obj/stealth.o 
 
 
-all: pimpcashd
+all: okcashd
 
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/include)
@@ -175,11 +175,11 @@ obj/%.o: %.cpp
 		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
 	rm -f $(@:%.o=%.d)
 
-pimpcashd: $(OBJS:obj/%=obj/%)
+okcashd: $(OBJS:obj/%=obj/%)
 	$(LINK) $(xCXXFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
 
 clean:
-	-rm -f pimpcashd
+	-rm -f okcashd
 	-rm -f obj/*.o
 	-rm -f obj/*.P
 	-rm -f obj/build.h
