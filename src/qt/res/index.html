@@ -50,8 +50,8 @@
             <li><a href="#receive">receive</a></li>
             <li><a href="#transactions">transactions</a></li>
             <li><a href="#addressbook">address book</a></li>
-            <li><a href="#messages" onclick="iscrollReload(true);">OK Anon EM Chat</a></li>
-            <li><a href="#chaindata" onclick="chainDataPage.updateAnonOutputs();">OKCash Tokens Data</a></li>
+            <li><a href="#messages" onclick="iscrollReload(true);">Private Messages</a></li>
+            <!-- <li><a href="#chaindata" onclick="chainDataPage.updateAnonOutputs();">OKCash Tokens Data</a></li> -->
             <li><a href="#blockdata" onclick="blockExplorerPage.updateLatestBlocks();">Block Explorer</a></li>
             <li class="none"><a href="#options">Options</a></li>
             <!--li><a href="#news">news</a></li-->
@@ -156,7 +156,7 @@
                     <div>
                         <table id="balances">
                             <tr><td>Spendable:      </td><td class="balance" >0.00</td><td class="unit">OK</td></tr>
-                            <tr><td>OKCash:         </td><td id="okcashBal"  >0.00</td><td class="units">ANON</td></tr>
+                            <!-- <tr><td>OKCash:         </td><td id="okcashBal"  >0.00</td><td class="units">ANON</td></tr> -->
                             <tr><td>Reserved:       </td><td id="reserved"   >0.00</td><td class="unit">OK</td></tr>
                             <tr><td>Stake:          </td><td id="stake"      >0.00</td><td class="unit">OK</td></tr>
                             <tr><td>Unconfirmed:    </td><td id="unconfirmed">0.00</td><td class="unit">OK</td></tr>
@@ -178,10 +178,11 @@
                             </div>
                         </div>
                         <div class="flex-item grow one-third-width">
-                            <h2>OK Updates</h2>
-
-                            <div id="announcements">
-
+                            <h2 align="center">Welcome to your OKCash Wallet</h2>
+                            <div>
+							<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+							<p align="right"><a href='https://www.coingecko.com/en/price_charts/okcash/btc?id=okcash' target='_blank'><img alt='okcash price' src='https://www.coingecko.com/en/widget_component/ticker/okcash/btc.jpg?id=okcash'></a>
+                            </p>
                             </div>
                         </div>
                     </div>
@@ -262,11 +263,11 @@
                 </div><!-- #coincontrol -->
 
                 <select id="txn_type" class="txn_type button is-inverse has-fixed-icon"  style="width:180px;" onchange="changeTxnType();">
-                    <option value="0" title="OK to OK" selected>OK to OK</option>
-                    <option value="1" title="OK to OKCash">OK to OKCash</option>
+                    <option value="0" title="OK to OK" selected>send OK</option>
+                   <!--  <option value="1" title="OK to OKCash">OK to OKCash</option>
                     <option value="2" title="OKCash to OKCash">OKCash to OKCash</option>
-                    <option value="3" title="OKCash to OK">OKCash to OK</option>
-                </select>
+                    <option value="3" title="OKCash to OK">OKCash to OK</option> -->
+                </select> 
 
                 <span id="tx_ringsize">
                     <label for="ring_size" class="ring_size" style="margin-left:10px;margin-top:0;">Ring Size:</label>
@@ -283,7 +284,7 @@
                         <a  class="button is-inverse has-icon-spacing" onclick="clearRecipients();" title="Remove all transaction fields"><i class="fa fa-close"></i>Clear All</a>
                         <span title="Current spendable balance"><a class="current_spenable_balance"><b>Balance:</b> <span class="balance">0.00</span> <span class="unit">OK</span></span>
                         <span></span>
-                        <a class="button is-inverse has-icon-spacing"  id="suggest_ring_size" href="javascript:suggestRingSize();">Suggest Ring Size <i class="fa fa-calculator"></i></a>
+                        <!-- <a class="button is-inverse has-icon-spacing"  id="suggest_ring_size" href="javascript:suggestRingSize();">Suggest Ring Size <i class="fa fa-calculator"></i></a> -->
                         <a class="button is-inverse has-icon-spacing" onclick="sendCoins();" title="Confirm the send action"><i class="fa fa-arrow-right"></i>Send</a>
                     </div>
                 </div><!-- /content -->
@@ -470,7 +471,7 @@
         <!-- Messages Page -->
         <article id="messages" style="display:none;">
             <div class="content top">
-                <h2>OK Anonymous Encrypted Messages Chat Center</h2>
+                <h2>OK Private Message Center</h2>
             </div>
 
             <div class="bottom">
@@ -887,29 +888,29 @@
                                 <option value="3" title="OKtoshi (1 / 100000000)">OKtoshi</option>
                             </select>
                         </div>
-                        <div class="option">
+                        <!-- <div class="option">
                             <label for="optMinStakeInterval" class="option" title="Minimum time in seconds between successful stakes">Minimum Stake Interval</label>
                             <input  id="optMinStakeInterval" type="number" placeholder="30" step="1" title="Minimum time in seconds between successful stakes" />
                         </div>
-                        <div class="option">
+                         <div class="option">
                             <label for="optMinRingSize" class="option">Minimum Ring size:</label>
                             <input  id="optMinRingSize" type="number" min="3"   placeholder="3" step="1" />
                         </div>
                         <div class="option">
                             <label for="optMaxRingSize" class="option">Maximum Ring size:</label>
                             <input  id="optMaxRingSize" type="number" max="200" placeholder="100" step="1" />
-                        </div>
-                        <!--div class="option">
+                        </div> -->
+                        <!-- <div class="option">
                             <input  id="optAutoRedeemOKCash" type="checkbox" title="OKCash will be converted to OK as soon as has confirmed and wallet is unlocked" />
                             <label for="optAutoRedeemOKCash" class="option" title="OKCash will be converted to OK as soon as has confirmed and wallet is unlocked">Auto-redeem okcash</label>
                         </div-->
-                        <div class="option">
+                        <!-- <div class="option">
                             <input  id="optAutoRingSize" type="checkbox" title="Automatically select ring size based on best available output counts" />
                             <label for="optAutoRingSize" class="option" title="Automatically select ring size based on best available output counts">Automatically select ring size</label>
-                        </div>
+                        </div> -->
                         <div class="option">
                             <input  id="optSecureMessaging" type="checkbox" />
-                            <label for="optSecureMessaging" class="option">Enable Secure messaging</label>
+                            <label for="optSecureMessaging" class="option">Enable Private messages</label>
                         </div>
                         <!-- <div class="option">
                             <input  id="optThinMode" type="checkbox" data-linked="optThinFullIndex optThinIndexWindow" />
