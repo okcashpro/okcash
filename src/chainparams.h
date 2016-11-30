@@ -75,9 +75,9 @@ public:
     
     int RPCPort() const { return nRPCPort; }
     
-	int ThirdYearBlock() const { return nThirdYearBlock; }
-	int SecondYearBlock() const { return nSecondYearBlock; }
-	int FirstYearBlock() const { return nFirstYearBlock; }
+    int ThirdYearBlock() const { return nThirdYearBlock; }
+    int SecondYearBlock() const { return nSecondYearBlock; }
+    int FirstYearBlock() const { return nFirstYearBlock; }
 	
     
     int LastPOWBlock() const { return nLastPOWBlock; }
@@ -109,9 +109,9 @@ protected:
     int nLastPOWBlock;
     int nLastFairLaunchBlock;
     int nDistributionFund;
-	int nThirdYearBlock;
-	int nSecondYearBlock;
-	int nFirstYearBlock;
+    int nThirdYearBlock;
+    int nSecondYearBlock;
+    int nFirstYearBlock;
 };
 
 /**

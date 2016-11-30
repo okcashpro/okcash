@@ -6,7 +6,9 @@ OKCash is digital cash. OK is the official symbol. Transactions have really fast
 
 Some of OKCash  features: Fast, Efficient, Social, Community based (like Bitcoin), Decentralized, Optional Anon Transactions (OKCash Anon Tokens), Encrypted Messages system, friendly to use, Universal name, Multicultural, Multi-platform, Tor and i2p compatible and much more.
 
-OKCash Ann: https://bitcointalk.org/index.php?topic=1028368.0
+OKCash Ann (EN): https://bitcointalk.org/index.php?topic=1028368.0
+
+OKCash Ann (ES): https://bitcointalk.org/index.php?topic=1206249.0
 
 OKCash Development process
 --------
@@ -35,3 +37,6 @@ in this manner will have their corresponding issue labelled 'stagnant'.
 Issues with no commits will be given a similar warning, and closed after
 15 days from their last activity. Issues closed in this manner will be 
 labelled 'stale'.
+
+
+[![Visit the OK Community IRC Chat for Support!](https://kiwiirc.com/buttons/irc.freenode.net/okcash.png)](https://kiwiirc.com/client/irc.freenode.net/?nick=ok|?&theme=cli#okcash)

@@ -14,7 +14,7 @@ To Build
 --------
 
 cd src/
-make -f makefile.unix            # Headless okcash
+make -f makefile.unix USE_UPNP=-           # Headless okcash
 
 See readme-qt.rst for instructions on building OKCash QT,
 the graphical okcash.
@@ -61,7 +61,16 @@ Versions used in this release:
 
 Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
+
+Install dependencies:
+
 sudo apt-get install build-essential libssl-dev libdb++-dev libboost-all-dev libqrencode-dev
+
+compile okcashd (no UPnP support):
+
+cd okcash/src/
+make -f makefile.unix USE_UPNP=-
+strip okcashd
 
 If using Boost 1.37, append -mt to the boost libraries in the makefile.
 
