@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 
     // Application identification (must be set before OptionsModel is initialized,
     // as it is used to locate QSettings)
-    app.setOrganizationName("The OKCash Project");
+    app.setOrganizationName("okcash");
     app.setOrganizationDomain("okcash.co");
     if(GetBoolArg("-testnet")) // Separate UI settings for testnet
         app.setApplicationName("OKCash-testnet");
