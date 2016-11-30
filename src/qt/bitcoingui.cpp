@@ -78,7 +78,7 @@ text-align: left;\
 QToolButton {\
 min-width:180px;\
 background-color: transparent;\
-border: 1px solid #3A3939;\
+border: 1px solid #ffffff;\
 border-radius: 3px;\
 margin: 3px;\
 padding-left: 5px;\
@@ -89,20 +89,20 @@ text-align: left;\
 padding-bottom:5px;\
 }\
 QToolButton:pressed {\
-background-color: #4A4949;\
-border: 1px solid silver;\
+background-color: #f0fcfc;\
+border: 1px solid white;\
 }\
 QToolButton:checked {\
-background-color: #777777;\
-border: 1px solid silver;\
+background-color: #f0fcfc;\
+border: 1px solid white;\
 }\
 QToolButton:hover {\
-background-color: #4A4949;\
-border: 1px solid gray;\
+background-color: #f0fcfc;\
+border: 1px solid white;\
 }"
 #define HORIZONTAL_TOOLBAR_STYLESHEET "QToolBar {\
-    border: 1px solid #000000;\
-    background: 1px solid #000000;\
+    border: 1px solid #ffffff;\
+    background: 1px solid #ffffff;\
     font-weight: bold;\
 }"
 

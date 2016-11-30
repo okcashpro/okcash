@@ -2248,8 +2248,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Üretilen coinler, harcanmaya başlamadan önce 510 blokta olgunlaşmalıdır. Bu bloğu ürettiğinizde, blok zincirine eklenmek üzere ağda yayınlanır. Eğer blok, zincire girmede başarısız olursa, bloğun durumu &quot;kabul edilmedi&quot;ye dönüşür ve harcanamaz. Bu, başka bir devre sizden birkaç saniye önce bir blok ürettiyse gerçekleşebilir.</translation>
+        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Üretilen coinler, harcanmaya başlamadan önce 69 blokta olgunlaşmalıdır. Bu bloğu ürettiğinizde, blok zincirine eklenmek üzere ağda yayınlanır. Eğer blok, zincire girmede başarısız olursa, bloğun durumu &quot;kabul edilmedi&quot;ye dönüşür ve harcanamaz. Bu, başka bir devre sizden birkaç saniye önce bir blok ürettiyse gerçekleşebilir.</translation>
     </message>
     <message>
         <location line="+7"/>

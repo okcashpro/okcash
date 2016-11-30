@@ -2248,8 +2248,8 @@ Ta oznaka se obarva rdeče, če je prioriteta manjša kot &quot;srednja&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Ustvarjeni kovanci morajo zoreti 510 blokov preden so lahko potrošeni. Ko ustvarite ta blok, je predvajan po mreži in nanizan v verigo blokov. Če mu priključitev na verigo spodleti, se bo njegovo stanje spremenilo v &quot;ni sprejet&quot; in ne bo razpoložljiv. To se lahko občasno zgodi, če drugo vozlišče ustvari blok par sekund pred vami. </translation>
+        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Ustvarjeni kovanci morajo zoreti 69 blokov preden so lahko potrošeni. Ko ustvarite ta blok, je predvajan po mreži in nanizan v verigo blokov. Če mu priključitev na verigo spodleti, se bo njegovo stanje spremenilo v &quot;ni sprejet&quot; in ne bo razpoložljiv. To se lahko občasno zgodi, če drugo vozlišče ustvari blok par sekund pred vami. </translation>
     </message>
     <message>
         <location line="+7"/>

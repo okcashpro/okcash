@@ -2252,8 +2252,8 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Genererad mynt måste mogna i 510 block före de kan användas. När du genererade detta blocket sändes det ut till nätverket för att läggas till i blockkedjan. Om det inte kan läggas till i kedjan kommer dess status att ändras till &quot;Ej accepterat&quot; och det kommer inte gå att använda. Detta kan hända imellanåt om en annan klient genererar ett block inom ett par sekunder från ditt.</translation>
+        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Genererad mynt måste mogna i 69 block före de kan användas. När du genererade detta blocket sändes det ut till nätverket för att läggas till i blockkedjan. Om det inte kan läggas till i kedjan kommer dess status att ändras till &quot;Ej accepterat&quot; och det kommer inte gå att använda. Detta kan hända imellanåt om en annan klient genererar ett block inom ett par sekunder från ditt.</translation>
     </message>
     <message>
         <location line="+7"/>
