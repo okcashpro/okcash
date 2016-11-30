@@ -1,10 +1,12 @@
 <RCC>
     <qresource prefix="/icons">
-        <file alias="bitcoin">res/icons/novacoin-80.png</file>
+        <file alias="bitcoin">res/icons/pimpcash-80.png</file>
+        <file alias="bitcoin_testnet">res/icons/pimpcash-80.png</file>
+        <file alias="toolbar">res/icons/pimpcash-16.png</file>
+        <file alias="toolbar_testnet">res/icons/pimpcash-16.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
         <file alias="quit">res/icons/quit.png</file>
         <file alias="send">res/icons/send.png</file>
-        <file alias="toolbar">res/icons/novacoin-16.png</file>
         <file alias="connect_0">res/icons/connect0_16.png</file>
         <file alias="connect_1">res/icons/connect1_16.png</file>
         <file alias="connect_2">res/icons/connect2_16.png</file>
@@ -23,8 +25,6 @@
         <file alias="editpaste">res/icons/editpaste.png</file>
         <file alias="editcopy">res/icons/editcopy.png</file>
         <file alias="add">res/icons/add.png</file>
-        <file alias="bitcoin_testnet">res/icons/novacoin-80.png</file>
-        <file alias="toolbar_testnet">res/icons/novacoin-16.png</file>
         <file alias="edit">res/icons/edit.png</file>
         <file alias="history">res/icons/history.png</file>
         <file alias="overview">res/icons/overview.png</file>
@@ -46,7 +46,9 @@
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
-        <file alias="splash">res/images/splash3.png</file>
+        <file alias="splash">res/images/splash.png</file>
+        <file alias="pimp-vertical">res/images/pimp-vertical.png</file>
+        <file alias="pimp-horizontal">res/images/pimp-horizontal.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>

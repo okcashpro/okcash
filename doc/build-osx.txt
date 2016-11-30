@@ -7,12 +7,12 @@ software written by Eric Young (eay@cryptsoft.com) and UPnP software written by
 Thomas Bernard.
 
 
-Mac OS X blackcoind build instructions
+Mac OS X pimpcashd build instructions
 Laszlo Hanyecz <solar@heliacal.net>
 Douglas Huff <dhuff@jrbobdobbs.org>
 
 
-See readme-qt.rst for instructions on building BlackCoin QT, the
+See readme-qt.rst for instructions on building PimpCash QT, the
 graphical user interface.
 
 Tested on 10.5 and 10.6 intel.  PPC is not supported because it's big-endian.
@@ -27,8 +27,6 @@ but you can get the current version from http://developer.apple.com
 
 1.  Clone the github tree to get the source code:
 
-git clone git@github.com:rat4/blackcoin.git blackcoin
-
 2.  Download and install MacPorts from http://www.macports.org/
 
 2a. (for 10.7 Lion)
@@ -41,14 +39,14 @@ sudo port install boost db48 openssl miniupnpc
 Optionally install qrencode (and set USE_QRCODE=1):
 sudo port install qrencode
 
-4.  Now you should be able to build blackcoind:
+4.  Now you should be able to build pimpcashd:
 
-cd blackcoin/src
+cd pimpcash/src
 make -f makefile.osx
 
 Run:
-  ./blackcoind --help  # for a list of command-line options.
+  ./pimpcashd --help  # for a list of command-line options.
 Run
-  ./blackcoind -daemon # to start the blackcoin daemon.
+  ./pimpcashd -daemon # to start the pimpcash daemon.
 Run
-  ./blackcoind help # When the daemon is running, to get a list of RPC commands
+  ./pimpcashd help # When the daemon is running, to get a list of RPC commands

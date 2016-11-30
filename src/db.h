@@ -33,6 +33,7 @@ bool BackupWallet(const CWallet& wallet, const std::string& strDest);
 class CDBEnv
 {
 private:
+    bool fDetachDB;
     bool fDbEnvInit;
     bool fMockDb;
     boost::filesystem::path pathEnv;
@@ -73,6 +74,8 @@ public:
     void Close();
     void Flush(bool fShutdown);
     void CheckpointLSN(std::string strFile);
+    void SetDetach(bool fDetachDB_) { fDetachDB = fDetachDB_; }
+    bool GetDetach() { return fDetachDB; }
 
     void CloseDb(const std::string& strFile);
     bool RemoveDb(const std::string& strFile);

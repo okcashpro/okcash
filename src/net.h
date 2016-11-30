@@ -10,7 +10,6 @@
 #include <boost/foreach.hpp>
 #include <openssl/rand.h>
 
-
 #ifndef WIN32
 #include <arpa/inet.h>
 #endif
@@ -140,6 +139,8 @@ public:
     uint64_t nServices;
     int64_t nLastSend;
     int64_t nLastRecv;
+    uint64_t nSendBytes;
+    uint64_t nRecvBytes;
     int64_t nTimeConnected;
     std::string addrName;
     int nVersion;
@@ -195,6 +196,29 @@ public:
 
 
 
+class SecMsgNode
+{
+public:
+    SecMsgNode()
+    {
+        lastSeen        = 0;
+        lastMatched     = 0;
+        ignoreUntil     = 0;
+        nWakeCounter    = 0;
+        nPeerId         = 0;
+        fEnabled        = false;
+    };
+    
+    ~SecMsgNode() {};
+    
+    int64_t                     lastSeen;
+    int64_t                     lastMatched;
+    int64_t                     ignoreUntil;
+    uint32_t                    nWakeCounter;
+    uint32_t                    nPeerId;
+    bool                        fEnabled;
+    
+};
 
 /** Information about a peer */
 class CNode
@@ -215,6 +239,11 @@ public:
 
     int64_t nLastSend;
     int64_t nLastRecv;
+    
+    uint64_t nSendBytes;
+    uint64_t nRecvBytes;
+    
+    int64_t nLastSendEmpty;
     int64_t nTimeConnected;
     CAddress addr;
     std::string addrName;
@@ -258,6 +287,8 @@ public:
     CCriticalSection cs_inventory;
     std::multimap<int64_t, CInv> mapAskFor;
 
+    SecMsgNode smsgData;
+
     // Ping time measurement:
     // The pong reply we're expecting, or 0 if no pong expected.
     uint64_t nPingNonceSent;
@@ -275,6 +306,9 @@ public:
         nRecvVersion = INIT_PROTO_VERSION;
         nLastSend = 0;
         nLastRecv = 0;
+        nSendBytes = 0;
+        nRecvBytes = 0;
+        nLastSendEmpty = GetTime();
         nTimeConnected = GetTime();
         addr = addrIn;
         addrName = addrNameIn == "" ? addr.ToStringIPPort() : addrNameIn;
@@ -319,6 +353,12 @@ public:
 private:
     CNode(const CNode&);
     void operator=(const CNode&);
+    
+    // Network usage totals
+    static CCriticalSection cs_totalBytesRecv;
+    static CCriticalSection cs_totalBytesSent;
+    static uint64_t nTotalBytesRecv;
+    static uint64_t nTotalBytesSent;
 public:
 
 
@@ -685,6 +725,8 @@ public:
     void Subscribe(unsigned int nChannel, unsigned int nHops=0);
     void CancelSubscribe(unsigned int nChannel);
     void CloseSocketDisconnect();
+    void Cleanup();
+
 
     // Denial-of-service detection/prevention
     // The idea is to detect peers that are behaving
@@ -704,6 +746,13 @@ public:
     static bool IsBanned(CNetAddr ip);
     bool Misbehaving(int howmuch); // 1 == a little, 100 == a lot
     void copyStats(CNodeStats &stats);
+    
+    // Network stats
+    static void RecordBytesRecv(uint64_t bytes);
+    static void RecordBytesSent(uint64_t bytes);
+
+    static uint64_t GetTotalBytesRecv();
+    static uint64_t GetTotalBytesSent();
 };
 
 inline void RelayInventory(const CInv& inv)

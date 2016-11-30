@@ -189,7 +189,7 @@ bool GetIPFromIRC(SOCKET hSocket, string strMyName, CNetAddr& ipRet)
 void ThreadIRCSeed(void* parg)
 {
     // Make this thread recognisable as the IRC seeding thread
-    RenameThread("blackcoin-ircseed");
+    RenameThread("pimpcash-ircseed");
 
     try
     {
@@ -301,17 +301,19 @@ void ThreadIRCSeed2(void* parg)
             }
         }
 
-        if (fTestNet) {
-            Send(hSocket, "JOIN #blackcoinTEST\r");
-            Send(hSocket, "WHO #blackcoinTEST\r");
-        } else {
-            // randomly join #blackcoin00-#blackcoin05
-            int channel_number = GetRandInt(5);
+        if (fTestNet)
+        {
+            Send(hSocket, "JOIN #pimpcashTEST\r");
+            Send(hSocket, "WHO #pimpcashTEST\r");
+        } else
+        {
+            // randomly join #pimpcash00-#pimpcash05
+            //int channel_number = GetRandInt(5);
 
             // Channel number is always 0 for initial release
-            //int channel_number = 0;
-            Send(hSocket, strprintf("JOIN #blackcoin%02d\r", channel_number).c_str());
-            Send(hSocket, strprintf("WHO #blackcoin%02d\r", channel_number).c_str());
+            int channel_number = 0;
+            Send(hSocket, strprintf("JOIN #pimpcash%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("WHO #pimpcash%02d\r", channel_number).c_str());
         }
 
         int64_t nStart = GetTime();
@@ -356,8 +358,7 @@ void ThreadIRCSeed2(void* parg)
                     if (addrman.Add(addr, addrConnect, 51 * 60))
                         printf("IRC got new address: %s\n", addr.ToString().c_str());
                     nGotIRCAddresses++;
-                }
-                else
+                } else
                 {
                     printf("IRC decode failed\n");
                 }

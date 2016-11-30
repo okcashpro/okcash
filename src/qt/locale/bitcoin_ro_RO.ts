@@ -3,22 +3,24 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About BlackCoin</source>
-        <translation>Despre BlackCoin</translation>
+        <source>About PimpCash</source>
+        <translation>Despre PimpCash</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation>Versiune &lt;b&gt;BlackCoin&lt;/b&gt;</translation>
+        <source>&lt;b&gt;PimpCash&lt;/b&gt; version</source>
+        <translation>Versiune &lt;b&gt;PimpCash&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers</source>
+Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The PimpCash developers</source>
         <translation>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers</translation>
+Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The PimpCash developers</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -65,8 +67,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Acestea sunt adresele BlackCoin pentru a primi plăți. Poate doriți sa dați o adresa noua fiecarui expeditor pentru a putea ține evidența la cine efectuează plăti.</translation>
+        <source>These are your PimpCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Acestea sunt adresele PimpCash pentru a primi plăți. Poate doriți sa dați o adresa noua fiecarui expeditor pentru a putea ține evidența la cine efectuează plăti.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -80,8 +82,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation>Semnează un mesaj pentru a dovedi că dețineti o adresă BlackCoin</translation>
+        <source>Sign a message to prove you own a PimpCash address</source>
+        <translation>Semnează un mesaj pentru a dovedi că dețineti o adresă PimpCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -95,8 +97,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation>Verifică un mesaj pentru a vă asigura că a fost semnat cu o anumită adresă BlackCoin</translation>
+        <source>Verify a message to ensure it was signed with a specified PimpCash address</source>
+        <translation>Verifică un mesaj pentru a vă asigura că a fost semnat cu o anumită adresă PimpCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -263,8 +265,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="-58"/>
-        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>BlackCoin se va inchide pentru a termina procesul de encriptie. Amintiți-vă, criptarea portofelul dumneavoastră nu poate proteja pe deplin monedele dvs. de a fi furate de  infectarea cu malware a computerului.</translation>
+        <source>PimpCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>PimpCash se va inchide pentru a termina procesul de encriptie. Amintiți-vă, criptarea portofelul dumneavoastră nu poate proteja pe deplin monedele dvs. de a fi furate de  infectarea cu malware a computerului.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -377,8 +379,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about BlackCoin</source>
-        <translation>Arată informații despre BlackCoin</translation>
+        <source>Show information about PimpCash</source>
+        <translation>Arată informații despre PimpCash</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -427,13 +429,13 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a BlackCoin address</source>
-        <translation>Trimite monede către o adresă BlackCoin</translation>
+        <source>Send coins to a PimpCash address</source>
+        <translation>Trimite monede către o adresă PimpCash</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for BlackCoin</source>
-        <translation>Modifică opțiuni de configurare pentru BlackCoin</translation>
+        <source>Modify configuration options for PimpCash</source>
+        <translation>Modifică opțiuni de configurare pentru PimpCash</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -472,8 +474,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="-200"/>
-        <source>BlackCoin</source>
-        <translation>BlackCoin</translation>
+        <source>PimpCash</source>
+        <translation>PimpCash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -482,8 +484,8 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About BlackCoin</source>
-        <translation>Despre BlackCoin</translation>
+        <source>&amp;About PimpCash</source>
+        <translation>Despre PimpCash</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -539,13 +541,13 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>BlackCoin client</source>
-        <translation>Clientul BlackCoin</translation>
+        <source>PimpCash client</source>
+        <translation>Clientul PimpCash</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to BlackCoin network</source>
-        <translation><numerusform>%n conexiune activă la reteaua BlackCoin</numerusform><numerusform>%n conexiuni active la reteaua BlackCoin</numerusform><numerusform>%n conexiuni active la reteaua BlackCoin</numerusform></translation>
+        <source>%n active connection(s) to PimpCash network</source>
+        <translation><numerusform>%n conexiune activă la reteaua PimpCash</numerusform><numerusform>%n conexiuni active la reteaua PimpCash</numerusform><numerusform>%n conexiuni active la reteaua PimpCash</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -659,8 +661,8 @@ Adresa: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation>URI nu poate fi parsatt! Cauza poate fi o adresa BlackCoin invalidă sau parametrii URI malformați.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters.</source>
+        <translation>URI nu poate fi parsatt! Cauza poate fi o adresa PimpCash invalidă sau parametrii URI malformați.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -719,8 +721,8 @@ Adresa: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation>A apărut o eroare fatală. BlackCoin nu mai poate continua în condiții de siguranță și va iesi.</translation>
+        <source>A fatal error occurred. PimpCash can no longer continue safely and will quit.</source>
+        <translation>A apărut o eroare fatală. PimpCash nu mai poate continua în condiții de siguranță și va iesi.</translation>
     </message>
 </context>
 <context>
@@ -1053,8 +1055,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation>Adresa introdusă &quot;%1&quot; nu este o adresă BlackCoin validă</translation>
+        <source>The entered address &quot;%1&quot; is not a valid PimpCash address.</source>
+        <translation>Adresa introdusă &quot;%1&quot; nu este o adresă PimpCash validă</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1072,8 +1074,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>BlackCoin-Qt</source>
-        <translation>BlackCoin-Qt</translation>
+        <source>PimpCash-Qt</source>
+        <translation>PimpCash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1145,13 +1147,13 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation>Pornește BlackCoin imdiat după logarea în sistem</translation>
+        <source>Automatically start PimpCash after logging in to the system.</source>
+        <translation>Pornește PimpCash imdiat după logarea în sistem</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start BlackCoin on system login</source>
-        <translation>$Pornește BlackCoin la logarea în sistem</translation>
+        <source>&amp;Start PimpCash on system login</source>
+        <translation>$Pornește PimpCash la logarea în sistem</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1170,8 +1172,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Deschide automat portul pentru cientul BlackCoin pe router. Aces lucru este posibil doara daca routerul suporta UPnP si este activat</translation>
+        <source>Automatically open the PimpCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Deschide automat portul pentru cientul PimpCash pe router. Aces lucru este posibil doara daca routerul suporta UPnP si este activat</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1180,8 +1182,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Conecteaza la reteaua BlackCoin prinr-un proxy SOCKS(ex. cand te conectezi prin Tor)</translation>
+        <source>Connect to the PimpCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Conecteaza la reteaua PimpCash prinr-un proxy SOCKS(ex. cand te conectezi prin Tor)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1255,8 +1257,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation>Limba interfeței utilizator poate fi setat aici. Această setare va avea efect după repornirea BlackCoin.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting PimpCash.</source>
+        <translation>Limba interfeței utilizator poate fi setat aici. Această setare va avea efect după repornirea PimpCash.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1270,8 +1272,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation>Dacă să arate adrese BlackCoin din lista de tranzacție sau nu.</translation>
+        <source>Whether to show PimpCash addresses in the transaction list or not.</source>
+        <translation>Dacă să arate adrese PimpCash din lista de tranzacție sau nu.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1317,8 +1319,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation>Aceasta setare va avea efect dupa repornirea BlackCoin.</translation>
+        <source>This setting will take effect after restarting PimpCash.</source>
+        <translation>Aceasta setare va avea efect dupa repornirea PimpCash.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1336,8 +1338,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Informatia afisata poate fi depasita.  Portofel se sincronizează automat cu rețeaua BlackCoin după ce se stabilește o conexiune, dar acest proces nu s-a finalizat încă.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PimpCash network after a connection is established, but this process has not completed yet.</source>
+        <translation>Informatia afisata poate fi depasita.  Portofel se sincronizează automat cu rețeaua PimpCash după ce se stabilește o conexiune, dar acest proces nu s-a finalizat încă.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1552,8 +1554,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation>Afișa mesajul de ajutor BlackCoin-Qt pentru a obține o listă cu posibile opțiuni de linie de comandă BlackCoin.</translation>
+        <source>Show the PimpCash-Qt help message to get a list with possible PimpCash command-line options.</source>
+        <translation>Afișa mesajul de ajutor PimpCash-Qt pentru a obține o listă cu posibile opțiuni de linie de comandă PimpCash.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1572,13 +1574,13 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="-104"/>
-        <source>BlackCoin - Debug window</source>
-        <translation>BlackCoin - fereastră depanare</translation>
+        <source>PimpCash - Debug window</source>
+        <translation>PimpCash - fereastră depanare</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>BlackCoin Core</source>
-        <translation>BlackCoin Core</translation>
+        <source>PimpCash Core</source>
+        <translation>PimpCash Core</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1587,8 +1589,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Deschideti fisierul de depanare BlackCoin din folderul curent. Acest lucru poate dura cateva secunde pentru fisiere de log mari.</translation>
+        <source>Open the PimpCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Deschideti fisierul de depanare PimpCash din folderul curent. Acest lucru poate dura cateva secunde pentru fisiere de log mari.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1597,8 +1599,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the BlackCoin RPC console.</source>
-        <translation>Bine ati venit la consola BlackCoin RPC.</translation>
+        <source>Welcome to the PimpCash RPC console.</source>
+        <translation>Bine ati venit la consola PimpCash RPC.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1671,8 +1673,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
         <location line="+86"/>
         <location line="+86"/>
         <location line="+32"/>
-        <source>0.00 BC</source>
-        <translation>123.456 BC {0.00 ?}</translation>
+        <source>0.00 PIMP</source>
+        <translation>123.456 PIMP {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -1741,8 +1743,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>123.456 BC</source>
-        <translation>123.456 BC</translation>
+        <source>123.456 PIMP</source>
+        <translation>123.456 PIMP</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1756,8 +1758,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Introduceți o adresă BlackCoin(ex:B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Introduceți o adresă PimpCash(ex:PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1856,8 +1858,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid BlackCoin address</source>
-        <translation>Atenție: Adresă BlackCoin invalidă</translation>
+        <source>WARNING: Invalid PimpCash address</source>
+        <translation>Atenție: Adresă PimpCash invalidă</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1900,8 +1902,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Adresa catre care trimiteti plata(ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Adresa catre care trimiteti plata(ex. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1930,8 +1932,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Introduceți o adresă BlackCoin(ex:B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Introduceți o adresă PimpCash(ex:PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1954,8 +1956,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Adresa cu care semnati mesajul(ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address to sign the message with (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Adresa cu care semnati mesajul(ex. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1991,8 +1993,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation>Semnează un mesaj pentru a dovedi că dețineti o adresă BlackCoin</translation>
+        <source>Sign the message to prove you own this PimpCash address</source>
+        <translation>Semnează un mesaj pentru a dovedi că dețineti o adresă PimpCash</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2018,13 +2020,13 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Adresa cu care a fost semnat mesajul(ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address the message was signed with (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Adresa cu care a fost semnat mesajul(ex. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation>Verifică un mesaj pentru a vă asigura că a fost semnat cu o anumită adresă BlackCoin</translation>
+        <source>Verify the message to ensure it was signed with the specified PimpCash address</source>
+        <translation>Verifică un mesaj pentru a vă asigura că a fost semnat cu o anumită adresă PimpCash</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2034,8 +2036,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Introduceți o adresă BlackCoin(ex:B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Introduceți o adresă PimpCash(ex:PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2044,8 +2046,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter BlackCoin signature</source>
-        <translation>Introduceti semnatura BlackCoin</translation>
+        <source>Enter PimpCash signature</source>
+        <translation>Introduceti semnatura PimpCash</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2615,8 +2617,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>BlackCoin version</source>
-        <translation>Versiune BlackCoin</translation>
+        <source>PimpCash version</source>
+        <translation>Versiune PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2625,8 +2627,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Send command to -server or blackcoind</source>
-        <translation>Trimite comanda catre server sau blackcoind</translation>
+        <source>Send command to -server or pimpcashd</source>
+        <translation>Trimite comanda catre server sau pimpcashd</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2645,13 +2647,13 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation>Specifica fisier de configurare(implicit: blackcoin.conf)</translation>
+        <source>Specify configuration file (default: pimpcash.conf)</source>
+        <translation>Specifica fisier de configurare(implicit: pimpcash.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation>Speficica fisier pid(implicit: blackcoin.pid)</translation>
+        <source>Specify pid file (default: pimpcashd.pid)</source>
+        <translation>Speficica fisier pid(implicit: pimpcashd.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2675,8 +2677,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation>Ascultă pentru conectări pe &lt;port&gt; (implicit:  15714 sau testnet: 25714) </translation>
+        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
+        <translation>Ascultă pentru conectări pe &lt;port&gt; (implicit:  69070 sau testnet: 79080) </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2735,8 +2737,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation>Ascultă pentru conexiuni JSON-RPC pe &lt;port&gt; (implicit:15715 sau testnet: 25715)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
+        <translation>Ascultă pentru conexiuni JSON-RPC pe &lt;port&gt; (implicit:69069 sau testnet: 79079)</translation>
     </message>
     <message>
         <location line="-11"/>
@@ -2800,8 +2802,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation>Atentie: Va rugam verificati ca timpul si data calculatorului sunt corete. Daca timpul este gresit BlackCoin nu va functiona corect.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong PimpCash will not work properly.</source>
+        <translation>Atentie: Va rugam verificati ca timpul si data calculatorului sunt corete. Daca timpul este gresit PimpCash nu va functiona corect.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2990,22 +2992,22 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=blackcoinrpc
+rpcuser=pimpcashrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
 </source>
         <translation>%s, trebuie să configurați o parolă rpc în fișierul de configurare: %s
-Este recomandat să folosiți următoarea parolă generată aleator: rpcuser=blackcoinrpc
+Este recomandat să folosiți următoarea parolă generată aleator: rpcuser=pimpcashrpc
 rpcpassword=%s
 (nu trebuie să țineți minte această parolă)
 Username-ul și parola NU TREBUIE să fie aceleași.
 Dacă fișierul nu există, creați-l cu drepturi de citire doar de către deținător.
 Este deasemenea recomandat să setați alertnotify pentru a fi notificat de probleme;
-de exemplu: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+de exemplu: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
 </translation>
     </message>
     <message>
@@ -3130,13 +3132,13 @@ de exemplu: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation>Nu se poate obtine un lock pe directorul de date &amp;s. Blackoin probabil ruleaza deja.</translation>
+        <source>Cannot obtain a lock on data directory %s.  PimpCash is probably already running.</source>
+        <translation>Nu se poate obtine un lock pe directorul de date &amp;s. PimpCash probabil ruleaza deja.</translation>
     </message>
     <message>
         <location line="-98"/>
-        <source>BlackCoin</source>
-        <translation>BlackCoin</translation>
+        <source>PimpCash</source>
+        <translation>PimpCash</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3170,13 +3172,13 @@ de exemplu: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation>Eroare la încărcarea wallet.dat: Portofelul necesita o versiune mai noua de BlackCoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of PimpCash</source>
+        <translation>Eroare la încărcarea wallet.dat: Portofelul necesita o versiune mai noua de PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation>A fost nevoie de rescrierea portofelului: restartați BlackCoin pentru a finaliza</translation>
+        <source>Wallet needed to be rewritten: restart PimpCash to complete</source>
+        <translation>A fost nevoie de rescrierea portofelului: restartați PimpCash pentru a finaliza</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3245,8 +3247,8 @@ de exemplu: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation>Imposibil de conectat %s pe acest computer. Cel mai probabil BlackCoin ruleaza</translation>
+        <source>Unable to bind to %s on this computer. PimpCash is probably already running.</source>
+        <translation>Imposibil de conectat %s pe acest computer. Cel mai probabil PimpCash ruleaza</translation>
     </message>
     <message>
         <location line="-97"/>

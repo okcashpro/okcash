@@ -268,6 +268,7 @@ public:
     CBitcoinAddressVisitor(CBitcoinAddress *addrIn) : addr(addrIn) { }
     bool operator()(const CKeyID &id) const;
     bool operator()(const CScriptID &id) const;
+    bool operator()(const CStealthAddress &stxAddr) const;
     bool operator()(const CNoDestination &no) const;
 };
 
@@ -276,10 +277,10 @@ class CBitcoinAddress : public CBase58Data
 public:
     enum
     {
-        PUBKEY_ADDRESS = 25,
-        SCRIPT_ADDRESS = 85,
-        PUBKEY_ADDRESS_TEST = 111,
-        SCRIPT_ADDRESS_TEST = 196,
+        PUBKEY_ADDRESS = 55,     // P
+        SCRIPT_ADDRESS = 28,      // C
+        PUBKEY_ADDRESS_TEST = 68,    //  U
+        SCRIPT_ADDRESS_TEST = 73,    // W
     };
 
     bool Set(const CKeyID &id) {
@@ -396,6 +397,7 @@ public:
 
 bool inline CBitcoinAddressVisitor::operator()(const CKeyID &id) const         { return addr->Set(id); }
 bool inline CBitcoinAddressVisitor::operator()(const CScriptID &id) const      { return addr->Set(id); }
+bool inline CBitcoinAddressVisitor::operator()(const CStealthAddress &stxAddr) const      { return false; }
 bool inline CBitcoinAddressVisitor::operator()(const CNoDestination &id) const { return false; }
 
 /** A base58-encoded secret key */

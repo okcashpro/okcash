@@ -105,15 +105,14 @@ typedef std::map<CKeyID, std::pair<CPubKey, std::vector<unsigned char> > > Crypt
 class CCryptoKeyStore : public CBasicKeyStore
 {
 private:
-    CryptedKeyMap mapCryptedKeys;
-
-    CKeyingMaterial vMasterKey;
-
     // if fUseCrypto is true, mapKeys must be empty
     // if fUseCrypto is false, vMasterKey must be empty
     bool fUseCrypto;
 
 protected:
+    CryptedKeyMap mapCryptedKeys;
+    CKeyingMaterial vMasterKey;
+    
     bool SetCrypted();
 
     // will encrypt previously unencrypted keys
@@ -143,7 +142,7 @@ public:
         return result;
     }
 
-    bool Lock();
+    bool LockKeyStore();
 
     virtual bool AddCryptedKey(const CPubKey &vchPubKey, const std::vector<unsigned char> &vchCryptedSecret);
     bool AddKey(const CKey& key);

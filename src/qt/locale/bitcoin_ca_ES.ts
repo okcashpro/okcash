@@ -3,22 +3,24 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About BlackCoin</source>
-        <translation>Sobre BlackCoin</translation>
+        <source>About PimpCash</source>
+        <translation>Sobre PimpCash</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation>versió &lt;b&gt;BlackCoin&lt;/b&gt;</translation>
+        <source>&lt;b&gt;PimpCash&lt;/b&gt; version</source>
+        <translation>versió &lt;b&gt;PimpCash&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers</source>
+Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The PimpCash developers</source>
         <translation>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers</translation>
+Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The PimpCash developers</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -60,8 +62,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Aquestes són les teves adreces de BlackCoin per rebre els pagaments. És possible que vulgueu donar una diferent a cada remitent per a poder realitzar un seguiment de qui li está pagant.</translation>
+        <source>These are your PimpCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Aquestes són les teves adreces de PimpCash per rebre els pagaments. És possible que vulgueu donar una diferent a cada remitent per a poder realitzar un seguiment de qui li está pagant.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -75,8 +77,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation>Signar un missatge per demostrar que és propietari d&apos;una adreça BlackCoin</translation>
+        <source>Sign a message to prove you own a PimpCash address</source>
+        <translation>Signar un missatge per demostrar que és propietari d&apos;una adreça PimpCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -90,8 +92,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation>Comproveu el missatge per assegurar-se que es va signar amb una adreça BlackCoin especificada.</translation>
+        <source>Verify a message to ensure it was signed with a specified PimpCash address</source>
+        <translation>Comproveu el missatge per assegurar-se que es va signar amb una adreça PimpCash especificada.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -258,8 +260,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>BlackCoin tancarà ara per acabar el procés de xifrat. Recordeu que l&apos;encriptació del seu moneder no pot protegir completament les seves monedes de ser robades pel malware que pugui infectar al seu equip.</translation>
+        <source>PimpCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>PimpCash tancarà ara per acabar el procés de xifrat. Recordeu que l&apos;encriptació del seu moneder no pot protegir completament les seves monedes de ser robades pel malware que pugui infectar al seu equip.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -372,8 +374,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about BlackCoin</source>
-        <translation>Mostra informació sobre BlackCoin</translation>
+        <source>Show information about PimpCash</source>
+        <translation>Mostra informació sobre PimpCash</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -422,13 +424,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a BlackCoin address</source>
-        <translation>Enviar monedes a una adreça BlackCoin</translation>
+        <source>Send coins to a PimpCash address</source>
+        <translation>Enviar monedes a una adreça PimpCash</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for BlackCoin</source>
-        <translation>Modificar les opcions de configuració per a BlackCoin</translation>
+        <source>Modify configuration options for PimpCash</source>
+        <translation>Modificar les opcions de configuració per a PimpCash</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -467,8 +469,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-200"/>
-        <source>BlackCoin</source>
-        <translation>BlackCoin</translation>
+        <source>PimpCash</source>
+        <translation>PimpCash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -477,8 +479,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About BlackCoin</source>
-        <translation>&amp;Sobre BlackCoin</translation>
+        <source>&amp;About PimpCash</source>
+        <translation>&amp;Sobre PimpCash</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -534,13 +536,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>BlackCoin client</source>
-        <translation>Client BlackCoin</translation>
+        <source>PimpCash client</source>
+        <translation>Client PimpCash</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to BlackCoin network</source>
-        <translation><numerusform>%n conexió activa a la xarxa BlackCoin</numerusform><numerusform>%n conexions actives a la xarxa BlackCoin</numerusform></translation>
+        <source>%n active connection(s) to PimpCash network</source>
+        <translation><numerusform>%n conexió activa a la xarxa PimpCash</numerusform><numerusform>%n conexions actives a la xarxa PimpCash</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -650,8 +652,8 @@ Address: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation>l&apos;URI no es pot analitzar! Això pot ser causat per una adreça BlackCoin no vàlida o paràmetres URI malformats.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters.</source>
+        <translation>l&apos;URI no es pot analitzar! Això pot ser causat per una adreça PimpCash no vàlida o paràmetres URI malformats.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -710,8 +712,8 @@ Address: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation>S&apos;ha produït un error fatal. BlackCoin ja no pot continuar de forma segura i es tancarà.</translation>
+        <source>A fatal error occurred. PimpCash can no longer continue safely and will quit.</source>
+        <translation>S&apos;ha produït un error fatal. PimpCash ja no pot continuar de forma segura i es tancarà.</translation>
     </message>
 </context>
 <context>
@@ -1044,8 +1046,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation>La direcció introduïda &quot;%1&quot; no és una adreça BlackCoin vàlida.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid PimpCash address.</source>
+        <translation>La direcció introduïda &quot;%1&quot; no és una adreça PimpCash vàlida.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1063,8 +1065,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>BlackCoin-Qt</source>
-        <translation>BlackCoin-Qt</translation>
+        <source>PimpCash-Qt</source>
+        <translation>PimpCash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1136,13 +1138,13 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation>Inicia automàticament BlackCoin després d&apos;entrar en el sistema.</translation>
+        <source>Automatically start PimpCash after logging in to the system.</source>
+        <translation>Inicia automàticament PimpCash després d&apos;entrar en el sistema.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start BlackCoin on system login</source>
-        <translation>&amp;Iniciar BlackCoin amb l&apos;inici de sessió</translation>
+        <source>&amp;Start PimpCash on system login</source>
+        <translation>&amp;Iniciar PimpCash amb l&apos;inici de sessió</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1161,8 +1163,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Obrir automàticament el port de client BlackCoin en el router. Això només funciona quan el router és compatible amb UPnP i està habilitat.</translation>
+        <source>Automatically open the PimpCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Obrir automàticament el port de client PimpCash en el router. Això només funciona quan el router és compatible amb UPnP i està habilitat.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1171,8 +1173,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Connecteu-vos a la xarxa BlackCoin través d&apos;un proxy SOCKS (per exemple, quan es connecta a través de Tor).</translation>
+        <source>Connect to the PimpCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Connecteu-vos a la xarxa PimpCash través d&apos;un proxy SOCKS (per exemple, quan es connecta a través de Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1246,8 +1248,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation>L&apos;idioma de la interfície d&apos;usuari es pot configurar aquí. Aquesta configuració s&apos;aplicarà després de reiniciar BlackCoin.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting PimpCash.</source>
+        <translation>L&apos;idioma de la interfície d&apos;usuari es pot configurar aquí. Aquesta configuració s&apos;aplicarà després de reiniciar PimpCash.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1261,8 +1263,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation>Per mostrar BlackCoin adreces a la llista de transaccions o no.</translation>
+        <source>Whether to show PimpCash addresses in the transaction list or not.</source>
+        <translation>Per mostrar PimpCash adreces a la llista de transaccions o no.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1308,8 +1310,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation>Aquesta configuració s&apos;aplicarà després de reiniciar BlackCoin.</translation>
+        <source>This setting will take effect after restarting PimpCash.</source>
+        <translation>Aquesta configuració s&apos;aplicarà després de reiniciar PimpCash.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1327,8 +1329,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>La informació mostrada pot estar fora de data. El seu moneder es sincronitza automàticament amb la xarxa BlackCoin després d&apos;establir una connexió, però aquest procés no s&apos;ha completat encara.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PimpCash network after a connection is established, but this process has not completed yet.</source>
+        <translation>La informació mostrada pot estar fora de data. El seu moneder es sincronitza automàticament amb la xarxa PimpCash després d&apos;establir una connexió, però aquest procés no s&apos;ha completat encara.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1543,8 +1545,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation>Mostra el missatge d&apos;ajuda de BlackCoin-Qt per obtenir una llista amb les possibles opcions de línia d&apos;ordres BlackCoin.</translation>
+        <source>Show the PimpCash-Qt help message to get a list with possible PimpCash command-line options.</source>
+        <translation>Mostra el missatge d&apos;ajuda de PimpCash-Qt per obtenir una llista amb les possibles opcions de línia d&apos;ordres PimpCash.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1563,13 +1565,13 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="-104"/>
-        <source>BlackCoin - Debug window</source>
-        <translation>BlackCoin - Finestra Depuració</translation>
+        <source>PimpCash - Debug window</source>
+        <translation>PimpCash - Finestra Depuració</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>BlackCoin Core</source>
-        <translation>Nucli BlackCoin</translation>
+        <source>PimpCash Core</source>
+        <translation>Nucli PimpCash</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1578,8 +1580,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Obriu el fitxer de registre de depuració BlackCoin des del directori de dades actual. Això pot trigar uns segons en els arxius de registre de grans dimensions.</translation>
+        <source>Open the PimpCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Obriu el fitxer de registre de depuració PimpCash des del directori de dades actual. Això pot trigar uns segons en els arxius de registre de grans dimensions.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1588,8 +1590,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the BlackCoin RPC console.</source>
-        <translation>Benvingut a la consola RPC de BlackCoin.</translation>
+        <source>Welcome to the PimpCash RPC console.</source>
+        <translation>Benvingut a la consola RPC de PimpCash.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1662,8 +1664,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
         <location line="+86"/>
         <location line="+86"/>
         <location line="+32"/>
-        <source>0.00 BC</source>
-        <translation>123.456 BC {0.00 ?}</translation>
+        <source>0.00 PIMP</source>
+        <translation>123.456 PIMP {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -1732,8 +1734,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>123.456 BC</source>
-        <translation>123.456 BC</translation>
+        <source>123.456 PIMP</source>
+        <translation>123.456 PIMP</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1747,8 +1749,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Introdueix una adreça BlackCoin (p.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Introdueix una adreça PimpCash (p.ex. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1847,8 +1849,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid BlackCoin address</source>
-        <translation>ADVERTÈNCIA: Direcció BlackCoin invàlida</translation>
+        <source>WARNING: Invalid PimpCash address</source>
+        <translation>ADVERTÈNCIA: Direcció PimpCash invàlida</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1891,8 +1893,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>L&apos;adreça per a enviar el pagament (per exemple: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>L&apos;adreça per a enviar el pagament (per exemple: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1921,8 +1923,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Introdueix una adreça BlackCoin (p.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Introdueix una adreça PimpCash (p.ex. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1945,8 +1947,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>L&apos;adreça per a signar el missatge (per exemple B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address to sign the message with (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>L&apos;adreça per a signar el missatge (per exemple PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1982,8 +1984,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation>Signar un missatge per demostrar que és propietari d&apos;aquesta adreça BlackCoin</translation>
+        <source>Sign the message to prove you own this PimpCash address</source>
+        <translation>Signar un missatge per demostrar que és propietari d&apos;aquesta adreça PimpCash</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2009,13 +2011,13 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>La direcció que va ser signada amb un missatge (per exemple B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address the message was signed with (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>La direcció que va ser signada amb un missatge (per exemple PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation>Comproveu el missatge per assegurar-se que es va signar amb l&apos;adreça BlackCoin especificada.</translation>
+        <source>Verify the message to ensure it was signed with the specified PimpCash address</source>
+        <translation>Comproveu el missatge per assegurar-se que es va signar amb l&apos;adreça PimpCash especificada.</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2025,8 +2027,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Introdueix una adreça BlackCoin (p.ex. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Introdueix una adreça PimpCash (p.ex. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2035,8 +2037,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter BlackCoin signature</source>
-        <translation>Introduïu la signatura BlackCoin</translation>
+        <source>Enter PimpCash signature</source>
+        <translation>Introduïu la signatura PimpCash</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2606,8 +2608,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>BlackCoin version</source>
-        <translation>versió BlackCoin</translation>
+        <source>PimpCash version</source>
+        <translation>versió PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2616,8 +2618,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Send command to -server or blackcoind</source>
-        <translation>Enviar comandes a -server o blackcoind</translation>
+        <source>Send command to -server or pimpcashd</source>
+        <translation>Enviar comandes a -server o pimpcashd</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2636,13 +2638,13 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation>Especifiqueu el fitxer de configuració (per defecte: blackcoin.conf)</translation>
+        <source>Specify configuration file (default: pimpcash.conf)</source>
+        <translation>Especifiqueu el fitxer de configuració (per defecte: pimpcash.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation>Especificar arxiu pid (per defecte: blackcoind.pid)</translation>
+        <source>Specify pid file (default: pimpcashd.pid)</source>
+        <translation>Especificar arxiu pid (per defecte: pimpcashd.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2666,8 +2668,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation>Escoltar connexions en &lt;port&gt; (per defecte: 15714 o testnet: 25714)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
+        <translation>Escoltar connexions en &lt;port&gt; (per defecte: 69070 o testnet: 79080)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2726,8 +2728,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation>Escoltar connexions JSON-RPC al port &lt;port&gt; (per defecte: 15715 o testnet: 25715)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
+        <translation>Escoltar connexions JSON-RPC al port &lt;port&gt; (per defecte: 69069 o testnet: 79079)</translation>
     </message>
     <message>
         <location line="-11"/>
@@ -2791,8 +2793,8 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation>Avís: Comproveu que la data i hora de l&apos;equip siguin correctes! Si el seu rellotge és erroni BlackCoin no funcionarà correctament.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong PimpCash will not work properly.</source>
+        <translation>Avís: Comproveu que la data i hora de l&apos;equip siguin correctes! Si el seu rellotge és erroni PimpCash no funcionarà correctament.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2981,24 +2983,24 @@ En aquest cas es requereix una comisió d&apos;almenys 2%.</translation>
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=blackcoinrpc
+rpcuser=pimpcashrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
 </source>
         <translation>%s, ha d&apos;establir un rpcpassword al fitxer de configuració:
 %s
 Es recomana utilitzar la següent contrasenya aleatòria:
-rpcuser=blackcoinrpc
+rpcuser=pimpcashrpc
 rpcpassword=%s
 (No cal recordar aquesta contrasenya)
 El nom d&apos;usuari i contrasenya NO HA DE SER el mateix.
 Si no hi ha l&apos;arxiu, s&apos;ha de crear amb els permisos de només lectura per al propietari.
 També es recomana establir alertnotify per a que se li notifiquin els problemes;
-per exemple: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+per exemple: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
 </translation>
     </message>
     <message>
@@ -3124,13 +3126,13 @@ Executar una ordre quan es rep un avís rellevant (%s en cmd es substitueix per 
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation>No es pot obtenir un bloqueig en el directori de dades %s. BlackCoin probablement ja estigui en funcionament.</translation>
+        <source>Cannot obtain a lock on data directory %s.  PimpCash is probably already running.</source>
+        <translation>No es pot obtenir un bloqueig en el directori de dades %s. PimpCash probablement ja estigui en funcionament.</translation>
     </message>
     <message>
         <location line="-98"/>
-        <source>BlackCoin</source>
-        <translation>BlackCoin</translation>
+        <source>PimpCash</source>
+        <translation>PimpCash</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3164,13 +3166,13 @@ Executar una ordre quan es rep un avís rellevant (%s en cmd es substitueix per 
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation>Error en carregar wallet.dat: El moneder requereix la versió més recent de BlackCoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of PimpCash</source>
+        <translation>Error en carregar wallet.dat: El moneder requereix la versió més recent de PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation>El moneder necessita ser reescrita: reiniciar BlackCoin per completar</translation>
+        <source>Wallet needed to be rewritten: restart PimpCash to complete</source>
+        <translation>El moneder necessita ser reescrita: reiniciar PimpCash per completar</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3239,8 +3241,8 @@ Executar una ordre quan es rep un avís rellevant (%s en cmd es substitueix per 
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation>No es pot enllaçar a %s en aquest equip. BlackCoin probablement ja estigui en funcionament.</translation>
+        <source>Unable to bind to %s on this computer. PimpCash is probably already running.</source>
+        <translation>No es pot enllaçar a %s en aquest equip. PimpCash probablement ja estigui en funcionament.</translation>
     </message>
     <message>
         <location line="-97"/>

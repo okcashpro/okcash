@@ -16,13 +16,14 @@
 
 #include "keystore.h"
 #include "bignum.h"
+#include "stealth.h"
 
 typedef std::vector<unsigned char> valtype;
 
 class CTransaction;
 
 static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 520; // bytes
-static const unsigned int MAX_OP_RETURN_RELAY = 40;      // bytes
+static const unsigned int MAX_OP_RETURN_RELAY = 48;      // bytes
 
 /** Signature hash types/flags */
 enum
@@ -57,7 +58,7 @@ public:
  *  * CScriptID: TX_SCRIPTHASH destination
  *  A CTxDestination is the internal data type encoded in a CBitcoinAddress
  */
-typedef boost::variant<CNoDestination, CKeyID, CScriptID> CTxDestination;
+typedef boost::variant<CNoDestination, CKeyID, CScriptID, CStealthAddress> CTxDestination;
 
 const char* GetTxnOutputType(txnouttype t);
 
@@ -530,7 +531,7 @@ public:
 
     bool IsPayToScriptHash() const;
 
-    // Called by IsStandardTx and P2SH VerifyScript (which makes it consensus-critical).
+    // Called by CTransaction::IsStandard and P2SH VerifyScript (which makes it consensus-critical).
     bool IsPushOnly() const
     {
         const_iterator pc = begin();
@@ -545,7 +546,7 @@ public:
         return true;
     }
 
-    // Called by IsStandardTx.
+    // Called by CTransaction::IsStandard.
     bool HasCanonicalPushes() const;
 
     void SetDestination(const CTxDestination& address);

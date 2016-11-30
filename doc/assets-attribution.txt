@@ -54,6 +54,5 @@ Designer: Crobbo (forum)
 Site: https://bitcointalk.org/index.php?topic=32273.0
 License: Public domain
 
-BlackCoin Logo
-Designer: Evan
+PimpCash Logo
 License: Creative Commons Attribution 4.0 International License

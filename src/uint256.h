@@ -24,7 +24,7 @@ class base_uint
 {
 protected:
     enum { WIDTH=BITS/32 };
-    unsigned int pn[WIDTH];
+    uint32_t pn[WIDTH];
 public:
 
     bool operator!() const
@@ -386,6 +386,7 @@ public:
 typedef base_uint<160> base_uint160;
 typedef base_uint<256> base_uint256;
 
+
 //
 // uint160 and uint256 could be implemented as templates, but to keep
 // compile errors and debugging cleaner, they're copy and pasted.
@@ -617,14 +618,6 @@ inline const uint256 operator&(const uint256& a, const uint256& b)      { return
 inline const uint256 operator|(const uint256& a, const uint256& b)      { return (base_uint256)a |  (base_uint256)b; }
 inline const uint256 operator+(const uint256& a, const uint256& b)      { return (base_uint256)a +  (base_uint256)b; }
 inline const uint256 operator-(const uint256& a, const uint256& b)      { return (base_uint256)a -  (base_uint256)b; }
-
-
-
-
-
-
-
-
 
 
 #ifdef TEST_UINT256

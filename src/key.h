@@ -113,10 +113,14 @@ protected:
     bool fSet;
     bool fCompressedPubKey;
 
-    void SetCompressedPubKey();
+    
 
 public:
-
+    void SetCompressedPubKey();
+    void SetUnCompressedPubKey();
+    
+    EC_KEY* GetECKey();
+    
     void Reset();
 
     CKey();
@@ -152,6 +156,9 @@ public:
     bool SetCompactSignature(uint256 hash, const std::vector<unsigned char>& vchSig);
 
     bool Verify(uint256 hash, const std::vector<unsigned char>& vchSig);
+
+    // Verify a compact signature
+    bool VerifyCompact(uint256 hash, const std::vector<unsigned char>& vchSig);
 
     bool IsValid();
 

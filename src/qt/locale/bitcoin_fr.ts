@@ -3,22 +3,23 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About BlackCoin</source>
-        <translation>Au sujet de BlackCoin</translation>
+        <source>About PimpCash</source>
+        <translation>Au sujet de PimpCash</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;BlackCoin&lt;/b&gt; version</source>
-        <translation>Version de &lt;b&gt;BlackCoin&lt;/b&gt;</translation>
+        <source>&lt;b&gt;PimpCash&lt;/b&gt; version</source>
+        <translation>Version de &lt;b&gt;PimpCash&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers</source>
+Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The PimpCash developers</source>
         <translation>Copyright © 2009-2014 Les développeurs Bitcoin
 Copyright © 2012-2014 Les développeurs NovaCoin
-Copyright © 2014 Les développeurs BlackCoin</translation>
+Copyright © 2014 Les développeurs PimpCash</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -65,7 +66,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your BlackCoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <source>These are your PimpCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
         <translation>Ce sont vos adresses pour recevoir vos paiements. Vous pouvez utiliser une adresse différente pour chaque réception afin d&apos;identifier facilement le payeur.</translation>
     </message>
     <message>
@@ -80,8 +81,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a BlackCoin address</source>
-        <translation>Signer un message afin de valider l&apos;identité de votre adresse BlackCoin</translation>
+        <source>Sign a message to prove you own a PimpCash address</source>
+        <translation>Signer un message afin de valider l&apos;identité de votre adresse PimpCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -95,8 +96,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified BlackCoin address</source>
-        <translation>Vérifier un message pour s&apos;assurer qu&apos;il vient d&apos;un adresse BlackCoin spécifique.</translation>
+        <source>Verify a message to ensure it was signed with a specified PimpCash address</source>
+        <translation>Vérifier un message pour s&apos;assurer qu&apos;il vient d&apos;un adresse PimpCash spécifique.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -237,7 +238,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+1"/>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation>Avertissement : Si vous chiffrez votre portefeuille et perdez votre passphrase, vous ne pourrez &lt;b&gt;plus accéder à vos BlackCoins&lt;/b&gt;!</translation>
+        <translation>Avertissement : Si vous chiffrez votre portefeuille et perdez votre passphrase, vous ne pourrez &lt;b&gt;plus accéder à vos PimpCashs&lt;/b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -263,8 +264,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>BlackCoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>L&apos;application BlackCoin va désormais se terminer afin de finaliser le processus de chiffrage. Merci de noter que le chiffrage du portefeuille ne garantit pas de se prémunir du vol via utilisation de malware, qui auraient pu infecter votre ordinateur. </translation>
+        <source>PimpCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>L&apos;application PimpCash va désormais se terminer afin de finaliser le processus de chiffrage. Merci de noter que le chiffrage du portefeuille ne garantit pas de se prémunir du vol via utilisation de malware, qui auraient pu infecter votre ordinateur. </translation>
     </message>
     <message>
         <location line="+13"/>
@@ -377,8 +378,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about BlackCoin</source>
-        <translation>Afficher des informations au sujet de BlackCoin</translation>
+        <source>Show information about PimpCash</source>
+        <translation>Afficher des informations au sujet de PimpCash</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -427,13 +428,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a BlackCoin address</source>
-        <translation>Envoyer des monnaies vers une adresse BlackCoin</translation>
+        <source>Send coins to a PimpCash address</source>
+        <translation>Envoyer des monnaies vers une adresse PimpCash</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for BlackCoin</source>
-        <translation>Modification des options de configuration de BlackCoin</translation>
+        <source>Modify configuration options for PimpCash</source>
+        <translation>Modification des options de configuration de PimpCash</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -472,8 +473,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-200"/>
-        <source>BlackCoin</source>
-        <translation>BlackCoin</translation>
+        <source>PimpCash</source>
+        <translation>PimpCash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -482,8 +483,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About BlackCoin</source>
-        <translation>&amp;Au sujet de BlackCoin</translation>
+        <source>&amp;About PimpCash</source>
+        <translation>&amp;Au sujet de PimpCash</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -539,13 +540,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>BlackCoin client</source>
-        <translation>Client BlackCoin</translation>
+        <source>PimpCash client</source>
+        <translation>Client PimpCash</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to BlackCoin network</source>
-        <translation><numerusform>%n connexion active au réseau BlackCoin</numerusform><numerusform>%n connexions actives au réseau BlackCoin</numerusform></translation>
+        <source>%n active connection(s) to PimpCash network</source>
+        <translation><numerusform>%n connexion active au réseau PimpCash</numerusform><numerusform>%n connexions actives au réseau PimpCash</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -659,8 +660,8 @@ Adresse : %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid BlackCoin address or malformed URI parameters.</source>
-        <translation>L&apos;adresse du portefeuille BlackCoin n&apos;as pas pu être correctement identifiée, car invalide ou malformée.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid PimpCash address or malformed URI parameters.</source>
+        <translation>L&apos;adresse du portefeuille PimpCash n&apos;as pas pu être correctement identifiée, car invalide ou malformée.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -719,8 +720,8 @@ Adresse : %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. BlackCoin can no longer continue safely and will quit.</source>
-        <translation>Une erreur fatale a été rencontrée. L&apos;application BlackCoin ne peut plus être s&apos;exécuter de façon correcte et va se terminer.</translation>
+        <source>A fatal error occurred. PimpCash can no longer continue safely and will quit.</source>
+        <translation>Une erreur fatale a été rencontrée. L&apos;application PimpCash ne peut plus être s&apos;exécuter de façon correcte et va se terminer.</translation>
     </message>
 </context>
 <context>
@@ -1053,8 +1054,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid BlackCoin address.</source>
-        <translation>L&apos;adresse &quot;%1&quot; renseignée n&apos;est pas une adresse BlackCoin valide.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid PimpCash address.</source>
+        <translation>L&apos;adresse &quot;%1&quot; renseignée n&apos;est pas une adresse PimpCash valide.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1072,8 +1073,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>BlackCoin-Qt</source>
-        <translation>BlackCoin-Qt</translation>
+        <source>PimpCash-Qt</source>
+        <translation>PimpCash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1145,13 +1146,13 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start BlackCoin after logging in to the system.</source>
-        <translation>Démarrage automatique du client BlackCoin lors de la connexion au système</translation>
+        <source>Automatically start PimpCash after logging in to the system.</source>
+        <translation>Démarrage automatique du client PimpCash lors de la connexion au système</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start BlackCoin on system login</source>
-        <translation>&amp;Démarrage du client BlackCoin à la connexion au système</translation>
+        <source>&amp;Start PimpCash on system login</source>
+        <translation>&amp;Démarrage du client PimpCash à la connexion au système</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1170,8 +1171,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the BlackCoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Ouvrir automatiquemwnr le port client de BlackCoin sur le routeur. Ceci ne fonctionne que dans le cas où le support UPnP sur votre routeur existe et est actif.</translation>
+        <source>Automatically open the PimpCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Ouvrir automatiquemwnr le port client de PimpCash sur le routeur. Ceci ne fonctionne que dans le cas où le support UPnP sur votre routeur existe et est actif.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1180,8 +1181,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the BlackCoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Connexion au réseau BlackCoin à travers un proxy SOCKS (e.g. Connexion via le réseau Tor).</translation>
+        <source>Connect to the PimpCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Connexion au réseau PimpCash à travers un proxy SOCKS (e.g. Connexion via le réseau Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1255,8 +1256,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting BlackCoin.</source>
-        <translation>La langue d&apos;interface de l&apos;utilisateur peut être définie ici. Les modification seront prises en compte après redémarrage de l&apos;application BlackCoin</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting PimpCash.</source>
+        <translation>La langue d&apos;interface de l&apos;utilisateur peut être définie ici. Les modification seront prises en compte après redémarrage de l&apos;application PimpCash</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1270,8 +1271,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show BlackCoin addresses in the transaction list or not.</source>
-        <translation>Afficher les adresses BlackCoin au sein de la liste de transactions</translation>
+        <source>Whether to show PimpCash addresses in the transaction list or not.</source>
+        <translation>Afficher les adresses PimpCash au sein de la liste de transactions</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1317,8 +1318,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting BlackCoin.</source>
-        <translation>Les paramètres prendront effet après redémarrage du client BlackCoin</translation>
+        <source>This setting will take effect after restarting PimpCash.</source>
+        <translation>Les paramètres prendront effet après redémarrage du client PimpCash</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1336,8 +1337,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BlackCoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Les informations affichées peuvent être obsolètes. Votre portefeuille se synchronise automatiquement avec le réseau BlackCoin mais ce processus n&apos;est pas encore terminé.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PimpCash network after a connection is established, but this process has not completed yet.</source>
+        <translation>Les informations affichées peuvent être obsolètes. Votre portefeuille se synchronise automatiquement avec le réseau PimpCash mais ce processus n&apos;est pas encore terminé.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1552,8 +1553,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the BlackCoin-Qt help message to get a list with possible BlackCoin command-line options.</source>
-        <translation>Afficher le message d&apos;aide BlackCoin-Qt afin d&apos;obtenir la liste des options de de L&apos;outil en ligne de commande BlackCoin</translation>
+        <source>Show the PimpCash-Qt help message to get a list with possible PimpCash command-line options.</source>
+        <translation>Afficher le message d&apos;aide PimpCash-Qt afin d&apos;obtenir la liste des options de de L&apos;outil en ligne de commande PimpCash</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1572,13 +1573,13 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="-104"/>
-        <source>BlackCoin - Debug window</source>
-        <translation>BlackCoin - Fenêtre de déboggage</translation>
+        <source>PimpCash - Debug window</source>
+        <translation>PimpCash - Fenêtre de déboggage</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>BlackCoin Core</source>
-        <translation>BlackCoin Core</translation>
+        <source>PimpCash Core</source>
+        <translation>PimpCash Core</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1587,8 +1588,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the BlackCoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Ouvrir le fichier journal de debug BlackCoin au sein du répertoire courant. Cette opération peut prendre quelques secondes dans le cas de fichiers journaux volumineux.</translation>
+        <source>Open the PimpCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Ouvrir le fichier journal de debug PimpCash au sein du répertoire courant. Cette opération peut prendre quelques secondes dans le cas de fichiers journaux volumineux.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1597,8 +1598,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the BlackCoin RPC console.</source>
-        <translation>Bienvenue sur la console RPC de BlackCoin.</translation>
+        <source>Welcome to the PimpCash RPC console.</source>
+        <translation>Bienvenue sur la console RPC de PimpCash.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1671,8 +1672,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
         <location line="+86"/>
         <location line="+86"/>
         <location line="+32"/>
-        <source>0.00 BC</source>
-        <translation>123.456 BC {0.00 ?}</translation>
+        <source>0.00 PIMP</source>
+        <translation>123.456 PIMP {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -1741,8 +1742,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+16"/>
-        <source>123.456 BC</source>
-        <translation>123.456 BC</translation>
+        <source>123.456 PIMP</source>
+        <translation>123.456 PIMP</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1756,8 +1757,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Entrer une adresse PimpCash (par ex: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1856,8 +1857,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid BlackCoin address</source>
-        <translation>AVERTISSEMENT: Adresse BlackCoin Invalide</translation>
+        <source>WARNING: Invalid PimpCash address</source>
+        <translation>AVERTISSEMENT: Adresse PimpCash Invalide</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1867,7 +1868,7 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location line="+4"/>
         <source>WARNING: unknown change address</source>
-        <translation>AVERTISSEMENT: Adresse BlackCoin Invalide</translation>
+        <translation>AVERTISSEMENT: Adresse PimpCash Invalide</translation>
     </message>
 </context>
 <context>
@@ -1900,8 +1901,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to send the payment to  (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Adresse destinataire du paiement (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Adresse destinataire du paiement (par ex: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1930,8 +1931,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Entrer une adresse PimpCash (par ex: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1954,8 +1955,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address to sign the message with (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Entrer une adresse PimpCash (par ex: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1991,8 +1992,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this BlackCoin address</source>
-        <translation>Signer le message afin de prouver l&apos;identité de votre adresse BlackCoin</translation>
+        <source>Sign the message to prove you own this PimpCash address</source>
+        <translation>Signer le message afin de prouver l&apos;identité de votre adresse PimpCash</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2018,13 +2019,13 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>L&apos;adresse avec laquelle le message à été signé (ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>The address the message was signed with (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>L&apos;adresse avec laquelle le message à été signé (ex: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BlackCoin address</source>
-        <translation>Vérifiez le message afin de vous assurer qu&apos;il provient de l&apos;adresse BlackCoin spécifiée.</translation>
+        <source>Verify the message to ensure it was signed with the specified PimpCash address</source>
+        <translation>Vérifiez le message afin de vous assurer qu&apos;il provient de l&apos;adresse PimpCash spécifiée.</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2034,8 +2035,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a BlackCoin address (e.g. B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</source>
-        <translation>Entrer une adresse BlackCoin (par ex: B8gZqgY4r2RoEdqYk3QsAqFckyf9pRHN6i)</translation>
+        <source>Enter a PimpCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Entrer une adresse PimpCash (par ex: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2044,8 +2045,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter BlackCoin signature</source>
-        <translation>Entrer une signature BlackCoin</translation>
+        <source>Enter PimpCash signature</source>
+        <translation>Entrer une signature PimpCash</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2615,8 +2616,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>BlackCoin version</source>
-        <translation>Version BlackCoin</translation>
+        <source>PimpCash version</source>
+        <translation>Version PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2625,8 +2626,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+1"/>
-        <source>Send command to -server or blackcoind</source>
-        <translation>Envoyer commande à -server ou blackcoind</translation>
+        <source>Send command to -server or pimpcashd</source>
+        <translation>Envoyer commande à -server ou pimpcashd</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2645,13 +2646,13 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+2"/>
-        <source>Specify configuration file (default: blackcoin.conf)</source>
-        <translation>Spécifier le fichier de configuration (par défaut: blackcoin.conf)</translation>
+        <source>Specify configuration file (default: pimpcash.conf)</source>
+        <translation>Spécifier le fichier de configuration (par défaut: pimpcash.conf)</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Specify pid file (default: blackcoind.pid)</source>
-        <translation>Spécifier le fichier pid (par défaut: blackcoind.pid)</translation>
+        <source>Specify pid file (default: pimpcashd.pid)</source>
+        <translation>Spécifier le fichier pid (par défaut: pimpcashd.pid)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2675,8 +2676,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 15714 or testnet: 25714)</source>
-        <translation>Écouter les connexions sur le &lt;port&gt; (par défault: 15714 ou testnet: 25714)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
+        <translation>Écouter les connexions sur le &lt;port&gt; (par défault: 69070 ou testnet: 79080)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2735,8 +2736,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 15715 or testnet: 25715)</source>
-        <translation>Écouter les connexions JSON-RPC sur le &lt;port&gt; (default: 15715 or testnet: 25715)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
+        <translation>Écouter les connexions JSON-RPC sur le &lt;port&gt; (default: 69069 or testnet: 79079)</translation>
     </message>
     <message>
         <location line="-11"/>
@@ -2800,8 +2801,8 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BlackCoin will not work properly.</source>
-        <translation>Avertissement: Veuillez vérifier la date et l&apos;heure de votre ordinateur. BlackCoin ne pourra pas fonctionner correctement si l&apos;horloge est réglée de façon incorrecte</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong PimpCash will not work properly.</source>
+        <translation>Avertissement: Veuillez vérifier la date et l&apos;heure de votre ordinateur. PimpCash ne pourra pas fonctionner correctement si l&apos;horloge est réglée de façon incorrecte</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2990,24 +2991,24 @@ Cela implique que des frais à hauteur d&apos;au moins %2 seront nécessaires.</
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=blackcoinrpc
+rpcuser=pimpcashrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;BlackCoin Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;PimpCash Alert&quot; admin@foo.com
 </source>
         <translation>%s, vous devez définir un mot de passe rpc &apos;rpcpassword&apos; au sein du fichier de configuration:
  %s
 Il est recommandé d&apos;utiliser le mot de passe aléatoire suivant:
-rpcuser=blackcoinrpc
+rpcuser=pimpcashrpc
 rpcpassword=%s
 (il n&apos;est pas nécessaire de retenir ce mot de passe)
 Le nom d&apos;utilisateur et le mot de passe doivent IMPERATIVEMENT être différents.
 Si le fichier n&apos;existe pas, il est nécessaire de le créer, avec les droit de lecture au propriétaire seulement.
 Il est également recommandé d&apos;utiliser l&apos;option alertnotify afin d&apos;être notifié des problèmes;
-par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@foo.com
+par exemple: alertnotify=echo %%s | mail -s &quot;Alerte PimpCash&quot; admin@foo.com
 </translation>
     </message>
     <message>
@@ -3132,13 +3133,13 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  BlackCoin is probably already running.</source>
-        <translation>Echec lors de la tentative de verrou des données du répertoire %s. L&apos;application BlackCoin est probablement déjà en cours d&apos;exécution</translation>
+        <source>Cannot obtain a lock on data directory %s.  PimpCash is probably already running.</source>
+        <translation>Echec lors de la tentative de verrou des données du répertoire %s. L&apos;application PimpCash est probablement déjà en cours d&apos;exécution</translation>
     </message>
     <message>
         <location line="-98"/>
-        <source>BlackCoin</source>
-        <translation>BlackCoin</translation>
+        <source>PimpCash</source>
+        <translation>PimpCash</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3172,13 +3173,13 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BlackCoin</source>
-        <translation>Erreur de chargement du fichier wallet.dat: le portefeuille nécessite une version plus récente de l&apos;application BlackCoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of PimpCash</source>
+        <translation>Erreur de chargement du fichier wallet.dat: le portefeuille nécessite une version plus récente de l&apos;application PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart BlackCoin to complete</source>
-        <translation>Le portefeuille nécessite d&apos;être réédité : Merci de relancer l&apos;application BlackCoin</translation>
+        <source>Wallet needed to be rewritten: restart PimpCash to complete</source>
+        <translation>Le portefeuille nécessite d&apos;être réédité : Merci de relancer l&apos;application PimpCash</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3247,8 +3248,8 @@ par exemple: alertnotify=echo %%s | mail -s &quot;Alerte BlackCoin&quot; admin@f
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. BlackCoin is probably already running.</source>
-        <translation>Connexion au port %s impossible. L&apos;application BlackCoin est probablement déjà en cours d&apos;exécution</translation>
+        <source>Unable to bind to %s on this computer. PimpCash is probably already running.</source>
+        <translation>Connexion au port %s impossible. L&apos;application PimpCash est probablement déjà en cours d&apos;exécution</translation>
     </message>
     <message>
         <location line="-97"/>
