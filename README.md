@@ -35,11 +35,11 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 --------------------
 
-## Visit OK Smart Links and join the different channels
+## Visit OK Smart Links and join the different community channels
 
 #### What is Okcash?  http://okcash.co
 
-#### OK videos: [Youtube](https://www.youtube.com/channel/UC5BCYmlBtPZiC7NNv-a5gfA)
+#### OK community videos on Youtube: https://www.youtube.com/c/OkcashCrypto
 
 #### OkcashTalk Forums *new:  http://okcashtalk.org
 
@@ -52,6 +52,8 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 #### OK Reddit community: https://reddit.com/r/okcash
 
 #### OK Communications Channels: https://discord.gg/grvpc8c
+
+#### OK G+ community: https://plus.google.com/u/0/+OkcashCrypto
 
 -------------------
 
