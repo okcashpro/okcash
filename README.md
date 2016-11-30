@@ -18,8 +18,11 @@
 
 [![OK-raspberry](http://imgur.com/UJNvyax.png)](http://okcash.co/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](http://okcash.co/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](http://okcash.co/#jf_download)
 
-#### Download the Instant OK-Blockchain (Fast Sync for first time users): 
+#### Download the Instant OK-Blockchain - Fast Sync for first time users on Desktop-Laptop (Mac, Win, Linux): 
 ![OK-bootstrap](http://i.imgur.com/edwu0MM.png) https://github.com/okcashpro/ok-blockchain/releases
+
+#### Download the Instant OK-Blockchain-IoT - Fast Sync for first time users on IoT Devices (arm + arm64): 
+![OK-bootstrap](http://i.imgur.com/edwu0MM.png) https://github.com/okcashpro/ok-blockchain-iot/releases
 
 --------------------
 
