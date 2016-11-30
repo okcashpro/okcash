@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=4.0.0.1
+Name=OKCash Core Client
+Comment=OKCash Graphical UI
+Categories=Network;
+Exec=/usr/local/bin/okcash
+Icon=/usr/share/pixmaps/okcash.png
+Terminal=false
+Type=Application
