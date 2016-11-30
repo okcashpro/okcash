@@ -54,11 +54,19 @@ static const int64_t CENT = 1000000;
 static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_TX_FEE_ANON = 1000000;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
-static const int64_t MAX_MONEY = 105000000 * COIN;    //  105 million OKCash Total
-static const int64_t COIN_YEAR_REWARD = 69 * CENT;   // 69% 1st year
-static const int64_t SCOIN_YEAR_REWARD = 20 * CENT; // 20% 2nd Year
-static const int64_t CCOIN_YEAR_REWARD = 10 * CENT; // 10% 3rd Year
-static const int64_t KCOIN_YEAR_REWARD = 6 * CENT;   //   6% 4th Year and onwards
+static const int64_t MAX_MONEY = 105000000 * COIN;        //  105 million OKCash Total
+static const int64_t COIN_YEAR_REWARD = 69 * CENT;       //  69% 1st Year
+static const int64_t SCOIN_YEAR_REWARD = 20 * CENT;     //  20% 1st halving
+static const int64_t CCOIN_YEAR_REWARD = 10 * CENT;     //  10% 2nd halving
+static const int64_t KCOIN_YEAR_REWARD = 5 * CENT;       //  5% 3rd halving
+static const int64_t ICOIN_YEAR_REWARD = 2.5 * CENT;    //  2.5% 4th halving
+static const int64_t OCOIN_YEAR_REWARD = 2 * CENT;       //  2% 5th halving
+static const int64_t DCOIN_YEAR_REWARD = 1 * CENT;       //  1% 6th halving
+static const int64_t RCOIN_YEAR_REWARD = 0.5 * CENT;    //  0.5% 7th halving
+static const int64_t ECOIN_YEAR_REWARD = 0.25 * CENT;  //   0.25% 8th halving
+static const int64_t ACOIN_YEAR_REWARD = 0.1 * CENT;    //   0.1% 9th halving
+static const int64_t MCOIN_YEAR_REWARD = 0.05 * CENT;  //   0.05% 10th halving
+static const int64_t ZCOIN_YEAR_REWARD = 0.03 * CENT;  //   0.03% 11th halving and onwards
 
 
 extern int nNodeMode;

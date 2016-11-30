@@ -1,16 +1,18 @@
 ![OKCash-OK](http://i.imgur.com/rOeEycy.png)
+
+[![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) 
 OKCash OK
 ===========================
 
-![OK-bootstrap](http://i.imgur.com/edwu0MM.png) Updated OKchain bootstrap: http://bit.ly/OKchain
+![OK-bootstrap](http://i.imgur.com/edwu0MM.png) Updated Instant Bootstrap (OK-blockchain): https://github.com/okcashpro/ok-blockchain/releases
 
 OKCash is digital cash. OK is the official symbol. Transactions have really fast confirmations, making them virtually instant. You can send OKCash to family or friends, or pay for goods or services, anywhere in the world. The OKCash network is decentralized and free from middlemen, giving you back control of your finances and providing a secure network for all of your payments. 
 
-Some of the OKCash features: Fast, Efficient, Social, Community based (like Bitcoin), Decentralized, Transparency, Private Message Center, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible.
+Some of the OKCash features: Fast, Efficient, Social, Community based (like Bitcoin), Decentralized, Transparency, Private Messages, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible.
 
-OKCash Ann (EN): https://bitcointalk.org/index.php?topic=1028368.0
+OKCash BitcoinTalk Community Forum Ann: https://bitcointalk.org/index.php?topic=1028368.0
 
-OKCash Ann (ES): https://bitcointalk.org/index.php?topic=1206249.0
+OKCash Community Info Website: http://okcash.co
 
 OKCash Development process
 --------
@@ -40,5 +42,10 @@ Issues with no commits will be given a similar warning, and closed after
 15 days from their last activity. Issues closed in this manner will be 
 labelled 'stale'.
 
+#OK Community at Slack
+
+[![Slack Community](https://img.shields.io/badge/slack-okcash-blue.svg)](https://okcash.herokuapp.com)
+
+#IRC
 
 [![Visit the OK Community IRC Chat for Support!](https://kiwiirc.com/buttons/irc.freenode.net/okcash.png)](https://kiwiirc.com/client/irc.freenode.net/?nick=ok|?&theme=cli#okcash)

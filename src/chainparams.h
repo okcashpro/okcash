@@ -75,9 +75,17 @@ public:
     
     int RPCPort() const { return nRPCPort; }
     
-    int ThirdYearBlock() const { return nThirdYearBlock; }
-    int SecondYearBlock() const { return nSecondYearBlock; }
-    int FirstYearBlock() const { return nFirstYearBlock; }
+    int TenthBlockHalve() const { return nTenthBlockHalve; }
+    int NinthBlockHalve() const { return nNinthBlockHalve; }
+    int EighthBlockHalve() const { return nEighthBlockHalve; }
+    int SeventhBlockHalve() const { return nSeventhBlockHalve; }
+    int SixthBlockHalve() const { return nSixthBlockHalve; }
+    int FifthBlockHalve() const { return nFifthBlockHalve; }
+    int FourthBlockHalve() const { return nFourthBlockHalve; }
+    int ThirdBlockHalve() const { return nThirdBlockHalve; }
+    int SecondBlockHalve() const { return nSecondBlockHalve; }
+    int FirstBlockHalve() const { return nFirstBlockHalve; }
+    int FirstYearStake() const { return nFirstYearStake; }
 	
     
     int LastPOWBlock() const { return nLastPOWBlock; }
@@ -109,9 +117,17 @@ protected:
     int nLastPOWBlock;
     int nLastFairLaunchBlock;
     int nDistributionFund;
-    int nThirdYearBlock;
-    int nSecondYearBlock;
-    int nFirstYearBlock;
+    int nTenthBlockHalve;
+    int nNinthBlockHalve;
+    int nEighthBlockHalve;
+    int nSeventhBlockHalve;
+    int nSixthBlockHalve;
+    int nFifthBlockHalve;
+    int nFourthBlockHalve;
+    int nThirdBlockHalve;
+    int nSecondBlockHalve;
+    int nFirstBlockHalve;
+    int nFirstYearStake;
 };
 
 /**

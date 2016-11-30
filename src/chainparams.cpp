@@ -59,17 +59,40 @@ int64_t CChainParams::GetProofOfWorkReward(int nHeight, int64_t nFees) const
 int64_t CChainParams::GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees) const
 {
     // miner's coin stake reward based on coin age spent (coin-days)
-    int64_t nSubsidy = nCoinAge * KCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    int64_t nSubsidy = nCoinAge * ZCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     
-    if (pindexBest->nHeight <= nFirstYearBlock)
+    if (pindexBest->nHeight <= nFirstYearStake)
         nSubsidy = nCoinAge * COIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     else
-    if (pindexBest->nHeight <= nSecondYearBlock)
+    if (pindexBest->nHeight <= nFirstBlockHalve)
         nSubsidy = nCoinAge * SCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     else	
-    if (pindexBest->nHeight <= nThirdYearBlock)
+    if (pindexBest->nHeight <= nSecondBlockHalve)
         nSubsidy = nCoinAge * CCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
-    
+    else	
+    if (pindexBest->nHeight <= nThirdBlockHalve)
+        nSubsidy = nCoinAge * KCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nFourthBlockHalve)
+        nSubsidy = nCoinAge * ICOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nFifthBlockHalve)
+        nSubsidy = nCoinAge * OCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nSixthBlockHalve)
+        nSubsidy = nCoinAge * DCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nSeventhBlockHalve)
+        nSubsidy = nCoinAge * RCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nEighthBlockHalve)
+        nSubsidy = nCoinAge * ECOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nNinthBlockHalve)
+        nSubsidy = nCoinAge * ACOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nTenthBlockHalve)
+        nSubsidy = nCoinAge * MCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
 
 
     if (fDebug && GetBoolArg("-printcreation"))
@@ -177,9 +200,18 @@ public:
         //convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
         convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
         
-        nThirdYearBlock = 1523771; // + 1 year blocks average
-        nSecondYearBlock = 1022514; // + 1 year blocks average
-        nFirstYearBlock = 531257;  // 501257 blocks/year + 20k blocks(nov 30) + 10k blocks update
+        // 1 Year aprox = 501257 blocks /  4 Year aprox = 2005028 blocks
+        nTenthBlockHalve = 14556453; // + 4 year blocks average                  x 0.05
+        nNinthBlockHalve = 12551425; // + 4 year blocks average                   x 0.1
+        nEighthBlockHalve = 10546397; // + 4 year blocks average                  x 0.25
+        nSeventhBlockHalve = 8541369; // + 4 year blocks average                 x 0.5
+        nSixthBlockHalve = 6536341; // + 4 year blocks average                      x 1
+        nFifthBlockHalve = 4531313; // + 4 year blocks average                       x 2
+        nFourthBlockHalve = 2526285; // + 1 year blocks average                    x 2.5
+        nThirdBlockHalve = 2025028; // + 1 year blocks average                      x 5
+        nSecondBlockHalve = 1523771; // + 1 year blocks average                   x 10
+        nFirstBlockHalve = 1022514; // + 1 year blocks average - 10k blockupdt x 20
+        nFirstYearStake = 531257;  // 501257 blocks/year + 20k blocks(nov 30) + 10 k blocksupdate x 69
         
         nLastPOWBlock = 33186;
         nLastFairLaunchBlock = 30;

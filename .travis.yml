@@ -1,0 +1,21 @@
+---
+language: cpp
+compiler: gcc
+os: linux
+sudo: required
+dist: trusty
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools build-essential libboost-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev libssl-dev libdb++-dev libminiupnpc-dev libqt5webkit5-dev
+script:
+  - qmake
+  - make -j2
+  - cd src && RELEASE=1 STATIC=TRUE make -j2 -f makefile.unix && strip okcashd
+# TODO: 
+#deploy:
+#  provider: releases
+#  api_key: "GITHUB OAUTH TOKEN"
+#  file: "FILE TO UPLOAD"
+#  skip_cleanup: true
+#  on:
+#    tags: true

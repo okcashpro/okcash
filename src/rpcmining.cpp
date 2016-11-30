@@ -91,6 +91,14 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("stakeinterest",         (uint64_t)SCOIN_YEAR_REWARD));
     obj.push_back(Pair("stakeinterest",         (uint64_t)CCOIN_YEAR_REWARD));
     obj.push_back(Pair("stakeinterest",         (uint64_t)KCOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)ICOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)OCOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)DCOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)RCOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)ECOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)ACOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)MCOIN_YEAR_REWARD));
+    obj.push_back(Pair("stakeinterest",         (uint64_t)ZCOIN_YEAR_REWARD));
     obj.push_back(Pair("testnet",               fTestNet));
     return obj;
 }

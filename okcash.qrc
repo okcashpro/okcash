@@ -44,7 +44,6 @@
         <file alias="about">src/qt/res/images/about.png</file>
         <file alias="splash">src/qt/res/images/splash.png</file>
         <file alias="ok-vertical">src/qt/res/images/ok-vertical.png</file>
-        <file alias="graph">src/qt/res/images/graph.png</file>
         <file alias="default">src/qt/res/images/avatars/default.png</file>
     </qresource>
     <qresource prefix="/translations">
