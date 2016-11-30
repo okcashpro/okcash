@@ -1199,7 +1199,7 @@ label.recipient {
   padding: 7px 14px;
   -webkit-border-radius: 5;
   -moz-border-radius: 5;
-  border-radius: 5px;
+  border-radius: 20px;
   background-color: transparent;
   color: inherit;
   vertical-align: middle;

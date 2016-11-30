@@ -55,17 +55,13 @@ Licenses of statically linked libraries:
 Versions used in this release:
  GCC           4.9.0
  OpenSSL       1.0.1g
- Berkeley DB   5.3.28.NC
+ Berkeley DB   4.8.30NC
  Boost         1.55.0
  miniupnpc     1.9.20140401
 
 Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
-sudo apt-get install build-essential
-sudo apt-get install libssl-dev
-sudo apt-get install libdb++-dev
-sudo apt-get install libboost-all-dev
-sudo apt-get install libqrencode-dev
+sudo apt-get install build-essential libssl-dev libdb++-dev libboost-all-dev libqrencode-dev
 
 If using Boost 1.37, append -mt to the boost libraries in the makefile.
 

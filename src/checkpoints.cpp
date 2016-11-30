@@ -36,7 +36,8 @@ namespace Checkpoints
         ( 300000,   uint256("0xbd1178c903fbf5a2ed6c7e7207f82a828f392d8d80499d9daa2ad2311817d075") )
         ( 360000,   uint256("0xfad01c88115aeacf5871459cc76325b6766214334c98d9b53da48dc6605b725c") )
         ( 400000,   uint256("0xc0bf944bac3cb24974578c5c17479cb05ac41d12305b51b324eadcb2855b1a14") )
-    ;
+        ( 471000,   uint256("0x8ea2035f9a8bd9edaa9f39897f9e6e7492736a2815ec1507ddcb40a963c93293") )
+		;
 
     // TestNet has no checkpoints
     MapCheckpoints mapCheckpointsTestnet =
