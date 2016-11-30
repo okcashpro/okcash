@@ -36,8 +36,8 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
-static const int64_t MAX_MONEY = 2000000000 * COIN;
-static const int64_t COIN_YEAR_REWARD = 69 * CENT; // 69% per year
+static const int64_t MAX_MONEY = 105000000 * COIN;  //  105 million OKCash Total
+static const int64_t COIN_YEAR_REWARD = 69 * CENT; // 69% 1st Year : 20% 2nd : 10% 3rd : 6% 4th onwards  
 
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.

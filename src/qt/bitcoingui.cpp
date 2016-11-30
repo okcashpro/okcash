@@ -78,7 +78,7 @@ text-align: left;\
 QToolButton {\
 min-width:180px;\
 background-color: transparent;\
-border: 1px solid #0193c9;\
+border: 1px solid #f7f7f7;\
 border-radius: 0px;\
 margin: 3px;\
 padding-left: 5px;\
@@ -89,20 +89,20 @@ text-align: left;\
 padding-bottom:5px;\
 }\
 QToolButton:pressed {\
-background-color: #02c0ec;\
-border: 1px solid #02c0ec;\
+background-color: #ffffff;\
+border: 1px solid #ffffff;\
 }\
 QToolButton:checked {\
-background-color: #02c0ec;\
-border: 1px solid #02c0ec;\
+background-color: #ffffff;\
+border: 1px solid #ffffff;\
 }\
 QToolButton:hover {\
-background-color: #02c0ec;\
-border: 1px solid #02c0ec;\
+background-color: #ffffff;\
+border: 1px solid #ffffff;\
 }"
 #define HORIZONTAL_TOOLBAR_STYLESHEET "QToolBar {\
-    border: 1px solid #0193c9;\
-    background: 1px solid #0193c9;\
+    border: 1px solid #f7f7f7;\
+    background: 1px solid #f7f7f7;\
     font-weight: bold;\
 }"
 
@@ -700,8 +700,7 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     else
     {
         tooltip = tr("Catching up...") + QString("<br>") + tooltip;
-        labelBlocksIcon->setMovie(syncIconMovie);
-        syncIconMovie->start();
+        labelBlocksIcon->setPixmap(QIcon(":/icons/notsynced").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
 
         overviewPage->showOutOfSyncWarning(true);
     }

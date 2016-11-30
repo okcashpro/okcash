@@ -13,13 +13,15 @@
     </message>
     <message>
         <location line="+41"/>
-        <source>Copyright © 2009-2014 The Bitcoin developers
+        <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
 Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The ShadowCash developers
 Copyright © 2014-2015 The OKCash developers</source>
-        <translation>Copyright © 2009-2014 The Bitcoin developers
+        <translation>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
 Copyright © 2014 The BlackCoin developers
+Copyright © 2014 The ShadowCash developers
 Copyright © 2014-2015 The OKCash developers</translation>
     </message>
     <message>
