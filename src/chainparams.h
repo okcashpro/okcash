@@ -85,7 +85,7 @@ public:
     int DistributionFund() const { return nDistributionFund; }
     
     int64_t GetProofOfWorkReward(int nHeight, int64_t nFees) const;
-    int64_t GetProofOfStakeReward(int nHeight, int64_t nCoinAge, int64_t nFees) const;
+    int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees) const;
     
 protected:
     CChainParams() {};

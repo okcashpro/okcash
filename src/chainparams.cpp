@@ -56,18 +56,18 @@ int64_t CChainParams::GetProofOfWorkReward(int nHeight, int64_t nFees) const
 };
 
 
-int64_t CChainParams::GetProofOfStakeReward(int nHeight, int64_t nCoinAge, int64_t nFees) const
+int64_t CChainParams::GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees) const
 {
     // miner's coin stake reward based on coin age spent (coin-days)
     int64_t nSubsidy = nCoinAge * KCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     
-    if (nHeight <= nFirstYearBlock)
+    if (pindexBest->nHeight <= nFirstYearBlock)
         nSubsidy = nCoinAge * COIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     else
-    if (nHeight <= nSecondYearBlock)
+    if (pindexBest->nHeight <= nSecondYearBlock)
         nSubsidy = nCoinAge * SCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     else	
-    if (nHeight <= nThirdYearBlock)
+    if (pindexBest->nHeight <= nThirdYearBlock)
         nSubsidy = nCoinAge * CCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     
 

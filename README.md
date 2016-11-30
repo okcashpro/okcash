@@ -2,9 +2,11 @@
 OKCash OK
 ===========================
 
+![OK-bootstrap](http://i.imgur.com/edwu0MM.png) Updated OKchain bootstrap: http://bit.ly/OKchain
+
 OKCash is digital cash. OK is the official symbol. Transactions have really fast confirmations, making them virtually instant. You can send OKCash to family or friends, or pay for goods or services, anywhere in the world. The OKCash network is decentralized and free from middlemen, giving you back control of your finances and providing a secure network for all of your payments. 
 
-Some of OKCash  features: Fast, Efficient, Social, Community based (like Bitcoin), Decentralized, Optional Anon Transactions (OKCash Anon Tokens), Encrypted Messages system, friendly to use, Universal name, Multicultural, Multi-platform, Tor and i2p compatible and much more.
+Some of the OKCash features: Fast, Efficient, Social, Community based (like Bitcoin), Decentralized, Transparency, Private Message Center, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible.
 
 OKCash Ann (EN): https://bitcointalk.org/index.php?topic=1028368.0
 

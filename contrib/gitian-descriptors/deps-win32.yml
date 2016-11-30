@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-deps"
+name: "okcash-deps"
 suites:
 - "lucid"
 architectures:
@@ -10,12 +10,12 @@ packages:
 - "zip"
 - "faketime"
 - "wine"
-reference_datetime: "2011-01-30 00:00:00"
+reference_datetime: "2015-11-30 00:00:00"
 remotes: []
 files:
-- "openssl-1.0.1b.tar.gz"
+- "openssl-1.0.1l.tar.gz"
 - "db-4.8.30.NC.tar.gz"
-- "miniupnpc-1.6.tar.gz"
+- "miniupnpc-1.9.20140701.tar.gz"
 - "zlib-1.2.7.tar.gz"
 - "libpng-1.5.12.tar.gz"
 - "qrencode-3.2.0.tar.bz2"
@@ -25,8 +25,8 @@ script: |
   export FAKETIME=$REFERENCE_DATETIME
   export TZ=UTC
   #
-  tar xzf openssl-1.0.1b.tar.gz
-  cd openssl-1.0.1b
+  tar xzf openssl-1.0.1l.tar.gz
+  cd openssl-1.0.1l
   ./Configure --cross-compile-prefix=i586-mingw32msvc- mingw
   make
   cd ..
@@ -37,13 +37,13 @@ script: |
   make $MAKEOPTS
   cd ../..
   #
-  tar xzf miniupnpc-1.6.tar.gz
-  cd miniupnpc-1.6
+  tar xzf miniupnpc-1.9.20140701.tar.gz
+  cd miniupnpc-1.9.20140701
   sed 's/dllwrap -k --driver-name gcc/$(DLLWRAP) -k --driver-name $(CC)/' -i Makefile.mingw
   sed 's|wingenminiupnpcstrings $< $@|./wingenminiupnpcstrings $< $@|' -i Makefile.mingw
   make -f Makefile.mingw DLLWRAP=i586-mingw32msvc-dllwrap CC=i586-mingw32msvc-gcc AR=i586-mingw32msvc-ar
   cd ..
-  mv miniupnpc-1.6 miniupnpc
+  mv miniupnpc-1.9.20140701 miniupnpc
   #
   tar xzf zlib-1.2.7.tar.gz
   cd zlib-1.2.7
@@ -62,7 +62,7 @@ script: |
   make $MAKEOPTS
   cd ..
   #
-  zip -r $OUTDIR/ppcoin-deps-0.0.1.zip \
+  zip -r $OUTDIR/okcash-deps-0.0.1.zip \
     $(ls qrencode-*/{qrencode.h,.libs/libqrencode.{,l}a} | sort) \
     $(ls db-*/build_unix/{libdb_cxx.a,db.h,db_cxx.h,libdb.a,.libs/libdb_cxx-?.?.a} | sort) \
     $(find openssl-* -name '*.a' -o -name '*.h' | sort) \

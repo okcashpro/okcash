@@ -8,15 +8,15 @@ packages:
 - "mingw32"
 - "faketime"
 - "zip"
-reference_datetime: "2011-01-30 00:00:00"
+reference_datetime: "2015-11-30 00:00:00"
 remotes: []
 files:
-- "boost_1_47_0.tar.bz2"
+- "boost_1_55_0.tar.bz2"
 script: |
   TMPDIR="$HOME/tmpdir"
   mkdir -p $TMPDIR/bin/$GBUILD_BITS $TMPDIR/include
-  tar xjf boost_1_47_0.tar.bz2
-  cd boost_1_47_0
+  tar xjf boost_1_55_0.tar.bz2
+  cd boost_1_55_0
   echo "using gcc : 4.4 : i586-mingw32msvc-g++
         :
         <rc>i586-mingw32msvc-windres

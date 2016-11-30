@@ -54,7 +54,7 @@ Licenses of statically linked libraries:
 
 Versions used in this release:
  GCC           4.9.0
- OpenSSL       1.0.1g
+ OpenSSL       1.0.1l
  Berkeley DB   4.8.30NC
  Boost         1.55.0
  miniupnpc     1.9.20140401
@@ -64,7 +64,7 @@ Dependency Build Instructions: Ubuntu & Debian
 
 Install dependencies:
 
-sudo apt-get install build-essential libssl-dev libdb++-dev libboost-all-dev libqrencode-dev
+sudo apt-get install build-essential libssl-dev libdb++-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
 
 compile okcashd (no UPnP support):
 
