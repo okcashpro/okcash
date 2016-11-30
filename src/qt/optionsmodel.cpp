@@ -16,21 +16,18 @@ bool static ApplyProxySettings()
 {
     QSettings settings;
     CService addrProxy(settings.value("addrProxy", "127.0.0.1:9050").toString().toStdString());
-    int nSocksVersion(settings.value("nSocksVersion", 5).toInt());
+    
     if (!settings.value("fUseProxy", false).toBool()) {
         addrProxy = CService();
-        nSocksVersion = 0;
         return false;
     }
-    if (nSocksVersion && !addrProxy.IsValid())
+    if (!addrProxy.IsValid())
         return false;
     if (!IsLimited(NET_IPV4))
-        SetProxy(NET_IPV4, addrProxy, nSocksVersion);
-    if (nSocksVersion > 4) {
-        if (!IsLimited(NET_IPV6))
-            SetProxy(NET_IPV6, addrProxy, nSocksVersion);
-        SetNameProxy(addrProxy, nSocksVersion);
-    }
+    SetProxy(NET_IPV4, addrProxy);
+    if (!IsLimited(NET_IPV6))
+        SetProxy(NET_IPV6, addrProxy);
+    SetNameProxy(addrProxy);
     return true;
 }
 
@@ -39,14 +36,20 @@ void OptionsModel::Init()
     QSettings settings;
 
     // These are Qt-only settings:
-    nDisplayUnit = settings.value("nDisplayUnit", BitcoinUnits::BTC).toInt();
+    nDisplayUnit = settings.value("nDisplayUnit", BitcoinUnits::OK).toInt();
     bDisplayAddresses = settings.value("bDisplayAddresses", false).toBool();
     fMinimizeToTray = settings.value("fMinimizeToTray", false).toBool();
     fMinimizeOnClose = settings.value("fMinimizeOnClose", false).toBool();
-    fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
     nTransactionFee = settings.value("nTransactionFee").toLongLong();
     nReserveBalance = settings.value("nReserveBalance").toLongLong();
     language = settings.value("language", "").toString();
+    nRowsPerPage = settings.value("nRowsPerPage", 20).toInt();
+    notifications = settings.value("notifications", "*").toStringList();
+    visibleTransactions = settings.value("visibleTransactions", "*").toStringList();
+    fAutoRingSize = settings.value("fAutoRingSize", false).toBool();
+    fAutoRedeemOKCash = settings.value("fAutoRedeemOKCash", false).toBool();
+    nMinRingSize = settings.value("nMinRingSize", 3).toInt();
+    nMaxRingSize = settings.value("nMaxRingSize", 200).toInt();
 
     // These are shared with core Bitcoin; we want
     // command-line options to override the GUI settings:
@@ -60,6 +63,18 @@ void OptionsModel::Init()
         SoftSetBoolArg("-detachdb", settings.value("detachDB").toBool());
     if (!language.isEmpty())
         SoftSetArg("-lang", language.toStdString());
+    if (settings.contains("fStaking"))
+        SoftSetBoolArg("-staking", settings.value("fStaking").toBool());
+    if (settings.contains("nMinStakeInterval"))
+        SoftSetArg("-minstakeinterval", settings.value("nMinStakeInterval").toString().toStdString());
+    if (settings.contains("fSecMsgEnabled"))
+        SoftSetBoolArg("-nosmsg", !settings.value("fSecMsgEnabled").toBool());
+    if (settings.contains("fThinMode"))
+        SoftSetBoolArg("-thinmode", settings.value("fThinMode").toBool());
+    if (settings.contains("fThinFullIndex"))
+        SoftSetBoolArg("-thinfullindex", settings.value("fThinFullIndex").toBool());
+    if (settings.contains("nThinIndexWindow"))
+        SoftSetArg("-thinindexmax", settings.value("nThinIndexWindow").toString().toStdString());
 }
 
 int OptionsModel::rowCount(const QModelIndex & parent) const
@@ -75,50 +90,118 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         switch(index.row())
         {
         case StartAtStartup:
-            return QVariant(GUIUtil::GetStartOnSystemStartup());
+            return GUIUtil::GetStartOnSystemStartup();
         case MinimizeToTray:
-            return QVariant(fMinimizeToTray);
+            return fMinimizeToTray;
         case MapPortUPnP:
             return settings.value("fUseUPnP", GetBoolArg("-upnp", true));
         case MinimizeOnClose:
-            return QVariant(fMinimizeOnClose);
+            return fMinimizeOnClose;
         case ProxyUse:
             return settings.value("fUseProxy", false);
         case ProxyIP: {
             proxyType proxy;
             if (GetProxy(NET_IPV4, proxy))
-                return QVariant(QString::fromStdString(proxy.first.ToStringIP()));
+                return QString::fromStdString(proxy.ToStringIP());
             else
-                return QVariant(QString::fromStdString("127.0.0.1"));
+                return "";
         }
         case ProxyPort: {
             proxyType proxy;
             if (GetProxy(NET_IPV4, proxy))
-                return QVariant(proxy.first.GetPort());
-            else
-                return QVariant(9050);
+                return QVariant(proxy.GetPort());
         }
+            break;
+
         case ProxySocksVersion:
             return settings.value("nSocksVersion", 5);
         case Fee:
-            return QVariant((qint64) nTransactionFee);
+            return (qint64) nTransactionFee;
         case ReserveBalance:
-            return QVariant((qint64) nReserveBalance);
+            return (qint64) nReserveBalance;
         case DisplayUnit:
-            return QVariant(nDisplayUnit);
+            return nDisplayUnit;
         case DisplayAddresses:
-            return QVariant(bDisplayAddresses);
+            return bDisplayAddresses;
         case DetachDatabases:
-            return QVariant(bitdb.GetDetach());
+            return bitdb.GetDetach();
         case Language:
             return settings.value("language", "");
-        case CoinControlFeatures:
-            return QVariant(fCoinControlFeatures);
-        default:
-            return QVariant();
+        case RowsPerPage:
+            return nRowsPerPage;
+        case AutoRingSize:
+            return fAutoRingSize;
+        case AutoRedeemOKCash:
+            return fAutoRedeemOKCash;
+        case MinRingSize:
+            return nMinRingSize;
+        case MaxRingSize:
+            return nMaxRingSize;
+        case Staking:
+            return settings.value("fStaking", GetBoolArg("-staking", true)).toBool();
+        case MinStakeInterval:
+            return nMinStakeInterval;
+        case SecureMessaging:
+            return fSecMsgEnabled;
+        case ThinMode:
+            return settings.value("fThinMode",      GetBoolArg("-thinmode",      false)).toBool();
+        case ThinFullIndex:
+            return settings.value("fThinFullIndex", GetBoolArg("-thinfullindex", false)).toBool();
+        case ThinIndexWindow:
+            return settings.value("ThinIndexWindow", (qint64) GetArg("-thinindexwindow", 4096)).toInt();
+        case Notifications:
+            return notifications;
+        case VisibleTransactions:
+            return visibleTransactions;
         }
     }
+
     return QVariant();
+}
+
+QString OptionsModel::optionIDName(int row)
+{
+    switch(row)
+    {
+    case Fee: return "Fee";
+    case ReserveBalance: return "ReserveBalance";
+    case StartAtStartup: return "StartAtStartup";
+    case DetachDatabases: return "DetachDatabases";
+    case Staking: return "Staking";
+    case MinStakeInterval: return "MinStakeInterval";
+    case SecureMessaging: return "SecureMessaging";
+    case ThinMode: return "ThinMode";
+    case ThinFullIndex: return "ThinFullIndex";
+    case ThinIndexWindow: return "ThinIndexWindow";
+    case AutoRingSize: return "AutoRingSize";
+    case AutoRedeemOKCash: return "AutoRedeemOKCash";
+    case MinRingSize: return "MinRingSize";
+    case MaxRingSize: return "MaxRingSize";
+    case MapPortUPnP: return "MapPortUPnP";
+    case ProxyUse: return "ProxyUse";
+    case ProxyIP: return "ProxyIP";
+    case ProxyPort: return "ProxyPort";
+    case ProxySocksVersion: return "ProxySocksVersion";
+    case MinimizeToTray: return "MinimizeToTray";
+    case MinimizeOnClose: return "MinimizeOnClose";
+    case Language: return "Language";
+    case DisplayUnit: return "DisplayUnit";
+    case DisplayAddresses: return "DisplayAddresses";
+    case RowsPerPage: return "RowsPerPage";
+    case Notifications: return "Notifications";
+    case VisibleTransactions: return "VisibleTransactions";
+    }
+
+    return "";
+}
+
+int OptionsModel::optionNameID(QString name)
+{
+    for(int i=0;i<OptionIDRowCount;i++)
+        if(optionIDName(i) == name)
+            return i;
+
+    return -1;
 }
 
 bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, int role)
@@ -138,8 +221,8 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             break;
         case MapPortUPnP:
             fUseUPnP = value.toBool();
-            settings.setValue("fUseUPnP", fUseUPnP);
-            MapPort();
+            settings.setValue("fUseUPnP", value.toBool());
+            MapPort(value.toBool());
             break;
         case MinimizeOnClose:
             fMinimizeOnClose = value.toBool();
@@ -151,32 +234,22 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             break;
         case ProxyIP: {
             proxyType proxy;
-            proxy.first = CService("127.0.0.1", 9050);
+            proxy = CService("127.0.0.1", 9050);
             GetProxy(NET_IPV4, proxy);
 
             CNetAddr addr(value.toString().toStdString());
-            proxy.first.SetIP(addr);
-            settings.setValue("addrProxy", proxy.first.ToStringIPPort().c_str());
+            proxy.SetIP(addr);
+            settings.setValue("addrProxy", proxy.ToStringIPPort().c_str());
             successful = ApplyProxySettings();
         }
         break;
         case ProxyPort: {
             proxyType proxy;
-            proxy.first = CService("127.0.0.1", 9050);
+            proxy = CService("127.0.0.1", 9050);
             GetProxy(NET_IPV4, proxy);
 
-            proxy.first.SetPort(value.toInt());
-            settings.setValue("addrProxy", proxy.first.ToStringIPPort().c_str());
-            successful = ApplyProxySettings();
-        }
-        break;
-        case ProxySocksVersion: {
-            proxyType proxy;
-            proxy.second = 5;
-            GetProxy(NET_IPV4, proxy);
-
-            proxy.second = value.toInt();
-            settings.setValue("nSocksVersion", proxy.second);
+            proxy.SetPort(value.toInt());
+            settings.setValue("addrProxy", proxy.ToStringIPPort().c_str());
             successful = ApplyProxySettings();
         }
         break;
@@ -198,6 +271,7 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case DisplayAddresses:
             bDisplayAddresses = value.toBool();
             settings.setValue("bDisplayAddresses", bDisplayAddresses);
+            emit displayUnitChanged(settings.value("nDisplayUnit", BitcoinUnits::OK).toInt());
             break;
         case DetachDatabases: {
             bool fDetachDB = value.toBool();
@@ -208,10 +282,69 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case Language:
             settings.setValue("language", value);
             break;
-        case CoinControlFeatures: {
-            fCoinControlFeatures = value.toBool();
-            settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
-            emit coinControlFeaturesChanged(fCoinControlFeatures);
+        case RowsPerPage: {
+            nRowsPerPage = value.toInt();
+            settings.setValue("nRowsPerPage", nRowsPerPage);
+            emit rowsPerPageChanged(nRowsPerPage);
+            }
+            break;
+        case Notifications: {
+            notifications = value.toStringList();
+            settings.setValue("notifications", notifications);
+            }
+            break;
+        case VisibleTransactions: {
+            visibleTransactions = value.toStringList();
+            settings.setValue("visibleTransactions", visibleTransactions);
+            emit visibleTransactionsChanged(visibleTransactions);
+            }
+            break;
+        case AutoRingSize: {
+            fAutoRingSize = value.toBool();
+            settings.setValue("fAutoRingSize", fAutoRingSize);
+            }
+            break;
+        case AutoRedeemOKCash: {
+            fAutoRedeemOKCash = value.toBool();
+            settings.setValue("fAutoRedeemOKCash", fAutoRedeemOKCash);
+            }
+            break;
+        case MinRingSize: {
+            nMinRingSize = value.toInt();
+            settings.setValue("nMinRingSize", nMinRingSize);
+            }
+            break;
+        case MaxRingSize: {
+            nMaxRingSize = value.toInt();
+            settings.setValue("nMaxRingSize", nMaxRingSize);
+            }
+            break;
+        case Staking:
+            settings.setValue("fStaking", value.toBool());
+            break;
+        case MinStakeInterval:
+            nMinStakeInterval = value.toInt();
+            settings.setValue("nMinStakeInterval", nMinStakeInterval);
+            break;
+        case ThinMode:
+            settings.setValue("fThinMode", value.toBool());
+            break;
+        case ThinFullIndex:
+            settings.setValue("fThinFullIndex", value.toBool());
+            break;
+        case ThinIndexWindow:
+            settings.setValue("fThinIndexWindow", value.toInt());
+            break;
+        case SecureMessaging: {
+            if(value.toBool())
+            {
+                if(!fSecMsgEnabled)
+                    SecureMsgEnable();
+            }
+            else
+                SecureMsgDisable();
+
+            settings.setValue("fSecMsgEnabled", fSecMsgEnabled);
             }
             break;
         default:
@@ -233,11 +366,6 @@ qint64 OptionsModel::getReserveBalance()
     return nReserveBalance;
 }
 
-bool OptionsModel::getCoinControlFeatures()
-{
-    return fCoinControlFeatures;
-}
-
 bool OptionsModel::getMinimizeToTray()
 {
     return fMinimizeToTray;
@@ -257,3 +385,11 @@ bool OptionsModel::getDisplayAddresses()
 {
     return bDisplayAddresses;
 }
+
+int OptionsModel::getRowsPerPage() { return nRowsPerPage; }
+QStringList OptionsModel::getNotifications() { return notifications; }
+QStringList OptionsModel::getVisibleTransactions() { return visibleTransactions; }
+bool OptionsModel::getAutoRingSize() { return fAutoRingSize; }
+bool OptionsModel::getAutoRedeemOKCash() { return fAutoRedeemOKCash; }
+int OptionsModel::getMinRingSize() { return nMinRingSize; }
+int OptionsModel::getMaxRingSize() { return nMaxRingSize; }

@@ -15,8 +15,8 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation type="unfinished"/>
     </message>
@@ -80,7 +80,7 @@ Ta proizvod vključuje softver razvit s strani projekta OpenSSL za uporabo v Ope
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>Podpišite sporočilo, kot dokazilo lastništva OKCash naslova</translation>
     </message>
     <message>
@@ -427,7 +427,7 @@ Ta proizvod vključuje softver razvit s strani projekta OpenSSL za uporabo v Ope
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>Pošlji kovance na OKCash naslov</translation>
     </message>
     <message>
@@ -2249,8 +2249,8 @@ Ta oznaka se obarva rdeče, če je prioriteta manjša kot &quot;srednja&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Ustvarjeni kovanci morajo zoreti 69 blokov preden so lahko potrošeni. Ko ustvarite ta blok, je predvajan po mreži in nanizan v verigo blokov. Če mu priključitev na verigo spodleti, se bo njegovo stanje spremenilo v &quot;ni sprejet&quot; in ne bo razpoložljiv. To se lahko občasno zgodi, če drugo vozlišče ustvari blok par sekund pred vami. </translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Ustvarjeni kovanci morajo zoreti 510 blokov preden so lahko potrošeni. Ko ustvarite ta blok, je predvajan po mreži in nanizan v verigo blokov. Če mu priključitev na verigo spodleti, se bo njegovo stanje spremenilo v &quot;ni sprejet&quot; in ne bo razpoložljiv. To se lahko občasno zgodi, če drugo vozlišče ustvari blok par sekund pred vami. </translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2675,8 +2675,8 @@ Ta oznaka se obarva rdeče, če je prioriteta manjša kot &quot;srednja&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>Sprejmi povezave na &lt;port&gt; (privzeta vrata: 69070 ali testnet: 79080) </translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>Sprejmi povezave na &lt;port&gt; (privzeta vrata: 6970 ali testnet: 7980) </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2735,8 +2735,8 @@ Ta oznaka se obarva rdeče, če je prioriteta manjša kot &quot;srednja&quot;.
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
-        <translation>Sprejmi povezave na &lt;port&gt; (privzeta vrata: 69070 ali testnet: 79080) </translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
+        <translation>Sprejmi povezave na &lt;port&gt; (privzeta vrata: 6970 ali testnet: 7980) </translation>
     </message>
     <message>
         <location line="-11"/>

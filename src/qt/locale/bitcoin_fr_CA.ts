@@ -15,12 +15,12 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation>Copyright © 2009-2014 Les développeurs Bitcoin
 Copyright © 2012-2014 Les développeurs NovaCoin
-Copyright © 2014 Les développeurs OKCash</translation>
+Copyright © 2014-2015 Les développeurs OKCash</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -82,7 +82,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>Signer un message afin de valider l&apos;identité de votre adresse OKCash</translation>
     </message>
     <message>
@@ -429,7 +429,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>Envoyer des monnaies vers une adresse OKCash</translation>
     </message>
     <message>
@@ -2251,8 +2251,8 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Les pièces de monnaie générées nécessitent une maturation de 69 blocks avant de pouvoir être utilisées. Lors de la génération d&apos;un blokc, celui-ci est diffusé sur le réseau afin d&apos;être ajouté à la chaîne de blocks. En cas d&apos;échec, son état passera en &quot;non accepté&quot; et celui-ci ne pourra pas être dépensé. Cela peut occasionnellement se produire, lorsqu&apos;un noeud différent génère un block à quelques secondes d&apos;intervalle du vôtre.</translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Les pièces de monnaie générées nécessitent une maturation de 510 blocks avant de pouvoir être utilisées. Lors de la génération d&apos;un blokc, celui-ci est diffusé sur le réseau afin d&apos;être ajouté à la chaîne de blocks. En cas d&apos;échec, son état passera en &quot;non accepté&quot; et celui-ci ne pourra pas être dépensé. Cela peut occasionnellement se produire, lorsqu&apos;un noeud différent génère un block à quelques secondes d&apos;intervalle du vôtre.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2678,8 +2678,8 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>Écouter les connexions sur le &lt;port&gt; (default: 69070 or testnet: 79080)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>Écouter les connexions sur le &lt;port&gt; (default: 6970 or testnet: 7980)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2738,8 +2738,8 @@ Les montants inférieurs à  0.546 fois les frais minimum de relais apparaissent
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
-        <translation>Écouter les connexions JSON-RPC sur le &lt;port&gt; (default: 69069 or testnet: 79079)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
+        <translation>Écouter les connexions JSON-RPC sur le &lt;port&gt; (default: 6969 or testnet: 7979)</translation>
     </message>
     <message>
         <location line="-11"/>

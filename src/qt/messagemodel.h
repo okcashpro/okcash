@@ -7,7 +7,6 @@
 #include "allocators.h" /* for SecureString */
 #include "smessage.h"
 #include <map>
-#include <QSortFilterProxyModel>
 #include <QAbstractTableModel>
 #include <QStringList>
 #include <QDateTime>
@@ -21,22 +20,13 @@ class CWallet;
 class WalletModel;
 class OptionsModel;
 
-class SendMessagesRecipient
-{
-public:
-    QString address;
-    QString label;
-    QString pubkey;
-    QString message;
-};
-
 struct MessageTableEntry
 {
     enum Type {
         Sent,
         Received
     };
-    
+
     std::vector<unsigned char> chKey;
     Type type;
     QString label;
@@ -44,6 +34,7 @@ struct MessageTableEntry
     QString from_address;
     QDateTime sent_datetime;
     QDateTime received_datetime;
+    bool read;
     QString message;
 
     MessageTableEntry() {}
@@ -54,6 +45,7 @@ struct MessageTableEntry
                       const QString &from_address,
                       const QDateTime &sent_datetime,
                       const QDateTime &received_datetime,
+                      const bool &read,
                       const QString &message):
         chKey(chKey),
         type(type),
@@ -62,6 +54,7 @@ struct MessageTableEntry
         from_address(from_address),
         sent_datetime(sent_datetime),
         received_datetime(received_datetime),
+        read(read),
         message(message)
     {
     }
@@ -96,9 +89,10 @@ public:
         ToAddress = 4, /**< To Bitcoin address */
         FromAddress = 5, /**< From Bitcoin address */
         Message = 6, /**< Plaintext */
-        TypeInt = 7, /**< Plaintext */
-        Key = 8, /**< chKey */
-        HTML = 9, /**< HTML Formatted Data */
+        Read = 7, /**< Plaintext */
+        TypeInt = 8, /**< Plaintext */
+        Key = 9, /**< chKey */
+        HTML = 10, /**< HTML Formatted Data */
     };
 
     /** Roles to get specific information from a message row.
@@ -107,9 +101,9 @@ public:
     enum RoleIndex {
         /** Type of message */
         TypeRole = Qt::UserRole,
-        /** Date and time this message was sent */
         /** message key */
         KeyRole,
+        /** Date and time this message was sent */
         SentDateRole,
         /** Date and time this message was received */
         ReceivedDateRole,
@@ -125,6 +119,8 @@ public:
         MessageRole,
         /** Short Message */
         ShortMessageRole,
+        /** Message Read */
+        ReadRole,
         /** HTML Formatted */
         HTMLRole,
         /** Ambiguous bool */
@@ -142,29 +138,27 @@ public:
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    QModelIndex index(int row, int column, const QModelIndex & parent) const;
+    QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
     bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
     Qt::ItemFlags flags(const QModelIndex & index) const;
     /*@}*/
 
+
+    /* Mark message as read
+     */
+    bool markMessageAsRead(const QString &key) const;
     /* Look up row index of a message in the model.
        Return -1 if not found.
      */
-    int lookupMessage(const QString &message) const;
+    int lookupMessage(const QString &key) const;
 
     WalletModel *getWalletModel();
     OptionsModel *getOptionsModel();
 
     void resetFilter();
 
-    bool getAddressOrPubkey( QString &Address,  QString &Pubkey) const;
+    StatusCode sendMessage(const QString &address, const QString &message, const QString &addressFrom);
 
-    // Send messages to a list of recipients
-    StatusCode sendMessages(const QList<SendMessagesRecipient> &recipients);
-    StatusCode sendMessages(const QList<SendMessagesRecipient> &recipients, const QString &addressFrom);
-    
-    QSortFilterProxyModel *proxyModel;
-    
 private:
     CWallet *wallet;
     WalletModel *walletModel;
@@ -180,16 +174,10 @@ public slots:
     /* Check for new messages */
     void newMessage(const SecMsgStored& smsg);
     void newOutboxMessage(const SecMsgStored& smsg);
-    
-    void walletUnlocked();
-    
+
     void setEncryptionStatus(int status);
 
     friend class MessageTablePriv;
-
-signals:
-    // Asynchronous error notification
-    void error(const QString &title, const QString &message, bool modal);
 };
 
 #endif // MESSAGEMODEL_H

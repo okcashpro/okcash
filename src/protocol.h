@@ -10,19 +10,13 @@
 #ifndef __INCLUDED_PROTOCOL_H__
 #define __INCLUDED_PROTOCOL_H__
 
+#include <string>
+
+#include "chainparams.h"
 #include "serialize.h"
 #include "netbase.h"
-#include <string>
 #include "uint256.h"
-
-extern bool fTestNet;
-static inline unsigned short GetDefaultPort(const bool testnet = fTestNet)
-{
-    return testnet ? 7980 : 6970;
-}
-
-
-extern unsigned char pchMessageStart[4];
+#include "state.h"
 
 /** Message header.
  * (4) message start.
@@ -50,7 +44,6 @@ class CMessageHeader
     // TODO: make private (improves encapsulation)
     public:
         enum {
-            MESSAGE_START_SIZE=sizeof(::pchMessageStart),
             COMMAND_SIZE=12,
             MESSAGE_SIZE_SIZE=sizeof(int),
             CHECKSUM_SIZE=sizeof(int),
@@ -65,10 +58,13 @@ class CMessageHeader
         unsigned int nChecksum;
 };
 
-/** nServices flags */
-enum
+
+
+/** reject codes */
+enum RejectCodes
 {
-    NODE_NETWORK = (1 << 0),
+    REJ_NEED_THIN_SUPPORT = 1,
+    REJ_MAX_THIN_PEERS,
 };
 
 /** A CService with information about it as peer */
@@ -88,9 +84,9 @@ class CAddress : public CService
                  pthis->Init();
              if (nType & SER_DISK)
                  READWRITE(nVersion);
-             if ((nType & SER_DISK) ||
-                 (nVersion >= CADDR_TIME_VERSION && !(nType & SER_GETHASH)))
-                 READWRITE(nTime);
+             if ((nType & SER_DISK)
+                || (nVersion >= CADDR_TIME_VERSION && !(nType & SER_GETHASH)))
+                READWRITE(nTime);
              READWRITE(nServices);
              READWRITE(*pip);
             )
@@ -128,11 +124,29 @@ class CInv
         const char* GetCommand() const;
         std::string ToString() const;
         void print() const;
-
-    // TODO: make private (improves encapsulation)
-    public:
+        
         int type;
         uint256 hash;
+};
+
+class CPendingFilteredChunk
+{
+    public:
+        CPendingFilteredChunk(uint256 _startHash, uint256 _endHash, int64_t _nTime)
+             : startHash(_startHash), endHash(_endHash), nTime(_nTime) {};
+        
+        uint256 startHash;
+        uint256 endHash;
+        int64_t nTime;
+};
+
+enum
+{
+    MSG_TX = 1,
+    MSG_BLOCK,
+    // Nodes may always request a MSG_FILTERED_BLOCK in a getdata, however,
+    // MSG_FILTERED_BLOCK should not appear in any invs except as a part of getdata.
+    MSG_FILTERED_BLOCK,
 };
 
 #endif // __INCLUDED_PROTOCOL_H__

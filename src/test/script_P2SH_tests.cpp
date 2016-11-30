@@ -13,8 +13,8 @@ using namespace std;
 
 // Test routines internal to script.cpp:
 extern uint256 SignatureHash(CScript scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType);
-extern bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CTransaction& txTo, unsigned int nIn,
-                         bool fValidatePayToScriptHash, int nHashType);
+//extern bool VerifyScriptVerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CTransaction& txTo, unsigned int nIn,
+//                         bool fValidatePayToScriptHash, int nHashType);
 
 // Helpers:
 static std::vector<unsigned char>
@@ -40,7 +40,7 @@ Verify(const CScript& scriptSig, const CScript& scriptPubKey, bool fStrict)
     txTo.vin[0].scriptSig = scriptSig;
     txTo.vout[0].nValue = 1;
 
-    return VerifyScript(scriptSig, scriptPubKey, txTo, 0, fStrict, 0);
+    return VerifyScript(scriptSig, scriptPubKey, txTo, 0, fStrict ? SCRIPT_VERIFY_STRICTENC : SCRIPT_VERIFY_NONE, 0);
 }
 
 
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(sign)
         {
             CScript sigSave = txTo[i].vin[0].scriptSig;
             txTo[i].vin[0].scriptSig = txTo[j].vin[0].scriptSig;
-            bool sigOK = VerifySignature(txFrom, txTo[i], 0, true, 0);
+            bool sigOK = VerifySignature(txFrom, txTo[i], 0, SCRIPT_VERIFY_NONE, 0);
             if (i == j)
                 BOOST_CHECK_MESSAGE(sigOK, strprintf("VerifySignature %d %d", i, j));
             else
@@ -145,19 +145,19 @@ BOOST_AUTO_TEST_CASE(set)
     // Test the CScript::Set* methods
     CBasicKeyStore keystore;
     CKey key[4];
-    std::vector<CKey> keys;
+    std::vector<CPubKey> keys;
     for (int i = 0; i < 4; i++)
     {
         key[i].MakeNewKey(true);
         keystore.AddKey(key[i]);
-        keys.push_back(key[i]);
+        keys.push_back(key[i].GetPubKey());
     }
 
     CScript inner[4];
     inner[0].SetDestination(key[0].GetPubKey().GetID());
-    inner[1].SetMultisig(2, std::vector<CKey>(keys.begin(), keys.begin()+2));
-    inner[2].SetMultisig(1, std::vector<CKey>(keys.begin(), keys.begin()+2));
-    inner[3].SetMultisig(2, std::vector<CKey>(keys.begin(), keys.begin()+3));
+    inner[1].SetMultisig(2, std::vector<CPubKey>(keys.begin(), keys.begin()+2));
+    inner[2].SetMultisig(1, std::vector<CPubKey>(keys.begin(), keys.begin()+2));
+    inner[3].SetMultisig(2, std::vector<CPubKey>(keys.begin(), keys.begin()+3));
 
     CScript outer[4];
     for (int i = 0; i < 4; i++)
@@ -246,12 +246,12 @@ BOOST_AUTO_TEST_CASE(AreInputsStandard)
     std::map<uint256, std::pair<CTxIndex, CTransaction> > mapInputs;
     CBasicKeyStore keystore;
     CKey key[3];
-    vector<CKey> keys;
-    for (int i = 0; i < 3; i++)
+    std::vector<CPubKey> keys;
+    for (int i = 0; i < 4; i++)
     {
         key[i].MakeNewKey(true);
         keystore.AddKey(key[i]);
-        keys.push_back(key[i]);
+        keys.push_back(key[i].GetPubKey());
     }
 
     CTransaction txFrom;

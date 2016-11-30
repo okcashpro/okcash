@@ -3,7 +3,7 @@
 
 #include "addresstablemodel.h"
 #include "optionsmodel.h"
-#include "bitcoingui.h"
+#include "okcashgui.h"
 #include "editaddressdialog.h"
 #include "csvmodelwriter.h"
 #include "guiutil.h"
@@ -118,11 +118,17 @@ void AddressBookPage::setModel(AddressTableModel *model)
     switch(tab)
     {
     case ReceivingTab:
+        // Don't show stealth addresses in dialogues
+        proxyModel->setFilterRole(AddressTableModel::AddressTypeRole);
+
         // Receive filter
         proxyModel->setFilterRole(AddressTableModel::TypeRole);
         proxyModel->setFilterFixedString(AddressTableModel::Receive);
         break;
     case SendingTab:
+        // Don't show stealth addresses in dialogues
+        proxyModel->setFilterRole(AddressTableModel::AddressTypeRole);
+
         // Send filter
         proxyModel->setFilterRole(AddressTableModel::TypeRole);
         proxyModel->setFilterFixedString(AddressTableModel::Send);

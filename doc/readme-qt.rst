@@ -1,4 +1,4 @@
-OKCash-qt: Qt5 GUI for OKCash
+OKCash: Qt5 GUI for OKCash
 ===============================
 
 Build instructions
@@ -12,10 +12,7 @@ distribution are installed, for Debian and Ubuntu these are:
 
 ::
 
-    apt-get install qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools \
-        build-essential libboost-dev libboost-system-dev \
-        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb++-dev libminiupnpc-dev
+    apt-get install qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools build-essential libboost-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev libssl-dev libdb++-dev libminiupnpc-dev libqt5webkit5-dev
 
 then execute the following:
 
@@ -24,9 +21,9 @@ then execute the following:
     qmake
     make
 
-Alternatively, install Qt Creator and open the `okcash-qt.pro` file.
+Alternatively, install Qt Creator and open the `okcash.pro` file.
 
-An executable named `okcash-qt` will be built.
+An executable named `okcash` will be built.
 
 
 Windows
@@ -134,7 +131,7 @@ Ubuntu 11.10 warning
 ====================
 
 Ubuntu 11.10 has a package called 'qt-at-spi' installed by default.  At the time of writing, having that package
-installed causes okcash-qt to crash intermittently.  The issue has been reported as `launchpad bug 857790`_, but
+installed causes okcash to crash intermittently.  The issue has been reported as `launchpad bug 857790`_, but
 isn't yet fixed.
 
 Until the bug is fixed, you can remove the qt-at-spi package to work around the problem, though this will presumably

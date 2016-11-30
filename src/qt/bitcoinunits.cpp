@@ -11,9 +11,10 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(BTC);
-    unitlist.append(mBTC);
-    unitlist.append(uBTC);
+    unitlist.append(OK);
+    unitlist.append(mOK);
+    unitlist.append(uOK);
+    unitlist.append(sOK);
     return unitlist;
 }
 
@@ -21,9 +22,10 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case BTC:
-    case mBTC:
-    case uBTC:
+    case OK:
+    case mOK:
+    case uOK:
+    case sOK:
         return true;
     default:
         return false;
@@ -34,9 +36,10 @@ QString BitcoinUnits::name(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("OK");
-    case mBTC: return QString("mOK");
-    case uBTC: return QString::fromUtf8("μOK");
+    case OK: return QString("OK");
+    case mOK: return QString("mOK");
+    case uOK: return QString::fromUtf8("μOK");
+    case sOK: return QString::fromUtf8("OKtoshi");
     default: return QString("???");
     }
 }
@@ -45,10 +48,11 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("OKCashs");
-    case mBTC: return QString("Milli-OKCashs (1 / 1,000)");
-    case uBTC: return QString("Micro-OKCashs (1 / 1,000,000)");
-    default: return QString("???");
+    case OK:  return QString("OKCashs");
+    case mOK: return QString("Milli-OKCashs (1 / 1,000)");
+    case uOK: return QString("Micro-OKCashs (1 / 1,000,000)");
+    case sOK: return QString("OKtoshi (1 / 100,000,000)");
+    default:   return QString("???");
     }
 }
 
@@ -56,9 +60,9 @@ qint64 BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case BTC:  return 100000000;
-    case mBTC: return 100000;
-    case uBTC: return 100;
+    case mOK: return 100000;
+    case uOK: return 100;
+    case sOK: return 1;
     default:   return 100000000;
     }
 }
@@ -67,9 +71,10 @@ int BitcoinUnits::amountDigits(int unit)
 {
     switch(unit)
     {
-    case BTC: return 8; // 21,000,000 (# digits, without commas)
-    case mBTC: return 11; // 21,000,000,000
-    case uBTC: return 14; // 21,000,000,000,000
+    case OK: return 8; // 21,000,000 (# digits, without commas)
+    case mOK: return 11; // 21,000,000,000
+    case uOK: return 14; // 21,000,000,000,000
+    case sOK: return 16; // 2,100,000,000,000,000
     default: return 0;
     }
 }
@@ -78,9 +83,9 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case BTC: return 8;
-    case mBTC: return 5;
-    case uBTC: return 2;
+    case OK: return 8;
+    case mOK: return 5;
+    case uOK: return 2;
     default: return 0;
     }
 }

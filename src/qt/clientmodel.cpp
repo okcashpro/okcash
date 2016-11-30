@@ -1,6 +1,7 @@
 #include "clientmodel.h"
 #include "guiconstants.h"
 #include "optionsmodel.h"
+#include "peertablemodel.h"
 #include "addresstablemodel.h"
 #include "transactiontablemodel.h"
 
@@ -17,6 +18,8 @@ ClientModel::ClientModel(OptionsModel *optionsModel, QObject *parent) :
     QObject(parent), optionsModel(optionsModel),
     cachedNumBlocks(0), cachedNumBlocksOfPeers(0), pollTimer(0)
 {
+    peerTableModel = new PeerTableModel(this);
+    
     numBlocksAtStartup = -1;
 
     pollTimer = new QTimer(this);
@@ -32,9 +35,18 @@ ClientModel::~ClientModel()
     unsubscribeFromCoreSignals();
 }
 
-int ClientModel::getNumConnections() const
+int ClientModel::getNumConnections(unsigned int flags) const
 {
-    return vNodes.size();
+    LOCK(cs_vNodes);
+    if (flags == CONNECTIONS_ALL) // Shortcut if we want total
+        return vNodes.size();
+
+    int nNum = 0;
+    BOOST_FOREACH(CNode* pnode, vNodes)
+    if (flags & (pnode->fInbound ? CONNECTIONS_IN : CONNECTIONS_OUT))
+        nNum++;
+
+    return nNum;
 }
 
 int ClientModel::getNumBlocks() const
@@ -45,7 +57,8 @@ int ClientModel::getNumBlocks() const
 
 int ClientModel::getNumBlocksAtStartup()
 {
-    if (numBlocksAtStartup == -1) numBlocksAtStartup = getNumBlocks();
+    if (numBlocksAtStartup == -1)
+        numBlocksAtStartup = getNumBlocks();
     return numBlocksAtStartup;
 }
 
@@ -65,8 +78,19 @@ QDateTime ClientModel::getLastBlockDate() const
     if (pindexBest)
         return QDateTime::fromTime_t(pindexBest->GetBlockTime());
     else
-        return QDateTime::fromTime_t(1393221600); // Genesis block's time
+        return QDateTime::fromTime_t(GENESIS_BLOCK_TIME);
 }
+
+QDateTime ClientModel::getLastBlockThinDate() const
+{
+    LOCK(cs_main);
+    if (pindexBestHeader)
+        return QDateTime::fromTime_t(pindexBestHeader->GetBlockTime());
+    else
+        return QDateTime::fromTime_t(GENESIS_BLOCK_TIME);
+}
+
+
 
 void ClientModel::updateTimer()
 {
@@ -78,10 +102,13 @@ void ClientModel::updateTimer()
         return;
     // Some quantities (such as number of blocks) change so fast that we don't want to be notified for each change.
     // Periodically check and update with a timer.
+    
     int newNumBlocks = getNumBlocks();
     int newNumBlocksOfPeers = getNumBlocksOfPeers();
 
-    if(cachedNumBlocks != newNumBlocks || cachedNumBlocksOfPeers != newNumBlocksOfPeers)
+    if (cachedNumBlocks != newNumBlocks
+        || cachedNumBlocksOfPeers != newNumBlocksOfPeers
+        || nNodeState == NS_GET_FILTERED_BLOCKS)
     {
         cachedNumBlocks = newNumBlocks;
         cachedNumBlocksOfPeers = newNumBlocksOfPeers;
@@ -100,16 +127,16 @@ void ClientModel::updateNumConnections(int numConnections)
 void ClientModel::updateAlert(const QString &hash, int status)
 {
     // Show error message notification for new alert
-    if(status == CT_NEW)
+    if (status == CT_NEW)
     {
         uint256 hash_256;
         hash_256.SetHex(hash.toStdString());
         CAlert alert = CAlert::getAlertByHash(hash_256);
-        if(!alert.IsNull())
+        if (!alert.IsNull())
         {
             emit error(tr("Network Alert"), QString::fromStdString(alert.strStatusBar), false);
-        }
-    }
+        };
+    };
 
     // Emit a numBlocksChanged when the status message changes,
     // so that the view recomputes and updates the status bar.
@@ -119,6 +146,11 @@ void ClientModel::updateAlert(const QString &hash, int status)
 bool ClientModel::isTestNet() const
 {
     return fTestNet;
+}
+
+int ClientModel::getClientMode() const
+{
+    return nNodeMode;
 }
 
 bool ClientModel::inInitialBlockDownload() const
@@ -139,6 +171,11 @@ QString ClientModel::getStatusBarWarnings() const
 OptionsModel *ClientModel::getOptionsModel()
 {
     return optionsModel;
+}
+
+PeerTableModel *ClientModel::getPeerTableModel()
+{
+    return peerTableModel;
 }
 
 QString ClientModel::formatFullVersion() const
@@ -170,14 +207,14 @@ static void NotifyBlocksChanged(ClientModel *clientmodel)
 
 static void NotifyNumConnectionsChanged(ClientModel *clientmodel, int newNumConnections)
 {
-    // Too noisy: OutputDebugStringF("NotifyNumConnectionsChanged %i\n", newNumConnections);
+    // Too noisy: LogPrintf("NotifyNumConnectionsChanged %i\n", newNumConnections);
     QMetaObject::invokeMethod(clientmodel, "updateNumConnections", Qt::QueuedConnection,
                               Q_ARG(int, newNumConnections));
 }
 
 static void NotifyAlertChanged(ClientModel *clientmodel, const uint256 &hash, ChangeType status)
 {
-    OutputDebugStringF("NotifyAlertChanged %s status=%i\n", hash.GetHex().c_str(), status);
+    LogPrintf("NotifyAlertChanged %s status=%i\n", hash.GetHex().c_str(), status);
     QMetaObject::invokeMethod(clientmodel, "updateAlert", Qt::QueuedConnection,
                               Q_ARG(QString, QString::fromStdString(hash.GetHex())),
                               Q_ARG(int, status));

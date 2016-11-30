@@ -8,6 +8,7 @@
 #include "db.h"
 #include "base58.h"
 #include "stealth.h"
+#include "ringsig.h"
 
 class CKeyPool;
 class CAccount;
@@ -78,7 +79,61 @@ public:
 
 };
 
+class CLockedAnonOutput
+{
+// expand key for anon output received with wallet locked
+// stored in walletdb, key is pubkey hash160
+public:
+    CLockedAnonOutput() {};
+    
+    CLockedAnonOutput(CPubKey pkEphem_, CPubKey pkScan_, COutPoint outpoint_)
+    {
+        pkEphem = pkEphem_;
+        pkScan = pkScan_;
+        outpoint = outpoint_;
+    };
+    
+    CPubKey   pkEphem;
+    CPubKey   pkScan;
+    COutPoint outpoint;
 
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(pkEphem);
+        READWRITE(pkScan);
+        READWRITE(outpoint);
+    )
+
+};
+
+class COwnedAnonOutput
+{
+// stored in walletdb, key is keyimage
+// TODO: store nValue?
+public:
+    COwnedAnonOutput() {};
+    
+    COwnedAnonOutput(COutPoint outpoint_, bool fSpent_)
+    {
+        outpoint = outpoint_;
+        fSpent   = fSpent_;
+    };
+    
+    std::vector<uint8_t> vchImage;
+    int64_t nValue;
+    
+    COutPoint outpoint;
+    bool fSpent;
+    
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(outpoint);
+        READWRITE(fSpent);
+    )
+
+};
+
+ 
 /** Access to the wallet database (wallet.dat) */
 class CWalletDB : public CDB
 {
@@ -130,6 +185,57 @@ public:
         return Erase(std::make_pair(std::string("tx"), hash));
     }
     
+    bool ReadLockedAnonOutput(const CKeyID& keyId, CLockedAnonOutput& lockedAo)
+    {
+        return Read(std::make_pair(std::string("lao"), keyId), lockedAo);
+    };
+    
+    bool WriteLockedAnonOutput(const CKeyID& keyId, const CLockedAnonOutput& lockedAo)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("lao"), keyId), lockedAo, true);
+    };
+    
+    bool EraseLockedAnonOutput(const CKeyID& keyId)
+    {
+        nWalletDBUpdated++;
+        return Erase(std::make_pair(std::string("lao"), keyId));
+    };
+    
+    bool ReadOwnedAnonOutput(const std::vector<uint8_t>& vchImage, COwnedAnonOutput& ownAo)
+    {
+        return Read(std::make_pair(std::string("oao"), vchImage), ownAo);
+    };
+    
+    bool WriteOwnedAnonOutput(const std::vector<uint8_t>& vchImage, const COwnedAnonOutput& ownAo)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("oao"), vchImage), ownAo, true);
+    };
+    
+    bool EraseOwnedAnonOutput(const std::vector<uint8_t>& vchImage)
+    {
+        nWalletDBUpdated++;
+        return Erase(std::make_pair(std::string("oao"), vchImage));
+    };
+    
+    bool ReadOwnedAnonOutputLink(const CPubKey& pkCoin, std::vector<uint8_t>& vchImage)
+    {
+        return Read(std::make_pair(std::string("oal"), pkCoin), vchImage);
+    };
+    
+    bool WriteOwnedAnonOutputLink(const CPubKey& pkCoin, const std::vector<uint8_t>& vchImage)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("oal"), pkCoin), vchImage, true);
+    };
+    
+    bool EraseOwnedAnonOutputLink(const CPubKey& pkCoin)
+    {
+        nWalletDBUpdated++;
+        return Erase(std::make_pair(std::string("oal"), pkCoin));
+    };
+    
     bool WriteStealthKeyMeta(const CKeyID& keyId, const CStealthKeyMetadata& sxKeyMeta)
     {
         nWalletDBUpdated++;
@@ -155,34 +261,16 @@ public:
         return Read(std::make_pair(std::string("sxAddr"), sxAddr.scan_pubkey), sxAddr);
     }
     
-    bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, const CKeyMetadata &keyMeta)
+    bool EraseStealthAddress(const CStealthAddress& sxAddr)
     {
         nWalletDBUpdated++;
-
-        if(!Write(std::make_pair(std::string("keymeta"), vchPubKey), keyMeta))
-            return false;
-
-        return Write(std::make_pair(std::string("key"), vchPubKey.Raw()), vchPrivKey, false);
+        return Erase(std::make_pair(std::string("sxAddr"), sxAddr.scan_pubkey));
     }
-
-    bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, const CKeyMetadata &keyMeta)
-    {
-        nWalletDBUpdated++;
-        bool fEraseUnencryptedKey = true;
-
-        if(!Write(std::make_pair(std::string("keymeta"), vchPubKey), keyMeta))
-            return false;
-
-        if (!Write(std::make_pair(std::string("ckey"), vchPubKey.Raw()), vchCryptedSecret, true))
-            return false;
-        if (fEraseUnencryptedKey)
-        {
-            Erase(std::make_pair(std::string("key"), vchPubKey.Raw()));
-            Erase(std::make_pair(std::string("wkey"), vchPubKey.Raw()));
-        }
-        return true;
-    }
-
+    
+    bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, const CKeyMetadata &keyMeta);
+    
+    bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, const CKeyMetadata &keyMeta);
+    
     bool WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey)
     {
         nWalletDBUpdated++;
@@ -200,10 +288,32 @@ public:
         nWalletDBUpdated++;
         return Write(std::string("bestblock"), locator);
     }
-
+    
     bool ReadBestBlock(CBlockLocator& locator)
     {
         return Read(std::string("bestblock"), locator);
+    }
+    
+    bool WriteBestBlockThin(const CBlockThinLocator& locator)
+    {
+        nWalletDBUpdated++;
+        return Write(std::string("bestblockheader"), locator);
+    }
+    
+    bool ReadBestBlockThin(CBlockThinLocator& locator)
+    {
+        return Read(std::string("bestblockheader"), locator);
+    }
+    
+    bool WriteLastFilteredHeight(const int64_t& height)
+    {
+        nWalletDBUpdated++;
+        return Write(std::string("lastfilteredheight"), height);
+    }
+    
+    bool ReadLastFilteredHeight(int64_t& height)
+    {
+        return Read(std::string("lastfilteredheight"), height);
     }
 
     bool WriteOrderPosNext(int64_t nOrderPosNext)
@@ -212,11 +322,7 @@ public:
         return Write(std::string("orderposnext"), nOrderPosNext);
     }
 
-    bool WriteDefaultKey(const CPubKey& vchPubKey)
-    {
-        nWalletDBUpdated++;
-        return Write(std::string("defaultkey"), vchPubKey.Raw());
-    }
+    bool WriteDefaultKey(const CPubKey& vchPubKey);
 
     bool ReadPool(int64_t nPool, CKeyPool& keypool)
     {
@@ -239,6 +345,7 @@ public:
     {
         return Write(std::string("minversion"), nVersion);
     }
+    
 
     bool ReadAccount(const std::string& strAccount, CAccount& account);
     bool WriteAccount(const std::string& strAccount, const CAccount& account);
@@ -256,3 +363,4 @@ public:
 };
 
 #endif // BITCOIN_WALLETDB_H
+

@@ -5,7 +5,7 @@
 #ifndef BITCOIN_IRC_H
 #define BITCOIN_IRC_H
 
-void ThreadIRCSeed(void* parg);
+void ThreadIRCSeed();
 
 extern int nGotIRCAddresses;
 

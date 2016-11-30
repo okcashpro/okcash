@@ -17,8 +17,8 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -82,8 +82,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
-        <translation>Sign a message to prove you own an OKCash address</translation>
+        <source>Sign a message to prove you own a OKCash address</source>
+        <translation>Sign a message to prove you own a OKCash address</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -414,16 +414,24 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message numerus="yes">
         <location line="+250"/>
-        <source>~%n block(s) remaining</source>
+        <source>~%n %s remaining</source>
         <translation>
             <numerusform>~%n block remaining</numerusform>
             <numerusform>~%n blocks remaining</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <location line="+251"/>
+        <source>~%n filtered %s remaining</source>
+        <translation>
+            <numerusform>~%n filtered block remaining</numerusform>
+            <numerusform>~%n filtered blocks remaining</numerusform>
+        </translation>
+    </message>
     <message>
         <location line="+6"/>
-        <source>Downloaded %1 of %2 blocks of transaction history (%3% done).</source>
-        <translation>Downloaded %1 of %2 blocks of transaction history (%3% done).</translation>
+        <source>Downloaded %1 of %2 %3 of transaction history (%4% done).</source>
+        <translation>Downloaded %1 of %2 %3 of transaction history (%4% done).</translation>
     </message>
     <message>
         <location line="-247"/>
@@ -432,8 +440,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
-        <translation>Send coins to an OKCash address</translation>
+        <source>Send coins to a OKCash address</source>
+        <translation>Send coins to a OKCash address</translation>
     </message>
     <message>
         <location line="+45"/>
@@ -557,8 +565,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+40"/>
-        <source>Downloaded %1 blocks of transaction history.</source>
-        <translation>Downloaded %1 blocks of transaction history.</translation>
+        <source>Downloaded %1 %2 of transaction history.</source>
+        <translation>Downloaded %1 %2 of transaction history.</translation>
     </message>
     <message>
         <location line="+428"/>
@@ -634,8 +642,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+10"/>
-        <source>Last received block was generated %1.</source>
-        <translation>Last received block was generated %1.</translation>
+        <source>Last received %1 was generated %2.</source>
+        <translation>Last received %1 was generated %2.</translation>
     </message>
     <message>
         <location line="+59"/>
@@ -2276,8 +2284,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2705,8 +2713,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2765,7 +2773,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
         <translation></translation>
     </message>
     <message>

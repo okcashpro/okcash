@@ -1,26 +1,7 @@
 
-OKCash $OK
-===========================
-
-OKCash is a new and easy to use crypto-currency similar to Bitcoin improved with a POS reward system.
-
-Website: 
-(en) http://www.okcash.co
-(es) http://es.okcash.co
-
-E-mail Contact: devteam@okcash.co
-
-Twitter: https://twitter.com/OKCashCrypto
-
-Reddit: https://www.reddit.com/r/OKcash
-
-Voat: https://voat.co/v/ok
-
-Multipool: https://www.okcashpool.info
-
-Explorer: http://okcash.explorer.rocks
-
 OKCash development tree
+
+OKCash is a PoS-based cryptocurrency.
 
 Development process
 ===========================
@@ -48,4 +29,4 @@ in this manner will have their corresponding issue labeled 'stagnant'.
 
 Issues with no commits will be given a similar warning, and closed after
 15 days from their last activity. Issues closed in this manner will be 
-labelled 'stale'.
+labeled 'stale'.

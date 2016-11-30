@@ -50,7 +50,9 @@ public:
         /** Formatted amount, without brackets when unconfirmed */
         FormattedAmountRole,
         /** Transaction status (TransactionRecord::Status) */
-        StatusRole
+        StatusRole,
+        /** Amount of Confirmations */
+        ConfirmationsRole
     };
 
     int rowCount(const QModelIndex &parent) const;
@@ -58,6 +60,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
+
+    int lookupTransaction(const QString &txid) const;
 private:
     CWallet* wallet;
     WalletModel *walletModel;
@@ -68,12 +72,11 @@ private:
     QVariant addressColor(const TransactionRecord *wtx) const;
     QString formatTxStatus(const TransactionRecord *wtx) const;
     QString formatTxDate(const TransactionRecord *wtx) const;
-    QString formatTxType(const TransactionRecord *wtx) const;
     QString formatTxToAddress(const TransactionRecord *wtx, bool tooltip) const;
     QString formatTxAmount(const TransactionRecord *wtx, bool showUnconfirmed=true) const;
     QString formatNarration(const TransactionRecord *wtx) const;
     QString formatTooltip(const TransactionRecord *rec) const;
-    QVariant txStatusDecoration(const TransactionRecord *wtx) const;
+    QString txStatusDecoration(const TransactionRecord *wtx) const;
     QVariant txAddressDecoration(const TransactionRecord *wtx) const;
 
 public slots:

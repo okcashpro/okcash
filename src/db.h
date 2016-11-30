@@ -26,7 +26,7 @@ class CWalletTx;
 
 extern unsigned int nWalletDBUpdated;
 
-void ThreadFlushWalletDB(void* parg);
+void ThreadFlushWalletDB(const std::string& strFile);
 bool BackupWallet(const CWallet& wallet, const std::string& strDest);
 
 
@@ -228,6 +228,9 @@ protected:
         return pcursor;
     }
 
+
+public:
+
     int ReadAtCursor(Dbc* pcursor, CDataStream& ssKey, CDataStream& ssValue, unsigned int fFlags=DB_NEXT)
     {
         // Read at cursor
@@ -267,7 +270,6 @@ protected:
         return 0;
     }
 
-public:
     bool TxnBegin()
     {
         if (!pdb || activeTxn)

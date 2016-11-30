@@ -1,19 +1,16 @@
-// Copyright (c) 2014 The Shadowcoin developers
-// Copyright (c) 2014-2015 The OKCash developers
+// Copyright (c) 2014 The OKCash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
 #include "stealth.h"
 #include "base58.h"
+#include "state.h"
 
 
 #include <openssl/rand.h>
 #include <openssl/ec.h>
 #include <openssl/ecdsa.h>
 #include <openssl/obj_mac.h>
-
-//const uint8_t stealth_version_byte = 0x2a;
-const uint8_t stealth_version_byte = 0x28;
 
 
 bool CStealthAddress::SetEncoded(const std::string& encodedAddress)
@@ -23,21 +20,21 @@ bool CStealthAddress::SetEncoded(const std::string& encodedAddress)
     if (!DecodeBase58(encodedAddress, raw))
     {
         if (fDebug)
-            printf("CStealthAddress::SetEncoded DecodeBase58 falied.\n");
+            LogPrintf("CStealthAddress::SetEncoded DecodeBase58 falied.\n");
         return false;
     };
     
     if (!VerifyChecksum(raw))
     {
         if (fDebug)
-            printf("CStealthAddress::SetEncoded verify_checksum falied.\n");
+            LogPrintf("CStealthAddress::SetEncoded verify_checksum falied.\n");
         return false;
     };
     
     if (raw.size() < 1 + 1 + 33 + 1 + 33 + 1 + 1 + 4)
     {
         if (fDebug)
-            printf("CStealthAddress::SetEncoded() too few bytes provided.\n");
+            LogPrintf("CStealthAddress::SetEncoded() too few bytes provided.\n");
         return false;
     };
     
@@ -47,7 +44,7 @@ bool CStealthAddress::SetEncoded(const std::string& encodedAddress)
     
     if (version != stealth_version_byte)
     {
-        printf("CStealthAddress::SetEncoded version mismatch 0x%x != 0x%x.\n", version, stealth_version_byte);
+        LogPrintf("CStealthAddress::SetEncoded version mismatch 0x%x != 0x%x.\n", version, stealth_version_byte);
         return false;
     };
     
@@ -86,6 +83,13 @@ std::string CStealthAddress::Encoded() const
     return EncodeBase58(raw);
 };
 
+int CStealthAddress::SetScanPubKey(CPubKey pk)
+{
+    scan_pubkey.resize(pk.size());
+    memcpy(&scan_pubkey[0], pk.begin(), pk.size());
+    return 0;
+};
+
 
 uint32_t BitcoinChecksum(uint8_t* p, uint32_t nBytes)
 {
@@ -107,10 +111,11 @@ void AppendChecksum(data_chunk& data)
 {
     uint32_t checksum = BitcoinChecksum(&data[0], data.size());
     
-    // -- to_little_endian
-    std::vector<uint8_t> tmp(4);
     
+    std::vector<uint8_t> tmp(4);
     //memcpy(&tmp[0], &checksum, 4);
+    
+    // -- to_little_endian
     for (int i = 0; i < 4; ++i)
     {
         tmp[i] = checksum & 0xFF;
@@ -154,7 +159,7 @@ int GenerateRandomSecret(ec_secret& out)
     
     if (i > 31)
     {
-        printf("Error: GenerateRandomSecret failed to generate a valid key.\n");
+        LogPrintf("Error: GenerateRandomSecret failed to generate a valid key.\n");
         return 1;
     };
     
@@ -166,11 +171,11 @@ int SecretToPublicKey(const ec_secret& secret, ec_point& out)
     // -- public key = private * G
     int rv = 0;
     
-    EC_GROUP *ecgrp = EC_GROUP_new_by_curve_name(NID_secp256k1);
+    EC_GROUP* ecgrp = EC_GROUP_new_by_curve_name(NID_secp256k1);
     
     if (!ecgrp)
     {
-        printf("SecretToPublicKey(): EC_GROUP_new_by_curve_name failed.\n");
+        LogPrintf("SecretToPublicKey(): EC_GROUP_new_by_curve_name failed.\n");
         return 1;
     };
 
@@ -178,7 +183,7 @@ int SecretToPublicKey(const ec_secret& secret, ec_point& out)
     if (!bnIn)
     {
         EC_GROUP_free(ecgrp);
-        printf("SecretToPublicKey(): BN_bin2bn failed\n");
+        LogPrintf("SecretToPublicKey(): BN_bin2bn failed\n");
         return 1;
     };
     
@@ -190,7 +195,7 @@ int SecretToPublicKey(const ec_secret& secret, ec_point& out)
     BIGNUM* bnOut = EC_POINT_point2bn(ecgrp, pub, POINT_CONVERSION_COMPRESSED, BN_new(), NULL);
     if (!bnOut)
     {
-        printf("SecretToPublicKey(): point2bn failed\n");
+        LogPrintf("SecretToPublicKey(): point2bn failed\n");
         rv = 1;
     } else
     {
@@ -198,17 +203,18 @@ int SecretToPublicKey(const ec_secret& secret, ec_point& out)
         if (BN_num_bytes(bnOut) != (int) ec_compressed_size
             || BN_bn2bin(bnOut, &out[0]) != (int) ec_compressed_size)
         {
-            printf("SecretToPublicKey(): bnOut incorrect length.\n");
+            LogPrintf("SecretToPublicKey(): bnOut incorrect length.\n");
             rv = 1;
         };
         
         BN_free(bnOut);
     };
     
-    EC_GROUP_free(ecgrp);
-    BN_free(bnIn);
+    
     EC_POINT_free(pub);
-
+    BN_free(bnIn);
+    EC_GROUP_free(ecgrp);
+    
     return rv;
 };
 
@@ -264,34 +270,34 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     
     if (!ecgrp)
     {
-        printf("StealthSecret(): EC_GROUP_new_by_curve_name failed.\n");
+        LogPrintf("StealthSecret(): EC_GROUP_new_by_curve_name failed.\n");
         return 1;
     };
     
     if (!(bnCtx = BN_CTX_new()))
     {
-        printf("StealthSecret(): BN_CTX_new failed.\n");
+        LogPrintf("StealthSecret(): BN_CTX_new failed.\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnEphem = BN_bin2bn(&secret.e[0], ec_secret_size, BN_new())))
     {
-        printf("StealthSecret(): bnEphem BN_bin2bn failed.\n");
+        LogPrintf("StealthSecret(): bnEphem BN_bin2bn failed.\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnQ = BN_bin2bn(&pubkey[0], pubkey.size(), BN_new())))
     {
-        printf("StealthSecret(): bnQ BN_bin2bn failed\n");
+        LogPrintf("StealthSecret(): bnQ BN_bin2bn failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(Q = EC_POINT_bn2point(ecgrp, bnQ, NULL, bnCtx)))
     {
-        printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
+        LogPrintf("StealthSecret(): Q EC_POINT_bn2point failed\n");
         rv = 1;
         goto End;
     };
@@ -301,14 +307,14 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     // EC_POINT_mul calculates the value generator * n + q * m and stores the result in r. The value n may be NULL in which case the result is just q * m. 
     if (!EC_POINT_mul(ecgrp, Q, NULL, Q, bnEphem, bnCtx))
     {
-        printf("StealthSecret(): eQ EC_POINT_mul failed\n");
+        LogPrintf("StealthSecret(): eQ EC_POINT_mul failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnOutQ = EC_POINT_point2bn(ecgrp, Q, POINT_CONVERSION_COMPRESSED, BN_new(), bnCtx)))
     {
-        printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
+        LogPrintf("StealthSecret(): Q EC_POINT_bn2point failed\n");
         rv = 1;
         goto End;
     };
@@ -318,7 +324,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (BN_num_bytes(bnOutQ) != (int) ec_compressed_size
         || BN_bn2bin(bnOutQ, &vchOutQ[0]) != (int) ec_compressed_size)
     {
-        printf("StealthSecret(): bnOutQ incorrect length.\n");
+        LogPrintf("StealthSecret(): bnOutQ incorrect length.\n");
         rv = 1;
         goto End;
     };
@@ -327,7 +333,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     
     if (!(bnc = BN_bin2bn(&sharedSOut.e[0], ec_secret_size, BN_new())))
     {
-        printf("StealthSecret(): BN_bin2bn failed\n");
+        LogPrintf("StealthSecret(): BN_bin2bn failed\n");
         rv = 1;
         goto End;
     };
@@ -335,21 +341,21 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     // -- cG
     if (!(C = EC_POINT_new(ecgrp)))
     {
-        printf("StealthSecret(): C EC_POINT_new failed\n");
+        LogPrintf("StealthSecret(): C EC_POINT_new failed\n");
         rv = 1;
         goto End;
     };
     
     if (!EC_POINT_mul(ecgrp, C, bnc, NULL, NULL, bnCtx))
     {
-        printf("StealthSecret(): C EC_POINT_mul failed\n");
+        LogPrintf("StealthSecret(): C EC_POINT_mul failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnR = BN_bin2bn(&pkSpend[0], pkSpend.size(), BN_new())))
     {
-        printf("StealthSecret(): bnR BN_bin2bn failed\n");
+        LogPrintf("StealthSecret(): bnR BN_bin2bn failed\n");
         rv = 1;
         goto End;
     };
@@ -357,35 +363,35 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     
     if (!(R = EC_POINT_bn2point(ecgrp, bnR, NULL, bnCtx)))
     {
-        printf("StealthSecret(): R EC_POINT_bn2point failed\n");
+        LogPrintf("StealthSecret(): R EC_POINT_bn2point failed\n");
         rv = 1;
         goto End;
     };
     
     if (!EC_POINT_mul(ecgrp, C, bnc, NULL, NULL, bnCtx))
     {
-        printf("StealthSecret(): C EC_POINT_mul failed\n");
+        LogPrintf("StealthSecret(): C EC_POINT_mul failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(Rout = EC_POINT_new(ecgrp)))
     {
-        printf("StealthSecret(): Rout EC_POINT_new failed\n");
+        LogPrintf("StealthSecret(): Rout EC_POINT_new failed\n");
         rv = 1;
         goto End;
     };
     
     if (!EC_POINT_add(ecgrp, Rout, R, C, bnCtx))
     {
-        printf("StealthSecret(): Rout EC_POINT_add failed\n");
+        LogPrintf("StealthSecret(): Rout EC_POINT_add failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnOutR = EC_POINT_point2bn(ecgrp, Rout, POINT_CONVERSION_COMPRESSED, BN_new(), bnCtx)))
     {
-        printf("StealthSecret(): Rout EC_POINT_bn2point failed\n");
+        LogPrintf("StealthSecret(): Rout EC_POINT_bn2point failed\n");
         rv = 1;
         goto End;
     };
@@ -395,7 +401,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (BN_num_bytes(bnOutR) != (int) ec_compressed_size
         || BN_bn2bin(bnOutR, &pkOut[0]) != (int) ec_compressed_size)
     {
-        printf("StealthSecret(): pkOut incorrect length.\n");
+        LogPrintf("StealthSecret(): pkOut incorrect length.\n");
         rv = 1;
         goto End;
     };
@@ -444,34 +450,34 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
     
     if (!ecgrp)
     {
-        printf("StealthSecretSpend(): EC_GROUP_new_by_curve_name failed.\n");
+        LogPrintf("StealthSecretSpend(): EC_GROUP_new_by_curve_name failed.\n");
         return 1;
     };
     
     if (!(bnCtx = BN_CTX_new()))
     {
-        printf("StealthSecretSpend(): BN_CTX_new failed.\n");
+        LogPrintf("StealthSecretSpend(): BN_CTX_new failed.\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnScanSecret = BN_bin2bn(&scanSecret.e[0], ec_secret_size, BN_new())))
     {
-        printf("StealthSecretSpend(): bnScanSecret BN_bin2bn failed.\n");
+        LogPrintf("StealthSecretSpend(): bnScanSecret BN_bin2bn failed.\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnP = BN_bin2bn(&ephemPubkey[0], ephemPubkey.size(), BN_new())))
     {
-        printf("StealthSecretSpend(): bnP BN_bin2bn failed\n");
+        LogPrintf("StealthSecretSpend(): bnP BN_bin2bn failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(P = EC_POINT_bn2point(ecgrp, bnP, NULL, bnCtx)))
     {
-        printf("StealthSecretSpend(): P EC_POINT_bn2point failed\n");
+        LogPrintf("StealthSecretSpend(): P EC_POINT_bn2point failed\n");
         rv = 1;
         goto End;
     };
@@ -479,14 +485,14 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
     // -- dP
     if (!EC_POINT_mul(ecgrp, P, NULL, P, bnScanSecret, bnCtx))
     {
-        printf("StealthSecretSpend(): dP EC_POINT_mul failed\n");
+        LogPrintf("StealthSecretSpend(): dP EC_POINT_mul failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnOutP = EC_POINT_point2bn(ecgrp, P, POINT_CONVERSION_COMPRESSED, BN_new(), bnCtx)))
     {
-        printf("StealthSecretSpend(): P EC_POINT_bn2point failed\n");
+        LogPrintf("StealthSecretSpend(): P EC_POINT_bn2point failed\n");
         rv = 1;
         goto End;
     };
@@ -496,7 +502,7 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
     if (BN_num_bytes(bnOutP) != (int) ec_compressed_size
         || BN_bn2bin(bnOutP, &vchOutP[0]) != (int) ec_compressed_size)
     {
-        printf("StealthSecretSpend(): bnOutP incorrect length.\n");
+        LogPrintf("StealthSecretSpend(): bnOutP incorrect length.\n");
         rv = 1;
         goto End;
     };
@@ -507,7 +513,7 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
     
     if (!(bnc = BN_bin2bn(&hash1[0], 32, BN_new())))
     {
-        printf("StealthSecretSpend(): BN_bin2bn failed\n");
+        LogPrintf("StealthSecretSpend(): BN_bin2bn failed\n");
         rv = 1;
         goto End;
     };
@@ -515,14 +521,14 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
     if (!(bnOrder = BN_new())
         || !EC_GROUP_get_order(ecgrp, bnOrder, bnCtx))
     {
-        printf("StealthSecretSpend(): EC_GROUP_get_order failed\n");
+        LogPrintf("StealthSecretSpend(): EC_GROUP_get_order failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnSpend = BN_bin2bn(&spendSecret.e[0], ec_secret_size, BN_new())))
     {
-        printf("StealthSecretSpend(): bnSpend BN_bin2bn failed.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend BN_bin2bn failed.\n");
         rv = 1;
         goto End;
     };
@@ -531,22 +537,24 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
     //return BN_nnmod(r, r, m, ctx);
     if (!BN_mod_add(bnSpend, bnSpend, bnc, bnOrder, bnCtx))
     {
-        printf("StealthSecretSpend(): bnSpend BN_mod_add failed.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend BN_mod_add failed.\n");
         rv = 1;
         goto End;
     };
     
     if (BN_is_zero(bnSpend)) // possible?
     {
-        printf("StealthSecretSpend(): bnSpend is zero.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend is zero.\n");
         rv = 1;
         goto End;
     };
     
-    if (BN_num_bytes(bnSpend) != (int) ec_secret_size
-        || BN_bn2bin(bnSpend, &secretOut.e[0]) != (int) ec_secret_size)
+    int nBytes;
+    memset(&secretOut.e[0], 0, ec_secret_size);
+    if ((nBytes = BN_num_bytes(bnSpend)) > (int)ec_secret_size
+        || BN_bn2bin(bnSpend, &secretOut.e[ec_secret_size-nBytes]) != nBytes)
     {
-        printf("StealthSecretSpend(): bnSpend incorrect length.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend incorrect length.\n");
         rv = 1;
         goto End;
     };
@@ -568,7 +576,6 @@ int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& 
 
 int StealthSharedToSecretSpend(ec_secret& sharedS, ec_secret& spendSecret, ec_secret& secretOut)
 {
-    
     int rv = 0;
     std::vector<uint8_t> vchOutP;
     
@@ -581,20 +588,20 @@ int StealthSharedToSecretSpend(ec_secret& sharedS, ec_secret& spendSecret, ec_se
     
     if (!ecgrp)
     {
-        printf("StealthSecretSpend(): EC_GROUP_new_by_curve_name failed.\n");
+        LogPrintf("StealthSecretSpend(): EC_GROUP_new_by_curve_name failed.\n");
         return 1;
     };
     
     if (!(bnCtx = BN_CTX_new()))
     {
-        printf("StealthSecretSpend(): BN_CTX_new failed.\n");
+        LogPrintf("StealthSecretSpend(): BN_CTX_new failed.\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnc = BN_bin2bn(&sharedS.e[0], ec_secret_size, BN_new())))
     {
-        printf("StealthSecretSpend(): BN_bin2bn failed\n");
+        LogPrintf("StealthSecretSpend(): BN_bin2bn failed\n");
         rv = 1;
         goto End;
     };
@@ -602,14 +609,14 @@ int StealthSharedToSecretSpend(ec_secret& sharedS, ec_secret& spendSecret, ec_se
     if (!(bnOrder = BN_new())
         || !EC_GROUP_get_order(ecgrp, bnOrder, bnCtx))
     {
-        printf("StealthSecretSpend(): EC_GROUP_get_order failed\n");
+        LogPrintf("StealthSecretSpend(): EC_GROUP_get_order failed\n");
         rv = 1;
         goto End;
     };
     
     if (!(bnSpend = BN_bin2bn(&spendSecret.e[0], ec_secret_size, BN_new())))
     {
-        printf("StealthSecretSpend(): bnSpend BN_bin2bn failed.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend BN_bin2bn failed.\n");
         rv = 1;
         goto End;
     };
@@ -618,22 +625,24 @@ int StealthSharedToSecretSpend(ec_secret& sharedS, ec_secret& spendSecret, ec_se
     //return BN_nnmod(r, r, m, ctx);
     if (!BN_mod_add(bnSpend, bnSpend, bnc, bnOrder, bnCtx))
     {
-        printf("StealthSecretSpend(): bnSpend BN_mod_add failed.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend BN_mod_add failed.\n");
         rv = 1;
         goto End;
     };
     
     if (BN_is_zero(bnSpend)) // possible?
     {
-        printf("StealthSecretSpend(): bnSpend is zero.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend is zero.\n");
         rv = 1;
         goto End;
     };
     
-    if (BN_num_bytes(bnSpend) != (int) ec_secret_size
-        || BN_bn2bin(bnSpend, &secretOut.e[0]) != (int) ec_secret_size)
+    int nBytes;
+    memset(&secretOut.e[0], 0, ec_secret_size);
+    if ((nBytes = BN_num_bytes(bnSpend)) > (int)ec_secret_size
+        || BN_bn2bin(bnSpend, &secretOut.e[ec_secret_size-nBytes]) != nBytes)
     {
-        printf("StealthSecretSpend(): bnSpend incorrect length.\n");
+        LogPrintf("StealthSecretSpend(): bnSpend incorrect length.\n");
         rv = 1;
         goto End;
     };
@@ -654,19 +663,19 @@ bool IsStealthAddress(const std::string& encodedAddress)
     
     if (!DecodeBase58(encodedAddress, raw))
     {
-        //printf("IsStealthAddress DecodeBase58 falied.\n");
+        //LogPrintf("IsStealthAddress DecodeBase58 falied.\n");
         return false;
     };
     
     if (!VerifyChecksum(raw))
     {
-        //printf("IsStealthAddress verify_checksum falied.\n");
+        //LogPrintf("IsStealthAddress verify_checksum falied.\n");
         return false;
     };
     
     if (raw.size() < 1 + 1 + 33 + 1 + 33 + 1 + 1 + 4)
     {
-        //printf("IsStealthAddress too few bytes provided.\n");
+        //LogPrintf("IsStealthAddress too few bytes provided.\n");
         return false;
     };
     
@@ -676,7 +685,7 @@ bool IsStealthAddress(const std::string& encodedAddress)
     
     if (version != stealth_version_byte)
     {
-        //printf("IsStealthAddress version mismatch 0x%x != 0x%x.\n", version, stealth_version_byte);
+        //LogPrintf("IsStealthAddress version mismatch 0x%x != 0x%x.\n", version, stealth_version_byte);
         return false;
     };
     

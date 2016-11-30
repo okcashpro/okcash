@@ -14,7 +14,7 @@
    height="16px"
    id="svg2993"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.48.0 r9654"
    sodipodi:docname="questionmark.svg"
    inkscape:export-filename="/store/orion/projects/bitcoin/questionmark.png"
    inkscape:export-xdpi="90"
@@ -32,6 +32,18 @@
          offset="1"
          id="stop3812" />
     </linearGradient>
+    <filter
+       inkscape:collect="always"
+       id="filter3804"
+       x="-0.2510722"
+       width="1.5021444"
+       y="-0.13164773"
+       height="1.2632955">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.73280473"
+         id="feGaussianBlur3806" />
+    </filter>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3808"
@@ -72,7 +84,7 @@
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
+     inkscape:pageokcash="2"
      inkscape:zoom="1"
      inkscape:cx="10.789648"
      inkscape:cy="7.6382159"
@@ -80,10 +92,10 @@
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1360"
-     inkscape:window-height="745"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1127"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata2998">
@@ -93,7 +105,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>

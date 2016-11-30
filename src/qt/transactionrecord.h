@@ -4,6 +4,7 @@
 #include "uint256.h"
 
 #include <QList>
+#include <QString>
 
 class CWallet;
 class CWalletTx;
@@ -68,8 +69,13 @@ public:
         SendToOther,
         RecvWithAddress,
         RecvFromOther,
-        SendToSelf
+        SendToSelf,
+        RecvOKCash,
+        SendOKCash,
     };
+
+    static QString getTypeLabel(const int &type);
+    static QString getTypeShort(const int &type);
 
     /** Number of confirmation recommended for accepting a transaction */
     static const int RecommendedNumConfirmations = 10;
@@ -117,6 +123,8 @@ public:
 
     /** Return the unique identifier for this transaction (part) */
     std::string getTxID();
+
+    QString getTypeLabel();
 
     /** Update status from core wallet tx.
      */

@@ -8,6 +8,9 @@
 
 #include "main.h"
 #include "wallet.h"
+#include "init.h"
+
+void ThreadStakeMiner(CWallet *pwallet);
 
 /* Generate a new block, without valid proof-of-work */
 CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake=false, int64_t* pFees = 0);

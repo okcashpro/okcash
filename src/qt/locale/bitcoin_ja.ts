@@ -15,12 +15,12 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation>コピーライト © 2009-2014 The Bitcoin developers
 コピーライト © 2012-2014 The NovaCoin developers
-コピーライト © 2014 The BlackCoin developers</translation>
+コピーライト © 2014-2015 The BlackCoin developers</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -82,7 +82,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>所有権の証明するためのメサッジを署名する。</translation>
     </message>
     <message>
@@ -429,7 +429,7 @@ MIT/X11 ソフトウェア ライセンスの下で配布されています。�
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>ブラックコインアドレスへコインを送る</translation>
     </message>
     <message>
@@ -2250,7 +2250,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
         <translation>コインを費やす前に発現されたコインは510ブロック間成熟しなければなりません。このブロックを発現させたときに、ブロックチェインに足すためにネットワークへ放送しました。ブロックチェインに追加失敗したばい、レベルは「受け入られていない」に変わって、費やせられない状況になります。自分のノードと他のノードと同時に新しいブロックを発現させたときに、時折に起こること。</translation>
     </message>
     <message>
@@ -2676,8 +2676,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>&lt;port&gt; で 接続をリスン (デフォルト: 69070かtestnet は 79080)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>&lt;port&gt; で 接続をリスン (デフォルト: 6970かtestnet は 7980)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2736,8 +2736,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
-        <translation>&lt;port&gt; で JSON-RPC 接続をリスン (デフォルト: 69069かtestnet は 79079)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
+        <translation>&lt;port&gt; で JSON-RPC 接続をリスン (デフォルト: 6969かtestnet は 7979)</translation>
     </message>
     <message>
         <location line="-11"/>

@@ -4,13 +4,13 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include "ui_interface.h"
 #include "init.h"
-#include "bitcoinrpc.h"
+#include "rpcserver.h"
 
 #include <string>
 
 static int noui_ThreadSafeMessageBox(const std::string& message, const std::string& caption, int style)
 {
-    printf("%s: %s\n", caption.c_str(), message.c_str());
+    LogPrintf("%s: %s\n", caption.c_str(), message.c_str());
     fprintf(stderr, "%s: %s\n", caption.c_str(), message.c_str());
     return 4;
 }

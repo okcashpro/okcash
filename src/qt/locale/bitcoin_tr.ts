@@ -15,8 +15,8 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation type="unfinished"/>
     </message>
@@ -80,7 +80,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>Bir OKCash adresine sahip olduğunu ispatlamak için bir mesaj imzala</translation>
     </message>
     <message>
@@ -427,7 +427,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>Bir OKCash adresine coin gönder</translation>
     </message>
     <message>
@@ -2249,8 +2249,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Üretilen coinler, harcanmaya başlamadan önce 69 blokta olgunlaşmalıdır. Bu bloğu ürettiğinizde, blok zincirine eklenmek üzere ağda yayınlanır. Eğer blok, zincire girmede başarısız olursa, bloğun durumu &quot;kabul edilmedi&quot;ye dönüşür ve harcanamaz. Bu, başka bir devre sizden birkaç saniye önce bir blok ürettiyse gerçekleşebilir.</translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Üretilen coinler, harcanmaya başlamadan önce 510 blokta olgunlaşmalıdır. Bu bloğu ürettiğinizde, blok zincirine eklenmek üzere ağda yayınlanır. Eğer blok, zincire girmede başarısız olursa, bloğun durumu &quot;kabul edilmedi&quot;ye dönüşür ve harcanamaz. Bu, başka bir devre sizden birkaç saniye önce bir blok ürettiyse gerçekleşebilir.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2675,8 +2675,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>&lt;port&gt; üzerinde bağlantıları dinle (varsayılan: 69070 veya testnet: 79080)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>&lt;port&gt; üzerinde bağlantıları dinle (varsayılan: 6970 veya testnet: 7980)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2735,8 +2735,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
-        <translation>&lt;port&gt; üzerinde JSON-RPC bağlantılarını dinle (varsayılan: 69069 veya testnet: 79079)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
+        <translation>&lt;port&gt; üzerinde JSON-RPC bağlantılarını dinle (varsayılan: 6969 veya testnet: 7979)</translation>
     </message>
     <message>
         <location line="-11"/>

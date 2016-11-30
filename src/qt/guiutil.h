@@ -4,6 +4,7 @@
 #include <QString>
 #include <QObject>
 #include <QMessageBox>
+#include <stdint.h>
 
 QT_BEGIN_NAMESPACE
 class QFont;
@@ -22,6 +23,19 @@ namespace GUIUtil
     // Create human-readable string from date
     QString dateTimeStr(const QDateTime &datetime);
     QString dateTimeStr(qint64 nTime);
+    
+    /* Convert seconds into a QString with days, hours, mins, secs */
+    QString formatDurationStr(int secs);
+    
+    /* Format CNodeStats.nServices bitmask into a user-readable string */
+    QString formatServicesStr(quint64 mask);
+
+    /* Format a CNodeCombinedStats.dPingTime into a user-readable string or display N/A, if 0*/
+    QString formatPingTime(double dPingTime);
+
+    /* Format a CNodeCombinedStats.nTimeOffset into a user-readable string. */
+    QString formatTimeOffset(int64_t nTimeOffset);
+    
 
     // Render Bitcoin addresses in monospace font
     QFont bitcoinAddressFont();
@@ -34,6 +48,12 @@ namespace GUIUtil
     // See Bitcoin URI definition discussion here: https://bitcointalk.org/index.php?topic=33490.0
     bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out);
     bool parseBitcoinURI(QString uri, SendCoinsRecipient *out);
+    
+    /** Save window size and position */
+    void saveWindowGeometry(const QString& strSetting, QWidget *parent);
+    /** Restore window size and position */
+    void restoreWindowGeometry(const QString& strSetting, const QSize &defaultSizeIn, QWidget *parent);
+
 
     // HTML escaping for rich text controls
     QString HtmlEscape(const QString& str, bool fMultiLine=false);

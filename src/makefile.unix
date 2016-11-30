@@ -12,7 +12,8 @@ DEFS=-DBOOST_SPIRIT_THREADSAFE
 DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH))
 LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH))
 
-DEFS += -DIS_ARCH_64
+
+TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
 LMODE = dynamic
 LMODE2 = dynamic
@@ -21,7 +22,10 @@ ifdef STATIC
     ifeq (${STATIC}, all)
         LMODE2 = static
     endif
+else
+    TESTDEFS += -DBOOST_TEST_DYN_LINK
 endif
+
 
 # for boost 1.37, add -mt to the boost libraries
 LIBS += \
@@ -48,6 +52,9 @@ LIBS+= \
    -l dl \
    -l pthread
 
+TESTLIBS += \
+ -Wl,-B$(LMODE) \
+   -l boost_unit_test_framework$(BOOST_LIB_SUFFIX)
 
 # Hardening
 # Make some classes of vulnerabilities unexploitable in case one is discovered.
@@ -108,15 +115,19 @@ OBJS= \
     obj/addrman.o \
     obj/crypter.o \
     obj/key.o \
+    obj/eckey.o \
     obj/db.o \
     obj/init.o \
+    obj/okcashd.o \
     obj/irc.o \
     obj/keystore.o \
     obj/miner.o \
     obj/main.o \
     obj/net.o \
     obj/protocol.o \
-    obj/bitcoinrpc.o \
+    obj/rpcprotocol.o \
+    obj/rpcserver.o \
+    obj/rpcclient.o \
     obj/rpcdump.o \
     obj/rpcnet.o \
     obj/rpcmining.o \
@@ -127,6 +138,7 @@ OBJS= \
     obj/script.o \
     obj/sync.o \
     obj/util.o \
+    obj/hash.o \
     obj/wallet.o \
     obj/walletdb.o \
     obj/noui.o \
@@ -137,10 +149,19 @@ OBJS= \
     obj/scrypt-x86.o \
     obj/scrypt-x86_64.o \
     obj/smessage.o \
-    obj/stealth.o 
+    obj/stealth.o \
+    obj/ringsig.o \
+    obj/core.o \
+    obj/txmempool.o \
+    obj/chainparams.o \
+    obj/state.o \
+    obj/bloom.o 
 
 
 all: okcashd
+
+test check: test_okcash FORCE
+	./test_okcash
 
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/include)
@@ -178,10 +199,37 @@ obj/%.o: %.cpp
 okcashd: $(OBJS:obj/%=obj/%)
 	$(LINK) $(xCXXFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
 
+
+TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
+#TESTOBJS := obj-test/json_spirit_reader.o
+
+#obj-test/json_spirit_reader.o: json/json_spirit_reader.cpp
+#	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+#	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+#		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+#		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+#	rm -f $(@:%.o=%.d)
+    
+
+
+obj-test/%.o: test/%.cpp
+	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+	rm -f $(@:%.o=%.d)
+
+test_okcash: $(TESTOBJS) $(filter-out obj/init.o obj/okcashd.o,$(OBJS:obj/%=obj/%))
+	$(LINK) $(xCXXFLAGS) -o $@ $(LIBPATHS) $^ $(TESTLIBS) $(xLDFLAGS) $(LIBS)
+
 clean:
 	-rm -f okcashd
 	-rm -f obj/*.o
 	-rm -f obj/*.P
 	-rm -f obj/build.h
+	-rm -f test_okcash
+	-rm -f obj-test/*.o
+	-rm -f obj-test/*.P
+	-cd leveldb && $(MAKE) clean || true
 
 FORCE:

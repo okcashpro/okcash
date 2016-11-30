@@ -15,13 +15,13 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</translation>
     </message>
     <message>
@@ -85,7 +85,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>Signera ett meddelande för att bevisa att du äger OKCash adressen</translation>
     </message>
     <message>
@@ -432,7 +432,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>Skicka coins till en OKCash adress</translation>
     </message>
     <message>
@@ -2254,8 +2254,8 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Genererad mynt måste mogna i 69 block före de kan användas. När du genererade detta blocket sändes det ut till nätverket för att läggas till i blockkedjan. Om det inte kan läggas till i kedjan kommer dess status att ändras till &quot;Ej accepterat&quot; och det kommer inte gå att använda. Detta kan hända imellanåt om en annan klient genererar ett block inom ett par sekunder från ditt.</translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Genererad mynt måste mogna i 510 block före de kan användas. När du genererade detta blocket sändes det ut till nätverket för att läggas till i blockkedjan. Om det inte kan läggas till i kedjan kommer dess status att ändras till &quot;Ej accepterat&quot; och det kommer inte gå att använda. Detta kan hända imellanåt om en annan klient genererar ett block inom ett par sekunder från ditt.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2680,8 +2680,8 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>Lyssna efter anslutningar på &lt;port&gt; (standard: 69070 eller testnät: 79080)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>Lyssna efter anslutningar på &lt;port&gt; (standard: 6970 eller testnät: 7980)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2740,8 +2740,8 @@ Detta betyder att en avgift på minst %2 krävs.</translation>
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
-        <translation>Lyssna efter JSON-RPC anslutningar på &lt;port&gt; (standard: 69069 eller testnät: 79079)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
+        <translation>Lyssna efter JSON-RPC anslutningar på &lt;port&gt; (standard: 6969 eller testnät: 7979)</translation>
     </message>
     <message>
         <location line="-11"/>

@@ -76,7 +76,7 @@ Dependency Build Instructions: Gentoo
 emerge -av1 --noreplace boost openssl sys-libs/db
 
 Take the following steps to build (no UPnP support):
- cd ${OKCash_DIR}/src
+ cd ${OKCASH_DIR}/src
  make -f makefile.unix USE_UPNP=
  strip okcashd
 

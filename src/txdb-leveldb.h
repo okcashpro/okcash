@@ -12,8 +12,11 @@
 #include <string>
 #include <vector>
 
+
 #include <leveldb/db.h>
 #include <leveldb/write_batch.h>
+
+#include "ringsig.h"
 
 // Class that provides access to a LevelDB. Note that this class is frequently
 // instantiated on the stack and then destroyed again, so instantiation has to
@@ -34,7 +37,8 @@ public:
     ~CTxDB() {
         // Note that this is not the same as Close() because it deletes only
         // data scoped to this TxDB object.
-        delete activeBatch;
+        if (activeBatch)
+            delete activeBatch;
     }
 
     // Destroys the underlying shared global state accessed by this TxDB.
@@ -65,23 +69,28 @@ protected:
         std::string strValue;
 
         bool readFromDb = true;
-        if (activeBatch) {
+        if (activeBatch)
+        {
             // First we must search for it in the currently pending set of
             // changes to the db. If not found in the batch, go on to read disk.
             bool deleted = false;
             readFromDb = ScanBatch(ssKey, &strValue, &deleted) == false;
-            if (deleted) {
+            if (deleted)
+            {
                 return false;
             }
-        }
-        if (readFromDb) {
+        };
+        
+        if (readFromDb)
+        {
             leveldb::Status status = pdb->Get(leveldb::ReadOptions(),
                                               ssKey.str(), &strValue);
-            if (!status.ok()) {
+            if (!status.ok())
+            {
                 if (status.IsNotFound())
                     return false;
                 // Some unexpected error.
-                printf("LevelDB read failure: %s\n", status.ToString().c_str());
+                LogPrintf("LevelDB read failure: %s\n", status.ToString().c_str());
                 return false;
             }
         }
@@ -90,8 +99,8 @@ protected:
             CDataStream ssValue(strValue.data(), strValue.data() + strValue.size(),
                                 SER_DISK, CLIENT_VERSION);
             ssValue >> value;
-        }
-        catch (std::exception &e) {
+        } catch (std::exception &e)
+        {
             return false;
         }
         return true;
@@ -110,15 +119,19 @@ protected:
         ssValue.reserve(10000);
         ssValue << value;
 
-        if (activeBatch) {
+        if (activeBatch)
+        {
             activeBatch->Put(ssKey.str(), ssValue.str());
             return true;
-        }
+        };
+        
         leveldb::Status status = pdb->Put(leveldb::WriteOptions(), ssKey.str(), ssValue.str());
-        if (!status.ok()) {
-            printf("LevelDB write failure: %s\n", status.ToString().c_str());
+        if (!status.ok())
+        {
+            LogPrintf("LevelDB write failure: %s\n", status.ToString().c_str());
             return false;
-        }
+        };
+        
         return true;
     }
 
@@ -133,10 +146,12 @@ protected:
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
         ssKey << key;
-        if (activeBatch) {
+        if (activeBatch)
+        {
             activeBatch->Delete(ssKey.str());
             return true;
-        }
+        };
+        
         leveldb::Status status = pdb->Delete(leveldb::WriteOptions(), ssKey.str());
         return (status.ok() || status.IsNotFound());
     }
@@ -149,13 +164,14 @@ protected:
         ssKey << key;
         std::string unused;
 
-        if (activeBatch) {
+        if (activeBatch)
+        {
             bool deleted;
-            if (ScanBatch(ssKey, &unused, &deleted) && !deleted) {
+            if (ScanBatch(ssKey, &unused, &deleted) && !deleted)
+            {
                 return true;
             }
         }
-
 
         leveldb::Status status = pdb->Get(leveldb::ReadOptions(), ssKey.str(), &unused);
         return status.IsNotFound() == false;
@@ -171,6 +187,11 @@ public:
         activeBatch = NULL;
         return true;
     }
+    
+    leveldb::DB* GetInstance()
+    {
+        return pdb;
+    }
 
     bool ReadVersion(int& nVersion)
     {
@@ -182,7 +203,20 @@ public:
     {
         return Write(std::string("version"), nVersion);
     }
-
+    
+    
+    int CheckVersion();
+    int RecreateDB();
+    int MigrateFrom70509();
+    
+    bool WriteKeyImage(ec_point& keyImage, CKeyImageSpent& keyImageSpent);
+    bool ReadKeyImage(ec_point& keyImage, CKeyImageSpent& keyImageSpent);
+    bool EraseKeyImage(ec_point& keyImage);
+    
+    bool WriteAnonOutput(CPubKey& pkCoin, CAnonOutput& ao);
+    bool ReadAnonOutput(CPubKey& pkCoin, CAnonOutput& ao);
+    bool EraseAnonOutput(CPubKey& pkCoin);
+    
     bool ReadTxIndex(uint256 hash, CTxIndex& txindex);
     bool UpdateTxIndex(uint256 hash, const CTxIndex& txindex);
     bool AddTxIndex(const CTransaction& tx, const CDiskTxPos& pos, int nHeight);
@@ -193,8 +227,13 @@ public:
     bool ReadDiskTx(COutPoint outpoint, CTransaction& tx, CTxIndex& txindex);
     bool ReadDiskTx(COutPoint outpoint, CTransaction& tx);
     bool WriteBlockIndex(const CDiskBlockIndex& blockindex);
+    bool EraseBlockIndex(const uint256& blockhash);
+    bool WriteBlockThinIndex(const CDiskBlockThinIndex& blockindex);
+    bool ReadBlockThinIndex(const uint256& hash, CDiskBlockThinIndex& blockindex);
     bool ReadHashBestChain(uint256& hashBestChain);
     bool WriteHashBestChain(uint256 hashBestChain);
+    bool ReadHashBestHeaderChain(uint256& hashBestChain);
+    bool WriteHashBestHeaderChain(uint256 hashBestChain);
     bool ReadBestInvalidTrust(CBigNum& bnBestInvalidTrust);
     bool WriteBestInvalidTrust(CBigNum bnBestInvalidTrust);
     bool ReadSyncCheckpoint(uint256& hashCheckpoint);
@@ -202,6 +241,7 @@ public:
     bool ReadCheckpointPubKey(std::string& strPubKey);
     bool WriteCheckpointPubKey(const std::string& strPubKey);
     bool LoadBlockIndex();
+    bool LoadBlockThinIndex();
 private:
     bool LoadBlockIndexGuts();
 };

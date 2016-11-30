@@ -15,13 +15,13 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</translation>
     </message>
     <message>
@@ -84,7 +84,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>Semnează un mesaj pentru a dovedi că dețineti o adresă OKCash</translation>
     </message>
     <message>
@@ -431,7 +431,7 @@ Acest produs include programe dezvoltate de către OpenSSL Project pentru a fi f
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>Trimite monede către o adresă OKCash</translation>
     </message>
     <message>
@@ -2253,8 +2253,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Monedele generate trebuie să se maturizeze 69 blocuri înainte de a fi cheltuite. Când ați generat acest bloc,  a fost trimis la rețea pentru a fi adăugat la lanțul de blocuri. În cazul în care nu reușește să intre în lanț, starea sa se ​​va schimba in &quot;nu a fost acceptat&quot;, și nu va putea fi cheltuit. Acest lucru se poate întâmpla din când în când, dacă un alt nod generează un bloc cu câteva secunde inaintea blocului tau.</translation>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Monedele generate trebuie să se maturizeze 510 blocuri înainte de a fi cheltuite. Când ați generat acest bloc,  a fost trimis la rețea pentru a fi adăugat la lanțul de blocuri. În cazul în care nu reușește să intre în lanț, starea sa se ​​va schimba in &quot;nu a fost acceptat&quot;, și nu va putea fi cheltuit. Acest lucru se poate întâmpla din când în când, dacă un alt nod generează un bloc cu câteva secunde inaintea blocului tau.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2679,8 +2679,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
-        <translation>Ascultă pentru conectări pe &lt;port&gt; (implicit:  69070 sau testnet: 79080) </translation>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
+        <translation>Ascultă pentru conectări pe &lt;port&gt; (implicit:  6970 sau testnet: 7980) </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2739,8 +2739,8 @@ Acest lucru înseamnă că o taxă de cel puțin %2 este necesară</translation>
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
-        <translation>Ascultă pentru conexiuni JSON-RPC pe &lt;port&gt; (implicit:69069 sau testnet: 79079)</translation>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
+        <translation>Ascultă pentru conexiuni JSON-RPC pe &lt;port&gt; (implicit:6969 sau testnet: 7979)</translation>
     </message>
     <message>
         <location line="-11"/>

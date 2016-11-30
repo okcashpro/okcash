@@ -15,12 +15,12 @@
         <location line="+41"/>
         <source>Copyright © 2009-2015 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2014 The BlackCoin developers 
-Copyright © 2014 The ShadowCash developers
+Copyright © 2014-2015 The BlackCoin developers
+Copyright © 2014-2015 The ShadowCoin developers 
 Copyright © 2014-2015 The OKCash developers</source>
         <translation>Copyright © 2009-2014 para pengembang Bitcoin
 Copyright © 2012-2014 para pengembang NovaCoin
-Copyright © 2014 para pengembang OKCash</translation>
+Copyright © 2014-2015 para pengembang OKCash</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -77,7 +77,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own an OKCash address</source>
+        <source>Sign a message to prove you own a OKCash address</source>
         <translation>Masukan  pesan untuk membuktikan bahwa anda telah mempunyai adress OKCash</translation>
     </message>
     <message>
@@ -424,7 +424,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to an OKCash address</source>
+        <source>Send coins to a OKCash address</source>
         <translation>Kirim koin ke alamat OKCash</translation>
     </message>
     <message>
@@ -2232,7 +2232,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 69 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <source>Generated coins must mature 510 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2658,7 +2658,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Listen for connections on &lt;port&gt; (default: 69070 or testnet: 79080)</source>
+        <source>Listen for connections on &lt;port&gt; (default: 6970 or testnet: 7980)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2718,7 +2718,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-87"/>
-        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 69069 or testnet: 79079)</source>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 6969 or testnet: 7979)</source>
         <translation type="unfinished"/>
     </message>
     <message>

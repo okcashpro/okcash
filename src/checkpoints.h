@@ -23,6 +23,8 @@ class CSyncCheckpoint;
  */
 namespace Checkpoints
 {
+    typedef std::map<int, uint256> MapCheckpoints;
+    
     /** Checkpointing mode */
     enum CPMode
     {
@@ -36,6 +38,7 @@ namespace Checkpoints
 
     // Returns true if block passes checkpoint checks
     bool CheckHardened(int nHeight, const uint256& hash);
+    
 
     // Return conservative estimate of total number of blocks, 0 if unknown
     int GetTotalBlocksEstimate();
@@ -44,21 +47,27 @@ namespace Checkpoints
     CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex);
 
     extern uint256 hashSyncCheckpoint;
+    extern uint256 hashPendingCheckpoint;
     extern CSyncCheckpoint checkpointMessage;
     extern uint256 hashInvalidCheckpoint;
     extern CCriticalSection cs_hashSyncCheckpoint;
+    
+    extern MapCheckpoints mapCheckpoints;
+    extern MapCheckpoints mapCheckpointsTestnet;
 
     CBlockIndex* GetLastSyncCheckpoint();
+    CBlockThinIndex* GetLastSyncCheckpointHeader();
     bool WriteSyncCheckpoint(const uint256& hashCheckpoint);
     bool AcceptPendingSyncCheckpoint();
     uint256 AutoSelectSyncCheckpoint();
     bool CheckSync(const uint256& hashBlock, const CBlockIndex* pindexPrev);
     bool WantedByPendingSyncCheckpoint(uint256 hashBlock);
+    bool WantedByPendingSyncCheckpointHeader(uint256 hashBlock);
     bool ResetSyncCheckpoint();
+    bool ResetSyncCheckpointThin();
     void AskForPendingSyncCheckpoint(CNode* pfrom);
     bool SetCheckpointPrivKey(std::string strPrivKey);
     bool SendSyncCheckpoint(uint256 hashCheckpoint);
-    bool IsMatureSyncCheckpoint();
 }
 
 // ppcoin: synchronized checkpoint
@@ -94,7 +103,7 @@ public:
 
     void print() const
     {
-        printf("%s", ToString().c_str());
+        LogPrintf("%s", ToString().c_str());
     }
 };
 
@@ -149,6 +158,9 @@ public:
 
     bool CheckSignature();
     bool ProcessSyncCheckpoint(CNode* pfrom);
+    bool ProcessSyncCheckpointHeaders(CNode* pfrom);
 };
+
+extern enum Checkpoints::CPMode CheckpointsMode;
 
 #endif

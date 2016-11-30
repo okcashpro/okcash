@@ -3,8 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addrman.h"
-
-using namespace std;
+#include "hash.h"
 
 int CAddrInfo::GetTriedBucket(const std::vector<unsigned char> &nKey) const
 {
@@ -260,7 +259,7 @@ void CAddrMan::MakeTried(CAddrInfo& info, int nId, int nOrigin)
 
 void CAddrMan::Good_(const CService &addr, int64_t nTime)
 {
-//    printf("Good: addr=%s\n", addr.ToString().c_str());
+//    LogPrintf("Good: addr=%s\n", addr.ToString().c_str());
 
     int nId;
     CAddrInfo *pinfo = Find(addr, &nId);
@@ -303,7 +302,7 @@ void CAddrMan::Good_(const CService &addr, int64_t nTime)
     // TODO: maybe re-add the node, but for now, just bail out
     if (nUBucket == -1) return;
 
-    printf("Moving %s to tried\n", addr.ToString().c_str());
+    LogPrintf("Moving %s to tried\n", addr.ToString().c_str());
 
     // move nId to the tried tables
     MakeTried(info, nId, nUBucket);
@@ -324,7 +323,7 @@ bool CAddrMan::Add_(const CAddress &addr, const CNetAddr& source, int64_t nTimeP
         bool fCurrentlyOnline = (GetAdjustedTime() - addr.nTime < 24 * 60 * 60);
         int64_t nUpdateInterval = (fCurrentlyOnline ? 60 * 60 : 24 * 60 * 60);
         if (addr.nTime && (!pinfo->nTime || pinfo->nTime < addr.nTime - nUpdateInterval - nTimePenalty))
-            pinfo->nTime = max((int64_t)0, addr.nTime - nTimePenalty);
+            pinfo->nTime = std::max((int64_t)0, addr.nTime - nTimePenalty);
 
         // add services
         pinfo->nServices |= addr.nServices;
@@ -347,13 +346,14 @@ bool CAddrMan::Add_(const CAddress &addr, const CNetAddr& source, int64_t nTimeP
             nFactor *= 2;
         if (nFactor > 1 && (GetRandInt(nFactor) != 0))
             return false;
-    } else {
+    } else
+    {
         pinfo = Create(addr, source, &nId);
-        pinfo->nTime = max((int64_t)0, (int64_t)pinfo->nTime - nTimePenalty);
-//        printf("Added %s [nTime=%fhr]\n", pinfo->ToString().c_str(), (GetAdjustedTime() - pinfo->nTime) / 3600.0);
+        pinfo->nTime = std::max((int64_t)0, (int64_t)pinfo->nTime - nTimePenalty);
+//        LogPrintf("Added %s [nTime=%fhr]\n", pinfo->ToString().c_str(), (GetAdjustedTime() - pinfo->nTime) / 3600.0);
         nNew++;
         fNew = true;
-    }
+    };
 
     int nUBucket = pinfo->GetNewBucket(nKey, source);
     std::set<int> &vNew = vvNew[nUBucket];
@@ -363,7 +363,7 @@ bool CAddrMan::Add_(const CAddress &addr, const CNetAddr& source, int64_t nTimeP
         if (vNew.size() == ADDRMAN_NEW_BUCKET_SIZE)
             ShrinkNew(nUBucket);
         vvNew[nUBucket].insert(nId);
-    }
+    };
     return fNew;
 }
 
@@ -408,8 +408,9 @@ CAddress CAddrMan::Select_(int nUnkBias)
             if (GetRandInt(1<<30) < fChanceFactor*info.GetChance()*(1<<30))
                 return info;
             fChanceFactor *= 1.2;
-        }
-    } else {
+        };
+    } else
+    {
         // use a new node
         double fChanceFactor = 1.0;
         while(1)
@@ -426,8 +427,8 @@ CAddress CAddrMan::Select_(int nUnkBias)
             if (GetRandInt(1<<30) < fChanceFactor*info.GetChance()*(1<<30))
                 return info;
             fChanceFactor *= 1.2;
-        }
-    }
+        };
+    };
 }
 
 #ifdef DEBUG_ADDRMAN
@@ -448,16 +449,17 @@ int CAddrMan::Check_()
             if (!info.nLastSuccess) return -1;
             if (info.nRefCount) return -2;
             setTried.insert(n);
-        } else {
+        } else
+        {
             if (info.nRefCount < 0 || info.nRefCount > ADDRMAN_NEW_BUCKETS_PER_ADDRESS) return -3;
             if (!info.nRefCount) return -4;
             mapNew[n] = info.nRefCount;
-        }
+        };
         if (mapAddr[info] != n) return -5;
         if (info.nRandomPos<0 || info.nRandomPos>=vRandom.size() || vRandom[info.nRandomPos] != n) return -14;
         if (info.nLastTry < 0) return -6;
         if (info.nLastSuccess < 0) return -8;
-    }
+    };
 
     if (setTried.size() != nTried) return -9;
     if (mapNew.size() != nNew) return -10;
@@ -469,8 +471,8 @@ int CAddrMan::Check_()
         {
             if (!setTried.count(*it)) return -11;
             setTried.erase(*it);
-        }
-    }
+        };
+    };
 
     for (int n=0; n<vvNew.size(); n++)
     {
@@ -480,8 +482,8 @@ int CAddrMan::Check_()
             if (!mapNew.count(*it)) return -12;
             if (--mapNew[*it] == 0)
                 mapNew.erase(*it);
-        }
-    }
+        };
+    };
 
     if (setTried.size()) return -13;
     if (mapNew.size()) return -15;

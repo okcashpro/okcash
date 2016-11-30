@@ -39,7 +39,7 @@ inline T& REF(const T& val)
 /////////////////////////////////////////////////////////////////
 //
 // Templates for serializing to anything that looks like a stream,
-// i.e. anything that supports .read(char*, int) and .write(char*, int)
+// i.e. anything that supports .read(char*, size_t) and .write(char*, size_t)
 //
 
 enum
@@ -234,7 +234,7 @@ uint64_t ReadCompactSize(Stream& is)
         uint64_t xSize;
         READDATA(is, xSize);
         nSizeRet = xSize;
-        if (nSizeRet < 0x100000000LLu)
+        if (nSizeRet < 0x100000000ULL)
             throw std::ios_base::failure("non-canonical ReadCompactSize()");
     }
     if (nSizeRet > (uint64_t)MAX_SIZE)
@@ -242,9 +242,75 @@ uint64_t ReadCompactSize(Stream& is)
     return nSizeRet;
 }
 
+// Variable-length integers: bytes are a MSB base-128 encoding of the number.
+// The high bit in each byte signifies whether another digit follows. To make
+// the encoding is one-to-one, one is subtracted from all but the last digit.
+// Thus, the byte sequence a[] with length len, where all but the last byte
+// has bit 128 set, encodes the number:
+//
+//   (a[len-1] & 0x7F) + sum(i=1..len-1, 128^i*((a[len-i-1] & 0x7F)+1))
+//
+// Properties:
+// * Very small (0-127: 1 byte, 128-16511: 2 bytes, 16512-2113663: 3 bytes)
+// * Every integer has exactly one encoding
+// * Encoding does not depend on size of original integer type
+// * No redundancy: every (infinite) byte sequence corresponds to a list
+//   of encoded integers.
+//
+// 0:         [0x00]  256:        [0x81 0x00]
+// 1:         [0x01]  16383:      [0xFE 0x7F]
+// 127:       [0x7F]  16384:      [0xFF 0x00]
+// 128:  [0x80 0x00]  16511: [0x80 0xFF 0x7F]
+// 255:  [0x80 0x7F]  65535: [0x82 0xFD 0x7F]
+// 2^32:           [0x8E 0xFE 0xFE 0xFF 0x00]
 
+template<typename I>
+inline unsigned int GetSizeOfVarInt(I n)
+{
+    int nRet = 0;
+    while(true) {
+        nRet++;
+        if (n <= 0x7F)
+            break;
+        n = (n >> 7) - 1;
+    }
+    return nRet;
+}
 
-#define FLATDATA(obj)   REF(CFlatData((char*)&(obj), (char*)&(obj) + sizeof(obj)))
+template<typename Stream, typename I>
+void WriteVarInt(Stream& os, I n)
+{
+    unsigned char tmp[(sizeof(n)*8+6)/7];
+    int len=0;
+    while(true) {
+        tmp[len] = (n & 0x7F) | (len ? 0x80 : 0x00);
+        if (n <= 0x7F)
+            break;
+        n = (n >> 7) - 1;
+        len++;
+    }
+    do {
+        WRITEDATA(os, tmp[len]);
+    } while(len--);
+}
+
+template<typename Stream, typename I>
+I ReadVarInt(Stream& is)
+{
+    I n = 0;
+    while(true) {
+        unsigned char chData;
+        READDATA(is, chData);
+        n = (n << 7) | (chData & 0x7F);
+        if (chData & 0x80)
+            n++;
+        else
+            return n;
+    }
+}
+
+#define FLATDATA(obj)  REF(CFlatData((char*)&(obj), (char*)&(obj) + sizeof(obj)))
+#define VARINT(obj)    REF(WrapVarInt(REF(obj)))
 
 /** Wrapper for serializing arrays and POD.
  */
@@ -277,6 +343,32 @@ public:
         s.read(pbegin, pend - pbegin);
     }
 };
+
+template<typename I>
+class CVarInt
+{
+protected:
+    I &n;
+public:
+    CVarInt(I& nIn) : n(nIn) { }
+
+    unsigned int GetSerializeSize(int, int) const {
+        return GetSizeOfVarInt<I>(n);
+    }
+
+    template<typename Stream>
+    void Serialize(Stream &s, int, int) const {
+        WriteVarInt<Stream,I>(s, n);
+    }
+
+    template<typename Stream>
+    void Unserialize(Stream& s, int, int) {
+        n = ReadVarInt<Stream,I>(s);
+    }
+};
+
+template<typename I>
+CVarInt<I> WrapVarInt(I& n) { return CVarInt<I>(n); }
 
 //
 // Forward declarations
@@ -707,6 +799,35 @@ struct ser_streamplaceholder
 
 typedef std::vector<char, zero_after_free_allocator<char> > CSerializeData;
 
+class CSizeComputer
+{
+protected:
+    size_t nSize;
+
+public:
+    int nType;
+    int nVersion;
+
+    CSizeComputer(int nTypeIn, int nVersionIn) : nSize(0), nType(nTypeIn), nVersion(nVersionIn) {}
+
+    CSizeComputer& write(const char *psz, size_t nSize)
+    {
+        this->nSize += nSize;
+        return *this;
+    }
+
+    template<typename T>
+    CSizeComputer& operator<<(const T& obj)
+    {
+        ::Serialize(*this, obj, nType, nVersion);
+        return (*this);
+    }
+
+    size_t size() const {
+        return nSize;
+    }
+};
+
 /** Double ended buffer combining vector and stream-like interfaces.
  *
  * >> and << read and write unformatted data using the above serialization templates.
@@ -918,10 +1039,9 @@ public:
     void ReadVersion()           { *this >> nVersion; }
     void WriteVersion()          { *this << nVersion; }
 
-    CDataStream& read(char* pch, int nSize)
+    CDataStream& read(char* pch, size_t nSize)
     {
         // Read from the beginning of the buffer
-        assert(nSize >= 0);
         unsigned int nReadPosNext = nReadPos + nSize;
         if (nReadPosNext >= vch.size())
         {
@@ -958,10 +1078,9 @@ public:
         return (*this);
     }
 
-    CDataStream& write(const char* pch, int nSize)
+    CDataStream& write(const char* pch, size_t nSize)
     {
         // Write to the end of the buffer
-        assert(nSize >= 0);
         vch.insert(vch.end(), pch, pch + nSize);
         return (*this);
     }
