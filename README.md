@@ -3,10 +3,8 @@
 [![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) 
 # OKCash OK
 
-<iframe src="https://discordapp.com/widget?id=213747404745211904&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
-
 ### Join the new communications server
-<a href="https://discord.gg/grvpc8c">
+<a href="https://discord.io/okcash">
     <img alt="Logo" src="https://discordapp.com/api/guilds/213747404745211904/widget.png?style=banner2">
   </a>
 
@@ -14,9 +12,9 @@
 
 ### Download Supported Platforms
 
-[![OK-windows](http://i.imgur.com/kJIvcip.png)](http://okcash.co/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](http://okcash.co/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](http://okcash.co/#jf_download) 
+[![OK-windows](http://i.imgur.com/kJIvcip.png)](https://okcash.info/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](https://okcash.info/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](https://okcash.info/#jf_download) 
 
-[![OK-raspberry](http://imgur.com/UJNvyax.png)](http://okcash.co/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](http://okcash.co/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](http://okcash.co/#jf_download)
+[![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.info/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.info/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.info/#jf_download)
 
 #### Download the Instant OK-Blockchain - Fast Sync for first time users on Desktop-Laptop (Mac, Win, Linux): 
 ![OK-bootstrap](http://i.imgur.com/edwu0MM.png) https://github.com/okcashpro/ok-blockchain/releases
@@ -40,7 +38,9 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 ## Visit OK Smart Links and join the different community channels
 
-#### What is Okcash?  http://okcash.co
+#### Okcash:  http://okcash.co
+
+#### What is Okcash?  https://okcash.info
 
 #### OK community videos on Youtube: https://www.youtube.com/c/OkcashCrypto
 
@@ -54,7 +54,7 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Reddit community: https://reddit.com/r/okcash
 
-#### OK Communications Channels: https://discord.gg/grvpc8c
+#### OK Communications Channels: https://discord.io/okcash
 
 #### OK G+ community: https://plus.google.com/u/0/+OkcashCrypto
 
