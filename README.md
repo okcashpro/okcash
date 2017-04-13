@@ -39,19 +39,23 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### What is Okcash?  https://okcash.info
 
-#### OK community videos on Youtube: https://www.youtube.com/c/OkcashCrypto
+#### OK Chain explorer:  https://chainz.cryptoid.info/ok/
+
+#### Okcash Block halving:  https://okcashblockhalf.com
+
+#### OK Communications Channels: https://discord.io/okcash
 
 #### OkcashTalk Forums *new:  http://okcashtalk.org
 
 #### BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
+
+#### OK community videos on Youtube: https://www.youtube.com/c/OkcashCrypto
 
 #### OK Twitter community: https://twitter.com/OkcashCrypto
 
 #### OK Facebook community: https://www.facebook.com/OKCashCrypto/
 
 #### OK Reddit community: https://reddit.com/r/okcash
-
-#### OK Communications Channels: https://discord.io/okcash
 
 #### OK G+ community: https://plus.google.com/u/0/+OkcashCrypto
 
