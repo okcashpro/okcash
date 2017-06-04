@@ -12,9 +12,9 @@
 
 ### Download Supported Platforms
 
-[![OK-windows](http://i.imgur.com/kJIvcip.png)](https://okcash.info/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](https://okcash.info/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](https://okcash.info/#jf_download) 
+[![OK-windows](http://i.imgur.com/kJIvcip.png)](https://okcash.org/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](https://okcash.org/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](https://okcash.org/#jf_download) 
 
-[![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.info/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.info/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.info/#jf_download)
+[![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.org/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.org/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.org/#jf_download)
 
 #### Download the Instant OK-Blockchain - Fast Sync for first time users on Desktop-Laptop (Mac, Win, Linux, Raspberry Pi): 
 ![OK-bootstrap](http://i.imgur.com/edwu0MM.png) https://github.com/okcashpro/ok-blockchain/releases
@@ -37,7 +37,7 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### Okcash:  http://okcash.co
 
-#### What is Okcash?  https://okcash.info
+#### What is Okcash?  https://okcash.org
 
 #### OK Chain explorer:  https://chainz.cryptoid.info/ok/
 
