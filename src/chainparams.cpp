@@ -23,10 +23,10 @@ struct SeedSpec6 {
 
 unsigned int pnSeed[] =
 {
-    0x3675a768,
-    0xcf6fa768,
-    0x8a98eba8,
-    0x0da551b9,
+    0x8C99202D,
+    0xAE004D2D,
+    0x1A3E202D,
+    0x58234D2D,
 };
 
 
@@ -190,6 +190,8 @@ public:
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed2.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed3.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed4.okcash.co"));
+        vSeeds.push_back(CDNSSeedData("okcash.co", "seed5.okcash.co"));
+        vSeeds.push_back(CDNSSeedData("okcash.co", "seed6.okcash.co"));
         
         base58Prefixes[PUBKEY_ADDRESS] = list_of(55)                    .convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[SCRIPT_ADDRESS] = list_of(28)                   .convert_to_container<std::vector<unsigned char> >();
