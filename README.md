@@ -1,4 +1,4 @@
-![OKCash-OK](http://i.imgur.com/rpzMWd6.png)
+![OKCash-OK](http://i.imgur.com/FzFxAhN.png)
 
 [![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) 
 # OKCash OK
