@@ -56,17 +56,17 @@ android {
 build_macosx64 {
     QMAKE_TARGET_BUNDLE_PREFIX = co.okcash
     BOOST_LIB_SUFFIX=-mt
-    BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.55.0_2/include
-    BOOST_LIB_PATH=/usr/local/Cellar/boost/1.55.0_2/lib
+    BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.65.1/include
+    BOOST_LIB_PATH=/usr/local/Cellar/boost/1.65.1/lib
 
-    BDB_INCLUDE_PATH=/usr/local/opt/berkeley-db4/include
-    BDB_LIB_PATH=/usr/local/Cellar/berkeley-db4/4.8.30/lib
+    BDB_INCLUDE_PATH=/usr/local/Cellar/berkeley-db@4/4.8.30/include
+    BDB_LIB_PATH=/usr/local/Cellar/berkeley-db@4/4.8.30/lib
 
-    OPENSSL_INCLUDE_PATH=/usr/local/opt/openssl/include
-    OPENSSL_LIB_PATH=/usr/local/opt/openssl/lib
+    OPENSSL_INCLUDE_PATH=/usr/local/Cellar/openssl/1.0.2l/include
+    OPENSSL_LIB_PATH=/usr/local/Cellar/openssl/1.0.2l/lib
 
-    MINIUPNPC_INCLUDE_PATH=/usr/local/opt/miniupnpc/include
-    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/1.8.20131007/lib
+    MINIUPNPC_INCLUDE_PATH=/usr/local/Cellar/miniupnpc/2.0.20170509/include
+    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/2.0.20170509/lib
 
     QMAKE_CXXFLAGS += -arch x86_64 -stdlib=libc++
     QMAKE_CFLAGS += -arch x86_64
@@ -95,7 +95,7 @@ build_win32 {
 contains(RELEASE, 1) {
     CONFIG += static
     # Mac: compile for maximum compatibility (10.5, 32-bit)
-    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk
+    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 
     !windows:!macx {
         # Linux: static link
