@@ -445,6 +445,7 @@ isEmpty(OPENSSL_LIB_PATH) {
 }
 
 isEmpty(MINIUPNPC_INCLUDE_PATH) {
+    macx:MINIUPNPC_INCLUDE_PATH = /usr/local/Cellar/miniupnpc/2.0.20170509/include
 }
 
 isEmpty(MINIUPNPC_LIB_PATH) {
