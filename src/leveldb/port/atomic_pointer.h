@@ -21,11 +21,12 @@
 #include <stdint.h>
 #ifdef LEVELDB_ATOMIC_PRESENT
 #include <atomic>
-#elif defined(__APPLE__)
-#include <libkern/OSAtomic.h>
 #endif
 #ifdef OS_WIN
 #include <windows.h>
+#endif
+#ifdef OS_MACOSX
+#include <libkern/OSAtomic.h>
 #endif
 
 #if defined(_M_X64) || defined(__x86_64__)
