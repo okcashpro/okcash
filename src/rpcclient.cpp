@@ -40,7 +40,7 @@ Object CallRPC(const std::string& strMethod, const Array& params)
     // Connect to localhost
     bool fUseSSL = GetBoolArg("-rpcssl", false);
     ba::io_service io_service;
-    ba::ssl::context context(io_service, ba::ssl::context::sslv23);
+    ba::ssl::context context(ba::ssl::context::sslv23);
     context.set_options(ba::ssl::context::no_sslv2);
     ba::ssl::stream<ba::ip::tcp::socket> sslStream(io_service, context);
     SSLIOStreamDevice<ba::ip::tcp> d(sslStream, fUseSSL);

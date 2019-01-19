@@ -69,42 +69,44 @@ OBJS= \
     obj/addrman.o \
     obj/crypter.o \
     obj/key.o \
+    obj/eckey.o \
     obj/db.o \
     obj/init.o \
+    obj/okcashd.o \
     obj/irc.o \
     obj/keystore.o \
-    obj/main.o \
     obj/miner.o \
+    obj/main.o \
     obj/net.o \
     obj/protocol.o \
-    obj/bitcoinrpc.o \
+    obj/rpcprotocol.o \
+    obj/rpcserver.o \
+    obj/rpcclient.o \
     obj/rpcdump.o \
     obj/rpcnet.o \
     obj/rpcmining.o \
     obj/rpcwallet.o \
     obj/rpcblockchain.o \
     obj/rpcrawtransaction.o \
+    obj/rpcsmessage.o \
     obj/script.o \
     obj/sync.o \
     obj/util.o \
+    obj/hash.o \
     obj/wallet.o \
     obj/walletdb.o \
     obj/noui.o \
-    obj/pbkdf2.o \
     obj/kernel.o \
+    obj/pbkdf2.o \
     obj/scrypt.o \
-    obj/scrypt-x86.o \
-    obj/scrypt-x86_64.o \
-    obj/zerocoin/Accumulator.o \
-    obj/zerocoin/AccumulatorProofOfKnowledge.o \
-    obj/zerocoin/Coin.o \
-    obj/zerocoin/CoinSpend.o \
-    obj/zerocoin/Commitment.o \
-    obj/zerocoin/ParamGeneration.o \
-    obj/zerocoin/Params.o \
-    obj/zerocoin/SerialNumberSignatureOfKnowledge.o \
-    obj/zerocoin/SpendMetaData.o \
-    obj/zerocoin/ZeroTest.o
+    obj/smessage.o \
+    obj/stealth.o \
+    obj/ringsig.o \
+    obj/core.o \
+    obj/txmempool.o \
+    obj/chainparams.o \
+    obj/state.o \
+    obj/bloom.o 
 
 ifndef USE_UPNP
 	override USE_UPNP = -
