@@ -192,6 +192,7 @@ public:
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed4.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed5.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed6.okcash.co"));
+        vSeeds.push_back(CDNSSeedData("okcash.co", "seed7.okcash.co"));
         
         base58Prefixes[PUBKEY_ADDRESS] = list_of(55)                    .convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[SCRIPT_ADDRESS] = list_of(28)                   .convert_to_container<std::vector<unsigned char> >();
