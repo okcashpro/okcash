@@ -43,25 +43,17 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### Okcash Block halving:  https://okcashblockhalf.com
 
-#### OK Communications Channels: https://discord.io/okcash
+#### OK BTC Community Channels: https://discord.io/okcash
 
 #### OkcashTalk Forums *new:  http://okcashtalk.org
 
 #### BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
 
-#### OK community videos on Youtube: https://www.youtube.com/c/OkcashCrypto
-
-#### OK Twitter community: https://twitter.com/OkcashCrypto
-
-#### OK Facebook community: https://www.facebook.com/OKCashCrypto/
-
 #### OK Reddit community: https://reddit.com/r/okcash
-
-#### OK G+ community: https://plus.google.com/u/0/+OkcashCrypto
 
 -------------------
 
-# OKCash Development process
+# Join the OKCash Development process
 
 Developers work in their own forks, then submit pull requests when
 they think their feature or bug fix is ready.
