@@ -12,7 +12,7 @@ Files and Folders
 This file takes care of generating `.qm` files from `.ts` files. It is mostly
 automated.
 
-### src/qt/bitcoin.qrc
+### src/qt/okcash.qrc
 
 This file must be updated whenever a new translation is added. Please note that
 files must end with `.qm`, not `.ts`.
@@ -75,6 +75,6 @@ It is also possible to directly download new translations one by one from transi
 ### Fetching new translations
 
 1. `tx pull -a`
-2. update `src/qt/bitcoin.qrc` manually or via
+2. update `src/qt/okcash.qrc` manually or via
    `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(bitcoin_\(.*\)\).ts/<file alias="\2">locale/\1.qm<\/file>/'`
 3. `git add` new translations from `src/qt/locale/`
