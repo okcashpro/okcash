@@ -6,7 +6,7 @@ DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
 # CONFIG += static
-# LIBS += -L"c:/" -llibeay32
+# LIBS += -L"c:/deps/openssl_1.0.2n" -llibeay32
 
 # Mobile devices
 android:ios{
@@ -79,8 +79,8 @@ build_win32 {
 
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
-    OPENSSL_INCLUDE_PATH=c:/deps/openssl_1.0.1h/include
-    OPENSSL_LIB_PATH=c:/deps/openssl_1.0.1h/lib/
+    OPENSSL_INCLUDE_PATH=c:/deps/openssl_1.0.2n/include
+    OPENSSL_LIB_PATH=c:/deps/openssl_1.0.2n/lib/
 
     MINIUPNPC_INCLUDE_PATH=c:/deps/miniupnpc
     MINIUPNPC_LIB_PATH=c:/deps/miniupnpc
