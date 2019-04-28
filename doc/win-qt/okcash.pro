@@ -92,6 +92,7 @@ build_win32 {
     #USE_UPNP=-
 }
 
+
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     CONFIG += static
