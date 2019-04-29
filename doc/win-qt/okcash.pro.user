@@ -74,7 +74,7 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">true</value>
-      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments">BOOST_LIB_SUFFIX=-mgw48-mt-s-1_55 BOOST_INCLUDE_PATH=c:/deps/boost_1_55_0/ BOOST_LIB_PATH=c:/deps/boost_1_55_0/stage/lib BDB_INCLUDE_PATH=c:\deps\db-4.8.30.NC\build_unix BDB_LIB_PATH=c:\deps\db-4.8.30.NC\build_unix OPENSSL_INCLUDE_PATH=c:\deps\openssl-1.0.2n\include\ OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2n MINIUPNPC_INCLUDE_PATH=c:/deps MINIUPNPC_LIB_PATH=c:/deps/miniupnpc</value>
+      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments">BOOST_LIB_SUFFIX=-mgw48-mt-s-1_55 BOOST_INCLUDE_PATH=c:/deps/boost_1_55_0/ BOOST_LIB_PATH=c:/deps/boost_1_55_0/stage/lib BDB_INCLUDE_PATH=c:\deps\db-4.8.30.NC\build_unix BDB_LIB_PATH=c:\deps\db-4.8.30.NC\build_unix OPENSSL_INCLUDE_PATH=c:\deps\openssl-1.0.2r\include\ OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2r MINIUPNPC_INCLUDE_PATH=c:/deps MINIUPNPC_LIB_PATH=c:/deps/miniupnpc</value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.SeparateDebugInfo">false</value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.UseQtQuickCompiler">false</value>
