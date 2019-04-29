@@ -65,8 +65,8 @@ build_macosx64 {
     OPENSSL_INCLUDE_PATH=/usr/local/Cellar/openssl/1.0.2l/include
     OPENSSL_LIB_PATH=/usr/local/Cellar/openssl/1.0.2l/lib
 
-    MINIUPNPC_INCLUDE_PATH=/usr/local/Cellar/miniupnpc/2.0.20170509/include
-    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/2.0.20170509/lib
+    MINIUPNPC_INCLUDE_PATH=/usr/local/Cellar/miniupnpc/2.1/include
+    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/2.1/lib
 
     QMAKE_CXXFLAGS += -arch x86_64 -stdlib=libc++
     QMAKE_CFLAGS += -arch x86_64
@@ -445,11 +445,11 @@ isEmpty(OPENSSL_LIB_PATH) {
 }
 
 isEmpty(MINIUPNPC_INCLUDE_PATH) {
-    macx:MINIUPNPC_INCLUDE_PATH = /usr/local/Cellar/miniupnpc/2.0.20170509/include
+    macx:MINIUPNPC_INCLUDE_PATH = /usr/local/Cellar/miniupnpc/2.1/include
 }
 
 isEmpty(MINIUPNPC_LIB_PATH) {
-    macx:MINIUPNPC_LIB_PATH = /usr/local/Cellar/miniupnpc/2.0.20170509/lib
+    macx:MINIUPNPC_LIB_PATH = /usr/local/Cellar/miniupnpc/2.1/lib
 }
 
 
