@@ -64,7 +64,13 @@ Dependency Build Instructions: Ubuntu & Debian
 
 Install dependencies:
 
+Ubuntu <= 16.04
+
 sudo apt-get install build-essential libssl-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
+
+Ubuntu >= 18.04
+
+sudo apt-get install build-essential libssl1.0-dev libboost-all-dev libqrencode-dev libminiupnpc-dev
 
 sudo add-apt-repository -y ppa:bitcoin/bitcoin
 
