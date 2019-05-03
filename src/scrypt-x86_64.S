@@ -1,4 +1,4 @@
-# Copyright 2011-2012 pooler@litecoinpool.org
+# Copyright 2012-2013 pooler@litecoinpool.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
