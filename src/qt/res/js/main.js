@@ -7,10 +7,10 @@ var qrcode = new QRCode("qrcode", {colorDark:'#0165a4', colorLight: '#ffffff', c
 
 function showQRCode(address, label) {
 
-    if(address!==undefined)
+    if(address!=undefined)
         $("#qraddress").val(address);
 
-    if(label!==undefined)
+    if(label!=undefined)
         $("#qrlabel").val(label);
 
     qrcode.clear();
@@ -41,10 +41,10 @@ function resizeFooter() {
 
 function updateValue(element) {
     var curhtml = element.html(),
-        value   = (element.parent("td").data("label") !== undefined ? element.parent("td").data("label") :
-                  (element.parent("td").data("value") !== undefined ? element.parent("td").data("value") :
-                  (element             .data("label") !== undefined ? element             .data("label") :
-                  (element             .data("value") !== undefined ? element             .data("value") : element.text()))));
+        value   = (element.parent("td").data("label") != undefined ? element.parent("td").data("label") :
+                  (element.parent("td").data("value") != undefined ? element.parent("td").data("value") :
+                  (element             .data("label") != undefined ? element             .data("label") :
+                  (element             .data("value") != undefined ? element             .data("value") : element.text()))));
 
     var address = element.parents(".selected").find(".address");
 
@@ -57,7 +57,7 @@ function updateValue(element) {
         e.stopPropagation();
     });
     $(".newval").keyup(function (event) {
-        if (event.keyCode === 13)
+        if (event.keyCode == 13)
             element.html(curhtml.replace(value, $(".newval").val().trim()))
     });
 
@@ -146,7 +146,7 @@ function changePage(event) {
             $("#navitems li").removeClass("selected");
             $(this).parent("li").addClass("selected");
 
-            if(toPage.length === 1 && toPage[0].tagName.toLowerCase() === "article") {
+            if(toPage.length == 1 && toPage[0].tagName.toLowerCase() == "article") {
                 event.preventDefault();
                 $(window).scrollTop(0);
                 $("article").hide();
@@ -160,7 +160,7 @@ function tooltip (event) {
         tooltip = false,
         tip     = false;
 
-    if($("input, textarea").is(':focus') || $('.iw-contextMenu').css('display') === 'inline-block')
+    if($("input, textarea").is(':focus') || $('.iw-contextMenu').css('display') == 'inline-block')
         return;
 
     event.stopPropagation();
@@ -171,7 +171,7 @@ function tooltip (event) {
     tip     = target.attr('title');
     tooltip = $('<div id="tooltip"></div>');
 
-    if(!tip || tip === '')
+    if(!tip || tip == '')
         return false;
 
     tip = tip.replace(/&#013;|\n|\x0A/g, '<br />')
@@ -189,7 +189,7 @@ function tooltip (event) {
            .html(tip)
            .appendTo('body');
 
-    if(target.css('cursor') !== "pointer" && target.prop("tagName") !== "A")
+    if(target.css('cursor') != "pointer" && target.prop("tagName") != "A")
         target.css('cursor', 'help');
 
     var init_tooltip = function() {
@@ -303,7 +303,7 @@ var base58 = {
         var value = el.val();
 
         for (var i = 0, len = value.length; i < len; ++i)
-            if (base58.base58Chars.indexOf(value[i]) === -1) {
+            if (base58.base58Chars.indexOf(value[i]) == -1) {
                 el.css("background", "#E51C39").css("color", "white");
                 return false;
             }
@@ -340,8 +340,8 @@ function paste(field)
 {
     pasteTo = field;
     bridge.paste();
-    if (pasteTo.indexOf("#pay_to") === 0
-        || pasteTo === '#change_address')
+    if (pasteTo.indexOf("#pay_to") == 0
+        || pasteTo == '#change_address')
         base58.check(pasteTo);
 }
 
@@ -353,9 +353,9 @@ function copy(field, attribute)
         value = $(field).text();
     } catch(e) {};
 
-    if(value===undefined||attribute!==undefined)
+    if(value==undefined||attribute!=undefined)
     {
-        if(attribute==='copy')
+        if(attribute=='copy')
             value = field;
         else
             value = $(field).attr(attribute);
@@ -367,7 +367,7 @@ function copy(field, attribute)
 function networkAlert(alert) {
     $("#network-alert span").text(alert);
 
-    if(alert === "")
+    if(alert == "")
         $("#network-alert").hide();
     else
         $("#network-alert").show();
@@ -378,7 +378,7 @@ var unit = {
     name: "OK",
     display: "OK",
     setType: function(type) {
-        this.type = (type === undefined ? 0 : type);
+        this.type = (type == undefined ? 0 : type);
 
         switch(type) {
             case 1:
@@ -408,8 +408,8 @@ var unit = {
     format: function(value, type) {
         var el = ($.isNumeric(value) ? null : $(value));
 
-        type  = (type === undefined ? this.type : parseInt(type)),
-        value = parseInt(el === undefined ? value : (el.data('value') === undefined ? el.val() : el.data('value')));
+        type  = (type == undefined ? this.type : parseInt(type)),
+        value = parseInt(el == undefined ? value : (el.data('value') == undefined ? el.val() : el.data('value')));
 
         switch(type) {
             case 1: value = value / 100000; break;
@@ -420,7 +420,7 @@ var unit = {
 
         value = value.toFixed(this.mask(type));
 
-        if(el === undefined)
+        if(el == undefined)
             return value;
 
         el.val(value);
@@ -428,13 +428,13 @@ var unit = {
     parse: function(value, type) {
         var el = ($.isNumeric(value) ? null : $(value));
 
-        type  = (type === undefined ? this.type : parseInt(type)),
+        type  = (type == undefined ? this.type : parseInt(type)),
 
-        fp = (el === undefined ? value : el.val());
+        fp = (el == undefined ? value : el.val());
         if (fp == undefined || fp.length < 1)
             fp = ['0', '0'];
         else
-        if (fp[0] === '.')
+        if (fp[0] == '.')
             fp = ['0', fp.slice(1)];
         else
             fp = fp.split('.');
@@ -448,7 +448,7 @@ var unit = {
         {
             var av = fp[1].split('');
 
-            while (av.length > 1 && av[av.length-1] === '0')
+            while (av.length > 1 && av[av.length-1] == '0')
                 av.pop();
 
             var fract = parseInt(av.join(''));
@@ -463,14 +463,14 @@ var unit = {
             };
         };
 
-        if (el === undefined)
+        if (el == undefined)
             return value;
 
         el.data('value', value);
         this.format(el, type);
     },
     mask: function(type) {
-        type  = (type === undefined ? this.type : parseInt(type));
+        type  = (type == undefined ? this.type : parseInt(type));
 
         switch(type) {
             case 1: return 5;
@@ -484,8 +484,8 @@ var unit = {
             type = $(e.target).siblings(".unit").val();
 
 
-        if(key===190 || key === 110) {
-            if(this.value.toString().indexOf('.') !== -1 || unit.mask(type) === 0)
+        if(key==190 || key == 110) {
+            if(this.value.toString().indexOf('.') != -1 || unit.mask(type) == 0)
                 e.preventDefault();
 
             return true;
@@ -494,9 +494,9 @@ var unit = {
         if(!e.shiftKey && (key>=96 && key<=105 || key>=48 && key<=57)) {
             var selectS = this.selectionStart;
             var indP = this.value.indexOf(".");
-            if (!(document.getSelection().type === "Range") && selectS > indP && this.value.indexOf('.') !== -1 && this.value.length -1 - indP >= unit.mask(type))
+            if (!(document.getSelection().type == "Range") && selectS > indP && this.value.indexOf('.') != -1 && this.value.length -1 - indP >= unit.mask(type))
             {
-                if (this.value[this.value.length-1] === '0'
+                if (this.value[this.value.length-1] == '0'
                     && selectS < this.value.length)
                 {
                     this.value = this.value.slice(0,-1);
@@ -509,14 +509,14 @@ var unit = {
             return;
         }
 
-        if(key===8||key===9||key===17||key===46||key===45||key>=35 && key<=40||(e.ctrlKey && (key===65||key===67||key===86||key===88)))
+        if(key==8||key==9||key == 17||key==46||key==45||key>=35 && key<=40||(e.ctrlKey && (key==65||key==67||key==86||key==88)))
             return;
 
         e.preventDefault();
     },
     paste: function(e) {
         var data = e.originalEvent.clipboardData.getData("text/plain");
-        if(!($.isNumeric(data)) || (this.value.indexOf('.') !== -1 && document.getSelection().type !== "Range"))
+        if(!($.isNumeric(data)) || (this.value.indexOf('.') != -1 && document.getSelection().type != "Range"))
             e.preventDefault();
     }
 };
@@ -524,10 +524,10 @@ var unit = {
 var contextMenus = [];
 function openContextMenu(el)
 {
-    if (contextMenus.indexOf(el) === -1)
+    if (contextMenus.indexOf(el) == -1)
         contextMenus.push(el);
 
-    if (el.isOpen !== undefined && el.isOpen === 1)
+    if (el.isOpen != undefined && el.isOpen == 1)
     {
         el.isOpen = 0;
         if(el.close)
@@ -536,7 +536,7 @@ function openContextMenu(el)
 
     // -- close other menus (their onClose isn't called if they were closed by opening another memu)
     for (var i = 0; i < contextMenus.length; ++i)
-        contextMenus[i].isOpen = contextMenus[i] === el ? 1 : 0;
+        contextMenus[i].isOpen = contextMenus[i] == el ? 1 : 0;
 }
 
 /* Overview Page */
@@ -559,7 +559,7 @@ var overviewPage = {
 //                return new Date(b.publishedDate) - new Date(a.publishedDate);
 //            });
 //            for(i=0;i<rss.responseData.feed.entries.length;i++) {
-//                $('#announcements').append("<h4><a href='" + rss.responseData.feed.entries[i].link  + "'>" + rss.responseData.feed.entries[i].title + "</a></h4>"
+//                $('#announcements').append("<h4><a href='" + rss.responseData.feed.entries[i].link  + "'>" + //rss.responseData.feed.entries[i].title + "</a></h4>"
 //                                         + "<span>"
 //                                             +      new Date(rss.responseData.feed.entries[i].publishedDate).toDateString()
 //                                         + "</span>");
@@ -671,7 +671,7 @@ var overviewPage = {
     },
 
     updateBalance: function(balance, okcashBal, stake, unconfirmed, immature) {
-        if(balance === undefined)
+        if(balance == undefined)
             balance     = this.balance    .data("orig"),
             okcashBal   = this.okcashBal  .data("orig"),
             stake       = this.stake      .data("orig"),
@@ -699,7 +699,7 @@ var overviewPage = {
 
     formatValue: function(field, value) {
 
-        if(field === "total" && value !== undefined && !isNaN(value))
+        if(field == "total" && value != undefined && !isNaN(value))
         {
             var val = unit.format(value).split(".");
 
@@ -707,9 +707,9 @@ var overviewPage = {
             $("#total-big .cents").text(val[1]);
         }
 
-        if(field === "stake" && value !== undefined && !isNaN(value))
+        if(field == "stake" && value != undefined && !isNaN(value))
         {
-            if(value === 0)
+            if(value == 0)
                 $("#staking-big").addClass("not-staking");
             else
                 $("#staking-big").removeClass("not-staking");
@@ -722,7 +722,7 @@ var overviewPage = {
 
         field = this[field];
 
-        if(value === 0) {
+        if(value == 0) {
             field.html("");
             field.parent("tr").hide();
         } else {
@@ -740,15 +740,15 @@ var overviewPage = {
         var format = function(tx) {
 
             return "<a id='"+tx.id.substring(0,17)+"' title='"+tx.tt+"' class='transaction-overview' href='#' onclick='$(\"#navitems [href=#transactions]\").click();$(\"#"+tx.id+"\").click();'>\
-                                                <span class='"+(tx.t === 'input' ? 'received' : (tx.t === 'output' ? 'sent' : (tx.t === 'inout' ? 'self' : 'stake')))+" icon no-padding'>\
-                                                  <i class='fa fa-"+(tx.t === 'input' ? 'angle-left' : (tx.t === 'output' ? 'angle-right' : (tx.t === 'inout' ? 'angle-down' : 'money')))+" font-26px margin-right-10'></i>"
+                                                <span class='"+(tx.t == 'input' ? 'received' : (tx.t == 'output' ? 'sent' : (tx.t == 'inout' ? 'self' : 'stake')))+" icon no-padding'>\
+                                                  <i class='fa fa-"+(tx.t == 'input' ? 'angle-left' : (tx.t == 'output' ? 'angle-right' : (tx.t == 'inout' ? 'angle-down' : 'money')))+" font-26px margin-right-10'></i>"
                                                 +unit.format(tx.am)+" </span> <span> "+unit.display+" </span> <span class='overview_date' data-value='"+tx.d+"'>"+tx.d_s+"</span></a>";
 
         }
 
         var sid = txn.id.substring(0,17);
 
-        if($("#"+sid).attr("title", txn.tt).length===0)
+        if($("#"+sid).attr("title", txn.tt).length==0)
         {
             var set = $('#recenttxns a');
             var txnHtml = format(txn);
@@ -832,9 +832,9 @@ var optionsPage = {
                 value   = options[option],
                 values  = options["opt"+option];
 
-            if(element.length === 0)
+            if(element.length == 0)
             {
-                if(option.indexOf('opt') === -1)
+                if(option.indexOf('opt') == -1)
                     console.log('Option element not available for %s', option);
 
                 continue;
@@ -878,12 +878,12 @@ var optionsPage = {
 
             if(element.is(":checkbox"))
             {
-                element.prop("checked", value === true||value === "true");
+                element.prop("checked", value == true||value == "true");
                 element.off("change");
                 element.on("change", toggleLinked);
                 element.change();
             }
-            else if(element.is("select[multiple]") && value === "*")
+            else if(element.is("select[multiple]") && value == "*")
                 element.find("option").attr("selected", true);
             else
                 element.val(value);
@@ -901,20 +901,20 @@ var optionsPage = {
                 oldvalue = options[option],
                 newvalue = false;
 
-            if(oldvalue === null || oldvalue === "false")
+            if(oldvalue == null || oldvalue == "false")
                 oldvalue = false;
 
-            if(element.length === 0)
+            if(element.length == 0)
                 continue;
 
             if(element.is(":checkbox"))
                 newvalue = element.prop("checked");
-            else if(element.is("select[multiple]") && element.find("option:not(:selected)").length === 0)
+            else if(element.is("select[multiple]") && element.find("option:not(:selected)").length == 0)
                 newvalue = "*";
             else
                 newvalue = element.val();
 
-            if(oldvalue !== newvalue && oldvalue.toString() !== newvalue.toString())
+            if(oldvalue != newvalue && oldvalue.toString() != newvalue.toString())
                 changed[option] = newvalue;
         }
 
@@ -941,14 +941,14 @@ var recipients = 0;
 function addRecipient() {
 
     $("#recipients").append((
-           (recipients === 0 || $("div.recipient").length === 0 ? '' : '<hr />')
+           (recipients == 0 || $("div.recipient").length == 0 ? '' : '<hr />')
         +  '<div id="recipient[count]" class="recipient"> \
             <div class="flex-right"> \
                 <label for="pay_to[count]" class="recipient">Pay To:</label> \
                 <input id="pay_to[count]" class="pay_to input_box" title="The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" placeholder="Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" maxlength="128" oninput="base58.check(this);" onchange="$(\'#label[count]\').val(bridge.getAddressLabel(this.value));"/> \
                 <a class="button is-inverse has-fixed-icon" title="Choose address from address book" style="margin-right:10px; margin-left:10px; height:43px; width:43px;" onclick="openAddressBook(\'#pay_to[count]\', \'#label[count]\', true)"><i class="fa fa-book"></i></a> \
                 <a class="button is-inverse has-fixed-icon" title="Paste address from clipboard" style="margin-right:10px; height:43px; width:43px;" onclick="paste(\'#pay_to[count]\')"><i class="fa fa-files-o"></i></a> \
-                <a class="button is-inverse has-fixed-icon" title="Remove this recipient" style="height:43px; width:43px;" onclick="if($(\'div.recipient\').length === 1) clearRecipients(); else {var recipient=$(\'#recipient[count]\');if(recipient.next(\'hr\').remove().length===0)recipient.prev(\'hr\').remove();$(\'#recipient[count]\').remove();resizeFooter();}"><i class="fa fa-times"></i></a> \
+                <a class="button is-inverse has-fixed-icon" title="Remove this recipient" style="height:43px; width:43px;" onclick="if($(\'div.recipient\').length == 1) clearRecipients(); else {var recipient=$(\'#recipient[count]\');if(recipient.next(\'hr\').remove().length==0)recipient.prev(\'hr\').remove();$(\'#recipient[count]\').remove();resizeFooter();}"><i class="fa fa-times"></i></a> \
             </div> \
             <div class="flex-right"> \
                 <label for="label[count]" class="recipient">Label:</label> \
@@ -962,10 +962,10 @@ function addRecipient() {
                 <label for="amount[count]" class="recipient">Amount:</label> \
                 <input id="amount[count]" class="amount input_box" type="number" placeholder="0.00000000" step="0.01" value="0.00000000" onfocus="invalid($(this), true);" onchange="unit.parse(this, $(\'#unit[count]\').val());updateCoinControl();"  /> \
                 <select id="unit[count]" class="unit button is-inverse has-fixed-icon"  style="margin-left:10px; height:43px; width:100px;" onchange="unit.format(\'#amount[count]\', $(this).val());"> \
-                    <option value="0" title="OKCash"                    ' + (unit.type === 0 ? "selected" : "") + '>OK</option> \
-                    <option value="1" title="Milli-OKCash (1 / 1000)"   ' + (unit.type === 1 ? "selected" : "") + '>mOK</option> \
-                    <option value="2" title="Micro-OKCash (1 / 1000000)"' + (unit.type === 2 ? "selected" : "") + '>&micro;OK</option> \
-                    <option value="3" title="OKtoshi (1 / 100000000)" ' + (unit.type === 3 ? "selected" : "") + '>OKtoshi</option> \
+                    <option value="0" title="OKCash"                    ' + (unit.type == 0 ? "selected" : "") + '>OK</option> \
+                    <option value="1" title="Milli-OKCash (1 / 1000)"   ' + (unit.type == 1 ? "selected" : "") + '>mOK</option> \
+                    <option value="2" title="Micro-OKCash (1 / 1000000)"' + (unit.type == 2 ? "selected" : "") + '>&micro;OK</option> \
+                    <option value="3" title="OKtoshi (1 / 100000000)" ' + (unit.type == 3 ? "selected" : "") + '>OKtoshi</option> \
                 </select> \
             </div> \
         </div>').replace(/\[count\]/g, recipients++));
@@ -1002,7 +1002,7 @@ function changeTxnType()
 
     if (type > 1)
     {
-        if(bridge.info.options.AutoRingSize === true)
+        if(bridge.info.options.AutoRingSize == true)
         {
             $("#tx_ringsize").hide();
             $("#suggest_ring_size").hide();
@@ -1031,7 +1031,7 @@ function suggestRingSize()
         maxsize = bridge.info.options.MaxRingSize||100;
 
     function mature(value, min_owned) {
-        if(min_owned === undefined || !$.isNumeric(min_owned))
+        if(min_owned == undefined || !$.isNumeric(min_owned))
             min_owned = 1;
 
         var anonOutput = chainDataPage.anonOutputs[value];
@@ -1066,10 +1066,10 @@ function suggestRingSize()
                 return Math.min(mature(5*test, 1),
                                 mature(4*test, 1))||getOutputRingSize(++output, test, maxsize);
             default:
-                if(output === 10)
+                if(output == 10)
                     return mature(test/2, 2);
 
-                maxsize = Math.max(mature(output*test, 1),mature(1*test, output))||getOutputRingSize(output===1?3:++output, test, maxsize);
+                maxsize = Math.max(mature(output*test, 1),mature(1*test, output))||getOutputRingSize(output==1?3:++output, test, maxsize);
         }
         return maxsize;
     }
@@ -1115,7 +1115,7 @@ function suggestRingSize()
 }
 
 function toggleCoinControl(enable) {
-    if(enable===undefined && $("#coincontrol_enabled")  .css("display") === "block" || enable === false)
+    if(enable==undefined && $("#coincontrol_enabled")  .css("display") == "block" || enable == false)
     {
         $("#coincontrol_enabled") .css("display", "none");
         $("#coincontrol_disabled").css("display", "block");
@@ -1128,7 +1128,7 @@ function toggleCoinControl(enable) {
 }
 
 function updateCoinControl() {
-    if($("#coincontrol_enabled").css("display") === "none")
+    if($("#coincontrol_enabled").css("display") == "none")
         return;
     var amount = 0;
 
@@ -1140,22 +1140,22 @@ function updateCoinControl() {
 
 function updateCoinControlInfo(quantity, amount, fee, afterfee, bytes, priority, low, change)
 {
-    if($("#coincontrol_enabled").css("display") === "none")
+    if($("#coincontrol_enabled").css("display") == "none")
         return;
 
     if (quantity > 0)
     {
         $("#coincontrol_auto").hide();
 
-        var enable_change = (change === "" ? false : true);
+        var enable_change = (change == "" ? false : true);
 
         $("#coincontrol_quantity").text(quantity);
         $("#coincontrol_amount")  .text(unit.format(amount));
         $("#coincontrol_fee")     .text(unit.format(fee));
         $("#coincontrol_afterfee").text(unit.format(afterfee));
         $("#coincontrol_bytes")   .text("~"+bytes).css("color", (bytes > 10000 ? "red" : null));
-        $("#coincontrol_priority").text(priority).css("color", (priority.indexOf("low") === 0 ? "red" : null)); // TODO: Translations of low...
-        $("#coincontrol_low")     .text(low).toggle(enable_change).css("color", (low === "yes" ? "red" : null)); // TODO: Translations of low outputs
+        $("#coincontrol_priority").text(priority).css("color", (priority.indexOf("low") == 0 ? "red" : null)); // TODO: Translations of low...
+        $("#coincontrol_low")     .text(low).toggle(enable_change).css("color", (low == "yes" ? "red" : null)); // TODO: Translations of low outputs
         $("#coincontrol_change")  .text(unit.format(change)).toggle(enable_change);
 
         $("label[for='coincontrol_low']")   .toggle(enable_change);
@@ -1179,12 +1179,12 @@ function updateCoinControlInfo(quantity, amount, fee, afterfee, bytes, priority,
 }
 
 var invalid = function(el, valid) {
-    if(valid === true)
+    if(valid == true)
         el.css("background", "").css("color", "");
     else
         el.css("background", "#E51C39").css("color", "white");
 
-    return (valid === true);
+    return (valid == true);
 }
 
 function sendCoins() {
@@ -1201,14 +1201,14 @@ function sendCoins() {
 
         el = $("#amount"+i);
 
-        if(unit.parse(el.val()) === 0 && !invalid(el))
+        if(unit.parse(el.val()) == 0 && !invalid(el))
             valid = false;
 
         if(!valid || !bridge.addRecipient($("#pay_to"+i).val(), $("#label"+i).val(), $("#narration"+i).val(), unit.parse($("#amount"+i).val(), $("#unit"+i).val()), $("#txn_type").val(), $("#ring_size").val()))
             return false;
     }
 
-    if(bridge.sendCoins($("#coincontrol_enabled").css("display") !== "none", $("#change_address").val()))
+    if(bridge.sendCoins($("#coincontrol_enabled").css("display") != "none", $("#change_address").val()))
         clearRecipients();
 }
 
@@ -1332,7 +1332,7 @@ function appendAddresses(addresses) {
 
     if(typeof addresses == "string")
     {
-        if(addresses === "[]")
+        if(addresses == "[]")
             return;
 
         addresses = JSON.parse(addresses.replace(/,\]$/, "]"));
@@ -1342,10 +1342,10 @@ function appendAddresses(addresses) {
     {
         var address = addresses[i];
         var addrRow = $("#"+address.address);
-        var page = (address.type === "S" ? "#addressbook" : "#receive");
+        var page = (address.type == "S" ? "#addressbook" : "#receive");
 
-        if(address.type === "R" && address.address.length < 75) {
-            if(addrRow.length===0)
+        if(address.type == "R" && address.address.length < 75) {
+            if(addrRow.length==0)
                 $("#message-from-address").append("<option title='"+address.address+"' value='"+address.address+"'>"+address.label+"</option>");
             else
                 $("#message-from-address option[value="+address.address+"]").text(address.label);
@@ -1359,7 +1359,7 @@ function appendAddresses(addresses) {
             }
         }
 
-        if(addrRow.length===0)
+        if(addrRow.length==0)
         {
             $(page + " .footable tbody").append("<tr id='"+address.address+"'>\
                                                    <td class='label editable' data-value='"+address.label_value+"'>"+address.label+"</td>\
@@ -1465,7 +1465,7 @@ function transactionPageInit() {
 
         /* Sort Columns */
         var sortCol = $txtable.data("sorted"),
-            sortAsc = $txtable.find("th.footable-sorted").length === 1,
+            sortAsc = $txtable.find("th.footable-sorted").length == 1,
             sortFun = 'numeric';
 
         switch(sortCol)
@@ -1522,7 +1522,7 @@ function transactionPageInit() {
 
         filteredTransactions = Transactions.filter(function(transaction) {
             for(var prop in transaction)
-                if(transaction[prop].toString().toLowerCase().indexOf(e.filter.toLowerCase()) !== -1)
+                if(transaction[prop].toString().toLowerCase().indexOf(e.filter.toLowerCase()) != -1)
                     return true;
 
             return false;
@@ -1546,9 +1546,9 @@ function formatTransaction(transaction) {
 }
 
 function visibleTransactions(visible) {
-    if(visible[0] !== "*")
+    if(visible[0] != "*")
         Transactions = Transactions.filter(function(val) {
-            return this.some(function(val){return val === this}, val.t_l);
+            return this.some(function(val){return val == this}, val.t_l);
         }, visible);
 }
 
@@ -1584,13 +1584,13 @@ function bindTransactionTableEvents() {
 function appendTransactions(transactions) {
     if(typeof transactions == "string")
     {
-        if(transactions === "[]")
+        if(transactions == "[]")
             return;
 
         transactions = JSON.parse(transactions.replace(/,\]$/, "]"));
     }
 
-    if(transactions.length===1 && transactions[0].id===-1)
+    if(transactions.length==1 && transactions[0].id==-1)
         return;
 
     transactions.sort(function (a, b) {
@@ -1602,8 +1602,8 @@ function appendTransactions(transactions) {
 
     Transactions = Transactions.filter(function(val) {
         return this.some(function(val) {
-            return val.id === this.id;
-        }, val) === false;
+            return val.id == this.id;
+        }, val) == false;
     }, transactions)
     .concat(transactions);
 
@@ -1666,7 +1666,7 @@ function okcashChatInit() {
                 var selected = $(".contact-discussion li.selected"),
                     id = selected.attr("id");
 
-                $.each(contacts[selected.attr("contact-key")].messages, function(index){if(this.id === id) copy(this.message, 'copy');});
+                $.each(contacts[selected.attr("contact-key")].messages, function(index){if(this.id == id) copy(this.message, 'copy');});
             }
         },
         /*
@@ -1733,7 +1733,7 @@ function appendMessages(messages, reset) {
         contactScroll   .scrollTo(0, 0);
     }
 
-    if(messages === "[]")
+    if(messages == "[]")
         return;
 
     messages = JSON.parse(messages.replace(/,\]$/, "]"));
@@ -1764,19 +1764,19 @@ function appendMessages(messages, reset) {
 }
 
 function appendMessage(id, type, sent_date, received_date, label_value, label, to_address, from_address, read, message, initial) {
-    if(type==="R"&&read===false) {
+    if(type=="R"&&read==false) {
         $(".user-notifications").show();
         $("#message-count").text(parseInt($("#message-count").text())+1);
     }
 
-    var them = type === "S" ? to_address   : from_address;
-    var self = type === "S" ? from_address : to_address;
+    var them = type == "S" ? to_address   : from_address;
+    var self = type == "S" ? from_address : to_address;
 
-    var key = (label_value === "" ? them : label_value).replace(/\s/g, '');
+    var key = (label_value == "" ? them : label_value).replace(/\s/g, '');
 
     var contact = contacts[key];
 
-    if(contacts[key] === undefined)
+    if(contacts[key] == undefined)
         contacts[key] = {},
         contact = contacts[key],
         contact.key = key,
@@ -1784,7 +1784,7 @@ function appendMessage(id, type, sent_date, received_date, label_value, label, t
         contact.avatar = (false ? '' : 'qrc:///images/default'), // TODO: Avatars!!
         contact.messages  = new Array();
 
-    if($.grep(contact.messages, function(a){ return a.id === id; }).length === 0)
+    if($.grep(contact.messages, function(a){ return a.id == id; }).length == 0)
     {
         contact.messages.push({id:id, them: them, self: self, message: message, type: type, sent: sent_date, received: received_date, read: read});
 
@@ -1797,9 +1797,9 @@ function appendContact (key, newcontact) {
     var contact_el = $("#contact-"+key);
     var contact = contacts[key];
 
-    var unread_count = $.grep(contact.messages, function(a){return a.type==="R"&&a.read===false}).length;
+    var unread_count = $.grep(contact.messages, function(a){return a.type=="R"&&a.read==false}).length;
 
-    if(contact_el.length === 0) {
+    if(contact_el.length == 0) {
         contact_list.append("<li id='contact-"+ key +"' class='contact' title='"+contact.label+"'>\
                                         <img src='"+ contact.avatar +"' />\
                                         <span class='contact-info'>\
@@ -1807,7 +1807,7 @@ function appendContact (key, newcontact) {
                                             <span class='contact-address'>"+contact.messages[0].them+"</span>\
                                         </span>\
                                         <span class='contact-options'>\
-                                                <span class='message-notifications"+(unread_count===0?' none':'')+"'>"+unread_count+"</span>\
+                                                <span class='message-notifications"+(unread_count==0?' none':'')+"'>"+unread_count+"</span>\
                                                 <span class='delete' onclick='deleteMessages(\""+key+"\")'></span>\
                                                 " //<span class='favorite favorited'></span>\ //TODO: Favourites
                                      + "</span>\
@@ -1830,24 +1830,24 @@ function appendContact (key, newcontact) {
             for(var i=0;i<contact.messages.length;i++)
             {
                 message = contact.messages[i];
-                if(message.read === false && bridge.markMessageAsRead(message.id))
+                if(message.read == false && bridge.markMessageAsRead(message.id))
                 {
                     var message_count = $("#message-count"),
                         message_count_val = parseInt(message_count.text())-1;
 
                     message_count.text(message_count_val);
-                    if(message_count_val===0)
+                    if(message_count_val==0)
                         message_count.hide();
                     else
                         message_count.show();
                 }
 
                 //title='"+(message.type=='S'? message.self : message.them)+"' taken out below.. titles getting in the way..
-                discussion.append("<li id='"+message.id+"' class='"+(message.type==='S'?'user-message':'other-message')+"' contact-key='"+contact.key+"'>\
+                discussion.append("<li id='"+message.id+"' class='"+(message.type=='S'?'user-message':'other-message')+"' contact-key='"+contact.key+"'>\
                                     <span class='info'>\
                                         <img src='"+contact.avatar+"' />\
                                         <span class='user-name'>"
-                                            +(message.type==='S'? (message.self === 'anon' ? 'anon' : Name) : contact.label)+"\
+                                            +(message.type=='S'? (message.self == 'anon' ? 'anon' : Name) : contact.label)+"\
                                         </span>\
                                     </span>\
                                     <span class='message-content'>\
@@ -1869,7 +1869,7 @@ function appendContact (key, newcontact) {
 
                 messagesScroller.refresh();
 
-                if(max !== messagesScroller.maxScrollY)
+                if(max != messagesScroller.maxScrollY)
                     messagesScroller.scrollTo(0, messagesScroller.maxScrollY, 100);
             };
 
@@ -1894,7 +1894,7 @@ function appendContact (key, newcontact) {
     } else {
         var received_message = contact.messages[contact.messages.length-1];
 
-        if(received_message.type==="R"&&received_message.read===false) {
+        if(received_message.type=="R"&&received_message.read==false) {
             var notifications = contact_el.find(".message-notifications");
             notifications.text(unread_count);
         }
@@ -1927,7 +1927,7 @@ function sendMessage() {
 function deleteMessages(key, messageid) {
     var contact = contacts[key];
 
-    if(!confirm("Are you sure you want to delete " + (messageid === undefined ? 'these messages?' : 'this message?')))
+    if(!confirm("Are you sure you want to delete " + (messageid == undefined ? 'these messages?' : 'this message?')))
         return false;
 
     var message_count = $("#message-count"),
@@ -1935,16 +1935,16 @@ function deleteMessages(key, messageid) {
 
     for(var i=0;i<contact.messages.length;i++) {
 
-        if(messageid === undefined) {
+        if(messageid == undefined) {
             if(bridge.deleteMessage(contact.messages[i].id))
             {
                 $("#"+contact.messages[i].id).remove();
 
-                if(contact.messages[i].type==="R" && contact.messages[i].read === false)
+                if(contact.messages[i].type=="R" && contact.messages[i].read == false)
                 {
                     message_count_val--
                     message_count.text(message_count_val);
-                    if(message_count_val===0)
+                    if(message_count_val==0)
                         message_count.hide();
                     else
                         message_count.show();
@@ -1957,15 +1957,15 @@ function deleteMessages(key, messageid) {
                 return false;
         }
         else
-            if(contact.messages[i].id === messageid)
+            if(contact.messages[i].id == messageid)
                 if(bridge.deleteMessage(messageid)) {
                     $("#"+messageid).remove();
 
-                    if(contact.messages[i].type==="R" && contact.messages[i].read === false)
+                    if(contact.messages[i].type=="R" && contact.messages[i].read == false)
                     {
                         message_count_val--
                         message_count.text(message_count_val);
-                        if(message_count_val===0)
+                        if(message_count_val==0)
                             message_count.hide();
                         else
                             message_count.show();
@@ -1981,7 +1981,7 @@ function deleteMessages(key, messageid) {
                     return false;
     }
 
-    if(contact.messages.length === 0)
+    if(contact.messages.length == 0)
     {
         $("#contact-"+ key).remove();
         $("#contact-list").removeClass("in-conversation");
@@ -2017,7 +2017,7 @@ function iscrollReload(scroll) {
     contactScroll.refresh();
     messagesScroller.refresh();
 
-    if(scroll === true)
+    if(scroll == true)
         messagesScroller.scrollTo(0, messagesScroller.maxScrollY, 0);
 }
 
@@ -2063,7 +2063,7 @@ var chainDataPage = {
 
         $("#show-own-outputs").on("click", function() {
             $("#chaindata .footable tbody tr>td:first-child+td").each(function() {
-                if($(this).text()===0)
+                if($(this).text()==0)
                     $(this).parents("tr").hide();
             });
         });
@@ -2083,7 +2083,7 @@ var chainDataPage = {
             tbody.append('<tr>\
                     <td data-value='+value+'>'+anonOutput.value_s+'</td>\
                     <td>' +  anonOutput.owned_outputs
-                          + (anonOutput.owned_outputs === anonOutput.owned_mature
+                          + (anonOutput.owned_outputs == anonOutput.owned_mature
                             ? ''
                             : ' (<b>' + anonOutput.owned_mature + '</b>)') + '</td>\
                     <td>'+anonOutput.system_outputs + ' (' + anonOutput.system_mature + ')</td>\
@@ -2101,7 +2101,7 @@ var blockExplorerPage =
     blockHeader: {},
     findBlock: function(searchID) {
 
-        if(searchID === "" || searchID === null)
+        if(searchID == "" || searchID == null)
         {
             blockExplorerPage.updateLatestBlocks();
         }
@@ -2109,7 +2109,7 @@ var blockExplorerPage =
         {
             blockExplorerPage.foundBlock = bridge.findBlock(searchID);
 
-            if(blockExplorerPage.foundBlock.error_msg !== '' )
+            if(blockExplorerPage.foundBlock.error_msg != '' )
             { 
                 $('#latest-blocks-table  > tbody').html('');
                 $("#block-txs-table > tbody").html('');
@@ -2188,7 +2188,7 @@ var blockExplorerPage =
 
                             selectedTxn = bridge.txnDetails(blkHash , $(this).attr("data-value").trim());
 
-                            if(selectedTxn.error_msg === '')
+                            if(selectedTxn.error_msg == '')
                             {
                                 $("#txn-hash").html(selectedTxn.transaction_hash);
                                 $("#txn-size").html(selectedTxn.transaction_size);
