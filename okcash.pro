@@ -72,17 +72,18 @@ build_macosx64 {
     QMAKE_CFLAGS += -arch x86_64
     QMAKE_LFLAGS += -arch x86_64 -stdlib=libc++
 }
-build_win32 {
+win32 {
     BOOST_LIB_SUFFIX=-mgw48-mt-s-1_55
-    BOOST_INCLUDE_PATH=c:/deps/boost/include
-    BOOST_LIB_PATH=c:/deps/boost/lib
+    BOOST_INCLUDE_PATH=c:/deps/boost_1_55_0
+    BOOST_LIB_PATH=c:/deps/boost_1_55_0/stage/lib
 
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
     OPENSSL_INCLUDE_PATH=c:/deps/openssl_1.0.2r/include
-    OPENSSL_LIB_PATH=c:/deps/openssl_1.0.2r/lib/
+    OPENSSL_LIB_PATH=c:/deps/openssl_1.0.2r
 
-    MINIUPNPC_INCLUDE_PATH=c:/deps/miniupnpc
+
+    MINIUPNPC_INCLUDE_PATH=c:/deps
     MINIUPNPC_LIB_PATH=c:/deps/miniupnpc
 
         #USE_BUILD_INFO = 1
