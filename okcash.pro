@@ -4,12 +4,14 @@ VERSION = 4.0.0.6
 INCLUDEPATH += src src/json src/qt
 DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
-CONFIG += thread
-# CONFIG += static
-# LIBS += -L"c:/deps/openssl_1.0.2r" -llibeay32
+!win32:CONFIG += thread
+win32:CONFIG += thread static
+win32:CONFIG += static
+win32:LIBS += -L"c:/deps/openssl-1.0.2r" -llibeay32
+unix|win32:QT += widgets webkitwidgets
 
 # Mobile devices
-android:ios{
+android|ios {
     CONFIG += mobility
     MOBILITY =
 }
@@ -47,20 +49,18 @@ android {
     OBJECTS_DIR = build-android
     MOC_DIR = build-android
     UI_DIR = build-android
-} else {
-
-    QT += widgets webkitwidgets
 }
+
     RESOURCES = okcash.qrc
 
 build_macosx64 {
     QMAKE_TARGET_BUNDLE_PREFIX = co.okcash
     BOOST_LIB_SUFFIX=-mt
-    BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.65.1/include
-    BOOST_LIB_PATH=/usr/local/Cellar/boost/1.65.1/lib
+    BOOST_INCLUDE_PATH=/opt/local/include
+    BOOST_LIB_PATH=/opt/local/lib
 
-    BDB_INCLUDE_PATH=/usr/local/Cellar/berkeley-db@4/4.8.30/include
-    BDB_LIB_PATH=/usr/local/Cellar/berkeley-db@4/4.8.30/lib
+    BDB_INCLUDE_PATH=/opt/local/include/db48
+    BDB_LIB_PATH=/opt/local/lib/db48
 
     OPENSSL_INCLUDE_PATH=/usr/local/Cellar/openssl/1.0.2l/include
     OPENSSL_LIB_PATH=/usr/local/Cellar/openssl/1.0.2l/lib
@@ -72,31 +72,33 @@ build_macosx64 {
     QMAKE_CFLAGS += -arch x86_64
     QMAKE_LFLAGS += -arch x86_64 -stdlib=libc++
 }
+
 win32 {
-    BOOST_LIB_SUFFIX=-mgw48-mt-s-1_55
-    BOOST_INCLUDE_PATH=c:/deps/boost_1_55_0
-    BOOST_LIB_PATH=c:/deps/boost_1_55_0/stage/lib
+    BOOST_LIB_SUFFIX=-mgw49-mt-s-1_57
+    BOOST_INCLUDE_PATH=c:/deps/boost_1_57_0/
+    BOOST_LIB_PATH=c:/deps/boost_1_57_0/stage/lib
 
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
-    OPENSSL_INCLUDE_PATH=c:/deps/openssl_1.0.2r/include
-    OPENSSL_LIB_PATH=c:/deps/openssl_1.0.2r
 
+    OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2r/include/
+    OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2r
 
     MINIUPNPC_INCLUDE_PATH=c:/deps
     MINIUPNPC_LIB_PATH=c:/deps/miniupnpc
 
         #USE_BUILD_INFO = 1
-        DEFINES += HAVE_BUILD_INFO
+        #DEFINES += HAVE_BUILD_INFO
 
     #USE_UPNP=-
 }
+
 
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     CONFIG += static
     # Mac: compile for maximum compatibility (10.5, 32-bit)
-    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk
 
     !windows:!macx {
         # Linux: static link
@@ -153,14 +155,16 @@ SOURCES += src/txdb-leveldb.cpp
 
 !win32 {
     # we use QMAKE_CXXFLAGS_RELEASE even without RELEASE=1 because we use RELEASE to indicate linking preferences not -O preferences
-    genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a
-} else {
+     genleveldb.commands = cd $$PWD/src/leveldb && GCC=$$QMAKE_CC CXX=$$QMAKE_CXX $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a
+}
+
+win32 {
     # make an educated guess about what the ranlib command is called
-    isEmpty(QMAKE_RANLIB) {
-        QMAKE_RANLIB = $$replace(QMAKE_STRIP, strip, ranlib)
-    }
+    #isEmpty(QMAKE_RANLIB) {
+    #    QMAKE_RANLIB = $$replace(QMAKE_STRIP, strip, ranlib)
+    #}
     LIBS += -lshlwapi
-    genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX TARGET_OS=OS_WINDOWS_CROSSCOMPILE $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libleveldb.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libmemenv.a
+    # genleveldb.commands = cd $$PWD/src/leveldb && GCC=$$QMAKE_CC CXX=$$QMAKE_CXX TARGET_OS=OS_NATIVE_WINDOWS $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libleveldb.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libmemenv.a
 }
 genleveldb.target = $$PWD/src/leveldb/libleveldb.a
 genleveldb.depends = FORCE
@@ -418,7 +422,7 @@ isEmpty(BOOST_THREAD_LIB_SUFFIX) {
 }
 
 isEmpty(BDB_LIB_PATH) {
-    macx:BDB_LIB_PATH = /usr/local/Cellar/berkeley-db@4/4.8.30/lib
+    macx:BDB_LIB_PATH = /opt/local/lib/db48
 }
 
 isEmpty(BDB_LIB_SUFFIX) {
@@ -426,33 +430,16 @@ isEmpty(BDB_LIB_SUFFIX) {
 }
 
 isEmpty(BDB_INCLUDE_PATH) {
-    macx:BDB_INCLUDE_PATH = /usr/local/Cellar/berkeley-db@4/4.8.30/include
+    macx:BDB_INCLUDE_PATH = /opt/local/include/db48
 }
 
 isEmpty(BOOST_LIB_PATH) {
-    macx:BOOST_LIB_PATH = /usr/local/Cellar/boost/1.65.1/lib
+    macx:BOOST_LIB_PATH = /opt/local/lib
 }
 
 isEmpty(BOOST_INCLUDE_PATH) {
-    macx:BOOST_INCLUDE_PATH = /usr/local/Cellar/boost/1.65.1/include
+    macx:BOOST_INCLUDE_PATH = /opt/local/include
 }
-
-isEmpty(OPENSSL_INCLUDE_PATH) {
-    macx:OPENSSL_INCLUDE_PATH = /usr/local/Cellar/openssl/1.0.2l/include
-}
-
-isEmpty(OPENSSL_LIB_PATH) {
-    macx:OPENSSL_LIB_PATH = /usr/local/Cellar/openssl/1.0.2l/lib
-}
-
-isEmpty(MINIUPNPC_INCLUDE_PATH) {
-    macx:MINIUPNPC_INCLUDE_PATH = /usr/local/Cellar/miniupnpc/2.1/include
-}
-
-isEmpty(MINIUPNPC_LIB_PATH) {
-    macx:MINIUPNPC_LIB_PATH = /usr/local/Cellar/miniupnpc/2.1/lib
-}
-
 
 windows:DEFINES += WIN32
 windows:RC_FILE = src/qt/res/bitcoin-qt.rc
