@@ -4,6 +4,7 @@ VERSION = 4.0.0.6
 INCLUDEPATH += src src/json src/qt
 DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
+
 !win32:CONFIG += thread
 win32:CONFIG += thread static
 win32:CONFIG += static
@@ -53,24 +54,28 @@ android {
 
     RESOURCES = okcash.qrc
 
-build_macosx64 {
+macx {
     QMAKE_TARGET_BUNDLE_PREFIX = co.okcash
+
     BOOST_LIB_SUFFIX=-mt
-    BOOST_INCLUDE_PATH=/opt/local/include
+
+    BOOST_INCLUDE_PATH=/opt/local/include 
     BOOST_LIB_PATH=/opt/local/lib
 
     BDB_INCLUDE_PATH=/opt/local/include/db48
     BDB_LIB_PATH=/opt/local/lib/db48
 
-    OPENSSL_INCLUDE_PATH=/usr/local/Cellar/openssl/1.0.2l/include
-    OPENSSL_LIB_PATH=/usr/local/Cellar/openssl/1.0.2l/lib
+    OPENSSL_INCLUDE_PATH=/opt/local/include/openssl-1.0
+    OPENSSL_LIB_PATH=/opt/local/lib/openssl-1.0
 
-    MINIUPNPC_INCLUDE_PATH=/usr/local/Cellar/miniupnpc/2.1/include
-    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/2.1/lib
+    MINIUPNPC_INCLUDE_PATH=/opt/local/include/miniupnpc
+    MINIUPNPC_LIB_PATH=/opt/local/lib/
 
     QMAKE_CXXFLAGS += -arch x86_64 -stdlib=libc++
     QMAKE_CFLAGS += -arch x86_64
     QMAKE_LFLAGS += -arch x86_64 -stdlib=libc++
+
+    #USE_UPNP=-
 }
 
 win32 {
@@ -97,8 +102,8 @@ win32 {
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     CONFIG += static
-    # Mac: compile for maximum compatibility (10.5, 32-bit)
-    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk
+    # Mac: compile for maximum compatibility (10.11, 32-bit)
+    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.11 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 
     !windows:!macx {
         # Linux: static link
@@ -473,7 +478,7 @@ LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB
 LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
 # -lgdi32 has to happen after -lcrypto (see  #681)
 windows:LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
-LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
+LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_LIB_SUFFIX
 windows:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
 contains(RELEASE, 1) {
