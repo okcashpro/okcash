@@ -3,8 +3,8 @@
 [![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) 
 # OKCash OK
 
-### Join the new communications server
-<a href="https://discord.io/okcash">
+### Join the OK Bitcoin - Cryptocurrency and Blockchain communications server
+<a href="https://discord.io/cryptocurrency">
     <img alt="Logo" src="https://discordapp.com/api/guilds/213747404745211904/widget.png?style=banner2">
   </a>
 
@@ -12,9 +12,9 @@
 
 ### Download Supported Platforms
 
-[![OK-windows](http://i.imgur.com/kJIvcip.png)](https://okcash.org/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](https://okcash.org/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](https://okcash.org/#jf_download) 
+[![OK-windows](http://i.imgur.com/kJIvcip.png)](https://okcash.org/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](https://okcash.org/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](https://okcash.org/#jf_download) [![OK-debian](https://i.imgur.com/pPS1OOx.png)](https://okcash.org/#jf_download) 
 
-[![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.org/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.org/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.org/#jf_download)
+[![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.org/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.org/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.org/#jf_download) [![OK-fedora](https://i.imgur.com/WCovlZx.png)](https://okcash.org/#jf_download) 
 
 #### Download the Instant OK-Blockchain - Fast Sync for first time users on Desktop-Laptop (Mac, Win, Linux, Raspberry Pi): 
 ![OK-bootstrap](http://i.imgur.com/edwu0MM.png) https://github.com/okcashpro/ok-blockchain/releases
