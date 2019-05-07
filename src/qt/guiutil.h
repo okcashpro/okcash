@@ -115,7 +115,7 @@ namespace GUIUtil
     bool GetStartOnSystemStartup();
     bool SetStartOnSystemStartup(bool fAutoStart);
 
-    /** Help message for Bitcoin-Qt, shown with --help. */
+    /** Help message for okcash, shown with --help. */
     class HelpMessageBox : public QMessageBox
     {
         Q_OBJECT

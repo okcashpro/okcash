@@ -101,8 +101,8 @@ Section -post SEC0001
     # bitcoin: URI handling disabled for 0.6.0
     #    WriteRegStr HKCR "bitcoin" "URL Protocol" ""
     #    WriteRegStr HKCR "bitcoin" "" "URL:Bitcoin"
-    #    WriteRegStr HKCR "bitcoin\DefaultIcon" "" $INSTDIR\bitcoin-qt.exe
-    #    WriteRegStr HKCR "bitcoin\shell\open\command" "" '"$INSTDIR\bitcoin-qt.exe" "$$1"'
+    #    WriteRegStr HKCR "bitcoin\DefaultIcon" "" $INSTDIR\okcash.exe
+    #    WriteRegStr HKCR "bitcoin\shell\open\command" "" '"$INSTDIR\okcash.exe" "$$1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
