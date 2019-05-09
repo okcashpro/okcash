@@ -35,8 +35,6 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 ## Visit OK Smart Links and join the different community channels
 
-#### Okcash:  http://okcash.co
-
 #### What is Okcash?  https://okcash.org
 
 #### OK Chain explorer:  https://chainz.cryptoid.info/ok/
