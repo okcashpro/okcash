@@ -23,10 +23,13 @@ struct SeedSpec6 {
 
 unsigned int pnSeed[] =
 {
-    0x8C99202D,
-    0xAE004D2D,
-    0x1A3E202D,
-    0x58234D2D,
+    0x1fb18940,
+    0xc962ca90,
+    0xe2a68940,
+    0x4ae33e2d,
+    0x6e0ed85f,
+    0x52af965b,
+    0x76ba7649,
 };
 
 
