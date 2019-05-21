@@ -47,6 +47,8 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
 
+#### Okcash White Paper: https://github.com/okcashpro/okcash-whitepaper
+
 #### OK Reddit community: https://reddit.com/r/okcash
 
 -------------------
