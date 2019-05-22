@@ -1325,7 +1325,7 @@ function addressBookInit() {
 }
 
 
-var Name = 'Me';
+var Name = ' Okcash';
 var initialAddress = true;
 
 function appendAddresses(addresses) {
