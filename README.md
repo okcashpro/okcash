@@ -1,7 +1,7 @@
-![OKCash-OK](https://github.com/oktoshi/azure-quickstart-templates/blob/master/okcash-on-ubuntu/images/okcash.png)
+![Okcash-OK](https://github.com/oktoshi/azure-quickstart-templates/blob/master/okcash-on-ubuntu/images/okcash.png)
 
 [![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) 
-# OKCash OK
+# Okcash OK
 
 ### Join the OK Bitcoin - Cryptocurrency and Blockchain communications server
 <a href="https://discord.io/cryptocurrency">
@@ -21,15 +21,15 @@
 
 --------------------
 
-**OKCash** is digital cash. **OK** is the official symbol. 
+**Okcash** is digital cash. **OK** is the official symbol. 
 
 **Transactions** have real fast confirmations, making them virtually instant. 
 
-You can send OKCash to family or friends, or pay for goods or services, **anywhere in the world**.
+You can send Okcash to family or friends, or pay for goods or services, **anywhere in the world**.
 
-The OKCash network is **decentralized** and free from middlemen, giving you back control of your finances and providing a **secure network** for all of your payments. 
+The Okcash network is **decentralized** and free from middlemen, giving you back control of your finances and providing a **secure network** for all of your payments. 
 
-Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, Private Messages, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible**.
+Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, Secure Messages, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible**.
 
 --------------------
 
@@ -53,7 +53,7 @@ Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bi
 
 -------------------
 
-# Join the OKCash Development process
+# Contribute with the Okcash Development process
 
 Developers work in their own forks, then submit pull requests when
 they think their feature or bug fix is ready.
