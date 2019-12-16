@@ -39,10 +39,10 @@ Object CallRPC(const std::string& strMethod, const Array& params)
 
     // Connect to localhost
     bool fUseSSL = GetBoolArg("-rpcssl", false);
-    ba::io_service io_service;
+    ioContext io_context;
     ba::ssl::context context(ba::ssl::context::sslv23);
     context.set_options(ba::ssl::context::no_sslv2);
-    ba::ssl::stream<ba::ip::tcp::socket> sslStream(io_service, context);
+    ba::ssl::stream<ba::ip::tcp::socket> sslStream(io_context, context);
     SSLIOStreamDevice<ba::ip::tcp> d(sslStream, fUseSSL);
     boost::iostreams::stream< SSLIOStreamDevice<ba::ip::tcp> > stream(d);
 

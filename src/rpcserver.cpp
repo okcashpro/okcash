@@ -34,7 +34,7 @@ namespace ba = boost::asio;
 static std::string strRPCUserColonPass;
 
 // These are created by StartRPCThreads, destroyed in StopRPCThreads
-static ba::io_service* rpc_io_service = NULL;
+static ioContext* rpc_io_service = NULL;
 static std::map<std::string, boost::shared_ptr<ba::deadline_timer> > deadlineTimers;
 static ba::ssl::context* rpc_ssl_context = NULL;
 static boost::thread_group* rpc_worker_group = NULL;
@@ -445,10 +445,10 @@ class AcceptedConnectionImpl : public AcceptedConnection
 {
 public:
     AcceptedConnectionImpl(
-            ba::io_service& io_service,
+            ioContext& io_context,
             ba::ssl::context &context,
             bool fUseSSL) :
-        sslStream(io_service, context),
+        sslStream(io_context, context),
         _d(sslStream, fUseSSL),
         _stream(_d)
     {
@@ -496,7 +496,7 @@ static void RPCListen(boost::shared_ptr<ba::basic_socket_acceptor<Protocol> > ac
                    const bool fUseSSL)
 {
     // Accept connection
-    AcceptedConnectionImpl<Protocol>* conn = new AcceptedConnectionImpl<Protocol>(acceptor->get_io_service(), context, fUseSSL);
+    AcceptedConnectionImpl<Protocol>* conn = new AcceptedConnectionImpl<Protocol>(GetIOServiceFromPtr(acceptor), context, fUseSSL);
 
     acceptor->async_accept(
             conn->sslStream.lowest_layer(),
@@ -582,7 +582,7 @@ void StartRPCThreads()
     }
 
     assert(rpc_io_service == NULL);
-    rpc_io_service = new ba::io_service();
+    rpc_io_service = new ioContext();
     rpc_ssl_context = new ba::ssl::context(ba::ssl::context::sslv23);
 
     const bool fUseSSL = GetBoolArg("-rpcssl", false);
@@ -664,7 +664,7 @@ void StartRPCThreads()
 
     rpc_worker_group = new boost::thread_group();
     for (int i = 0; i < GetArg("-rpcthreads", 4); i++)
-        rpc_worker_group->create_thread(boost::bind(&ba::io_service::run, rpc_io_service));
+        rpc_worker_group->create_thread(boost::bind(&ioContext::run, rpc_io_service));
 }
 
 void StopRPCThreads()
