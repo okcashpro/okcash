@@ -62,7 +62,7 @@ int64_t CChainParams::GetProofOfWorkReward(int nHeight, int64_t nFees) const
 int64_t CChainParams::GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees) const
 {
     // miner's coin stake reward based on coin age spent (coin-days)
-    int64_t nSubsidy = nCoinAge * ZCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    int64_t nSubsidy = nCoinAge * FCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
     
     if (pindexBest->nHeight <= nFirstYearStake)
         nSubsidy = nCoinAge * COIN_YEAR_REWARD * 33 / (365 * 33 + 8);
@@ -96,6 +96,19 @@ int64_t CChainParams::GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees) con
     else	
     if (pindexBest->nHeight <= nTenthBlockHalve)
         nSubsidy = nCoinAge * MCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nElevenBlockHalve)
+        nSubsidy = nCoinAge * ZCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nTwelveBlockHalve)
+        nSubsidy = nCoinAge * XCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nThirteenBlockHalve)
+        nSubsidy = nCoinAge * BCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+    else	
+    if (pindexBest->nHeight <= nFourteenBlockHalve)
+        nSubsidy = nCoinAge * GCOIN_YEAR_REWARD * 33 / (365 * 33 + 8);
+
 
 
     if (fDebug && GetBoolArg("-printcreation"))
@@ -207,18 +220,22 @@ public:
         //convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
         convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
         
-        // 1 Year aprox = 501257 blocks /  4 Year aprox = 2005028 blocks
-        nTenthBlockHalve = 14556453; // + 4 year blocks average                  x 0.05
-        nNinthBlockHalve = 12551425; // + 4 year blocks average                   x 0.1
-        nEighthBlockHalve = 10546397; // + 4 year blocks average                  x 0.25
-        nSeventhBlockHalve = 8541369; // + 4 year blocks average                 x 0.5
-        nSixthBlockHalve = 6536341; // + 4 year blocks average                      x 1
-        nFifthBlockHalve = 4531313; // + 4 year blocks average                       x 2
-        nFourthBlockHalve = 2526285; // + 1 year blocks average                    x 2.5
-        nThirdBlockHalve = 2025028; // + 1 year blocks average                      x 5
-        nSecondBlockHalve = 1523771; // + 1 year blocks average                   x 10
-        nFirstBlockHalve = 1022514; // + 1 year blocks average - 10k blockupdt x 20
-        nFirstYearStake = 531257;  // 501257 blocks/year + 20k blocks(nov 30) + 10 k blocksupdate x 69
+        // 1 Year aprox = 501257 blocks 
+        nFourteenBlockHalve = 27589135; // + 10 year blocks average            x 0.69 % staking
+        nThirteenBlockHalve = 22576565; // + 10 year blocks average            x 1 % staking
+        nTwelveBlockHalve = 17563995; // + 10 year blocks average              x 2 % staking
+        nElevenBlockHalve = 12551425; // + 10 year blocks average              x 3 % staking
+        nTenthBlockHalve = 7538855; // + 2 year blocks average                 x 3.3 % staking
+        nNinthBlockHalve = 6536341; // + 2 year blocks average                 x 3.6 % staking
+        nEighthBlockHalve = 5533827; // + 2 year blocks average                x 3.9 % staking
+        nSeventhBlockHalve = 4531313; // + 2 year blocks average               x 6.9 % staking
+        nSixthBlockHalve = 3528799; // + 1 year blocks average                 x 11 % staking
+        nFifthBlockHalve = 3027542; // + 1 year blocks average                 x 22 % staking
+        nFourthBlockHalve = 2526285; // + 1 year blocks average                x 2.5 % staking
+        nThirdBlockHalve = 2025028; // + 1 year blocks average                 x 5 % staking
+        nSecondBlockHalve = 1523771; // + 1 year blocks average                x 10 % staking
+        nFirstBlockHalve = 1022514; // + 1 year blocks average - 10k blockupdt x 20 % staking
+        nFirstYearStake = 531257;  // 501257 blocks/year + 20k blocks(nov 30) + 10 k blocksupdate x 69 % staking
         
         nLastPOWBlock = 33186;
         nLastFairLaunchBlock = 30;

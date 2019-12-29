@@ -60,13 +60,17 @@ static const int64_t SCOIN_YEAR_REWARD = 20 * CENT;     //  20% 1st halving
 static const int64_t CCOIN_YEAR_REWARD = 10 * CENT;     //  10% 2nd halving
 static const int64_t KCOIN_YEAR_REWARD = 5 * CENT;       //  5% 3rd halving
 static const int64_t ICOIN_YEAR_REWARD = 2.5 * CENT;    //  2.5% 4th halving
-static const int64_t OCOIN_YEAR_REWARD = 2 * CENT;       //  2% 5th halving
-static const int64_t DCOIN_YEAR_REWARD = 1 * CENT;       //  1% 6th halving
-static const int64_t RCOIN_YEAR_REWARD = 0.5 * CENT;    //  0.5% 7th halving
-static const int64_t ECOIN_YEAR_REWARD = 0.25 * CENT;  //   0.25% 8th halving
-static const int64_t ACOIN_YEAR_REWARD = 0.1 * CENT;    //   0.1% 9th halving
-static const int64_t MCOIN_YEAR_REWARD = 0.05 * CENT;  //   0.05% 10th halving
-static const int64_t ZCOIN_YEAR_REWARD = 0.03 * CENT;  //   0.03% 11th halving and onwards
+static const int64_t OCOIN_YEAR_REWARD = 22 * CENT;       //  22% 5th halving
+static const int64_t DCOIN_YEAR_REWARD = 11 * CENT;       //  11% 6th halving
+static const int64_t RCOIN_YEAR_REWARD = 6.9 * CENT;    //  6.9% 7th halving
+static const int64_t ECOIN_YEAR_REWARD = 3.9 * CENT;  //   3.9% 8th halving
+static const int64_t ACOIN_YEAR_REWARD = 3.6 * CENT;    //   3.6% 9th halving
+static const int64_t MCOIN_YEAR_REWARD = 3.3 * CENT;  //   3.3% 10th halving
+static const int64_t ZCOIN_YEAR_REWARD = 3 * CENT;  //   3% 11th halving
+static const int64_t XCOIN_YEAR_REWARD = 2 * CENT;  //   2% 12th halving
+static const int64_t BCOIN_YEAR_REWARD = 1 * CENT;    //   1% 13th halving
+static const int64_t GCOIN_YEAR_REWARD = 0.69 * CENT;  //   0.69% 14th halving
+static const int64_t FCOIN_YEAR_REWARD = 0.33 * CENT;  //   0.33% 15th halving and onwards
 
 
 extern int nNodeMode;

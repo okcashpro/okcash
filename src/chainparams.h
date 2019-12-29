@@ -75,6 +75,10 @@ public:
     
     int RPCPort() const { return nRPCPort; }
     
+    int FourteenBlockHalve() const { return nFourteenBlockHalve; }
+    int ThirteenBlockHalve() const { return nThirteenBlockHalve; }
+    int TwelveBlockHalve() const { return nTwelveBlockHalve; }
+    int ElevenBlockHalve() const { return nElevenBlockHalve; }
     int TenthBlockHalve() const { return nTenthBlockHalve; }
     int NinthBlockHalve() const { return nNinthBlockHalve; }
     int EighthBlockHalve() const { return nEighthBlockHalve; }
@@ -117,6 +121,10 @@ protected:
     int nLastPOWBlock;
     int nLastFairLaunchBlock;
     int nDistributionFund;
+    int nFourteenBlockHalve;
+    int nThirteenBlockHalve;
+    int nTwelveBlockHalve;
+    int nElevenBlockHalve;
     int nTenthBlockHalve;
     int nNinthBlockHalve;
     int nEighthBlockHalve;
