@@ -785,14 +785,14 @@ small screens.
 }
 
 .footable.okcash {
-    border-color: #0165a4;
+    border-color: #ff9933;
 }
 .footable.okcash > tfoot > tr > th,
 .footable.okcash > thead > tr > th,
 .footable.okcash > tfoot > tr > td,
 .footable.okcash > thead > tr > td {
-    background-color: #0165a4;
-    border-color: #0165a4;
+    background-color: #ff9933;
+    border-color: #ff9933;
 }
 
 .footable > thead > tr > th,.footable > thead > tr > td {
@@ -1200,7 +1200,7 @@ label.recipient {
   padding: 7px 14px;
   -webkit-border-radius: 5;
   -moz-border-radius: 5;
-  border-radius: 20px;
+  border-radius: 0px;
   background-color: transparent;
   color: inherit;
   vertical-align: middle;
@@ -1356,21 +1356,21 @@ label.recipient {
 }
 
 .button.is-inverse {
-  background: #0165a4;
+  background: #0080FF;
 
   color: white;
 }
 
 .button.is-inverse:hover,
 .button.is-inverse:focus {
-  background: #01395c;
+  background: #1034A6;
 
   text-decoration: none;
 }
 
 .button.is-inverse:active,
 .button.is-inverse.is-active {
-  background-color: #01395c;
+  background-color: #1034A6;
 }
 
 .button.is-link {
@@ -1948,11 +1948,12 @@ label.recipient {
 }
 
 .fa {
-    font-size: 14px !important;
+    font-size: 18px !important;
 }
 
 .fa-lg {
-    font-size: 1.33333333em !important;
+    font-size: 24px !important;
+	vertical-align: -2%;
 }
 
 .font-16px {
@@ -2250,8 +2251,8 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
 }
 
 .iw-mIcon {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     padding-right: 4px;
     top: 3px;
     padding-left: 1px;
