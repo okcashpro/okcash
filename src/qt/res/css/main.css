@@ -152,8 +152,8 @@ ul.vmenu li a {
     text-decoration: none;
     padding: 5px 0 15px 0;
     display: block;
-    color: #829091;
-    border: 1px solid #15141a;
+    color: #4d4d4d;
+    border: 1px solid #05050c;
     padding-left: 20px;
     -webkit-transition: all 0.2s ease-in-out;
 }
@@ -163,14 +163,15 @@ ul.vmenu li {
 }
 
 ul.vmenu li.selected a {
-    background: #0f0f13;
-    border: 1px solid #101014;
+    background: #040225;
+    border: 1px solid #040225;
     color: #fff;
+	font-weight: bold;
 }
 
 ul.vmenu li a:hover {
-    background: #424242;
-    border: 1px solid #1b1a20;
+    background: #040225;
+    border: 1px solid #040225;
     color: #fff;
 }
 
@@ -189,9 +190,9 @@ div.menu span {
 div.menu span a {
     display: block;
     text-decoration: none;
-    color: #829091;
+    color: #4d4d4d;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 /*
@@ -213,7 +214,7 @@ Add transition to containers so they can push in and out.
 }
 
 #navpanel {
-    background: #131218;
+    background: #05050c;
     margin-left: -135px;
     width: 17%;
     position: fixed;
@@ -587,7 +588,7 @@ article {
     content: " ";
     padding-left: 18px;
     top: 5px;
-    background: #829091;
+    background: #4d4d4d;
     -webkit-mask-image: url('qrc:///icons/nav_icons');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position-x: -5px;
@@ -602,7 +603,7 @@ article {
 #navpanel .selected [href='#chaindata']:before,
 #navpanel .selected [href='#blockdata']:before,
 #navpanel .selected [href='#news']:before {
-    background: #0165a2;
+    background: #4d4;
 }
 
 #navpanel [href='#overview']:before {
@@ -1869,7 +1870,7 @@ label.recipient {
 /* Icons styling */
 
 .staking {
-    color: rgb(18, 121, 59);
+    color: #4d4;
 }
 .not-staking {
     opacity: 0.3;
@@ -1891,7 +1892,7 @@ label.recipient {
 }
 
 .red {
-    color: #0165a4;
+    color: #4d4;
 }
 
 .orange {
