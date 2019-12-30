@@ -1,8 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Version=5.0.0.0
-Name=OKCash Core Client
-Comment=OKCash Graphical UI
+Name=Okcash Core Client
+Comment=Okcash Graphical UI
 Categories=Network;
 Exec=/usr/local/bin/okcash
 Icon=/usr/share/pixmaps/okcash.png

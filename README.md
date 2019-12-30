@@ -29,7 +29,7 @@ You can send Okcash to family or friends, or pay for goods or services, **anywhe
 
 The Okcash network is **decentralized** and free from middlemen, giving you back control of your finances and providing a **secure network** for all of your payments. 
 
-Some of the OKCash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, Secure Messages, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible**.
+Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, Secure Messages, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible**.
 
 --------------------
 
@@ -69,7 +69,7 @@ or are controversial.
 
 The master branch is regularly built and tested, but is not guaranteed
 to be completely stable. Tags are regularly created to indicate new
-stable release versions of OKCash.
+stable release versions of Okcash.
 
 Feature branches are created when there are major new features being
 worked on by several people.

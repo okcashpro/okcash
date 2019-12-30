@@ -32,7 +32,7 @@ const QString BITCOIN_IPC_PREFIX("okcash:");
 //
 static QString ipcServerName()
 {
-    QString name("OKCash");
+    QString name("Okcash");
 
     // Append a simple hash of the datadir
     // Note that GetDataDir(true) returns a different path

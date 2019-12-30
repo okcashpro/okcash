@@ -108,7 +108,7 @@ static std::string Translate(const char* psz)
 static void handleRunawayException(std::exception *e)
 {
     PrintExceptionContinue(e, "Runaway exception");
-    QMessageBox::critical(0, "Runaway exception", OKCashGUI::tr("A fatal error occurred. OKCash can no longer continue safely and will quit.") + QString("\n\n") + QString::fromStdString(strMiscWarning));
+    QMessageBox::critical(0, "Runaway exception", OKCashGUI::tr("A fatal error occurred. Okcash can no longer continue safely and will quit.") + QString("\n\n") + QString::fromStdString(strMiscWarning));
     exit(1);
 }
 
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     {
         // This message can not be translated, as translation is not initialized yet
         // (which not yet possible because lang=XX can be overridden in bitcoin.conf in the data directory)
-        QMessageBox::critical(0, "OKCash",
+        QMessageBox::critical(0, "Okcash",
                               QString("Error: Specified data directory \"%1\" does not exist.").arg(QString::fromStdString(mapArgs["-datadir"])));
         return 1;
     }
@@ -154,9 +154,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName("okcash");
     app.setOrganizationDomain("okcash.co");
     if(GetBoolArg("-testnet")) // Separate UI settings for testnet
-        app.setApplicationName("OKCash-testnet");
+        app.setApplicationName("Okcash-testnet");
     else
-        app.setApplicationName("OKCash");
+        app.setApplicationName("Okcash");
 
     // ... then GUI settings:
     OptionsModel optionsModel;
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
                 guiref = 0;
             }
             // Shutdown the core and its threads, but don't exit Qt here
-            LogPrintf("OKCash shutdown.\n\n");
+            LogPrintf("Okcash shutdown.\n\n");
             threadGroup.interrupt_all();
             threadGroup.join_all();
             Shutdown();

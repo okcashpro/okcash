@@ -3,12 +3,12 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About OKCash</source>
+        <source>About Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;OKCash&lt;/b&gt; version</source>
+        <source>&lt;b&gt;Okcash&lt;/b&gt; version</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -59,7 +59,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your OKCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <source>These are your Okcash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -74,7 +74,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a OKCash address</source>
+        <source>Sign a message to prove you own a Okcash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -89,7 +89,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified OKCash address</source>
+        <source>Verify a message to ensure it was signed with a specified Okcash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -257,7 +257,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>OKCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <source>Okcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -371,7 +371,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about OKCash</source>
+        <source>Show information about Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -421,12 +421,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a OKCash address</source>
+        <source>Send coins to a Okcash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for OKCash</source>
+        <source>Modify configuration options for Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -466,7 +466,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-200"/>
-        <source>OKCash</source>
+        <source>Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -476,7 +476,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About OKCash</source>
+        <source>&amp;About Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -533,12 +533,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>OKCash client</source>
+        <source>Okcash client</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to OKCash network</source>
+        <source>%n active connection(s) to Okcash network</source>
         <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message>
@@ -649,7 +649,7 @@ Address: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters.</source>
+        <source>URI can not be parsed! This can be caused by an invalid Okcash address or malformed URI parameters.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -709,7 +709,7 @@ Address: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. OKCash can no longer continue safely and will quit.</source>
+        <source>A fatal error occurred. Okcash can no longer continue safely and will quit.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -1029,7 +1029,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid OKCash address.</source>
+        <source>The entered address &quot;%1&quot; is not a valid Okcash address.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1048,7 +1048,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>OKCash-Qt</source>
+        <source>Okcash-Qt</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1121,12 +1121,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start OKCash after logging in to the system.</source>
+        <source>Automatically start Okcash after logging in to the system.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start OKCash on system login</source>
+        <source>&amp;Start Okcash on system login</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1146,7 +1146,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the OKCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <source>Automatically open the Okcash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1156,7 +1156,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the OKCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <source>Connect to the Okcash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1231,7 +1231,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting OKCash.</source>
+        <source>The user interface language can be set here. This setting will take effect after restarting Okcash.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1246,7 +1246,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show OKCash addresses in the transaction list or not.</source>
+        <source>Whether to show Okcash addresses in the transaction list or not.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1293,7 +1293,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting OKCash.</source>
+        <source>This setting will take effect after restarting Okcash.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1312,7 +1312,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the OKCash network after a connection is established, but this process has not completed yet.</source>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Okcash network after a connection is established, but this process has not completed yet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1528,7 +1528,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the OKCash-Qt help message to get a list with possible OKCash command-line options.</source>
+        <source>Show the Okcash-Qt help message to get a list with possible Okcash command-line options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1548,12 +1548,12 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-104"/>
-        <source>OKCash - Debug window</source>
+        <source>Okcash - Debug window</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+25"/>
-        <source>OKCash Core</source>
+        <source>Okcash Core</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1563,7 +1563,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the OKCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <source>Open the Okcash debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1573,7 +1573,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the OKCash RPC console.</source>
+        <source>Welcome to the Okcash RPC console.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1732,7 +1732,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1832,7 +1832,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid OKCash address</source>
+        <source>WARNING: Invalid Okcash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1906,7 +1906,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -1967,7 +1967,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this OKCash address</source>
+        <source>Sign the message to prove you own this Okcash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1999,7 +1999,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified OKCash address</source>
+        <source>Verify the message to ensure it was signed with the specified Okcash address</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2010,7 +2010,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2020,7 +2020,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter OKCash signature</source>
+        <source>Enter Okcash signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2591,7 +2591,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>OKCash version</source>
+        <source>Okcash version</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2776,7 +2776,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong OKCash will not work properly.</source>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Okcash will not work properly.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2971,7 +2971,7 @@ rpcpassword=%s
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;Okcash Alert&quot; admin@foo.com
 </source>
         <translation type="unfinished"/>
     </message>
@@ -3097,12 +3097,12 @@ for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.c
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  OKCash is probably already running.</source>
+        <source>Cannot obtain a lock on data directory %s.  Okcash is probably already running.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="-98"/>
-        <source>OKCash</source>
+        <source>Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3137,12 +3137,12 @@ for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.c
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of OKCash</source>
+        <source>Error loading wallet.dat: Wallet requires newer version of Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart OKCash to complete</source>
+        <source>Wallet needed to be rewritten: restart Okcash to complete</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3212,7 +3212,7 @@ for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.c
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. OKCash is probably already running.</source>
+        <source>Unable to bind to %s on this computer. Okcash is probably already running.</source>
         <translation type="unfinished"/>
     </message>
     <message>

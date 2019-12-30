@@ -21,7 +21,7 @@ To Build
 cd src/
 make -f makefile.unix USE_UPNP=-           # Headless okcash
 
-See readme-qt.rst for instructions on building OKCash QT,
+See readme-qt.rst for instructions on building Okcash QT,
 the graphical okcash.
 
 Dependencies

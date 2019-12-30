@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <title>OKCash</title>
+        <title>Okcash</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="qrc:///css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -51,14 +51,14 @@
             <li><a href="#transactions">transactions</a></li>
             <li><a href="#addressbook">address book</a></li>
             <li><a href="#messages" onclick="iscrollReload(true);">Private Messages</a></li>
-            <!-- <li><a href="#chaindata" onclick="chainDataPage.updateAnonOutputs();">OKCash Tokens Data</a></li> -->
+            <!-- <li><a href="#chaindata" onclick="chainDataPage.updateAnonOutputs();">Okcash Tokens Data</a></li> -->
             <li><a href="#blockdata" onclick="blockExplorerPage.updateLatestBlocks();">Block Explorer</a></li>
             <li class="none"><a href="#options">Options</a></li>
             <!--li><a href="#news">news</a></li-->
         </ul>
 
         <div id="navinfo">
-            <a id="clientinfo" href="#about">OKCash <span id="version"></span></a>
+            <a id="clientinfo" href="#about">Okcash <span id="version"></span></a>
             <progress id="syncProgressBar" max=100 value=1 title="Catching up...
                                                                   downloaded 0 blocks of history..."></progress>
         </div>
@@ -97,7 +97,7 @@
 
             <span style="white-space:nowrap;">
                 <label for="qraddress" class="recipient">Address:</label>
-                <input id="qraddress" class="pay_to input_box" style="width:250px" placeholder="Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" onchange="showQRCode();" />
+                <input id="qraddress" class="pay_to input_box" style="width:250px" placeholder="Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" onchange="showQRCode();" />
             </span>
 
             <span style="white-space:nowrap;">
@@ -114,9 +114,9 @@
                 <label for="qramount" class="recipient">Amount:</label>
                 <input id="qramount" style="width:140px;" type="number" placeholder="0.00000000" step="0.01" value="0.00000000" onchange="unit.parse(this, $('#qrunit').val());showQRCode();" />
                 <select id="qrunit" class="unit button is-inverse has-fixed-icon" style="margin-left:10px; height:43px; width:100px;" onchange="unit.format('#qramount', $(this).val());showQRCode();">
-                    <option value="0" title="OKCash">OK</option>
-                    <option value="1" title="Milli-OKCash (1 / 1000)">mOK</option>
-                    <option value="2" title="Micro-OKCash (1 / 1000000)">&micro;OK</option>
+                    <option value="0" title="Okcash">OK</option>
+                    <option value="1" title="Milli-Okcash (1 / 1000)">mOK</option>
+                    <option value="2" title="Micro-Okcash (1 / 1000000)">&micro;OK</option>
                     <option value="3" title="OKtoshi (1 / 100000000)">OKtoshi</option>
                 </select>
             </span>
@@ -156,7 +156,7 @@
                     <div>
                         <table id="balances">
                             <tr><td>Spendable:      </td><td class="balance" >0.00</td><td class="unit">OK</td></tr>
-                            <!-- <tr><td>OKCash:         </td><td id="okcashBal"  >0.00</td><td class="units">ANON</td></tr> -->
+                            <!-- <tr><td>Okcash:         </td><td id="okcashBal"  >0.00</td><td class="units">ANON</td></tr> -->
                             <tr><td>Reserved:       </td><td id="reserved"   >0.00</td><td class="unit">OK</td></tr>
                             <tr><td>Stake:          </td><td id="stake"      >0.00</td><td class="unit">OK</td></tr>
                             <tr><td>Unconfirmed:    </td><td id="unconfirmed">0.00</td><td class="unit">OK</td></tr>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div class="flex-item grow one-third-width">
-                            <h2 align="center">My OKCash Wallet</h2>
+                            <h2 align="center">My Okcash Wallet</h2>
                             <div>
 							
                             </div>
@@ -244,7 +244,7 @@
 
                         <label>Custom change address: </label>
                         <div class="flex-left">
-                            <input id="change_address" title="Optional address to receive transaction change" placeholder="Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" maxlength="128" oninput="base58.check(this);" />
+                            <input id="change_address" title="Optional address to receive transaction change" placeholder="Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" maxlength="128" oninput="base58.check(this);" />
                             <a class="button is-inverse has-fixed-icon"  style="margin-right:10px; margin-left:10px; height:43px; width:43px;" onclick="openAddressBook('#change_address', '', false)"><i class="fa fa-book"></i></a>
                             <a class="button is-inverse has-fixed-icon"  style="margin-right:10px; height:43px; width:43px;" onclick="paste('#change_address')"><i class="fa fa-files-o"></i></a>
                             <a class="button is-inverse has-fixed-icon"  style="height:43px; width:43px;" onclick="$('#change_address').val('').css('background', '').css('color', '');"><i class="fa fa-times"></i></a>
@@ -262,9 +262,9 @@
 
                 <select id="txn_type" class="txn_type button is-inverse has-fixed-icon" style="display:none;" style="width:0px;" onchange="changeTxnType();">
                     <option value="0" title="OK to OK" selected>send OK</option>
-                   <!--  <option value="1" title="OK to OKCash">OK to OKCash</option>
-                    <option value="2" title="OKCash to OKCash">OKCash to OKCash</option>
-                    <option value="3" title="OKCash to OK">OKCash to OK</option> -->
+                   <!--  <option value="1" title="OK to Okcash">OK to Okcash</option>
+                    <option value="2" title="Okcash to Okcash">Okcash to Okcash</option>
+                    <option value="3" title="Okcash to OK">Okcash to OK</option> -->
                 </select> 
 
                 <span id="tx_ringsize">
@@ -293,7 +293,7 @@
         <article id="receive" style="display:none;">
             <div class="content top">
                 <h2>Receive</h2>
-                These are your OKCash addresses for receiving payments. You may want to have a different address for each sender so you can keep track of who is paying you.
+                These are your Okcash addresses for receiving payments. You may want to have a different address for each sender so you can keep track of who is paying you.
             </div>
 
             <div class="bottom">
@@ -449,7 +449,7 @@
             <a class="modal_close" href="#close"><i class="fa fa-times-circle red"></i></a>
             <div style="white-space:nowrap;">
                 <label for="new-contact-address" class="recipient">Address: </label>
-                <input id="new-contact-address"  class="recipient input_box" style="width: 300px;" title="The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" placeholder="Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" onchange="if(base58.check(this)) $('#new-contact-pubkey').val(bridge.getPubKey(this.value, $('#new-contact-name').val()));" maxlength="128" oninput="base58.check(this);"/>
+                <input id="new-contact-address"  class="recipient input_box" style="width: 300px;" title="The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" placeholder="Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" onchange="if(base58.check(this)) $('#new-contact-pubkey').val(bridge.getPubKey(this.value, $('#new-contact-name').val()));" maxlength="128" oninput="base58.check(this);"/>
                 <a class="button is-inverse has-fixed-icon" title="Choose address from address book" style="margin-right:10px; margin-left:10px; height:43px; width:43px;" onclick="openAddressBook('#new-contact-address', '#new-contact-name', true)"><i class="fa fa-book"></i></a>
                 <a class="button is-inverse has-fixed-icon" title="Paste address from clipboard"     style="margin-right:10px; height:43px; width:43px;" onclick="paste('#new-contact-address')"><i class="fa fa-files-o"></i></a>
                 <a class="button is-inverse has-fixed-icon" title="Remove this recipient"            style="height:43px; width:43px;" onclick="$('#new-contact-address').val('').css('background', '').css('color', '');"><i class="fa fa-times"></i></a>
@@ -586,7 +586,7 @@
         <!-- Chain Data Page -->
         <article id="chaindata" style="display:none;">
             <div class="content top">
-                <h2>Anonymous OKCash Tokens Chain Data</h2>
+                <h2>Anonymous Okcash Tokens Chain Data</h2>
             </div>
 
             <div class="bottom">
@@ -854,7 +854,7 @@
 
                         <div class="option">
                             <input  id="optStartAtStartup" type="checkbox" />
-                            <label for="optStartAtStartup" class="option">Start OKCash on system login</label>
+                            <label for="optStartAtStartup" class="option">Start Okcash on system login</label>
                         </div>
                         <div class="option">
                             <input  id="optDetachDatabases" type="checkbox" />
@@ -865,9 +865,9 @@
                             <label for="optFee" class="option">Pay transaction fee:</label>
                             <input  id="optFee" type="number" placeholder="0.00000000" step="0.01" value="0.00000000" onchange="unit.parse(this, $('#optFeeunit').val());" />
                             <select id="optFeeunit" class="unit button is-inverse has-fixed-icon" style="margin-left:10px; height:43px; width:100px;" onchange="unit.format('#optFee', $(this).val());">
-                                <option value="0" title="OKCash">OK</option>
-                                <option value="1" title="Milli-OKCash (1 / 1000)">mOK</option>
-                                <option value="2" title="Micro-OKCash (1 / 1000000)">&micro;OK</option>
+                                <option value="0" title="Okcash">OK</option>
+                                <option value="1" title="Milli-Okcash (1 / 1000)">mOK</option>
+                                <option value="2" title="Micro-Okcash (1 / 1000000)">&micro;OK</option>
                                 <option value="3" title="OKtoshi (1 / 100000000)">OKtoshi</option>
                             </select>
                         </div>
@@ -880,9 +880,9 @@
                             <label for="optReserveBalance" class="option">Reserve:</label>
                             <input  id="optReserveBalance" type="number" placeholder="0.00000000" step="0.01" value="0.00000000" onchange="unit.parse(this, $('#optReserveBalanceunit').val());" />
                             <select id="optReserveBalanceunit" class="unit button is-inverse has-fixed-icon" style="margin-left:10px; height:43px; width:100px;" onchange="unit.format('#optReserveBalance', $(this).val());">
-                                <option value="0" title="OKCash">OK</option>
-                                <option value="1" title="Milli-OKCash (1 / 1000)">mOK</option>
-                                <option value="2" title="Micro-OKCash (1 / 1000000)">&micro;OK</option>
+                                <option value="0" title="Okcash">OK</option>
+                                <option value="1" title="Milli-Okcash (1 / 1000)">mOK</option>
+                                <option value="2" title="Micro-Okcash (1 / 1000000)">&micro;OK</option>
                                 <option value="3" title="OKtoshi (1 / 100000000)">OKtoshi</option>
                             </select>
                         </div>
@@ -899,8 +899,8 @@
                             <input  id="optMaxRingSize" type="number" max="200" placeholder="100" step="1" />
                         </div> -->
                         <!-- <div class="option">
-                            <input  id="optAutoRedeemOKCash" type="checkbox" title="OKCash will be converted to OK as soon as has confirmed and wallet is unlocked" />
-                            <label for="optAutoRedeemOKCash" class="option" title="OKCash will be converted to OK as soon as has confirmed and wallet is unlocked">Auto-redeem okcash</label>
+                            <input  id="optAutoRedeemOKCash" type="checkbox" title="Okcash will be converted to OK as soon as has confirmed and wallet is unlocked" />
+                            <label for="optAutoRedeemOKCash" class="option" title="Okcash will be converted to OK as soon as has confirmed and wallet is unlocked">Auto-redeem okcash</label>
                         </div-->
                         <!-- <div class="option">
                             <input  id="optAutoRingSize" type="checkbox" title="Automatically select ring size based on best available output counts" />
@@ -979,9 +979,9 @@
                         <div class="option">
                             <label for="optDisplayUnit" class="option" style="width:200px;text-align:right;">Unit to show amounts in:</label>
                             <select id="optDisplayUnit" class="button is-inverse has-fixed-icon" style="width:200px;">
-                                <option value="0" title="OKCash">OK</option>
-                                <option value="1" title="Milli-OKCash (1 / 1000)">mOK</option>
-                                <option value="2" title="Micro-OKCash (1 / 1000000)">&micro;OK</option>
+                                <option value="0" title="Okcash">OK</option>
+                                <option value="1" title="Milli-Okcash (1 / 1000)">mOK</option>
+                                <option value="2" title="Micro-Okcash (1 / 1000000)">&micro;OK</option>
                                 <option value="3" title="OKtoshi (1 / 100000000)">OKtoshi</option>
                             </select>
                         </div>
@@ -999,9 +999,9 @@
                                 <!--optgroup label="Transactions">
                                     <option>Received with</option>
                                     <option>Received from</option>
-                                    <option>Received OKCash</option>
+                                    <option>Received Okcash</option>
                                     <option>Sent to</option>
-                                    <option>Sent OKCash</option>
+                                    <option>Sent Okcash</option>
                                     <option>Stake</option>
                                     <option>Other</option>
                                 </optgroup>
@@ -1017,9 +1017,9 @@
                             <select id="optVisibleTransactions" class="button is-inverse has-fixed-icon" multiple size="7">
                                 <!--option>Received with</option>
                                 <option>Received from</option>
-                                <option>Received OKCash</option>
+                                <option>Received Okcash</option>
                                 <option>Sent to</option>
-                                <option>Sent OKCash</option>
+                                <option>Sent Okcash</option>
                                 <option>Stake</option>
                                 <option>Other</option-->
                             </select>
@@ -1054,7 +1054,7 @@
             <span id="footer-icons">
                 <i id="encryptionIcon"    style="padding-right:5px;" class="fa fa-lock fa-lg cursor-pointer red" onclick="bridge.userAction(['toggleLock']);" title="Wallet is encrypted and currently locked"></i>
                 <i id="stakingIcon"       style="padding-right:5px;" class="fa fa-check-circle-o fa-lg not-staking" title="Not staking because wallet is locked"></i>
-                <img id="connectionsIcon" style="cursor:default; padding-right:5px" src="qrc:///icons/connect_0"/ title="0 active connection(s) to OKCash network" />
+                <img id="connectionsIcon" style="cursor:default; padding-right:5px" src="qrc:///icons/connect_0"/ title="0 active connection(s) to Okcash network" />
                 <img id="syncingIcon"     style="cursor:default;"                  src="qrc:///icons/syncing"/ title="Wallet is syncing" />
                 <i id="blocksIcon" class="fa fa-check red none" title="Wallet is syncing"></i>
             </span>

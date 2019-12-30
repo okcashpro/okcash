@@ -3,12 +3,12 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About OKCash</source>
-        <translation>O OKCash</translation>
+        <source>About Okcash</source>
+        <translation>O Okcash</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;OKCash&lt;/b&gt; version</source>
+        <source>&lt;b&gt;Okcash&lt;/b&gt; version</source>
         <translation>verzia &lt;b&gt;OKCashu&lt;/b&gt;</translation>
     </message>
     <message>
@@ -67,8 +67,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your OKCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Toto sú vaše OKCash adresy pre príjem platieb. Možno budete chcieť dať inú každému odosielateľovi, aby ste mohli sledovať, kto Vám platí.</translation>
+        <source>These are your Okcash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Toto sú vaše Okcash adresy pre príjem platieb. Možno budete chcieť dať inú každému odosielateľovi, aby ste mohli sledovať, kto Vám platí.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -82,8 +82,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a OKCash address</source>
-        <translation>Podpísať správu ako dôkaz, že vlastníte túto OKCash adresu</translation>
+        <source>Sign a message to prove you own a Okcash address</source>
+        <translation>Podpísať správu ako dôkaz, že vlastníte túto Okcash adresu</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -97,8 +97,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified OKCash address</source>
-        <translation>Overte správu, aby ste zabezpečili, že bola podpísaná s určitou OKCash adresou</translation>
+        <source>Verify a message to ensure it was signed with a specified Okcash address</source>
+        <translation>Overte správu, aby ste zabezpečili, že bola podpísaná s určitou Okcash adresou</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -265,8 +265,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="-58"/>
-        <source>OKCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>OKCash sa teraz zavrie aby dokončil proces zašifrovania. Nezabudnite, že zašifrovanie vašej peňaženky nemôže plne chrániť vaše mince pred krádežou malwarom napadnutím vašeho počítača.</translation>
+        <source>Okcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>Okcash sa teraz zavrie aby dokončil proces zašifrovania. Nezabudnite, že zašifrovanie vašej peňaženky nemôže plne chrániť vaše mince pred krádežou malwarom napadnutím vašeho počítača.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -379,8 +379,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about OKCash</source>
-        <translation>Zobraziť informácie o OKCash</translation>
+        <source>Show information about Okcash</source>
+        <translation>Zobraziť informácie o Okcash</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -429,13 +429,13 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a OKCash address</source>
-        <translation>Poslať mince na OKCash adresu</translation>
+        <source>Send coins to a Okcash address</source>
+        <translation>Poslať mince na Okcash adresu</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for OKCash</source>
-        <translation>Upraviť možnosti konfigurácie pre OKCash</translation>
+        <source>Modify configuration options for Okcash</source>
+        <translation>Upraviť možnosti konfigurácie pre Okcash</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -474,8 +474,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="-200"/>
-        <source>OKCash</source>
-        <translation>OKCash</translation>
+        <source>Okcash</source>
+        <translation>Okcash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -484,8 +484,8 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About OKCash</source>
-        <translation>&amp;O OKCash</translation>
+        <source>&amp;About Okcash</source>
+        <translation>&amp;O Okcash</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -541,13 +541,13 @@ Tento produkt obsahuje softvér vyvinutý projektom OpenSSL Project pre použiti
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>OKCash client</source>
-        <translation>OKCash klient</translation>
+        <source>Okcash client</source>
+        <translation>Okcash klient</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to OKCash network</source>
-        <translation><numerusform>%n aktívne spojenie s OKCash sieťov</numerusform><numerusform>%n aktívnych spojení s OKCash sieťov</numerusform><numerusform>%n aktívnych spojení s OKCash sieťou</numerusform></translation>
+        <source>%n active connection(s) to Okcash network</source>
+        <translation><numerusform>%n aktívne spojenie s Okcash sieťov</numerusform><numerusform>%n aktívnych spojení s Okcash sieťov</numerusform><numerusform>%n aktívnych spojení s Okcash sieťou</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -660,8 +660,8 @@ Adresa: %4</translation>
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters.</source>
-        <translation>URI nemožno analyzovať! Toto môže byť spôsobené neplatnou OKCash adresu alebo chybnými URI parametrami.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid Okcash address or malformed URI parameters.</source>
+        <translation>URI nemožno analyzovať! Toto môže byť spôsobené neplatnou Okcash adresu alebo chybnými URI parametrami.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -720,8 +720,8 @@ Adresa: %4</translation>
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. OKCash can no longer continue safely and will quit.</source>
-        <translation>Došlo k závažnej chybe. OKCash už nemôže pokračovať bezpečne a bude ukončený.</translation>
+        <source>A fatal error occurred. Okcash can no longer continue safely and will quit.</source>
+        <translation>Došlo k závažnej chybe. Okcash už nemôže pokračovať bezpečne a bude ukončený.</translation>
     </message>
 </context>
 <context>
@@ -1054,8 +1054,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid OKCash address.</source>
-        <translation>Zadaná adresa &quot;%1&quot; nie je platnou OKCash adresou.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Okcash address.</source>
+        <translation>Zadaná adresa &quot;%1&quot; nie je platnou Okcash adresou.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1073,8 +1073,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>OKCash-Qt</source>
-        <translation>OKCash-Qt</translation>
+        <source>Okcash-Qt</source>
+        <translation>Okcash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1146,13 +1146,13 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start OKCash after logging in to the system.</source>
-        <translation>Automaticky spustiť OKCash po prihlásení sa do systému.</translation>
+        <source>Automatically start Okcash after logging in to the system.</source>
+        <translation>Automaticky spustiť Okcash po prihlásení sa do systému.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start OKCash on system login</source>
-        <translation>&amp;Spustiť OKCash pri prihlásení do systému</translation>
+        <source>&amp;Start Okcash on system login</source>
+        <translation>&amp;Spustiť Okcash pri prihlásení do systému</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1171,8 +1171,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the OKCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automaticky otvoriť port klienta OKCash na routeri. To funguje iba vtedy, ak váš router podporuje UPnP a je povolené.</translation>
+        <source>Automatically open the Okcash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automaticky otvoriť port klienta Okcash na routeri. To funguje iba vtedy, ak váš router podporuje UPnP a je povolené.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1181,8 +1181,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the OKCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Pripojenie k sieti OKCash cez SOCKS proxy server (napr. pri pripojení cez Tor).</translation>
+        <source>Connect to the Okcash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Pripojenie k sieti Okcash cez SOCKS proxy server (napr. pri pripojení cez Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1256,8 +1256,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting OKCash.</source>
-        <translation>Tu môžete nastaviť jazyk používateľského rozhrania. Toto nastavenie sa prejaví až po reštartovaní OKCash.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Okcash.</source>
+        <translation>Tu môžete nastaviť jazyk používateľského rozhrania. Toto nastavenie sa prejaví až po reštartovaní Okcash.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1271,8 +1271,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show OKCash addresses in the transaction list or not.</source>
-        <translation>Či chcete zobraziť OKCash adresy v zozname transakcií alebo nie.</translation>
+        <source>Whether to show Okcash addresses in the transaction list or not.</source>
+        <translation>Či chcete zobraziť Okcash adresy v zozname transakcií alebo nie.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1318,8 +1318,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting OKCash.</source>
-        <translation>Toto nastavenie sa prejaví až po reštartovaní OKCash.</translation>
+        <source>This setting will take effect after restarting Okcash.</source>
+        <translation>Toto nastavenie sa prejaví až po reštartovaní Okcash.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1337,8 +1337,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the OKCash network after a connection is established, but this process has not completed yet.</source>
-        <translation>Zobrazené informácie môžu byť zastaralé. Vaša peňaženka sa automaticky synchronizuje so sieťou OKCash po nadviazaní spojenia, ale tento proces nie je ešte dokončený.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Okcash network after a connection is established, but this process has not completed yet.</source>
+        <translation>Zobrazené informácie môžu byť zastaralé. Vaša peňaženka sa automaticky synchronizuje so sieťou Okcash po nadviazaní spojenia, ale tento proces nie je ešte dokončený.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1553,8 +1553,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the OKCash-Qt help message to get a list with possible OKCash command-line options.</source>
-        <translation>Zobraziť OKCash-Qt nápovedu k získaniu zoznamu pre možnosti  príkazového riadku OKCash.</translation>
+        <source>Show the Okcash-Qt help message to get a list with possible Okcash command-line options.</source>
+        <translation>Zobraziť Okcash-Qt nápovedu k získaniu zoznamu pre možnosti  príkazového riadku Okcash.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1573,13 +1573,13 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="-104"/>
-        <source>OKCash - Debug window</source>
-        <translation>OKCash - Ladiace okno</translation>
+        <source>Okcash - Debug window</source>
+        <translation>Okcash - Ladiace okno</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>OKCash Core</source>
-        <translation>Jadro OKCash</translation>
+        <source>Okcash Core</source>
+        <translation>Jadro Okcash</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1588,8 +1588,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the OKCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Otvorte OKCash súbor denníku ladenia z aktuálneho adresára dát. To môže trvať niekoľko sekúnd pre veľké súbory denníka.</translation>
+        <source>Open the Okcash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Otvorte Okcash súbor denníku ladenia z aktuálneho adresára dát. To môže trvať niekoľko sekúnd pre veľké súbory denníka.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1598,8 +1598,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the OKCash RPC console.</source>
-        <translation>Vitajte v konzole OKCash RPC.</translation>
+        <source>Welcome to the Okcash RPC console.</source>
+        <translation>Vitajte v konzole Okcash RPC.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1757,8 +1757,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Zadajte OKCash adresu (napr. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Zadajte Okcash adresu (napr. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1857,8 +1857,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid OKCash address</source>
-        <translation>UPOZORNENIE: Neplatná OKCash adresa</translation>
+        <source>WARNING: Invalid Okcash address</source>
+        <translation>UPOZORNENIE: Neplatná Okcash adresa</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1931,8 +1931,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Zadajte OKCash adresu (napr. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Zadajte Okcash adresu (napr. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1992,8 +1992,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this OKCash address</source>
-        <translation>Podpísať správu ako dôkaz, že vlastníte túto OKCash adresu</translation>
+        <source>Sign the message to prove you own this Okcash address</source>
+        <translation>Podpísať správu ako dôkaz, že vlastníte túto Okcash adresu</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2024,8 +2024,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified OKCash address</source>
-        <translation>Overte správu, aby ste sa ubezpečili, že bola podpísaná s danou OKCash adresou</translation>
+        <source>Verify the message to ensure it was signed with the specified Okcash address</source>
+        <translation>Overte správu, aby ste sa ubezpečili, že bola podpísaná s danou Okcash adresou</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2035,8 +2035,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Zadajte OKCash adresu (napr. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Zadajte Okcash adresu (napr. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2045,8 +2045,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter OKCash signature</source>
-        <translation>Zadajte OKCash podpis</translation>
+        <source>Enter Okcash signature</source>
+        <translation>Zadajte Okcash podpis</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2616,8 +2616,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>OKCash version</source>
-        <translation>OKCash verzia</translation>
+        <source>Okcash version</source>
+        <translation>Okcash verzia</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2801,8 +2801,8 @@ To znamená, že je potrebný poplatok aspoň %2.</translation>
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong OKCash will not work properly.</source>
-        <translation>Upozornenie: Skontrolujte, že dátum a čas počítača sú správne! Ak je Váš čas nesprávny OKCash nebude pracovať správne.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Okcash will not work properly.</source>
+        <translation>Upozornenie: Skontrolujte, že dátum a čas počítača sú správne! Ak je Váš čas nesprávny Okcash nebude pracovať správne.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2997,7 +2997,7 @@ rpcpassword=%s
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;Okcash Alert&quot; admin@foo.com
 </source>
         <translation>%s, musíte nastaviť rpcpassword v konfiguračnom súbore:
  %s
@@ -3008,7 +3008,7 @@ rpcpassword=%s
 Užívateľské meno a heslo nesmú byť rovnaké. 
 Ak súbor neexistuje, vytvorte ho s oprávneniami súborov vlastníkov iba na čítatanie.
 Odporúča sa tiež nastaviť alertnotify, takže budete upozornení na problémy;
-napríklad: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.com</translation>
+napríklad: alertnotify=echo %%s | mail -s &quot;Okcash Alert&quot; admin@foo.com</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -3132,13 +3132,13 @@ napríklad: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.co
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  OKCash is probably already running.</source>
-        <translation>Nemožno získať zámok na dátový adresár %s. OKCash už pravdepodobne beží.</translation>
+        <source>Cannot obtain a lock on data directory %s.  Okcash is probably already running.</source>
+        <translation>Nemožno získať zámok na dátový adresár %s. Okcash už pravdepodobne beží.</translation>
     </message>
     <message>
         <location line="-98"/>
-        <source>OKCash</source>
-        <translation>OKCash</translation>
+        <source>Okcash</source>
+        <translation>Okcash</translation>
     </message>
     <message>
         <location line="+140"/>
@@ -3172,13 +3172,13 @@ napríklad: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.co
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of OKCash</source>
-        <translation>Chyba pri načítaní wallet.dat: Peňaženka vyžaduje novšiu verziu OKCash</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Okcash</source>
+        <translation>Chyba pri načítaní wallet.dat: Peňaženka vyžaduje novšiu verziu Okcash</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart OKCash to complete</source>
-        <translation>Peňaženka potrebuje byť prepísaná: reštartujte OKCash k dokončeniu</translation>
+        <source>Wallet needed to be rewritten: restart Okcash to complete</source>
+        <translation>Peňaženka potrebuje byť prepísaná: reštartujte Okcash k dokončeniu</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3247,8 +3247,8 @@ napríklad: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.co
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. OKCash is probably already running.</source>
-        <translation>Nemôžem sa pripojiť na %s na tomto počítači. OKCash je pravdepodobne už beží.</translation>
+        <source>Unable to bind to %s on this computer. Okcash is probably already running.</source>
+        <translation>Nemôžem sa pripojiť na %s na tomto počítači. Okcash je pravdepodobne už beží.</translation>
     </message>
     <message>
         <location line="-97"/>

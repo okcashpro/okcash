@@ -3,13 +3,13 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About OKCash</source>
-        <translation>OKCash Hakkında</translation>
+        <source>About Okcash</source>
+        <translation>Okcash Hakkında</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;OKCash&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;OKCash&lt;/b&gt; versiyonu</translation>
+        <source>&lt;b&gt;Okcash&lt;/b&gt; version</source>
+        <translation>&lt;b&gt;Okcash&lt;/b&gt; versiyonu</translation>
     </message>
     <message>
         <location line="+41"/>
@@ -64,8 +64,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your OKCash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Bunlar, ödeme almak için OKCash adreslerinizdir. Her bir göndericiye farklı birini verebilir, böylece size kimin ödeme yaptığını takip edebilirsiniz.</translation>
+        <source>These are your Okcash addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Bunlar, ödeme almak için Okcash adreslerinizdir. Her bir göndericiye farklı birini verebilir, böylece size kimin ödeme yaptığını takip edebilirsiniz.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -79,8 +79,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a OKCash address</source>
-        <translation>Bir OKCash adresine sahip olduğunu ispatlamak için bir mesaj imzala</translation>
+        <source>Sign a message to prove you own a Okcash address</source>
+        <translation>Bir Okcash adresine sahip olduğunu ispatlamak için bir mesaj imzala</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -94,8 +94,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified OKCash address</source>
-        <translation>Mesajın, belirli bir OKCash adresiyle imzalandığından emin olmak için onu doğrula</translation>
+        <source>Verify a message to ensure it was signed with a specified Okcash address</source>
+        <translation>Mesajın, belirli bir Okcash adresiyle imzalandığından emin olmak için onu doğrula</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -262,8 +262,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>OKCash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>OKCash, şifreleme işlemini tamamlamak için şimdi kapatılacak. Cüzdanınızı şifrelemenin; coinlerinizin, bilgisayarınızı etkileyen zararlı yazılımlar tarafından çalınmasını bütünüyle engelleyemeyebileceğini unutmayınız.</translation>
+        <source>Okcash will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>Okcash, şifreleme işlemini tamamlamak için şimdi kapatılacak. Cüzdanınızı şifrelemenin; coinlerinizin, bilgisayarınızı etkileyen zararlı yazılımlar tarafından çalınmasını bütünüyle engelleyemeyebileceğini unutmayınız.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -376,8 +376,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about OKCash</source>
-        <translation>OKCash hakkındaki bilgiyi göster</translation>
+        <source>Show information about Okcash</source>
+        <translation>Okcash hakkındaki bilgiyi göster</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -426,13 +426,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-62"/>
-        <source>Send coins to a OKCash address</source>
-        <translation>Bir OKCash adresine coin gönder</translation>
+        <source>Send coins to a Okcash address</source>
+        <translation>Bir Okcash adresine coin gönder</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for OKCash</source>
-        <translation>OKCash yapılandırma seçeneklerini değiştir</translation>
+        <source>Modify configuration options for Okcash</source>
+        <translation>Okcash yapılandırma seçeneklerini değiştir</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -471,8 +471,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-200"/>
-        <source>OKCash</source>
-        <translation>OKCash</translation>
+        <source>Okcash</source>
+        <translation>Okcash</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -481,8 +481,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+178"/>
-        <source>&amp;About OKCash</source>
-        <translation>OKCash &amp;Hakkında</translation>
+        <source>&amp;About Okcash</source>
+        <translation>Okcash &amp;Hakkında</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -538,13 +538,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>OKCash client</source>
-        <translation>OKCash istemcisi</translation>
+        <source>Okcash client</source>
+        <translation>Okcash istemcisi</translation>
     </message>
     <message numerus="yes">
         <location line="+70"/>
-        <source>%n active connection(s) to OKCash network</source>
-        <translation><numerusform>OKCash ağına %n etkin bağlantı</numerusform><numerusform>OKCash ağına %n etkin bağlantı</numerusform></translation>
+        <source>%n active connection(s) to Okcash network</source>
+        <translation><numerusform>Okcash ağına %n etkin bağlantı</numerusform><numerusform>Okcash ağına %n etkin bağlantı</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -658,8 +658,8 @@ Adres: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid OKCash address or malformed URI parameters.</source>
-        <translation>URI ayrıştırılamadı! Bu, geçersiz bir OKCash adresi veya hatalı URI parametreleri nedeniyle olabilir.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid Okcash address or malformed URI parameters.</source>
+        <translation>URI ayrıştırılamadı! Bu, geçersiz bir Okcash adresi veya hatalı URI parametreleri nedeniyle olabilir.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -718,8 +718,8 @@ Adres: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. OKCash can no longer continue safely and will quit.</source>
-        <translation>Önemli bir hata oluştu. OKCash artık güvenli bir şekilde devam edemez ve şimdi kapatılacak.</translation>
+        <source>A fatal error occurred. Okcash can no longer continue safely and will quit.</source>
+        <translation>Önemli bir hata oluştu. Okcash artık güvenli bir şekilde devam edemez ve şimdi kapatılacak.</translation>
     </message>
 </context>
 <context>
@@ -1052,8 +1052,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid OKCash address.</source>
-        <translation>Girilen %1 adresi, geçerli bir OKCash adresi değildir.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Okcash address.</source>
+        <translation>Girilen %1 adresi, geçerli bir Okcash adresi değildir.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1071,8 +1071,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../guiutil.cpp" line="+420"/>
         <location line="+12"/>
-        <source>OKCash-Qt</source>
-        <translation>OKCash-Qt</translation>
+        <source>Okcash-Qt</source>
+        <translation>Okcash-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -1144,13 +1144,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start OKCash after logging in to the system.</source>
-        <translation>Sisteme giriş yaptıktan sonra OKCash&apos;i otomatik olarak başlat</translation>
+        <source>Automatically start Okcash after logging in to the system.</source>
+        <translation>Sisteme giriş yaptıktan sonra Okcash&apos;i otomatik olarak başlat</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start OKCash on system login</source>
-        <translation>Sisteme girişte OKCash&apos;i &amp;başlat</translation>
+        <source>&amp;Start Okcash on system login</source>
+        <translation>Sisteme girişte Okcash&apos;i &amp;başlat</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1169,8 +1169,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the OKCash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Yönelticide OKCash istemci portunu otomatik olarak aç. Bu, sadece yönelticiniz UPnP&apos;i desteklediğinde ve etkin olduğunda çalışır.</translation>
+        <source>Automatically open the Okcash client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Yönelticide Okcash istemci portunu otomatik olarak aç. Bu, sadece yönelticiniz UPnP&apos;i desteklediğinde ve etkin olduğunda çalışır.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1179,8 +1179,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the OKCash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>OKCash ağına bir SOCKS vekil sunucusu yoluyla bağlan (örn. Tor yoluyla bağlanıldığında)</translation>
+        <source>Connect to the Okcash network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Okcash ağına bir SOCKS vekil sunucusu yoluyla bağlan (örn. Tor yoluyla bağlanıldığında)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1254,8 +1254,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting OKCash.</source>
-        <translation>Kullanıcı arabirimi dili buradan ayarlanabilir. Ayar, OKCash yeniden başlatıldığında etkin olacaktır.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Okcash.</source>
+        <translation>Kullanıcı arabirimi dili buradan ayarlanabilir. Ayar, Okcash yeniden başlatıldığında etkin olacaktır.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1269,8 +1269,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show OKCash addresses in the transaction list or not.</source>
-        <translation>OKCash adresinin işlem listesinde gösterilmesi veya gösterilmemesi</translation>
+        <source>Whether to show Okcash addresses in the transaction list or not.</source>
+        <translation>Okcash adresinin işlem listesinde gösterilmesi veya gösterilmemesi</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1316,8 +1316,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting OKCash.</source>
-        <translation>Bu ayar, OKCash&apos;i yeniden başlattıktan sonra etkin olacaktır.</translation>
+        <source>This setting will take effect after restarting Okcash.</source>
+        <translation>Bu ayar, Okcash&apos;i yeniden başlattıktan sonra etkin olacaktır.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -1335,8 +1335,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location line="+33"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the OKCash network after a connection is established, but this process has not completed yet.</source>
-        <translation>Görüntülenen bilginin tarihi geçmiş olabilir. Cüzdanınız, bağlantı kurulduktan sonra otomatik olarak OKCash ağı ile senkronize olur ancak bu süreç, henüz tamamlanmamıştır.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Okcash network after a connection is established, but this process has not completed yet.</source>
+        <translation>Görüntülenen bilginin tarihi geçmiş olabilir. Cüzdanınız, bağlantı kurulduktan sonra otomatik olarak Okcash ağı ile senkronize olur ancak bu süreç, henüz tamamlanmamıştır.</translation>
     </message>
     <message>
         <location line="-160"/>
@@ -1551,8 +1551,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the OKCash-Qt help message to get a list with possible OKCash command-line options.</source>
-        <translation>Muhtemel OKCash komut satırı seçeneklerinin bir listesini getirmek için OKCash-Qt yardım mesajını göster</translation>
+        <source>Show the Okcash-Qt help message to get a list with possible Okcash command-line options.</source>
+        <translation>Muhtemel Okcash komut satırı seçeneklerinin bir listesini getirmek için Okcash-Qt yardım mesajını göster</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1571,13 +1571,13 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="-104"/>
-        <source>OKCash - Debug window</source>
-        <translation>OKCash - Hata ayıklama penceresi</translation>
+        <source>Okcash - Debug window</source>
+        <translation>Okcash - Hata ayıklama penceresi</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>OKCash Core</source>
-        <translation>OKCash Core</translation>
+        <source>Okcash Core</source>
+        <translation>Okcash Core</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1586,8 +1586,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the OKCash debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>OKCash hata ayıklama günlük kütüğü dosyasını, mevcut veri klasöründen aç. Bu işlem, büyük günlük kütüğü dosyaları için birkaç saniye sürebilir.</translation>
+        <source>Open the Okcash debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Okcash hata ayıklama günlük kütüğü dosyasını, mevcut veri klasöründen aç. Bu işlem, büyük günlük kütüğü dosyaları için birkaç saniye sürebilir.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1596,8 +1596,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the OKCash RPC console.</source>
-        <translation>OKCash RPC konsoluna hoş geldiniz.</translation>
+        <source>Welcome to the Okcash RPC console.</source>
+        <translation>Okcash RPC konsoluna hoş geldiniz.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1755,8 +1755,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-173"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Bir OKCash adresi gir (örn: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Bir Okcash adresi gir (örn: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1855,8 +1855,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+251"/>
-        <source>WARNING: Invalid OKCash address</source>
-        <translation>UYARI: Geçersiz OKCash adresi</translation>
+        <source>WARNING: Invalid Okcash address</source>
+        <translation>UYARI: Geçersiz Okcash adresi</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -1929,8 +1929,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Bir OKCash adresi girin (örn: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Bir Okcash adresi girin (örn: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
 </context>
 <context>
@@ -1990,8 +1990,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this OKCash address</source>
-        <translation>Bu OKCash adresine sahip olduğunuzu ispatlamak için mesajı imzala</translation>
+        <source>Sign the message to prove you own this Okcash address</source>
+        <translation>Bu Okcash adresine sahip olduğunuzu ispatlamak için mesajı imzala</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2022,8 +2022,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified OKCash address</source>
-        <translation>Mesajın, belirtilen OKCash adresiyle imzalandığından emin olmak için onu doğrula</translation>
+        <source>Verify the message to ensure it was signed with the specified Okcash address</source>
+        <translation>Mesajın, belirtilen Okcash adresiyle imzalandığından emin olmak için onu doğrula</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2033,8 +2033,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
-        <translation>Bir OKCash adresi girin (örn: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
+        <source>Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</source>
+        <translation>Bir Okcash adresi girin (örn: PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -2043,8 +2043,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter OKCash signature</source>
-        <translation>OKCash imzası gir</translation>
+        <source>Enter Okcash signature</source>
+        <translation>Okcash imzası gir</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2614,8 +2614,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+33"/>
-        <source>OKCash version</source>
-        <translation>OKCash versiyonu</translation>
+        <source>Okcash version</source>
+        <translation>Okcash versiyonu</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2799,8 +2799,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+61"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong OKCash will not work properly.</source>
-        <translation>Uyarı: Lütfen bilgisayarınızın tarih ve saatinin doğru olduğunu kontrol ediniz! Saatiniz yanlış ise, OKCash düzgün çalışmayacaktır.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Okcash will not work properly.</source>
+        <translation>Uyarı: Lütfen bilgisayarınızın tarih ve saatinin doğru olduğunu kontrol ediniz! Saatiniz yanlış ise, Okcash düzgün çalışmayacaktır.</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -2995,7 +2995,7 @@ rpcpassword=%s
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;OKCash Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;Okcash Alert&quot; admin@foo.com
 </source>
         <translation>%s, konfigürasyon dosyasında bir rpcpassword belirlemelisiniz:
  %s
@@ -3006,7 +3006,7 @@ rpcpassword=%s
 Kullanıcı adı ve parola aynı OLMAMALIDIR.
 Dosya mevcut değilse, dosyayı sadece-kullanıcı-okuyabilir dosya izniyle yaratınız.
 alertnotify ayarlamanız da ayrıca tavsiye edilir böylece sorunlar, size bildirilir;
-örneğin: alertnotify=echo %%s | mail -s &quot;OKCash Uyarısı&quot; admin@foo.com
+örneğin: alertnotify=echo %%s | mail -s &quot;Okcash Uyarısı&quot; admin@foo.com
 </translation>
     </message>
     <message>
@@ -3131,12 +3131,12 @@ alertnotify ayarlamanız da ayrıca tavsiye edilir böylece sorunlar, size bildi
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot obtain a lock on data directory %s.  OKCash is probably already running.</source>
+        <source>Cannot obtain a lock on data directory %s.  Okcash is probably already running.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="-98"/>
-        <source>OKCash</source>
+        <source>Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3171,12 +3171,12 @@ alertnotify ayarlamanız da ayrıca tavsiye edilir böylece sorunlar, size bildi
     </message>
     <message>
         <location line="+4"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of OKCash</source>
+        <source>Error loading wallet.dat: Wallet requires newer version of Okcash</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
-        <source>Wallet needed to be rewritten: restart OKCash to complete</source>
+        <source>Wallet needed to be rewritten: restart Okcash to complete</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3246,7 +3246,7 @@ alertnotify ayarlamanız da ayrıca tavsiye edilir böylece sorunlar, size bildi
     </message>
     <message>
         <location line="+122"/>
-        <source>Unable to bind to %s on this computer. OKCash is probably already running.</source>
+        <source>Unable to bind to %s on this computer. Okcash is probably already running.</source>
         <translation type="unfinished"/>
     </message>
     <message>

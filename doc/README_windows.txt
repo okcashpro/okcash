@@ -1,4 +1,4 @@
-OKCash
+Okcash
 
 Copyright (c) 2014-2020 Okcash Developers
 Copyright (c) 2014 BlackCoin Developers
@@ -15,7 +15,7 @@ cryptographic software written by Eric Young (eay@cryptsoft.com).
 
 Intro
 -----
-OKCash is a free open source project derived from Bitcoin, with
+Okcash is a free open source project derived from Bitcoin, with
 the goal of providing a long-term energy-efficient scrypt-based crypto-currency.
 Built on the foundation of Bitcoin, PPCoin, NovaCoin and BlackCoin, innovations such as proof-of-stake
 help further advance the field of crypto-currency.

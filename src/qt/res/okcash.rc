@@ -18,14 +18,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "OKCash"
-            VALUE "FileDescription",    "OKCash (OSS GUI client for OKCash)"
+            VALUE "CompanyName",        "Okcash"
+            VALUE "FileDescription",    "Okcash (OSS GUI client for Okcash)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "okcash"
             VALUE "LegalCopyright",     "2009-2012 The Bitcoin developers, 2012-2014 The NovaCoin & PPCoin developers, 2014 The BlackCoin developers, 2014-2020 The Okcash Developers"
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "okcash.exe"
-            VALUE "ProductName",        "OKCash"
+            VALUE "ProductName",        "Okcash"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

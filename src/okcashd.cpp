@@ -20,7 +20,7 @@ void WaitForShutdown(boost::thread_group* threadGroup)
         fShutdown = ShutdownRequested();
     };
     
-    LogPrintf("OKCash shutdown.\n\n");
+    LogPrintf("Okcash shutdown.\n\n");
     
     if (threadGroup)
     {
@@ -56,7 +56,7 @@ bool AppInit(int argc, char* argv[])
         if (mapArgs.count("-?") || mapArgs.count("--help"))
         {
             // First part of help message is specific to bitcoind / RPC client
-            std::string strUsage = _("OKCash version") + " " + FormatFullVersion() + "\n\n" +
+            std::string strUsage = _("Okcash version") + " " + FormatFullVersion() + "\n\n" +
                 _("Usage:") + "\n" +
                   "  okcashd [options]                     " + "\n" +
                   "  okcashd [options] <command> [params]  " + _("Send command to -server or okcashd") + "\n" +

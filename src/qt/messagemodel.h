@@ -60,7 +60,7 @@ struct MessageTableEntry
     }
 };
 
-/** Interface to OKCash Secure Messaging from Qt view code. */
+/** Interface to Okcash Secure Messaging from Qt view code. */
 class MessageModel : public QAbstractTableModel
 {
     Q_OBJECT

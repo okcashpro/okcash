@@ -4320,7 +4320,7 @@ bool CWallet::SendOkToAnon(CStealthAddress& sxAddress, int64_t nValue, std::stri
 
     if (vNodes.empty())
     {
-        sError = _("Error: OKCash is not connected!");
+        sError = _("Error: Okcash is not connected!");
         return false;
     };
 
@@ -4435,7 +4435,7 @@ bool CWallet::SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRi
 
     if (vNodes.empty())
     {
-        sError = _("Error: OKCash is not connected!");
+        sError = _("Error: Okcash is not connected!");
         return false;
     };
 
@@ -4539,7 +4539,7 @@ bool CWallet::SendAnonToOk(CStealthAddress& sxAddress, int64_t nValue, int nRing
 
     if (vNodes.empty())
     {
-        sError = _("Error: OKCash is not connected!");
+        sError = _("Error: Okcash is not connected!");
         return false;
     };
 

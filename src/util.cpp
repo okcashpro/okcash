@@ -1028,15 +1028,15 @@ void PrintExceptionContinue(std::exception* pex, const char* pszThread)
 boost::filesystem::path GetDefaultDataDir()
 {
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\OKCash
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\OKCash
-    // Mac: ~/Library/Application Support/OKCash
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Okcash
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Okcash
+    // Mac: ~/Library/Application Support/Okcash
     // Unix: ~/.okcash
     
     
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "OKCash";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Okcash";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -1048,7 +1048,7 @@ boost::filesystem::path GetDefaultDataDir()
         // Mac
         pathRet /= "Library/Application Support";
         fs::create_directory(pathRet);
-        return pathRet / "OKCash";
+        return pathRet / "Okcash";
     #else
         // Unix
         return pathRet / ".okcash";
@@ -1318,10 +1318,10 @@ void AddTimeData(const CNetAddr& ip, int64_t nTime)
                 if (!fMatch)
                 {
                     fDone = true;
-                    string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong OKCash will not work properly.");
+                    string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong Okcash will not work properly.");
                     strMiscWarning = strMessage;
                     LogPrintf("*** %s\n", strMessage.c_str());
-                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("OKCash"), CClientUIInterface::BTN_OK | CClientUIInterface::ICON_WARNING);
+                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("Okcash"), CClientUIInterface::BTN_OK | CClientUIInterface::ICON_WARNING);
                 }
             }
         }

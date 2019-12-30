@@ -461,7 +461,7 @@ bool OKCashBridge::sendCoins(bool fUseCoinControl, QString sChangeAddr)
     QStringList formatted;
     foreach(const SendCoinsRecipient &rcp, recipients)
     {
-        int inputType; // 0 OK, 1 OKCash
+        int inputType; // 0 OK, 1 Okcash
         switch(rcp.txnTypeInd)
         {
             case TXT_OK_TO_OK:
@@ -1284,7 +1284,7 @@ QVariantMap OKCashBridge::txnDetails(QString blkHash, QString txnHash)
             if (txn.nVersion == ANON_TXN_VERSION
                 && txin.IsAnonInput())
             {
-                sAddr = "OKCash";
+                sAddr = "Okcash";
                 std::vector<uint8_t> vchImage;
                 txin.ExtractKeyImage(vchImage);
 
@@ -1341,7 +1341,7 @@ QVariantMap OKCashBridge::txnDetails(QString blkHash, QString txnHash)
 
              if( txn.nVersion == ANON_TXN_VERSION
                  && txout.IsAnonOutput() )
-                 sAddr = "OKCash";
+                 sAddr = "Okcash";
              else
              {
                  CTxDestination address;

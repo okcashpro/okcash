@@ -1,4 +1,4 @@
-// OKCash HTML5 main.js
+// Okcash HTML5 main.js
 
 $("[href='#qrcode-modal']").leanModal({top : 10, overlay : 0.5, closeButton: "#qrcode-modal .modal_close"});
 $("#start-conversation").leanModal({top : 200, overlay : 0.5, closeButton: "#new-contact-modal .modal_close"});
@@ -653,7 +653,7 @@ var overviewPage = {
                      }
                  },  */
                  {
-                     name: ' About&nbsp;OKCash...',
+                     name: ' About&nbsp;Okcash...',
                      img: 'qrc:///icons/okcash',
                      fun: function () {
                         bridge.userAction(['aboutClicked']);
@@ -945,7 +945,7 @@ function addRecipient() {
         +  '<div id="recipient[count]" class="recipient"> \
             <div class="flex-right"> \
                 <label for="pay_to[count]" class="recipient">Pay To:</label> \
-                <input id="pay_to[count]" class="pay_to input_box" title="The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" placeholder="Enter an OKCash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" maxlength="128" oninput="base58.check(this);" onchange="$(\'#label[count]\').val(bridge.getAddressLabel(this.value));"/> \
+                <input id="pay_to[count]" class="pay_to input_box" title="The address to send the payment to  (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" placeholder="Enter an Okcash address (e.g. PzjjetSdTwrppUwwNUo1GFHYTibzJi77jM)" maxlength="128" oninput="base58.check(this);" onchange="$(\'#label[count]\').val(bridge.getAddressLabel(this.value));"/> \
                 <a class="button is-inverse has-fixed-icon" title="Choose address from address book" style="margin-right:10px; margin-left:10px; height:43px; width:43px;" onclick="openAddressBook(\'#pay_to[count]\', \'#label[count]\', true)"><i class="fa fa-book"></i></a> \
                 <a class="button is-inverse has-fixed-icon" title="Paste address from clipboard" style="margin-right:10px; height:43px; width:43px;" onclick="paste(\'#pay_to[count]\')"><i class="fa fa-files-o"></i></a> \
                 <a class="button is-inverse has-fixed-icon" title="Remove this recipient" style="height:43px; width:43px;" onclick="if($(\'div.recipient\').length == 1) clearRecipients(); else {var recipient=$(\'#recipient[count]\');if(recipient.next(\'hr\').remove().length==0)recipient.prev(\'hr\').remove();$(\'#recipient[count]\').remove();resizeFooter();}"><i class="fa fa-times"></i></a> \
@@ -962,9 +962,9 @@ function addRecipient() {
                 <label for="amount[count]" class="recipient">Amount:</label> \
                 <input id="amount[count]" class="amount input_box" type="number" placeholder="0.00000000" step="0.01" value="0.00000000" onfocus="invalid($(this), true);" onchange="unit.parse(this, $(\'#unit[count]\').val());updateCoinControl();"  /> \
                 <select id="unit[count]" class="unit button is-inverse has-fixed-icon"  style="margin-left:10px; height:43px; width:100px;" onchange="unit.format(\'#amount[count]\', $(this).val());"> \
-                    <option value="0" title="OKCash"                    ' + (unit.type == 0 ? "selected" : "") + '>OK</option> \
-                    <option value="1" title="Milli-OKCash (1 / 1000)"   ' + (unit.type == 1 ? "selected" : "") + '>mOK</option> \
-                    <option value="2" title="Micro-OKCash (1 / 1000000)"' + (unit.type == 2 ? "selected" : "") + '>&micro;OK</option> \
+                    <option value="0" title="Okcash"                    ' + (unit.type == 0 ? "selected" : "") + '>OK</option> \
+                    <option value="1" title="Milli-Okcash (1 / 1000)"   ' + (unit.type == 1 ? "selected" : "") + '>mOK</option> \
+                    <option value="2" title="Micro-Okcash (1 / 1000000)"' + (unit.type == 2 ? "selected" : "") + '>&micro;OK</option> \
                     <option value="3" title="OKtoshi (1 / 100000000)" ' + (unit.type == 3 ? "selected" : "") + '>OKtoshi</option> \
                 </select> \
             </div> \
@@ -1614,7 +1614,7 @@ function appendTransactions(transactions) {
 
 function okcashChatInit() {
     var menu = [{
-            name: 'Send&nbsp;OKCash',
+            name: 'Send&nbsp;Okcash',
             fun: function () {
                 clearRecipients();
                 $("#pay_to0").val($('#contact-list .selected .contact-address').text());

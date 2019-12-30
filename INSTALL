@@ -1,9 +1,9 @@
-Compile / Integrate OKCash in to your Platform
+Compile / Integrate Okcash in to your Platform
 
-See doc/readme-qt.rst for instructions on building OKCash (graphical wallet),
+See doc/readme-qt.rst for instructions on building Okcash (graphical wallet),
 for your own OS, the intended-for-end-users, with nice-graphical-interface, reference
-implementation of OKCash.
+implementation of Okcash.
 
 See doc/build-*.txt for instructions on building the okcashd daemon (command-line wallet),
 for your own OS, the intended-for-services, developers, no-graphical-interface, reference
-implementation of OKCash.
+implementation of Okcash.

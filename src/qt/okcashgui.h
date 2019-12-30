@@ -33,7 +33,7 @@ class QUrl;
 QT_END_NAMESPACE
 
 /**
-  OKCash GUI main class. This class represents the main window of the OKCash UI. It communicates with both the client and
+  Okcash GUI main class. This class represents the main window of the Okcash UI. It communicates with both the client and
   wallet models to give the user an up-to-date view of the current core state.
 */
 class OKCashGUI : public QMainWindow

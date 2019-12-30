@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>OKCash - Debug window</string>
+   <string>Okcash - Debug window</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -36,7 +36,7 @@
           </font>
          </property>
          <property name="text">
-          <string>OKCash Core</string>
+          <string>Okcash Core</string>
          </property>
         </widget>
        </item>
@@ -354,7 +354,7 @@
        <item row="15" column="0">
         <widget class="QPushButton" name="openDebugLogfileButton">
          <property name="toolTip">
-          <string>Open the OKCash debug log file from the current data directory. This can take a few seconds for large log files.</string>
+          <string>Open the Okcash debug log file from the current data directory. This can take a few seconds for large log files.</string>
          </property>
          <property name="text">
           <string>&amp;Open</string>
@@ -380,7 +380,7 @@
        <item row="17" column="0">
         <widget class="QPushButton" name="showCLOptionsButton">
          <property name="toolTip">
-          <string>Show the OKCash help message to get a list with possible OKCash command-line options.</string>
+          <string>Show the Okcash help message to get a list with possible Okcash command-line options.</string>
          </property>
          <property name="text">
           <string>&amp;Show</string>

@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
-// Thanks and Credits for Technologies found in OKCash: Bitcoin, Novacoin, Blackcoin, Bitmessage, Shadowcoin, Cryptonote
+// Thanks and Credits for Technologies found in Okcash: Bitcoin, Novacoin, Blackcoin, Bitmessage, Shadowcoin, Cryptonote
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "assert.h"
