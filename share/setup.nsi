@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 4.0.0.6
+!define VERSION 5.0.0.0
 !define COMPANY "Okcash project"
 !define URL http://www.okcash.org/
 
@@ -45,13 +45,13 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile okcash-4.0.0.6-win32-setup.exe
+OutFile okcash-5.0.0.0-win32-setup.exe
 InstallDir $PROGRAMFILES\Okcash
 CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
-VIProductVersion 4.0.0.6
+VIProductVersion 5.0.0.0
 VIAddVersionKey ProductName Okcash
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"

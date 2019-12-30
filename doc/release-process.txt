@@ -8,11 +8,11 @@
 
 * tag version in git
 
-   git tag -a v4.0.0.6-core.Utopia
+   git tag -a v5.0.0.0-core.bliss
 
 * write release notes.  git shortlog helps a lot:
 
-   git shortlog --no-merges v4.0.0.6-core.Utopia..
+   git shortlog --no-merges v5.0.0.0-core.bliss..
 
 * perform gitian builds
 
