@@ -2049,7 +2049,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
         display: inline-block;
         height: 50px;
         width: 50px;
-        border-radius: 100%;
+        /* border-radius: 100%; */
         float: left;
     }
 

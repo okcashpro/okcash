@@ -835,7 +835,7 @@ var optionsPage = {
             if(element.length == 0)
             {
                 if(option.indexOf('opt') == -1)
-                    console.log('Option element not available for %s', option);
+                  //  console.log('Option element not available for %s', option);
 
                 continue;
             }

@@ -45,14 +45,14 @@
         </div>
 
         <ul id="navitems" class="vmenu">
-            <li class="selected"><a href="#overview">overview</a></li>
+            <li class="selected"><a href="#overview">home</a></li>
             <li><a href="#send">send</a></li>
             <li><a href="#receive">receive</a></li>
             <li><a href="#transactions">transactions</a></li>
-            <li><a href="#addressbook">address book</a></li>
-            <li><a href="#messages" onclick="iscrollReload(true);">Private Messages</a></li>
+            <li><a href="#addressbook">addresses</a></li>
+            <li><a href="#messages" onclick="iscrollReload(true);">Messages</a></li>
             <!-- <li><a href="#chaindata" onclick="chainDataPage.updateAnonOutputs();">Okcash Tokens Data</a></li> -->
-            <li><a href="#blockdata" onclick="blockExplorerPage.updateLatestBlocks();">Block Explorer</a></li>
+            <li><a href="#blockdata" onclick="blockExplorerPage.updateLatestBlocks();">OK Explorer</a></li>
             <li class="none"><a href="#options">Options</a></li>
             <!--li><a href="#news">news</a></li-->
         </ul>
@@ -126,7 +126,7 @@
         <!-- Overview Page -->
         <article id="overview">
             <div class="content top">
-                <h2 class="contracted">Balance <span class="outofsync syncing">out of sync</span></h2>
+                <h2 class="contracted">My Okcash Balance <span class="outofsync syncing">out of sync</span></h2>
 
                 <!--span class="incoming-transactions none">
                     <i class="fa fa-sign-in margin-right-10"></i>
@@ -158,7 +158,7 @@
                             <tr><td>Spendable:      </td><td class="balance" >0.00</td><td class="unit">OK</td></tr>
                             <!-- <tr><td>Okcash:         </td><td id="okcashBal"  >0.00</td><td class="units">ANON</td></tr> -->
                             <tr><td>Reserved:       </td><td id="reserved"   >0.00</td><td class="unit">OK</td></tr>
-                            <tr><td>Stake:          </td><td id="stake"      >0.00</td><td class="unit">OK</td></tr>
+                            <tr><td>Staking:          </td><td id="stake"      >0.00</td><td class="unit">OK</td></tr>
                             <tr><td>Unconfirmed:    </td><td id="unconfirmed">0.00</td><td class="unit">OK</td></tr>
                             <tr><td>Immature:       </td><td id="immature"   >0.00</td><td class="unit">OK</td></tr>
 
@@ -178,7 +178,8 @@
                             </div>
                         </div>
                         <div class="flex-item grow one-third-width">
-                            <h2 align="center">My Okcash Wallet</h2>
+                            <!-- <h2 align="center">Welcome</h2> -->
+							<img align="right" src="qrc:///images/okcash-full">
                             <div>
 							
                             </div>
@@ -193,7 +194,9 @@
         <article id="send" style="display:none;">
             <div id="sendoptions" class="content top">
 
-                <h2>Send Options</h2>
+                <h2>Send</h2>
+                From here you can send Okcash to other parties, you just need to fill the form (recommended).<br>
+                You could also use Coin Control to have full control of the transaction (advanced).
 
                 <div id="coincontrol">
 
@@ -293,7 +296,7 @@
         <article id="receive" style="display:none;">
             <div class="content top">
                 <h2>Receive</h2>
-                These are your Okcash addresses for receiving payments. You may want to have a different address for each sender so you can keep track of who is paying you.
+                Here you can create your new OK addresses. These are your Okcash addresses for receiving payments. <br> You may want to have a different OK address for each sender so you can keep track of who is paying you.
             </div>
 
             <div class="bottom">
@@ -343,7 +346,8 @@
         <!-- Transactions Page -->
         <article id="transactions" style="display:none;">
             <div class="content top">
-                <h2>Transactions</h2>
+                <h2>Transactions History</h2>
+                Search for your recent and past transactions.
             </div>
 
             <div class="bottom">
@@ -399,6 +403,7 @@
         <article id="addressbook" style="display:none;">
             <div class="content top">
                 <h2>Address Book</h2>
+                Save your contacts and services addresses to send payments in a fast and easy way.
             </div>
             <div class="bottom">
 
@@ -469,7 +474,7 @@
         <!-- Messages Page -->
         <article id="messages" style="display:none;">
             <div class="content top">
-                <h2>OK Private Messages</h2>
+                <h2>OK Message Center</h2>
             </div>
 
             <div class="bottom">
@@ -792,7 +797,8 @@
         <!-- Block Explorer Page -->
         <article id="blockdata" style="display:none;">
             <div class="content top">
-                <h2>Block Explorer</h2>
+                <h2>OK Blockchain Explorer</h2>
+                Search, inspect or audit the OK Blockchain by yourself.
             </div>
             <div class="bottom">
                 <div class="content">
