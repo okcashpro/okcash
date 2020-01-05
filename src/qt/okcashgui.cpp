@@ -425,7 +425,7 @@ void OKCashGUI::setNumConnections(int count)
     default:         icon = "qrc:///icons/connect_6"; break;
     }
     connectionsIcon.setAttribute("src", icon);
-    connectionsIcon.setAttribute("title", tr("%n active connection(s) to Okcash network", "", count));
+    connectionsIcon.setAttribute("title", tr("%n active connection(s) to the Okcash network", "", count));
 }
 
 void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
@@ -801,10 +801,10 @@ void OKCashGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Unlocked:
         encryptionIcon.removeAttribute("style");
-        encryptionIcon.removeClass("fa-lock");
-        encryptionIcon.   addClass("fa-unlock");
-        toggleLockIcon.removeClass("fa-unlock");
-        toggleLockIcon.   addClass("fa-lock");
+        encryptionIcon.removeClass("fa-toggle-on");
+        encryptionIcon.   addClass("fa-toggle-off");
+        toggleLockIcon.removeClass("fa-toggle-off");
+        toggleLockIcon.   addClass("fa-toggle-on");
         encryptionIcon   .setAttribute("src", "qrc:///icons/lock_open");
         encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         encryptButton.addClass("none");
@@ -818,11 +818,11 @@ void OKCashGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Locked:
         encryptionIcon.removeAttribute("style");
-        encryptionIcon.removeClass("fa-unlock");
-        encryptionIcon.   addClass("fa-lock");
-        toggleLockIcon.removeClass("fa-lock");
-        toggleLockIcon.   addClass("fa-unlock");
-        encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
+        encryptionIcon.removeClass("fa-toggle-off");
+        encryptionIcon.   addClass("fa-toggle-on");
+        toggleLockIcon.removeClass("fa-toggle-on");
+        toggleLockIcon.   addClass("fa-toggle-off");
+        encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b>"));
         encryptButton.addClass("none");
         changePassphrase.removeClass("none");
         toggleLock.removeClass("none");
@@ -992,7 +992,7 @@ void OKCashGUI::updateStakingIcon()
             nNetworkWeight /= COIN;
         }
 
-        stakingIcon.setAttribute("title", tr("Staking.\nYour weight is %1\nNetwork weight is %2\nExpected time to earn reward is %3").arg(nWeight).arg(nNetworkWeight).arg(text));
+        stakingIcon.setAttribute("title", tr("You are Staking.\nYour weight (staking power) is %1\nNetwork weight is %2\nExpected time to earn staking reward is %3").arg(nWeight).arg(nNetworkWeight).arg(text));
     } else
     {
         stakingIcon.   addClass("not-staking");

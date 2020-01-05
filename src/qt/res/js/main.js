@@ -3,7 +3,7 @@
 $("[href='#qrcode-modal']").leanModal({top : 10, overlay : 0.5, closeButton: "#qrcode-modal .modal_close"});
 $("#start-conversation").leanModal({top : 200, overlay : 0.5, closeButton: "#new-contact-modal .modal_close"});
 
-var qrcode = new QRCode("qrcode", {colorDark:'#0165a4', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H, width: 220, height: 220,});
+var qrcode = new QRCode("qrcode", {colorDark:'#1034A6', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H, width: 220, height: 220,});
 
 function showQRCode(address, label) {
 
@@ -614,8 +614,8 @@ var overviewPage = {
                  },
                  {
                      id: 'changePassphrase',
-                     name: 'Change&nbsp;Passphrase...',
-                     fa: 'fa-key red fa-fw',
+                     name: 'Change&nbsp;Password...',
+                     fa: 'fa-shield red fa-fw',
                      fun: function () {
                         bridge.userAction(['changePassphrase']);
                      }
@@ -623,14 +623,14 @@ var overviewPage = {
                  {
                      id: 'toggleLock',
                      name: '(Un)Lock&nbsp;Wallet...',
-                     fa: 'fa-unlock red pad fa-fw',
+                     fa: 'fa-toggle-on red pad fa-fw',
                      fun: function () {
                         bridge.userAction(['toggleLock']);
                      }
                  },
                  {
                      name: 'Options',
-                     fa: 'fa-wrench red fa-fw',
+                     fa: 'fa-cog red fa-fw',
                      fun: function () {
                         $("#navitems [href=#options]").click();
                      }
@@ -661,7 +661,7 @@ var overviewPage = {
                  },
                  {
                      name: 'About&nbsp;Qt...',
-                     fa: 'fa-question red fa-fw',
+                     fa: 'fa-quote-right red fa-fw',
                      fun: function () {
                         bridge.userAction(['aboutQtClicked']);
                      }

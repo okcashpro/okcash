@@ -147,7 +147,7 @@
                             <span class="light-red">.</span>
                             <span class="cents">00</span>
                             <span class="units">OK</span>
-                            <i class="fa fa-check-circle-o"></i>
+                            <i class="fa fa-rocket"></i>
                         </span>
                     </div>
                 </div>
@@ -615,7 +615,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5" style="background:#0165a4!important;">
+                                <td colspan="5" style="background:#ff9933!important;">
                                     <div class="pagination pagination-centered hide-if-no-paging"></div>
                                 </td>
                             </tr>
@@ -686,7 +686,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="2" style="background:#0165a4!important;">
+                                        <td colspan="2" style="background:#ff9933!important;">
                                             <div class="pagination pagination-centered hide-if-no-paging"></div>
                                         </td>
                                     </tr>
@@ -705,7 +705,7 @@
                                   </tbody>
                                   <tfoot>
                                       <tr>
-                                          <td colspan="2" style="background:#0165a4!important;">
+                                          <td colspan="2" style="background:#ff9933!important;">
                                               <div class="pagination pagination-centered hide-if-no-paging"></div>
                                           </td>
                                       </tr>
@@ -835,7 +835,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="2" style="background:#0165a4!important;">
+                                <td colspan="2" style="background:#ff9933!important;">
                                     <div class="pagination pagination-centered hide-if-no-paging"></div>
                                 </td>
                             </tr>
@@ -867,7 +867,7 @@
                             <label for="optDetachDatabases" class="option">Detach databases at shutdown</label>
                         </div>
                         <div class="option">
-                            <p>Optional transaction fee per kB that helps make sure your transactions are processed quickly. Most transactions are 1kB. Fee 0.01 recommended.</p>
+                            <p>Optional transaction fee per kB that helps make sure your transactions are processed quickly. <br>Most transactions are 1kB. Fee 0.01 recommended.</p>
                             <label for="optFee" class="option">Pay transaction fee:</label>
                             <input  id="optFee" type="number" placeholder="0.00000000" step="0.01" value="0.00000000" onchange="unit.parse(this, $('#optFeeunit').val());" />
                             <select id="optFeeunit" class="unit button is-inverse has-fixed-icon" style="margin-left:10px; height:43px; width:100px;" onchange="unit.format('#optFee', $(this).val());">
@@ -1059,7 +1059,7 @@
         <div id="footer">
             <span id="footer-icons">
                 <i id="encryptionIcon"    style="padding-right:5px;" class="fa fa-lock fa-lg cursor-pointer red" onclick="bridge.userAction(['toggleLock']);" title="Wallet is encrypted and currently locked"></i>
-                <i id="stakingIcon"       style="padding-right:5px;" class="fa fa-check-circle-o fa-lg not-staking" title="Not staking because wallet is locked"></i>
+                <i id="stakingIcon"       style="padding-right:5px;" class="fa fa-rocket fa-lg not-staking" title="Not staking because wallet is locked"></i>
                 <img id="connectionsIcon" style="cursor:default; padding-right:5px" src="qrc:///icons/connect_0"/ title="0 active connection(s) to Okcash network" />
                 <img id="syncingIcon"     style="cursor:default;"  width="18px"                src="qrc:///icons/syncing"/ title="Wallet is syncing" />
                 <i id="blocksIcon" class="fa fa-check red none" title="Wallet is syncing"></i>

@@ -29,11 +29,11 @@ QString TransactionRecord::getTypeLabel(const int &type)
     case SendToSelf:
         return OKCashGUI::tr("Payment to yourself");
     case Generated:
-        return OKCashGUI::tr("Mined");
+        return OKCashGUI::tr("PoS Mined (Staked)");/*
     case RecvOKCash:
         return OKCashGUI::tr("Received okcash");
     case SendOKCash:
-        return OKCashGUI::tr("Sent okcash");
+        return OKCashGUI::tr("Sent okcash");*/
     case Other:
         return OKCashGUI::tr("Other");
     default:
