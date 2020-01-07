@@ -35,6 +35,8 @@ LIBS += \
    -l boost_program_options$(BOOST_LIB_SUFFIX) \
    -l boost_thread$(BOOST_LIB_SUFFIX) \
    -l db_cxx$(BDB_LIB_SUFFIX) \
+#For some linux systems
+#   -l boost_chrono \
    -l ssl \
    -l crypto
 
