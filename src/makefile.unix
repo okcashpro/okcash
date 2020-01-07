@@ -27,9 +27,7 @@ else
 endif
 
 
-# for boost 1.37, add -mt to the boost libraries
-# For some linux systems
-#   -l boost_chrono \
+# for boost 1.37, add -mt to the boost libraries, For some linux systems, -l boost_chrono \
 LIBS += \
  -Wl,-B$(LMODE) \
    -l boost_system$(BOOST_LIB_SUFFIX) \
