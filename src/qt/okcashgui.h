@@ -92,6 +92,7 @@ private:
     QAction *changePassphraseAction;
     QAction *unlockWalletAction;
     QAction *lockWalletAction;
+    QAction *openConfEditorAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
 
@@ -174,6 +175,8 @@ private slots:
     void lockWallet();
     /** Toggle whether wallet is locked or not */
     void toggleLock();
+    /** open okcash.conf */
+    void showConfEditor();
     /** Encrypt the wallet */
     void encryptWallet(bool status);
     /** Backup the wallet */

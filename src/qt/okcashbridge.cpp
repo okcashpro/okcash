@@ -983,6 +983,8 @@ QVariantMap OKCashBridge::userAction(QVariantMap action)
         window->changePassphrase();
     if(key == "toggleLock")
         window->toggleLock();
+    if(key == "showConfEditor")
+        window->showConfEditor();
     if(key == "developerConsole")
         window->webView->page()->triggerAction(QWebPage::InspectElement);
     if(key == "aboutClicked")

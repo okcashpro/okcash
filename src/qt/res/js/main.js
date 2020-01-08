@@ -629,6 +629,14 @@ var overviewPage = {
                      }
                  },
                  {
+                     id: 'showConfEditor',
+                     name: 'Open&nbsp;Config&nbsp;Folder...',
+                     fa: 'fa-link red pad fa-fw',
+                     fun: function () {
+                        bridge.userAction(['showConfEditor']);
+                     }
+                 },
+                 {
                      name: 'Options',
                      fa: 'fa-cog red fa-fw',
                      fun: function () {

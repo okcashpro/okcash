@@ -348,6 +348,22 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(pathDebug.string())));
 }
 
+void openConfigfile()
+{
+    boost::filesystem::path pathConfig = GetDataDir() / "okcash.conf";
+    boost::filesystem::path pathDir = GetDataDir();
+
+    /* Open okcash config directory for now (used to be to open okcash.conf if exists) with the associated application */
+        if (boost::filesystem::exists(pathDir))
+    {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(pathDir.string())));
+    }
+    else
+    {
+        /* QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(pathDir.string()))); */
+    }
+}
+
 ToolTipToRichTextFilter::ToolTipToRichTextFilter(int size_threshold, QObject *parent) :
     QObject(parent), size_threshold(size_threshold)
 {

@@ -203,6 +203,8 @@ void OKCashGUI::createActions()
     unlockWalletAction->setToolTip(tr("Unlock wallet"));
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock Wallet"), this);
     lockWalletAction->setToolTip(tr("Lock wallet"));
+    openConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open Wallet &Configuration File"), this);
+    openConfEditorAction->setStatusTip(tr("Open configuration file"));
     signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
     verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
 
@@ -221,6 +223,7 @@ void OKCashGUI::createActions()
     connect(changePassphraseAction, SIGNAL(triggered()), SLOT(changePassphrase()));
     connect(unlockWalletAction, SIGNAL(triggered()), SLOT(unlockWallet()));
     connect(lockWalletAction, SIGNAL(triggered()), SLOT(lockWallet()));
+    connect(openConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showConfEditor()));
     connect(signMessageAction, SIGNAL(triggered()), SLOT(gotoSignMessageTab()));
     connect(verifyMessageAction, SIGNAL(triggered()), SLOT(gotoVerifyMessageTab()));
 }
@@ -785,6 +788,7 @@ void OKCashGUI::setEncryptionStatus(int status)
     QWebElement encryptionIcon    = documentFrame->findFirstElement("#encryptionIcon");
     QWebElement encryptButton     = documentFrame->findFirstElement("#encryptWallet");
     QWebElement changePassphrase  = documentFrame->findFirstElement("#changePassphrase");
+    QWebElement showConfEditor  = documentFrame->findFirstElement("#showConfEditor");
     QWebElement toggleLock        = documentFrame->findFirstElement("#toggleLock");
     QWebElement toggleLockIcon    = documentFrame->findFirstElement("#toggleLock i");
     switch(status)
@@ -863,6 +867,11 @@ void OKCashGUI::changePassphrase()
     AskPassphraseDialog dlg(AskPassphraseDialog::ChangePass, this);
     dlg.setModel(walletModel);
     dlg.exec();
+}
+
+void OKCashGUI::showConfEditor()
+{
+    GUIUtil::openConfigfile();
 }
 
 void OKCashGUI::unlockWallet()
