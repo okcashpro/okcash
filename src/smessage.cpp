@@ -3202,7 +3202,7 @@ int SecureMsgValidate(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload)
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
     HMAC_CTX_free(ctx);
 #else
-    HMAC_CTX_cleanup(&ctx);
+    HMAC_CTX_cleanup(ctx);
     delete ctx;
 #endif
 
