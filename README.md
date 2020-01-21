@@ -37,6 +37,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Community website  https://okcash.co - What is Okcash?
 
+#### OK Resources website:  https://okcash.io
+
 #### OK Documentation website:  https://okcash.org
 
 #### OK Tutorials website:  https://okcash.info
