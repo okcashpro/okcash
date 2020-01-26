@@ -7,6 +7,7 @@
 #ifndef CEC_KEY_H
 #define CEC_KEY_H
 
+#include <openssl/opensslv.h>  // For using openssl 1.0 and 1.1 branches.
 #include <openssl/bn.h>
 #include <openssl/ecdsa.h>
 #include <openssl/rand.h>
