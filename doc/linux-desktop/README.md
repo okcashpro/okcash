@@ -1,6 +1,6 @@
 # Okcash Desktop files and pixmaps for Linux
 
-![Okcash-OK](http://i.imgur.com/rpzMWd6.png)
+![Okcash-OK](https://i.imgur.com/prq5JYO.png)
 
 * pre-req: "okcash" should be cp to /usr/local/bin
 
