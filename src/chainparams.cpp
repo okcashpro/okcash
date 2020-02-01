@@ -203,7 +203,7 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0xeb465c4bc52c2730efca9ed897e1581f6266ba8d630e282b140d61a00e422108"));
         
         vSeeds.push_back(CDNSSeedData("okcash.co", "dns1.okcash.co"));
-        vSeeds.push_back(CDNSSeedData("okcash.co", "seed2.okcash.co"));
+        vSeeds.push_back(CDNSSeedData("okcash.co", "dns2.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed3.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed4.okcash.co"));
         vSeeds.push_back(CDNSSeedData("okcash.co", "seed5.okcash.co"));
