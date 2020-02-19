@@ -30,6 +30,7 @@ unsigned int pnSeed[] =
     0xf1b88940,
     0xa4a18940,
     0x3ebc8940,
+    0x8260a768,
 };
 
 
