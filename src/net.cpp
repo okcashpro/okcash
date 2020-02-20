@@ -1332,7 +1332,7 @@ void ThreadOpenConnections()
         
         CSemaphoreGrant grant(*semOutbound);
         
-        // Add seed nodes if IRC isn't working
+        // Add seed nodes
         if (addrman.size() == 0 && (GetTime() - nStart > 60) && !fTestNet)
         {
             static bool done = false;

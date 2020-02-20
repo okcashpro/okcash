@@ -69,7 +69,6 @@ OBJS= \
     obj/db.o \
     obj/init.o \
     obj/okcashd.o \
-    obj/irc.o \
     obj/keystore.o \
     obj/miner.o \
     obj/main.o \
