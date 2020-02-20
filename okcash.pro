@@ -252,7 +252,6 @@ HEADERS += \
     src/state.h \
     src/bloom.h \
     src/init.h \
-    src/irc.h \
     src/mruset.h \
     src/rpcprotocol.h \
     src/rpcserver.h \
@@ -315,7 +314,6 @@ SOURCES += \
     src/miner.cpp \
     src/init.cpp \
     src/net.cpp \
-    src/irc.cpp \
     src/checkpoints.cpp \
     src/addrman.cpp \
     src/db.cpp \
