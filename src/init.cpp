@@ -1118,7 +1118,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     if (!strErrors.str().empty())
         return InitError(strErrors.str());
     
-    LogPrintf("Params().GetDefaultPort() %d\n", Params().GetDefaultPort());
+    LogPrintf("Network: %s, port: %d\n", Params().NetworkIDString(), Params().GetDefaultPort());
     
     return !fRequestShutdown;
 }
