@@ -3,8 +3,12 @@ Encoding=UTF-8
 Version=5.0.2.3
 Name=Okcash Core Client
 Comment=Okcash Graphical UI
-Categories=Network;
-Exec=/usr/local/bin/okcash
-Icon=/usr/share/pixmaps/okcash.png
-Terminal=false
+
 Type=Application
+Categories=Network;
+
+Exec=okcash
+Icon=okcash
+
+Terminal=false
+StartupNotify=true
