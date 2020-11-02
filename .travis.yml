@@ -1,7 +1,7 @@
 language: cpp
 compiler: gcc
 os: linux
-sudo: required
+
 dist: trusty
 
 before_install:
@@ -26,7 +26,7 @@ script:
 
 after_success:
   - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - # curl --upload-file okcash*.AppImage https://transfer.sh/okcash-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - # curl --upload-file Okcash*.AppImage https://transfer.sh/okcash-git.$(git rev-parse --short HEAD)-x86_64.AppImage
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   - bash upload.sh okcash*.AppImage*
 
