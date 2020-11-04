@@ -13,9 +13,9 @@ script:
   - cd src ; RELEASE=1 STATIC=TRUE make -j2 -f makefile.unix ; strip okcashd ; cd -
 
 # - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/ # FIXME; workaround are the following lines starting with "mkdir"
-  - mkdir -p appdir/usr/bin ; cp src/okcashd ./appdir/usr/bin/
-  - mkdir -p appdir/usr/share/applications ; cp doc/linux-desktop/okcashd.desktop ./appdir/usr/share/applications/
-  - mkdir -p appdir/usr/share/icons/hicolor/256x256/apps ; cp doc/linux-desktop/okcashd.png ./appdir/usr/share/icons/hicolor/256x256/apps/
+  - mkdir -p appdir/usr/bin ; strip okcash ; cp okcash ./appdir/usr/bin/
+  - mkdir -p appdir/usr/share/applications ; cp doc/linux-desktop/okcash.desktop ./appdir/usr/share/applications/
+  - mkdir -p appdir/usr/share/icons/hicolor/256x256/apps ; cp doc/linux-desktop/okcash.png ./appdir/usr/share/icons/hicolor/256x256/apps/
   - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH

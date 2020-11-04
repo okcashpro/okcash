@@ -1,0 +1,14 @@
+[Desktop Entry]
+
+Version=1.0
+Name=Okcash Daemon
+Comment=Okcash core terminal
+
+Type=Application
+Categories=Network;
+
+Exec=okcashd
+Icon=okcashd
+
+Terminal=true
+StartupNotify=true
