@@ -12,6 +12,4 @@ before_install:
   - sudo apt-get install libdb4.8-dev libdb4.8++-dev -y
   
 script:
-  - qmake PREFIX=/usr
-  - make -j$(nproc)
   - cd src ; RELEASE=1 STATIC=TRUE make -j2 -f makefile.unix ; strip okcashd
