@@ -1,15 +1,35 @@
 language: cpp
 compiler: gcc
 os: linux
-dist: xenial
+dist: trusty
 
 before_install:
-  - sudo apt-get install build-essential libssl-dev libboost-all-dev libqrencode-dev libminiupnpc-dev -y
-  - sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev -y
+  - sudo apt-get -qq update
+  - sudo apt-get install -y qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools build-essential libboost-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev libssl-dev libdb++-dev libminiupnpc-dev libqt5webkit5-dev
 
-  - sudo add-apt-repository ppa:bitcoin/bitcoin -y
-  - sudo apt-get update
-  - sudo apt-get install libdb4.8-dev libdb4.8++-dev -y
-  
 script:
-  - cd src ; RELEASE=1 STATIC=TRUE make -j2 -f makefile.unix ; strip okcashd
+  - qmake PREFIX=/usr
+  - make -j$(nproc)
+  - cd src ; RELEASE=1 STATIC=TRUE make -j2 -f makefile.unix ; strip okcashd ; cd -
+
+# - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/ # FIXME; workaround are the following lines starting with "mkdir"
+  - mkdir -p appdir/usr/bin ; strip okcash ; cp okcash ./appdir/usr/bin/
+  - mkdir -p appdir/usr/share/applications ; cp doc/linux-desktop/okcash.desktop ./appdir/usr/share/applications/
+  - mkdir -p appdir/usr/share/icons/hicolor/256x256/apps ; cp doc/linux-desktop/okcash.png ./appdir/usr/share/icons/hicolor/256x256/apps/
+  - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+  - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+  - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
+  - export VERSION=$(git rev-parse --short HEAD) # linuxdeployqt uses this for naming the file
+  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -bundle-non-qt-libs
+  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
+
+after_success:
+  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
+  - # curl --upload-file Okcash*.AppImage https://transfer.sh/okcash-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh Okcash*.AppImage*
+
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)/
