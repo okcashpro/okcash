@@ -9,7 +9,7 @@ CONFIG += no_include_pwd
 win32:CONFIG += thread static
 win32:CONFIG += static
 win32:LIBS += -L"c:/deps/openssl-1.0.2r" -llibeay32
-!android|!ios:QT += widgets webkitwidgets
+QT += widgets webkitwidgets
 
 # Mobile devices
 android|ios {
