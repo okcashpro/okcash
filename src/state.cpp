@@ -13,7 +13,7 @@ int nMinStakeInterval = 0;         // in seconds, min time between successful st
 int nThinIndexWindow = 4096;        // no. of block headers to keep in memory
 
 // -- services provided by local node, initialise to all on THIN_SUPPORT | THIN_STEALTH | rmvd
-uint64_t nLocalServices     = 0 | NODE_NETWORK | SMSG_RELAY;
+uint64_t nLocalServices     = 0 | NODE_NETWORK | THIN_SUPPORT | THIN_STEALTH | SMSG_RELAY;
 uint32_t nLocalRequirements = 0 | NODE_NETWORK;
 
 
