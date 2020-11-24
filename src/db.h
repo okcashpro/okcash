@@ -112,7 +112,7 @@ private:
 
 protected:
     template<typename K, typename T>
-    bool Read(const K& key, T& value)
+    bool Read(const K& key, T& value, uint32_t nFlags=0)
     {
         if (!pdb)
             return false;
@@ -126,7 +126,7 @@ protected:
         // Read
         Dbt datValue;
         datValue.set_flags(DB_DBT_MALLOC);
-        int ret = pdb->get(activeTxn, &datKey, &datValue, 0);
+        int ret = pdb->get(activeTxn, &datKey, &datValue, nFlags);
         memset(datKey.get_data(), 0, datKey.get_size());
         if (datValue.get_data() == NULL)
             return false;
@@ -151,6 +151,7 @@ protected:
     {
         if (!pdb)
             return false;
+
         if (fReadOnly)
             assert(!"Write called on database in read-only mode");
 
