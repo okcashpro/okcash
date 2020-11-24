@@ -204,19 +204,11 @@ okcashd: $(OBJS:obj/%=obj/%)
 
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
-#TESTOBJS := obj-test/json_spirit_reader.o
 
-#obj-test/json_spirit_reader.o: json/json_spirit_reader.cpp
-#	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
-#	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-#		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-#		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-#	rm -f $(@:%.o=%.d)
-    
-
+xTESTCXXFLAGS = -std=c++11
 
 obj-test/%.o: test/%.cpp
-	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+	$(CXX) -c $(TESTDEFS) $(xTESTCXXFLAGS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
 	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
 		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
