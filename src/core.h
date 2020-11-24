@@ -168,7 +168,7 @@ public:
     
     void ExtractKeyImage(ec_point& kiOut) const
     {
-        kiOut.resize(ec_compressed_size);
+        kiOut.resize(EC_COMPRESSED_SIZE);
         memcpy(&kiOut[0], prevout.hash.begin(), 32);
         kiOut[32] = prevout.n & 0xFF;
     };
@@ -274,7 +274,7 @@ public:
     CPubKey ExtractAnonPk() const
     {
         // always use IsAnonOutput to check length
-        return CPubKey(&scriptPubKey[2+1], ec_compressed_size);
+        return CPubKey(&scriptPubKey[2+1], EC_COMPRESSED_SIZE);
     };
 };
 
