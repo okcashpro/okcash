@@ -37,7 +37,7 @@ bool fDiscover = true;
 bool fUseUPnP = false;
 
 CCriticalSection cs_mapLocalHost;
-map<CNetAddr, LocalServiceInfo> mapLocalHost;
+std::map<CNetAddr, LocalServiceInfo> mapLocalHost;
 static bool vfReachable[NET_MAX] = {};
 static bool vfLimited[NET_MAX] = {};
 static CNode* pnodeLocalHost = NULL;
@@ -46,23 +46,23 @@ uint64_t nLocalHostNonce = 0;
 static std::vector<SOCKET> vhListenSocket;
 CAddrMan addrman;
 
-vector<CNode*> vNodes;
+std::vector<CNode*> vNodes;
 CCriticalSection cs_vNodes;
 
 CCriticalSection cs_connectNode;
 
-map<CInv, CDataStream> mapRelay;
-deque<pair<int64_t, CInv> > vRelayExpiration;
+std::map<CInv, CDataStream> mapRelay;
+deque<std::pair<int64_t, CInv> > vRelayExpiration;
 CCriticalSection cs_mapRelay;
-map<CInv, int64_t> mapAlreadyAskedFor;
+std::map<CInv, int64_t> mapAlreadyAskedFor;
 
-static deque<string> vOneShots;
+static deque<std::string> vOneShots;
 CCriticalSection cs_vOneShots;
 
-set<CNetAddr> setservAddNodeAddresses;
+std::set<CNetAddr> setservAddNodeAddresses;
 CCriticalSection cs_setservAddNodeAddresses;
 
-vector<std::string> vAddedNodes;
+std::vector<std::string> vAddedNodes;
 CCriticalSection cs_vAddedNodes;
 
 static CSemaphore *semOutbound = NULL;
@@ -783,7 +783,6 @@ void SocketSendData(CNode *pnode)
 
 void ThreadSocketHandler()
 {
-    LogPrintf("ThreadSocketHandler started\n");
     list<CNode*> vNodesDisconnected;
     unsigned int nPrevNodeCount = 0;
 
@@ -1280,14 +1279,14 @@ void DumpAddresses()
 
 void static ProcessOneShot()
 {
-    string strDest;
+    std::string strDest;
     {
         LOCK(cs_vOneShots);
         if (vOneShots.empty())
             return;
         strDest = vOneShots.front();
         vOneShots.pop_front();
-    }
+    } //cs_vOneShots
     CAddress addr;
     CSemaphoreGrant grant(*semOutbound, true);
     if (grant)
@@ -1333,14 +1332,15 @@ void ThreadOpenConnections()
         CSemaphoreGrant grant(*semOutbound);
         
         // Add seed nodes
-        if (addrman.size() == 0 && (GetTime() - nStart > 60) && !fTestNet)
+        if (addrman.size() == 0 && (GetTime() - nStart > 60))
         {
             static bool done = false;
-            if (!done) {
+            if (!done)
+            {
                 LogPrintf("Adding fixed seed nodes as DNS doesn't seem to be available.\n");
                 addrman.Add(Params().FixedSeeds(), CNetAddr("127.0.0.1"));
                 done = true;
-            }
+            };
         };
 
         //
@@ -1372,11 +1372,11 @@ void ThreadOpenConnections()
             boost::this_thread::interruption_point();
             // use an nUnkBias between 10 (no outgoing connections) and 90 (8 outgoing connections)
             CAddress addr = addrman.Select(10 + min(nOutbound,8)*10);
-
+            
             // if we selected an invalid address, restart
             if (!addr.IsValid() || setConnected.count(addr.GetGroup()) || IsLocal(addr))
                 break;
-
+            
             // If we didn't find an appropriate destination after trying 100 addresses fetched from addrman,
             // stop this loop, and let the outer loop run again (which sleeps, adds seed nodes, recalculates
             // already-connected network ranges, ...) before trying new addrman addresses.
@@ -1402,7 +1402,7 @@ void ThreadOpenConnections()
         if (addrConnect.IsValid())
         {
             OpenNetworkConnection(addrConnect, &grant);
-        }
+        };
     };
 }
 
@@ -1530,7 +1530,7 @@ void ThreadMessageHandler()
             vNodesCopy = vNodes;
             BOOST_FOREACH(CNode* pnode, vNodesCopy)
                 pnode->AddRef();
-        }
+        } // cs_vNodes
 
         // Poll the connected nodes for messages
         CNode* pnodeTrickle = NULL;
@@ -1539,8 +1539,13 @@ void ThreadMessageHandler()
 
         bool fSleep = true;
 
-        BOOST_FOREACH(CNode* pnode, vNodesCopy)
+        //BOOST_FOREACH(CNode* pnode, vNodesCopy)
+
+        size_t r = GetRandInt(vNodesCopy.size()-1); // randomise the order
+        for (size_t i = 0; i < vNodesCopy.size(); ++i)
         {
+            CNode *pnode = vNodesCopy[(i + r) % vNodesCopy.size()];
+
             if (pnode->fDisconnect)
                 continue;
 
@@ -1555,7 +1560,7 @@ void ThreadMessageHandler()
                     if (pnode->nSendSize < SendBufferSize() && (!pnode->vRecvGetData.empty() || (!pnode->vRecvMsg.empty() && pnode->vRecvMsg[0].complete())))
                         fSleep = false;
                 }
-            }
+            } // cs_vRecvMsg
 
             boost::this_thread::interruption_point();
 
@@ -1564,7 +1569,7 @@ void ThreadMessageHandler()
                 TRY_LOCK(pnode->cs_vSend, lockSend);
                 if (lockSend)
                     SendMessages(pnode, vNodesCopy, pnode == pnodeTrickle);
-            }
+            } // cs_vSend
         };
 
         {
@@ -1575,7 +1580,6 @@ void ThreadMessageHandler()
 
         if (fSleep)
             MilliSleep(100);
-        
     };
 }
 
