@@ -47,8 +47,12 @@ public:
         PUBKEY_ADDRESS,
         SCRIPT_ADDRESS,
         SECRET_KEY,
+        STEALTH_ADDRESS,
         EXT_PUBLIC_KEY,
         EXT_SECRET_KEY,
+
+        EXT_KEY_HASH,
+        EXT_ACC_HASH,
 
         MAX_BASE58_TYPES
     };
@@ -90,15 +94,12 @@ public:
     int SecondBlockHalve() const { return nSecondBlockHalve; }
     int FirstBlockHalve() const { return nFirstBlockHalve; }
     int FirstYearStake() const { return nFirstYearStake; }
-	
-    
     int LastPOWBlock() const { return nLastPOWBlock; }
     int LastFairLaunchBlock() const { return nLastFairLaunchBlock; }
     int DistributionFund() const { return nDistributionFund; }
-    
     int64_t GetProofOfWorkReward(int nHeight, int64_t nFees) const;
     int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees) const;
-    
+
 protected:
     CChainParams() {};
 
