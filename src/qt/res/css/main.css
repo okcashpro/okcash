@@ -328,7 +328,7 @@ article {
     border-width: 1px 0 0 0;
     background: #ecf0f1;
     overflow:auto;
-    box-okcash:0 -1px 0 0 #dee2e2,
+    box-shadow:0 -1px 0 0 #dee2e2,
                0 -2px 0 0 #f8f8f8;
 }
 
@@ -351,7 +351,7 @@ article {
     background: inherit;
     padding: 10px;
     cursor: pointer;
-    box-okcash: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
+    box-shadow: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
     z-index: 10000;
 }
 
@@ -551,12 +551,12 @@ article {
             background: #131218;
             border-radius: 50px;
             padding: 2px;
-            box-okcash: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
     }
 
     progress::-webkit-progress-value {
             border-radius: 50px;
-            box-okcash: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
             background:
                     -webkit-linear-gradient(45deg, transparent, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%),
                     -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.2)),
@@ -1234,8 +1234,8 @@ label.recipient {
 
 .button:active,
 .button.is-active {
-  -webkit-box-okcash: none;
-  box-okcash: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
   text-decoration: none;
 }
 
@@ -1716,9 +1716,9 @@ label.recipient {
     padding: 10px;
     border-radius: 5px;
     margin-left: 10px;
-    -webkit-box-okcash:  1px 1px 5px rgba(0,0,0,.15);
-    -moz-box-okcash:  1px 1px 5px rgba(0,0,0,.15);
-    box-okcash: 1px 1px 5px rgba(0,0,0,.15);
+    -webkit-box-shadow:  1px 1px 5px rgba(0,0,0,.15);
+    -moz-box-shadow:  1px 1px 5px rgba(0,0,0,.15);
+    box-shadow: 1px 1px 5px rgba(0,0,0,.15);
     font-size: 15px;
     max-width: 75%;
     overflow-wrap: break-word;
@@ -2233,7 +2233,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     width: 400px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
 }
 
@@ -2254,7 +2254,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2266,7 +2266,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2279,7 +2279,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2291,7 +2291,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 320px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2306,7 +2306,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     width: 630px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
 }
 
@@ -2326,7 +2326,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     font-size:0.8em;
     color: #F51E3E;
     background: #ecf0f1;
-    box-okcash: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
+    box-shadow: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
 }
 
 .network-alerts-icon {
