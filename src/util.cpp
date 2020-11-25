@@ -564,7 +564,7 @@ void ParseParameters(int argc, const char* const argv[])
 
 namespace ok
 {
-void* memrchr(const void *s, int c, size_t n)
+void *memrchr(const void *s, int c, size_t n)
 {
     if (n < 1)
         return NULL;
@@ -577,6 +577,19 @@ void* memrchr(const void *s, int c, size_t n)
     } while (--n != 0);
     
     return NULL;
+};
+// memcmp_nta - memcmp that is secure against timing attacks
+// returns 0 if both areas are equal to each other, non-zero otherwise
+int memcmp_nta(const void *cs, const void *ct, size_t count)
+{
+    const unsigned char *su1, *su2;
+    int res = 0;
+
+    for (su1 = (unsigned char*)cs, su2 = (unsigned char*)ct;
+        0 < count; ++su1, ++su2, count--)
+        res |= (*su1 ^ *su2);
+
+    return res;
 };
 }
 
@@ -1200,6 +1213,15 @@ const char *GetNodeStateName(int stateInd)
     
     return "unknown";
 };
+void ReplaceStrInPlace(std::string &subject, const std::string &search, const std::string &replace)
+{
+    size_t pos = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+}
 
 std::string getTimeString(int64_t timestamp, char *buffer, size_t nBuffer)
 {
