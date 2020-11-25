@@ -15,6 +15,7 @@
 #include <boost/variant.hpp>
 
 #include "stealth.h"
+#include "extkey.h"
 #include "keystore.h"
 #include "bignum.h"
 #include "util.h"
@@ -25,6 +26,13 @@ class CTransaction;
 
 static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 520; // bytes
 static const unsigned int MAX_OP_RETURN_RELAY = 48;      // bytes
+
+template <typename T>
+std::vector<unsigned char> ToByteVector(const T& in)
+{
+    return std::vector<unsigned char>(in.begin(), in.end());
+}
+
 
 /** Signature hash types/flags */
 enum
@@ -39,7 +47,9 @@ enum
 enum
 {
     SCRIPT_VERIFY_NONE      = 0,
-    SCRIPT_VERIFY_NOCACHE   = (1U << 0), // do not store results in signature cache (but do query it)
+
+    // Evaluate P2SH subscripts (softfork safe, BIP16).
+    SCRIPT_VERIFY_P2SH      = (1U << 0),
     SCRIPT_VERIFY_NULLDUMMY = (1U << 1), // verify dummy stack item consumed by CHECKMULTISIG is of zero-length
 
     // Discourage use of NOPs reserved for upgrades (NOP1-10)
@@ -53,6 +63,8 @@ enum
     SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS = (1U << 2),
 
     SCRIPT_VERIFY_STRICTENC = (1U << 3),
+    SCRIPT_VERIFY_NOCACHE   = (1U << 4), // do not store results in signature cache (but do query it)
+
 };
 
 // Mandatory script verification flags that all new blocks must comply with for
@@ -60,7 +72,7 @@ enum
 //
 // Failing one of these tests may trigger a DoS ban - see ConnectInputs() for
 // details.
-static const unsigned int MANDATORY_SCRIPT_VERIFY_FLAGS = SCRIPT_VERIFY_NONE;
+static const unsigned int MANDATORY_SCRIPT_VERIFY_FLAGS = SCRIPT_VERIFY_P2SH;
 
 // Standard script verification flags that standard transactions will comply
 // with. However scripts violating these flags may still be present in valid
@@ -90,13 +102,22 @@ public:
     friend bool operator<(const CNoDestination &a, const CNoDestination &b) { return true; }
 };
 
+/** A reference to a CScript: the Hash160 of its serialization */
+class CScriptID : public uint160
+{
+public:
+    CScriptID() : uint160(0) { }
+    CScriptID(const CScript& in);
+    CScriptID(const uint160 &in) : uint160(in) { }
+};
+
 /** A txout script template with a specific destination. It is either:
  *  * CNoDestination: no destination set
  *  * CKeyID: TX_PUBKEYHASH destination
  *  * CScriptID: TX_SCRIPTHASH destination
  *  A CTxDestination is the internal data type encoded in a CBitcoinAddress
  */
-typedef boost::variant<CNoDestination, CKeyID, CScriptID, CStealthAddress> CTxDestination;
+typedef boost::variant<CNoDestination, CKeyID, CScriptID, CStealthAddress, CExtKeyPair> CTxDestination;
 
 const char* GetTxnOutputType(txnouttype t);
 
@@ -705,8 +726,6 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
 bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<std::vector<unsigned char> >& vSolutionsRet);
 int ScriptSigArgsExpected(txnouttype t, const std::vector<std::vector<unsigned char> >& vSolutions);
 bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType);
-bool IsMine(const CKeyStore& keystore, const CScript& scriptPubKey);
-bool IsMine(const CKeyStore& keystore, const CTxDestination &dest);
 void ExtractAffectedKeys(const CKeyStore &keystore, const CScript& scriptPubKey, std::vector<CKeyID> &vKeys);
 bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet);
 bool ExtractDestinations(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<CTxDestination>& addressRet, int& nRequiredRet);
@@ -719,5 +738,7 @@ bool VerifySignature(const CTransaction& txFrom, const CTransaction& txTo, unsig
 // Given two sets of signatures for scriptPubKey, possibly with OP_0 placeholders,
 // combine them intelligently and return the result.
 CScript CombineSignatures(CScript scriptPubKey, const CTransaction& txTo, unsigned int nIn, const CScript& scriptSig1, const CScript& scriptSig2);
+
+CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys);
 
 #endif
