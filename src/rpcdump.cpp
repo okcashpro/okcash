@@ -255,23 +255,37 @@ Value dumpprivkey(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "dumpprivkey <okcashaddress>\n"
+            "dumpprivkey <okcashaddress/public_key_hex>\n"
             "Reveals the private key corresponding to <okcashaddress>.");
 
     EnsureWalletIsUnlocked();
 
-    string strAddress = params[0].get_str();
-    CBitcoinAddress address;
-    if (!address.SetString(strAddress))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Okcash address");
     if (fWalletUnlockStakingOnly)
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Wallet is unlocked for staking only.");
+
+    string strAddress = params[0].get_str();
+    CBitcoinAddress address;
     CKeyID keyID;
-    if (!address.GetKeyID(keyID))
-        throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
+
+    bool fIsPubkey = false;
+    if (IsHex(strAddress) && strAddress.size() > 60) // pubkey input
+    {
+        CPubKey pk(ParseHex(strAddress));
+        if (!pk.IsValid())
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid public key");
+        keyID = pk.GetID();
+        fIsPubkey = true;
+    } else
+    {
+        if (!address.SetString(strAddress))
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid ShadowCoin address");
+        if (!address.GetKeyID(keyID))
+            throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
+    };
+
     CKey vchSecret;
     if (!pwalletMain->GetKey(keyID, vchSecret))
-        throw JSONRPCError(RPC_WALLET_ERROR, "Private key for address " + strAddress + " is not known");
+        throw JSONRPCError(RPC_WALLET_ERROR, std::string("Private key for ")+(fIsPubkey ? "public key " : "address ") + strAddress + " is not known");
     return CBitcoinSecret(vchSecret).ToString();
 }
 
