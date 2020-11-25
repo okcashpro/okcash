@@ -9,7 +9,6 @@
 #include "transactionrecord.h"
 #include "transactiondesc.h"
 
-#include "addressbookpage.h"
 #include "addresstablemodel.h"
 
 #include "messagemodel.h"
@@ -27,6 +26,7 @@
 #include "askpassphrasedialog.h"
 
 #include "txdb.h"
+#include "state.h"
 
 #include <QApplication>
 #include <QThread>
@@ -38,7 +38,6 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-#include <QDebug>
 #include <QDir>
 #include <list>
 #define ROWS_TO_REFRESH 200
@@ -206,6 +205,7 @@ public:
         address.insert("label",       label.data().toString());
         address.insert("address",     label.sibling(row, AddressTableModel::Address).data().toString());
         address.insert("pubkey",      label.sibling(row, AddressTableModel::Pubkey).data().toString());
+        address.insert("at",          label.sibling(row, AddressTableModel::AddressType).data().toString());
 
         return address;
     }
@@ -221,7 +221,6 @@ public:
 
             addresses.append(addAddress(start++));
         }
-
         emitAddresses(addresses);
     }
 
@@ -240,7 +239,6 @@ public:
 
             addresses.append(addAddress(row));
         }
-
         emitAddresses(addresses, true);
 
         running = false;
@@ -321,7 +319,6 @@ OKCashBridge::~OKCashBridge()
 // This is just a hook, we won't really be setting the model...
 void OKCashBridge::setClientModel()
 {
-
     info->insert("version", CLIENT_VERSION);
     info->insert("build",   window->clientModel->formatFullVersion());
     info->insert("date",    window->clientModel->formatBuildDate());
@@ -351,14 +348,15 @@ void OKCashBridge::copy(QString text)
     QApplication::clipboard()->setText(text);
 }
 
-void OKCashBridge::paste() {
+void OKCashBridge::paste() 
+{
     emitPaste(QApplication::clipboard()->text());
 }
 
 // Options
 void OKCashBridge::populateOptions()
 {
-    OptionsModel * optionsModel(window->clientModel->getOptionsModel());
+    OptionsModel *optionsModel(window->clientModel->getOptionsModel());
 
     int option = 0;
 
@@ -427,11 +425,17 @@ bool OKCashBridge::addRecipient(QString address, QString label, QString narratio
 {
     SendCoinsRecipient rv;
 
+
     rv.address = address;
     rv.label = label;
     rv.narration = narration;
     rv.amount = amount;
-    rv.typeInd = (address.length() > 75 ? AddressTableModel::AT_Stealth : AddressTableModel::AT_Normal);
+
+    std::string sAddr = address.toStdString();
+    if (IsBIP32(sAddr.c_str()))
+        rv.typeInd = 3;
+    else
+        rv.typeInd = address.length() > 75 ? AT_Stealth : AT_Normal;
 
     rv.txnTypeInd = txnType;
     rv.nRingSize = nRingSize;
@@ -654,25 +658,6 @@ bool OKCashBridge::sendCoins(bool fUseCoinControl, QString sChangeAddr)
     return true;
 }
 
-void OKCashBridge::openAddressBook(bool sending)
-{
-    if (!window || !addressModel->atm)
-        return;
-
-    AddressBookPage dlg(AddressBookPage::ForSending, sending ? AddressBookPage::SendingTab : AddressBookPage::ReceivingTab, window);
-
-    dlg.setModel(addressModel->atm);
-
-    if (dlg.exec())
-    {
-        QString address = dlg.getReturnValue();
-        QString label = addressModel->atm->labelForAddress(address);
-
-        emitAddressBookReturn(address, label);
-    }
-
-}
-
 void OKCashBridge::openCoinControl()
 {
     if (!window || !window->walletModel)
@@ -794,25 +779,52 @@ void OKCashBridge::updateAddresses(QModelIndex topLeft, QModelIndex bottomRight)
 
 void OKCashBridge::insertAddresses(const QModelIndex & parent, int start, int end)
 {
-    if(window->clientModel->inInitialBlockDownload()||addressModel->isRunning())
+    // NOTE: Check inInitialBlockDownload here as many stealth addresses uncovered can slow wallet
+    //       fPassGuiAddresses allows addresses added manually to still reflect
+    if (!fPassGuiAddresses
+        && (window->clientModel->inInitialBlockDownload() || addressModel->isRunning()))
         return;
 
     addressModel->poplateRows(start, end);
 }
 
-QString OKCashBridge::newAddress(bool own)
+QString OKCashBridge::newAddress(QString addressLabel, int addressType, QString address, bool send)
 {
-    EditAddressDialog dlg(
-            own ?
-            EditAddressDialog::NewReceivingAddress :
-            EditAddressDialog::NewSendingAddress);
+    // Generate a new address to associate with given label
 
-    dlg.setModel(addressModel->atm);
 
-    if(dlg.exec())
-        return dlg.getAddress();
+    // NOTE: unlock happens in addRow
+    
+    QString rv = addressModel->atm->addRow(send ? AddressTableModel::Send : AddressTableModel::Receive, addressLabel, address, addressType);
+    
+    return rv;
+}
+QString OKCashBridge::lastAddressError()
+{
+    QString sError;
+    AddressTableModel::EditStatus status = addressModel->atm->getEditStatus();
 
-    return "";
+    switch(status)
+    {
+        case AddressTableModel::OK:
+        case AddressTableModel::NO_CHANGES: // error?
+            break;
+        case AddressTableModel::INVALID_ADDRESS:
+            sError = "Invalid Address.";
+            break;
+        case AddressTableModel::DUPLICATE_ADDRESS:
+            sError = "Duplicate Address.";
+            break;
+        case AddressTableModel::WALLET_UNLOCK_FAILURE:
+            sError = "Unlock Failed.";
+            break;
+        case AddressTableModel::KEY_GENERATION_FAILURE:
+        default:
+            sError = "Unspecified error.";
+            break;
+    };
+
+    return sError;
 }
 
 QString OKCashBridge::getAddressLabel(QString address)
@@ -841,7 +853,8 @@ void OKCashBridge::appendMessages(QString messages, bool reset)
     emitMessages("[" + messages + "]", reset);
 }
 
-void OKCashBridge::appendMessage(int row) {
+void OKCashBridge::appendMessage(int row) 
+{
     emitMessage(window->messageModel->index(row, MessageModel::Key)             .data().toString(),
                 window->messageModel->index(row, MessageModel::Type)            .data().toString(),
                 window->messageModel->index(row, MessageModel::SentDateTime)    .data().toDateTime().toTime_t(),
@@ -971,10 +984,6 @@ QVariantMap OKCashBridge::userAction(QVariantMap action)
 
     if(key == "backupWallet")
         window->backupWallet();
-    if(key == "verifyMessage")
-        window->gotoVerifyMessageTab(it.value().toString());
-    if(key == "signMessage")
-        window->gotoSignMessageTab  (it.value().toString());
     if(key == "close")
         window->close();
     if(key == "encryptWallet")
@@ -1310,7 +1319,6 @@ QVariantMap OKCashBridge::txnDetails(QString blkHash, QString txnHash)
                         const CTxOut &vout = prevTx.vout[txin.prevout.n];
                         sCoinValue = strprintf("%f", (double)vout.nValue / (double)COIN);
 
-
                         CTxDestination address;
                         if (ExtractDestination(vout.scriptPubKey, address))
                             sAddr = CBitcoinAddress(address).ToString();
@@ -1373,3 +1381,98 @@ QVariantMap OKCashBridge::txnDetails(QString blkHash, QString txnHash)
 
     return txnDetail;
 }
+
+QVariantMap OKCashBridge::signMessage(QString address, QString message)
+{
+    QVariantMap result;
+
+    CBitcoinAddress addr(address.toStdString());
+    if (!addr.IsValid())
+    {
+        result.insert("error_msg", "The entered address is invalid. Please check the address and try again.");
+        return result;
+    }
+    CKeyID keyID;
+    if (!addr.GetKeyID(keyID))
+    {
+        result.insert("error_msg", "The entered address does not refer to a key. Please check the address and try again.");
+        return result;
+    }
+
+    WalletModel::UnlockContext ctx(window->walletModel->requestUnlock());
+    if (!ctx.isValid())
+    {
+        result.insert("error_msg", "Wallet unlock was cancelled.");
+        return result;
+    }
+
+    CKey key;
+    if (!pwalletMain->GetKey(keyID, key))
+    {
+        result.insert("error_msg", "Private key for the entered address is not available.");
+        return result;
+    }
+
+    CDataStream ss(SER_GETHASH, 0);
+    ss << strMessageMagic;
+    ss << message.toStdString();
+
+    std::vector<unsigned char> vchSig;
+    if (!key.SignCompact(Hash(ss.begin(), ss.end()), vchSig))
+    {
+        result.insert("error_msg"       , "Message signing failed.");
+        return result;
+    }
+    result.insert("signed_signature", QString::fromStdString(EncodeBase64(&vchSig[0], vchSig.size())));
+    result.insert("error_msg"       , "");
+    return result;
+}
+
+QVariantMap OKCashBridge::verifyMessage(QString address, QString message, QString signature)
+{
+    QVariantMap result;
+
+    CBitcoinAddress addr(address.toStdString());
+    if (!addr.IsValid())
+    {
+        result.insert("error_msg", "The entered address is invalid. Please check the address and try again.");
+        return result;
+    }
+    CKeyID keyID;
+    if (!addr.GetKeyID(keyID))
+    {
+        result.insert("error_msg", "The entered address does not refer to a key. Please check the address and try again.");
+        return result;
+    }
+
+    bool fInvalid = false;
+    std::vector<unsigned char> vchSig = DecodeBase64(signature.toStdString().c_str(), &fInvalid);
+
+    if (fInvalid)
+    {
+        result.insert("error_msg", "The signature could not be decoded. Please check the signature and try again.");
+        return result;
+    }
+
+    CDataStream ss(SER_GETHASH, 0);
+    ss << strMessageMagic;
+    ss << message.toStdString();
+
+    CPubKey pubkey;
+    if (!pubkey.RecoverCompact(Hash(ss.begin(), ss.end()), vchSig))
+    {
+        result.insert("error_msg", "The signature did not match the message digest. Please check the signature and try again.");
+        return result;
+    }
+
+    if (!(CBitcoinAddress(pubkey.GetID()) == addr))
+    {
+        result.insert("error_msg", "Message verification failed.");
+        return result;
+    }
+
+    // If we get here all went well and the message is valid
+    result.insert("error_msg"       , "");
+    return result;
+}
+
