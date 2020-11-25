@@ -84,7 +84,7 @@ p {
     margin: 2px;
 }
 
-.content input {
+.content input, textarea {
     color:#3c3c3c;
     font-weight:500;
     border-radius: 0;
@@ -1455,6 +1455,14 @@ label.recipient {
   text-align: center;
 }
 
+.small-button
+{
+    margin-right:10px; 
+    margin-left:5px; 
+    height:40px; 
+    width:40px; 
+    margin-bottom:7px;
+}
 
 /****************************
 
@@ -1891,6 +1899,11 @@ label.recipient {
     margin-left: 10px;
 }
 
+.inputError {
+    color: white !important;
+    background: #E51C39 !important;
+}
+
 .red {
     color: #4d4;
 }
@@ -2167,6 +2180,53 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
 
 .modal_close { position: absolute; top: 12px; right: 12px; display: block; width: 20px; height: 20px; z-index: 2; }
 
+#add-address-modal {
+    margin: auto;
+    padding: 20px;
+    width: 800px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+}
+
+#address-lookup-modal {
+    margin: auto;
+    padding: 20px;
+    width: 800px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+}
+
+#verify-sign-modal {
+    margin: auto;
+    padding: 20px;
+    width: 750px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+    position: absolute;
+}
+
+#verify-sign-modal input
+{
+    width:650px;
+    height:40px;
+    padding:0 10px;
+    margin-bottom:10px;
+}
+
+#verify-sign-modal textarea
+{
+    width: 698px; 
+    height: 100px;
+    padding:0 10px;
+    margin-bottom:10px;
+}
+
 #qrcode-modal {
     margin: auto;
     padding: 20px;
@@ -2392,4 +2452,29 @@ input[type=checkbox]:checked + label:before {
     line-height:1.42857143;
     vertical-align:top;
     border-bottom:1px solid #ddd
+}
+
+.heading-selected {
+    font-size: 1.2em;
+    margin: 0;
+    margin-bottom: 30px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    color:#313131;
+    text-transform: uppercase;
+    white-space: normal;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.heading-deselected {
+    font-size: 1.2em;
+    margin: 0;
+    margin-bottom: 30px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    color:#999;
+    text-transform: uppercase;
+    text-decoration: none;  
+    cursor: pointer;  
 }
