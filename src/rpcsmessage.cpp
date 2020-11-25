@@ -6,6 +6,8 @@
 #include "rpcserver.h"
 
 #include <boost/lexical_cast.hpp>
+#include <algorithm>
+#include <string>
 
 #include "smessage.h"
 #include "init.h"
@@ -63,7 +65,9 @@ Value smsgoptions(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 3)
         throw std::runtime_error(
-            "smsgoptions [list|set <optname> <value>]\n"
+            "smsgoptions [list <with_description>|set <optname> <value>]\n"
+            "smsgoptions list 1\n"
+            " list possible options with descriptions.\n"
             "List and manage options.");
     
     std::string mode = "list";
@@ -76,8 +80,22 @@ Value smsgoptions(const Array& params, bool fHelp)
     
     if (mode == "list")
     {
+        bool fDescriptions = false;
+        if (params.size() > 1)
+        {
+            std::string value   = params[1].get_str();
+            fDescriptions       = IsStringBoolPositive(value);
+        };
+        
         result.push_back(Pair("option", std::string("newAddressRecv = ") + (smsgOptions.fNewAddressRecv ? "true" : "false")));
+        if (fDescriptions)
+            result.push_back(Pair("newAddressRecv", "Enable receiving messages for newly created addresses."));
         result.push_back(Pair("option", std::string("newAddressAnon = ") + (smsgOptions.fNewAddressAnon ? "true" : "false")));
+        if (fDescriptions)
+            result.push_back(Pair("newAddressAnon", "Enable receiving anonymous messages for newly created addresses."));
+        result.push_back(Pair("option", std::string("scanIncoming = ") + (smsgOptions.fScanIncoming ? "true" : "false")));
+        if (fDescriptions)
+            result.push_back(Pair("scanIncoming", "Scan incoming blocks for public keys."));
         
         result.push_back(Pair("result", "Success."));
     } else
@@ -93,15 +111,14 @@ Value smsgoptions(const Array& params, bool fHelp)
         std::string optname = params[1].get_str();
         std::string value   = params[2].get_str();
         
-        if (optname == "newAddressRecv")
+        std::transform(optname.begin(), optname.end(), optname.begin(), ::tolower);
+        
+        bool fValue;
+        if (optname == "newaddressrecv")
         {
-            if (IsStringBoolPositive(value))
+            if (GetStringBool(value, fValue))
             {
-                smsgOptions.fNewAddressRecv = true;
-            } else
-            if (IsStringBoolNegative(value))
-            {
-                smsgOptions.fNewAddressRecv = false;
+                smsgOptions.fNewAddressRecv = fValue;
             } else
             {
                 result.push_back(Pair("result", "Unknown value."));
@@ -109,21 +126,29 @@ Value smsgoptions(const Array& params, bool fHelp)
             };
             result.push_back(Pair("set option", std::string("newAddressRecv = ") + (smsgOptions.fNewAddressRecv ? "true" : "false")));
         } else
-        if (optname == "newAddressAnon")
+        if (optname == "newaddressanon")
         {
-            if (IsStringBoolPositive(value))
+            if (GetStringBool(value, fValue))
             {
-                smsgOptions.fNewAddressAnon = true;
-            } else
-            if (IsStringBoolNegative(value))
-            {
-                smsgOptions.fNewAddressAnon = false;
+                smsgOptions.fNewAddressAnon = fValue;
             } else
             {
                 result.push_back(Pair("result", "Unknown value."));
                 return result;
             };
             result.push_back(Pair("set option", std::string("newAddressAnon = ") + (smsgOptions.fNewAddressAnon ? "true" : "false")));
+        } else
+        if (optname == "scanincoming")
+        {
+            if (GetStringBool(value, fValue))
+            {
+                smsgOptions.fScanIncoming = fValue;
+            } else
+            {
+                result.push_back(Pair("result", "Unknown value."));
+                return result;
+            };
+            result.push_back(Pair("set option", std::string("scanIncoming = ") + (smsgOptions.fScanIncoming ? "true" : "false")));
         } else
         {
             result.push_back(Pair("result", "Option not found."));
@@ -155,8 +180,6 @@ Value smsglocalkeys(const Array& params, bool fHelp)
         mode = params[0].get_str();
     };
     
-    char cbuf[256];
-    
     if (mode == "whitelist"
         || mode == "all")
     {
@@ -187,7 +210,6 @@ Value smsglocalkeys(const Array& params, bool fHelp)
                 continue;
             };
             
-            
             sPublicKey = EncodeBase58(pubKey.begin(), pubKey.end());
             
             std::string sLabel = pwalletMain->mapAddressBook[keyID];
@@ -200,9 +222,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
             nKeys++;
         };
         
-        
-        snprintf(cbuf, sizeof(cbuf), "%u keys listed.", nKeys);
-        result.push_back(Pair("result", std::string(cbuf)));
+        result.push_back(Pair("result", strprintf("%u keys listed.", nKeys)));
         
     } else
     if (mode == "recv")
@@ -304,7 +324,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
         uint32_t nKeys = 0;
         BOOST_FOREACH(const PAIRTYPE(CTxDestination, std::string)& entry, pwalletMain->mapAddressBook)
         {
-            if (!IsMine(*pwalletMain, entry.first))
+            if (!IsDestMine(*pwalletMain, entry.first))
                 continue;
             
             CBitcoinAddress coinAddress(entry.first);
@@ -334,8 +354,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
             nKeys++;
         };
         
-        snprintf(cbuf, sizeof(cbuf), "%u keys listed from wallet.", nKeys);
-        result.push_back(Pair("result", std::string(cbuf)));
+        result.push_back(Pair("result", strprintf("%u keys listed from wallet.", nKeys)));
     } else
     {
         result.push_back(Pair("result", "Unknown Mode."));
@@ -617,8 +636,7 @@ Value smsginbox(const Array& params, bool fHelp)
             delete it;
             dbInbox.TxnCommit();
             
-            snprintf(cbuf, sizeof(cbuf), "Deleted %u messages.", nMessages);
-            result.push_back(Pair("result", std::string(cbuf)));
+            result.push_back(Pair("result", strprintf("Deleted %u messages.", nMessages)));
         } else
         if (mode == "all"
             || mode == "unread")
@@ -663,8 +681,7 @@ Value smsginbox(const Array& params, bool fHelp)
             delete it;
             dbInbox.TxnCommit();
             
-            snprintf(cbuf, sizeof(cbuf), "%u messages shown.", nMessages);
-            result.push_back(Pair("result", std::string(cbuf)));
+            result.push_back(Pair("result", strprintf("%u messages shown.", nMessages)));
             
         } else
         {
@@ -727,9 +744,7 @@ Value smsgoutbox(const Array& params, bool fHelp)
             delete it;
             dbOutbox.TxnCommit();
             
-            
-            snprintf(cbuf, sizeof(cbuf), "Deleted %u messages.", nMessages);
-            result.push_back(Pair("result", std::string(cbuf)));
+            result.push_back(Pair("result", strprintf("Deleted %u messages.", nMessages)));
         } else
         if (mode == "all")
         {
@@ -757,8 +772,7 @@ Value smsgoutbox(const Array& params, bool fHelp)
             };
             delete it;
             
-            snprintf(cbuf, sizeof(cbuf), "%u sent messages shown.", nMessages);
-            result.push_back(Pair("result", std::string(cbuf)));
+            result.push_back(Pair("result", strprintf("%u sent messages shown.", nMessages)));
         } else
         {
             result.push_back(Pair("result", "Unknown Mode."));
@@ -806,9 +820,6 @@ Value smsgbuckets(const Array& params, bool fHelp)
                 std::string sBucket = boost::lexical_cast<std::string>(it->first);
                 std::string sFile = sBucket + "_01.dat";
                 
-                snprintf(cbuf, sizeof(cbuf), "%zu", tokenSet.size());
-                std::string snContents(cbuf);
-                
                 std::string sHash = boost::lexical_cast<std::string>(it->second.hash);
                 
                 nBuckets++;
@@ -817,7 +828,7 @@ Value smsgbuckets(const Array& params, bool fHelp)
                 Object objM;
                 objM.push_back(Pair("bucket", sBucket));
                 objM.push_back(Pair("time", getTimeString(it->first, cbuf, sizeof(cbuf))));
-                objM.push_back(Pair("no. messages", snContents));
+                objM.push_back(Pair("no. messages", strprintf("%u", tokenSet.size())));
                 objM.push_back(Pair("hash", sHash));
                 objM.push_back(Pair("last changed", getTimeString(it->second.timeChanged, cbuf, sizeof(cbuf))));
                 
