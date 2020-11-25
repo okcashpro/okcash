@@ -103,7 +103,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 if (wallet->IsMine(txout))
                 {
                     CTxDestination address;
-                    if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*wallet, address))
+                    if (ExtractDestination(txout.scriptPubKey, address) && IsDestMine(*wallet, address))
                     {
                         if (wallet->mapAddressBook.count(address))
                         {
