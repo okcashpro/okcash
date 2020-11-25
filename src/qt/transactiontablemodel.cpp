@@ -58,7 +58,6 @@ public:
      */
     void refreshWallet()
     {
-        LogPrintf("refreshWallet\n");
         cachedWallet.clear();
 
         {
@@ -76,7 +75,7 @@ public:
      */
     void updateWallet(const uint256 &hash, int status)
     {
-        LogPrintf("updateWallet %s %i\n", hash.ToString().c_str(), status);
+        //LogPrintf("updateWallet %s %i\n", hash.ToString().c_str(), status);
         {
             LOCK2(cs_main, wallet->cs_wallet);
 
@@ -152,6 +151,26 @@ public:
             case CT_UPDATED:
                 // Miscellaneous updates -- nothing to do, status update will take care of this, and is only computed for
                 // visible transactions.
+                if (inWallet && mi->second.ForceUpdate())
+                {
+                    parent->beginRemoveRows(QModelIndex(), lowerIndex, upperIndex-1);
+                    cachedWallet.erase(lower, upper);
+                    parent->endRemoveRows();
+                    QList<TransactionRecord> toInsert =
+                            TransactionRecord::decomposeTransaction(wallet, mi->second);
+                    if(!toInsert.isEmpty()) /* only if something to insert */
+                    {
+                        parent->beginInsertRows(QModelIndex(), lowerIndex, lowerIndex+toInsert.size()-1);
+                        int insert_idx = lowerIndex;
+                        foreach(const TransactionRecord &rec, toInsert)
+                        {
+                            cachedWallet.insert(insert_idx, rec);
+                            insert_idx += 1;
+                        }
+                        parent->endInsertRows();
+                    }
+                };
+
                 break;
             }
         }
