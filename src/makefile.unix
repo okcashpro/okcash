@@ -12,8 +12,6 @@ DEFS=-DBOOST_SPIRIT_THREADSAFE
 DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH))
 LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH))
 
-# [rm]
-DEFS += -DDEBUG_LOCKORDER
 
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
@@ -118,7 +116,6 @@ OBJS= \
     obj/crypter.o \
     obj/key.o \
     obj/eckey.o \
-    obj/extkey.o \
     obj/db.o \
     obj/init.o \
     obj/okcashd.o \
@@ -137,7 +134,6 @@ OBJS= \
     obj/rpcblockchain.o \
     obj/rpcrawtransaction.o \
     obj/rpcsmessage.o \
-    obj/rpcextkey.o \
     obj/script.o \
     obj/sync.o \
     obj/util.o \
@@ -204,11 +200,19 @@ okcashd: $(OBJS:obj/%=obj/%)
 
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
+#TESTOBJS := obj-test/json_spirit_reader.o
 
-xTESTCXXFLAGS = -std=c++11
+#obj-test/json_spirit_reader.o: json/json_spirit_reader.cpp
+#	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+#	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+#		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+#		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+#	rm -f $(@:%.o=%.d)
+    
+
 
 obj-test/%.o: test/%.cpp
-	$(CXX) -c $(TESTDEFS) $(xTESTCXXFLAGS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
 	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
 		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \

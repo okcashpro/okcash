@@ -237,7 +237,7 @@ CDB::CDB(const char *pszFile, const char* pszMode) :
 
     fReadOnly = (!strchr(pszMode, '+') && !strchr(pszMode, 'w'));
     bool fCreate = strchr(pszMode, 'c');
-    unsigned int nFlags = DB_READ_UNCOMMITTED | DB_THREAD; // get must be called with DB_READ_UNCOMMITTED also for it to apply
+    unsigned int nFlags = DB_THREAD;
     if (fCreate)
         nFlags |= DB_CREATE;
 

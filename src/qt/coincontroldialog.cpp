@@ -585,8 +585,6 @@ void CoinControlDialog::updateView()
 {
     bool treeMode = ui->radioTreeMode->isChecked();
 
-    LOCK(cs_main);
-	
     ui->treeWidget->clear();
     ui->treeWidget->setEnabled(false); // performance, otherwise updateLabels would be called for every checked checkbox
     ui->treeWidget->setAlternatingRowColors(!treeMode);

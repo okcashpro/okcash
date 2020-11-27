@@ -21,7 +21,6 @@
 
 #include "allocators.h"
 #include "version.h"
-#include "types.h"
 
 class CAutoFile;
 class CDataStream;
@@ -120,8 +119,6 @@ inline unsigned int GetSerializeSize(unsigned long long a, int, int=0) { return 
 inline unsigned int GetSerializeSize(float a,              int, int=0) { return sizeof(a); }
 inline unsigned int GetSerializeSize(double a,             int, int=0) { return sizeof(a); }
 
-
-
 template<typename Stream> inline void Serialize(Stream& s, char a,               int, int=0) { WRITEDATA(s, a); }
 template<typename Stream> inline void Serialize(Stream& s, signed char a,        int, int=0) { WRITEDATA(s, a); }
 template<typename Stream> inline void Serialize(Stream& s, unsigned char a,      int, int=0) { WRITEDATA(s, a); }
@@ -135,8 +132,6 @@ template<typename Stream> inline void Serialize(Stream& s, signed long long a,  
 template<typename Stream> inline void Serialize(Stream& s, unsigned long long a, int, int=0) { WRITEDATA(s, a); }
 template<typename Stream> inline void Serialize(Stream& s, float a,              int, int=0) { WRITEDATA(s, a); }
 template<typename Stream> inline void Serialize(Stream& s, double a,             int, int=0) { WRITEDATA(s, a); }
-
-
 
 template<typename Stream> inline void Unserialize(Stream& s, char& a,               int, int=0) { READDATA(s, a); }
 template<typename Stream> inline void Unserialize(Stream& s, signed char& a,        int, int=0) { READDATA(s, a); }
@@ -152,11 +147,11 @@ template<typename Stream> inline void Unserialize(Stream& s, unsigned long long&
 template<typename Stream> inline void Unserialize(Stream& s, float& a,              int, int=0) { READDATA(s, a); }
 template<typename Stream> inline void Unserialize(Stream& s, double& a,             int, int=0) { READDATA(s, a); }
 
-
-
 inline unsigned int GetSerializeSize(bool a, int, int=0)                          { return sizeof(char); }
 template<typename Stream> inline void Serialize(Stream& s, bool a, int, int=0)    { char f=a; WRITEDATA(s, f); }
 template<typename Stream> inline void Unserialize(Stream& s, bool& a, int, int=0) { char f; READDATA(s, f); a=f; }
+
+
 
 
 
@@ -175,7 +170,6 @@ inline unsigned int GetSizeOfCompactSize(uint64_t nSize)
     else if (nSize <= std::numeric_limits<unsigned int>::max())  return sizeof(unsigned char) + sizeof(unsigned int);
     else                         return sizeof(unsigned char) + sizeof(uint64_t);
 }
-
 
 template<typename Stream>
 void WriteCompactSize(Stream& os, uint64_t nSize)

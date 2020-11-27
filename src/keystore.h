@@ -9,7 +9,7 @@
 #include "sync.h"
 #include <boost/signals2/signal.hpp>
 
-class CScriptID;
+class CScript;
 
 /** A virtual base class for key stores */
 class CKeyStore

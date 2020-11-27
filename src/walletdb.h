@@ -10,46 +10,6 @@
 #include "stealth.h"
 #include "ringsig.h"
 
-
-/*
-prefixes
-    name
-    acc
-    acentry
-    keymeta
-    key
-    ckey
-    wkey
-    mkey
-    defaultkey
-    sxAddr
-    sxKeyMeta
-    keymeta
-    lastfilteredheight
-    pool
-    version
-    cscript
-    orderposnext
-    minversion
-    tx
-    lao                 - locked anon output
-    oao                 - owned anon output
-    oal
-    bestblock
-    bestblockheader
-    minversion
-    ek32                - bip32 extended keypair
-    eknm                - named extended key
-    eacc                - extended account
-    epak                - extended account key pack
-    espk                - extended account stealth key pack
-    ecpk                - extended account stealth child key pack
-    flag                - named integer flag
-    
-    old:
-        
-*/
-
 class CKeyPool;
 class CAccount;
 class CAccountingEntry;
@@ -208,40 +168,10 @@ public:
     {
         return activeTxn;
     }
-
-    template< typename T>
-    bool Replace(Dbc *pcursor, const T& value)
-    {
-        if (!pcursor)
-            return false;
-
-        if (fReadOnly)
-            assert(!"Replace called on database in read-only mode");
-
-        // Value
-        CDataStream ssValue(SER_DISK, CLIENT_VERSION);
-        ssValue.reserve(10000);
-        ssValue << value;
-        Dbt datValue(&ssValue[0], ssValue.size());
-
-        // Write
-        int ret = pcursor->put(NULL, &datValue, DB_CURRENT);
-
-        if (ret != 0)
-        {
-            LogPrintf("CursorPut ret %d - %s\n", ret, DbEnv::strerror(ret));
-        };
-        // Clear memory in case it was a private key
-        memset(datValue.get_data(), 0, datValue.get_size());
-
-        return (ret == 0);
-    }
-
+    
     bool WriteName(const std::string& strAddress, const std::string& strName);
 
     bool EraseName(const std::string& strAddress);
-
-    bool EraseRange(const std::string& sPrefix, uint32_t &nAffected);
 
     bool WriteTx(uint256 hash, const CWalletTx& wtx)
     {
@@ -415,83 +345,7 @@ public:
     {
         return Write(std::string("minversion"), nVersion);
     }
-
-bool ReadNamedExtKeyId(const std::string &name, CKeyID &identifier, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(std::make_pair(std::string("eknm"), name), identifier, nFlags);
-    }
-
-    bool WriteNamedExtKeyId(const std::string &name, const CKeyID &identifier)
-    {
-        nWalletDBUpdated++;
-        return Write(std::make_pair(std::string("eknm"), name), identifier, true);
-    }
-
-    bool ReadExtKey(const CKeyID &identifier, CStoredExtKey &ek32, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(std::make_pair(std::string("ek32"), identifier), ek32, nFlags);
-    }
-
-    bool WriteExtKey(const CKeyID &identifier, const CStoredExtKey &ek32)
-    {
-        nWalletDBUpdated++;
-        return Write(std::make_pair(std::string("ek32"), identifier), ek32, true);
-    }
-
-    bool ReadExtAccount(const CKeyID &identifier, CExtKeyAccount &ekAcc, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(std::make_pair(std::string("eacc"), identifier), ekAcc, nFlags);
-    }
-
-    bool WriteExtAccount(const CKeyID &identifier, const CExtKeyAccount &ekAcc)
-    {
-        nWalletDBUpdated++;
-        return Write(std::make_pair(std::string("eacc"), identifier), ekAcc, true);
-    }
-
-    bool ReadExtKeyPack(const CKeyID &identifier, const uint32_t nPack, std::vector<CEKAKeyPack> &ekPak, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(boost::make_tuple(std::string("epak"), identifier, nPack), ekPak, nFlags);
-    }
-
-    bool WriteExtKeyPack(const CKeyID &identifier, const uint32_t nPack, const std::vector<CEKAKeyPack> &ekPak)
-    {
-        nWalletDBUpdated++;
-        return Write(boost::make_tuple(std::string("epak"), identifier, nPack), ekPak, true);
-    }
-
-    bool ReadExtStealthKeyPack(const CKeyID &identifier, const uint32_t nPack, std::vector<CEKAStealthKeyPack> &aksPak, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(boost::make_tuple(std::string("espk"), identifier, nPack), aksPak, nFlags);
-    }
-
-    bool WriteExtStealthKeyPack(const CKeyID &identifier, const uint32_t nPack, const std::vector<CEKAStealthKeyPack> &aksPak)
-    {
-        nWalletDBUpdated++;
-        return Write(boost::make_tuple(std::string("espk"), identifier, nPack), aksPak, true);
-    }
-
-    bool ReadExtStealthKeyChildPack(const CKeyID &identifier, const uint32_t nPack, std::vector<CEKASCKeyPack> &asckPak, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(boost::make_tuple(std::string("ecpk"), identifier, nPack), asckPak, nFlags);
-    }
-
-    bool WriteExtStealthKeyChildPack(const CKeyID &identifier, const uint32_t nPack, const std::vector<CEKASCKeyPack> &asckPak)
-    {
-        nWalletDBUpdated++;
-        return Write(boost::make_tuple(std::string("ecpk"), identifier, nPack), asckPak, true);
-    }
-
-    bool ReadFlag(const std::string &name, int32_t &nValue, uint32_t nFlags=DB_READ_UNCOMMITTED)
-    {
-        return Read(std::make_pair(std::string("flag"), name), nValue, nFlags);
-    }
-
-    bool WriteFlag(const std::string &name, int32_t nValue)
-    {
-        nWalletDBUpdated++;
-        return Write(std::make_pair(std::string("flag"), name), nValue, true);
-    }
+    
 
     bool ReadAccount(const std::string& strAccount, CAccount& account);
     bool WriteAccount(const std::string& strAccount, const CAccount& account);

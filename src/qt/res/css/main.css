@@ -84,7 +84,7 @@ p {
     margin: 2px;
 }
 
-.content input, textarea {
+.content input {
     color:#3c3c3c;
     font-weight:500;
     border-radius: 0;
@@ -328,7 +328,7 @@ article {
     border-width: 1px 0 0 0;
     background: #ecf0f1;
     overflow:auto;
-    box-shadow:0 -1px 0 0 #dee2e2,
+    box-okcash:0 -1px 0 0 #dee2e2,
                0 -2px 0 0 #f8f8f8;
 }
 
@@ -351,7 +351,7 @@ article {
     background: inherit;
     padding: 10px;
     cursor: pointer;
-    box-shadow: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
+    box-okcash: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
     z-index: 10000;
 }
 
@@ -551,12 +551,12 @@ article {
             background: #131218;
             border-radius: 50px;
             padding: 2px;
-            box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
+            box-okcash: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
     }
 
     progress::-webkit-progress-value {
             border-radius: 50px;
-            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+            box-okcash: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
             background:
                     -webkit-linear-gradient(45deg, transparent, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%),
                     -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.2)),
@@ -1234,8 +1234,8 @@ label.recipient {
 
 .button:active,
 .button.is-active {
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  -webkit-box-okcash: none;
+  box-okcash: none;
   text-decoration: none;
 }
 
@@ -1455,14 +1455,6 @@ label.recipient {
   text-align: center;
 }
 
-.small-button
-{
-    margin-right:10px; 
-    margin-left:5px; 
-    height:40px; 
-    width:40px; 
-    margin-bottom:7px;
-}
 
 /****************************
 
@@ -1716,9 +1708,9 @@ label.recipient {
     padding: 10px;
     border-radius: 5px;
     margin-left: 10px;
-    -webkit-box-shadow:  1px 1px 5px rgba(0,0,0,.15);
-    -moz-box-shadow:  1px 1px 5px rgba(0,0,0,.15);
-    box-shadow: 1px 1px 5px rgba(0,0,0,.15);
+    -webkit-box-okcash:  1px 1px 5px rgba(0,0,0,.15);
+    -moz-box-okcash:  1px 1px 5px rgba(0,0,0,.15);
+    box-okcash: 1px 1px 5px rgba(0,0,0,.15);
     font-size: 15px;
     max-width: 75%;
     overflow-wrap: break-word;
@@ -1897,11 +1889,6 @@ label.recipient {
 
 .margin-left-10 {
     margin-left: 10px;
-}
-
-.inputError {
-    color: white !important;
-    background: #E51C39 !important;
 }
 
 .red {
@@ -2180,60 +2167,13 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
 
 .modal_close { position: absolute; top: 12px; right: 12px; display: block; width: 20px; height: 20px; z-index: 2; }
 
-#add-address-modal {
-    margin: auto;
-    padding: 20px;
-    width: 800px;
-    background: #fff;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
-    display: none;
-}
-
-#address-lookup-modal {
-    margin: auto;
-    padding: 20px;
-    width: 800px;
-    background: #fff;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
-    display: none;
-}
-
-#verify-sign-modal {
-    margin: auto;
-    padding: 20px;
-    width: 750px;
-    background: #fff;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
-    display: none;
-    position: absolute;
-}
-
-#verify-sign-modal input
-{
-    width:650px;
-    height:40px;
-    padding:0 10px;
-    margin-bottom:10px;
-}
-
-#verify-sign-modal textarea
-{
-    width: 698px; 
-    height: 100px;
-    padding:0 10px;
-    margin-bottom:10px;
-}
-
 #qrcode-modal {
     margin: auto;
     padding: 20px;
     width: 400px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
 }
 
@@ -2254,7 +2194,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2266,7 +2206,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2279,7 +2219,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2291,7 +2231,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 320px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2306,7 +2246,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     width: 630px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
 }
 
@@ -2326,7 +2266,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     font-size:0.8em;
     color: #F51E3E;
     background: #ecf0f1;
-    box-shadow: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
+    box-okcash: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
 }
 
 .network-alerts-icon {
@@ -2452,29 +2392,4 @@ input[type=checkbox]:checked + label:before {
     line-height:1.42857143;
     vertical-align:top;
     border-bottom:1px solid #ddd
-}
-
-.heading-selected {
-    font-size: 1.2em;
-    margin: 0;
-    margin-bottom: 30px;
-    font-family: "Open Sans", sans-serif;
-    font-weight: 700;
-    color:#313131;
-    text-transform: uppercase;
-    white-space: normal;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.heading-deselected {
-    font-size: 1.2em;
-    margin: 0;
-    margin-bottom: 30px;
-    font-family: "Open Sans", sans-serif;
-    font-weight: 700;
-    color:#999;
-    text-transform: uppercase;
-    text-decoration: none;  
-    cursor: pointer;  
 }

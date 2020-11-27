@@ -307,53 +307,6 @@ bool CTxDB::EraseAnonOutput(CPubKey& pkCoin)
     return Erase(make_pair(string("ao"), pkCoin));
 };
 
-bool CTxDB::EraseRange(const std::string &sPrefix, uint32_t &nAffected)
-{
-
-    TxnBegin();
-
-    leveldb::Iterator *iterator = pdb->NewIterator(leveldb::ReadOptions());
-    if (!iterator)
-        LogPrintf("EraseRange(%s) - NewIterator failed.\n", sPrefix.c_str());
-
-    size_t nLenPrefix = sPrefix.length();
-
-    if (nLenPrefix > 252) // fit in 256 and compressed int is 1 byte
-    {
-        LogPrintf("EraseRange(%s) - Key length too long.\n", sPrefix.c_str());
-        return false;
-    };
-
-    // - key starts with strlen || str
-    uint8_t data[256];
-    data[0] = (uint8_t)nLenPrefix;
-    memcpy(&data[1], sPrefix.data(), nLenPrefix);
-
-    iterator->Seek(leveldb::Slice((const char*)data, nLenPrefix+1));
-
-    leveldb::WriteOptions writeOptions;
-    writeOptions.sync = true;
-    while (iterator->Valid())
-    {
-        if (iterator->key().size() < nLenPrefix+1
-            || memcmp(iterator->key().data(), data, nLenPrefix+1) != 0)
-            break;
-
-        leveldb::Status s = pdb->Delete(writeOptions, iterator->key());
-
-        if (!s.ok())
-            LogPrintf("EraseRange(%s) - Delete failed.\n", sPrefix.c_str());
-
-        nAffected++;
-        iterator->Next();
-    };
-
-
-    delete iterator;
-    TxnCommit();
-
-    return true;
-};
 
 bool CTxDB::ReadTxIndex(uint256 hash, CTxIndex& txindex)
 {

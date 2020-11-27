@@ -8,7 +8,7 @@
 // These need to be macros, as version.cpp's and okcash.rc's voodoo requires it
 #define CLIENT_VERSION_MAJOR       5
 #define CLIENT_VERSION_MINOR       0
-#define CLIENT_VERSION_REVISION    1
+#define CLIENT_VERSION_REVISION    0
 #define CLIENT_VERSION_BUILD       5
 
 // Converts the parameter X to a string after macro replacement on X has been performed.

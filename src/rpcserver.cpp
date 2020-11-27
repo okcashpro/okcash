@@ -115,25 +115,10 @@ bool IsStringBoolNegative(std::string& value)
     return (value == "-" || value == "off" || value == "false" || value == "0" || value == "no" || value == "n");
 };
 
-bool GetStringBool(std::string& value, bool &fOut)
-{
-    if (IsStringBoolPositive(value))
-    {
-        fOut = true;
-        return true;
-    };
-
-    if (IsStringBoolNegative(value))
-    {
-        fOut = false;
-        return true;
-    };
-
-    return false;
-};
-
+//
 // Utilities: convert hex-encoded Values
 // (throws error if not hex).
+//
 uint256 ParseHashV(const Value& v, std::string strName)
 {
     std::string strHex;
@@ -276,8 +261,7 @@ static const CRPCCommand vRPCCommands[] =
     { "getmininginfo",          &getmininginfo,          true,      false,     false },
     { "getstakinginfo",         &getstakinginfo,         true,      false,     false },
     { "getnewaddress",          &getnewaddress,          true,      false,     false },
-    { "getnewextaddress",       &getnewextaddress,       true,      false,     false },
-    { "getnewpubkey",           &getnewpubkey,           true,      false,     true  },
+    { "getnewpubkey",           &getnewpubkey,           true,      false,     false },
     { "getaccountaddress",      &getaccountaddress,      true,      false,     false },
     { "setaccount",             &setaccount,             true,      false,     false },
     { "getaccount",             &getaccount,             false,     false,     false },
@@ -299,8 +283,7 @@ static const CRPCCommand vRPCCommands[] =
     { "move",                   &movecmd,                false,     false,     false },
     { "sendfrom",               &sendfrom,               false,     false,     false },
     { "sendmany",               &sendmany,               false,     false,     false },
-    { "addmultisigaddress",     &addmultisigaddress,     false,     false,     true  },
-    { "createmultisig",         &createmultisig,         true,      false,     true  },
+    { "addmultisigaddress",     &addmultisigaddress,     false,     false,     false },
     { "addredeemscript",        &addredeemscript,        false,     false,     false },
     { "getrawmempool",          &getrawmempool,          true,      false,     false },
     { "getblock",               &getblock,               false,     false,     false },
@@ -380,8 +363,6 @@ static const CRPCCommand vRPCCommands[] =
     { "thinscanmerkleblocks",   &thinscanmerkleblocks,   false,     false,     false },
     { "thinforcestate",         &thinforcestate,         false,     false,     false },
     
-    { "extkey",                 &extkey,                 false,     false,     true  },
-    { "bip32",                  &extkey,                 false,     false,     true  },
 };
 
 CRPCTable::CRPCTable()
@@ -739,6 +720,17 @@ CNetAddr BoostAsioToCNetAddr(boost::asio::ip::address address)
     
     return netaddr;
 }
+
+class JSONRequest
+{
+public:
+    Value id;
+    std::string strMethod;
+    Array params;
+
+    JSONRequest() { id = Value::null; }
+    void parse(const Value& valRequest);
+};
 
 void JSONRequest::parse(const Value& valRequest)
 {

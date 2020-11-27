@@ -5,24 +5,20 @@
 #include "key.h"
 #include "eckey.h"
 
-int CompareBigEndian(const unsigned char *c1, size_t c1len, const unsigned char *c2, size_t c2len)
-{
-    while (c1len > c2len)
-    {
+int CompareBigEndian(const unsigned char *c1, size_t c1len, const unsigned char *c2, size_t c2len) {
+    while (c1len > c2len) {
         if (*c1)
             return 1;
         c1++;
         c1len--;
-    };
-    while (c2len > c1len)
-    {
+    }
+    while (c2len > c1len) {
         if (*c2)
             return -1;
         c2++;
         c2len--;
-    };
-    while (c1len > 0)
-    {
+    }
+    while (c1len > 0) {
         if (*c1 > *c2)
             return 1;
         if (*c2 > *c1)
@@ -30,7 +26,7 @@ int CompareBigEndian(const unsigned char *c1, size_t c1len, const unsigned char 
         c1++;
         c2++;
         c1len--;
-    };
+    }
     return 0;
 }
 
@@ -54,8 +50,7 @@ const unsigned char vchZero[0] = {};
 
 
 
-bool CKey::Check(const unsigned char *vch)
-{
+bool CKey::Check(const unsigned char *vch) {
     // Do not convert to OpenSSL's data structures for range-checking keys,
     // it's easy enough to do directly.
     static const unsigned char vchMax[32] = {
@@ -70,8 +65,7 @@ bool CKey::Check(const unsigned char *vch)
             fIsZero = false;
     if (fIsZero)
         return false;
-    for (int i=0; i<32; i++)
-    {
+    for (int i=0; i<32; i++) {
         if (vch[i] < vchMax[i])
             return true;
         if (vch[i] > vchMax[i])
@@ -80,14 +74,12 @@ bool CKey::Check(const unsigned char *vch)
     return true;
 }
 
-bool CKey::CheckSignatureElement(const unsigned char *vch, int len, bool half)
-{
+bool CKey::CheckSignatureElement(const unsigned char *vch, int len, bool half) {
     return CompareBigEndian(vch, len, vchZero, 0) > 0 &&
            CompareBigEndian(vch, len, half ? vchMaxModHalfOrder : vchMaxModOrder, 32) <= 0;
 }
 
-bool CKey::ReserealizeSignature(std::vector<unsigned char>& vchSig)
-{
+bool CKey::ReserealizeSignature(std::vector<unsigned char>& vchSig) {
     unsigned char *pos;
 
     if (vchSig.empty())
@@ -100,8 +92,7 @@ bool CKey::ReserealizeSignature(std::vector<unsigned char>& vchSig)
 
     bool ret = false;
     int nSize = i2d_ECDSA_SIG(sig, NULL);
-    if (nSize > 0)
-    {
+    if (nSize > 0) {
         vchSig.resize(nSize); // grow or shrink as needed
 
         pos = &vchSig[0];
@@ -114,8 +105,7 @@ bool CKey::ReserealizeSignature(std::vector<unsigned char>& vchSig)
     return ret;
 }
 
-void CKey::MakeNewKey(bool fCompressedIn)
-{
+void CKey::MakeNewKey(bool fCompressedIn) {
     do {
         RAND_bytes(vch, sizeof(vch));
     } while (!Check(vch));
@@ -123,8 +113,7 @@ void CKey::MakeNewKey(bool fCompressedIn)
     fCompressed = fCompressedIn;
 }
 
-bool CKey::SetPrivKey(const CPrivKey &privkey, bool fCompressedIn)
-{
+bool CKey::SetPrivKey(const CPrivKey &privkey, bool fCompressedIn) {
     CECKey key;
     if (!key.SetPrivKey(privkey))
         return false;
@@ -134,8 +123,7 @@ bool CKey::SetPrivKey(const CPrivKey &privkey, bool fCompressedIn)
     return true;
 }
 
-CPrivKey CKey::GetPrivKey() const
-{
+CPrivKey CKey::GetPrivKey() const {
     assert(fValid);
     CECKey key;
     key.SetSecretBytes(vch);
@@ -144,8 +132,7 @@ CPrivKey CKey::GetPrivKey() const
     return privkey;
 }
 
-CPubKey CKey::GetPubKey() const
-{
+CPubKey CKey::GetPubKey() const {
     assert(fValid);
     CECKey key;
     key.SetSecretBytes(vch);
@@ -154,8 +141,7 @@ CPubKey CKey::GetPubKey() const
     return pubkey;
 }
 
-CPubKey CKey::GetPubKey(bool fForceCompressed) const
-{
+CPubKey CKey::GetPubKey(bool fForceCompressed) const {
     assert(fValid);
     CECKey key;
     key.SetSecretBytes(vch);
@@ -164,8 +150,7 @@ CPubKey CKey::GetPubKey(bool fForceCompressed) const
     return pubkey;
 }
 
-bool CKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig) const
-{
+bool CKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig) const {
     if (!fValid)
         return false;
     CECKey key;
@@ -173,8 +158,7 @@ bool CKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig) const
     return key.Sign(hash, vchSig);
 }
 
-bool CKey::SignCompact(const uint256 &hash, std::vector<unsigned char>& vchSig) const
-{
+bool CKey::SignCompact(const uint256 &hash, std::vector<unsigned char>& vchSig) const {
     if (!fValid)
         return false;
     CECKey key;
@@ -188,8 +172,7 @@ bool CKey::SignCompact(const uint256 &hash, std::vector<unsigned char>& vchSig) 
     return true;
 }
 
-bool CKey::Load(CPrivKey &privkey, CPubKey &vchPubKey, bool fSkipCheck=false)
-{
+bool CKey::Load(CPrivKey &privkey, CPubKey &vchPubKey, bool fSkipCheck=false) {
     CECKey key;
     if (!key.SetPrivKey(privkey, fSkipCheck))
         return false;
@@ -207,8 +190,7 @@ bool CKey::Load(CPrivKey &privkey, CPubKey &vchPubKey, bool fSkipCheck=false)
     return true;
 }
 
-bool CPubKey::Verify(const uint256 &hash, const std::vector<unsigned char>& vchSig) const
-{
+bool CPubKey::Verify(const uint256 &hash, const std::vector<unsigned char>& vchSig) const {
     if (!IsValid())
         return false;
     CECKey key;
@@ -219,8 +201,7 @@ bool CPubKey::Verify(const uint256 &hash, const std::vector<unsigned char>& vchS
     return true;
 }
 
-bool CPubKey::RecoverCompact(const uint256 &hash, const std::vector<unsigned char>& vchSig)
-{
+bool CPubKey::RecoverCompact(const uint256 &hash, const std::vector<unsigned char>& vchSig) {
     if (vchSig.size() != 65)
         return false;
     CECKey key;
@@ -230,8 +211,7 @@ bool CPubKey::RecoverCompact(const uint256 &hash, const std::vector<unsigned cha
     return true;
 }
 
-bool CPubKey::VerifyCompact(const uint256 &hash, const std::vector<unsigned char>& vchSig) const
-{
+bool CPubKey::VerifyCompact(const uint256 &hash, const std::vector<unsigned char>& vchSig) const {
     if (!IsValid())
         return false;
     if (vchSig.size() != 65)
@@ -246,8 +226,7 @@ bool CPubKey::VerifyCompact(const uint256 &hash, const std::vector<unsigned char
     return true;
 }
 
-bool CPubKey::IsFullyValid() const
-{
+bool CPubKey::IsFullyValid() const {
     if (!IsValid())
         return false;
     CECKey key;
@@ -256,8 +235,7 @@ bool CPubKey::IsFullyValid() const
     return true;
 }
 
-bool CPubKey::Decompress()
-{
+bool CPubKey::Decompress() {
     if (!IsValid())
         return false;
     CECKey key;
@@ -267,8 +245,7 @@ bool CPubKey::Decompress()
     return true;
 }
 
-void static BIP32Hash(const unsigned char chainCode[32], unsigned int nChild, unsigned char header, const unsigned char data[32], unsigned char output[64])
-{
+void static BIP32Hash(const unsigned char chainCode[32], unsigned int nChild, unsigned char header, const unsigned char data[32], unsigned char output[64]) {
     unsigned char num[4];
     num[0] = (nChild >> 24) & 0xFF;
     num[1] = (nChild >> 16) & 0xFF;
@@ -282,22 +259,19 @@ void static BIP32Hash(const unsigned char chainCode[32], unsigned int nChild, un
     HMAC_SHA512_Final(output, &ctx);
 }
 
-bool CKey::Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const
-{
+bool CKey::Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const {
     assert(IsValid());
     assert(IsCompressed());
     unsigned char out[64];
     LockObject(out);
-    if ((nChild >> 31) == 0)
-    {
+    if ((nChild >> 31) == 0) {
         CPubKey pubkey = GetPubKey();
         assert(pubkey.begin() + 33 == pubkey.end());
         BIP32Hash(cc, nChild, *pubkey.begin(), pubkey.begin()+1, out);
-    } else
-    {
+    } else {
         assert(begin() + 32 == end());
         BIP32Hash(cc, nChild, 0, begin(), out);
-    };
+    }
     memcpy(ccChild, out+32, 32);
     bool ret = TweakSecret((unsigned char*)keyChild.begin(), begin(), out);
     UnlockObject(out);
@@ -306,23 +280,7 @@ bool CKey::Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild
     return ret;
 }
 
-bool CKey::VerifyPubKey(const CPubKey& pubkey) const
-{
-    if (pubkey.IsCompressed() != fCompressed)
-    {
-        return false;
-    }
-    unsigned char rnd[8];
-    std::string str = "Bitcoin key verification\n";
-    RAND_bytes(rnd, sizeof(rnd));
-    uint256 hash = CHashWriter(SER_GETHASH, 0).write((char*)str.data(), str.size()).write((char*)rnd, sizeof(rnd)).GetHash();
-    std::vector<unsigned char> vchSig;
-    Sign(hash, vchSig);
-    return pubkey.Verify(hash, vchSig);
-}
-
-bool CPubKey::Derive(CPubKey& pubkeyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const
-{
+bool CPubKey::Derive(CPubKey& pubkeyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const {
     assert(IsValid());
     assert((nChild >> 31) == 0);
     assert(begin() + 33 == end());
@@ -336,8 +294,7 @@ bool CPubKey::Derive(CPubKey& pubkeyChild, unsigned char ccChild[32], unsigned i
     return ret;
 }
 
-bool CExtKey::Derive(CExtKey &out, unsigned int nChild) const
-{
+bool CExtKey::Derive(CExtKey &out, unsigned int nChild) const {
     out.nDepth = nDepth + 1;
     CKeyID id = key.GetPubKey().GetID();
     memcpy(&out.vchFingerprint[0], &id, 4);
@@ -345,8 +302,7 @@ bool CExtKey::Derive(CExtKey &out, unsigned int nChild) const
     return key.Derive(out.key, out.vchChainCode, nChild, vchChainCode);
 }
 
-void CExtKey::SetMaster(const unsigned char *seed, unsigned int nSeedLen)
-{
+void CExtKey::SetMaster(const unsigned char *seed, unsigned int nSeedLen) {
     static const char hashkey[] = {'B','i','t','c','o','i','n',' ','s','e','e','d'};
     HMAC_SHA512_CTX ctx;
     HMAC_SHA512_Init(&ctx, hashkey, sizeof(hashkey));
@@ -362,18 +318,7 @@ void CExtKey::SetMaster(const unsigned char *seed, unsigned int nSeedLen)
     memset(vchFingerprint, 0, sizeof(vchFingerprint));
 }
 
-int CExtKey::SetKeyCode(const unsigned char *pkey, const unsigned char *pcode)
-{
-    key.Set(pkey, true);
-    memcpy(vchChainCode, pcode, 32);
-    nDepth = 0;
-    nChild = 0;
-    memset(vchFingerprint, 0, sizeof(vchFingerprint));
-    return 0;
-}
-
-CExtPubKey CExtKey::Neutered() const
-{
+CExtPubKey CExtKey::Neuter() const {
     CExtPubKey ret;
     ret.nDepth = nDepth;
     memcpy(&ret.vchFingerprint[0], &vchFingerprint[0], 4);
@@ -383,8 +328,7 @@ CExtPubKey CExtKey::Neutered() const
     return ret;
 }
 
-void CExtKey::Encode(unsigned char code[74]) const
-{
+void CExtKey::Encode(unsigned char code[74]) const {
     code[0] = nDepth;
     memcpy(code+1, vchFingerprint, 4);
     code[5] = (nChild >> 24) & 0xFF; code[6] = (nChild >> 16) & 0xFF;
@@ -395,8 +339,7 @@ void CExtKey::Encode(unsigned char code[74]) const
     memcpy(code+42, key.begin(), 32);
 }
 
-void CExtKey::Decode(const unsigned char code[74])
-{
+void CExtKey::Decode(const unsigned char code[74]) {
     nDepth = code[0];
     memcpy(vchFingerprint, code+1, 4);
     nChild = (code[5] << 24) | (code[6] << 16) | (code[7] << 8) | code[8];
@@ -404,8 +347,7 @@ void CExtKey::Decode(const unsigned char code[74])
     key.Set(code+42, code+74, true);
 }
 
-void CExtPubKey::Encode(unsigned char code[74]) const
-{
+void CExtPubKey::Encode(unsigned char code[74]) const {
     code[0] = nDepth;
     memcpy(code+1, vchFingerprint, 4);
     code[5] = (nChild >> 24) & 0xFF; code[6] = (nChild >> 16) & 0xFF;
@@ -415,8 +357,7 @@ void CExtPubKey::Encode(unsigned char code[74]) const
     memcpy(code+41, pubkey.begin(), 33);
 }
 
-void CExtPubKey::Decode(const unsigned char code[74])
-{
+void CExtPubKey::Decode(const unsigned char code[74]) {
     nDepth = code[0];
     memcpy(vchFingerprint, code+1, 4);
     nChild = (code[5] << 24) | (code[6] << 16) | (code[7] << 8) | code[8];
@@ -424,177 +365,15 @@ void CExtPubKey::Decode(const unsigned char code[74])
     pubkey.Set(code+41, code+74);
 }
 
-bool CExtPubKey::Derive(CExtPubKey &out, unsigned int nChild) const
-{
+bool CExtPubKey::Derive(CExtPubKey &out, unsigned int nChild) const {
     out.nDepth = nDepth + 1;
     CKeyID id = pubkey.GetID();
-
     memcpy(&out.vchFingerprint[0], &id, 4);
     out.nChild = nChild;
     return pubkey.Derive(out.pubkey, out.vchChainCode, nChild, vchChainCode);
 }
 
-
-void CExtKeyPair::EncodeV(unsigned char code[74]) const
-{
-    code[0] = nDepth;
-    memcpy(code+1, vchFingerprint, 4);
-    code[5] = (nChild >> 24) & 0xFF; code[6] = (nChild >> 16) & 0xFF;
-    code[7] = (nChild >>  8) & 0xFF; code[8] = (nChild >>  0) & 0xFF;
-    memcpy(code+9, vchChainCode, 32);
-    code[41] = 0;
-    assert(key.size() == 32);
-    memcpy(code+42, key.begin(), 32);
-};
-
-void CExtKeyPair::DecodeV(const unsigned char code[74])
-{
-    nDepth = code[0];
-    memcpy(vchFingerprint, code+1, 4);
-    nChild = (code[5] << 24) | (code[6] << 16) | (code[7] << 8) | code[8];
-    memcpy(vchChainCode, code+9, 32);
-    key.Set(code+42, code+74, true);
-    pubkey = key.GetPubKey();
-};
-
-void CExtKeyPair::EncodeP(unsigned char code[74]) const
-{
-    code[0] = nDepth;
-    memcpy(code+1, vchFingerprint, 4);
-    code[5] = (nChild >> 24) & 0xFF; code[6] = (nChild >> 16) & 0xFF;
-    code[7] = (nChild >>  8) & 0xFF; code[8] = (nChild >>  0) & 0xFF;
-    memcpy(code+9, vchChainCode, 32);
-    assert(pubkey.size() == 33);
-    memcpy(code+41, pubkey.begin(), 33);
-};
-
-void CExtKeyPair::DecodeP(const unsigned char code[74])
-{
-    nDepth = code[0];
-    memcpy(vchFingerprint, code+1, 4);
-    nChild = (code[5] << 24) | (code[6] << 16) | (code[7] << 8) | code[8];
-    memcpy(vchChainCode, code+9, 32);
-    pubkey.Set(code+41, code+74);
-    key.Clear();
-};
-
-bool CExtKeyPair::Derive(CExtKey &out, unsigned int nChild) const
-{
-    if (!key.IsValid())
-        return false;
-    out.nDepth = nDepth + 1;
-    CKeyID id = key.GetPubKey().GetID();
-    memcpy(&out.vchFingerprint[0], &id, 4);
-    out.nChild = nChild;
-    return key.Derive(out.key, out.vchChainCode, nChild, vchChainCode);
-};
-
-bool CExtKeyPair::Derive(CExtPubKey &out, unsigned int nChild) const
-{
-    if ((nChild >> 31) == 0)
-    {
-        out.nDepth = nDepth + 1;
-        CKeyID id = pubkey.GetID();
-        memcpy(&out.vchFingerprint[0], &id, 4);
-        out.nChild = nChild;
-        return pubkey.Derive(out.pubkey, out.vchChainCode, nChild, vchChainCode);
-    };
-    if (!key.IsValid())
-        return false;
-
-    out.nDepth = nDepth + 1;
-    CKeyID id = pubkey.GetID();
-    memcpy(&out.vchFingerprint[0], &id, 4);
-    out.nChild = nChild;
-    CKey tkey;
-    if (!key.Derive(tkey, out.vchChainCode, nChild, vchChainCode))
-        return false;
-
-    out.pubkey = tkey.GetPubKey();
-    return true;
-};
-
-bool CExtKeyPair::Derive(CKey &out, unsigned int nChild) const
-{
-    if (!key.IsValid())
-        return false;
-
-    unsigned char temp[32];
-    return key.Derive(out, temp, nChild, vchChainCode);
-};
-
-bool CExtKeyPair::Derive(CPubKey &out, unsigned int nChild) const
-{
-    unsigned char temp[32];
-    if ((nChild >> 31) == 0)
-    {
-        return pubkey.Derive(out, temp, nChild, vchChainCode);
-    };
-    if (!key.IsValid())
-        return false;
-
-    CKey tkey;
-    if (!key.Derive(tkey, temp, nChild, vchChainCode))
-        return false;
-    out = tkey.GetPubKey();
-    return true;
-};
-
-CExtPubKey CExtKeyPair::GetExtPubKey() const
-{
-    CExtPubKey ret;
-    ret.nDepth = nDepth;
-    memcpy(&ret.vchFingerprint[0], &vchFingerprint[0], 4);
-    ret.nChild = nChild;
-    ret.pubkey = pubkey;
-    memcpy(&ret.vchChainCode[0], &vchChainCode[0], 32);
-    return ret;
-};
-
-CExtKeyPair CExtKeyPair::Neutered() const
-{
-    CExtKeyPair ret;
-    ret.nDepth = nDepth;
-    memcpy(&ret.vchFingerprint[0], &vchFingerprint[0], 4);
-    ret.nChild = nChild;
-    ret.pubkey = pubkey;
-    ret.key.Clear();
-    memcpy(&ret.vchChainCode[0], &vchChainCode[0], 32);
-    return ret;
-}
-
-void CExtKeyPair::SetMaster(const unsigned char *seed, unsigned int nSeedLen)
-{
-    static const char hashkey[] = {'B','i','t','c','o','i','n',' ','s','e','e','d'};
-    HMAC_SHA512_CTX ctx;
-    HMAC_SHA512_Init(&ctx, hashkey, sizeof(hashkey));
-    HMAC_SHA512_Update(&ctx, seed, nSeedLen);
-    unsigned char out[64];
-    LockObject(out);
-    HMAC_SHA512_Final(out, &ctx);
-    key.Set(&out[0], &out[32], true);
-    pubkey = key.GetPubKey();
-    memcpy(vchChainCode, &out[32], 32);
-    UnlockObject(out);
-    nDepth = 0;
-    nChild = 0;
-    memset(vchFingerprint, 0, sizeof(vchFingerprint));
-};
-
-int CExtKeyPair::SetKeyCode(const unsigned char *pkey, const unsigned char *pcode)
-{
-    key.Set(pkey, true);
-    pubkey = key.GetPubKey();
-    memcpy(vchChainCode, pcode, 32);
-    nDepth = 0;
-    nChild = 0;
-    memset(vchFingerprint, 0, sizeof(vchFingerprint));
-    return 0;
-};
-
-
-bool ECC_InitSanityCheck()
-{
+bool ECC_InitSanityCheck() {
     EC_KEY *pkey = EC_KEY_new_by_curve_name(NID_secp256k1);
     if(pkey == NULL)
         return false;

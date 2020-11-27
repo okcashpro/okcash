@@ -3,7 +3,6 @@
 
 class OKCashGUI;
 class TransactionModel;
-class WalletModel;
 class BlockExplorerModel;
 class AddressModel;
 class MessageThread;
@@ -33,8 +32,7 @@ public:
     /** Get the label belonging to an address */
     Q_INVOKABLE QString getAddressLabel(QString address);
     /** Create a new address or add an existing address to your Address book */
-    Q_INVOKABLE QString newAddress(QString addressLabel, int addressType, QString address = "", bool send = false);
-    Q_INVOKABLE QString lastAddressError();
+    Q_INVOKABLE QString newAddress(bool own);
     /** Get the full transaction details */
     Q_INVOKABLE QString transactionDetails(QString txid);
     /** Get the pubkey for an address */
@@ -52,6 +50,7 @@ public:
     Q_INVOKABLE bool deleteMessage(QString key);
     Q_INVOKABLE bool markMessageAsRead(QString key);
 
+    Q_INVOKABLE void openAddressBook(bool sending);
     Q_INVOKABLE void openCoinControl();
 
     Q_INVOKABLE bool addRecipient(QString address, QString label, QString narration, qint64 amount, int txnType, int nRingSize);
@@ -70,9 +69,6 @@ public:
     Q_INVOKABLE QVariantMap listTransactionsForBlock(QString blkid);
     Q_INVOKABLE QVariantMap txnDetails(QString blkHash, QString txnHash);
 
-    Q_INVOKABLE QVariantMap signMessage(QString address, QString message);
-    Q_INVOKABLE QVariantMap verifyMessage(QString address, QString message, QString signature);
-
 signals:
     void emitPaste(QString text);
     void emitTransactions(QVariantList transactions);
@@ -86,13 +82,13 @@ signals:
     void networkAlert(QString alert);
 
 private:
-    OKCashGUI *window;
-    TransactionModel *transactionModel;
-    AddressModel *addressModel;
-    MessageThread *thMessage;
+    OKCashGUI * window;
+    TransactionModel * transactionModel;
+    AddressModel * addressModel;
+    MessageThread * thMessage;
     QList<SendCoinsRecipient> recipients;
-    QVariantMap *info;
-    QThread *async;
+    QVariantMap * info;
+    QThread * async;
 
     friend class OKCashGUI;
 

@@ -12,7 +12,6 @@
 
 #include "main.h"
 #include "key.h"
-#include "extkey.h"
 #include "keystore.h"
 #include "crypter.h"
 #include "script.h"
@@ -33,10 +32,6 @@ class CCoinControl;
 
 typedef std::map<CKeyID, CStealthKeyMetadata> StealthKeyMetaMap;
 typedef std::map<std::string, std::string> mapValue_t;
-typedef std::map<unsigned int, CMasterKey> MasterKeyMap;
-typedef std::map<uint256, CWalletTx> WalletTxMap;
-typedef std::map<CKeyID, CExtKeyAccount*>  ExtKeyAccountMap;
-typedef std::map<CKeyID, CStoredExtKey*>  ExtKeyMap;
 
 /** (client) version numbers for particular wallet features */
 enum WalletFeature
@@ -75,8 +70,7 @@ public:
         READWRITE(vchPubKey);
     )
 };
-bool IsDestMine(const CWallet &wallet, const CTxDestination &dest);
-bool IsMine(const CWallet& wallet, const CScript& scriptPubKey);
+
 /** A CWallet is an extension of a keystore, which also maintains a set of transactions and balances,
  * and provides the ability to create new transactions.
  */
@@ -109,11 +103,7 @@ public:
     
     std::set<CStealthAddress> stealthAddresses;
     StealthKeyMetaMap mapStealthKeyMeta;
-    CStoredExtKey *pEkMaster;
-    CKeyID idDefaultAccount;
-    ExtKeyAccountMap mapExtAccounts;
-    ExtKeyMap mapExtKeys;
-
+    
     CBloomFilter* pBloomFilter;
     
     int nLastFilteredHeight;
@@ -121,10 +111,11 @@ public:
     uint32_t nStealth, nFoundStealth; // for reporting, zero before use
 
 
+    typedef std::map<unsigned int, CMasterKey> MasterKeyMap;
     MasterKeyMap mapMasterKeys;
     unsigned int nMasterKeyMaxID;
     
-    WalletTxMap mapWallet;
+    std::map<uint256, CWalletTx> mapWallet;
     int64_t nOrderPosNext;
     std::map<uint256, int> mapRequestCount;
 
@@ -146,6 +137,16 @@ public:
         fFileBacked = true;
     }
     
+    ~CWallet()
+    {
+        if (pBloomFilter)
+        {
+            delete pBloomFilter;
+            if (fDebug)
+                LogPrintf("Bloom filter destructed.\n");
+        };
+    }
+    
     void SetNull()
     {
         nWalletVersion = FEATURE_BASE;
@@ -154,13 +155,11 @@ public:
         nMasterKeyMaxID = 0;
         pwalletdbEncryption = NULL;
         pBloomFilter = NULL;
-        pEkMaster = NULL;
         nOrderPosNext = 0;
         nTimeFirstKey = 0;
         nLastFilteredHeight = 0;
     }
-    int Finalise();
-
+    
     // check whether we are allowed to upgrade (or already support) to the named feature
     bool CanSupportFeature(enum WalletFeature wf) { AssertLockHeld(cs_wallet); return nWalletMaxVersion >= wf; }
 
@@ -173,10 +172,10 @@ public:
     CPubKey GenerateNewKey();
     
     // Adds a key to the store, and saves it to disk.
-    bool AddKey(const CKey &key);
-    bool AddKeyPubKey(const CKey &key, const CPubKey &pubkey);
+    bool AddKey(const CKey& key);
+    bool AddKeyPubKey(const CKey& key, const CPubKey &pubkey);
     
-    bool AddKeyInDBTxn(CWalletDB *pdb, const CKey &key);
+    bool AddKeyInDBTxn(CWalletDB* pdb, const CKey& key);
     
     
     // Adds a key to the store, without saving it to disk (used by LoadWallet)
@@ -231,15 +230,13 @@ public:
     int64_t GetImmatureBalance() const;
     int64_t GetStake() const;
     int64_t GetNewMint() const;
-
-    bool CreateTransaction(const std::vector<std::pair<CScript, int64_t> >& vecSend, CWalletTx& wtxNew, int64_t& nFeeRet, int32_t& nChangePos, const CCoinControl *coinControl=NULL);
-    bool CreateTransaction(CScript scriptPubKey, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, const CCoinControl *coinControl=NULL);
-
-    bool CommitTransaction(CWalletTx& wtxNew);
+    bool CreateTransaction(const std::vector<std::pair<CScript, int64_t> >& vecSend, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, int32_t& nChangePos, const CCoinControl *coinControl=NULL);
+    bool CreateTransaction(CScript scriptPubKey, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, const CCoinControl *coinControl=NULL);
+    bool CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey);
     
 
     uint64_t GetStakeWeight() const;
-    bool CreateCoinStake(unsigned int nBits, int64_t nSearchInterval, int64_t nFees, CTransaction& txNew, CKey& key);
+    bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, int64_t nFees, CTransaction& txNew, CKey& key);
 
     std::string SendMoney(CScript scriptPubKey, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, bool fAskFee=false);
     std::string SendMoneyToDestination(const CTxDestination& address, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, bool fAskFee=false);
@@ -250,14 +247,14 @@ public:
     bool UnlockStealthAddresses(const CKeyingMaterial& vMasterKeyIn);
     bool UpdateStealthAddress(std::string &addr, std::string &label, bool addIfNotExist);
     
-    bool CreateStealthTransaction(CScript scriptPubKey, int64_t nValue, std::vector<uint8_t>& P, std::vector<uint8_t>& narr, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, const CCoinControl* coinControl=NULL);
+    bool CreateStealthTransaction(CScript scriptPubKey, int64_t nValue, std::vector<uint8_t>& P, std::vector<uint8_t>& narr, std::string& sNarr, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, const CCoinControl* coinControl=NULL);
     std::string SendStealthMoney(CScript scriptPubKey, int64_t nValue, std::vector<uint8_t>& P, std::vector<uint8_t>& narr, std::string& sNarr, CWalletTx& wtxNew, bool fAskFee=false);
     bool SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
     bool FindStealthTransactions(const CTransaction& tx, mapValue_t& mapNarr);
     
-    bool UpdateAnonTransaction(CTxDB *ptxdb, const CTransaction& tx, const uint256& blockHash);
+    bool UpdateAnonTransaction(CTxDB* ptxdb, const CTransaction& tx, const uint256& blockHash);
     bool UndoAnonTransaction(const CTransaction& tx);
-    bool ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTransaction& tx, const uint256& blockHash, bool& fIsMine, mapValue_t& mapNarr, std::vector<WalletTxMap::iterator>& vUpdatedTxns);
+    bool ProcessAnonTransaction(CWalletDB* pwdb, CTxDB* ptxdb, const CTransaction& tx, const uint256& blockHash, bool& fIsMine, mapValue_t& mapNarr, std::vector<std::map<uint256, CWalletTx>::iterator>& vUpdatedTxns);
     
     bool GetAnonChangeAddress(CStealthAddress& sxAddress);
     bool CreateStealthOutput(CStealthAddress* sxAddress, int64_t nValue, std::string& sNarr, std::vector<std::pair<CScript, int64_t> >& vecSend, std::map<int, std::string>& mapNarr, std::string& sError);
@@ -271,7 +268,7 @@ public:
     bool SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
     bool SendAnonToOk(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
     
-    bool ExpandLockedAnonOutput(CWalletDB *pdb, CKeyID &ckeyId, CLockedAnonOutput &lao, std::set<uint256> &setUpdated);
+    bool ExpandLockedAnonOutput(CWalletDB* pdb, CKeyID& ckeyId, CLockedAnonOutput& lao);
     bool ProcessLockedAnonOutputs();
     
     bool EstimateAnonFee(int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, std::string& sError);
@@ -298,7 +295,7 @@ public:
     int64_t GetOldestKeyPoolTime();
     void GetAllReserveKeys(std::set<CKeyID>& setAddress) const;
 
-    std::set<std::set<CTxDestination> > GetAddressGroupings();
+    std::set< std::set<CTxDestination> > GetAddressGroupings();
     std::map<CTxDestination, int64_t> GetAddressBalances();
 
     bool IsMine(const CTxIn& txin) const;
@@ -345,10 +342,7 @@ public:
             {
                 nDebit += GetOKCashDebit(txin);
             } else
-            {
                 nDebit += GetDebit(txin);
-            };
-
             if (!MoneyRange(nDebit))
                 throw std::runtime_error("CWallet::GetDebit() : value out of range");
         }
@@ -366,7 +360,6 @@ public:
                 nCredit += GetOKCashCredit(txout);
             } else
                 nCredit += GetCredit(txout);
-
             if (!MoneyRange(nCredit))
                 throw std::runtime_error("CWallet::GetCredit() : value out of range");
         }
@@ -407,9 +400,9 @@ public:
     
     void SetBestThinChain(const CBlockThinLocator& loc);
 
-    DBErrors LoadWallet();
+    DBErrors LoadWallet(bool& fFirstRunRet);
 
-    bool SetAddressBookName(const CTxDestination& address, const std::string& strName, CWalletDB *pwdb = NULL, bool fAddKeyToMerkleFilters = true, bool fManual = false);
+    bool SetAddressBookName(const CTxDestination& address, const std::string& strName, CWalletDB* pwdb = NULL, bool fAddKeyToMerkleFilters = true);
 
     bool DelAddressBookName(const CTxDestination& address);
 
@@ -449,85 +442,10 @@ public:
     void FixSpentCoins(int& nMismatchSpent, int64_t& nBalanceInQuestion, bool fCheckOnly = false);
     void DisableTransaction(const CTransaction &tx);
 
-    int GetChangeAddress(CPubKey &pk);
-
-    int ExtKeyNew32(CExtKey &out);
-    int ExtKeyNew32(CExtKey &out, const char *sPassPhrase, int32_t nHash, const char *sSeed);
-    int ExtKeyNew32(CExtKey &out, uint8_t *data, uint32_t lenData);
-
-    int ExtKeyImportLoose(CWalletDB *pwdb, CStoredExtKey &sekIn);
-    int ExtKeyImportAccount(CWalletDB *pwdb, CStoredExtKey &sekIn, int64_t nTimeStartScan, const std::string &sLabel);
-
-    int ExtKeySetMaster(CWalletDB *pwdb, CKeyID &idMaster); // set master to existing key, remove master key tag from old key if exists
-    int ExtKeyNewMaster(CWalletDB *pwdb, CKeyID &idMaster, bool fAutoGenerated = false); // make and save new root key to wallet
-
-    int ExtKeyCreateAccount(CStoredExtKey *ekAccount, CKeyID &idMaster, CExtKeyAccount &ekaOut, const std::string &sLabel);
-    int ExtKeyDeriveNewAccount(CWalletDB *pwdb, CExtKeyAccount *sea, const std::string &sLabel, const std::string &sPath=""); // derive a new account from the master key and save to wallet
-
-
-    int ExtKeyEncrypt(CStoredExtKey *sek, const CKeyingMaterial &vMKey, bool fLockKey);
-    int ExtKeyEncrypt(CExtKeyAccount *sea, const CKeyingMaterial &vMKey, bool fLockKey);
-    int ExtKeyEncryptAll(CWalletDB *pwdb, const CKeyingMaterial &vMKey);
-    int ExtKeyLock();
-
-    int ExtKeyUnlock(CExtKeyAccount *sea);
-    int ExtKeyUnlock(CExtKeyAccount *sea, const CKeyingMaterial &vMKey);
-    int ExtKeyUnlock(CStoredExtKey *sek);
-    int ExtKeyUnlock(CStoredExtKey *sek, const CKeyingMaterial &vMKey);
-    int ExtKeyUnlock(const CKeyingMaterial &vMKey);
-
-    int ExtKeyCreateInitial(CWalletDB *pwdb);
-    int ExtKeyLoadMaster();
-    int ExtKeyLoadAccounts();
-
-    int ExtKeySaveAccountToDB(CWalletDB *pwdb, CKeyID &idAccount, CExtKeyAccount *sea);
-    int ExtKeyAddAccountToMaps(CKeyID &idAccount, CExtKeyAccount *sea);
-    int ExtKeyLoadAccountPacks();
-
-
-    int ExtKeyAppendToPack(CWalletDB *pwdb, CExtKeyAccount *sea, const CKeyID &idKey, CEKAKey &ak, bool &fUpdateAcc) const;
-    int ExtKeyAppendToPack(CWalletDB *pwdb, CExtKeyAccount *sea, const CKeyID &idKey, CEKASCKey &asck, bool &fUpdateAcc) const;
-
-
-
-    int ExtKeySaveKey(CWalletDB *pwdb, CExtKeyAccount *sea, const CKeyID &keyId, CEKAKey &ak) const;
-    int ExtKeySaveKey(CExtKeyAccount *sea, const CKeyID &keyId, CEKAKey &ak) const;
-
-    int ExtKeySaveKey(CWalletDB *pwdb, CExtKeyAccount *sea, const CKeyID &keyId, CEKASCKey &asck) const;
-    int ExtKeySaveKey(CExtKeyAccount *sea, const CKeyID &keyId, CEKASCKey &asck) const;
-
-    int ExtKeyUpdateStealthAddress(CWalletDB *pwdb, CExtKeyAccount *sea, CKeyID &sxId, std::string &sLabel);
-
-    int NewKeyFromAccount(CWalletDB *pwdb, const CKeyID &idAccount, CPubKey &pkOut, bool fInternal, bool fHardened);
-    int NewKeyFromAccount(CPubKey &pkOut, bool fInternal=false, bool fHardened=false); // wrapper - use default account
-
-    int NewStealthKeyFromAccount(CWalletDB *pwdb, const CKeyID &idAccount, std::string &sLabel, CEKAStealthKey &akStealthOut);
-    int NewStealthKeyFromAccount(std::string &sLabel, CEKAStealthKey &akStealthOut); // wrapper - use default account
-
-    int NewExtKeyFromAccount(CWalletDB *pwdb, const CKeyID &idAccount, std::string &sLabel, CStoredExtKey *sekOut);
-    int NewExtKeyFromAccount(std::string &sLabel, CStoredExtKey *sekOut); // wrapper - use default account
-
-
-    int ExtKeyGetDestination(const CExtKeyPair &ek, CScript &scriptPubKeyOut, uint32_t &nKey);
-    int ExtKeyUpdateLooseKey(const CExtKeyPair &ek, uint32_t nKey, bool fAddToAddressBook);
-
-
-    bool HaveKey(const CKeyID &address) const;
-
-    bool HaveExtKey(const CKeyID &address) const;
-
-    bool GetKey(const CKeyID &address, CKey &keyOut) const;
-
-    bool GetPubKey(const CKeyID &address, CPubKey &pkOut) const;
-
-    bool HaveStealthAddress(const CStealthAddress &sxAddr) const;
-
-    int ScanChainFromTime(int64_t nTimeStartScan);
-
     /** Address book entry changed.
      * @note called with lock cs_wallet held.
      */
-    boost::signals2::signal<void (CWallet *wallet, const CTxDestination &address, const std::string &label, bool isMine, ChangeType status, bool fManual)> NotifyAddressBookChanged;
+    boost::signals2::signal<void (CWallet *wallet, const CTxDestination &address, const std::string &label, bool isMine, ChangeType status)> NotifyAddressBookChanged;
     
 
     /** Wallet transaction added, removed or updated.
@@ -601,7 +519,7 @@ public:
     int64_t nOrderPos;  // position in ordered transaction list
 
     // memory only
-    mutable int8_t fDebitCached; // overload for force update message
+    mutable bool fDebitCached;
     mutable bool fCreditCached;
     mutable bool fAvailableCreditCached;
     mutable bool fChangeCached;
@@ -755,11 +673,7 @@ public:
         fDebitCached = false;
         fChangeCached = false;
         fCreditSplitCached = false;
-    }
-
-    bool ForceUpdate()
-    {
-        return fDebitCached == 2;
+        
     }
 
     void BindWallet(CWallet *pwalletIn)
@@ -1169,26 +1083,5 @@ private:
 };
 
 bool GetWalletFile(CWallet* pwallet, std::string &strWalletFileOut);
-
-class CWalletIsMineVisitor : public boost::static_visitor<bool>
-{
-private:
-    const CWallet *wallet;
-public:
-    CWalletIsMineVisitor(const CWallet *walletIn) : wallet(walletIn) { }
-    bool operator()(const CNoDestination &dest) const { return false; }
-    bool operator()(const CKeyID &keyID) const { return wallet->HaveKey(keyID); }
-    bool operator()(const CScriptID &scriptID) const { return wallet->HaveCScript(scriptID); }
-    bool operator()(const CStealthAddress &sxAddr) const
-    {
-        return sxAddr.scan_secret.size() == EC_SECRET_SIZE;
-    }
-    bool operator()(const CExtKeyPair &ek) const
-    {
-        return wallet->HaveExtKey(ek.GetID());
-        //return ek.IsValidV();
-    }
-};
-
 
 #endif

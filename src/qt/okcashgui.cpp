@@ -5,6 +5,9 @@
 #include "okcashgui.h"
 #include "transactiontablemodel.h"
 #include "transactionrecord.h"
+
+#include "signverifymessagedialog.h"
+
 #include "aboutdialog.h"
 #include "clientmodel.h"
 #include "walletmodel.h"
@@ -106,6 +109,8 @@ OKCashGUI::OKCashGUI(QWidget *parent):
     // Create the tray icon (or setup the dock icon)
     createTrayIcon();
 
+    signVerifyMessageDialog = new SignVerifyMessageDialog(this);
+
     rpcConsole = new RPCConsole(this);
 
     connect(openRPCConsoleAction, SIGNAL(triggered()), rpcConsole, SLOT(show()));
@@ -200,6 +205,8 @@ void OKCashGUI::createActions()
     lockWalletAction->setToolTip(tr("Lock wallet"));
     openConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open Wallet &Configuration File"), this);
     openConfEditorAction->setStatusTip(tr("Open configuration file"));
+    signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
+    verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
 
     //exportAction = new QAction(QIcon(":/icons/export"), tr("&Export..."), this);
     //exportAction->setToolTip(tr("Export the data in the current tab to a file"));
@@ -217,6 +224,8 @@ void OKCashGUI::createActions()
     connect(unlockWalletAction, SIGNAL(triggered()), SLOT(unlockWallet()));
     connect(lockWalletAction, SIGNAL(triggered()), SLOT(lockWallet()));
     connect(openConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showConfEditor()));
+    connect(signMessageAction, SIGNAL(triggered()), SLOT(gotoSignMessageTab()));
+    connect(verifyMessageAction, SIGNAL(triggered()), SLOT(gotoVerifyMessageTab()));
 }
 
 void OKCashGUI::createMenuBar()
@@ -234,6 +243,8 @@ void OKCashGUI::createMenuBar()
     QMenu *file = appMenuBar->addMenu(tr("&File"));
     file->addAction(backupWalletAction);
     //file->addAction(exportAction);
+    file->addAction(signMessageAction);
+    file->addAction(verifyMessageAction);
     file->addSeparator();
     file->addAction(quitAction);
 
@@ -307,6 +318,8 @@ void OKCashGUI::setWalletModel(WalletModel *walletModel)
         // Report errors from wallet thread
         connect(walletModel, SIGNAL(error(QString,QString,bool)), this, SLOT(error(QString,QString,bool)));
 
+        signVerifyMessageDialog->setModel(walletModel);
+
         documentFrame->addToJavaScriptWindowObject("walletModel",  walletModel);
         documentFrame->addToJavaScriptWindowObject("optionsModel", walletModel->getOptionsModel());
 
@@ -368,6 +381,8 @@ void OKCashGUI::createTrayIcon()
     // Configuration of the tray icon (or dock icon) icon menu
     trayIconMenu->addAction(toggleHideAction);
     trayIconMenu->addSeparator();
+    trayIconMenu->addAction(signMessageAction);
+    trayIconMenu->addAction(verifyMessageAction);
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(optionsAction);
     trayIconMenu->addAction(openRPCConsoleAction);
@@ -413,7 +428,7 @@ void OKCashGUI::setNumConnections(int count)
     default:         icon = "qrc:///icons/connect_6"; break;
     }
     connectionsIcon.setAttribute("src", icon);
-    connectionsIcon.setAttribute("data-title", tr("%n active connection(s) to the Okcash network", "", count));
+    connectionsIcon.setAttribute("title", tr("%n active connection(s) to the Okcash network", "", count));
 }
 
 void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
@@ -481,7 +496,8 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
 
         tooltip += (tooltip.isEmpty()? "" : "\n")
                  + tr("Downloaded %1 of %2 %3 of transaction history (%4% done).").arg(count).arg(nTotalBlocks).arg(sBlockTypeMulti).arg(nPercentageDone, 0, 'f', 2);
-    } else
+    }
+    else
     {
         tooltip = tr("Downloaded %1 blocks of transaction history.").arg(count);
     }
@@ -556,9 +572,9 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
         tooltip += tr("Last received %1 was generated %2.").arg(sBlockType).arg(text);
     };
 
-    blocksIcon     .setAttribute("data-title", tooltip);
-    syncingIcon    .setAttribute("data-title", tooltip);
-    syncProgressBar.setAttribute("data-title", tooltip);
+    blocksIcon     .setAttribute("title", tooltip);
+    syncingIcon    .setAttribute("title", tooltip);
+    syncProgressBar.setAttribute("title", tooltip);
     syncProgressBar.setAttribute("value", QString::number(count));
     syncProgressBar.setAttribute("max",   QString::number(nTotalBlocks));
 }
@@ -569,8 +585,7 @@ void OKCashGUI::error(const QString &title, const QString &message, bool modal)
     if(modal)
     {
         QMessageBox::critical(this, title, message, QMessageBox::Ok, QMessageBox::Ok);
-    } else 
-    {
+    } else {
         notificator->notify(Notificator::Critical, title, message);
     }
 }
@@ -690,6 +705,24 @@ void OKCashGUI::incomingMessage(const QModelIndex & parent, int start, int end)
     };
 }
 
+void OKCashGUI::gotoSignMessageTab(QString addr)
+{
+    // call show() in showTab_SM()
+    signVerifyMessageDialog->showTab_SM(true);
+
+    if(!addr.isEmpty())
+        signVerifyMessageDialog->setAddress_SM(addr);
+}
+
+void OKCashGUI::gotoVerifyMessageTab(QString addr)
+{
+    // call show() in showTab_VM()
+    signVerifyMessageDialog->showTab_VM(true);
+
+    if(!addr.isEmpty())
+        signVerifyMessageDialog->setAddress_VM(addr);
+}
+
 void OKCashGUI::optionsClicked()
 {
     bridge->triggerElement("#navitems a[href=#options]", "click");
@@ -777,19 +810,7 @@ void OKCashGUI::setEncryptionStatus(int status)
         toggleLockIcon.removeClass("fa-toggle-off");
         toggleLockIcon.   addClass("fa-toggle-on");
         encryptionIcon   .setAttribute("src", "qrc:///icons/lock_open");
-
-        if (fWalletUnlockStakingOnly)
-        {
-            encryptionIcon   .setAttribute("data-title", tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b> for staking only"));
-            encryptionIcon.removeClass("red");
-            encryptionIcon.addClass("orange");
-        } else
-        {
-            encryptionIcon   .setAttribute("data-title", tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
-            encryptionIcon.addClass("red");
-            encryptionIcon.removeClass("orange");
-        };
-
+        encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         encryptButton.addClass("none");
         changePassphrase.removeClass("none");
         toggleLock.removeClass("none");
@@ -805,10 +826,7 @@ void OKCashGUI::setEncryptionStatus(int status)
         encryptionIcon.   addClass("fa-toggle-on");
         toggleLockIcon.removeClass("fa-toggle-on");
         toggleLockIcon.   addClass("fa-toggle-off");
-        encryptionIcon   .setAttribute("data-title", tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
-
-        encryptionIcon.addClass("red");
-        encryptionIcon.removeClass("orange");
+        encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b>"));
         encryptButton.addClass("none");
         changePassphrase.removeClass("none");
         toggleLock.removeClass("none");
@@ -837,10 +855,8 @@ void OKCashGUI::backupWallet()
 {
     QString saveDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString filename = QFileDialog::getSaveFileName(this, tr("Backup Wallet"), saveDir, tr("Wallet Data (*.dat)"));
-    if(!filename.isEmpty())
-    {
-        if(!walletModel->backupWallet(filename))
-        {
+    if(!filename.isEmpty()) {
+        if(!walletModel->backupWallet(filename)) {
             QMessageBox::warning(this, tr("Backup Failed"), tr("There was an error trying to save the wallet data to the new location."));
         }
     }
@@ -947,6 +963,7 @@ void OKCashGUI::updateWeight()
 
 void OKCashGUI::updateStakingIcon()
 {
+
     QWebElement stakingIcon = documentFrame->findFirstElement("#stakingIcon");
     uint64_t nNetworkWeight = 0;
 
@@ -984,14 +1001,14 @@ void OKCashGUI::updateStakingIcon()
             nNetworkWeight /= COIN;
         }
 
-        stakingIcon.setAttribute("data-title", tr("You are Staking.\nYour weight (staking power) is %1\nNetwork weight is %2\nExpected time to earn staking reward is %3").arg(nWeight).arg(nNetworkWeight).arg(text));
+        stakingIcon.setAttribute("title", tr("You are Staking.\nYour weight (staking power) is %1\nNetwork weight is %2\nExpected time to earn staking reward is %3").arg(nWeight).arg(nNetworkWeight).arg(text));
     } else
     {
         stakingIcon.   addClass("not-staking");
         stakingIcon.removeClass("staking");
         //stakingIcon.removeClass("fa-spin"); // TODO: See above TODO...
 
-        stakingIcon.setAttribute("data-title", (nNodeMode == NT_THIN)                   ? tr("Not staking because wallet is in thin mode") : \
+        stakingIcon.setAttribute("title", (nNodeMode == NT_THIN)                   ? tr("Not staking because wallet is in thin mode") : \
                                           (!GetBoolArg("-staking", true))          ? tr("Not staking, staking is disabled")  : \
                                           (pwalletMain && pwalletMain->IsLocked()) ? tr("Not staking because wallet is locked")  : \
                                           (vNodes.empty())                         ? tr("Not staking because wallet is offline") : \

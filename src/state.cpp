@@ -13,7 +13,7 @@ int nMinStakeInterval = 0;         // in seconds, min time between successful st
 int nThinIndexWindow = 4096;        // no. of block headers to keep in memory
 
 // -- services provided by local node, initialise to all on THIN_SUPPORT | THIN_STEALTH | rmvd
-uint64_t nLocalServices     = 0 | NODE_NETWORK | THIN_SUPPORT | THIN_STEALTH | SMSG_RELAY;
+uint64_t nLocalServices     = 0 | NODE_NETWORK | SMSG_RELAY;
 uint32_t nLocalRequirements = 0 | NODE_NETWORK;
 
 
@@ -39,8 +39,6 @@ bool fThinFullIndex = false; // when in thin mode don't keep all headers in memo
 bool fReindexing = false;
 bool fHaveGUI = false;
 volatile bool fIsStaking = false; // looks at stake weight also
-bool fMakeExtKeyInitials = false;
-volatile bool fPassGuiAddresses = false; // force the gui to process new addresses, gui doesn't update addresses when syncing
 
 bool fConfChange;
 bool fEnforceCanonical;
@@ -56,7 +54,5 @@ int64_t nMinTxFee = MIN_TX_FEE;
 unsigned int nStakeSplitAge = 1 * 24 * 60 * 60;
 int64_t nStakeCombineThreshold = 1000 * COIN;
 
-uint32_t nExtKeyLookAhead = 10;
 
-int64_t nTimeLastMblkRecv = 0;
 

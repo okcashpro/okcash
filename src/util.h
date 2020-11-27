@@ -100,23 +100,16 @@ int LogPrintStr(const std::string &str);
     /*   Print to debug.log if -debug=category switch is given OR category is NULL. */ \
     template<TINYFORMAT_ARGTYPES(n)>                                          \
     static inline int LogPrint(const char* category, const char* format, TINYFORMAT_VARARGS(n))  \
-    {                                                                                \
-        if(!LogAcceptCategory(category)) return 0;                                   \
-        return LogPrintStr(tfm::format(format, TINYFORMAT_PASSARGS(n)));             \
-    }                                                                                \
-    /*   Log error and return false */                                               \
-    template<TINYFORMAT_ARGTYPES(n)>                                                 \
-    static inline bool error(const char* format, TINYFORMAT_VARARGS(n))              \
-    {                                                                                \
+    {                                                                         \
+        if(!LogAcceptCategory(category)) return 0;                            \
+        return LogPrintStr(tfm::format(format, TINYFORMAT_PASSARGS(n)));      \
+    }                                                                         \
+    /*   Log error and return false */                                        \
+    template<TINYFORMAT_ARGTYPES(n)>                                          \
+    static inline bool error(const char* format, TINYFORMAT_VARARGS(n))       \
+    {                                                                         \
         LogPrintStr("ERROR: " + tfm::format(format, TINYFORMAT_PASSARGS(n)) + "\n"); \
-        return false;                                                                \
-    }                                                                                \
-    /*   Log error and return n */                                                   \
-    template<TINYFORMAT_ARGTYPES(n)>                                                 \
-    static inline int errorN(int rv, const char* format, TINYFORMAT_VARARGS(n))      \
-    {                                                                                \
-        LogPrintStr("ERROR: " + tfm::format(format, TINYFORMAT_PASSARGS(n)) + "\n"); \
-        return rv;                                                         \
+        return false;                                                         \
     }
 
 TINYFORMAT_FOREACH_ARGNUM(MAKE_ERROR_AND_LOG_FUNC)
@@ -134,11 +127,13 @@ static inline bool error(const char* format)
     LogPrintStr(std::string("ERROR: ") + format + "\n");
     return false;
 }
-static inline int errorN(int n, const char* format)
+static inline bool error1(const char* format)
 {
     LogPrintStr(std::string("ERROR: ") + format + "\n");
-    return n;
+    return 1;
 }
+
+
 
 
 extern std::map<std::string, std::string> mapArgs;
@@ -189,7 +184,6 @@ boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
 const char *GetNodeModeName(int modeInd);
 const char *GetNodeStateName(int stateInd);
 
-void ReplaceStrInPlace(std::string &subject, const std::string &search, const std::string &replace);
 std::string getTimeString(int64_t timestamp, char *buffer, size_t nBuffer);
 std::string bytesReadable(uint64_t nBytes);
 
@@ -343,10 +337,6 @@ inline std::string DateTimeStrFormat(int64_t nTime)
     return DateTimeStrFormat(strTimestampFormat.c_str(), nTime);
 }
 
-inline bool IsStrOnlyDigits(std::string &s)
-{
-    return s.find_first_not_of("0123456789") == std::string::npos;
-}
 
 template<typename T>
 void skipspaces(T& it)
@@ -366,9 +356,7 @@ inline bool IsSwitchChar(char c)
 
 namespace ok
 {
-    void *memrchr(const void *s, int c, size_t n);
-
-    int memcmp_nta(const void *cs, const void *ct, size_t count);
+    void* memrchr(const void *s, int c, size_t n);
 }
 /**
  * Return string argument or default value

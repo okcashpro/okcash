@@ -13,11 +13,20 @@
 #include "util.h"
 #include "serialize.h"
 #include "key.h"
-#include "hash.h"
-#include "types.h"
+
+
+typedef std::vector<uint8_t> data_chunk;
 
 const uint32_t MAX_STEALTH_NARRATION_SIZE = 48;
 
+const size_t ec_secret_size = 32;
+const size_t ec_compressed_size = 33;
+const size_t ec_uncompressed_size = 65;
+
+const uint8_t stealth_version_byte = 0x28;
+
+typedef struct ec_secret { uint8_t e[ec_secret_size]; } ec_secret;
+typedef data_chunk ec_point;
 
 typedef uint32_t stealth_bitfield;
 
@@ -27,8 +36,27 @@ struct stealth_prefix
     stealth_bitfield bitfield;
 };
 
-const uint256 MAX_SECRET("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140");
-const uint256 MIN_SECRET(16000); // increase? min valid key is 1
+template <typename T, typename Iterator>
+T from_big_endian(Iterator in)
+{
+    //VERIFY_UNSIGNED(T);
+    T out = 0;
+    size_t i = sizeof(T);
+    while (0 < i)
+        out |= static_cast<T>(*in++) << (8 * --i);
+    return out;
+}
+
+template <typename T, typename Iterator>
+T from_little_endian(Iterator in)
+{
+    //VERIFY_UNSIGNED(T);
+    T out = 0;
+    size_t i = 0;
+    while (i < sizeof(T))
+        out |= static_cast<T>(*in++) << (8 * i++);
+    return out;
+}
 
 class CStealthAddress
 {
@@ -36,7 +64,7 @@ public:
     CStealthAddress()
     {
         options = 0;
-    };
+    }
     
     uint8_t options;
     ec_point scan_pubkey;
@@ -57,13 +85,8 @@ public:
     
     bool operator <(const CStealthAddress& y) const
     {
-        return memcmp(&scan_pubkey[0], &y.scan_pubkey[0], EC_COMPRESSED_SIZE) < 0;
-    };
-
-    bool operator ==(const CStealthAddress& y) const
-    {
-        return memcmp(&scan_pubkey[0], &y.scan_pubkey[0], EC_COMPRESSED_SIZE) == 0;
-    };
+        return memcmp(&scan_pubkey[0], &y.scan_pubkey[0], ec_compressed_size) < 0;
+    }
     
     IMPLEMENT_SERIALIZE
     (
@@ -78,6 +101,9 @@ public:
     
 };
 
+void AppendChecksum(data_chunk& data);
+
+bool VerifyChecksum(const data_chunk& data);
 
 int GenerateRandomSecret(ec_secret& out);
 
@@ -85,9 +111,7 @@ int SecretToPublicKey(const ec_secret& secret, ec_point& out);
 
 int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, ec_secret& sharedSOut, ec_point& pkOut);
 int StealthSecretSpend(ec_secret& scanSecret, ec_point& ephemPubkey, ec_secret& spendSecret, ec_secret& secretOut);
-int StealthSharedToSecretSpend(const ec_secret& sharedS, const ec_secret& spendSecret, ec_secret& secretOut);
-
-int StealthSharedToPublicKey(const ec_point& pkSpend, const ec_secret &sharedS, ec_point &pkOut);
+int StealthSharedToSecretSpend(ec_secret& sharedS, ec_secret& spendSecret, ec_secret& secretOut);
 
 bool IsStealthAddress(const std::string& encodedAddress);
 

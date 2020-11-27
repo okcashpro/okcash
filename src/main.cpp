@@ -595,10 +595,10 @@ bool CTransaction::IsStandard() const
     txnouttype whichType;
     BOOST_FOREACH(const CTxOut& txout, vout)
     {
-        if (nVersion == ANON_TXN_VERSION
-            && txout.IsAnonOutput())
+        if (txout.IsAnonOutput())
         {
-            if (txout.nValue < 1
+            if (nVersion != ANON_TXN_VERSION
+                || txout.nValue < 1
                 || txout.scriptPubKey.size() > MIN_ANON_OUT_SIZE + MAX_ANON_NARRATION_SIZE)
             {
                 LogPrintf("IsStandard() anon txout failed.\n");
@@ -720,7 +720,7 @@ bool CTransaction::HasStealthOutput() const
         if (!it->scriptPubKey.GetOp(itScript, opCode, vchEphemPK)
             || opCode != OP_RETURN
             || !it->scriptPubKey.GetOp(itScript, opCode, vchEphemPK) // rule out np narrations
-            || vchEphemPK.size() != EC_COMPRESSED_SIZE)
+            || vchEphemPK.size() != ec_compressed_size)
             continue;
 
         return true;
@@ -1182,7 +1182,8 @@ bool GetTransactionBlockHash(const uint256 &hash, uint256 &hashBlock)
 bool GetKeyImage(CTxDB* ptxdb, ec_point& keyImage, CKeyImageSpent& keyImageSpent, bool& fInMempool)
 {
     AssertLockHeld(cs_main);
-
+    
+    
     // -- check txdb first
     fInMempool = false;
     if (ptxdb->ReadKeyImage(keyImage, keyImageSpent))
@@ -1193,7 +1194,7 @@ bool GetKeyImage(CTxDB* ptxdb, ec_point& keyImage, CKeyImageSpent& keyImageSpent
         fInMempool = true;
         return true;
     };
-
+    
     return false;
 };
 
@@ -2171,11 +2172,11 @@ bool CTransaction::FetchInputs(CTxDB& txdb, const map<uint256, CTxIndex>& mapTes
 bool CTransaction::CheckAnonInputs(CTxDB& txdb, int64_t& nSumValue, bool& fInvalid, bool fCheckExists)
 {
     if (fDebugRingSig)
-    {
         LogPrintf("CheckAnonInputs()\n");
-        AssertLockHeld(cs_main);
-    };
+    
     // - fCheckExists should only run for anonInputs entering this node
+    
+    AssertLockHeld(cs_main);
 
     fInvalid = false; // TODO: is it acceptable to not find ring members?
 
@@ -2238,7 +2239,7 @@ bool CTransaction::CheckAnonInputs(CTxDB& txdb, int64_t& nSumValue, bool& fInval
             fInvalid = true; return false;
         };
 
-        if (s.size() < 2 + (EC_COMPRESSED_SIZE + EC_SECRET_SIZE + EC_SECRET_SIZE) * nRingSize)
+        if (s.size() < 2 + (ec_compressed_size + ec_secret_size + ec_secret_size) * nRingSize)
         {
             LogPrintf("CheckAnonInputs(): Error input %d scriptSig too small.\n", i);
             fInvalid = true; return false;
@@ -2249,8 +2250,8 @@ bool CTransaction::CheckAnonInputs(CTxDB& txdb, int64_t& nSumValue, bool& fInval
         CAnonOutput ao;
         CTxIndex txindex;
         const unsigned char* pPubkeys = &s[2];
-        const unsigned char* pSigc    = &txin.scriptSig[2 + EC_COMPRESSED_SIZE * nRingSize];
-        const unsigned char* pSigr    = &txin.scriptSig[2 + (EC_COMPRESSED_SIZE + EC_SECRET_SIZE) * nRingSize];
+        const unsigned char* pSigc    = &txin.scriptSig[2 + ec_compressed_size * nRingSize];
+        const unsigned char* pSigr    = &txin.scriptSig[2 + (ec_compressed_size + ec_secret_size) * nRingSize];
         for (int ri = 0; ri < nRingSize; ++ri)
         {
             pkRingCoin = CPubKey(&pPubkeys[ri * ec_compressed_size], ec_compressed_size);
@@ -3833,7 +3834,7 @@ bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
     if (nSearchTime > nLastCoinStakeSearchTime)
     {
         int64_t nSearchInterval = Params().IsProtocolV2(nBestHeight+1) ? 1 : nSearchTime - nLastCoinStakeSearchTime;
-        if (wallet.CreateCoinStake(nBits, nSearchInterval, nFees, txCoinStake, key))
+        if (wallet.CreateCoinStake(wallet, nBits, nSearchInterval, nFees, txCoinStake, key))
         {
             if (txCoinStake.nTime >= pindexBest->GetPastTimeLimit()+1)
             {
@@ -3995,7 +3996,7 @@ int LoadBlockIndex(bool fAllowNew)
     
     // CheckVersion() will wipe old databases, try reload db from chain with reindex
     // before reinexing the genesis block must be created
-    int tryReindex = txdb.CheckVersion() == 2 ? 1 : 0;
+    int tryReindex = txdb.CheckVersion() != 0 ? 1 : 0;
     
     if (nNodeMode == NT_FULL)
     {
@@ -4034,21 +4035,21 @@ int LoadBlockIndex(bool fAllowNew)
         if (nNodeMode == NT_FULL)
         {
             if (!block.WriteToDisk(nFile, nBlockPos))
-                return errorN(1, "LoadBlockIndex() : writing genesis block to disk failed");
+                return error1("LoadBlockIndex() : writing genesis block to disk failed");
             if (!block.AddToBlockIndex(nFile, nBlockPos, Params().HashGenesisBlock()))
-                return errorN(1, "LoadBlockIndex() : genesis block not accepted");
+                return error1("LoadBlockIndex() : genesis block not accepted");
         } else
         {
             CBlockThin blockThin(block);
             if (!blockThin.AddToBlockThinIndex(nFile, nBlockPos, Params().HashGenesisBlock()))
-                return errorN(1, "LoadBlockIndex() : genesis block not accepted");
+                return error1("LoadBlockIndex() : genesis block not accepted");
             
             pindexRear = pindexGenesisBlockThin;
         };
         
         // ppcoin: initialize synchronized checkpoint
         if (!Checkpoints::WriteSyncCheckpoint(Params().HashGenesisBlock()))
-            return errorN(1, "LoadBlockIndex() : failed to init sync checkpoint");
+            return error1("LoadBlockIndex() : failed to init sync checkpoint");
     };
     
     string strPubKey = "";
@@ -4059,14 +4060,14 @@ int LoadBlockIndex(bool fAllowNew)
         // write checkpoint master key to db
         txdb.TxnBegin();
         if (!txdb.WriteCheckpointPubKey(CSyncCheckpoint::strMasterPubKey))
-            return errorN(1, "LoadBlockIndex() : failed to write new checkpoint master key to db");
+            return error1("LoadBlockIndex() : failed to write new checkpoint master key to db");
         if (!txdb.TxnCommit())
-            return errorN(1, "LoadBlockIndex() : failed to commit new checkpoint master key to db");
+            return error1("LoadBlockIndex() : failed to commit new checkpoint master key to db");
         if (!fTestNet)
         {
             if ((nNodeMode == NT_FULL && !Checkpoints::ResetSyncCheckpoint())
                 || (nNodeMode == NT_THIN && !Checkpoints::ResetSyncCheckpointThin()))
-                return errorN(1, "LoadBlockIndex() : failed to reset sync-checkpoint");
+                return error1("LoadBlockIndex() : failed to reset sync-checkpoint");
         };
     };
 
@@ -4388,9 +4389,9 @@ static void ProcessGetData(CNode* pfrom)
         {
             bool send = false;
             CBlockIndex *pBlockIndex;
-            
-            std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(inv.hash);
-            
+
+            map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(inv.hash);
+
             if (mi != mapBlockIndex.end())
             {
                 pBlockIndex = (*mi).second;
@@ -4517,14 +4518,14 @@ static void ProcessGetData(CNode* pfrom)
                     // Bypass PushInventory, this must send even if redundant,
                     // and we want it right after the last block so they don't
                     // wait for other stuff first.
-                    std::vector<CInv> vInv;
+                    vector<CInv> vInv;
 
                     // ppcoin: send latest proof-of-work block to allow the
                     // download node to accept as orphan (proof-of-stake
                     // block might be rejected by stake connection check)
 
                     // unless PoW phase is over
-                    bool fReturnPoSBlock = nBestHeight > Params().LastPOWBlock() ? true : false;
+                    bool fReturnPoSBlock = nBestHeight <= Params().LastPOWBlock() ? true : false;
 
                     vInv.push_back(CInv(MSG_BLOCK, GetLastBlockIndex(pindexBest, fReturnPoSBlock)->GetBlockHash()));
                     pfrom->PushMessage("inv", vInv);
@@ -4538,7 +4539,7 @@ static void ProcessGetData(CNode* pfrom)
             bool pushed = false;
             {
                 LOCK(cs_mapRelay);
-                std::map<CInv, CDataStream>::iterator mi = mapRelay.find(inv);
+                map<CInv, CDataStream>::iterator mi = mapRelay.find(inv);
                 if (mi != mapRelay.end())
                 {
                     pfrom->PushMessage(inv.GetCommand(), (*mi).second);
@@ -5055,7 +5056,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                     && nAskedForBlocks < 1)
                 {
                     ChangeNodeState(NS_GET_FILTERED_BLOCKS);
-                };
+                }
             };
         };
 
@@ -5185,8 +5186,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         LOCK(cs_main);
 
         // find last block in inv vector
-        uint32_t nLastBlock = (uint32_t)(-1);
-        for (uint32_t nInv = 0; nInv < vInv.size(); nInv++)
+        unsigned int nLastBlock = (unsigned int)(-1);
+        for (unsigned int nInv = 0; nInv < vInv.size(); nInv++)
         {
             if (vInv[vInv.size() - 1 - nInv].type == MSG_BLOCK)
             {
@@ -5195,10 +5196,11 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             };
         };
 
+
         if (nNodeMode == NT_FULL)
         {
             CTxDB txdb("r");
-            for (uint32_t nInv = 0; nInv < vInv.size(); nInv++)
+            for (unsigned int nInv = 0; nInv < vInv.size(); nInv++)
             {
                 const CInv &inv = vInv[nInv];
 
@@ -5226,13 +5228,9 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                     // In case we are on a very long side-chain, it is possible that we already have
                     // the last block in an inv bundle sent in response to getblocks. Try to detect
                     // this situation and push another getblocks to continue.
-
-                    if (GetNumBlocksOfPeers() - nBestHeight < 256)
-                    {
-                        pfrom->PushGetBlocks(mapBlockIndex[inv.hash], uint256(0));
-                        if (fDebug)
-                            LogPrintf("force request: %s\n", inv.ToString().c_str());
-                    };
+                    pfrom->PushGetBlocks(mapBlockIndex[inv.hash], uint256(0));
+                    if (fDebug)
+                        LogPrintf("force request: %s\n", inv.ToString().c_str());
                 };
 
                 // Track requests for our stuff
@@ -5241,7 +5239,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         } else
         {
             CTxDB txdb("r");
-            for (uint32_t nInv = 0; nInv < vInv.size(); nInv++)
+            for (unsigned int nInv = 0; nInv < vInv.size(); nInv++)
             {
                 CInv &inv = vInv[nInv];
 
@@ -5575,7 +5573,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         };
         
         LogPrintf("Received mblk %d\n", nBlocks);
-        nTimeLastMblkRecv = GetTime();
         
         for (uint32_t i = 0; i < nBlocks; ++i)
         {
@@ -5619,7 +5616,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         std::vector<CMBlkThinElement> vMultiBlockThin;
         vRecv >> vMultiBlockThin; // TODO: use a plain byte buffer?
         uint32_t nBlocks = vMultiBlockThin.size();
-
+        
+        LOCK(cs_main);
 
         if (nBlocks > MAX_MULTI_BLOCK_THIN_ELEMENTS)
         {
@@ -5633,7 +5631,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         std::vector<CTransaction> vTxns;
         for (uint32_t i = 0; i < nBlocks; ++i)
         {
-            LOCK(cs_main);
             CMerkleBlockIncoming mbi = CMerkleBlockIncoming(vMultiBlockThin[i].merkleBlock);
             vTxns = vMultiBlockThin[i].vtx;
             ProcessMerkleBlock(pfrom, mbi, &vTxns);
@@ -6505,7 +6502,7 @@ bool SendMessages(CNode* pto, std::vector<CNode*> &vNodesCopy, bool fSendTrickle
     while (!pto->mapAskFor.empty() && (*pto->mapAskFor.begin()).first <= nNow)
     {
         const CInv& inv = (*pto->mapAskFor.begin()).second;
-
+    
         if ((nNodeMode == NT_FULL && !AlreadyHave(txdb, inv))
             || (nNodeMode == NT_THIN && !AlreadyHaveThin(txdb, inv)))
         {
@@ -6526,18 +6523,6 @@ bool SendMessages(CNode* pto, std::vector<CNode*> &vNodesCopy, bool fSendTrickle
     if (!vGetData.empty())
         pto->PushMessage("getdata", vGetData);
 
-
-    // - If syncing and !get mblk in MBLK_RECEIVE_TIMEOUT send another getblocks to random peer
-    if (nNodeMode == NT_FULL
-        && nTimeLastMblkRecv > 0
-        && pto->nChainHeight - nBestHeight > 256
-        && nTimeNow - nTimeLastMblkRecv > MBLK_RECEIVE_TIMEOUT)
-    {
-        pto->PushGetBlocks(pindexBest, uint256(0));
-        if (fDebug)
-            LogPrintf("Sync timeout, getblocks to %s, from %d\n", pto->addr.ToString().c_str(), pindexBest->nHeight);
-        nTimeLastMblkRecv = nTimeNow; // reset timeout
-    };
 
     if (fSecMsgEnabled)
         SecureMsgSendData(pto, fSendTrickle); // should be in cs_main?
