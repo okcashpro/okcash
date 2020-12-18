@@ -38,6 +38,24 @@
     font-style: italic;
 }
 
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic);
+
+@font-face { 
+    font-family: "NotoCJK Japanese"; 
+    font-weight: 400; 
+    src: url("qrc:///fonts/japanese.otf"); 
+}
+@font-face { 
+    font-family: "NotoCJK Chinese simplified"; 
+    font-weight: 400; 
+    src: url("qrc:///fonts/chinese_s.otf"); 
+}
+@font-face { 
+    font-family: "NotoCJK Chinese traditional"; 
+    font-weight: 400; 
+    src: url("qrc:///fonts/chinese_t.otf"); 
+}
+
 
 /* Page specific */
 html,body { height: 100%; margin: 0px; padding: 0px; }
@@ -62,10 +80,11 @@ h2 {
 }
 h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
+    line-height: 1.1em;
 }
 
 input:focus {
-    outline: rgba(38,147,255, 0.37) 2px outset;
+    outline: rgba(255, 0, 0, 0.37) 2px outset;
     outline-offset: -2px;
 }
 
@@ -96,7 +115,7 @@ p {
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
-    border: 1px solid #ffffff;
+    border: 1px solid #E5E5E5;
 }
 
 .selected td input {
@@ -137,7 +156,7 @@ tbody tr.selected td:hover {
 
 .pagination.selected,
 .pagination:hover {
-    background:#ff9933!important;
+    background:#E5203D!important;
 }
 
 /* Vertical Menu */
@@ -152,8 +171,8 @@ ul.vmenu li a {
     text-decoration: none;
     padding: 5px 0 15px 0;
     display: block;
-    color: #4d4d4d;
-    border: 1px solid #05050c;
+    color: #829091;
+    border: 1px solid #15141a;
     padding-left: 20px;
     -webkit-transition: all 0.2s ease-in-out;
 }
@@ -163,15 +182,14 @@ ul.vmenu li {
 }
 
 ul.vmenu li.selected a {
-    background: #040225;
-    border: 1px solid #040225;
+    background: #0f0f13;
+    border: 1px solid #101014;
     color: #fff;
-	font-weight: bold;
 }
 
 ul.vmenu li a:hover {
-    background: #040225;
-    border: 1px solid #040225;
+    background: #424242;
+    border: 1px solid #1b1a20;
     color: #fff;
 }
 
@@ -190,9 +208,9 @@ div.menu span {
 div.menu span a {
     display: block;
     text-decoration: none;
-    color: #4d4d4d;
+    color: #829091;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 /*
@@ -214,7 +232,7 @@ Add transition to containers so they can push in and out.
 }
 
 #navpanel {
-    background: #05050c;
+    background: #131218;
     margin-left: -135px;
     width: 17%;
     position: fixed;
@@ -259,7 +277,7 @@ article {
     padding: 10px 25px 10px 15px;
     background: url('qrc:///icons/search') no-repeat 100% 7px;
     background-color: #ecf0f1;
-    border: 1px #ecf0f1 solid;
+    border: 1px #e5e5e5 solid;
     text-transform: uppercase;
     font-size: 14px;
 }
@@ -295,11 +313,11 @@ article {
     margin-top: 10px;
 }
 
-.user-info .user-name,
-.user-info .balance {
+.user-info .user-name {
     text-transform: uppercase;
     font-family: "Open Sans", sans-serif;
     font-size: 14px;
+    float: left;
 }
 
 .user-info .user-menu {
@@ -328,7 +346,7 @@ article {
     border-width: 1px 0 0 0;
     background: #ecf0f1;
     overflow:auto;
-    box-okcash:0 -1px 0 0 #dee2e2,
+    box-shadow:0 -1px 0 0 #dee2e2,
                0 -2px 0 0 #f8f8f8;
 }
 
@@ -351,7 +369,7 @@ article {
     background: inherit;
     padding: 10px;
     cursor: pointer;
-    box-okcash: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
+    box-shadow: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
     z-index: 10000;
 }
 
@@ -551,16 +569,16 @@ article {
             background: #131218;
             border-radius: 50px;
             padding: 2px;
-            box-okcash: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
     }
 
     progress::-webkit-progress-value {
             border-radius: 50px;
-            box-okcash: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
             background:
                     -webkit-linear-gradient(45deg, transparent, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%),
                     -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.2)),
-                    -webkit-linear-gradient(left, #0165a2, #0165a4);
+                    -webkit-linear-gradient(left, #0351aa, #0366d6);
 
             /* Looks great, now animating it */
             background-size: 25px 14px, 100% 100%, 100% 100%;
@@ -588,7 +606,7 @@ article {
     content: " ";
     padding-left: 18px;
     top: 5px;
-    background: #4d4d4d;
+    background: #829091;
     -webkit-mask-image: url('qrc:///icons/nav_icons');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position-x: -5px;
@@ -603,7 +621,7 @@ article {
 #navpanel .selected [href='#chaindata']:before,
 #navpanel .selected [href='#blockdata']:before,
 #navpanel .selected [href='#news']:before {
-    background: #4d4;
+    background: #e5203d;
 }
 
 #navpanel [href='#overview']:before {
@@ -784,15 +802,15 @@ small screens.
     -moz-osx-font-smoothing: grayscale;
 }
 
-.footable.okcash {
-    border-color: #ff9933;
+.footable.shadow {
+    border-color: #e5203d;
 }
-.footable.okcash > tfoot > tr > th,
-.footable.okcash > thead > tr > th,
-.footable.okcash > tfoot > tr > td,
-.footable.okcash > thead > tr > td {
-    background-color: #ff9933;
-    border-color: #ff9933;
+.footable.shadow > tfoot > tr > th,
+.footable.shadow > thead > tr > th,
+.footable.shadow > tfoot > tr > td,
+.footable.shadow > thead > tr > td {
+    background-color: #e5203d;
+    border-color: #e5203d;
 }
 
 .footable > thead > tr > th,.footable > thead > tr > td {
@@ -843,7 +861,7 @@ tr.footable-row-detail {
 }
 
 .outofsync {
-    color: rgb(2, 192, 236);
+    color: red;
 }
 
 
@@ -907,7 +925,7 @@ color: rgb(228, 26, 26);
 }
 
 #overview .outofsync {
-    color: rgb(2, 192, 236);
+    color: rgb(228, 40, 40);
     font-weight:400;
 }
 
@@ -1200,7 +1218,7 @@ label.recipient {
   padding: 7px 14px;
   -webkit-border-radius: 5;
   -moz-border-radius: 5;
-  border-radius: 0px;
+  border-radius: 5px;
   background-color: transparent;
   color: inherit;
   vertical-align: middle;
@@ -1234,8 +1252,8 @@ label.recipient {
 
 .button:active,
 .button.is-active {
-  -webkit-box-okcash: none;
-  box-okcash: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
   text-decoration: none;
 }
 
@@ -1356,21 +1374,21 @@ label.recipient {
 }
 
 .button.is-inverse {
-  background: #0080FF;
+  background: #0366d6;
 
   color: white;
 }
 
 .button.is-inverse:hover,
 .button.is-inverse:focus {
-  background: #1034A6;
+  background: #8A1B2B;
 
   text-decoration: none;
 }
 
 .button.is-inverse:active,
 .button.is-inverse.is-active {
-  background-color: #1034A6;
+  background-color: #8A1B2B;
 }
 
 .button.is-link {
@@ -1455,10 +1473,18 @@ label.recipient {
   text-align: center;
 }
 
+.small-button
+{
+    margin-right:10px; 
+    margin-left:5px; 
+    height:40px; 
+    width:40px; 
+    margin-bottom:7px;
+}
 
 /****************************
 
-       OKCashChat
+       OkcashChat
 
 *****************************/
 
@@ -1708,9 +1734,9 @@ label.recipient {
     padding: 10px;
     border-radius: 5px;
     margin-left: 10px;
-    -webkit-box-okcash:  1px 1px 5px rgba(0,0,0,.15);
-    -moz-box-okcash:  1px 1px 5px rgba(0,0,0,.15);
-    box-okcash: 1px 1px 5px rgba(0,0,0,.15);
+    -webkit-box-shadow:  1px 1px 5px rgba(0,0,0,.15);
+    -moz-box-shadow:  1px 1px 5px rgba(0,0,0,.15);
+    box-shadow: 1px 1px 5px rgba(0,0,0,.15);
     font-size: 15px;
     max-width: 75%;
     overflow-wrap: break-word;
@@ -1751,7 +1777,7 @@ label.recipient {
 }
 
 .text-box textarea:focus {
-    outline: rgba(38,147,255, 0.37) 2px outset;
+    outline: rgba(255, 0, 0, 0.37) 2px outset;
     outline-offset: -2px;
 }
 
@@ -1772,7 +1798,7 @@ label.recipient {
     text-align: center;
     display: block;
     color: #fff;
-    background: #0165a4;
+    background: #E41C39;
     -webkit-border-radius: 5;
     -moz-border-radius: 5;
     border-radius: 5px;
@@ -1783,25 +1809,25 @@ label.recipient {
 
 .left-bar :hover,
 .left-bar :focus {
-  background: #01395c;
+  background: #8A1B2B;
   text-decoration: none;
 }
 
 .left-bar :active,
 .left-bar .is-active {
   border-color: #353b43;
-  background-color: #01395c;
+  background-color: #8A1B2B;
 }
 
 .right-bar :hover,
 .right-bar :focus {
-  background: #01395c;
+  background: #8A1B2B;
   text-decoration: none;
 }
 
 .right-bar :active,
 .right-bar .is-active {
-    background-color: #01395c;
+    background-color: #8A1B2B;
 }
 
 .text-box .left-bar a {
@@ -1840,7 +1866,7 @@ label.recipient {
     margin-left: 5px;
 }
 .text-box .right-bar a.submit:hover i {
-    background: #01395c;
+    background: #0000b3;
     text-decoration: none;
 }
 
@@ -1870,7 +1896,7 @@ label.recipient {
 /* Icons styling */
 
 .staking {
-    color: #4d4;
+    color: rgb(18, 121, 59);
 }
 .not-staking {
     opacity: 0.3;
@@ -1891,8 +1917,13 @@ label.recipient {
     margin-left: 10px;
 }
 
+.inputError {
+    color: white !important;
+    background: #E51C39 !important;
+}
+
 .red {
-    color: #4d4;
+    color: #D62C2C;
 }
 
 .orange {
@@ -1948,16 +1979,18 @@ label.recipient {
 }
 
 .fa {
-    font-size: 18px !important;
+    font-size: 14px !important;
 }
 
 .fa-lg {
-    font-size: 24px !important;
-	vertical-align: -2%;
+    font-size: 1.33333333em !important;
 }
 
 .font-16px {
     font-size: 16px !important;
+}
+.font-20px {
+    font-size: 20px !important;
 }
 .font-26px {
     font-size: 26px !important;
@@ -1965,6 +1998,11 @@ label.recipient {
 .font-32px {
     font-size: 32px !important;
 }
+
+.font-150px {
+    font-size: 150px !important;
+}
+
 
 
 /* -- Responsive Styles (Media Queries) ------------------------------------- */
@@ -2036,10 +2074,12 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     }
 
     #announcements {
+         height: 100%;
 
     }
 
     #recenttxns {
+        height: 100%;
         width: 100%;
     }
 
@@ -2051,7 +2091,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
         display: inline-block;
         height: 50px;
         width: 50px;
-        /* border-radius: 100%; */
+        border-radius: 100%;
         float: left;
     }
 
@@ -2069,7 +2109,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
 
     .user-avatar .user-notifications span {
         display: initial;
-        background: #0165a4;
+        background: red;
         border-radius: 100%;
         font-size: 10px;
         padding-top: 1px;
@@ -2109,6 +2149,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     .content .flex-item {
         padding: 0;
         border: 0;
+        height: 100%;
     }
 
     .grow {
@@ -2156,7 +2197,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
 
 #lean_overlay {
     position: fixed;
-    z-index:100;
+    z-index:100; 
     top: 0px;
     left: 0px;
     height:100%;
@@ -2167,13 +2208,99 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
 
 .modal_close { position: absolute; top: 12px; right: 12px; display: block; width: 20px; height: 20px; z-index: 2; }
 
+#add-address-modal {
+    margin: auto;
+    padding: 20px;
+    width: 800px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+}
+
+#address-lookup-modal {
+    margin: auto;
+    padding: 20px;
+    width: 800px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+}
+
+#verify-sign-modal {
+    margin: auto;
+    padding: 20px;
+    width: 750px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+    position: absolute;
+}
+
+#verify-sign-modal input
+{
+    width:650px;
+    height:40px;
+    padding:0 10px;
+    margin-bottom:10px;
+}
+
+#verify-sign-modal textarea
+{
+    width: 698px; 
+    height: 100px;
+    padding:0 10px;
+    margin-bottom:10px;
+}
+
+
+#import-key-modal {
+    margin: auto;
+    padding: 20px;
+    width: 800px;
+    background: #fff;
+    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
+    display: none;
+    position: absolute;
+}
+
+#import-key-modal label
+{
+    display: inline-block;
+    padding-right: 20px;
+    margin: 20px;
+    margin-top:15px;
+    text-align: right;
+    width:200px;
+}
+
+
+#import-key-modal input
+{
+    width:650px;
+    height:40px;
+    padding:0 10px;
+    margin-bottom:10px;
+}
+
+#import-key-modal textarea
+{
+    width: 500px; 
+    height: 50px;
+    padding:0 10px;
+    margin-bottom:10px;
+}
+
 #qrcode-modal {
     margin: auto;
     padding: 20px;
     width: 400px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
 }
 
@@ -2194,7 +2321,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2206,7 +2333,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2219,7 +2346,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 480px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2231,7 +2358,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     height: 320px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
     overflow: auto;
 }
@@ -2246,16 +2373,21 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     width: 630px;
     background: #fff;
     border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-okcash: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-okcash: 0 0 4px rgba(0,0,0,0.7); -moz-box-okcash: 0 0px 4px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.7); -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7); -moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);
     display: none;
 }
 
+.iw-contextMenu {
+    font-size: 0.9em;
+}
+
 .iw-mIcon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     padding-right: 4px;
-    top: 3px;
     padding-left: 1px;
+    top:0;
+    vertical-align: sub;
 }
 
 #network-alert {
@@ -2266,7 +2398,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
     font-size:0.8em;
     color: #F51E3E;
     background: #ecf0f1;
-    box-okcash: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
+    box-shadow: -1px -1px 0 0 #dee2e2, -1px 1px 0 0 #dee2e2, -2px -2px 0 0 #f8f8f8, -2px 2px 0 0 #f8f8f8;
 }
 
 .network-alerts-icon {
@@ -2327,7 +2459,7 @@ input[type=checkbox] + label {
 }
 
 input[type=checkbox]:checked {
-    border: 2px solid #F51E3E;
+    border: 2px solid #F51E3E;;
 }
 
 input[type=checkbox]:checked + label {
@@ -2353,8 +2485,6 @@ input[type=checkbox]:checked + label:before {
     width:0;
     display:inline-block;
 }
-
-
 
 .select-multiple label.option {
     width: 200px;
@@ -2392,4 +2522,125 @@ input[type=checkbox]:checked + label:before {
     line-height:1.42857143;
     vertical-align:top;
     border-bottom:1px solid #ddd
+}
+
+.heading-selected {
+    font-size: 1.2em;
+    margin: 0;
+    margin-bottom: 30px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    color:#313131;
+    text-transform: uppercase;
+    white-space: normal;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.heading-deselected {
+    font-size: 1.2em;
+    margin: 0;
+    margin-bottom: 30px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    color:#999;
+    text-transform: uppercase;
+    text-decoration: none;  
+    cursor: pointer;  
+}
+
+.optionblock {
+    width: 150px;
+    height: 350px;
+    float: left;   
+    text-align: center;
+    margin: 50px;
+    cursor: pointer;
+}
+
+.wizardback {
+    display: block;
+    position: relative;
+    float:left;
+    width: 40px;
+    height:100%;
+    top:0;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.wizardback:before {
+    content: "\f053";
+    font-family: "FontAwesome";
+    font-size: 30px;
+    margin-top: 100px;
+    float: left;
+}
+
+.wizardfwd {
+    display: block;
+    position: relative;
+    float:right;
+    width: 40px;
+    height:100%;
+    top:0;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.wizardfwd:after {
+    content: "\f054";
+    font-family: "FontAwesome";
+    font-size: 30px;
+    margin-top: 100px;
+    float: left;
+}
+
+.wizardblock {
+    display: block;
+    float: left;
+    height: 600px;
+    width: 800px;
+    margin: 0px 25px 0px 25px;
+}
+
+#wizards p {
+    line-height: 20px;
+}
+
+.wizardblock label {
+    margin-left: 0;
+    padding-left: 0;
+
+}
+
+.green-circle {
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;   
+    left: 50%;  
+}
+
+.red-circle {
+    width: 20px;
+    height: 20px;
+    background-color: #F51E3E;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;   
+    text-align: center;
+
+}
+
+.fa.green {
+    color: rgb(73, 151, 73);
+}
+.fa.red {
+    color: rgb(187, 53, 53);
+}
+.fa.blue {
+    color: rgb(86, 86, 165);
 }

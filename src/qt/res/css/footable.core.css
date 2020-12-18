@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'footable';
+  src: url('footable.eot');
+  src: url('footable.eot?#iefix') format('embedded-opentype'), url('footable.woff') format('woff'), url('footable.ttf') format('truetype'), url('footable.svg#footable') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @font-face {
+    font-family: 'footable';
+    src: url('footable.svg#footable') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+}
 .footable {
   width: 100%;
   /** SORTING **/
@@ -20,7 +35,7 @@
 }
 .footable.breakpoint > tbody > tr > td > span.footable-toggle {
   display: inline-block;
-   font-family: "Open Sans", sans-serif;
+  font-family: 'footable';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -119,7 +134,7 @@
 }
 .footable > thead > tr > th > span.footable-sort-indicator {
   display: inline-block;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'footable';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -157,4 +172,7 @@
 }
 .footable-row-detail-value {
   display: table-cell;
+}
+.footable-odd {
+  background-color: #f7f7f7;
 }
