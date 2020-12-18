@@ -412,7 +412,7 @@ QString CoinControlDialog::getPriorityLabel(double dPriority)
     else ui->labelLocked->setVisible(false);
 }*/
 
-void CoinControlDialog::updateLabels(WalletModel *model, QDialog *dialog, OKCashBridge *bridge)
+void CoinControlDialog::updateLabels(WalletModel *model, QDialog *dialog, OkcashBridge *bridge)
 {
     if (!model) return;
 
@@ -562,7 +562,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog *dialog, OKCash
         l5->setStyleSheet((nBytes >= 10000) ? "color:red;" : "");               // Bytes >= 10000
         l6->setStyleSheet((dPriority <= 576000) ? "color:red;" : "");         // Priority < "medium"
         l7->setStyleSheet((fLowOutput) ? "color:red;" : "");                    // Low Output = "yes"
-        l8->setStyleSheet((nChange > 0 && nChange < CENT) ? "color:red;" : ""); // Change < 0.01OK
+        l8->setStyleSheet((nChange > 0 && nChange < CENT) ? "color:red;" : ""); // Change < 0.01 OK
 
         // tool tips
         l5->setToolTip(tr("This label turns red, if the transaction size is bigger than 10000 bytes.\n\n This means a fee of at least %1 per kb is required.\n\n Can vary +/- 1 Byte per input.").arg(BitcoinUnits::formatWithUnit(nDisplayUnit, CENT)));
@@ -584,6 +584,8 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog *dialog, OKCash
 void CoinControlDialog::updateView()
 {
     bool treeMode = ui->radioTreeMode->isChecked();
+    
+    LOCK(cs_main);
 
     ui->treeWidget->clear();
     ui->treeWidget->setEnabled(false); // performance, otherwise updateLabels would be called for every checked checkbox
@@ -649,7 +651,7 @@ void CoinControlDialog::updateView()
             {
                 sAddress = CBitcoinAddress(outputAddress).ToString().c_str();
 
-                // if listMode or change => show bitcoin address. In tree mode, address is not shown again for direct wallet address outputs
+                // if listMode or change => show okcash address. In tree mode, address is not shown again for direct wallet address outputs
                 if (!treeMode || (!(sAddress == sWalletAddress)))
                     itemOutput->setText(COLUMN_ADDRESS, sAddress);
 
