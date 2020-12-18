@@ -34,6 +34,56 @@ bool CWalletDB::EraseName(const string& strAddress)
     return Erase(make_pair(string("name"), strAddress));
 }
 
+bool CWalletDB::EraseRange(const std::string& sPrefix, uint32_t &nAffected)
+{
+
+    TxnBegin();
+
+    Dbc* pcursor = GetTxnCursor();
+
+    if (!pcursor)
+        throw runtime_error("EraseAllAnonData() : cannot create DB cursor");
+
+    size_t nLenPrefix = sPrefix.length();
+
+    if (nLenPrefix > 252) // fit in 256 and compressed int is 1 byte
+    {
+        LogPrintf("EraseRange(%s) - Key length too long.\n", sPrefix.c_str());
+        return false;
+    };
+
+    // - key starts with strlen || str
+    uint8_t data[256];
+    data[0] = (uint8_t)nLenPrefix;
+    memcpy(&data[1], sPrefix.data(), nLenPrefix);
+
+    Dbt key, record;
+    memset(&key, 0, sizeof(key));
+    key.set_data(data);
+    key.set_size(nLenPrefix+1);
+    unsigned int fFlags = DB_SET_RANGE;
+    int ret;
+    while ((ret = pcursor->get(&key, &record, fFlags)) == 0)
+    {
+        fFlags = DB_NEXT;
+
+        if (key.get_size() < nLenPrefix+1
+            || memcmp(key.get_data(), data, nLenPrefix+1) != 0)
+            break;
+
+        if ((ret = pcursor->del(0)) != 0)
+               LogPrintf("EraseRange(%s) - Delete failed %d, %s\n", sPrefix.c_str(), ret, db_strerror(ret));
+
+        nAffected++;
+    };
+
+    pcursor->close();
+
+    TxnCommit();
+
+    return true;
+};
+
 bool CWalletDB::ReadAccount(const string& strAccount, CAccount& account)
 {
     account.SetNull();
@@ -206,7 +256,7 @@ CWalletDB::ReorderTransactions(CWallet* pwallet)
                 if (nOrderPos >= nOffsetStart)
                     ++nOrderPosOff;
             };
-            
+
             nOrderPos += nOrderPosOff;
             nOrderPosNext = std::max(nOrderPosNext, nOrderPos + 1);
 
@@ -313,10 +363,10 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         {
             if (fDebug)
                 LogPrintf("WalletDB ReadKeyValue sxAddr\n");
-            
+
             CStealthAddress sxAddr;
             ssValue >> sxAddr;
-            
+
             pwallet->stealthAddresses.insert(sxAddr);
         } else
         if (strType == "acentry")
@@ -437,18 +487,14 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             ssValue >> keyMeta;
             wss.nKeyMeta++;
 
+            // nTimeFirstKey set in LoadKeyMetadata
             pwallet->LoadKeyMetadata(vchPubKey, keyMeta);
-
-            // find earliest key creation time, as wallet birthday
-            if (!pwallet->nTimeFirstKey ||
-                (keyMeta.nCreateTime < pwallet->nTimeFirstKey))
-                pwallet->nTimeFirstKey = keyMeta.nCreateTime;
         } else
         if (strType == "sxKeyMeta")
         {
             if (fDebug)
                 LogPrintf("WalletDB ReadKeyValue sxKeyMeta\n");
-            
+
             CKeyID keyId;
             ssKey >> keyId;
             CStealthKeyMetadata sxKeyMeta;
@@ -599,7 +645,6 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
     // nTimeFirstKey is only reliable if all keys have metadata
     if ((wss.nKeys + wss.nCKeys) != wss.nKeyMeta)
         pwallet->nTimeFirstKey = 1; // 0 would be considered 'no value'
-
 
     BOOST_FOREACH(uint256 hash, wss.vWalletUpgrade)
         WriteTx(hash, pwallet->mapWallet[hash]);
@@ -752,7 +797,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
         LogPrintf("Salvage(aggressive) found no records in %s.\n", newFilename.c_str());
         return false;
     };
-    
+
     LogPrintf("Salvage(aggressive) found %u records\n", salvagedData.size());
 
     bool fSuccess = allOK;
@@ -783,7 +828,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
                                         wss, strType, strErr);
             if (!IsKeyType(strType))
                 continue;
-            
+
             if (!fReadOK)
             {
                 LogPrintf("WARNING: CWalletDB::Recover skipping %s: %s\n", strType.c_str(), strErr.c_str());
