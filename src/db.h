@@ -73,7 +73,8 @@ public:
     bool Open(boost::filesystem::path pathEnv_);
     void Close();
     void Flush(bool fShutdown);
-    void CheckpointLSN(std::string strFile);
+
+    void CheckpointLSN(const std::string& strFile);
     void SetDetach(bool fDetachDB_) { fDetachDB = fDetachDB_; }
     bool GetDetach() { return fDetachDB; }
 
@@ -102,17 +103,19 @@ protected:
     DbTxn *activeTxn;
     bool fReadOnly;
 
-    explicit CDB(const char* pszFile, const char* pszMode="r+");
+    explicit CDB(const std::string& strFilename, const char* pszMode="r+");
     ~CDB() { Close(); }
+
 public:
     void Close();
+
 private:
     CDB(const CDB&);
     void operator=(const CDB&);
 
 protected:
     template<typename K, typename T>
-    bool Read(const K& key, T& value)
+    bool Read(const K& key, T& value, uint32_t nFlags=0)
     {
         if (!pdb)
             return false;
@@ -126,7 +129,7 @@ protected:
         // Read
         Dbt datValue;
         datValue.set_flags(DB_DBT_MALLOC);
-        int ret = pdb->get(activeTxn, &datKey, &datValue, 0);
+        int ret = pdb->get(activeTxn, &datKey, &datValue, nFlags);
         memset(datKey.get_data(), 0, datKey.get_size());
         if (datValue.get_data() == NULL)
             return false;
@@ -151,27 +154,29 @@ protected:
     {
         if (!pdb)
             return false;
+        
         if (fReadOnly)
             assert(!"Write called on database in read-only mode");
-
+        
         // Key
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         ssKey.reserve(1000);
         ssKey << key;
         Dbt datKey(&ssKey[0], ssKey.size());
-
+        
         // Value
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         ssValue.reserve(10000);
         ssValue << value;
         Dbt datValue(&ssValue[0], ssValue.size());
-
+        
         // Write
         int ret = pdb->put(activeTxn, &datKey, &datValue, (fOverwrite ? 0 : DB_NOOVERWRITE));
-
+        
         // Clear memory in case it was a private key
         memset(datKey.get_data(), 0, datKey.get_size());
         memset(datValue.get_data(), 0, datValue.get_size());
+        
         return (ret == 0);
     }
 
