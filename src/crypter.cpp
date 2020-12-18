@@ -238,8 +238,11 @@ bool CCryptoKeyStore::Unlock(const CKeyingMaterial& vMasterKeyIn)
         
         if (nUnlocked < 1) // at least 1 key must pass the test
         {
-            LogPrintf("Unlock failed: No keys unlocked.\n");
-            return false;
+            if (mapCryptedKeys.size() > 0)
+            {
+                LogPrintf("Unlock failed: No keys unlocked.\n");
+                return false;
+            };
         };
         
         vMasterKey = vMasterKeyIn;
