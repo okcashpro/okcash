@@ -30,6 +30,7 @@ struct MessageTableEntry
     std::vector<unsigned char> chKey;
     Type type;
     QString label;
+    QString labelTo;
     QString to_address;
     QString from_address;
     QDateTime sent_datetime;
@@ -41,6 +42,7 @@ struct MessageTableEntry
     MessageTableEntry(std::vector<unsigned char> &chKey,
                       Type type,
                       const QString &label,
+                      const QString &labelTo,
                       const QString &to_address,
                       const QString &from_address,
                       const QDateTime &sent_datetime,
@@ -50,6 +52,7 @@ struct MessageTableEntry
         chKey(chKey),
         type(type),
         label(label),
+        labelTo(labelTo),
         to_address(to_address),
         from_address(from_address),
         sent_datetime(sent_datetime),
@@ -93,6 +96,7 @@ public:
         TypeInt = 8, /**< Plaintext */
         Key = 9, /**< chKey */
         HTML = 10, /**< HTML Formatted Data */
+        LabelTo = 11,
     };
 
     /** Roles to get specific information from a message row.
