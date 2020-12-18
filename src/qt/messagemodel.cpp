@@ -49,10 +49,8 @@ public:
         cachedMessageTable.clear();
 
         if (parent->getWalletModel()->getEncryptionStatus() == WalletModel::Locked)
-        {
             // -- messages are stored encrypted, can't load them without the private keys
             return;
-        };
 
         {
             LOCK2(pwalletMain->cs_wallet, cs_smsgDB);
@@ -70,6 +68,8 @@ public:
             SecMsgStored smsgStored;
             MessageData msg;
             QString label;
+            QString labelTo;
+            QString groupPrefix = QString::fromStdString("group_");
             QDateTime sent_datetime;
             QDateTime received_datetime;
 
@@ -80,7 +80,34 @@ public:
                 uint32_t nPayload = smsgStored.vchMessage.size() - SMSG_HDR_LEN;
                 if (SecureMsgDecrypt(false, smsgStored.sAddrTo, &smsgStored.vchMessage[0], &smsgStored.vchMessage[SMSG_HDR_LEN], nPayload, msg) == 0)
                 {
+                    if (fDebugSmsg)
+                        LogPrintf("refreshMessageTable: secureMsgDecrypt succesful\n");
+
                     label = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(msg.sFromAddress));
+                    labelTo = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(smsgStored.sAddrTo)); //returns "" if not found.
+
+                    if (fDebugSmsg)
+                    {
+                        LogPrintf("refreshMessageTable: addressTo: %s\n", smsgStored.sAddrTo);
+                        LogPrintf("refreshMessageTable: addressFrom: %s\n", msg.sFromAddress);
+                    }
+
+                    std::string publicKey;
+                    int duplicateMessageFromOutBox = SecureMsgGetLocalPublicKey(msg.sFromAddress, publicKey);
+
+                    if((labelTo.startsWith(groupPrefix)) && (duplicateMessageFromOutBox == 0)) {
+                        //a message has been received to our group but it was one of our own. Just don't process this at all.
+                        if(fDebugSmsg)
+                            LogPrintf("refreshMessageTable: groupchat message, but duplicate. Label: %s, LabelTo: %s, SecureMsgGetLocalPublicKey: %i\n", label.toStdString(), labelTo.toStdString(), duplicateMessageFromOutBox);
+                        continue;
+                    } else if(labelTo.startsWith(groupPrefix) && (duplicateMessageFromOutBox == 4)) {
+                        //a message has been received to our group and it was NOT one of our own. Yet retrieving the public key of it was succesful.
+                        if(fDebugSmsg)
+                            LogPrintf("refreshMessageTable: grouchat message and it was not a duplicate. Label: %s, LabelTo: %s, SecureMsgGetLocalPublicKey: %i\n", label.toStdString(), labelTo.toStdString(), duplicateMessageFromOutBox);
+                    } else {
+                        if(fDebugSmsg)
+                           LogPrintf("refreshMessageTable: not groupchat. Label: %s, LabelTo: %s, SecureMsgGetLocalPublicKey: %i\n", label.toStdString(), labelTo.toStdString(), duplicateMessageFromOutBox);
+                    }
 
                     sent_datetime    .setTime_t(msg.timestamp);
                     received_datetime.setTime_t(smsgStored.timeReceived);
@@ -90,6 +117,7 @@ public:
                     addMessageEntry(MessageTableEntry(vchKey,
                                                       MessageTableEntry::Received,
                                                       label,
+                                                      labelTo,
                                                       QString::fromStdString(smsgStored.sAddrTo),
                                                       QString::fromStdString(msg.sFromAddress),
                                                       sent_datetime,
@@ -110,6 +138,10 @@ public:
                 if (SecureMsgDecrypt(false, smsgStored.sAddrOutbox, &smsgStored.vchMessage[0], &smsgStored.vchMessage[SMSG_HDR_LEN], nPayload, msg) == 0)
                 {
                     label = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(smsgStored.sAddrTo));
+                    labelTo = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(msg.sFromAddress));
+
+                    if(fDebugSmsg)
+                        LogPrintf("refreshMessageTable: sendMessage: label: %s, labelTo: %s\n", label.toStdString(), labelTo.toStdString());
 
                     sent_datetime    .setTime_t(msg.timestamp);
                     received_datetime.setTime_t(smsgStored.timeReceived);
@@ -119,6 +151,7 @@ public:
                     addMessageEntry(MessageTableEntry(vchKey,
                                                       MessageTableEntry::Sent,
                                                       label,
+                                                      labelTo,
                                                       QString::fromStdString(smsgStored.sAddrTo),
                                                       QString::fromStdString(msg.sFromAddress),
                                                       sent_datetime,
@@ -139,6 +172,8 @@ public:
         SecMsgStored smsgStored = inboxHdr;
         MessageData msg;
         QString label;
+        QString labelTo;
+        QString groupPrefix = QString::fromStdString("group_");
         QDateTime sent_datetime;
         QDateTime received_datetime;
 
@@ -146,6 +181,29 @@ public:
         if (SecureMsgDecrypt(false, smsgStored.sAddrTo, &smsgStored.vchMessage[0], &smsgStored.vchMessage[SMSG_HDR_LEN], nPayload, msg) == 0)
         {
             label = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(msg.sFromAddress));
+            labelTo = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(smsgStored.sAddrTo)); //returns "" if not found.
+
+            if(fDebugSmsg)
+                LogPrintf("newMessage: secureMsgDecrypt succesful\n");
+                LogPrintf("newMessage: addressTo: %s\n", smsgStored.sAddrTo);
+
+            std::string publicKey;
+            int duplicateMessageFromOutBox = SecureMsgGetLocalPublicKey(msg.sFromAddress, publicKey);
+
+            if((labelTo.startsWith(groupPrefix)) && (duplicateMessageFromOutBox == 0)) {
+                //a message has been received to our group but it was one of our own. Just don't process this at all.
+                //MAY CAUSE LOOP?
+                if(fDebugSmsg)
+                    LogPrintf("newMessage: groupchat message, but duplicate.");
+                return;
+            } else if(labelTo.startsWith(groupPrefix) && (duplicateMessageFromOutBox == 4)) {
+                //a message has been received to our group and it was NOT one of our own. Yet retrieving the public key of it was succesful.
+                if(fDebugSmsg)
+                    LogPrintf("newMessage: grouchat message and it was not a duplicate. Label: %s, LabelTo: %s, SecureMsgGetLocalPublicKey: %i\n", label.toStdString(), labelTo.toStdString(), duplicateMessageFromOutBox);
+            } else {
+                if(fDebugSmsg)
+                    LogPrintf("newMessage: not groupchat. Label: %s, LabelTo: %s, SecureMsgGetLocalPublicKey: %i\n", label.toStdString(), labelTo.toStdString(), duplicateMessageFromOutBox);
+            }
 
             sent_datetime    .setTime_t(msg.timestamp);
             received_datetime.setTime_t(smsgStored.timeReceived);
@@ -162,6 +220,7 @@ public:
             addMessageEntry(MessageTableEntry(vchKey,
                                               MessageTableEntry::Received,
                                               label,
+                                              labelTo,
                                               QString::fromStdString(smsgStored.sAddrTo),
                                               QString::fromStdString(msg.sFromAddress),
                                               sent_datetime,
@@ -178,6 +237,7 @@ public:
         SecMsgStored smsgStored = outboxHdr;
         MessageData msg;
         QString label;
+        QString labelTo;
         QDateTime sent_datetime;
         QDateTime received_datetime;
 
@@ -185,6 +245,10 @@ public:
         if (SecureMsgDecrypt(false, smsgStored.sAddrOutbox, &smsgStored.vchMessage[0], &smsgStored.vchMessage[SMSG_HDR_LEN], nPayload, msg) == 0)
         {
             label = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(smsgStored.sAddrTo));
+            labelTo = parent->getWalletModel()->getAddressTableModel()->labelForAddress(QString::fromStdString(msg.sFromAddress));
+
+            if(fDebugSmsg)
+                LogPrintf("newOutboxMessage: Label: %s, LabelTo: %s\n", label.toStdString(), labelTo.toStdString());
 
             sent_datetime    .setTime_t(msg.timestamp);
             received_datetime.setTime_t(smsgStored.timeReceived);
@@ -200,6 +264,7 @@ public:
             addMessageEntry(MessageTableEntry(vchKey,
                                               MessageTableEntry::Sent,
                                               label,
+                                              labelTo,
                                               QString::fromStdString(smsgStored.sAddrTo),
                                               QString::fromStdString(msg.sFromAddress),
                                               sent_datetime,
@@ -372,8 +437,9 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
         switch(index.column())
         {
-            case Label:	           return (rec->label.isEmpty() ? tr("(no label)") : rec->label);
-            case ToAddress:	       return rec->to_address;
+            case Label:            return (rec->label.isEmpty() ? tr("(no label)") : rec->label);
+            case LabelTo:          return (rec->labelTo.isEmpty() ? tr("(no label)") : rec->labelTo);
+            case ToAddress:        return rec->to_address;
             case FromAddress:      return rec->from_address;
             case SentDateTime:     return rec->sent_datetime;
             case ReceivedDateTime: return rec->received_datetime;
@@ -561,4 +627,3 @@ void MessageModel::unsubscribeFromCoreSignals()
 
     disconnect(walletModel, SIGNAL(encryptionStatusChanged(int)), this, SLOT(setEncryptionStatus(int)));
 }
-
