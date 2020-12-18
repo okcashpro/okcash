@@ -5,8 +5,8 @@
 #ifndef OK_CORE_H
 #define OK_CORE_H
 
-#include <stdlib.h> 
-#include <stdio.h> 
+#include <stdlib.h>
+#include <stdio.h>
 #include <vector>
 #include <inttypes.h>
 
@@ -123,11 +123,10 @@ public:
 
     bool IsAnonInput() const
     {
-        return (scriptSig.size() >= 2 + (33 + 32 + 32) // 2byte marker (cpubkey + sigc + sigr)
+        return (scriptSig.size() >= MIN_ANON_IN_SIZE
             && scriptSig[0] == OP_RETURN
             && scriptSig[1] == OP_ANON_MARKER);
     }
-
 
     friend bool operator==(const CTxIn& a, const CTxIn& b)
     {
@@ -141,10 +140,6 @@ public:
         return !(a == b);
     }
 
-    std::string ToStringShort() const
-    {
-        return strprintf(" %s %d", prevout.hash.ToString().c_str(), prevout.n);
-    }
 
     std::string ToString() const
     {
@@ -165,19 +160,19 @@ public:
     {
         LogPrintf("%s\n", ToString().c_str());
     }
-    
+
     void ExtractKeyImage(ec_point& kiOut) const
     {
-        kiOut.resize(ec_compressed_size);
+        kiOut.resize(EC_COMPRESSED_SIZE);
         memcpy(&kiOut[0], prevout.hash.begin(), 32);
         kiOut[32] = prevout.n & 0xFF;
     };
-    
+
     int ExtractRingSize() const
     {
         return (prevout.n >> 16) & 0xFFFF;
     };
-    
+
 };
 
 
@@ -255,9 +250,9 @@ public:
         return !(a == b);
     }
 
-    std::string ToStringShort() const
+    friend bool operator<(const CTxOut& a, const CTxOut& b)
     {
-        return strprintf(" out %s %s", FormatMoney(nValue).c_str(), scriptPubKey.ToString(true).c_str());
+        return (a.nValue < b.nValue);
     }
 
     std::string ToString() const
@@ -270,11 +265,11 @@ public:
     {
         LogPrintf("%s\n", ToString().c_str());
     }
-    
+
     CPubKey ExtractAnonPk() const
     {
         // always use IsAnonOutput to check length
-        return CPubKey(&scriptPubKey[2+1], ec_compressed_size);
+        return CPubKey(&scriptPubKey[2+1], EC_COMPRESSED_SIZE);
     };
 };
 
@@ -286,18 +281,18 @@ class CKeyImageSpent
 // stored in txdb, key is keyimage
 public:
     CKeyImageSpent() {};
-    
+
     CKeyImageSpent(uint256& txnHash_, uint32_t inputNo_, int64_t nValue_)
     {
         txnHash = txnHash_;
         inputNo = inputNo_;
         nValue  = nValue_;
     };
-    
+
     uint256 txnHash;    // hash of spending transaction
     uint32_t inputNo;   // keyimage is for inputNo of txnHash
     int64_t nValue;     // reporting only
-    
+
     IMPLEMENT_SERIALIZE
     (
         READWRITE(txnHash);
@@ -310,9 +305,9 @@ class CAnonOutput
 {
 // stored in txdb, key is pubkey
 public:
-    
+
     CAnonOutput() {};
-    
+
     CAnonOutput(COutPoint& outpoint_, int64_t nValue_, int nBlockHeight_, uint8_t nCompromised_)
     {
         outpoint = outpoint_;
@@ -320,7 +315,7 @@ public:
         nBlockHeight = nBlockHeight_;
         nCompromised = nCompromised_;
     };
-    
+
     COutPoint outpoint;
     int64_t nValue;         // rather store 2 bytes, digit + power 10 ?
     int nBlockHeight;
@@ -337,7 +332,7 @@ public:
 class CAnonOutputCount
 { // CountAllAnonOutputs
 public:
-    
+
     CAnonOutputCount()
     {
         nValue = 0;
@@ -345,26 +340,29 @@ public:
         nSpends = 0;
         nOwned = 0;
         nLeastDepth = 0;
+        nCompromised = 0;
     }
 
-    CAnonOutputCount(int64_t nValue_, int nExists_, int nSpends_, int nOwned_, int nLeastDepth_)
+    CAnonOutputCount(int64_t nValue_, int nExists_, int nSpends_, int nOwned_, int nLeastDepth_, int nCompromised_)
     {
         nValue = nValue_;
         nExists = nExists_;
         nSpends = nSpends_;
         nOwned = nOwned_;
         nLeastDepth = nLeastDepth_;
+        nCompromised = nCompromised_;
     }
-    
-    void set(int64_t nValue_, int nExists_, int nSpends_, int nOwned_, int nLeastDepth_)
+
+    void set(int64_t nValue_, int nExists_, int nSpends_, int nOwned_, int nLeastDepth_, int nCompromised_)
     {
         nValue = nValue_;
         nExists = nExists_;
         nSpends = nSpends_;
         nOwned = nOwned_;
         nLeastDepth = nLeastDepth_;
+        nCompromised = nCompromised_;
     }
-    
+
     void addCoin(int nCoinDepth, int64_t nCoinValue)
     {
         nExists++;
@@ -372,7 +370,7 @@ public:
         if (nCoinDepth < nLeastDepth)
             nLeastDepth = nCoinDepth;
     }
-    
+
     void updateDepth(int nCoinDepth, int64_t nCoinValue)
     {
         nValue = nCoinValue;
@@ -380,38 +378,39 @@ public:
             || nCoinDepth < nLeastDepth)
             nLeastDepth = nCoinDepth;
     }
-    
+
     void incSpends(int64_t nCoinValue)
     {
         nSpends++;
         nValue = nCoinValue;
     }
-    
+
     void decSpends(int64_t nCoinValue)
     {
         nSpends--;
         nValue = nCoinValue;
     }
-    
+
     void incExists(int64_t nCoinValue)
     {
         nExists++;
         nValue = nCoinValue;
     }
-    
+
     void decExists(int64_t nCoinValue)
     {
         nExists--;
         nValue = nCoinValue;
     }
-    
-    
+
+
     int64_t nValue;
     int nExists;
     int nSpends;
     int nOwned; // todo
     int nLeastDepth;
-    
+    int nCompromised;
+
 };
 
 
@@ -420,11 +419,12 @@ class CStakeModifier
 // for CheckKernel
 public:
     CStakeModifier() {};
-    CStakeModifier(uint64_t modifier, int height, int64_t time)
-        : nModifier(modifier), nHeight(height), nTime(time)
+    CStakeModifier(uint64_t modifier, uint256 modifierv2, int height, int64_t time)
+        : nModifier(modifier), bnModifierV2(modifierv2), nHeight(height), nTime(time)
     {};
-    
+
     uint64_t nModifier;
+    uint256 bnModifierV2;
     int nHeight;
     int64_t nTime;
 };
