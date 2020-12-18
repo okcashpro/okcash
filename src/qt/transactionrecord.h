@@ -28,10 +28,10 @@ public:
         Unconfirmed,        /**< Not yet mined into a block **/
         Confirming,         /**< Confirmed, but waiting for the recommended number of confirmations **/
         Conflicted,         /**< Conflicts with other transaction or mempool **/
-        /// Generated (mined) transactions
-        Immature,           /**< Mined but waiting for maturity */
+        /// Generated (staked) transactions
+        Immature,           /**< Staked but waiting for maturity */
         MaturesWarning,     /**< Transaction will likely not mature because no nodes have confirmed */
-        NotAccepted         /**< Mined but not accepted */
+        NotAccepted         /**< Generated but not accepted */
     };
 
     /// Transaction counts towards available balance
@@ -70,8 +70,8 @@ public:
         RecvWithAddress,
         RecvFromOther,
         SendToSelf,
-        RecvOKCash,
-        SendOKCash,
+        RecvOKprivate,
+        SendOKprivate,
     };
 
     static QString getTypeLabel(const int &type);
