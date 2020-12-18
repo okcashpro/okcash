@@ -142,4 +142,10 @@ int HMAC_SHA512_Init(HMAC_SHA512_CTX *pctx, const void *pkey, size_t len);
 int HMAC_SHA512_Update(HMAC_SHA512_CTX *pctx, const void *pdata, size_t len);
 int HMAC_SHA512_Final(unsigned char *pmd, HMAC_SHA512_CTX *pctx);
 
+uint32_t BitcoinChecksum(uint8_t* p, uint32_t nBytes);
+
+void AppendChecksum(std::vector<uint8_t>& data);
+
+bool VerifyChecksum(const std::vector<uint8_t>& data);
+
 #endif
