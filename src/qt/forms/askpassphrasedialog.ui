@@ -105,10 +105,26 @@
         <bool>true</bool>
        </property>
        <property name="toolTip">
-        <string>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</string>
+        <string>Unlocks the OK wallet to be able to participate in Staking.</string>
        </property>
        <property name="text">
         <string>For staking only</string>
+       </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="messagingCheckBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Unlocks the OK Chat to be able to send and receive messages.</string>
+       </property>
+       <property name="text">
+        <string>For OK Chat only</string>
        </property>
        <property name="visible">
         <bool>false</bool>
