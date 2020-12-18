@@ -1,5 +1,5 @@
 
-<img alt="Okcash" src="https://github.com/okcashpro/okcash/blob/master/src/qt/res/assets/img/splash.png">
+<img alt="Okcash" src="https://i.imgur.com/9N1ZIVK.jpg">
 
 [![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) 
 # [OK] Okcash
