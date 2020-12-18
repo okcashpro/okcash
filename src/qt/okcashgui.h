@@ -1,4 +1,4 @@
-// Copyright (c) 2014 The Okcash Developers
+// Copyright (c) 2014 The Okcash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
@@ -22,7 +22,6 @@ class TransactionTableModel;
 class ClientModel;
 class WalletModel;
 class MessageModel;
-class SignVerifyMessageDialog;
 class Notificator;
 
 QT_BEGIN_NAMESPACE
@@ -36,12 +35,12 @@ QT_END_NAMESPACE
   Okcash GUI main class. This class represents the main window of the Okcash UI. It communicates with both the client and
   wallet models to give the user an up-to-date view of the current core state.
 */
-class OKCashGUI : public QMainWindow
+class OkcashGUI : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit OKCashGUI(QWidget *parent = 0);
-    ~OKCashGUI();
+    explicit OkcashGUI(QWidget *parent = 0);
+    ~OkcashGUI();
 
     /** Set the client model.
         The client model represents the part of the core that communicates with the P2P network, and is wallet-agnostic.
@@ -69,18 +68,13 @@ private:
     QWebView *webView;
     QWebFrame *documentFrame;
 
-    OKCashBridge * bridge;
+    OkcashBridge *bridge;
 
     ClientModel *clientModel;
     WalletModel *walletModel;
     MessageModel *messageModel;
 
-    SignVerifyMessageDialog *signVerifyMessageDialog;
-
     QMenuBar *appMenuBar;
-
-    QAction *signMessageAction;
-    QAction *verifyMessageAction;
 
     QAction *quitAction;
     QAction *aboutAction;
@@ -92,7 +86,6 @@ private:
     QAction *changePassphraseAction;
     QAction *unlockWalletAction;
     QAction *lockWalletAction;
-    QAction *openConfEditorAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
 
@@ -110,7 +103,7 @@ private:
     /** Create system tray (notification) icon */
     void createTrayIcon();
 
-    friend class OKCashBridge;
+    friend class OkcashBridge;
 
 private slots:
     /** Page finished loading */
@@ -159,11 +152,6 @@ private slots:
     */
     void incomingMessage(const QModelIndex & parent, int start, int end);
 
-    /** Show Sign/Verify Message dialog and switch to sign message tab */
-    void gotoSignMessageTab(QString addr = "");
-    /** Show Sign/Verify Message dialog and switch to verify message tab */
-    void gotoVerifyMessageTab(QString addr = "");
-
     /** Show configuration dialog */
     void optionsClicked();
     /** Show about dialog */
@@ -175,8 +163,6 @@ private slots:
     void lockWallet();
     /** Toggle whether wallet is locked or not */
     void toggleLock();
-    /** open okcash.conf */
-    void showConfEditor();
     /** Encrypt the wallet */
     void encryptWallet(bool status);
     /** Backup the wallet */
