@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 
 extern bool fWalletUnlockStakingOnly;
+extern bool fWalletUnlockMessagingEnabled;
 
 AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget *parent) :
     QDialog(parent),
@@ -28,6 +29,7 @@ AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget *parent) :
     ui->passEdit3->installEventFilter(this);
 
     ui->stakingCheckBox->setChecked(fWalletUnlockStakingOnly);
+    ui->messagingCheckBox->setChecked(fWalletUnlockMessagingEnabled);
 
     switch(mode)
     {
@@ -41,6 +43,10 @@ AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget *parent) :
             ui->stakingCheckBox->setChecked(true);
             ui->stakingCheckBox->show();
             // fallthru
+        case UnlockMessaging:
+            ui->messagingCheckBox->setChecked(true);
+            ui->messagingCheckBox->show();
+
         case Unlock: // Ask passphrase
             ui->warningLabel->setText(tr("This operation needs your wallet passphrase to unlock the wallet."));
             ui->passLabel2->hide();
@@ -155,6 +161,7 @@ void AskPassphraseDialog::accept()
         else
         {
             fWalletUnlockStakingOnly = ui->stakingCheckBox->isChecked();
+            fWalletUnlockMessagingEnabled = ui->messagingCheckBox->isChecked();
             QDialog::accept(); // Success
         }
         break;
