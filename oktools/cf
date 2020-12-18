@@ -1,0 +1,8 @@
+#!/bin/bash
+OKDIR=/home/dev/.okcash
+cd $OKDIR
+sudo rm -r d* s* t* b* p* .lock
+mv wallet.dat wallet.datbkp
+#sudo rm -r $OKDIR/d* $OKDIR/s* $OKDIR/t* $OKDIR/b* $OKDIR/p* $OKDIR/.lock
+echo "I cleaned your Okcash data bro!"
+exit 0

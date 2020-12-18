@@ -1,0 +1,6 @@
+#!/bin/bash
+cd src/leveldb
+make clean
+echo "cleaned the make files bro"
+exit 0
+

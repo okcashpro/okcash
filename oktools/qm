@@ -1,0 +1,7 @@
+#!/bin/bash
+qmake
+make -j4
+echo "Done bro, I finished compiling your Okcash wallet! Enjoy!"
+strip okcash
+sudo cp okcash /usr/local/bin
+exit 0

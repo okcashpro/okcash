@@ -1,0 +1,8 @@
+#!/bin/bash
+OKCHAIN=/home/dev/ok-chain
+OKDATA=/home/dev/.okcash
+
+cp $OKCHAIN/blk0001.dat $OKDATA
+cp -r $OKCHAIN/txleveldb $OKDATA
+echo "Your OK-chain files are copied to .okcash  properly"
+exit 0
