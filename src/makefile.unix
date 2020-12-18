@@ -116,6 +116,7 @@ OBJS= \
     obj/crypter.o \
     obj/key.o \
     obj/eckey.o \
+    obj/extkey.o \
     obj/db.o \
     obj/init.o \
     obj/okcashd.o \
@@ -134,6 +135,8 @@ OBJS= \
     obj/rpcblockchain.o \
     obj/rpcrawtransaction.o \
     obj/rpcsmessage.o \
+    obj/rpcextkey.o \
+    obj/rpcmnemonic.o \
     obj/script.o \
     obj/sync.o \
     obj/util.o \
@@ -154,7 +157,7 @@ OBJS= \
     obj/txmempool.o \
     obj/chainparams.o \
     obj/state.o \
-    obj/bloom.o 
+    obj/bloom.o
 
 
 all: okcashd
@@ -200,19 +203,11 @@ okcashd: $(OBJS:obj/%=obj/%)
 
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
-#TESTOBJS := obj-test/json_spirit_reader.o
 
-#obj-test/json_spirit_reader.o: json/json_spirit_reader.cpp
-#	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
-#	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-#		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-#		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-#	rm -f $(@:%.o=%.d)
-    
-
+xTESTCXXFLAGS = -std=c++11
 
 obj-test/%.o: test/%.cpp
-	$(CXX) -c $(TESTDEFS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+	$(CXX) -c $(TESTDEFS) $(xTESTCXXFLAGS) $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
 	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
 		sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 		-e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
