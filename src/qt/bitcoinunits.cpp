@@ -39,7 +39,7 @@ QString BitcoinUnits::name(int unit)
     case OK: return QString("OK");
     case mOK: return QString("mOK");
     case uOK: return QString::fromUtf8("μOK");
-    case sOK: return QString::fromUtf8("OKtoshi");
+    case sOK: return QString::fromUtf8("oktoshi");
     default: return QString("???");
     }
 }
@@ -48,10 +48,10 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case OK:  return QString("OKCashs");
-    case mOK: return QString("Milli-OKCashs (1 / 1,000)");
-    case uOK: return QString("Micro-OKCashs (1 / 1,000,000)");
-    case sOK: return QString("OKtoshi (1 / 100,000,000)");
+    case OK:  return QString("OK Coins");
+    case mOK: return QString("Milli-OK Coins (1 / 1,000)");
+    case uOK: return QString("Micro-OK Coins (1 / 1,000,000)");
+    case sOK: return QString("oktoshis (1 / 100,000,000)");
     default:   return QString("???");
     }
 }
