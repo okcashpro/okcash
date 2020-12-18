@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="-280 372 50 50" style="enable-background:new -280 372 50 50;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.1;fill:none;stroke:#000000;stroke-width:3;enable-background:new    ;}
+	.st1{fill:none;stroke:#4d4;stroke-width:3;stroke-linecap:round;stroke-dasharray:110;}
+</style>
+<circle class="st0" cx="-255" cy="397" r="20"/>
+<g transform="translate(25,25) rotate(-90)">
+	<circle class="st1" cx="-372" cy="-280" r="20">
+	
+		<animate  fill="freeze" dur="2.2s" keyTimes="0;1" accumulate="none" keySplines="0.41,0.314,0.8,0.54" values="360;140" begin="0" attributeName="stroke-dashoffset" additive="replace" calcMode="spline" restart="always" repeatCount="indefinite">
+		</animate>
+	
+		<animateTransform  type="rotate" fill="remove" dur="2.2s" keyTimes="0;0.74;1" accumulate="none" values="0;274;360" begin="0" attributeName="transform" additive="replace" calcMode="linear" restart="always" repeatCount="indefinite">
+		</animateTransform>
+	</circle>
+</g>
+</svg>
