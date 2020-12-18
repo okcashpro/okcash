@@ -11,6 +11,8 @@
 // client versioning
 //
 
+const std::string CLIENT_LAST_COPYRIGHT("2022");
+
 static const int CLIENT_VERSION =
                            1000000 * CLIENT_VERSION_MAJOR
                          +   10000 * CLIENT_VERSION_MINOR
@@ -24,13 +26,13 @@ extern const std::string CLIENT_DATE;
 //
 // database format versioning
 //
-static const int DATABASE_VERSION = 70510;
+static const int DATABASE_VERSION = 70511;
 
 //
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 60022;
+static const int PROTOCOL_VERSION = 60023;
 
 // intial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
