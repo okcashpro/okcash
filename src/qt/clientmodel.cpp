@@ -162,6 +162,10 @@ int ClientModel::getNumBlocksOfPeers() const
 {
     return GetNumBlocksOfPeers();
 }
+bool ClientModel::isImporting() const
+{
+    return fImporting;
+}
 
 QString ClientModel::getStatusBarWarnings() const
 {
