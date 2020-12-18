@@ -122,7 +122,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
     auto_ptr<CBlock> pblock(new CBlock());
     if (!pblock.get())
         return NULL;
-    
+
     CBlockIndex* pindexPrev = pindexBest;
 
     // Create coinbase tx
@@ -133,17 +133,16 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
 
 
     int nHeight = pindexPrev->nHeight+1; // height of new block
-    
+
     if (!Params().IsProtocolV2(nHeight)) // generate old version until protocolV2
         pblock->nVersion = 6;
-    
+
 
     if (!fProofOfStake)
     {
         CReserveKey reservekey(pwallet);
         CPubKey pubkey;
-        if (!reservekey.GetReservedKey(pubkey))
-            return NULL;
+        pwallet->NewKeyFromAccount(pubkey);
         txNew.vout[0].scriptPubKey.SetDestination(pubkey.GetID());
     } else
     {
@@ -226,7 +225,6 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
                 int nConf = txindex.GetDepthInMainChainFromIndex();
                 dPriority += (double)nValueIn * nConf;
             };
-
 
             if (tx.nVersion == ANON_TXN_VERSION)
             {
@@ -349,10 +347,8 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
                 nFee = nTxFees;
             };
 
-
             // TODO: must this be done twice!?
             // Need to look at COrphan
-
 
             if (nFee < nMinFee)
                 continue;
@@ -361,6 +357,9 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
             if (nBlockSigOps + nTxSigOps >= MAX_BLOCK_SIGOPS)
                 continue;
 
+            // Note that flags: we don't want to set mempool/IsStandard()
+            // policy here, but we still have to ensure that the block we
+            // create only contains transactions that are valid in new blocks.
             if (!tx.ConnectInputs(txdb, mapInputs, mapTestPoolTmp, CDiskTxPos(1,1,1), pindexPrev, false, true, MANDATORY_SCRIPT_VERIFY_FLAGS))
                 continue;
 
@@ -535,7 +534,7 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
 
     if (!pblock->IsProofOfStake())
         return error("CheckStake() : %s is not a proof-of-stake block", hashBlock.GetHex().c_str());
-    
+
     std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(pblock->hashPrevBlock);
     if (mi == mapBlockIndex.end())
         return error("CheckStake() : %s prev block not found: %s.", hashBlock.GetHex().c_str(), pblock->hashPrevBlock.GetHex().c_str());
@@ -578,7 +577,7 @@ void ThreadStakeMiner(CWallet *pwallet)
     while (true)
     {
         boost::this_thread::interruption_point();
-        
+
         while (pwallet->IsLocked())
         {
             fIsStaking = false;
@@ -634,9 +633,9 @@ void ThreadStakeMiner(CWallet *pwallet)
         auto_ptr<CBlock> pblock(CreateNewBlock(pwallet, true, &nFees));
         if (!pblock.get())
             return;
-        
+
         fIsStaking = true;
-        
+
         // Trying to sign a block
         if (pblock->SignBlock(*pwallet, nFees))
         {
@@ -645,7 +644,7 @@ void ThreadStakeMiner(CWallet *pwallet)
                 nTimeLastStake = GetTime();
             SetThreadPriority(THREAD_PRIORITY_LOWEST);
         };
-        
+
         MilliSleep(nMinerSleep);
     };
 }
