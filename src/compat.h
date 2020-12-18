@@ -6,6 +6,9 @@
 #define _BITCOIN_COMPAT_H 1
 
 #ifdef WIN32
+#ifdef _WIN32_WINNT
+#undef _WIN32_WINNT
+#endif
 #define _WIN32_WINNT 0x0501
 #define WIN32_LEAN_AND_MEAN 1
 #ifndef NOMINMAX
@@ -17,11 +20,7 @@
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
-#ifndef ANDROID
 #include <sys/fcntl.h>
-#else
-#include <fcntl.h>
-#endif
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <net/if.h>
