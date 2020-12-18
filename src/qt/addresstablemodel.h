@@ -8,6 +8,14 @@ class AddressTablePriv;
 class CWallet;
 class WalletModel;
 
+enum EAddressType {
+    AT_Unknown = 0, /**< User specified label */
+    AT_Normal = 1,  /**< Bitcoin address */
+    AT_Stealth = 2,  /**< Stealth address */
+    AT_BIP32 = 3, /**< BIP32 address */
+    AT_Group = 4, /**< BIP32 address */
+};
+
 /**
    Qt model of the address book in the core. This allows views to access and modify the address book.
  */
@@ -17,13 +25,7 @@ class AddressTableModel : public QAbstractTableModel
 public:
     explicit AddressTableModel(CWallet *wallet, WalletModel *parent = 0);
     ~AddressTableModel();
-
-    enum AddressType {
-        AT_Unknown = 0, /**< User specified label */
-        AT_Normal = 1,  /**< Bitcoin address */
-        AT_Stealth = 2  /**< Stealth address */
-    };
-
+    
     enum ColumnIndex {
         Label = 0,   /**< User specified label */
         Address = 1,  /**< Bitcoin address */
@@ -74,6 +76,10 @@ public:
     /* Look up pubkey for address in address book, if not found return empty string.
      */
     QString pubkeyForAddress(const QString &address, const bool lookup=true) const;
+
+    /* Derive address for pubkey, if invalid return empty string.
+     */
+    QString addressForPubkey(const QString &address) const;
 
     /* Look up row index of an address in the model.
        Return -1 if not found.
