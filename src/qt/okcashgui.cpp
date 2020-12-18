@@ -1,12 +1,10 @@
-// Copyright (c) 2014 The Okcash Developers
+// Copyright (c) 2014 The Okcash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
 #include "okcashgui.h"
 #include "transactiontablemodel.h"
 #include "transactionrecord.h"
-
-#include "signverifymessagedialog.h"
 
 #include "aboutdialog.h"
 #include "clientmodel.h"
@@ -59,9 +57,9 @@
 extern CWallet* pwalletMain;
 double GetPoSKernelPS();
 
-OKCashGUI::OKCashGUI(QWidget *parent):
+OkcashGUI::OkcashGUI(QWidget *parent):
     QMainWindow(parent),
-    bridge(new OKCashBridge(this)),
+    bridge(new OkcashBridge(this)),
     clientModel(0),
     walletModel(0),
     messageModel(0),
@@ -109,8 +107,6 @@ OKCashGUI::OKCashGUI(QWidget *parent):
     // Create the tray icon (or setup the dock icon)
     createTrayIcon();
 
-    signVerifyMessageDialog = new SignVerifyMessageDialog(this);
-
     rpcConsole = new RPCConsole(this);
 
     connect(openRPCConsoleAction, SIGNAL(triggered()), rpcConsole, SLOT(show()));
@@ -140,7 +136,7 @@ OKCashGUI::OKCashGUI(QWidget *parent):
         webView->setUrl(QUrl("qrc:///src/qt/res/index.html"));
 }
 
-OKCashGUI::~OKCashGUI()
+OkcashGUI::~OkcashGUI()
 {
     if(trayIcon) // Hide tray icon, as deleting will let it linger until quit (on Ubuntu)
         trayIcon->hide();
@@ -151,7 +147,7 @@ OKCashGUI::~OKCashGUI()
 #endif
 }
 
-void OKCashGUI::pageLoaded(bool ok)
+void OkcashGUI::pageLoaded(bool ok)
 {
     if (GetBoolArg("-staking", true))
     {
@@ -160,14 +156,16 @@ void OKCashGUI::pageLoaded(bool ok)
         timerStakingIcon->start(15 * 1000);
         updateStakingIcon();
     }
+
 }
 
-void OKCashGUI::addJavascriptObjects()
+void OkcashGUI::addJavascriptObjects()
 {
     documentFrame->addToJavaScriptWindowObject("bridge", bridge);
+
 }
 
-void OKCashGUI::urlClicked(const QUrl & link)
+void OkcashGUI::urlClicked(const QUrl & link)
 {
     if(link.scheme() == "qrc" || link.scheme() == "file")
         return;
@@ -175,14 +173,14 @@ void OKCashGUI::urlClicked(const QUrl & link)
     QDesktopServices::openUrl(link);
 }
 
-void OKCashGUI::createActions()
+void OkcashGUI::createActions()
 {
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setToolTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/bitcoin"), tr("&About Okcash"), this);
+    aboutAction = new QAction(QIcon(":/icons/okcash"), tr("&About Okcash"), this);
     aboutAction->setToolTip(tr("Show information about Okcash"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
@@ -191,7 +189,7 @@ void OKCashGUI::createActions()
     optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
     optionsAction->setToolTip(tr("Modify configuration options for Okcash"));
     optionsAction->setMenuRole(QAction::PreferencesRole);
-    toggleHideAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Show / Hide"), this);
+    toggleHideAction = new QAction(QIcon(":/icons/okcash"), tr("&Show / Hide"), this);
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setToolTip(tr("Encrypt or decrypt wallet"));
     encryptWalletAction->setCheckable(true);
@@ -203,14 +201,10 @@ void OKCashGUI::createActions()
     unlockWalletAction->setToolTip(tr("Unlock wallet"));
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock Wallet"), this);
     lockWalletAction->setToolTip(tr("Lock wallet"));
-    openConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open Wallet &Configuration File"), this);
-    openConfEditorAction->setStatusTip(tr("Open configuration file"));
-    signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
-    verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
 
     //exportAction = new QAction(QIcon(":/icons/export"), tr("&Export..."), this);
     //exportAction->setToolTip(tr("Export the data in the current tab to a file"));
-    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
+    openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&OK Console / Debug"), this);
     openRPCConsoleAction->setToolTip(tr("Open debugging and diagnostic console"));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -223,12 +217,9 @@ void OKCashGUI::createActions()
     connect(changePassphraseAction, SIGNAL(triggered()), SLOT(changePassphrase()));
     connect(unlockWalletAction, SIGNAL(triggered()), SLOT(unlockWallet()));
     connect(lockWalletAction, SIGNAL(triggered()), SLOT(lockWallet()));
-    connect(openConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showConfEditor()));
-    connect(signMessageAction, SIGNAL(triggered()), SLOT(gotoSignMessageTab()));
-    connect(verifyMessageAction, SIGNAL(triggered()), SLOT(gotoVerifyMessageTab()));
 }
 
-void OKCashGUI::createMenuBar()
+void OkcashGUI::createMenuBar()
 {
 #ifdef Q_OS_MAC
     // Create a decoupled menu bar on Mac which stays even if the window is closed
@@ -243,8 +234,6 @@ void OKCashGUI::createMenuBar()
     QMenu *file = appMenuBar->addMenu(tr("&File"));
     file->addAction(backupWalletAction);
     //file->addAction(exportAction);
-    file->addAction(signMessageAction);
-    file->addAction(verifyMessageAction);
     file->addSeparator();
     file->addAction(quitAction);
 
@@ -263,7 +252,7 @@ void OKCashGUI::createMenuBar()
     help->addAction(aboutQtAction);
 }
 
-void OKCashGUI::setClientModel(ClientModel *clientModel)
+void OkcashGUI::setClientModel(ClientModel *clientModel)
 {
     this->clientModel = clientModel;
     if (clientModel)
@@ -310,15 +299,13 @@ void OKCashGUI::setClientModel(ClientModel *clientModel)
     }
 }
 
-void OKCashGUI::setWalletModel(WalletModel *walletModel)
+void OkcashGUI::setWalletModel(WalletModel *walletModel)
 {
     this->walletModel = walletModel;
     if(walletModel)
     {
         // Report errors from wallet thread
         connect(walletModel, SIGNAL(error(QString,QString,bool)), this, SLOT(error(QString,QString,bool)));
-
-        signVerifyMessageDialog->setModel(walletModel);
 
         documentFrame->addToJavaScriptWindowObject("walletModel",  walletModel);
         documentFrame->addToJavaScriptWindowObject("optionsModel", walletModel->getOptionsModel());
@@ -348,7 +335,7 @@ void OKCashGUI::setWalletModel(WalletModel *walletModel)
     }
 }
 
-void OKCashGUI::setMessageModel(MessageModel *messageModel)
+void OkcashGUI::setMessageModel(MessageModel *messageModel)
 {
     this->messageModel = messageModel;
     if(messageModel)
@@ -359,7 +346,7 @@ void OKCashGUI::setMessageModel(MessageModel *messageModel)
     }
 }
 
-void OKCashGUI::createTrayIcon()
+void OkcashGUI::createTrayIcon()
 {
     QMenu *trayIconMenu;
 #ifndef Q_OS_MAC
@@ -381,8 +368,6 @@ void OKCashGUI::createTrayIcon()
     // Configuration of the tray icon (or dock icon) icon menu
     trayIconMenu->addAction(toggleHideAction);
     trayIconMenu->addSeparator();
-    trayIconMenu->addAction(signMessageAction);
-    trayIconMenu->addAction(verifyMessageAction);
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(optionsAction);
     trayIconMenu->addAction(openRPCConsoleAction);
@@ -395,7 +380,7 @@ void OKCashGUI::createTrayIcon()
 }
 
 #ifndef Q_OS_MAC
-void OKCashGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
+void OkcashGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)
     {
@@ -405,40 +390,43 @@ void OKCashGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 }
 #endif
 
-void OKCashGUI::aboutClicked()
+void OkcashGUI::aboutClicked()
 {
     AboutDialog dlg;
     dlg.setModel(clientModel);
     dlg.exec();
 }
 
-void OKCashGUI::setNumConnections(int count)
+void OkcashGUI::setNumConnections(int count)
 {
     QWebElement connectionsIcon = documentFrame->findFirstElement("#connectionsIcon");
 
-    QString icon;
+    QString className;
+
     switch(count)
     {
-    case 0:          icon = "qrc:///icons/connect_0"; break;
-    case 1: case 2:  icon = "qrc:///icons/connect_1"; break;
-    case 3: case 4:  icon = "qrc:///icons/connect_2"; break;
-    case 5: case 6:  icon = "qrc:///icons/connect_3"; break;
-    case 7: case 8:  icon = "qrc:///icons/connect_4"; break;
-    case 9: case 10: icon = "qrc:///icons/connect_5"; break;
-    default:         icon = "qrc:///icons/connect_6"; break;
+    case 0:          className = "connect-0"; break;
+    case 1: case 2:  className = "connect-1"; break;
+    case 3: case 4:  className = "connect-2"; break;
+    case 5: case 6:  className = "connect-3"; break;
+    case 7: case 8:  className = "connect-4"; break;
+    case 9: case 10: className = "connect-5"; break;
+    default:         className = "connect-6"; break;
     }
-    connectionsIcon.setAttribute("src", icon);
-    connectionsIcon.setAttribute("title", tr("%n active connection(s) to the Okcash network", "", count));
+
+    connectionsIcon.setAttribute("class", className);
+    connectionsIcon.setAttribute("src", "qrc:///icons/" + className.replace("-", "_"));
+    connectionsIcon.setAttribute("data-title", tr("<b>%n active connection(s)</b> to the OK network", "", count));
 }
 
-void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
+void OkcashGUI::setNumBlocks(int count, int nTotalBlocks)
 {
     QWebElement blocksIcon  = documentFrame->findFirstElement("#blocksIcon");
     QWebElement syncingIcon = documentFrame->findFirstElement("#syncingIcon");
     QWebElement syncProgressBar = documentFrame->findFirstElement("#syncProgressBar");
 
     // don't show / hide progress bar and its label if we have no connection to the network
-    if (!clientModel || clientModel->getNumConnections() == 0)
+    if (!clientModel || (clientModel->getNumConnections() == 0 && !clientModel->isImporting()))
     {
         syncProgressBar.setAttribute("style", "display:none;");
 
@@ -477,7 +465,7 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
         if (strStatusBarWarnings.isEmpty())
         {
             bridge->networkAlert("");
-            tooltip = tr("Synchronizing with network...");
+            tooltip = clientModel->isImporting() ? tr("Importing blocks...") : tr("Synchronizing with network...");
 
             if (nNodeMode == NT_FULL)
             {
@@ -495,11 +483,11 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
         }
 
         tooltip += (tooltip.isEmpty()? "" : "\n")
-                 + tr("Downloaded %1 of %2 %3 of transaction history (%4% done).").arg(count).arg(nTotalBlocks).arg(sBlockTypeMulti).arg(nPercentageDone, 0, 'f', 2);
-    }
-    else
+		 + (clientModel->isImporting() ? tr("Imported") : tr("Downloaded")) + " "
+                 + tr("%1 of %2 %3 of transaction history (%4% done).").arg(count).arg(nTotalBlocks).arg(sBlockTypeMulti).arg(nPercentageDone, 0, 'f', 2);
+    } else
     {
-        tooltip = tr("Downloaded %1 blocks of transaction history.").arg(count);
+        tooltip = (clientModel->isImporting() ? tr("Imported") : tr("Downloaded")) + " " + tr("%1 blocks of transaction history.").arg(count);
     }
 
     // Override progressBarLabel text when we have warnings to display
@@ -540,7 +528,7 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
     if (secs < 90*60 && count >= nTotalBlocks
         && nNodeState != NS_GET_FILTERED_BLOCKS)
     {
-        tooltip = tr("Up to date") + "\n" + tooltip;
+        tooltip = tr("<b>Up to date</b> with the OK Blockchain.") + "\n" + tooltip;
         blocksIcon.removeClass("none");
         syncingIcon.addClass("none");
 
@@ -550,10 +538,9 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
             outOfSync.setStyleProperty("display", "none");
 
         syncProgressBar.setAttribute("style", "display:none;");
-    }
-    else
+    } else
     {
-        tooltip = tr("Catching up...") + "\n" + tooltip;
+        tooltip = tr("<b>Catching up</b> with the OK Blockchain...") + "\n" + tooltip;
 
         blocksIcon.addClass("none");
         syncingIcon.removeClass("none");
@@ -569,28 +556,29 @@ void OKCashGUI::setNumBlocks(int count, int nTotalBlocks)
     if (!text.isEmpty())
     {
         tooltip += "\n";
-        tooltip += tr("Last received %1 was generated %2.").arg(sBlockType).arg(text);
+        tooltip += tr("The last received %1 was generated %2").arg(sBlockType).arg(text);
     };
 
-    blocksIcon     .setAttribute("title", tooltip);
-    syncingIcon    .setAttribute("title", tooltip);
-    syncProgressBar.setAttribute("title", tooltip);
+    blocksIcon     .setAttribute("data-title", tooltip);
+    syncingIcon    .setAttribute("data-title", tooltip);
+    syncProgressBar.setAttribute("data-title", tooltip);
     syncProgressBar.setAttribute("value", QString::number(count));
     syncProgressBar.setAttribute("max",   QString::number(nTotalBlocks));
 }
 
-void OKCashGUI::error(const QString &title, const QString &message, bool modal)
+void OkcashGUI::error(const QString &title, const QString &message, bool modal)
 {
     // Report errors from network/worker thread
     if(modal)
     {
         QMessageBox::critical(this, title, message, QMessageBox::Ok, QMessageBox::Ok);
-    } else {
+    } else
+    {
         notificator->notify(Notificator::Critical, title, message);
     }
 }
 
-void OKCashGUI::changeEvent(QEvent *e)
+void OkcashGUI::changeEvent(QEvent *e)
 {
     QMainWindow::changeEvent(e);
 #ifndef Q_OS_MAC // Ignored on Mac
@@ -609,7 +597,7 @@ void OKCashGUI::changeEvent(QEvent *e)
 #endif
 }
 
-void OKCashGUI::closeEvent(QCloseEvent *event)
+void OkcashGUI::closeEvent(QCloseEvent *event)
 {
     if(clientModel)
     {
@@ -624,11 +612,11 @@ void OKCashGUI::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
-void OKCashGUI::askFee(qint64 nFeeRequired, bool *payFee)
+void OkcashGUI::askFee(qint64 nFeeRequired, bool *payFee)
 {
     QString strMessage =
         tr("This transaction is over the size limit.  You can still send it for a fee of %1, "
-          "which goes to the nodes that process your transaction and helps to support the network.  "
+          "which goes to the nodes that process your transaction and helps to support the OK network.  "
           "Do you want to pay the fee?").arg(
                 BitcoinUnits::formatWithUnit(BitcoinUnits::OK, nFeeRequired));
     QMessageBox::StandardButton retval = QMessageBox::question(
@@ -637,9 +625,9 @@ void OKCashGUI::askFee(qint64 nFeeRequired, bool *payFee)
     *payFee = (retval == QMessageBox::Yes);
 }
 
-void OKCashGUI::incomingTransaction(const QModelIndex & parent, int start, int end)
+void OkcashGUI::incomingTransaction(const QModelIndex & parent, int start, int end)
 {
-    if(!walletModel || !clientModel || clientModel->inInitialBlockDownload() || !nNodeState == NS_READY)
+    if(!walletModel || !clientModel || clientModel->inInitialBlockDownload() || nNodeState != NS_READY)
         return;
 
     TransactionTableModel *ttm = walletModel->getTransactionTableModel();
@@ -672,7 +660,7 @@ void OKCashGUI::incomingTransaction(const QModelIndex & parent, int start, int e
                           .arg(address), icon);
 }
 
-void OKCashGUI::incomingMessage(const QModelIndex & parent, int start, int end)
+void OkcashGUI::incomingMessage(const QModelIndex & parent, int start, int end)
 {
     if(!messageModel)
         return;
@@ -705,43 +693,25 @@ void OKCashGUI::incomingMessage(const QModelIndex & parent, int start, int end)
     };
 }
 
-void OKCashGUI::gotoSignMessageTab(QString addr)
-{
-    // call show() in showTab_SM()
-    signVerifyMessageDialog->showTab_SM(true);
-
-    if(!addr.isEmpty())
-        signVerifyMessageDialog->setAddress_SM(addr);
-}
-
-void OKCashGUI::gotoVerifyMessageTab(QString addr)
-{
-    // call show() in showTab_VM()
-    signVerifyMessageDialog->showTab_VM(true);
-
-    if(!addr.isEmpty())
-        signVerifyMessageDialog->setAddress_VM(addr);
-}
-
-void OKCashGUI::optionsClicked()
+void OkcashGUI::optionsClicked()
 {
     bridge->triggerElement("#navitems a[href=#options]", "click");
     showNormalIfMinimized();
 }
 
-void OKCashGUI::dragEnterEvent(QDragEnterEvent *event)
+void OkcashGUI::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept only URIs
     if(event->mimeData()->hasUrls())
         event->acceptProposedAction();
 }
 
-void OKCashGUI::dragMoveEvent(QDragMoveEvent *event)
+void OkcashGUI::dragMoveEvent(QDragMoveEvent *event)
 {
     event->accept();
 }
 
-void OKCashGUI::dropEvent(QDropEvent *event)
+void OkcashGUI::dropEvent(QDropEvent *event)
 {
     if(event->mimeData()->hasUrls())
     {
@@ -763,7 +733,7 @@ void OKCashGUI::dropEvent(QDropEvent *event)
     event->acceptProposedAction();
 }
 
-void OKCashGUI::handleURI(QString strURI)
+void OkcashGUI::handleURI(QString strURI)
 {
 
     SendCoinsRecipient rv;
@@ -783,12 +753,12 @@ void OKCashGUI::handleURI(QString strURI)
         notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid Okcash address or malformed URI parameters."));
 }
 
-void OKCashGUI::setEncryptionStatus(int status)
+void OkcashGUI::setEncryptionStatus(int status)
 {
     QWebElement encryptionIcon    = documentFrame->findFirstElement("#encryptionIcon");
     QWebElement encryptButton     = documentFrame->findFirstElement("#encryptWallet");
+    QWebElement encryptMenuItem   = documentFrame->findFirstElement(".encryptWallet");
     QWebElement changePassphrase  = documentFrame->findFirstElement("#changePassphrase");
-    QWebElement showConfEditor  = documentFrame->findFirstElement("#showConfEditor");
     QWebElement toggleLock        = documentFrame->findFirstElement("#toggleLock");
     QWebElement toggleLockIcon    = documentFrame->findFirstElement("#toggleLock i");
     switch(status)
@@ -797,6 +767,7 @@ void OKCashGUI::setEncryptionStatus(int status)
         encryptionIcon.setAttribute("style", "display:none;");
         changePassphrase.addClass("none");
         toggleLock.addClass("none");
+        encryptMenuItem.removeClass("none");
         encryptWalletAction->setChecked(false);
         changePassphraseAction->setEnabled(false);
         unlockWalletAction->setVisible(false);
@@ -804,13 +775,50 @@ void OKCashGUI::setEncryptionStatus(int status)
         encryptWalletAction->setEnabled(true);
         break;
     case WalletModel::Unlocked:
+        encryptMenuItem  .addClass("none");
         encryptionIcon.removeAttribute("style");
-        encryptionIcon.removeClass("fa-toggle-on");
-        encryptionIcon.   addClass("fa-toggle-off");
-        toggleLockIcon.removeClass("fa-toggle-off");
-        toggleLockIcon.   addClass("fa-toggle-on");
+        encryptionIcon.removeClass("fa-toggle-off");
+        encryptionIcon.removeClass("encryption");
+        encryptionIcon.   addClass("fa-toggle-on");
+        encryptionIcon.   addClass("no-encryption");
+        encryptMenuItem  .addClass("none");
+        toggleLockIcon.removeClass("fa-toggle-on");
+        toggleLockIcon.removeClass("fa-toggle-on");
+        toggleLockIcon.   addClass("fa-toggle-off");
         encryptionIcon   .setAttribute("src", "qrc:///icons/lock_open");
-        encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
+
+        if (fWalletUnlockStakingOnly || fWalletUnlockMessagingEnabled)
+        {
+            QString datatitle = "";
+
+            if(fWalletUnlockStakingOnly && fWalletUnlockMessagingEnabled)
+                datatitle.append(tr("Your OK Wallet is <b>encrypted</b> and currently <b>unlocked</b>\n for <b>Staking</b> and the <b>OK Chat only</b>"));
+
+            else if(fWalletUnlockMessagingEnabled)
+                datatitle.append(tr("Your OK Wallet is <b>encrypted</b> and currently <b>unlocked</b>\n for the <b>OK Chat only</b>"));
+
+            else if(fWalletUnlockStakingOnly)
+                datatitle.append(tr("Your OK Wallet is <b>encrypted</b> and currently <b>unlocked</b>\n for <b>Staking only</b>"));
+
+
+            encryptionIcon   .setAttribute("data-title", datatitle);
+            encryptionIcon.removeClass("orange");
+            encryptionIcon.addClass("green");
+            encryptionIcon.addClass("encryption-stake");
+
+            toggleLockIcon  .removeClass("orange");
+            toggleLockIcon     .addClass("green");
+        } else
+        {
+            encryptionIcon   .setAttribute("data-title", tr("Your OK Wallet is <b>encrypted</b> and currently fully <b>unlocked</b>"));
+            encryptionIcon.addClass("orange");
+            encryptionIcon.removeClass("green");
+            encryptionIcon.removeClass("encryption-stake");
+
+            toggleLockIcon  .removeClass("green");
+            toggleLockIcon     .addClass("orange");
+        };
+
         encryptButton.addClass("none");
         changePassphrase.removeClass("none");
         toggleLock.removeClass("none");
@@ -822,14 +830,22 @@ void OKCashGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Locked:
         encryptionIcon.removeAttribute("style");
-        encryptionIcon.removeClass("fa-toggle-off");
-        encryptionIcon.   addClass("fa-toggle-on");
-        toggleLockIcon.removeClass("fa-toggle-on");
-        toggleLockIcon.   addClass("fa-toggle-off");
-        encryptionIcon   .setAttribute("title", tr("Wallet is <b>encrypted</b>"));
-        encryptButton.addClass("none");
+        encryptionIcon.removeClass("fa-toggle-on");
+        encryptionIcon.removeClass("no-encryption");
+        encryptionIcon.removeClass("encryption-stake");
+        encryptionIcon.   addClass("fa-toggle-off");
+        encryptionIcon.   addClass("encryption");
+        toggleLockIcon.removeClass("fa-toggle-off");
+        toggleLockIcon.   addClass("fa-toggle-on");
+        encryptionIcon   .setAttribute("data-title", tr("Your OK Wallet is <b>encrypted</b> and currently <b>locked</b>"));
+
+        encryptionIcon     .addClass("green");
+        encryptionIcon  .removeClass("orange");
+        encryptButton      .addClass("none");
+        encryptMenuItem    .addClass("none");
         changePassphrase.removeClass("none");
-        toggleLock.removeClass("none");
+        toggleLockIcon  .removeClass("orange");
+        toggleLockIcon     .addClass("green");
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         unlockWalletAction->setVisible(true);
@@ -839,7 +855,7 @@ void OKCashGUI::setEncryptionStatus(int status)
     }
 }
 
-void OKCashGUI::encryptWallet(bool status)
+void OkcashGUI::encryptWallet(bool status)
 {
     if(!walletModel)
         return;
@@ -851,30 +867,27 @@ void OKCashGUI::encryptWallet(bool status)
     setEncryptionStatus(walletModel->getEncryptionStatus());
 }
 
-void OKCashGUI::backupWallet()
+void OkcashGUI::backupWallet()
 {
     QString saveDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString filename = QFileDialog::getSaveFileName(this, tr("Backup Wallet"), saveDir, tr("Wallet Data (*.dat)"));
-    if(!filename.isEmpty()) {
-        if(!walletModel->backupWallet(filename)) {
+    if(!filename.isEmpty())
+    {
+        if(!walletModel->backupWallet(filename))
+        {
             QMessageBox::warning(this, tr("Backup Failed"), tr("There was an error trying to save the wallet data to the new location."));
         }
     }
 }
 
-void OKCashGUI::changePassphrase()
+void OkcashGUI::changePassphrase()
 {
     AskPassphraseDialog dlg(AskPassphraseDialog::ChangePass, this);
     dlg.setModel(walletModel);
     dlg.exec();
 }
 
-void OKCashGUI::showConfEditor()
-{
-    GUIUtil::openConfigfile();
-}
-
-void OKCashGUI::unlockWallet()
+void OkcashGUI::unlockWallet()
 {
     if(!walletModel)
         return;
@@ -891,7 +904,7 @@ void OKCashGUI::unlockWallet()
     }
 }
 
-void OKCashGUI::lockWallet()
+void OkcashGUI::lockWallet()
 {
     if(!walletModel)
         return;
@@ -899,7 +912,7 @@ void OKCashGUI::lockWallet()
     walletModel->setWalletLocked(true);
 }
 
-void OKCashGUI::toggleLock()
+void OkcashGUI::toggleLock()
 {
     if(!walletModel)
         return;
@@ -911,14 +924,14 @@ void OKCashGUI::toggleLock()
         case WalletModel::Unlocked:     lockWalletAction->trigger();   break;
         default: // unencrypted wallet
             QMessageBox::warning(this, tr("Lock Wallet"),
-                tr("Error: Wallet must first be encrypted to be locked."),
+                tr("Error: The OK Wallet must first be encrypted to be locked."),
                 QMessageBox::Ok, QMessageBox::Ok);
             break;
     };
 
 }
 
-void OKCashGUI::showNormalIfMinimized(bool fToggleHidden)
+void OkcashGUI::showNormalIfMinimized(bool fToggleHidden)
 {
     // activateWindow() (sometimes) helps with keyboard focus on Windows
     if (isHidden())
@@ -940,12 +953,12 @@ void OKCashGUI::showNormalIfMinimized(bool fToggleHidden)
         hide();
 }
 
-void OKCashGUI::toggleHidden()
+void OkcashGUI::toggleHidden()
 {
     showNormalIfMinimized(true);
 }
 
-void OKCashGUI::updateWeight()
+void OkcashGUI::updateWeight()
 {
     if (!pwalletMain)
         return;
@@ -961,9 +974,8 @@ void OKCashGUI::updateWeight()
     nWeight = pwalletMain->GetStakeWeight();
 }
 
-void OKCashGUI::updateStakingIcon()
+void OkcashGUI::updateStakingIcon()
 {
-
     QWebElement stakingIcon = documentFrame->findFirstElement("#stakingIcon");
     uint64_t nNetworkWeight = 0;
 
@@ -971,11 +983,6 @@ void OKCashGUI::updateStakingIcon()
     {
         updateWeight();
         nNetworkWeight = GetPoSKernelPS();
-
-        // PoSV1
-        if(nNetworkWeight < COIN)
-            nWeight /= COIN;
-
     } else
         nWeight = 0;
 
@@ -995,30 +1002,27 @@ void OKCashGUI::updateStakingIcon()
         stakingIcon.   addClass("staking");
         //stakingIcon.   addClass("fa-spin"); // TODO: Replace with gif... too much cpu usage
 
-        // PoSV2
-        if(nNetworkWeight > COIN) {
-            nWeight /= COIN;
-            nNetworkWeight /= COIN;
-        }
+        nWeight        /= COIN,
+        nNetworkWeight /= COIN;
 
-        stakingIcon.setAttribute("title", tr("You are Staking.\nYour weight (staking power) is %1\nNetwork weight is %2\nExpected time to earn staking reward is %3").arg(nWeight).arg(nNetworkWeight).arg(text));
+        stakingIcon.setAttribute("data-title", tr("<b>OK LTSS Staking.</b>\nYour weight (Staking Power) is %1.\nNetwork weight is %2.\nExpected average time to earn reward is %3").arg(nWeight).arg(nNetworkWeight).arg(text));
     } else
     {
         stakingIcon.   addClass("not-staking");
         stakingIcon.removeClass("staking");
         //stakingIcon.removeClass("fa-spin"); // TODO: See above TODO...
 
-        stakingIcon.setAttribute("title", (nNodeMode == NT_THIN)                   ? tr("Not staking because wallet is in thin mode") : \
-                                          (!GetBoolArg("-staking", true))          ? tr("Not staking, staking is disabled")  : \
-                                          (pwalletMain && pwalletMain->IsLocked()) ? tr("Not staking because wallet is locked")  : \
-                                          (vNodes.empty())                         ? tr("Not staking because wallet is offline") : \
-                                          (IsInitialBlockDownload())               ? tr("Not staking because wallet is syncing") : \
-                                          (!nWeight)                               ? tr("Not staking because you don't have mature coins") : \
-                                                                                     tr("Not staking"));
+        stakingIcon.setAttribute("data-title", (nNodeMode == NT_THIN)                   ? tr("<b>Not Staking.</b>\n Because the <b>OK client is in thin mode</b>") : \
+                                               (!GetBoolArg("-staking", true))          ? tr("<b>Not Staking.</b>\n Because <b>Staking is disabled in the settings</b>")  : \
+                                               (pwalletMain && pwalletMain->IsLocked()) ? tr("<b>Not Staking.</b>\n Because the <b>OK wallet is locked</b>")  : \
+                                               (vNodes.empty())                         ? tr("<b>Not Staking.</b>\n Because the <b>OK client is offline</b>") : \
+                                               (IsInitialBlockDownload())               ? tr("<b>Not Staking.</b>\n Because the <b>OK client is syncing with the OK Blockchain</b>") : \
+                                               (!nWeight)                               ? tr("<b>Not Staking.</b>\n Because <b>you don't have mature OK coins</b>\n You need to wait 8hrs after receiving the OK coins") : \
+                                                                                          tr("Not Staking"));
     }
 }
 
-void OKCashGUI::detectShutdown()
+void OkcashGUI::detectShutdown()
 {
     if (ShutdownRequested())
         QMetaObject::invokeMethod(QCoreApplication::instance(), "quit", Qt::QueuedConnection);
