@@ -1,0 +1,63 @@
+---
+name: "okcash"
+suites:
+- "trusty"
+architectures:
+- "i386"
+- "amd64"
+packages: 
+- "g++"
+- "libqt5webkit5-dev"
+- "qt5-qmake"
+- "qt5-default"
+- "qttools5-dev-tools"
+- "git-core"
+- "pkg-config"
+- "libtool"
+- "automake"
+- "faketime"
+- "bsdmainutils"
+reference_datetime: "2015-05-25 00:00:00"
+remotes:
+- "url": "https://github.com/okcashpro/okcash.git"
+  "dir": "okcash"
+files:
+- "okcash-deps-linux32-gitian.tar.xz"
+- "okcash-deps-linux64-gitian.tar.xz"
+script: |
+  #Integrity check
+  echo "0d1e171cd3683f2ebb8e3dc1ab29bdcca4ed136b4ee30d376f1c3cf8c29ea7d0  okcash-deps-linux32-gitian.tar.xz" |sha256sum -c
+  echo "3f3f36e20fc1c3dcd00a4f32a7f07172989933b2b8534147fec896de1b520b3b  okcash-deps-linux64-gitian.tar.xz" |sha256sum -c
+  STAGING="$HOME/install"
+  OPTFLAGS='-O2'
+  BINDIR="${OUTDIR}/bin/${GBUILD_BITS}" # 32/64 bit build specific output directory
+  TEMPDIR="$HOME/tempdir"
+  if [ "$GBUILD_BITS" == "32" ]; then
+    export LD_PRELOAD=/usr/lib/i386-linux-gnu/faketime/libfaketime.so.1;
+  else
+    export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1;
+  fi
+  export FAKETIME=$REFERENCE_DATETIME
+  export TZ=UTC
+  export LIBRARY_PATH="$STAGING/lib"
+  mkdir -p ${BINDIR}
+  #
+  mkdir -p $STAGING
+  cd $STAGING
+  tar xf ../build/okcash-deps-linux${GBUILD_BITS}-gitian.tar.xz
+  cd ../build
+  #
+  cd okcash
+  mkdir -p $OUTDIR/src
+  git archive HEAD | tar -x -C $OUTDIR/src
+  cp $OUTDIR/src/doc/README $OUTDIR
+  cp $OUTDIR/src/COPYING $OUTDIR
+  cd src
+  make -f makefile.unix STATIC=1 OPENSSL_INCLUDE_PATH="$STAGING/include" OPENSSL_LIB_PATH="$STAGING/lib" $MAKEOPTS okcashd USE_UPNP=1 BOOST_LIB_SUFFIX="-mt" DEBUGFLAGS= 
+  mkdir -p $STAGING/bin/$GBUILD_BITS
+  install -s okcashd $OUTDIR/bin/$GBUILD_BITS
+  #
+  cd ..
+  qmake INCLUDEPATH="$STAGING/include" LIBS="-L$STAGING/lib" BOOST_LIB_SUFFIX="-mt" RELEASE=1 USE_QRCODE=1
+  make $MAKEOPTS
+  install okcash $OUTDIR/bin/$GBUILD_BITS
