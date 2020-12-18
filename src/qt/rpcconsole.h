@@ -50,8 +50,6 @@ private slots:
     void on_tabWidget_currentChanged(int index);
     /** open the debug.log from the current datadir */
     void on_openDebugLogfileButton_clicked();
-    /** Open external (default) editor with okcash.conf */
-    void showConfEditor();
     /** display messagebox with program parameters (same as okcash --help) */
     void on_showCLOptionsButton_clicked();
     /** change the time range of the network traffic graph */
