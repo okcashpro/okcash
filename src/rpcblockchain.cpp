@@ -29,16 +29,15 @@ double BitsToDouble(unsigned int nBits)
     {
         dDiff *= 256.0;
         nShift++;
-    };
-    
+    }
     while (nShift > 29)
     {
         dDiff /= 256.0;
         nShift--;
-    };
+    }
 
     return dDiff;
-};
+}
 
 double GetDifficulty(const CBlockIndex* blockindex)
 {
@@ -87,10 +86,10 @@ double GetPoWMHashPS()
             nTargetSpacingWork = ((nPoWInterval - 1) * nTargetSpacingWork + nActualSpacingWork + nActualSpacingWork) / (nPoWInterval + 1);
             nTargetSpacingWork = max(nTargetSpacingWork, nTargetSpacingWorkMin);
             pindexPrevWork = pindex;
-        };
+        }
 
         pindex = pindex->pnext;
-    };
+    }
 
     return GetDifficulty() * 4294.967296 / nTargetSpacingWork;
 }
@@ -100,12 +99,12 @@ double GetPoSKernelPS()
     int nPoSInterval = 72;
     double dStakeKernelsTriedAvg = 0;
     int nStakesHandled = 0, nStakesTime = 0;
-    
+
     if (nNodeMode == NT_THIN)
     {
         CBlockThinIndex* pindex = pindexBestHeader;;
         CBlockThinIndex* pindexPrevStake = NULL;
-        
+
         while (pindex && nStakesHandled < nPoSInterval)
         {
             if (pindex->IsProofOfStake())
@@ -118,14 +117,14 @@ double GetPoSKernelPS()
                 };
                 pindexPrevStake = pindex;
             };
-            
+
             pindex = pindex->pprev;
         };
     } else
     {
         CBlockIndex* pindex = pindexBest;;
         CBlockIndex* pindexPrevStake = NULL;
-        
+
         while (pindex && nStakesHandled < nPoSInterval)
         {
             if (pindex->IsProofOfStake())
@@ -135,23 +134,22 @@ double GetPoSKernelPS()
                     dStakeKernelsTriedAvg += GetDifficulty(pindex) * 4294967296.0;
                     nStakesTime += pindexPrevStake ? (pindexPrevStake->nTime - pindex->nTime) : 0;
                     nStakesHandled++;
-                };
+                }
                 pindexPrevStake = pindex;
-            };
-            
+            }
+
             pindex = pindex->pprev;
-        };
-    };
-    
-    
+		}
+    }
+
     double result = 0;
-    
+
     if (nStakesTime)
         result = dStakeKernelsTriedAvg / nStakesTime;
-    
+
     if (Params().IsProtocolV2(nBestHeight))
         result *= STAKE_TIMESTAMP_MASK + 1;
-    
+
     return result;
 }
 
@@ -182,7 +180,7 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool fPri
     result.push_back(Pair("proofhash", blockindex->hashProof.GetHex()));
     result.push_back(Pair("entropybit", (int)blockindex->GetStakeEntropyBit()));
     result.push_back(Pair("modifier", strprintf("%016x", blockindex->nStakeModifier)));
-    
+    result.push_back(Pair("modifierv2", blockindex->bnStakeModifierV2.GetHex()));
     Array txinfo;
     BOOST_FOREACH (const CTransaction& tx, block.vtx)
     {
@@ -194,9 +192,10 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool fPri
             TxToJSON(tx, 0, entry);
 
             txinfo.push_back(entry);
-        } else
+        }
+        else
             txinfo.push_back(tx.GetHash().GetHex());
-    };
+    }
 
     result.push_back(Pair("tx", txinfo));
 
@@ -224,7 +223,7 @@ Object blockHeaderToJSON(const CBlockThin& block, const CBlockThinIndex* blockin
     result.push_back(Pair("difficulty", GetHeaderDifficulty(blockindex)));
     result.push_back(Pair("blocktrust", leftTrim(blockindex->GetBlockTrust().GetHex(), '0')));
     result.push_back(Pair("chaintrust", leftTrim(blockindex->nChainTrust.GetHex(), '0')));
-    
+
     if (blockindex->pprev)
         result.push_back(Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));
     if (blockindex->pnext)
@@ -234,7 +233,7 @@ Object blockHeaderToJSON(const CBlockThin& block, const CBlockThinIndex* blockin
     result.push_back(Pair("proofhash", blockindex->hashProof.GetHex()));
     result.push_back(Pair("entropybit", (int)blockindex->GetStakeEntropyBit()));
     result.push_back(Pair("modifier", strprintf("%016x", blockindex->nStakeModifier)));
-    
+    //result.push_back(Pair("modifierv2", blockindex->bnStakeModifierV2.GetHex()));
     //if (block.IsProofOfStake())
     //    result.push_back(Pair("signature", HexStr(block.vchBlockSig.begin(), block.vchBlockSig.end())));
 
@@ -245,7 +244,7 @@ Object blockHeaderToJSON(const CBlockThin& block, const CBlockThinIndex* blockin
 Object diskBlockThinIndexToJSON(CDiskBlockThinIndex& diskBlock)
 {
     CBlock block = diskBlock.GetBlock();
-    
+
     Object result;
     result.push_back(Pair("hash", block.GetHash().GetHex()));
     //CMerkleTx txGen(block.vtx[0]);
@@ -262,17 +261,18 @@ Object diskBlockThinIndexToJSON(CDiskBlockThinIndex& diskBlock)
     result.push_back(Pair("difficulty", BitsToDouble(diskBlock.nBits)));
     result.push_back(Pair("blocktrust", leftTrim(diskBlock.GetBlockTrust().GetHex(), '0')));
     result.push_back(Pair("chaintrust", leftTrim(diskBlock.nChainTrust.GetHex(), '0')));
-    
+
     result.push_back(Pair("previousblockhash", diskBlock.hashPrev.GetHex()));
     result.push_back(Pair("nextblockhash", diskBlock.hashNext.GetHex()));
-    
+
 
     result.push_back(Pair("flags", strprintf("%s%s", diskBlock.IsProofOfStake()? "proof-of-stake" : "proof-of-work", diskBlock.GeneratedStakeModifier()? " stake-modifier": "")));
     result.push_back(Pair("proofhash", diskBlock.hashProof.GetHex()));
     result.push_back(Pair("entropybit", (int)diskBlock.GetStakeEntropyBit()));
     result.push_back(Pair("modifier", strprintf("%016x", diskBlock.nStakeModifier)));
+    //result.push_back(Pair("modifierv2", diskBlock.bnStakeModifierV2.GetHex()));
     //result.push_back(Pair("modifierchecksum", strprintf("%08x", diskBlock.nStakeModifierChecksum)));
-    
+
     //if (block.IsProofOfStake())
     //    result.push_back(Pair("signature", HexStr(block.vchBlockSig.begin(), block.vchBlockSig.end())));
 
@@ -370,14 +370,14 @@ Value getblock(const Array& params, bool fHelp)
 
     std::string strHash = params[0].get_str();
     uint256 hash(strHash);
-    
+
     if (nNodeMode == NT_THIN)
     {
         CDiskBlockThinIndex diskindex;
         CTxDB txdb("r");
         if (txdb.ReadBlockThinIndex(hash, diskindex))
             return diskBlockThinIndexToJSON(diskindex);
-        
+
         throw runtime_error("Read header from db failed.\n");
     };
 
@@ -402,7 +402,7 @@ Value getblockbynumber(const Array& params, bool fHelp)
     int nHeight = params[0].get_int();
     if (nHeight < 0 || nHeight > nBestHeight)
         throw runtime_error("Block number out of range.");
-    
+
     if (nNodeMode == NT_THIN)
     {
         if (!fThinFullIndex
@@ -411,7 +411,7 @@ Value getblockbynumber(const Array& params, bool fHelp)
         {
             CDiskBlockThinIndex diskindex;
             uint256 hashPrev = pindexRear->GetBlockHash();
-            
+
             // -- find closest checkpoint
             Checkpoints::MapCheckpoints& checkpoints = (fTestNet ? Checkpoints::mapCheckpointsTestnet : Checkpoints::mapCheckpoints);
             Checkpoints::MapCheckpoints::reverse_iterator rit;
@@ -422,23 +422,23 @@ Value getblockbynumber(const Array& params, bool fHelp)
                     break;
                 hashPrev = rit->second;
             };
-            
+
             CTxDB txdb("r");
             while (hashPrev != 0)
             {
                 if (!txdb.ReadBlockThinIndex(hashPrev, diskindex))
                     throw runtime_error("Read header from db failed.\n");
-                
+
                 if (diskindex.nHeight == nHeightFilteredNeeded)
                     return diskBlockThinIndexToJSON(diskindex);
-                
+
                 hashPrev = diskindex.hashPrev;
             };
-            
+
             throw runtime_error("block not found.");
         };
-        
-        
+
+
         CBlockThin block;
         std::map<uint256, CBlockThinIndex*>::iterator mi = mapBlockThinIndex.find(hashBestChain);
         if (mi != mapBlockThinIndex.end())
@@ -446,7 +446,7 @@ Value getblockbynumber(const Array& params, bool fHelp)
             CBlockThinIndex* pblockindex = mi->second;
             while (pblockindex->pprev && pblockindex->nHeight > nHeight)
                 pblockindex = pblockindex->pprev;
-            
+
             if (nHeight != pblockindex->nHeight)
             {
                 throw runtime_error("block not in chain index.");
@@ -456,10 +456,10 @@ Value getblockbynumber(const Array& params, bool fHelp)
         {
             throw runtime_error("hashBestChain not in chain index.");
         }
-        
-        
-    };
-    
+
+
+    }
+
     CBlock block;
     CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
     while (pblockindex->nHeight > nHeight)
@@ -483,12 +483,12 @@ Value setbestblockbyheight(const Array& params, bool fHelp)
     int nHeight = params[0].get_int();
     if (nHeight < 0 || nHeight > nBestHeight)
         throw runtime_error("Block height out of range.");
-    
+
     if (nNodeMode == NT_THIN)
     {
         throw runtime_error("Must be in full mode.");
     };
-    
+
     CBlock block;
     CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
     while (pblockindex->nHeight > nHeight)
@@ -498,21 +498,21 @@ Value setbestblockbyheight(const Array& params, bool fHelp)
 
     pblockindex = mapBlockIndex[hash];
     block.ReadFromDisk(pblockindex, true);
-    
-    
+
+
     Object result;
-    
+
     CTxDB txdb;
     {
         LOCK(cs_main);
-        
+
         if (!block.SetBestChain(txdb, pblockindex))
             result.push_back(Pair("result", "failure"));
         else
             result.push_back(Pair("result", "success"));
-    
+
     };
-    
+
     return result;
 }
 
@@ -526,69 +526,69 @@ Value rewindchain(const Array& params, bool fHelp)
     int nNumber = params[0].get_int();
     if (nNumber < 0 || nNumber > nBestHeight)
         throw runtime_error("Block number out of range.");
-    
+
     if (nNodeMode == NT_THIN)
     {
         throw runtime_error("Must be in full mode.");
     };
-    
+
     Object result;
     int nRemoved = 0;
-    
+
     {
     LOCK2(cs_main, pwalletMain->cs_wallet);
-    
-    
+
+
     uint32_t nFileRet = 0;
-    
+
     uint8_t buffer[512];
-    
+
     LogPrintf("rewindchain %d\n", nNumber);
-    
+
     void* nFind;
-    
+
     for (int i = 0; i < nNumber; ++i)
     {
         memset(buffer, 0, sizeof(buffer));
-        
+
         FILE* fp = AppendBlockFile(false, nFileRet, "r+b");
         if (!fp)
         {
             LogPrintf("AppendBlockFile failed.\n");
             break;
         };
-        
+
         errno = 0;
         if (fseek(fp, 0, SEEK_END) != 0)
         {
             LogPrintf("fseek failed: %s\n", strerror(errno));
             break;
         };
-        
+
         long int fpos = ftell(fp);
-        
+
         if (fpos == -1)
         {
             LogPrintf("ftell failed: %s\n", strerror(errno));
             break;
         };
-        
+
         long int foundPos = -1;
         long int readSize = sizeof(buffer) / 2;
         while (fpos > 0)
         {
             if (fpos < (long int)sizeof(buffer) / 2)
                 readSize = fpos;
-            
-            memcpy(buffer+readSize, buffer, readSize); // move last read data (incase token crosses a boundary) 
+
+            memcpy(buffer+readSize, buffer, readSize); // move last read data (incase token crosses a boundary)
             fpos -= readSize;
-            
+
             if (fseek(fp, fpos, SEEK_SET) != 0)
             {
                 LogPrintf("fseek failed: %s\n", strerror(errno));
                 break;
             };
-            
+
             errno = 0;
             if (fread(buffer, sizeof(uint8_t), readSize, fp) != (size_t)readSize)
             {
@@ -598,7 +598,7 @@ Value rewindchain(const Array& params, bool fHelp)
                     LogPrintf("End of file.\n");
                 break;
             };
-            
+
             uint32_t findPos = sizeof(buffer);
             while (findPos > MESSAGE_START_SIZE)
             {
@@ -617,51 +617,51 @@ Value rewindchain(const Array& params, bool fHelp)
                     };
                 } else
                 {
-                    break; // pchMessageStart[0] not found in buffer 
+                    break; // pchMessageStart[0] not found in buffer
                 };
             };
-            
+
             if (foundPos > -1)
                 break;
         };
-        
+
         LogPrintf("fpos %d, foundPos %d.\n", fpos, foundPos);
-        
+
         if (foundPos < 0)
         {
             LogPrintf("block start not found.\n");
             fclose(fp);
             break;
         };
-        
+
         CAutoFile blkdat(fp, SER_DISK, CLIENT_VERSION);
-        
+
         if (fseek(blkdat, fpos+foundPos, SEEK_SET) != 0)
         {
             LogPrintf("fseek blkdat failed: %s\n", strerror(errno));
             break;
         };
-        
+
         unsigned int nSize;
         blkdat >> nSize;
         LogPrintf("nSize %u .\n", nSize);
-        
+
         if (nSize < 1 || nSize > MAX_BLOCK_SIZE)
         {
             LogPrintf("block size error %u\n", nSize);
-            
+
         };
-    
+
         CBlock block;
         blkdat >> block;
         uint256 hashblock = block.GetHash();
         LogPrintf("hashblock %s .\n", hashblock.ToString().c_str());
-        
+
         std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashblock);
         if (mi != mapBlockIndex.end() && (*mi).second)
         {
             LogPrintf("block is in main chain.\n");
-            
+
             if (!mi->second->pprev)
             {
                 LogPrintf("! mi->second.pprev\n");
@@ -672,9 +672,9 @@ Value rewindchain(const Array& params, bool fHelp)
                     if (!blockPrev.ReadFromDisk(mi->second->pprev))
                     {
                         LogPrintf("blockPrev.ReadFromDisk failed %s.\n", mi->second->pprev->GetBlockHash().ToString().c_str());
-                        break;
+                        //break;
                     };
-                    
+
                     CTxDB txdb;
                     if (!blockPrev.SetBestChain(txdb, mi->second->pprev))
                     {
@@ -683,51 +683,51 @@ Value rewindchain(const Array& params, bool fHelp)
                 }
                 mi->second->pprev->pnext = NULL;
             };
-            
+
             delete mi->second;
             mapBlockIndex.erase(mi);
         };
-        
-        std::map<uint256, CBlock*>::iterator miOph = mapOrphanBlocks.find(hashblock);
+
+        std::map<uint256, COrphanBlock*>::iterator miOph = mapOrphanBlocks.find(hashblock);
         if (miOph != mapOrphanBlocks.end())
         {
             LogPrintf("block is an orphan.\n");
             mapOrphanBlocks.erase(miOph);
         };
-        
+
         CTxDB txdb;
         for (vector<CTransaction>::iterator it = block.vtx.begin(); it != block.vtx.end(); ++it)
         {
             LogPrintf("EraseTxIndex().\n");
             txdb.EraseTxIndex(*it);
         };
-        
+
         LogPrintf("EraseBlockIndex().\n");
         txdb.EraseBlockIndex(hashblock);
-        
+
         errno = 0;
         if (ftruncate(fileno(fp), fpos+foundPos-MESSAGE_START_SIZE) != 0)
         {
             LogPrintf("ftruncate failed: %s\n", strerror(errno));
         };
-        
+
         LogPrintf("hashBestChain %s, nBestHeight %d\n", hashBestChain.ToString().c_str(), nBestHeight);
-        
+
         //fclose(fp); // ~CAutoFile() will close the file
         nRemoved++;
     };
     }
-    
-    
+
+
     result.push_back(Pair("no. blocks removed", itostr(nRemoved)));
-    
+
     result.push_back(Pair("hashBestChain", hashBestChain.ToString()));
     result.push_back(Pair("nBestHeight", itostr(nBestHeight)));
-    
+
     // -- need restart, setStakeSeen etc
     if (nRemoved > 0)
         result.push_back(Pair("Please restart okcash", ""));
-    
+
     if (nRemoved == nNumber)
         result.push_back(Pair("result", "success"));
     else
@@ -743,46 +743,46 @@ Value nextorphan(const Array& params, bool fHelp)
             "nextorphan [connecthash]\n"
             "displays orphan blocks that connect to current best block.\n"
             "if [connecthash] is set try to connect that block (must be nextorphan).\n");
-    
+
     if (nNodeMode == NT_THIN)
     {
         throw runtime_error("Must be in full mode.");
     };
-    
+
     if (!pindexBest)
         throw runtime_error("No best index.");
-    
+
     throw runtime_error("Not working."); // too few blocks in mapOrphan!?
-    
+
     Object result;
-    
-    std::map<uint256, CBlock*> mapNextOrphanBlocks;
-    
+
+    std::map<uint256, COrphanBlock*> mapNextOrphanBlocks;
+
     LOCK(cs_main);
-    
+
     //mapOrphanBlocks.clear();
     uint256 besthash = *pindexBest->phashBlock;
-    std::map<uint256, CBlock*>::iterator it;
+    std::map<uint256, COrphanBlock*>::iterator it;
     for (it = mapOrphanBlocks.begin(); it != mapOrphanBlocks.end(); ++it)
     {
-        if (it->second->hashPrevBlock == besthash)
+        if (it->second->hashPrev == besthash)
         {
             mapNextOrphanBlocks[it->first] = it->second;
         };
     };
-    
+
     if (params.size() > 0)
     {
-        
+
     } else
     {
-        std::map<uint256, CBlock*>::iterator it;
+        std::map<uint256, COrphanBlock*>::iterator it;
         for (it = mapNextOrphanBlocks.begin(); it != mapNextOrphanBlocks.end(); ++it)
         {
             result.push_back(Pair("block", it->first.ToString()));
         };
     };
-    
+
     result.push_back(Pair("result", "done"));
     return result;
 }
@@ -796,25 +796,13 @@ Value getcheckpoint(const Array& params, bool fHelp)
             "Show info of synchronized checkpoint.\n");
 
     Object result;
-    CBlockIndex* pindexCheckpoint;
+    const CBlockIndex* pindexCheckpoint = Checkpoints::AutoSelectSyncCheckpoint();
 
-    result.push_back(Pair("synccheckpoint", Checkpoints::hashSyncCheckpoint.ToString().c_str()));
-    pindexCheckpoint = mapBlockIndex[Checkpoints::hashSyncCheckpoint];
+    result.push_back(Pair("synccheckpoint", pindexCheckpoint->GetBlockHash().ToString().c_str()));
     result.push_back(Pair("height", pindexCheckpoint->nHeight));
     result.push_back(Pair("timestamp", DateTimeStrFormat(pindexCheckpoint->GetBlockTime()).c_str()));
 
-    // Check that the block satisfies synchronized checkpoint
-    if (CheckpointsMode == Checkpoints::STRICT)
-        result.push_back(Pair("policy", "strict"));
-
-    if (CheckpointsMode == Checkpoints::ADVISORY)
-        result.push_back(Pair("policy", "advisory"));
-
-    if (CheckpointsMode == Checkpoints::PERMISSIVE)
-        result.push_back(Pair("policy", "permissive"));
-
-    if (mapArgs.count("-checkpointkey")) // TODO: posv2 remove
-        result.push_back(Pair("checkpointmaster", true));
+    result.push_back(Pair("policy", "rolling"));
 
     return result;
 }
@@ -831,24 +819,24 @@ Value thinscanmerkleblocks(const Array& params, bool fHelp)
     int nHeight = params[0].get_int();
     if (nHeight < 0 || nHeight > nBestHeight)
         throw runtime_error("Block height out of range.");
-    
+
     if (nNodeMode != NT_THIN)
         throw runtime_error("Must be in thin mode.");
-    
+
     if (nNodeState == NS_GET_FILTERED_BLOCKS)
         throw runtime_error("Wait for current merkle block scan to complete.");
-    
+
     {
         LOCK2(cs_main, pwalletMain->cs_wallet);
-        
+
         pwalletMain->nLastFilteredHeight = nHeight;
         nHeightFilteredNeeded = nHeight;
         CWalletDB walletdb(pwalletMain->strWalletFile);
         walletdb.WriteLastFilteredHeight(nHeight);
-        
+
         ChangeNodeState(NS_GET_FILTERED_BLOCKS, false);
     }
-    
+
     Object result;
     result.push_back(Pair("result", "Success."));
     result.push_back(Pair("startheight", nHeight));
@@ -862,21 +850,21 @@ Value thinforcestate(const Array& params, bool fHelp)
             "thinforcestate <state>\n"
             "force into state <state>.\n"
             "2 get headers, 3 get filtered blocks, 4 ready");
-    
+
     if (nNodeMode != NT_THIN)
         throw runtime_error("Must be in thin mode.");
-    
+
     int nState = params[0].get_int();
     if (nState <= NS_STARTUP || nState >= NS_UNKNOWN)
         throw runtime_error("unknown state.");
-    
-    
-    
+
+
+
     Object result;
     if (ChangeNodeState(nState))
         result.push_back(Pair("result", "Success."));
     else
         result.push_back(Pair("result", "Failed."));
-    
+
     return result;
 }
