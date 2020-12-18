@@ -36,6 +36,8 @@ static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
+/** Default for -maxorphanblocksmib, maximum number of memory to keep orphan blocks */
+static const unsigned int DEFAULT_MAX_ORPHAN_BLOCKS = 40;
 static const unsigned int MAX_INV_SZ = 50000;
 static const unsigned int MAX_GETHEADERS_SZ = 2000;
 
@@ -43,6 +45,8 @@ static const unsigned int MAX_MULTI_BLOCK_SIZE = 5120000;    // 5MiB, most likel
 static const unsigned int MAX_MULTI_BLOCK_ELEMENTS = 64;     // processing larger blocks is cpu intensive
 static const unsigned int MAX_MULTI_BLOCK_THIN_ELEMENTS = 128;
 
+/** No amount larger than this (in satoshi) is valid */
+static const int64_t MAX_MONEY = 105000000 * COIN;
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -53,7 +57,7 @@ inline int64_t FutureDriftV2(int64_t nTime) { return nTime + 15; }
 
 inline int64_t FutureDrift(int64_t nTime, int nHeight) { return Params().IsProtocolV2(nHeight) ? FutureDriftV2(nTime) : FutureDriftV1(nTime); }
 
-inline unsigned int GetTargetSpacing(int nHeight) { return Params().IsProtocolV2(nHeight) ? 64 : 60; }
+inline unsigned int GetTargetSpacing(int nHeight) { return Params().IsProtocolV2(nHeight) ? 69 : 69; }
 
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
@@ -81,9 +85,16 @@ extern uint64_t nLastBlockSize;
 extern int64_t nLastCoinStakeSearchInterval;
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
+extern bool fImporting;
 extern CCriticalSection cs_setpwalletRegistered;
 extern std::set<CWallet*> setpwalletRegistered;
-extern std::map<uint256, CBlock*> mapOrphanBlocks;
+struct COrphanBlock {
+    uint256 hashBlock;
+    uint256 hashPrev;
+    std::pair<COutPoint, unsigned int> stake;
+    std::vector<unsigned char> vchBlock;
+};
+extern std::map<uint256, COrphanBlock*> mapOrphanBlocks;
 extern std::map<uint256, CBlockThin*> mapOrphanBlockThins;
 
 extern std::map<int64_t, CAnonOutputCount> mapAnonOutputStats;
@@ -95,6 +106,7 @@ extern CTxMemPool mempool;
 extern int64_t nTransactionFee;
 extern int64_t nReserveBalance;
 extern int64_t nMinimumInputValue;
+extern bool fUseFastIndex;
 
 extern bool fEnforceCanonical;
 
@@ -120,6 +132,7 @@ bool ProcessMessages(CNode* pfrom);
 bool SendMessages(CNode* pto, std::vector<CNode*> &vNodesCopy, bool fSendTrickle);
 
 bool LoadExternalBlockFile(int nFile, FILE* fileIn);
+void ThreadImport(std::vector<boost::filesystem::path> vImportFiles);
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake);
@@ -127,6 +140,7 @@ unsigned int GetNextTargetRequiredThin(const CBlockThinIndex* pindexLast, bool f
 
 int GetNumBlocksOfPeers();
 bool IsInitialBlockDownload();
+bool IsConfirmedInNPrevBlocks(const CTxIndex& txindex, const CBlockIndex* pindexFrom, int nMaxDepth, int& nActualDepth);
 std::string GetWarnings(std::string strFor);
 bool GetTransaction(const uint256 &hash, CTransaction &tx, uint256 &hashBlock);
 bool GetTransactionBlockHash(const uint256 &hash, uint256 &hashBlock);
@@ -136,6 +150,7 @@ bool TxnHashInSystem(CTxDB* ptxdb, uint256& txnHash);
 
 uint256 WantedByOrphan(const CBlock* pblockOrphan);
 uint256 WantedByOrphanHeader(const CBlockThin* pblockOrphan);
+const COrphanBlock* AddOrphanBlock(const CBlock* pblock);
 const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake);
 const CBlockThinIndex* GetLastBlockThinIndex(const CBlockThinIndex* pindex, bool fProofOfStake);
 void ResendWalletTransactions(bool fForce = false);
@@ -365,8 +380,8 @@ public:
         Note that lightweight clients may not know anything besides the hash of previous transactions,
         so may not be able to calculate this.
 
-        @param[in] mapInputs	Map of previous transactions that have outputs we're spending
-        @return	Sum of value of all inputs (scriptSigs)
+        @param[in] mapInputs    Map of previous transactions that have outputs we're spending
+        @return Sum of value of all inputs (scriptSigs)
         @see CTransaction::FetchInputs
      */
     int64_t GetValueIn(const MapPrevTx& mapInputs) const;
@@ -414,19 +429,12 @@ public:
         return !(a == b);
     }
 
-    std::string ToStringShort() const
-    {
-        std::string str;
-        str += strprintf("%s %s", GetHash().ToString().c_str(), IsCoinBase()? "base" : (IsCoinStake()? "stake" : "user"));
-        return str;
-    }
-
     std::string ToString() const
     {
         std::string str;
         str += IsCoinBase()? "Coinbase" : (IsCoinStake()? "Coinstake" : "CTransaction");
         str += strprintf("(hash=%s, nTime=%d, ver=%d, vin.size=%u, vout.size=%u, nLockTime=%d)\n",
-            GetHash().ToString().substr(0,10).c_str(),
+            GetHash().ToString(),
             nTime,
             nVersion,
             vin.size(),
@@ -452,7 +460,7 @@ public:
 
     /** Fetch from memory and/or disk. inputsRet keys are transaction hashes.
 
-     @param[in] txdb	Transaction database
+     @param[in] txdb    Transaction database
      @param[in] mapTestPool	List of pending changes to the transaction index database
      @param[in] fBlock	True if being called to add a new best-block to the chain
      @param[in] fMiner	True if being called by CreateNewBlock
@@ -480,8 +488,7 @@ public:
                        std::map<uint256, CTxIndex>& mapTestPool, const CDiskTxPos& posThisTx,
                        const CBlockIndex* pindexBlock, bool fBlock, bool fMiner, unsigned int flags = STANDARD_SCRIPT_VERIFY_FLAGS);
     bool CheckTransaction() const;
-    
-    bool GetCoinAge(CTxDB& txdb, uint64_t& nCoinAge) const;  // ppcoin: get transaction coin age
+    bool GetCoinAge(CTxDB& txdb, const CBlockIndex* pindexPrev, uint64_t& nCoinAge) const;
 
 
 protected:
@@ -491,6 +498,86 @@ protected:
 
 bool AcceptToMemoryPool(CTxMemPool &pool, CTransaction &tx, CTxDB& txdb, bool *pfMissingInputs=NULL);
 
+
+
+/** A transaction with a merkle branch linking it to the block chain. */
+class CMerkleTx : public CTransaction
+{
+private:
+    int GetDepthInMainChainINTERNAL(CBlockIndex* &pindexRet) const;
+    int GetDepthInMainChainINTERNAL(CBlockThinIndex* &pindexRet) const;
+public:
+    uint256 hashBlock;
+    std::vector<uint256> vMerkleBranch;
+    int nIndex;
+
+    // memory only
+    mutable bool fMerkleVerified;
+
+
+    CMerkleTx()
+    {
+        Init();
+    }
+
+    CMerkleTx(const CTransaction& txIn) : CTransaction(txIn)
+    {
+        Init();
+    }
+
+    void Init()
+    {
+        hashBlock = 0;
+        nIndex = -1;
+        fMerkleVerified = false;
+    }
+
+
+    IMPLEMENT_SERIALIZE
+    (
+        nSerSize += SerReadWrite(s, *(CTransaction*)this, nType, nVersion, ser_action);
+        nVersion = this->nVersion;
+        READWRITE(hashBlock);
+        READWRITE(vMerkleBranch);
+        READWRITE(nIndex);
+    )
+
+
+    int SetMerkleBranch(const CBlock* pblock=NULL);
+
+    // Return depth of transaction in blockchain:
+    // -1  : not in blockchain, and not in memory pool (conflicted transaction)
+    //  0  : in memory pool, waiting to be included in a block
+    // >=1 : this many blocks deep in the main chain
+    int GetDepthInMainChain(CBlockIndex* &pindexRet) const;
+    int GetDepthInMainChain(CBlockThinIndex* &pindexRet) const;
+    int GetDepthInMainChain() const
+    {
+        if (nNodeMode == NT_FULL)
+        {
+            CBlockIndex *pindexRet;
+            return GetDepthInMainChain(pindexRet);
+        };
+
+        CBlockThinIndex *pindexRet;
+        return GetDepthInMainChain(pindexRet);
+    }
+    bool IsInMainChain() const
+    {
+        if (nNodeMode == NT_THIN)
+        {
+            CBlockThinIndex *pindexRet;
+            return GetDepthInMainChainINTERNAL(pindexRet) > 0;
+        };
+
+        CBlockIndex *pindexRet;
+        return GetDepthInMainChainINTERNAL(pindexRet) > 0;
+    }
+
+    int GetBlocksToMaturity() const;
+    bool AcceptToMemoryPool(CTxDB& txdb);
+    bool AcceptToMemoryPool();
+};
 
 
 
@@ -540,13 +627,13 @@ public:
         return (a.pos    == b.pos &&
                 a.vSpent == b.vSpent);
     }
-    
+
     friend bool operator!=(const CTxIndex& a, const CTxIndex& b)
     {
         return !(a == b);
     }
     int GetDepthInMainChainFromIndex() const;
-    
+
 };
 
 
@@ -576,12 +663,12 @@ public:
     unsigned int nTime;
     unsigned int nBits;
     unsigned int nNonce;
-    
+
     CBlockHeader()
     {
         SetHdrNull();
     }
-    
+
     void SetHdrNull()
     {
         nVersion = CBlockHeader::CURRENT_VERSION;
@@ -591,7 +678,7 @@ public:
         nBits = 0;
         nNonce = 0;
     }
-    
+
     IMPLEMENT_SERIALIZE
     (
         READWRITE(this->nVersion);
@@ -602,12 +689,12 @@ public:
         READWRITE(nBits);
         READWRITE(nNonce);
     )
-    
+
     bool IsNull() const
     {
         return (nBits == 0);
     }
-    
+
     uint256 GetHash() const
     {
         if (nVersion > 6)
@@ -615,12 +702,12 @@ public:
         else
             return scrypt_blockhash(CVOIDBEGIN(nVersion));
     }
-    
+
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;
     }
-    
+
     CBlockHeader GetBlockHeaderOnly() const
     {
         CBlockHeader block;
@@ -632,7 +719,7 @@ public:
         block.nNonce         = nNonce;
         return block;
     }
-    
+
 };
 
 
@@ -669,8 +756,8 @@ public:
         {
             READWRITE(vtx);
             READWRITE(vchBlockSig);
-        } else
-        if (fRead)
+        }
+        else if (fRead)
         {
             const_cast<CBlock*>(this)->vtx.clear();
             const_cast<CBlock*>(this)->vchBlockSig.clear();
@@ -814,8 +901,8 @@ public:
         // Read block
         try {
             filein >> *this;
-        } catch (std::exception &e)
-        {
+        }
+        catch (std::exception &e) {
             return error("%s() : deserialize or I/O error", __PRETTY_FUNCTION__);
         }
 
@@ -854,7 +941,7 @@ public:
     CBlockThin GetBlockThinOnly() const;
 
 
-    
+
     bool DisconnectBlock(CTxDB& txdb, CBlockIndex* pindex);
     bool ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck=false);
 
@@ -863,10 +950,9 @@ public:
     bool AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const uint256& hashProof);
     bool CheckBlock(bool fCheckPOW=true, bool fCheckMerkleRoot=true, bool fCheckSig=true) const;
     bool AcceptBlock();
-    bool GetCoinAge(uint64_t& nCoinAge) const; // ppcoin: calculate total coin age spent in block
     bool SignBlock(CWallet& keystore, int64_t nFees);
     bool CheckBlockSignature() const;
-    
+
     bool GetHashProof(uint256& hashProof);
 
 private:
@@ -1025,10 +1111,12 @@ public:
 
     int64_t nMint;
     int64_t nMoneySupply;
+    int64_t nAnonSupply;
 
     unsigned int nFlags;  // ppcoin: block index flags
 
     uint64_t nStakeModifier; // hash modifier for proof-of-stake
+    uint256 bnStakeModifierV2;
 
     // proof-of-stake specific fields
     COutPoint prevoutStake;
@@ -1054,8 +1142,10 @@ public:
         nChainTrust = 0;
         nMint = 0;
         nMoneySupply = 0;
+        nAnonSupply = 0;
         nFlags = 0;
         nStakeModifier = 0;
+        bnStakeModifierV2 = 0;
         hashProof = 0;
         prevoutStake.SetNull();
         nStakeTime = 0;
@@ -1078,19 +1168,22 @@ public:
         nChainTrust = 0;
         nMint = 0;
         nMoneySupply = 0;
+        nAnonSupply = 0;
         nFlags = 0;
         nStakeModifier = 0;
+        bnStakeModifierV2 = 0;
         hashProof = 0;
         if (block.IsProofOfStake())
         {
             SetProofOfStake();
             prevoutStake = block.vtx[1].vin[0].prevout;
             nStakeTime = block.vtx[1].nTime;
-        } else
+        }
+        else
         {
             prevoutStake.SetNull();
             nStakeTime = 0;
-        };
+        }
 
         nVersion       = block.nVersion;
         hashMerkleRoot = block.hashMerkleRoot;
@@ -1098,7 +1191,6 @@ public:
         nBits          = block.nBits;
         nNonce         = block.nNonce;
     }
-
 
     CBlock GetBlockHeader() const
     {
@@ -1230,13 +1322,13 @@ public:
     {
         return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016x, hashProof=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s)",
             pprev, pnext, nFile, nBlockPos, nHeight,
-            FormatMoney(nMint).c_str(), FormatMoney(nMoneySupply).c_str(),
+            FormatMoney(nMint), FormatMoney(nMoneySupply),
             GeneratedStakeModifier() ? "MOD" : "-", GetStakeEntropyBit(), IsProofOfStake()? "PoS" : "PoW",
             nStakeModifier,
-            hashProof.ToString().c_str(),
-            prevoutStake.ToString().c_str(), nStakeTime,
-            hashMerkleRoot.ToString().c_str(),
-            GetBlockHash().ToString().c_str());
+            hashProof.ToString(),
+            prevoutStake.ToString(), nStakeTime,
+            hashMerkleRoot.ToString(),
+            GetBlockHash().ToString());
     }
 
     void print() const
@@ -1434,6 +1526,9 @@ public:
 /** Used to marshal pointers into hashes for db storage. */
 class CDiskBlockIndex : public CBlockIndex
 {
+private:
+    uint256 blockHash;
+
 public:
     uint256 hashPrev;
     uint256 hashNext;
@@ -1442,6 +1537,7 @@ public:
     {
         hashPrev = 0;
         hashNext = 0;
+        blockHash = 0;
     }
 
     explicit CDiskBlockIndex(CBlockIndex* pindex) : CBlockIndex(*pindex)
@@ -1461,14 +1557,16 @@ public:
         READWRITE(nHeight);
         READWRITE(nMint);
         READWRITE(nMoneySupply);
+        READWRITE(nAnonSupply);
         READWRITE(nFlags);
         READWRITE(nStakeModifier);
+        READWRITE(bnStakeModifierV2);
         if (IsProofOfStake())
         {
             READWRITE(prevoutStake);
             READWRITE(nStakeTime);
-        } else
-        if (fRead)
+        }
+        else if (fRead)
         {
             const_cast<CDiskBlockIndex*>(this)->prevoutStake.SetNull();
             const_cast<CDiskBlockIndex*>(this)->nStakeTime = 0;
@@ -1482,10 +1580,14 @@ public:
         READWRITE(nTime);
         READWRITE(nBits);
         READWRITE(nNonce);
+        READWRITE(blockHash);
     )
 
     uint256 GetBlockHash() const
     {
+        if (fUseFastIndex && (nTime < GetAdjustedTime() - 24 * 60 * 60) && blockHash != 0)
+            return blockHash;
+
         CBlock block;
         block.nVersion        = nVersion;
         block.hashPrevBlock   = hashPrev;
@@ -1493,7 +1595,10 @@ public:
         block.nTime           = nTime;
         block.nBits           = nBits;
         block.nNonce          = nNonce;
-        return block.GetHash();
+
+        const_cast<CDiskBlockIndex*>(this)->blockHash = block.GetHash();
+
+        return blockHash;
     }
 
     std::string ToString() const
@@ -1501,9 +1606,9 @@ public:
         std::string str = "CDiskBlockIndex(";
         str += CBlockIndex::ToString();
         str += strprintf("\n                hashBlock=%s, hashPrev=%s, hashNext=%s)",
-            GetBlockHash().ToString().c_str(),
-            hashPrev.ToString().c_str(),
-            hashNext.ToString().c_str());
+            GetBlockHash().ToString(),
+            hashPrev.ToString(),
+            hashNext.ToString());
         return str;
     }
 
@@ -1667,6 +1772,7 @@ public:
             // Exponentially larger steps back
             for (int i = 0; pindex && i < nStep; i++)
                 pindex = pindex->pprev;
+
             if (vHave.size() > 10)
                 nStep *= 2;
         }
@@ -1871,85 +1977,6 @@ public:
             return 0;
         return pindex->nHeight;
     }
-};
-
-/** A transaction with a merkle branch linking it to the block chain. */
-class CMerkleTx : public CTransaction
-{
-private:
-    int GetDepthInMainChainINTERNAL(CBlockIndex* &pindexRet) const;
-    int GetDepthInMainChainINTERNAL(CBlockThinIndex* &pindexRet) const;
-public:
-    uint256 hashBlock;
-    std::vector<uint256> vMerkleBranch;
-    int nIndex;
-
-    // memory only
-    mutable bool fMerkleVerified;
-
-
-    CMerkleTx()
-    {
-        Init();
-    }
-
-    CMerkleTx(const CTransaction& txIn) : CTransaction(txIn)
-    {
-        Init();
-    }
-
-    void Init()
-    {
-        hashBlock = 0;
-        nIndex = -1;
-        fMerkleVerified = false;
-    }
-
-
-    IMPLEMENT_SERIALIZE
-    (
-        nSerSize += SerReadWrite(s, *(CTransaction*)this, nType, nVersion, ser_action);
-        nVersion = this->nVersion;
-        READWRITE(hashBlock);
-        READWRITE(vMerkleBranch);
-        READWRITE(nIndex);
-    )
-
-
-    int SetMerkleBranch(const CBlock* pblock=NULL);
-
-    // Return depth of transaction in blockchain:
-    // -1  : not in blockchain, and not in memory pool (conflicted transaction)
-    //  0  : in memory pool, waiting to be included in a block
-    // >=1 : this many blocks deep in the main chain
-    int GetDepthInMainChain(CBlockIndex* &pindexRet) const;
-    int GetDepthInMainChain(CBlockThinIndex* &pindexRet) const;
-    int GetDepthInMainChain() const
-    {
-        if (nNodeMode == NT_FULL)
-        {
-            CBlockIndex *pindexRet;
-            return GetDepthInMainChain(pindexRet);
-        };
-
-        CBlockThinIndex *pindexRet;
-        return GetDepthInMainChain(pindexRet);
-    }
-    bool IsInMainChain() const
-    {
-        if (nNodeMode == NT_THIN)
-        {
-            CBlockThinIndex *pindexRet;
-            return GetDepthInMainChainINTERNAL(pindexRet) > 0;
-        };
-
-        CBlockIndex *pindexRet;
-        return GetDepthInMainChainINTERNAL(pindexRet) > 0;
-    }
-
-    int GetBlocksToMaturity() const;
-    bool AcceptToMemoryPool(CTxDB& txdb);
-    bool AcceptToMemoryPool();
 };
 
 /** Data structure that represents a partial merkle tree.
