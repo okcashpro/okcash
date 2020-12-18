@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = okcash
-VERSION = 6.0.0.0
+VERSION = 6.9.0.0
 INCLUDEPATH += src src/json src/qt
 DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
@@ -59,7 +59,7 @@ macx {
 
     BOOST_LIB_SUFFIX=-mt
 
-    BOOST_INCLUDE_PATH=/opt/local/include 
+    BOOST_INCLUDE_PATH=/opt/local/include
     BOOST_LIB_PATH=/opt/local/lib
 
     BDB_INCLUDE_PATH=/opt/local/include/db48
@@ -133,7 +133,7 @@ contains(USE_UPNP, -) {
     count(USE_UPNP, 0) {
         USE_UPNP=1
     }
-    DEFINES += USE_UPNP=$$USE_UPNP STATICLIB
+    DEFINES += USE_UPNP=$$USE_UPNP MINIUPNP_STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
     LIBS += $$join(MINIUPNPC_LIB_PATH,,-L,) -lminiupnpc
     win32:LIBS += -liphlpapi
@@ -156,7 +156,7 @@ contains(OKCASH_NEED_QT_PLUGINS, 1) {
 
 INCLUDEPATH += src/leveldb/include src/leveldb/helpers
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
-SOURCES += src/txdb-leveldb.cpp
+SOURCES += src/txdb-leveldb.cpp src/qt/addresstablemodel.cpp
 
 !win32 {
     # we use QMAKE_CXXFLAGS_RELEASE even without RELEASE=1 because we use RELEASE to indicate linking preferences not -O preferences
@@ -240,6 +240,7 @@ HEADERS += \
     src/miner.h \
     src/net.h \
     src/key.h \
+    src/extkey.h \
     src/eckey.h \
     src/db.h \
     src/txdb.h \
@@ -269,7 +270,6 @@ HEADERS += \
     src/qt/addresstablemodel.h \
     src/qt/coincontroldialog.h \
     src/qt/coincontroltreewidget.h \
-    src/qt/signverifymessagedialog.h \
     src/qt/aboutdialog.h \
     src/qt/editaddressdialog.h \
     src/qt/bitcoinaddressvalidator.h \
@@ -296,7 +296,7 @@ HEADERS += \
     src/qt/messagemodel.h \
     src/qt/okcashgui.h \
     src/qt/okcashbridge.h \
-    src/qt/addressbookpage.h
+    src/qt/bridgetranslations.h \
 
 SOURCES += \
     src/alert.cpp \
@@ -308,6 +308,7 @@ SOURCES += \
     src/hash.cpp \
     src/netbase.cpp \
     src/key.cpp \
+    src/extkey.cpp \
     src/eckey.cpp \
     src/script.cpp \
     src/main.cpp \
@@ -345,11 +346,11 @@ SOURCES += \
     src/rpcblockchain.cpp \
     src/rpcrawtransaction.cpp \
     src/rpcsmessage.cpp \
+    src/rpcextkey.cpp \
+    src/rpcmnemonic.cpp \
     src/qt/transactiontablemodel.cpp \
-    src/qt/addresstablemodel.cpp \
     src/qt/coincontroldialog.cpp \
     src/qt/coincontroltreewidget.cpp \
-    src/qt/signverifymessagedialog.cpp \
     src/qt/aboutdialog.cpp \
     src/qt/editaddressdialog.cpp \
     src/qt/bitcoinaddressvalidator.cpp \
@@ -376,26 +377,23 @@ SOURCES += \
     src/qt/messagemodel.cpp \
     src/qt/okcashgui.cpp \
     src/qt/okcash.cpp \
-    src/qt/okcashbridge.cpp \
-    src/qt/addressbookpage.cpp 
-    
+    src/qt/okcashbridge.cpp
+
 
 FORMS += \
     src/qt/forms/coincontroldialog.ui \
-    src/qt/forms/signverifymessagedialog.ui \
     src/qt/forms/aboutdialog.ui \
     src/qt/forms/editaddressdialog.ui \
     src/qt/forms/transactiondescdialog.ui \
     src/qt/forms/askpassphrasedialog.ui \
-    src/qt/forms/rpcconsole.ui \
-    src/qt/forms/addressbookpage.ui
+    src/qt/forms/rpcconsole.ui
 
 
 CODECFORTR = UTF-8
 
 # for lrelease/lupdate
 # also add new translations to src/qt/okcash.qrc under translations/
-TRANSLATIONS = $$files(src/qt/locale/bitcoin_*.ts)
+TRANSLATIONS = $$files(src/qt/locale/okcash_*.ts)
 
 isEmpty(QMAKE_LRELEASE) {
     win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\\lrelease.exe
@@ -409,11 +407,6 @@ TSQM.output = $$QM_DIR/${QMAKE_FILE_BASE}.qm
 TSQM.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
 TSQM.CONFIG = no_link
 QMAKE_EXTRA_COMPILERS += TSQM
-
-# "Other files" to show in Qt Creator
-OTHER_FILES += \
-    doc/*.rst doc/*.txt doc/README README.md res/okcash.rc
-
 
 windows:DEFINES += WIN32
 windows:RC_FILE = src/qt/res/okcash.rc
@@ -461,5 +454,9 @@ contains(RELEASE, 1) {
     DEFINES += LINUX
     LIBS += -lrt -ldl
 }
+
+# "Other files" to show in Qt Creator
+OTHER_FILES += \
+    "doc/*.rst" "doc/*.txt" "doc/README" "README.md" "res/okcash.rc"
 
 system($$QMAKE_LRELEASE -silent $$_PRO_FILE_)
