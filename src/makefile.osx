@@ -5,9 +5,9 @@
 
 # Mac OS X makefile for okcash
 # Originally by Laszlo Hanyecz (solar@heliacal.net)
-
+USE_UPNP:=0
 CXX=llvm-g++
-DEPSDIR=/opt/local
+DEPSDIR=/usr/local/Cellar
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
@@ -23,18 +23,6 @@ USE_UPNP:=1
 
 LIBS= -dead_strip
 
-ifdef STATIC
-# Build STATIC if you are redistributing the okcashd binary
-LIBS += \
- $(DEPSDIR)/lib/db48/libdb_cxx-4.8.a \
- $(DEPSDIR)/lib/libboost_system-mt.a \
- $(DEPSDIR)/lib/libboost_filesystem-mt.a \
- $(DEPSDIR)/lib/libboost_program_options-mt.a \
- $(DEPSDIR)/lib/libboost_thread-mt.a \
- $(DEPSDIR)/lib/libssl.a \
- $(DEPSDIR)/lib/libcrypto.a \
- -lz
-else
 LIBS += \
  -ldb_cxx-4.8 \
  -lboost_system-mt \
@@ -42,9 +30,8 @@ LIBS += \
  -lboost_program_options-mt \
  -lboost_thread-mt \
  -lssl \
- -lcrypto \
- -lz
-endif
+ -lcrypto
+
 
 DEFS=-DMAC_OSX -DMSG_NOSIGNAL=0 -DBOOST_SPIRIT_THREADSAFE
 
@@ -52,15 +39,14 @@ ifdef RELEASE
 # Compile for maximum compatibility and smallest size.
 # This requires that dependencies are compiled
 # the same way.
-CFLAGS = -mmacosx-version-min=10.5 -arch x86_64 -O3 -msse2
+CFLAGS = -arch x86_64 -stdlib=libc++
 else
-CFLAGS = -g -msse2
+CFLAGS = -arch x86_64 -stdlib=libc++ -g -msse2
 endif
 
 # ppc doesn't work because we don't support big-endian
 CFLAGS += -Wall -Wextra -Wformat -Wno-ignored-qualifiers -Wformat-security -Wno-unused-parameter \
     $(DEBUGFLAGS) $(DEFS) $(INCLUDEPATHS)
-
 OBJS= \
     obj/alert.o \
     obj/version.o \
@@ -70,6 +56,7 @@ OBJS= \
     obj/crypter.o \
     obj/key.o \
     obj/eckey.o \
+    obj/extkey.o \
     obj/db.o \
     obj/init.o \
     obj/okcashd.o \
@@ -88,6 +75,8 @@ OBJS= \
     obj/rpcblockchain.o \
     obj/rpcrawtransaction.o \
     obj/rpcsmessage.o \
+    obj/rpcextkey.o \
+    obj/rpcmnemonic.o \
     obj/script.o \
     obj/sync.o \
     obj/util.o \
@@ -98,6 +87,9 @@ OBJS= \
     obj/kernel.o \
     obj/pbkdf2.o \
     obj/scrypt.o \
+    obj/scrypt-arm.o \
+    obj/scrypt-x86.o \
+    obj/scrypt-x86_64.o \
     obj/smessage.o \
     obj/stealth.o \
     obj/ringsig.o \
@@ -105,28 +97,20 @@ OBJS= \
     obj/txmempool.o \
     obj/chainparams.o \
     obj/state.o \
-    obj/bloom.o 
+    obj/bloom.o
 
-ifndef USE_UPNP
-	override USE_UPNP = -
-endif
-ifneq (${USE_UPNP}, -)
-	DEFS += -DUSE_UPNP=$(USE_UPNP)
-ifdef STATIC
-	LIBS += $(DEPSDIR)/lib/libminiupnpc.a
-else
-	LIBS += -lminiupnpc
-endif
-endif
+
 
 all: okcashd
 
+test check: test_okcash FORCE
+	./test_okcash
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/include)
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
 OBJS += obj/txdb-leveldb.o
 leveldb/libleveldb.a:
-	@echo "Building LevelDB ..."; cd leveldb; make libleveldb.a libmemenv.a; cd ..
+	@echo "Building LevelDB ..."; cd leveldb; make libleveldb.a libmemenv.a; cd ..;
 obj/txdb-leveldb.o: leveldb/libleveldb.a
 
 # auto-generated dependencies:
@@ -136,6 +120,12 @@ obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
 version.cpp: obj/build.h
 DEFS += -DHAVE_BUILD_INFO
+obj/scrypt-x86.o: scrypt-x86.S
+	$(CXX) -c $(CFLAGS) -MMD -o $@ $<
+obj/scrypt-x86_64.o: scrypt-x86_64.S
+	$(CXX) -c $(CFLAGS) -MMD -o $@ $<
+obj/scrypt-arm.o: scrypt-arm.S
+	$(CXX) -c $(CFLAGS) -MMD -o $@ $<
 
 obj/%.o: %.cpp
 	$(CXX) -c $(CFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
@@ -144,28 +134,33 @@ obj/%.o: %.cpp
 	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
 	  rm -f $(@:%.o=%.d)
 
-obj/zerocoin/%.o: zerocoin/%.cpp
-	$(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+okcashd: $(OBJS:obj/%=obj/%)
+	$(LINK) $(CFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
+
+
+TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
+
+xTESTCXXFLAGS = -std=c++11
+
+obj-test/%.o: test/%.cpp
+	$(CXX) -c $(TESTDEFS) $(xTESTCXXFLAGS) $(CFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
 	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
 	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
 	  rm -f $(@:%.o=%.d)
 
-obj/scrypt-x86.o: scrypt-x86.S
-	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
-
-obj/scrypt-x86_64.o: scrypt-x86_64.S
-	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
-
-okcashd: $(OBJS:obj/%=obj/%)
-	$(CXX) $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
+test_okcash: $(TESTOBJS) $(filter-out obj/init.o obj/okcashd.o,$(OBJS:obj/%=obj/%))
+	$(LINK) $(CFLAGS) -o $@ $(LIBPATHS) $^ $(TESTLIBS) $(xLDFLAGS) $(LIBS)
 
 clean:
 	-rm -f okcashd
 	-rm -f obj/*.o
-	-rm -f obj/zerocoin/*.o
 	-rm -f obj/*.P
-	-rm -f obj/zerocoin/*.P
 	-rm -f obj/build.h
+	-rm -f test_okcash
+	-rm -f obj-test/*.o
+	-rm -f obj-test/*.P
+	-cd leveldb && $(MAKE) clean || true
+
 
 FORCE:
