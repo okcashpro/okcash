@@ -1,0 +1,38 @@
+name: okcash
+version: master
+summary: decentralized peer-to-peer staking platform
+description: |
+  The Okcash wallet is a decentralized peer-to-peer platform, created under an
+  open source license, featuring a built-in cryptocurrency, end-to-end
+  encrypted messaging and Long Term Sustainable Staking (LTSS). The decentralized
+  network aims to provide a fast, reliable and efficient Proof of Stake system for everyone
+  through the best user-friendly interface that even grandma could understand and use.
+
+grade: devel
+confinement: strict
+
+apps:
+  okcash:
+    command: desktop-launch $SNAP/usr/local/bin/okcash
+    plugs: [network, network-bind, unity7]
+
+parts:
+  okcash:
+    source: .
+    plugin: qmake
+    qt-version: qt5
+    build-packages:
+      - build-essential
+      - qt5-default
+      - qtbase5-dev-tools
+      - qttools5-dev-tools
+      - libboost-dev
+      - libboost-filesystem-dev
+      - libboost-program-options-dev
+      - libboost-system-dev
+      - libboost-thread-dev
+      - libdb++-dev
+      - libminiupnpc-dev
+      - libqt5webkit5-dev
+      - libssl-dev
+    after: [desktop-qt5]
