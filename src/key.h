@@ -28,16 +28,6 @@ public:
     CKeyID(const uint160 &in) : uint160(in) { }
 };
 
-/** A reference to a CScript: the Hash160 of its serialization (see script.h) */
-class CScriptID : public uint160
-{
-public:
-    CScriptID() : uint160(0) { }
-    CScriptID(const uint160 &in) : uint160(in) { }
-};
-
-
-
 /** An encapsulated public key. */
 class CPubKey {
 private:
@@ -67,7 +57,8 @@ public:
 
     // Initialize a public key using begin/end iterators to byte data.
     template<typename T>
-    void Set(const T pbegin, const T pend) {
+    void Set(const T pbegin, const T pend)
+    {
         int len = pend == pbegin ? 0 : GetLen(pbegin[0]);
         if (len && len == (pend-pbegin))
             memcpy(vch, (unsigned char*)&pbegin[0], len);
@@ -182,6 +173,7 @@ public:
 
     // Derive BIP32 child pubkey.
     bool Derive(CPubKey& pubkeyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const;
+    
 };
 
 
@@ -211,6 +203,8 @@ public:
     // Construct an invalid private key.
     CKey() : fValid(false) {
         LockObject(vch);
+        fCompressed = true;
+        memset(vch, 0, sizeof(vch));
     }
 
     // Copy constructor. This is necessary because of memlocking.
@@ -245,7 +239,15 @@ public:
         }
     }
     
-    void Set(unsigned char *p, bool fCompressedIn)
+    void Clear()
+    {
+        memset(vch, 0, sizeof(vch));
+        fCompressed = true;
+        fValid = false;
+    };
+    
+    
+    void Set(const unsigned char *p, bool fCompressedIn)
     {
         if (Check(p)) {
             memcpy(vch, p, 32);
@@ -295,15 +297,36 @@ public:
 
     // Derive BIP32 child key.
     bool Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const;
-
+    
+    /**
+     * Verify thoroughly whether a private key and a public key match.
+     * This is done using a different mechanism than just regenerating it.
+     */
+    bool VerifyPubKey(const CPubKey& vchPubKey) const;
+    
     // Load private key and check that public key matches.
     bool Load(CPrivKey &privkey, CPubKey &vchPubKey, bool fSkipCheck);
 
     // Check whether an element of a signature (r or s) is valid.
     static bool CheckSignatureElement(const unsigned char *vch, int len, bool half);
 
-    // Ensure that signature is DER-encoded
-    static bool ReserealizeSignature(std::vector<unsigned char>& vchSig);
+    unsigned int GetSerializeSize(int nType, int nVersion) const
+    {
+        return 33;
+    }
+    
+    template<typename Stream> void Serialize(Stream &s, int nType, int nVersion) const
+    {
+        s.write((char*)vch, 32);
+        s.write((char*)&fValid, 1);
+    }
+    
+    template<typename Stream> void Unserialize(Stream &s, int nType, int nVersion)
+    {
+        fCompressed = true;
+        s.read((char*)vch, 32);
+        s.read((char*)&fValid, 1);
+    }
 };
 
 struct CExtPubKey {
@@ -317,10 +340,42 @@ struct CExtPubKey {
         return a.nDepth == b.nDepth && memcmp(&a.vchFingerprint[0], &b.vchFingerprint[0], 4) == 0 && a.nChild == b.nChild &&
                memcmp(&a.vchChainCode[0], &b.vchChainCode[0], 32) == 0 && a.pubkey == b.pubkey;
     }
+    
+    bool IsValid() const { return pubkey.IsValid(); }
+    
+    CKeyID GetID() const {
+        return pubkey.GetID();
+    }
 
     void Encode(unsigned char code[74]) const;
     void Decode(const unsigned char code[74]);
     bool Derive(CExtPubKey &out, unsigned int nChild) const;
+    
+    
+    unsigned int GetSerializeSize(int nType, int nVersion) const
+    {
+        return 41 + pubkey.GetSerializeSize(nType, nVersion);
+    }
+    
+    template<typename Stream> void Serialize(Stream &s, int nType, int nVersion) const
+    {
+        s.write((char*)&nDepth, 1);
+        s.write((char*)vchFingerprint, 4);
+        s.write((char*)&nChild, 4);
+        s.write((char*)vchChainCode, 32);
+        
+        pubkey.Serialize(s, nType, nVersion);
+    }
+    
+    template<typename Stream> void Unserialize(Stream &s, int nType, int nVersion)
+    {
+        s.read((char*)&nDepth, 1);
+        s.read((char*)vchFingerprint, 4);
+        s.read((char*)&nChild, 4);
+        s.read((char*)vchChainCode, 32);
+        
+        pubkey.Unserialize(s, nType, nVersion);
+    }
 };
 
 struct CExtKey {
@@ -334,12 +389,156 @@ struct CExtKey {
         return a.nDepth == b.nDepth && memcmp(&a.vchFingerprint[0], &b.vchFingerprint[0], 4) == 0 && a.nChild == b.nChild &&
                memcmp(&a.vchChainCode[0], &b.vchChainCode[0], 32) == 0 && a.key == b.key;
     }
+    
+    bool IsValid() const { return key.IsValid(); }
 
     void Encode(unsigned char code[74]) const;
     void Decode(const unsigned char code[74]);
     bool Derive(CExtKey &out, unsigned int nChild) const;
-    CExtPubKey Neuter() const;
+    CExtPubKey Neutered() const;
     void SetMaster(const unsigned char *seed, unsigned int nSeedLen);
+    int SetKeyCode(const unsigned char *pkey, const unsigned char *pcode);
+    
+    unsigned int GetSerializeSize(int nType, int nVersion) const
+    {
+        return 42 + (key.IsValid() ? 32 : 0);
+    }
+    
+    template<typename Stream> void Serialize(Stream &s, int nType, int nVersion) const
+    {
+        s.write((char*)&nDepth, 1);
+        s.write((char*)vchFingerprint, 4);
+        s.write((char*)&nChild, 4);
+        s.write((char*)vchChainCode, 32);
+        
+        char fValid = key.IsValid();
+        s.write((char*)&fValid, 1);
+        if (fValid)
+            s.write((char*)key.begin(), 32);
+    }
+    
+    template<typename Stream> void Unserialize(Stream &s, int nType, int nVersion)
+    {
+        s.read((char*)&nDepth, 1);
+        s.read((char*)vchFingerprint, 4);
+        s.read((char*)&nChild, 4);
+        s.read((char*)vchChainCode, 32);
+        
+        char tmp[33];
+        s.read((char*)tmp, 1); // key.IsValid()
+        if (tmp[0])
+        {
+            s.read((char*)tmp+1, 32);
+            key.Set((uint8_t*)tmp+1, 1);
+        };
+    }
+};
+
+class CExtKeyPair
+{
+public:
+    //unsigned char nFlags; ? crypted
+    unsigned char nDepth;
+    unsigned char vchFingerprint[4];
+    unsigned int nChild;
+    unsigned char vchChainCode[32];
+    CKey key;
+    CPubKey pubkey;
+    
+    CExtKeyPair() {};
+    CExtKeyPair(CExtKey &vk)
+    {
+        nDepth = vk.nDepth;
+        memcpy(vchFingerprint, vk.vchFingerprint, sizeof(vchFingerprint));
+        nChild = vk.nChild;
+        memcpy(vchChainCode, vk.vchChainCode, sizeof(vchChainCode));
+        key = vk.key;
+        pubkey = key.GetPubKey();
+    };
+    
+    
+    CExtKey GetExtKey() const
+    {
+        CExtKey vk;
+        vk.nDepth = nDepth;
+        memcpy(vk.vchFingerprint, vchFingerprint, sizeof(vchFingerprint));
+        vk.nChild = nChild;
+        memcpy(vk.vchChainCode, vchChainCode, sizeof(vchChainCode));
+        vk.key = key;
+        return vk;
+    };
+    
+    CKeyID GetID() const {
+        return pubkey.GetID();
+    }
+    
+    
+    bool operator <(const CExtKeyPair& y) const
+    {
+        return pubkey < y.pubkey;
+    };
+    
+    friend bool operator==(const CExtKeyPair &a, const CExtKeyPair &b)
+    {
+        return a.nDepth == b.nDepth && memcmp(&a.vchFingerprint[0], &b.vchFingerprint[0], 4) == 0 && a.nChild == b.nChild &&
+               memcmp(&a.vchChainCode[0], &b.vchChainCode[0], 32) == 0 && a.key == b.key && a.pubkey == b.pubkey ;
+    }
+    
+    bool IsValidV() const { return key.IsValid(); }
+    bool IsValidP() const { return pubkey.IsValid(); }
+
+    void EncodeV(unsigned char code[74]) const;
+    void DecodeV(const unsigned char code[74]);
+    
+    void EncodeP(unsigned char code[74]) const;
+    void DecodeP(const unsigned char code[74]);
+    
+    bool Derive(CExtKey &out, unsigned int nChild) const;
+    bool Derive(CExtPubKey &out, unsigned int nChild) const;
+    bool Derive(CKey &out, unsigned int nChild) const;
+    bool Derive(CPubKey &out, unsigned int nChild) const;
+    
+    CExtPubKey GetExtPubKey() const;
+    CExtKeyPair Neutered() const;
+    void SetMaster(const unsigned char *seed, unsigned int nSeedLen);
+    int SetKeyCode(const unsigned char *pkey, const unsigned char *pcode);
+    
+    unsigned int GetSerializeSize(int nType, int nVersion) const
+    {
+        return 42 + (key.IsValid() ? 32 : 0) + pubkey.GetSerializeSize(nType, nVersion);
+    }
+    
+    template<typename Stream> void Serialize(Stream &s, int nType, int nVersion) const
+    {
+        s.write((char*)&nDepth, 1);
+        s.write((char*)vchFingerprint, 4);
+        s.write((char*)&nChild, 4);
+        s.write((char*)vchChainCode, 32);
+        
+        char fValid = key.IsValid();
+        s.write((char*)&fValid, 1);
+        if (fValid)
+            s.write((char*)key.begin(), 32);
+        
+        pubkey.Serialize(s, nType, nVersion);
+    }
+    
+    template<typename Stream> void Unserialize(Stream &s, int nType, int nVersion)
+    {
+        s.read((char*)&nDepth, 1);
+        s.read((char*)vchFingerprint, 4);
+        s.read((char*)&nChild, 4);
+        s.read((char*)vchChainCode, 32);
+        
+        char tmp[33];
+        s.read((char*)tmp, 1); // key.IsValid()
+        if (tmp[0])
+        {
+            s.read((char*)tmp+1, 32);
+            key.Set((uint8_t*)tmp+1, 1);
+        };
+        pubkey.Unserialize(s, nType, nVersion);
+    }
 };
 
 /** Check that required EC support is available at runtime */
