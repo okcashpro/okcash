@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[okcashcore.okcash]
+file_filter = src/qt/locale/okcash_<lang>.ts
+source_file = src/qt/locale/okcash_en.ts
+source_lang = en
+type = QT
+
