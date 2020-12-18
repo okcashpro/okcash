@@ -348,22 +348,6 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(pathDebug.string())));
 }
 
-void openConfigfile()
-{
-    boost::filesystem::path pathConfig = GetDataDir() / "okcash.conf";
-    boost::filesystem::path pathDir = GetDataDir();
-
-    /* Open okcash config directory for now (used to be to open okcash.conf if exists) with the associated application */
-        if (boost::filesystem::exists(pathDir))
-    {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(pathDir.string())));
-    }
-    else
-    {
-        /* QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(pathDir.string()))); */
-    }
-}
-
 ToolTipToRichTextFilter::ToolTipToRichTextFilter(int size_threshold, QObject *parent) :
     QObject(parent), size_threshold(size_threshold)
 {
@@ -517,7 +501,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
                    << "Type=Application\n" \
                    << "Name=Okcash\n" \
                    << "Exec=" << pszExePath << "%u -min\n" \
-                   << "Icon=" <<  QFileInfo(":/icons/bitcoin").absoluteFilePath().toStdString() << "\n" \
+                   << "Icon=" <<  QFileInfo(":/icons/okcash").absoluteFilePath().toStdString() << "\n" \
                    << "Terminal=false\n" \
                    << "Hidden=false\n" \
                    << "Categories=Application;Network;\n" \
