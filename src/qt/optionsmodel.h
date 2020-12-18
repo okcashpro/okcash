@@ -31,7 +31,7 @@ public:
         ThinFullIndex,
         ThinIndexWindow,
         AutoRingSize,        /**< Default Transaction Fee. bool */
-        AutoRedeemOKCash,    /**< Default Transaction Fee. bool */
+        AutoRedeemOKprivate,    /**< Default Transaction Fee. bool */
         MinRingSize,         /**< Default Transaction Fee. int */
         MaxRingSize,         /**< Default Transaction Fee. int */
         /// Network Related Options
@@ -69,7 +69,7 @@ public:
     bool getMinimizeOnClose();
     bool getDisplayAddresses();
     bool getAutoRingSize();
-    bool getAutoRedeemOKCash();
+    bool getAutoRedeemOKprivate();
     int getDisplayUnit();
     int getRowsPerPage();
     int getMinRingSize();
@@ -87,7 +87,7 @@ private:
     bool fMinimizeToTray;
     bool fMinimizeOnClose;
     bool fAutoRingSize;
-    bool fAutoRedeemOKCash;
+    bool fAutoRedeemOKprivate;
     QString language;
     QStringList notifications;
     QStringList visibleTransactions;
