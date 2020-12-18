@@ -1,4 +1,4 @@
-// Copyright (c) 2014 The Okcash Developers
+// Copyright (c) 2014 The Okcash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
@@ -35,7 +35,7 @@ Q_IMPORT_PLUGIN(qtaccessiblewidgets)
 #endif
 
 // Need a global reference for the notifications to find the GUI
-static OKCashGUI *guiref;
+static OkcashGUI *guiref;
 static QSplashScreen *splashref;
 
 static void ThreadSafeMessageBox(const std::string& message, const std::string& caption, int style)
@@ -85,7 +85,7 @@ static void InitMessage(const std::string &message)
 {
     if(splashref)
     {
-        splashref->showMessage(QString::fromStdString(message), Qt::AlignBottom|Qt::AlignHCenter, QColor(2,192,236));
+        splashref->showMessage(QString::fromStdString(message), Qt::AlignBottom|Qt::AlignHCenter, QColor(0,102,204));
         QApplication::instance()->processEvents();
     }
 }
@@ -108,7 +108,7 @@ static std::string Translate(const char* psz)
 static void handleRunawayException(std::exception *e)
 {
     PrintExceptionContinue(e, "Runaway exception");
-    QMessageBox::critical(0, "Runaway exception", OKCashGUI::tr("A fatal error occurred. Okcash can no longer continue safely and will quit.") + QString("\n\n") + QString::fromStdString(strMiscWarning));
+    QMessageBox::critical(0, "Runaway exception", OkcashGUI::tr("A fatal error occurred. Okcash can no longer continue safely and will quit.") + QString("\n\n") + QString::fromStdString(strMiscWarning));
     exit(1);
 }
 
@@ -124,6 +124,10 @@ int main(int argc, char *argv[])
 #endif
 
     Q_INIT_RESOURCE(okcash);
+
+    // Command-line options take precedence:
+    ParseParameters(argc, argv);
+
     QApplication app(argc, argv);
     
     // Do this early as we don't want to bother initializing if we are just calling IPC
@@ -134,9 +138,6 @@ int main(int argc, char *argv[])
 
     // Install global event filter that makes sure that long tooltips can be word-wrapped
     app.installEventFilter(new GUIUtil::ToolTipToRichTextFilter(TOOLTIP_WRAP_THRESHOLD, &app));
-
-    // Command-line options take precedence:
-    ParseParameters(argc, argv);
 
     // ... then okcash.conf:
     if (!boost::filesystem::is_directory(GetDataDir(false)))
@@ -198,7 +199,8 @@ int main(int argc, char *argv[])
 
     // Show help message immediately after parsing command-line options (for "-lang") and setting locale,
     // but before showing splash screen.
-    if (mapArgs.count("-?") || mapArgs.count("--help"))
+
+    if (mapArgs.count("-?") || mapArgs.count("-h") || mapArgs.count("-help"))
     {
         GUIUtil::HelpMessageBox help;
         help.showOrPrint();
@@ -224,7 +226,7 @@ int main(int argc, char *argv[])
         
         boost::thread_group threadGroup;
         
-        OKCashGUI window;
+        OkcashGUI window;
         guiref = &window;
         
         QTimer* pollShutdownTimer = new QTimer(guiref);
@@ -273,7 +275,7 @@ int main(int argc, char *argv[])
                 guiref = 0;
             }
             // Shutdown the core and its threads, but don't exit Qt here
-            LogPrintf("Okcash shutdown.\n\n");
+            LogPrintf("Starting Okcash Core shutdown.\n");
             threadGroup.interrupt_all();
             threadGroup.join_all();
             Shutdown();
