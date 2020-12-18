@@ -22,7 +22,7 @@ BEGIN
             VALUE "FileDescription",    "Okcash (OSS GUI client for Okcash)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "okcash"
-            VALUE "LegalCopyright",     "2009-2012 The Bitcoin developers, 2012-2014 The NovaCoin & PPCoin developers, 2014 The BlackCoin developers, 2014-2020 The Okcash Developers"
+            VALUE "LegalCopyright",     "2009-2014 The Bitcoin developers, 2012-2014 The NovaCoin & PPCoin developers, 2014 The BlackCoin developers, 2014-2022 The Okcash developers"
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "okcash.exe"
             VALUE "ProductName",        "Okcash"
