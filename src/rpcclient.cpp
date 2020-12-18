@@ -25,14 +25,16 @@
 #include <boost/shared_ptr.hpp>
 #include "json/json_spirit_writer_template.h"
 
+using namespace std;
+using namespace boost;
+using namespace boost::asio;
 using namespace json_spirit;
-
 namespace ba = boost::asio;
 
-Object CallRPC(const std::string& strMethod, const Array& params)
+Object CallRPC(const string& strMethod, const Array& params)
 {
     if (mapArgs["-rpcuser"] == "" && mapArgs["-rpcpassword"] == "")
-        throw std::runtime_error(strprintf(
+        throw runtime_error(strprintf(
             _("You must set rpcpassword=<password> in the configuration file:\n%s\n"
               "If the file does not exist, create it with owner-readable-only file permissions."),
                 GetConfigFile().string()));
@@ -41,10 +43,10 @@ Object CallRPC(const std::string& strMethod, const Array& params)
     bool fUseSSL = GetBoolArg("-rpcssl", false);
     ioContext io_context;
     ba::ssl::context context(ba::ssl::context::sslv23);
-    context.set_options(ba::ssl::context::no_sslv2);
-    ba::ssl::stream<ba::ip::tcp::socket> sslStream(io_context, context);
-    SSLIOStreamDevice<ba::ip::tcp> d(sslStream, fUseSSL);
-    boost::iostreams::stream< SSLIOStreamDevice<ba::ip::tcp> > stream(d);
+    context.set_options(ssl::context::no_sslv2);
+    asio::ssl::stream<asio::ip::tcp::socket> sslStream(io_context, context);
+    SSLIOStreamDevice<asio::ip::tcp> d(sslStream, fUseSSL);
+    iostreams::stream< SSLIOStreamDevice<asio::ip::tcp> > stream(d);
 
     bool fWait = GetBoolArg("-rpcwait", false); // -rpcwait means try until server has started
     do {
@@ -53,17 +55,17 @@ Object CallRPC(const std::string& strMethod, const Array& params)
         if (fWait)
             MilliSleep(1000);
         else
-            throw std::runtime_error("couldn't connect to server");
+            throw runtime_error("couldn't connect to server");
     } while (fWait);
 
     // HTTP basic authentication
-    std::string strUserPass64 = EncodeBase64(mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"]);
-    std::map<std::string, std::string> mapRequestHeaders;
-    mapRequestHeaders["Authorization"] = std::string("Basic ") + strUserPass64;
+    string strUserPass64 = EncodeBase64(mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"]);
+    map<string, string> mapRequestHeaders;
+    mapRequestHeaders["Authorization"] = string("Basic ") + strUserPass64;
 
     // Send request
-    std::string strRequest = JSONRPCRequest(strMethod, params, 1);
-    std::string strPost = HTTPPost(strRequest, mapRequestHeaders);
+    string strRequest = JSONRPCRequest(strMethod, params, 1);
+    string strPost = HTTPPost(strRequest, mapRequestHeaders);
     stream << strPost << std::flush;
 
     // Receive HTTP reply status
@@ -71,24 +73,24 @@ Object CallRPC(const std::string& strMethod, const Array& params)
     int nStatus = ReadHTTPStatus(stream, nProto);
 
     // Receive HTTP reply message headers and body
-    std::map<std::string, std::string> mapHeaders;
-    std::string strReply;
+    map<string, string> mapHeaders;
+    string strReply;
     ReadHTTPMessage(stream, mapHeaders, strReply, nProto);
 
     if (nStatus == HTTP_UNAUTHORIZED)
-        throw std::runtime_error("incorrect rpcuser or rpcpassword (authorization failed)");
+        throw runtime_error("incorrect rpcuser or rpcpassword (authorization failed)");
     else if (nStatus >= 400 && nStatus != HTTP_BAD_REQUEST && nStatus != HTTP_NOT_FOUND && nStatus != HTTP_INTERNAL_SERVER_ERROR)
-        throw std::runtime_error(strprintf("server returned HTTP error %d", nStatus));
+        throw runtime_error(strprintf("server returned HTTP error %d", nStatus));
     else if (strReply.empty())
-        throw std::runtime_error("no response from server");
+        throw runtime_error("no response from server");
 
     // Parse reply
     Value valReply;
     if (!read_string(strReply, valReply))
-        throw std::runtime_error("couldn't parse reply from server");
+        throw runtime_error("couldn't parse reply from server");
     const Object& reply = valReply.get_obj();
     if (reply.empty())
-        throw std::runtime_error("expected reply to have result, error and id properties");
+        throw runtime_error("expected reply to have result, error and id properties");
 
     return reply;
 }
@@ -130,22 +132,22 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "walletpassphrase", 2 },
     { "getblocktemplate", 0 },
     { "listsinceblock", 1 },
-
+    { "clearwallettransactions", 0},
     { "scanforalltxns", 0 },
     { "scanforstealthtxns", 0 },
-
     { "sendalert", 2 },
     { "sendalert", 3 },
     { "sendalert", 4 },
     { "sendalert", 5 },
     { "sendalert", 6 },
-
     { "sendmany", 1 },
     { "sendmany", 2 },
     { "reservebalance", 0 },
     { "reservebalance", 1 },
     { "addmultisigaddress", 0 },
     { "addmultisigaddress", 1 },
+    { "createmultisig", 0 },
+    { "createmultisig", 1 },
     { "listunspent", 0 },
     { "listunspent", 1 },
     { "listunspent", 2 },
@@ -155,9 +157,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "signrawtransaction", 1},
     { "signrawtransaction", 2},
     { "keypoolrefill", 0 },
-    
     { "sendtostealthaddress", 1 },
-    
     { "sendoktoanon", 1 },
     { "sendanontoanon", 1 },
     { "sendanontoanon", 2 },
@@ -165,9 +165,13 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "sendanontook", 2 },
     { "estimateanonfee", 0 },
     { "estimateanonfee", 1 },
-    
     { "thinscanmerkleblocks", 0 },
     { "thinforcestate", 0 },
+    { "importprivkey", 2 },
+    { "importprivkey", 3 },
+    { "checkkernel", 0 },
+    { "checkkernel", 1 },
+    { "submitblock", 1 },
 };
 
 class CRPCConvertTable
@@ -213,7 +217,7 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
         else {
             Value jVal;
             if (!read_string(strVal, jVal))
-                throw std::runtime_error(std::string("Error parsing JSON:")+strVal);
+                throw runtime_error(string("Error parsing JSON:")+strVal);
             params.push_back(jVal);
         }
 
@@ -224,7 +228,7 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
 
 int CommandLineRPC(int argc, char *argv[])
 {
-    std::string strPrint;
+    string strPrint;
     int nRet = 0;
     try
     {
@@ -237,8 +241,8 @@ int CommandLineRPC(int argc, char *argv[])
 
         // Method
         if (argc < 2)
-            throw std::runtime_error("too few parameters");
-        std::string strMethod = argv[1];
+            throw runtime_error("too few parameters");
+        string strMethod = argv[1];
 
         // Parameters default to strings
         std::vector<std::string> strParams(&argv[2], &argv[argc]);
@@ -268,15 +272,15 @@ int CommandLineRPC(int argc, char *argv[])
             else
                 strPrint = write_string(result, true);
         }
-    } catch (boost::thread_interrupted)
-    {
+    }
+    catch (boost::thread_interrupted) {
         throw;
-    } catch (std::exception& e)
-    {
-        strPrint = std::string("error: ") + e.what();
+    }
+    catch (std::exception& e) {
+        strPrint = string("error: ") + e.what();
         nRet = 87;
-    } catch (...)
-    {
+    }
+    catch (...) {
         PrintException(NULL, "CommandLineRPC()");
     }
 
