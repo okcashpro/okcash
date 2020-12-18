@@ -1,8 +1,9 @@
+#include <iostream>
 #include <boost/test/unit_test.hpp>
 
 #include <boost/atomic.hpp>
 
-BOOST_AUTO_TEST_SUITE(atomic_tests)
+BOOST_AUTO_TEST_SUITE(basic_tests)
 
 BOOST_AUTO_TEST_CASE(is_lock_free)
 {

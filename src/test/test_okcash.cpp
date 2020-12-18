@@ -8,7 +8,7 @@
 #include "wallet.h"
 
 
-CWallet* pwalletMain;
+CWallet *pwalletMain;
 CClientUIInterface uiInterface;
 
 extern bool fPrintToConsole;
@@ -18,16 +18,26 @@ boost::filesystem::path pathTemp;
 
 struct TestingSetup {
     TestingSetup() {
-        fPrintToDebugLog = false; // don't want to write to debug.log file
-        noui_connect();
-        bitdb.MakeMock();
-        pathTemp = GetTempPath() / strprintf("test_bitcoin_%lu_%i", (unsigned long)GetTime(), (int)(GetRand(100000)));
+        //fPrintToDebugLog = false; // don't want to write to debug.log file
+        
+        //pathTemp = GetTempPath() / strprintf("test_okcash_%lu_%i", (unsigned long)GetTime(), (int)(GetRand(100000)));
+        pathTemp = GetTempPath() / "test_okcash";
+        //printf("pathTemp %s\n", pathTemp.string().c_str());
         boost::filesystem::create_directories(pathTemp);
         mapArgs["-datadir"] = pathTemp.string();
+        
+        fDebug = true;
+        fDebugSmsg = true;
+        fDebugChain = true;
+        fDebugRingSig = true;
+        fDebugPoS = true;
+        
+        noui_connect();
+        bitdb.MakeMock();
+        
         LoadBlockIndex(true);
-        bool fFirstRun;
         pwalletMain = new CWallet("walletUT.dat");
-        pwalletMain->LoadWallet(fFirstRun);
+        pwalletMain->LoadWallet();
         RegisterWallet(pwalletMain);
     }
     ~TestingSetup()

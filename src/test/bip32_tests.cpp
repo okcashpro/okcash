@@ -81,7 +81,7 @@ void RunTest(const TestVector &test) {
     CExtKey key;
     CExtPubKey pubkey;
     key.SetMaster(&seed[0], seed.size());
-    pubkey = key.Neuter();
+    pubkey = key.Neutered();
     BOOST_FOREACH(const TestDerivation &derive, test.vDerive) {
         unsigned char data[74];
         key.Encode(data);
@@ -97,7 +97,7 @@ void RunTest(const TestVector &test) {
         // Derive new keys
         CExtKey keyNew;
         BOOST_CHECK(key.Derive(keyNew, derive.nChild));
-        CExtPubKey pubkeyNew = keyNew.Neuter();
+        CExtPubKey pubkeyNew = keyNew.Neutered();
         if (!(derive.nChild & 0x80000000)) {
             // Compare with public derivation
             CExtPubKey pubkeyNew2;

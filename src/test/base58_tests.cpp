@@ -1,10 +1,21 @@
-#include <boost/test/unit_test.hpp>
-#include "json/json_spirit_reader_template.h"
-#include "json/json_spirit_writer_template.h"
-#include "json/json_spirit_utils.h"
+// Copyright (c) 2011-2014 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "base58.h"
+
+#include "key.h"
+#include "script.h"
+#include "uint256.h"
 #include "util.h"
+#include "state.h"
+#include "chainparams.h"
+
+#include <boost/foreach.hpp>
+#include <boost/test/unit_test.hpp>
+#include "json/json_spirit_reader_template.h"
+#include "json/json_spirit_utils.h"
+#include "json/json_spirit_writer_template.h"
 
 using namespace json_spirit;
 extern Array read_json(const std::string& filename);
@@ -76,6 +87,10 @@ public:
     {
         return (exp_addrType == "stealthAddress");
     }
+    bool operator()(const CExtKeyPair &ek) const
+    {
+        return (exp_addrType == "bip32Address");
+    }
     bool operator()(const CNoDestination &no) const
     {
         return (exp_addrType == "none");
@@ -130,6 +145,10 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
         bool isPrivkey = find_value(metadata, "isPrivkey").get_bool();
         bool isTestnet = find_value(metadata, "isTestnet").get_bool();
         fTestNet = isTestnet; // Override testnet flag
+        if (isTestnet)
+            SelectParams(CChainParams::TESTNET);
+        else
+            SelectParams(CChainParams::MAIN);
         if(isPrivkey)
         {
             bool isCompressed = find_value(metadata, "isCompressed").get_bool();
@@ -137,9 +156,8 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
             // Note: CBitcoinSecret::SetString tests isValid, whereas CBitcoinAddress does not!
             BOOST_CHECK_MESSAGE(secret.SetString(exp_base58string), "!SetString:"+ strTest);
             BOOST_CHECK_MESSAGE(secret.IsValid(), "!IsValid:" + strTest);
-            bool fCompressedOut = false;
-            CSecret privkey = secret.GetSecret(fCompressedOut);
-            BOOST_CHECK_MESSAGE(fCompressedOut == isCompressed, "compressed mismatch:" + strTest);
+            CKey privkey = secret.GetKey();
+            BOOST_CHECK_MESSAGE(privkey.IsCompressed() == isCompressed, "compressed mismatch:" + strTest);
             BOOST_CHECK_MESSAGE(privkey.size() == exp_payload.size() && std::equal(privkey.begin(), privkey.end(), exp_payload.begin()), "key mismatch:" + strTest);
 
             // Private key must be invalid public key
@@ -163,6 +181,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
     }
     // Restore global state
     fTestNet = fTestNet_stored;
+    SelectParams(CChainParams::MAIN);
 }
 
 // Goal: check that generated keys match test vectors
@@ -188,11 +207,18 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
         bool isPrivkey = find_value(metadata, "isPrivkey").get_bool();
         bool isTestnet = find_value(metadata, "isTestnet").get_bool();
         fTestNet = isTestnet; // Override testnet flag
+        if (isTestnet)
+            SelectParams(CChainParams::TESTNET);
+        else
+            SelectParams(CChainParams::MAIN);
         if(isPrivkey)
         {
             bool isCompressed = find_value(metadata, "isCompressed").get_bool();
+            CKey key;
+            key.Set(exp_payload.begin(), exp_payload.end(), isCompressed);
+            assert(key.IsValid());
             CBitcoinSecret secret;
-            secret.SetSecret(CSecret(exp_payload.begin(), exp_payload.end()), isCompressed);
+            secret.SetKey(key);
             BOOST_CHECK_MESSAGE(secret.ToString() == exp_base58string, "result mismatch: " + strTest);
         }
         else
@@ -229,6 +255,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
 
     // Restore global state
     fTestNet = fTestNet_stored;
+    SelectParams(CChainParams::MAIN);
 }
 
 // Goal: check that base58 parsing code is robust against a variety of corrupted data
@@ -247,7 +274,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_invalid)
         {
             BOOST_ERROR("Bad test: " << strTest);
             continue;
-        }
+        };
         std::string exp_base58string = test[0].get_str();
 
         // must be invalid as public and as private key
