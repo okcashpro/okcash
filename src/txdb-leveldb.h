@@ -18,6 +18,25 @@
 
 #include "ringsig.h"
 
+/*
+prefixes
+    ao
+    ki
+    version
+    tx
+    bidx
+    bhdx
+    hashBestChain
+    hashBestHeaderChain
+    bnBestInvalidTrust
+    hashSyncCheckpoint
+    strCheckpointPubKey
+
+
+    old:
+        blockindex
+*/
+
 // Class that provides access to a LevelDB. Note that this class is frequently
 // instantiated on the stack and then destroyed again, so instantiation has to
 // be very cheap. Unfortunately that means, a CTxDB instance is actually just a
@@ -80,7 +99,7 @@ protected:
                 return false;
             }
         };
-        
+
         if (readFromDb)
         {
             leveldb::Status status = pdb->Get(leveldb::ReadOptions(),
@@ -124,14 +143,14 @@ protected:
             activeBatch->Put(ssKey.str(), ssValue.str());
             return true;
         };
-        
+
         leveldb::Status status = pdb->Put(leveldb::WriteOptions(), ssKey.str(), ssValue.str());
         if (!status.ok())
         {
             LogPrintf("LevelDB write failure: %s\n", status.ToString().c_str());
             return false;
         };
-        
+
         return true;
     }
 
@@ -151,7 +170,7 @@ protected:
             activeBatch->Delete(ssKey.str());
             return true;
         };
-        
+
         leveldb::Status status = pdb->Delete(leveldb::WriteOptions(), ssKey.str());
         return (status.ok() || status.IsNotFound());
     }
@@ -187,7 +206,7 @@ public:
         activeBatch = NULL;
         return true;
     }
-    
+
     leveldb::DB* GetInstance()
     {
         return pdb;
@@ -203,20 +222,21 @@ public:
     {
         return Write(std::string("version"), nVersion);
     }
-    
-    
+
+
     int CheckVersion();
     int RecreateDB();
-    int MigrateFrom70509();
-    
+
     bool WriteKeyImage(ec_point& keyImage, CKeyImageSpent& keyImageSpent);
     bool ReadKeyImage(ec_point& keyImage, CKeyImageSpent& keyImageSpent);
     bool EraseKeyImage(ec_point& keyImage);
-    
+
     bool WriteAnonOutput(CPubKey& pkCoin, CAnonOutput& ao);
     bool ReadAnonOutput(CPubKey& pkCoin, CAnonOutput& ao);
     bool EraseAnonOutput(CPubKey& pkCoin);
-    
+
+    bool EraseRange(const std::string &sPrefix, uint32_t &nAffected);
+
     bool ReadTxIndex(uint256 hash, CTxIndex& txindex);
     bool UpdateTxIndex(uint256 hash, const CTxIndex& txindex);
     bool AddTxIndex(const CTransaction& tx, const CDiskTxPos& pos, int nHeight);
