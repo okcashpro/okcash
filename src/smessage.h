@@ -1,6 +1,7 @@
-// Copyright (c) 2014 The Okcash Developers
+// Copyright (c) 2014-2022 The Okcash developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef SEC_MESSAGE_H
 #define SEC_MESSAGE_H
 
@@ -12,29 +13,26 @@
 #include "wallet.h"
 #include "lz4/lz4.h"
 
+const unsigned int SMSG_HDR_LEN        = 104;               // length of unencrypted header, 4 + 2 + 1 + 8 + 16 + 33 + 32 + 4 +4
+const unsigned int SMSG_PL_HDR_LEN     = 1+20+65+4;         // length of encrypted header in payload
 
-const unsigned int SMSG_HDR_LEN         = 104;               // length of unencrypted header, 4 + 2 + 1 + 8 + 16 + 33 + 32 + 4 +4
-const unsigned int SMSG_PL_HDR_LEN      = 1+20+65+4;         // length of encrypted header in payload
+const unsigned int SMSG_BUCKET_LEN     = 60 * 10;           // in seconds
+const unsigned int SMSG_RETENTION      = 60 * 60 * 48;      // in seconds
+const unsigned int SMSG_SEND_DELAY     = 2;                 // in seconds, SecureMsgSendData will delay this long between firing
+const unsigned int SMSG_THREAD_DELAY   = 30;
+const unsigned int SMSG_THREAD_LOG_GAP = 6;
 
-const unsigned int SMSG_BUCKET_LEN      = 60 * 10;           // in seconds
-const unsigned int SMSG_RETENTION       = 60 * 60 * 48;      // in seconds
-const unsigned int SMSG_SEND_DELAY      = 2;                 // in seconds, SecureMsgSendData will delay this long between firing
-const unsigned int SMSG_THREAD_DELAY    = 20;
-
-const unsigned int SMSG_TIME_LEEWAY     = 60;
-const unsigned int SMSG_TIME_IGNORE     = 90;                // seconds that a peer is ignored for if they fail to deliver messages for a smsgWant
+const unsigned int SMSG_TIME_LEEWAY    = 60;
+const unsigned int SMSG_TIME_IGNORE    = 90;                // seconds that a peer is ignored for if they fail to deliver messages for a smsgWant
 
 
-const unsigned int SMSG_MAX_MSG_BYTES   = 4096;              // the user input part
+const unsigned int SMSG_MAX_MSG_BYTES  = 4096;              // the user input part
+const unsigned int SMSG_MAX_AMSG_BYTES = 512;               // the user input part (ANON)
 
 // max size of payload worst case compression
 const unsigned int SMSG_MAX_MSG_WORST = LZ4_COMPRESSBOUND(SMSG_MAX_MSG_BYTES+SMSG_PL_HDR_LEN);
 
-
-
 #define SMSG_MASK_UNREAD            (1 << 0)
-
-
 
 extern bool fSecMsgEnabled;
 
@@ -49,7 +47,6 @@ extern boost::signals2::signal<void (SecMsgStored& outboxHdr)> NotifySecMsgOutbo
 // Wallet Unlocked, called after all messages received while locked have been processed.
 extern boost::signals2::signal<void ()> NotifySecMsgWalletUnlocked;
 
-
 class SecMsgBucket;
 class SecMsgAddress;
 class SecMsgOptions;
@@ -61,7 +58,6 @@ extern SecMsgOptions                    smsgOptions;
 extern CCriticalSection cs_smsg;            // all except inbox and outbox
 extern CCriticalSection cs_smsgDB;
 
-
 #pragma pack(push, 1)
 class SecureMessage
 {
@@ -70,6 +66,7 @@ public:
     {
         nPayload = 0;
         pPayload = NULL;
+        paid = false;
     };
 
     ~SecureMessage()
@@ -79,20 +76,20 @@ public:
         pPayload = NULL;
     };
 
-    uint8_t   hash[4];
-    uint8_t   version[2];
-    uint8_t   flags;
-    int64_t   timestamp;
-    uint8_t   iv[16];
-    uint8_t   cpkR[33];
-    uint8_t   mac[32];
-    uint8_t   nonse[4];
-    uint32_t  nPayload;
-    uint8_t*  pPayload;
+    uint8_t  hash[4];
+    uint8_t  version[2];
+    uint8_t  flags;
+    int64_t  timestamp;
+    uint8_t  iv[16];
+    uint8_t  cpkR[33];
+    uint8_t  mac[32];
+    uint8_t  nonce[4];
+    uint32_t nPayload;
+    uint8_t* pPayload;
+    bool     paid;
 
 };
 #pragma pack(pop)
-
 
 class MessageData
 {
@@ -103,7 +100,6 @@ public:
     std::string           sFromAddress;
     std::vector<uint8_t>  vchMessage;         // null terminated plaintext
 };
-
 
 class SecMsgToken
 {
@@ -131,12 +127,10 @@ public:
         return timestamp < y.timestamp;
     }
 
-    int64_t               timestamp;    // doesn't need to be full 64 bytes?
-    uint8_t               sample[8];    // first 8 bytes of payload - a hash
-    int64_t               offset;       // offset
-
+    int64_t timestamp;    // doesn't need to be full 64 bytes?
+    uint8_t sample[8];    // first 8 bytes of payload - a hash
+    int64_t offset;       // offset
 };
-
 
 class SecMsgBucket
 {
@@ -152,14 +146,13 @@ public:
 
     void hashBucket();
 
-    int64_t                     timeChanged;
-    uint32_t                    hash;           // token set should get ordered the same on each node
-    uint32_t                    nLockCount;     // set when smsgWant first sent, unset at end of smsgMsg, ticks down in ThreadSecureMsg()
-    NodeId                      nLockPeerId;    // id of peer that bucket is locked for
-    std::set<SecMsgToken>       setTokens;
+    int64_t               timeChanged;
+    uint32_t              hash;           // token set should get ordered the same on each node
+    uint32_t              nLockCount;     // set when smsgWant first sent, unset at end of smsgMsg, ticks down in ThreadSecureMsg()
+    NodeId                nLockPeerId;    // id of peer that bucket is locked for
+    std::set<SecMsgToken> setTokens;
 
 };
-
 
 // -- get at the data
 class CBitcoinAddress_B : public CBitcoinAddress
@@ -183,21 +176,20 @@ public:
     }
 };
 
-
 class SecMsgAddress
 {
 public:
     SecMsgAddress() {};
     SecMsgAddress(std::string sAddr, bool receiveOn, bool receiveAnon)
     {
-        sAddress            = sAddr;
-        fReceiveEnabled     = receiveOn;
-        fReceiveAnon        = receiveAnon;
+        sAddress        = sAddr;
+        fReceiveEnabled = receiveOn;
+        fReceiveAnon    = receiveAnon;
     };
 
-    std::string     sAddress;
-    bool            fReceiveEnabled;
-    bool            fReceiveAnon;
+    std::string sAddress;
+    bool        fReceiveEnabled;
+    bool        fReceiveAnon;
 
     IMPLEMENT_SERIALIZE
     (
@@ -207,6 +199,7 @@ public:
     );
 };
 
+// Secure Message Options
 class SecMsgOptions
 {
 public:
@@ -215,13 +208,15 @@ public:
         // -- default options
         fNewAddressRecv = true;
         fNewAddressAnon = true;
+        fScanIncoming   = true;
     }
 
     bool fNewAddressRecv;
     bool fNewAddressAnon;
+    bool fScanIncoming;
 };
 
-
+// Secure Message Crypter
 class SecMsgCrypter
 {
 private:
@@ -253,20 +248,20 @@ public:
 
     bool SetKey(const std::vector<uint8_t>& vchNewKey, uint8_t* chNewIV);
     bool SetKey(const uint8_t* chNewKey, uint8_t* chNewIV);
-    bool Encrypt(uint8_t* chPlaintext, uint32_t nPlain, std::vector<uint8_t> &vchCiphertext);
+    bool Encrypt(uint8_t* chPlaintext,  uint32_t nPlain,  std::vector<uint8_t> &vchCiphertext);
     bool Decrypt(uint8_t* chCiphertext, uint32_t nCipher, std::vector<uint8_t>& vchPlaintext);
 };
 
-
+// Secure Message storage
 class SecMsgStored
 {
 public:
-    int64_t                   timeReceived;
-    char                      status;         // read etc
-    uint16_t                  folderId;
-    std::string               sAddrTo;        // when in owned addr, when sent remote addr
-    std::string               sAddrOutbox;    // owned address this copy was encrypted with
-    std::vector<uint8_t>      vchMessage;     // message header + encryped payload
+    int64_t              timeReceived;
+    char                 status;         // read etc
+    uint16_t             folderId;
+    std::string          sAddrTo;        // when in owned addr, when sent remote addr
+    std::string          sAddrOutbox;    // owned address this copy was encrypted with
+    std::vector<uint8_t> vchMessage;     // message header + encryped payload
 
     IMPLEMENT_SERIALIZE
     (
@@ -289,8 +284,7 @@ public:
 
     ~SecMsgDB()
     {
-        // -- deletes only data scoped to this TxDB object.
-
+        // -- deletes only data scoped to this SecMsgDB object.
         if (activeBatch)
             delete activeBatch;
     };
@@ -319,7 +313,6 @@ public:
 
 };
 
-
 int SecureMsgBuildBucketSet();
 int SecureMsgAddWalletAddresses();
 
@@ -335,12 +328,10 @@ bool SecureMsgDisable();
 bool SecureMsgReceiveData(CNode* pfrom, std::string strCommand, CDataStream& vRecv);
 bool SecureMsgSendData(CNode* pto, bool fSendTrickle);
 
-
 bool SecureMsgScanBlock(CBlock& block);
 bool ScanChainForPublicKeys(CBlockIndex* pindexStart);
 bool SecureMsgScanBlockChain();
 bool SecureMsgScanBuckets();
-
 
 int SecureMsgWalletUnlocked();
 int SecureMsgWalletKeyChanged(std::string sAddress, std::string sLabel, ChangeType mode);
@@ -361,19 +352,15 @@ int SecureMsgStoreUnscanned(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPaylo
 int SecureMsgStore(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload, bool fUpdateBucket);
 int SecureMsgStore(SecureMessage& smsg, bool fUpdateBucket);
 
-
-
-int SecureMsgSend(std::string& addressFrom, std::string& addressTo, std::string& message, std::string& sError);
+int SecureMsgSend(std::string &addressFrom, std::string &addressTo, std::string &message, std::string &sError);
 
 int SecureMsgValidate(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload);
-int SecureMsgSetHash(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload);
+int SecureMsgSetHash (uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload);
 
-int SecureMsgEncrypt(SecureMessage& smsg, std::string& addressFrom, std::string& addressTo, std::string& message);
+int SecureMsgEncrypt(SecureMessage &smsg, const std::string &addressFrom, const std::string &addressTo, const std::string &message);
 
-int SecureMsgDecrypt(bool fTestOnly, std::string& address, uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload, MessageData& msg);
-int SecureMsgDecrypt(bool fTestOnly, std::string& address, SecureMessage& smsg, MessageData& msg);
-
-
+int SecureMsgDecrypt(bool fTestOnly, std::string &address, uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload, MessageData &msg);
+int SecureMsgDecrypt(bool fTestOnly, std::string &address, SecureMessage &smsg, MessageData &msg);
 
 #endif // SEC_MESSAGE_H
 
