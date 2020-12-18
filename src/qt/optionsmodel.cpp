@@ -5,6 +5,7 @@
 #include "init.h"
 #include "walletdb.h"
 #include "guiutil.h"
+#include "ringsig.h"
 
 OptionsModel::OptionsModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -16,7 +17,7 @@ bool static ApplyProxySettings()
 {
     QSettings settings;
     CService addrProxy(settings.value("addrProxy", "127.0.0.1:9050").toString().toStdString());
-    
+
     if (!settings.value("fUseProxy", false).toBool()) {
         addrProxy = CService();
         return false;
@@ -47,9 +48,9 @@ void OptionsModel::Init()
     notifications = settings.value("notifications", "*").toStringList();
     visibleTransactions = settings.value("visibleTransactions", "*").toStringList();
     fAutoRingSize = settings.value("fAutoRingSize", false).toBool();
-    fAutoRedeemOKCash = settings.value("fAutoRedeemOKCash", false).toBool();
-    nMinRingSize = settings.value("nMinRingSize", 3).toInt();
-    nMaxRingSize = settings.value("nMaxRingSize", 200).toInt();
+    fAutoRedeemOKprivate = settings.value("fAutoRedeemOKprivate", false).toBool();
+    nMinRingSize = settings.value("nMinRingSize", MIN_RING_SIZE).toInt();
+    nMaxRingSize = settings.value("nMaxRingSize", MAX_RING_SIZE).toInt();
 
     // These are shared with core Bitcoin; we want
     // command-line options to override the GUI settings:
@@ -131,8 +132,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return nRowsPerPage;
         case AutoRingSize:
             return fAutoRingSize;
-        case AutoRedeemOKCash:
-            return fAutoRedeemOKCash;
+        case AutoRedeemOKprivate:
+            return fAutoRedeemOKprivate;
         case MinRingSize:
             return nMinRingSize;
         case MaxRingSize:
@@ -174,7 +175,7 @@ QString OptionsModel::optionIDName(int row)
     case ThinFullIndex: return "ThinFullIndex";
     case ThinIndexWindow: return "ThinIndexWindow";
     case AutoRingSize: return "AutoRingSize";
-    case AutoRedeemOKCash: return "AutoRedeemOKCash";
+    case AutoRedeemOKprivate: return "AutoRedeemOKprivate";
     case MinRingSize: return "MinRingSize";
     case MaxRingSize: return "MaxRingSize";
     case MapPortUPnP: return "MapPortUPnP";
@@ -304,9 +305,9 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             settings.setValue("fAutoRingSize", fAutoRingSize);
             }
             break;
-        case AutoRedeemOKCash: {
-            fAutoRedeemOKCash = value.toBool();
-            settings.setValue("fAutoRedeemOKCash", fAutoRedeemOKCash);
+        case AutoRedeemOKprivate: {
+            fAutoRedeemOKprivate = value.toBool();
+            settings.setValue("fAutoRedeemOKprivate", fAutoRedeemOKprivate);
             }
             break;
         case MinRingSize: {
@@ -390,6 +391,6 @@ int OptionsModel::getRowsPerPage() { return nRowsPerPage; }
 QStringList OptionsModel::getNotifications() { return notifications; }
 QStringList OptionsModel::getVisibleTransactions() { return visibleTransactions; }
 bool OptionsModel::getAutoRingSize() { return fAutoRingSize; }
-bool OptionsModel::getAutoRedeemOKCash() { return fAutoRedeemOKCash; }
+bool OptionsModel::getAutoRedeemOKprivate() { return fAutoRedeemOKprivate; }
 int OptionsModel::getMinRingSize() { return nMinRingSize; }
 int OptionsModel::getMaxRingSize() { return nMaxRingSize; }
