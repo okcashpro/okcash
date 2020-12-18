@@ -66,7 +66,7 @@ public:
         InputTypeError,
         SCR_NeedFullMode,
         SCR_StealthAddressFail,
-        SCR_AmountWithFeeExceedsOKCashBalance,
+        SCR_AmountWithFeeExceedsOKprivateBalance,
         SCR_Error,
         SCR_ErrorWithMsg,
         Aborted
@@ -84,7 +84,7 @@ public:
     TransactionTableModel *getTransactionTableModel();
 
     qint64 getBalance() const;
-    qint64 getOKCashBalance() const;
+    qint64 getOKprivateBalance() const;
     qint64 getStake() const;
     qint64 getUnconfirmedBalance() const;
     qint64 getImmatureBalance() const;
@@ -163,13 +163,14 @@ private:
 
     // Cache some values to be able to detect changes
     qint64 cachedBalance;
-    qint64 cachedOKCashBal;
+    qint64 cachedOKprivateBal;
     qint64 cachedStake;
     qint64 cachedUnconfirmedBalance;
     qint64 cachedImmatureBalance;
     qint64 cachedNumTransactions;
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
+    bool fForceCheckBalanceChanged;
 
     QTimer *pollTimer;
 
@@ -184,13 +185,13 @@ public slots:
     /* New transaction, or transaction changed status */
     void updateTransaction(const QString &hash, int status);
     /* New, updated or removed address book entry */
-    void updateAddressBook(const QString &address, const QString &label, bool isMine, int status);
+    void updateAddressBook(const QString &address, const QString &label, bool isMine, int status, bool fManual);
     /* Current, immature or unconfirmed balance might have changed - emit 'balanceChanged' if so */
     void pollBalanceChanged();
 
 signals:
     // Signal that balance in wallet changed
-    void balanceChanged(qint64 balance, qint64 okcashBal, qint64 stake, qint64 unconfirmedBalance, qint64 immatureBalance);
+    void balanceChanged(qint64 balance, qint64 okprivateBal, qint64 stake, qint64 unconfirmedBalance, qint64 immatureBalance);
 
     // Number of transactions in wallet changed
     void numTransactionsChanged(int count);
