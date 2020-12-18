@@ -20,22 +20,22 @@ QString TransactionRecord::getTypeLabel(const int &type)
     switch(type)
     {
     case RecvWithAddress:
-        return OKCashGUI::tr("Received with");
+        return OkcashGUI::tr("Received with");
     case RecvFromOther:
-        return OKCashGUI::tr("Received from");
+        return OkcashGUI::tr("Received from");
     case SendToAddress:
     case SendToOther:
-        return OKCashGUI::tr("Sent to");
+        return OkcashGUI::tr("Sent to");
     case SendToSelf:
-        return OKCashGUI::tr("Payment to yourself");
+        return OkcashGUI::tr("Payment to yourself");
     case Generated:
-        return OKCashGUI::tr("PoS Mined (Staked)");/*
-    case RecvOKCash:
-        return OKCashGUI::tr("Received okcash");
-    case SendOKCash:
-        return OKCashGUI::tr("Sent okcash");*/
+        return OkcashGUI::tr("Staked [LTSS]");
+//    case RecvOKprivate:
+//        return OkcashGUI::tr("Received OKprivate");
+//    case SendOKprivate:
+//        return OkcashGUI::tr("Sent OKprivate");
     case Other:
-        return OKCashGUI::tr("Other");
+        return OkcashGUI::tr("Other");
     default:
         return "";
     }
@@ -49,11 +49,11 @@ QString TransactionRecord::getTypeShort(const int &type)
         return "mined";
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
-    case TransactionRecord::RecvOKCash:
+    case TransactionRecord::RecvOKprivate:
         return "input";
     case TransactionRecord::SendToAddress:
     case TransactionRecord::SendToOther:
-    case TransactionRecord::SendOKCash:
+    case TransactionRecord::SendOKprivate:
         return "output";
     default:
         return "inout";
@@ -68,9 +68,9 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
     QList<TransactionRecord> parts;
     int64_t nTime = wtx.GetTxTime();
 
-    int64_t nCredOK, nCredOKCash;
-    wtx.GetCredit(nCredOK, nCredOKCash, true);
-    int64_t nCredit = nCredOK + nCredOKCash;
+    int64_t nCredOK, nCredOKprivate;
+    wtx.GetCredit(nCredOK, nCredOKprivate, true);
+    int64_t nCredit = nCredOK + nCredOKprivate;
     int64_t nDebit = wtx.GetDebit();
     int64_t nNet = nCredit - nDebit;
     uint256 hash = wtx.GetHash(), hashPrev = 0;
@@ -80,10 +80,10 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
 
     if (wtx.nVersion == ANON_TXN_VERSION)
     {
-        if (nNet > 0 && nCredOKCash > 0)
+        if (nNet > 0 && nCredOKprivate > 0)
         {
             // -- credit
-            TransactionRecord sub(hash, nTime, TransactionRecord::RecvOKCash, "", "", nNet, 0);
+            TransactionRecord sub(hash, nTime, TransactionRecord::RecvOKprivate, "", "", nNet, 0);
 
             for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++)
             {
@@ -103,7 +103,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
         if (nNet <= 0)
         {
             // -- debit
-            TransactionRecord sub(hash, nTime, TransactionRecord::SendOKCash, "", "", nNet, 0);
+            TransactionRecord sub(hash, nTime, TransactionRecord::SendOKprivate, "", "", nNet, 0);
 
             for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++)
             {
@@ -148,7 +148,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
 
                     sub.credit = txout.nValue;
 
-                    sub.type = TransactionRecord::RecvOKCash;
+                    sub.type = TransactionRecord::RecvOKprivate;
                     sub.address = CBitcoinAddress(ckidD).ToString();
                     //sub.address = wallet->mapAddressBook[ckidD]
 
@@ -169,7 +169,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 CTxDestination address;
 
                 sub.credit = txout.nValue;
-                if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*wallet, address))
+                if (ExtractDestination(txout.scriptPubKey, address) && IsDestMine(*wallet, address))
                 {
                     // Received by Bitcoin Address
                     sub.type = TransactionRecord::RecvWithAddress;
@@ -223,7 +223,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 if (!walletdb.ReadOwnedAnonOutput(vchImage, oao))
                 {
                     fAllFromMe = false;
-                    break; // display as send/recv okcash
+                    break; // display as send/recv OKprivate
                 };
                 continue;
             };
@@ -241,7 +241,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 && txout.IsAnonOutput())
             {
                 fAllToMe = false;
-                break; // display as send/recv okcash
+                break; // display as send/recv OKprivate
             }
             opcodetype firstOpCode;
             CScript::const_iterator pc = txout.scriptPubKey.begin();
@@ -298,7 +298,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                     sub.idx = parts.size(); // sequence number
                     sub.credit = txout.nValue;
 
-                    sub.type = TransactionRecord::SendOKCash;
+                    sub.type = TransactionRecord::SendOKprivate;
                     sub.address = CBitcoinAddress(ckidD).ToString();
 
                 } else
