@@ -6,6 +6,7 @@
 #define COIN_STATE_H
 
 #include <string>
+#include <limits>
 #include "sync.h"
 
 enum eNodeType
@@ -39,11 +40,11 @@ enum eBlockFlags
 
 enum
 {
-    NODE_NETWORK        = (1 << 0),
-    THIN_SUPPORT        = (1 << 1),
-    THIN_STAKE          = (1 << 2),  // deprecated
-    THIN_STEALTH        = (1 << 3),
-    SMSG_RELAY          = (1 << 4),
+    NODE_NETWORK = (1 << 0),
+    THIN_SUPPORT = (1 << 1),
+    THIN_STAKE   = (1 << 2),  // deprecated
+    THIN_STEALTH = (1 << 3),
+    SMSG_RELAY   = (1 << 4),
 };
 
 const int64_t GENESIS_BLOCK_TIME = 1416737561;
@@ -51,10 +52,12 @@ const int64_t GENESIS_BLOCK_TIME = 1416737561;
 static const int64_t COIN = 100000000;
 static const int64_t CENT = 1000000;
 
+/** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
 static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_TX_FEE_ANON = 1000000;
+/** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
-static const int64_t MAX_MONEY = 105000000 * COIN;        //  105 million Okcash Total
+
 static const int64_t COIN_YEAR_REWARD = 69 * CENT;       //  69% 1st Year
 static const int64_t SCOIN_YEAR_REWARD = 20 * CENT;     //  20% 1st halving
 static const int64_t CCOIN_YEAR_REWARD = 10 * CENT;     //  10% 2nd halving
@@ -72,6 +75,7 @@ static const int64_t BCOIN_YEAR_REWARD = 1 * CENT;    //   1% 13th halving
 static const int64_t GCOIN_YEAR_REWARD = 0.69 * CENT;  //   0.69% 14th halving
 static const int64_t FCOIN_YEAR_REWARD = 0.33 * CENT;  //   0.33% 15th halving and onwards
 
+static const int64_t MBLK_RECEIVE_TIMEOUT = 60; // seconds
 
 extern int nNodeMode;
 extern int nNodeState;
@@ -115,6 +119,8 @@ extern bool fThinFullIndex;
 extern bool fReindexing;
 extern bool fHaveGUI;
 extern volatile bool fIsStaking;
+extern bool fMakeExtKeyInitials;
+extern volatile bool fPassGuiAddresses;
 
 extern bool fConfChange;
 extern bool fEnforceCanonical;
@@ -127,7 +133,12 @@ extern unsigned int nBlockMinSize;
 extern int64_t nMinTxFee;
 
 extern unsigned int nStakeSplitAge;
+extern int nStakeMinConfirmations;
+extern int64_t nStakeSplitThreshold;
 extern int64_t nStakeCombineThreshold;
+
+extern uint32_t nExtKeyLookAhead;
+extern int64_t nTimeLastMblkRecv;
 
 
 #endif /* COIN_STATE_H */
