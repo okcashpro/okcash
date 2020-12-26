@@ -1,7 +1,7 @@
 
 <img alt="Okcash" src="https://i.imgur.com/9N1ZIVK.jpg">
 
-[![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg)](https://github.com/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest)
+[![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) [![Okcash lines of code](https://img.shields.io/tokei/lines/github/okcashpro/okcash)](https://github.com/okcashpro/okcash) [![Okcash License](https://img.shields.io/github/license/okcashpro/okcash)](https://github.com/okcashpro/okcash/blob/master/COPYING) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg)](https://github.com/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord)](https://discord.gg/okcash)
 # [OK] Okcash
 
 ### Join the OK Bitcoin - Cryptocurrency and Blockchain communications server
