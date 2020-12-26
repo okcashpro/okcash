@@ -1,7 +1,7 @@
 
 <img alt="Okcash" src="https://i.imgur.com/9N1ZIVK.jpg">
 
-[![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg)]()
+[![Build Status](https://travis-ci.org/okcashpro/okcash.svg?branch=master)](https://travis-ci.org/okcashpro/okcash) [![Download OK wallet](https://img.shields.io/badge/downloads-latest%20client-blue.svg)](https://github.com/okcashpro/okcash/releases/latest) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg)](http://explorer.okcash.co) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg)](https://github.com/okcashpro/okcash)
 # [OK] Okcash
 
 ### Join the OK Bitcoin - Cryptocurrency and Blockchain communications server
