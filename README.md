@@ -5,14 +5,12 @@
 
 [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash lines of code](https://img.shields.io/tokei/lines/github/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash top lang](https://img.shields.io/github/languages/top/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash languages](https://img.shields.io/github/languages/count/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) 
 
-[![Okcash last release date](https://img.shields.io/github/release-date/okcashpro/okcash?label=latest%20release&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![Okcash last release name download](https://img.shields.io/github/v/release/okcashpro/okcash?label=release%20download&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/okcash)
+[![Okcash last release date](https://img.shields.io/github/release-date/okcashpro/okcash?label=latest%20release&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![Okcash last release name download](https://img.shields.io/github/v/release/okcashpro/okcash?label=release%20download&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest)
 
 # [OK] Okcash
 
 ### Join the OK Bitcoin - Cryptocurrency and Blockchain communications server
-<a href="https://discord.io/cryptocurrency">
-    <img alt="Logo" src="https://discordapp.com/api/guilds/213747404745211904/widget.png?style=banner2">
-  </a>
+[![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/okcash)
 
 -------------------
 
