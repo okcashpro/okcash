@@ -47,6 +47,7 @@ public:
     quint64 getTotalBytesRecv() const;
     quint64 getTotalBytesSent() const;
 
+    double getVerificationProgress() const;
     QDateTime getLastBlockDate() const;
     QDateTime getLastBlockThinDate() const;
 
