@@ -4,6 +4,7 @@
 #include "peertablemodel.h"
 #include "addresstablemodel.h"
 #include "transactiontablemodel.h"
+#include "checkpoints.h"
 
 #include "alert.h"
 #include "main.h"
@@ -53,6 +54,11 @@ int ClientModel::getNumBlocks() const
 {
     LOCK(cs_main);
     return nBestHeight;
+}
+
+double ClientModel::getVerificationProgress() const
+{
+    return Checkpoints::GuessVerificationProgress(pindexBest);
 }
 
 int ClientModel::getNumBlocksAtStartup()
