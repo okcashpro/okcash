@@ -139,7 +139,7 @@ double GetPoSKernelPS()
             }
 
             pindex = pindex->pprev;
-		}
+        }
     }
 
     double result = 0;
@@ -867,4 +867,37 @@ Value thinforcestate(const Array& params, bool fHelp)
         result.push_back(Pair("result", "Failed."));
 
     return result;
+}
+
+Value getblockchaininfo(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "getblockchaininfo\n"
+            "Returns an object containing various state info regarding block chain processing.\n"
+            "\nResult:\n"
+            "{\n"
+            "  \"chain\": \"xxxx\",        (string) current chain (main, testnet3, regtest)\n"
+            "  \"blocks\": xxxxxx,         (numeric) the current number of blocks processed in the server\n"
+            "  \"bestblockhash\": \"...\", (string) the hash of the currently best block\n"
+            "  \"difficulty\": xxxxxx,     (numeric) the current difficulty\n"
+            "  \"verificationprogress\": xxxx, (numeric) estimate of verification progress [0..1]\n"
+            "  \"chainwork\": \"xxxx\"     (string) total amount of work in active chain, in hexadecimal\n"
+            "}\n"
+            "\nExamples:\n"
+        );
+
+        //setNumBlocks(model->getNumBlocks(), model->getNumBlocksOfPeers());
+        //connect(model, SIGNAL(numBlocksChanged(int,int)), this, SLOT(setNumBlocks(int,int)));
+    Object obj;
+    std::string chain = Params().DataDir();
+    if(chain.empty())
+        chain = "main";
+    obj.push_back(Pair("chain",         chain));
+    obj.push_back(Pair("blocks",        GetNumBlocksOfPeers()));
+    obj.push_back(Pair("bestblockhash", hashBestChain.ToString()));
+    obj.push_back(Pair("difficulty",    (double)GetDifficulty(GetLastBlockIndex(pindexBest, true))));
+    obj.push_back(Pair("verificationprogress", (double)Checkpoints::GuessVerificationProgress(pindexBest)));
+    obj.push_back(Pair("chainwork",     pindexBest->nChainTrust.GetHex()));
+    return obj;
 }
