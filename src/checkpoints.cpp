@@ -24,6 +24,25 @@ namespace Checkpoints
     //    timestamp before)
     // + Contains no strange transactions
     //
+
+    typedef std::map<int, uint256> MapCheckpoints;
+
+
+    //
+    // How many times we expect transactions after the last checkpoint to
+    // be slower. This number is conservative. On multi-core CPUs with
+    // parallel signature checking enabled, this number is way too high.
+    // We prefer a progressbar that's faster at the end than the other
+    // way around, though.
+    static const double fSigcheckVerificationFactor = 15.0;
+
+    struct CCheckpointData {
+        const MapCheckpoints *mapCheckpoints;
+        int64_t nTimeLastCheckpoint;
+        int64_t nTransactionsLastCheckpoint;
+        double fTransactionsPerDay;
+    };
+
     MapCheckpoints mapCheckpoints =
         boost::assign::map_list_of
         ( 0,        uint256("0x0000046309984501e5e724498cddb4aff41a126927355f64b44f1b8bba4f447e") ) // Params().HashGenesisBlock())
@@ -55,9 +74,17 @@ namespace Checkpoints
         ( 2530000,   uint256("0x13fdac99dee847cab93c16e56cb3ce432c50b0b89988b89e160d7bb7d6666da2") )
         ( 2672672,   uint256("0xe8523e5c85baa3266f4b48e142870f134eaf1002bdbf303df62e6293fbb4756b") )
     ;
+    static const CCheckpointData data = {
+        &mapCheckpoints,
+        1604199328, // * UNIX timestamp of last checkpoint block
+        11011160,   // * total number of transactions between genesis and last checkpoint
+                    //   (the tx=... number in the SetBestChain debug.log lines)
+        5000.0     // * estimated number of transactions per day after checkpoint
+    };
 
     // TestNet has no checkpoints
     MapCheckpoints mapCheckpointsTestnet;
+
 
     bool CheckHardened(int nHeight, const uint256& hash)
     {
@@ -71,11 +98,28 @@ namespace Checkpoints
 
     int GetTotalBlocksEstimate()
     {
+
         MapCheckpoints& checkpoints = (fTestNet ? mapCheckpointsTestnet : mapCheckpoints);
 
         if (checkpoints.empty())
             return 0;
         return checkpoints.rbegin()->first;
+    }
+
+    // Guess how far we are in the verification process at the given block index
+    double GuessVerificationProgress(CBlockIndex *pindex) {
+
+        //int64_t nNow = time(NULL);
+        //int nEstimBlocks = GetNumBlocksOfPeers();
+        //double nRemainingBlocks = nEstimBlocks - pindex->nHeight;
+
+        if (pindex->nHeight < 0) {
+            return 0.0;
+        } else if (pindex->nHeight > GetNumBlocksOfPeers()) {
+            return 0.99996298;
+        } else {
+            return pindex->nHeight / (GetNumBlocksOfPeers() * 1.0);
+        }
     }
 
     CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex)
@@ -107,7 +151,7 @@ namespace Checkpoints
     }
 
 
-    // Automatically select a suitable sync-checkpoint 
+    // Automatically select a suitable sync-checkpoint
     const CBlockIndex* AutoSelectSyncCheckpoint()
     {
         const CBlockIndex *pindex = pindexBest;
