@@ -6411,7 +6411,7 @@ bool CWallet::TopUpKeyPool(unsigned int nSize)
 
 void CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool)
 {
-    assert(false);
+    // assert(true);
     nIndex = -1;
     keypool.vchPubKey = CPubKey();
     {
@@ -6468,7 +6468,7 @@ void CWallet::KeepKey(int64_t nIndex)
 
 void CWallet::ReturnKey(int64_t nIndex)
 {
-    assert(false); // [rm]
+    // assert(true); // [rm]
 
     // Return to key pool
     {
