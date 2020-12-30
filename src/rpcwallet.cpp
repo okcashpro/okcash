@@ -2954,10 +2954,10 @@ Value getwalletinfo(const Array& params, bool fHelp)
     obj.push_back(Pair("walletversion", pwalletMain->GetVersion()));
     obj.push_back(Pair("balance",       ValueFromAmount(pwalletMain->GetBalance())));
     obj.push_back(Pair("txcount",       (int)pwalletMain->mapWallet.size()));
-    obj.push_back(Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
+    obj.push_back(Pair("keypoololdest", (boost::int64_t)pwalletMain->GetOldestKeyPoolTime()));
     obj.push_back(Pair("keypoolsize",   (int)pwalletMain->GetKeyPoolSize()));
     if (pwalletMain->IsCrypted())
-        obj.push_back(Pair("unlocked_until", (int64_t)nWalletUnlockTime / 1000));
+        obj.push_back(Pair("unlocked_until", (boost::int64_t)nWalletUnlockTime / 1000));
     return obj;
 }
 
