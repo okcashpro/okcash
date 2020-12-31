@@ -546,7 +546,7 @@ Value getblockbynumber(const Array& params, bool fHelp)
             {
                 throw runtime_error("block not in chain index.");
             }
-            // return blockHeaderToJSON(block, pblockindex);
+            //return blockheaderToJSON(block, pblockindex, true);
         } else
         {
             throw runtime_error("hashBestChain not in chain index.");
@@ -565,6 +565,7 @@ Value getblockbynumber(const Array& params, bool fHelp)
     pblockindex = mapBlockIndex[hash];
     block.ReadFromDisk(pblockindex, true);
 
+    return blockToJSON(block, pblockindex, params.size() > 1 ? params[1].get_bool() : false);
 }
 
 Value setbestblockbyheight(const Array& params, bool fHelp)
