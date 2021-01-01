@@ -231,9 +231,9 @@ public:
     bool ReadKeyImage(ec_point& keyImage, CKeyImageSpent& keyImageSpent);
     bool EraseKeyImage(ec_point& keyImage);
 
-    bool WriteAnonOutput(CPubKey& pkCoin, CAnonOutput& ao);
-    bool ReadAnonOutput(CPubKey& pkCoin, CAnonOutput& ao);
-    bool EraseAnonOutput(CPubKey& pkCoin);
+    bool WriteOkxOutput(CPubKey& pkCoin, COkxOutput& ao);
+    bool ReadOkxOutput(CPubKey& pkCoin, COkxOutput& ao);
+    bool EraseOkxOutput(CPubKey& pkCoin);
 
     bool EraseRange(const std::string &sPrefix, uint32_t &nAffected);
 

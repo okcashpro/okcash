@@ -214,17 +214,17 @@ bool CTxDB::EraseKeyImage(ec_point& keyImage)
     return Erase(make_pair(string("ki"), keyImage));
 }
 
-bool CTxDB::WriteAnonOutput(CPubKey& pkCoin, CAnonOutput& ao)
+bool CTxDB::WriteOkxOutput(CPubKey& pkCoin, COkxOutput& ao)
 {
     return Write(make_pair(string("ao"), pkCoin), ao);
 };
 
-bool CTxDB::ReadAnonOutput(CPubKey& pkCoin, CAnonOutput& ao)
+bool CTxDB::ReadOkxOutput(CPubKey& pkCoin, COkxOutput& ao)
 {
     return Read(make_pair(string("ao"), pkCoin), ao);
 };
 
-bool CTxDB::EraseAnonOutput(CPubKey& pkCoin)
+bool CTxDB::EraseOkxOutput(CPubKey& pkCoin)
 {
     return Erase(make_pair(string("ao"), pkCoin));
 };
@@ -460,7 +460,7 @@ bool CTxDB::LoadBlockIndex()
         pindexNew->nHeight           = diskindex.nHeight;
         pindexNew->nMint             = diskindex.nMint;
         pindexNew->nMoneySupply      = diskindex.nMoneySupply;
-        pindexNew->nAnonSupply       = diskindex.nAnonSupply;
+        pindexNew->nOkxSupply       = diskindex.nOkxSupply;
         pindexNew->nFlags            = diskindex.nFlags;
         pindexNew->nStakeModifier    = diskindex.nStakeModifier;
         pindexNew->bnStakeModifierV2 = diskindex.bnStakeModifierV2;

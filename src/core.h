@@ -226,7 +226,7 @@ public:
         return (nValue == 0 && scriptPubKey.empty());
     }
 
-    bool IsAnonOutput() const
+    bool IsOkxOutput() const
     {
         return (scriptPubKey.size() >= MIN_ANON_OUT_SIZE
             && scriptPubKey[0] == OP_RETURN
@@ -268,7 +268,7 @@ public:
 
     CPubKey ExtractAnonPk() const
     {
-        // always use IsAnonOutput to check length
+        // always use IsOkxOutput to check length
         return CPubKey(&scriptPubKey[2+1], EC_COMPRESSED_SIZE);
     };
 };
@@ -301,14 +301,14 @@ public:
     )
 };
 
-class CAnonOutput
+class COkxOutput
 {
 // stored in txdb, key is pubkey
 public:
 
-    CAnonOutput() {};
+    COkxOutput() {};
 
-    CAnonOutput(COutPoint& outpoint_, int64_t nValue_, int nBlockHeight_, uint8_t nCompromised_)
+    COkxOutput(COutPoint& outpoint_, int64_t nValue_, int nBlockHeight_, uint8_t nCompromised_)
     {
         outpoint = outpoint_;
         nValue = nValue_;
@@ -329,11 +329,11 @@ public:
     )
 };
 
-class CAnonOutputCount
-{ // CountAllAnonOutputs
+class COkxOutputCount
+{ // CountAllOkxOutputs
 public:
 
-    CAnonOutputCount()
+    COkxOutputCount()
     {
         nValue = 0;
         nExists = 0;
@@ -343,7 +343,7 @@ public:
         nCompromised = 0;
     }
 
-    CAnonOutputCount(int64_t nValue_, int nExists_, int nSpends_, int nOwned_, int nLeastDepth_, int nCompromised_)
+    COkxOutputCount(int64_t nValue_, int nExists_, int nSpends_, int nOwned_, int nLeastDepth_, int nCompromised_)
     {
         nValue = nValue_;
         nExists = nExists_;

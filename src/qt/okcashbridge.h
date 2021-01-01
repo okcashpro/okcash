@@ -70,7 +70,7 @@ public:
     Q_INVOKABLE void updateCoinControlAmount(qint64 amount);
     Q_INVOKABLE void updateCoinControlLabels(unsigned int &quantity, int64_t &amount, int64_t &fee, int64_t &afterfee, unsigned int &bytes, QString &priority, QString low, int64_t &change);
 
-    Q_INVOKABLE QVariantMap listAnonOutputs();
+    Q_INVOKABLE QVariantMap listOkxOutputs();
 
     Q_INVOKABLE QVariantMap findBlock(QString searchID);
     Q_INVOKABLE QVariantMap listLatestBlocks();

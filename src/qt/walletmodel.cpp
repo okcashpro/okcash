@@ -547,9 +547,9 @@ WalletModel::SendCoinsReturn WalletModel::sendCoinsAnon(const QList<SendCoinsRec
             {
                 // -- out okprivate
                 CScript scriptNarration; // needed to match output id of narr
-                if (!wallet->CreateAnonOutputs(&sxAddrTo, nValue, sNarr, vecSend, scriptNarration))
+                if (!wallet->CreateOkxOutputs(&sxAddrTo, nValue, sNarr, vecSend, scriptNarration))
                 {
-                    LogPrintf("SendCoinsAnon() CreateAnonOutputs failed.\n");
+                    LogPrintf("SendCoinsAnon() CreateOkxOutputs failed.\n");
                     return SCR_Error;
                 };
 

@@ -952,7 +952,7 @@ int SecureMsgBuildBucketSet()
 
 /*
 SecureMsgAddWalletAddresses
-    Enumerates the AddressBook, filters out anon outputs and checks the "real addresses"
+    Enumerates the AddressBook, filters out okx outputs and checks the "real addresses"
     Adds these to the vector smsgAddresses to be used for decryption
 
     Returns 0 on success
@@ -973,7 +973,7 @@ int SecureMsgAddWalletAddresses()
         if (!IsDestMine(*pwalletMain, entry.first))
             continue;
 
-        // -- skip addresses for anon outputs
+        // -- skip addresses for okx outputs
         if (entry.second.compare(0, sAnonPrefix.length(), sAnonPrefix) == 0)
             continue;
 
@@ -2121,7 +2121,7 @@ static bool ScanBlock(CBlock& block, CTxDB& txdb, SecMsgDB& addrpkdb,
             {
                 if (tx.nVersion == ANON_TXN_VERSION
                     && tx.vin[i].IsAnonInput())
-                    continue; // skip anon inputs
+                    continue; // skip okx inputs
 
                 CScript *script = &tx.vin[i].scriptSig;
                 CScript::const_iterator pc = script->begin();
@@ -2676,7 +2676,7 @@ int SecureMsgScanMessage(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload,
                 if (fDebugSmsg)
                     LogPrintf("Decrypted message with %s.\n", addressTo.c_str());
 
-                if (msg.sFromAddress.compare("anon") != 0)
+                if (msg.sFromAddress.compare("okx") != 0)
                     fOwnMessage = true;
                 break;
             };
@@ -3474,7 +3474,7 @@ int SecureMsgEncrypt(SecureMessage &smsg, const std::string &addressFrom, const 
     if (fDebugSmsg)
         LogPrintf("SecureMsgEncrypt(%s, %s, ...)\n", addressFrom.c_str(), addressTo.c_str());
 
-    bool fSendAnonymous = (addressFrom.compare("anon") == 0);
+    bool fSendAnonymous = (addressFrom.compare("okx") == 0);
 
 
     if (message.size() > (fSendAnonymous ? SMSG_MAX_AMSG_BYTES : SMSG_MAX_MSG_BYTES))
@@ -3728,7 +3728,7 @@ int SecureMsgSend(std::string &addressFrom, std::string &addressTo, std::string 
         return 1;
     };
 
-    bool fSendAnonymous = (addressFrom.compare("anon") == 0);
+    bool fSendAnonymous = (addressFrom.compare("okx") == 0);
 
     if (message.size() > (fSendAnonymous ? SMSG_MAX_AMSG_BYTES : SMSG_MAX_MSG_BYTES))
     {
@@ -4072,7 +4072,7 @@ int SecureMsgDecrypt(bool fTestOnly, std::string &address, uint8_t *pHeader, uin
     if (fFromAnonymous)
     {
         // -- Anonymous sender
-        msg.sFromAddress = "anon";
+        msg.sFromAddress = "okx";
     } else
     {
         std::vector<uint8_t> vchUint160;

@@ -266,25 +266,25 @@ public:
     
     bool GetAnonChangeAddress(CStealthAddress& sxAddress);
     bool CreateStealthOutput(CStealthAddress* sxAddress, int64_t nValue, std::string& sNarr, std::vector<std::pair<CScript, int64_t> >& vecSend, std::map<int, std::string>& mapNarr, std::string& sError);
-    bool CreateAnonOutputs(CStealthAddress* sxAddress, int64_t nValue, std::string& sNarr, std::vector<std::pair<CScript, int64_t> >& vecSend, CScript& scriptNarration);
-    int PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRingSize, CWalletTx& wtxNew, int nOutputs, int nSizeOutputs, int& nExpectChangeOuts, std::list<COwnedAnonOutput>& lAvailableCoins, std::vector<COwnedAnonOutput*>& vPickedCoins, std::vector<std::pair<CScript, int64_t> >& vecChange, bool fTest, std::string& sError);
+    bool CreateOkxOutputs(CStealthAddress* sxAddress, int64_t nValue, std::string& sNarr, std::vector<std::pair<CScript, int64_t> >& vecSend, CScript& scriptNarration);
+    int PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRingSize, CWalletTx& wtxNew, int nOutputs, int nSizeOutputs, int& nExpectChangeOuts, std::list<COwnedOkxOutput>& lAvailableCoins, std::vector<COwnedOkxOutput*>& vPickedCoins, std::vector<std::pair<CScript, int64_t> >& vecChange, bool fTest, std::string& sError);
     int GetTxnPreImage(CTransaction& txn, uint256& hash);
     int PickHidingOutputs(int64_t nValue, int nRingSize, CPubKey& pkCoin, int skip, uint8_t* p);
     bool AreOutputsUnique(CWalletTx& wtxNew);
     bool AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::vector<std::pair<CScript, int64_t> >&vecSend, std::vector<std::pair<CScript, int64_t> >&vecChange, CWalletTx& wtxNew, int64_t& nFeeRequired, bool fTestOnly, std::string& sError);
-    bool SendOkToAnon(CStealthAddress& sxAddress, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
-    bool SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
-    bool SendAnonToOk(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
+    bool SendOkToOkx(CStealthAddress& sxAddress, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
+    bool SendOkxToOkx(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
+    bool SendOkxToOk(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
     
-    bool ExpandLockedAnonOutput(CWalletDB *pdb, CKeyID &ckeyId, CLockedAnonOutput &lao, std::set<uint256> &setUpdated);
-    bool ProcessLockedAnonOutputs();
+    bool ExpandLockedOkxOutput(CWalletDB *pdb, CKeyID &ckeyId, CLockedOkxOutput &lao, std::set<uint256> &setUpdated);
+    bool ProcessLockedOkxOutputs();
     
-    bool EstimateAnonFee(int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, std::string& sError);
+    bool EstimateOkxFee(int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, std::string& sError);
     
-    int ListUnspentAnonOutputs(std::list<COwnedAnonOutput>& lUAnonOutputs, bool fMatureOnly);
-    int CountAnonOutputs(std::map<int64_t, int>& mOutputCounts, bool fMatureOnly);
-    int CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, bool fMatureOnly);
-    int CountOwnedAnonOutputs(std::map<int64_t, int>& mOwnedOutputCounts, bool fMatureOnly);
+    int ListUnspentOkxOutputs(std::list<COwnedOkxOutput>& lUOkxOutputs, bool fMatureOnly);
+    int CountOkxOutputs(std::map<int64_t, int>& mOutputCounts, bool fMatureOnly);
+    int CountAllOkxOutputs(std::list<COkxOutputCount>& lOutputCounts, bool fMatureOnly);
+    int CountOwnedOkxOutputs(std::map<int64_t, int>& mOwnedOutputCounts, bool fMatureOnly);
     
     bool EraseAllAnonData();
     
@@ -366,7 +366,7 @@ public:
         BOOST_FOREACH(const CTxOut& txout, tx.vout)
         {
             if (tx.nVersion == ANON_TXN_VERSION
-                && txout.IsAnonOutput())
+                && txout.IsOkxOutput())
             {
                 nCredit += GetOKprivateCredit(txout);
             } else
@@ -384,7 +384,7 @@ public:
         BOOST_FOREACH(const CTxOut& txout, tx.vout)
         {
             if (tx.nVersion == ANON_TXN_VERSION
-                && txout.IsAnonOutput())
+                && txout.IsOkxOutput())
             {
                 nOKprivate += GetOKprivateCredit(txout);
             } else
@@ -899,7 +899,7 @@ public:
             {
                 const CTxOut &txout = vout[i];
                 
-                if (!txout.IsAnonOutput())
+                if (!txout.IsOkxOutput())
                     continue;
                 const CScript &s = txout.scriptPubKey;
                 

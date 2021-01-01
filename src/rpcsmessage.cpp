@@ -157,7 +157,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 3)
         throw std::runtime_error(
-            "smsglocalkeys [whitelist|all|wallet|recv <+/-> <address>|anon <+/-> <address>]\n"
+            "smsglocalkeys [whitelist|all|wallet|recv <+/-> <address>|okx <+/-> <address>]\n"
             "List and manage keys.");
 
     if (!fSecMsgEnabled)
@@ -211,12 +211,12 @@ Value smsglocalkeys(const Array& params, bool fHelp)
             std::string sInfo;
             if (all)
                 sInfo = std::string("Receive ") + (it->fReceiveEnabled ? "on,  " : "off, ");
-            sInfo += std::string("Anon ") + (it->fReceiveAnon ? "on" : "off");
+            sInfo += std::string("Okx ") + (it->fReceiveAnon ? "on" : "off");
             //result.push_back(Pair("key", it->sAddress + " - " + sPublicKey + " " + sInfo + " - " + sLabel));
             objM.push_back(Pair("address", it->sAddress));
             objM.push_back(Pair("publickey",sPublicKey));
             objM.push_back(Pair("receive",(it->fReceiveEnabled ? "1" : "0")));
-            objM.push_back(Pair("anon",(it->fReceiveAnon ? "1" : "0")));
+            objM.push_back(Pair("okx",(it->fReceiveAnon ? "1" : "0")));
             objM.push_back(Pair("label",sLabel));
             keys.push_back(objM);
 
@@ -266,18 +266,18 @@ Value smsglocalkeys(const Array& params, bool fHelp)
 
         std::string sInfo;
         sInfo = std::string("Receive ") + (it->fReceiveEnabled ? "on, " : "off,");
-        sInfo += std::string("Anon ") + (it->fReceiveAnon ? "on" : "off");
+        sInfo += std::string("Okx ") + (it->fReceiveAnon ? "on" : "off");
         result.push_back(Pair("result", "Success."));
         result.push_back(Pair("key", it->sAddress + " " + sInfo));
         return result;
 
     } else
-    if (mode == "anon")
+    if (mode == "okx")
     {
         if (params.size() < 3)
         {
             result.push_back(Pair("result", "Too few parameters."));
-            result.push_back(Pair("expected", "anon <+/-> <address>"));
+            result.push_back(Pair("expected", "okx <+/-> <address>"));
             return result;
         };
 
@@ -313,7 +313,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
 
         std::string sInfo;
         sInfo = std::string("Receive ") + (it->fReceiveEnabled ? "on, " : "off,");
-        sInfo += std::string("Anon ") + (it->fReceiveAnon ? "on" : "off");
+        sInfo += std::string("Okx ") + (it->fReceiveAnon ? "on" : "off");
         result.push_back(Pair("result", "Success."));
         result.push_back(Pair("key", it->sAddress + " " + sInfo));
         return result;
@@ -366,7 +366,7 @@ Value smsglocalkeys(const Array& params, bool fHelp)
     } else
     {
         result.push_back(Pair("result", "Unknown Mode."));
-        result.push_back(Pair("expected", "smsglocalkeys [whitelist|all|wallet|recv <+/-> <address>|anon <+/-> <address>]"));
+        result.push_back(Pair("expected", "smsglocalkeys [whitelist|all|wallet|recv <+/-> <address>|okx <+/-> <address>]"));
     };
 
     return result;
@@ -572,7 +572,7 @@ Value smsgsendanon(const Array& params, bool fHelp)
     if (!fSecMsgEnabled)
         throw std::runtime_error("Secure messaging is disabled.");
 
-    std::string addrFrom  = "anon";
+    std::string addrFrom  = "okx";
     std::string addrTo    = params[0].get_str();
     std::string msg       = params[1].get_str();
 

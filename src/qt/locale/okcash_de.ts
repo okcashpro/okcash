@@ -1224,7 +1224,7 @@ Ring Größe von eins ist nicht anonym und schädigt das Netzwerk.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <source>Error: Must be in full mode to send anon.</source>
+        <source>Error: Must be in full mode to send okx.</source>
         <translation>Fehler: Muss in Vollen Modus sein um anonym zu senden.</translation>
     </message>
     <message>

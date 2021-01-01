@@ -178,7 +178,7 @@ vector<unsigned char> ParseHexO(const Object& o, string strKey)
 
 string CRPCTable::help(string strCommand) const
 {
-    bool fAllAnon = strCommand == "anon" ? true : false;
+    bool fAllOkx = strCommand == "okx" ? true : false;
 
     string strRet;
     set<rpcfn_type> setDone;
@@ -191,15 +191,15 @@ string CRPCTable::help(string strCommand) const
             continue;
             
         
-        if (fAllAnon)
+        if (fAllOkx)
         {
-            if (strMethod != "sendoktoanon"
-                && strMethod != "sendanontoanon"
-                && strMethod != "sendanontook"
-                && strMethod != "estimateanonfee"
-                && strMethod != "anonoutputs"
-                && strMethod != "anoninfo"
-                && strMethod != "reloadanondata")
+            if (strMethod != "sendoktookx"
+                && strMethod != "sendokxtookx"
+                && strMethod != "sendokxtook"
+                && strMethod != "estimateokxfee"
+                && strMethod != "okxoutputs"
+                && strMethod != "okxinfo"
+                && strMethod != "reloadokxdata")
             continue;
         } else
         if (strCommand != "" && strMethod != strCommand)
@@ -364,13 +364,13 @@ static const CRPCCommand vRPCCommands[] =
     { "scanforalltxns",         &scanforalltxns,         false,     false,     false },
     { "scanforstealthtxns",     &scanforstealthtxns,     false,     false,     false },
     
-    { "sendoktoanon",           &sendoktoanon,           false,     false,     false },
-    { "sendanontoanon",         &sendanontoanon,         false,     false,     false },
-    { "sendanontook",           &sendanontook,           false,     false,     false },
-    { "estimateanonfee",        &estimateanonfee,        false,     false,     false },
-    { "anonoutputs",            &anonoutputs,            false,     false,     false },
-    { "anoninfo",               &anoninfo,               false,     false,     false },
-    { "reloadanondata",         &reloadanondata,         false,     false,     false },
+    { "sendoktookx",            &sendoktookx,            false,     false,     false },
+    { "sendokxtookx",           &sendokxtookx,           false,     false,     false },
+    { "sendokxtook",            &sendokxtook,            false,     false,     false },
+    { "estimateokxfee",         &estimateokxfee,         false,     false,     false },
+    { "okxoutputs",             &okxoutputs,             false,     false,     false },
+    { "okxinfo",                &okxinfo,                false,     false,     false },
+    { "reloadokxdata",          &reloadokxdata,          false,     false,     false },
 
     { "txnreport",              &txnreport,              false,     false,     false },
 

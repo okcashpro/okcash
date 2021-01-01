@@ -268,7 +268,7 @@ bool CWallet::Unlock(const SecureString& strWalletPassphrase)
 
         UnlockStealthAddresses(vMasterKey);
         ExtKeyUnlock(vMasterKey);
-        ProcessLockedAnonOutputs();
+        ProcessLockedOkxOutputs();
         SecureMsgWalletUnlocked();
 
         if (fMakeExtKeyInitials)
@@ -558,7 +558,7 @@ void CWallet::WalletUpdateSpent(const CTransaction &tx, bool fBlock)
             if (tx.nVersion == ANON_TXN_VERSION
                 && txin.IsAnonInput())
             {
-                // anon input
+                // okx input
                 // TODO
                 continue;
             };
@@ -590,9 +590,9 @@ void CWallet::WalletUpdateSpent(const CTransaction &tx, bool fBlock)
             BOOST_FOREACH(const CTxOut& txout, tx.vout)
             {
                 if (tx.nVersion == ANON_TXN_VERSION
-                    && txout.IsAnonOutput())
+                    && txout.IsOkxOutput())
                 {
-                    // anon output
+                    // okx output
                     // TODO
                     continue;
                 };
@@ -977,8 +977,8 @@ int64_t CWallet::GetOKprivateDebit(const CTxIn& txin) const
         std::vector<uint8_t> vchImage;
         txin.ExtractKeyImage(vchImage);
 
-        COwnedAnonOutput oao;
-        if (!walletdb.ReadOwnedAnonOutput(vchImage, oao))
+        COwnedOkxOutput oao;
+        if (!walletdb.ReadOwnedOkxOutput(vchImage, oao))
             return 0;
         //return oao.nValue
 
@@ -997,7 +997,7 @@ int64_t CWallet::GetOKprivateDebit(const CTxIn& txin) const
 
 int64_t CWallet::GetOKprivateCredit(const CTxOut& txout) const
 {
-    if (!txout.IsAnonOutput())
+    if (!txout.IsOkxOutput())
         return 0;
 
     // TODO: store links in memory
@@ -1010,11 +1010,11 @@ int64_t CWallet::GetOKprivateCredit(const CTxOut& txout) const
         CPubKey pkCoin = txout.ExtractAnonPk();
 
         std::vector<uint8_t> vchImage;
-        if (!walletdb.ReadOwnedAnonOutputLink(pkCoin, vchImage))
+        if (!walletdb.ReadOwnedOkxOutputLink(pkCoin, vchImage))
             return 0;
 
-        COwnedAnonOutput oao;
-        if (!walletdb.ReadOwnedAnonOutput(vchImage, oao))
+        COwnedOkxOutput oao;
+        if (!walletdb.ReadOwnedOkxOutput(vchImage, oao))
             return 0;
 
         WalletTxMap::const_iterator mi = mapWallet.find(oao.outpoint.hash);
@@ -1121,7 +1121,7 @@ void CWalletTx::GetAmounts(list<pair<CTxDestination, int64_t> >& listReceived,
     BOOST_FOREACH(const CTxOut& txout, vout)
     {
         if (nVersion == ANON_TXN_VERSION
-            && txout.IsAnonOutput())
+            && txout.IsOkxOutput())
         {
             const CScript &s = txout.scriptPubKey;
             CKeyID ckidD = CPubKey(&s[2+1], 33).GetID();
@@ -1655,7 +1655,7 @@ void CWallet::AvailableCoinsForStaking(std::vector<COutput>& vCoins, unsigned in
             for (unsigned int i = 0; i < pcoin->vout.size(); i++)
             {
                 if (pcoin->nVersion == ANON_TXN_VERSION
-                    && pcoin->vout[i].IsAnonOutput())
+                    && pcoin->vout[i].IsOkxOutput())
                     continue;
                 if (!(pcoin->IsSpent(i)) && IsMine(pcoin->vout[i]) && pcoin->vout[i].nValue >= nMinimumInputValue)
                     vCoins.push_back(COutput(pcoin, i, nDepth));
@@ -2179,7 +2179,7 @@ bool CWallet::UnlockStealthAddresses(const CKeyingMaterial& vMasterKeyIn)
         StealthKeyMetaMap::iterator mi = mapStealthKeyMeta.find(ckid);
         if (mi == mapStealthKeyMeta.end())
         {
-            // -- could be an anon output
+            // -- could be an okx output
             if (fDebug)
                 LogPrintf("Warning: No metadata found to add secret for %s\n", addr.ToString().c_str());
             continue;
@@ -2547,9 +2547,9 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx, mapValue_t& mapNar
         nOutputIdOuter++;
         // -- for each OP_RETURN need to check all other valid outputs
 
-        // -- skip scan anon outputs
+        // -- skip scan okx outputs
         if (tx.nVersion == ANON_TXN_VERSION
-            && txout.IsAnonOutput())
+            && txout.IsOkxOutput())
             continue;
 
         CScript::const_iterator itTxA = txout.scriptPubKey.begin();
@@ -2589,9 +2589,9 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx, mapValue_t& mapNar
         {
             nOutputId++;
 
-            // -- skip anon outputs
+            // -- skip okx outputs
             if (tx.nVersion == ANON_TXN_VERSION
-                && txout.IsAnonOutput())
+                && txout.IsOkxOutput())
                 continue;
 
             if (&txoutB == &txout)
@@ -2862,7 +2862,7 @@ static int GetBlockHeightFromHash(const uint256& blockHash)
     return 0;
 }
 
-static int IsAnonCoinCompromised(CTxDB *txdb, CPubKey &pubKey, CAnonOutput &ao, ec_point &vchSpentImage)
+static int IsAnonCoinCompromised(CTxDB *txdb, CPubKey &pubKey, COkxOutput &ao, ec_point &vchSpentImage)
 {
     // check if its been compromised (signer known)
     CKeyImageSpent kis;
@@ -2874,7 +2874,7 @@ static int IsAnonCoinCompromised(CTxDB *txdb, CPubKey &pubKey, CAnonOutput &ao, 
     if (vchSpentImage == pkImage || GetKeyImage(txdb, pkImage, kis, fInMempool))
     {
         ao.nCompromised = 1;
-        txdb->WriteAnonOutput(pubKey, ao);
+        txdb->WriteOkxOutput(pubKey, ao);
         if(fDebugRingSig)
             LogPrintf("Spent key image, mark as compromised: %s\n", pubKey.GetID().ToString());
         return 1;
@@ -2913,7 +2913,7 @@ bool CWallet::UpdateAnonTransaction(CTxDB *ptxdb, const CTransaction& tx, const 
 
         // -- get nCoinValue by reading first ring element
         CPubKey pkRingCoin;
-        CAnonOutput ao;
+        COkxOutput ao;
         CTxIndex txindex;
 
         const uint8_t *pPubkeys;
@@ -2929,9 +2929,9 @@ bool CWallet::UpdateAnonTransaction(CTxDB *ptxdb, const CTransaction& tx, const 
 
         pkRingCoin = CPubKey(&pPubkeys[0 * EC_COMPRESSED_SIZE], EC_COMPRESSED_SIZE);
 
-        if (!ptxdb->ReadAnonOutput(pkRingCoin, ao))
+        if (!ptxdb->ReadOkxOutput(pkRingCoin, ao))
         {
-            LogPrintf("UpdateAnonTransaction(): Error input %u AnonOutput %s not found.\n", i, pkRingCoin.GetID().ToString());
+            LogPrintf("UpdateAnonTransaction(): Error input %u OkxOutput %s not found.\n", i, pkRingCoin.GetID().ToString());
             //LogPrintf("%s, %s\n", pkRingCoin.GetID().ToString(), CBitcoinAddress(pkRingCoin.GetID()).ToString());
             return false;
         };
@@ -2953,29 +2953,29 @@ bool CWallet::UpdateAnonTransaction(CTxDB *ptxdb, const CTransaction& tx, const 
     {
         const CTxOut& txout = tx.vout[i];
 
-        if (!txout.IsAnonOutput())
+        if (!txout.IsOkxOutput())
             continue;
 
         const CScript &s = txout.scriptPubKey;
 
         CPubKey pkCoin = CPubKey(&s[2+1], EC_COMPRESSED_SIZE);
-        CAnonOutput ao;
-        if (!ptxdb->ReadAnonOutput(pkCoin, ao))
+        COkxOutput ao;
+        if (!ptxdb->ReadOkxOutput(pkCoin, ao))
         {
-            LogPrintf("ReadAnonOutput %d failed.\n", i);
+            LogPrintf("ReadOkxOutput %d failed.\n", i);
             return false;
         };
 
         ao.nBlockHeight = nNewHeight;
 
-        if (!ptxdb->WriteAnonOutput(pkCoin, ao))
+        if (!ptxdb->WriteOkxOutput(pkCoin, ao))
         {
-            LogPrintf("ReadAnonOutput %d failed.\n", i);
+            LogPrintf("ReadOkxOutput %d failed.\n", i);
             return false;
         };
 
         LogPrintf("UpdateAnonTransaction(): updateDepth: %d, value: %d\n", nNewHeight, ao.nValue);
-        mapAnonOutputStats[ao.nValue].updateDepth(nNewHeight, ao.nValue);
+        mapOkxOutputStats[ao.nValue].updateDepth(nNewHeight, ao.nValue);
     };
 
     return true;
@@ -3028,11 +3028,11 @@ bool CWallet::UndoAnonTransaction(const CTransaction& tx)
             continue;
         };
 
-        mapAnonOutputStats[spentKeyImage.nValue].decSpends(spentKeyImage.nValue);
+        mapOkxOutputStats[spentKeyImage.nValue].decSpends(spentKeyImage.nValue);
 
 
-        COwnedAnonOutput oao;
-        if (walletdb.ReadOwnedAnonOutput(vchImage, oao))
+        COwnedOkxOutput oao;
+        if (walletdb.ReadOwnedOkxOutput(vchImage, oao))
         {
             if (fDebugRingSig)
                 LogPrintf("UndoAnonTransaction(): input %d keyimage %s found in wallet (owned).\n", i, HexStr(vchImage).c_str());
@@ -3066,9 +3066,9 @@ bool CWallet::UndoAnonTransaction(const CTransaction& tx)
             };
 
             oao.fSpent = false;
-            if (!walletdb.WriteOwnedAnonOutput(vchImage, oao))
+            if (!walletdb.WriteOwnedOkxOutput(vchImage, oao))
             {
-                LogPrintf("UndoAnonTransaction(): input %d WriteOwnedAnonOutput failed %s.\n", i, HexStr(vchImage).c_str());
+                LogPrintf("UndoAnonTransaction(): input %d WriteOwnedOkxOutput failed %s.\n", i, HexStr(vchImage).c_str());
                 return false;
             };
         };
@@ -3079,7 +3079,7 @@ bool CWallet::UndoAnonTransaction(const CTransaction& tx)
     {
         const CTxOut& txout = tx.vout[i];
 
-        if (!txout.IsAnonOutput())
+        if (!txout.IsOkxOutput())
             continue;
 
         const CScript &s = txout.scriptPubKey;
@@ -3087,41 +3087,41 @@ bool CWallet::UndoAnonTransaction(const CTransaction& tx)
         CPubKey pkCoin    = CPubKey(&s[2+1], EC_COMPRESSED_SIZE);
         CKeyID  ckCoinId  = pkCoin.GetID();
 
-        CAnonOutput ao;
-        if (!txdb.ReadAnonOutput(pkCoin, ao)) // read only to update mapAnonOutputStats
+        COkxOutput ao;
+        if (!txdb.ReadOkxOutput(pkCoin, ao)) // read only to update mapOkxOutputStats
         {
-            LogPrintf("ReadAnonOutput(): %u failed.\n", i);
+            LogPrintf("ReadOkxOutput(): %u failed.\n", i);
             return false;
         };
 
-        mapAnonOutputStats[ao.nValue].decExists(ao.nValue);
+        mapOkxOutputStats[ao.nValue].decExists(ao.nValue);
 
-        if (!txdb.EraseAnonOutput(pkCoin))
+        if (!txdb.EraseOkxOutput(pkCoin))
         {
-            LogPrintf("EraseAnonOutput(): %u failed.\n", i);
+            LogPrintf("EraseOkxOutput(): %u failed.\n", i);
             continue;
         };
 
         // -- only in db if owned
-        walletdb.EraseLockedAnonOutput(ckCoinId);
+        walletdb.EraseLockedOkxOutput(ckCoinId);
 
         std::vector<uint8_t> vchImage;
 
-        if (!walletdb.ReadOwnedAnonOutputLink(pkCoin, vchImage))
+        if (!walletdb.ReadOwnedOkxOutputLink(pkCoin, vchImage))
         {
-            LogPrintf("ReadOwnedAnonOutputLink(): %u failed - output wasn't owned.\n", i);
+            LogPrintf("ReadOwnedOkxOutputLink(): %u failed - output wasn't owned.\n", i);
             continue;
         };
 
-        if (!walletdb.EraseOwnedAnonOutput(vchImage))
+        if (!walletdb.EraseOwnedOkxOutput(vchImage))
         {
-            LogPrintf("EraseOwnedAnonOutput(): %u failed.\n", i);
+            LogPrintf("EraseOwnedOkxOutput(): %u failed.\n", i);
             continue;
         };
 
-        if (!walletdb.EraseOwnedAnonOutputLink(pkCoin))
+        if (!walletdb.EraseOwnedOkxOutputLink(pkCoin))
         {
-            LogPrintf("EraseOwnedAnonOutputLink(): %u failed.\n", i);
+            LogPrintf("EraseOwnedOkxOutputLink(): %u failed.\n", i);
             continue;
         };
     };
@@ -3195,12 +3195,12 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
         };
 
 
-        COwnedAnonOutput oao;
+        COwnedOkxOutput oao;
         ec_point vchNewImage;
         if (!pwdb->ReadOldOutputLink(vchImage, vchNewImage))
             vchNewImage = vchImage;
 
-        if (pwdb->ReadOwnedAnonOutput(vchNewImage, oao))
+        if (pwdb->ReadOwnedOkxOutput(vchNewImage, oao))
         {
             if (fDebugRingSig)
                 LogPrintf("%s: input %d keyimage %s found in wallet (owned).\n", __func__, i, HexStr(vchImage).c_str());
@@ -3229,9 +3229,9 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
             };
 
             oao.fSpent = true;
-            if (!pwdb->WriteOwnedAnonOutput(vchNewImage, oao))
+            if (!pwdb->WriteOwnedOkxOutput(vchNewImage, oao))
             {
-                return error("%s: Input %d WriteOwnedAnonOutput failed %s.", __func__, i, HexStr(vchImage).c_str());
+                return error("%s: Input %d WriteOwnedOkxOutput failed %s.", __func__, i, HexStr(vchImage).c_str());
             };
         };
 
@@ -3257,17 +3257,17 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
         int64_t nCoinValue = -1;
 
         CPubKey pkRingCoin;
-        CAnonOutput ao;
+        COkxOutput ao;
         CTxIndex txindex;
 
         for (uint32_t ri = 0; ri < (uint32_t)nRingSize; ++ri)
         {
             pkRingCoin = CPubKey(&pPubkeys[ri * EC_COMPRESSED_SIZE], EC_COMPRESSED_SIZE);
-            if (!ptxdb->ReadAnonOutput(pkRingCoin, ao))
-                return error("%s: Input %u AnonOutput %s not found, rsType: %d.", __func__, i, HexStr(pkRingCoin).c_str(), rsType);
+            if (!ptxdb->ReadOkxOutput(pkRingCoin, ao))
+                return error("%s: Input %u OkxOutput %s not found, rsType: %d.", __func__, i, HexStr(pkRingCoin).c_str(), rsType);
 
             if (IsAnonCoinCompromised(ptxdb, pkRingCoin, ao, vchImage) and Params().IsProtocolV3(nBestHeight))
-                return error("%s: Found spent pubkey at index %u: AnonOutput: %s, rsType: %d.", __func__, i, HexStr(pkRingCoin).c_str(), rsType);
+                return error("%s: Found spent pubkey at index %u: OkxOutput: %s, rsType: %d.", __func__, i, HexStr(pkRingCoin).c_str(), rsType);
 
             if (nCoinValue == -1)
                 nCoinValue = ao.nValue;
@@ -3282,9 +3282,9 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
             if (nRingSize == 1)
             {
                 ao.nCompromised = 1;
-                if (!ptxdb->WriteAnonOutput(pkRingCoin, ao))
-                    return error("%s: Input %d WriteAnonOutput failed %s.", __func__, i, HexStr(vchImage).c_str());
-                mapAnonOutputStats[ao.nValue].nCompromised++;
+                if (!ptxdb->WriteOkxOutput(pkRingCoin, ao))
+                    return error("%s: Input %d WriteOkxOutput failed %s.", __func__, i, HexStr(vchImage).c_str());
+                mapOkxOutputStats[ao.nValue].nCompromised++;
             }
 
             // -- ring sig validation is done in CTransaction::CheckAnonInputs()
@@ -3302,7 +3302,7 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
             // -- add keyImage to mempool, will be added to txdb in UpdateAnonTransaction
             mempool.insertKeyImage(vchImage, spentKeyImage);
 
-        mapAnonOutputStats[spentKeyImage.nValue].incSpends(spentKeyImage.nValue);
+        mapOkxOutputStats[spentKeyImage.nValue].incSpends(spentKeyImage.nValue);
     }
 
     ec_secret sSpendR;
@@ -3330,7 +3330,7 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
     {
         const CTxOut& txout = tx.vout[i];
 
-        if (!txout.IsAnonOutput())
+        if (!txout.IsOkxOutput())
             continue;
 
         const CScript &s = txout.scriptPubKey;
@@ -3340,28 +3340,28 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
 
         COutPoint outpoint = COutPoint(tx.GetHash(), i);
 
-        // -- add all anon outputs to txdb
-        CAnonOutput ao;
+        // -- add all okx outputs to txdb
+        COkxOutput ao;
 
-        if (ptxdb->ReadAnonOutput(pkCoin, ao)) // check if exists
+        if (ptxdb->ReadOkxOutput(pkCoin, ao)) // check if exists
         {
             if (blockHash != 0)
             {
                 if (fDebugRingSig)
-                    LogPrintf("Found existing anon output - assuming txn has been processed before.\n");
+                    LogPrintf("Found existing okx output - assuming txn has been processed before.\n");
                 return UpdateAnonTransaction(ptxdb, tx, blockHash);
             };
-            return error("%s: Found duplicate anon output.", __func__);
+            return error("%s: Found duplicate okx output.", __func__);
         };
 
-        ao = CAnonOutput(outpoint, txout.nValue, nBlockHeight, 0);
-        if (!ptxdb->WriteAnonOutput(pkCoin, ao))
+        ao = COkxOutput(outpoint, txout.nValue, nBlockHeight, 0);
+        if (!ptxdb->WriteOkxOutput(pkCoin, ao))
         {
-            LogPrintf("%s: WriteAnonOutput failed.\n", __func__);
+            LogPrintf("%s: WriteOkxOutput failed.\n", __func__);
             continue;
         };
 
-        mapAnonOutputStats[txout.nValue].addCoin(nBlockHeight, txout.nValue);
+        mapOkxOutputStats[txout.nValue].addCoin(nBlockHeight, txout.nValue);
 
         memcpy(&vchEphemPK[0], &s[2+EC_COMPRESSED_SIZE+2], EC_COMPRESSED_SIZE);
 
@@ -3396,7 +3396,7 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
             {
                 if (it->spend_secret.size() != EC_SECRET_SIZE)
                 {
-                    LogPrintf("%s: Found anon tx to sx key %s which contains no spend secret.\n", __func__, sSxAddr.c_str());
+                    LogPrintf("%s: Found okx tx to sx key %s which contains no spend secret.\n", __func__, sSxAddr.c_str());
                     continue;
                     // - next iter here, stop processing (fOwnOutput not set)
                 };
@@ -3474,7 +3474,7 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
             continue;
 
         if (fDebugRingSig)
-            LogPrintf("anon output match tx, no %s, %u\n", txnHash.GetHex().c_str(), i);
+            LogPrintf("okx output match tx, no %s, %u\n", txnHash.GetHex().c_str(), i);
 
         fIsMine = true; // mark tx to be added to wallet
 
@@ -3525,11 +3525,11 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
 
             CPubKey cpkEphem(vchEphemPK);
             CPubKey cpkScan(pkScan);
-            CLockedAnonOutput lockedAo(cpkEphem, cpkScan, COutPoint(txnHash, i));
-            if (!pwdb->WriteLockedAnonOutput(ckCoinId, lockedAo))
+            CLockedOkxOutput lockedAo(cpkEphem, cpkScan, COutPoint(txnHash, i));
+            if (!pwdb->WriteLockedOkxOutput(ckCoinId, lockedAo))
             {
                 CBitcoinAddress coinAddress(ckCoinId);
-                LogPrintf("%s: WriteLockedAnonOutput failed for %s.\n", __func__, coinAddress.ToString().c_str());
+                LogPrintf("%s: WriteLockedOkxOutput failed for %s.\n", __func__, coinAddress.ToString().c_str());
             };
         } else
         {
@@ -3591,18 +3591,18 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
             fSpentAOut = (GetKeyImage(ptxdb, pkImage, kis, fInMemPool)
                         ||GetKeyImage(ptxdb, pkOldImage, kis, fInMemPool));
 
-            COwnedAnonOutput oao(outpoint, fSpentAOut);
+            COwnedOkxOutput oao(outpoint, fSpentAOut);
 
-            if (!pwdb->WriteOwnedAnonOutput(pkImage, oao)
+            if (!pwdb->WriteOwnedOkxOutput(pkImage, oao)
               ||!pwdb->WriteOldOutputLink(pkOldImage, pkImage)
-              ||!pwdb->WriteOwnedAnonOutputLink(pkCoin, pkImage))
+              ||!pwdb->WriteOwnedOkxOutputLink(pkCoin, pkImage))
             {
-                LogPrintf("%s: WriteOwnedAnonOutput() failed.\n", __func__);
+                LogPrintf("%s: WriteOwnedOkxOutput() failed.\n", __func__);
                 continue;
             };
 
             if (fDebugRingSig)
-                LogPrintf("Adding anon output to wallet: %s.\n", HexStr(pkImage).c_str());
+                LogPrintf("Adding okx output to wallet: %s.\n", HexStr(pkImage).c_str());
         };
     };
 
@@ -3611,7 +3611,7 @@ bool CWallet::ProcessAnonTransaction(CWalletDB *pwdb, CTxDB *ptxdb, const CTrans
 
 bool CWallet::GetAnonChangeAddress(CStealthAddress &sxAddress)
 {
-    // return owned stealth address to send anon change to.
+    // return owned stealth address to send okx change to.
     // TODO: make an option
 
     // NOTE: tries default ext account only, for now
@@ -3739,10 +3739,10 @@ bool CWallet::CreateStealthOutput(CStealthAddress* sxAddress, int64_t nValue, st
     return true;
 };
 
-bool CWallet::CreateAnonOutputs(CStealthAddress* sxAddress, int64_t nValue, std::string& sNarr, std::vector<std::pair<CScript, int64_t> >& vecSend, CScript& scriptNarration)
+bool CWallet::CreateOkxOutputs(CStealthAddress* sxAddress, int64_t nValue, std::string& sNarr, std::vector<std::pair<CScript, int64_t> >& vecSend, CScript& scriptNarration)
 {
     if (fDebugRingSig)
-        LogPrintf("CreateAnonOutputs()\n");
+        LogPrintf("CreateOkxOutputs()\n");
 
     ec_secret scEphem;
     ec_secret scShared;
@@ -3825,7 +3825,7 @@ bool CWallet::CreateAnonOutputs(CStealthAddress* sxAddress, int64_t nValue, std:
             CKeyID ckidTo = cpkTo.GetID();
             CBitcoinAddress addrTo(ckidTo);
 
-            LogPrintf("CreateAnonOutput to generated pubkey %u: %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
+            LogPrintf("CreateOkxOutput to generated pubkey %u: %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
             if (!sxAddress)
                 LogPrintf("Test Mode\n");
             LogPrintf("hash %s\n", addrTo.ToString().c_str());
@@ -3842,14 +3842,14 @@ bool CWallet::CreateAnonOutputs(CStealthAddress* sxAddress, int64_t nValue, std:
     return true;
 };
 
-static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*>& vData, std::vector<int>& vecInputIndex)
+static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedOkxOutput*>& vData, std::vector<int>& vecInputIndex)
 {
     // -- m of n combinations, check smallest coins first
 
     if (fDebugRingSig)
         LogPrintf("checkCombinations() %d, %u\n", m, vData.size());
 
-    int nOwnedAnonOutputs = vData.size();
+    int nOwnedOkxOutputs = vData.size();
 
     try { vecInputIndex.resize(m); } catch (std::exception& e)
     {
@@ -3860,9 +3860,9 @@ static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*
 
     int64_t nCount = 0;
 
-    if (m > nOwnedAnonOutputs) // ERROR
+    if (m > nOwnedOkxOutputs) // ERROR
     {
-        LogPrintf("Error: checkCombinations() m > nOwnedAnonOutputs\n");
+        LogPrintf("Error: checkCombinations() m > nOwnedOkxOutputs\n");
         return false;
     };
 
@@ -3870,7 +3870,7 @@ static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*
 
     // -- pick better start point
     //    lAvailableCoins is sorted, if coin i * m < nReq, no combinations of lesser coins will be < either
-    for (l = m; l <= nOwnedAnonOutputs; ++l)
+    for (l = m; l <= nOwnedOkxOutputs; ++l)
     {
         if (vData[l-1]->nValue * m < nReq)
             continue;
@@ -3888,7 +3888,7 @@ static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*
     };
 
 
-    for (l = startL; l <= nOwnedAnonOutputs; ++l)
+    for (l = startL; l <= nOwnedOkxOutputs; ++l)
     {
         for (i = 0; i < m; ++i)
             vecInputIndex[i] = (m - i)-1;
@@ -3938,7 +3938,7 @@ static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*
             };
         };
 
-        if (!fSeekFine && l < nOwnedAnonOutputs)
+        if (!fSeekFine && l < nOwnedOkxOutputs)
             continue;
 
         // -- fine
@@ -3969,7 +3969,7 @@ static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*
 
                 if (fDebugRingSig && !(nCount % 500))
                 {
-                    LogPrintf("checkCombinations() nCount: %d - l: %d, nOwnedAnonOutputs: %d, m: %d, i: %d, nReq: %d, v[0]: %d, nTotal: %d \n", nCount, l, nOwnedAnonOutputs, m, i, nReq, vecInputIndex[0], nTotal);
+                    LogPrintf("checkCombinations() nCount: %d - l: %d, nOwnedOkxOutputs: %d, m: %d, i: %d, nReq: %d, v[0]: %d, nTotal: %d \n", nCount, l, nOwnedOkxOutputs, m, i, nReq, vecInputIndex[0], nTotal);
                     for (i = m; i--;) LogPrintf("%d%c", vecInputIndex[i], i ? ' ': '\n');
                 };
             };
@@ -3985,14 +3985,14 @@ static bool checkCombinations(int64_t nReq, int m, std::vector<COwnedAnonOutput*
                 vecInputIndex[i-1] = vecInputIndex[i] + 1;
         };
         EndInner:
-        if (i+1 > nOwnedAnonOutputs)
+        if (i+1 > nOwnedOkxOutputs)
             break;
     };
 
     return false;
 }
 
-int CWallet::PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRingSize, CWalletTx& wtxNew, int nOutputs, int nSizeOutputs, int& nExpectChangeOuts, std::list<COwnedAnonOutput>& lAvailableCoins, std::vector<COwnedAnonOutput*>& vPickedCoins, std::vector<std::pair<CScript, int64_t> >& vecChange, bool fTest, std::string& sError)
+int CWallet::PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRingSize, CWalletTx& wtxNew, int nOutputs, int nSizeOutputs, int& nExpectChangeOuts, std::list<COwnedOkxOutput>& lAvailableCoins, std::vector<COwnedOkxOutput*>& vPickedCoins, std::vector<std::pair<CScript, int64_t> >& vecChange, bool fTest, std::string& sError)
 {
     if (fDebugRingSig)
         LogPrintf("PickAnonInputs(), ChangeOuts %d\n", nExpectChangeOuts);
@@ -4002,7 +4002,7 @@ int CWallet::PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRing
 
     int64_t nAmountCheck = 0;
 
-    std::vector<COwnedAnonOutput*> vData;
+    std::vector<COwnedOkxOutput*> vData;
     try { vData.resize(lAvailableCoins.size()); } catch (std::exception& e)
     {
         LogPrintf("Error: PickAnonInputs() vData.resize threw: %s.\n", e.what());
@@ -4010,7 +4010,7 @@ int CWallet::PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRing
     };
 
     uint32_t vi = 0;
-    for (std::list<COwnedAnonOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
+    for (std::list<COwnedOkxOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
     {
         vData[vi++] = &(*it);
         nAmountCheck += it->nValue;
@@ -4098,9 +4098,9 @@ int CWallet::PickAnonInputs(int rsType, int64_t nValue, int64_t& nFee, int nRing
             std::string sNone;
             sNone.clear();
             CScript scriptNone;
-            if (!CreateAnonOutputs(fTest ? NULL : &sxChange, nChange, sNone, vecChange, scriptNone))
+            if (!CreateOkxOutputs(fTest ? NULL : &sxChange, nChange, sNone, vecChange, scriptNone))
             {
-                sError = "CreateAnonOutputs() change failed.";
+                sError = "CreateOkxOutputs() change failed.";
                 return 3;
             };
 
@@ -4190,7 +4190,7 @@ int CWallet::PickHidingOutputs(int64_t nValue, int nRingSize, CPubKey& pkCoin, i
     iterator->Seek(ssStartKey.str());
 
     CPubKey pkAo;
-    CAnonOutput anonOutput;
+    COkxOutput okxOutput;
     while (iterator->Valid())
     {
         // Unpack keys and values.
@@ -4211,11 +4211,11 @@ int CWallet::PickHidingOutputs(int64_t nValue, int nRingSize, CPubKey& pkCoin, i
         if (pkAo != pkCoin
             && pkAo.IsValid())
         {
-            ssValue >> anonOutput;
+            ssValue >> okxOutput;
 
-            if ((anonOutput.nBlockHeight > 0 && nBestHeight - anonOutput.nBlockHeight >= MIN_ANON_SPEND_DEPTH)
-                && anonOutput.nValue == nValue
-                && anonOutput.nCompromised == 0)
+            if ((okxOutput.nBlockHeight > 0 && nBestHeight - okxOutput.nBlockHeight >= MIN_ANON_SPEND_DEPTH)
+                && okxOutput.nValue == nValue
+                && okxOutput.nCompromised == 0)
                 try { vHideKeys.push_back(pkAo); } catch (std::exception& e)
                 {
                     LogPrintf("Error: PickHidingOutputs() vHideKeys.push_back threw: %s.\n", e.what());
@@ -4259,15 +4259,15 @@ bool CWallet::AreOutputsUnique(CWalletTx& wtxNew)
     {
         const CTxOut& txout = wtxNew.vout[i];
 
-        if (txout.IsAnonOutput())
+        if (txout.IsOkxOutput())
             continue;
 
         const CScript &s = txout.scriptPubKey;
 
         CPubKey pkCoin = CPubKey(&s[2+1], EC_COMPRESSED_SIZE);
-        CAnonOutput ao;
+        COkxOutput ao;
 
-        if (txdb.ReadAnonOutput(pkCoin, ao))
+        if (txdb.ReadOkxOutput(pkCoin, ao))
         {
             //LogPrintf("AreOutputsUnique() pk %s is not unique.\n", pkCoin);
             return false;
@@ -4310,20 +4310,20 @@ bool CWallet::AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::v
     if (fDebugRingSig)
         LogPrintf("AddAnonInputs() %d, %d, rsType:%d\n", nTotalOut, nRingSize, rsType);
 
-    std::list<COwnedAnonOutput> lAvailableCoins;
-    if (ListUnspentAnonOutputs(lAvailableCoins, true) != 0)
+    std::list<COwnedOkxOutput> lAvailableCoins;
+    if (ListUnspentOkxOutputs(lAvailableCoins, true) != 0)
     {
-        sError = "ListUnspentAnonOutputs() failed";
+        sError = "ListUnspentOkxOutputs() failed";
         return false;
     };
 
     std::map<int64_t, int> mOutputCounts;
-    for (std::list<COwnedAnonOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
+    for (std::list<COwnedOkxOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
         mOutputCounts[it->nValue] = 0;
 
-    if (CountAnonOutputs(mOutputCounts, true) != 0)
+    if (CountOkxOutputs(mOutputCounts, true) != 0)
     {
-        sError = "CountAnonOutputs() failed";
+        sError = "CountOkxOutputs() failed";
         return false;
     };
 
@@ -4334,8 +4334,8 @@ bool CWallet::AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::v
     };
 
     int64_t nAmountCheck = 0;
-    // -- remove coins that don't have enough same value anonoutputs in the system for the ring size
-    std::list<COwnedAnonOutput>::iterator it = lAvailableCoins.begin();
+    // -- remove coins that don't have enough same value okxoutputs in the system for the ring size
+    std::list<COwnedOkxOutput>::iterator it = lAvailableCoins.begin();
     while (it != lAvailableCoins.end())
     {
         std::map<int64_t, int>::iterator mi = mOutputCounts.find(it->nValue);
@@ -4364,7 +4364,7 @@ bool CWallet::AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::v
     int64_t nFee;
     int nExpectChangeOuts = 1;
     std::string sPickError;
-    std::vector<COwnedAnonOutput*> vPickedCoins;
+    std::vector<COwnedOkxOutput*> vPickedCoins;
     for (int k = 0; k < 50; ++k) // safety
     {
         // -- nExpectChangeOuts is raised if needed (rv == 2)
@@ -4398,7 +4398,7 @@ bool CWallet::AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::v
     uint32_t ii = 0;
     wtxNew.vin.resize(vPickedCoins.size());
     vCoinOffsets.resize(vPickedCoins.size());
-    for (std::vector<COwnedAnonOutput*>::iterator it = vPickedCoins.begin(); it != vPickedCoins.end(); ++it)
+    for (std::vector<COwnedOkxOutput*>::iterator it = vPickedCoins.begin(); it != vPickedCoins.end(); ++it)
     {
         CTxIn& txin = wtxNew.vin[ii];
         if (fDebugRingSig)
@@ -4439,9 +4439,9 @@ bool CWallet::AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::v
         const CTxOut& txout = wtxAnonCoin.vout[nCoinOutId];
         const CScript &s = txout.scriptPubKey;
 
-        if (!txout.IsAnonOutput())
+        if (!txout.IsOkxOutput())
         {
-            sError = "picked coin not an anon output.\n";
+            sError = "picked coin not an okx output.\n";
             return false;
         };
 
@@ -4585,17 +4585,17 @@ bool CWallet::AddAnonInputs(int rsType, int64_t nTotalOut, int nRingSize, std::v
     // -- check if new coins already exist (in case random is broken ?)
     if (!AreOutputsUnique(wtxNew))
     {
-        sError = "Error: Anon outputs are not unique - is random working!.";
+        sError = "Error: Okx outputs are not unique - is random working!.";
         return false;
     };
 
     return true;
 };
 
-bool CWallet::SendOkToAnon(CStealthAddress& sxAddress, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee)
+bool CWallet::SendOkToOkx(CStealthAddress& sxAddress, int64_t nValue, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee)
 {
     if (fDebugRingSig)
-        LogPrintf("SendOkToAnon()\n");
+        LogPrintf("SendOkToOkx()\n");
 
     if (IsLocked())
     {
@@ -4646,9 +4646,9 @@ bool CWallet::SendOkToAnon(CStealthAddress& sxAddress, int64_t nValue, std::stri
     CScript scriptNarration; // needed to match output id of narr
     std::vector<std::pair<CScript, int64_t> > vecSend;
 
-    if (!CreateAnonOutputs(&sxAddress, nValue, sNarr, vecSend, scriptNarration))
+    if (!CreateOkxOutputs(&sxAddress, nValue, sNarr, vecSend, scriptNarration))
     {
-        sError = "CreateAnonOutputs() failed.";
+        sError = "CreateOkxOutputs() failed.";
         return false;
     };
 
@@ -4690,7 +4690,7 @@ bool CWallet::SendOkToAnon(CStealthAddress& sxAddress, int64_t nValue, std::stri
     // -- check if new coins already exist (in case random is broken ?)
     if (!AreOutputsUnique(wtxNew))
     {
-        sError = "Error: Anon outputs are not unique - is random working!.";
+        sError = "Error: Okx outputs are not unique - is random working!.";
         return false;
     };
 
@@ -4706,10 +4706,10 @@ bool CWallet::SendOkToAnon(CStealthAddress& sxAddress, int64_t nValue, std::stri
     return true;
 };
 
-bool CWallet::SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee)
+bool CWallet::SendOkxToOkx(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee)
 {
     if (fDebugRingSig)
-        LogPrintf("SendAnonToAnon()\n");
+        LogPrintf("SendOkxToOkx()\n");
 
     if (IsLocked())
     {
@@ -4761,9 +4761,9 @@ bool CWallet::SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRi
     std::vector<std::pair<CScript, int64_t> > vecChange;
 
 
-    if (!CreateAnonOutputs(&sxAddress, nValue, sNarr, vecSend, scriptNarration))
+    if (!CreateOkxOutputs(&sxAddress, nValue, sNarr, vecSend, scriptNarration))
     {
-        sError = "CreateAnonOutputs() failed.";
+        sError = "CreateOkxOutputs() failed.";
         return false;
     };
 
@@ -4776,7 +4776,7 @@ bool CWallet::SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRi
     std::string sError2;
     if (!AddAnonInputs(nRingSize == 1 ? RING_SIG_1 : RING_SIG_2, nValue, nRingSize, vecSend, vecChange, wtxNew, nFeeRequired, false, sError2))
     {
-        LogPrintf("SendAnonToAnon() AddAnonInputs failed %s.\n", sError2.c_str());
+        LogPrintf("SendOkxToOkx() AddAnonInputs failed %s.\n", sError2.c_str());
         sError = "AddAnonInputs() failed : " + sError2;
         return false;
     };
@@ -4808,10 +4808,10 @@ bool CWallet::SendAnonToAnon(CStealthAddress& sxAddress, int64_t nValue, int nRi
     return true;
 };
 
-bool CWallet::SendAnonToOk(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee)
+bool CWallet::SendOkxToOk(CStealthAddress& sxAddress, int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, std::string& sError, bool fAskFee)
 {
     if (fDebug)
-        LogPrintf("SendAnonToOk()\n");
+        LogPrintf("SendOkxToOk()\n");
 
     if (IsLocked())
     {
@@ -4879,13 +4879,13 @@ bool CWallet::SendAnonToOk(CStealthAddress& sxAddress, int64_t nValue, int nRing
         wtxNew.mapValue[key] = itN->second;
     };
 
-    // -- get anon inputs
+    // -- get okx inputs
 
     int64_t nFeeRequired;
     std::string sError2;
     if (!AddAnonInputs(nRingSize == 1 ? RING_SIG_1 : RING_SIG_2, nValue, nRingSize, vecSend, vecChange, wtxNew, nFeeRequired, false, sError2))
     {
-        LogPrintf("SendAnonToOk() AddAnonInputs failed %s.\n", sError2.c_str());
+        LogPrintf("SendOkxToOk() AddAnonInputs failed %s.\n", sError2.c_str());
         sError = "AddAnonInputs() failed: " + sError2;
         return false;
     };
@@ -4901,7 +4901,7 @@ bool CWallet::SendAnonToOk(CStealthAddress& sxAddress, int64_t nValue, int nRing
 };
 
 
-bool CWallet::ExpandLockedAnonOutput(CWalletDB *pwdb, CKeyID &ckeyId, CLockedAnonOutput &lao, std::set<uint256> &setUpdated)
+bool CWallet::ExpandLockedOkxOutput(CWalletDB *pwdb, CKeyID &ckeyId, CLockedOkxOutput &lao, std::set<uint256> &setUpdated)
 {
     if (fDebugRingSig)
     {
@@ -5037,8 +5037,8 @@ bool CWallet::ExpandLockedAnonOutput(CWalletDB *pwdb, CKeyID &ckeyId, CLockedAno
         CKeyImageSpent kis;
 
         bool fInMemPool;
-        CAnonOutput ao;
-        txdb.ReadAnonOutput(pkCoin, ao);
+        COkxOutput ao;
+        txdb.ReadOkxOutput(pkCoin, ao);
         if ((GetKeyImage(&txdb, pkImage, kis, fInMemPool) && !fInMemPool)
           ||(GetKeyImage(&txdb, pkOldImage, kis, fInMemPool) && !fInMemPool)) // shouldn't be possible for kis to be in mempool here
         {
@@ -5058,21 +5058,21 @@ bool CWallet::ExpandLockedAnonOutput(CWalletDB *pwdb, CKeyID &ckeyId, CLockedAno
         };
     } // txdb
 
-    COwnedAnonOutput oao(lao.outpoint, fSpentAOut);
-    if (!pwdb->WriteOwnedAnonOutput(pkImage, oao)
+    COwnedOkxOutput oao(lao.outpoint, fSpentAOut);
+    if (!pwdb->WriteOwnedOkxOutput(pkImage, oao)
       ||!pwdb->WriteOldOutputLink(pkOldImage, pkImage)
-      ||!pwdb->WriteOwnedAnonOutputLink(pkCoin, pkImage))
+      ||!pwdb->WriteOwnedOkxOutputLink(pkCoin, pkImage))
     {
-        return error("%s: WriteOwnedAnonOutput() failed.", __func__);
+        return error("%s: WriteOwnedOkxOutput() failed.", __func__);
     };
 
     if (fDebugRingSig)
-        LogPrintf("Adding anon output to wallet: %s.\n", HexStr(pkImage).c_str());
+        LogPrintf("Adding okx output to wallet: %s.\n", HexStr(pkImage).c_str());
 
     return true;
 };
 
-bool CWallet::ProcessLockedAnonOutputs()
+bool CWallet::ProcessLockedOkxOutputs()
 {
     if (fDebugRingSig)
     {
@@ -5080,7 +5080,7 @@ bool CWallet::ProcessLockedAnonOutputs()
         AssertLockHeld(cs_main);
         AssertLockHeld(cs_wallet);
     };
-    // -- process owned anon outputs received when wallet was locked.
+    // -- process owned okx outputs received when wallet was locked.
 
 
     std::set<uint256> setUpdated;
@@ -5116,12 +5116,12 @@ bool CWallet::ProcessLockedAnonOutputs()
         ssKey >> strType;
         if (strType != "lao")
             break;
-        CLockedAnonOutput lockedAnonOutput;
+        CLockedOkxOutput lockedOkxOutput;
         CKeyID ckeyId;
         ssKey >> ckeyId;
-        ssValue >> lockedAnonOutput;
+        ssValue >> lockedOkxOutput;
 
-        if (ExpandLockedAnonOutput(&walletdb, ckeyId, lockedAnonOutput, setUpdated))
+        if (ExpandLockedOkxOutput(&walletdb, ckeyId, lockedOkxOutput, setUpdated))
         {
             if ((ret = pcursor->del(0)) != 0)
                LogPrintf("%s : Delete failed %d, %s\n", __func__, ret, db_strerror(ret));
@@ -5148,10 +5148,10 @@ bool CWallet::ProcessLockedAnonOutputs()
     return true;
 };
 
-bool CWallet::EstimateAnonFee(int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, std::string& sError)
+bool CWallet::EstimateOkxFee(int64_t nValue, int nRingSize, std::string& sNarr, CWalletTx& wtxNew, int64_t& nFeeRet, std::string& sError)
 {
     if (fDebugRingSig)
-        LogPrintf("EstimateAnonFee()\n");
+        LogPrintf("EstimateOkxFee()\n");
 
     if (nNodeMode != NT_FULL)
     {
@@ -5178,16 +5178,16 @@ bool CWallet::EstimateAnonFee(int64_t nValue, int nRingSize, std::string& sNarr,
     std::vector<std::pair<CScript, int64_t> > vecSend;
     std::vector<std::pair<CScript, int64_t> > vecChange;
 
-    if (!CreateAnonOutputs(NULL, nValue, sNarr, vecSend, scriptNarration))
+    if (!CreateOkxOutputs(NULL, nValue, sNarr, vecSend, scriptNarration))
     {
-        sError = "CreateAnonOutputs() failed.";
+        sError = "CreateOkxOutputs() failed.";
         return false;
     };
 
     int64_t nFeeRequired;
     if (!AddAnonInputs(RING_SIG_2, nValue, nRingSize, vecSend, vecChange, wtxNew, nFeeRequired, true, sError))
     {
-        LogPrintf("EstimateAnonFee() AddAnonInputs failed %s.\n", sError.c_str());
+        LogPrintf("EstimateOkxFee() AddAnonInputs failed %s.\n", sError.c_str());
         sError = "AddAnonInputs() failed.";
         return false;
     };
@@ -5197,13 +5197,13 @@ bool CWallet::EstimateAnonFee(int64_t nValue, int nRingSize, std::string& sNarr,
     return true;
 };
 
-int CWallet::ListUnspentAnonOutputs(std::list<COwnedAnonOutput>& lUAnonOutputs, bool fMatureOnly)
+int CWallet::ListUnspentOkxOutputs(std::list<COwnedOkxOutput>& lUOkxOutputs, bool fMatureOnly)
 {
     CWalletDB walletdb(strWalletFile, "r");
 
     Dbc* pcursor = walletdb.GetAtCursor();
     if (!pcursor)
-        throw runtime_error("CWallet::ListUnspentAnonOutputs() : cannot create DB cursor");
+        throw runtime_error("CWallet::ListUnspentOkxOutputs() : cannot create DB cursor");
     unsigned int fFlags = DB_SET_RANGE;
     while (true)
     {
@@ -5221,7 +5221,7 @@ int CWallet::ListUnspentAnonOutputs(std::list<COwnedAnonOutput>& lUAnonOutputs, 
         if (ret != 0)
         {
             pcursor->close();
-            throw runtime_error("CWallet::ListUnspentAnonOutputs() : error scanning DB");
+            throw runtime_error("CWallet::ListUnspentOkxOutputs() : error scanning DB");
         };
 
         // Unserialize
@@ -5229,7 +5229,7 @@ int CWallet::ListUnspentAnonOutputs(std::list<COwnedAnonOutput>& lUAnonOutputs, 
         ssKey >> strType;
         if (strType != "oao")
             break;
-        COwnedAnonOutput oao;
+        COwnedOkxOutput oao;
         ssKey >> oao.vchImage;
 
         ssValue >> oao;
@@ -5251,37 +5251,37 @@ int CWallet::ListUnspentAnonOutputs(std::list<COwnedAnonOutput>& lUAnonOutputs, 
             continue;
         };
 
-        // TODO: check ReadAnonOutput?
+        // TODO: check ReadOkxOutput?
 
         oao.nValue = mi->second.vout[oao.outpoint.n].nValue;
 
 
         // -- insert by nValue asc
         bool fInserted = false;
-        for (std::list<COwnedAnonOutput>::iterator it = lUAnonOutputs.begin(); it != lUAnonOutputs.end(); ++it)
+        for (std::list<COwnedOkxOutput>::iterator it = lUOkxOutputs.begin(); it != lUOkxOutputs.end(); ++it)
         {
             if (oao.nValue > it->nValue)
                 continue;
-            lUAnonOutputs.insert(it, oao);
+            lUOkxOutputs.insert(it, oao);
             fInserted = true;
             break;
         };
         if (!fInserted)
-            lUAnonOutputs.push_back(oao);
+            lUOkxOutputs.push_back(oao);
     };
 
     pcursor->close();
     return 0;
 }
 
-int CWallet::CountAnonOutputs(std::map<int64_t, int>& mOutputCounts, bool fMatureOnly)
+int CWallet::CountOkxOutputs(std::map<int64_t, int>& mOutputCounts, bool fMatureOnly)
 {
     LOCK(cs_main);
     CTxDB txdb("r");
 
     leveldb::DB* pdb = txdb.GetInstance();
     if (!pdb)
-        throw runtime_error("CWallet::CountAnonOutputs() : cannot get leveldb instance");
+        throw runtime_error("CWallet::CountOkxOutputs() : cannot get leveldb instance");
 
     leveldb::Iterator *iterator = pdb->NewIterator(leveldb::ReadOptions());
 
@@ -5309,15 +5309,15 @@ int CWallet::CountAnonOutputs(std::map<int64_t, int>& mOutputCounts, bool fMatur
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         ssValue.write(iterator->value().data(), iterator->value().size());
 
-        CAnonOutput anonOutput;
-        ssValue >> anonOutput;
+        COkxOutput okxOutput;
+        ssValue >> okxOutput;
 
 
         if ((!fMatureOnly
-           ||(anonOutput.nBlockHeight > 0 && nBestHeight - anonOutput.nBlockHeight >= MIN_ANON_SPEND_DEPTH))
-          && (Params().IsProtocolV3(nBestHeight) ? anonOutput.nCompromised == 0 : true))
+           ||(okxOutput.nBlockHeight > 0 && nBestHeight - okxOutput.nBlockHeight >= MIN_ANON_SPEND_DEPTH))
+          && (Params().IsProtocolV3(nBestHeight) ? okxOutput.nCompromised == 0 : true))
         {
-            std::map<int64_t, int>::iterator mi = mOutputCounts.find(anonOutput.nValue);
+            std::map<int64_t, int>::iterator mi = mOutputCounts.find(okxOutput.nValue);
             if (mi != mOutputCounts.end())
                 mi->second++;
         };
@@ -5330,10 +5330,10 @@ int CWallet::CountAnonOutputs(std::map<int64_t, int>& mOutputCounts, bool fMatur
     return 0;
 };
 
-int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, bool fMatureOnly)
+int CWallet::CountAllOkxOutputs(std::list<COkxOutputCount>& lOutputCounts, bool fMatureOnly)
 {
     if (fDebugRingSig)
-        LogPrintf("CountAllAnonOutputs()\n");
+        LogPrintf("CountAllOkxOutputs()\n");
 
     // TODO: there are few enough possible coin values to preinitialise a vector with all of them
 
@@ -5342,7 +5342,7 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
 
     leveldb::DB* pdb = txdb.GetInstance();
     if (!pdb)
-        throw runtime_error("CWallet::CountAnonOutputs() : cannot get leveldb instance");
+        throw runtime_error("CWallet::CountOkxOutputs() : cannot get leveldb instance");
 
     leveldb::Iterator *iterator = pdb->NewIterator(leveldb::ReadOptions());
 
@@ -5370,7 +5370,7 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         ssValue.write(iterator->value().data(), iterator->value().size());
 
-        CAnonOutput ao;
+        COkxOutput ao;
         ssValue >> ao;
 
         if (strType != "ao")
@@ -5387,7 +5387,7 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
         {
             // -- insert by nValue asc
             bool fProcessed = false;
-            for (std::list<CAnonOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
+            for (std::list<COkxOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
             {
                 if (ao.nValue == it->nValue)
                 {
@@ -5400,12 +5400,12 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
                 };
                 if (ao.nValue > it->nValue)
                     continue;
-                lOutputCounts.insert(it, CAnonOutputCount(ao.nValue, 1, 0, 0, nHeight, ao.nCompromised));
+                lOutputCounts.insert(it, COkxOutputCount(ao.nValue, 1, 0, 0, nHeight, ao.nCompromised));
                 fProcessed = true;
                 break;
             };
             if (!fProcessed)
-                lOutputCounts.push_back(CAnonOutputCount(ao.nValue, 1, 0, 0, nHeight, ao.nCompromised));
+                lOutputCounts.push_back(COkxOutputCount(ao.nValue, 1, 0, 0, nHeight, ao.nCompromised));
         };
 
         iterator->Next();
@@ -5439,7 +5439,7 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
 
 
         bool fProcessed = false;
-        for (std::list<CAnonOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
+        for (std::list<COkxOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
         {
             if (kis.nValue != it->nValue)
                 continue;
@@ -5448,7 +5448,7 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
             break;
         };
         if (!fProcessed)
-            LogPrintf("WARNING: CountAllAnonOutputs found keyimage without matching anon output value.\n");
+            LogPrintf("WARNING: CountAllOkxOutputs found keyimage without matching okx output value.\n");
 
         iterator->Next();
     };
@@ -5458,16 +5458,16 @@ int CWallet::CountAllAnonOutputs(std::list<CAnonOutputCount>& lOutputCounts, boo
     return 0;
 };
 
-int CWallet::CountOwnedAnonOutputs(std::map<int64_t, int>& mOwnedOutputCounts, bool fMatureOnly)
+int CWallet::CountOwnedOkxOutputs(std::map<int64_t, int>& mOwnedOutputCounts, bool fMatureOnly)
 {
     if (fDebugRingSig)
-        LogPrintf("CountOwnedAnonOutputs()\n");
+        LogPrintf("CountOwnedOkxOutputs()\n");
 
     CWalletDB walletdb(strWalletFile, "r");
 
     Dbc* pcursor = walletdb.GetAtCursor();
     if (!pcursor)
-        throw runtime_error("CWallet::CountOwnedAnonOutputs() : cannot create DB cursor");
+        throw runtime_error("CWallet::CountOwnedOkxOutputs() : cannot create DB cursor");
     unsigned int fFlags = DB_SET_RANGE;
     while (true)
     {
@@ -5485,7 +5485,7 @@ int CWallet::CountOwnedAnonOutputs(std::map<int64_t, int>& mOwnedOutputCounts, b
         if (ret != 0)
         {
             pcursor->close();
-            throw runtime_error("CWallet::CountOwnedAnonOutputs() : error scanning DB");
+            throw runtime_error("CWallet::CountOwnedOkxOutputs() : error scanning DB");
         };
 
         // Unserialize
@@ -5493,7 +5493,7 @@ int CWallet::CountOwnedAnonOutputs(std::map<int64_t, int>& mOwnedOutputCounts, b
         ssKey >> strType;
         if (strType != "oao")
             break;
-        COwnedAnonOutput oao;
+        COwnedOkxOutput oao;
         ssKey >> oao.vchImage;
 
         ssValue >> oao;
@@ -5521,7 +5521,7 @@ int CWallet::CountOwnedAnonOutputs(std::map<int64_t, int>& mOwnedOutputCounts, b
             };
 
         }
-        // TODO: check ReadAnonOutput?
+        // TODO: check ReadOkxOutput?
 
         oao.nValue = mi->second.vout[oao.outpoint.n].nValue;
 
@@ -5544,7 +5544,7 @@ bool CWallet::EraseAllAnonData()
     uint32_t nAo = 0;
     uint32_t nKi = 0;
 
-    LogPrintf("Erasing anon outputs.\n");
+    LogPrintf("Erasing okx outputs.\n");
     txdb.EraseRange(std::string("ao"), nAo);
     LogPrintf("Erasing spent key images.\n");
     txdb.EraseRange(std::string("ki"), nKi);
@@ -5554,11 +5554,11 @@ bool CWallet::EraseAllAnonData()
     uint32_t nOal = 0;
     uint32_t nOol = 0;
 
-    LogPrintf("Erasing locked anon outputs.\n");
+    LogPrintf("Erasing locked okx outputs.\n");
     walletdb.EraseRange(std::string("lao"), nLao);
-    LogPrintf("Erasing owned anon outputs.\n");
+    LogPrintf("Erasing owned okx outputs.\n");
     walletdb.EraseRange(std::string("oao"), nOao);
-    LogPrintf("Erasing anon output links.\n");
+    LogPrintf("Erasing okx output links.\n");
     walletdb.EraseRange(std::string("oal"), nOal);
     LogPrintf("Erasing old output links.\n");
     walletdb.EraseRange(std::string("ool"), nOol);
@@ -5572,20 +5572,20 @@ bool CWallet::CacheAnonStats()
     if (fDebugRingSig)
         LogPrintf("CacheAnonStats()\n");
 
-    mapAnonOutputStats.clear();
+    mapOkxOutputStats.clear();
 
-    std::list<CAnonOutputCount> lOutputCounts;
-    if (CountAllAnonOutputs(lOutputCounts, false) != 0)
+    std::list<COkxOutputCount> lOutputCounts;
+    if (CountAllOkxOutputs(lOutputCounts, false) != 0)
     {
-        LogPrintf("Error: CountAllAnonOutputs() failed.\n");
+        LogPrintf("Error: CountAllOkxOutputs() failed.\n");
         return false;
     };
 
-    for (std::list<CAnonOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
+    for (std::list<COkxOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
     {
-        mapAnonOutputStats[it->nValue].set(
+        mapOkxOutputStats[it->nValue].set(
             it->nValue, it->nExists, it->nSpends, it->nOwned,
-            it->nLeastDepth < 1 ? 0 : nBestHeight - it->nLeastDepth, it->nCompromised); // mapAnonOutputStats stores height in chain instead of depth
+            it->nLeastDepth < 1 ? 0 : nBestHeight - it->nLeastDepth, it->nCompromised); // mapOkxOutputStats stores height in chain instead of depth
     };
 
     return true;
@@ -5636,7 +5636,7 @@ bool CWallet::InitBloomFilter()
             if (fDebugRingSig)
             {
                 CBitcoinAddress coinAddress(keyId);
-                LogPrintf("InitBloomFilter() - ignoring key for anon output %s.\n", coinAddress.ToString().c_str());
+                LogPrintf("InitBloomFilter() - ignoring key for okx output %s.\n", coinAddress.ToString().c_str());
             };
             continue;
         };
@@ -6083,7 +6083,7 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew)
         BOOST_FOREACH(CTxOut txout, wtxNew.vout)
         {
             if (wtxNew.nVersion == ANON_TXN_VERSION
-                && txout.IsAnonOutput())
+                && txout.IsOkxOutput())
                 continue;
 
             if (IsChange(txout))
@@ -6217,7 +6217,7 @@ bool CWallet::SetAddressBookName(const CTxDestination& address, const string& st
         mapAddressBook[address] = strName;
     }
 
-    // -- fAddKeyToMerkleFilters is always false when adding keys for anonoutputs
+    // -- fAddKeyToMerkleFilters is always false when adding keys for okxoutputs
     if (fOwned
         && fAddKeyToMerkleFilters)
     {

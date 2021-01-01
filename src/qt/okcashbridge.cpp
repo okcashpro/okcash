@@ -467,7 +467,7 @@ void OkcashBridge::clearRecipients()
 bool OkcashBridge::sendCoins(bool fUseCoinControl, QString sChangeAddr)
 {
     int inputTypes = -1;
-    int nAnonOutputs = 0;
+    int nOkxOutputs = 0;
     int ringSizes = -1;
     // Format confirmation message
     QStringList formatted;
@@ -483,12 +483,12 @@ bool OkcashBridge::sendCoins(bool fUseCoinControl, QString sChangeAddr)
             case TXT_OK_TO_ANON:
                 formatted.append(tr("<b>%1</b> to OKPRIVATE %2 (%3)").arg(BitcoinUnits::formatWithUnit(BitcoinUnits::OK, rcp.amount), Qt::escape(rcp.label), rcp.address));
                 inputType = 0;
-                nAnonOutputs++;
+                nOkxOutputs++;
                 break;
             case TXT_ANON_TO_ANON:
                 formatted.append(tr("<b>%1</b> OKPRIVATE, ring size %2 to OKPRIVATE %3 (%4)").arg(BitcoinUnits::formatWithUnit(BitcoinUnits::OK, rcp.amount), QString::number(rcp.nRingSize), Qt::escape(rcp.label), rcp.address));
                 inputType = 1;
-                nAnonOutputs++;
+                nOkxOutputs++;
                 break;
             case TXT_ANON_TO_OK:
                 formatted.append(tr("<b>%1</b> OKPRIVATE, ring size %2 to OK %3 (%4)").arg(BitcoinUnits::formatWithUnit(BitcoinUnits::OK, rcp.amount), QString::number(rcp.nRingSize), Qt::escape(rcp.label), rcp.address));
@@ -574,7 +574,7 @@ bool OkcashBridge::sendCoins(bool fUseCoinControl, QString sChangeAddr)
     if(!ctx.isValid())
         return false;
 
-    if (inputTypes == 1 || nAnonOutputs > 0)
+    if (inputTypes == 1 || nOkxOutputs > 0)
         sendstatus = window->walletModel->sendCoinsAnon(recipients, fUseCoinControl ? CoinControlDialog::coinControl : NULL);
     else
         sendstatus = window->walletModel->sendCoins    (recipients, fUseCoinControl ? CoinControlDialog::coinControl : NULL);
@@ -634,7 +634,7 @@ bool OkcashBridge::sendCoins(bool fUseCoinControl, QString sChangeAddr)
             return false;
         case WalletModel::SCR_NeedFullMode:
             QMessageBox::warning(window, tr("Send Coins"),
-                tr("Error: Must be in full mode to send anon."),
+                tr("Error: Must be in full mode to send okx."),
                 QMessageBox::Ok, QMessageBox::Ok);
             return false;
         case WalletModel::SCR_StealthAddressFail:
@@ -696,50 +696,50 @@ void OkcashBridge::updateCoinControlLabels(unsigned int &quantity, int64_t &amou
     emitCoinControlUpdate(quantity, amount, fee, afterfee, bytes, priority, low, change);
 }
 
-QVariantMap OkcashBridge::listAnonOutputs()
+QVariantMap OkcashBridge::listOkxOutputs()
 {
-    QVariantMap anonOutputs;
+    QVariantMap okxOutputs;
     typedef std::map<int64_t, int> outputCount;
 
     outputCount mOwnedOutputCounts;
     outputCount mMatureOutputCounts;
     outputCount mSystemOutputCounts;
 
-    if (pwalletMain->CountOwnedAnonOutputs(mOwnedOutputCounts,  false) != 0
-     || pwalletMain->CountOwnedAnonOutputs(mMatureOutputCounts, true)  != 0)
+    if (pwalletMain->CountOwnedOkxOutputs(mOwnedOutputCounts,  false) != 0
+     || pwalletMain->CountOwnedOkxOutputs(mMatureOutputCounts, true)  != 0)
     {
-        LogPrintf("Error: CountOwnedAnonOutputs failed.\n");
-        return anonOutputs;
+        LogPrintf("Error: CountOwnedOkxOutputs failed.\n");
+        return okxOutputs;
     };
 
-    for (std::map<int64_t, CAnonOutputCount>::iterator mi(mapAnonOutputStats.begin()); mi != mapAnonOutputStats.end(); mi++)
+    for (std::map<int64_t, COkxOutputCount>::iterator mi(mapOkxOutputStats.begin()); mi != mapOkxOutputStats.end(); mi++)
         mSystemOutputCounts[mi->first] = 0;
 
-    if (pwalletMain->CountAnonOutputs(mSystemOutputCounts, true) != 0)
+    if (pwalletMain->CountOkxOutputs(mSystemOutputCounts, true) != 0)
     {
-        LogPrintf("Error: CountAnonOutputs failed.\n");
-        return anonOutputs;
+        LogPrintf("Error: CountOkxOutputs failed.\n");
+        return okxOutputs;
     };
 
-    for (std::map<int64_t, CAnonOutputCount>::iterator mi(mapAnonOutputStats.begin()); mi != mapAnonOutputStats.end(); mi++)
+    for (std::map<int64_t, COkxOutputCount>::iterator mi(mapOkxOutputStats.begin()); mi != mapOkxOutputStats.end(); mi++)
     {
-        CAnonOutputCount* aoc = &mi->second;
-        QVariantMap anonOutput;
+        COkxOutputCount* aoc = &mi->second;
+        QVariantMap okxOutput;
 
         int nDepth = aoc->nLeastDepth == 0 ? 0 : nBestHeight - aoc->nLeastDepth;
 
-        anonOutput.insert("owned_mature",   mMatureOutputCounts[aoc->nValue]);
-        anonOutput.insert("owned_outputs",  mOwnedOutputCounts [aoc->nValue]);
-        anonOutput.insert("system_mature",  mSystemOutputCounts[aoc->nValue]);
-        anonOutput.insert("system_outputs", aoc->nExists);
-        anonOutput.insert("system_spends",  aoc->nSpends);
-        anonOutput.insert("least_depth",    nDepth);
-        anonOutput.insert("value_s",        BitcoinUnits::format(window->clientModel->getOptionsModel()->getDisplayUnit(), aoc->nValue));
+        okxOutput.insert("owned_mature",   mMatureOutputCounts[aoc->nValue]);
+        okxOutput.insert("owned_outputs",  mOwnedOutputCounts [aoc->nValue]);
+        okxOutput.insert("system_mature",  mSystemOutputCounts[aoc->nValue]);
+        okxOutput.insert("system_outputs", aoc->nExists);
+        okxOutput.insert("system_spends",  aoc->nSpends);
+        okxOutput.insert("least_depth",    nDepth);
+        okxOutput.insert("value_s",        BitcoinUnits::format(window->clientModel->getOptionsModel()->getDisplayUnit(), aoc->nValue));
 
-        anonOutputs.insert(QString::number(aoc->nValue), anonOutput);
+        okxOutputs.insert(QString::number(aoc->nValue), okxOutput);
     };
 
-    return anonOutputs;
+    return okxOutputs;
 };
 
 void OkcashBridge::populateTransactionTable()
@@ -1553,7 +1553,7 @@ QVariantMap OkcashBridge::txnDetails(QString blkHash, QString txnHash)
 
 
              if( txn.nVersion == ANON_TXN_VERSION
-                 && txout.IsAnonOutput() )
+                 && txout.IsOkxOutput() )
                  sAddr = "Okcash";
              else
              {

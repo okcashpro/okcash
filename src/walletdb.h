@@ -32,8 +32,8 @@ prefixes
     orderposnext
     minversion
     tx
-    lao                 - locked anon output
-    oao                 - owned anon output
+    lao                 - locked okx output
+    oao                 - owned okx output
     oal
     bestblock
     bestblockheader
@@ -119,14 +119,14 @@ public:
 
 };
 
-class CLockedAnonOutput
+class CLockedOkxOutput
 {
-// expand key for anon output received with wallet locked
+// expand key for okx output received with wallet locked
 // stored in walletdb, key is pubkey hash160
 public:
-    CLockedAnonOutput() {}
+    CLockedOkxOutput() {}
 
-    CLockedAnonOutput(CPubKey pkEphem_, CPubKey pkScan_, COutPoint outpoint_)
+    CLockedOkxOutput(CPubKey pkEphem_, CPubKey pkScan_, COutPoint outpoint_)
     {
         pkEphem = pkEphem_;
         pkScan = pkScan_;
@@ -146,14 +146,14 @@ public:
 
 };
 
-class COwnedAnonOutput
+class COwnedOkxOutput
 {
 // stored in walletdb, key is keyimage
 // TODO: store nValue?
 public:
-    COwnedAnonOutput() {}
+    COwnedOkxOutput() {}
 
-    COwnedAnonOutput(COutPoint outpoint_, bool fSpent_)
+    COwnedOkxOutput(COutPoint outpoint_, bool fSpent_)
     {
         outpoint = outpoint_;
         fSpent   = fSpent_;
@@ -256,52 +256,52 @@ public:
         return Erase(std::make_pair(std::string("tx"), hash));
     }
 
-    bool ReadLockedAnonOutput(const CKeyID& keyId, CLockedAnonOutput& lockedAo)
+    bool ReadLockedOkxOutput(const CKeyID& keyId, CLockedOkxOutput& lockedAo)
     {
         return Read(std::make_pair(std::string("lao"), keyId), lockedAo);
     }
 
-    bool WriteLockedAnonOutput(const CKeyID& keyId, const CLockedAnonOutput& lockedAo)
+    bool WriteLockedOkxOutput(const CKeyID& keyId, const CLockedOkxOutput& lockedAo)
     {
         nWalletDBUpdated++;
         return Write(std::make_pair(std::string("lao"), keyId), lockedAo, true);
     }
 
-    bool EraseLockedAnonOutput(const CKeyID& keyId)
+    bool EraseLockedOkxOutput(const CKeyID& keyId)
     {
         nWalletDBUpdated++;
         return Erase(std::make_pair(std::string("lao"), keyId));
     }
 
-    bool ReadOwnedAnonOutput(const ec_point& vchImage, COwnedAnonOutput& ownAo)
+    bool ReadOwnedOkxOutput(const ec_point& vchImage, COwnedOkxOutput& ownAo)
     {
         return Read(std::make_pair(std::string("oao"), vchImage), ownAo);
     }
 
-    bool WriteOwnedAnonOutput(const ec_point& vchImage, const COwnedAnonOutput& ownAo)
+    bool WriteOwnedOkxOutput(const ec_point& vchImage, const COwnedOkxOutput& ownAo)
     {
         nWalletDBUpdated++;
         return Write(std::make_pair(std::string("oao"), vchImage), ownAo, true);
     }
 
-    bool EraseOwnedAnonOutput(const ec_point& vchImage)
+    bool EraseOwnedOkxOutput(const ec_point& vchImage)
     {
         nWalletDBUpdated++;
         return Erase(std::make_pair(std::string("oao"), vchImage));
     }
 
-    bool ReadOwnedAnonOutputLink(const CPubKey& pkCoin, ec_point& vchImage)
+    bool ReadOwnedOkxOutputLink(const CPubKey& pkCoin, ec_point& vchImage)
     {
         return Read(std::make_pair(std::string("oal"), pkCoin), vchImage);
     }
 
-    bool WriteOwnedAnonOutputLink(const CPubKey& pkCoin, const ec_point& vchImage)
+    bool WriteOwnedOkxOutputLink(const CPubKey& pkCoin, const ec_point& vchImage)
     {
         nWalletDBUpdated++;
         return Write(std::make_pair(std::string("oal"), pkCoin), vchImage, true);
     }
 
-    bool EraseOwnedAnonOutputLink(const CPubKey& pkCoin)
+    bool EraseOwnedOkxOutputLink(const CPubKey& pkCoin)
     {
         nWalletDBUpdated++;
         return Erase(std::make_pair(std::string("oal"), pkCoin));

@@ -161,7 +161,7 @@ Value getinfo(const Array& params, bool fHelp)
     if (nNodeMode == NT_FULL)
     {
         obj.push_back(Pair("moneysupply",  ValueFromAmount(pindexBest->nMoneySupply)));
-//        obj.push_back(Pair("okprivsupply", ValueFromAmount(pindexBest->nAnonSupply)));
+//        obj.push_back(Pair("okprivsupply", ValueFromAmount(pindexBest->nOkxSupply)));
     }
 
     obj.push_back(Pair("connections",   (int)vNodes.size()));
@@ -2251,7 +2251,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
         throw std::runtime_error(
             "clearwallettransactions [unaccepted]\n"
                 "[unaccepted] optional to deleted unaccepted stakes only\n"
-            "delete all transactions from wallet - reload with reloadanondata\n"
+            "delete all transactions from wallet - reload with reloadokxdata\n"
             "Warning: Backup your wallet first!");
 
     Object result;
@@ -2390,7 +2390,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
 
     snprintf(cbuf, sizeof(cbuf), "Removed %u transactions.", nTransactions);
     result.push_back(Pair("complete", std::string(cbuf)));
-    result.push_back(Pair("", "Reload with reloadanondata, reindex or re-download blockchain."));
+    result.push_back(Pair("", "Reload with reloadokxdata, reindex or re-download blockchain."));
 
 
     return result;
@@ -2510,11 +2510,11 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
 }
 
 
-Value sendoktoanon(const Array& params, bool fHelp)
+Value sendoktookx(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw std::runtime_error(
-            "sendoktoanon <stealth_address> <amount> [narration] [comment] [comment-to]\n"
+            "sendoktookx <stealth_address> <amount> [narration] [comment] [comment-to]\n"
             "<amount> is a real number and is rounded to the nearest 0.000001"
             + HelpRequiringPassphrase());
 
@@ -2544,19 +2544,19 @@ Value sendoktoanon(const Array& params, bool fHelp)
         wtx.mapValue["to"]      = params[4].get_str();
 
     std::string sError;
-    if (!pwalletMain->SendOkToAnon(sxAddr, nAmount, sNarr, wtx, sError))
+    if (!pwalletMain->SendOkToOkx(sxAddr, nAmount, sNarr, wtx, sError))
     {
-        LogPrintf("SendOkToAnon failed %s\n", sError.c_str());
+        LogPrintf("SendOkToOkx failed %s\n", sError.c_str());
         throw JSONRPCError(RPC_WALLET_ERROR, sError);
     };
     return wtx.GetHash().GetHex();
 }
 
-Value sendanontoanon(const Array& params, bool fHelp)
+Value sendokxtookx(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 3 || params.size() > 6)
         throw std::runtime_error(
-            "sendanontoanon <stealth_address> <amount> <ring_size> [narration] [comment] [comment-to]\n"
+            "sendokxtookx <stealth_address> <amount> <ring_size> [narration] [comment] [comment-to]\n"
             "<amount> is a real number and is rounded to the nearest 0.000001\n"
             "<ring_size> is a number of outputs of the same amount to include in the signature\n"
             "  warning: using a ring_size less than 3 is not recommended"
@@ -2599,9 +2599,9 @@ Value sendanontoanon(const Array& params, bool fHelp)
 
 
     std::string sError;
-    if (!pwalletMain->SendAnonToAnon(sxAddr, nAmount, nRingSize, sNarr, wtx, sError))
+    if (!pwalletMain->SendOkxToOkx(sxAddr, nAmount, nRingSize, sNarr, wtx, sError))
     {
-        LogPrintf("SendAnonToAnon failed %s\n", sError.c_str());
+        LogPrintf("SendOkxToOkx failed %s\n", sError.c_str());
         throw JSONRPCError(RPC_WALLET_ERROR, sError);
     };
 
@@ -2613,11 +2613,11 @@ Value sendanontoanon(const Array& params, bool fHelp)
     return wtx.GetHash().GetHex();
 }
 
-Value sendanontook(const Array& params, bool fHelp)
+Value sendokxtook(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 3 || params.size() > 6)
         throw std::runtime_error(
-            "sendanontook <stealth_address> <amount> <ring_size> [narration] [comment] [comment-to]\n"
+            "sendokxtook <stealth_address> <amount> <ring_size> [narration] [comment] [comment-to]\n"
             "<amount> is a real number and is rounded to the nearest 0.000001\n"
             "<ring_size> is a number of outputs of the same amount to include in the signature"
             + HelpRequiringPassphrase());
@@ -2655,19 +2655,19 @@ Value sendanontook(const Array& params, bool fHelp)
 
 
     std::string sError;
-    if (!pwalletMain->SendAnonToOk(sxAddr, nAmount, nRingSize, sNarr, wtx, sError))
+    if (!pwalletMain->SendOkxToOk(sxAddr, nAmount, nRingSize, sNarr, wtx, sError))
     {
-        LogPrintf("SendAnonToOk failed %s\n", sError.c_str());
+        LogPrintf("SendOkxToOk failed %s\n", sError.c_str());
         throw JSONRPCError(RPC_WALLET_ERROR, sError);
     };
     return wtx.GetHash().GetHex();
 }
 
-Value estimateanonfee(const Array& params, bool fHelp)
+Value estimateokxfee(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 3)
         throw std::runtime_error(
-            "estimateanonfee <amount> <ring_size> [narration]\n"
+            "estimateokxfee <amount> <ring_size> [narration]\n"
             "<amount>is a real number and is rounded to the nearest 0.000001\n"
             "<ring_size> is a number of outputs of the same amount to include in the signature");
 
@@ -2691,9 +2691,9 @@ Value estimateanonfee(const Array& params, bool fHelp)
     CWalletTx wtx;
     int64_t nFee = 0;
     std::string sError;
-    if (!pwalletMain->EstimateAnonFee(nAmount, nRingSize, sNarr, wtx, nFee, sError))
+    if (!pwalletMain->EstimateOkxFee(nAmount, nRingSize, sNarr, wtx, nFee, sError))
     {
-        LogPrintf("EstimateAnonFee failed %s\n", sError.c_str());
+        LogPrintf("EstimateOkxFee failed %s\n", sError.c_str());
         throw JSONRPCError(RPC_WALLET_ERROR, sError);
     };
 
@@ -2709,11 +2709,11 @@ Value estimateanonfee(const Array& params, bool fHelp)
     return result;
 }
 
-Value anonoutputs(const Array& params, bool fHelp)
+Value okxoutputs(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 2)
         throw std::runtime_error(
-            "anonoutputs [systemTotals] [show_immature_outputs]\n"
+            "okxoutputs [systemTotals] [show_immature_outputs]\n"
             "[systemTotals] if true displays the total no. of coins in the system.");
 
     if (nNodeMode != NT_FULL)
@@ -2735,9 +2735,9 @@ Value anonoutputs(const Array& params, bool fHelp)
             fMatureOnly = false;
     };
 
-    std::list<COwnedAnonOutput> lAvailableCoins;
-    if (pwalletMain->ListUnspentAnonOutputs(lAvailableCoins, fMatureOnly) != 0)
-        throw std::runtime_error("ListUnspentAnonOutputs() failed.");
+    std::list<COwnedOkxOutput> lAvailableCoins;
+    if (pwalletMain->ListUnspentOkxOutputs(lAvailableCoins, fMatureOnly) != 0)
+        throw std::runtime_error("ListUnspentOkxOutputs() failed.");
 
 
     Object result;
@@ -2751,7 +2751,7 @@ Value anonoutputs(const Array& params, bool fHelp)
         int64_t nTotal = 0;
         int64_t nLast = 0;
         int nCount = 0;
-        for (std::list<COwnedAnonOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
+        for (std::list<COwnedOkxOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
         {
             if (nLast > 0 && it->nValue != nLast)
             {
@@ -2773,11 +2773,11 @@ Value anonoutputs(const Array& params, bool fHelp)
     } else
     {
         std::map<int64_t, int> mOutputCounts;
-        for (std::list<COwnedAnonOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
+        for (std::list<COwnedOkxOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
             mOutputCounts[it->nValue] = 0;
 
-        if (pwalletMain->CountAnonOutputs(mOutputCounts, fMatureOnly) != 0)
-            throw std::runtime_error("CountAnonOutputs() failed.");
+        if (pwalletMain->CountOkxOutputs(mOutputCounts, fMatureOnly) != 0)
+            throw std::runtime_error("CountOkxOutputs() failed.");
 
         result.push_back(Pair("No. of coins owned, No. of system coins available", "amount"));
 
@@ -2786,7 +2786,7 @@ Value anonoutputs(const Array& params, bool fHelp)
         int64_t nLast = 0;
         int64_t nCount = 0;
         int64_t nSystemCount;
-        for (std::list<COwnedAnonOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
+        for (std::list<COwnedOkxOutput>::iterator it = lAvailableCoins.begin(); it != lAvailableCoins.end(); ++it)
         {
             if (nLast > 0 && it->nValue != nLast)
             {
@@ -2812,11 +2812,11 @@ Value anonoutputs(const Array& params, bool fHelp)
     return result;
 }
 
-Value anoninfo(const Array& params, bool fHelp)
+Value okxinfo(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
         throw std::runtime_error(
-            "anoninfo [recalculate]\n"
+            "okxinfo [recalculate]\n"
             "list outputs in system.");
 
     if (nNodeMode != NT_FULL)
@@ -2835,22 +2835,22 @@ Value anoninfo(const Array& params, bool fHelp)
 
     Object result;
 
-    std::list<CAnonOutputCount> lOutputCounts;
+    std::list<COkxOutputCount> lOutputCounts;
 
     if (fRecalculate)
     {
-        if (pwalletMain->CountAllAnonOutputs(lOutputCounts, fMatureOnly) != 0)
-            throw std::runtime_error("CountAllAnonOutputs() failed.");
+        if (pwalletMain->CountAllOkxOutputs(lOutputCounts, fMatureOnly) != 0)
+            throw std::runtime_error("CountAllOkxOutputs() failed.");
     } else
     {
-        // TODO: make mapAnonOutputStats a vector preinitialised with all possible coin values?
-        for (std::map<int64_t, CAnonOutputCount>::iterator mi = mapAnonOutputStats.begin(); mi != mapAnonOutputStats.end(); ++mi)
+        // TODO: make mapOkxOutputStats a vector preinitialised with all possible coin values?
+        for (std::map<int64_t, COkxOutputCount>::iterator mi = mapOkxOutputStats.begin(); mi != mapOkxOutputStats.end(); ++mi)
         {
             bool fProcessed = false;
-            CAnonOutputCount aoc = mi->second;
+            COkxOutputCount aoc = mi->second;
             if (aoc.nLeastDepth > 0)
                 aoc.nLeastDepth = nBestHeight - aoc.nLeastDepth;
-            for (std::list<CAnonOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
+            for (std::list<COkxOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
             {
                 if (aoc.nValue > it->nValue)
                     continue;
@@ -2872,7 +2872,7 @@ Value anoninfo(const Array& params, bool fHelp)
     int64_t nTotalOut = 0;
     int64_t nTotalCompromised = 0;
     int64_t nTotalCoins = 0;
-    for (std::list<CAnonOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
+    for (std::list<COkxOutputCount>::iterator it = lOutputCounts.begin(); it != lOutputCounts.end(); ++it)
     {
         snprintf(cbuf, sizeof(cbuf), "%5d, %5d, %7d, %3d", it->nExists, it->nSpends, it->nCompromised, it->nLeastDepth);
         result.push_back(Pair(cbuf, ValueFromAmount(it->nValue)));
@@ -2884,20 +2884,20 @@ Value anoninfo(const Array& params, bool fHelp)
         nTotalCoins += it->nExists;
     };
 
-    result.push_back(Pair("total anon value in", ValueFromAmount(nTotalIn)));
-    result.push_back(Pair("total anon value out", ValueFromAmount(nTotalOut)));
-    result.push_back(Pair("total anon value Ring_1", ValueFromAmount(nTotalCompromised)));
-    result.push_back(Pair("total anon outputs", nTotalCoins));
+    result.push_back(Pair("total okx value in", ValueFromAmount(nTotalIn)));
+    result.push_back(Pair("total okx value out", ValueFromAmount(nTotalOut)));
+    result.push_back(Pair("total okx value Ring_1", ValueFromAmount(nTotalCompromised)));
+    result.push_back(Pair("total okx outputs", nTotalCoins));
 
     return result;
 }
 
-Value reloadanondata(const Array& params, bool fHelp)
+Value reloadokxdata(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 0)
         throw std::runtime_error(
-            "reloadanondata \n"
-            "clears all anon txn data from system, and runs scanforalltxns.\n"
+            "reloadokxdata \n"
+            "clears all okx txn data from system, and runs scanforalltxns.\n"
             "WARNING: Intended for development use only."
             + HelpRequiringPassphrase());
 
@@ -2907,7 +2907,7 @@ Value reloadanondata(const Array& params, bool fHelp)
 
     CBlockIndex *pindex = pindexGenesisBlock;
 
-    // check from 257000, once anon transactions started
+    // check from 257000, once okx transactions started
     while (pindex->nHeight < (fTestNet ? 0 : 470000) && pindex->pnext)
         pindex = pindex->pnext;
 
@@ -2924,10 +2924,10 @@ Value reloadanondata(const Array& params, bool fHelp)
         pwalletMain->ReacceptWalletTransactions();
 
         pwalletMain->CacheAnonStats();
-        result.push_back(Pair("result", "reloadanondata complete."));
+        result.push_back(Pair("result", "reloadokxdata complete."));
     } else
     {
-        result.push_back(Pair("result", "reloadanondata failed - !pindex."));
+        result.push_back(Pair("result", "reloadokxdata failed - !pindex."));
     };
 
     return result;
@@ -3086,8 +3086,8 @@ Value txnreport(const Array& params, bool fHelp)
                     if (GetKeyImage(&txdb, vchImage, ski, fInMemPool))
                         nInputValue = ski.nValue;
 
-                    COwnedAnonOutput oao;
-                    if (walletdb.ReadOwnedAnonOutput(vchImage, oao))
+                    COwnedOkxOutput oao;
+                    if (walletdb.ReadOwnedOkxOutput(vchImage, oao))
                     {
                         fOwnCoin = true;
                     } else
@@ -3171,7 +3171,7 @@ Value txnreport(const Array& params, bool fHelp)
                 bool fSpent = false;
 
                 if (pwtx->nVersion == ANON_TXN_VERSION
-                    && txout.IsAnonOutput())
+                    && txout.IsOkxOutput())
                 {
                     entry.push_back("okprivate out");
                     entry.push_back("");
@@ -3179,10 +3179,10 @@ Value txnreport(const Array& params, bool fHelp)
                     CPubKey pkCoin    = txout.ExtractAnonPk();
 
                     std::vector<uint8_t> vchImage;
-                    COwnedAnonOutput oao;
+                    COwnedOkxOutput oao;
 
-                    if (walletdb.ReadOwnedAnonOutputLink(pkCoin, vchImage)
-                        && walletdb.ReadOwnedAnonOutput(vchImage, oao))
+                    if (walletdb.ReadOwnedOkxOutputLink(pkCoin, vchImage)
+                        && walletdb.ReadOwnedOkxOutput(vchImage, oao))
                     {
                         sKeyImage = HexStr(vchImage);
                         fOwnCoin = true;
@@ -3192,8 +3192,8 @@ Value txnreport(const Array& params, bool fHelp)
                         // - tokens received with locked wallet won't have oao until wallet unlocked
                         CKeyID ckCoinId = pkCoin.GetID();
 
-                        CLockedAnonOutput lockedAo;
-                        if (walletdb.ReadLockedAnonOutput(ckCoinId, lockedAo))
+                        CLockedOkxOutput lockedAo;
+                        if (walletdb.ReadLockedOkxOutput(ckCoinId, lockedAo))
                             fOwnCoin = true;
 
                         sKeyImage = "locked?";

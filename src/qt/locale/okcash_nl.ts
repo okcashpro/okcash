@@ -1224,7 +1224,7 @@ Kring grootte van één is niet geheim en tast het netwerk aan.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <source>Error: Must be in full mode to send anon.</source>
+        <source>Error: Must be in full mode to send okx.</source>
         <translation>Fout: Alleen in volledige node modus kan anoniem.</translation>
     </message>
     <message>

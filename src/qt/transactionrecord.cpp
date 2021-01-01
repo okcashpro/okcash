@@ -136,7 +136,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
             const CTxOut& txout = wtx.vout[nOut];
 
             if (wtx.nVersion == ANON_TXN_VERSION
-                && txout.IsAnonOutput())
+                && txout.IsOkxOutput())
             {
                 const CScript &s = txout.scriptPubKey;
                 CKeyID ckidD = CPubKey(&s[2+1], 33).GetID();
@@ -219,8 +219,8 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 txin.ExtractKeyImage(vchImage);
 
                 CWalletDB walletdb(wallet->strWalletFile, "r");
-                COwnedAnonOutput oao;
-                if (!walletdb.ReadOwnedAnonOutput(vchImage, oao))
+                COwnedOkxOutput oao;
+                if (!walletdb.ReadOwnedOkxOutput(vchImage, oao))
                 {
                     fAllFromMe = false;
                     break; // display as send/recv OKprivate
@@ -238,7 +238,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
         BOOST_FOREACH(const CTxOut& txout, wtx.vout)
         {
             if (wtx.nVersion == ANON_TXN_VERSION
-                && txout.IsAnonOutput())
+                && txout.IsOkxOutput())
             {
                 fAllToMe = false;
                 break; // display as send/recv OKprivate
@@ -289,7 +289,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 sub.idx = parts.size();
 
                 if (wtx.nVersion == ANON_TXN_VERSION
-                    && txout.IsAnonOutput())
+                    && txout.IsOkxOutput())
                 {
                     const CScript &s = txout.scriptPubKey;
                     CKeyID ckidD = CPubKey(&s[2+1], 33).GetID();

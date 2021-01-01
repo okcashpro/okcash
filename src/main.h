@@ -97,7 +97,7 @@ struct COrphanBlock {
 extern std::map<uint256, COrphanBlock*> mapOrphanBlocks;
 extern std::map<uint256, CBlockThin*> mapOrphanBlockThins;
 
-extern std::map<int64_t, CAnonOutputCount> mapAnonOutputStats;
+extern std::map<int64_t, COkxOutputCount> mapOkxOutputStats;
 
 extern CTxMemPool mempool;
 
@@ -1111,7 +1111,7 @@ public:
 
     int64_t nMint;
     int64_t nMoneySupply;
-    int64_t nAnonSupply;
+    int64_t nOkxSupply;
 
     unsigned int nFlags;  // ppcoin: block index flags
 
@@ -1142,7 +1142,7 @@ public:
         nChainTrust = 0;
         nMint = 0;
         nMoneySupply = 0;
-        nAnonSupply = 0;
+        nOkxSupply = 0;
         nFlags = 0;
         nStakeModifier = 0;
         bnStakeModifierV2 = 0;
@@ -1168,7 +1168,7 @@ public:
         nChainTrust = 0;
         nMint = 0;
         nMoneySupply = 0;
-        nAnonSupply = 0;
+        nOkxSupply = 0;
         nFlags = 0;
         nStakeModifier = 0;
         bnStakeModifierV2 = 0;
@@ -1557,7 +1557,7 @@ public:
         READWRITE(nHeight);
         READWRITE(nMint);
         READWRITE(nMoneySupply);
-        READWRITE(nAnonSupply);
+        READWRITE(nOkxSupply);
         READWRITE(nFlags);
         READWRITE(nStakeModifier);
         READWRITE(bnStakeModifierV2);

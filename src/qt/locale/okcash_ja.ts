@@ -1229,7 +1229,7 @@ Ring size of one is not anonymous, and harms the network.</source>
     </message>
     <message>
         <location line="+5"/>
-        <source>Error: Must be in full mode to send anon.</source>
+        <source>Error: Must be in full mode to send okx.</source>
         <translation type="unfinished"/>
     </message>
     <message>

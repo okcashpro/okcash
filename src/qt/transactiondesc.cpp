@@ -80,7 +80,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
             BOOST_FOREACH(const CTxOut& txout, wtx.vout)
             {
                 if (wtx.nVersion == ANON_TXN_VERSION
-                    && txout.IsAnonOutput())
+                    && txout.IsOkxOutput())
                 {
                     const CScript &s = txout.scriptPubKey;
                     CKeyID ckidD = CPubKey(&s[2+1], 33).GetID();
@@ -297,7 +297,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                     sCoinValue = "spend not in chain!";
                 };
 
-                strHTML += "<li>Anon Coin - value: "+GUIUtil::HtmlEscape(sCoinValue)+", ring size: "+GUIUtil::HtmlEscape(itostr(nRingSize))+", keyimage: "+GUIUtil::HtmlEscape(HexStr(vchImage))+"</li>";
+                strHTML += "<li>Okx Coin - value: "+GUIUtil::HtmlEscape(sCoinValue)+", ring size: "+GUIUtil::HtmlEscape(itostr(nRingSize))+", keyimage: "+GUIUtil::HtmlEscape(HexStr(vchImage))+"</li>";
                 continue;
             };
 

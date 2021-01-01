@@ -183,7 +183,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
             BOOST_FOREACH(const CTxIn& txin, tx.vin)
             {
                 if (tx.nVersion == ANON_TXN_VERSION
-                    && txin.IsAnonInput()) // anon inputs are verified later in CheckAnonInputs()
+                    && txin.IsAnonInput()) // okx inputs are verified later in CheckAnonInputs()
                     continue;
 
                 // Read prev transaction

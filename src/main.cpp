@@ -64,7 +64,7 @@ CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes 
 
 std::map<uint256, CBlockThin*> mapOrphanBlockThins;
 
-std::map<int64_t, CAnonOutputCount> mapAnonOutputStats; // display only, not 100% accurate, height could become inaccurate due to undos
+std::map<int64_t, COkxOutputCount> mapOkxOutputStats; // display only, not 100% accurate, height could become inaccurate due to undos
 
 std::multimap<uint256, CBlockThin*> mapOrphanBlockThinsByPrev;
 
@@ -571,7 +571,7 @@ bool CTransaction::IsStandard() const
                 || nRingSize > (Params().IsProtocolV3(pindexBest->nHeight) ? (int)MAX_RING_SIZE : (int)MAX_RING_SIZE_OLD)
                 || txin.scriptSig.size() > sizeof(COutPoint) + 2 + (33 + 32 + 32) * nRingSize)
             {
-                LogPrintf("IsStandard() anon txin failed.\n");
+                LogPrintf("IsStandard() okx txin failed.\n");
                 return false;
             };
             continue;
@@ -595,15 +595,15 @@ bool CTransaction::IsStandard() const
     BOOST_FOREACH(const CTxOut& txout, vout)
     {
         if (nVersion == ANON_TXN_VERSION
-            && txout.IsAnonOutput())
+            && txout.IsOkxOutput())
         {
             if (txout.nValue < 1
              || txout.scriptPubKey.size() > MIN_ANON_OUT_SIZE + MAX_ANON_NARRATION_SIZE)
             {
-                LogPrintf("IsStandard() anon txout failed.\n");
+                LogPrintf("IsStandard() okx txout failed.\n");
                 return false;
             }
-            //nTxnOut++; anon outputs don't count (narrations are embedded in scriptPubKey)
+            //nTxnOut++; okx outputs don't count (narrations are embedded in scriptPubKey)
             continue;
         };
 
@@ -710,7 +710,7 @@ bool CTransaction::HasStealthOutput() const
     for (vector<CTxOut>::const_iterator it = vout.begin(); it != vout.end(); ++it)
     {
         if (nVersion == ANON_TXN_VERSION
-            && it->IsAnonOutput())
+            && it->IsOkxOutput())
             continue;
 
         CScript::const_iterator itScript = it->scriptPubKey.begin();
@@ -846,13 +846,13 @@ bool CTransaction::CheckTransaction() const
 
     if (nVersion == ANON_TXN_VERSION)
     {
-        // -- Check for duplicate anon outputs
+        // -- Check for duplicate okx outputs
         // NOTE: is this necessary, duplicate coins would not be spendable anyway?
         set<CPubKey> vAnonOutPubkeys;
         CPubKey pkTest;
         BOOST_FOREACH(const CTxOut& txout, vout)
         {
-            if (!txout.IsAnonOutput())
+            if (!txout.IsOkxOutput())
                 continue;
 
             const CScript &s = txout.scriptPubKey;
@@ -883,9 +883,9 @@ bool CTransaction::CheckTransaction() const
 
 int64_t CTransaction::GetMinFee(unsigned int nBlockSize, enum GetMinFee_mode mode, unsigned int nBytes) const
 {
-    // Base fee is either MIN_TX_FEE or MIN_RELAY_TX_FEE for standard txns, and MIN_TX_FEE_ANON for anon txns
+    // Base fee is either MIN_TX_FEE or MIN_RELAY_TX_FEE for standard txns, and MIN_TX_FEE_ANON for okx txns
 
-    // -- force GMF_ANON if anon txn
+    // -- force GMF_ANON if okx txn
     if (nVersion == ANON_TXN_VERSION)
         mode = GMF_ANON;
 
@@ -2197,7 +2197,7 @@ static bool CheckAnonInputAB(CTxDB &txdb, const CTxIn &txin, int i, int nRingSiz
     const CScript &s = txin.scriptSig;
 
     CPubKey pkRingCoin;
-    CAnonOutput ao;
+    COkxOutput ao;
     CTxIndex txindex;
 
     ec_point pSigC;
@@ -2208,9 +2208,9 @@ static bool CheckAnonInputAB(CTxDB &txdb, const CTxIn &txin, int i, int nRingSiz
     for (int ri = 0; ri < nRingSize; ++ri)
     {
         pkRingCoin = CPubKey(&pPubkeys[ri * EC_COMPRESSED_SIZE], EC_COMPRESSED_SIZE);
-        if (!txdb.ReadAnonOutput(pkRingCoin, ao))
+        if (!txdb.ReadOkxOutput(pkRingCoin, ao))
         {
-            LogPrintf("CheckAnonInputsAB(): Error input %d, element %d AnonOutput %s not found.\n", i, ri, HexStr(pkRingCoin).c_str());
+            LogPrintf("CheckAnonInputsAB(): Error input %d, element %d OkxOutput %s not found.\n", i, ri, HexStr(pkRingCoin).c_str());
             return false;
         };
 
@@ -2328,7 +2328,7 @@ bool CTransaction::CheckAnonInputs(CTxDB& txdb, int64_t& nSumValue, bool& fInval
 
 
         CPubKey pkRingCoin;
-        CAnonOutput ao;
+        COkxOutput ao;
         CTxIndex txindex;
         const unsigned char* pPubkeys = &s[2];
         const unsigned char* pSigc    = &s[2 + EC_COMPRESSED_SIZE * nRingSize];
@@ -2336,9 +2336,9 @@ bool CTransaction::CheckAnonInputs(CTxDB& txdb, int64_t& nSumValue, bool& fInval
         for (int ri = 0; ri < nRingSize; ++ri)
         {
             pkRingCoin = CPubKey(&pPubkeys[ri * EC_COMPRESSED_SIZE], EC_COMPRESSED_SIZE);
-            if (!txdb.ReadAnonOutput(pkRingCoin, ao))
+            if (!txdb.ReadOkxOutput(pkRingCoin, ao))
             {
-                LogPrintf("CheckAnonInputs(): Error input %d, element %d AnonOutput %s not found.\n", i, ri, HexStr(pkRingCoin).c_str());
+                LogPrintf("CheckAnonInputs(): Error input %d, element %d OkxOutput %s not found.\n", i, ri, HexStr(pkRingCoin).c_str());
                 fInvalid = true; return false;
             };
 
@@ -2680,7 +2680,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
                 int64_t nTxAnonIn;
 
                 BOOST_FOREACH(const CTxOut& txout, tx.vout)
-                    if (txout.IsAnonOutput())
+                    if (txout.IsOkxOutput())
                         nAnonOut += txout.nValue;
 
                 if (!tx.CheckAnonInputs(txdb, nTxAnonIn, fInvalid, true))
@@ -2735,7 +2735,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     // ppcoin: track money supply and mint amount info
     pindex->nMint = nValueOut - nValueIn + nFees;
     pindex->nMoneySupply = (pindex->pprev? pindex->pprev->nMoneySupply : 0) + nValueOut - nValueIn;
-    pindex->nAnonSupply  = (pindex->pprev? pindex->pprev->nAnonSupply  : 0) + nAnonOut - nAnonIn;
+    pindex->nOkxSupply  = (pindex->pprev? pindex->pprev->nOkxSupply  : 0) + nAnonOut - nAnonIn;
     if (!txdb.WriteBlockIndex(CDiskBlockIndex(pindex)))
         return error("ConnectBlock() : WriteBlockIndex for pindex failed");
 

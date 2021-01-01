@@ -218,13 +218,13 @@ extern json_spirit::Value clearwallettransactions(const json_spirit::Array& para
 extern json_spirit::Value scanforalltxns(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value scanforstealthtxns(const json_spirit::Array& params, bool fHelp);
 
-extern json_spirit::Value sendoktoanon(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value sendanontoanon(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value sendanontook(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value estimateanonfee(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value anonoutputs(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value anoninfo(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value reloadanondata(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value sendoktookx(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value sendokxtookx(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value sendokxtook(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value estimateokxfee(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value okxoutputs(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value okxinfo(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value reloadokxdata(const json_spirit::Array& params, bool fHelp);
 
 extern json_spirit::Value txnreport(const json_spirit::Array& params, bool fHelp);
 
