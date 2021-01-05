@@ -265,7 +265,7 @@ signals:
     void emitMessages(const QVariantList & messages, bool reset);
 
 public:
-    MessageModel *mtm;
+    MessageModel * mtm;
 
     QVariantMap addMessage(int row)
     {
