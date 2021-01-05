@@ -48,6 +48,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Chain explorer:  https://chainz.cryptoid.info/ok/
 
+#### OK Chain 2nd explorer:  https://okcash.coinzen.pro
+
 #### Okcash Block halving:  https://okcashblockhalf.com
 
 #### OK BTC Community Channels: https://discord.io/okcash
