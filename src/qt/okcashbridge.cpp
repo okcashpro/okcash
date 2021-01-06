@@ -265,7 +265,7 @@ signals:
     void emitMessages(const QVariantList & messages, bool reset);
 
 public:
-    MessageModel *mtm;
+    MessageModel * mtm;
 
     QVariantMap addMessage(int row)
     {
@@ -870,7 +870,7 @@ bool OkcashBridge::deleteAddress(QString address)
 }
 
 // Messages
-void OkcashBridge::appendMessages(QVariantList messages, bool reset)
+void OkcashBridge::appendMessages(QVariantList & messages, bool reset)
 {
     emitMessages(messages, reset);
 }
