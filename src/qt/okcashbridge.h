@@ -131,7 +131,7 @@ private slots:
     void insertAddresses(const QModelIndex &parent, int start, int end);
     void insertMessages(const QModelIndex &parent, int start, int end);
 
-    void appendMessages(QVariantList messages, bool reset);
+    void appendMessages(QVariantList &messages, bool reset);
 
     void populateMessageTable();
 
