@@ -265,7 +265,7 @@ signals:
     void emitMessages(const QVariantList & messages, bool reset);
 
 public:
-    MessageModel * mtm;
+    MessageModel *mtm;
 
     QVariantMap addMessage(int row)
     {
@@ -870,7 +870,7 @@ bool OkcashBridge::deleteAddress(QString address)
 }
 
 // Messages
-void OkcashBridge::appendMessages(QVariantList & messages, bool reset)
+void OkcashBridge::appendMessages(QVariantList messages, bool reset)
 {
     emitMessages(messages, reset);
 }
@@ -1777,18 +1777,13 @@ QVariantMap OkcashBridge::importFromMnemonic(QString inMnemonic, QString inPassw
     /*
     if (fBip44)
     {
-
         eKey58.SetKey(ekMaster, CChainParams::EXT_SECRET_KEY_BTC);
-
         //result.push_back(Pair("master", eKey58.ToString()));
-
         // m / purpose' / coin_type' / account' / change / address_index
         CExtKey ekDerived;
         ekMaster.Derive(ekDerived, BIP44_PURPOSE);
         ekDerived.Derive(ekDerived, Params().BIP44ID());
-
         eKey58.SetKey(ekDerived, CChainParams::EXT_SECRET_KEY);
-
         //result.push_back(Pair("derived", eKey58.ToString()));
     } else
     {
