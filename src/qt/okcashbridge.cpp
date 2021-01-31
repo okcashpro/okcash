@@ -894,7 +894,7 @@ void OkcashBridge::populateMessageTable()
 {
     thMessage->mtm = window->messageModel;
 
-    connect(thMessage, SIGNAL(emitMessages(QVariantList, bool)), SLOT(appendMessages(QVariantList, bool)));
+    //connect(thMessage, SIGNAL(emitMessages(QVariantList, bool)), SLOT(appendMessages(QVariantList, bool)));
     thMessage->start();
 }
 
