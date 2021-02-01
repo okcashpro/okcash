@@ -7,7 +7,7 @@
 # Originally by Laszlo Hanyecz (solar@heliacal.net)
 USE_UPNP:=0
 CXX=llvm-g++
-DEPSDIR=/usr/local/Cellar
+DEPSDIR=/opt/local
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
