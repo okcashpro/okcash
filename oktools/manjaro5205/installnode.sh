@@ -7,6 +7,16 @@ cd  ../..
 
 cd src
 
+export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
+
+export BDB_INCLUDE_PATH="/usr/local/BerkeleyDB.4.8/include"
+
+export BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
+
+export CPATH="/usr/local/BerkeleyDB.4.8/include"
+
+export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
+
 # Build okcashd node
 
 make -j4 -f makefile.unix USE_UPNP=-
