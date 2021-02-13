@@ -2956,6 +2956,7 @@ Value getwalletinfo(const Array& params, bool fHelp)
     obj.push_back(Pair("txcount",       (int)pwalletMain->mapWallet.size()));
     obj.push_back(Pair("keypoololdest", (boost::int64_t)pwalletMain->GetOldestKeyPoolTime()));
     obj.push_back(Pair("keypoolsize",   (int)pwalletMain->GetKeyPoolSize()));
+    obj.push_back(Pair("walletlocked",      pwalletMain->IsCrypted() ? pwalletMain->IsLocked() ? "Locked" : "Unlocked" : "Uncrypted"));
     if (pwalletMain->IsCrypted())
         obj.push_back(Pair("unlocked_until", (boost::int64_t)nWalletUnlockTime / 1000));
     return obj;
