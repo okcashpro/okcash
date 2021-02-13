@@ -39,7 +39,7 @@ echo "= BerkeleyDB 4.8 is now installed ="
 
 cd
 
-sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev -y
+sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default -y
 
 echo "All the required dependencies for Okcash node and Graphical client are now installed for:"
 uname -a
