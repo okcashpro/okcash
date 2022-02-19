@@ -18,9 +18,8 @@
 
 [![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.org/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.org/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.org/#jf_download) [![OK-fedora](https://i.imgur.com/WCovlZx.png)](https://okcash.org/#jf_download) [![OK-suse](https://i.imgur.com/CBnNFOZ.png)](https://okcash.org/#jf_download)
 
-#### Download the Instant OK-Blockchain - Fast Sync for first time users on Desktop-Laptop 
-(Mac, Win, Linux, Raspberry Pi): 
-![OK-bootstrap](http://i.imgur.com/edwu0MM.png) https://github.com/okcashpro/ok-blockchain/releases
+#### Download the Instant OK-Blockchain - Fast Synchronize your OK wallets
+**Fast sync for Mac, Windows, Linux, Raspberry Pi and IoT users:** https://github.com/okcashpro/ok-blockchain
 
 --------------------
 
