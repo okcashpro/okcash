@@ -23,6 +23,12 @@
 
 --------------------
 
+OK is open-source; its design is public, nobody owns or controls OK and everyone can take part. 
+
+Okcash is a decentralized and established hybrid cryptocurrency that started on Nov 24th 2014. OK was mined (PoW-Scrypt) and evolved to be stake-able (PoS-LTSS-Sha256). 
+
+Okcash is not a security, it never had an ICO, nor any kind of funding rounds. OK is self sustainable and is fully supported by voluntaries (Just like Bitcoin).
+
 **Okcash** is digital cash. **OK** is the official symbol. 
 
 **Transactions** have real fast confirmations, making them virtually instant. 
@@ -31,7 +37,7 @@ You can send Okcash to family or friends, or pay for goods or services, **anywhe
 
 The Okcash network is **decentralized** and free from middlemen, giving you back control of your finances and providing a **secure network** for all of your payments. 
 
-Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, Secure Messages, friendly to use, Universal name, Multicultural, Multi-platform, IoT(Internet of Things), Tor and i2p compatible**.
+Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, friendly to use, Universal name, Multicultural, Multi-platform, Multichain, IoT(Internet of Things), Tor and i2p compatible**.
 
 --------------------
 
@@ -53,7 +59,7 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK BTC Community Channels: https://discord.io/cryptocurrency
 
-#### OkcashTalk Forums *new:  http://okcashtalk.org
+#### OkcashTalk Forums:  http://okcashtalk.org
 
 #### BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
 
