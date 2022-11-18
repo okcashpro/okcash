@@ -37,11 +37,11 @@
         <file alias="assets/icons/chevron.png">src/qt/res/assets/icons/chevron.png</file>
         <file alias="assets/icons/connect_0.gif">src/qt/res/assets/icons/connect_0.gif</file>
         <file alias="assets/icons/connect_1.gif">src/qt/res/assets/icons/connect_1.gif</file>
-        <file alias="assets/icons/connect_2.png">src/qt/res/assets/icons/connect_2.png</file>
-        <file alias="assets/icons/connect_3.png">src/qt/res/assets/icons/connect_3.png</file>
-        <file alias="assets/icons/connect_4.png">src/qt/res/assets/icons/connect_4.png</file>
-        <file alias="assets/icons/connect_5.png">src/qt/res/assets/icons/connect_5.png</file>
-        <file alias="assets/icons/connect_6.png">src/qt/res/assets/icons/connect_6.png</file>
+        <file alias="assets/icons/connect_2.gif">src/qt/res/assets/icons/connect_2.gif</file>
+        <file alias="assets/icons/connect_3.gif">src/qt/res/assets/icons/connect_3.gif</file>
+        <file alias="assets/icons/connect_4.gif">src/qt/res/assets/icons/connect_4.gif</file>
+        <file alias="assets/icons/connect_5.gif">src/qt/res/assets/icons/connect_5.gif</file>
+        <file alias="assets/icons/connect_6.gif">src/qt/res/assets/icons/connect_6.gif</file>
         <file alias="assets/icons/delete.png">src/qt/res/assets/icons/delete.png</file>
         <file alias="assets/icons/hd.png">src/qt/res/assets/icons/hd.png</file>
         <file alias="assets/icons/i2p_off.png">src/qt/res/assets/icons/i2p_off.png</file>
