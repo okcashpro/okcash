@@ -123,7 +123,7 @@ body.dashboard .page-container {
     width: 100%;
     padding: 0 20px 0 0;
     z-index: 800;
-    background-color: #0d1117;
+    background-color: #000000;
     border-bottom: 1px solid rgba(230, 230, 230, 0.7);
 }
 .page-sidebar,
@@ -207,7 +207,7 @@ body.dashboard .page-container {
 }
 .page-sidebar {
     width: 280px;
-    background-color: #0d1117;
+    background-color: #000000;
     left: -210px;
     position: fixed;
     top: 0;
@@ -242,7 +242,7 @@ body.dashboard .page-container {
     display: block;
     height: 60px;
     line-height: 60px;
-    background-color: #0d1117;
+    background-color: #000000;
     border-bottom: 1px solid #0f0f13;
     color: #fff;
     width: 100%;
@@ -455,7 +455,7 @@ body.dashboard .page-container {
     display: none;
     list-style: none;
     clear: both;
-    background-color: #0d1117;
+    background-color: #000000;
     padding: 0 0 10px;
 }
 .page-sidebar .sidebar-menu .menu-items > li ul.sub-menu > li {
@@ -479,7 +479,7 @@ body.dashboard .page-container {
     height: 30px;
     line-height: 30px;
     margin: 0;
-    background-color: #0d1117;
+    background-color: #000000;
     font-size: 14px;
 }
 .page-sidebar .sidebar-menu .muted {
@@ -495,7 +495,7 @@ body.dashboard .page-container {
 }
 .icon-thumbnail {
     display: inline-block;
-    background: #0d1117;
+    background: #000000;
     height: 40px;
     width: 40px;
     line-height: 40px;
@@ -548,7 +548,7 @@ body.dashboard .page-container {
     opacity: 1;
 }
 .quickview-wrapper .nav-tabs {
-    background-color: #0d1117;
+    background-color: #000000;
     position: relative;
     padding: 0 15px;
     height: 40px;
@@ -1831,7 +1831,7 @@ hr.dotted {
     background-color: #0f0e12;
 }
 .bg-menu {
-    background-color: #0d1117;
+    background-color: #000000;
 }
 .bg-menu-light {
     background-color: #4c4a55;
