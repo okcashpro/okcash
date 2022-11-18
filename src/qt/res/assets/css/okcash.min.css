@@ -893,7 +893,7 @@ progress::-webkit-progress-value {
     background-repeat: no-repeat;
 }
 .no-syncing {
-    background: url(qrc:///assets/icons/synced.png);
+    background: url(qrc:///assets/icons/synced.gif);
     width: 26px;
     height: 26px;
     background-size: 100% 100%;
