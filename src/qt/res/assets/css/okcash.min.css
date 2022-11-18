@@ -775,7 +775,7 @@ progress::-webkit-progress-value {
     }
 }
 .staking {
-    background: url(qrc:///assets/icons/staking.png);
+    background: url(qrc:///assets/icons/staking.gif);
     width: 26px;
     height: 26px;
     background-size: 100% 100%;

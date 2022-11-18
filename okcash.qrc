@@ -64,7 +64,7 @@
         <file alias="assets/icons/okcash.png">src/qt/res/assets/icons/okcash.png</file>
         <file alias="assets/icons/okcash.icns">src/qt/res/assets/icons/okcash.icns</file>
         <file alias="assets/icons/staking_off.png">src/qt/res/assets/icons/staking_off.png</file>
-        <file alias="assets/icons/staking.png">src/qt/res/assets/icons/staking.png</file>
+        <file alias="assets/icons/staking.gif">src/qt/res/assets/icons/staking.gif</file>
         <file alias="assets/icons/synced.png">src/qt/res/assets/icons/synced.png</file>
         <file alias="assets/icons/syncing.gif">src/qt/res/assets/icons/syncing.gif</file>
         <file alias="assets/icons/syncing_static.gif">src/qt/res/assets/icons/syncing_static.gif</file>
