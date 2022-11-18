@@ -1,6 +1,6 @@
 Okcash
 
-Copyright (c) 2014-2022 Okcash Developers
+Copyright (c) 2014-2023 Okcash Developers
 Copyright (c) 2014 BlackCoin Developers
 Copyright (c) 2013-2014 NovaCoin Developers
 Copyright (c) 2012-2013 PPCoin Developers
