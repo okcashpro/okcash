@@ -35,8 +35,8 @@
         <file alias="assets/fonts/OpenSans/OpenSans-Regular.ttf">src/qt/res/assets/fonts/OpenSans/OpenSans-Regular.ttf</file>
         <file alias="assets/icons/chat_bubble.png">src/qt/res/assets/icons/chat_bubble.png</file>
         <file alias="assets/icons/chevron.png">src/qt/res/assets/icons/chevron.png</file>
-        <file alias="assets/icons/connect_0.png">src/qt/res/assets/icons/connect_0.png</file>
-        <file alias="assets/icons/connect_1.png">src/qt/res/assets/icons/connect_1.png</file>
+        <file alias="assets/icons/connect_0.gif">src/qt/res/assets/icons/connect_0.gif</file>
+        <file alias="assets/icons/connect_1.gif">src/qt/res/assets/icons/connect_1.gif</file>
         <file alias="assets/icons/connect_2.png">src/qt/res/assets/icons/connect_2.png</file>
         <file alias="assets/icons/connect_3.png">src/qt/res/assets/icons/connect_3.png</file>
         <file alias="assets/icons/connect_4.png">src/qt/res/assets/icons/connect_4.png</file>
