@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = okcash
-VERSION = 6.9.0.7
+VERSION = 6.9.0.9
 INCLUDEPATH += src src/json src/qt
 DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
