@@ -33,14 +33,14 @@
                   <li><a href=#transactions><span class=translate>Tx History </span><span class=icon-thumbnail><i class="fa fa-list-ol"></i></span></a>
                   <li><a href=#addressbook><span class=translate>Address Book </span><span class=icon-thumbnail><i class="fa fa-bookmark-o"></i></span></a>
                </ul>
-            <!--<li><a href=#okdecent><span class=title class=translate>OK Decentraland</span> <span class=icon-thumbnail><i class="fa fa-shopping-cart"></i></span></a>-->
             <li>
                <a href=#><span class="title translate">OK Apps</span> <span class=arrow></span> <span class=icon-thumbnail><i class="fa fa-star"></i></span></a>
                <ul class=sub-menu>
                   <!--<li><a href=#chaindata onclick=chainDataPage.updateOkxOutputs()><span class=translate>Chain Data</span> <span class=icon-thumbnail><i class="fa fa-link"></i></span></a>-->
                   <li><a href=#blockdata onclick=blockExplorerPage.updateLatestBlocks()><span class=translate>OK Explorer</span> <span class=icon-thumbnail><i class="fa fa-chain"></i></span></a>
                   <li><a href=# onclick='bridge.userAction(["debugClicked"])'><span class=translate>OK Console</span> <span class=icon-thumbnail><i class="fa fa-laptop"></i></span></a>
-
+                  <li><a href=#okswap><span class=title class=translate>OK Swap</span> <span class=icon-thumbnail><i class="fa fa-rocket"></i></span></a>
+                  <!-- <li><a href=#okdefi><span class=title class=translate>OK Defi</span> <span class=icon-thumbnail><i class="fa fa-flask"></i></span></a> -->
                </ul>
             <!--<li><a href=#messages id=chat-menu-link onclick=scrollMessages()><span class="title translate">OK Chat</span> <span class=arrow></span><span class=icon-thumbnail><i class="fa fa-comment"></i> </span><span class=details><span class=user-notifications><span id=message-count>0</span> </span><span class=translate>Notifications</span></span></a>
             <li>
@@ -594,12 +594,12 @@
                      </div>
                   </div>
                </article>
-               <article id=okdecent class=bg-white style=background-color:#fff>
+               <article id=okdefi class=bg-white style=background-color:#fff>
                   <div class=bg-white style=position:fixed;top:0;bottom:0;left:0;right:0></div>
                   <div class=page-content-wrapper>
                      <nav class="navbar navbar-default nav-sub-menu p-t-10 p-r-35 p-l-35" style=min-height:75px;margin-bottom:0!important role=navigation>
                         <div class=pull-left>
-                           <h4 class="translate uppercase" style=font-weight:bolder>OK Decentraland</h4>
+                           <h4 class="translate uppercase" style=font-weight:bolder>OK Defi</h4>
                         </div>
                         <div class=pull-right></div>
                         <div class=container-fluid>
@@ -610,12 +610,12 @@
                         <div class="col-sm-12 bg-white" style=height:100px%;min-height:100%>
                            <div class="col-sm-6 col-sm-offset-3 bg-white p-t-30" style=text-align:center;padding-top:100px>
                               <img src=qrc:///assets/img/okdecentraland.png>
-                              <h1>OK Decentraland</h1>
+                              <h1>OK Defi</h1>
                               <p>- under development -
                            </div>
                            <div class="col-sm-6 bg-white" style=text-align:right;padding-top:100px>
                               <h5>GET IN TOUCH AND CONTRIBUTE</h5>
-                              <p style=opacity:6>Join the community on <a href=https://discord.gg/grvpc8c target=_blank>Discord</a>
+                              <p style=opacity:6>Join the community on <a href=https://discord.io/ok target=_blank>Discord</a>
                            </div>
                            <div class="col-sm-6 bg-white m-t-130" style=padding-top:100px>
                               <h5>KUDOS DEVELOPMENT!</h5>
@@ -624,6 +624,29 @@
                      </div>
                   </div>
                </article>
+			   
+               <article id=okswap class=bg-white style=background-color:#fff>
+                  <div class=bg-white style=position:fixed;top:0;bottom:0;left:0;right:0></div>
+                  <div class=page-content-wrapper>
+                     <nav class="navbar navbar-default nav-sub-menu p-t-10 p-r-35 p-l-35" style=min-height:75px;margin-bottom:0!important role=navigation>
+                        <div class=pull-left>
+                           <h4 style=font-weight:bold><span class=translate>OK Swap</span></h4> Here you can swap <b>OK</b> for <b>OK</b> [BEP20] and vice versa.
+                        </div>
+                        <div class=pull-right></div>
+                        <div class=container-fluid>
+                           <div class=navbar-header></div>
+                        </div>
+                     </nav>
+                     <div class=row>
+                        <div class="col-sm-12 bg-white" style=height:100px%;min-height:100%>
+                           <p align="center">
+		                   <iframe src="https://wrapping.services/get/ok/" name="swap" frameborder="0" height="820px" width="100%"></iframe>
+		                   </p>
+                        </div>
+                     </div>
+                  </div>
+               </article>
+
             </div>
             <article id=send>
                <div class=page-content-wrapper>
