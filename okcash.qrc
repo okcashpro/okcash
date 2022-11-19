@@ -100,7 +100,7 @@
         <file alias="assets/img/ok_leak_image.jpg">src/qt/res/assets/img/ok_leak_image.jpg</file>
         <file alias="assets/img/ok-vertical.png">src/qt/res/assets/img/ok-vertical.png</file>
         <file alias="assets/img/okcash_logo.png">src/qt/res/assets/img/okcash_logo.png</file>
-        <file alias="assets/img/okdecentraland.png">src/qt/res/assets/img/okdecentraland.png</file>
+        <file alias="assets/img/okdefi.png">src/qt/res/assets/img/okdefi.png</file>
         <file alias="assets/img/splash.png">src/qt/res/assets/img/splash.png</file>
         <file alias="assets/js/navigation.min.js">src/qt/res/assets/js/navigation.min.js</file>
         <file alias="assets/js/pages/send.min.js">src/qt/res/assets/js/pages/send.min.js</file>
