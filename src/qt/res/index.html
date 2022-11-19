@@ -37,8 +37,6 @@
                <a href=#><span class="title translate">OK Apps</span> <span class=arrow></span> <span class=icon-thumbnail><i class="fa fa-star"></i></span></a>
                <ul class=sub-menu>
                   <!--<li><a href=#chaindata onclick=chainDataPage.updateOkxOutputs()><span class=translate>Chain Data</span> <span class=icon-thumbnail><i class="fa fa-link"></i></span></a>-->
-                  <li><a href=#blockdata onclick=blockExplorerPage.updateLatestBlocks()><span class=translate>OK Explorer</span> <span class=icon-thumbnail><i class="fa fa-chain"></i></span></a>
-                  <li><a href=# onclick='bridge.userAction(["debugClicked"])'><span class=translate>OK Console</span> <span class=icon-thumbnail><i class="fa fa-laptop"></i></span></a>
                   <li><a href=#okswap><span class=title class=translate>OK Swap</span> <span class=icon-thumbnail><i class="fa fa-rocket"></i></span></a>
                   <!-- <li><a href=#okdefi><span class=title class=translate>OK Defi</span> <span class=icon-thumbnail><i class="fa fa-flask"></i></span></a> -->
                </ul>
@@ -46,21 +44,28 @@
             <li>
                <a href=#><span class="title translate">Wallet System</span> <span class=arrow></span> <span class=icon-thumbnail><i class="fa fa fa-key"></i></span></a>
                <ul class=sub-menu>
-
                </ul>-->
+            <li>
+               <a href=#><span class="title translate">Security</span> </a>
+               <ul class=sub-menu>
+                  <li><a href=# onclick='bridge.userAction(["backupWallet"])'><span class=translate>Backup my OK Wallet</span> <span class=icon-thumbnail><i class="fa fa-floppy-o"></i></span></a>
+                  <li class=encryptWallet><a href=# onclick='bridge.userAction(["encryptWallet"])'><span class=translate>Encrypt my OK Wallet</span> <span class=icon-thumbnail><i id=encryptWallet class="fa fa-toggle-off"></i></span></a>
+                  <li id=changePassphrase><a href=# onclick='bridge.userAction(["changePassphrase"])'><span class=translate>Change my Password</span> <span class=icon-thumbnail><i class="fa fa-user-secret"></i></span></a>
+                  <li id=toggleLock><a href=# onclick='bridge.userAction(["toggleLock"])'><span class=translate>Un/Lock OK Wallet</span> <span class=icon-thumbnail><i class="fa fa-toggle-on"></i></span></a>
+
+               </ul>
+
             <li>
                <a href=#><span class="title translate">Config</span> </a>
                <ul class=sub-menu>
                   <li><a href=#options><span class="title translate">OK Client options</span> <span class=icon-thumbnail><i class="fa fa-cogs"></i></span></a>
-                  <li><a href=# onclick='bridge.userAction(["backupWallet"])'><span class=translate>Backup my OK Wallet</span> <span class=icon-thumbnail><i class="fa fa-floppy-o"></i></span></a>
-                  <li class=encryptWallet><a href=# onclick='bridge.userAction(["encryptWallet"])'><span class=translate>Encrypt my OK Wallet</span> <span class=icon-thumbnail><i id=encryptWallet class="fa fa-toggle-off"></i></span></a>
-                  <li id=changePassphrase><a href=# onclick='bridge.userAction(["changePassphrase"])'><span class=translate>Change my Password</span> <span class=icon-thumbnail><i class="fa fa-user-secret"></i></span></a>
-                  <li id=toggleLock><a href=# onclick='bridge.userAction(["toggleLock"])'><span class=translate>Un/Lock my OK Wallet</span> <span class=icon-thumbnail><i class="fa fa-toggle-on"></i></span></a>
-                  <li><a href=#walletmanagement onclick='$("#walletmanagement-advanced").hide(),$("#key-options").hide(),$("#wizards").show(),gotoWizard("new-key-wizard",0,!0)'><span class=translate>Get a New HD Wallet</span> <span class=icon-thumbnail><i class="fa fa-shield"></i></span></a>
-                  <li><a href=#walletmanagement onclick='$("#walletmanagement-advanced").hide(),$("#key-options").hide(),$("#wizards").show(),gotoWizard("recover-key-wizard",0,!0)'><span class=translate>Import an HD Wallet</span> <span class=icon-thumbnail><i class="fa fa-crosshairs"></i></span></a>
-                  <li><a href=#walletmanagement onclick='$("#key-options").hide(),$("#wizards").hide(),$("#walletmanagement-advanced").show(),walletManagementPage.updateKeyList(),walletManagementPage.updateAccountList()'><span class=translate>Advanced HD config </span> <span class=icon-thumbnail><i class="fa fa-laptop"></i></span></a>
+                  <li><a href=# onclick='bridge.userAction(["debugClicked"])'><span class=translate>OK Console</span> <span class=icon-thumbnail><i class="fa fa-bug"></i></span></a>
+                  <li><a href=#blockdata onclick=blockExplorerPage.updateLatestBlocks()><span class=translate>OK Explorer</span> <span class=icon-thumbnail><i class="fa fa-chain"></i></span></a>
                   <li><a href=# data-target=#verify-sign-message-modal data-toggle=modal onclick='$("#sign-href").click(),$("#sign-address")'><span class=translate>Sign Message</span> <span class=icon-thumbnail><i class="fa fa-edit"></i></span></a>
                   <li><a href=# data-target=#verify-sign-message-modal data-toggle=modal onclick='$("#verify-href").click(),$("#verify-address")'><span class=translate>Verify Message</span> <span class=icon-thumbnail><i class="fa fa-check-square-o"></i></span></a>
+                  <li><a href=#walletmanagement onclick='$("#key-options").hide(),$("#wizards").hide(),$("#walletmanagement-advanced").show(),walletManagementPage.updateKeyList(),walletManagementPage.updateAccountList()'><span class=translate>Advanced HD config </span> <span class=icon-thumbnail><i class="fa fa-laptop"></i></span></a>
+                  <li><a href=#walletmanagement onclick='$("#walletmanagement-advanced").hide(),$("#key-options").hide(),$("#wizards").show(),gotoWizard("new-key-wizard",0,!0)'><span class=translate>Get a New HD Wallet</span> <span class=icon-thumbnail><i class="fa fa-shield"></i></span></a>
+                  <li><a href=#walletmanagement onclick='$("#walletmanagement-advanced").hide(),$("#key-options").hide(),$("#wizards").show(),gotoWizard("recover-key-wizard",0,!0)'><span class=translate>Import an HD Wallet</span> <span class=icon-thumbnail><i class="fa fa-crosshairs"></i></span></a>
                   <li><a href=#b onclick='bridge.userAction(["aboutClicked"])'><span class=translate>About OK</span> <span class=icon-thumbnail><i class="fa fa-github"></i></span></a>
                   <li><a href=# onclick='bridge.userAction(["aboutQtClicked"])'><span class=translate>About QT</span> <span class=icon-thumbnail><i class="fa fa-info"></i></span></a>
                </ul>
@@ -694,7 +699,7 @@
                                     <label class="col-sm-3 control-label option p-l-20 recipient translate" for=from_account_public>OK <a href=#><i class="p-b-5 fa fa-question-circle" data-title="My Okcash Balance" style=color:#626262></i></a></label>
                                     <div class=col-sm-9>
                                        <div class=option>
-                                          <div id=from_account_group class="radio radio-success"><input id=from_account_public name=transaction_type_from type=radio value=public checked><label for=from_account_public class=translate>Okcash</label><!--<input id=from_account_private name=transaction_type_from type=radio value=private><label for=from_account_private class=translate>PRIVATE</label>--><span data-title="Current spendable send payment balance"><b class=translate>Balance:</b> <span id=spend_ok><span class=balance>0.00</span> <span class=unit>OK</span> </span><span id=spend_okprivate><span class=okprivate_balance>0.00</span> <span class=unit>OK</span> </span></span><span id=tx_ringsize><label class="form-controlring_size m-r-10 translate" for=ring_size>Ring Size:</label><input class="form-control-options-page ring_size input_box" id=ring_size max=32 min=3 step=1 type=number value=16></span></div>
+                                          <div id=from_account_group class="radio radio-success"><input id=from_account_public name=transaction_type_from type=radio value=public checked><label for=from_account_public class=translate>OK</label><!--<input id=from_account_private name=transaction_type_from type=radio value=private><label for=from_account_private class=translate>PRIVATE</label>--><span data-title="Current spendable send payment balance"><b class=translate>Balance:</b> <span id=spend_ok><span class=balance>0.00</span> <span class=unit>OK</span> </span><span id=spend_okprivate><span class=okprivate_balance>0.00</span> <span class=unit>OK</span> </span></span><span id=tx_ringsize><label class="form-controlring_size m-r-10 translate" for=ring_size>Ring Size:</label><input class="form-control-options-page ring_size input_box" id=ring_size max=32 min=3 step=1 type=number value=16></span></div>
                                        </div>
                                     </div>
                                  </div>
