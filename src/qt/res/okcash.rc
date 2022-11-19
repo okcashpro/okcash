@@ -19,7 +19,7 @@ BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
             VALUE "CompanyName",        "Okcash"
-            VALUE "FileDescription",    "Okcash (OSS GUI client for Okcash)"
+            VALUE "FileDescription",    "OK Wallet (OSS GUI client for Okcash)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "okcash"
             VALUE "LegalCopyright",     "2009-2014 The Bitcoin developers, 2012-2014 The NovaCoin & PPCoin developers, 2014 The BlackCoin developers, 2014-2023 The Okcash developers"
