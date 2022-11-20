@@ -4,19 +4,13 @@
 [![Build Status](https://img.shields.io/badge/build-success-gre.svg?style=flat-square)](https://github.com/okcashpro/okcash) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg?style=flat-square)](http://explorer.okcash.co) [![OK NetworkU](https://img.shields.io/badge/network%20uptime-100%25-gre.svg?style=flat-square)](http://explorer.okcash.co) [![Okcash last commit](https://img.shields.io/github/last-commit/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash License](https://img.shields.io/github/license/okcashpro/okcash?color=green&style=flat-square)](https://github.com/okcashpro/okcash/blob/master/COPYING) [![Okcash Repo Size](https://img.shields.io/github/repo-size/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash top lang](https://img.shields.io/github/languages/top/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash languages](https://img.shields.io/github/languages/count/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg?style=flat-square)](https://github.com/okcashpro/okcash) 
 [![Okcash last release date](https://img.shields.io/github/release-date/okcashpro/okcash?label=latest%20release&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![Okcash last release name download](https://img.shields.io/github/v/release/okcashpro/okcash?label=release%20download&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest)
 
+<img src="https://media0.giphy.com/media/jQ4XBuu2FXFJyzfqie/giphy.gif" alt="OK" width="680">
+
 # [OK] Okcash
 
-#### Join the OK Bitcoin - Cryptocurrency and blockchain community server
+#### Join the OK Bitcoin Crypto community server
 
 [![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/okcash)
-
--------------------
-
-### Download Supported Platforms
-
-[![OK-windows](http://i.imgur.com/kJIvcip.png)](https://okcash.org/#jf_download) [![OK-mac](http://i.imgur.com/eW5Hlpc.png)](https://okcash.org/#jf_download) [![OK-ubuntu](http://imgur.com/orQ2ta4.png)](https://okcash.org/#jf_download) [![OK-debian](https://i.imgur.com/pPS1OOx.png)](https://okcash.org/#jf_download)  [![OK-redhat](https://i.imgur.com/3AwIKyy.png)](https://okcash.org/#jf_download) 
-
-[![OK-raspberry](http://imgur.com/UJNvyax.png)](https://okcash.org/#jf_download)  [![OK-pine](http://imgur.com/bUpbcNL.png)](https://okcash.org/#jf_download) [![OK-android](http://i.imgur.com/Tx4q5Dc.png)](https://okcash.org/#jf_download) [![OK-fedora](https://i.imgur.com/WCovlZx.png)](https://okcash.org/#jf_download) [![OK-suse](https://i.imgur.com/CBnNFOZ.png)](https://okcash.org/#jf_download)
 
 #### Download the Instant OK-Blockchain - Fast Synchronize your OK wallets
 **Fast sync for Mac, Windows, Linux, Raspberry Pi and IoT users:** https://github.com/okcashpro/ok-blockchain
