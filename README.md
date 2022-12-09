@@ -1,23 +1,23 @@
 
-<img alt="Okcash" src="https://i.imgur.com/aCEqPMB.png">
+<img alt="OK Wallets v7" src="https://i.imgur.com/UZY6MAz.png">
 
 [![Build Status](https://img.shields.io/badge/build-success-gre.svg?style=flat-square)](https://github.com/okcashpro/okcash) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg?style=flat-square)](http://explorer.okcash.co) [![OK NetworkU](https://img.shields.io/badge/network%20uptime-100%25-gre.svg?style=flat-square)](http://explorer.okcash.co) [![Okcash last commit](https://img.shields.io/github/last-commit/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash License](https://img.shields.io/github/license/okcashpro/okcash?color=green&style=flat-square)](https://github.com/okcashpro/okcash/blob/master/COPYING) [![Okcash Repo Size](https://img.shields.io/github/repo-size/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash top lang](https://img.shields.io/github/languages/top/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash languages](https://img.shields.io/github/languages/count/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg?style=flat-square)](https://github.com/okcashpro/okcash) 
 [![Okcash last release date](https://img.shields.io/github/release-date/okcashpro/okcash?label=latest%20release&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![Okcash last release name download](https://img.shields.io/github/v/release/okcashpro/okcash?label=release%20download&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest)
 
 <img src="https://media0.giphy.com/media/jQ4XBuu2FXFJyzfqie/giphy.gif" alt="OK" width="830">
 
-# [OK] Okcash
+# OK • Okcash
 
-#### Join the OK Bitcoin Crypto community server
+#### Join the OK community server
 
 [![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/okcash)
 
-#### Download the Instant OK-Blockchain - Fast Synchronize your OK wallets
+#### Download the 1 Click Instant sync for the OK-Blockchain - Synchronize your OK wallet fast for the 1st time sync.
 **Fast sync for Mac, Windows, Linux, Raspberry Pi and IoT users:** https://github.com/okcashpro/ok-blockchain
 
 --------------------
 
-OK is open-source; its design is public, nobody owns or controls OK and everyone can take part. 
+OK is multi chain and open-source; its design is public, nobody owns or controls OK and everyone can take part. 
 
 Okcash is a decentralized and established hybrid cryptocurrency that started on Nov 24th 2014. OK was mined (PoW-Scrypt) and evolved to be stake-able (PoS-LTSS-Sha256). 
 
@@ -39,7 +39,7 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Community website  https://okcash.co - What is Okcash?
 
-#### OK swap to OK BEP20 website: https://oktoken.cash - Wrapped Okcash BSC
+#### OK swap to OK BEP20 website: https://oktoken.cash - OK Multi chain swap site
 
 #### OK Documentation website:  https://okcash.org
 
