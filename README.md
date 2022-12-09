@@ -39,19 +39,23 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Community website  https://okcash.co - What is Okcash?
 
-#### OK swap to OK BEP20 website: https://oktoken.cash - OK Multi chain swap site
+#### OK Multi chain swap site: https://oktoken.cash
 
 #### OK Documentation website:  https://okcash.org
 
+#### OK Block halving counter + info:  https://okcashblockhalf.com
+
+#### OK Network explorer:  https://chainz.cryptoid.info/ok/
+
+#### OK Ethereum explorer:  https://etherscan.io/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
+
+#### OK Binance Smart Chain explorer:  https://bscscan.com/token/0x523821d20a283d955f6205B4C9252779Cd0f964B
+
+#### OK Polygon explorer:  https://polygonscan.com/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
+
+#### OK Avalanche explorer:  https://snowtrace.io/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
+
 #### OK Tutorials website:  https://okcash.info
-
-#### OK Chain explorer:  https://chainz.cryptoid.info/ok/
-
-#### OK BEP20 explorer:  https://bscscan.com/token/0x523821d20a283d955f6205B4C9252779Cd0f964B
-
-#### Okcash Block halving:  https://okcashblockhalf.com
-
-#### OK BTC Community Channels: https://discord.io/cryptocurrency
 
 #### OkcashTalk Forums:  http://okcashtalk.org
 
@@ -60,6 +64,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 #### Okcash White Paper: https://github.com/okcashpro/okcash-whitepaper
 
 #### OK Reddit community: https://reddit.com/r/okcash
+
+#### OK Community Channels: https://discord.io/cryptocurrency
 
 -------------------
 
