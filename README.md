@@ -55,6 +55,12 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Avalanche explorer:  https://snowtrace.io/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
 
+#### OK Arbitrum explorer:  https://arbiscan.io/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
+
+#### OK Optimism explorer:  https://optimistic.etherscan.io/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
+
+#### OK Fantom explorer:  https://ftmscan.com/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
+
 #### OK Tutorials website:  https://okcash.info
 
 #### OkcashTalk Forums:  http://okcashtalk.org
