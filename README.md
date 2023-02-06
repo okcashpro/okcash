@@ -37,6 +37,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 ## Visit OK Smart Links and join the different community channels
 
+#### Okcash White Paper: https://github.com/okcashpro/okcash-whitepaper
+
 #### OK Community website  https://okcash.co - What is Okcash?
 
 #### OK Multi chain swap site: https://oktoken.cash
@@ -44,6 +46,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 #### OK Documentation website:  https://okcash.org
 
 #### OK Resources website:  https://okcash.io
+
+#### OK Tutorials website:  https://okcash.info
 
 #### OK Block halving counter + info:  https://okcashblockhalf.com
 
@@ -63,13 +67,9 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Fantom explorer:  https://ftmscan.com/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
 
-#### OK Tutorials website:  https://okcash.info
+#### OK Forums:  http://okcashtalk.org
 
-#### OkcashTalk Forums:  http://okcashtalk.org
-
-#### BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
-
-#### Okcash White Paper: https://github.com/okcashpro/okcash-whitepaper
+#### OK BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
 
 #### OK Reddit community: https://reddit.com/r/okcash
 
