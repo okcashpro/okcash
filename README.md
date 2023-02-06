@@ -43,6 +43,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Documentation website:  https://okcash.org
 
+#### OK Resources website:  https://okcash.io
+
 #### OK Block halving counter + info:  https://okcashblockhalf.com
 
 #### OK Network explorer:  https://chainz.cryptoid.info/ok/
