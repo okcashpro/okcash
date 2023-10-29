@@ -73,7 +73,7 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Reddit community: https://reddit.com/r/okcash
 
-#### OK Community Discord: https://discord.io/cryptocurrency
+#### OK Community Discord: https://discord.gg/grvpc8c
 
 #### OK Community Telegram: https://t.me/okcash
 
