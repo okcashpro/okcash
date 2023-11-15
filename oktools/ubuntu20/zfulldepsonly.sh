@@ -19,6 +19,10 @@ sudo apt-get install unzip pwgen git -y
 
 sudo apt-get install build-essential libboost-all-dev libqrencode-dev libminiupnpc-dev -y
 
+#Install deps for graphical ui
+
+sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default -y
+
 #Compile and Install db-4.8.30
 
 wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
@@ -36,12 +40,6 @@ make
 sudo make install
 
 echo "= BerkeleyDB 4.8 is now installed ="
-
-#Install deps for graphical ui
-
-cd
-
-sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default -y
 
 echo "All the required dependencies for Okcash node and Graphical client are now installed for:"
 
