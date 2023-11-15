@@ -9,7 +9,7 @@ cd ../..
 
 qmake
 
-make -j4
+make 
 
 strip okcash
 
@@ -20,6 +20,7 @@ sudo cp okcash /usr/local/bin
 echo "Done compiling + installing: Okcash GUI > on its latest version for:"
 uname -a
 echo "Okcash is now installed in your /usr/local/bin directory"
-echo "You are now empowered with Okcash!"
+
 echo "enjoy your OK experience"
+
 exit 0

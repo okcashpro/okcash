@@ -4,7 +4,7 @@ echo "Patch for Okcash for Ubuntu 20"
 date
 
 # Patch Okcash for Ubuntu 20
-cp -r patch2004/* ../..
+cp -r patch20/* ../..
 
 echo "PATCH APPLIED"
 
