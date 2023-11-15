@@ -11,7 +11,7 @@ sudo sh -c 'echo "deb http://security.ubuntu.com/ubuntu bionic-security main" >>
 
 sudo apt update && apt-cache policy libssl1.0-dev
 
-sudo apt-get install libssl1.0-dev
+sudo apt-get install libssl1.0-dev -y
 
 echo "libssl1.0-dev is now installed for:"
 uname -a
