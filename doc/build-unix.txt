@@ -18,12 +18,6 @@ UNIX BUILD NOTES
 To Build
 --------
 
-cd src/
-make -f makefile.unix USE_UPNP=-           # Headless okcash
-
-See readme-qt.rst for instructions on building Okcash QT,
-the graphical okcash.
-
 Dependencies
 ------------
 
@@ -35,8 +29,8 @@ Dependencies
  miniupnpc   UPnP Support      Optional firewall-jumping support
  libqrencode QRCode generation Optional QRCode generation
 
-Note that libexecinfo should be installed, if you building under *BSD systems. 
-This library provides backtrace facility.
+Note that libexecinfo should be installed, if you are building under *BSD systems. 
+This library provides a backtrace facility.
 
 miniupnpc may be used for UPnP port mapping.  It can be downloaded from
 http://miniupnp.tuxfamily.org/files/.  UPnP support is compiled in and
@@ -57,14 +51,113 @@ Licenses of statically linked libraries:
  Boost         MIT-like license
  miniupnpc     New (3-clause) BSD license
 
-Versions used in this release:
+Deps Versions used in this release:
  GCC           4.9.0
  OpenSSL       1.0.2r
  Berkeley DB   4.8.30NC
  Boost         1.70.0
  miniupnpc     1.9.20140401
 
-Dependency Build Instructions: Ubuntu & Debian
+Dependency Build Instructions: Ubuntu 20
+-------------------------------------
+
+Build and Install okcashd node ubuntu 20 #headless
+
+// Install libssl1.0-dev
+
+sudo nano /etc/apt/sources.list
+deb http://security.ubuntu.com/ubuntu bionic-security main
+//If it does not work, do this next line too; otherwise, there is no need.
+// sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+sudo apt update && apt-cache policy libssl1.0-dev
+sudo apt-get install libssl1.0-dev
+
+//Install deps for okcashd node
+
+sudo apt-get install unzip pwgen git -y
+
+sudo apt-get install build-essential libboost-all-dev libqrencode-dev libminiupnpc-dev -y
+
+//Build and Install db4.8.30
+
+wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
+
+tar -xzvf db-4.8.30.NC.tar.gz
+
+sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-4.8.30.NC/dbinc/atomic.h
+
+cd db-4.8.30.NC/build_unix
+
+../dist/configure --enable-cxx --disable-shared --with-pic 
+
+make
+
+sudo make install
+
+//Use db4.8.30 variables
+
+export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
+
+export BDB_INCLUDE_PATH="/usr/local/BerkeleyDB.4.8/include"
+
+export BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
+
+export CPATH="/usr/local/BerkeleyDB.4.8/include"
+
+export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
+
+//Clone Okcash and apply the patch for ubuntu 20
+
+git clone https://github.com/okcashpro/okcash
+
+cd okcash/oktools/ubuntu20
+
+chmod +x *
+
+./1patchu20.sh
+
+cd
+
+cd okcash
+
+cd src
+
+make -f makefile.unix USE_UPNP=-
+
+strip okcashd
+
+sudo cp okcashd /usr/local/bin
+
+//Make config file
+
+cd okcash/oktools/ubuntu2004/
+
+./startconfig.sh
+
+//If you want to have a full tx node, go to okcash.conf and remove # from txindex=1
+
+//Build the full graphical client for Okcash
+//Do these steps after building the okcashd node from the previous instructions file.
+
+sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default
+
+cd okcash
+
+qmake
+
+make
+
+strip okcash
+
+//Install okcash in the system
+
+sudo cp okcash /usr/local/bin
+
+//Now Okcash graphical client is installed in the system
+
+//END
+
+Dependency Build Instructions: Ubuntu 16/18 & Debian
 ----------------------------------------------
 
 Install dependencies:
@@ -92,7 +185,6 @@ make -f makefile.unix USE_UPNP=-
 strip okcashd
 
 If using Boost 1.37, append -mt to the boost libraries in the makefile.
-
 
 Dependency Build Instructions: Gentoo
 -------------------------------------
