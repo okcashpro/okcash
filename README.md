@@ -37,6 +37,8 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 ## Visit OK Smart Links and join the different community channels
 
+#### Exploring Okcash: Your One-Stop Guide to All Things OK: https://okcash.news/exploring-okcash-your-one-stop-guide-to-all-things-ok-60bfafb9d9a8
+
 #### Okcash White Paper: https://github.com/okcashpro/okcash-whitepaper
 
 #### OK Community website  https://okcash.co - What is Okcash?
@@ -75,7 +77,7 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Community Discord: https://discord.gg/grvpc8c
 
-#### OK Community Telegram: https://t.me/okcash
+#### OK Community Telegram: https://t.me/ok_heroes
 
 -------------------
 
