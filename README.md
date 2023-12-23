@@ -79,6 +79,10 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 #### OK Community Telegram: https://t.me/ok_heroes
 
+#### OK on Coingecko: https://www.coingecko.com/en/coins/okcash
+
+#### OK on Coinmarketcap: https://coinmarketcap.com/currencies/okcash/
+
 -------------------
 
 # Contribute with the Okcash Development process
