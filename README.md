@@ -35,6 +35,14 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 --------------------
 
+## To compile Okcash for different systems / devices / OS
+
+#### Read docs at: https://github.com/okcashpro/okcash/tree/master/doc
+
+#### More detailed sh + Instructions + Upgrade Patch for specific OS / deps = Read / Use: https://github.com/okcashpro/okcash/tree/master/oktools
+
+--------------------
+
 ## Visit OK Smart Links and join the different community channels
 
 #### Exploring Okcash: Your One-Stop Guide to All Things OK: https://okcash.news/exploring-okcash-your-one-stop-guide-to-all-things-ok-60bfafb9d9a8
