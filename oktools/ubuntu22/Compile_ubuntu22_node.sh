@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Compiling okcash GUI (Qt) for the system"
+echo "Compiling okcashd for the system"
 
 # Patch Okcash for Ubuntu 22
 /bin/bash ./1patchu22.sh
@@ -7,12 +7,11 @@ echo "Compiling okcash GUI (Qt) for the system"
 #Install libssl1.0-dev
 /bin/bash ./2libssl10.sh
 
-#Install deps for okcash
+#Install deps for okcashd node
 /bin/bash ./3depsnode.sh
-/bin/bash ./6depsgui.sh
 
 #Compile and Install db-4.8.30
-/bin/bash ./4db4830.sh
+/bin/bash ./4db4830.sh 
 
 #Setup db-4.8.30 variables
 export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
@@ -30,17 +29,7 @@ strip okcashd
 
 # Install okcashd in the system
 sudo cp okcashd /usr/local/bin
-
-# Build okcash
-cd
-cd okcash
-qmake
-make 
-strip okcash
-
-# Install Okcash in the system
-sudo cp okcash /usr/local/bin
-echo "= okcash Node and GUI (Qt) are now build and installed for ="
+echo "= okcashd is now build and installed for ="
 uname -a
 
 #exit

@@ -21,16 +21,6 @@ export BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
 export CPATH="/usr/local/BerkeleyDB.4.8/include"
 export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
-# Build okcashd node
-cd
-cd okcash
-cd src
-make -f makefile.unix USE_UPNP=-
-strip okcashd
-
-# Install okcashd in the system
-sudo cp okcashd /usr/local/bin
-
 # Build okcash
 cd
 cd okcash
@@ -38,9 +28,9 @@ qmake
 make 
 strip okcash
 
-# Install Okcash in the system
+# Install okcash GUI in the system
 sudo cp okcash /usr/local/bin
-echo "= okcash Node and GUI (Qt) are now build and installed for ="
+echo "= okcash GUI (Qt) is now build and installed for ="
 uname -a
 
 #exit

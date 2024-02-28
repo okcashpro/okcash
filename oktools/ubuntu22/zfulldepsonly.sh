@@ -1,48 +1,22 @@
 #!/bin/bash
-echo "installing the required dependencies for Okcash node."
+echo "Installing okcash dependencies for the system"
 
-date
-
-cd
+# Patch Okcash for Ubuntu 22
+/bin/bash ./1patchu22.sh
 
 #Install libssl1.0-dev
+/bin/bash ./2libssl10.sh
 
-sudo sh -c 'echo "deb http://security.ubuntu.com/ubuntu bionic-security main" >> /etc/apt/sources.list'
-
-sudo apt update && apt-cache policy libssl1.0-dev
-
-sudo apt-get install libssl1.0-dev -y
-
-#Install deps for okcashd node
-
-sudo apt-get install unzip pwgen git -y
-
-sudo apt-get install build-essential libboost-all-dev libqrencode-dev libminiupnpc-dev -y
-
-#Install deps for graphical ui
-
-sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default -y
+#Install deps for okcash
+/bin/bash ./3depsnode.sh
+/bin/bash ./6depsgui.sh
 
 #Compile and Install db-4.8.30
+/bin/bash ./4db4830.sh
 
-wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
-
-tar -xzvf db-4.8.30.NC.tar.gz
-
-sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-4.8.30.NC/dbinc/atomic.h
-
-cd db-4.8.30.NC/build_unix
-
-../dist/configure --enable-cxx --disable-shared --with-pic 
-
-make
-
-sudo make install
-
-echo "= BerkeleyDB 4.8 is now installed ="
-
-echo "All the required dependencies for Okcash node and Graphical client are now installed for:"
-
+# OK Full deps in the system
+echo "= Okcash dependencies installed for ="
 uname -a
 
+#exit
 exit 0
