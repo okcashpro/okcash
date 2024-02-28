@@ -1,12 +1,12 @@
 #!/bin/bash
-# Do "chmod +x INSTALL_ubuntu22_node.sh" if you can't run this file"
-echo "Compiling|Installing - "okcashd" node to Ubuntu 22.04"
+# Do "chmod +x INSTALL_ubuntu20_node.sh" if you can't run this file"
+echo "Compiling|Installing - "okcashd" node to Ubuntu 20.04"
 date
 
-# Call INSTALL_ubuntu22_node compilation
-cd oktools/ubuntu22
+# Call INSTALL_ubuntu20_node compilation
+cd oktools/ubuntu20
 chmod +x *
-/bin/bash ./Compile_ubuntu22_node.sh
+/bin/bash ./Compile_ubuntu20_node.sh
 echo "okcashd is now installed in your system."
 
 # Ask the user if they want to perform an action
@@ -22,7 +22,7 @@ if [ "$answer" == "yes" ]; then
     # If the user answers "yes", perform the action
     echo "Performing the action..."
     cd 
-    cd okcash/oktools/ubuntu22
+    cd okcash/oktools/ubuntu20
     /bin/bash ./9syncok.sh
     # Place the command for the action you want to perform below
     # For example: ls -l
@@ -34,7 +34,7 @@ else
     echo "Please answer yes or no."
 fi
 # end Client
-echo "Done with the Okcash Ubuntu 22 node install on its latest version for:"
+echo "Done with the Okcash Ubuntu 20 node install on its latest version for:"
 uname -a
 echo "  "
 echo "Get empowered with Okcash!"
