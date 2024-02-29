@@ -52,10 +52,10 @@ Licenses of statically linked libraries:
  miniupnpc     New (3-clause) BSD license
 
 Deps Versions used in this release:
- GCC           4.9.0
- OpenSSL       1.0.2r
+ GCC           11.4.0
+ OpenSSL       3.0.2
  Berkeley DB   4.8.30NC
- Boost         1.70.0
+ Boost         1.74.0
  miniupnpc     1.9.20140401
 
 Dependency Build Instructions: Ubuntu 20
@@ -63,20 +63,19 @@ Dependency Build Instructions: Ubuntu 20
 
 Build and Install okcashd node ubuntu 20 #headless
 
-// Install libssl1.0-dev
+//Install u22 patch
 
-sudo nano /etc/apt/sources.list
-deb http://security.ubuntu.com/ubuntu bionic-security main
-//If it does not work, do this next line too; otherwise, there is no need.
-// sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
-sudo apt update && apt-cache policy libssl1.0-dev
-sudo apt-get install libssl1.0-dev
+cd okcash/oktools/ubuntu20
+
+chmod +x 1patch20.sh
+
+./1patch20.sh
 
 //Install deps for okcashd node
 
 sudo apt-get install unzip pwgen git -y
 
-sudo apt-get install build-essential libboost-all-dev libqrencode-dev libminiupnpc-dev -y
+sudo apt-get install build-essential libboost-all-dev libssl-dev libqrencode-dev libminiupnpc-dev -y
 
 //Build and Install db4.8.30
 
