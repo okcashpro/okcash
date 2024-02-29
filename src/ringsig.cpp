@@ -14,6 +14,7 @@
 #include <openssl/bn.h>
 #include <openssl/ecdsa.h>
 #include <openssl/obj_mac.h>
+#include <openssl/opensslv.h>
 
 
 static EC_GROUP *ecGrp   = NULL;
@@ -289,11 +290,22 @@ int generateRingSignature(data_chunk &keyImage, uint256 &txnHash, int nRingSize,
     }
 
     // zero sum
-    if (!bnSum || !(BN_zero(bnSum)))
+    // Ensure bnSum is not NULL
+    if (!bnSum)
+    {
+        LogPrintf("%s: bnSum is NULL.\n", __func__);
+        rv = 1; goto End;
+    }
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    BN_zero(bnSum);
+#else
+    if (!(BN_zero(bnSum)))
     {
         LogPrintf("%s: BN_zero failed.\n", __func__);
         rv = 1; goto End;
     }
+#endif
 
     if (   !(ptT1 = EC_POINT_new(ecGrp))
         || !(ptT2 = EC_POINT_new(ecGrp))
@@ -532,11 +544,22 @@ int verifyRingSignature(data_chunk &keyImage, uint256 &txnHash, int nRingSize, c
     ssCommitHash << txnHash;
 
     // zero sum
-    if (!bnSum || !(BN_zero(bnSum)))
+    // Ensure bnSum is not NULL
+    if (!bnSum)
+    {
+        LogPrintf("%s: bnSum is NULL.\n", __func__);
+        rv = 1; goto End;
+    }
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    BN_zero(bnSum);
+#else
+    if (!(BN_zero(bnSum)))
     {
         LogPrintf("%s: BN_zero failed.\n", __func__);
         rv = 1; goto End;
     }
+#endif
 
     if (   !(ptT1 = EC_POINT_new(ecGrp))
         || !(ptT2 = EC_POINT_new(ecGrp))
