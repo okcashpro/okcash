@@ -5,7 +5,7 @@ echo "Compiling okcash GUI (Qt) for the system"
 /bin/bash ./1patchu22.sh
 
 #Install libssl1.0-dev
-/bin/bash ./2libssl10.sh
+/bin/bash ./2libssl.sh
 
 #Install deps for okcash
 /bin/bash ./3depsnode.sh
