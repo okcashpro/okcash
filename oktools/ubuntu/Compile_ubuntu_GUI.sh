@@ -27,6 +27,11 @@ strip okcash
 
 # Install okcash GUI in the system
 sudo cp okcash /usr/local/bin
+
+# Install okcash.desktop
+cd oktools/ubuntu
+/bin/bash/ ./desktop.sh
+
 echo "= okcash GUI (Qt) is now build and installed for ="
 uname -a
 

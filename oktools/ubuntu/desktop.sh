@@ -11,5 +11,6 @@ sudo chmod +x /usr/share/applications/okcash.desktop
 echo "  "
 echo "Installed!"
 echo "Now you can restart your system and start using Okcash [GUI (Qt)] from your applications menu."
+echo "  "
 
 exit 0
