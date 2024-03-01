@@ -11,7 +11,7 @@
 // client versioning
 //
 
-const std::string CLIENT_LAST_COPYRIGHT("2022");
+const std::string CLIENT_LAST_COPYRIGHT("2024");
 
 static const int CLIENT_VERSION =
                            1000000 * CLIENT_VERSION_MAJOR
