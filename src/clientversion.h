@@ -6,7 +6,7 @@
 //
 
 // These need to be macros, as version.cpp's and okcash.rc's voodoo requires it
-#define CLIENT_VERSION_MAJOR       7
+#define CLIENT_VERSION_MAJOR       8
 #define CLIENT_VERSION_MINOR       0
 #define CLIENT_VERSION_REVISION    0
 #define CLIENT_VERSION_BUILD       0
