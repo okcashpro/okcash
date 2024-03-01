@@ -86,7 +86,7 @@ OkcashGUI::OkcashGUI(QWidget *parent):
     setCentralWidget(webView);
 
     resize(1280, 720);
-    setWindowTitle(tr("OK Wallet") + " - " + tr("v7"));
+    setWindowTitle(tr("OK Wallet") + " - " + tr("v8"));
 #ifndef Q_OS_MAC
     qApp->setWindowIcon(QIcon(":icons/okcash"));
     setWindowIcon(QIcon(":icons/okcash"));
