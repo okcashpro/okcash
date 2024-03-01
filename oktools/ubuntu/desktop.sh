@@ -1,7 +1,6 @@
 #!/bin/bash
 echo "installing Okcash GUI desktop app."
-cd 
-cd okcash/oktools/ubuntu
+
 #Install okcash.desktop
 sudo cp okcash-icon.png /usr/share/icons/hicolor/256x256/apps/okcash-icon.png
 #sudo cp okcash.desktop ~/.local/share/applications/okcash.desktop
