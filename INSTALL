@@ -22,7 +22,10 @@ EASY SETUP - AUTOMATIC
 
 5) -> Direct 1 Click Install (compile + install): Follow these instructions to use this installer after cloning this okcash repo.
 
->>>>>>>>>>>> For Ubuntu [=<18.04][20.04,22.04]: Compiles and installs the "okcashd node" and asks if the user wants to install the "GUI (Qt)", the "Instant Sync" to ok-blockchain for first-time use/sync, and the "okcash.conf" file.)
+>>>>>>>>>>>> 
+For Ubuntu [=< 18.04 + 20.04 + 22.04]: 
+Compiles and installs the "okcashd node" and asks if the user wants to install the "GUI (Qt)", the "Instant Sync" to ok-blockchain for first-time use/sync, and the "okcash.conf" file. 
+>>>>>>>>>>>>
 
 cd okcash
 
