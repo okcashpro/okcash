@@ -1,9 +1,6 @@
 #!/bin/bash
 echo "Compiling okcashd for the system"
 
-# Patch Okcash for Ubuntu 22
-/bin/bash ./1patch.sh
-
 #Install libssl1.0-dev
 /bin/bash ./2libssl.sh
 
