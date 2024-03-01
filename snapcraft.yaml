@@ -1,11 +1,11 @@
 name: okcash
 version: master
-summary: decentralized peer-to-peer long term sustainable staking platform
+summary: A Decentralized, Sustainable Staking Cryptocurrency Platform
 description: |
-  The OK wallet is a decentralized peer-to-peer platform, created under an
-  open source license, featuring a built-in cryptocurrency and Long Term Sustainable Staking (LTSS). 
-  The decentralized network aims to provide a fast, reliable and efficient Proof of Stake system 
-  for everyone through the best user-friendly interface that even grandma could understand and use.
+Okcash presents a pioneering peer-to-peer platform, crafted under an open-source framework, encapsulating a native cryptocurrency alongside a Long-Term Sustainable Staking (LTSS) model. 
+This decentralized ecosystem is engineered to deliver a rapid, dependable, and eco-friendly Proof of Stake mechanism accessible to all. 
+Okcash is designed with a focus on user-friendliness, ensuring ease of use for everyone, from tech enthusiasts to those less familiar with digital currencies. 
+Through Okcash, users engage in a secure, efficient staking process, contributing to a robust, decentralized network while earning rewards, making it a standout in the realm of digital finance.
 
 grade: devel
 confinement: strict
