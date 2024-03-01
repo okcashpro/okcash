@@ -1,37 +1,43 @@
 
-<img alt="OK Wallets v8" src="https://i.imgur.com/UZY6MAz.png">
+<img alt="OK Wallets v8" src="https://i.imgur.com/xmxQ5u8.png">
 
 [![Build Status](https://img.shields.io/badge/build-success-gre.svg?style=flat-square)](https://github.com/okcashpro/okcash) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg?style=flat-square)](http://explorer.okcash.co) [![OK NetworkU](https://img.shields.io/badge/network%20uptime-100%25-gre.svg?style=flat-square)](http://explorer.okcash.co) [![Okcash last commit](https://img.shields.io/github/last-commit/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash License](https://img.shields.io/github/license/okcashpro/okcash?color=green&style=flat-square)](https://github.com/okcashpro/okcash/blob/master/COPYING) [![Okcash Repo Size](https://img.shields.io/github/repo-size/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash top lang](https://img.shields.io/github/languages/top/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash languages](https://img.shields.io/github/languages/count/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg?style=flat-square)](https://github.com/okcashpro/okcash) 
 [![Okcash last release date](https://img.shields.io/github/release-date/okcashpro/okcash?label=latest%20release&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![Okcash last release name download](https://img.shields.io/github/v/release/okcashpro/okcash?label=release%20download&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest)
 
-<img src="https://i.giphy.com/fvUZcZs0GBzsDKASqs.webp" alt="OK" width="830">
+<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXMxemU0cjMxdHd1aDhjaXR3d2Ntbmo1NXIwN213Ym5xMnNvY2diaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IcIDugr6sjkMRM6o4h/giphy.gif" alt="OK" width="830">
 
 # OK • Okcash
 
 #### Join the OK community server
 
-[![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/okcash)
-
-#### Download the 1 Click Instant sync for the OK-Blockchain - Synchronize your OK wallet fast for the 1st time sync.
-**Fast sync for Mac, Windows, Linux, Raspberry Pi and IoT users:** https://github.com/okcashpro/ok-blockchain
-
+[![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/grvpc8c)
 --------------------
 
-OK is multi-chain and open-source; its design is public, nobody owns or controls OK and everyone can take part. 
+**Okcash: A Decentralized Multichain Marvel**
 
-Okcash is a decentralized and established hybrid cryptocurrency that started on Nov 24th 2014. OK was mined (PoW-Scrypt) and evolved to be stake-able (PoS-LTSS-Sha256). 
+Okcash is a pioneering force in the cryptocurrency world, epitomizing the essence of digital cash since its inception on November 24th, 2014. Born from the realms of open-source, Okcash represents a decentralized, hybrid cryptocurrency, seamlessly blending Proof of Work (PoW-Scrypt) origins with a transition to a stake-able (PoS-LTSS-Sha256) future.
 
-Okcash is not a security, it never had an ICO, nor any kind of funding rounds. OK is self sustainable and is fully supported by voluntaries (Just like Bitcoin).
+**Ownership and Inclusivity**: Okcash's architecture is a testament to decentralization. Its open-source nature ensures that no single entity owns or controls OK, promoting a participatory environment where everyone is welcome to contribute, innovate, and share in its development and benefits.
 
-**Okcash** is digital cash. **OK** is the official symbol. 
+**Sustainability and Integrity**: Distinguished by its lack of an Initial Coin Offering (ICO) or funding rounds, Okcash is a beacon of self-sustainability. Supported by a community of volunteers, it mirrors Bitcoin's ethos of collective input and maintenance, standing as a model for genuine, grassroots cryptocurrency evolution.
 
-**Transactions** have real fast confirmations, making them virtually instant. 
+**The Essence of Okcash**:
 
-You can send Okcash to family or friends, or pay for goods or services, **anywhere in the world**.
+**Digital Cash for the World**: OKcash facilitates instantaneous transactions, offering a swift and efficient means to transfer value globally, without the constraints of borders or intermediaries.
 
-The Okcash network is **decentralized** and free from middlemen, giving you back control of your finances and providing a **secure network** for all of your payments. 
+**Empowerment and Security**: By sidelining middlemen, Okcash returns financial control to its users, fortifying their transactions with unparalleled security and privacy.
 
-Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bitcoin), Transparency, friendly to use, Universal name, Multicultural, Multi-platform, Multichain, IoT(Internet of Things), Tor and i2p compatible**.
+**Community and Transparency**: At its core, Okcash is nurtured by an active community, fostering an environment of transparency, collaboration, and mutual support reminiscent of Bitcoin’s foundational principles.
+
+**Versatility and Accessibility**: Okcash is more than a cryptocurrency; it's a versatile platform supporting diverse applications from IoT (Internet of Things) to privacy-focused networks like Tor and i2p, making it adaptable for a future where technology pervades every facet of life.
+
+**Multichain Ecosystem**: Okcash has embraced the multichain paradigm, ensuring its presence across various blockchain networks, thus enhancing accessibility and engagement across different crypto communities.
+
+**A Name for Everyone**: With "OK" as its universal symbol, Okcash transcends cultural and linguistic barriers, embodying a truly global currency designed for everyone, everywhere.
+
+**Future-Proof Technology**: Okcash’s journey is marked by constant innovation. From rapid, efficient transactions to its scalable, multichain nature, Okcash is equipped to meet the evolving demands of the digital age, heralding a new era of financial freedom and inclusivity.
+
+Join us in shaping the future of digital transactions, where Okcash stands as a symbol of empowerment, innovation, and community-driven progress.
 
 --------------------
 
@@ -40,6 +46,11 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 #### Read docs at: https://github.com/okcashpro/okcash/blob/master/INSTALL
 
 #### More detailed sh + Instructions + 1 Click Install + different OS Platforms
+--------------------
+
+#### Download the 1 Click Instant sync for the OK-Blockchain - Synchronize your OK wallet fast for the 1st time sync.
+**Fast sync for Mac, Windows, Linux, Raspberry Pi and IoT users:** https://github.com/okcashpro/ok-blockchain
+
 --------------------
 
 ## Visit OK Smart Links and join the different community channels
