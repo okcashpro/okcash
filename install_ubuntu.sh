@@ -41,6 +41,11 @@ if ask_question "Do you want to also install the GUI (Qt Graphical User Interfac
     echo "Installing the Okcash GUI..."
     cd oktools/ubuntu
     /bin/bash ./6depsgui.sh
+    export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
+    export BDB_INCLUDE_PATH="/usr/local/BerkeleyDB.4.8/include"
+    export BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
+    export CPATH="/usr/local/BerkeleyDB.4.8/include"
+    export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
     /bin/bash ./7buildgui.sh
     echo "**********************************************"
     echo ""
