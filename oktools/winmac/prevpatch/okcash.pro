@@ -8,7 +8,7 @@ CONFIG += no_include_pwd
 !win32:CONFIG += thread
 win32:CONFIG += thread static
 win32:CONFIG += static
-win32:LIBS += -L"c:/deps/openssl-1.0.2r" -llibeay32
+win32:LIBS += -L"c:/deps/openssl-1.0.2u" -llibcrypto
 !android|!ios:QT += widgets webkitwidgets
 
 # Mobile devices
@@ -79,15 +79,15 @@ macx {
 }
 
 win32 {
-    BOOST_LIB_SUFFIX=-mgw49-mt-s-1_57
+    BOOST_LIB_SUFFIX=-mgw112-mt-s-1_57
     BOOST_INCLUDE_PATH=c:/deps/boost_1_57_0/
     BOOST_LIB_PATH=c:/deps/boost_1_57_0/stage/lib
 
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
 
-    OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2r/include/
-    OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2r
+    OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2u/include/
+    OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2u
 
     MINIUPNPC_INCLUDE_PATH=c:/deps
     MINIUPNPC_LIB_PATH=c:/deps/miniupnpc
@@ -440,7 +440,7 @@ LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB
 LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
 # -lgdi32 has to happen after -lcrypto (see  #681)
 windows:LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
-LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_chrono$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_LIB_SUFFIX
+LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_LIB_SUFFIX
 windows:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
 contains(RELEASE, 1) {
