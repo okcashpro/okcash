@@ -3,7 +3,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec=/usr/local/bin/okcash %U
+Exec=/usr/local/bin/okcash
 Name=Okcash
 Comment=Seamlessly secure, eco-friendly digital currency for instant global transactions.
 Icon=/usr/share/icons/hicolor/256x256/apps/okcash-icon.png
