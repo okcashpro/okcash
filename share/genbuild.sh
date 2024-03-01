@@ -15,7 +15,7 @@ if [ -e "$(which git)" ]; then
     # clean 'dirty' status of touched files that haven't been modified
     git diff >/dev/null 2>/dev/null 
 
-    # get a string like "v0.6.9-00-g59887e8-dirty"
+    # get a string like "v0.8.0-00-g59887e8-dirty"
     DESC="$(git describe --dirty 2>/dev/null)"
 
     # get a string like "2020-12-16 16:27:19 +0500"
