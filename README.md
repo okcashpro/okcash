@@ -4,7 +4,7 @@
 [![Build Status](https://img.shields.io/badge/build-success-gre.svg?style=flat-square)](https://github.com/okcashpro/okcash) [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg?style=flat-square)](http://explorer.okcash.co) [![OK NetworkU](https://img.shields.io/badge/network%20uptime-100%25-gre.svg?style=flat-square)](http://explorer.okcash.co) [![Okcash last commit](https://img.shields.io/github/last-commit/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash License](https://img.shields.io/github/license/okcashpro/okcash?color=green&style=flat-square)](https://github.com/okcashpro/okcash/blob/master/COPYING) [![Okcash Repo Size](https://img.shields.io/github/repo-size/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash top lang](https://img.shields.io/github/languages/top/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash languages](https://img.shields.io/github/languages/count/okcashpro/okcash?style=flat-square)](https://github.com/okcashpro/okcash) [![Okcash Github Downloads](https://img.shields.io/github/downloads/okcashpro/okcash/total.svg?style=flat-square)](https://github.com/okcashpro/okcash) 
 [![Okcash last release date](https://img.shields.io/github/release-date/okcashpro/okcash?label=latest%20release&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest) [![Okcash last release name download](https://img.shields.io/github/v/release/okcashpro/okcash?label=release%20download&style=flat-square)](https://github.com/okcashpro/okcash/releases/latest)
 
-<img src="https://media0.giphy.com/media/jQ4XBuu2FXFJyzfqie/giphy.gif" alt="OK" width="830">
+<img src="https://i.giphy.com/fvUZcZs0GBzsDKASqs.webp" alt="OK" width="830">
 
 # OK • Okcash
 
@@ -17,7 +17,7 @@
 
 --------------------
 
-OK is multi chain and open-source; its design is public, nobody owns or controls OK and everyone can take part. 
+OK is multi-chain and open-source; its design is public, nobody owns or controls OK and everyone can take part. 
 
 Okcash is a decentralized and established hybrid cryptocurrency that started on Nov 24th 2014. OK was mined (PoW-Scrypt) and evolved to be stake-able (PoS-LTSS-Sha256). 
 
@@ -37,10 +37,9 @@ Some of the Okcash features: **Fast, Efficient, Social, Community based (like Bi
 
 ## To compile Okcash for different systems / devices / OS
 
-#### Read docs at: https://github.com/okcashpro/okcash/tree/master/doc
+#### Read docs at: https://github.com/okcashpro/okcash/blob/master/INSTALL
 
-#### More detailed sh + Instructions + Upgrade Patch for specific OS / deps = Read / Use: https://github.com/okcashpro/okcash/tree/master/oktools
-
+#### More detailed sh + Instructions + 1 Click Install + different OS Platforms
 --------------------
 
 ## Visit OK Smart Links and join the different community channels
