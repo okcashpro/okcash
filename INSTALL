@@ -1,13 +1,41 @@
-Okcash Cryptocurrency - Energy Friendly and Open source Peer-to-Peer Electronic Cash, its design is public, nobody owns or controls OK and Everyone can take part.
+Okcash Cryptocurrency: The Future of Energy-Efficient, Open-Source Digital Cash
 
-Compile / Integrate Okcash in to your Platform
+Okcash represents a leap forward in the evolution of digital currency. Designed for everyone, its open-source nature ensures that nobody has sole ownership or control over OK, fostering a community-driven development process.
 
-See doc/readme-qt.rst for instructions on building Okcash (graphical wallet),
-for your own OS, the intended-for-end-users, with nice-graphical-interface, reference
-implementation of Okcash.
+Integrate Okcash Into Your Platforms.
 
-See doc/build-*.txt for instructions on building the okcashd daemon (command-line wallet),
-for your own OS, the intended-for-services, developers, no-graphical-interface, reference
-implementation of Okcash.
+*****************************
+ADVANCED - MANUAL
+*****************************
 
-You can also find the OK Tools over okcashpro github for automated install / compillation.
+1) -> Whether you're aiming to incorporate Okcash into your service or looking to build on its platform, we provide comprehensive guides to help you get started:
+
+2) -> For Daemon Wallet (okcashd): Check out doc/build-*.txt for guidelines on compiling the okcashd daemon, the command-line version of the Okcash wallet, aimed at developers and services requiring a no-GUI setup.
+
+3) -> For Graphical Wallet (okcash): Refer to doc/readme-qt.rst for detailed instructions on building the Okcash graphical wallet, designed for end-users who prefer a user-friendly interface.
+
+4) -> OK Tools (Helping Scripts): Explore the OK Tools available on the OkcashPro GitHub repository for easy installation and compilation. These tools streamline the process, making it accessible for users of all technical backgrounds.
+
+*****************************
+EASY SETUP - AUTOMATIC
+*****************************
+
+5) -> Direct 1 Click Install (compile + install): Follow these instructions to use this installer after cloning this okcash repo.
+
+>>>>>>>>>>>> For Ubuntu [=<18.04][20.04,22.04]: Compiles and installs the "okcashd node" and asks if the user wants to install the "GUI (Qt)", the "Instant Sync" to ok-blockchain for first-time use/sync, and the "okcash.conf" file.)
+
+cd okcash
+
+chmod +x INSTALL_ubuntu.sh
+
+./INSTALL_ubuntu.sh
+
+>>>>>>>>>>>>
+
+*****************************
+Join the Okcash Revolution
+*****************************
+
+By choosing Okcash, you're not just adopting a cryptocurrency; you're embracing a sustainable, efficient, and community-centric financial system. Okcash offers the tools and support you need to succeed in the digital economy, whether for personal use, development, or integration into your services.
+
+Dive into the world of Okcash and discover how you can contribute to, benefit from, and grow with this revolutionary digital cash system.
