@@ -26,5 +26,5 @@ txindex=1
 
 # end Client
 echo "okcash.conf file created with random rpcuser and rpcpassword."
-echo "enjoy your OK experience"
+echo "  "
 exit 0

@@ -2,7 +2,7 @@
 echo "Compiling okcashd for the system"
 
 # Patch Okcash for Ubuntu 22
-/bin/bash ./1patchu22.sh
+/bin/bash ./1patch.sh
 
 #Install libssl1.0-dev
 /bin/bash ./2libssl.sh
@@ -24,7 +24,7 @@ export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 cd
 cd okcash
 cd src
-make -f makefile.unix USE_UPNP=-
+make -j4 -f makefile.unix USE_UPNP=-
 strip okcashd
 
 # Install okcashd in the system

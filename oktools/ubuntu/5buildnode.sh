@@ -23,7 +23,7 @@ export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
 # Build okcashd node
 
-make -f makefile.unix USE_UPNP=-
+make -j4 -f makefile.unix USE_UPNP=-
 
 strip okcashd
 
@@ -39,6 +39,6 @@ echo "okcashd node is now installed in your /usr/local/bin directory"
 
 echo "remember to create your okcash.conf file before running okcashd"
 
-echo "enjoy your OK experience"
+echo "  "
 
 exit 0

@@ -23,7 +23,7 @@ export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
 qmake
 
-make 
+make -j4
 
 strip okcash
 
@@ -35,6 +35,6 @@ echo "Done compiling + installing: Okcash GUI > on its latest version for:"
 uname -a
 echo "Okcash is now installed in your /usr/local/bin directory"
 
-echo "enjoy your OK experience"
+echo "  "
 
 exit 0

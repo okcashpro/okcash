@@ -6,9 +6,9 @@ uname -a
 echo ""
 
 # Navigate to the appropriate directory and compile/install the node
-cd oktools/ubuntu22
+cd oktools/ubuntu
 chmod +x *
-/bin/bash ./Compile_ubuntu22_node.sh
+/bin/bash ./Compile_ubuntu_node.sh
 echo "**********************************************"
 echo ""
 echo "okcashd node is now installed in your system."
@@ -39,7 +39,7 @@ ask_question() {
 # Ask if the user wants to install the GUI
 if ask_question "Do you want to also install the GUI (Qt Graphical User Interface) for Okcash?"; then
     echo "Installing the Okcash GUI..."
-    cd oktools/ubuntu22
+    cd oktools/ubuntu
     /bin/bash ./6depsgui.sh
     /bin/bash ./7buildgui.sh
     echo "**********************************************"
@@ -56,7 +56,7 @@ echo ""
 if ask_question "First Time Use? Do you want to Instant Sync [Download and instant sync the latest ok-blockchain?"; then
     echo "Syncing Okcash for the first time..."
     cd
-    cd okcash/oktools/ubuntu22
+    cd okcash/oktools/ubuntu
     /bin/bash ./9syncok.sh
     echo "**********************************************"
     echo ""
@@ -72,7 +72,7 @@ echo ""
 if ask_question "Need an okcash.conf file? Do you want to install the sample okcash.conf file in your system (okcashd node requirement)"; then
     echo "Adding okcash.conf file to the system..."
     cd
-    cd okcash/oktools/ubuntu22
+    cd okcash/oktools/ubuntu
     /bin/bash ./8startconfig.sh
     echo "**********************************************"
     echo ""

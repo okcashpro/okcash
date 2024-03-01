@@ -1,8 +1,6 @@
 #!/bin/bash
 echo "installing the required dependencies for Okcashd node."
 
-date
-
 cd
 
 #Install deps for okcashd node

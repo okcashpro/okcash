@@ -2,8 +2,6 @@
 echo "Initializing the 1 Click Instant Sync for the OK Blockchain"
 echo "This could take a minute, enjoy some coffee and come back soon..."
 
-date
-
 # Create .okcash config folder
 
 mkdir ~/.okcash
@@ -24,5 +22,5 @@ cd
 
 # end Client
 echo "Completed the OK Blockchain 1 Click Instant sync, make sure you have an okcash.conf file if you are goin to use okcashd daemon."
-echo "enjoy your OK experience"
+echo "  "
 exit 0
