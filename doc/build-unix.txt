@@ -63,14 +63,6 @@ Dependency Build Instructions: Ubuntu
 
 Build and Install okcashd node ubuntu #headless
 
-//Install ubuntu patch
-
-cd okcash/oktools/ubuntu
-
-chmod +x 1patch.sh
-
-./1patch.sh
-
 //Install deps for okcashd node
 
 sudo apt-get install unzip pwgen git -y
@@ -105,23 +97,15 @@ export CPATH="/usr/local/BerkeleyDB.4.8/include"
 
 export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
-//Clone Okcash and apply the patch for ubuntu 20
-
-git clone https://github.com/okcashpro/okcash
-
-cd okcash/oktools/ubuntu20
-
-chmod +x *
-
-./1patchu20.sh
+//Clone Okcash
 
 cd
 
-cd okcash
+git clone https://github.com/okcashpro/okcash
 
-cd src
+cd okcash/src
 
-make -f makefile.unix USE_UPNP=-
+make -j4 -f makefile.unix USE_UPNP=-
 
 strip okcashd
 
@@ -129,14 +113,18 @@ sudo cp okcashd /usr/local/bin
 
 //Make config file
 
-cd okcash/oktools/ubuntu2004/
+cd
 
-./startconfig.sh
+cd okcash/oktools/ubuntu/
 
-//If you want to have a full tx node, go to okcash.conf and remove # from txindex=1
+chmod +x 8startconfig.sh
+
+./8startconfig.sh
+
+//If you want to have a full tx node, go to okcash.conf and use: txindex=1
 
 //Build the full graphical client for Okcash
-//Do these steps after building the okcashd node from the previous instructions file.
+//Do these steps after building the okcashd node from the previous instructions.
 
 //if ubuntu <= 18.04
 sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default
@@ -144,11 +132,13 @@ sudo apt-get install qtcreator qttools5-dev-tools  libqt5webkit5-dev qt5-default
 //If ubuntu >= 20.04 / 22.04
 sudo apt-get install qtcreator qttools5-dev-tools libqt5webkit5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 
+cd
+
 cd okcash
 
 qmake
 
-make
+make -j4
 
 strip okcash
 
