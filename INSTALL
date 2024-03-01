@@ -29,9 +29,9 @@ Compiles and installs the "okcashd node" and asks if the user wants to install t
 
 cd okcash
 
-chmod +x INSTALL_ubuntu.sh
+chmod +x install_ubuntu.sh
 
-./INSTALL_ubuntu.sh
+./install_ubuntu.sh
 
 >>>>>>>>>>>>
 
