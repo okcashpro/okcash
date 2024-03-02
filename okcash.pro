@@ -8,7 +8,8 @@ CONFIG += no_include_pwd
 !win32:CONFIG += thread
 win32:CONFIG += thread static
 win32:CONFIG += static
-win32:LIBS += -L"c:/deps/openssl-1.0.2r" -llibeay32
+#win32:LIBS += -L"c:/deps/openssl-1.0.2u" -llibcrypto
+win32:LIBS += -L"c:/deps/openssl-3.0.13" -llibcrypto -lcrypt32
 !android|!ios:QT += widgets webkitwidgets
 
 # Mobile devices
@@ -79,10 +80,6 @@ macx {
 }
 
 win32 {
-    #BOOST_LIB_SUFFIX=-mgw112-mt-s-1_57
-    #BOOST_INCLUDE_PATH=c:/deps/boost_1_57_0/
-    #BOOST_LIB_PATH=c:/deps/boost_1_57_0/stage/lib
-    #BOOST_LIB_SUFFIX=-mgw11-mt-s-x32-1_74
     BOOST_LIB_SUFFIX=-mgw11-mt-s-x64-1_74
     BOOST_INCLUDE_PATH=c:/deps/boost_1_74_0/
     BOOST_LIB_PATH=c:/deps/boost_1_74_0/stage/lib
@@ -90,8 +87,10 @@ win32 {
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
 
-    OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2r/include/
-    OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2r
+    #OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2u/include/
+    #OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2u
+    OPENSSL_INCLUDE_PATH=c:/deps/openssl-3.0.13/include/
+    OPENSSL_LIB_PATH=c:/deps/openssl-3.0.13
 
     MINIUPNPC_INCLUDE_PATH=c:/deps
     MINIUPNPC_LIB_PATH=c:/deps/miniupnpc
