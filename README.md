@@ -37,6 +37,7 @@ Explore comprehensive resources and join vibrant community channels to connect w
 - [Okcash on Coingecko](https://www.coingecko.com/en/coins/okcash)
 - [Okcash on Coinmarketcap](https://coinmarketcap.com/currencies/okcash/)
 - [Official Okcash Whitepaper](https://github.com/okcashpro/okcash-whitepaper)
+- [Okcash Smart contracts Repo](https://github.com/okcashpro/ok-smartcontracts)
 - [Okcash Cyberscope Audit](https://www.cyberscope.io/audits/coin-okcash)
 - [OK Community Website + Swap](https://okcash.co)
 - [Documentation](https://okcash.org)
