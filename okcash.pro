@@ -79,7 +79,7 @@ macx {
 }
 
 win32 {
-    BOOST_LIB_SUFFIX=-mgw49-mt-s-1_57
+    BOOST_LIB_SUFFIX=-mgw112-mt-s-1_57
     BOOST_INCLUDE_PATH=c:/deps/boost_1_57_0/
     BOOST_LIB_PATH=c:/deps/boost_1_57_0/stage/lib
 
