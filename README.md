@@ -57,6 +57,10 @@ Join us in shaping the future of digital transactions, where Okcash stands as a 
 
 #### Exploring Okcash: Your One-Stop Guide to All Things OK: https://okcash.news/exploring-okcash-your-one-stop-guide-to-all-things-ok-60bfafb9d9a8
 
+#### OK on Coingecko: https://www.coingecko.com/en/coins/okcash
+
+#### OK on Coinmarketcap: https://coinmarketcap.com/currencies/okcash/
+
 #### Okcash White Paper: https://github.com/okcashpro/okcash-whitepaper
 
 #### Okcash at Cyberscope: https://www.cyberscope.io/audits/coin-okcash
@@ -89,47 +93,29 @@ Join us in shaping the future of digital transactions, where Okcash stands as a 
 
 #### OK Fantom explorer:  https://ftmscan.com/token/0xd3Ac016b1B8C80EeAdDe4D186A9138C9324e4189
 
-#### OK Forums:  http://okcashtalk.org
-
 #### OK BitcoinTalk Ann: https://bitcointalk.org/index.php?topic=1028368.0
 
-#### OK Reddit community: https://reddit.com/r/okcash
+#### OK Reddit Community: https://reddit.com/r/okcash
 
-#### OK Community Discord: https://discord.gg/grvpc8c
+#### OK Telegram Community: https://t.me/ok_heroes
 
-#### OK Community Telegram: https://t.me/ok_heroes
+#### OK Discord Community: https://discord.gg/grvpc8c
 
-#### OK on Coingecko: https://www.coingecko.com/en/coins/okcash
-
-#### OK on Coinmarketcap: https://coinmarketcap.com/currencies/okcash/
 
 -------------------
 
-# Contribute with the Okcash Development process
+# Contribute to the Okcash Development process
 
-Developers work in their own forks, then submit pull requests when
-they think their feature or bug fix is ready.
+Developers collaborate by working in their own forks, pushing commits when they believe their enhancement or bug fix is complete.
 
-The patch will be accepted if there is broad consensus that it is a
-good thing.  Developers should expect to rework and resubmit patches
-if they don't match the project's coding conventions (see coding.txt)
-or are controversial.
+Acceptance of contributions hinges on a consensus regarding the value they add to Okcash. Contributors should be prepared to refine and re-submit their work in line with the project's coding standards (refer to coding.txt) and to address any areas of contention.
 
-The master branch is regularly built and tested, but is not guaranteed
-to be completely stable. Tags are regularly created to indicate new
-stable release versions of Okcash.
+The master branch undergoes regular builds and tests, offering a snapshot of the latest developments without an absolute guarantee of stability. Stable release versions of Okcash are marked by tags for clarity and reliability.
 
-Feature branches are created when there are major new features being
-worked on by several people.
+Instead of feature branches, our workflow relies on comprehensive collaboration directly through forks for significant new features, ensuring that all contributions are meticulously integrated.
 
-From time to time a pull request will become outdated. If this occurs, and
-the pull is no longer automatically merge able; a comment on the pull will
-be used to issue a warning of closure. The pull will be closed 15 days
-after the warning if action is not taken by the author. Pull requests closed
-in this manner will have their corresponding issue labelled 'stagnant'.
+Occasionally, a pull request may become outdated due to changes in the master that render it non-mergeable. In such cases, if no action is taken by the author within 15 days of this, the pull request will be closed.
 
-Issues with no commits will be given a similar warning, and closed after
-15 days from their last activity. Issues closed in this manner will be 
-labelled 'stale'.
+Similarly, issues without any commits over time will receive a warning of impending closure. Without activity within 15 days of such a notice, the issue will be closed, ensuring the focus remains on active and relevant project tasks.
 
 
