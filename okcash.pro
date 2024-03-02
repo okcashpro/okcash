@@ -79,9 +79,13 @@ macx {
 }
 
 win32 {
-    BOOST_LIB_SUFFIX=-mgw112-mt-s-1_57
-    BOOST_INCLUDE_PATH=c:/deps/boost_1_57_0/
-    BOOST_LIB_PATH=c:/deps/boost_1_57_0/stage/lib
+    #BOOST_LIB_SUFFIX=-mgw112-mt-s-1_57
+    #BOOST_INCLUDE_PATH=c:/deps/boost_1_57_0/
+    #BOOST_LIB_PATH=c:/deps/boost_1_57_0/stage/lib
+    #BOOST_LIB_SUFFIX=-mgw11-mt-s-x32-1_74
+    BOOST_LIB_SUFFIX=-mgw11-mt-s-x64-1_74
+    BOOST_INCLUDE_PATH=c:/deps/boost_1_74_0/
+    BOOST_LIB_PATH=c:/deps/boost_1_74_0/stage/lib
 
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
