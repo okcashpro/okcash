@@ -30,6 +30,7 @@ LIBS += \
  $(DEPSDIR)/lib/libboost_system-mt.a \
  $(DEPSDIR)/lib/libboost_filesystem-mt.a \
  $(DEPSDIR)/lib/libboost_program_options-mt.a \
+  $(DEPSDIR)/lib/libboost_chrono-mt.a \
  $(DEPSDIR)/lib/libboost_thread-mt.a \
  $(DEPSDIR)/lib/libssl.a \
  $(DEPSDIR)/lib/libcrypto.a \
@@ -40,6 +41,7 @@ LIBS += \
  -lboost_system-mt \
  -lboost_filesystem-mt \
  -lboost_program_options-mt \
+ -lboost_chrono-mt \
  -lboost_thread-mt \
  -lssl \
  -lcrypto \
