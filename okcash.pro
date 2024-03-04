@@ -67,8 +67,8 @@ macx {
     BDB_INCLUDE_PATH=/opt/local/include/db48
     BDB_LIB_PATH=/opt/local/lib/db48
 
-    OPENSSL_INCLUDE_PATH=/opt/local/include/openssl-1.0
-    OPENSSL_LIB_PATH=/opt/local/lib/openssl-1.0
+    OPENSSL_INCLUDE_PATH=/opt/local/include/openssl
+    OPENSSL_LIB_PATH=/opt/local/lib/openssl
 
     MINIUPNPC_INCLUDE_PATH=/opt/local/include/miniupnpc
     MINIUPNPC_LIB_PATH=/opt/local/lib/
