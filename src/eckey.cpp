@@ -220,51 +220,85 @@ bool CECKey::SetPubKey(const CPubKey &pubkey) {
 
 bool CECKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig) {
     vchSig.clear();
-    ECDSA_SIG *sig = ECDSA_do_sign((unsigned char*)&hash, sizeof(hash), pkey);
-    if (sig == NULL)
+
+    // Convert uint256 to a byte array
+    unsigned char hashData[32];
+    memcpy(hashData, hash.begin(), 32); // Assuming hash.begin() gives access to the data
+
+    ECDSA_SIG *sig = ECDSA_do_sign(hashData, sizeof(hashData), pkey);
+    if (sig == nullptr) {
         return false;
+    }
+
     BN_CTX *ctx = BN_CTX_new();
-    BN_CTX_start(ctx);
+    if (!ctx) {
+        ECDSA_SIG_free(sig);
+        return false;
+    }
+
+    BIGNUM *order = BN_new();
+    BIGNUM *halfOrder = BN_new();
+    if (!order || !halfOrder) {
+        ECDSA_SIG_free(sig);
+        BN_free(order);
+        BN_free(halfOrder);
+        BN_CTX_free(ctx);
+        return false;
+    }
+
     const EC_GROUP *group = EC_KEY_get0_group(pkey);
-    BIGNUM *order = BN_CTX_get(ctx);
-    BIGNUM *halforder = BN_CTX_get(ctx);
     EC_GROUP_get_order(group, order, ctx);
-    BN_rshift1(halforder, order);
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-    if (BN_cmp(sig->s, halforder) > 0) {
-        // enforce low S values, by negating the value (modulo the order) if above order/2.
-        BN_sub(sig->s, order, sig->s);
+    BN_rshift1(halfOrder, order); // Calculate half order of the curve
+
+    const BIGNUM *sig_r, *sig_s;
+    ECDSA_SIG_get0(sig, &sig_r, &sig_s);
+
+    // Normalize S if it's above half the order of the curve
+    BIGNUM *normalized_s = BN_new();
+    if (BN_cmp(sig_s, halfOrder) > 0) {
+        BN_sub(normalized_s, order, sig_s);
+    } else {
+        BN_copy(normalized_s, sig_s);
     }
-#else
-    const BIGNUM *r;
-    const BIGNUM *s;
-    r = BN_secure_new();
-    s = BN_secure_new();
-    ECDSA_SIG_get0(sig, &r, &s);
-    BIGNUM *s1;
-    s1 = BN_secure_new();
-    BN_copy(s1,s);
-    if (BN_cmp(s, halforder) > 0) {
-        // enforce low S values, by negating the value (modulo the order) if above order/2.
-        BN_sub(s1, order, s1);
+
+    // Set the normalized S value back into the signature object
+    ECDSA_SIG_set0(sig, BN_dup(sig_r), normalized_s); // This duplicates r and takes ownership of normalized_s
+
+    // Serialize the signature into a DER encoded byte array
+    unsigned char *der = nullptr;
+    int nSize = i2d_ECDSA_SIG(sig, &der); // Use 'int' to store the size returned by i2d_ECDSA_SIG
+    if (nSize < 0) {
+        // Cleanup if serialization failed
+        ECDSA_SIG_free(sig);
+        BN_free(order);
+        BN_free(halfOrder);
+        BN_CTX_free(ctx);
+        return false;
     }
-#endif
-    BN_CTX_end(ctx);
-    BN_CTX_free(ctx);
-    unsigned int nSize = ECDSA_size(pkey);
-    vchSig.resize(nSize); // Make sure it is big enough
-    unsigned char *pos = &vchSig[0];
-    nSize = i2d_ECDSA_SIG(sig, &pos);
+    vchSig.resize(nSize); // Resize the vector to accommodate the serialized signature
+    memcpy(vchSig.data(), der, nSize); // Copy the serialized signature into the vector
+
+    // Cleanup
+    OPENSSL_free(der); // Free the allocated buffer by i2d_ECDSA_SIG
     ECDSA_SIG_free(sig);
-    vchSig.resize(nSize); // Shrink to fit actual size
+    BN_free(order);
+    BN_free(halfOrder);
+    BN_CTX_free(ctx);
+
     return true;
 }
 
 bool CECKey::Verify(const uint256 &hash, const std::vector<unsigned char>& vchSig) {
-    // -1 = error, 0 = bad sig, 1 = good
-    if (ECDSA_verify(0, (unsigned char*)&hash, sizeof(hash), &vchSig[0], vchSig.size(), pkey) != 1)
+    const unsigned char *p = vchSig.data();
+    ECDSA_SIG *sig = d2i_ECDSA_SIG(NULL, &p, vchSig.size());
+    if (sig == NULL) {
         return false;
-    return true;
+    }
+
+    int ret = ECDSA_do_verify((const unsigned char*)&hash, sizeof(hash), sig, pkey);
+    ECDSA_SIG_free(sig);
+
+    return ret == 1;
 }
 
 bool CECKey::SignCompact(const uint256 &hash, unsigned char *p64, int &rec) {
