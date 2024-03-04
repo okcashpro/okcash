@@ -8,9 +8,9 @@ CONFIG += no_include_pwd
 !win32:CONFIG += thread
 win32:CONFIG += thread static
 win32:CONFIG += static
-win32:LIBS += -L"c:/deps/openssl-1.0.2u" -llibcrypto
+#win32:LIBS += -L"c:/deps/openssl-1.0.2u" -llibcrypto
 #win32:LIBS += -L"c:/deps/openssl-1.1.1u" -llibcrypto -lcrypt32
-#win32:LIBS += -L"c:/deps/openssl-3.0.2" -llibcrypto -lcrypt32
+win32:LIBS += -L"c:/deps/openssl-3.0.2" -llibcrypto -lcrypt32
 !android|!ios:QT += widgets webkitwidgets
 
 # Mobile devices
@@ -88,12 +88,12 @@ win32 {
     BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
 
-    OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2u/include/
-    OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2u
     #OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.1.1u/include/
     #OPENSSL_LIB_PATH=c:/deps/openssl-1.1.1u
-    #OPENSSL_INCLUDE_PATH=c:/deps/openssl-3.0.2/include/
-    #OPENSSL_LIB_PATH=c:/deps/openssl-3.0.2
+    #OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2u/include/
+    #OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2u
+    OPENSSL_INCLUDE_PATH=c:/deps/openssl-3.0.2/include/
+    OPENSSL_LIB_PATH=c:/deps/openssl-3.0.2
 
     MINIUPNPC_INCLUDE_PATH=c:/deps
     MINIUPNPC_LIB_PATH=c:/deps/miniupnpc
