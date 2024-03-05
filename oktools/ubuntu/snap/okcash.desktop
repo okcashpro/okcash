@@ -5,10 +5,10 @@ Name=Okcash
 Comment=Seamlessly secure, eco-friendly digital currency for instant global transactions.
 
 Type=Application
-Categories=Office;Finance;P2P;Network;Qt;
+Categories=Network;
 
 Exec=okcash
-Icon=${SNAP}/share/pixmaps/okcash-icon.png
+Icon=okcash-icon
 
 Terminal=false
 StartupNotify=true
