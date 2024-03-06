@@ -14,7 +14,7 @@ INCLUDEPATHS= \
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
 LIBPATHS= \
- -L"C:\deps\boost_1_74_0\bin.v2\libs" \
+ -L"C:\deps\boost_1_74_0\stage\lib" \
  -L"C:\deps\db-4.8.30.NC\build_unix" \
  -L"C:\deps\openssl-3.0.13\lib" \
 
