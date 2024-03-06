@@ -20,8 +20,8 @@ export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
 # Build okcash
 cd ../..
-qmake -j4
-make 
+qmake
+make -j4
 strip okcash
 
 # Install okcash GUI in the system
