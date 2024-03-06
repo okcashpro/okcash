@@ -5,7 +5,7 @@ Name=Okcash
 Comment=Seamlessly secure, eco-friendly digital currency for instant global transactions.
 
 Type=Application
-Categories=Network;
+Categories=Office;Finance;P2P;Network;Qt;
 
 Exec=okcash
 Icon=okcash-icon
