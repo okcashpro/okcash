@@ -29,9 +29,9 @@ Dependencies
 Libraries you need to download separately and build:
 
                 default path               download
-OpenSSL         \openssl-1.0.2r-mgw        http://www.openssl.org/source/
+OpenSSL         \openssl-3.0.13-mgw        http://www.openssl.org/source/
 Berkeley DB     \db-4.8.30.NC-mgw          http://www.oracle.com/technology/software/products/berkeley-db/index.html
-Boost           \boost-1.57.0-mgw          http://www.boost.org/users/download/
+Boost           \boost-1.74.0-mgw          http://www.boost.org/users/download/
 miniupnpc       \miniupnpc-1.9-mgw         http://miniupnp.tuxfamily.org/files/
 
 Their licenses:
@@ -41,9 +41,9 @@ Boost          MIT-like license
 miniupnpc      New (3-clause) BSD license
 
 Versions used in this release:
-OpenSSL      1.0.2r
+OpenSSL      3.0.13
 Berkeley DB  4.8.30.NC
-Boost        1.57.0
+Boost        1.74.0
 miniupnpc    1.9
 
 
@@ -53,7 +53,7 @@ MSYS shell:
 un-tar sources with MSYS 'tar xfz' to avoid issue with symlinks (OpenSSL ticket 2377)
 change 'MAKE' env. variable from 'C:\MinGW32\bin\mingw32-make.exe' to '/c/MinGW32/bin/mingw32-make.exe'
 
-cd /c/openssl-1.0.2r-mgw
+cd /c/openssl-3.0.13-mgw
 ./config
 make
 
@@ -67,8 +67,8 @@ make
 Boost
 -----
 DOS prompt:
-downloaded boost jam 3.1.18
-cd \boost-1.57.0-mgw
+downloaded boost 
+cd \boost-1.74.0-mgw
 bjam toolset=gcc --build-type=complete stage
 
 MiniUPnPc
