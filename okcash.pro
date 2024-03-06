@@ -8,6 +8,7 @@ CONFIG += no_include_pwd
 !win32:CONFIG += thread
 win32:CONFIG += thread static
 win32:CONFIG += static
+win32:CONFIG -= qtquickcompiler
 #win32:LIBS += -L"c:/deps/openssl-1.0.2u" -llibcrypto
 #win32:LIBS += -L"c:/deps/openssl-1.1.1u" -llibcrypto -lcrypt32
 win32:LIBS += -L"c:/deps/openssl-3.0.13" -llibcrypto -lcrypt32
