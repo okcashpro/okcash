@@ -6,24 +6,24 @@ USE_UPNP:=1
 USE_WALLET:=1
 
 INCLUDEPATHS= \
- -I"C:\Develop\deps\boost_1_59_0" \
- -I"C:\Develop\deps\db-4.8.30.NC\build_unix" \
- -I"C:\Develop\deps\openssl-1.0.2d\include" \
+ -I"C:\deps\boost_1_74_0" \
+ -I"C:\deps\db-4.8.30.NC\build_unix" \
+ -I"C:\deps\openssl-3.0.13\include" \
  -I"$(abspath obj)"
 
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
 LIBPATHS= \
- -L"C:\Develop\deps\boost_1_59_0\bin.v2\libs" \
- -L"C:\Develop\deps\db-4.8.30.NC\build_unix" \
- -L"C:\Develop\deps\openssl-1.0.2d\lib" \
+ -L"C:\deps\boost_1_74_0\bin.v2\libs" \
+ -L"C:\deps\db-4.8.30.NC\build_unix" \
+ -L"C:\deps\openssl-3.0.13\lib" \
 
 LIBS= \
- -l boost_system-mgw49-mt-s-1_59 \
- -l boost_filesystem-mgw49-mt-s-1_59 \
- -l boost_program_options-mgw49-mt-s-1_59 \
- -l boost_thread-mgw49-mt-s-1_59 \
- -l boost_chrono-mgw49-mt-s-1_59 \
+ -l boost_system-mgw11-mt-s-x64-1_74 \
+ -l boost_filesystem-mgw11-mt-s-x64-1_74 \
+ -l boost_program_options-mgw11-mt-s-x64-1_74 \
+ -l boost_thread-mgw11-mt-s-x64-1_74 \
+ -l boost_chrono-mgw11-mt-s-x64-1_74 \
  -l db_cxx \
  -l ssl \
  -l crypto \
@@ -40,8 +40,8 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
-  INCLUDEPATHS += -I"C:\Develop\deps\miniupnpc-1.9\include"
-  LIBPATHS += -L"C:\Develop\deps\miniupnpc-1.9\lib"
+  INCLUDEPATHS += -I"C:\deps\miniupnpc\include"
+  LIBPATHS += -L"C:\deps\miniupnpc\lib"
   LIBS += -l miniupnpc -l iphlpapi
   DEFS += -DMINIUPNP_STATICLIB -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
