@@ -1,18 +1,10 @@
 #!/bin/bash
 echo "**********************************************"
 echo ""
-echo "Compiling|Installing - 'okcashd' node for"
+echo "Compiling|Installing Okcash for"
 uname -a
 echo ""
-
-# Navigate to the appropriate directory and compile/install the node
-cd oktools/ubuntu
-chmod +x *
-/bin/bash ./Compile_ubuntu_node.sh
 echo "**********************************************"
-echo ""
-echo "okcashd node is now installed in your system."
-echo ""
 echo ""
 
 # Function to ask yes/no question
@@ -36,20 +28,33 @@ ask_question() {
     done
 }
 
-# Ask if the user wants to install the GUI
-if ask_question "Do you want to also install the GUI (Qt Graphical User Interface) for Okcash?"; then
-    echo "Installing the Okcash GUI..."
+# Ask if the user wants to install the OK node
+if ask_question "Do you want to install the - okcashd - node?"; then
+    echo "Installing the okcashd node"
+    # Navigate to the appropriate directory and compile/install the node
     cd oktools/ubuntu
-    /bin/bash ./6depsgui.sh
-    export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
-    export BDB_INCLUDE_PATH="/usr/local/BerkeleyDB.4.8/include"
-    export BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
-    export CPATH="/usr/local/BerkeleyDB.4.8/include"
-    export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
-    /bin/bash ./7buildgui.sh
+    chmod +x *
+    /bin/bash ./Compile_ubuntu_node.sh
     echo "**********************************************"
     echo ""
-    echo "okcash node and GUI (Qt) are now installed in your system."
+    echo " - okcashd - node is now installed in your system."
+    echo ""
+    echo ""
+else
+    echo ""
+    echo "OK, Enjoy!."
+fi
+
+# Ask if the user wants to install the GUI
+if ask_question "Do you want to install the - Okcash GUI - (Qt Graphical User Interface)?"; then
+    echo "Installing the Okcash GUI..."
+    cd oktools/ubuntu
+    chmod +x *
+    /bin/bash ./Compile_ubuntu_GUI.sh
+    echo "**********************************************"
+    echo ""
+    echo "The Okcash GUI (Qt) is now installed in your system."
+    echo ""
 else
     echo ""
     echo "OK, Enjoy!."
@@ -66,6 +71,7 @@ if ask_question "First Time Use? Do you want to Instant Sync [Download and insta
     echo "**********************************************"
     echo ""
     echo "okcash First time Sync is installed in your system."
+    echo ""
 else
     echo ""
     echo "OK, Enjoy!."
@@ -82,6 +88,7 @@ if ask_question "Need an okcash.conf file? Do you want to install the sample okc
     echo "**********************************************"
     echo ""
     echo "okcash.conf is installed in your system."
+    echo ""
 else
     echo ""
     echo "OK, Enjoy!."

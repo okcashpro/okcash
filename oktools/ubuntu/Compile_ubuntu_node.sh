@@ -18,8 +18,7 @@ export CPATH="/usr/local/BerkeleyDB.4.8/include"
 export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
 # Build okcashd node
-cd
-cd okcash
+cd ../..
 cd src
 make -j4 -f makefile.unix USE_UPNP=-
 strip okcashd

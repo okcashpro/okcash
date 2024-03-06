@@ -19,8 +19,7 @@ export CPATH="/usr/local/BerkeleyDB.4.8/include"
 export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
 # Build okcash
-cd
-cd okcash
+cd ../..
 qmake -j4
 make 
 strip okcash
