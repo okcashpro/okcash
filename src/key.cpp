@@ -418,7 +418,12 @@ void CExtKeyPair::EncodeV(unsigned char code[74]) const
     code[7] = (nChild >>  8) & 0xFF; code[8] = (nChild >>  0) & 0xFF;
     memcpy(code+9, vchChainCode, 32);
     code[41] = 0;
-    assert(key.size() == 32);
+
+    if (key.size() != 32) {
+
+    return;
+    }
+
     memcpy(code+42, key.begin(), 32);
 };
 
