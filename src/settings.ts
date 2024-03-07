@@ -53,6 +53,7 @@ dotenv.config();
 // import from env
 for (const key in settings) {
     if (process.env[key]) {
+        // @ts-expect-error - we know this key exists
         settings[key] = process.env[key]!;
     }
 }

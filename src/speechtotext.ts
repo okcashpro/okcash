@@ -1,6 +1,6 @@
 import OpenAI from "openai";
-import settings from "./settings";
-import { getWavHeader } from "./util";
+import settings from "./settings.ts";
+import { getWavHeader } from "./util.ts";
 
 var openAI = new OpenAI({
     apiKey: settings.OPENAI_KEY

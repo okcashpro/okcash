@@ -1,17 +1,19 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "target": "es2016",
-        "jsx": "preserve",
-        "resolveJsonModule": true,
-        "outDir": "out",
-        "sourceMap": true,
-        "skipLibCheck": true
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowImportingTsExtensions": true,
+      "declaration": true,
+      "emitDeclarationOnly": true
     },
-    "exclude": [
-        "node_modules",
-        "**/node_modules/*"
-    ]
-}
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+  }
+  

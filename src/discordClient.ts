@@ -3,7 +3,7 @@ import { BaseGuildVoiceChannel, ChannelType, Client, GatewayIntentBits, Guild, G
 import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import settings from "./settings";
+import settings from "./settings.ts";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -39,9 +39,9 @@ export default class DiscordClient extends EventEmitter {
         });
         this.client.login(this.apiToken);
         this.client.on('voiceStateUpdate', (oldState, newState) => {
-            if (newState.member.user.bot) return;
+            if (newState?.member?.user.bot) return;
             if (newState.channelId != null && newState.channelId != oldState.channelId) {
-                this.joinChannel(newState.channel);
+                this.joinChannel(newState.channel as BaseGuildVoiceChannel);
             }
         });
         this.client.on('guildCreate', (guild) => {
@@ -62,12 +62,12 @@ export default class DiscordClient extends EventEmitter {
     private async scanGuild(guild: Guild) {
         // Iterate through all voice channels fetching the largest one with at least one connected member
         const channels = (await guild.channels.fetch())
-            .filter(channel => channel.type == ChannelType.GuildVoice);
-        var chosenChannel: BaseGuildVoiceChannel = null;
+            .filter(channel => channel?.type == ChannelType.GuildVoice);
+        let chosenChannel: BaseGuildVoiceChannel | null = null;
 
         for (const [id, channel] of channels) {
             const voiceChannel = channel as BaseGuildVoiceChannel;
-            if (voiceChannel.members.size > 0 && (chosenChannel == null || voiceChannel.members.size > chosenChannel.members.size)) {
+            if (voiceChannel.members.size > 0 && (chosenChannel === null || voiceChannel.members.size > chosenChannel.members.size)) {
                 chosenChannel = voiceChannel;
             }
         }
@@ -93,14 +93,15 @@ export default class DiscordClient extends EventEmitter {
 
         connection.receiver.speaking.on('start', (userId) => {
             const user = channel.members.get(userId);
-            if (user.user.bot) return;
+            if(!user) return;
+            if (user?.user.bot) return;
             this.monitorMember(user, channel);
             this.streams.get(userId)?.emit('speakingStarted');
         });
 
         connection.receiver.speaking.on('end', async (userId) => {
             const user = channel.members.get(userId);
-            if (user.user.bot) return;
+            if (user?.user.bot) return;
             this.streams.get(userId)?.emit('speakingStopped');
         });
     }
@@ -109,6 +110,7 @@ export default class DiscordClient extends EventEmitter {
         const userId = member.id;
         const userName = member.displayName;
         const connection = getVoiceConnection(member.guild.id);
+        if(!connection) return;
         const receiveStream = connection.receiver.subscribe(userId, {
             autoDestroy: true,
             emitClose: true

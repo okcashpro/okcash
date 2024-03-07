@@ -1,7 +1,7 @@
 import { Readable } from "stream";
 import { WebSocket } from "ws";
-import settings from "./settings";
-import { prependWavHeader } from "./util";
+import settings from "./settings.ts";
+import { prependWavHeader } from "./util.ts";
 
 export async function textToSpeechStreaming(text: string): Promise<Readable> {
     console.log("11 TTS: " + text);
@@ -33,10 +33,10 @@ export async function textToSpeechStreaming(text: string): Promise<Readable> {
         throw new Error(`Received status ${status} from Eleven Labs API: ${errorBodyString}`);
     }
     
-    let reader = response.body.getReader();
+    let reader = response?.body?.getReader();
     let readable = new Readable({
         read() {
-            reader.read().then(({ done, value }) => {
+            reader?.read().then(({ done, value }) => {
                 if (done) {
                     this.push(null);
                 } else {
@@ -173,7 +173,7 @@ export class ElevenLabsConverter extends Readable {
     private inputEnded: boolean = false;
     private outputEnded: boolean = false;
     private startTime: number;
-    private openTime: number;
+    private openTime: number | undefined
     private buffers: Buffer[] = [];
     private draining: boolean = false;
     private firstDataTime: number = -1;
@@ -231,7 +231,7 @@ export class ElevenLabsConverter extends Readable {
             } else if (response.audio) {
                 if (this.firstDataTime == -1) {
                     this.firstDataTime = Date.now();
-                    console.log(`First audio packet received after ${this.firstDataTime - this.openTime}ms`);
+                    console.log(`First audio packet received after ${this.firstDataTime - (this.openTime || 0)}ms`);
                 }
                 let audioChunk = Buffer.from(response.audio, 'base64');
                 console.log(`Received audio chunk of length ${audioChunk.length}`);
