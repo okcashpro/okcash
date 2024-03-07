@@ -3,7 +3,7 @@ import { BaseGuildVoiceChannel, ChannelType, Client, GatewayIntentBits, Guild, G
 import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import settings from "./settings";
+import settings from "./settings.ts";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -39,9 +39,9 @@ export default class DiscordClient extends EventEmitter {
         });
         this.client.login(this.apiToken);
         this.client.on('voiceStateUpdate', (oldState, newState) => {
-            if (newState.member.user.bot) return;
+            if (newState.member?.user.bot) return;
             if (newState.channelId != null && newState.channelId != oldState.channelId) {
-                this.joinChannel(newState.channel);
+                this.joinChannel(newState.channel as BaseGuildVoiceChannel);
             }
         });
         this.client.on('guildCreate', (guild) => {
@@ -62,8 +62,8 @@ export default class DiscordClient extends EventEmitter {
     private async scanGuild(guild: Guild) {
         // Iterate through all voice channels fetching the largest one with at least one connected member
         const channels = (await guild.channels.fetch())
-            .filter(channel => channel.type == ChannelType.GuildVoice);
-        var chosenChannel: BaseGuildVoiceChannel = null;
+            .filter(channel => channel?.type == ChannelType.GuildVoice);
+        var chosenChannel: BaseGuildVoiceChannel | null = null;
 
         for (const [id, channel] of channels) {
             const voiceChannel = channel as BaseGuildVoiceChannel;
@@ -93,14 +93,14 @@ export default class DiscordClient extends EventEmitter {
 
         connection.receiver.speaking.on('start', (userId) => {
             const user = channel.members.get(userId);
-            if (user.user.bot) return;
-            this.monitorMember(user, channel);
+            if (user?.user.bot) return;
+            this.monitorMember(user as GuildMember, channel);
             this.streams.get(userId)?.emit('speakingStarted');
         });
 
         connection.receiver.speaking.on('end', async (userId) => {
             const user = channel.members.get(userId);
-            if (user.user.bot) return;
+            if (user?.user.bot) return;
             this.streams.get(userId)?.emit('speakingStopped');
         });
     }
@@ -109,23 +109,23 @@ export default class DiscordClient extends EventEmitter {
         const userId = member.id;
         const userName = member.displayName;
         const connection = getVoiceConnection(member.guild.id);
-        const receiveStream = connection.receiver.subscribe(userId, {
+        const receiveStream = connection?.receiver.subscribe(userId, {
             autoDestroy: true,
             emitClose: true
         });
-        if (receiveStream.listenerCount('data') > 0) { return; }
+        if (receiveStream && receiveStream.listenerCount('data') > 0) { return; }
         const opusDecoder = new prism.opus.Decoder({
             channels: 1,
             rate: DECODE_SAMPLE_RATE,
             frameSize: DECODE_FRAME_SIZE
         });
-        pipeline(receiveStream, opusDecoder, (err) => {
+        pipeline(receiveStream as any, opusDecoder, (err) => {
             if (err) {
                 console.log(`Opus decoding pipeline error: ${err}`);
             }
         });
         this.streams.set(userId, opusDecoder);
-        this.connections.set(userId, connection);
+        this.connections.set(userId, connection as VoiceConnection);
         opusDecoder.on('error', (err) => {
             console.log(`Opus decoding error: ${err}`);
         });
@@ -133,7 +133,7 @@ export default class DiscordClient extends EventEmitter {
             console.log(`Opus decoder for ${member?.displayName} closed`);
         });
         this.emit('userStream', userId, userName, channel, opusDecoder);
-        receiveStream.on('close', () => {
+        receiveStream && receiveStream.on('close', () => {
             console.log(`voice stream from ${member?.displayName} closed`);
         });
     }

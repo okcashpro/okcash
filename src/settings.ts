@@ -53,7 +53,8 @@ dotenv.config();
 // import from env
 for (const key in settings) {
     if (process.env[key]) {
-        settings[key] = process.env[key]!;
+        // @ts-ignore
+        settings[key] = process.env[key]!
     }
 }
 
