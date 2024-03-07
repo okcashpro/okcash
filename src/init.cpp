@@ -579,9 +579,10 @@ bool AppInit2(boost::thread_group& threadGroup)
     LogPrintf(" |_____|_,_|___|__,|___|_|_|  |___|___|_| |___|    _/|___|  \n\n");
                                                                     
 
-	LogPrintf("         ~Decentralize Everything and Empower Everyone~\n\n");
-    LogPrintf("Okcash Core %s (%s)\n", FormatFullVersion().c_str(), CLIENT_DATE.c_str());
-    LogPrintf("is activated in %s mode.\n", GetNodeModeName(nNodeMode));
+    LogPrintf("       \"Decentralizing Everything, Empowering Everyone\"\n");
+    LogPrintf("                   Welcome to the OK Network.\n\n");
+    LogPrintf("Okcah Core %s (%s)\n", FormatFullVersion().c_str(), CLIENT_DATE.c_str());
+    LogPrintf("Activated in %s mode.\n", GetNodeModeName(nNodeMode));
     LogPrintf("Using %s\n", SSLeay_version(SSLEAY_VERSION));
 
     if (!fLogTimestamps)
