@@ -4,10 +4,10 @@ import { UUID } from 'crypto';
 import dotenv from "dotenv";
 import { Readable } from "stream";
 import getUuid from 'uuid-by-string';
-import { AudioMonitor } from "./audioMonitor";
-import DiscordClient from "./discordClient";
-import { textToSpeech } from "./elevenlabs";
-import { speechToText } from "./speechtotext";
+import { AudioMonitor } from "./audioMonitor.ts";
+import DiscordClient from "./discordClient.ts";
+import { textToSpeech } from "./elevenlabs.ts";
+import { speechToText } from "./speechtotext.ts";
 import { BaseGuildVoiceChannel } from "discord.js";
 
 enum ResponseType {
@@ -161,7 +161,7 @@ const discordClient = new DiscordClient();
 
 const runtime = new BgentRuntime({
     supabase,
-    token: process.env.OPENAI_API_KEY,
+    token: process.env.OPENAI_API_KEY as string,
     serverUrl: 'https://api.openai.com/v1',
     evaluators: [],
     actions: [],
@@ -198,9 +198,9 @@ async function respondToSpokenAudio(userId: string, userName: string, channelId:
     const sstService = speechToText;
     const text = await sstService(inputBuffer);
     if (requestedResponseType == ResponseType.SPOKEN_TEXT) {
-        return Readable.from(text);
+        return Readable.from(text as string);
     } else {
-        return await respondToText(userId, userName, channelId, text, requestedResponseType);
+        return await respondToText(userId, userName, channelId, text as string, requestedResponseType);
     }
 }
 /**
@@ -214,7 +214,7 @@ async function respondToText(userId: string, userName: string, channelId: string
 
     const userIdUUID = getUuid(userId) as UUID;
 
-    const agentId = getUuid(process.env.DISCORD_APPLICATION_ID) as UUID;
+    const agentId = getUuid(process.env.DISCORD_APPLICATION_ID as string) as UUID;
 
     await ensureUserExists(supabase, agentId, null, process.env.DISCORD_TOKEN);
     await ensureUserExists(supabase, userIdUUID, userName);
