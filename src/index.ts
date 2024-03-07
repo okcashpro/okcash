@@ -9,6 +9,7 @@ import DiscordClient from "./discordClient.ts";
 import { textToSpeech } from "./elevenlabs.ts";
 import { speechToText } from "./speechtotext.ts";
 import { BaseGuildVoiceChannel } from "discord.js";
+import uuid from 'uuid-by-string';
 
 enum ResponseType {
     /**
@@ -47,7 +48,7 @@ async function handleMessage(
         // we run evaluation here since some evals could be modulo based, and we should run on every message
         if ((senderContent as Content).content) {
             const { data: data2, error } = await runtime.supabase.from('messages').select('*').eq('user_id', message.senderId)
-                .eq('room_id', room_id)
+                .eq('room_id', message.room_id)
                 .order('created_at', { ascending: false })
 
             if (error) {
@@ -58,9 +59,9 @@ async function handleMessage(
             } else {
                 await runtime.messageManager.createMemory({
                     user_ids: [message.senderId, message.agentId, ...message.userIds],
-                    user_id: senderId!,
+                    user_id: message.senderId!,
                     content: senderContent,
-                    room_id,
+                    room_id: message.room_id,
                     embedding: embeddingZeroVector
                 })
             }
@@ -70,6 +71,7 @@ async function handleMessage(
 
     await _saveRequestMessage(message, state as State)
     // if (!state) {
+        console.log("MESSAGE:", message);
     state = (await runtime.composeState(message)) as State
     // }
 
@@ -373,9 +375,11 @@ async function respondToText(userId: string, userName: string, channelId: string
     }
 }
 
-discordClient.on('userStream', (userId: string, userName: string, channel: BaseGuildVoiceChannel, audioStream: Readable) => {
+
+discordClient.on('userStream', async (userId: string, userName: string, channel: BaseGuildVoiceChannel, audioStream: Readable) => {
     const channelId = channel.id;
-    listenToSpokenAudio(userId, userName, channelId, audioStream, async (responseAudioStream) => {
+    const userIdUUID = uuid(userId) as UUID;
+    listenToSpokenAudio(userIdUUID, userName, channelId, audioStream, async (responseAudioStream) => {
         console.log("Got response audio stream");
         responseAudioStream.on('close', () => {
             console.log("Response audio stream closed");

@@ -78,6 +78,7 @@ export default class DiscordClient extends EventEmitter {
     }
 
     private async joinChannel(channel: BaseGuildVoiceChannel) {
+        console.log("joining channel:", channel.name);
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
