@@ -38,59 +38,59 @@ enum ResponseType {
 
 const commands = [
     {
-      name: 'setname',
-      description: 'Change the agent\'s name in the database',
-      options: [
-        {
-          name: 'name',
-          description: 'The new name for the agent',
-          type: 3, // 3 corresponds to the STRING type
-          required: true,
-        },
-      ],
+        name: 'setname',
+        description: 'Change the agent\'s name in the database',
+        options: [
+            {
+                name: 'name',
+                description: 'The new name for the agent',
+                type: 3, // 3 corresponds to the STRING type
+                required: true,
+            },
+        ],
     },
     {
-      name: 'setbio',
-      description: 'Change the agent\'s bio in the database',
-      options: [
-        {
-          name: 'bio',
-          description: 'The new bio for the agent',
-          type: 3,
-          required: true,
-        },
-      ],
+        name: 'setbio',
+        description: 'Change the agent\'s bio in the database',
+        options: [
+            {
+                name: 'bio',
+                description: 'The new bio for the agent',
+                type: 3,
+                required: true,
+            },
+        ],
     },
     {
-      name: 'setavatar',
-      description: 'Change the bot\'s server avatar',
-      options: [
-        {
-          name: 'image',
-          description: 'The image to set as the bot\'s avatar',
-          type: 11, // 11 corresponds to the ATTACHMENT type
-          required: true,
-        },
-      ],
+        name: 'setavatar',
+        description: 'Change the bot\'s server avatar',
+        options: [
+            {
+                name: 'image',
+                description: 'The image to set as the bot\'s avatar',
+                type: 11, // 11 corresponds to the ATTACHMENT type
+                required: true,
+            },
+        ],
     },
-  ];
-  
-  const rest = new REST({ version: '9' }).setToken(settings.DISCORD_API_TOKEN);
-  
-  (async () => {
+];
+
+const rest = new REST({ version: '9' }).setToken(settings.DISCORD_API_TOKEN);
+
+(async () => {
     try {
-      console.log('Started refreshing application (/) commands.');
-  
-      await rest.put(
-        Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
-        { body: commands },
-      );
-  
-      console.log('Successfully reloaded application (/) commands.');
+        console.log('Started refreshing application (/) commands.');
+
+        await rest.put(
+            Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
+            { body: commands },
+        );
+
+        console.log('Successfully reloaded application (/) commands.');
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
-  })();
+})();
 
 export class DiscordClient extends EventEmitter {
     private apiToken: string;
@@ -110,7 +110,7 @@ export class DiscordClient extends EventEmitter {
             settings.SUPABASE_URL!,
             settings.SUPABASE_API_KEY!,
         )
-        
+
         this.runtime = new BgentRuntime({
             supabase,
             token: settings.OPENAI_API_KEY as string,
@@ -119,11 +119,12 @@ export class DiscordClient extends EventEmitter {
             actions: [],
         });
 
-        this.client.once(Events.ClientReady, readyClient => {
+        this.client.once(Events.ClientReady, async readyClient => {
             console.log(`Logged in as ${readyClient.user?.tag}`);
             console.log('Use this URL to add the bot to your server:');
             console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
-            this.onReady();
+            await this.checkBotAccount();
+            await this.onReady();
         });
         this.client.login(this.apiToken);
         this.client.on('voiceStateUpdate', (oldState, newState) => {
@@ -155,7 +156,7 @@ export class DiscordClient extends EventEmitter {
             // Ignore messages from the bot itself
             if (message.author.bot) return;
 
-             // Check if the message has already been processed
+            // Check if the message has already been processed
             if (message.id === lastProcessedMessageId) {
                 console.log("Ignoring duplicate message");
                 return;
@@ -171,21 +172,21 @@ export class DiscordClient extends EventEmitter {
             // TODO: determine if we want to respond
 
             try {
-                    // Use your existing function to handle text and get a response
-                    const responseStream = await this.respondToText(userId, userName, channelId, textContent, ResponseType.RESPONSE_TEXT);
+                // Use your existing function to handle text and get a response
+                const responseStream = await this.respondToText(userId, userName, channelId, textContent, ResponseType.RESPONSE_TEXT);
 
-                    // Convert the Readable stream to text (assuming the response is text)
-                    let responseData = '';
-                    for await (const chunk of responseStream) {
-                        responseData += chunk;
-                    }
-
-                    // Send the response back to the same channel
-                    message.channel.send(responseData);
-                } catch (error) {
-                    console.error('Error responding to message:', error);
-                    message.channel.send('Sorry, I encountered an error while processing your request.');
+                // Convert the Readable stream to text (assuming the response is text)
+                let responseData = '';
+                for await (const chunk of responseStream) {
+                    responseData += chunk;
                 }
+
+                // Send the response back to the same channel
+                message.channel.send(responseData);
+            } catch (error) {
+                console.error('Error responding to message:', error);
+                message.channel.send('Sorry, I encountered an error while processing your request.');
+            }
         });
 
         this.client.on(Events.InteractionCreate, async (interaction) => {
@@ -194,20 +195,20 @@ export class DiscordClient extends EventEmitter {
                 console.log('interaction', interaction);
                 const newName = interaction.options.get('name')?.value;
                 console.log('**** newName:', newName);
-            
+
                 const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
                 const userIdUUID = getUuid(interaction.user.id) as UUID;
                 const userName = interaction.user.username;
                 const room_id = getUuid(interaction.channelId) as UUID;
-            
+
                 await interaction.deferReply();
-            
+
                 await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
                 await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
                 await this.ensureRoomExists(this.runtime.supabase, room_id);
                 await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
                 await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
-            
+
                 if (newName) {
                     try {
                         const { error } = await this.runtime.supabase
@@ -221,6 +222,12 @@ export class DiscordClient extends EventEmitter {
                             return;
                         }
             
+                        const guild = interaction.guild;
+                        if (guild) {
+                            const botMember = await guild.members.fetch(interaction.client.user?.id as string);
+                            await botMember.setNickname(newName as string);
+                        }
+            
                         await interaction.editReply(`Agent's name has been updated to: ${newName}`);
                     } catch (error) {
                         console.error('Error updating agent name:', error);
@@ -229,33 +236,37 @@ export class DiscordClient extends EventEmitter {
                 } else {
                     await interaction.editReply('Please provide a new name for the agent.');
                 }
-            }else if (interaction.commandName === 'setbio') {
-                const newBio = interaction.options.get('bio');
-                if (newBio) {
-                  try {
-                    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-                    const userIdUUID = getUuid(interaction.user.id) as UUID;
-                    const userName = interaction.user.username;
-                    const room_id = getUuid(interaction.channelId) as UUID;
-                    
-                    await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                    await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
-                    await this.ensureRoomExists(this.runtime.supabase, room_id);
-                    await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
-                    await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
-                
-                    await this.runtime.supabase
-                      .from('accounts')
-                      .update({ details: { summary: newBio } })
-                      .eq('id', getUuid(interaction.client.user?.id));
             
-                    await interaction.reply(`Agent's bio has been updated to: ${newBio}`);
-                  } catch (error) {
-                    console.error('Error updating agent bio:', error);
-                    await interaction.reply('An error occurred while updating the agent bio.');
-                  }
+            
+            } else if (interaction.commandName === 'setbio') {
+                const newBio = interaction.options.get('bio')?.value;
+                if (newBio) {
+                    try {
+                        const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+                        const userIdUUID = getUuid(interaction.user.id) as UUID;
+                        const userName = interaction.user.username;
+                        const room_id = getUuid(interaction.channelId) as UUID;
+
+                        await interaction.deferReply();
+
+                        await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                        await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
+                        await this.ensureRoomExists(this.runtime.supabase, room_id);
+                        await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
+                        await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+
+                        await this.runtime.supabase
+                            .from('accounts')
+                            .update({ details: { summary: newBio } })
+                            .eq('id', getUuid(interaction.client.user?.id));
+
+                        await interaction.editReply(`Agent's bio has been updated to: ${newBio}`);
+                    } catch (error) {
+                        console.error('Error updating agent bio:', error);
+                        await interaction.editReply('An error occurred while updating the agent bio.');
+                    }
                 } else {
-                  await interaction.reply('Please provide a new bio for the agent.');
+                    await interaction.reply('Please provide a new bio for the agent.');
                 }
                 return;
             } else if (interaction.commandName === 'setavatar') {
@@ -263,33 +274,62 @@ export class DiscordClient extends EventEmitter {
                 const userIdUUID = getUuid(interaction.user.id) as UUID;
                 const userName = interaction.user.username;
                 const room_id = getUuid(interaction.channelId) as UUID;
-                
+
+                await interaction.deferReply();
+
                 await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
                 await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
                 await this.ensureRoomExists(this.runtime.supabase, room_id);
                 await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
                 await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
-            
+
                 const attachment = interaction.options.getAttachment('image');
                 if (attachment) {
-                  try {
-                    const response = await fetch(attachment.url);
-                    const buffer = await response.arrayBuffer();
-                    const base64 = Buffer.from(buffer).toString('base64');
-                    const dataURI = `data:${attachment.contentType};base64,${base64}`;
-                    await interaction.client.user?.setAvatar(dataURI);
-                    await interaction.reply('Bot avatar has been updated.');
-                  } catch (error) {
-                    console.error('Error updating bot avatar:', error);
-                    await interaction.reply('An error occurred while updating the bot avatar.');
-                  }
+                    try {
+                        const response = await fetch(attachment.url);
+                        const buffer = await response.arrayBuffer();
+                        const base64 = Buffer.from(buffer).toString('base64');
+                        const dataURI = `data:${attachment.contentType};base64,${base64}`;
+                        await interaction.client.user?.setAvatar(dataURI);
+                        await interaction.editReply('Bot avatar has been updated.');
+                    } catch (error) {
+                        console.error('Error updating bot avatar:', error);
+                        await interaction.editReply('An error occurred while updating the bot avatar.');
+                    }
                 } else {
-                  await interaction.reply('Please provide an image attachment to set as the bot avatar.');
+                    await interaction.editReply('Please provide an image attachment to set as the bot avatar.');
                 }
                 return;
-              }        
-          });
+            }
+        });
+    }
 
+    private async checkBotAccount() {
+        const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+        const room_id = getUuid(this.client.user?.id as string) as UUID;
+
+        await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+        await this.ensureRoomExists(this.runtime.supabase, room_id);
+        await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+
+        const { data: botData, error: botError } = await this.runtime.supabase
+            .from('accounts')
+            .select('name')
+            .eq('id', agentId)
+            .single();
+
+        if (botError) {
+            console.error('Error fetching bot account:', botError);
+            return;
+        }
+
+        if (!botData.name) {
+            const botName = await this.fetchBotName(settings.DISCORD_API_TOKEN);
+            await this.runtime.supabase
+                .from('accounts')
+                .update({ name: botName })
+                .eq('id', agentId);
+        }
     }
 
     /**
@@ -298,325 +338,325 @@ export class DiscordClient extends EventEmitter {
 * @param state The state of the agent.
 * @returns The response to the message.
 */
-async handleMessage(
-    message: Message,
-    state?: State
-) {
-    const _saveRequestMessage = async (message: Message, state: State) => {
-        const { content: senderContent, /* senderId, userIds, room_id */ } = message
+    async handleMessage(
+        message: Message,
+        state?: State
+    ) {
+        const _saveRequestMessage = async (message: Message, state: State) => {
+            const { content: senderContent, /* senderId, userIds, room_id */ } = message
 
-        // we run evaluation here since some evals could be modulo based, and we should run on every message
-        if ((senderContent as Content).content) {
-            const { data: data2, error } = await this.runtime.supabase.from('messages').select('*').eq('user_id', message.senderId)
-                .eq('room_id', message.room_id)
-                .order('created_at', { ascending: false })
+            // we run evaluation here since some evals could be modulo based, and we should run on every message
+            if ((senderContent as Content).content) {
+                const { data: data2, error } = await this.runtime.supabase.from('messages').select('*').eq('user_id', message.senderId)
+                    .eq('room_id', message.room_id)
+                    .order('created_at', { ascending: false })
 
-            if (error) {
-                console.log('error', error)
-                // TODO: dont need this recall
-            } else if (data2.length > 0 && data2[0].content === message.content) {
-                console.log('already saved', data2)
-            } else {
-                await this.runtime.messageManager.createMemory({
-                    user_ids: [message.senderId, message.agentId, ...message.userIds],
-                    user_id: message.senderId!,
-                    content: senderContent,
-                    room_id: message.room_id,
-                    embedding: embeddingZeroVector
-                })
+                if (error) {
+                    console.log('error', error)
+                    // TODO: dont need this recall
+                } else if (data2.length > 0 && data2[0].content === message.content) {
+                    console.log('already saved', data2)
+                } else {
+                    await this.runtime.messageManager.createMemory({
+                        user_ids: [message.senderId, message.agentId, ...message.userIds],
+                        user_id: message.senderId!,
+                        content: senderContent,
+                        room_id: message.room_id,
+                        embedding: embeddingZeroVector
+                    })
+                }
+                await this.runtime.evaluate(message, state)
             }
-            await this.runtime.evaluate(message, state)
         }
-    }
 
-    await _saveRequestMessage(message, state as State)
-    // if (!state) {
-    console.log("MESSAGE:", message);
-    state = (await this.runtime.composeState(message)) as State
-    // }
+        await _saveRequestMessage(message, state as State)
+        // if (!state) {
+        console.log("MESSAGE:", message);
+        state = (await this.runtime.composeState(message)) as State
+        // }
 
-    const context = composeContext({
-        state,
-        template: messageHandlerTemplate
-    })
-
-    if (this.runtime.debugMode) {
-        console.log(context, 'Response Context')
-    }
-
-    let responseContent: Content | null = null
-    const { senderId, room_id, userIds: user_ids, agentId } = message
-
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        console.log(context)
-        const response = await this.runtime.completion({
-            context,
-            stop: []
+        const context = composeContext({
+            state,
+            template: messageHandlerTemplate
         })
 
-        this.runtime.supabase
-            .from('logs')
-            .insert({
-                body: { message, context, response },
-                user_id: senderId,
-                room_id,
-                user_ids: user_ids!,
-                agent_id: agentId!,
-                type: 'main_completion'
+        if (this.runtime.debugMode) {
+            console.log(context, 'Response Context')
+        }
+
+        let responseContent: Content | null = null
+        const { senderId, room_id, userIds: user_ids, agentId } = message
+
+        for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+            console.log(context)
+            const response = await this.runtime.completion({
+                context,
+                stop: []
             })
-            .then(({ error }) => {
-                if (error) {
-                    console.error('error', error)
+
+            this.runtime.supabase
+                .from('logs')
+                .insert({
+                    body: { message, context, response },
+                    user_id: senderId,
+                    room_id,
+                    user_ids: user_ids!,
+                    agent_id: agentId!,
+                    type: 'main_completion'
+                })
+                .then(({ error }) => {
+                    if (error) {
+                        console.error('error', error)
+                    }
+                })
+
+            console.log('raw response is', response)
+
+            const parsedResponse = parseJSONObjectFromText(
+                response
+            ) as unknown as Content
+
+            if (
+                (parsedResponse.user as string)?.includes(
+                    (state as State).agentName as string
+                )
+            ) {
+                responseContent = {
+                    content: parsedResponse.content,
+                    action: parsedResponse.action
                 }
-            })
-
-        console.log('raw response is', response)
-
-        const parsedResponse = parseJSONObjectFromText(
-            response
-        ) as unknown as Content
-
-        if (
-            (parsedResponse.user as string)?.includes(
-                (state as State).agentName as string
-            )
-        ) {
-            responseContent = {
-                content: parsedResponse.content,
-                action: parsedResponse.action
+                break
             }
-            break
-        }
-    }
-
-    if (!responseContent) {
-        responseContent = {
-            content: '',
-            action: 'IGNORE'
-        }
-    }
-
-    const _saveResponseMessage = async (
-        message: Message,
-        state: State,
-        responseContent: Content
-    ) => {
-        const { agentId, userIds, room_id } = message
-
-        responseContent.content = responseContent.content?.trim()
-
-        if (responseContent.content) {
-            await this.runtime.messageManager.createMemory({
-                user_ids: userIds!,
-                user_id: agentId!,
-                content: responseContent,
-                room_id,
-                embedding: embeddingZeroVector
-            })
-            await this.runtime.evaluate(message, { ...state, responseContent })
-        } else {
-            console.warn('Empty response, skipping')
-        }
-    }
-
-    await _saveResponseMessage(message, state, responseContent)
-    await this.runtime.processActions(message, responseContent)
-    console.log('RESPONSE:', responseContent)
-    return responseContent
-}
-
-// Add this function to fetch the bot's name
-async fetchBotName(botToken: string) {
-    const url = 'https://discord.com/api/v10/users/@me';
-
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bot ${botToken}`,
-        },
-    });
-
-    if (!response.ok) {
-        throw new Error(`Error fetching bot details: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data.username; // Or data.tag for username#discriminator
-}
-
-// Modify this function to include fetching the bot's name if the user is an agent
-async ensureUserExists(
-    supabase: SupabaseClient,
-    userId: UUID,
-    userName: string | null,
-    botToken?: string,
-) {
-    const { data, error } = await supabase
-        .from('accounts')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-    if (error) {
-        console.error('Error fetching user:', error);
-    }
-
-    if (data) {
-        console.log('User exists:', data);
-    }
-
-    if (!data) {
-        // If userName is not provided and botToken is, fetch the bot's name
-        if (!userName && botToken) {
-            userName = await this.fetchBotName(botToken);
         }
 
-        // User does not exist, so create them
-        const { error } = await supabase.from('accounts').insert([
-            {
-                id: userId,
-                name: userName || 'Bot',
-                email: (userName || 'Bot') + '@discord',
-                details: { summary: 'I am a bot' },
+        if (!responseContent) {
+            responseContent = {
+                content: '',
+                action: 'IGNORE'
+            }
+        }
+
+        const _saveResponseMessage = async (
+            message: Message,
+            state: State,
+            responseContent: Content
+        ) => {
+            const { agentId, userIds, room_id } = message
+
+            responseContent.content = responseContent.content?.trim()
+
+            if (responseContent.content) {
+                await this.runtime.messageManager.createMemory({
+                    user_ids: userIds!,
+                    user_id: agentId!,
+                    content: responseContent,
+                    room_id,
+                    embedding: embeddingZeroVector
+                })
+                await this.runtime.evaluate(message, { ...state, responseContent })
+            } else {
+                console.warn('Empty response, skipping')
+            }
+        }
+
+        await _saveResponseMessage(message, state, responseContent)
+        await this.runtime.processActions(message, responseContent)
+        console.log('RESPONSE:', responseContent)
+        return responseContent
+    }
+
+    // Add this function to fetch the bot's name
+    async fetchBotName(botToken: string) {
+        const url = 'https://discord.com/api/v10/users/@me';
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bot ${botToken}`,
             },
-        ]);
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching bot details: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.username; // Or data.tag for username#discriminator
+    }
+
+    // Modify this function to include fetching the bot's name if the user is an agent
+    async ensureUserExists(
+        supabase: SupabaseClient,
+        userId: UUID,
+        userName: string | null,
+        botToken?: string,
+    ) {
+        const { data, error } = await supabase
+            .from('accounts')
+            .select('*')
+            .eq('id', userId)
+            .single();
 
         if (error) {
-            console.error('Error creating user:', error);
-        } else {
-            console.log(`User ${userName} created successfully.`);
+            console.error('Error fetching user:', error);
+        }
+
+        if (data) {
+            console.log('User exists:', data);
+        }
+
+        if (!data) {
+            // If userName is not provided and botToken is, fetch the bot's name
+            if (!userName && botToken) {
+                userName = await this.fetchBotName(botToken);
+            }
+
+            // User does not exist, so create them
+            const { error } = await supabase.from('accounts').insert([
+                {
+                    id: userId,
+                    name: userName || 'Bot',
+                    email: (userName || 'Bot') + '@discord',
+                    details: { summary: 'I am a bot' },
+                },
+            ]);
+
+            if (error) {
+                console.error('Error creating user:', error);
+            } else {
+                console.log(`User ${userName} created successfully.`);
+            }
         }
     }
-}
 
-// Function to ensure a room exists
-async ensureRoomExists(supabase: SupabaseClient, roomId: UUID) {
-    const { data, error } = await supabase
-        .from('rooms') // Replace 'rooms' with your actual rooms table name
-        .select('*')
-        .eq('id', roomId)
-        .single();
-
-    if (error) {
-        console.error('Error fetching room:', error);
-    }
-
-    if (!data) {
-        // Room does not exist, so create it
-        const { error } = await supabase
+    // Function to ensure a room exists
+    async ensureRoomExists(supabase: SupabaseClient, roomId: UUID) {
+        const { data, error } = await supabase
             .from('rooms') // Replace 'rooms' with your actual rooms table name
-            .insert([{ id: roomId }]);
+            .select('*')
+            .eq('id', roomId)
+            .single();
 
         if (error) {
-            console.error('Error creating room:', error);
-        } else {
-            console.log(`Room ${roomId} created successfully.`);
+            console.error('Error fetching room:', error);
+        }
+
+        if (!data) {
+            // Room does not exist, so create it
+            const { error } = await supabase
+                .from('rooms') // Replace 'rooms' with your actual rooms table name
+                .insert([{ id: roomId }]);
+
+            if (error) {
+                console.error('Error creating room:', error);
+            } else {
+                console.log(`Room ${roomId} created successfully.`);
+            }
         }
     }
-}
 
-// Function to ensure a participant is linked to a room
-async ensureParticipantInRoom(
-    supabase: SupabaseClient,
-    userId: UUID,
-    roomId: UUID,
-) {
-    const { data, error } = await supabase
-        .from('participants') // Replace 'participants' with your actual participants table name
-        .select('*')
-        .eq('user_id', userId)
-        .eq('room_id', roomId)
-        .single();
-
-    if (error) {
-        console.error('Error fetching participant:', error);
-    }
-
-    if (!data) {
-        // Participant does not exist, so link user to room
-        const { error } = await supabase
+    // Function to ensure a participant is linked to a room
+    async ensureParticipantInRoom(
+        supabase: SupabaseClient,
+        userId: UUID,
+        roomId: UUID,
+    ) {
+        const { data, error } = await supabase
             .from('participants') // Replace 'participants' with your actual participants table name
-            .insert([{ user_id: userId, room_id: roomId }]);
+            .select('*')
+            .eq('user_id', userId)
+            .eq('room_id', roomId)
+            .single();
 
         if (error) {
-            console.error('Error linking user to room:', error);
-        } else {
-            console.log(`User ${userId} linked to room ${roomId} successfully.`);
+            console.error('Error fetching participant:', error);
+        }
+
+        if (!data) {
+            // Participant does not exist, so link user to room
+            const { error } = await supabase
+                .from('participants') // Replace 'participants' with your actual participants table name
+                .insert([{ user_id: userId, room_id: roomId }]);
+
+            if (error) {
+                console.error('Error linking user to room:', error);
+            } else {
+                console.log(`User ${userId} linked to room ${roomId} successfully.`);
+            }
         }
     }
-}
 
-/**
- * Listens on an audio stream and responds with an audio stream.
- */
-async listenToSpokenAudio(userId: string, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
-    if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
-    let monitor = new AudioMonitor(inputStream, 1000000, async (buffer) => {
-        if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
-            const readable = new Readable({
-                read() {
-                    this.push(buffer);
-                    this.push(null);
-                }
-            });
+    /**
+     * Listens on an audio stream and responds with an audio stream.
+     */
+    async listenToSpokenAudio(userId: string, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
+        if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
+        let monitor = new AudioMonitor(inputStream, 1000000, async (buffer) => {
+            if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
+                const readable = new Readable({
+                    read() {
+                        this.push(buffer);
+                        this.push(null);
+                    }
+                });
 
-            callback(readable);
+                callback(readable);
+            } else {
+                let responseStream = await this.respondToSpokenAudio(userId, userName, channelId, buffer, requestedResponseType);
+                callback(responseStream);
+            }
+        });
+    }
+
+    /**
+    * Responds to an audio stream
+    */
+    async respondToSpokenAudio(userId: string, userName: string, channelId: string, inputBuffer: Buffer, requestedResponseType?: ResponseType): Promise<Readable> {
+        console.log("Responding to spoken audio");
+        if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
+        const sstService = speechToText;
+        const text = await sstService(inputBuffer);
+        if (requestedResponseType == ResponseType.SPOKEN_TEXT) {
+            return Readable.from(text as string);
         } else {
-            let responseStream = await this.respondToSpokenAudio(userId, userName, channelId, buffer, requestedResponseType);
-            callback(responseStream);
+            return await this.respondToText(userId, userName, channelId, text as string, requestedResponseType);
         }
-    });
-}
-
-/**
-* Responds to an audio stream
-*/
-async respondToSpokenAudio(userId: string, userName: string, channelId: string, inputBuffer: Buffer, requestedResponseType?: ResponseType): Promise<Readable> {
-    console.log("Responding to spoken audio");
-    if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
-    const sstService = speechToText;
-    const text = await sstService(inputBuffer);
-    if (requestedResponseType == ResponseType.SPOKEN_TEXT) {
-        return Readable.from(text as string);
-    } else {
-        return await this.respondToText(userId, userName, channelId, text as string, requestedResponseType);
     }
-}
-/**
- * Responds to text
- */
-async respondToText(userId: string, userName: string, channelId: string, input: string, requestedResponseType?: ResponseType): Promise<Readable> {
-    console.log("Responding to text");
-    if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
+    /**
+     * Responds to text
+     */
+    async respondToText(userId: string, userName: string, channelId: string, input: string, requestedResponseType?: ResponseType): Promise<Readable> {
+        console.log("Responding to text");
+        if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
 
-    const room_id = getUuid(channelId) as UUID;
+        const room_id = getUuid(channelId) as UUID;
 
-    const userIdUUID = getUuid(userId) as UUID;
+        const userIdUUID = getUuid(userId) as UUID;
 
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+        const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
-    await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-    await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
-    await this.ensureRoomExists(this.runtime.supabase, room_id);
-    await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
-    await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+        await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+        await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
+        await this.ensureRoomExists(this.runtime.supabase, room_id);
+        await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
+        await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
 
-    const message = {
-        content: { content: input },
-        senderId: userIdUUID,
-        agentId,
-        userIds: [userIdUUID, agentId],
-        room_id,
-    } as unknown as Message;
+        const message = {
+            content: { content: input },
+            senderId: userIdUUID,
+            agentId,
+            userIds: [userIdUUID, agentId],
+            room_id,
+        } as unknown as Message;
 
-    const response = await this.handleMessage(message)
+        const response = await this.handleMessage(message)
 
-    if (requestedResponseType == ResponseType.RESPONSE_TEXT) {
-        return Readable.from(response.content);
-    } else {
-        return await textToSpeech(response.content);
+        if (requestedResponseType == ResponseType.RESPONSE_TEXT) {
+            return Readable.from(response.content);
+        } else {
+            return await textToSpeech(response.content);
+        }
     }
-}
 
     private async onReady() {
         const guilds = await this.client.guilds.fetch();
