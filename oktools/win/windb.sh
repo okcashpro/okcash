@@ -7,7 +7,7 @@ echo "**********************************************"
 echo ""
 
 # Function to ask yes/no question
-cd ..
+cd ../..
 cd src/leveldb
 rm libleveldb.a
 rm libmemenv.a
