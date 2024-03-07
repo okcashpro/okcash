@@ -15,36 +15,36 @@ td {
     overflow: hidden;
 }
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 300;
-    src: url(qrc:///assets/fonts/OpenSans/OpenSans-Light.ttf);
+    src: url(qrc:///assets/fonts/SegoeUI/SegoeUI-Light.ttf);
 }
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 300;
-    src: url(qrc:///assets/fonts/OpenSans/OpenSans-LightItalic.ttf);
+    src: url(qrc:///assets/fonts/SegoeUI/SegoeUI-LightItalic.ttf);
     font-style: italic;
 }
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 400;
-    src: url(qrc:///assets/fonts/OpenSans/OpenSans-Regular.ttf);
+    src: url(qrc:///assets/fonts/SegoeUI/SegoeUI-Regular.ttf);
 }
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 400;
-    src: url(qrc:///assets/fonts/OpenSans/OpenSans-Italic.ttf);
+    src: url(qrc:///assets/fonts/SegoeUI/SegoeUI-Italic.ttf);
     font-style: italic;
 }
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 700;
-    src: url(qrc:///assets/fonts/OpenSans/OpenSans-Bold.ttf);
+    src: url(qrc:///assets/fonts/SegoeUI/SegoeUI-Bold.ttf);
 }
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 700;
-    src: url(qrc:///assets/fonts/OpenSans/OpenSans-BoldItalic.ttf);
+    src: url(qrc:///assets/fonts/SegoeUI/SegoeUI-BoldItalic.ttf);
     font-style: italic;
 }
 .uppercase {
@@ -407,7 +407,7 @@ button {
 }
 .contact-list ul li .contact-info .contact-name {
     display: block;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     color: #5b6a78;
     font-size: 14px;
     margin-top: 1px;
@@ -687,7 +687,7 @@ textarea {
 .heading-deselected,
 .heading-selected {
     font-size: 1em;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     text-decoration: none;
     cursor: pointer;
 }

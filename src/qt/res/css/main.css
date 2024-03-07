@@ -1,40 +1,40 @@
 /* Fonts. */
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 300;
-    src: url("qrc:///fonts/OpenSans-Light.ttf");
+    src: url("qrc:///fonts/SegoeUI-Light.ttf");
 }
 
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 300;
-    src: url("qrc:///fonts/OpenSans-LightItalic.ttf");
+    src: url("qrc:///fonts/SegoeUI-LightItalic.ttf");
     font-style: italic
 }
 
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 400;
-    src: url("qrc:///fonts/OpenSans-Regular.ttf");
+    src: url("qrc:///fonts/SegoeUI-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 400;
-    src: url("qrc:///fonts/OpenSans-Italic.ttf");
+    src: url("qrc:///fonts/SegoeUI-Italic.ttf");
     font-style: italic
 }
 
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 700;
-    src: url("qrc:///fonts/OpenSans-Bold.ttf");
+    src: url("qrc:///fonts/SegoeUI-Bold.ttf");
 }
 
 @font-face {
-    font-family: "Open Sans";
+    font-family: "SegoeUI";
     font-weight: 700;
-    src: url("qrc:///fonts/OpenSans-BoldItalic.ttf");
+    src: url("qrc:///fonts/SegoeUI-BoldItalic.ttf");
     font-style: italic;
 }
 
@@ -61,7 +61,7 @@
 html,body { height: 100%; margin: 0px; padding: 0px; }
 
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     color: #05040a;
     line-height: 0.9em;
 }
@@ -70,7 +70,7 @@ h2 {
     font-size: 1.2em;
     margin: 0;
     margin-bottom: 30px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-weight: 700;
     color:#313131;
 }
@@ -125,7 +125,7 @@ p {
 #balances tr > td {
     color: #525e6c;
     font-size: 0.8em;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
 }
 
 #balances tr + tr td {
@@ -178,7 +178,7 @@ ul.vmenu li a {
 }
 
 ul.vmenu li {
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
 }
 
 ul.vmenu li.selected a {
@@ -315,7 +315,7 @@ article {
 
 .user-info .user-name {
     text-transform: uppercase;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-size: 14px;
     float: left;
 }
@@ -971,7 +971,7 @@ color: rgb(228, 26, 26);
     position: absolute;
     margin-top: 50px;
     color: rgb(68, 126, 68);
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-size: 18px;
     padding: 10px;
     background: rgb(208, 233, 208);
@@ -997,7 +997,7 @@ color: rgb(228, 26, 26);
     font-size: 25px;
     border-radius: 10px;
     margin-top: 22px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     color: rgb(49, 49, 49);
 }
 
@@ -1033,7 +1033,7 @@ color: rgb(228, 26, 26);
 
 .total-balance .staking .cents {
     font-size: 16px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     color: #131218;
     margin-left: -3px;
 }
@@ -1061,14 +1061,14 @@ color: rgb(228, 26, 26);
     font-size: 1.1em;
     font-weight:400;
     color: #131218;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
 }
 
 .transaction-overview span.date {
     font-size: 0.8em;
     font-weight:300;
     color: #b9bdbe;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
 }
 
 #overview .overview_date {
@@ -1229,7 +1229,7 @@ label.recipient {
   font-weight: normal;
   font-style: normal;
   font-size: 13px;
-  font-family: "OpenSans", Helvetica, Arial, sans-serif;
+  font-family: "SegoeUI", Helvetica, Arial, sans-serif;
   line-height: 20px;
   cursor: pointer;
   -webkit-transition: all 0.15s ease;
@@ -1567,7 +1567,7 @@ label.recipient {
 
 #contact-list ul li .contact-info .contact-name {
     display: block;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     color: #5b6a78;
     font-size: 14px;
     overflow: hidden;
@@ -1701,7 +1701,7 @@ label.recipient {
 
 .contact-discussion ul li .info .user-name {
     text-transform: uppercase;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-size: 14px;
     white-space:nowrap;
     max-width: 75px;
@@ -2103,7 +2103,7 @@ Hides the menu at `56.625em`, but modify this based on your app's needs.
         font-size: 10px;
         border-radius: 100%;
         margin-left: -20px;
-        font-family: "Open Sans", sans-serif;
+        font-family: "SegoeUI", sans-serif;
         float: left;
     }
 
@@ -2528,7 +2528,7 @@ input[type=checkbox]:checked + label:before {
     font-size: 1.2em;
     margin: 0;
     margin-bottom: 30px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-weight: 700;
     color:#313131;
     text-transform: uppercase;
@@ -2541,7 +2541,7 @@ input[type=checkbox]:checked + label:before {
     font-size: 1.2em;
     margin: 0;
     margin-bottom: 30px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-weight: 700;
     color:#999;
     text-transform: uppercase;

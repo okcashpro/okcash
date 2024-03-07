@@ -177,7 +177,7 @@ body.dashboard .page-container {
     color: #626262;
     opacity: 0.7;
     font-size: 16px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
 }
 .header .search-link i {
     margin-right: 15px;
@@ -357,7 +357,7 @@ body.dashboard .page-container {
     clear: both;
 }
 .page-sidebar .sidebar-menu .menu-items > li > a {
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     display: inline-block;
     padding: 0 3px 0 32px;
     min-height: 40px;
@@ -471,7 +471,7 @@ body.dashboard .page-container {
     display: inline-block;
     padding: 5px 0;
     font-size: 13px;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     white-space: normal;
 }
 .page-sidebar .sidebar-menu .menu-items > li ul.sub-menu > li .icon-thumbnail {
@@ -509,7 +509,7 @@ body.dashboard .page-container {
     transition: transform 0.4s cubic-bezier(0.05, 0.74, 0.27, 0.99);
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     font-weight: 700;
@@ -1506,7 +1506,7 @@ html {
     -webkit-text-size-adjust: 100%;
 }
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-size: 13px;
     font-weight: 400;
 }
@@ -1521,7 +1521,7 @@ h4,
 h5,
 h6 {
     margin: 10px 0;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     font-weight: 300;
@@ -1966,7 +1966,7 @@ hr.dotted {
     line-height: 16px;
 }
 .font-arial {
-    font-family: "Open Sans", sans-serif !important;
+    font-family: "SegoeUI", sans-serif !important;
 }
 .font-montserrat {
     font-family: Montserrat !important;
@@ -1975,7 +1975,7 @@ hr.dotted {
     font-family: Georgia !important;
 }
 .font-heading {
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
 }
 .well {
     background-color: #e6e6e6;
@@ -2096,7 +2096,7 @@ hr.dotted {
     font-size: 89%;
 }
 .btn {
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.01em;
@@ -2943,7 +2943,7 @@ fieldset[disabled] .btn-danger:hover {
 }
 .badge {
     text-shadow: none;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     font-weight: 600;
     background-color: #e6e6e6;
     font-size: 11px;
@@ -4736,7 +4736,7 @@ form legend {
     background-color: #f0f1f3;
     background-image: none;
     border: 1px solid rgba(0, 0, 0, 0.07);
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     -webkit-appearance: none;
     color: #2c2c2c;
     outline: 0;
@@ -6243,7 +6243,7 @@ div.cs-skin-slide:before {
 }
 div.cs-skin-slide {
     width: auto;
-    font-family: "Open Sans", sans-serif;
+    font-family: "SegoeUI", sans-serif;
     color: #5e5e5e;
 }
 div.cs-skin-slide.cs-transparent {
