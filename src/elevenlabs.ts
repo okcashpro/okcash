@@ -1,7 +1,7 @@
 import { Readable } from "stream";
 import { WebSocket } from "ws";
-import settings from "./settings";
-import { prependWavHeader } from "./util";
+import settings from "./settings.ts";
+import { prependWavHeader } from "./util.ts";
 
 export async function textToSpeechStreaming(text: string): Promise<Readable> {
     console.log("11 TTS: " + text);
@@ -32,26 +32,32 @@ export async function textToSpeechStreaming(text: string): Promise<Readable> {
         let errorBodyString = await response.text();
         throw new Error(`Received status ${status} from Eleven Labs API: ${errorBodyString}`);
     }
-    
-    let reader = response.body.getReader();
-    let readable = new Readable({
-        read() {
-            reader.read().then(({ done, value }) => {
-                if (done) {
-                    this.push(null);
-                } else {
-                    this.push(value);
-                }
-            });
-        }
-    });
 
-    if (settings.ELEVENLABS_OUTPUT_FORMAT.startsWith('pcm_')) {
-        const sampleRate = parseInt(settings.ELEVENLABS_OUTPUT_FORMAT.substring(4));
-        var withHeader = prependWavHeader(readable, 1024 * 1024 * 100, sampleRate, 1, 16);
-        return withHeader;
+    if (response) {    
+        let reader = response.body?.getReader();
+        let readable = new Readable({
+            read() {
+                reader && reader.read().then(({ done, value }) => {
+                    if (done) {
+                        this.push(null);
+                    } else {
+                        this.push(value);
+                    }
+                });
+            }
+        });
+
+        if (settings.ELEVENLABS_OUTPUT_FORMAT.startsWith('pcm_')) {
+            const sampleRate = parseInt(settings.ELEVENLABS_OUTPUT_FORMAT.substring(4));
+            var withHeader = prependWavHeader(readable, 1024 * 1024 * 100, sampleRate, 1, 16);
+            return withHeader;
+        } else {
+            return readable;
+        }
     } else {
-        return readable;
+        return new Readable({
+            read() {}
+        });
     }
 }
 
@@ -173,7 +179,7 @@ export class ElevenLabsConverter extends Readable {
     private inputEnded: boolean = false;
     private outputEnded: boolean = false;
     private startTime: number;
-    private openTime: number;
+    private openTime: number = 0;
     private buffers: Buffer[] = [];
     private draining: boolean = false;
     private firstDataTime: number = -1;
@@ -231,7 +237,7 @@ export class ElevenLabsConverter extends Readable {
             } else if (response.audio) {
                 if (this.firstDataTime == -1) {
                     this.firstDataTime = Date.now();
-                    console.log(`First audio packet received after ${this.firstDataTime - this.openTime}ms`);
+                    console.log(`First audio packet received after ${this.firstDataTime - (this.openTime || 0)}ms`);
                 }
                 let audioChunk = Buffer.from(response.audio, 'base64');
                 console.log(`Received audio chunk of length ${audioChunk.length}`);
