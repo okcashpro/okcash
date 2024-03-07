@@ -3,13 +3,14 @@ echo "Compiling Okcash GUI + node okcashd from source on its latest version"
 echo "This could take a minute, enjoy some coffee or water and come back soon..."
 date
 
-# Build okcashd node
+# Build okcashd dependencies
+/bin/bash ./2archdeps.sh
 
 # Build + install node - okcashd
-sh ./installnode.sh
+/bin/bash ./installnode.sh
 
 # Build + install Okcash GUI
-sh ./installgui.sh
+/bin/bash ./installgui.sh
 
 # end Client
 echo "Done compiling + installing: okcashd + Okcash GUI > on its latest version for:"

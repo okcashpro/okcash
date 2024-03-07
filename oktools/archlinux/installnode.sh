@@ -3,6 +3,9 @@ echo "Compiling Okcash node: okcashd - from source on its latest version"
 echo "This could take a minute, enjoy some coffee or water and come back soon..."
 date
 
+# Build okcashd dependencies
+/bin/bash ./2archdeps.sh
+
 cd  ../..
 
 cd src
