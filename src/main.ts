@@ -230,7 +230,7 @@ async function respondToText(userId: string, userName: string, channelId: string
         room_id,
     } as unknown as Message;
 
-    const response = await runtime.handleMessage(message)
+    const response = {content: "hello"}; // await handleMessage(message)
 
     if (requestedResponseType == ResponseType.RESPONSE_TEXT) {
         return Readable.from(response.content);
