@@ -284,13 +284,7 @@ async function ensureParticipantInRoom(
 
 dotenv.config();
 
-const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_API_KEY!,
-)
-
 const discordClient = new DiscordClient();
-
 
 /**
  * Listens on an audio stream and responds with an audio stream.
@@ -340,6 +334,12 @@ async function respondToText(userId: string, userName: string, channelId: string
     const userIdUUID = getUuid(userId) as UUID;
 
     const agentId = getUuid(process.env.DISCORD_APPLICATION_ID as string) as UUID;
+
+
+    const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_API_KEY!,
+    )
 
     await ensureUserExists(supabase, agentId, null, process.env.DISCORD_TOKEN);
     await ensureUserExists(supabase, userIdUUID, userName);

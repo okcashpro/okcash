@@ -32,26 +32,32 @@ export async function textToSpeechStreaming(text: string): Promise<Readable> {
         let errorBodyString = await response.text();
         throw new Error(`Received status ${status} from Eleven Labs API: ${errorBodyString}`);
     }
-    
-    let reader = response?.body?.getReader();
-    let readable = new Readable({
-        read() {
-            reader?.read().then(({ done, value }) => {
-                if (done) {
-                    this.push(null);
-                } else {
-                    this.push(value);
-                }
-            });
-        }
-    });
 
-    if (settings.ELEVENLABS_OUTPUT_FORMAT.startsWith('pcm_')) {
-        const sampleRate = parseInt(settings.ELEVENLABS_OUTPUT_FORMAT.substring(4));
-        var withHeader = prependWavHeader(readable, 1024 * 1024 * 100, sampleRate, 1, 16);
-        return withHeader;
+    if (response) {    
+        let reader = response.body?.getReader();
+        let readable = new Readable({
+            read() {
+                reader && reader.read().then(({ done, value }) => {
+                    if (done) {
+                        this.push(null);
+                    } else {
+                        this.push(value);
+                    }
+                });
+            }
+        });
+
+        if (settings.ELEVENLABS_OUTPUT_FORMAT.startsWith('pcm_')) {
+            const sampleRate = parseInt(settings.ELEVENLABS_OUTPUT_FORMAT.substring(4));
+            var withHeader = prependWavHeader(readable, 1024 * 1024 * 100, sampleRate, 1, 16);
+            return withHeader;
+        } else {
+            return readable;
+        }
     } else {
-        return readable;
+        return new Readable({
+            read() {}
+        });
     }
 }
 
@@ -173,7 +179,7 @@ export class ElevenLabsConverter extends Readable {
     private inputEnded: boolean = false;
     private outputEnded: boolean = false;
     private startTime: number;
-    private openTime: number | undefined
+    private openTime: number = 0;
     private buffers: Buffer[] = [];
     private draining: boolean = false;
     private firstDataTime: number = -1;
