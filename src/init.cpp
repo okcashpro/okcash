@@ -573,10 +573,10 @@ bool AppInit2(boost::thread_group& threadGroup)
         ShrinkDebugFile();
 
 
-    LogPrintf("  _____ _               _                             ___   ___   \n");
-    LogPrintf(" |     | |_ ___ ___ ___| |_    ___ ___ ___ ___    _ _|  _| | . |  \n");
-    LogPrintf(" |  |  | '_|  _| .'|_ -|   |  |  _| . |  _| -_|  | | | . |_|_  |  \n");
-    LogPrintf(" |_____|_,_|___|__,|___|_|_|  |___|___|_| |___|    _/|___|_|___|  \n\n");
+    LogPrintf("  _____ _               _                             ___      \n");
+    LogPrintf(" |     | |_ ___ ___ ___| |_    ___ ___ ___ ___    _ _|  .  |  \n");
+    LogPrintf(" |  |  | '_|  _| .'|_ -|   |  |  _| . |  _| -_|  | | | . |  \n");
+    LogPrintf(" |_____|_,_|___|__,|___|_|_|  |___|___|_| |___|    _/|___|  \n\n");
                                                                     
 
 	LogPrintf("         ~Decentralize Everything and Empower Everyone~\n\n");
