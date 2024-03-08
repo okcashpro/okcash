@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "node --loader ts-node/esm src/index.ts",
     "watch": "tsc --watch",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "concat": "node ./scripts/concat.mjs"
   },
   "author": "",
   "license": "MIT",
