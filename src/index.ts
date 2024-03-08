@@ -3,7 +3,7 @@ import { NoSubscriberBehavior, StreamType, VoiceConnection, createAudioPlayer, c
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { BgentRuntime, Content, Message, State, composeContext, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
 import { UUID } from 'crypto';
-import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Routes } from "discord.js";
+import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes } from "discord.js";
 import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
@@ -103,7 +103,17 @@ export class DiscordClient extends EventEmitter {
         super();
         this.apiToken = settings.DISCORD_API_TOKEN;
         this.client = new Client({
-            intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages]
+            intents: [
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.GuildVoiceStates,
+                GatewayIntentBits.MessageContent,
+                GatewayIntentBits.GuildMessages
+            ],
+            partials: [
+                Partials.Channel,
+                Partials.Message
+              ]
         });
 
         const supabase = createClient(
@@ -150,7 +160,6 @@ export class DiscordClient extends EventEmitter {
         });
 
         let lastProcessedMessageId: string | null = null;
-
         this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
             console.log("Got message");
             // Ignore messages from the bot itself
@@ -191,6 +200,7 @@ export class DiscordClient extends EventEmitter {
 
         this.client.on(Events.InteractionCreate, async (interaction) => {
             if (!interaction.isCommand()) return;
+            
             if (interaction.commandName === 'setname') {
                 console.log('interaction', interaction);
                 const newName = interaction.options.get('name')?.value;
