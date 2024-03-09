@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { NoSubscriberBehavior, StreamType, VoiceConnection, createAudioPlayer, createAudioResource, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { BgentRuntime, Content, Message, State, composeContext, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
+import { SupabaseDatabaseAdapter, BgentRuntime, Content, Message, State, composeContext, defaultActions, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
 import { UUID } from 'crypto';
 import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes } from "discord.js";
 import { EventEmitter } from "events";
@@ -9,13 +9,34 @@ import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from 'uuid-by-string';
 import { AudioMonitor } from "./audioMonitor.ts";
+import elaborate_discord from './elaborate_discord.ts';
 import { textToSpeech } from "./elevenlabs.ts";
 import settings from "./settings.ts";
 import { speechToText } from "./speechtotext.ts";
 
+const supabaseClient = createClient(
+    settings.SUPABASE_URL!,
+    settings.SUPABASE_API_KEY!,
+);
+
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
 const DECODE_SAMPLE_RATE = 16000;
+
+type InterestChannels = { [key: string]: { lastMessageSent: number, messages: { userId: UUID, userName: string, content: Content }[] } }
+
+export const shouldRespondTemplate = `
+# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+
+Response options are "true" and "false".
+
+{{agentName}} is in a room with other users and wants to be conversational, but not annoying. {{agentName}} should respond to messages that are directed at them, or participate in conversations that are interesting or relevant. If a message is not interesting or relevant, {{agentName}} should not respond. Unless directly engaging with a user, {{agentName}} should try to avoid responding to messages that are very short or do not contain much information.
+
+{{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to not respond.
+
+{{recentMessages}}
+
+# INSTRUCTIONS: Respond with "true" if {{agentName}} should respond, or "false" if {{agentName}} should not respond.`;
 
 enum ResponseType {
     /**
@@ -113,7 +134,7 @@ export class DiscordClient extends EventEmitter {
             partials: [
                 Partials.Channel,
                 Partials.Message
-              ]
+            ]
         });
 
         const supabase = createClient(
@@ -122,11 +143,19 @@ export class DiscordClient extends EventEmitter {
         )
 
         this.runtime = new BgentRuntime({
-            supabase,
+            databaseAdapter: new SupabaseDatabaseAdapter(
+                settings.SUPABASE_URL!,
+                settings.SUPABASE_API_KEY!,
+            ),
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
             evaluators: [],
-            actions: [],
+            // filter out the default ELABORATE action
+            actions: [...defaultActions.filter(
+                action => action.name !== 'ELABORATE'
+            ),
+            // add the discord specific elaborate action, which has a callback
+            elaborate_discord],
         });
 
         this.client.once(Events.ClientReady, async readyClient => {
@@ -147,7 +176,7 @@ export class DiscordClient extends EventEmitter {
             console.log(`Joined guild ${guild.name}`);
             this.scanGuild(guild);
         });
-        this.on('userStream', async (userId: string, userName: string, channel: BaseGuildVoiceChannel, audioStream: Readable) => {
+        this.on('userStream', async (userId: UUID, userName: string, channel: BaseGuildVoiceChannel, audioStream: Readable) => {
             const channelId = channel.id;
             const userIdUUID = uuid(userId) as UUID;
             this.listenToSpokenAudio(userIdUUID, userName, channelId, audioStream, async (responseAudioStream) => {
@@ -160,10 +189,12 @@ export class DiscordClient extends EventEmitter {
         });
 
         let lastProcessedMessageId: string | null = null;
+        let interestChannels: InterestChannels = {};
+
         this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
             console.log("Got message");
-            // Ignore messages from the bot itself
-            if (message.author.bot) return;
+
+            if (message.author?.bot) return;
 
             // Check if the message has already been processed
             if (message.id === lastProcessedMessageId) {
@@ -173,17 +204,25 @@ export class DiscordClient extends EventEmitter {
 
             lastProcessedMessageId = message.id;
 
-            const userId = message.author.id;
+            const userId = message.author.id as UUID;
             const userName = message.author.username;
             const channelId = message.channel.id;
             const textContent = message.content;
 
-            // TODO: determine if we want to respond
+            // remove any channels that have not been active for 10 hours
+            for (let [channelId, channelData] of Object.entries(interestChannels)) {
+                if (Date.now() - channelData.lastMessageSent > 36000000) {
+                    delete interestChannels[channelId];
+                }
+            }
 
             try {
                 // Use your existing function to handle text and get a response
-                const responseStream = await this.respondToText(userId, userName, channelId, textContent, ResponseType.RESPONSE_TEXT);
-
+                const responseStream = await this.respondToText({ userId, userName, channelId, input: textContent, requestedResponseType: ResponseType.RESPONSE_TEXT, message, interestChannels });
+                if (!responseStream) {
+                    console.log("No response stream");
+                    return;
+                }
                 // Convert the Readable stream to text (assuming the response is text)
                 let responseData = '';
                 for await (const chunk of responseStream) {
@@ -200,7 +239,7 @@ export class DiscordClient extends EventEmitter {
 
         this.client.on(Events.InteractionCreate, async (interaction) => {
             if (!interaction.isCommand()) return;
-            
+
             if (interaction.commandName === 'setname') {
                 console.log('interaction', interaction);
                 const newName = interaction.options.get('name')?.value;
@@ -213,31 +252,31 @@ export class DiscordClient extends EventEmitter {
 
                 await interaction.deferReply();
 
-                await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
-                await this.ensureRoomExists(this.runtime.supabase, room_id);
-                await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
-                await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+                await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                await this.ensureUserExists(supabaseClient, userIdUUID, userName);
+                await this.ensureRoomExists(supabaseClient, room_id);
+                await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
+                await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
 
                 if (newName) {
                     try {
-                        const { error } = await this.runtime.supabase
+                        const { error } = await supabaseClient
                             .from('accounts')
                             .update({ name: newName })
                             .eq('id', getUuid(interaction.client.user?.id));
-            
+
                         if (error) {
                             console.error('Error updating agent name:', error);
                             await interaction.editReply('An error occurred while updating the agent name.');
                             return;
                         }
-            
+
                         const guild = interaction.guild;
                         if (guild) {
                             const botMember = await guild.members.fetch(interaction.client.user?.id as string);
                             await botMember.setNickname(newName as string);
                         }
-            
+
                         await interaction.editReply(`Agent's name has been updated to: ${newName}`);
                     } catch (error) {
                         console.error('Error updating agent name:', error);
@@ -246,8 +285,8 @@ export class DiscordClient extends EventEmitter {
                 } else {
                     await interaction.editReply('Please provide a new name for the agent.');
                 }
-            
-            
+
+
             } else if (interaction.commandName === 'setbio') {
                 const newBio = interaction.options.get('bio')?.value;
                 if (newBio) {
@@ -259,13 +298,13 @@ export class DiscordClient extends EventEmitter {
 
                         await interaction.deferReply();
 
-                        await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                        await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
-                        await this.ensureRoomExists(this.runtime.supabase, room_id);
-                        await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
-                        await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+                        await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                        await this.ensureUserExists(supabaseClient, userIdUUID, userName);
+                        await this.ensureRoomExists(supabaseClient, room_id);
+                        await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
+                        await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
 
-                        await this.runtime.supabase
+                        await supabaseClient
                             .from('accounts')
                             .update({ details: { summary: newBio } })
                             .eq('id', getUuid(interaction.client.user?.id));
@@ -287,11 +326,11 @@ export class DiscordClient extends EventEmitter {
 
                 await interaction.deferReply();
 
-                await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
-                await this.ensureRoomExists(this.runtime.supabase, room_id);
-                await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
-                await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+                await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                await this.ensureUserExists(supabaseClient, userIdUUID, userName);
+                await this.ensureRoomExists(supabaseClient, room_id);
+                await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
+                await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
 
                 const attachment = interaction.options.getAttachment('image');
                 if (attachment) {
@@ -318,11 +357,11 @@ export class DiscordClient extends EventEmitter {
         const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
         const room_id = getUuid(this.client.user?.id as string) as UUID;
 
-        await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-        await this.ensureRoomExists(this.runtime.supabase, room_id);
-        await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+        await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+        await this.ensureRoomExists(supabaseClient, room_id);
+        await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
 
-        const { data: botData, error: botError } = await this.runtime.supabase
+        const { data: botData, error: botError } = await supabaseClient
             .from('accounts')
             .select('name')
             .eq('id', agentId)
@@ -335,7 +374,7 @@ export class DiscordClient extends EventEmitter {
 
         if (!botData.name) {
             const botName = await this.fetchBotName(settings.DISCORD_API_TOKEN);
-            await this.runtime.supabase
+            await supabaseClient
                 .from('accounts')
                 .update({ name: botName })
                 .eq('id', agentId);
@@ -343,21 +382,28 @@ export class DiscordClient extends EventEmitter {
     }
 
     /**
-* Handle an incoming message, processing it and returning a response.
-* @param message The message to handle.
-* @param state The state of the agent.
-* @returns The response to the message.
-*/
+    * Handle an incoming message, processing it and returning a response.
+    * @param message The message to handle.
+    * @param state The state of the agent.
+    * @returns The response to the message.
+    */
     async handleMessage(
         message: Message,
-        state?: State
+        hasInterest = true,
+        shouldIgnore = false,
+        shouldRespond = true,
+        callback: (response: string) => void,
+        state?: State,
     ) {
+        
+        // remove the elaborate action 
+
         const _saveRequestMessage = async (message: Message, state: State) => {
             const { content: senderContent, /* senderId, userIds, room_id */ } = message
 
             // we run evaluation here since some evals could be modulo based, and we should run on every message
             if ((senderContent as Content).content) {
-                const { data: data2, error } = await this.runtime.supabase.from('messages').select('*').eq('user_id', message.senderId)
+                const { data: data2, error } = await supabaseClient.from('messages').select('*').eq('user_id', message.senderId)
                     .eq('room_id', message.room_id)
                     .order('created_at', { ascending: false })
 
@@ -380,10 +426,49 @@ export class DiscordClient extends EventEmitter {
         }
 
         await _saveRequestMessage(message, state as State)
-        // if (!state) {
+
         console.log("MESSAGE:", message);
+        if (shouldIgnore) {
+            return { content: '', action: 'IGNORE' };
+        }
+
         state = (await this.runtime.composeState(message)) as State
-        // }
+
+        if (!shouldRespond && hasInterest) {
+            console.log('Checking if agent should respond')
+            const shouldRespondContext = composeContext({
+                state,
+                template: shouldRespondTemplate
+            })
+
+            console.log(shouldRespondContext)
+
+            const response = await this.runtime.completion({
+                context: shouldRespondContext,
+                stop: []
+            })
+
+            console.log('*** response is', response)
+
+            // check if the response is true or false
+            if (response === 'true') {
+                console.log("Responding to message");
+                shouldRespond = true;
+            } else if (response === 'false') {
+                console.log("Not responding to message");
+                shouldRespond = false;
+            } else {
+                console.error('Invalid response:', response);
+                shouldRespond = false;
+            }
+        }
+
+        if (!shouldRespond) {
+            console.log("Not responding to message");
+            return { content: '', action: 'IGNORE' };
+        }
+
+        console.log("Responding to message");
 
         const context = composeContext({
             state,
@@ -398,13 +483,14 @@ export class DiscordClient extends EventEmitter {
         const { senderId, room_id, userIds: user_ids, agentId } = message
 
         for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+            console.log('*** RESPONDING:')
             console.log(context)
             const response = await this.runtime.completion({
                 context,
                 stop: []
             })
 
-            this.runtime.supabase
+            supabaseClient
                 .from('logs')
                 .insert({
                     body: { message, context, response },
@@ -427,7 +513,7 @@ export class DiscordClient extends EventEmitter {
             ) as unknown as Content
 
             if (
-                (parsedResponse.user as string)?.includes(
+                (parsedResponse?.user as string)?.includes(
                     (state as State).agentName as string
                 )
             ) {
@@ -470,7 +556,11 @@ export class DiscordClient extends EventEmitter {
         }
 
         await _saveResponseMessage(message, state, responseContent)
-        await this.runtime.processActions(message, responseContent)
+        this.runtime.processActions(message, responseContent).then((response: unknown) => {
+            if(response && (response as Content).content) {
+                callback((response as Content).content)
+            }
+        })
         console.log('RESPONSE:', responseContent)
         return responseContent
     }
@@ -512,7 +602,7 @@ export class DiscordClient extends EventEmitter {
         }
 
         if (data) {
-            console.log('User exists:', data);
+            // console.log('User exists:', data);
         }
 
         if (!data) {
@@ -571,6 +661,7 @@ export class DiscordClient extends EventEmitter {
         userId: UUID,
         roomId: UUID,
     ) {
+        console.log('*** ensureParticipantInRoom', userId, roomId)
         const { data, error } = await supabase
             .from('participants') // Replace 'participants' with your actual participants table name
             .select('*')
@@ -599,7 +690,7 @@ export class DiscordClient extends EventEmitter {
     /**
      * Listens on an audio stream and responds with an audio stream.
      */
-    async listenToSpokenAudio(userId: string, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
+    async listenToSpokenAudio(userId: UUID, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
         let monitor = new AudioMonitor(inputStream, 1000000, async (buffer) => {
             if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
@@ -612,7 +703,10 @@ export class DiscordClient extends EventEmitter {
 
                 callback(readable);
             } else {
-                let responseStream = await this.respondToSpokenAudio(userId, userName, channelId, buffer, requestedResponseType);
+                const responseStream = await this.respondToSpokenAudio(userId, userName, channelId, buffer, requestedResponseType);
+                if (!responseStream) {
+                    return null;
+                }
                 callback(responseStream);
             }
         });
@@ -621,7 +715,7 @@ export class DiscordClient extends EventEmitter {
     /**
     * Responds to an audio stream
     */
-    async respondToSpokenAudio(userId: string, userName: string, channelId: string, inputBuffer: Buffer, requestedResponseType?: ResponseType): Promise<Readable> {
+    async respondToSpokenAudio(userId: UUID, userName: string, channelId: string, inputBuffer: Buffer, requestedResponseType?: ResponseType): Promise<Readable | null> {
         console.log("Responding to spoken audio");
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
         const sstService = speechToText;
@@ -629,13 +723,121 @@ export class DiscordClient extends EventEmitter {
         if (requestedResponseType == ResponseType.SPOKEN_TEXT) {
             return Readable.from(text as string);
         } else {
-            return await this.respondToText(userId, userName, channelId, text as string, requestedResponseType);
+            return await this.respondToText({ userId, userName, channelId, input: text as string, requestedResponseType });
         }
     }
+
+
     /**
      * Responds to text
      */
-    async respondToText(userId: string, userName: string, channelId: string, input: string, requestedResponseType?: ResponseType): Promise<Readable> {
+    async respondToText({ userId, userName, channelId, input, requestedResponseType, message, interestChannels }: {
+        userId: UUID,
+        userName: string,
+        channelId: string,
+        input: string,
+        requestedResponseType?: ResponseType,
+        message?: DiscordMessage,
+        interestChannels?: InterestChannels
+    }): Promise<Readable | null> {
+
+        async function _shouldIgnore(message: DiscordMessage, interestChannels: InterestChannels) {
+            if (!interestChannels) {
+                throw new Error('Interest channels not provided');
+            }
+            // exclude common things people would say to make the agent shut up
+            const loseInterestWords = ['shut up', 'stop', 'dont talk', 'silence', 'stop talking', 'be quiet', 'hush', 'stfu', 'stupid bot', 'dumb bot']
+            // if message content is less than 13 characters and contains any of the ignore words, do not respond
+            if (message.content.length < 13 && loseInterestWords.some(word => message.content.toLowerCase().includes(word))) {
+                // delete the channel from the interest channels
+                delete interestChannels[message.channel.id];
+                return true;
+            }
+
+            const ignoreWords = ['fuck', 'shit', 'damn', 'piss', 'suck', 'dick', 'cock', ' sex', ' sexy']
+            if (message.content.length < 15 && ignoreWords.some(word => message.content.toLowerCase().includes(word))) {
+                // continue to pay attention, but ignore these
+                return true;
+            }
+
+            // if the message is less than 7 characters and the agent is not already interested, return false
+            if (!interestChannels[message.channel.id] && message.content.length < 7) {
+                return true;
+            }
+
+            // small quips that are veyr short can be ignored
+            const ignoreResponseWords = ['lol', 'nm', 'uh']
+            if (message.content.length < 4 && ignoreResponseWords.some(word => message.content.toLowerCase().includes(word))) {
+                // continue to pay attention, but ignore these
+                return true;
+            }
+            return false;
+        }
+
+        async function _shouldRespond(message: DiscordMessage, interestChannels: InterestChannels) {
+            if (message.author.id === discordClient.client.user?.id) return false; // do not respond to self
+            if (message.author.bot) return false; // Do not respond to other bots
+            // if the message includes a ping or the bots name (either uppercase or lowercase), respond
+            if (message.mentions.has(discordClient.client.user?.id as string)) return true;
+
+            console.log('discordClient.client.user?.username', discordClient.client.user?.username)
+            console.log('discordClient.client.user?.tag', discordClient.client.user?.tag)
+
+            // get the guild member info from the discord Client
+            const guild = message.guild;
+            const member = guild?.members.cache.get(discordClient.client.user?.id as string);
+            const nickname = member?.nickname;
+            console.log('nickname', nickname)
+
+            if (message.content.toLowerCase().includes(discordClient.client.user?.username.toLowerCase() as string) ||
+                message.content.toLowerCase().includes(discordClient.client.user?.tag.toLowerCase() as string) ||
+                (nickname && message.content.toLowerCase().includes(nickname.toLowerCase()))) {
+                return true;
+            }
+
+            console.log('*** isDM', !message.guild);
+            
+            // if the message is a DM (not a guild), respond
+            if (!message.guild) return true;
+
+            // acknowledgedments that come after an agent message should be evaluated
+            const acknowledgementWords = ['ok', 'sure', 'no', 'okay', 'yes', 'maybe', 'why not', 'yeah', 'yup', 'yep', 'ty']
+            // check if last message was from the bot
+            if (interestChannels[message.channel.id] && interestChannels[message.channel.id].messages && interestChannels[message.channel.id].messages.length > 0 &&
+                // last message came from the bot
+                interestChannels[message.channel.id].messages[interestChannels[message.channel.id].messages.length - 1].userId === discordClient.client.user?.id &&
+                // last message contains an acknowledgement word
+                acknowledgementWords.some(word => interestChannels[message.channel.id].messages[interestChannels[message.channel.id].messages.length - 1].content.content.toLowerCase().includes(word)) &&
+                // last message is less than 6 chars
+                interestChannels[message.channel.id].messages[interestChannels[message.channel.id].messages.length - 1].content.content.length < 6
+            ) {
+                return true;
+            }
+            return false;
+        }
+        
+        console.log('message && interestChannels', message, interestChannels)
+
+        // if interestChannels contains the channel id, considering responding
+        const hasInterest = (message && interestChannels) ? !!interestChannels[message.channel.id] : true;
+        const shouldIgnore = (message && interestChannels) ? await _shouldIgnore(message, interestChannels) : false;
+        const shouldRespond = (message && interestChannels) ? await _shouldRespond(message, interestChannels) : true;
+
+        console.log('***** hasInterest', hasInterest)
+        console.log('***** shouldIgnore', shouldIgnore)
+        console.log('***** shouldRespond', shouldRespond)
+
+        if (interestChannels) {
+            // set interestChannels to include the <channelId>: <timestamp> pair
+            interestChannels[channelId] = {
+                messages: [...(interestChannels[channelId]?.messages || []), {
+                    userId: userId,
+                    userName: userName,
+                    content: { content: message?.content || '', action: 'WAIT' },
+                }], lastMessageSent: Date.now()
+            };
+        }
+
         console.log("Responding to text");
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
 
@@ -645,21 +847,33 @@ export class DiscordClient extends EventEmitter {
 
         const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
-        await this.ensureUserExists(this.runtime.supabase, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-        await this.ensureUserExists(this.runtime.supabase, userIdUUID, userName);
-        await this.ensureRoomExists(this.runtime.supabase, room_id);
-        await this.ensureParticipantInRoom(this.runtime.supabase, userIdUUID, room_id);
-        await this.ensureParticipantInRoom(this.runtime.supabase, agentId, room_id);
+        await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+        await this.ensureUserExists(supabaseClient, userIdUUID, userName);
+        await this.ensureRoomExists(supabaseClient, room_id);
+        await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
+        await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
 
-        const message = {
-            content: { content: input },
+        const callback = (response: string) => {
+            // Send the response back to the same channel
+            message?.channel.send(response);
+        }
+
+        const response = await this.handleMessage({
+            content: { content: input, action: 'WAIT' },
             senderId: userIdUUID,
             agentId,
             userIds: [userIdUUID, agentId],
             room_id,
-        } as unknown as Message;
+        },
+            hasInterest,
+            shouldIgnore,
+            shouldRespond,
+            callback,
+        )
 
-        const response = await this.handleMessage(message)
+        if (!response.content) {
+            return null;
+        }
 
         if (requestedResponseType == ResponseType.RESPONSE_TEXT) {
             return Readable.from(response.content);
@@ -757,7 +971,7 @@ export class DiscordClient extends EventEmitter {
         });
     }
 
-    async playAudioStream(userId: string, audioStream: Readable) {
+    async playAudioStream(userId: UUID, audioStream: Readable) {
         const connection = this.connections.get(userId);
         if (connection == null) {
             console.log(`No connection for user ${userId}`);
