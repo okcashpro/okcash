@@ -24,7 +24,7 @@ export default {
             unique: false,
         });
         const agentMessages = recentMessagesData.filter(
-            (m) => m.user_id === message.agentId,
+            (m: { user_id: any; }) => m.user_id === message.agentId,
         );
 
         // check if the last messages were all continues=
@@ -32,7 +32,7 @@ export default {
             const lastMessages = agentMessages.slice(0, maxContinuesInARow);
             if (lastMessages.length >= maxContinuesInARow) {
                 const allContinues = lastMessages.every(
-                    (m) => (m.content as Content).action === "ELABORATE",
+                    (m: { content: any; }) => (m.content as Content).action === "ELABORATE",
                 );
                 if (allContinues) {
                     return false;
@@ -88,9 +88,9 @@ export default {
 
         // prevent repetition
         const messageExists = state.recentMessagesData
-            .filter((m) => m.user_id === message.agentId)
+            .filter((m: { user_id: any; }) => m.user_id === message.agentId)
             .slice(0, maxContinuesInARow + 1)
-            .some((m) => m.content === message.content);
+            .some((m: { content: any; }) => m.content === message.content);
 
         if (messageExists) {
             return;
@@ -125,12 +125,12 @@ export default {
         // if so, then we should change the action to WAIT
         if (responseContent.action === "ELABORATE") {
             const agentMessages = state.recentMessagesData
-                .filter((m) => m.user_id === message.agentId)
-                .map((m) => (m.content as Content).action);
+                .filter((m: { user_id: any; }) => m.user_id === message.agentId)
+                .map((m: { content: any; }) => (m.content as Content).action);
 
             const lastMessages = agentMessages.slice(0, maxContinuesInARow);
             if (lastMessages.length >= maxContinuesInARow) {
-                const allContinues = lastMessages.every((m) => m === "ELABORATE");
+                const allContinues = lastMessages.every((m: string) => m === "ELABORATE");
                 if (allContinues) {
                     responseContent.action = "WAIT";
                 }

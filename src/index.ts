@@ -1,16 +1,19 @@
 import { REST } from '@discordjs/rest';
 import { NoSubscriberBehavior, StreamType, VoiceConnection, createAudioPlayer, createAudioResource, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { SupabaseDatabaseAdapter, BgentRuntime, Content, Message, State, composeContext, defaultActions, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
+import { Action, BgentRuntime, Content, Message, State, SupabaseDatabaseAdapter, composeContext, defaultActions, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
 import { UUID } from 'crypto';
-import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes } from "discord.js";
+import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes, VoiceState } from "discord.js";
 import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from 'uuid-by-string';
-import { AudioMonitor } from "./audioMonitor.ts";
-import elaborate_discord from './elaborate_discord.ts';
+import elaborate_discord from './actions/elaborate.ts';
+import joinvoice from './actions/joinvoice.ts';
+import leavevoice from './actions/leavevoice.ts';
 import { textToSpeech } from "./elevenlabs.ts";
+import timeProvider from "./providers/time.ts";
+import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { speechToText } from "./speechtotext.ts";
 
@@ -137,10 +140,6 @@ export class DiscordClient extends EventEmitter {
             ]
         });
 
-        const supabase = createClient(
-            settings.SUPABASE_URL!,
-            settings.SUPABASE_API_KEY!,
-        )
 
         this.runtime = new BgentRuntime({
             databaseAdapter: new SupabaseDatabaseAdapter(
@@ -150,29 +149,31 @@ export class DiscordClient extends EventEmitter {
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
             evaluators: [],
+            providers: [voiceStateProvider, timeProvider],
             // filter out the default ELABORATE action
             actions: [...defaultActions.filter(
-                action => action.name !== 'ELABORATE'
+                (action: Action) => action.name !== 'ELABORATE'
             ),
-            // add the discord specific elaborate action, which has a callback
-            elaborate_discord],
+                // add the discord specific elaborate action, which has a callback
+                elaborate_discord,
+                joinvoice,
+                leavevoice],
         });
 
-        this.client.once(Events.ClientReady, async readyClient => {
+        this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any; }; }) => {
             console.log(`Logged in as ${readyClient.user?.tag}`);
             console.log('Use this URL to add the bot to your server:');
             console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
             await this.checkBotAccount();
             await this.onReady();
         });
-        this.client.login(this.apiToken);
-        this.client.on('voiceStateUpdate', (oldState, newState) => {
-            if (newState.member?.user.bot) return;
-            if (newState.channelId != null && newState.channelId != oldState.channelId) {
+        this.client.on('voiceStateUpdate', (oldState: VoiceState | null, newState: VoiceState | null) => {
+            if (newState?.member?.user.bot) return;
+            if (newState?.channelId != null && newState?.channelId != oldState?.channelId) {
                 this.joinChannel(newState.channel as BaseGuildVoiceChannel);
             }
         });
-        this.client.on('guildCreate', (guild) => {
+        this.client.on('guildCreate', (guild: Guild) => {
             console.log(`Joined guild ${guild.name}`);
             this.scanGuild(guild);
         });
@@ -192,6 +193,7 @@ export class DiscordClient extends EventEmitter {
         let interestChannels: InterestChannels = {};
 
         this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
+            if (interaction.isCommand) return;
             console.log("Got message");
 
             if (message.author?.bot) return;
@@ -239,7 +241,6 @@ export class DiscordClient extends EventEmitter {
 
         this.client.on(Events.InteractionCreate, async (interaction) => {
             if (!interaction.isCommand()) return;
-
             if (interaction.commandName === 'setname') {
                 console.log('interaction', interaction);
                 const newName = interaction.options.get('name')?.value;
@@ -395,7 +396,7 @@ export class DiscordClient extends EventEmitter {
         callback: (response: string) => void,
         state?: State,
     ) {
-        
+
         // remove the elaborate action 
 
         const _saveRequestMessage = async (message: Message, state: State) => {
@@ -427,7 +428,6 @@ export class DiscordClient extends EventEmitter {
 
         await _saveRequestMessage(message, state as State)
 
-        console.log("MESSAGE:", message);
         if (shouldIgnore) {
             return { content: '', action: 'IGNORE' };
         }
@@ -435,27 +435,20 @@ export class DiscordClient extends EventEmitter {
         state = (await this.runtime.composeState(message)) as State
 
         if (!shouldRespond && hasInterest) {
-            console.log('Checking if agent should respond')
             const shouldRespondContext = composeContext({
                 state,
                 template: shouldRespondTemplate
             })
-
-            console.log(shouldRespondContext)
 
             const response = await this.runtime.completion({
                 context: shouldRespondContext,
                 stop: []
             })
 
-            console.log('*** response is', response)
-
             // check if the response is true or false
             if (response.toLowerCase().includes('true')) {
-                console.log("Responding to message");
                 shouldRespond = true;
             } else if (response.toLowerCase().includes('false')) {
-                console.log("Not responding to message");
                 shouldRespond = false;
             } else {
                 console.error('Invalid response:', response);
@@ -500,7 +493,7 @@ export class DiscordClient extends EventEmitter {
                     agent_id: agentId!,
                     type: 'main_completion'
                 })
-                .then(({ error }) => {
+                .then(({ error }: { error: string }) => {
                     if (error) {
                         console.error('error', error)
                     }
@@ -557,7 +550,7 @@ export class DiscordClient extends EventEmitter {
 
         await _saveResponseMessage(message, state, responseContent)
         this.runtime.processActions(message, responseContent).then((response: unknown) => {
-            if(response && (response as Content).content) {
+            if (response && (response as Content).content) {
                 callback((response as Content).content)
             }
         })
@@ -692,24 +685,6 @@ export class DiscordClient extends EventEmitter {
      */
     async listenToSpokenAudio(userId: UUID, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
-        let monitor = new AudioMonitor(inputStream, 1000000, async (buffer) => {
-            if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
-                const readable = new Readable({
-                    read() {
-                        this.push(buffer);
-                        this.push(null);
-                    }
-                });
-
-                callback(readable);
-            } else {
-                const responseStream = await this.respondToSpokenAudio(userId, userName, channelId, buffer, requestedResponseType);
-                if (!responseStream) {
-                    return null;
-                }
-                callback(responseStream);
-            }
-        });
     }
 
     /**
@@ -796,7 +771,7 @@ export class DiscordClient extends EventEmitter {
             }
 
             console.log('*** isDM', !message.guild);
-            
+
             // if the message is a DM (not a guild), respond
             if (!message.guild) return true;
 
@@ -815,7 +790,7 @@ export class DiscordClient extends EventEmitter {
             }
             return false;
         }
-        
+
         // if interestChannels contains the channel id, considering responding
         const shouldIgnore = (message && interestChannels) ? await _shouldIgnore(message, interestChannels) : false;
         let hasInterest = (message && interestChannels) ? !!interestChannels[message.channelId] : true;
@@ -825,7 +800,7 @@ export class DiscordClient extends EventEmitter {
         if (shouldIgnore) {
             shouldRespond = false;
             hasInterest = false
-            if(interestChannels && message && interestChannels[message?.channelId]){
+            if (interestChannels && message && interestChannels[message?.channelId]) {
                 delete interestChannels[message?.channelId];
             }
         }
@@ -892,7 +867,7 @@ export class DiscordClient extends EventEmitter {
     private async onReady() {
         const guilds = await this.client.guilds.fetch();
         // Iterate through all guilds
-        for (const [guildId, guild] of guilds) {
+        for (const [, guild] of guilds) {
             const fullGuild = await guild.fetch();
             this.scanGuild(fullGuild);
         }
@@ -901,10 +876,10 @@ export class DiscordClient extends EventEmitter {
     private async scanGuild(guild: Guild) {
         // Iterate through all voice channels fetching the largest one with at least one connected member
         const channels = (await guild.channels.fetch())
-            .filter(channel => channel?.type == ChannelType.GuildVoice);
+            .filter((channel: { type: any; }) => channel?.type == ChannelType.GuildVoice);
         let chosenChannel: BaseGuildVoiceChannel | null = null;
 
-        for (const [id, channel] of channels) {
+        for (const [, channel] of channels) {
             const voiceChannel = channel as BaseGuildVoiceChannel;
             if (voiceChannel.members.size > 0 && (chosenChannel === null || voiceChannel.members.size > chosenChannel.members.size)) {
                 chosenChannel = voiceChannel;
@@ -926,19 +901,19 @@ export class DiscordClient extends EventEmitter {
             selfMute: false
         });
 
-        for (const [id, member] of channel.members) {
+        for (const [, member] of channel.members) {
             if (member.user.bot) continue;
             this.monitorMember(member, channel);
         }
 
-        connection.receiver.speaking.on('start', (userId) => {
+        connection.receiver.speaking.on('start', (userId: string) => {
             const user = channel.members.get(userId);
             if (user?.user.bot) return;
             this.monitorMember(user as GuildMember, channel);
             this.streams.get(userId)?.emit('speakingStarted');
         });
 
-        connection.receiver.speaking.on('end', async (userId) => {
+        connection.receiver.speaking.on('end', async (userId: string) => {
             const user = channel.members.get(userId);
             if (user?.user.bot) return;
             this.streams.get(userId)?.emit('speakingStopped');
@@ -959,14 +934,14 @@ export class DiscordClient extends EventEmitter {
             rate: DECODE_SAMPLE_RATE,
             frameSize: DECODE_FRAME_SIZE
         });
-        pipeline(receiveStream as any, opusDecoder, (err) => {
+        pipeline(receiveStream as any, opusDecoder, (err: any) => {
             if (err) {
                 console.log(`Opus decoding pipeline error: ${err}`);
             }
         });
         this.streams.set(userId, opusDecoder);
         this.connections.set(userId, connection as VoiceConnection);
-        opusDecoder.on('error', (err) => {
+        opusDecoder.on('error', (err: any) => {
             console.log(`Opus decoding error: ${err}`);
         });
         opusDecoder.on('close', () => {
@@ -1048,11 +1023,11 @@ export class DiscordClient extends EventEmitter {
         });
         audioPlayer.play(resource);
 
-        audioPlayer.on('error', (err) => {
+        audioPlayer.on('error', (err: any) => {
             console.log(`Audio player error: ${err}`);
         });
 
-        audioPlayer.on('stateChange', (oldState, newState) => {
+        audioPlayer.on('stateChange', (oldState: any, newState: { status: string; }) => {
             console.log("Audio player " + newState.status);
             if (newState.status == 'idle') {
                 let idleTime = Date.now();
