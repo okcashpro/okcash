@@ -154,7 +154,6 @@ export class DiscordClient extends EventEmitter {
             partials: [
                 Partials.Channel,
                 Partials.Message,
-                Partials.Message,
             ]
         });
 
