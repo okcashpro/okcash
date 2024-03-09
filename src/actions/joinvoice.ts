@@ -1,43 +1,56 @@
 // src/lib/actions/joinVoice.ts
-import { type BgentRuntime, type Action, type Message } from "bgent";
 import { joinVoiceChannel } from "@discordjs/voice";
+import { State, type Action, type BgentRuntime, type Message } from "bgent";
+import { Channel, ChannelType, Client, Message as DiscordMessage, Guild, GuildMember } from "discord.js";
 
 export default {
   name: "JOIN_VOICE",
   validate: async (_runtime: BgentRuntime, message: Message) => {
-    const channelName = (message.content as { channel: string }).channel;
-    const voiceChannel = message.guild.channels.cache.find(
-      (channel: { name: string; type: string; }) =>
-        channel.name === channelName && channel.type === "GUILD_VOICE"
-    );
-    return !!voiceChannel;
+    return true;
   },
   description: "Join a voice channel to participate in voice chat.",
-  handler: async (runtime: BgentRuntime, message: Message): Promise<boolean> => {
-    const channelName = (message.content as { channel: string }).channel;
-    const voiceChannel = message.guild.channels.cache.find(
-      (channel: { name: string; type: string; }) =>
-        channel.name === channelName && channel.type === "GUILD_VOICE"
+  handler: async (runtime: BgentRuntime, message: Message, state: State): Promise<boolean> => {
+    if (!state.discordClient) {
+      throw new Error("Discord client is not available in the state.");
+    }
+    if (!state.discordMessage) {
+      throw new Error("Discord message is not available in the state.");
+    }
+
+    const id = (state?.discordMessage as DiscordMessage).guild?.id as string;
+    const client = state.discordClient as Client;
+    const voiceChannels = (client.guilds.cache.get(id) as Guild)
+      .channels.cache.filter((channel: Channel) => channel.type === ChannelType.GuildVoice);
+
+    const channelName = (state.discordMessage as DiscordMessage).content.toLowerCase();
+    const targetChannel = voiceChannels.find((channel) =>
+      (channel as { name: string }).name.toLowerCase().includes(channelName)
     );
 
-    if (!voiceChannel) {
-      console.warn("Voice channel not found!");
-      return false;
-    }
-
-    try {
-      const connection = joinVoiceChannel({
-        channelId: voiceChannel.id,
-        guildId: message.guild.id,
-        adapterCreator: message.guild.voiceAdapterCreator,
+    if (targetChannel) {
+      joinVoiceChannel({
+        channelId: targetChannel.id,
+        guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
+        adapterCreator: (client.guilds.cache.get(id) as Guild).voiceAdapterCreator,
       });
-      console.log(`Joined voice channel: ${voiceChannel.name}`);
       return true;
-    } catch (error) {
-      console.error("Error joining voice channel:", error);
-      return false;
+    } else {
+      const member = (state.discordMessage as DiscordMessage).member as GuildMember;
+      if (member.voice.channel) {
+        joinVoiceChannel({
+          channelId: member.voice.channel.id,
+          guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
+          adapterCreator: (client.guilds.cache.get(id) as Guild).voiceAdapterCreator,
+        });
+        return true;
+      } else {
+        await (state.discordMessage as DiscordMessage).reply("Please specify a valid voice channel or join one.");
+        return false;
+      }
     }
   },
+
+
   condition: "The agent wants to join a voice channel to participate in voice chat.",
   examples: [
     [
@@ -45,16 +58,22 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Hey, let's jump into the 'General' voice channel and chat!",
-          action: "JOIN_VOICE",
-          channel: "General",
+          action: "WAIT",
         },
       },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "Sure! I'm joining the voice channel now.",
+          action: "JOIN_VOICE",
+        },
+      }
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "{{user2}}, can you join the 'Gaming' voice channel? I want to discuss our game strategy.",
+          content: "{{user2}}, can you join the voice channel? I want to discuss our game strategy.",
           action: "WAIT",
         },
       },
@@ -62,8 +81,7 @@ export default {
         user: "{{user2}}",
         content: {
           content: "Absolutely! I'll join right now.",
-          action: "JOIN_VOICE",
-          channel: "Gaming",
+          action: "JOIN_VOICE"
         },
       },
     ],
@@ -79,8 +97,7 @@ export default {
         user: "{{user2}}",
         content: {
           content: "Sure thing! I'll be right there.",
-          action: "JOIN_VOICE",
-          channel: "Conference",
+          action: "JOIN_VOICE"
         },
       },
     ],
@@ -97,7 +114,6 @@ export default {
         content: {
           content: "Sounds good! Joining the 'Lounge' channel now.",
           action: "JOIN_VOICE",
-          channel: "Lounge",
         },
       },
     ],
@@ -112,9 +128,8 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "Oh, exciting! I'm joining the 'Music' channel. Can't wait to hear it!",
-          action: "JOIN_VOICE",
-          channel: "Music",
+          content: "Oh, exciting! I'm joining the channel. Can't wait to hear it!",
+          action: "JOIN_VOICE"
         },
       },
     ],

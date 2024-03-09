@@ -1,30 +1,43 @@
 // src/lib/actions/leaveVoice.ts
-import { type BgentRuntime, type Action, type Message } from "bgent";
+import { type BgentRuntime, type Action, type Message, State } from "bgent";
 import { getVoiceConnection } from "@discordjs/voice";
+import { Channel, ChannelType, Client, Message as DiscordMessage, Guild } from "discord.js";
 
 export default {
   name: "LEAVE_VOICE",
-  validate: async (_runtime: BgentRuntime, message: Message) => {
-    const connection = getVoiceConnection(message.guild.id);
-    return !!connection;
+  validate: async (_runtime: BgentRuntime, message: Message, state: State) => {
+    if (!state.discordClient) {
+      throw new Error("Discord client is not available in the state.");
+    }
+    if (!state.discordMessage) {
+      throw new Error("Discord message is not available in the state.");
+    }
+    const id = (state?.discordMessage as DiscordMessage).guild?.id as string;
+    const client = state.discordClient as Client;
+    const voiceChannels = (client.guilds.cache.get(id) as Guild)
+      .channels.cache.filter((channel: Channel) => channel.type === ChannelType.GuildVoice)
+
+    return voiceChannels.size > 0;
   },
   description: "Leave the current voice channel.",
-  handler: async (runtime: BgentRuntime, message: Message): Promise<boolean> => {
-    const connection = getVoiceConnection(message.guild.id);
-
-    if (!connection) {
-      console.warn("Not currently in a voice channel.");
-      return false;
+  handler: async (runtime: BgentRuntime, message: Message, state: State): Promise<boolean> => {
+    if (!state.discordClient) {
+      throw new Error("Discord client is not available in the state.");
     }
-
-    try {
-      connection.destroy();
-      console.log("Left the voice channel.");
-      return true;
-    } catch (error) {
-      console.error("Error leaving voice channel:", error);
-      return false;
+    if (!state.discordMessage) {
+      throw new Error("Discord message is not available in the state.");
     }
+    const voiceChannels = (state.discordClient as Client)?.guilds.cache
+      .get((state.discordMessage as DiscordMessage).guild?.id as string)
+      ?.channels.cache.filter((channel: Channel) => channel.type === ChannelType.GuildVoice);
+
+    voiceChannels?.forEach((channel: Channel) => {
+      const connection = getVoiceConnection((state.discordMessage as DiscordMessage).guild?.id as string);
+      if (connection) {
+        connection.destroy();
+      }
+    });
+    return true;
   },
   condition: "The agent wants to leave the current voice channel.",
   examples: [
@@ -110,6 +123,3 @@ export default {
     ],
   ],
 } as Action;
-
-
-

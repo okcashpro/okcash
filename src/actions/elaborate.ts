@@ -130,14 +130,14 @@ export default {
 
             const lastMessages = agentMessages.slice(0, maxContinuesInARow);
             if (lastMessages.length >= maxContinuesInARow) {
-                const allContinues = lastMessages.every((m: string) => m === "ELABORATE");
+                const allContinues = lastMessages.every((m: string | undefined) => m === "ELABORATE");
                 if (allContinues) {
                     responseContent.action = "WAIT";
                 }
             }
         }
 
-        return await runtime.processActions(message, responseContent);
+        return await runtime.processActions(message, responseContent, state);
     },
     condition:
         "Only use ELABORATE if the message requires a continuation to finish the thought. If this actor is waiting for the other actor to respond, or the actor does not have more to say, do not use the ELABORATE action.",
