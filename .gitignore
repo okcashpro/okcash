@@ -1,8 +1,10 @@
 src/*.exe
 src/okcash
 src/okcashd
-src/test_okcash
 src/build.h
+src/build
+src/release
+src/debug
 .*.swp
 *.*~*
 *.bak
