@@ -104,7 +104,25 @@ const commands = [
             },
         ],
     },
+    {
+        name: 'joinchannel',
+        description: 'Join the voice channel the user is in',
+        options: [
+            {
+                name: 'channel',
+                description: 'The voice channel to join',
+                type: 7, // 7 corresponds to the CHANNEL type
+                required: true,
+            }
+        ]
+    },
+    {
+        name: 'leavechannel',
+        description: 'Leave the voice channel the user is in',
+    },
 ];
+
+
 
 const rest = new REST({ version: '9' }).setToken(settings.DISCORD_API_TOKEN);
 
@@ -139,11 +157,13 @@ export class DiscordClient extends EventEmitter {
                 GatewayIntentBits.DirectMessages,
                 GatewayIntentBits.GuildVoiceStates,
                 GatewayIntentBits.MessageContent,
-                GatewayIntentBits.GuildMessages
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.DirectMessageTyping,
+                GatewayIntentBits.GuildMessageTyping,
             ],
             partials: [
                 Partials.Channel,
-                Partials.Message
+                Partials.Message,
             ]
         });
 
@@ -357,6 +377,47 @@ export class DiscordClient extends EventEmitter {
                     await interaction.editReply('Please provide an image attachment to set as the bot avatar.');
                 }
                 return;
+            }
+            else if (interaction.commandName === 'joinchannel') {
+                const channelId = interaction.options.get('channel')?.value as string;
+                const guild = interaction.guild;
+                if (!guild) {
+                    return;
+                }
+                const voiceChannel = interaction.guild.channels.cache.find(channel => channel.id === channelId && channel.type === ChannelType.GuildVoice);
+            
+                if (!voiceChannel) {
+                  await interaction.reply('Voice channel not found!');
+                  return;
+                }
+            
+                try {
+                  joinVoiceChannel({
+                    channelId: voiceChannel.id,
+                    guildId: interaction.guildId as any,
+                    adapterCreator: interaction.guild.voiceAdapterCreator,
+                  });
+                  await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
+                } catch (error) {
+                  console.error('Error joining voice channel:', error);
+                  await interaction.reply('Failed to join the voice channel.');
+                }
+            }
+            else if (interaction.commandName === 'leavechannel') {
+                const connection = getVoiceConnection(interaction.guildId as any);
+            
+                if (!connection) {
+                    await interaction.reply('Not currently in a voice channel.');
+                    return;
+                }
+            
+                try {
+                    connection.destroy();
+                    await interaction.reply('Left the voice channel.');
+                } catch (error) {
+                    console.error('Error leaving voice channel:', error);
+                    await interaction.reply('Failed to leave the voice channel.');
+                }
             }
         });
     }
@@ -861,6 +922,10 @@ export class DiscordClient extends EventEmitter {
         const callback = (response: string) => {
             // Send the response back to the same channel
             message?.channel.send(response);
+        }
+
+        if (input && input.startsWith("/")) {
+            return null;
         }
 
         const response = await this.handleMessage({
