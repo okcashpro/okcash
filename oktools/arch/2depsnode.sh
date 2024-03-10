@@ -7,9 +7,9 @@ echo "Just click Enter each time asked to install all dependencies (default)"
 
 cd
 
-sudo pacman -S git miniupnpc openssl
+sudo pacman -S git miniupnpc openssl -y
 
-sudo pacman -S base-devel
+sudo pacman -S base-devel boost -y
 
 # Checking if Berkeley DB 4.8.30 is installed
 if [ -f /usr/local/BerkeleyDB.4.8/lib/libdb_cxx-4.8.a ]; then
@@ -28,8 +28,6 @@ fi
 
 echo "= BerkeleyDB 4.8 is now installed ="
 
-sudo pacman -S qt5 -y
-
-echo "All the required dependencies for Okcash node and Graphical client are now installed for:"
+echo "All the required dependencies for Okcash node are now installed for:"
 uname -a
 exit 0

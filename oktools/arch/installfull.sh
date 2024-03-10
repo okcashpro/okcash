@@ -4,7 +4,8 @@ echo "This could take a minute, enjoy some coffee or water and come back soon...
 date
 
 # Build okcashd dependencies
-/bin/bash ./2archdeps.sh
+/bin/bash ./2depsnode.sh
+/bin/bash ./3depsgui.sh
 
 # Build + install node - okcashd
 /bin/bash ./installnode.sh

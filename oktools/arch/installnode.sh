@@ -1,14 +1,12 @@
 #!/bin/bash
-echo "Compiling Okcash GUI: Okcash - from source on its latest version"
+echo "Compiling Okcash node: okcashd - from source on its latest version"
 echo "This could take a minute, enjoy some coffee or water and come back soon..."
 date
 
-# Build okcashd dependencies
-/bin/bash ./2archdeps.sh
+# Build okcashd 
+cd  ../..
 
-# Build okcash graphical client
-
-cd ../..
+cd src
 
 export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
 
@@ -20,19 +18,20 @@ export CPATH="/usr/local/BerkeleyDB.4.8/include"
 
 export LIBRARY_PATH="/usr/local/BerkeleyDB.4.8/lib"
 
-qmake
+# Build okcashd node
 
-make -j4
+make -j4 -f makefile.unix USE_UPNP=-
 
-strip okcash
+strip okcashd
 
-# Install okcash graphical client in the system
-sudo cp okcash /usr/local/bin
+# Install okcashd in the system
+sudo cp okcashd /usr/local/bin
 
 # end Client
-echo "Done compiling + installing: Okcash GUI > on its latest version for:"
+echo "Done compiling + installing: okcashd > on its latest version for:"
 uname -a
-echo "Okcash is now installed in your /usr/local/bin directory"
+echo "okcashd node is now installed in your /usr/local/bin directory"
+echo "remember to create your okcash.conf file before running okcashd"
 echo "You are now empowered with Okcash!"
 echo "enjoy your OK experience"
 exit 0
