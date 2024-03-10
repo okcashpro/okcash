@@ -13,7 +13,8 @@ sudo pacman -S yay -y
 
 yay -Syu
 
-sudo yay -S qt5-webkit
+yay -Ss qt5-webkit
+yay -S qt5-webkit
 
 echo "= QT5 Webkit is now installed ="
 

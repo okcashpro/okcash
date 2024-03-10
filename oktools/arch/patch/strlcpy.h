@@ -12,47 +12,37 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-#ifndef BITCOIN_STRLCPY_H
-#define BITCOIN_STRLCPY_H
-
-#include <stdlib.h>
-#include <string.h>
-
-/*
- * Copy src to string dst of size siz.  At most siz-1 characters
- * will be copied.  Always NUL terminates (unless siz == 0).
- * Returns strlen(src); if retval >= siz, truncation occurred.
  */
 #ifndef BITCOIN_STRLCPY_H
 #define BITCOIN_STRLCPY_H
-
+ 
 #include <stdlib.h>
 #include <string.h>
-
+ 
 #ifdef __GNUC__
 #define BITCOIN_GNUC_CHECK(major, minor) \
     ((__GNUC__ == (major) && __GNUC_MINOR__ >= (minor)) || __GNUC__ > (major))
 #else
 #define BITCOIN_GNUC_CHECK(major, minor) 0
 #endif
-
+ 
 #if BITCOIN_GNUC_CHECK(7, 0)
 #define BITCOIN_GNUC_INLINE __attribute__((gnu_inline)) inline
 #else
 #define BITCOIN_GNUC_INLINE inline
 #endif
-
+ 
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz == 0).
  * Returns strlen(src); if retval >= siz, truncation occurred.
  */
-BITCOIN_GNUC_INLINE size_t strlcpy(char *dst, const char *src, size_t siz)
+BITCOIN_GNUC_INLINE size_t my_strlcpy(char *dst, const char *src, size_t siz)
 {
     char *d = dst;
     const char *s = src;
     size_t n = siz;
-
+ 
     /* Copy as many bytes as will fit */
     if (n != 0)
     {
@@ -62,7 +52,7 @@ BITCOIN_GNUC_INLINE size_t strlcpy(char *dst, const char *src, size_t siz)
                 break;
         }
     }
-
+ 
     /* Not enough room in dst, add NUL and traverse rest of src */
     if (n == 0)
     {
@@ -71,10 +61,10 @@ BITCOIN_GNUC_INLINE size_t strlcpy(char *dst, const char *src, size_t siz)
         while (*s++)
             ;
     }
-
+ 
     return(s - src - 1); /* count does not include NUL */
 }
-
+ 
 /*
  * Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters
@@ -82,19 +72,19 @@ BITCOIN_GNUC_INLINE size_t strlcpy(char *dst, const char *src, size_t siz)
  * Returns strlen(src) + MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
-BITCOIN_GNUC_INLINE size_t strlcat(char *dst, const char *src, size_t siz)
+BITCOIN_GNUC_INLINE size_t my_strlcat(char *dst, const char *src, size_t siz)
 {
     char *d = dst;
     const char *s = src;
     size_t n = siz;
     size_t dlen;
-
+ 
     /* Find the end of dst and adjust bytes left but don't go past end */
     while (n-- != 0 && *d != '\0')
         d++;
     dlen = d - dst;
     n = siz - dlen;
-
+ 
     if (n == 0)
         return(dlen + strlen(s));
     while (*s != '\0')
@@ -107,8 +97,8 @@ BITCOIN_GNUC_INLINE size_t strlcat(char *dst, const char *src, size_t siz)
         s++;
     }
     *d = '\0';
-
+ 
     return(dlen + (s - src)); /* count does not include NUL */
 }
-
+ 
 #endif
