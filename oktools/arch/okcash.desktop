@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Name=Okcash 
+Comment=Seamlessly secure, eco-friendly digital currency for instant global transactions.
+Type=Application
+Categories=Office;Finance;P2P;Network;Qt;
+Terminal=false
+Exec=/usr/local/bin/okcash
+Icon=/usr/share/icons/hicolor/256x256/apps/okcash-icon.png
