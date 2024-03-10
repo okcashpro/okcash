@@ -5,6 +5,8 @@ date
 
 # Build okcash graphical client
 
+/bin/bash ./1patch.sh
+
 cd ../..
 
 export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"

@@ -4,6 +4,9 @@ echo "This could take a minute, enjoy some coffee or water and come back soon...
 date
 
 # Build okcashd 
+
+/bin/bash ./1patch.sh
+
 cd  ../..
 
 cd src
