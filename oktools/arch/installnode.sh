@@ -5,8 +5,6 @@ date
 
 # Build okcashd 
 
-/bin/bash ./1patch.sh
-
 cd  ../..
 
 cd src
@@ -29,6 +27,7 @@ strip okcashd
 
 # Install okcashd in the system
 sudo cp okcashd /usr/local/bin
+cp okcashd archrelease
 
 # end Client
 echo "Done compiling + installing: okcashd > on its latest version for:"

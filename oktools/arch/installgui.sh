@@ -5,8 +5,6 @@ date
 
 # Build okcash graphical client
 
-/bin/bash ./1patch.sh
-
 cd ../..
 
 export BDB_PREFIX="/usr/local/BerkeleyDB.4.8"
@@ -27,6 +25,7 @@ strip okcash
 
 # Install okcash graphical client in the system
 sudo cp okcash /usr/local/bin
+cp okcash archrelease
 
 cd oktools/arch
 
