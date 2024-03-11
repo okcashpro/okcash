@@ -167,7 +167,6 @@ export class DiscordClient extends EventEmitter {
             ]
         });
 
-
         this.runtime = new BgentRuntime({
             databaseAdapter: new SupabaseDatabaseAdapter(
                 settings.SUPABASE_URL!,
@@ -194,6 +193,7 @@ export class DiscordClient extends EventEmitter {
             await this.checkBotAccount();
             await this.onReady();
         });
+        this.client.login(this.apiToken);
         this.client.on('voiceStateUpdate', (oldState: VoiceState | null, newState: VoiceState | null) => {
             if (newState?.member?.user.bot) return;
             if (newState?.channelId != null && newState?.channelId != oldState?.channelId) {
