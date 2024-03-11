@@ -28,6 +28,12 @@ strip okcash
 # Install okcash graphical client in the system
 sudo cp okcash /usr/local/bin
 
+cd oktools/arch
+
+#Install desktop
+/bin/bash ./desktop.sh
+
+
 # end Client
 echo "Done compiling + installing: Okcash GUI > on its latest version for:"
 uname -a
