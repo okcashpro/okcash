@@ -3,7 +3,7 @@ echo ""
 
 cd ../..
 
-cp oktools/arch/strlcpy.h src
+cp oktools/arch/patch/strlcpy.h src
 
 echo "= Patch Done. ="
 
