@@ -88,7 +88,7 @@ echo ""
 if ask_question "Need an okcash.conf file? Do you want to install the sample okcash.conf file in your system (okcashd node requirement)"; then
     echo "Adding okcash.conf file to the system..."
     cd
-    cd okcash/oktools/ubuntu
+    cd okcash/oktools/arch
     /bin/bash ./8startconfig.sh
     echo "**********************************************"
     echo ""
