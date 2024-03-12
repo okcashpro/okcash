@@ -6,6 +6,10 @@ import { Channel, ChannelType, Client, Message as DiscordMessage, Guild } from "
 export default {
   name: "LEAVE_VOICE",
   validate: async (_runtime: BgentRuntime, message: Message, state: State) => {
+    if (!state) {
+      return;
+    }
+    
     if (!state.discordClient) {
       throw new Error("Discord client is not available in the state.");
     }

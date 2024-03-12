@@ -10,6 +10,10 @@ export default {
   },
   description: "Join a voice channel to participate in voice chat.",
   handler: async (runtime: BgentRuntime, message: Message, state: State): Promise<boolean> => {
+    if (!state) {
+      return false;
+    }
+    
     if (!state.discordClient) {
       throw new Error("Discord client is not available in the state.");
     }
