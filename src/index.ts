@@ -187,6 +187,7 @@ export class DiscordClient extends EventEmitter {
         });
 
         this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any; }; }) => {
+            console.log("ignored channels:", settings.DISCORD_IGNORED_CHANNEL_IDS);
             console.log(`Logged in as ${readyClient.user?.tag}`);
             console.log('Use this URL to add the bot to your server:');
             console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
@@ -237,6 +238,11 @@ export class DiscordClient extends EventEmitter {
             const userName = message.author.username;
             const channelId = message.channel.id;
             const textContent = message.content;
+
+            if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channelId)) {
+                console.log("Ignoring message in ignored channel");
+                return;
+            }
 
             // remove any channels that have not been active for 10 hours
             for (let [channelId, channelData] of Object.entries(interestChannels)) {
@@ -380,8 +386,16 @@ export class DiscordClient extends EventEmitter {
             }
             else if (interaction.commandName === 'joinchannel') {
                 const channelId = interaction.options.get('channel')?.value as string;
+                if (!channelId) {
+                    await interaction.reply('Please provide a voice channel to join.');
+                    return;
+                }
                 const guild = interaction.guild;
                 if (!guild) {
+                    return;
+                }
+                if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channelId)) {
+                    await interaction.reply('Voice channel not found!');
                     return;
                 }
                 const voiceChannel = interaction.guild.channels.cache.find(channel => channel.id === channelId && channel.type === ChannelType.GuildVoice);
@@ -392,15 +406,11 @@ export class DiscordClient extends EventEmitter {
                 }
             
                 try {
-                  joinVoiceChannel({
-                    channelId: voiceChannel.id,
-                    guildId: interaction.guildId as any,
-                    adapterCreator: interaction.guild.voiceAdapterCreator,
-                  });
-                  await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
+                    this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
+                    await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
                 } catch (error) {
-                  console.error('Error joining voice channel:', error);
-                  await interaction.reply('Failed to join the voice channel.');
+                    console.error('Error joining voice channel:', error);
+                    await interaction.reply('Failed to join the voice channel.');
                 }
             }
             else if (interaction.commandName === 'leavechannel') {
@@ -984,7 +994,19 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async joinChannel(channel: BaseGuildVoiceChannel) {
+        if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channel.id)) {
+            console.log("Ignoring channel:", channel.name);
+            return;
+        }
         console.log("joining channel:", channel.name);
+        const oldConnection = getVoiceConnection(channel.guildId as any);
+        if (oldConnection) {
+            try {
+                oldConnection.destroy();
+            } catch (error) {
+                console.error('Error leaving voice channel:', error);
+            }
+        }
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
