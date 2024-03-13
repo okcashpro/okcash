@@ -406,15 +406,11 @@ export class DiscordClient extends EventEmitter {
                 }
             
                 try {
-                  joinVoiceChannel({
-                    channelId: voiceChannel.id,
-                    guildId: interaction.guildId as any,
-                    adapterCreator: interaction.guild.voiceAdapterCreator,
-                  });
-                  await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
+                    this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
+                    await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
                 } catch (error) {
-                  console.error('Error joining voice channel:', error);
-                  await interaction.reply('Failed to join the voice channel.');
+                    console.error('Error joining voice channel:', error);
+                    await interaction.reply('Failed to join the voice channel.');
                 }
             }
             else if (interaction.commandName === 'leavechannel') {
