@@ -5,6 +5,7 @@ dotenv.config();
 interface Settings {
     DISCORD_APPLICATION_ID: string;
     DISCORD_API_TOKEN: string;
+    DISCORD_IGNORED_CHANNEL_IDS: string[];
 
     OPENAI_API_KEY: string;
     OPENAI_MODEL: string;
@@ -28,6 +29,7 @@ interface Settings {
 let settings: Settings = {
     DISCORD_APPLICATION_ID: process.env.DISCORD_APPLICATION_ID || '',
     DISCORD_API_TOKEN: process.env.DISCORD_API_TOKEN || '',
+    DISCORD_IGNORED_CHANNEL_IDS: (process.env.DISCORD_IGNORED_CHANNEL_IDS || '').split(','),
 
     OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
     OPENAI_MODEL: process.env.OPENAI_MODEL || 'gpt-3.5-turbo-1106',
@@ -50,8 +52,12 @@ let settings: Settings = {
 // import from env
 for (const key in settings) {
     if (process.env[key]) {
-        // @ts-expect-error - we know this key exists
-        settings[key] = process.env[key]!;
+        if (key === 'DISCORD_IGNORED_CHANNEL_IDS') {
+            settings[key] = process.env[key]!.split(',');
+        } else {
+            // @ts-expect-error - we know this key exists
+            settings[key] = process.env[key]!;
+        }
     }
 }
 
