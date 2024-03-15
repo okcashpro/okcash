@@ -13,6 +13,7 @@ import joinvoice from './actions/joinvoice.ts';
 import leavevoice from './actions/leavevoice.ts';
 import { textToSpeech } from "./elevenlabs.ts";
 import timeProvider from "./providers/time.ts";
+import flavorProvider from "./providers/flavor.ts";
 import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { speechToText } from "./speechtotext.ts";
@@ -175,7 +176,7 @@ export class DiscordClient extends EventEmitter {
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
             evaluators: [],
-            providers: [voiceStateProvider, timeProvider],
+            providers: [voiceStateProvider, timeProvider, flavorProvider],
             // filter out the default ELABORATE action
             actions: [...defaultActions.filter(
                 (action: Action) => action.name !== 'ELABORATE'
@@ -707,7 +708,7 @@ export class DiscordClient extends EventEmitter {
                     id: userId,
                     name: userName || 'Bot',
                     email: (userName || 'Bot') + '@discord',
-                    details: { summary: 'I am a bot' },
+                    details: { summary: 'No information yet.' },
                 },
             ]);
 
