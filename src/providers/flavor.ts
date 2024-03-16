@@ -718,7 +718,7 @@ export const composeActionExamples = (actionExamples: ActionExample[][], count: 
 const flavor: Provider = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   get: async (_runtime: BgentRuntime, _message: Message, _state?: State) => {
-    return '# BEGIN FLAVOR\nThis is just to add flavor and should be ignored for dialog.\nThe following are dialog excerpts taken from the time of The Event and The Recording.\n'+ composeActionExamples(excerptConversations, 3) + '\n' + 'NOTE: These all happened a LONG TIME AGO. Ruby remembers these but should not reference them like they just happened.\n# END FLAVOR \n' + direction + '\n';
+    return direction; // '# BEGIN FLAVOR\nThis is just to add flavor and should be ignored for dialog.\nThe following are dialog excerpts taken from the time of The Event and The Recording.\n'+ composeActionExamples(excerptConversations, 3) + '\n' + 'NOTE: These all happened a LONG TIME AGO. Ruby remembers these but should not reference them like they just happened.\n# END FLAVOR \n' + direction + '\n';
   },
 };
 

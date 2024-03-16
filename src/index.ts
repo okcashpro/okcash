@@ -175,6 +175,7 @@ export class DiscordClient extends EventEmitter {
             ),
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
+            model: 'gpt-4-turbo-preview', // gpt-3.5 is default
             evaluators: [],
             providers: [voiceStateProvider, timeProvider, flavorProvider],
             // filter out the default ELABORATE action
