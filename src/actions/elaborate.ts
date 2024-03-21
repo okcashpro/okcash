@@ -18,13 +18,13 @@ export default {
     description:
         "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly!",
     validate: async (runtime: BgentRuntime, message: Message) => {
-        const recentMessagesData = await runtime.messageManager.getMemoriesByIds({
-            userIds: message.userIds!,
+        const recentMessagesData = await runtime.messageManager.getMemories({
+            room_id: message.room_id,
             count: 10,
             unique: false,
-        });
+          });
         const agentMessages = recentMessagesData.filter(
-            (m: { user_id: any; }) => m.user_id === message.agentId,
+            (m: { user_id: any; }) => m.user_id === runtime.agentId,
         );
 
         // check if the last messages were all continues=
@@ -51,7 +51,7 @@ export default {
         });
 
         let responseContent;
-        const { senderId, room_id, userIds: user_ids, agentId } = message;
+        const { userId, room_id } = message;
 
         for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
             const response = await runtime.completion({
@@ -61,10 +61,8 @@ export default {
 
             runtime.databaseAdapter.log({
                 body: { message, context, response },
-                user_id: senderId,
+                user_id: userId,
                 room_id,
-                user_ids: user_ids!,
-                agent_id: agentId!,
                 type: "elaborate",
             });
 
@@ -88,7 +86,7 @@ export default {
 
         // prevent repetition
         const messageExists = state.recentMessagesData
-            .filter((m: { user_id: any; }) => m.user_id === message.agentId)
+            .filter((m: { user_id: any; }) => m.user_id === runtime.agentId)
             .slice(0, maxContinuesInARow + 1)
             .some((m: { content: any; }) => m.content === message.content);
 
@@ -101,14 +99,13 @@ export default {
             state: State,
             responseContent: Content,
         ) => {
-            const { agentId, userIds, room_id } = message;
+            const { room_id } = message;
 
             responseContent.content = responseContent.content?.trim();
 
             if (responseContent.content) {
                 await runtime.messageManager.createMemory({
-                    user_ids: userIds!,
-                    user_id: agentId!,
+                    user_id: runtime.agentId,
                     content: responseContent,
                     room_id,
                     embedding: embeddingZeroVector,
@@ -125,7 +122,7 @@ export default {
         // if so, then we should change the action to WAIT
         if (responseContent.action === "ELABORATE") {
             const agentMessages = state.recentMessagesData
-                .filter((m: { user_id: any; }) => m.user_id === message.agentId)
+                .filter((m: { user_id: any; }) => m.user_id === runtime.agentId)
                 .map((m: { content: any; }) => (m.content as Content).action);
 
             const lastMessages = agentMessages.slice(0, maxContinuesInARow);
