@@ -7,6 +7,8 @@ interface Settings {
     DISCORD_API_TOKEN: string;
     DISCORD_IGNORED_CHANNEL_IDS: string[];
 
+    DB_PATH: string;
+
     OPENAI_API_KEY: string;
     OPENAI_MODEL: string;
     // OPENAI_WHISPER_PROMPT: string;
@@ -31,6 +33,8 @@ let settings: Settings = {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
     OPENAI_MODEL: process.env.OPENAI_MODEL || 'gpt-3.5-turbo-1106',
     // OPENAI_WHISPER_PROMPT: 'Hello, Ruby.',
+
+    DB_PATH: process.env.DB_PATH || ':memory:',
 
     ELEVENLABS_XI_API_KEY: process.env.ELEVENLABS_XI_API_KEY || '',
     ELEVENLABS_MODEL_ID: process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',

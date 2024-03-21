@@ -6,6 +6,8 @@ This is an example repo of an AI chatbot with Discord voice channels, powered by
 - Get API keys for Discord and Eleven Labs
 - Set the appropriate environment variables
 
+For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
+
 ## Environment Variables
 
 ### General

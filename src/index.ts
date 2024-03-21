@@ -19,6 +19,8 @@ import settings from "./settings.ts";
 import { speechToText } from "./speechtotext.ts";
 import { load } from "./sqlite_vss.ts";
 
+
+
 // SQLite adapter
 const adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
 
