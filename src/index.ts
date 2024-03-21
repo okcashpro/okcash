@@ -5,27 +5,50 @@ import { Action, BgentRuntime, Content, Message, SqliteDatabaseAdapter, State, c
 import { UUID } from 'crypto';
 import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes, VoiceState } from "discord.js";
 import { EventEmitter } from "events";
+import { File } from "formdata-node";
+import OpenAI from "openai";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from 'uuid-by-string';
 import elaborate_discord from './actions/elaborate.ts';
 import joinvoice from './actions/joinvoice.ts';
 import leavevoice from './actions/leavevoice.ts';
+import { AudioMonitor } from './audioMonitor.ts';
 import { textToSpeech } from "./elevenlabs.ts";
+import lore from './lore.json' assert { type: 'json' };
 import flavorProvider from "./providers/flavor.ts";
 import timeProvider from "./providers/time.ts";
 import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
-import { speechToText } from "./speechtotext.ts";
 import { load } from "./sqlite_vss.ts";
-
-
+import { getWavHeader } from "./util.ts";
 
 // SQLite adapter
 const adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
 
 // Load sqlite-vss
 load((adapter as SqliteDatabaseAdapter).db);
+
+// lore.json
+// [
+//     {
+//         "source": "book",
+//         "content": {
+//         "content": "morning, day of The Event: Ruby takes a photo of a rundown cafeteria and texts it with a message 'Rescue me.' Ruby is new to Ennis, Ohio and expresses discontent with her new surroundings."
+//         },
+//         "embedContent": {
+//         "content": "morning, day of The Event: Ruby takes a photo of a rundown cafeteria and texts it with a message 'Rescue me.' Ruby is new to Ennis, Ohio and expresses discontent with her new surroundings."
+//         },
+//         "embedding": [ vector(1536) ]
+//     },
+// ...
+// ]
+
+// for each item in lore, insert into memories with the type "lore"
+for (const item of lore as { source: string, content: Content, embedding: number[] }[]) {
+    const { source, content, embedding } = item;
+    adapter.db.prepare('INSERT INTO memories (type, content, embedding) VALUES (?, ?, ?)').run('lore', JSON.stringify(content), JSON.stringify(embedding));
+}
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -127,8 +150,6 @@ const commands = [
     },
 ];
 
-
-
 const rest = new REST({ version: '9' }).setToken(settings.DISCORD_API_TOKEN);
 
 (async () => {
@@ -145,6 +166,40 @@ const rest = new REST({ version: '9' }).setToken(settings.DISCORD_API_TOKEN);
         console.error(error);
     }
 })();
+
+console.log('OpenAI key', settings.OPENAI_API_KEY);
+var openAI = new OpenAI({
+    apiKey: settings.OPENAI_API_KEY
+});
+
+export async function speechToText(buffer: Buffer) {
+    var wavHeader = getWavHeader(buffer.length, 16000);
+
+    const file = new File([wavHeader, buffer], 'audio.wav', { type: 'audio/wav' });
+
+    console.log('Transcribing audio... key', settings.OPENAI_API_KEY);
+    // This actually returns a string instead of the expected Transcription object 🙃
+    var result = await openAI.audio.transcriptions.create({
+        model: 'whisper-1',
+        language: 'en',
+        response_format: 'text',
+        // prompt: settings.OPENAI_WHISPER_PROMPT,
+        file: file,
+    }, 
+    {
+        headers: {
+            "Authentication": `Bearer ${settings.OPENAI_API_KEY}`,
+        }
+    }) as any as string;
+    console.log(result);
+    result = result.trim();
+    console.log(`Speech to text: ${result}`);
+    if (result == null || result.length < 5) {
+        return null;
+    }
+    return result;
+}
+
 
 export class DiscordClient extends EventEmitter {
     private apiToken: string;
@@ -212,6 +267,7 @@ export class DiscordClient extends EventEmitter {
             const channelId = channel.id;
             const userIdUUID = uuid(userId) as UUID;
             this.listenToSpokenAudio(userIdUUID, userName, channelId, audioStream, async (responseAudioStream) => {
+                console.log("responseAudioStream", responseAudioStream)
                 console.log("Got response audio stream");
                 responseAudioStream.on('close', () => {
                     console.log("Response audio stream closed");
@@ -467,6 +523,10 @@ export class DiscordClient extends EventEmitter {
         discordClient: Client,
         discordMessage: DiscordMessage
     }): Promise<Content> {
+        console.log("*** message", message);
+        if(!message.content.content) {
+            return { content: '', action: 'IGNORE' };
+        }
         if (!state) {
             state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
         }
@@ -496,10 +556,14 @@ export class DiscordClient extends EventEmitter {
         await _saveRequestMessage(message, state as State)
 
         if (shouldIgnore) {
+            console.log("shouldIgnore", shouldIgnore)
             return { content: '', action: 'IGNORE' };
         }
 
-        state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
+        const nickname = this.client.user?.displayName;
+        console.log("nickname", nickname)
+        state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage, agentName: nickname || "Ruby" }
+
 
         if (!shouldRespond && hasInterest) {
             const shouldRespondContext = composeContext({
@@ -511,6 +575,8 @@ export class DiscordClient extends EventEmitter {
                 context: shouldRespondContext,
                 stop: []
             })
+
+            console.log('shouldRespond response:', response)
 
             // check if the response is true or false
             if (response.toLowerCase().includes('respond')) {
@@ -532,7 +598,11 @@ export class DiscordClient extends EventEmitter {
             return { content: '', action: 'IGNORE' };
         }
 
-        console.log("Responding to message");
+        if(!nickname) {
+            console.log('No nickname found for bot');
+        }
+
+        console.log("nickname", nickname)
 
         const context = composeContext({
             state,
@@ -700,11 +770,45 @@ export class DiscordClient extends EventEmitter {
         }
     }
 
-    /**
-     * Listens on an audio stream and responds with an audio stream.
-     */
-    async listenToSpokenAudio(userId: UUID, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
+    async listenToSpokenAudio(userId: string, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
+    
+        const buffers: Buffer[] = [];
+        let totalLength = 0;
+        const maxSilenceTime = 1000; // Maximum pause duration in milliseconds
+        let lastChunkTime = Date.now();
+    
+        const monitor = new AudioMonitor(inputStream, 1000000, async (buffer) => {
+            const currentTime = Date.now();
+            const silenceDuration = currentTime - lastChunkTime;
+    
+            buffers.push(buffer);
+            totalLength += buffer.length;
+            lastChunkTime = currentTime;
+    
+            if (silenceDuration > maxSilenceTime || totalLength >= 1000000) {
+                const combinedBuffer = Buffer.concat(buffers, totalLength);
+                buffers.length = 0;
+                totalLength = 0;
+    
+                if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
+                    const readable = new Readable({
+                        read() {
+                            this.push(combinedBuffer);
+                            this.push(null);
+                        }
+                    });
+    
+                    callback(readable);
+                } else {
+                    let responseStream = await this.respondToSpokenAudio(userId as UUID, userName, channelId, combinedBuffer, requestedResponseType);
+                    console.log("responseStream is", responseStream);
+                    if (responseStream) {
+                        callback(responseStream as Readable);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -713,8 +817,8 @@ export class DiscordClient extends EventEmitter {
     async respondToSpokenAudio(userId: UUID, userName: string, channelId: string, inputBuffer: Buffer, requestedResponseType?: ResponseType): Promise<Readable | null> {
         console.log("Responding to spoken audio");
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
-        const sstService = speechToText;
-        const text = await sstService(inputBuffer);
+        const text = await speechToText(inputBuffer);
+        console.log("Got text from speech to text:", text);
         if (requestedResponseType == ResponseType.SPOKEN_TEXT) {
             return Readable.from(text as string);
         } else {
@@ -942,6 +1046,7 @@ export class DiscordClient extends EventEmitter {
         }
 
         connection.receiver.speaking.on('start', (userId: string) => {
+            console.log("user speaking:", userId);
             const user = channel.members.get(userId);
             if (user?.user.bot) return;
             this.monitorMember(user as GuildMember, channel);
@@ -949,6 +1054,7 @@ export class DiscordClient extends EventEmitter {
         });
 
         connection.receiver.speaking.on('end', async (userId: string) => {
+            console.log("user stopped speaking:", userId);
             const user = channel.members.get(userId);
             if (user?.user.bot) return;
             this.streams.get(userId)?.emit('speakingStopped');
@@ -956,6 +1062,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async monitorMember(member: GuildMember, channel: BaseGuildVoiceChannel) {
+        console.log("monitoring member:", member.displayName);
         const userId = member.id;
         const userName = member.displayName;
         const connection = getVoiceConnection(member.guild.id);
