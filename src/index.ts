@@ -15,36 +15,24 @@ import joinvoice from './actions/joinvoice.ts';
 import leavevoice from './actions/leavevoice.ts';
 import { AudioMonitor } from './audioMonitor.ts';
 import { textToSpeech } from "./elevenlabs.ts";
-import lore from './lore.json' assert { type: 'json' };
 import flavorProvider from "./providers/flavor.ts";
 import timeProvider from "./providers/time.ts";
 import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { load } from "./sqlite_vss.ts";
 import { getWavHeader } from "./util.ts";
-
+import fs from 'fs';
+import bio from './bio.ts';
 // SQLite adapter
 const adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
 
 // Load sqlite-vss
 load((adapter as SqliteDatabaseAdapter).db);
 
-// lore.json
-// [
-//     {
-//         "source": "book",
-//         "content": {
-//         "content": "morning, day of The Event: Ruby takes a photo of a rundown cafeteria and texts it with a message 'Rescue me.' Ruby is new to Ennis, Ohio and expresses discontent with her new surroundings."
-//         },
-//         "embedContent": {
-//         "content": "morning, day of The Event: Ruby takes a photo of a rundown cafeteria and texts it with a message 'Rescue me.' Ruby is new to Ennis, Ohio and expresses discontent with her new surroundings."
-//         },
-//         "embedding": [ vector(1536) ]
-//     },
-// ...
-// ]
-
 // for each item in lore, insert into memories with the type "lore"
+// check if lore.json exists, if it does thn read it
+const exists = fs.existsSync('lore.json');
+const lore = exists ? JSON.parse(fs.readFileSync('lore.json', 'utf8')) : [];
 for (const item of lore as { source: string, content: Content, embedding: number[] }[]) {
     const { source, content, embedding } = item;
     adapter.db.prepare('INSERT INTO memories (type, content, embedding) VALUES (?, ?, ?)').run('lore', JSON.stringify(content), JSON.stringify(embedding));
@@ -231,7 +219,7 @@ export class DiscordClient extends EventEmitter {
             databaseAdapter: adapter,
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
-            model: 'gpt-4-turbo-preview', // gpt-3.5 is default
+            model: 'gpt-3.5-turbo', // gpt-3.5 is default
             evaluators: [],
             providers: [voiceStateProvider, timeProvider, flavorProvider],
             // filter out the default ELABORATE action
@@ -245,7 +233,6 @@ export class DiscordClient extends EventEmitter {
         });
 
         this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any; }; }) => {
-            console.log("ignored channels:", settings.DISCORD_IGNORED_CHANNEL_IDS);
             console.log(`Logged in as ${readyClient.user?.tag}`);
             console.log('Use this URL to add the bot to your server:');
             console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
@@ -281,9 +268,9 @@ export class DiscordClient extends EventEmitter {
 
         this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
             if (message.interaction) return;
-            console.log("Got message");
-
+        
             if (message.author?.bot) return;
+
 
             // Check if the message has already been processed
             if (message.id === lastProcessedMessageId) {
@@ -297,11 +284,6 @@ export class DiscordClient extends EventEmitter {
             const userName = message.author.username;
             const channelId = message.channel.id;
             const textContent = message.content;
-
-            if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channelId)) {
-                console.log("Ignoring message in ignored channel");
-                return;
-            }
 
             // remove any channels that have not been active for 10 hours
             for (let [channelId, channelData] of Object.entries(interestChannels)) {
@@ -441,10 +423,6 @@ export class DiscordClient extends EventEmitter {
                 if (!guild) {
                     return;
                 }
-                if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channelId)) {
-                    await interaction.reply('Voice channel not found!');
-                    return;
-                }
                 const voiceChannel = interaction.guild.channels.cache.find(channel => channel.id === channelId && channel.type === ChannelType.GuildVoice);
 
                 if (!voiceChannel) {
@@ -528,7 +506,7 @@ export class DiscordClient extends EventEmitter {
             return { content: '', action: 'IGNORE' };
         }
         if (!state) {
-            state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
+            state = await this.runtime.composeState(message, { discordClient, discordMessage });
         }
         // remove the elaborate action 
 
@@ -562,8 +540,7 @@ export class DiscordClient extends EventEmitter {
 
         const nickname = this.client.user?.displayName;
         console.log("nickname", nickname)
-        state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage, agentName: nickname || "Ruby" }
-
+        state = await this.runtime.composeState(message, { discordClient, discordMessage, agentName: nickname || "Ruby" });
 
         if (!shouldRespond && hasInterest) {
             const shouldRespondContext = composeContext({
@@ -737,7 +714,7 @@ export class DiscordClient extends EventEmitter {
                 userId,
                 userName || 'Bot',
                 (userName || 'Bot') + '@discord',
-                JSON.stringify({ summary: 'I am a bot' }),
+                JSON.stringify({ summary: '' }),
             );
 
             console.log(`User ${userName} created successfully.`);
@@ -775,10 +752,10 @@ export class DiscordClient extends EventEmitter {
     
         const buffers: Buffer[] = [];
         let totalLength = 0;
-        const maxSilenceTime = 1000; // Maximum pause duration in milliseconds
+        const maxSilenceTime = 500; // Maximum pause duration in milliseconds
         let lastChunkTime = Date.now();
     
-        const monitor = new AudioMonitor(inputStream, 1000000, async (buffer) => {
+        const monitor = new AudioMonitor(inputStream, 10000000, async (buffer) => {
             const currentTime = Date.now();
             const silenceDuration = currentTime - lastChunkTime;
     
@@ -1019,10 +996,6 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async joinChannel(channel: BaseGuildVoiceChannel) {
-        if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channel.id)) {
-            console.log("Ignoring channel:", channel.name);
-            return;
-        }
         console.log("joining channel:", channel.name);
         const oldConnection = getVoiceConnection(channel.guildId as any);
         if (oldConnection) {

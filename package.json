@@ -19,7 +19,7 @@
     "@discordjs/voice": "^0.16.1",
     "@types/fluent-ffmpeg": "^2.1.24",
     "better-sqlite3": "^9.4.3",
-    "bgent": "^0.1.5",
+    "bgent": "^0.1.7",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "ffmpeg-static": "^5.2.0",

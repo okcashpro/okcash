@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 const instructions = 'The above code was taken from my codebase at https://github.com/jointhealliance/bgent-discord-voice.'
 
 // Patterns to ignore
-const ignorePatterns = ['cache', 'logger', 'index', 'data', 'templates']
+const ignorePatterns = ['cache', 'logger', 'index', 'data', 'templates', 'providers', 'actions', 'sqlite', 'settings', 'util']
 
 // __dirname is not defined in ES module scope, so we need to create it
 const __filename = fileURLToPath(import.meta.url)
