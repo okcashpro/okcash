@@ -11,9 +11,6 @@ interface Settings {
     OPENAI_MODEL: string;
     // OPENAI_WHISPER_PROMPT: string;
 
-    SUPABASE_URL: string;
-    SUPABASE_API_KEY: string;
-
     // https://elevenlabs.io/docs/api-reference/streaming
     ELEVENLABS_XI_API_KEY: string;
     ELEVENLABS_MODEL_ID: string;
@@ -34,9 +31,6 @@ let settings: Settings = {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
     OPENAI_MODEL: process.env.OPENAI_MODEL || 'gpt-3.5-turbo-1106',
     // OPENAI_WHISPER_PROMPT: 'Hello, Ruby.',
-
-    SUPABASE_URL: process.env.SUPABASE_URL || '',
-    SUPABASE_API_KEY: process.env.SUPABASE_API_KEY || '',
 
     ELEVENLABS_XI_API_KEY: process.env.ELEVENLABS_XI_API_KEY || '',
     ELEVENLABS_MODEL_ID: process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',

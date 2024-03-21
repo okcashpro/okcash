@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { NoSubscriberBehavior, StreamType, VoiceConnection, createAudioPlayer, createAudioResource, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
-import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Action, BgentRuntime, Content, Message, State, SupabaseDatabaseAdapter, composeContext, defaultActions, embeddingZeroVector, parseJSONObjectFromText } from "bgent";
+import Database from "better-sqlite3";
+import { Action, BgentRuntime, Content, Message, SqliteDatabaseAdapter, State, composeContext, defaultActions, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
 import { UUID } from 'crypto';
 import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes, VoiceState } from "discord.js";
 import { EventEmitter } from "events";
@@ -12,17 +12,18 @@ import elaborate_discord from './actions/elaborate.ts';
 import joinvoice from './actions/joinvoice.ts';
 import leavevoice from './actions/leavevoice.ts';
 import { textToSpeech } from "./elevenlabs.ts";
-import timeProvider from "./providers/time.ts";
 import flavorProvider from "./providers/flavor.ts";
+import timeProvider from "./providers/time.ts";
 import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { speechToText } from "./speechtotext.ts";
-import { messageHandlerTemplate } from "./template.ts";
+import { load } from "./sqlite_vss.ts";
 
-const supabaseClient = createClient(
-    settings.SUPABASE_URL!,
-    settings.SUPABASE_API_KEY!,
-);
+// SQLite adapter
+const adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
+
+// Load sqlite-vss
+load((adapter as SqliteDatabaseAdapter).db);
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -170,11 +171,7 @@ export class DiscordClient extends EventEmitter {
         });
 
         this.runtime = new BgentRuntime({
-            databaseAdapter: new SupabaseDatabaseAdapter(
-                settings.SUPABASE_URL!,
-                settings.SUPABASE_API_KEY!,
-            ),
-            template: messageHandlerTemplate,
+            databaseAdapter: adapter,
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
             model: 'gpt-4-turbo-preview', // gpt-3.5 is default
@@ -290,24 +287,15 @@ export class DiscordClient extends EventEmitter {
 
                 await interaction.deferReply();
 
-                await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                await this.ensureUserExists(supabaseClient, userIdUUID, userName);
-                await this.ensureRoomExists(supabaseClient, room_id);
-                await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
-                await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
+                await this.ensureUserExists(agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                await this.ensureUserExists(userIdUUID, userName);
+                await this.ensureRoomExists(room_id);
+                await this.ensureParticipantInRoom(userIdUUID, room_id);
+                await this.ensureParticipantInRoom(agentId, room_id);
 
                 if (newName) {
                     try {
-                        const { error } = await supabaseClient
-                            .from('accounts')
-                            .update({ name: newName })
-                            .eq('id', getUuid(interaction.client.user?.id));
-
-                        if (error) {
-                            console.error('Error updating agent name:', error);
-                            await interaction.editReply('An error occurred while updating the agent name.');
-                            return;
-                        }
+                        adapter.db.prepare('UPDATE accounts SET name = ? WHERE id = ?').run(newName, getUuid(interaction.client.user?.id));
 
                         const guild = interaction.guild;
                         if (guild) {
@@ -336,16 +324,13 @@ export class DiscordClient extends EventEmitter {
 
                         await interaction.deferReply();
 
-                        await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                        await this.ensureUserExists(supabaseClient, userIdUUID, userName);
-                        await this.ensureRoomExists(supabaseClient, room_id);
-                        await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
-                        await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
+                        await this.ensureUserExists(agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                        await this.ensureUserExists(userIdUUID, userName);
+                        await this.ensureRoomExists(room_id);
+                        await this.ensureParticipantInRoom(userIdUUID, room_id);
+                        await this.ensureParticipantInRoom(agentId, room_id);
 
-                        await supabaseClient
-                            .from('accounts')
-                            .update({ details: { summary: newBio } })
-                            .eq('id', getUuid(interaction.client.user?.id));
+                        adapter.db.prepare('UPDATE accounts SET details = ? WHERE id = ?').run(JSON.stringify({ summary: newBio }), getUuid(interaction.client.user?.id));
 
                         await interaction.editReply(`Agent's bio has been updated to: ${newBio}`);
                     } catch (error) {
@@ -364,11 +349,11 @@ export class DiscordClient extends EventEmitter {
 
                 await interaction.deferReply();
 
-                await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-                await this.ensureUserExists(supabaseClient, userIdUUID, userName);
-                await this.ensureRoomExists(supabaseClient, room_id);
-                await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
-                await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
+                await this.ensureUserExists(agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+                await this.ensureUserExists(userIdUUID, userName);
+                await this.ensureRoomExists(room_id);
+                await this.ensureParticipantInRoom(userIdUUID, room_id);
+                await this.ensureParticipantInRoom(agentId, room_id);
 
                 const attachment = interaction.options.getAttachment('image');
                 if (attachment) {
@@ -403,12 +388,12 @@ export class DiscordClient extends EventEmitter {
                     return;
                 }
                 const voiceChannel = interaction.guild.channels.cache.find(channel => channel.id === channelId && channel.type === ChannelType.GuildVoice);
-            
+
                 if (!voiceChannel) {
-                  await interaction.reply('Voice channel not found!');
-                  return;
+                    await interaction.reply('Voice channel not found!');
+                    return;
                 }
-            
+
                 try {
                     this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
                     await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
@@ -419,12 +404,12 @@ export class DiscordClient extends EventEmitter {
             }
             else if (interaction.commandName === 'leavechannel') {
                 const connection = getVoiceConnection(interaction.guildId as any);
-            
+
                 if (!connection) {
                     await interaction.reply('Not currently in a voice channel.');
                     return;
                 }
-            
+
                 try {
                     connection.destroy();
                     await interaction.reply('Left the voice channel.');
@@ -440,29 +425,18 @@ export class DiscordClient extends EventEmitter {
         const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
         const room_id = getUuid(this.client.user?.id as string) as UUID;
 
-        await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-        await this.ensureRoomExists(supabaseClient, room_id);
-        await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
+        await this.ensureUserExists(agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+        await this.ensureRoomExists(room_id);
+        await this.ensureParticipantInRoom(agentId, room_id);
 
-        const { data: botData, error: botError } = await supabaseClient
-            .from('accounts')
-            .select('name')
-            .eq('id', agentId)
-            .single();
-
-        if (botError) {
-            console.error('Error fetching bot account:', botError);
-            return;
-        }
+        const botData = adapter.db.prepare('SELECT name FROM accounts WHERE id = ?').get(agentId) as { name: string };
 
         if (!botData.name) {
             const botName = await this.fetchBotName(settings.DISCORD_API_TOKEN);
-            await supabaseClient
-                .from('accounts')
-                .update({ name: botName })
-                .eq('id', agentId);
+            adapter.db.prepare('UPDATE accounts SET name = ? WHERE id = ?').run(botName, agentId);
         }
     }
+
 
     /**
     * Handle an incoming message, processing it and returning a response.
@@ -491,35 +465,29 @@ export class DiscordClient extends EventEmitter {
         discordClient: Client,
         discordMessage: DiscordMessage
     }): Promise<Content> {
-        if(!state) {
-            state = {...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
+        if (!state) {
+            state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
         }
         // remove the elaborate action 
 
         const _saveRequestMessage = async (message: Message, state: State) => {
-            const { content: senderContent, /* senderId, userIds, room_id */ } = message
+            const { content: senderContent, /* userId, userIds, room_id */ } = message
 
             // we run evaluation here since some evals could be modulo based, and we should run on every message
             if ((senderContent as Content).content) {
-                const { data: data2, error } = await supabaseClient.from('messages').select('*').eq('user_id', message.senderId)
-                    .eq('room_id', message.room_id)
-                    .order('created_at', { ascending: false })
+                const data2 = adapter.db.prepare('SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1').all('messages', message.userId, message.room_id) as { content: Content }[];
 
-                if (error) {
-                    console.log('error', error)
-                    // TODO: dont need this recall
-                } else if (data2.length > 0 && data2[0].content === message.content) {
+                if (data2.length > 0 && data2[0].content === message.content) {
                     console.log('already saved', data2)
                 } else {
                     await this.runtime.messageManager.createMemory({
-                        user_ids: [message.senderId, message.agentId, ...message.userIds],
-                        user_id: message.senderId!,
+                        user_id: message.userId!,
                         content: senderContent,
                         room_id: message.room_id,
                         embedding: embeddingZeroVector
                     })
                 }
-                await this.runtime.evaluate(message, {...state, discordMessage, discordClient })
+                await this.runtime.evaluate(message, { ...state, discordMessage, discordClient })
             }
         }
 
@@ -529,7 +497,7 @@ export class DiscordClient extends EventEmitter {
             return { content: '', action: 'IGNORE' };
         }
 
-        state = {...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
+        state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
 
         if (!shouldRespond && hasInterest) {
             const shouldRespondContext = composeContext({
@@ -549,7 +517,7 @@ export class DiscordClient extends EventEmitter {
                 shouldRespond = false;
             } else if (response.toLowerCase().includes('stop')) {
                 shouldRespond = false;
-                if(interestChannels)
+                if (interestChannels)
                     delete interestChannels[discordMessage.channelId];
             } else {
                 console.error('Invalid response:', response);
@@ -574,7 +542,7 @@ export class DiscordClient extends EventEmitter {
         }
 
         let responseContent: Content | null = null
-        const { senderId, room_id, userIds: user_ids, agentId } = message
+        const { userId, room_id } = message
 
         for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
             console.log('*** RESPONDING:')
@@ -584,31 +552,31 @@ export class DiscordClient extends EventEmitter {
                 stop: []
             })
 
-            supabaseClient
-                .from('logs')
-                .insert({
-                    body: { message, context, response },
-                    user_id: senderId,
-                    room_id,
-                    user_ids: user_ids!,
-                    agent_id: agentId!,
-                    type: 'main_completion'
-                })
-                .then(({ error }) => {
-                    if (error) {
-                        console.error('error', error)
-                    }
-                })
+            const values = {
+                body: response,
+                user_id: userId,
+                room_id,
+                type: 'response'
+            }
+
+            console.log("values", values)
+
+            adapter.db.prepare('INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)').run([
+                values.body,
+                values.user_id,
+                values.room_id,
+                values.type
+            ])
 
             console.log('raw response is', response)
 
             const parsedResponse = parseJSONObjectFromText(
                 response
             ) as unknown as Content
-
+                console.log("parsedResponse", parsedResponse)
             if (
-                (parsedResponse?.user as string)?.includes(
-                    (state as State).agentName as string
+                !(parsedResponse?.user as string)?.includes(
+                    (state as State).senderName as string
                 )
             ) {
                 responseContent = {
@@ -631,13 +599,13 @@ export class DiscordClient extends EventEmitter {
             state: State,
             responseContent: Content
         ) => {
-            const { agentId, userIds, room_id } = message
+            const { room_id } = message
+            const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
             responseContent.content = responseContent.content?.trim()
 
             if (responseContent.content) {
                 await this.runtime.messageManager.createMemory({
-                    user_ids: userIds!,
                     user_id: agentId!,
                     content: responseContent,
                     room_id,
@@ -678,26 +646,13 @@ export class DiscordClient extends EventEmitter {
         return data.username; // Or data.tag for username#discriminator
     }
 
-    // Modify this function to include fetching the bot's name if the user is an agent
+    // Modify this function to use SQLite
     async ensureUserExists(
-        supabase: SupabaseClient,
         userId: UUID,
         userName: string | null,
         botToken?: string,
     ) {
-        const { data, error } = await supabase
-            .from('accounts')
-            .select('*')
-            .eq('id', userId)
-            .single();
-
-        if (error) {
-            console.error('Error fetching user:', error);
-        }
-
-        if (data) {
-            // console.log('User exists:', data);
-        }
+        const data = adapter.db.prepare('SELECT * FROM accounts WHERE id = ?').get(userId);
 
         if (!data) {
             // If userName is not provided and botToken is, fetch the bot's name
@@ -706,78 +661,40 @@ export class DiscordClient extends EventEmitter {
             }
 
             // User does not exist, so create them
-            const { error } = await supabase.from('accounts').insert([
-                {
-                    id: userId,
-                    name: userName || 'Bot',
-                    email: (userName || 'Bot') + '@discord',
-                    details: { summary: 'No information yet.' },
-                },
-            ]);
+            adapter.db.prepare('INSERT INTO accounts (id, name, email, details) VALUES (?, ?, ?, ?)').run(
+                userId,
+                userName || 'Bot',
+                (userName || 'Bot') + '@discord',
+                JSON.stringify({ summary: 'I am a bot' }),
+            );
 
-            if (error) {
-                console.error('Error creating user:', error);
-            } else {
-                console.log(`User ${userName} created successfully.`);
-            }
+            console.log(`User ${userName} created successfully.`);
         }
     }
 
-    // Function to ensure a room exists
-    async ensureRoomExists(supabase: SupabaseClient, roomId: UUID) {
-        const { data, error } = await supabase
-            .from('rooms') // Replace 'rooms' with your actual rooms table name
-            .select('*')
-            .eq('id', roomId)
-            .single();
-
-        if (error) {
-            console.error('Error fetching room:', error);
-        }
+    // Modify this function to use SQLite  
+    async ensureRoomExists(roomId: UUID) {
+        const data = adapter.db.prepare('SELECT * FROM rooms WHERE id = ?').get(roomId);
 
         if (!data) {
             // Room does not exist, so create it
-            const { error } = await supabase
-                .from('rooms') // Replace 'rooms' with your actual rooms table name
-                .insert([{ id: roomId }]);
-
-            if (error) {
-                console.error('Error creating room:', error);
-            } else {
-                console.log(`Room ${roomId} created successfully.`);
-            }
+            adapter.db.prepare('INSERT INTO rooms (id) VALUES (?)').run(roomId);
+            console.log(`Room ${roomId} created successfully.`);
         }
     }
 
-    // Function to ensure a participant is linked to a room
+    // Modify this function to use SQLite
     async ensureParticipantInRoom(
-        supabase: SupabaseClient,
         userId: UUID,
         roomId: UUID,
     ) {
-        console.log('*** ensureParticipantInRoom', userId, roomId)
-        const { data, error } = await supabase
-            .from('participants') // Replace 'participants' with your actual participants table name
-            .select('*')
-            .eq('user_id', userId)
-            .eq('room_id', roomId)
-            .single();
-
-        if (error) {
-            console.error('Error fetching participant:', error);
-        }
+        console.log('*** ensureParticipantInRoom', userId, roomId);
+        const data = adapter.db.prepare('SELECT * FROM participants WHERE user_id = ? AND room_id = ?').get(userId, roomId);
 
         if (!data) {
             // Participant does not exist, so link user to room
-            const { error } = await supabase
-                .from('participants') // Replace 'participants' with your actual participants table name
-                .insert([{ user_id: userId, room_id: roomId }]);
-
-            if (error) {
-                console.error('Error linking user to room:', error);
-            } else {
-                console.log(`User ${userId} linked to room ${roomId} successfully.`);
-            }
+            adapter.db.prepare('INSERT INTO participants (user_id, room_id) VALUES (?, ?)').run(userId, roomId);
+            console.log(`User ${userId} linked to room ${roomId} successfully.`);
         }
     }
 
@@ -927,11 +844,11 @@ export class DiscordClient extends EventEmitter {
 
         const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
-        await this.ensureUserExists(supabaseClient, agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
-        await this.ensureUserExists(supabaseClient, userIdUUID, userName);
-        await this.ensureRoomExists(supabaseClient, room_id);
-        await this.ensureParticipantInRoom(supabaseClient, userIdUUID, room_id);
-        await this.ensureParticipantInRoom(supabaseClient, agentId, room_id);
+        await this.ensureUserExists(agentId, await this.fetchBotName(settings.DISCORD_API_TOKEN), settings.DISCORD_API_TOKEN);
+        await this.ensureUserExists(userIdUUID, userName);
+        await this.ensureRoomExists(room_id);
+        await this.ensureParticipantInRoom(userIdUUID, room_id);
+        await this.ensureParticipantInRoom(agentId, room_id);
 
         const callback = (response: string) => {
             // Send the response back to the same channel
@@ -945,9 +862,7 @@ export class DiscordClient extends EventEmitter {
         const response = await this.handleMessage({
             message: {
                 content: { content: input, action: 'WAIT' },
-                senderId: userIdUUID,
-                agentId,
-                userIds: [userIdUUID, agentId],
+                userId: userIdUUID,
                 room_id,
             },
             hasInterest,
