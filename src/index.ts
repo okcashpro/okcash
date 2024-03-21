@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { NoSubscriberBehavior, StreamType, VoiceConnection, createAudioPlayer, createAudioResource, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Action, BgentRuntime, Content, Message, State, SupabaseDatabaseAdapter, composeContext, defaultActions, embeddingZeroVector, messageHandlerTemplate, parseJSONObjectFromText } from "bgent";
+import { Action, BgentRuntime, Content, Message, State, SupabaseDatabaseAdapter, composeContext, defaultActions, embeddingZeroVector, parseJSONObjectFromText } from "bgent";
 import { UUID } from 'crypto';
 import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes, VoiceState } from "discord.js";
 import { EventEmitter } from "events";
@@ -17,6 +17,7 @@ import flavorProvider from "./providers/flavor.ts";
 import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { speechToText } from "./speechtotext.ts";
+import { messageHandlerTemplate } from "./template.ts";
 
 const supabaseClient = createClient(
     settings.SUPABASE_URL!,
@@ -173,6 +174,7 @@ export class DiscordClient extends EventEmitter {
                 settings.SUPABASE_URL!,
                 settings.SUPABASE_API_KEY!,
             ),
+            template: messageHandlerTemplate,
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
             model: 'gpt-4-turbo-preview', // gpt-3.5 is default
