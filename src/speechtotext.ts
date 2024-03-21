@@ -27,7 +27,7 @@ export async function speechToText(buffer: Buffer) {
             "Authentication": `Bearer ${settings.OPENAI_API_KEY}`,
         }
     }) as any as string;
-    console.log(result);
+
     result = result.trim();
     console.log(`Speech to text: ${result}`);
     if (result == null || result.length < 5) {

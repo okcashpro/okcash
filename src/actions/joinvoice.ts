@@ -21,8 +21,6 @@ export default {
 
     const client = state.discordClient as Client;
 
-    console.log("client.voice.adapters", client.voice.adapters)
-
     // Check if the client is connected to any voice channel
     const isConnectedToVoice = client.voice.adapters.size === 0;
 
@@ -30,7 +28,6 @@ export default {
   },
   description: "Join a voice channel to participate in voice chat.",
   handler: async (runtime: BgentRuntime, message: Message, state: State): Promise<boolean> => {
-    console.log("calling JOIN_VOICE handler")
     if (!state) {
       console.error("State is not available.");
     }
@@ -41,8 +38,6 @@ export default {
     if (!state.discordMessage) {
       throw new Error("Discord message is not available in the state.");
     }
-
-    console.log("state.discordMessage", state.discordMessage)
 
     const id = (state?.discordMessage as DiscordMessage).guild?.id as string;
     const client = state.discordClient as Client;
@@ -59,12 +54,8 @@ export default {
       return name.includes(channelName) || channelName.includes(name) || replacedName.includes(channelName) || channelName.includes(replacedName);
     }
     );
-    console.log("voiceChannels", voiceChannels)
-    console.log("channelName", channelName)
-    console.log("targetChannel", targetChannel)
 
     if (targetChannel) {
-      console.log("joining voice channel", targetChannel.id)
       joinVoiceChannel({
         channelId: targetChannel.id,
         guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
@@ -72,7 +63,6 @@ export default {
       });
       return true;
     } else {
-      console.log("joining user's voice channel")
       const member = (state.discordMessage as DiscordMessage).member as GuildMember;
       if (member.voice.channel) {
         joinVoiceChannel({
@@ -105,7 +95,6 @@ You should only respond with the name of the voice channel or none, no commentar
 
       const context = composeContext({ template: messageTemplate, state: guessState as unknown as State });
 
-      console.log("((( context", context)
       let responseContent;
 
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
@@ -125,10 +114,7 @@ You should only respond with the name of the voice channel or none, no commentar
         }
       }
 
-      console.log("responseContent", responseContent)
-
       if (responseContent) {
-        console.log("responseContent", responseContent)
         // join the voice channel
         const channelName = responseContent.toLowerCase();
 
@@ -150,7 +136,7 @@ You should only respond with the name of the voice channel or none, no commentar
           return true;
         }
       }
-      console.log("replying to user")
+
       await (state.discordMessage as DiscordMessage).reply("I couldn't figure out which channel you wanted me to join.");
       return false;
     }

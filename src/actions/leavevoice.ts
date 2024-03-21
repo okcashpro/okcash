@@ -18,8 +18,6 @@ export default {
     }
   
     const client = state.discordClient as Client;
-
-    console.log("client.voice.adapters", client.voice.adapters)
   
     // Check if the client is connected to any voice channel
     const isConnectedToVoice = client.voice.adapters.size > 0;
