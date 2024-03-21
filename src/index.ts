@@ -6,6 +6,7 @@ import { UUID } from 'crypto';
 import { BaseGuildVoiceChannel, ChannelType, Client, Message as DiscordMessage, Events, GatewayIntentBits, Guild, GuildMember, Partials, Routes, VoiceState } from "discord.js";
 import { EventEmitter } from "events";
 import { File } from "formdata-node";
+import fs from 'fs';
 import OpenAI from "openai";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
@@ -21,7 +22,6 @@ import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { load } from "./sqlite_vss.ts";
 import { getWavHeader } from "./util.ts";
-import fs from 'fs';
 // SQLite adapter
 const adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
 
@@ -30,12 +30,15 @@ load((adapter as SqliteDatabaseAdapter).db);
 
 // for each item in lore, insert into memories with the type "lore"
 // check if lore.json exists, if it does thn read it
-const exists = fs.existsSync('lore.json');
-const lore = exists ? JSON.parse(fs.readFileSync('lore.json', 'utf8')) : [];
+const loreExists = fs.existsSync('lore.json');
+const lore = loreExists ? JSON.parse(fs.readFileSync('lore.json', 'utf8')) : [];
 for (const item of lore as { source: string, content: Content, embedding: number[] }[]) {
     const { source, content, embedding } = item;
     adapter.db.prepare('INSERT INTO memories (type, content, embedding) VALUES (?, ?, ?)').run('lore', JSON.stringify(content), JSON.stringify(embedding));
 }
+
+const bioExists = fs.existsSync('bioExists.json');
+const bio = bioExists ? JSON.parse(fs.readFileSync('bio.json', 'utf8')) : "";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -154,7 +157,7 @@ const rest = new REST({ version: '9' }).setToken(settings.DISCORD_API_TOKEN);
     }
 })();
 
-console.log('OpenAI key', settings.OPENAI_API_KEY);
+
 var openAI = new OpenAI({
     apiKey: settings.OPENAI_API_KEY
 });
@@ -172,15 +175,13 @@ export async function speechToText(buffer: Buffer) {
         response_format: 'text',
         // prompt: settings.OPENAI_WHISPER_PROMPT,
         file: file,
-    }, 
-    {
-        headers: {
-            "Authentication": `Bearer ${settings.OPENAI_API_KEY}`,
-        }
-    }) as any as string;
-    console.log(result);
+    },
+        {
+            headers: {
+                "Authentication": `Bearer ${settings.OPENAI_API_KEY}`,
+            }
+        }) as any as string;
     result = result.trim();
-    console.log(`Speech to text: ${result}`);
     if (result == null || result.length < 5) {
         return null;
     }
@@ -218,7 +219,7 @@ export class DiscordClient extends EventEmitter {
             databaseAdapter: adapter,
             token: settings.OPENAI_API_KEY as string,
             serverUrl: 'https://api.openai.com/v1',
-            model: 'gpt-4-turbo-preview', // gpt-3.5 is default
+            model: 'gpt-3.5-turbo', // gpt-3.5 is default
             evaluators: [],
             providers: [voiceStateProvider, timeProvider, flavorProvider],
             // filter out the default ELABORATE action
@@ -232,7 +233,6 @@ export class DiscordClient extends EventEmitter {
         });
 
         this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any; }; }) => {
-            console.log("ignored channels:", settings.DISCORD_IGNORED_CHANNEL_IDS);
             console.log(`Logged in as ${readyClient.user?.tag}`);
             console.log('Use this URL to add the bot to your server:');
             console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
@@ -254,8 +254,6 @@ export class DiscordClient extends EventEmitter {
             const channelId = channel.id;
             const userIdUUID = uuid(userId) as UUID;
             this.listenToSpokenAudio(userIdUUID, userName, channelId, audioStream, async (responseAudioStream) => {
-                console.log("responseAudioStream", responseAudioStream)
-                console.log("Got response audio stream");
                 responseAudioStream.on('close', () => {
                     console.log("Response audio stream closed");
                 });
@@ -268,9 +266,9 @@ export class DiscordClient extends EventEmitter {
 
         this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
             if (message.interaction) return;
-            console.log("Got message");
 
             if (message.author?.bot) return;
+
 
             // Check if the message has already been processed
             if (message.id === lastProcessedMessageId) {
@@ -284,11 +282,6 @@ export class DiscordClient extends EventEmitter {
             const userName = message.author.username;
             const channelId = message.channel.id;
             const textContent = message.content;
-
-            if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channelId)) {
-                console.log("Ignoring message in ignored channel");
-                return;
-            }
 
             // remove any channels that have not been active for 10 hours
             for (let [channelId, channelData] of Object.entries(interestChannels)) {
@@ -321,9 +314,7 @@ export class DiscordClient extends EventEmitter {
         this.client.on(Events.InteractionCreate, async (interaction) => {
             if (!interaction.isCommand()) return;
             if (interaction.commandName === 'setname') {
-                console.log('interaction', interaction);
                 const newName = interaction.options.get('name')?.value;
-                console.log('**** newName:', newName);
 
                 const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
                 const userIdUUID = getUuid(interaction.user.id) as UUID;
@@ -428,10 +419,6 @@ export class DiscordClient extends EventEmitter {
                 if (!guild) {
                     return;
                 }
-                if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channelId)) {
-                    await interaction.reply('Voice channel not found!');
-                    return;
-                }
                 const voiceChannel = interaction.guild.channels.cache.find(channel => channel.id === channelId && channel.type === ChannelType.GuildVoice);
 
                 if (!voiceChannel) {
@@ -464,6 +451,12 @@ export class DiscordClient extends EventEmitter {
                 }
             }
         });
+
+        // set the bio
+        if (bio) {
+            adapter.db.prepare('UPDATE accounts SET details = ? WHERE id = ?').run(JSON.stringify({ summary: bio }), getUuid(this.client.user?.id as string));
+        }
+
     }
 
     private async checkBotAccount() {
@@ -510,12 +503,11 @@ export class DiscordClient extends EventEmitter {
         discordClient: Client,
         discordMessage: DiscordMessage
     }): Promise<Content> {
-        console.log("*** message", message);
-        if(!message.content.content) {
+        if (!message.content.content) {
             return { content: '', action: 'IGNORE' };
         }
         if (!state) {
-            state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage }
+            state = await this.runtime.composeState(message, { discordClient, discordMessage });
         }
         // remove the elaborate action 
 
@@ -548,9 +540,7 @@ export class DiscordClient extends EventEmitter {
         }
 
         const nickname = this.client.user?.displayName;
-        console.log("nickname", nickname)
-        state = { ...(await this.runtime.composeState(message) as State), discordClient, discordMessage, agentName: nickname || "Ruby" }
-
+        state = await this.runtime.composeState(message, { discordClient, discordMessage, agentName: nickname || "Ruby" });
 
         if (!shouldRespond && hasInterest) {
             const shouldRespondContext = composeContext({
@@ -562,8 +552,6 @@ export class DiscordClient extends EventEmitter {
                 context: shouldRespondContext,
                 stop: []
             })
-
-            console.log('shouldRespond response:', response)
 
             // check if the response is true or false
             if (response.toLowerCase().includes('respond')) {
@@ -585,11 +573,9 @@ export class DiscordClient extends EventEmitter {
             return { content: '', action: 'IGNORE' };
         }
 
-        if(!nickname) {
+        if (!nickname) {
             console.log('No nickname found for bot');
         }
-
-        console.log("nickname", nickname)
 
         const context = composeContext({
             state,
@@ -604,8 +590,6 @@ export class DiscordClient extends EventEmitter {
         const { userId, room_id } = message
 
         for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-            console.log('*** RESPONDING:')
-            console.log(context)
             const response = await this.runtime.completion({
                 context,
                 stop: []
@@ -618,8 +602,6 @@ export class DiscordClient extends EventEmitter {
                 type: 'response'
             }
 
-            console.log("values", values)
-
             adapter.db.prepare('INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)').run([
                 values.body,
                 values.user_id,
@@ -627,12 +609,10 @@ export class DiscordClient extends EventEmitter {
                 values.type
             ])
 
-            console.log('raw response is', response)
-
             const parsedResponse = parseJSONObjectFromText(
                 response
             ) as unknown as Content
-                console.log("parsedResponse", parsedResponse)
+            console.log("parsedResponse", parsedResponse)
             if (
                 !(parsedResponse?.user as string)?.includes(
                     (state as State).senderName as string
@@ -682,7 +662,7 @@ export class DiscordClient extends EventEmitter {
                 callback((response as Content).content)
             }
         })
-        console.log('RESPONSE:', responseContent)
+
         return responseContent
     }
 
@@ -724,7 +704,7 @@ export class DiscordClient extends EventEmitter {
                 userId,
                 userName || 'Bot',
                 (userName || 'Bot') + '@discord',
-                JSON.stringify({ summary: 'I am a bot' }),
+                JSON.stringify({ summary: '' }),
             );
 
             console.log(`User ${userName} created successfully.`);
@@ -747,7 +727,6 @@ export class DiscordClient extends EventEmitter {
         userId: UUID,
         roomId: UUID,
     ) {
-        console.log('*** ensureParticipantInRoom', userId, roomId);
         const data = adapter.db.prepare('SELECT * FROM participants WHERE user_id = ? AND room_id = ?').get(userId, roomId);
 
         if (!data) {
@@ -759,25 +738,25 @@ export class DiscordClient extends EventEmitter {
 
     async listenToSpokenAudio(userId: string, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
-    
+
         const buffers: Buffer[] = [];
         let totalLength = 0;
         const maxSilenceTime = 500; // Maximum pause duration in milliseconds
         let lastChunkTime = Date.now();
-    
+
         const monitor = new AudioMonitor(inputStream, 10000000, async (buffer) => {
             const currentTime = Date.now();
             const silenceDuration = currentTime - lastChunkTime;
-    
+
             buffers.push(buffer);
             totalLength += buffer.length;
             lastChunkTime = currentTime;
-    
+
             if (silenceDuration > maxSilenceTime || totalLength >= 1000000) {
                 const combinedBuffer = Buffer.concat(buffers, totalLength);
                 buffers.length = 0;
                 totalLength = 0;
-    
+
                 if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
                     const readable = new Readable({
                         read() {
@@ -785,11 +764,10 @@ export class DiscordClient extends EventEmitter {
                             this.push(null);
                         }
                     });
-    
+
                     callback(readable);
                 } else {
                     let responseStream = await this.respondToSpokenAudio(userId as UUID, userName, channelId, combinedBuffer, requestedResponseType);
-                    console.log("responseStream is", responseStream);
                     if (responseStream) {
                         callback(responseStream as Readable);
                     }
@@ -802,10 +780,8 @@ export class DiscordClient extends EventEmitter {
     * Responds to an audio stream
     */
     async respondToSpokenAudio(userId: UUID, userName: string, channelId: string, inputBuffer: Buffer, requestedResponseType?: ResponseType): Promise<Readable | null> {
-        console.log("Responding to spoken audio");
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
         const text = await speechToText(inputBuffer);
-        console.log("Got text from speech to text:", text);
         if (requestedResponseType == ResponseType.SPOKEN_TEXT) {
             return Readable.from(text as string);
         } else {
@@ -872,7 +848,6 @@ export class DiscordClient extends EventEmitter {
             const guild = message.guild;
             const member = guild?.members.cache.get(discordClient.user?.id as string);
             const nickname = member?.nickname;
-            console.log('nickname', nickname)
 
             if (message.content.toLowerCase().includes(discordClient.user?.username.toLowerCase() as string) ||
                 message.content.toLowerCase().includes(discordClient.user?.tag.toLowerCase() as string) ||
@@ -913,10 +888,6 @@ export class DiscordClient extends EventEmitter {
             }
         }
 
-        console.log('***** hasInterest', hasInterest)
-        console.log('***** shouldIgnore', shouldIgnore)
-        console.log('***** shouldRespond', shouldRespond)
-
         if (!shouldIgnore && interestChannels) {
             // set interestChannels to include the <channelId>: <timestamp> pair
             interestChannels[channelId] = {
@@ -928,7 +899,6 @@ export class DiscordClient extends EventEmitter {
             };
         }
 
-        console.log("Responding to text");
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
 
         const room_id = getUuid(channelId) as UUID;
@@ -1006,11 +976,6 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async joinChannel(channel: BaseGuildVoiceChannel) {
-        if (settings.DISCORD_IGNORED_CHANNEL_IDS.includes(channel.id)) {
-            console.log("Ignoring channel:", channel.name);
-            return;
-        }
-        console.log("joining channel:", channel.name);
         const oldConnection = getVoiceConnection(channel.guildId as any);
         if (oldConnection) {
             try {
@@ -1033,7 +998,6 @@ export class DiscordClient extends EventEmitter {
         }
 
         connection.receiver.speaking.on('start', (userId: string) => {
-            console.log("user speaking:", userId);
             const user = channel.members.get(userId);
             if (user?.user.bot) return;
             this.monitorMember(user as GuildMember, channel);
@@ -1041,7 +1005,6 @@ export class DiscordClient extends EventEmitter {
         });
 
         connection.receiver.speaking.on('end', async (userId: string) => {
-            console.log("user stopped speaking:", userId);
             const user = channel.members.get(userId);
             if (user?.user.bot) return;
             this.streams.get(userId)?.emit('speakingStopped');
@@ -1049,7 +1012,6 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async monitorMember(member: GuildMember, channel: BaseGuildVoiceChannel) {
-        console.log("monitoring member:", member.displayName);
         const userId = member.id;
         const userName = member.displayName;
         const connection = getVoiceConnection(member.guild.id);
@@ -1096,56 +1058,6 @@ export class DiscordClient extends EventEmitter {
         connection.subscribe(audioPlayer);
 
         const audioStartTime = Date.now();
-
-        /*
-        const transformer = new AudioConversionStream({
-            inputChannels: 1,
-            inputSampleRate: 16000,
-            outputChannels: 2,
-            outputSampleRate: 48000
-        });
-        */
-
-
-        /*
-        const transformer = ffmpeg(audioStream)
-            .inputFormat('s16le')
-            .inputOptions([
-                '-ac 1',
-                '-ar 16000'
-            ])
-            .outputFormat('s16le')
-            .outputOptions([
-                '-ac 2',
-                '-ar 48000'
-            ]);
-        */
-
-        /*
-        const transformer = new prism.FFmpeg({
-            args: [
-                '-f', 's16le',
-                '-ar', '16000',
-                '-ac', '1',
-                '-i', '-',
-                '-f', 's16le',
-                '-ar', '48000',
-                '-ac', '2'
-            ]
-        });
-
-        const transformer = new PassThrough();
-
-        transformer.on('error', (err) => {
-            console.log(`Audio conversion error: ${err}`);
-        });
-
-        transformer.on('close', () => {
-            console.log(`Audio conversion closed`);
-        });
-
-        audioStream.pipe(transformer);
-        */
 
         let resource = createAudioResource(audioStream, {
             inputType: StreamType.Arbitrary
