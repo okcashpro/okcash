@@ -10,14 +10,15 @@ export default {
       throw new Error("State is not available.");
     }
 
+    if (!state.discordMessage) {
+      return; // discordMessage isn't available in voice channels
+    }
+
     if (!state.discordClient) {
       console.error("Discord client is not available in the state.");
       throw new Error("Discord client is not available in the state.");
     }
-    if (!state.discordMessage) {
-      console.error("Discord message is not available in the state.");
-      throw new Error("Discord message is not available in the state.");
-    }
+
 
     const client = state.discordClient as Client;
 

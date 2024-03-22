@@ -30,12 +30,15 @@ load((adapter as SqliteDatabaseAdapter).db);
 
 // for each item in lore, insert into memories with the type "lore"
 // check if lore.json exists, if it does thn read it
-const exists = fs.existsSync('lore.json');
-const lore = exists ? JSON.parse(fs.readFileSync('lore.json', 'utf8')) : [];
+const loreExists = fs.existsSync('lore.json');
+const lore = loreExists ? JSON.parse(fs.readFileSync('lore.json', 'utf8')) : [];
 for (const item of lore as { source: string, content: Content, embedding: number[] }[]) {
     const { source, content, embedding } = item;
     adapter.db.prepare('INSERT INTO memories (type, content, embedding) VALUES (?, ?, ?)').run('lore', JSON.stringify(content), JSON.stringify(embedding));
 }
+
+const bioExists = fs.existsSync('bioExists.json');
+const bio = bioExists ? JSON.parse(fs.readFileSync('bio.json', 'utf8')) : "";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -172,12 +175,12 @@ export async function speechToText(buffer: Buffer) {
         response_format: 'text',
         // prompt: settings.OPENAI_WHISPER_PROMPT,
         file: file,
-    }, 
-    {
-        headers: {
-            "Authentication": `Bearer ${settings.OPENAI_API_KEY}`,
-        }
-    }) as any as string;
+    },
+        {
+            headers: {
+                "Authentication": `Bearer ${settings.OPENAI_API_KEY}`,
+            }
+        }) as any as string;
     result = result.trim();
     if (result == null || result.length < 5) {
         return null;
@@ -263,7 +266,7 @@ export class DiscordClient extends EventEmitter {
 
         this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
             if (message.interaction) return;
-        
+
             if (message.author?.bot) return;
 
 
@@ -448,6 +451,12 @@ export class DiscordClient extends EventEmitter {
                 }
             }
         });
+
+        // set the bio
+        if (bio) {
+            adapter.db.prepare('UPDATE accounts SET details = ? WHERE id = ?').run(JSON.stringify({ summary: bio }), getUuid(this.client.user?.id as string));
+        }
+
     }
 
     private async checkBotAccount() {
@@ -494,7 +503,7 @@ export class DiscordClient extends EventEmitter {
         discordClient: Client,
         discordMessage: DiscordMessage
     }): Promise<Content> {
-        if(!message.content.content) {
+        if (!message.content.content) {
             return { content: '', action: 'IGNORE' };
         }
         if (!state) {
@@ -564,7 +573,7 @@ export class DiscordClient extends EventEmitter {
             return { content: '', action: 'IGNORE' };
         }
 
-        if(!nickname) {
+        if (!nickname) {
             console.log('No nickname found for bot');
         }
 
@@ -603,7 +612,7 @@ export class DiscordClient extends EventEmitter {
             const parsedResponse = parseJSONObjectFromText(
                 response
             ) as unknown as Content
-                console.log("parsedResponse", parsedResponse)
+            console.log("parsedResponse", parsedResponse)
             if (
                 !(parsedResponse?.user as string)?.includes(
                     (state as State).senderName as string
@@ -729,25 +738,25 @@ export class DiscordClient extends EventEmitter {
 
     async listenToSpokenAudio(userId: string, userName: string, channelId: string, inputStream: Readable, callback: (responseAudioStream: Readable) => void, requestedResponseType?: ResponseType): Promise<void> {
         if (requestedResponseType == null) requestedResponseType = ResponseType.RESPONSE_AUDIO;
-    
+
         const buffers: Buffer[] = [];
         let totalLength = 0;
         const maxSilenceTime = 500; // Maximum pause duration in milliseconds
         let lastChunkTime = Date.now();
-    
+
         const monitor = new AudioMonitor(inputStream, 10000000, async (buffer) => {
             const currentTime = Date.now();
             const silenceDuration = currentTime - lastChunkTime;
-    
+
             buffers.push(buffer);
             totalLength += buffer.length;
             lastChunkTime = currentTime;
-    
+
             if (silenceDuration > maxSilenceTime || totalLength >= 1000000) {
                 const combinedBuffer = Buffer.concat(buffers, totalLength);
                 buffers.length = 0;
                 totalLength = 0;
-    
+
                 if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
                     const readable = new Readable({
                         read() {
@@ -755,7 +764,7 @@ export class DiscordClient extends EventEmitter {
                             this.push(null);
                         }
                     });
-    
+
                     callback(readable);
                 } else {
                     let responseStream = await this.respondToSpokenAudio(userId as UUID, userName, channelId, combinedBuffer, requestedResponseType);
