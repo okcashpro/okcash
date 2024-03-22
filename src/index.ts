@@ -22,6 +22,7 @@ import voiceStateProvider from "./providers/voicestate.ts";
 import settings from "./settings.ts";
 import { load } from "./sqlite_vss.ts";
 import { getWavHeader } from "./util.ts";
+import channelStateProvider from './providers/channelState.ts';
 // SQLite adapter
 const adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
 
@@ -221,7 +222,7 @@ export class DiscordClient extends EventEmitter {
             serverUrl: 'https://api.openai.com/v1',
             model: 'gpt-3.5-turbo', // gpt-3.5 is default
             evaluators: [],
-            providers: [voiceStateProvider, timeProvider, flavorProvider],
+            providers: [channelStateProvider, voiceStateProvider, timeProvider, flavorProvider],
             // filter out the default ELABORATE action
             actions: [...defaultActions.filter(
                 (action: Action) => action.name !== 'ELABORATE'
@@ -581,6 +582,9 @@ export class DiscordClient extends EventEmitter {
             state,
             template: messageHandlerTemplate
         })
+
+        console.log('*** context')
+        console.log(context)
 
         if (this.runtime.debugMode) {
             console.log(context, 'Response Context')
