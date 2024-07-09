@@ -1,4 +1,4 @@
-# Discord Voice AI Chatbot
+# Ruby Agent
 
 This is an example repo of an AI chatbot with Discord voice channels, powered by [bgent](https://github.com/JoinTheAlliance/bgent), with elevenlabs and OpenAI Whisper for text-to-speech and speech-to-text services. The bot is designed to be modular and can be easily extended to support other services.
 
