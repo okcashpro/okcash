@@ -51,7 +51,7 @@ export default {
         });
 
         let responseContent;
-        const { userId, room_id } = message;
+        const { user_id, room_id } = message;
 
         for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
             const response = await runtime.completion({
@@ -61,7 +61,7 @@ export default {
 
             runtime.databaseAdapter.log({
                 body: { message, context, response },
-                user_id: userId,
+                user_id,
                 room_id,
                 type: "elaborate",
             });

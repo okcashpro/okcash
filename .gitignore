@@ -4,3 +4,5 @@
 .env
 concatenated-output.ts
 embedding-cache.json
+
+dist/
