@@ -66,11 +66,18 @@ export default {
                 type: "elaborate",
             });
 
+            console.log("Response is")
+            console.log(response)
+
             const parsedResponse = parseJSONObjectFromText(
                 response,
             ) as unknown as Content;
+
+            if (!parsedResponse) {
+                continue;
+            }
             if (
-                (parsedResponse?.user as string).includes(state.agentName as string)
+                (parsedResponse?.user as any).includes(state.agentName as string)
             ) {
                 responseContent = parsedResponse;
                 break;

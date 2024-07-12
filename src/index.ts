@@ -261,7 +261,7 @@ export class DiscordClient extends EventEmitter {
       databaseAdapter: adapter,
       token: settings.OPENAI_API_KEY as string,
       serverUrl: "https://api.openai.com/v1",
-      model: "gpt-3.5-turbo", // gpt-3.5 is default
+      model: "gpt-4o", // gpt-3.5 is default
       evaluators: [],
       providers: [
         channelStateProvider,
@@ -777,6 +777,9 @@ export class DiscordClient extends EventEmitter {
           (state as State).senderName as string
         )
       ) {
+        if (!parsedResponse) {
+            continue;
+        }
         responseContent = {
           content: parsedResponse.content,
           action: parsedResponse.action,
@@ -862,6 +865,22 @@ export class DiscordClient extends EventEmitter {
       // If userName is not provided and botToken is, fetch the bot's name
       if (!userName && botToken) {
         userName = await this.fetchBotName(botToken);
+      }
+
+      // get if userName already exists
+
+      if (userName) {
+        const data = adapter.db
+          .prepare("SELECT * FROM accounts WHERE name = ?")
+          .get(userName);
+        if (data) {
+          // User exists, so update their ID
+          adapter.db
+            .prepare("UPDATE accounts SET id = ? WHERE name = ?")
+            .run(user_id, userName);
+          console.log(`User ${userName} updated successfully.`);
+          return;
+        }
       }
 
       // User does not exist, so create them
