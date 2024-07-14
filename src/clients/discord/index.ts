@@ -46,7 +46,17 @@ import { getWavHeader } from "../../core/util.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
 import { commands } from "./commands.ts";
 import { shouldRespondTemplate } from "./prompts.ts";
-
+import { File } from "formdata-node";
+import {
+    AvailableModels,
+    InferenceSession,
+    SessionManager,
+    Segment,
+    DecodingOptionsBuilder,
+    initialize,
+    Task
+  } from "whisper-turbo";
+  
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
 const DECODE_SAMPLE_RATE = 16000;
@@ -356,32 +366,50 @@ export class DiscordClient extends EventEmitter {
   }
 
   async speechToText(buffer: Buffer) {
-    var wavHeader = getWavHeader(buffer.length, 16000);
 
-    const file = new File([wavHeader, buffer], "audio.wav", {
-      type: "audio/wav",
+    const audioData = new Uint8Array(buffer);
+
+    let turboSession;
+
+    let result;
+
+    await initialize();
+
+    const loadResult = await new SessionManager().loadModel(
+      AvailableModels.WHISPER_TINY,
+      () => {
+        console.log("Model loaded successfully");
+      },
+      (p) => {
+        console.log(`Loading: ${p}%`);
+      }
+    );
+  
+    if (loadResult.isOk) {
+        turboSession = loadResult.value;
+    } else {
+        console.log("model loading failed")
+    }
+
+    let options = new DecodingOptionsBuilder().setTask(Task.Transcribe).build();
+  
+    await turboSession.transcribe(audioData, true, options, (segment) => {
+        console.log("segment text:", segment.text );
+        result = result.concat(segment.text)
+        if (segment.last) {
+            return
+        }
     });
 
-    console.log("Transcribing audio... key", settings.OPENAI_API_KEY);
-    var result = (await openAI.audio.transcriptions.create(
-      {
-        model: "whisper-1",
-        language: "en",
-        response_format: "text",
-        file: file,
-      },
-      {
-        headers: {
-          Authentication: `Bearer ${settings.OPENAI_API_KEY}`,
-        },
-      }
-    )) as any as string;
     result = result.trim();
+    console.log(`Speech to text: ${result}`);
     if (result == null || result.length < 5) {
-      return null;
+        return null;
     }
+    
     return result;
-  }
+
+}
 
   private async ensureUserExists(agentId, userName, botToken = null) {
     if (!userName && botToken) {
