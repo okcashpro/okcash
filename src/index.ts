@@ -1,6 +1,6 @@
-import { Agent } from './agent.ts';
-import { DiscordClient } from './clients/discord.ts';
-import { TwitterClient } from './clients/twitter.ts';
+import { Agent } from './core/agent.ts';
+import { DiscordClient } from './clients/discord/index.ts';
+import { TwitterClient } from './clients/twitter/index.ts';
 import { bio } from './lore.ts';
 
 const agent = new Agent();

@@ -2,7 +2,7 @@ import {
     Content
 } from "bgent";
 import fs from "fs";
-import { adapter } from "./db.ts";
+import { adapter } from "./core/db.ts";
 
 // for each item in lore, insert into memories with the type "lore"
 // check if lore.json exists, if it does thn read it
@@ -19,5 +19,4 @@ for (const item of lore as {
     .run("lore", JSON.stringify(content), JSON.stringify(embedding));
 }
 
-const bioExists = fs.existsSync("bioExists.json");
-export const bio = bioExists ? JSON.parse(fs.readFileSync("bio.json", "utf8")) : "";
+export const bio = fs.existsSync("bio.json") ? JSON.parse(fs.readFileSync("bio.json", "utf8")) : "";

@@ -1,6 +1,6 @@
 // src/lib/actions/joinVoice.ts
 import { joinVoiceChannel } from "@discordjs/voice";
-import { State, type Action, type BgentRuntime, type Message, composeContext, parseJSONObjectFromText } from "bgent";
+import { composeContext, State, type Action, type BgentRuntime, type Message } from "bgent";
 import { Channel, ChannelType, Client, Message as DiscordMessage, Guild, GuildMember } from "discord.js";
 
 export default {
@@ -18,7 +18,6 @@ export default {
       console.error("Discord client is not available in the state.");
       throw new Error("Discord client is not available in the state.");
     }
-
 
     const client = state.discordClient as Client;
 

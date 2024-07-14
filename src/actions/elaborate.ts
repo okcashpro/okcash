@@ -66,9 +66,6 @@ export default {
                 type: "elaborate",
             });
 
-            console.log("Response is")
-            console.log(response)
-
             const parsedResponse = parseJSONObjectFromText(
                 response,
             ) as unknown as Content;

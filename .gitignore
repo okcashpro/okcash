@@ -5,6 +5,12 @@
 concatenated-output.ts
 embedding-cache.json
 
+.DS_Store
+
 dist/
 
 cookies.json
+
+db.sqlite
+searches/
+tweets/
