@@ -13,7 +13,6 @@ import { Agent } from "../../core/agent.ts";
 import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
-import { directions, name, topics, people, adjectives } from "./constants.ts";
 
 const messageHandlerTemplate = `{{lore}}
 {{relevantFacts}}
@@ -48,8 +47,8 @@ Your response should not contain any questions. Brief, concise statements only.
 export class TwitterSearchClient extends ClientBase {
   private respondedTweets: Set<string> = new Set();
 
-  constructor(agent: Agent, bio: string) {
-    super(agent, bio, (self) => self.onReady());
+  constructor(agent: Agent, character) {
+    super(agent, character, (self) => self.onReady());
   }
 
   async onReady() {
@@ -82,7 +81,7 @@ export class TwitterSearchClient extends ClientBase {
         return;
       }
   
-      const searchTerm = [...topics, ...people][Math.floor(Math.random() * topics.length)];
+      const searchTerm = [...this.character.topics, ...this.character.people][Math.floor(Math.random() * this.character.topics.length)];
   
       if (!fs.existsSync('tweets')) {
         fs.mkdirSync('tweets');
@@ -208,7 +207,7 @@ Notes:
         directions: this.directions,
         adjectives: this.character.adjectives,
         adjective: this.character.adjectives[Math.floor(Math.random() * this.character.adjectives.length)],
-        topics: topics.sort(() => 0.5 - Math.random()).slice(0, 10).join(", "),
+        topics: this.character.topics.sort(() => 0.5 - Math.random()).slice(0, 10).join(", "),
         tweetContext: `
 Tweet Background:
 ${tweetBackground}
@@ -303,7 +302,8 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(', ')}\n` : '
 
   private async getRecentSearchResults(): Promise<Tweet[]> {
     const recentSearchResults = [];
-    const searchTerm = topics.sort(() => 0.5 - Math.random()).slice(0, 2).join(" ");
+    const searchTerm = this.character.topics.sort(() => 0.5 - Math.random()).slice(0, 2).join(" ");
+    
     const tweets = this.twitterClient.searchTweets(searchTerm, 10, SearchMode.Latest);
     for await (const tweet of tweets) {
       recentSearchResults.push(tweet);

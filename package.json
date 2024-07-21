@@ -7,7 +7,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node --loader ts-node/esm --logError src/index.ts",
+    "start": "node --loader ts-node/esm src/index.ts",
+    "twitter": "node --loader ts-node/esm src/twitter.ts",
     "watch": "tsc --watch",
     "dev": "nodemon"
   },
