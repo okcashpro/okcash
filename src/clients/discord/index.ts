@@ -193,6 +193,15 @@ export class DiscordClient extends EventEmitter {
       if (interaction.commandName === "setname") {
         const newName = interaction.options.get("name")?.value;
 
+        console.log("settings.DISCORD_APPLICATION_ID")
+        console.log(settings.DISCORD_APPLICATION_ID)
+
+        console.log("interaction.user.id")
+        console.log(interaction.user.id)
+
+        console.log("interaction.channelId")
+        console.log(interaction.channelId)
+
         const agentId = getUuid(
           settings.DISCORD_APPLICATION_ID as string
         ) as UUID;
@@ -214,6 +223,8 @@ export class DiscordClient extends EventEmitter {
 
         if (newName) {
           try {
+            console.log("interaction.client.user?.id")
+            console.log(interaction.client.user?.id)
             adapter.db
               .prepare("UPDATE accounts SET name = ? WHERE id = ?")
               .run(newName, getUuid(interaction.client.user?.id));
@@ -244,6 +255,8 @@ export class DiscordClient extends EventEmitter {
         const newBio = interaction.options.get("bio")?.value;
         if (newBio) {
           try {
+            console.log("settings.DISCORD_APPLICATION_ID")
+            console.log(settings.DISCORD_APPLICATION_ID)
             const agentId = getUuid(
               settings.DISCORD_APPLICATION_ID as string
             ) as UUID;
@@ -327,15 +340,6 @@ export class DiscordClient extends EventEmitter {
         }
       }
     });
-
-    if (this.bio) {
-      adapter.db
-        .prepare("UPDATE accounts SET details = ? WHERE id = ?")
-        .run(
-          JSON.stringify({ summary: this.bio }),
-          getUuid(this.client.user?.id as string)
-        );
-    }
 
     const rest = new REST({ version: "9" }).setToken(settings.DISCORD_API_TOKEN);
 
@@ -955,6 +959,16 @@ export class DiscordClient extends EventEmitter {
     for (const [, guild] of guilds) {
       const fullGuild = await guild.fetch();
       this.scanGuild(fullGuild);
+    }
+
+    // set the bio back to default
+    if (this.bio) {
+      adapter.db
+        .prepare("UPDATE accounts SET details = ? WHERE id = ?")
+        .run(
+          JSON.stringify({ summary: this.bio }),
+          getUuid(this.client.user?.id as string)
+        );
     }
   }
 

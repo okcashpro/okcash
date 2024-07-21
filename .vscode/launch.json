@@ -5,16 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "preLaunchTask": "tsbuild",
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch via npm",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/out/main.js",
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
             ]
         }
     ]
