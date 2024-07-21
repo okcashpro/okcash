@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node --loader ts-node/esm src/index.ts",
+    "twitter": "node --loader ts-node/esm src/twitter.ts",
     "watch": "tsc --watch",
     "dev": "nodemon"
   },
@@ -17,7 +18,7 @@
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/voice": "^0.17.0",
     "@types/fluent-ffmpeg": "^2.1.24",
-    "agent-twitter-client": "^0.0.4",
+    "agent-twitter-client": "^0.0.8",
     "better-sqlite3": "^11.1.2",
     "bgent": "^0.1.11",
     "discord.js": "^14.14.1",
