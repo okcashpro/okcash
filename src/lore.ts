@@ -18,5 +18,3 @@ for (const item of lore as {
     .prepare("INSERT INTO memories (type, content, embedding) VALUES (?, ?, ?)")
     .run("lore", JSON.stringify(content), JSON.stringify(embedding));
 }
-
-export const bio = fs.existsSync("bio.json") ? JSON.parse(fs.readFileSync("bio.json", "utf8")) : "";

@@ -486,7 +486,7 @@ export class DiscordClient extends EventEmitter {
     state = await this.agent.runtime.composeState(message, {
       discordClient,
       discordMessage,
-      agentName: nickname || "Ruby",
+      agentName: nickname,
     });
 
     if (!shouldRespond && hasInterest) {
