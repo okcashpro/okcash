@@ -1,9 +1,9 @@
 import { Readable } from "stream";
 import { WebSocket } from "ws";
-import settings from "./settings.ts";
-import { prependWavHeader } from "./util.ts";
+import settings from "../../core/settings.ts";
+import { prependWavHeader } from "../../core/util.ts";
 
-export async function textToSpeechStreaming(text: string): Promise<Readable> {
+export async function textToSpeechStreaming(text: string) {
     console.log("11 TTS: " + text);
     const body = {
         "model_id": settings.ELEVENLABS_MODEL_ID,
@@ -33,7 +33,7 @@ export async function textToSpeechStreaming(text: string): Promise<Readable> {
         throw new Error(`Received status ${status} from Eleven Labs API: ${errorBodyString}`);
     }
 
-    if (response) {    
+    if (response) {
         let reader = response.body?.getReader();
         let readable = new Readable({
             read() {
@@ -56,7 +56,7 @@ export async function textToSpeechStreaming(text: string): Promise<Readable> {
         }
     } else {
         return new Readable({
-            read() {}
+            read() { }
         });
     }
 }
@@ -65,7 +65,7 @@ function textToSpeechDualStreaming(inputStream: Readable): Readable {
     let startTime = Date.now();
     const ws = new WebSocket(`wss://api.elevenlabs.io/v1/text-to-speech/${settings.ELEVENLABS_VOICE_ID}/stream-input?model_id=${settings.ELEVENLABS_MODEL_ID}&optimize_streaming_latency=${settings.ELEVENLABS_OPTIMIZE_STREAMING_LATENCY}&output_format=${settings.ELEVENLABS_OUTPUT_FORMAT}`);
     let output = new Readable({
-        read() {}
+        read() { }
     });
     let outputEnded = false;
     ws.on('open', () => {
@@ -141,8 +141,8 @@ function textToSpeechDualStreaming(inputStream: Readable): Readable {
     }
 }
 
-export async function textToSpeech(input: string): Promise<Readable> {
-        return await textToSpeechStreaming(input);
+export async function textToSpeech(input: string) {
+    return await textToSpeechStreaming(input);
 }
 
 export async function listVoices() {

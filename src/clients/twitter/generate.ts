@@ -1,0 +1,114 @@
+import { SearchMode } from "agent-twitter-client";
+import {
+  State,
+  composeContext
+} from "bgent";
+import { Agent } from "../../core/agent.ts";
+import settings from "../../core/settings.ts";
+import { ClientBase } from "./base.ts";
+
+const newTweetPrompt =
+`{{recentConversations}}
+
+{{recentSearchResults}}
+
+{{agentName}}'s bio:
+{{bio}}
+
+{{directions}}
+- do not use the "@" in your response
+- do not use the "#" in your response
+- no @s, #s, ?s or links
+
+INSTRUCTIONS: Write a single sentence status update that is {{adjective}} about {{topic}} without mentioning {{topic}} directly, from the perspective of {{agentName}}`;
+
+export class TwitterGenerationClient extends ClientBase {
+
+  onReady() {
+    const generateNewTweetLoop = () => {
+      this.generateNewTweet();
+      setTimeout(generateNewTweetLoop, Math.floor(Math.random() * 360000) + 1200000); // Random interval between 10-15 minutes
+    };
+    generateNewTweetLoop()
+  }
+
+  constructor(agent: Agent, character) {
+    // Initialize the client and pass an optional callback to be called when the client is ready
+    super(agent, character, (self) => self.onReady());
+    this.temperature = 1.0;
+  }
+
+  private async generateNewTweet() {
+    console.log('Generating new tweet');
+    try {
+      const botTwitterUsername = settings.TWITTER_USERNAME;
+      if (!botTwitterUsername) {
+        console.error('Twitter username not set in settings');
+        return;
+      }
+
+      // Get recent conversations
+      const recentConversations = this.twitterClient.searchTweets(`@${botTwitterUsername}`, 20, SearchMode.Latest);
+
+      const recentConversationsArray = [];
+      while (true) {
+        const next = await recentConversations.next();
+        if (next.done) {
+          break;
+        }
+        recentConversationsArray.push(next.value)
+      }
+      const recentConversationsText = (recentConversationsArray).map(tweet => tweet.text).join('\n');
+
+      // Get recent search results
+      const searchTerms = this.character.topics.sort(() => Math.random() - 0.5).slice(0, 2);
+      const recentSearchResults = [];
+      for (const searchTerm of searchTerms) {
+        const tweets = this.twitterClient.searchTweets(searchTerm, 20, SearchMode.Latest);
+        const tweetsArray = [];
+        while (true) {
+          const next = await tweets.next();
+          if (next.done) {
+            break;
+          }
+          tweetsArray.push(next.value)
+        }
+        recentSearchResults.push(...(tweetsArray).map(tweet => tweet.text));
+      }
+      const recentSearchResultsText = recentSearchResults.join('\n');
+
+      // Generate new tweet
+      const context = composeContext({
+        state: {
+          agentName: botTwitterUsername,
+          name: botTwitterUsername,
+          bio: this.character.bio,
+          recentConversations: recentConversationsText,
+          recentSearchResults: recentSearchResultsText,
+          topic: this.character.topics[Math.floor(Math.random() * this.character.topics.length)],
+          directions: this.directions,
+          adjective: this.character.adjectives[Math.floor(Math.random() * this.character.adjectives.length)]
+          
+        } as unknown as State,
+        template: newTweetPrompt,
+
+      });
+
+      const newTweetContent = await this.agent.runtime.completion({
+        context,
+        stop: [],
+        temperature: this.temperature,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+      });
+
+      console.log('context:', context);
+      console.log('New tweet:', newTweetContent);
+
+      // Send the new tweet
+      await this.twitterClient.sendTweet(newTweetContent.trim());
+    } catch (error) {
+      console.error('Error generating new tweet:', error);
+    }
+  }
+}
