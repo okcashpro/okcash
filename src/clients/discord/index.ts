@@ -32,30 +32,24 @@ import {
   VoiceState,
 } from "discord.js";
 import { EventEmitter } from "events";
-import { File } from "formdata-node";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from "uuid-by-string";
+import {
+  AvailableModels,
+  DecodingOptionsBuilder,
+  SessionManager,
+  Task,
+  initialize
+} from "whisper-turbo";
 import { Agent } from '../../core/agent.ts';
-import { openAI } from "../openai/index.ts";
-import { AudioMonitor } from "./audioMonitor.ts";
 import { adapter } from "../../core/db.ts";
-import { textToSpeech } from "../elevenlabs/index.ts";
 import settings from "../../core/settings.ts";
-import { getWavHeader } from "../../core/util.ts";
-import { InterestChannels, ResponseType } from "./types.ts";
+import { textToSpeech } from "../elevenlabs/index.ts";
+import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { shouldRespondTemplate } from "./prompts.ts";
-import { File } from "formdata-node";
-import {
-    AvailableModels,
-    InferenceSession,
-    SessionManager,
-    Segment,
-    DecodingOptionsBuilder,
-    initialize,
-    Task
-  } from "whisper-turbo";
+import { InterestChannels, ResponseType } from "./types.ts";
   
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;

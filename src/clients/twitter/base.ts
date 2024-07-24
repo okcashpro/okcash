@@ -37,17 +37,28 @@ export class ClientBase extends EventEmitter {
   agent: Agent;
   character: Character;
   directions: string;
+  model: string;
   lastCheckedTweetId: string | null = null;
   temperature: number = 0.5;
   callback: (self: ClientBase) => any = null;
 
-  constructor(agent: Agent, character: Character, callback=null) {
+  onReady() {
+    throw new Error("Not implemented in base class, please call from subclass");
+  }
+
+  constructor({ agent, character, model = 'gpt-4o-mini', callback = null }: {
+    agent: Agent,
+    character: Character,
+    model?: string,
+    callback?: (self: ClientBase) => any
+  }) {
     super()
     this.agent = agent;
     this.twitterClient = new Scraper();
     this.character = character;
     this.directions = "- " + character.style.all.join("\n- ") + "- " + character.style.post.join()
     this.callback = callback;
+    this.model = model;
 
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {
