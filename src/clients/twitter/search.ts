@@ -14,8 +14,7 @@ import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
 
-const messageHandlerTemplate = `{{lore}}
-{{relevantFacts}}
+const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
 
 Recent conversations:
@@ -47,8 +46,11 @@ Your response should not contain any questions. Brief, concise statements only.
 export class TwitterSearchClient extends ClientBase {
   private respondedTweets: Set<string> = new Set();
 
-  constructor(agent: Agent, character) {
-    super(agent, character, (self) => self.onReady());
+  constructor(agent: Agent, character: any, model: string) {
+    // Initialize the client and pass an optional callback to be called when the client is ready
+    super({
+      agent, character, model, callback: (self) => self.onReady()
+    });
   }
 
   async onReady() {
@@ -120,7 +122,8 @@ Notes:
       const mostInterestingTweetResponse = await this.agent.runtime.completion({
         context: prompt,
         stop: [],
-        temperature: 0.3,
+        temperature: this.temperature,
+        model: this.model,
       });
   
       const tweetId = mostInterestingTweetResponse.trim();

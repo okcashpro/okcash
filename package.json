@@ -8,7 +8,6 @@
   "scripts": {
     "build": "tsc",
     "start": "node --loader ts-node/esm src/index.ts",
-    "twitter": "node --loader ts-node/esm src/twitter.ts",
     "watch": "tsc --watch",
     "dev": "nodemon"
   },
@@ -35,7 +34,8 @@
     "ts-node": "^10.9.2",
     "uuid-by-string": "^4.0.0",
     "whisper-turbo": "^0.11.0",
-    "ws": "^8.16.0"
+    "ws": "^8.16.0",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",

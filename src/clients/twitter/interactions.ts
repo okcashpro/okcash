@@ -16,8 +16,7 @@ import settings from "../../core/settings.ts";
 import { ClientBase } from "./base.ts";
 
 export const messageHandlerTemplate =
-`{{lore}}
-{{relevantFacts}}
+`{{relevantFacts}}
 {{recentFacts}}
 
 {{agentName}}'s bio:
@@ -88,9 +87,11 @@ export class TwitterInteractionClient extends ClientBase {
     handleTwitterInteractionsLoop();
   }
 
-  constructor(agent: Agent, character) {
+  constructor(agent: Agent, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
-    super(agent, character, (self) => self.onReady());
+    super({
+      agent, character, model, callback: (self) => self.onReady()
+    });
   }
 
   private async handleTwitterInteractions() {
@@ -224,6 +225,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
       const response = await this.agent.runtime.completion({
         context: shouldRespondContext,
         stop: [],
+        model: this.model,
       });
 
       console.log("*** response from ", nickname, ":", response);
@@ -268,6 +270,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
         context,
         stop: [],
         temperature: this.temperature,
+        model: this.model,
       });
 
       const values = {

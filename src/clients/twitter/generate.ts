@@ -32,10 +32,11 @@ export class TwitterGenerationClient extends ClientBase {
     generateNewTweetLoop()
   }
 
-  constructor(agent: Agent, character) {
+  constructor(agent: Agent, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
-    super(agent, character, (self) => self.onReady());
-    this.temperature = 1.0;
+    super({
+      agent, character, model, callback: (self) => self.onReady()
+    });
   }
 
   private async generateNewTweet() {
@@ -98,8 +99,9 @@ export class TwitterGenerationClient extends ClientBase {
         context,
         stop: [],
         temperature: this.temperature,
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
+        frequency_penalty: 0.5, // TODO: tune these and move to settings
+        presence_penalty: 0.5, // TODO: tune these and move to settings
+        model: this.model,
       });
 
       console.log('context:', context);
