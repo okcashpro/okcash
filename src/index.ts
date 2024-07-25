@@ -43,30 +43,32 @@ try {
 
 // Load character
 const characterPath = argv.character || "./src/default_character.json";
-console.log("Character path", characterPath)
 const character = fs.existsSync(characterPath) ? JSON.parse(fs.readFileSync(characterPath, "utf8")) : { bio: "" };
-
-console.log("Character is", character)
 
 const agent = new Agent();
 
 function startDiscord() {
-    console.log("character")
     const discordClient = new DiscordClient(agent, character.bio);
 }
 
 // check if character has a 'model' field, if so use that, otherwise use 'gpt-4o-mini'
 const model = character.model || 'gpt-4o-mini';
 
-function startTwitter() {
-    const twitterInteractionClient = new TwitterInteractionClient(agent, character, model);
+async function startTwitter() {
+    // console.log("Starting interaction client")
+    // const twitterInteractionClient = new TwitterInteractionClient(agent, character, model);
+    // // wait 2 seconds
+    // await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log("Starting search client")
     const twitterSearchClient = new TwitterSearchClient(agent, character, model);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log("Starting generation client")
     const twitterGenerationClient = new TwitterGenerationClient(agent, character, model);
 }
 
-// if (argv.discord || (!argv.twitter && !argv.discord)) {
-//     startDiscord();
-// }
-// if (argv.twitter || (!argv.twitter && !argv.discord)) {
-//     startTwitter();
-// }
+if (argv.discord || (!argv.twitter && !argv.discord)) {
+    startDiscord();
+}
+if (argv.twitter || (!argv.twitter && !argv.discord)) {
+    startTwitter();
+}

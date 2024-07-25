@@ -83,7 +83,7 @@ export class TwitterSearchClient extends ClientBase {
         return;
       }
   
-      const searchTerm = [...this.character.topics, ...this.character.people][Math.floor(Math.random() * this.character.topics.length)];
+      const searchTerm = [...this.character.topics/*, ...this.character.people*/][Math.floor(Math.random() * this.character.topics.length)];
   
       if (!fs.existsSync('tweets')) {
         fs.mkdirSync('tweets');
@@ -119,6 +119,8 @@ Notes:
   - Respond to tweets where there is an easy exchange of ideas to have with the user
   - ONLY respond with the ID of the tweet`;
   
+  console.log("**** this.model", this.model)
+
       const mostInterestingTweetResponse = await this.agent.runtime.completion({
         context: prompt,
         stop: [],
@@ -230,6 +232,8 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(', ')}\n` : '
       });
   
       console.log("*** Context:", context);
+      console.log("**** this.model", this.model)
+
   
       let responseContent: Content | null = null;    
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
@@ -237,6 +241,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(', ')}\n` : '
           context,
           stop: [],
           temperature: this.temperature,
+          model: this.model,
           // images: selectedTweet.photos.map(photo => photo.url), // Pass image URLs to the completion API
         });
   
