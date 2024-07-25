@@ -95,6 +95,8 @@ export class TwitterGenerationClient extends ClientBase {
 
       });
 
+      console.log("**** this.model", this.model)
+
       const newTweetContent = await this.agent.runtime.completion({
         context,
         stop: [],

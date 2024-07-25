@@ -35,13 +35,7 @@ import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from "uuid-by-string";
-import {
-  AvailableModels,
-  DecodingOptionsBuilder,
-  SessionManager,
-  Task,
-  initialize
-} from "whisper-turbo";
+import { pipeline as transformersPipeline } from '@xenova/transformers';
 import { Agent } from '../../core/agent.ts';
 import { adapter } from "../../core/db.ts";
 import settings from "../../core/settings.ts";
@@ -50,7 +44,7 @@ import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { shouldRespondTemplate } from "./prompts.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
-  
+
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
 const DECODE_SAMPLE_RATE = 16000;
@@ -62,6 +56,8 @@ export class DiscordClient extends EventEmitter {
   private connections: Map<string, VoiceConnection> = new Map();
   private agent: Agent;
   private bio: string;
+  private transcriber: any;
+
   constructor(agent: Agent, bio: string) {
     super();
     this.apiToken = settings.DISCORD_API_TOKEN;
@@ -81,281 +77,44 @@ export class DiscordClient extends EventEmitter {
 
     this.agent = agent;
 
-    this.client.once(
-      Events.ClientReady,
-      async (readyClient: { user: { tag: any; id: any } }) => {
-        console.log(`Logged in as ${readyClient.user?.tag}`);
-        console.log("Use this URL to add the bot to your server:");
-        console.log(
-          `https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`
-        );
-        await this.checkBotAccount();
-        await this.onReady();
-      }
-    );
+    this.initializeTranscriber();
+
+    this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any } }) => {
+      console.log(`Logged in as ${readyClient.user?.tag}`);
+      console.log("Use this URL to add the bot to your server:");
+      console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
+      await this.checkBotAccount();
+      await this.onReady();
+    });
+
     this.client.login(this.apiToken);
-    this.client.on(
-      "voiceStateUpdate",
-      (oldState: VoiceState | null, newState: VoiceState | null) => {
-        if (newState?.member?.user.bot) return;
-        if (
-          newState?.channelId != null &&
-          newState?.channelId != oldState?.channelId
-        ) {
-          this.joinChannel(newState.channel as BaseGuildVoiceChannel);
-        }
-      }
-    );
-    this.client.on("guildCreate", (guild: Guild) => {
-      console.log(`Joined guild ${guild.name}`);
-      this.scanGuild(guild);
-    });
-    this.client.on(
-      "userStream",
-      async (
-        user_id: UUID,
-        userName: string,
-        channel: BaseGuildVoiceChannel,
-        audioStream: Readable
-      ) => {
-        const channelId = channel.id;
-        const userIdUUID = uuid(user_id) as UUID;
-        this.listenToSpokenAudio(
-          userIdUUID,
-          userName,
-          channelId,
-          audioStream,
-          async (responseAudioStream) => {
-            responseAudioStream.on("close", () => {
-              console.log("Response audio stream closed");
-            });
-            await this.playAudioStream(user_id, responseAudioStream);
-          },
-          ResponseType.RESPONSE_AUDIO
-        );
-      }
-    );
 
-    let lastProcessedMessageId: string | null = null;
-    let interestChannels: InterestChannels = {};
+    this.setupEventListeners();
+    this.setupCommands();
+  }
 
-    this.client.on(Events.MessageCreate, async (message: DiscordMessage) => {
-      if (message.interaction) return;
+  private async initializeTranscriber() {
+    this.transcriber = await transformersPipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en');
+  }
 
-      if (message.author?.bot) return;
+  private setupEventListeners() {
+    this.client.on("voiceStateUpdate", this.handleVoiceStateUpdate.bind(this));
+    this.client.on("guildCreate", this.handleGuildCreate.bind(this));
+    this.client.on("userStream", this.handleUserStream.bind(this));
+    this.client.on(Events.MessageCreate, this.handleMessageCreate.bind(this));
+    this.client.on(Events.InteractionCreate, this.handleInteractionCreate.bind(this));
+  }
 
-      if (message.id === lastProcessedMessageId) {
-        console.log("Ignoring duplicate message");
-        return;
-      }
-
-      lastProcessedMessageId = message.id;
-
-      const user_id = message.author.id as UUID;
-      const userName = message.author.username;
-      const channelId = message.channel.id;
-      const textContent = message.content;
-
-      for (let [channelId, channelData] of Object.entries(interestChannels)) {
-        if (Date.now() - channelData.lastMessageSent > 36000000) {
-          delete interestChannels[channelId];
-        }
-      }
-
-      try {
-        const responseStream = await this.respondToText({
-          user_id,
-          userName,
-          channelId,
-          input: textContent,
-          requestedResponseType: ResponseType.RESPONSE_TEXT,
-          message,
-          interestChannels,
-          discordMessage: message,
-          discordClient: this.client,
-        });
-        if (!responseStream) {
-          console.log("No response stream");
-          return;
-        }
-        let responseData = "";
-        for await (const chunk of responseStream) {
-          responseData += chunk;
-        }
-
-        message.channel.send(responseData);
-      } catch (error) {
-        console.error("Error responding to message:", error);
-        message.channel.send(
-          "Sorry, I encountered an error while processing your request."
-        );
-      }
-    });
-
-    this.client.on(Events.InteractionCreate, async (interaction) => {
-      if (!interaction.isCommand()) return;
-      if (interaction.commandName === "setname") {
-        const newName = interaction.options.get("name")?.value;
-
-        console.log("settings.DISCORD_APPLICATION_ID")
-        console.log(settings.DISCORD_APPLICATION_ID)
-
-        console.log("interaction.user.id")
-        console.log(interaction.user.id)
-
-        console.log("interaction.channelId")
-        console.log(interaction.channelId)
-
-        const agentId = getUuid(
-          settings.DISCORD_APPLICATION_ID as string
-        ) as UUID;
-        const userIdUUID = getUuid(interaction.user.id) as UUID;
-        const userName = interaction.user.username;
-        const room_id = getUuid(interaction.channelId) as UUID;
-
-        await interaction.deferReply();
-
-        await this.ensureUserExists(
-          agentId,
-          await this.fetchBotName(settings.DISCORD_API_TOKEN),
-          settings.DISCORD_API_TOKEN
-        );
-        await this.ensureUserExists(userIdUUID, userName);
-        await this.agent.ensureRoomExists(room_id);
-        await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-        await this.agent.ensureParticipantInRoom(agentId, room_id);
-
-        if (newName) {
-          try {
-            console.log("interaction.client.user?.id")
-            console.log(interaction.client.user?.id)
-            adapter.db
-              .prepare("UPDATE accounts SET name = ? WHERE id = ?")
-              .run(newName, getUuid(interaction.client.user?.id));
-
-            const guild = interaction.guild;
-            if (guild) {
-              const botMember = await guild.members.fetch(
-                interaction.client.user?.id as string
-              );
-              await botMember.setNickname(newName as string);
-            }
-
-            await interaction.editReply(
-              `Agent's name has been updated to: ${newName}`
-            );
-          } catch (error) {
-            console.error("Error updating agent name:", error);
-            await interaction.editReply(
-              "An error occurred while updating the agent name."
-            );
-          }
-        } else {
-          await interaction.editReply(
-            "Please provide a new name for the agent."
-          );
-        }
-      } else if (interaction.commandName === "setbio") {
-        const newBio = interaction.options.get("bio")?.value;
-        if (newBio) {
-          try {
-            console.log("settings.DISCORD_APPLICATION_ID")
-            console.log(settings.DISCORD_APPLICATION_ID)
-            const agentId = getUuid(
-              settings.DISCORD_APPLICATION_ID as string
-            ) as UUID;
-            const userIdUUID = getUuid(interaction.user.id) as UUID;
-            const userName = interaction.user.username;
-            const room_id = getUuid(interaction.channelId) as UUID;
-
-            await interaction.deferReply();
-
-            await this.ensureUserExists(
-              agentId,
-              await this.fetchBotName(settings.DISCORD_API_TOKEN),
-              settings.DISCORD_API_TOKEN
-            );
-            await this.ensureUserExists(userIdUUID, userName);
-            await this.agent.ensureRoomExists(room_id);
-            await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-            await this.agent.ensureParticipantInRoom(agentId, room_id);
-
-            adapter.db
-              .prepare("UPDATE accounts SET details = ? WHERE id = ?")
-              .run(
-                JSON.stringify({ summary: newBio }),
-                getUuid(interaction.client.user?.id)
-              );
-
-            await interaction.editReply(
-              `Agent's bio has been updated to: ${newBio}`
-            );
-          } catch (error) {
-            console.error("Error updating agent bio:", error);
-            await interaction.editReply(
-              "An error occurred while updating the agent bio."
-            );
-          }
-        } else {
-          await interaction.reply("Please provide a new bio for the agent.");
-        }
-        return;
-      } else if (interaction.commandName === "joinchannel") {
-        const channelId = interaction.options.get("channel")?.value as string;
-        if (!channelId) {
-          await interaction.reply("Please provide a voice channel to join.");
-          return;
-        }
-        const guild = interaction.guild;
-        if (!guild) {
-          return;
-        }
-        const voiceChannel = interaction.guild.channels.cache.find(
-          (channel) =>
-            channel.id === channelId && channel.type === ChannelType.GuildVoice
-        );
-
-        if (!voiceChannel) {
-          await interaction.reply("Voice channel not found!");
-          return;
-        }
-
-        try {
-          this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
-          await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
-        } catch (error) {
-          console.error("Error joining voice channel:", error);
-          await interaction.reply("Failed to join the voice channel.");
-        }
-      } else if (interaction.commandName === "leavechannel") {
-        const connection = getVoiceConnection(interaction.guildId as any);
-
-        if (!connection) {
-          await interaction.reply("Not currently in a voice channel.");
-          return;
-        }
-
-        try {
-          connection.destroy();
-          await interaction.reply("Left the voice channel.");
-        } catch (error) {
-          console.error("Error leaving voice channel:", error);
-          await interaction.reply("Failed to leave the voice channel.");
-        }
-      }
-    });
-
+  private setupCommands() {
     const rest = new REST({ version: "9" }).setToken(settings.DISCORD_API_TOKEN);
 
     (async () => {
       try {
         console.log("Started refreshing application (/) commands.");
-
         await rest.put(
           Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
           { body: commands }
         );
-
         console.log("Successfully reloaded application (/) commands.");
       } catch (error) {
         console.error(error);
@@ -363,53 +122,124 @@ export class DiscordClient extends EventEmitter {
     })();
   }
 
-  async speechToText(buffer: Buffer) {
+  private handleVoiceStateUpdate(oldState: VoiceState | null, newState: VoiceState | null) {
+    if (newState?.member?.user.bot) return;
+    if (newState?.channelId != null && newState?.channelId != oldState?.channelId) {
+      this.joinChannel(newState.channel as BaseGuildVoiceChannel);
+    }
+  }
 
-    const audioData = new Uint8Array(buffer);
+  private handleGuildCreate(guild: Guild) {
+    console.log(`Joined guild ${guild.name}`);
+    this.scanGuild(guild);
+  }
 
-    let turboSession;
-
-    let result;
-
-    await initialize();
-
-    const loadResult = await new SessionManager().loadModel(
-      AvailableModels.WHISPER_TINY,
-      () => {
-        console.log("Model loaded successfully");
+  private async handleUserStream(
+    user_id: UUID,
+    userName: string,
+    channel: BaseGuildVoiceChannel,
+    audioStream: Readable
+  ) {
+    const channelId = channel.id;
+    const userIdUUID = uuid(user_id) as UUID;
+    this.listenToSpokenAudio(
+      userIdUUID,
+      userName,
+      channelId,
+      audioStream,
+      async (responseAudioStream) => {
+        responseAudioStream.on("close", () => {
+          console.log("Response audio stream closed");
+        });
+        await this.playAudioStream(user_id, responseAudioStream);
       },
-      (p) => {
-        console.log(`Loading: ${p}%`);
-      }
+      ResponseType.RESPONSE_AUDIO
     );
-  
-    if (loadResult.isOk) {
-        turboSession = loadResult.value;
-    } else {
-        console.log("model loading failed")
+  }
+
+  private async handleMessageCreate(message: DiscordMessage) {
+    if (message.interaction) return;
+    if (message.author?.bot) return;
+
+    const user_id = message.author.id as UUID;
+    const userName = message.author.username;
+    const channelId = message.channel.id;
+    const textContent = message.content;
+
+    try {
+      const responseStream = await this.respondToText({
+        user_id,
+        userName,
+        channelId,
+        input: textContent,
+        requestedResponseType: ResponseType.RESPONSE_TEXT,
+        message,
+        discordMessage: message,
+        discordClient: this.client,
+      });
+      if (!responseStream) {
+        console.log("No response stream");
+        return;
+      }
+      let responseData = "";
+      for await (const chunk of responseStream) {
+        responseData += chunk;
+      }
+
+      message.channel.send(responseData);
+    } catch (error) {
+      console.error("Error responding to message:", error);
+      message.channel.send("Sorry, I encountered an error while processing your request.");
     }
+  }
 
-    let options = new DecodingOptionsBuilder().setTask(Task.Transcribe).build();
+  private async handleInteractionCreate(interaction: any) {
+    if (!interaction.isCommand()) return;
+
+    switch (interaction.commandName) {
+      case "setname":
+        await this.handleSetNameCommand(interaction);
+        break;
+      case "setbio":
+        await this.handleSetBioCommand(interaction);
+        break;
+      case "joinchannel":
+        await this.handleJoinChannelCommand(interaction);
+        break;
+      case "leavechannel":
+        await this.handleLeaveChannelCommand(interaction);
+        break;
+    }
+  }
+
+  async speechToText(buffer: Buffer) {
+    if (!this.transcriber) {
+      console.log("Transcriber not initialized. Initializing now...");
+      await this.initializeTranscriber();
+    }
   
-    await turboSession.transcribe(audioData, true, options, (segment) => {
-        console.log("segment text:", segment.text );
-        result = result.concat(segment.text)
-        if (segment.last) {
-            return
-        }
-    });
-
-    result = result.trim();
-    console.log(`Speech to text: ${result}`);
-    if (result == null || result.length < 5) {
+    try {
+      // Preprocess the audio data
+      const audioData = {
+        array: new Float32Array(buffer),
+        sampleRate: 16000,
+      };
+  
+      const result = await this.transcriber(audioData);
+      console.log(`Speech to text: ${result.text}`);
+      if (!result.text || result.text.length < 5) {
         return null;
+      }
+      return result.text;
+    } catch (error) {
+      console.error("Error in speech-to-text conversion:", error);
+      return null;
     }
-    
-    return result;
+  }
+  
+  
 
-}
-
-  private async ensureUserExists(agentId, userName, botToken = null) {
+  private async ensureUserExists(agentId: UUID, userName: string, botToken: string | null = null) {
     if (!userName && botToken) {
       userName = await this.fetchBotName(botToken);
     }
@@ -471,37 +301,7 @@ export class DiscordClient extends EventEmitter {
       });
     }
 
-    const _saveRequestMessage = async (message: Message, state: State) => {
-      const { content: senderContent } = message;
-
-      if ((senderContent as Content).content) {
-        const data2 = adapter.db
-          .prepare(
-            "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1"
-          )
-          .all("messages", message.user_id, message.room_id) as {
-            content: Content;
-          }[];
-
-        if (data2.length > 0 && data2[0].content === message.content) {
-          console.log("already saved", data2);
-        } else {
-          await this.agent.runtime.messageManager.createMemory({
-            user_id: message.user_id,
-            content: senderContent,
-            room_id: message.room_id,
-            embedding: embeddingZeroVector,
-          });
-        }
-        await this.agent.runtime.evaluate(message, {
-          ...state,
-          discordMessage,
-          discordClient,
-        });
-      }
-    };
-
-    await _saveRequestMessage(message, state as State);
+    await this._saveRequestMessage(message, state);
 
     if (shouldIgnore) {
       console.log("shouldIgnore", shouldIgnore);
@@ -516,29 +316,7 @@ export class DiscordClient extends EventEmitter {
     });
 
     if (!shouldRespond && hasInterest) {
-      const shouldRespondContext = composeContext({
-        state,
-        template: shouldRespondTemplate,
-      });
-
-      const response = await this.agent.runtime.completion({
-        context: shouldRespondContext,
-        stop: [],
-      });
-
-      console.log("*** response from ", nickname, ":", response);
-
-      if (response.toLowerCase().includes("respond")) {
-        shouldRespond = true;
-      } else if (response.toLowerCase().includes("ignore")) {
-        shouldRespond = false;
-      } else if (response.toLowerCase().includes("stop")) {
-        shouldRespond = false;
-        if (interestChannels) delete interestChannels[discordMessage.channelId];
-      } else {
-        console.error("Invalid response:", response);
-        shouldRespond = false;
-      }
+      shouldRespond = await this._checkShouldRespond(state, interestChannels, discordMessage);
     }
 
     if (!shouldRespond) {
@@ -559,6 +337,77 @@ export class DiscordClient extends EventEmitter {
       console.log(context, "Response Context");
     }
 
+    const responseContent = await this._generateResponse(message, state, context);
+
+    await this._saveResponseMessage(message, state, responseContent);
+    this.agent.runtime
+      .processActions(message, responseContent, state)
+      .then((response: unknown) => {
+        if (response && (response as Content).content) {
+          callback((response as Content).content);
+        }
+      });
+
+    return responseContent;
+  }
+
+  private async _saveRequestMessage(message: Message, state: State) {
+    const { content: senderContent } = message;
+
+    if ((senderContent as Content).content) {
+      const data2 = adapter.db
+        .prepare(
+          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1"
+        )
+        .all("messages", message.user_id, message.room_id) as {
+          content: Content;
+        }[];
+
+      if (data2.length > 0 && data2[0].content === message.content) {
+        console.log("already saved", data2);
+      } else {
+        await this.agent.runtime.messageManager.createMemory({
+          user_id: message.user_id,
+          content: senderContent,
+          room_id: message.room_id,
+          embedding: embeddingZeroVector,
+        });
+      }
+      await this.agent.runtime.evaluate(message, {
+        ...state,
+        discordMessage: state.discordMessage,
+        discordClient: state.discordClient,
+      });
+    }
+  }
+
+  private async _checkShouldRespond(state: State, interestChannels: InterestChannels | undefined, discordMessage: DiscordMessage): Promise<boolean> {
+    const shouldRespondContext = composeContext({
+      state,
+      template: shouldRespondTemplate,
+    });
+
+    const response = await this.agent.runtime.completion({
+      context: shouldRespondContext,
+      stop: [],
+    });
+
+    console.log("*** response from ", state.agentName, ":", response);
+
+    if (response.toLowerCase().includes("respond")) {
+      return true;
+    } else if (response.toLowerCase().includes("ignore")) {
+      return false;
+    } else if (response.toLowerCase().includes("stop")) {
+      if (interestChannels) delete interestChannels[discordMessage.channelId];
+      return false;
+    } else {
+      console.error("Invalid response:", response);
+      return false;
+    }
+  }
+
+  private async _generateResponse(message: Message, state: State, context: string): Promise<Content> {
     let responseContent: Content | null = null;
     const { user_id, room_id } = message;
 
@@ -608,41 +457,26 @@ export class DiscordClient extends EventEmitter {
       };
     }
 
-    const _saveResponseMessage = async (
-      message: Message,
-      state: State,
-      responseContent: Content
-    ) => {
-      const { room_id } = message;
-      const agentId = getUuid(
-        settings.DISCORD_APPLICATION_ID as string
-      ) as UUID;
-
-      responseContent.content = responseContent.content?.trim();
-
-      if (responseContent.content) {
-        await this.agent.runtime.messageManager.createMemory({
-          user_id: agentId!,
-          content: responseContent,
-          room_id,
-          embedding: embeddingZeroVector,
-        });
-        await this.agent.runtime.evaluate(message, { ...state, responseContent });
-      } else {
-        console.warn("Empty response, skipping");
-      }
-    };
-
-    await _saveResponseMessage(message, state, responseContent);
-    this.agent.runtime
-      .processActions(message, responseContent, state)
-      .then((response: unknown) => {
-        if (response && (response as Content).content) {
-          callback((response as Content).content);
-        }
-      });
-
     return responseContent;
+  }
+
+  private async _saveResponseMessage(message: Message, state: State, responseContent: Content) {
+    const { room_id } = message;
+    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+
+    responseContent.content = responseContent.content?.trim();
+
+    if (responseContent.content) {
+      await this.agent.runtime.messageManager.createMemory({
+        user_id: agentId!,
+        content: responseContent,
+        room_id,
+        embedding: embeddingZeroVector,
+      });
+      await this.agent.runtime.evaluate(message, { ...state, responseContent });
+    } else {
+      console.warn("Empty response, skipping");
+    }
   }
 
   async fetchBotName(botToken: string) {
@@ -762,174 +596,11 @@ export class DiscordClient extends EventEmitter {
     discordMessage?: DiscordMessage;
     interestChannels?: InterestChannels;
   }): Promise<Readable | null> {
-    async function _shouldIgnore(
-      message: DiscordMessage,
-      interestChannels: InterestChannels
-    ) {
-      if (!interestChannels) {
-        throw new Error("Interest channels not provided");
-      }
-      const loseInterestWords = [
-        "shut up",
-        "stop",
-        "dont talk",
-        "silence",
-        "stop talking",
-        "be quiet",
-        "hush",
-        "stfu",
-        "stupid bot",
-        "dumb bot",
-      ];
-      if (
-        message.content.length < 13 &&
-        loseInterestWords.some((word) =>
-          message.content.toLowerCase().includes(word)
-        )
-      ) {
-        delete interestChannels[message.channelId];
-        return true;
-      }
-
-      const ignoreWords = [
-        "fuck",
-        "shit",
-        "damn",
-        "piss",
-        "suck",
-        "dick",
-        "cock",
-        " sex",
-        " sexy",
-      ];
-      if (
-        message.content.length < 15 &&
-        ignoreWords.some((word) => message.content.toLowerCase().includes(word))
-      ) {
-        return true;
-      }
-
-      if (!interestChannels[message.channelId] && message.content.length < 7) {
-        return true;
-      }
-
-      const ignoreResponseWords = ["lol", "nm", "uh"];
-      if (
-        message.content.length < 4 &&
-        ignoreResponseWords.some((word) =>
-          message.content.toLowerCase().includes(word)
-        )
-      ) {
-        return true;
-      }
-      return false;
-    }
-
-    async function _shouldRespond(
-      message: DiscordMessage,
-      interestChannels: InterestChannels
-    ) {
-      if (message.author.id === discordClient.user?.id) return false;
-      if (message.author.bot) return false;
-      if (message.mentions.has(discordClient.user?.id as string)) return true;
-
-      const guild = message.guild;
-      const member = guild?.members.cache.get(discordClient.user?.id as string);
-      const nickname = member?.nickname;
-
-      if (
-        message.content
-          .toLowerCase()
-          .includes(discordClient.user?.username.toLowerCase() as string) ||
-        message.content
-          .toLowerCase()
-          .includes(discordClient.user?.tag.toLowerCase() as string) ||
-        (nickname &&
-          message.content.toLowerCase().includes(nickname.toLowerCase()))
-      ) {
-        return true;
-      }
-
-      if (!message.guild) return true;
-
-      const acknowledgementWords = [
-        "ok",
-        "sure",
-        "no",
-        "okay",
-        "yes",
-        "maybe",
-        "why not",
-        "yeah",
-        "yup",
-        "yep",
-        "ty",
-      ];
-      if (
-        interestChannels[message.channelId] &&
-        interestChannels[message.channelId].messages &&
-        interestChannels[message.channelId].messages.length > 0 &&
-        interestChannels[message.channelId].messages[
-          interestChannels[message.channelId].messages.length - 1
-        ].user_id === discordClient.user?.id &&
-        acknowledgementWords.some((word) =>
-          interestChannels[message.channelId].messages[
-            interestChannels[message.channelId].messages.length - 1
-          ].content.content
-            .toLowerCase()
-            .includes(word)
-        ) &&
-        interestChannels[message.channelId].messages[
-          interestChannels[message.channelId].messages.length - 1
-        ].content.content.length < 6
-      ) {
-        return true;
-      }
-      return false;
-    }
-
-    const shouldIgnore =
-      message && interestChannels
-        ? await _shouldIgnore(message, interestChannels)
-        : false;
-    let hasInterest =
-      message && interestChannels
-        ? !!interestChannels[message.channelId]
-        : true;
-    let shouldRespond =
-      message && interestChannels
-        ? await _shouldRespond(message, interestChannels)
-        : true;
-
-    if (shouldIgnore) {
-      shouldRespond = false;
-      hasInterest = false;
-      if (interestChannels && message && interestChannels[message?.channelId]) {
-        delete interestChannels[message?.channelId];
-      }
-    }
-
-    if (!shouldIgnore && interestChannels) {
-      interestChannels[channelId] = {
-        messages: [
-          ...(interestChannels[channelId]?.messages || []),
-          {
-            user_id: user_id,
-            userName: userName,
-            content: { content: message?.content || "", action: "WAIT" },
-          },
-        ],
-        lastMessageSent: Date.now(),
-      };
-    }
-
     if (requestedResponseType == null)
       requestedResponseType = ResponseType.RESPONSE_AUDIO;
 
     const room_id = getUuid(channelId) as UUID;
-
     const userIdUUID = getUuid(user_id) as UUID;
-
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
     await this.ensureUserExists(
@@ -956,9 +627,6 @@ export class DiscordClient extends EventEmitter {
         user_id: userIdUUID,
         room_id,
       },
-      hasInterest,
-      shouldIgnore,
-      shouldRespond,
       callback,
       interestChannels,
       discordClient: this.client,
@@ -1126,4 +794,144 @@ export class DiscordClient extends EventEmitter {
       }
     );
   }
+
+  private async handleSetNameCommand(interaction: any) {
+    const newName = interaction.options.get("name")?.value;
+    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+    const userIdUUID = getUuid(interaction.user.id) as UUID;
+    const userName = interaction.user.username;
+    const room_id = getUuid(interaction.channelId) as UUID;
+
+    await interaction.deferReply();
+
+    await this.ensureUserExists(
+      agentId,
+      await this.fetchBotName(settings.DISCORD_API_TOKEN),
+      settings.DISCORD_API_TOKEN
+    );
+    await this.ensureUserExists(userIdUUID, userName);
+    await this.agent.ensureRoomExists(room_id);
+    await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
+    await this.agent.ensureParticipantInRoom(agentId, room_id);
+
+    if (newName) {
+      try {
+        adapter.db
+          .prepare("UPDATE accounts SET name = ? WHERE id = ?")
+          .run(newName, getUuid(interaction.client.user?.id));
+
+        const guild = interaction.guild;
+        if (guild) {
+          const botMember = await guild.members.fetch(
+            interaction.client.user?.id as string
+          );
+          await botMember.setNickname(newName as string);
+        }
+
+        await interaction.editReply(
+          `Agent's name has been updated to: ${newName}`
+        );
+      } catch (error) {
+        console.error("Error updating agent name:", error);
+        await interaction.editReply(
+          "An error occurred while updating the agent name."
+        );
+      }
+    } else {
+      await interaction.editReply(
+        "Please provide a new name for the agent."
+      );
+    }
+  }
+
+  private async handleSetBioCommand(interaction: any) {
+    const newBio = interaction.options.get("bio")?.value;
+    if (newBio) {
+      try {
+        const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+        const userIdUUID = getUuid(interaction.user.id) as UUID;
+        const userName = interaction.user.username;
+        const room_id = getUuid(interaction.channelId) as UUID;
+
+        await interaction.deferReply();
+
+        await this.ensureUserExists(
+          agentId,
+          await this.fetchBotName(settings.DISCORD_API_TOKEN),
+          settings.DISCORD_API_TOKEN
+        );
+        await this.ensureUserExists(userIdUUID, userName);
+        await this.agent.ensureRoomExists(room_id);
+        await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
+        await this.agent.ensureParticipantInRoom(agentId, room_id);
+
+        adapter.db
+          .prepare("UPDATE accounts SET details = ? WHERE id = ?")
+          .run(
+            JSON.stringify({ summary: newBio }),
+            getUuid(interaction.client.user?.id)
+          );
+
+        await interaction.editReply(
+          `Agent's bio has been updated to: ${newBio}`
+        );
+      } catch (error) {
+        console.error("Error updating agent bio:", error);
+        await interaction.editReply(
+          "An error occurred while updating the agent bio."
+        );
+      }
+    } else {
+      await interaction.reply("Please provide a new bio for the agent.");
+    }
+  }
+
+  private async handleJoinChannelCommand(interaction: any) {
+    const channelId = interaction.options.get("channel")?.value as string;
+    if (!channelId) {
+      await interaction.reply("Please provide a voice channel to join.");
+      return;
+    }
+    const guild = interaction.guild;
+    if (!guild) {
+      return;
+    }
+    const voiceChannel = interaction.guild.channels.cache.find(
+      (channel) =>
+        channel.id === channelId && channel.type === ChannelType.GuildVoice
+    );
+
+    if (!voiceChannel) {
+      await interaction.reply("Voice channel not found!");
+      return;
+    }
+
+    try {
+      this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
+      await interaction.reply(`Joined voice channel: ${voiceChannel.name}`);
+    } catch (error) {
+      console.error("Error joining voice channel:", error);
+      await interaction.reply("Failed to join the voice channel.");
+    }
+  }
+
+  private async handleLeaveChannelCommand(interaction: any) {
+    const connection = getVoiceConnection(interaction.guildId as any);
+
+    if (!connection) {
+      await interaction.reply("Not currently in a voice channel.");
+      return;
+    }
+
+    try {
+      connection.destroy();
+      await interaction.reply("Left the voice channel.");
+    } catch (error) {
+      console.error("Error leaving voice channel:", error);
+      await interaction.reply("Failed to leave the voice channel.");
+    }
+  }
 }
+
+// Export the DiscordClient class
+export default DiscordClient;

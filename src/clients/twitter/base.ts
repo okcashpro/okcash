@@ -59,7 +59,7 @@ export class ClientBase extends EventEmitter {
     this.directions = "- " + character.style.all.join("\n- ") + "- " + character.style.post.join()
     this.callback = callback;
     this.model = model;
-
+  
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {
       console.log("settings.TWITTER_COOKIES")
@@ -90,11 +90,10 @@ export class ClientBase extends EventEmitter {
             console.error('Error logging in to Twitter:', error);
           });
       }
-
     }
-
+  
     console.log("doing stuff");
-
+  
     (async () => {
       while (!(await this.twitterClient.isLoggedIn())) {
         console.log('Waiting for Twitter login');
