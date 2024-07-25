@@ -15,4 +15,6 @@ db.sqlite
 searches/
 tweets/
 
+*.gguf
+
 characters/

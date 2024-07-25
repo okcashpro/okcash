@@ -7,7 +7,7 @@ export class BrowserService {
     this.browser = undefined;
   }
 
-  async initializeBrowser() {
+  async initialize() {
     if (!this.browser) {
       this.browser = await chromium.launch();
     }
