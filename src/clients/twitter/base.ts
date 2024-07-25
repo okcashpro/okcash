@@ -15,6 +15,7 @@ import { adapter } from "../../core/db.ts";
 import settings from "../../core/settings.ts";
 
 import { fileURLToPath } from 'url';
+import ImageRecognitionService from "../../services/imageRecognition.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +40,7 @@ export class ClientBase extends EventEmitter {
   directions: string;
   model: string;
   lastCheckedTweetId: string | null = null;
+  imageRecognitionService: ImageRecognitionService;
   temperature: number = 0.5;
   callback: (self: ClientBase) => any = null;
 
@@ -59,6 +61,7 @@ export class ClientBase extends EventEmitter {
     this.directions = "- " + character.style.all.join("\n- ") + "- " + character.style.post.join()
     this.callback = callback;
     this.model = model;
+    this.imageRecognitionService = new ImageRecognitionService();
   
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {
@@ -119,46 +122,12 @@ export class ClientBase extends EventEmitter {
   }
 
   async describeImage(imageUrl: string): Promise<string> {
-    // TODO: Verify this is correct and add a test for it
     try {
-      const response = await fetch(imageUrl);
-      const imageBuffer = await response.arrayBuffer();
-  
-      const formData = new FormData();
-      formData.append('image', new Blob([imageBuffer]), 'image.jpg');
-  
-      let base64Image: string;
-  
-      if (typeof window === 'undefined') {
-        // Running in Node.js environment
-        base64Image = Buffer.from(imageBuffer).toString('base64');
-      } else {
-        // Running in browser environment
-        base64Image = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(new Blob([imageBuffer]));
-        });
-      }
-  
-      const apiResponse = await fetch('https://api.openai.com/v1/images/generations', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          image: base64Image,
-        }),
-      });
-  
-      const responseData = await apiResponse.json();
-      const description = responseData.data[0].text;
-      return description;
+      const description = await this.imageRecognitionService.recognizeImage(imageUrl);
+      return description[0] || 'Unable to describe the image.';
     } catch (error) {
       console.error('Error describing image:', error);
-      return '';
+      return 'Error occurred while describing the image.';
     }
   }
 
@@ -170,7 +139,7 @@ export class ClientBase extends EventEmitter {
   }
 
   async searchArxiv(query: string): Promise<string> {
-    // TODO: Search Arxiv for a topic, find a paper, summarize it and return the link and summar
+    // TODO: Search Arxiv for a topic, find a paper, summarize it and return the link and summary
     return '';
   }
 
