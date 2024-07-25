@@ -8,6 +8,7 @@ import {
   getVoiceConnection,
   joinVoiceChannel,
 } from "@discordjs/voice";
+import { pipeline as transformersPipeline, read_audio } from '@xenova/transformers';
 import {
   Content,
   Message,
@@ -35,7 +36,6 @@ import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from "uuid-by-string";
-import { pipeline as transformersPipeline } from '@xenova/transformers';
 import { Agent } from '../../core/agent.ts';
 import { adapter } from "../../core/db.ts";
 import settings from "../../core/settings.ts";
@@ -44,6 +44,53 @@ import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { shouldRespondTemplate } from "./prompts.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
+
+import path from 'path'
+import fs from 'fs';
+import { promisify } from 'util';
+import wavefile from 'wavefile';
+
+const readFileAsync = promisify(fs.readFile);
+
+// define __dirname
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+/**
+ * Custom read_audio function for Node.js
+ * @param {string} filePath The path to the audio file.
+ * @param {number} sampleRate The desired sample rate of the audio data.
+ * @returns {Promise<Float32Array>} The audio data as a Float32Array.
+ */
+import wav from 'node-wav';
+
+async function read_audio_node(filePath: string, sampleRate: number): Promise<Float32Array> {
+  try {
+    const buffer = await fs.promises.readFile(filePath);
+    const result = wav.decode(buffer);
+
+    if (result.sampleRate !== sampleRate) {
+      console.warn(`Warning: File sample rate (${result.sampleRate}) doesn't match the requested sample rate (${sampleRate})`);
+    }
+
+    // Convert to mono if stereo
+    const audioData = result.channelData.length > 1
+      ? mixChannels(result.channelData)
+      : result.channelData[0];
+
+    return new Float32Array(audioData);
+  } catch (error) {
+    console.error('Error reading audio file:', error);
+    throw error;
+  }
+}
+
+function mixChannels(channelData: Float32Array[]): Float32Array {
+  const mixedChannel = new Float32Array(channelData[0].length);
+  for (let i = 0; i < mixedChannel.length; i++) {
+    mixedChannel[i] = channelData.reduce((sum, channel) => sum + channel[i], 0) / channelData.length;
+  }
+  return mixedChannel;
+}
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -96,6 +143,7 @@ export class DiscordClient extends EventEmitter {
   private async initializeTranscriber() {
     this.transcriber = await transformersPipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en');
   }
+
 
   private setupEventListeners() {
     this.client.on("voiceStateUpdate", this.handleVoiceStateUpdate.bind(this));
@@ -212,33 +260,46 @@ export class DiscordClient extends EventEmitter {
     }
   }
 
-  async speechToText(buffer: Buffer) {
+  async speechToText(audioBuffer: Buffer) {
     if (!this.transcriber) {
       console.log("Transcriber not initialized. Initializing now...");
       await this.initializeTranscriber();
     }
   
     try {
-      // Preprocess the audio data
-      const audioData = {
-        array: new Float32Array(buffer),
-        sampleRate: 16000,
-      };
+      console.log(`Received audioBuffer of length: ${audioBuffer.length}`);
   
-      const result = await this.transcriber(audioData);
-      console.log(`Speech to text: ${result.text}`);
-      if (!result.text || result.text.length < 5) {
+      // Convert the Buffer to a Float32Array
+      const float32Array = new Float32Array(audioBuffer.length / 2);
+      for (let i = 0; i < float32Array.length; i++) {
+        float32Array[i] = audioBuffer.readInt16LE(i * 2) / 32768.0;
+      }
+  
+      console.log(`Converted to Float32Array of length: ${float32Array.length}`);
+  
+      // Run transcription
+      let start = performance.now();
+      let output = await this.transcriber(float32Array, {
+        sampling_rate: 48000, // Discord's default sample rate
+      });
+      let end = performance.now();
+  
+      console.log(`Transcription duration: ${(end - start) / 1000} seconds`);
+      console.log('Transcription output:', output);
+  
+      if (!output.text || output.text.length < 5) {
         return null;
       }
-      return result.text;
+      return output.text;
     } catch (error) {
       console.error("Error in speech-to-text conversion:", error);
+      console.error("Error details:", error.message);
+      console.error("Error stack:", error.stack);
       return null;
     }
   }
-  
-  
 
+  
   private async ensureUserExists(agentId: UUID, userName: string, botToken: string | null = null) {
     if (!userName && botToken) {
       userName = await this.fetchBotName(botToken);
@@ -507,45 +568,34 @@ export class DiscordClient extends EventEmitter {
   ) {
     if (requestedResponseType == null)
       requestedResponseType = ResponseType.RESPONSE_AUDIO;
-
+  
     const buffers: Buffer[] = [];
     let totalLength = 0;
     const maxSilenceTime = 500;
     let lastChunkTime = Date.now();
-
+  
     const monitor = new AudioMonitor(inputStream, 10000000, async (buffer) => {
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
-
+  
       buffers.push(buffer);
       totalLength += buffer.length;
       lastChunkTime = currentTime;
-
+  
       if (silenceDuration > maxSilenceTime || totalLength >= 1000000) {
         const combinedBuffer = Buffer.concat(buffers, totalLength);
         buffers.length = 0;
         totalLength = 0;
-
-        if (requestedResponseType == ResponseType.SPOKEN_AUDIO) {
-          const readable = new Readable({
-            read() {
-              this.push(combinedBuffer);
-              this.push(null);
-            },
-          });
-
-          callback(readable);
-        } else {
-          let responseStream = await this.respondToSpokenAudio(
-            user_id as UUID,
-            userName,
-            channelId,
-            combinedBuffer,
-            requestedResponseType
-          );
-          if (responseStream) {
-            callback(responseStream as Readable);
-          }
+  
+        let responseStream = await this.respondToSpokenAudio(
+          user_id as UUID,
+          userName,
+          channelId,
+          combinedBuffer,
+          requestedResponseType
+        );
+        if (responseStream) {
+          callback(responseStream as Readable);
         }
       }
     });
