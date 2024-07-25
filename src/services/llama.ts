@@ -26,8 +26,10 @@ class LlamaService {
         if (this.llama) {
             return;
         }
+        console.log("Loading llama")
         this.llama = await getLlama();
         await this.checkModel();
+        console.log("Loading model")
         this.model = await this.llama.loadModel({ modelPath: this.modelPath });
     }
 
@@ -48,10 +50,13 @@ class LlamaService {
             throw new Error("Model not initialized. Call initialize() first.");
         }
 
+        console.log("Creating context")
         const context = await this.model.createContext();
+        console.log("Creating session")
         const session = new LlamaChatSession({
             contextSequence: context.getSequence()
         });
+        console.log("Creating grammar")
         const grammar = new LlamaJsonSchemaGrammar(this.llama, {
             "type": "object",
             "properties": {
@@ -66,15 +71,15 @@ class LlamaService {
                 }
             }
         });
-
+        console.log("Prompting")
         const response = await session.prompt(answer, {
             grammar,
             temperature: Number(temperature)
         });
-
+        console.log("Parsing")
         const parsedResponse: GrammarData = grammar.parse(response);
 
-        console.log("AI: " + parsedResponse);
+        console.log("AI: " + parsedResponse.responseMessage);
         return parsedResponse;
     }
 
