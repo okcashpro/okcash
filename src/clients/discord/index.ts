@@ -8,7 +8,7 @@ import {
   getVoiceConnection,
   joinVoiceChannel,
 } from "@discordjs/voice";
-import { pipeline as transformersPipeline, read_audio } from '@xenova/transformers';
+import { pipeline as transformersPipeline } from '@xenova/transformers';
 import {
   Content,
   Message,
@@ -44,53 +44,6 @@ import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { shouldRespondTemplate } from "./prompts.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
-
-import path from 'path'
-import fs from 'fs';
-import { promisify } from 'util';
-import wavefile from 'wavefile';
-
-const readFileAsync = promisify(fs.readFile);
-
-// define __dirname
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-
-/**
- * Custom read_audio function for Node.js
- * @param {string} filePath The path to the audio file.
- * @param {number} sampleRate The desired sample rate of the audio data.
- * @returns {Promise<Float32Array>} The audio data as a Float32Array.
- */
-import wav from 'node-wav';
-
-async function read_audio_node(filePath: string, sampleRate: number): Promise<Float32Array> {
-  try {
-    const buffer = await fs.promises.readFile(filePath);
-    const result = wav.decode(buffer);
-
-    if (result.sampleRate !== sampleRate) {
-      console.warn(`Warning: File sample rate (${result.sampleRate}) doesn't match the requested sample rate (${sampleRate})`);
-    }
-
-    // Convert to mono if stereo
-    const audioData = result.channelData.length > 1
-      ? mixChannels(result.channelData)
-      : result.channelData[0];
-
-    return new Float32Array(audioData);
-  } catch (error) {
-    console.error('Error reading audio file:', error);
-    throw error;
-  }
-}
-
-function mixChannels(channelData: Float32Array[]): Float32Array {
-  const mixedChannel = new Float32Array(channelData[0].length);
-  for (let i = 0; i < mixedChannel.length; i++) {
-    mixedChannel[i] = channelData.reduce((sum, channel) => sum + channel[i], 0) / channelData.length;
-  }
-  return mixedChannel;
-}
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
