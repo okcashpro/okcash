@@ -16,7 +16,7 @@ import settings from "../../core/settings.ts";
 import { ClientBase } from "./base.ts";
 
 export const messageHandlerTemplate =
-`{{relevantFacts}}
+  `{{relevantFacts}}
 {{recentFacts}}
 
 {{agentName}}'s bio:
@@ -57,7 +57,7 @@ Response format should be formatted in a JSON block like this:
 {{recentMessages}}`
 
 export const shouldRespondTemplate =
-`# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+  `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
 
@@ -167,9 +167,11 @@ export class TwitterInteractionClient extends ClientBase {
     }
 
     const imageDescriptions = [];
-    for (const photo of tweet.photos) {
-      const description = await this.describeImage(photo.url);
-      imageDescriptions.push(description);
+    if (tweet.photos && tweet.photos.length > 0) {
+      for (const photo of tweet.photos) {
+        const description = await this.describeImage(photo.url);
+        imageDescriptions.push(description);
+      }
     }
 
     // Fetch replies and retweets
