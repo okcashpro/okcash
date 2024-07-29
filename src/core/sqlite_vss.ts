@@ -2,6 +2,7 @@ import { statSync } from "fs";
 import { join } from "path";
 import { arch, platform } from "process";
 import { fileURLToPath } from 'url';
+import { Database } from 'better-sqlite3';
 import path from 'path';
 
 // Get the file path of the current module
@@ -9,11 +10,6 @@ const __filename = fileURLToPath(import.meta.url);
 
 // Get the directory name of the current module
 const __dirname = path.dirname(__filename);
-
-// TypeScript definitions
-export interface Database {
-  loadExtension(file: string, entrypoint?: string | undefined): void;
-}
 
 const supportedPlatforms: [string, string][] = [
   ["darwin", "x64"],
@@ -28,6 +24,7 @@ function validPlatform(platform: string, arch: string): boolean {
 function extensionSuffix(platform: string): string {
   if (platform === "win32") return "dll";
   if (platform === "darwin") return "dylib";
+  if (platform === "linux") return "";
   return "so";
 }
 
@@ -76,11 +73,11 @@ export function getVssLoadablePath(): string {
 }
 
 export function loadVector(db: Database): void {
-  db.loadExtension(getVectorLoadablePath());
+  db.loadExtension(getVectorLoadablePath().replace('.so', ''));
 }
 
 export function loadVss(db: Database): void {
-  db.loadExtension(getVssLoadablePath());
+  db.loadExtension(getVssLoadablePath().replace('.so', ''));
 }
 
 export function load(db: Database): void {
