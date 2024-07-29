@@ -15,7 +15,6 @@ import {
   State,
   composeContext,
   embeddingZeroVector,
-  messageHandlerTemplate,
   parseJSONObjectFromText
 } from "bgent";
 import { UUID } from "crypto";
@@ -42,8 +41,52 @@ import settings from "../../core/settings.ts";
 import { textToSpeech } from "../elevenlabs/index.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
-import { shouldRespondTemplate } from "./prompts.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
+
+export const messageHandlerTemplate =
+// `{{actionExamples}}
+
+// # IMPORTANT: DO NOT USE THE INFORMATION FROM THE EXAMPLES ABOVE. THE EXAMPLES ARE FOR ACTION EXAMPLE REFERENCE ONLY.
+
+// ~~~
+
+// {{lore}}
+// {{relevantFacts}}
+// {{recentFacts}}
+// {{goals}}
+// {{actors}}
+`{{providers}}
+{{actionNames}}
+{{actions}}
+
+{{recentMessages}}
+
+# INSTRUCTIONS: Write the next message for {{agentName}}.
+\nResponse format should be formatted in a JSON block like this:
+\`\`\`json
+{ \"user\": \"{{agentName}}\", \"responseMessage\": string, \"action\": string }
+\`\`\``;
+
+export const shouldRespondTemplate =
+`# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+
+Response options are RESPOND, IGNORE and STOP.
+
+{{agentName}} should respond to messages that are directed at them, or participate in conversations that are interesting or relevant to their background, IGNORE messages that are irrelevant to them, and should STOP if the conversation is concluded.
+
+{{agentName}} is in a room with other users and wants to be conversational, but not annoying.
+{{agentName}} should RESPOND to messages that are directed at them, or participate in conversations that are interesting or relevant to their background.
+If a message is not interesting or relevant, {{agentName}} should IGNORE.
+Unless directly responding to a user, {{agentName}} should IGNORE to messages that are very short or do not contain much information.
+If a user asks {{agentName}} to be quiet, {{agentName}} should STOP!
+If {{agentName}} concludes a conversation and isn't part of the conversation anymore, {{agentName}} should STOP.
+
+IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to IGNORE.
+
+{{recentMessages}}
+
+# INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, or IGNORE if {{agentName}} should not respond to the last message and STOP if {{agentName}} should stop participating in the conversation.
+What does {{agentName}} do? (RESPOND, IGNORE, STOP)`;
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -312,6 +355,7 @@ export class DiscordClient extends EventEmitter {
       state = await this.agent.runtime.composeState(message, {
         discordClient,
         discordMessage,
+        agentName: this.client.user?.displayName,
       });
     }
 
@@ -322,11 +366,10 @@ export class DiscordClient extends EventEmitter {
       return { content: "", action: "IGNORE" };
     }
 
-    const nickname = this.client.user?.displayName;
     state = await this.agent.runtime.composeState(message, {
       discordClient,
       discordMessage,
-      agentName: nickname,
+      agentName: this.client.user?.displayName,
     });
 
     if (!shouldRespond && hasInterest) {
@@ -336,10 +379,6 @@ export class DiscordClient extends EventEmitter {
     if (!shouldRespond) {
       console.log("Not responding to message");
       return { content: "", action: "IGNORE" };
-    }
-
-    if (!nickname) {
-      console.log("No nickname found for bot");
     }
 
     const context = composeContext({
@@ -400,11 +439,15 @@ export class DiscordClient extends EventEmitter {
       state,
       template: shouldRespondTemplate,
     });
-
+    console.log("Should respond context: ", shouldRespondContext)
     const response = await this.agent.runtime.completion({
       context: shouldRespondContext,
-      stop: [],
+      temperature: 0.1,
+      frequency_penalty: 0.0,
+      presence_penalty: 0.0,
     });
+
+    
 
     console.log("*** response from ", state.agentName, ":", response);
 
@@ -426,10 +469,13 @@ export class DiscordClient extends EventEmitter {
     const { user_id, room_id } = message;
 
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+      console.log("Generating response")
       const response = await this.agent.runtime.completion({
         context,
         stop: [],
       });
+
+      console.log("response is", response)
 
       const values = {
         body: response,
@@ -448,11 +494,11 @@ export class DiscordClient extends EventEmitter {
         response
       ) as unknown as Content;
       console.log("parsedResponse", parsedResponse);
-      if (
-        !(parsedResponse?.user as string)?.includes(
-          (state as State).senderName as string
-        )
-      ) {
+      // if (
+      //   !(parsedResponse?.user as string)?.includes(
+      //     (state as State).senderName as string
+      //   )
+      // ) {
         if (!parsedResponse) {
           continue;
         }
@@ -461,7 +507,7 @@ export class DiscordClient extends EventEmitter {
           action: parsedResponse.action,
         };
         break;
-      }
+      // }
     }
 
     if (!responseContent) {
@@ -508,6 +554,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     const data = await response.json();
+    console.log('**** BOT DATA: ', data)
     return data.username;
   }
 
@@ -636,14 +683,16 @@ export class DiscordClient extends EventEmitter {
       discordMessage: discordMessage as DiscordMessage,
     });
 
-    if (!response.content) {
+    const content = (response.responseMessage || response.response || response.content || response.message) as string;
+
+    if (!content) {
       return null;
     }
 
     if (requestedResponseType == ResponseType.RESPONSE_TEXT) {
-      return Readable.from(response.content);
+      return Readable.from(content);
     } else {
-      return await textToSpeech(response.content);
+      return await textToSpeech(content);
     }
   }
 

@@ -26,9 +26,9 @@ let argv: Arguments = {
 //     const llamaService = new LlamaService();
 //     await llamaService.initialize();
 
-//     const answer = "What is the capital of France?";
+//     const context = "What is the capital of France?";
 //     const temperature = 0.7;
-//     const completionResponse = await llamaService.getCompletionResponse(answer, temperature);
+//     const completionResponse = await llamaService.getCompletionResponse(context, temperature);
 //     console.log("Completion response:", completionResponse);
 
 //     const input = "This is a sample input.";
