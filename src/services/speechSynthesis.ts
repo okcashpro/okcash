@@ -2,9 +2,8 @@ import ort from "onnxruntime-node";
 import Debug, { Debugger } from "debug";
 import ESpeakNg from "espeak-ng";
 import * as fs from "fs";
+import path from "path";
 
-// This resolves a bug with WASM in nodejs.
-ort.env.wasm.numThreads = 1;
 ort.env.remoteModels = false;
 
 enum PuncPosition {
@@ -409,9 +408,24 @@ class SpeechSynthesizer {
         this.debugger = Debug("speech-synthesizer");
     }
 
-    static async create(uri: string = "./model/vits.onnx") {
+    static async create(uri: string = "./model.onnx") {
+        // check if model.onnx exists
+        if (!fs.existsSync(uri)) {
+            console.log("Model file does not exist, downloading...");
+            const response = await fetch("https://media.githubusercontent.com/media/ianmarmour/speech-synthesizer/main/model/vits.onnx?download=true");
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const buffer = await response.arrayBuffer();
+            fs.writeFileSync(uri, Buffer.from(buffer));
+    
+            console.log("Model downloaded and saved successfully.");
+        }
+
         const opt: ort.InferenceSession.SessionOptions = {
-            executionProviders: ["cpu"],
+            executionProviders: ["cuda", "cpu"],
             logSeverityLevel: 3,
             logVerbosityLevel: 3,
             enableCpuMemArena: false,
