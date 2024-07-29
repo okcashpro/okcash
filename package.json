@@ -1,5 +1,5 @@
 {
-  "name": "bgent-discord-voice",
+  "name": "@rubyresearch/agent",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",

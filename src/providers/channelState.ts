@@ -20,11 +20,11 @@ const channelStateProvider: Provider = {
       topic = (channel as TextChannel).topic || "No topic";
     }
 
-    return {
+    return JSON.stringify({
       serverName,
       guildId,
       topic
-    };
+    });
   },
 };
 

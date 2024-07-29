@@ -16,5 +16,6 @@ searches/
 tweets/
 
 *.gguf
+*.onnx
 
 characters/
