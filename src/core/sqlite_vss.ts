@@ -24,7 +24,6 @@ function validPlatform(platform: string, arch: string): boolean {
 function extensionSuffix(platform: string): string {
   if (platform === "win32") return "dll";
   if (platform === "darwin") return "dylib";
-  if (platform === "linux") return "";
   return "so";
 }
 
@@ -71,6 +70,8 @@ export function getVectorLoadablePath(): string {
 export function getVssLoadablePath(): string {
   return loadablePathResolver("vss0");
 }
+
+// Note: There is a weird bug on linux where the extension is not loaded correctly, so we remove the .so extension
 
 export function loadVector(db: Database): void {
   db.loadExtension(getVectorLoadablePath().replace('.so', ''));
