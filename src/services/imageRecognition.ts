@@ -9,7 +9,8 @@ class ImageRecognitionService {
 
   constructor() {
     this.modelId = 'Xenova/moondream2';
-    this.device = 'webgpu';
+    // this.device = 'webgpu';
+    this.device = 'cpu';
     this.model = null;
     this.processor = null;
     this.tokenizer = null;
