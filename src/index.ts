@@ -8,7 +8,7 @@ import { Agent } from './core/agent.ts';
 import fs from "fs";
 import yargs from "yargs";
 import { SpeechSynthesizer } from "./services/speechSynthesis.ts";
-import WavEncoderPkg from "wav-encoder";
+import WavEncoder from "wav-encoder";
 interface Arguments {
     character?: string;
     twitter?: boolean;

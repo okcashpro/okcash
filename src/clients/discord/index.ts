@@ -38,12 +38,13 @@ import { default as getUuid, default as uuid } from "uuid-by-string";
 import { Agent } from '../../core/agent.ts';
 import { adapter } from "../../core/db.ts";
 import settings from "../../core/settings.ts";
-import { textToSpeech } from "../elevenlabs/index.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
 import ImageRecognitionService from "../../services/imageRecognition.ts"
 import { extractAnswer } from "../../core/util.ts"; 
+import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
+import WavEncoder from "wav-encoder";
 
 export const messageHandlerTemplate =
 // `{{actionExamples}}
@@ -103,6 +104,7 @@ export class DiscordClient extends EventEmitter {
   private bio: string;
   private transcriber: any;
   private imageRecognitionService: ImageRecognitionService;
+  speechSynthesizer: SpeechSynthesizer;
 
   constructor(agent: Agent, bio: string) {
     super();
@@ -266,6 +268,25 @@ export class DiscordClient extends EventEmitter {
         await this.handleLeaveChannelCommand(interaction);
         break;
     }
+  }
+
+  async textToSpeech(text: string): Promise<Readable> {
+    if(!this.speechSynthesizer) {
+      this.speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
+    }
+
+        console.log("Synthesizing speech...");
+    // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
+    const audio = await this.speechSynthesizer.synthesize("Four score and seven years ago.");
+    console.log("Speech synthesized");
+    // Encode the audio data into a WAV format
+    const { encode } = WavEncoder;
+    const audioData = {
+        sampleRate: 22050,
+        channelData: [audio]
+    };
+    const wavArrayBuffer = encode.sync(audioData);
+    return wavArrayBuffer;
   }
 
   async speechToText(audioBuffer: Buffer) {
@@ -718,7 +739,7 @@ export class DiscordClient extends EventEmitter {
     if (requestedResponseType == ResponseType.RESPONSE_TEXT) {
       return Readable.from(content);
     } else {
-      return await textToSpeech(content);
+      return await this.textToSpeech(content);
     }
   }
 
