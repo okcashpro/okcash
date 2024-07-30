@@ -214,12 +214,13 @@ export class DiscordClient extends EventEmitter {
     const user_id = message.author.id as UUID;
     const userName = message.author.username;
     const channelId = message.channel.id;
-    const textContent = message.content;
 
     // Check for image attachments
     if (message.attachments.size > 0) {
       await this.handleImageRecognition(message);
     }
+
+    const textContent = message.content;
 
     try {
       const responseStream = await this.respondToText({
