@@ -42,3 +42,10 @@ export function prependWavHeader(readable: Readable, audioLength: number, sample
     });
     return passThrough;
 }
+
+
+export function extractAnswer(text: string): string {
+    const startIndex = text.indexOf('Answer: ') + 8;
+    const endIndex = text.indexOf('<|endoftext|>', 11);
+    return text.slice(startIndex, endIndex);
+};
