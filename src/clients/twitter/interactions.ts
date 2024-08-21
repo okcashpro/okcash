@@ -14,6 +14,7 @@ import { adapter } from "../../core/db.ts";
 import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
+import { log_to_file } from "../../core/logger.ts";
 
 export const messageHandlerTemplate =
   `{{relevantFacts}}
@@ -258,7 +259,10 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
       template: messageHandlerTemplate,
     });
 
-    console.log("***** CONTEXT *****", context);
+    const datestr = new Date().toISOString().replace(/:/g, '-');
+        
+    // log context to file
+    log_to_file(`${botTwitterUsername}_${datestr}_interactions_context`, context)
 
     if (this.agent.runtime.debugMode) {
       console.log(context, "Response Context");
@@ -274,6 +278,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
         temperature: this.temperature,
         model: this.model,
       });
+      log_to_file(`${botTwitterUsername}_${datestr}_interactions_response_${3 - triesLeft}`, response)
 
       const values = {
         body: response,

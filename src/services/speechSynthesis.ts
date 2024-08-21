@@ -424,6 +424,8 @@ class SpeechSynthesizer {
             console.log("Model downloaded and saved successfully.");
         }
 
+        // TODO: if we're on a mac, execution provider is cpu, otherwise test for cuda
+
         const opt: ort.InferenceSession.SessionOptions = {
             executionProviders: ["cuda", "cpu"],
             logSeverityLevel: 3,

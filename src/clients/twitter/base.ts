@@ -61,7 +61,7 @@ export class ClientBase extends EventEmitter {
     this.directions = "- " + character.style.all.join("\n- ") + "- " + character.style.post.join()
     this.callback = callback;
     this.model = model;
-    this.imageRecognitionService = new ImageRecognitionService();
+    this.imageRecognitionService = new ImageRecognitionService(this.agent);
   
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {
@@ -124,7 +124,7 @@ export class ClientBase extends EventEmitter {
   async describeImage(imageUrl: string): Promise<string> {
     try {
       const description = await this.imageRecognitionService.recognizeImage(imageUrl);
-      return description[0] || 'Unable to describe the image.';
+      return description || 'Unable to describe the image.';
     } catch (error) {
       console.error('Error describing image:', error);
       return 'Error occurred while describing the image.';
