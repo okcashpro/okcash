@@ -13,6 +13,7 @@ import { Agent } from "../../core/agent.ts";
 import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
+import { log_to_file } from "../../core/logger.ts";
 
 const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
@@ -118,8 +119,9 @@ Notes:
   - Respond to tweets that are not retweets
   - Respond to tweets where there is an easy exchange of ideas to have with the user
   - ONLY respond with the ID of the tweet`;
-  
-  console.log("**** this.model", this.model)
+    const datestr = new Date().toISOString().replace(/:/g, '-');
+      const logName = `${this.character.name}_search_${datestr}`;
+      log_to_file(logName, prompt)
 
       const mostInterestingTweetResponse = await this.agent.runtime.completion({
         context: prompt,
@@ -127,6 +129,9 @@ Notes:
         temperature: this.temperature,
         model: this.model,
       });
+
+      const responseLogName = `${this.character.name}_search_${datestr}_result`;
+      log_to_file(responseLogName, mostInterestingTweetResponse)
   
       const tweetId = mostInterestingTweetResponse.trim();
       const selectedTweet = tweetsArray.find((tweet) => tweet.id.toString().includes(tweetId) || tweetId.includes(tweet.id.toString()));

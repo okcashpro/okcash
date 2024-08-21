@@ -10,6 +10,7 @@ import {
     ActionExample,
     parseJSONObjectFromText,
 } from "bgent";
+import { log_to_file } from "../core/logger.ts";
 
 const maxContinuesInARow = 2;
 
@@ -49,6 +50,10 @@ export default {
             state,
             template: messageHandlerTemplate,
         });
+        const datestr = new Date().toISOString().replace(/:/g, '-');
+        
+        // log context to file
+        log_to_file(`${state.agentName}_${datestr}_elaborate_context`, context)
 
         let responseContent;
         const { user_id, room_id } = message;
@@ -58,6 +63,9 @@ export default {
                 context,
                 stop: [],
             });
+            
+            // log response to file
+            log_to_file(`${state.agentName}_${datestr}_elaborate_response_${3 - triesLeft}`, response)
 
             runtime.databaseAdapter.log({
                 body: { message, context, response },

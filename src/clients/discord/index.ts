@@ -19,6 +19,7 @@ import {
 } from "bgent";
 import { UUID } from "crypto";
 import {
+  Attachment,
   BaseGuildVoiceChannel,
   ChannelType,
   Client,
@@ -35,16 +36,17 @@ import { EventEmitter } from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from "uuid-by-string";
+import WavEncoder from "wav-encoder";
 import { Agent } from '../../core/agent.ts';
 import { adapter } from "../../core/db.ts";
+import { log_to_file } from "../../core/logger.ts";
 import settings from "../../core/settings.ts";
+import { extractAnswer } from "../../core/util.ts";
+import ImageRecognitionService from "../../services/imageRecognition.ts";
+import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
-import ImageRecognitionService from "../../services/imageRecognition.ts"
-import { extractAnswer } from "../../core/util.ts"; 
-import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
-import WavEncoder from "wav-encoder";
 
 export const messageHandlerTemplate =
 // `{{actionExamples}}
@@ -67,7 +69,7 @@ export const messageHandlerTemplate =
 # INSTRUCTIONS: Write the next message for {{agentName}}.
 \nResponse format should be formatted in a JSON block like this:
 \`\`\`json
-{ \"user\": \"{{agentName}}\", \"responseMessage\": string, \"action\": string }
+{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }
 \`\`\``;
 
 export const shouldRespondTemplate =
@@ -101,15 +103,15 @@ export class DiscordClient extends EventEmitter {
   private streams: Map<string, Readable> = new Map();
   private connections: Map<string, VoiceConnection> = new Map();
   private agent: Agent;
-  private bio: string;
+  private character: any;
   private transcriber: any;
   private imageRecognitionService: ImageRecognitionService;
   speechSynthesizer: SpeechSynthesizer;
 
-  constructor(agent: Agent, bio: string) {
+  constructor(agent: Agent, character: any) {
     super();
     this.apiToken = settings.DISCORD_API_TOKEN;
-    this.bio = bio;
+    this.character = character;
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -127,8 +129,7 @@ export class DiscordClient extends EventEmitter {
 
     this.initializeTranscriber();
 
-    this.imageRecognitionService = new ImageRecognitionService();
-    this.imageRecognitionService.initialize();
+    this.imageRecognitionService = new ImageRecognitionService(this.agent);
 
     this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any } }) => {
       console.log(`Logged in as ${readyClient.user?.tag}`);
@@ -192,6 +193,7 @@ export class DiscordClient extends EventEmitter {
     channel: BaseGuildVoiceChannel,
     audioStream: Readable
   ) {
+    console.log("handleVoiceStateUpdate", user_id, userName, channel, audioStream);
     const channelId = channel.id;
     const userIdUUID = uuid(user_id) as UUID;
     this.listenToSpokenAudio(
@@ -200,9 +202,6 @@ export class DiscordClient extends EventEmitter {
       channelId,
       audioStream,
       async (responseAudioStream) => {
-        responseAudioStream.on("close", () => {
-          console.log("Response audio stream closed");
-        });
         await this.playAudioStream(user_id, responseAudioStream);
       },
       ResponseType.RESPONSE_AUDIO
@@ -224,6 +223,11 @@ export class DiscordClient extends EventEmitter {
 
     const textContent = message.content;
 
+    // Check for image attachments
+    const imageAttachments = message.attachments.find(attachment => 
+      attachment.contentType?.startsWith('image/')
+    );
+
     try {
       const responseStream = await this.respondToText({
         user_id,
@@ -231,6 +235,7 @@ export class DiscordClient extends EventEmitter {
         channelId,
         input: textContent,
         requestedResponseType: ResponseType.RESPONSE_TEXT,
+        imageAttachments: imageAttachments ? [imageAttachments] : [],
         message,
         discordMessage: message,
         discordClient: this.client,
@@ -255,12 +260,12 @@ export class DiscordClient extends EventEmitter {
     if (!interaction.isCommand()) return;
 
     switch (interaction.commandName) {
-      case "setname":
-        await this.handleSetNameCommand(interaction);
-        break;
-      case "setbio":
-        await this.handleSetBioCommand(interaction);
-        break;
+      // case "setname":
+      //   await this.handleSetNameCommand(interaction);
+      //   break;
+      // case "setbio":
+      //   await this.handleSetBioCommand(interaction);
+      //   break;
       case "joinchannel":
         await this.handleJoinChannelCommand(interaction);
         break;
@@ -287,6 +292,15 @@ export class DiscordClient extends EventEmitter {
     };
     const wavArrayBuffer = encode.sync(audioData);
     return wavArrayBuffer;
+  }
+
+  async recognizeImage(imageUrl: string) {
+    console.log("recognizeImage", imageUrl);
+    if (!this.imageRecognitionService) {
+      console.log("initializeImageRecognitionService");
+      this.imageRecognitionService = new ImageRecognitionService(this.agent);
+    }
+    return await this.imageRecognitionService.recognizeImage(imageUrl);
   }
 
   async speechToText(audioBuffer: Buffer) {
@@ -384,6 +398,7 @@ export class DiscordClient extends EventEmitter {
     interestChannels,
     discordClient,
     discordMessage,
+    imageAttachments,
   }: {
     message: Message;
     hasInterest?: boolean;
@@ -394,15 +409,35 @@ export class DiscordClient extends EventEmitter {
     interestChannels?: InterestChannels;
     discordClient: Client;
     discordMessage: DiscordMessage;
+    imageAttachments?: Attachment[];
   }) {
     if (!message.content.content) {
       return { content: "", action: "IGNORE" };
     }
+
+    let imageDescriptions = [];
+
+    if (imageAttachments) {
+      console.log("imageAttachments", imageAttachments);
+      for (const attachment of imageAttachments) {
+        const recognitionResult = await this.recognizeImage(attachment.url);
+        imageDescriptions.push(recognitionResult);
+      }
+    }
+
+    if (imageDescriptions.length > 0) {
+      let counter = 1;
+      for (const description of imageDescriptions) {
+        message.content.content += ` (Attachment ${counter}: ${description})`;
+        counter++;
+      }
+    }
+
     if (!state) {
       state = await this.agent.runtime.composeState(message, {
         discordClient,
         discordMessage,
-        agentName: this.client.user?.displayName,
+        agentName: this.character?.name || this.client.user?.displayName,
       });
     }
 
@@ -416,7 +451,7 @@ export class DiscordClient extends EventEmitter {
     state = await this.agent.runtime.composeState(message, {
       discordClient,
       discordMessage,
-      agentName: this.client.user?.displayName,
+      agentName: this.character?.name || this.client.user?.displayName,
     });
 
     if (!shouldRespond && hasInterest) {
@@ -486,17 +521,29 @@ export class DiscordClient extends EventEmitter {
       state,
       template: shouldRespondTemplate,
     });
-    console.log("Should respond context: ", shouldRespondContext)
-    const response = await this.agent.runtime.completion({
-      context: shouldRespondContext,
-      temperature: 0.1,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0,
-    });
 
+    const datestr = new Date().toISOString().replace(/:/g, '-');
+        
+    // log context to file
+    log_to_file(`${state.agentName}_${datestr}_shouldrespond_context`, shouldRespondContext)
+
+    let response;
     
-
-    console.log("*** response from ", state.agentName, ":", response);
+    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+      try {
+        response = await this.agent.runtime.completion({
+          context: shouldRespondContext,
+          temperature: 0.1,
+          frequency_penalty: 0.0,
+          presence_penalty: 0.0,
+        });
+        log_to_file(`${state.agentName}_${datestr}_shouldrespond_response`, response)
+      } catch (error) {
+        console.error("Error in _checkShouldRespond:", error);
+        console.error("Error details:", error.message);
+        console.log("Retrying...")
+      }
+    }
 
     if (response.toLowerCase().includes("respond")) {
       return true;
@@ -515,14 +562,30 @@ export class DiscordClient extends EventEmitter {
     let responseContent: Content | null = null;
     const { user_id, room_id } = message;
 
+
+    const datestr = new Date().toISOString().replace(/:/g, '-');
+        
+    // log context to file
+    log_to_file(`${state.agentName}_${datestr}_generate_context`, context)
+
+    let response;
+
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      console.log("Generating response")
-      const response = await this.agent.runtime.completion({
-        context,
-        stop: [],
-      });
+
+      try {
+        response = await this.agent.runtime.completion({
+          context,
+          stop: [],
+        });
+      } catch (error) {
+        console.error("Error in _generateResponse:", error);
+        console.error("Error details:", error.message);
+        console.log("Retrying...")
+      }
 
       console.log("response is", response)
+
+      log_to_file(`${state.agentName}_${datestr}_generate_response`, response)
 
       const values = {
         body: response,
@@ -681,6 +744,7 @@ export class DiscordClient extends EventEmitter {
     message,
     discordMessage,
     discordClient,
+    imageAttachments,
     interestChannels,
   }: {
     user_id: UUID;
@@ -690,6 +754,7 @@ export class DiscordClient extends EventEmitter {
     requestedResponseType?: ResponseType;
     message?: DiscordMessage;
     discordClient: Client;
+    imageAttachments?: Attachment[];
     discordMessage?: DiscordMessage;
     interestChannels?: InterestChannels;
   }): Promise<Readable | null> {
@@ -728,6 +793,7 @@ export class DiscordClient extends EventEmitter {
       interestChannels,
       discordClient: this.client,
       discordMessage: discordMessage as DiscordMessage,
+      imageAttachments,
     });
 
     const content = (response.responseMessage || response.response || response.content || response.message) as string;
@@ -751,11 +817,11 @@ export class DiscordClient extends EventEmitter {
     }
 
     // set the bio back to default
-    if (this.bio) {
+    if (this.character?.bio) {
       adapter.db
         .prepare("UPDATE accounts SET details = ? WHERE id = ?")
         .run(
-          JSON.stringify({ summary: this.bio }),
+          JSON.stringify({ summary: this.character.bio }),
           getUuid(this.client.user?.id as string)
         );
     }
@@ -894,96 +960,96 @@ export class DiscordClient extends EventEmitter {
     );
   }
 
-  private async handleSetNameCommand(interaction: any) {
-    const newName = interaction.options.get("name")?.value;
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-    const userIdUUID = getUuid(interaction.user.id) as UUID;
-    const userName = interaction.user.username;
-    const room_id = getUuid(interaction.channelId) as UUID;
+  // private async handleSetNameCommand(interaction: any) {
+  //   const newName = interaction.options.get("name")?.value;
+  //   const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+  //   const userIdUUID = getUuid(interaction.user.id) as UUID;
+  //   const userName = interaction.user.username;
+  //   const room_id = getUuid(interaction.channelId) as UUID;
 
-    await interaction.deferReply();
+  //   await interaction.deferReply();
 
-    await this.ensureUserExists(
-      agentId,
-      await this.fetchBotName(settings.DISCORD_API_TOKEN),
-      settings.DISCORD_API_TOKEN
-    );
-    await this.ensureUserExists(userIdUUID, userName);
-    await this.agent.ensureRoomExists(room_id);
-    await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-    await this.agent.ensureParticipantInRoom(agentId, room_id);
+  //   await this.ensureUserExists(
+  //     agentId,
+  //     await this.fetchBotName(settings.DISCORD_API_TOKEN),
+  //     settings.DISCORD_API_TOKEN
+  //   );
+  //   await this.ensureUserExists(userIdUUID, userName);
+  //   await this.agent.ensureRoomExists(room_id);
+  //   await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
+  //   await this.agent.ensureParticipantInRoom(agentId, room_id);
 
-    if (newName) {
-      try {
-        adapter.db
-          .prepare("UPDATE accounts SET name = ? WHERE id = ?")
-          .run(newName, getUuid(interaction.client.user?.id));
+  //   if (newName) {
+  //     try {
+  //       adapter.db
+  //         .prepare("UPDATE accounts SET name = ? WHERE id = ?")
+  //         .run(newName, getUuid(interaction.client.user?.id));
 
-        const guild = interaction.guild;
-        if (guild) {
-          const botMember = await guild.members.fetch(
-            interaction.client.user?.id as string
-          );
-          await botMember.setNickname(newName as string);
-        }
+  //       const guild = interaction.guild;
+  //       if (guild) {
+  //         const botMember = await guild.members.fetch(
+  //           interaction.client.user?.id as string
+  //         );
+  //         await botMember.setNickname(newName as string);
+  //       }
 
-        await interaction.editReply(
-          `Agent's name has been updated to: ${newName}`
-        );
-      } catch (error) {
-        console.error("Error updating agent name:", error);
-        await interaction.editReply(
-          "An error occurred while updating the agent name."
-        );
-      }
-    } else {
-      await interaction.editReply(
-        "Please provide a new name for the agent."
-      );
-    }
-  }
+  //       await interaction.editReply(
+  //         `Agent's name has been updated to: ${newName}`
+  //       );
+  //     } catch (error) {
+  //       console.error("Error updating agent name:", error);
+  //       await interaction.editReply(
+  //         "An error occurred while updating the agent name."
+  //       );
+  //     }
+  //   } else {
+  //     await interaction.editReply(
+  //       "Please provide a new name for the agent."
+  //     );
+  //   }
+  // }
 
-  private async handleSetBioCommand(interaction: any) {
-    const newBio = interaction.options.get("bio")?.value;
-    if (newBio) {
-      try {
-        const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-        const userIdUUID = getUuid(interaction.user.id) as UUID;
-        const userName = interaction.user.username;
-        const room_id = getUuid(interaction.channelId) as UUID;
+  // private async handleSetBioCommand(interaction: any) {
+  //   const newBio = interaction.options.get("bio")?.value;
+  //   if (newBio) {
+  //     try {
+  //       const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+  //       const userIdUUID = getUuid(interaction.user.id) as UUID;
+  //       const userName = interaction.user.username;
+  //       const room_id = getUuid(interaction.channelId) as UUID;
 
-        await interaction.deferReply();
+  //       await interaction.deferReply();
 
-        await this.ensureUserExists(
-          agentId,
-          await this.fetchBotName(settings.DISCORD_API_TOKEN),
-          settings.DISCORD_API_TOKEN
-        );
-        await this.ensureUserExists(userIdUUID, userName);
-        await this.agent.ensureRoomExists(room_id);
-        await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-        await this.agent.ensureParticipantInRoom(agentId, room_id);
+  //       await this.ensureUserExists(
+  //         agentId,
+  //         await this.fetchBotName(settings.DISCORD_API_TOKEN),
+  //         settings.DISCORD_API_TOKEN
+  //       );
+  //       await this.ensureUserExists(userIdUUID, userName);
+  //       await this.agent.ensureRoomExists(room_id);
+  //       await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
+  //       await this.agent.ensureParticipantInRoom(agentId, room_id);
 
-        adapter.db
-          .prepare("UPDATE accounts SET details = ? WHERE id = ?")
-          .run(
-            JSON.stringify({ summary: newBio }),
-            getUuid(interaction.client.user?.id)
-          );
+  //       adapter.db
+  //         .prepare("UPDATE accounts SET details = ? WHERE id = ?")
+  //         .run(
+  //           JSON.stringify({ summary: newBio }),
+  //           getUuid(interaction.client.user?.id)
+  //         );
 
-        await interaction.editReply(
-          `Agent's bio has been updated to: ${newBio}`
-        );
-      } catch (error) {
-        console.error("Error updating agent bio:", error);
-        await interaction.editReply(
-          "An error occurred while updating the agent bio."
-        );
-      }
-    } else {
-      await interaction.reply("Please provide a new bio for the agent.");
-    }
-  }
+  //       await interaction.editReply(
+  //         `Agent's bio has been updated to: ${newBio}`
+  //       );
+  //     } catch (error) {
+  //       console.error("Error updating agent bio:", error);
+  //       await interaction.editReply(
+  //         "An error occurred while updating the agent bio."
+  //       );
+  //     }
+  //   } else {
+  //     await interaction.reply("Please provide a new bio for the agent.");
+  //   }
+  // }
 
   private async handleJoinChannelCommand(interaction: any) {
     const channelId = interaction.options.get("channel")?.value as string;

@@ -2,6 +2,7 @@
 import { joinVoiceChannel } from "@discordjs/voice";
 import { composeContext, State, type Action, type BgentRuntime, type Message } from "bgent";
 import { Channel, ChannelType, Client, Message as DiscordMessage, Guild, GuildMember } from "discord.js";
+import { log_to_file } from "../core/logger.ts";
 
 export default {
   name: "JOIN_VOICE",
@@ -95,12 +96,20 @@ You should only respond with the name of the voice channel or none, no commentar
 
       const context = composeContext({ template: messageTemplate, state: guessState as unknown as State });
 
+      const datestr = new Date().toISOString().replace(/:/g, '-');
+        
+      // log context to file
+      log_to_file(`${state.agentName}_${datestr}_joinvoice_context`, context)
+
       let responseContent;
 
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
         const response = await runtime.completion({
           context,
         });
+
+        // log response to file
+        log_to_file(`${state.agentName}_${datestr}_joinvoice_response_${3 - triesLeft}`, response)
 
         runtime.databaseAdapter.log({
           body: { message, context, response },

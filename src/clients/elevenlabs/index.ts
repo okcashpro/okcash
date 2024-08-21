@@ -1,7 +1,41 @@
-import { Readable } from "stream";
 import { WebSocket } from "ws";
 import settings from "../../core/settings.ts";
-import { prependWavHeader } from "../../core/util.ts";
+import { Readable, PassThrough } from "stream";
+
+export function getWavHeader(audioLength: number, sampleRate: number, channelCount: number = 1, bitsPerSample: number = 16): Buffer {
+    const wavHeader = Buffer.alloc(44);
+    wavHeader.write('RIFF', 0);
+    wavHeader.writeUInt32LE(36 + audioLength, 4); // Length of entire file in bytes minus 8
+    wavHeader.write('WAVE', 8);
+    wavHeader.write('fmt ', 12);
+    wavHeader.writeUInt32LE(16, 16); // Length of format data
+    wavHeader.writeUInt16LE(1, 20); // Type of format (1 is PCM)
+    wavHeader.writeUInt16LE(channelCount, 22); // Number of channels
+    wavHeader.writeUInt32LE(sampleRate, 24); // Sample rate
+    wavHeader.writeUInt32LE(sampleRate * bitsPerSample * channelCount / 8, 28); // Byte rate
+    wavHeader.writeUInt16LE(bitsPerSample * channelCount / 8, 32); // Block align ((BitsPerSample * Channels) / 8)
+    wavHeader.writeUInt16LE(bitsPerSample, 34); // Bits per sample
+    wavHeader.write('data', 36); // Data chunk header
+    wavHeader.writeUInt32LE(audioLength, 40); // Data chunk size
+    return wavHeader;
+}
+
+export function prependWavHeader(readable: Readable, audioLength: number, sampleRate: number, channelCount: number = 1, bitsPerSample: number = 16): Readable {
+    const wavHeader = getWavHeader(audioLength, sampleRate, channelCount, bitsPerSample);
+    let pushedHeader = false;
+    const passThrough = new PassThrough();
+    readable.on('data', function (data) {
+        if (!pushedHeader) {
+            passThrough.push(wavHeader);
+            pushedHeader = true;
+        }
+        passThrough.push(data);
+    });
+    readable.on('end', function () {
+        passThrough.end();
+    });
+    return passThrough;
+}
 
 export async function textToSpeechStreaming(text: string) {
     console.log("11 TTS: " + text);
@@ -58,86 +92,6 @@ export async function textToSpeechStreaming(text: string) {
         return new Readable({
             read() { }
         });
-    }
-}
-
-function textToSpeechDualStreaming(inputStream: Readable): Readable {
-    let startTime = Date.now();
-    const ws = new WebSocket(`wss://api.elevenlabs.io/v1/text-to-speech/${settings.ELEVENLABS_VOICE_ID}/stream-input?model_id=${settings.ELEVENLABS_MODEL_ID}&optimize_streaming_latency=${settings.ELEVENLABS_OPTIMIZE_STREAMING_LATENCY}&output_format=${settings.ELEVENLABS_OUTPUT_FORMAT}`);
-    let output = new Readable({
-        read() { }
-    });
-    let outputEnded = false;
-    ws.on('open', () => {
-        console.log('WebSocket opened');
-        let openTime = Date.now();
-        console.log(`WebSocket initialisation took ${openTime - startTime}ms`);
-        // send initial message
-        ws.send(JSON.stringify({
-            text: ' ',
-            voice_settings: {
-                similarity_boost: settings.ELEVENLABS_VOICE_SIMILARITY_BOOST,
-                stability: settings.ELEVENLABS_VOICE_STABILITY,
-                style: settings.ELEVENLABS_VOICE_STYLE,
-                use_speaker_boost: settings.ELEVENLABS_VOICE_USE_SPEAKER_BOOST
-            },
-            generation_config: {
-                chunk_length_schedule: [150]
-            },
-            xi_api_key: settings.ELEVENLABS_XI_API_KEY
-        }));
-
-        inputStream.on('data', (chunk: Buffer) => {
-            let asString = chunk.toString();
-            console.log("11: " + asString);
-            let opts = {
-                text: asString,
-                try_trigger_generation: true
-            };
-            ws.send(JSON.stringify(opts));
-        });
-    });
-    inputStream.on('end', () => {
-        console.log("Sending EOS");
-        let eosOpts = {
-            text: '',
-            try_trigger_generation: true
-        };
-        ws.send(JSON.stringify(eosOpts));
-    });
-    ws.on('message', (data: string) => {
-        let response = JSON.parse(data);
-        if (response.isFinal) {
-            console.log("Received final response from Eleven Labs API");
-            if (!outputEnded) {
-                outputEnded = true;
-                output.push(null);
-            }
-        } else if (response.audio) {
-            let audioChunk = Buffer.from(response.audio, 'base64');
-            console.log(`Received audio chunk of length ${audioChunk.length}`);
-            output.push(audioChunk);
-        } else {
-            console.log("Received non-audio response from Eleven Labs API");
-            console.log(response);
-        }
-    });
-    ws.on('close', (code, reason) => {
-        console.log('WebSocket closed');
-        if (code != 1000) {
-            console.log(`WebSocket closed with code ${code} and reason ${reason}`);
-        }
-        if (!outputEnded) {
-            outputEnded = true;
-            output.push(null);
-        }
-    });
-    if (settings.ELEVENLABS_OUTPUT_FORMAT.startsWith('pcm_')) {
-        const sampleRate = parseInt(settings.ELEVENLABS_OUTPUT_FORMAT.substring(4));
-        var withHeader = prependWavHeader(output, 1024 * 1024 * 100, sampleRate, 1, 16);
-        return withHeader;
-    } else {
-        return output;
     }
 }
 

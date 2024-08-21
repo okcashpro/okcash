@@ -6,6 +6,7 @@ import {
 import { Agent } from "../../core/agent.ts";
 import settings from "../../core/settings.ts";
 import { ClientBase } from "./base.ts";
+import { log_to_file } from "../../core/logger.ts";
 
 const newTweetPrompt =
 `{{recentConversations}}
@@ -95,19 +96,29 @@ export class TwitterGenerationClient extends ClientBase {
 
       });
 
-      console.log("**** this.model", this.model)
+      const datestr = new Date().toISOString().replace(/:/g, '-');
+        
+      // log context to file
+      log_to_file(`${botTwitterUsername}_${datestr}_generate_context`, context)
 
-      const newTweetContent = await this.agent.runtime.completion({
-        context,
-        stop: [],
-        temperature: this.temperature,
-        frequency_penalty: 0.5, // TODO: tune these and move to settings
-        presence_penalty: 0.5, // TODO: tune these and move to settings
-        model: this.model,
-      });
+      let newTweetContent;
+      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+        try{
 
-      console.log('context:', context);
-      console.log('New tweet:', newTweetContent);
+          newTweetContent = await this.agent.runtime.completion({
+            context,
+            stop: [],
+            temperature: this.temperature,
+            frequency_penalty: 0.5, // TODO: tune these and move to settings
+            presence_penalty: 0.5, // TODO: tune these and move to settings
+            model: this.model,
+          });
+          log_to_file(`${botTwitterUsername}_${datestr}_generate_response_${3 - triesLeft}`, newTweetContent)
+        } catch (error) {
+          console.warn('Could not generate new tweet:', error);
+          console.log("Retrying...")
+        }
+      }
 
       // Send the new tweet
       await this.twitterClient.sendTweet(newTweetContent.trim());

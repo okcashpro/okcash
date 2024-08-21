@@ -25,26 +25,35 @@ export class Agent extends EventEmitter {
       databaseAdapter: adapter,
       token: settings.OPENAI_API_KEY as string,
       serverUrl: "https://api.openai.com/v1",
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
       evaluators: [],
       providers: [
         channelStateProvider,
         voiceStateProvider,
         timeProvider,
-        // flavorProvider,
+        // flavorProvider, // TODO: re-implement this
       ],
       actions: [
+        // elaborate_discord,
         ...defaultActions.filter(
           (action: Action) => action.name !== "ELABORATE"
         ),
-        // elaborate_discord,
+        // TODO: Handle elaborating on Discord but *not* on Twitter
         joinvoice,
         leavevoice,
       ],
     });
+
+    // if settings.OPENAI_API_KEY is set, don't use Llama
+    if (settings.OPENAI_API_KEY)
+      return;
+
+    // Otherwise, initialize Llama
+
     const llamaService = new LlamaService();
     (async () => {
       await llamaService.initialize()
+      // TODO: Only initialize Llama if no OpenAI key is provided
       const completion = async ({ context, stop, model, frequency_penalty, presence_penalty, temperature, }: { context?: string; stop?: never[]; model?: string; frequency_penalty?: number; presence_penalty?: number; temperature?: number; }) => {
         console.log("Running llama completion service");
         console.log("Context: ", context);

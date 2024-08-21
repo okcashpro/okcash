@@ -1,5 +1,3 @@
-console.log("ok")
-
 import { TwitterGenerationClient } from './clients/twitter/generate.ts';
 import { TwitterSearchClient } from './clients/twitter/search.ts';
 import { TwitterInteractionClient } from './clients/twitter/interactions.ts';
@@ -36,26 +34,27 @@ let argv: Arguments = {
 //     console.log("Embedding response:", embeddingResponse);
 // }
 
-// (async () => {
-//     // Create the speech synthesizer instance
-//     const speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
+(async () => {
+    console.log("Creating speech synthesizer...");
+    // Create the speech synthesizer instance
+    const speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
     
-//     console.log("Synthesizing speech...");
-//     // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
-//     const audio = await speechSynthesizer.synthesize("Four score and seven years ago.");
-//     console.log("Speech synthesized");
-//     // Encode the audio data into a WAV format
-//     const { encode } = WavEncoderPkg;
-//     const audioData = {
-//         sampleRate: 22050,
-//         channelData: [audio]
-//     };
-//     const wavArrayBuffer = encode.sync(audioData);
+    console.log("Synthesizing speech...");
+    // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
+    const audio = await speechSynthesizer.synthesize("Four score and seven years ago.");
+    console.log("Speech synthesized");
+    // Encode the audio data into a WAV format
+    const { encode } = WavEncoder;
+    const audioData = {
+        sampleRate: 22050,
+        channelData: [audio]
+    };
+    const wavArrayBuffer = encode.sync(audioData);
     
-//     // Convert the ArrayBuffer to a Buffer and save it to a file
-//     fs.writeFileSync("test.wav", Buffer.from(wavArrayBuffer));
-//     console.log("Audio saved as test.wav");
-// })()
+    // Convert the ArrayBuffer to a Buffer and save it to a file
+    fs.writeFileSync("test.wav", Buffer.from(wavArrayBuffer));
+    console.log("Audio saved as test.wav");
+})()
 
 
 try {
@@ -86,7 +85,7 @@ const character = fs.existsSync(characterPath) ? JSON.parse(fs.readFileSync(char
 const agent = new Agent();
 
 function startDiscord() {
-    const discordClient = new DiscordClient(agent, character.bio);
+    const discordClient = new DiscordClient(agent, character);
 }
 
 // check if character has a 'model' field, if so use that, otherwise use 'gpt-4o-mini'
