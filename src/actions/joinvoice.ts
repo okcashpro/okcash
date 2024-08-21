@@ -1,12 +1,21 @@
-// src/lib/actions/joinVoice.ts
+// src/actions/joinVoice
 import { joinVoiceChannel } from "@discordjs/voice";
-import { composeContext, State, type Action, type BgentRuntime, type Message } from "bgent";
-import { Channel, ChannelType, Client, Message as DiscordMessage, Guild, GuildMember } from "discord.js";
-import { log_to_file } from "../core/logger.ts";
+import {
+  Channel,
+  ChannelType,
+  Client,
+  Message as DiscordMessage,
+  Guild,
+  GuildMember,
+} from "discord.js";
+import { composeContext } from "../context.ts"
+import { log_to_file } from "../logger.ts"
+import { AgentRuntime } from "../runtime.ts"
+import { Action, Message, State } from "../types.ts"
 
 export default {
   name: "JOIN_VOICE",
-  validate: async (_runtime: BgentRuntime, message: Message, state: State) => {
+  validate: async (_runtime: AgentRuntime, message: Message, state: State) => {
     if (!state) {
       throw new Error("State is not available.");
     }
@@ -28,7 +37,11 @@ export default {
     return isConnectedToVoice;
   },
   description: "Join a voice channel to participate in voice chat.",
-  handler: async (runtime: BgentRuntime, message: Message, state: State): Promise<boolean> => {
+  handler: async (
+    runtime: AgentRuntime,
+    message: Message,
+    state: State,
+  ): Promise<boolean> => {
     if (!state) {
       console.error("State is not available.");
     }
@@ -42,34 +55,46 @@ export default {
 
     const id = (state?.discordMessage as DiscordMessage).guild?.id as string;
     const client = state.discordClient as Client;
-    const voiceChannels = (client.guilds.cache.get(id) as Guild)
-      .channels.cache.filter((channel: Channel) => channel.type === ChannelType.GuildVoice);
+    const voiceChannels = (
+      client.guilds.cache.get(id) as Guild
+    ).channels.cache.filter(
+      (channel: Channel) => channel.type === ChannelType.GuildVoice,
+    );
 
-    const channelName = (state.discordMessage as DiscordMessage).content.toLowerCase();
+    const channelName = (
+      state.discordMessage as DiscordMessage
+    ).content.toLowerCase();
     const targetChannel = voiceChannels.find((channel) => {
       const name = (channel as { name: string }).name.toLowerCase();
 
       // remove all non-alphanumeric characters (keep spaces between words)
-      const replacedName = name.replace(/[^a-z0-9 ]/g, '');
+      const replacedName = name.replace(/[^a-z0-9 ]/g, "");
 
-      return name.includes(channelName) || channelName.includes(name) || replacedName.includes(channelName) || channelName.includes(replacedName);
-    }
-    );
+      return (
+        name.includes(channelName) ||
+        channelName.includes(name) ||
+        replacedName.includes(channelName) ||
+        channelName.includes(replacedName)
+      );
+    });
 
     if (targetChannel) {
       joinVoiceChannel({
         channelId: targetChannel.id,
         guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
-        adapterCreator: (client.guilds.cache.get(id) as Guild).voiceAdapterCreator,
+        adapterCreator: (client.guilds.cache.get(id) as Guild)
+          .voiceAdapterCreator,
       });
       return true;
     } else {
-      const member = (state.discordMessage as DiscordMessage).member as GuildMember;
+      const member = (state.discordMessage as DiscordMessage)
+        .member as GuildMember;
       if (member.voice.channel) {
         joinVoiceChannel({
           channelId: member.voice.channel.id,
           guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
-          adapterCreator: (client.guilds.cache.get(id) as Guild).voiceAdapterCreator,
+          adapterCreator: (client.guilds.cache.get(id) as Guild)
+            .voiceAdapterCreator,
         });
         return true;
       }
@@ -87,19 +112,24 @@ Here is the user's request:
 
 Please respond with the name of the voice channel which the bot should join. Try to infer what channel the user is talking about. If the user didn't specify a voice channel, respond with "none".
 You should only respond with the name of the voice channel or none, no commentary or additional information should be included.
-`
+`;
 
       const guessState = {
         userMessage: message.content.content,
-        voiceChannels: voiceChannels.map((channel) => (channel as { name: string }).name).join("\n"),
-      }
+        voiceChannels: voiceChannels
+          .map((channel) => (channel as { name: string }).name)
+          .join("\n"),
+      };
 
-      const context = composeContext({ template: messageTemplate, state: guessState as unknown as State });
+      const context = composeContext({
+        template: messageTemplate,
+        state: guessState as unknown as State,
+      });
 
-      const datestr = new Date().toISOString().replace(/:/g, '-');
-        
+      const datestr = new Date().toISOString().replace(/:/g, "-");
+
       // log context to file
-      log_to_file(`${state.agentName}_${datestr}_joinvoice_context`, context)
+      log_to_file(`${state.agentName}_${datestr}_joinvoice_context`, context);
 
       let responseContent;
 
@@ -109,7 +139,10 @@ You should only respond with the name of the voice channel or none, no commentar
         });
 
         // log response to file
-        log_to_file(`${state.agentName}_${datestr}_joinvoice_response_${3 - triesLeft}`, response)
+        log_to_file(
+          `${state.agentName}_${datestr}_joinvoice_response_${3 - triesLeft}`,
+          response,
+        );
 
         runtime.databaseAdapter.log({
           body: { message, context, response },
@@ -131,26 +164,36 @@ You should only respond with the name of the voice channel or none, no commentar
           const name = (channel as { name: string }).name.toLowerCase();
 
           // remove all non-alphanumeric characters (keep spaces between words)
-          const replacedName = name.replace(/[^a-z0-9 ]/g, '');
+          const replacedName = name.replace(/[^a-z0-9 ]/g, "");
 
-          return name.includes(channelName) || channelName.includes(name) || replacedName.includes(channelName) || channelName.includes(replacedName)
+          return (
+            name.includes(channelName) ||
+            channelName.includes(name) ||
+            replacedName.includes(channelName) ||
+            channelName.includes(replacedName)
+          );
         });
 
         if (targetChannel) {
           joinVoiceChannel({
             channelId: targetChannel.id,
-            guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
-            adapterCreator: (client.guilds.cache.get(id) as Guild).voiceAdapterCreator,
+            guildId: (state.discordMessage as DiscordMessage).guild
+              ?.id as string,
+            adapterCreator: (client.guilds.cache.get(id) as Guild)
+              .voiceAdapterCreator,
           });
           return true;
         }
       }
 
-      await (state.discordMessage as DiscordMessage).reply("I couldn't figure out which channel you wanted me to join.");
+      await (state.discordMessage as DiscordMessage).reply(
+        "I couldn't figure out which channel you wanted me to join.",
+      );
       return false;
     }
   },
-  condition: "The agent wants to join a voice channel to participate in voice chat.",
+  condition:
+    "The agent wants to join a voice channel to participate in voice chat.",
   examples: [
     [
       {
@@ -166,13 +209,14 @@ You should only respond with the name of the voice channel or none, no commentar
           content: "Sure! I'm joining the voice channel now.",
           action: "JOIN_VOICE",
         },
-      }
+      },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "{{user2}}, can you join the voice channel? I want to discuss our game strategy.",
+          content:
+            "{{user2}}, can you join the voice channel? I want to discuss our game strategy.",
           action: "WAIT",
         },
       },
@@ -180,7 +224,7 @@ You should only respond with the name of the voice channel or none, no commentar
         user: "{{user2}}",
         content: {
           content: "Absolutely! I'll join right now.",
-          action: "JOIN_VOICE"
+          action: "JOIN_VOICE",
         },
       },
     ],
@@ -188,7 +232,8 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "Hey {{user2}}, we're having a team meeting in the 'Conference' voice channel. Can you join us?",
+          content:
+            "Hey {{user2}}, we're having a team meeting in the 'Conference' voice channel. Can you join us?",
           action: "WAIT",
         },
       },
@@ -196,7 +241,7 @@ You should only respond with the name of the voice channel or none, no commentar
         user: "{{user2}}",
         content: {
           content: "Sure thing! I'll be right there.",
-          action: "JOIN_VOICE"
+          action: "JOIN_VOICE",
         },
       },
     ],
@@ -204,7 +249,8 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "{{user2}}, let's have a quick voice chat in the 'Lounge' channel.",
+          content:
+            "{{user2}}, let's have a quick voice chat in the 'Lounge' channel.",
           action: "WAIT",
         },
       },
@@ -220,15 +266,17 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "Hey {{user2}}, can you join me in the 'Music' voice channel? I want to share a new song with you.",
+          content:
+            "Hey {{user2}}, can you join me in the 'Music' voice channel? I want to share a new song with you.",
           action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Oh, exciting! I'm joining the channel. Can't wait to hear it!",
-          action: "JOIN_VOICE"
+          content:
+            "Oh, exciting! I'm joining the channel. Can't wait to hear it!",
+          action: "JOIN_VOICE",
         },
       },
     ],

@@ -1,15 +1,12 @@
 import { SearchMode } from "agent-twitter-client";
-import {
-  State,
-  composeContext
-} from "bgent";
-import { Agent } from "../../core/agent.ts";
-import settings from "../../core/settings.ts";
+import { Agent } from "../../agent.ts"
+import settings from "../../settings.ts"
 import { ClientBase } from "./base.ts";
-import { log_to_file } from "../../core/logger.ts";
+import { log_to_file } from "../../logger.ts"
+import { composeContext } from "../../context.ts"
+import { State } from "../../types.ts"
 
-const newTweetPrompt =
-`{{recentConversations}}
+const newTweetPrompt = `{{recentConversations}}
 
 {{recentSearchResults}}
 
@@ -24,33 +21,42 @@ const newTweetPrompt =
 INSTRUCTIONS: Write a single sentence status update that is {{adjective}} about {{topic}} without mentioning {{topic}} directly, from the perspective of {{agentName}}`;
 
 export class TwitterGenerationClient extends ClientBase {
-
   onReady() {
     const generateNewTweetLoop = () => {
       this.generateNewTweet();
-      setTimeout(generateNewTweetLoop, Math.floor(Math.random() * 360000) + 1200000); // Random interval between 10-15 minutes
+      setTimeout(
+        generateNewTweetLoop,
+        Math.floor(Math.random() * 360000) + 1200000,
+      ); // Random interval between 10-15 minutes
     };
-    generateNewTweetLoop()
+    generateNewTweetLoop();
   }
 
   constructor(agent: Agent, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
-      agent, character, model, callback: (self) => self.onReady()
+      agent,
+      character,
+      model,
+      callback: (self) => self.onReady(),
     });
   }
 
   private async generateNewTweet() {
-    console.log('Generating new tweet');
+    console.log("Generating new tweet");
     try {
       const botTwitterUsername = settings.TWITTER_USERNAME;
       if (!botTwitterUsername) {
-        console.error('Twitter username not set in settings');
+        console.error("Twitter username not set in settings");
         return;
       }
 
       // Get recent conversations
-      const recentConversations = this.twitterClient.searchTweets(`@${botTwitterUsername}`, 20, SearchMode.Latest);
+      const recentConversations = this.twitterClient.searchTweets(
+        `@${botTwitterUsername}`,
+        20,
+        SearchMode.Latest,
+      );
 
       const recentConversationsArray = [];
       while (true) {
@@ -58,26 +64,34 @@ export class TwitterGenerationClient extends ClientBase {
         if (next.done) {
           break;
         }
-        recentConversationsArray.push(next.value)
+        recentConversationsArray.push(next.value);
       }
-      const recentConversationsText = (recentConversationsArray).map(tweet => tweet.text).join('\n');
+      const recentConversationsText = recentConversationsArray
+        .map((tweet) => tweet.text)
+        .join("\n");
 
       // Get recent search results
-      const searchTerms = this.character.topics.sort(() => Math.random() - 0.5).slice(0, 2);
+      const searchTerms = this.character.topics
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 2);
       const recentSearchResults = [];
       for (const searchTerm of searchTerms) {
-        const tweets = this.twitterClient.searchTweets(searchTerm, 20, SearchMode.Latest);
+        const tweets = this.twitterClient.searchTweets(
+          searchTerm,
+          20,
+          SearchMode.Latest,
+        );
         const tweetsArray = [];
         while (true) {
           const next = await tweets.next();
           if (next.done) {
             break;
           }
-          tweetsArray.push(next.value)
+          tweetsArray.push(next.value);
         }
-        recentSearchResults.push(...(tweetsArray).map(tweet => tweet.text));
+        recentSearchResults.push(...tweetsArray.map((tweet) => tweet.text));
       }
-      const recentSearchResultsText = recentSearchResults.join('\n');
+      const recentSearchResultsText = recentSearchResults.join("\n");
 
       // Generate new tweet
       const context = composeContext({
@@ -87,24 +101,27 @@ export class TwitterGenerationClient extends ClientBase {
           bio: this.character.bio,
           recentConversations: recentConversationsText,
           recentSearchResults: recentSearchResultsText,
-          topic: this.character.topics[Math.floor(Math.random() * this.character.topics.length)],
+          topic:
+            this.character.topics[
+              Math.floor(Math.random() * this.character.topics.length)
+            ],
           directions: this.directions,
-          adjective: this.character.adjectives[Math.floor(Math.random() * this.character.adjectives.length)]
-          
+          adjective:
+            this.character.adjectives[
+              Math.floor(Math.random() * this.character.adjectives.length)
+            ],
         } as unknown as State,
         template: newTweetPrompt,
-
       });
 
-      const datestr = new Date().toISOString().replace(/:/g, '-');
-        
+      const datestr = new Date().toISOString().replace(/:/g, "-");
+
       // log context to file
-      log_to_file(`${botTwitterUsername}_${datestr}_generate_context`, context)
+      log_to_file(`${botTwitterUsername}_${datestr}_generate_context`, context);
 
       let newTweetContent;
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        try{
-
+        try {
           newTweetContent = await this.agent.runtime.completion({
             context,
             stop: [],
@@ -113,17 +130,20 @@ export class TwitterGenerationClient extends ClientBase {
             presence_penalty: 0.5, // TODO: tune these and move to settings
             model: this.model,
           });
-          log_to_file(`${botTwitterUsername}_${datestr}_generate_response_${3 - triesLeft}`, newTweetContent)
+          log_to_file(
+            `${botTwitterUsername}_${datestr}_generate_response_${3 - triesLeft}`,
+            newTweetContent,
+          );
         } catch (error) {
-          console.warn('Could not generate new tweet:', error);
-          console.log("Retrying...")
+          console.warn("Could not generate new tweet:", error);
+          console.log("Retrying...");
         }
       }
 
       // Send the new tweet
       await this.twitterClient.sendTweet(newTweetContent.trim());
     } catch (error) {
-      console.error('Error generating new tweet:', error);
+      console.error("Error generating new tweet:", error);
     }
   }
 }

@@ -1,9 +1,9 @@
 import { statSync } from "fs";
 import { join } from "path";
 import { arch, platform } from "process";
-import { fileURLToPath } from 'url';
-import { Database } from 'better-sqlite3';
-import path from 'path';
+import { fileURLToPath } from "url";
+import { Database } from "better-sqlite3";
+import path from "path";
 
 // Get the file path of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -42,8 +42,9 @@ function loadablePathResolver(name: string): string {
   }
 
   const packageName = platformPackageName(platform, arch);
-  let loadablePath = join(
+  const loadablePath = join(
     __dirname,
+    "..",
     "..",
     "..",
     "node_modules",
@@ -52,8 +53,8 @@ function loadablePathResolver(name: string): string {
     `${name}.${extensionSuffix(platform)}`,
   );
 
-  console.log("loadablePath")
-  console.log(loadablePath)
+  console.log("loadablePath");
+  console.log(loadablePath);
   if (!statSync(loadablePath, { throwIfNoEntry: false })) {
     throw new Error(
       `Loadable extension for sqlite-vss not found. Was the ${packageName} package installed? Avoid using the --no-optional flag, as the optional dependencies for sqlite-vss are required.`,
@@ -74,11 +75,11 @@ export function getVssLoadablePath(): string {
 // Note: There is a weird bug on linux where the extension is not loaded correctly, so we remove the .so extension
 
 export function loadVector(db: Database): void {
-  db.loadExtension(getVectorLoadablePath().replace('.so', ''));
+  db.loadExtension(getVectorLoadablePath().replace(".so", ""));
 }
 
 export function loadVss(db: Database): void {
-  db.loadExtension(getVssLoadablePath().replace('.so', ''));
+  db.loadExtension(getVssLoadablePath().replace(".so", ""));
 }
 
 export function load(db: Database): void {

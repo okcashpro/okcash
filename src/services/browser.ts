@@ -1,4 +1,4 @@
-import { chromium, Browser, Page } from 'playwright';
+import { chromium, Browser, Page } from "playwright";
 
 export class BrowserService {
   private browser: Browser | undefined;
@@ -25,7 +25,9 @@ export class BrowserService {
 
     try {
       if (!this.browser) {
-        throw new Error('Browser not initialized. Call initializeBrowser() first.');
+        throw new Error(
+          "Browser not initialized. Call initializeBrowser() first.",
+        );
       }
 
       page = await this.browser.newPage();
@@ -34,7 +36,7 @@ export class BrowserService {
       const bodyContent = await page.evaluate(() => document.body.innerText);
       return bodyContent;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       throw error;
     } finally {
       if (page) {

@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { REST } from "@discordjs/rest";
 import {
+  AudioReceiveStream,
   NoSubscriberBehavior,
   StreamType,
   VoiceConnection,
@@ -8,15 +10,7 @@ import {
   getVoiceConnection,
   joinVoiceChannel,
 } from "@discordjs/voice";
-import { pipeline as transformersPipeline } from '@xenova/transformers';
-import {
-  Content,
-  Message,
-  State,
-  composeContext,
-  embeddingZeroVector,
-  parseJSONObjectFromText
-} from "bgent";
+import { pipeline as transformersPipeline } from "@xenova/transformers";
 import { UUID } from "crypto";
 import {
   Attachment,
@@ -30,38 +24,48 @@ import {
   GuildMember,
   Partials,
   Routes,
+  VoiceChannel,
   VoiceState,
 } from "discord.js";
 import { EventEmitter } from "events";
+import fs from "fs";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid, default as uuid } from "uuid-by-string";
 import WavEncoder from "wav-encoder";
-import { Agent } from '../../core/agent.ts';
-import { adapter } from "../../core/db.ts";
-import { log_to_file } from "../../core/logger.ts";
-import settings from "../../core/settings.ts";
-import { extractAnswer } from "../../core/util.ts";
+import { Agent } from "../../agent.ts";
+import { composeContext } from "../../context.ts";
+import { adapter } from "../../db.ts";
+import { log_to_file } from "../../logger.ts";
+import { embeddingZeroVector } from "../../memory.ts";
 import ImageRecognitionService from "../../services/imageRecognition.ts";
 import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
+import settings from "../../settings.ts";
+import { Content, Message, State } from "../../types.ts";
+import { parseJSONObjectFromText } from "../../parsing.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
-import fs from "fs";
+
+export function extractAnswer(text: string): string {
+  const startIndex = text.indexOf("Answer: ") + 8;
+  const endIndex = text.indexOf("<|endoftext|>", 11);
+  return text.slice(startIndex, endIndex);
+}
 
 export const messageHandlerTemplate =
-// `{{actionExamples}}
+  // `{{actionExamples}}
 
-// # IMPORTANT: DO NOT USE THE INFORMATION FROM THE EXAMPLES ABOVE. THE EXAMPLES ARE FOR ACTION EXAMPLE REFERENCE ONLY.
+  // # IMPORTANT: DO NOT USE THE INFORMATION FROM THE EXAMPLES ABOVE. THE EXAMPLES ARE FOR ACTION EXAMPLE REFERENCE ONLY.
 
-// ~~~
+  // ~~~
 
-// {{lore}}
-// {{relevantFacts}}
-// {{recentFacts}}
-// {{goals}}
-// {{actors}}
-`{{providers}}
+  // {{lore}}
+  // {{relevantFacts}}
+  // {{recentFacts}}
+  // {{goals}}
+  // {{actors}}
+  `{{providers}}
 {{actionNames}}
 {{actions}}
 
@@ -70,11 +74,10 @@ export const messageHandlerTemplate =
 # INSTRUCTIONS: Write the next message for {{agentName}}.
 \nResponse format should be formatted in a JSON block like this:
 \`\`\`json
-{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }
+{ "user": "{{agentName}}", "content": string, "action": string }
 \`\`\``;
 
-export const shouldRespondTemplate =
-`# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
 
@@ -107,11 +110,11 @@ export class DiscordClient extends EventEmitter {
   private character: any;
   private transcriber: any;
   private imageRecognitionService: ImageRecognitionService;
-  speechSynthesizer: SpeechSynthesizer;
+  private speechSynthesizer: SpeechSynthesizer | null = null;
 
   constructor(agent: Agent, character: any) {
     super();
-    this.apiToken = settings.DISCORD_API_TOKEN;
+    this.apiToken = settings.DISCORD_API_TOKEN as string;
     this.character = character;
     this.client = new Client({
       intents: [
@@ -132,13 +135,18 @@ export class DiscordClient extends EventEmitter {
 
     this.imageRecognitionService = new ImageRecognitionService(this.agent);
 
-    this.client.once(Events.ClientReady, async (readyClient: { user: { tag: any; id: any } }) => {
-      console.log(`Logged in as ${readyClient.user?.tag}`);
-      console.log("Use this URL to add the bot to your server:");
-      console.log(`https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`);
-      await this.checkBotAccount();
-      await this.onReady();
-    });
+    this.client.once(
+      Events.ClientReady,
+      async (readyClient: { user: { tag: any; id: any } }) => {
+        console.log(`Logged in as ${readyClient.user?.tag}`);
+        console.log("Use this URL to add the bot to your server:");
+        console.log(
+          `https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`,
+        );
+        await this.checkBotAccount();
+        await this.onReady();
+      },
+    );
 
     this.client.login(this.apiToken);
 
@@ -147,27 +155,32 @@ export class DiscordClient extends EventEmitter {
   }
 
   private async initializeTranscriber() {
-    this.transcriber = await transformersPipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en');
+    this.transcriber = await transformersPipeline(
+      "automatic-speech-recognition",
+      "Xenova/whisper-tiny.en",
+    );
   }
-
 
   private setupEventListeners() {
     this.client.on("voiceStateUpdate", this.handleVoiceStateUpdate.bind(this));
     this.client.on("guildCreate", this.handleGuildCreate.bind(this));
     this.client.on("userStream", this.handleUserStream.bind(this));
     this.client.on(Events.MessageCreate, this.handleMessageCreate.bind(this));
-    this.client.on(Events.InteractionCreate, this.handleInteractionCreate.bind(this));
+    this.client.on(
+      Events.InteractionCreate,
+      this.handleInteractionCreate.bind(this),
+    );
   }
 
   private setupCommands() {
-    const rest = new REST({ version: "9" }).setToken(settings.DISCORD_API_TOKEN);
+    const rest = new REST({ version: "9" }).setToken(this.apiToken);
 
     (async () => {
       try {
         console.log("Started refreshing application (/) commands.");
         await rest.put(
           Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
-          { body: commands }
+          { body: commands },
         );
         console.log("Successfully reloaded application (/) commands.");
       } catch (error) {
@@ -176,9 +189,15 @@ export class DiscordClient extends EventEmitter {
     })();
   }
 
-  private handleVoiceStateUpdate(oldState: VoiceState | null, newState: VoiceState | null) {
+  private handleVoiceStateUpdate(
+    oldState: VoiceState | null,
+    newState: VoiceState | null,
+  ) {
     if (newState?.member?.user.bot) return;
-    if (newState?.channelId != null && newState?.channelId != oldState?.channelId) {
+    if (
+      newState?.channelId != null &&
+      newState?.channelId != oldState?.channelId
+    ) {
       this.joinChannel(newState.channel as BaseGuildVoiceChannel);
     }
   }
@@ -192,9 +211,15 @@ export class DiscordClient extends EventEmitter {
     user_id: UUID,
     userName: string,
     channel: BaseGuildVoiceChannel,
-    audioStream: Readable
+    audioStream: Readable,
   ) {
-    console.log("handleVoiceStateUpdate", user_id, userName, channel, audioStream);
+    console.log(
+      "handleVoiceStateUpdate",
+      user_id,
+      userName,
+      channel,
+      audioStream,
+    );
     const channelId = channel.id;
     const userIdUUID = uuid(user_id) as UUID;
     this.listenToSpokenAudio(
@@ -205,7 +230,7 @@ export class DiscordClient extends EventEmitter {
       async (responseAudioStream) => {
         await this.playAudioStream(user_id, responseAudioStream);
       },
-      ResponseType.RESPONSE_AUDIO
+      ResponseType.RESPONSE_AUDIO,
     );
   }
 
@@ -225,8 +250,8 @@ export class DiscordClient extends EventEmitter {
     const textContent = message.content;
 
     // Check for image attachments
-    const imageAttachments = message.attachments.find(attachment => 
-      attachment.contentType?.startsWith('image/')
+    const imageAttachments = message.attachments.find((attachment) =>
+      attachment.contentType?.startsWith("image/"),
     );
 
     try {
@@ -239,7 +264,6 @@ export class DiscordClient extends EventEmitter {
         imageAttachments: imageAttachments ? [imageAttachments] : [],
         message,
         discordMessage: message,
-        discordClient: this.client,
       });
       if (!responseStream) {
         console.log("No response stream");
@@ -253,7 +277,9 @@ export class DiscordClient extends EventEmitter {
       message.channel.send(responseData);
     } catch (error) {
       console.error("Error responding to message:", error);
-      message.channel.send("Sorry, I encountered an error while processing your request.");
+      message.channel.send(
+        "Sorry, I encountered an error while processing your request.",
+      );
     }
   }
 
@@ -280,20 +306,20 @@ export class DiscordClient extends EventEmitter {
     if (!this.speechSynthesizer) {
       this.speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
     }
-  
+
     console.log("Synthesizing speech...");
     // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
     const audio = await this.speechSynthesizer.synthesize(text);
     console.log("Speech synthesized");
-  
+
     // Encode the audio data into a WAV format
     const { encode } = WavEncoder;
     const audioData = {
-        sampleRate: 22050,
-        channelData: [audio]
+      sampleRate: 22050,
+      channelData: [audio],
     };
     const wavArrayBuffer = encode.sync(audioData);
-    
+
     // TODO: Move to a temp file
     // Convert the ArrayBuffer to a Buffer and save it to a file
     fs.writeFileSync("buffer.wav", Buffer.from(wavArrayBuffer));
@@ -317,56 +343,63 @@ export class DiscordClient extends EventEmitter {
       console.log("Transcriber not initialized. Initializing now...");
       await this.initializeTranscriber();
     }
-  
+
     try {
       console.log(`Received audioBuffer of length: ${audioBuffer.length}`);
-  
+
       // Convert the Buffer to a Float32Array
       const float32Array = new Float32Array(audioBuffer.length / 2);
       for (let i = 0; i < float32Array.length; i++) {
         float32Array[i] = audioBuffer.readInt16LE(i * 2) / 32768.0;
       }
-  
-      console.log(`Converted to Float32Array of length: ${float32Array.length}`);
-  
+
+      console.log(
+        `Converted to Float32Array of length: ${float32Array.length}`,
+      );
+
       // Run transcription
-      let start = performance.now();
-      let output = await this.transcriber(float32Array, {
+      const start = performance.now();
+      const output = await this.transcriber(float32Array, {
         sampling_rate: 48000, // Discord's default sample rate
       });
-      let end = performance.now();
-  
+      const end = performance.now();
+
       console.log(`Transcription duration: ${(end - start) / 1000} seconds`);
-      console.log('Transcription output:', output);
-  
+      console.log("Transcription output:", output);
+
       if (!output.text || output.text.length < 5) {
         return null;
       }
       return output.text;
     } catch (error) {
       console.error("Error in speech-to-text conversion:", error);
-      console.error("Error details:", error.message);
-      console.error("Error stack:", error.stack);
       return null;
     }
   }
 
   private async handleImageRecognition(message: DiscordMessage) {
     const attachment = message.attachments.first();
-    if (attachment && attachment.contentType?.startsWith('image/')) {
+    if (attachment && attachment.contentType?.startsWith("image/")) {
       try {
-        const recognizedText = await this.imageRecognitionService.recognizeImage(attachment.url);
+        const recognizedText =
+          await this.imageRecognitionService.recognizeImage(attachment.url);
         const description = extractAnswer(recognizedText[0]);
         // Add the image description to the completion context
         message.content += `\nImage description: ${description}`;
       } catch (error) {
-        console.error('Error recognizing image:', error);
-        await message.reply('Sorry, I encountered an error while processing the image.');
+        console.error("Error recognizing image:", error);
+        await message.reply(
+          "Sorry, I encountered an error while processing the image.",
+        );
       }
     }
   }
-  
-  private async ensureUserExists(agentId: UUID, userName: string, botToken: string | null = null) {
+
+  private async ensureUserExists(
+    agentId: UUID,
+    userName: string,
+    botToken: string | null = null,
+  ) {
     if (!userName && botToken) {
       userName = await this.fetchBotName(botToken);
     }
@@ -377,11 +410,9 @@ export class DiscordClient extends EventEmitter {
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
     const room_id = getUuid(this.client.user?.id as string) as UUID;
 
-    await this.ensureUserExists(
-      agentId,
-      await this.fetchBotName(settings.DISCORD_API_TOKEN),
-      settings.DISCORD_API_TOKEN
-    );
+    const botName = await this.fetchBotName(this.apiToken);
+
+    await this.ensureUserExists(agentId, botName, this.apiToken);
     await this.agent.ensureRoomExists(room_id);
     await this.agent.ensureParticipantInRoom(agentId, room_id);
 
@@ -390,7 +421,6 @@ export class DiscordClient extends EventEmitter {
       .get(agentId) as { name: string };
 
     if (!botData.name) {
-      const botName = await this.fetchBotName(settings.DISCORD_API_TOKEN);
       adapter.db
         .prepare("UPDATE accounts SET name = ? WHERE id = ?")
         .run(botName, agentId);
@@ -424,7 +454,7 @@ export class DiscordClient extends EventEmitter {
       return { content: "", action: "IGNORE" };
     }
 
-    let imageDescriptions = [];
+    const imageDescriptions = [];
 
     if (imageAttachments) {
       console.log("imageAttachments", imageAttachments);
@@ -464,7 +494,11 @@ export class DiscordClient extends EventEmitter {
     });
 
     if (!shouldRespond && hasInterest) {
-      shouldRespond = await this._checkShouldRespond(state, interestChannels, discordMessage);
+      shouldRespond = await this._checkShouldRespond(
+        state,
+        interestChannels,
+        discordMessage,
+      );
     }
 
     if (!shouldRespond) {
@@ -481,7 +515,11 @@ export class DiscordClient extends EventEmitter {
       console.log(context, "Response Context");
     }
 
-    const responseContent = await this._generateResponse(message, state, context);
+    const responseContent = await this._generateResponse(
+      message,
+      state,
+      context,
+    );
 
     await this._saveResponseMessage(message, state, responseContent);
     this.agent.runtime
@@ -501,11 +539,11 @@ export class DiscordClient extends EventEmitter {
     if ((senderContent as Content).content) {
       const data2 = adapter.db
         .prepare(
-          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1"
+          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
         )
         .all("messages", message.user_id, message.room_id) as {
-          content: Content;
-        }[];
+        content: Content;
+      }[];
 
       if (data2.length > 0 && data2[0].content === message.content) {
         console.log("already saved", data2);
@@ -525,19 +563,26 @@ export class DiscordClient extends EventEmitter {
     }
   }
 
-  private async _checkShouldRespond(state: State, interestChannels: InterestChannels | undefined, discordMessage: DiscordMessage): Promise<boolean> {
+  private async _checkShouldRespond(
+    state: State,
+    interestChannels: InterestChannels | undefined,
+    discordMessage: DiscordMessage,
+  ): Promise<boolean> {
     const shouldRespondContext = composeContext({
       state,
       template: shouldRespondTemplate,
     });
 
-    const datestr = new Date().toISOString().replace(/:/g, '-');
-        
+    const datestr = new Date().toISOString().replace(/:/g, "-");
+
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_shouldrespond_context`, shouldRespondContext)
+    log_to_file(
+      `${state.agentName}_${datestr}_shouldrespond_context`,
+      shouldRespondContext,
+    );
 
     let response;
-    
+
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
         response = await this.agent.runtime.completion({
@@ -546,12 +591,19 @@ export class DiscordClient extends EventEmitter {
           frequency_penalty: 0.0,
           presence_penalty: 0.0,
         });
-        log_to_file(`${state.agentName}_${datestr}_shouldrespond_response`, response)
+        log_to_file(
+          `${state.agentName}_${datestr}_shouldrespond_response`,
+          response,
+        );
       } catch (error) {
         console.error("Error in _checkShouldRespond:", error);
-        console.error("Error details:", error.message);
-        console.log("Retrying...")
+        console.log("Retrying...");
       }
+    }
+
+    if (response == null) {
+      console.error("No response in _checkShouldRespond");
+      return false;
     }
 
     if (response.toLowerCase().includes("respond")) {
@@ -567,20 +619,22 @@ export class DiscordClient extends EventEmitter {
     }
   }
 
-  private async _generateResponse(message: Message, state: State, context: string): Promise<Content> {
+  private async _generateResponse(
+    message: Message,
+    state: State,
+    context: string,
+  ): Promise<Content> {
     let responseContent: Content | null = null;
     const { user_id, room_id } = message;
 
+    const datestr = new Date().toISOString().replace(/:/g, "-");
 
-    const datestr = new Date().toISOString().replace(/:/g, '-');
-        
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_generate_context`, context)
+    log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
 
     let response;
 
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-
       try {
         response = await this.agent.runtime.completion({
           context,
@@ -588,13 +642,16 @@ export class DiscordClient extends EventEmitter {
         });
       } catch (error) {
         console.error("Error in _generateResponse:", error);
-        console.error("Error details:", error.message);
-        console.log("Retrying...")
+        console.log("Retrying...");
       }
 
-      console.log("response is", response)
+      console.log("response is", response);
 
-      log_to_file(`${state.agentName}_${datestr}_generate_response`, response)
+      if (!response) {
+        continue;
+      }
+
+      log_to_file(`${state.agentName}_${datestr}_generate_response`, response);
 
       const values = {
         body: response,
@@ -605,12 +662,12 @@ export class DiscordClient extends EventEmitter {
 
       adapter.db
         .prepare(
-          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)"
+          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
         )
         .run([values.body, values.user_id, values.room_id, values.type]);
 
       const parsedResponse = parseJSONObjectFromText(
-        response
+        response,
       ) as unknown as Content;
       console.log("parsedResponse", parsedResponse);
       // if (
@@ -618,14 +675,14 @@ export class DiscordClient extends EventEmitter {
       //     (state as State).senderName as string
       //   )
       // ) {
-        if (!parsedResponse) {
-          continue;
-        }
-        responseContent = {
-          content: parsedResponse.content,
-          action: parsedResponse.action,
-        };
-        break;
+      if (!parsedResponse) {
+        continue;
+      }
+      responseContent = {
+        content: parsedResponse.content,
+        action: parsedResponse.action,
+      };
+      break;
       // }
     }
 
@@ -639,7 +696,11 @@ export class DiscordClient extends EventEmitter {
     return responseContent;
   }
 
-  private async _saveResponseMessage(message: Message, state: State, responseContent: Content) {
+  private async _saveResponseMessage(
+    message: Message,
+    state: State,
+    responseContent: Content,
+  ) {
     const { room_id } = message;
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
@@ -673,7 +734,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     const data = await response.json();
-    console.log('**** BOT DATA: ', data)
+    console.log("**** BOT DATA: ", data);
     return data.username;
   }
 
@@ -683,35 +744,35 @@ export class DiscordClient extends EventEmitter {
     channelId: string,
     inputStream: Readable,
     callback: (responseAudioStream: Readable) => void,
-    requestedResponseType?: ResponseType
+    requestedResponseType?: ResponseType,
   ) {
     if (requestedResponseType == null)
       requestedResponseType = ResponseType.RESPONSE_AUDIO;
-  
+
     const buffers: Buffer[] = [];
     let totalLength = 0;
     const maxSilenceTime = 500;
     let lastChunkTime = Date.now();
-  
-    const monitor = new AudioMonitor(inputStream, 10000000, async (buffer) => {
+
+    new AudioMonitor(inputStream, 10000000, async (buffer) => {
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
-  
+
       buffers.push(buffer);
       totalLength += buffer.length;
       lastChunkTime = currentTime;
-  
+
       if (silenceDuration > maxSilenceTime || totalLength >= 1000000) {
         const combinedBuffer = Buffer.concat(buffers, totalLength);
         buffers.length = 0;
         totalLength = 0;
-  
-        let responseStream = await this.respondToSpokenAudio(
+
+        const responseStream = await this.respondToSpokenAudio(
           user_id as UUID,
           userName,
           channelId,
           combinedBuffer,
-          requestedResponseType
+          requestedResponseType,
         );
         if (responseStream) {
           callback(responseStream as Readable);
@@ -725,7 +786,7 @@ export class DiscordClient extends EventEmitter {
     userName: string,
     channelId: string,
     inputBuffer: Buffer,
-    requestedResponseType?: ResponseType
+    requestedResponseType?: ResponseType,
   ): Promise<Readable | null> {
     if (requestedResponseType == null)
       requestedResponseType = ResponseType.RESPONSE_AUDIO;
@@ -739,7 +800,6 @@ export class DiscordClient extends EventEmitter {
         channelId,
         input: text as string,
         requestedResponseType,
-        discordClient: this.client,
       });
     }
   }
@@ -752,7 +812,6 @@ export class DiscordClient extends EventEmitter {
     requestedResponseType,
     message,
     discordMessage,
-    discordClient,
     imageAttachments,
     interestChannels,
   }: {
@@ -762,7 +821,6 @@ export class DiscordClient extends EventEmitter {
     input: string;
     requestedResponseType?: ResponseType;
     message?: DiscordMessage;
-    discordClient: Client;
     imageAttachments?: Attachment[];
     discordMessage?: DiscordMessage;
     interestChannels?: InterestChannels;
@@ -773,12 +831,8 @@ export class DiscordClient extends EventEmitter {
     const room_id = getUuid(channelId) as UUID;
     const userIdUUID = getUuid(user_id) as UUID;
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-
-    await this.ensureUserExists(
-      agentId,
-      await this.fetchBotName(settings.DISCORD_API_TOKEN),
-      settings.DISCORD_API_TOKEN
-    );
+    const botName = await this.fetchBotName(this.apiToken);
+    await this.ensureUserExists(agentId, botName, this.apiToken);
     await this.ensureUserExists(userIdUUID, userName);
     await this.agent.ensureRoomExists(room_id);
     await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
@@ -805,7 +859,9 @@ export class DiscordClient extends EventEmitter {
       imageAttachments,
     });
 
-    const content = (response.responseMessage || response.response || response.content || response.message) as string;
+    const content = (response.responseMessage ||
+      response.content ||
+      response.message) as string;
 
     if (!content) {
       return null;
@@ -831,14 +887,14 @@ export class DiscordClient extends EventEmitter {
         .prepare("UPDATE accounts SET details = ? WHERE id = ?")
         .run(
           JSON.stringify({ summary: this.character.bio }),
-          getUuid(this.client.user?.id as string)
+          getUuid(this.client.user?.id as string),
         );
     }
   }
 
   private async scanGuild(guild: Guild) {
     const channels = (await guild.channels.fetch()).filter(
-      (channel) => channel?.type == ChannelType.GuildVoice
+      (channel) => channel?.type == ChannelType.GuildVoice,
     );
     let chosenChannel: BaseGuildVoiceChannel | null = null;
 
@@ -859,7 +915,7 @@ export class DiscordClient extends EventEmitter {
   }
 
   private async joinChannel(channel: BaseGuildVoiceChannel) {
-    const oldConnection = getVoiceConnection(channel.guildId as any);
+    const oldConnection = getVoiceConnection(channel.guildId as string);
     if (oldConnection) {
       try {
         oldConnection.destroy();
@@ -896,7 +952,7 @@ export class DiscordClient extends EventEmitter {
 
   private async monitorMember(
     member: GuildMember,
-    channel: BaseGuildVoiceChannel
+    channel: BaseGuildVoiceChannel,
   ) {
     const user_id = member.id;
     const userName = member.displayName;
@@ -913,11 +969,15 @@ export class DiscordClient extends EventEmitter {
       rate: DECODE_SAMPLE_RATE,
       frameSize: DECODE_FRAME_SIZE,
     });
-    pipeline(receiveStream as any, opusDecoder as any, (err: any) => {
-      if (err) {
-        console.log(`Opus decoding pipeline error: ${err}`);
-      }
-    });
+    pipeline(
+      receiveStream as AudioReceiveStream,
+      opusDecoder as any,
+      (err: Error | null) => {
+        if (err) {
+          console.log(`Opus decoding pipeline error: ${err}`);
+        }
+      },
+    );
     this.streams.set(user_id, opusDecoder);
     this.connections.set(user_id, connection as VoiceConnection);
     opusDecoder.on("error", (err: any) => {
@@ -939,7 +999,7 @@ export class DiscordClient extends EventEmitter {
       console.log(`No connection for user ${user_id}`);
       return;
     }
-    let audioPlayer = createAudioPlayer({
+    const audioPlayer = createAudioPlayer({
       behaviors: {
         noSubscriber: NoSubscriberBehavior.Pause,
       },
@@ -948,7 +1008,7 @@ export class DiscordClient extends EventEmitter {
 
     const audioStartTime = Date.now();
 
-    let resource = createAudioResource(audioStream, {
+    const resource = createAudioResource(audioStream, {
       inputType: StreamType.Arbitrary,
     });
     audioPlayer.play(resource);
@@ -962,10 +1022,10 @@ export class DiscordClient extends EventEmitter {
       (oldState: any, newState: { status: string }) => {
         console.log("Audio player " + newState.status);
         if (newState.status == "idle") {
-          let idleTime = Date.now();
+          const idleTime = Date.now();
           console.log(`Audio playback took: ${idleTime - audioStartTime}ms`);
         }
-      }
+      },
     );
   }
 
@@ -980,8 +1040,8 @@ export class DiscordClient extends EventEmitter {
 
   //   await this.ensureUserExists(
   //     agentId,
-  //     await this.fetchBotName(settings.DISCORD_API_TOKEN),
-  //     settings.DISCORD_API_TOKEN
+  //     await this.fetchBotName(this.apiToken),
+  //     this.apiToken
   //   );
   //   await this.ensureUserExists(userIdUUID, userName);
   //   await this.agent.ensureRoomExists(room_id);
@@ -1031,8 +1091,8 @@ export class DiscordClient extends EventEmitter {
 
   //       await this.ensureUserExists(
   //         agentId,
-  //         await this.fetchBotName(settings.DISCORD_API_TOKEN),
-  //         settings.DISCORD_API_TOKEN
+  //         await this.fetchBotName(this.apiToken),
+  //         this.apiToken
   //       );
   //       await this.ensureUserExists(userIdUUID, userName);
   //       await this.agent.ensureRoomExists(room_id);
@@ -1071,8 +1131,8 @@ export class DiscordClient extends EventEmitter {
       return;
     }
     const voiceChannel = interaction.guild.channels.cache.find(
-      (channel) =>
-        channel.id === channelId && channel.type === ChannelType.GuildVoice
+      (channel: VoiceChannel) =>
+        channel.id === channelId && channel.type === ChannelType.GuildVoice,
     );
 
     if (!voiceChannel) {

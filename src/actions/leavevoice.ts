@@ -1,11 +1,17 @@
-// src/lib/actions/leaveVoice.ts
+// src/actions/leaveVoice
 import { getVoiceConnection } from "@discordjs/voice";
-import { State, type Action, type BgentRuntime, type Message } from "bgent";
-import { Channel, ChannelType, Client, Message as DiscordMessage } from "discord.js";
+import {
+  Channel,
+  ChannelType,
+  Client,
+  Message as DiscordMessage,
+} from "discord.js";
+import { AgentRuntime } from "../runtime.ts"
+import { Message, State, Action } from "../types.ts"
 
 export default {
   name: "LEAVE_VOICE",
-  validate: async (runtime: BgentRuntime, message: Message, state: State) => {
+  validate: async (runtime: AgentRuntime, message: Message, state: State) => {
     if (!state) {
       throw new Error("State is not available.");
     }
@@ -13,20 +19,24 @@ export default {
     if (!state.discordMessage) {
       return; // discordMessage isn't available in voice channels
     }
-  
+
     if (!state.discordClient) {
       throw new Error("Discord client is not available in the state.");
     }
-  
+
     const client = state.discordClient as Client;
-  
+
     // Check if the client is connected to any voice channel
     const isConnectedToVoice = client.voice.adapters.size > 0;
-  
+
     return isConnectedToVoice;
-  },  
+  },
   description: "Leave the current voice channel.",
-  handler: async (runtime: BgentRuntime, message: Message, state: State): Promise<boolean> => {
+  handler: async (
+    runtime: AgentRuntime,
+    message: Message,
+    state: State,
+  ): Promise<boolean> => {
     if (!state.discordClient) {
       throw new Error("Discord client is not available in the state.");
     }
@@ -35,10 +45,14 @@ export default {
     }
     const voiceChannels = (state.discordClient as Client)?.guilds.cache
       .get((state.discordMessage as DiscordMessage).guild?.id as string)
-      ?.channels.cache.filter((channel: Channel) => channel.type === ChannelType.GuildVoice);
+      ?.channels.cache.filter(
+        (channel: Channel) => channel.type === ChannelType.GuildVoice,
+      );
 
     voiceChannels?.forEach((channel: Channel) => {
-      const connection = getVoiceConnection((state.discordMessage as DiscordMessage).guild?.id as string);
+      const connection = getVoiceConnection(
+        (state.discordMessage as DiscordMessage).guild?.id as string,
+      );
       if (connection) {
         connection.destroy();
       }
@@ -74,7 +88,8 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "No problem! I'll leave the voice channel too. Talk to you later!",
+          content:
+            "No problem! I'll leave the voice channel too. Talk to you later!",
           action: "LEAVE_VOICE",
         },
       },
@@ -83,14 +98,16 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Great discussion everyone! Let's wrap up this voice meeting.",
+          content:
+            "Great discussion everyone! Let's wrap up this voice meeting.",
           action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Agreed. I'll leave the voice channel now. Thanks for the productive meeting!",
+          content:
+            "Agreed. I'll leave the voice channel now. Thanks for the productive meeting!",
           action: "LEAVE_VOICE",
         },
       },
@@ -99,14 +116,16 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Hey {{user2}}, I need to step away from the voice chat for a bit.",
+          content:
+            "Hey {{user2}}, I need to step away from the voice chat for a bit.",
           action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "No worries! I'll leave the voice channel too. Just let me know when you're back.",
+          content:
+            "No worries! I'll leave the voice channel too. Just let me know when you're back.",
           action: "LEAVE_VOICE",
         },
       },
@@ -115,14 +134,16 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "{{user2}}, I think we covered everything we needed to discuss. Ready to leave the voice channel?",
+          content:
+            "{{user2}}, I think we covered everything we needed to discuss. Ready to leave the voice channel?",
           action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Yes, I think we're done here. Leaving the voice channel now. Good job everyone!",
+          content:
+            "Yes, I think we're done here. Leaving the voice channel now. Good job everyone!",
           action: "LEAVE_VOICE",
         },
       },

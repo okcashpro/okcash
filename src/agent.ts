@@ -1,27 +1,25 @@
-import {
-  Action,
-  BgentRuntime,
-  defaultActions
-} from "bgent";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UUID } from "crypto";
 import { EventEmitter } from "events";
-import elaborate_discord from "../actions/elaborate.ts";
-import joinvoice from "../actions/joinvoice.ts";
-import leavevoice from "../actions/leavevoice.ts";
-import { adapter } from "./db.ts";
-import channelStateProvider from "../providers/channelState.ts";
-import flavorProvider from "../providers/flavor.ts";
-import timeProvider from "../providers/time.ts";
-import voiceStateProvider from "../providers/voicestate.ts";
+import joinvoice from "./actions/joinvoice.ts";
+import leavevoice from "./actions/leavevoice.ts";
+import channelStateProvider from "./providers/channelState.ts";
+import timeProvider from "./providers/time.ts";
+import voiceStateProvider from "./providers/voiceState.ts";
+import LlamaService from "./services/llama.ts";
 import settings from "./settings.ts";
-import LlamaService from "../services/llama.ts";
+
+import { defaultActions } from "./actions.ts";
+import { adapter } from "./db.ts";
+import { Action } from "./types.ts";
+import { AgentRuntime } from "./runtime.ts";
 
 export class Agent extends EventEmitter {
-  runtime: BgentRuntime;
+  runtime: AgentRuntime;
 
   constructor() {
     super();
-    this.runtime = new BgentRuntime({
+    this.runtime = new AgentRuntime({
       databaseAdapter: adapter,
       token: settings.OPENAI_API_KEY as string,
       serverUrl: "https://api.openai.com/v1",
@@ -36,7 +34,7 @@ export class Agent extends EventEmitter {
       actions: [
         // elaborate_discord,
         ...defaultActions.filter(
-          (action: Action) => action.name !== "ELABORATE"
+          (action: Action) => action.name !== "ELABORATE",
         ),
         // TODO: Handle elaborating on Discord but *not* on Twitter
         joinvoice,
@@ -45,40 +43,55 @@ export class Agent extends EventEmitter {
     });
 
     // if settings.OPENAI_API_KEY is set, don't use Llama
-    if (settings.OPENAI_API_KEY)
-      return;
+    if (settings.OPENAI_API_KEY) return;
 
     // Otherwise, initialize Llama
 
     const llamaService = new LlamaService();
     (async () => {
-      await llamaService.initialize()
+      await llamaService.initialize();
       // TODO: Only initialize Llama if no OpenAI key is provided
-      const completion = async ({ context, stop, model, frequency_penalty, presence_penalty, temperature, }: { context?: string; stop?: never[]; model?: string; frequency_penalty?: number; presence_penalty?: number; temperature?: number; }) => {
+      const completion = async ({
+        context,
+        stop,
+        model,
+        frequency_penalty,
+        presence_penalty,
+        temperature,
+      }: {
+        context?: string;
+        stop?: never[];
+        model?: string;
+        frequency_penalty?: number;
+        presence_penalty?: number;
+        temperature?: number;
+      }) => {
         console.log("Running llama completion service");
         console.log("Context: ", context);
-        const completionResponse = await llamaService.getCompletionResponse(context, temperature, stop, frequency_penalty, presence_penalty);
+        const completionResponse = await llamaService.getCompletionResponse(
+          context,
+          temperature,
+          stop,
+          frequency_penalty,
+          presence_penalty,
+        );
         console.log("Completion response: ", completionResponse);
-        // change the 'responseMessage' to 'content'
-        (completionResponse as any).content = completionResponse.responseMessage;
-        delete completionResponse.responseMessage;
+        // change the 'content' to 'content'
+        (completionResponse as any).content = completionResponse.content;
         return JSON.stringify(completionResponse);
-      }
+      };
       this.runtime.completion = completion;
 
       const embed = async (input: string): Promise<number[]> => {
         console.log("Running llama embed service");
         console.log("Input: ", input);
         return await llamaService.getEmbeddingResponse(input);
-      }
+      };
       this.runtime.embed = embed;
     })();
   }
 
-  async ensureUserExists(
-    user_id: UUID,
-    userName: string | null
-  ) {
+  async ensureUserExists(user_id: UUID, userName: string | null) {
     const data = adapter.db
       .prepare("SELECT * FROM accounts WHERE id = ?")
       .get(user_id);
@@ -99,13 +112,13 @@ export class Agent extends EventEmitter {
 
       adapter.db
         .prepare(
-          "INSERT INTO accounts (id, name, email, details) VALUES (?, ?, ?, ?)"
+          "INSERT INTO accounts (id, name, email, details) VALUES (?, ?, ?, ?)",
         )
         .run(
           user_id,
           userName || "Bot",
           (userName || "Bot") + "@discord",
-          JSON.stringify({ summary: "" })
+          JSON.stringify({ summary: "" }),
         );
 
       console.log(`User ${userName} created successfully.`);

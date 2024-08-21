@@ -1,26 +1,21 @@
-import { SpeechSynthesizer } from "../services/speechSynthesis.ts";
+import { SpeechSynthesizer } from "../services/speechSynthesis.ts"
 
 class SpeechSynthesisService {
-    private speechSynthesizer: SpeechSynthesizer;
+  private speechSynthesizer: SpeechSynthesizer | null = null;
 
-    constructor() {
-        this.speechSynthesizer = null;
+  async initialize() {
+    if (this.speechSynthesizer) {
+      return;
     }
+    this.speechSynthesizer = await SpeechSynthesizer.create();
+  }
 
-    async initialize() {
-        if (this.speechSynthesizer) {
-            return;
-        }
-        this.speechSynthesizer = await SpeechSynthesizer.create();
+  async synthesize(text: string): Promise<Float32Array> {
+    if (!this.speechSynthesizer) {
+      throw new Error("Speech synthesizer not initialized");
     }
-
-    async synthesize(text: string): Promise<Float32Array> {
-        if (!this.speechSynthesizer) {
-            console.error("Speech synthesizer not initialized");
-            return;
-        }
-        return await this.speechSynthesizer.synthesize(text);
-    }
+    return await this.speechSynthesizer.synthesize(text);
+  }
 }
 
 export default SpeechSynthesisService;

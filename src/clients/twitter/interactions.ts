@@ -1,23 +1,18 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
-import {
-  Content,
-  Message,
-  State,
-  composeContext,
-  parseJSONObjectFromText
-} from "bgent";
 import { UUID } from "crypto";
 import fs from "fs";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../core/agent.ts";
-import { adapter } from "../../core/db.ts";
-import settings from "../../core/settings.ts";
+import { Agent } from "../../agent.ts"
+import { adapter } from "../../db.ts"
+import settings from "../../settings.ts"
 
 import { ClientBase } from "./base.ts";
-import { log_to_file } from "../../core/logger.ts";
+import { log_to_file } from "../../logger.ts"
+import { composeContext } from "../../context.ts"
+import { parseJSONObjectFromText } from "../../parsing.ts"
+import { Message, State, Content } from "../../types.ts"
 
-export const messageHandlerTemplate =
-  `{{relevantFacts}}
+export const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
 
 {{agentName}}'s bio:
@@ -55,10 +50,9 @@ Response format should be formatted in a JSON block like this:
 \`\`\`json\n{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }
 \`\`\`
 
-{{recentMessages}}`
+{{recentMessages}}`;
 
-export const shouldRespondTemplate =
-  `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
 
@@ -77,13 +71,15 @@ IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if t
 
 # INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, or IGNORE if {{agentName}} should not respond to the last message and STOP if {{agentName}} should stop participating in the conversation.`;
 
-
 export class TwitterInteractionClient extends ClientBase {
   onReady() {
-    console.log('Checking Twitter interactions');
+    console.log("Checking Twitter interactions");
     const handleTwitterInteractionsLoop = () => {
       this.handleTwitterInteractions();
-      setTimeout(handleTwitterInteractionsLoop, Math.floor(Math.random() * 300000) + 600000); // Random interval between 10-15 minutes
+      setTimeout(
+        handleTwitterInteractionsLoop,
+        Math.floor(Math.random() * 300000) + 600000,
+      ); // Random interval between 10-15 minutes
     };
     handleTwitterInteractionsLoop();
   }
@@ -91,31 +87,44 @@ export class TwitterInteractionClient extends ClientBase {
   constructor(agent: Agent, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
-      agent, character, model, callback: (self) => self.onReady()
+      agent,
+      character,
+      model,
+      callback: (self) => self.onReady(),
     });
   }
 
   private async handleTwitterInteractions() {
-    console.log('Checking Twitter interactions');
+    console.log("Checking Twitter interactions");
     try {
       const botTwitterUsername = settings.TWITTER_USERNAME;
       if (!botTwitterUsername) {
-        console.error('Twitter username not set in settings');
+        console.error("Twitter username not set in settings");
         return;
       }
 
       // Check for mentions
-      const mentions = this.twitterClient.searchTweets(`@${botTwitterUsername}`, 20, SearchMode.Latest);
+      const mentions = this.twitterClient.searchTweets(
+        `@${botTwitterUsername}`,
+        20,
+        SearchMode.Latest,
+      );
       for await (const tweet of mentions) {
-        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId) break;
+        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
+          break;
         await this.handleTweet(tweet);
       }
 
       // Check for replies to the bot's tweets
       const botTweets = this.twitterClient.getTweets(botTwitterUsername, 20);
       for await (const tweet of botTweets) {
-        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId) break;
-        const replies = this.twitterClient.searchTweets(`to:${botTwitterUsername}`, 20, SearchMode.Latest);
+        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
+          break;
+        const replies = this.twitterClient.searchTweets(
+          `to:${botTwitterUsername}`,
+          20,
+          SearchMode.Latest,
+        );
         for await (const reply of replies) {
           if (reply.inReplyToStatusId === tweet.id) {
             await this.handleTweet(reply);
@@ -124,13 +133,17 @@ export class TwitterInteractionClient extends ClientBase {
       }
 
       // Update the last checked tweet ID
-      const latestTweet = await this.twitterClient.getLatestTweet(botTwitterUsername);
+      const latestTweet =
+        await this.twitterClient.getLatestTweet(botTwitterUsername);
       if (latestTweet) {
         this.lastCheckedTweetId = latestTweet.id;
       }
-      console.log('Finished checking Twitter interactions, latest tweet is:', latestTweet);
+      console.log(
+        "Finished checking Twitter interactions, latest tweet is:",
+        latestTweet,
+      );
     } catch (error) {
-      console.error('Error handling Twitter interactions:', error);
+      console.error("Error handling Twitter interactions:", error);
     }
   }
 
@@ -141,7 +154,7 @@ export class TwitterInteractionClient extends ClientBase {
       return;
     }
     const twitterUserId = getUuid(tweet.userId as string) as UUID;
-    const twitterRoomId = getUuid('twitter') as UUID;
+    const twitterRoomId = getUuid("twitter") as UUID;
 
     await this.agent.ensureUserExists(twitterUserId, tweet.username);
 
@@ -154,14 +167,14 @@ export class TwitterInteractionClient extends ClientBase {
       room_id: twitterRoomId,
     };
 
-    let shouldIgnore = false
-    let shouldRespond = true
+    const shouldIgnore = false;
+    let shouldRespond = true;
 
     if (!message.content.content) {
       return { content: "", action: "IGNORE" };
     }
 
-    let tweetBackground = '';
+    let tweetBackground = "";
     if (tweet.isRetweet) {
       const originalTweet = await this.twitterClient.getTweet(tweet.id);
       tweetBackground = `Retweeting @${originalTweet.username}: ${originalTweet.text}`;
@@ -178,12 +191,12 @@ export class TwitterInteractionClient extends ClientBase {
     // Fetch replies and retweets
     const replies = await this.getReplies(tweet.id);
     const replyContext = replies
-      .filter(reply => reply.username !== botTwitterUsername)
-      .map(reply => `@${reply.username}: ${reply.text}`)
-      .join('\n');
+      .filter((reply) => reply.username !== botTwitterUsername)
+      .map((reply) => `@${reply.username}: ${reply.text}`)
+      .join("\n");
 
-    console.log('****** imageDescriptions')
-    console.log(imageDescriptions)
+    console.log("****** imageDescriptions");
+    console.log(imageDescriptions);
 
     let state = await this.agent.runtime.composeState(message, {
       twitterClient: this.twitterClient,
@@ -192,7 +205,10 @@ export class TwitterInteractionClient extends ClientBase {
       bio: this.character.bio,
       name: botTwitterUsername,
       directions: this.directions,
-      adjective: this.character.adjectives[Math.floor(Math.random() * this.character.adjectives.length)],
+      adjective:
+        this.character.adjectives[
+          Math.floor(Math.random() * this.character.adjectives.length)
+        ],
       tweetContext: `
 Tweet Background:
 ${tweetBackground}
@@ -200,8 +216,8 @@ ${tweetBackground}
 Original Tweet:
 By @${tweet.username}
 ${tweet.text}${tweet.replies > 0 && `\nReplies to original tweet:\n${replyContext}`}\n${`Original tweet text: ${tweet.text}`}}
-${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescriptions.length > 0 ? `\nImages in Tweet (Described): ${imageDescriptions.join(', ')}\n` : ''}
-`
+${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Tweet (Described): ${imageDescriptions.join(", ")}\n` : ""}
+`,
     });
 
     await this.saveRequestMessage(message, state as State);
@@ -259,10 +275,13 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
       template: messageHandlerTemplate,
     });
 
-    const datestr = new Date().toISOString().replace(/:/g, '-');
-        
+    const datestr = new Date().toISOString().replace(/:/g, "-");
+
     // log context to file
-    log_to_file(`${botTwitterUsername}_${datestr}_interactions_context`, context)
+    log_to_file(
+      `${botTwitterUsername}_${datestr}_interactions_context`,
+      context,
+    );
 
     if (this.agent.runtime.debugMode) {
       console.log(context, "Response Context");
@@ -278,7 +297,10 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
         temperature: this.temperature,
         model: this.model,
       });
-      log_to_file(`${botTwitterUsername}_${datestr}_interactions_response_${3 - triesLeft}`, response)
+      log_to_file(
+        `${botTwitterUsername}_${datestr}_interactions_response_${3 - triesLeft}`,
+        response,
+      );
 
       const values = {
         body: response,
@@ -289,17 +311,17 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
 
       adapter.db
         .prepare(
-          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)"
+          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
         )
         .run([values.body, values.user_id, values.room_id, values.type]);
 
       const parsedResponse = parseJSONObjectFromText(
-        response
+        response,
       ) as unknown as Content;
       console.log("parsedResponse", parsedResponse);
       if (
         !(parsedResponse?.user as string)?.includes(
-          (state as State).senderName as string
+          (state as State).senderName as string,
         )
       ) {
         if (!parsedResponse) {
@@ -326,7 +348,9 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(', ')}\n` : ''}${imageDescrip
     const response = responseContent;
 
     if (response.content) {
-      console.log(`Bot would respond to tweet ${tweet.id} with: ${response.content}`);
+      console.log(
+        `Bot would respond to tweet ${tweet.id} with: ${response.content}`,
+      );
       try {
         await this.twitterClient.sendTweet(response.content, tweet.id);
         console.log(`Successfully responded to tweet ${tweet.id}`);
