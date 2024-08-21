@@ -13,6 +13,7 @@ import {
 const channelStateProvider: Provider = {
   get: async (runtime: AgentRuntime, message: Message, state?: State) => {
     const discordMessage = state?.discordMessage as DiscordMessage;
+    console.log('discordMessage', discordMessage)
     const guild = discordMessage?.guild;
     const agentName = state?.agentName || "The agent";
     const senderName = state?.senderName || "someone";
@@ -29,21 +30,16 @@ const channelStateProvider: Provider = {
     const guildId = guild.id; // The ID of the guild
     const channel = discordMessage.channel;
 
-    const topic = "No topic";
-
     let response =
       agentName +
-      " is currently currently viewing in the channel `" +
-      channel +
-      "` (ID: " +
+      " is currently having a conversation in the channel `@" +
       channel.id +
-      ")" +
       " in the server `" +
       serverName +
-      "` (ID: " +
+      "` (@" +
       guildId +
       ")";
-    if (channel.type === ChannelType.GuildText) {
+    if (channel.type === ChannelType.GuildText && (channel as TextChannel).topic) {
       // Check if the channel is a text channel
       response +=
         "\nThe topic of the channel is: " + (channel as TextChannel).topic;

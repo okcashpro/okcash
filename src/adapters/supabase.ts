@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js.ts";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import {
   type Memory,
   type Goal,
@@ -8,6 +8,7 @@ import {
   Account,
   type UUID,
   Participant,
+  Room,
 } from "../types.ts"
 import { DatabaseAdapter } from "../database.ts"
 import { v4 as uuid } from "uuid";
@@ -398,7 +399,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
       throw new Error(`Error getting rooms by participants: ${error.message}`);
     }
 
-    return [...new Set(data.map((row) => row.room_id as UUID))];
+    return [...new Set(data.map((row) => row.room_id as UUID))] as UUID[];
   }
 
   async createRoom(room_id?: UUID): Promise<UUID> {
@@ -477,8 +478,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
         throw new Error("Room creation error: " + roomsError.message);
       }
 
-      // @ts-expect-error - newRoomData is not null
-      room_id = newRoomData?.id as UUID;
+      room_id = (newRoomData as Room)?.id as UUID;
     } else {
       // If an existing room is found, use the first room's ID
       room_id = allRoomData[0];

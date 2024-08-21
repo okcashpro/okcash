@@ -6,6 +6,7 @@ import { DiscordClient } from "./clients/discord/index.ts";
 import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
 import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { SpeechSynthesizer } from "./services/speechSynthesis.ts";
+import { YouTubeService } from "./services/youtube.ts";
 interface Arguments {
   character?: string;
   twitter?: boolean;
@@ -18,8 +19,7 @@ let argv: Arguments = {
   discord: false,
 };
 
-(async () => {
-  console.log("Creating speech synthesizer...");
+(async () => {  console.log("Creating speech synthesizer...");
   // Create the speech synthesizer instance
   const speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
 

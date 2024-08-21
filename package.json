@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "node --loader ts-node/esm src/index.ts",
     "watch": "tsc --watch",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "postinstall": "npx playwright install"
   },
   "author": "",
   "license": "MIT",
@@ -26,7 +27,7 @@
     "@types/wav-encoder": "^1.3.3",
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
-    "dotenv": "^16.4.4",
+    "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
@@ -38,13 +39,14 @@
     "rimraf": "^5.0.5",
     "rollup": "^2.79.1",
     "rollup-plugin-terser": "^7.0.0",
-    "ts-jest": "^29.1.2",
+    "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@cliqz/adblocker-playwright": "^1.31.3",
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/voice": "^0.17.0",
     "@supabase/supabase-js": "^2.39.3",
@@ -54,6 +56,8 @@
     "agent-twitter-client": "^0.0.8",
     "ansi-colors": "^4.1.3",
     "better-sqlite3": "^11.1.2",
+    "capsolver-npm": "^2.0.2",
+    "cross-fetch": "^4.0.0",
     "debug": "^4.3.6",
     "discord.js": "^14.14.1",
     "espeak-ng": "^1.0.2",
@@ -67,11 +71,14 @@
     "node-wav": "^0.0.2",
     "nodemon": "^3.1.4",
     "onnxruntime-node": "^1.19.0",
-    "playwright": "^1.45.3",
+    "playwright": "^1.46.1",
     "prism-media": "^1.3.5",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-capsolver": "^2.0.1",
     "speech-synthesizer": "^1.0.0",
     "sql.js": "^1.10.2",
     "sqlite-vss": "^0.1.2",
+    "srt": "^0.0.3",
     "unique-names-generator": "^4.7.1",
     "uuid-by-string": "^4.0.0",
     "uuidv4": "^6.2.13",
@@ -79,7 +86,8 @@
     "wavefile": "^11.0.0",
     "whisper-turbo": "^0.11.0",
     "ws": "^8.16.0",
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "youtube-dl-exec": "^3.0.7"
   },
   "optionalDependencies": {
     "sqlite-vss-darwin-arm64": "^0.1.2"
