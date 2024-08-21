@@ -19,3 +19,4 @@ tweets/
 *.onnx
 
 characters/
+logs/

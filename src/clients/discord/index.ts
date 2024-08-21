@@ -47,6 +47,7 @@ import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
+import fs from "fs";
 
 export const messageHandlerTemplate =
 // `{{actionExamples}}
@@ -276,14 +277,15 @@ export class DiscordClient extends EventEmitter {
   }
 
   async textToSpeech(text: string): Promise<Readable> {
-    if(!this.speechSynthesizer) {
+    if (!this.speechSynthesizer) {
       this.speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
     }
-
-        console.log("Synthesizing speech...");
+  
+    console.log("Synthesizing speech...");
     // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
-    const audio = await this.speechSynthesizer.synthesize("Four score and seven years ago.");
+    const audio = await this.speechSynthesizer.synthesize(text);
     console.log("Speech synthesized");
+  
     // Encode the audio data into a WAV format
     const { encode } = WavEncoder;
     const audioData = {
@@ -291,7 +293,14 @@ export class DiscordClient extends EventEmitter {
         channelData: [audio]
     };
     const wavArrayBuffer = encode.sync(audioData);
-    return wavArrayBuffer;
+    
+    // TODO: Move to a temp file
+    // Convert the ArrayBuffer to a Buffer and save it to a file
+    fs.writeFileSync("buffer.wav", Buffer.from(wavArrayBuffer));
+
+    // now read the file
+    const wavStream = fs.createReadStream("buffer.wav");
+    return wavStream;
   }
 
   async recognizeImage(imageUrl: string) {
