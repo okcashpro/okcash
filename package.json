@@ -28,6 +28,7 @@
     "espeak-ng": "^1.0.2",
     "ffmpeg-static": "^5.2.0",
     "formdata-node": "^6.0.3",
+    "gif-frames": "^1.0.1",
     "jest": "^29.7.0",
     "libsodium-wrappers": "^0.7.13",
     "node-llama-cpp": "^3.0.0-beta.38",

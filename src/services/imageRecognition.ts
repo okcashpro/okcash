@@ -1,4 +1,8 @@
 import { AutoProcessor, AutoTokenizer, Moondream1ForConditionalGeneration, RawImage } from '@xenova/transformers';
+import fs from 'fs';
+import gifFrames from 'gif-frames';
+import os from 'os';
+import path from 'path';
 import { Agent } from '../core/agent.ts';
 class ImageRecognitionService {
   private modelId: string = 'Xenova/moondream2';
@@ -51,73 +55,140 @@ class ImageRecognitionService {
 
   async recognizeImage(imageUrl: string): Promise<string> {
     console.log("recognizeImage", imageUrl);
+    
     if (!this.initialized) {
-      console.log("initialize");
+      console.log("initializing");
       await this.initialize();
     }
-
-    // Prepare text inputs
+  
+    const isGif = imageUrl.toLowerCase().endsWith('.gif');
+    let imageToProcess = imageUrl;
+    let imageData: Buffer | null = null;
+  
+    if (isGif) {
+      console.log("Processing GIF: extracting first frame");
+      const { filePath, data } = await this.extractFirstFrameFromGif(imageUrl);
+      imageToProcess = filePath;
+      imageData = data;
+    }
+  
     const prompt = 'Describe this image.';
-
-    // if we are using openai, we need to use the openai api and send the image to the openai api
+  
     if (this.device === 'cloud') {
-      console.log("using openai");
       for (let retryAttempts = 0; retryAttempts < 3; retryAttempts++) {
         try {
+          let body;
+          if (isGif) {
+            // For GIFs, send the extracted frame data
+            const base64Image = imageData.toString('base64');
+            body = JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                {
+                  role: 'user',
+                  content: [
+                    { type: 'text', text: prompt },
+                    { type: 'image_url', image_url: { url: `data:image/png;${base64Image}` } }
+                  ]
+                },
+              ],
+              max_tokens: 500,
+            });
+          } else {
+            // For non-GIFs, send the URL directly
+            body = JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                {
+                  role: 'user',
+                  content: [
+                    { type: 'text', text: prompt },
+                    { type: 'image_url', image_url: { url: imageUrl } }
+                  ]
+                },
+              ],
+              max_tokens: 300,
+            });
+          }
+  
           const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              messages: [
-                {
-                  role: 'user',
-                  content: [
-                    {
-                      type: 'text',
-                      text: prompt
-                    },
-                    {
-                      type: 'image_url',
-                      image_url: {
-                        url: imageUrl
-                      }
-                    }
-                  ]
-                },
-              ],
-              //
-            }),
-          }).then(res => res.json());
-
-          const completion = response.choices[0].message.content;
+            body: body,
+          });
+  
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+  
+          const data = await response.json();
+          const completion = data.choices[0].message.content;
+          
+          if (isGif) {
+            fs.unlinkSync(imageToProcess);
+          }
+  
           return completion;
         } catch (error) {
           console.log("Error during OpenAI request:", error);
+          if (retryAttempts === 2) {
+            throw error;
+          }
         }
       }
     }
-
-    console.log("using xenova");
-    const textInputs = this.tokenizer(prompt);
-
-    // Prepare vision inputs
-    const image = await RawImage.fromURL(imageUrl);
-    const visionInputs = await this.processor(image);
-
-    // Generate response
-    const output = await this.model.generate({
-      ...textInputs,
-      ...visionInputs,
-      do_sample: false,
-      max_new_tokens: 64,
-    });
-    const decoded = this.tokenizer.batch_decode(output, { skip_special_tokens: false });
-    return decoded;
+  
+    // Local processing (Xenova model)
+    console.log("using Xenova model for image recognition");
+    try {
+      const image = await RawImage.fromURL(imageToProcess);
+      const visionInputs = await this.processor(image);
+  
+      const output = await this.model.generate({
+        ...this.tokenizer(prompt),
+        ...visionInputs,
+        do_sample: false,
+        max_new_tokens: 64,
+      });
+      
+      const decoded = this.tokenizer.batch_decode(output, { skip_special_tokens: true });
+  
+      if (isGif) {
+        fs.unlinkSync(imageToProcess);
+      }
+  
+      return decoded[0];
+    } catch (error) {
+      console.error("Error processing image with Xenova model:", error);
+      throw error;
+    }
   }
+  
+  private async extractFirstFrameFromGif(gifUrl: string): Promise<{ filePath: string, data: Buffer }> {
+    const frameData = await gifFrames({ url: gifUrl, frames: 1, outputType: 'png' });
+    const firstFrame = frameData[0];
+  
+    const tempDir = os.tmpdir();
+    const tempFilePath = path.join(tempDir, `gif_frame_${Date.now()}.png`);
+  
+    return new Promise((resolve, reject) => {
+      const writeStream = fs.createWriteStream(tempFilePath);
+      firstFrame.getImage().pipe(writeStream);
+  
+      writeStream.on('finish', () => {
+        fs.readFile(tempFilePath, (err, data) => {
+          if (err) reject(err);
+          else resolve({ filePath: tempFilePath, data });
+        });
+      });
+  
+      writeStream.on('error', reject);
+    });
+  }
+  
 }
 
 export default ImageRecognitionService;
