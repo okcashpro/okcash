@@ -20,29 +20,6 @@ let argv: Arguments = {
   discord: false,
 };
 
-(async () => {  console.log("Creating speech synthesizer...");
-  // Create the speech synthesizer instance
-  const speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
-
-  console.log("Synthesizing speech...");
-  // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
-  const audio = await speechSynthesizer.synthesize(
-    "Four score and seven years ago.",
-  );
-  console.log("Speech synthesized");
-  // Encode the audio data into a WAV format
-  const { encode } = WavEncoder;
-  const audioData = {
-    sampleRate: 22050,
-    channelData: [audio],
-  };
-  const wavArrayBuffer = encode.sync(audioData);
-
-  // Convert the ArrayBuffer to a Buffer and save it to a file
-  fs.writeFileSync("test.wav", Buffer.from(wavArrayBuffer));
-  console.log("Audio saved as test.wav");
-})();
-
 try {
   // Parse command line arguments
   argv = yargs(process.argv)

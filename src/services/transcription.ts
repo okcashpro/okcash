@@ -1,17 +1,24 @@
 import { pipeline as transformersPipeline } from "@xenova/transformers";
+import { File } from "formdata-node";
 import fs from 'fs';
-import axios from 'axios';
-import FormData from 'form-data';
+import OpenAI from "openai";
+import { getWavHeader } from "../clients/elevenlabs/index.ts";
 import settings from "../settings.ts";
+import EventEmitter from "events";
 
-export class TranscriptionService {
-    private transcriber: any;
+export class TranscriptionService extends EventEmitter {
+    private openai: OpenAI | null = null;
+    private localTranscriber: any = null;
     private CONTENT_CACHE_DIR = './content_cache';
-    private openaiApiKey: string | undefined;
 
     constructor() {
+        super()
         this.ensureCacheDirectoryExists();
-        this.openaiApiKey = settings.OPENAI_API_KEY;
+        if (settings.OPENAI_API_KEY) {
+            this.openai = new OpenAI({
+                apiKey: settings.OPENAI_API_KEY
+            });
+        }
     }
 
     private ensureCacheDirectoryExists() {
@@ -20,86 +27,83 @@ export class TranscriptionService {
         }
     }
 
-    private async initializeTranscriber() {
-        if (!this.transcriber && !this.openaiApiKey) {
+    private async initializeLocalTranscriber() {
+        if (!this.localTranscriber) {
             console.log("Initializing local transcriber...");
-            this.transcriber = await transformersPipeline(
+            this.localTranscriber = await transformersPipeline(
                 "automatic-speech-recognition",
                 "Xenova/whisper-tiny.en"
             );
         }
     }
 
-    public async transcribe(audioBuffer: Buffer, chunkDurationMs: number = 30000): Promise<string> {
-        if (this.openaiApiKey) {
+    public async transcribe(audioBuffer: Buffer): Promise<string | null> {
+        if (this.openai) {
             return this.transcribeWithOpenAI(audioBuffer);
         } else {
-            await this.initializeTranscriber();
-            const chunks = this.splitAudioIntoChunks(audioBuffer, chunkDurationMs);
-            let fullTranscript = '';
-
-            for (let i = 0; i < chunks.length; i++) {
-                console.log(`Transcribing chunk ${i + 1} of ${chunks.length}`);
-                const chunkTranscript = await this.transcribeChunk(chunks[i]);
-                fullTranscript += chunkTranscript + ' ';
-            }
-
-            return fullTranscript.trim();
+            return this.transcribeLocally(audioBuffer);
         }
     }
 
-    private async transcribeWithOpenAI(audioBuffer: Buffer): Promise<string> {
-        console.log("Transcribing with OpenAI Whisper API...");
-        const formData = new FormData();
-        formData.append('file', audioBuffer, { filename: 'audio.wav' });
-        formData.append('model', 'whisper-1');
+    private async transcribeWithOpenAI(audioBuffer: Buffer): Promise<string | null> {
+        console.log('Transcribing audio with OpenAI...');
+        
+        const wavHeader = getWavHeader(audioBuffer.length, 16000);
+        const file = new File([wavHeader, audioBuffer], 'audio.wav', { type: 'audio/wav' });
 
         try {
-            const response = await axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
-                headers: {
-                    ...formData.getHeaders(),
-                    'Authorization': `Bearer ${this.openaiApiKey}`,
-                },
+            const result = await this.openai!.audio.transcriptions.create({
+                model: 'whisper-1',
+                language: 'en',
+                response_format: 'text',
+                file: file,
             });
 
-            return response.data.text;
+            console.log("result is")
+            console.log(result)
+
+            const trimmedResult = (result as any).trim();
+            console.log(`OpenAI speech to text: ${trimmedResult}`);
+            
+            return trimmedResult.length < 5 ? null : trimmedResult;
         } catch (error) {
             console.error("Error in OpenAI speech-to-text conversion:", error);
-            return '';
-        }
-    }
-
-    private splitAudioIntoChunks(audioBuffer: Buffer, chunkDurationMs: number): Float32Array[] {
-        const samplesPerChunk = Math.floor(48000 * (chunkDurationMs / 1000)); // Assuming 48kHz sample rate
-        const chunks: Float32Array[] = [];
-
-        for (let i = 0; i < audioBuffer.length; i += samplesPerChunk * 2) {
-            const chunkBuffer = audioBuffer.slice(i, i + samplesPerChunk * 2);
-            const float32Array = new Float32Array(chunkBuffer.length / 2);
-            for (let j = 0; j < float32Array.length; j++) {
-                float32Array[j] = chunkBuffer.readInt16LE(j * 2) / 32768.0;
+            if (error.response) {
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+            } else if (error.request) {
+                console.error("No response received:", error.request);
+            } else {
+                console.error("Error setting up request:", error.message);
             }
-            chunks.push(float32Array);
+            return null;
         }
-
-        return chunks;
     }
 
-    private async transcribeChunk(chunk: Float32Array): Promise<string> {
+    private async transcribeLocally(audioBuffer: Buffer): Promise<string | null> {
+        await this.initializeLocalTranscriber();
+        console.log('Transcribing audio locally...');
+
         try {
-            const output = await this.transcriber(chunk, {
+            const float32Array = new Float32Array(audioBuffer.length / 2);
+            for (let i = 0; i < float32Array.length; i++) {
+                float32Array[i] = audioBuffer.readInt16LE(i * 2) / 32768.0;
+            }
+
+            const output = await this.localTranscriber(float32Array, {
                 sampling_rate: 48000, // Discord's default sample rate
             });
 
-            console.log("Transcription output:", output);
+            console.log("Local transcription output:", output);
 
             if (!output.text || output.text.length < 5) {
-                return '';
+                return null;
             }
             return output.text;
         } catch (error) {
-            console.error("Error in speech-to-text conversion:", error);
-            return '';
+            console.error("Error in local speech-to-text conversion:", error);
+            return null;
         }
     }
 }

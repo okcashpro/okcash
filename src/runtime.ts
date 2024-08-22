@@ -323,6 +323,8 @@ export class AgentRuntime {
         length: 1536,
       }),
     };
+    console.log("Running embeddings")
+    console.log(requestOptions)
     try {
       const response = await fetch(
         `${this.serverUrl}/embeddings`,
@@ -519,8 +521,8 @@ export class AgentRuntime {
       recentMessagesData,
       recentFactsData,
       goalsData,
-      loreData,
-    ]: [Actor[], Memory[], Memory[], Goal[], Memory[]] = await Promise.all([
+      // loreData,
+    ]: [Actor[], Memory[], Memory[], Goal[]/*, Memory[]*/] = await Promise.all([
       getActorDetails({ runtime: this, room_id }),
       this.messageManager.getMemories({
         room_id,
@@ -537,12 +539,12 @@ export class AgentRuntime {
         onlyInProgress: false,
         room_id,
       }),
-      getLore({
-        runtime: this,
-        message: (message.content as Content).content,
-        count: 5,
-        match_threshold: 0.5,
-      }),
+      // getLore({
+      //   runtime: this,
+      //   message: (message.content as Content).content,
+      //   count: 5,
+      //   match_threshold: 0.5,
+      // }),
     ]);
 
     const goals = formatGoalsAsString({ goals: goalsData });
@@ -579,7 +581,7 @@ export class AgentRuntime {
     const recentFacts = formatFacts(recentFactsData);
     const relevantFacts = formatFacts(relevantFactsData);
 
-    const lore = formatLore(loreData);
+    // const lore = formatLore(loreData);
 
     const senderName = actorsData?.find(
       (actor: Actor) => actor.id === user_id,
@@ -599,8 +601,8 @@ export class AgentRuntime {
         "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
         goals,
       ),
-      lore: addHeader("### Important Information", lore),
-      loreData,
+      // lore: addHeader("### Important Information", lore),
+      // loreData,
       goalsData,
       recentMessages: addHeader("### Conversation Messages", recentMessages),
       recentMessagesData,
