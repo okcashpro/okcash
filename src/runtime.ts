@@ -35,6 +35,8 @@ import { formatLore, getLore } from "./lore.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import { type Actor, type Memory } from "./types.ts";
+import settings from "./settings.ts";
+import LlamaService from "./services/llama.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -94,6 +96,11 @@ export class AgentRuntime {
    * The model to use for embedding.
    */
   embeddingModel = "text-embedding-3-small";
+
+  /**
+   * Local Llama if no OpenAI key is present
+   */
+  llamaService: LlamaService | null = null
 
   /**
    * Fetch function to use
@@ -247,6 +254,25 @@ export class AgentRuntime {
     presence_penalty = 0.0,
     temperature = 0.7,
   }) {
+
+    if (!settings.OPENAI_API_KEY) {
+      if (!this.llamaService) {
+        this.llamaService = new LlamaService();
+        await this.llamaService.initialize();
+      }
+      const completionResponse = await this.llamaService.getCompletionResponse(
+        context,
+        temperature,
+        stop,
+        frequency_penalty,
+        presence_penalty,
+      );
+      console.log("Completion response: ", completionResponse);
+      // change the 'content' to 'content'
+      (completionResponse as any).content = completionResponse.content;
+      return JSON.stringify(completionResponse);
+    }
+
     const requestOptions = {
       method: "POST",
       headers: {
@@ -303,6 +329,13 @@ export class AgentRuntime {
    * @returns The embedding of the input.
    */
   async embed(input: string) {
+    if(!settings.OPENAI_API_KEY) {
+      if(!this.llamaService) {
+        this.llamaService = new LlamaService();
+        await this.llamaService.initialize();
+      }
+      return await this.llamaService.getEmbeddingResponse(input);
+    }
     const embeddingModel = this.embeddingModel;
 
     // Check if we already have the embedding in the lore
@@ -672,7 +705,7 @@ export class AgentRuntime {
       count: conversationLength,
       unique: false,
     });
-  
+
     const recentMessages = formatMessages({
       actors: state.actorsData ?? [],
       messages: recentMessagesData.map((memory: Memory) => {
@@ -681,7 +714,7 @@ export class AgentRuntime {
         return newMemory;
       }),
     });
-  
+
     return {
       ...state,
       recentMessages: addHeader("### Conversation Messages", recentMessages),

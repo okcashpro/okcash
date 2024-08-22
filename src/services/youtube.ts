@@ -134,8 +134,8 @@ export class YouTubeService {
             if (jsonContent.events) {
                 return jsonContent.events
                     .filter(event => event.segs)
-                    .map(event => event.segs.map(seg => seg.utf8).join(' '))
-                    .join(' ');
+                    .map(event => event.segs.map(seg => seg.utf8).join(''))
+                    .join('').replace('\n', ' ');
             } else {
                 console.error("Unexpected caption format:", jsonContent);
                 return "Error: Unable to parse captions";

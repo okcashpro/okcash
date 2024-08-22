@@ -41,54 +41,6 @@ export class Agent extends EventEmitter {
         leavevoice,
       ],
     });
-
-    // if settings.OPENAI_API_KEY is set, don't use Llama
-    if (settings.OPENAI_API_KEY) return;
-
-    // Otherwise, initialize Llama
-
-    const llamaService = new LlamaService();
-    (async () => {
-      await llamaService.initialize();
-      // TODO: Only initialize Llama if no OpenAI key is provided
-      const completion = async ({
-        context,
-        stop,
-        model,
-        frequency_penalty,
-        presence_penalty,
-        temperature,
-      }: {
-        context?: string;
-        stop?: never[];
-        model?: string;
-        frequency_penalty?: number;
-        presence_penalty?: number;
-        temperature?: number;
-      }) => {
-        console.log("Running llama completion service");
-        console.log("Context: ", context);
-        const completionResponse = await llamaService.getCompletionResponse(
-          context,
-          temperature,
-          stop,
-          frequency_penalty,
-          presence_penalty,
-        );
-        console.log("Completion response: ", completionResponse);
-        // change the 'content' to 'content'
-        (completionResponse as any).content = completionResponse.content;
-        return JSON.stringify(completionResponse);
-      };
-      this.runtime.completion = completion;
-
-      const embed = async (input: string): Promise<number[]> => {
-        console.log("Running llama embed service");
-        console.log("Input: ", input);
-        return await llamaService.getEmbeddingResponse(input);
-      };
-      this.runtime.embed = embed;
-    })();
   }
 
   async ensureUserExists(user_id: UUID, userName: string | null) {
