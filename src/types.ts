@@ -12,6 +12,7 @@ export interface Content {
   content: string; // The main text content of the message.
   action?: string; // An optional action associated with the message, indicating a specific behavior or response required.
   source?: string; // The source of the content, if applicable, such as a reference or origin.
+  attachments?: Media[]
   [key: string]: unknown; // Allows for additional properties to be included dynamically.
 }
 
@@ -225,4 +226,14 @@ export interface Participant {
 export interface Room {
   id: UUID;
   participants: Participant[];
+}
+
+
+export type Media = {
+  id: string;
+  url: string;
+  title: string;
+  source: string;
+  description: string;
+  text: string;
 }

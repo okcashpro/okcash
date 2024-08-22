@@ -10,6 +10,7 @@
     "start": "node --loader ts-node/esm src/index.ts",
     "watch": "tsc --watch",
     "dev": "nodemon",
+    "ruby:discord": "npm run dev -- --discord --character=characters/ruby.json",
     "postinstall": "npx playwright install"
   },
   "author": "",

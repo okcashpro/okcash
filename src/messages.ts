@@ -48,13 +48,21 @@ export const formatMessages = ({
     .map((message: Memory) => {
       let messageContent = (message.content as Content).content;
       const messageAction = (message.content as Content).action;
-      const sender = actors.find(
-        (actor: Actor) => actor.id === message.user_id,
-      )!;
+      const formattedName =
+        actors.find((actor: Actor) => actor.id === message.user_id)?.name || 
+        "Unknown User";
+
       if (messageAction === "IGNORE") {
-        messageContent = "*Ignored*.ts";
+        messageContent = "*Ignored*";
       }
-      return `${sender?.name}: ${messageContent} ${messageAction && messageAction !== "null" ? `(${messageAction})` : ""}`;
+
+      const attachments = (message.content as Content).attachments
+
+      const attachmentString = attachments && attachments.length > 0
+        ? ` (Attachments: ${attachments.map(media => `[${media.title}]`).join(", ")})`
+        : "";
+
+      return `${formattedName} (${message.user_id.slice(-5)}): ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
     })
     .join("\n");
   return messageStrings;

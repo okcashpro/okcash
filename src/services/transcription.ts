@@ -1,12 +1,17 @@
 import { pipeline as transformersPipeline } from "@xenova/transformers";
 import fs from 'fs';
+import axios from 'axios';
+import FormData from 'form-data';
+import settings from "../settings.ts";
 
 export class TranscriptionService {
     private transcriber: any;
     private CONTENT_CACHE_DIR = './content_cache';
+    private openaiApiKey: string | undefined;
 
     constructor() {
         this.ensureCacheDirectoryExists();
+        this.openaiApiKey = settings.OPENAI_API_KEY;
     }
 
     private ensureCacheDirectoryExists() {
@@ -16,8 +21,8 @@ export class TranscriptionService {
     }
 
     private async initializeTranscriber() {
-        if (!this.transcriber) {
-            console.log("Initializing transcriber...");
+        if (!this.transcriber && !this.openaiApiKey) {
+            console.log("Initializing local transcriber...");
             this.transcriber = await transformersPipeline(
                 "automatic-speech-recognition",
                 "Xenova/whisper-tiny.en"
@@ -26,18 +31,42 @@ export class TranscriptionService {
     }
 
     public async transcribe(audioBuffer: Buffer, chunkDurationMs: number = 30000): Promise<string> {
-        await this.initializeTranscriber();
+        if (this.openaiApiKey) {
+            return this.transcribeWithOpenAI(audioBuffer);
+        } else {
+            await this.initializeTranscriber();
+            const chunks = this.splitAudioIntoChunks(audioBuffer, chunkDurationMs);
+            let fullTranscript = '';
 
-        const chunks = this.splitAudioIntoChunks(audioBuffer, chunkDurationMs);
-        let fullTranscript = '';
+            for (let i = 0; i < chunks.length; i++) {
+                console.log(`Transcribing chunk ${i + 1} of ${chunks.length}`);
+                const chunkTranscript = await this.transcribeChunk(chunks[i]);
+                fullTranscript += chunkTranscript + ' ';
+            }
 
-        for (let i = 0; i < chunks.length; i++) {
-            console.log(`Transcribing chunk ${i + 1} of ${chunks.length}`);
-            const chunkTranscript = await this.transcribeChunk(chunks[i]);
-            fullTranscript += chunkTranscript + ' ';
+            return fullTranscript.trim();
         }
+    }
 
-        return fullTranscript.trim();
+    private async transcribeWithOpenAI(audioBuffer: Buffer): Promise<string> {
+        console.log("Transcribing with OpenAI Whisper API...");
+        const formData = new FormData();
+        formData.append('file', audioBuffer, { filename: 'audio.wav' });
+        formData.append('model', 'whisper-1');
+
+        try {
+            const response = await axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
+                headers: {
+                    ...formData.getHeaders(),
+                    'Authorization': `Bearer ${this.openaiApiKey}`,
+                },
+            });
+
+            return response.data.text;
+        } catch (error) {
+            console.error("Error in OpenAI speech-to-text conversion:", error);
+            return '';
+        }
     }
 
     private splitAudioIntoChunks(audioBuffer: Buffer, chunkDurationMs: number): Float32Array[] {

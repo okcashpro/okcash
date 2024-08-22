@@ -9,7 +9,6 @@ import {
   getVoiceConnection,
   joinVoiceChannel,
 } from "@discordjs/voice";
-import { pipeline as transformersPipeline } from "@xenova/transformers";
 import { UUID } from "crypto";
 import {
   Attachment,
@@ -38,17 +37,131 @@ import { composeContext } from "../../context.ts";
 import { adapter } from "../../db.ts";
 import { log_to_file } from "../../logger.ts";
 import { embeddingZeroVector } from "../../memory.ts";
+import { parseJSONObjectFromText } from "../../parsing.ts";
+import { BrowserService } from "../../services/browser.ts";
 import ImageRecognitionService from "../../services/imageRecognition.ts";
 import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
+import { TranscriptionService } from "../../services/transcription.ts";
+import { YouTubeService } from "../../services/youtube.ts";
 import settings from "../../settings.ts";
-import { Content, Message, State } from "../../types.ts";
-import { parseJSONObjectFromText } from "../../parsing.ts";
+import { Actor, Content, Media, Message, State } from "../../types.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { commands } from "./commands.ts";
 import { InterestChannels, ResponseType } from "./types.ts";
-import { BrowserService } from "../../services/browser.ts";
-import { YouTubeService } from "../../services/youtube.ts";
-import { TranscriptionService } from "../../services/transcription.ts";
+
+import { Memory } from "../../types.ts";
+
+export class AttachmentManager {
+  private imageRecognitionService: ImageRecognitionService;
+  private browserService: BrowserService;
+  private youtubeService: YouTubeService;
+  private attachmentCache: Map<string, Media> = new Map();
+
+  constructor(imageRecognitionService: ImageRecognitionService, browserService: BrowserService, youtubeService: YouTubeService) {
+    this.imageRecognitionService = imageRecognitionService;
+    this.browserService = browserService;
+    this.youtubeService = youtubeService;
+  }
+
+  async processAttachments(attachments: Collection<string, Attachment> | Attachment[]): Promise<Media[]> {
+    const processedAttachments: Media[] = [];
+    const attachmentCollection = attachments instanceof Collection ? attachments : new Collection(attachments.map(att => [att.id, att]));
+
+    for (const [, attachment] of attachmentCollection) {
+      const media = await this.processAttachment(attachment);
+      if (media) {
+        processedAttachments.push(media);
+      }
+    }
+    console.log("[DEBUG] Processed attachments:", processedAttachments);
+    return processedAttachments;
+  }
+
+
+  async processAttachment(attachment: Attachment): Promise<Media | null> {
+    if (this.attachmentCache.has(attachment.url)) {
+      return this.attachmentCache.get(attachment.url)!;
+    }
+
+    let media: Media | null = null;
+    if (attachment.contentType?.startsWith('image/')) {
+      media = await this.processImageAttachment(attachment);
+    } else if (attachment.contentType?.startsWith('video/') || this.youtubeService.isVideoUrl(attachment.url)) {
+      media = await this.processVideoAttachment(attachment);
+    } else {
+      media = await this.processGenericAttachment(attachment);
+    }
+
+    if (media) {
+      this.attachmentCache.set(attachment.url, media);
+    }
+    return media;
+  }
+
+  private async processImageAttachment(attachment: Attachment): Promise<Media> {
+    try {
+      const recognitionResult = await this.imageRecognitionService.recognizeImage(attachment.url);
+      return {
+        id: attachment.id,
+        url: attachment.url,
+        title: 'Image Attachment',
+        source: 'Image',
+        description: recognitionResult || 'An image attachment',
+        text: recognitionResult || 'Image content not available',
+      };
+    } catch (error) {
+      console.error(`Error processing image attachment: ${error.message}`);
+      return this.createFallbackImageMedia(attachment);
+    }
+  }
+
+  private createFallbackImageMedia(attachment: Attachment): Media {
+    return {
+      id: attachment.id,
+      url: attachment.url,
+      title: 'Image Attachment',
+      source: 'Image',
+      description: 'An image attachment (recognition failed)',
+      text: `This is an image attachment. File name: ${attachment.name}, Size: ${attachment.size} bytes, Content type: ${attachment.contentType}`,
+    };
+  }
+
+
+  private async processVideoAttachment(attachment: Attachment): Promise<Media> {
+    if (this.youtubeService.isVideoUrl(attachment.url)) {
+      const videoInfo = await this.youtubeService.processVideo(attachment.url);
+      return {
+        id: attachment.id,
+        url: attachment.url,
+        title: videoInfo.title,
+        source: 'YouTube',
+        description: videoInfo.description,
+        text: videoInfo.text
+      };
+    } else {
+      return {
+        id: attachment.id,
+        url: attachment.url,
+        title: 'Video Attachment',
+        source: 'Video',
+        description: 'A video attachment',
+        text: 'Video content not available',
+      };
+    }
+  }
+
+  private async processGenericAttachment(attachment: Attachment): Promise<Media> {
+    return {
+      id: attachment.id,
+      url: attachment.url,
+      title: 'Generic Attachment',
+      source: 'Generic',
+      description: 'A generic attachment',
+      text: 'Attachment content not available',
+    };
+  }
+}
+
 
 export const messageHandlerTemplate =
   // `{{actionExamples}}
@@ -62,7 +175,8 @@ export const messageHandlerTemplate =
   // {{recentFacts}}
   // {{goals}}
   // {{actors}}
-  `{{providers}}
+  `{{attachments}}
+{{providers}}
 {{actionNames}}
 {{actions}}
 
@@ -105,12 +219,12 @@ export class DiscordClient extends EventEmitter {
   private connections: Map<string, VoiceConnection> = new Map();
   private agent: Agent;
   private character: any;
-  private transcriber: any;
   private imageRecognitionService: ImageRecognitionService;
   private speechSynthesizer: SpeechSynthesizer | null = null;
   private browserService: BrowserService;
   private transcriptionService: TranscriptionService;
   private youtubeService: YouTubeService;
+  private attachmentManager: AttachmentManager;
 
   constructor(agent: Agent, character: any) {
     super();
@@ -133,21 +247,14 @@ export class DiscordClient extends EventEmitter {
     this.browserService = new BrowserService();
     this.transcriptionService = new TranscriptionService();
     this.youtubeService = new YouTubeService(this.transcriptionService);
-
     this.imageRecognitionService = new ImageRecognitionService(this.agent);
+    this.attachmentManager = new AttachmentManager(this.imageRecognitionService, this.browserService, this.youtubeService);
 
     this.client.once(Events.ClientReady, this.onClientReady.bind(this));
     this.client.login(this.apiToken);
 
     this.setupEventListeners();
     this.setupCommands();
-  }
-
-  private async initializeTranscriber() {
-    this.transcriber = await transformersPipeline(
-      "automatic-speech-recognition",
-      "Xenova/whisper-tiny.en"
-    );
   }
 
   private setupEventListeners() {
@@ -220,6 +327,8 @@ export class DiscordClient extends EventEmitter {
   async handleMessageCreate(message: DiscordMessage) {
     if (message.interaction || message.author?.bot) return;
 
+    console.log("[DEBUG] Received message:", message.content);
+
     const user_id = message.author.id as UUID;
     const userName = message.author.username;
     const channelId = message.channel.id;
@@ -227,8 +336,12 @@ export class DiscordClient extends EventEmitter {
     await this.browserService.initialize();
 
     try {
-      const processedContent = await this.processMessageContent(message);
-      await this.handleMessageWithMedia(message, user_id, userName, channelId, processedContent);
+      console.log("[DEBUG] Processing message content");
+      const { processedContent, attachments } = await this.processMessageContent(message);
+      console.log("[DEBUG] Processed content:", processedContent);
+      console.log("[DEBUG] Processed attachments:", attachments);
+
+      await this.handleMessageWithMedia(message, user_id, userName, channelId, processedContent, attachments);
     } catch (error) {
       console.error("Error handling message:", error);
       message.channel.send("Sorry, I encountered an error while processing your request.");
@@ -237,75 +350,89 @@ export class DiscordClient extends EventEmitter {
     }
   }
 
-  private async processMessageContent(message: DiscordMessage): Promise<string> {
+  private async _saveRequestMessage(message: Message, state: State) {
+    console.log('_saveRequestMessage ***')
+    console.log(message)
+    const { content } = message;
+
+    if ((content as Content).content) {
+      const data2 = adapter.db
+        .prepare(
+          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
+        )
+        .all("messages", message.user_id, message.room_id) as {
+          content: Content;
+        }[];
+
+      if (data2.length > 0 && JSON.stringify(data2[0].content) === JSON.stringify(content)) {
+        console.log("already saved", data2);
+      } else {
+        const senderName = state.actorsData?.find(
+          (actor: Actor) => actor.id === message.user_id,
+        )?.name || "Unknown User";
+
+        const contentWithUser = {
+          ...(content as Content),
+          user: senderName,
+        };
+
+        console.log("[DEBUG] Saving message with attachments:", contentWithUser);
+
+        await this.agent.runtime.messageManager.createMemory({
+          user_id: message.user_id,
+          content: contentWithUser,
+          room_id: message.room_id,
+          embedding: embeddingZeroVector,
+        });
+      }
+      await this.agent.runtime.evaluate(message, {
+        ...state,
+        discordMessage: state.discordMessage,
+        discordClient: state.discordClient,
+      });
+    }
+  }
+
+
+  private async processMessageContent(message: DiscordMessage): Promise<{ processedContent: string, attachments: Media[] }> {
+    console.log("[DEBUG] Starting processMessageContent");
     let processedContent = message.content;
+    let attachments: Media[] = [];
 
     if (message.attachments.size > 0) {
-      processedContent += await this.processAttachments(message.attachments);
+      console.log("[DEBUG] Message has attachments, processing...");
+      attachments = await this.attachmentManager.processAttachments(message.attachments);
+      console.log("[DEBUG] Processed attachments:", attachments);
     }
 
     const urls = this.extractUrls(processedContent);
     if (urls.length > 0) {
-      processedContent = await this.processUrls(processedContent, urls);
+      console.log("[DEBUG] URLs found in message, processing...");
+      const { updatedContent, urlAttachments } = await this.processUrls(processedContent, urls);
+      processedContent = updatedContent;
+      attachments = attachments.concat(urlAttachments);
+      console.log("[DEBUG] Processed content with URLs:", processedContent);
+      console.log("[DEBUG] URL attachments:", urlAttachments);
     }
 
-    return processedContent;
+    return { processedContent, attachments };
   }
 
-  private async processAttachments(attachments: Collection<string, Attachment>): Promise<string> {
-    let content = '';
-    let attachmentIndex = 1;
-    for (const attachment of attachments.values()) {
-      if (attachment.contentType?.startsWith('image/')) {
-        const description = await this.imageRecognitionService.recognizeImage(attachment.url);
-        content += `\nAttachment ${attachmentIndex} - Image [${attachment.url}]\n`;
-        content += `Description: ${description}\n`;
-      } else if (attachment.contentType?.startsWith('video/')) {
-        const videoInfo = await this.youtubeService.processVideo(attachment.url);
-        content += `\nAttachment ${attachmentIndex} - Video [${attachment.url}]\n`;
-        content += `Title: ${videoInfo.title}\n`;
-        content += `Channel: ${videoInfo.channel}\n`;
-        content += `Description: ${videoInfo.description}\n`;
-        content += `Transcript: ${videoInfo.transcript}\n`;
-      }
-      attachmentIndex++;
-    }
-    return content;
-  }
 
-  // TODO: this should return the video info, page info
-  private async processUrls(content: string, urls: string[]): Promise<string> {
-    let processedContent = content;
-    let attachmentIndex = 1;
-    for (const url of urls) {
-      if (this.youtubeService.isVideoUrl(url)) {
-        const videoInfo = await this.youtubeService.processVideo(url);
-        const replacement = `Attachment ${attachmentIndex} - YouTube Video [${url}]`;
-        processedContent = processedContent.replace(url, replacement);
-        attachmentIndex++;
-      } else {
-        const pageContent = await this.browserService.getPageContent(url);
-        const summary = await this.summarizeContent(pageContent);
-        const replacement = `Attachment ${attachmentIndex} - Web Page [${url}]`;
-        processedContent = processedContent.replace(url, replacement);
-        attachmentIndex++;
-      }
-    }
-    return processedContent;
-  }
-
-  private async handleMessageWithMedia(
+  async handleMessageWithMedia(
     message: DiscordMessage,
     user_id: UUID,
     userName: string,
     channelId: string,
-    processedContent: string
+    processedContent: string,
+    attachments: Media[]
   ) {
+    console.log("[DEBUG] Starting handleMessageWithMedia");
     const room_id = getUuid(channelId) as UUID;
     const userIdUUID = getUuid(user_id) as UUID;
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
-    await this.ensureUserExists(agentId, await this.fetchBotName(this.apiToken), this.apiToken);
+    await this.ensureUserExists(agentId, this.character?.name || await this.fetchBotName(this.apiToken));
     await this.ensureUserExists(userIdUUID, userName);
     await this.agent.ensureRoomExists(room_id);
     await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
@@ -315,26 +442,50 @@ export class DiscordClient extends EventEmitter {
       message.channel.send(response);
     };
 
+    const content: Content = {
+      content: processedContent,
+      action: "WAIT",
+      attachments: attachments
+    };
+
+    console.log("[DEBUG] Content object:", content);
+
+    const state = await this.agent.runtime.composeState(
+      { content, user_id: userIdUUID, room_id },
+      {
+        discordClient: this.client,
+        discordMessage: message,
+        agentName: this.character.name || this.client.user?.displayName,
+      }
+    );
+
+    console.log("[DEBUG] Composed state:", state);
+
+    console.log("[DEBUG] Calling handleMessage");
+
     const response = await this.handleMessage({
       message: {
-        content: { 
-          content: processedContent,
-          action: "WAIT"
-        },
+        content,
         user_id: userIdUUID,
         room_id,
       },
       callback,
       discordClient: this.client,
       discordMessage: message,
+      state,
+      attachments
     });
 
-    const content = (response.responseMessage || response.content || response.message) as string;
 
-    if (content) {
-      message.channel.send(content);
+    const responseContent = (response.responseMessage || response.content || response.message) as string;
+
+    console.log("[DEBUG] Response content:", responseContent);
+
+    if (responseContent) {
+      message.channel.send(responseContent);
     }
   }
+
 
   async handleMessage({
     message,
@@ -346,6 +497,7 @@ export class DiscordClient extends EventEmitter {
     interestChannels,
     discordClient,
     discordMessage,
+    attachments,
   }: {
     message: Message;
     hasInterest?: boolean;
@@ -356,63 +508,110 @@ export class DiscordClient extends EventEmitter {
     interestChannels?: InterestChannels;
     discordClient: Client;
     discordMessage: DiscordMessage;
-  }) {
+    attachments: Media[]
+  }): Promise<Content> {
+    console.log("[DEBUG] Starting handleMessage");
+    console.log("[DEBUG] Initial parameters:", { hasInterest, shouldIgnore, shouldRespond });
+
     if (!message.content.content) {
+      console.log("[DEBUG] Empty message content, ignoring");
       return { content: "", action: "IGNORE" };
     }
 
+    console.log("[DEBUG] Processing message history and extracting attachments");
+    let allAttachments = attachments || [];
 
-    if (!state) {
-      state = await this.agent.runtime.composeState(message, {
-        discordClient,
-        discordMessage,
-        agentName: this.character.name || this.client.user?.displayName,
-      });
+    if (state.recentMessagesData && Array.isArray(state.recentMessagesData)) {
+      allAttachments = allAttachments.concat(state.recentMessagesData.flatMap(msg => msg.content.attachments || []));
     }
-    
+
+    console.log("[DEBUG] All attachments:", allAttachments);
+
+    const formattedAttachments = allAttachments.map(attachment => `
+      Name: ${attachment.title}
+      URL: ${attachment.url}
+      Type: ${attachment.source}
+      Description: ${attachment.description}
+      Content: ${attachment.text}
+      `).join('\n');
+
+    state = {
+      ...state,
+      attachments: formattedAttachments,
+    };
+
+    console.log("[DEBUG] Updated state with attachments:", state);
+
+    message = {
+      ...message,
+      content: {
+        ...message.content,
+        attachments
+      }
+    }
+
+
+    console.log("[DEBUG] Saving request message");
     await this._saveRequestMessage(message, state);
 
-    state = await this.agent.runtime.updateRecentMessageState(state)
+    console.log("[DEBUG] Updating recent message state");
+    state = await this.agent.runtime.updateRecentMessageState(state);
 
+    state = {
+      ...state,
+      attachments: formattedAttachments,
+    };
 
     if (shouldIgnore) {
-      console.log("shouldIgnore", shouldIgnore);
+      console.log("[DEBUG] shouldIgnore is true, ignoring message");
       return { content: "", action: "IGNORE" };
     }
 
     if (!shouldRespond && hasInterest) {
+      console.log("[DEBUG] Checking if should respond");
       shouldRespond = await this._checkShouldRespond(
         state,
         interestChannels,
         discordMessage,
       );
+      console.log("[DEBUG] _checkShouldRespond result:", shouldRespond);
     }
 
     if (!shouldRespond) {
-      console.log("Not responding to message");
+      console.log("[DEBUG] Not responding to message");
       return { content: "", action: "IGNORE" };
     }
 
-    const context = composeContext({
+    console.log("[DEBUG] Composing context");
+    let context = composeContext({
       state,
       template: messageHandlerTemplate,
     });
 
+    console.log('****** CONTEXT')
+    console.log(context)
+
     if (this.agent.runtime.debugMode) {
-      console.log(context, "Response Context");
+      console.log("[DEBUG] Response Context:", context);
     }
 
+    console.log("[DEBUG] Generating response");
     const responseContent = await this._generateResponse(
       message,
       state,
       context,
     );
+    console.log("[DEBUG] Generated response:", responseContent);
 
+    console.log("[DEBUG] Saving response message");
     await this._saveResponseMessage(message, state, responseContent);
+
+    console.log("[DEBUG] Processing actions");
     this.agent.runtime
       .processActions(message, responseContent, state)
       .then((response: unknown) => {
         if (response && (response as Content).content) {
+          console.log("[DEBUG] Calling callback with response content");
           callback((response as Content).content);
         }
       });
@@ -420,14 +619,81 @@ export class DiscordClient extends EventEmitter {
     return responseContent;
   }
 
+  private async processMessage(message: any): Promise<{ content: string, processedContent: string, messageAttachments: Media[], media: Media[] }> {
+    const content = message.content.content || message.content;
+    let processedContent = content;
+    const messageAttachments: Media[] = [];
+    const media: Media[] = message.media || [];
+
+    const urls = this.extractUrls(content);
+    if (urls.length > 0) {
+      const { updatedContent, urlAttachments } = await this.processUrls(content, urls);
+      processedContent = updatedContent;
+      messageAttachments.push(...urlAttachments);
+    }
+
+    messageAttachments.push(...media);
+
+    return { content, processedContent, messageAttachments, media };
+  }
+
+  private async processUrls(content: string, urls: string[]): Promise<{ updatedContent: string, urlAttachments: Media[] }> {
+    let updatedContent = content;
+    const urlAttachments: Media[] = [];
+
+    for (const url of urls) {
+      if (this.youtubeService.isVideoUrl(url)) {
+        console.log("[DEBUG] Processing YouTube video:", url);
+        const videoInfo = await this.youtubeService.processVideo(url);
+        const replacement = `[YouTube Video: ${videoInfo.title}]`;
+        updatedContent = updatedContent.replace(url, replacement);
+        urlAttachments.push({
+          id: `youtube-${Date.now()}`,
+          url: url,
+          title: videoInfo.title,
+          source: 'YouTube',
+          description: videoInfo.description,
+          text: videoInfo.text
+        });
+      } else {
+        console.log("[DEBUG] Processing web page:", url);
+        const pageContent = await this.browserService.getPageContent(url);
+        const summary = await this.summarizeContent(pageContent);
+        const replacement = `[Web Page: ${summary.substring(0, 50)}...]`;
+        updatedContent = updatedContent.replace(url, replacement);
+        urlAttachments.push({
+          id: `webpage-${Date.now()}`,
+          url: url,
+          title: 'Web Page',
+          source: 'Web',
+          description: summary,
+          text: pageContent
+        });
+      }
+    }
+
+    return { updatedContent, urlAttachments };
+  }
+
   private extractUrls(content: string): string[] {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.match(urlRegex) || [];
   }
-  
+
+  private formatAttachments(attachments: Media[]): string {
+    return attachments.map(attachment => `
+Name: ${attachment.title}
+URL: ${attachment.url}
+Type: ${attachment.source}
+Description: ${attachment.description}
+Content: ${attachment.text}
+  `).join('\n');
+  }
+
+
   private async summarizeContent(content: string): Promise<string> {
     const prompt = `Summarize the following content in a concise manner:\n\n${content}`;
-  
+
     for (let i = 0; i < 3; i++) {
       try {
         const response = await this.agent.runtime.completion({
@@ -441,44 +707,8 @@ export class DiscordClient extends EventEmitter {
         if (i === 2) throw error;
       }
     }
-  
+
     throw new Error('Failed to summarize content after 3 attempts');
-  }
-  
-
-  private async handleImageAttachment(message: DiscordMessage, attachment: Attachment) {
-    const description = await this.imageRecognitionService.recognizeImage(attachment.url);
-    message.content += `\n(Attachment: image: [${attachment.url}] - ${description})`;
-  }
-
-  private async handleVideoAttachment(message: DiscordMessage, attachment: Attachment) {
-    console.log("handleVideoAttachment")
-    const videoInfo = await this.youtubeService.processVideo(attachment.url);
-    console.log("Video attachment info:")
-    console.log(videoInfo)
-    message.content += `\n(Attachment: video: [${attachment.url}] - ${videoInfo.title} on ${videoInfo.channel})`;
-  }
-
-  private async handleUrlsAndAttachments(
-    message: DiscordMessage,
-    urls: string[],
-    htmlAttachments: Collection<string, Attachment>
-  ) {
-    for (const url of urls) {
-      if (this.youtubeService.isVideoUrl(url)) {
-        console.log("Hnadling attachment")
-        const videoInfo = await this.youtubeService.processVideo(url);
-        console.log("Video attachment info:")
-        console.log(videoInfo)
-        message.content += `\n(Attachment: video: [${url}] - '${videoInfo.title}' on ${videoInfo.channel} )`;
-      } else {
-        await this.processUrl(message, url);
-      }
-    }
-
-    for (const attachment of htmlAttachments.values()) {
-      await this.processUrl(message, attachment.url);
-    }
   }
 
   private async processUrl(message: DiscordMessage, url: string) {
@@ -543,7 +773,7 @@ export class DiscordClient extends EventEmitter {
 
   async speechToText(audioBuffer: Buffer): Promise<string | null> {
     return this.transcriptionService.transcribe(audioBuffer);
-}
+  }
 
   private extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -557,7 +787,7 @@ export class DiscordClient extends EventEmitter {
     botToken: string | null = null,
   ) {
     if (!userName && botToken) {
-      userName = await this.fetchBotName(botToken);
+      userName = this.character?.name || await this.fetchBotName(botToken);
     }
     this.agent.ensureUserExists(agentId, userName);
   }
@@ -566,7 +796,7 @@ export class DiscordClient extends EventEmitter {
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
     const room_id = getUuid(this.client.user?.id as string) as UUID;
 
-    const botName = await this.fetchBotName(this.apiToken);
+    const botName = this.character?.name || await this.fetchBotName(this.apiToken);
 
     await this.ensureUserExists(agentId, botName, this.apiToken);
     await this.agent.ensureRoomExists(room_id);
@@ -583,35 +813,29 @@ export class DiscordClient extends EventEmitter {
     }
   }
 
-  private async _saveRequestMessage(message: Message, state: State) {
-    const { content: senderContent } = message;
+  private async _saveResponseMessage(
+    message: Message,
+    state: State,
+    responseContent: Content,
+  ) {
+    const { room_id } = message;
+    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
-    if ((senderContent as Content).content) {
-      const data2 = adapter.db
-        .prepare(
-          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
-        )
-        .all("messages", message.user_id, message.room_id) as {
-          content: Content;
-        }[];
+    responseContent.content = responseContent.content?.trim();
 
-      if (data2.length > 0 && data2[0].content === message.content) {
-        console.log("already saved", data2);
-      } else {
-        await this.agent.runtime.messageManager.createMemory({
-          user_id: message.user_id,
-          content: senderContent,
-          room_id: message.room_id,
-          embedding: embeddingZeroVector,
-        });
-      }
-      await this.agent.runtime.evaluate(message, {
-        ...state,
-        discordMessage: state.discordMessage,
-        discordClient: state.discordClient,
+    if (responseContent.content) {
+      await this.agent.runtime.messageManager.createMemory({
+        user_id: agentId!,
+        content: { ...responseContent, user: this.character.name },
+        room_id,
+        embedding: embeddingZeroVector,
       });
+      await this.agent.runtime.evaluate(message, { ...state, responseContent });
+    } else {
+      console.warn("Empty response, skipping");
     }
   }
+
 
   private async _checkShouldRespond(
     state: State,
@@ -746,29 +970,6 @@ export class DiscordClient extends EventEmitter {
     return responseContent;
   }
 
-  private async _saveResponseMessage(
-    message: Message,
-    state: State,
-    responseContent: Content,
-  ) {
-    const { room_id } = message;
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-
-    responseContent.content = responseContent.content?.trim();
-
-    if (responseContent.content) {
-      await this.agent.runtime.messageManager.createMemory({
-        user_id: agentId!,
-        content: responseContent,
-        room_id,
-        embedding: embeddingZeroVector,
-      });
-      await this.agent.runtime.evaluate(message, { ...state, responseContent });
-    } else {
-      console.warn("Empty response, skipping");
-    }
-  }
-
   async fetchBotName(botToken: string) {
     const url = "https://discord.com/api/v10/users/@me";
 
@@ -784,7 +985,6 @@ export class DiscordClient extends EventEmitter {
     }
 
     const data = await response.json();
-    console.log("**** BOT DATA: ", data);
     return data.username;
   }
 
@@ -881,7 +1081,7 @@ export class DiscordClient extends EventEmitter {
     const room_id = getUuid(channelId) as UUID;
     const userIdUUID = getUuid(user_id) as UUID;
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-    const botName = await this.fetchBotName(this.apiToken);
+    const botName = this.character?.name || await this.fetchBotName(this.apiToken);
     await this.ensureUserExists(agentId, botName, this.apiToken);
     await this.ensureUserExists(userIdUUID, userName);
     await this.agent.ensureRoomExists(room_id);
@@ -896,6 +1096,8 @@ export class DiscordClient extends EventEmitter {
       return null;
     }
 
+    const processedAttachments = imageAttachments ? await this.attachmentManager.processAttachments(imageAttachments) : [];
+
     const response = await this.handleMessage({
       message: {
         content: { content: input, action: "WAIT" },
@@ -906,6 +1108,7 @@ export class DiscordClient extends EventEmitter {
       interestChannels,
       discordClient: this.client,
       discordMessage: discordMessage as DiscordMessage,
+      attachments: processedAttachments
     });
 
     const content = (response.responseMessage ||
@@ -1077,97 +1280,6 @@ export class DiscordClient extends EventEmitter {
       },
     );
   }
-
-  // private async handleSetNameCommand(interaction: any) {
-  //   const newName = interaction.options.get("name")?.value;
-  //   const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-  //   const userIdUUID = getUuid(interaction.user.id) as UUID;
-  //   const userName = interaction.user.username;
-  //   const room_id = getUuid(interaction.channelId) as UUID;
-
-  //   await interaction.deferReply();
-
-  //   await this.ensureUserExists(
-  //     agentId,
-  //     await this.fetchBotName(this.apiToken),
-  //     this.apiToken
-  //   );
-  //   await this.ensureUserExists(userIdUUID, userName);
-  //   await this.agent.ensureRoomExists(room_id);
-  //   await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-  //   await this.agent.ensureParticipantInRoom(agentId, room_id);
-
-  //   if (newName) {
-  //     try {
-  //       adapter.db
-  //         .prepare("UPDATE accounts SET name = ? WHERE id = ?")
-  //         .run(newName, getUuid(interaction.client.user?.id));
-
-  //       const guild = interaction.guild;
-  //       if (guild) {
-  //         const botMember = await guild.members.fetch(
-  //           interaction.client.user?.id as string
-  //         );
-  //         await botMember.setNickname(newName as string);
-  //       }
-
-  //       await interaction.editReply(
-  //         `Agent's name has been updated to: ${newName}`
-  //       );
-  //     } catch (error) {
-  //       console.error("Error updating agent name:", error);
-  //       await interaction.editReply(
-  //         "An error occurred while updating the agent name."
-  //       );
-  //     }
-  //   } else {
-  //     await interaction.editReply(
-  //       "Please provide a new name for the agent."
-  //     );
-  //   }
-  // }
-
-  // private async handleSetBioCommand(interaction: any) {
-  //   const newBio = interaction.options.get("bio")?.value;
-  //   if (newBio) {
-  //     try {
-  //       const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-  //       const userIdUUID = getUuid(interaction.user.id) as UUID;
-  //       const userName = interaction.user.username;
-  //       const room_id = getUuid(interaction.channelId) as UUID;
-
-  //       await interaction.deferReply();
-
-  //       await this.ensureUserExists(
-  //         agentId,
-  //         await this.fetchBotName(this.apiToken),
-  //         this.apiToken
-  //       );
-  //       await this.ensureUserExists(userIdUUID, userName);
-  //       await this.agent.ensureRoomExists(room_id);
-  //       await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-  //       await this.agent.ensureParticipantInRoom(agentId, room_id);
-
-  //       adapter.db
-  //         .prepare("UPDATE accounts SET details = ? WHERE id = ?")
-  //         .run(
-  //           JSON.stringify({ summary: newBio }),
-  //           getUuid(interaction.client.user?.id)
-  //         );
-
-  //       await interaction.editReply(
-  //         `Agent's bio has been updated to: ${newBio}`
-  //       );
-  //     } catch (error) {
-  //       console.error("Error updating agent bio:", error);
-  //       await interaction.editReply(
-  //         "An error occurred while updating the agent bio."
-  //       );
-  //     }
-  //   } else {
-  //     await interaction.reply("Please provide a new bio for the agent.");
-  //   }
-  // }
 
   private async handleJoinChannelCommand(interaction: any) {
     const channelId = interaction.options.get("channel")?.value as string;

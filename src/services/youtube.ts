@@ -4,14 +4,8 @@ import { default as getUuid } from "uuid-by-string";
 import youtubeDl from 'youtube-dl-exec';
 import parseSrt from 'srt';
 import { TranscriptionService } from './transcription.ts';
+import { Media } from '../types.ts';
 
-type VideoResult = {
-    title: string,
-    channel: string,
-    description: string,
-    transcript: string
-    
-}
 export class YouTubeService {
     private transcriptionService: TranscriptionService;
     private CONTENT_CACHE_DIR = './content_cache';
@@ -32,31 +26,34 @@ export class YouTubeService {
         return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
     }
 
-    public async processVideo(url: string): Promise<VideoResult> {
-        // extract youtube ID from url
+    public async processVideo(url: string): Promise<Media> {
+        // Extract YouTube ID from URL
         const videoId = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/)?.[1] || '';
-        console.log("processing video")
         const videoUuid = this.getVideoId(videoId);
         const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${videoUuid}.json`);
-
+    
+        // Check if the result is already cached
         if (fs.existsSync(cacheFilePath)) {
-            console.log("Returning red file")
-            return JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8')) as VideoResult;
+            console.log("Returning cached file");
+            return JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8')) as Media;
         }
-        console.log("feetch video info")
+    
+        console.log("Cache miss, processing video");
+        console.log("Fetching video info");
         const videoInfo = await this.fetchVideoInfo(url);
-        console.log("get transcript")
+        console.log("Getting transcript");
         const transcript = await this.getTranscript(url, videoInfo);
-
-        const result = {
+    
+        const result: Media = {
             id: videoUuid,
             url: url,
             title: videoInfo.title,
-            channel: videoInfo.channel,
+            source: videoInfo.channel,
             description: videoInfo.description,
-            transcript: transcript
+            text: transcript
         };
-
+    
+        // Cache the result
         fs.writeFileSync(cacheFilePath, JSON.stringify(result));
         return result;
     }
