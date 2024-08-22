@@ -662,4 +662,28 @@ export class AgentRuntime {
 
     return { ...initialState, ...actionState };
   }
+
+  async updateRecentMessageState(state: State): Promise<State> {
+    const conversationLength = this.getConversationLength();
+    const recentMessagesData = await this.messageManager.getMemories({
+      room_id: state.room_id,
+      count: conversationLength,
+      unique: false,
+    });
+  
+    const recentMessages = formatMessages({
+      actors: state.actorsData ?? [],
+      messages: recentMessagesData.map((memory: Memory) => {
+        const newMemory = { ...memory };
+        delete newMemory.embedding;
+        return newMemory;
+      }),
+    });
+  
+    return {
+      ...state,
+      recentMessages: addHeader("### Conversation Messages", recentMessages),
+      recentMessagesData,
+    };
+  }
 }

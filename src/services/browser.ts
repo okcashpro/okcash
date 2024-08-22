@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import { default as getUuid } from "uuid-by-string";
 import { PlaywrightBlocker } from '@cliqz/adblocker-playwright';
 import fetch from 'cross-fetch';
 import { Browser, BrowserContext, chromium, Page } from 'playwright';
@@ -8,12 +11,20 @@ export class BrowserService {
   private context: BrowserContext | undefined;
   private blocker: PlaywrightBlocker | undefined;
   private captchaSolver: CaptchaSolver;
+  private CONTENT_CACHE_DIR = './content_cache';
 
   constructor() {
     this.browser = undefined;
     this.context = undefined;
     this.blocker = undefined;
     this.captchaSolver = new CaptchaSolver(process.env.CAPSOLVER_API_KEY || '');
+    this.ensureCacheDirectoryExists();
+  }
+
+  private ensureCacheDirectoryExists() {
+    if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
+      fs.mkdirSync(this.CONTENT_CACHE_DIR);
+    }
   }
 
   async initialize() {
@@ -42,6 +53,23 @@ export class BrowserService {
   }
 
   async getPageContent(url: string): Promise<string> {
+    const cacheKey = this.getCacheKey(url);
+    const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${cacheKey}.json`);
+
+    if (fs.existsSync(cacheFilePath)) {
+      return JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8')).content;
+    }
+
+    const content = await this.fetchPageContent(url);
+    fs.writeFileSync(cacheFilePath, JSON.stringify({ url, content }));
+    return content;
+  }
+
+  private getCacheKey(url: string): string {
+    return getUuid(url) as string;
+  }
+
+  private async fetchPageContent(url: string): Promise<string> {
     let page: Page | undefined;
 
     try {
@@ -160,7 +188,7 @@ export class BrowserService {
     // Try Internet Archive
     const archiveUrl = `https://web.archive.org/web/${url}`;
     try {
-      return await this.getPageContent(archiveUrl);
+      return await this.fetchPageContent(archiveUrl);
     } catch (error) {
       console.error("Error fetching from Internet Archive:", error);
     }
@@ -168,7 +196,7 @@ export class BrowserService {
     // Try Google Search as a last resort
     const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
     try {
-      return await this.getPageContent(googleSearchUrl);
+      return await this.fetchPageContent(googleSearchUrl);
     } catch (error) {
       console.error("Error fetching from Google Search:", error);
       throw new Error("Failed to fetch content from alternative sources");

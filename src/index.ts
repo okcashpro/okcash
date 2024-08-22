@@ -7,6 +7,7 @@ import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
 import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { SpeechSynthesizer } from "./services/speechSynthesis.ts";
 import { YouTubeService } from "./services/youtube.ts";
+import { exit } from "process";
 interface Arguments {
   character?: string;
   twitter?: boolean;
@@ -65,9 +66,14 @@ try {
 
 // Load character
 const characterPath = argv.character || "./src/default_character.json";
-const character = fs.existsSync(characterPath)
-  ? JSON.parse(fs.readFileSync(characterPath, "utf8"))
-  : { bio: "" };
+let character = null;
+try {
+  character = JSON.parse(fs.readFileSync(characterPath, "utf8"))
+  console.log("Character is")
+} catch (e) {
+  console.error("Unable to parse character")
+  exit(0)
+}
 
 const agent = new Agent();
 

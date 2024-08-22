@@ -227,8 +227,8 @@ export class DiscordClient extends EventEmitter {
     await this.browserService.initialize();
 
     try {
-      const mediaContent = await this.processMediaContent(message);
-      await this.handleMessageWithMedia(message, user_id, userName, channelId, mediaContent);
+      const processedContent = await this.processMessageContent(message);
+      await this.handleMessageWithMedia(message, user_id, userName, channelId, processedContent);
     } catch (error) {
       console.error("Error handling message:", error);
       message.channel.send("Sorry, I encountered an error while processing your request.");
@@ -237,52 +237,61 @@ export class DiscordClient extends EventEmitter {
     }
   }
 
-  private async processMediaContent(message: DiscordMessage): Promise<string> {
-    let mediaContent = "";
+  private async processMessageContent(message: DiscordMessage): Promise<string> {
+    let processedContent = message.content;
 
     if (message.attachments.size > 0) {
-      mediaContent += await this.processAttachments(message.attachments);
+      processedContent += await this.processAttachments(message.attachments);
     }
 
-    const urls = this.extractUrls(message.content);
+    const urls = this.extractUrls(processedContent);
     if (urls.length > 0) {
-      mediaContent += await this.processUrls(urls);
+      processedContent = await this.processUrls(processedContent, urls);
     }
 
-    return mediaContent;
+    return processedContent;
   }
 
   private async processAttachments(attachments: Collection<string, Attachment>): Promise<string> {
-    let content = "";
+    let content = '';
+    let attachmentIndex = 1;
     for (const attachment of attachments.values()) {
       if (attachment.contentType?.startsWith('image/')) {
         const description = await this.imageRecognitionService.recognizeImage(attachment.url);
-        content += `Image attachment: ${description}\n`;
+        content += `\nAttachment ${attachmentIndex} - Image [${attachment.url}]\n`;
+        content += `Description: ${description}\n`;
       } else if (attachment.contentType?.startsWith('video/')) {
         const videoInfo = await this.youtubeService.processVideo(attachment.url);
-        content += `Video attachment: ${videoInfo.title} by ${videoInfo.channel}\n`;
+        content += `\nAttachment ${attachmentIndex} - Video [${attachment.url}]\n`;
+        content += `Title: ${videoInfo.title}\n`;
+        content += `Channel: ${videoInfo.channel}\n`;
         content += `Description: ${videoInfo.description}\n`;
         content += `Transcript: ${videoInfo.transcript}\n`;
       }
+      attachmentIndex++;
     }
     return content;
   }
 
-  private async processUrls(urls: string[]): Promise<string> {
-    let content = "";
+  // TODO: this should return the video info, page info
+  private async processUrls(content: string, urls: string[]): Promise<string> {
+    let processedContent = content;
+    let attachmentIndex = 1;
     for (const url of urls) {
       if (this.youtubeService.isVideoUrl(url)) {
         const videoInfo = await this.youtubeService.processVideo(url);
-        content += `YouTube video: ${videoInfo.title} by ${videoInfo.channel}\n`;
-        content += `Description: ${videoInfo.description}\n`;
-        content += `Transcript: ${videoInfo.transcript}\n`;
+        const replacement = `Attachment ${attachmentIndex} - YouTube Video [${url}]`;
+        processedContent = processedContent.replace(url, replacement);
+        attachmentIndex++;
       } else {
         const pageContent = await this.browserService.getPageContent(url);
         const summary = await this.summarizeContent(pageContent);
-        content += `Web page summary: ${summary}\n`;
+        const replacement = `Attachment ${attachmentIndex} - Web Page [${url}]`;
+        processedContent = processedContent.replace(url, replacement);
+        attachmentIndex++;
       }
     }
-    return content;
+    return processedContent;
   }
 
   private async handleMessageWithMedia(
@@ -290,7 +299,7 @@ export class DiscordClient extends EventEmitter {
     user_id: UUID,
     userName: string,
     channelId: string,
-    mediaContent: string
+    processedContent: string
   ) {
     const room_id = getUuid(channelId) as UUID;
     const userIdUUID = getUuid(user_id) as UUID;
@@ -309,7 +318,7 @@ export class DiscordClient extends EventEmitter {
     const response = await this.handleMessage({
       message: {
         content: { 
-          content: `${mediaContent}\n\nUser message: ${message.content}`,
+          content: processedContent,
           action: "WAIT"
         },
         user_id: userIdUUID,
@@ -352,15 +361,19 @@ export class DiscordClient extends EventEmitter {
       return { content: "", action: "IGNORE" };
     }
 
+
     if (!state) {
       state = await this.agent.runtime.composeState(message, {
         discordClient,
         discordMessage,
-        agentName: this.character?.name || this.client.user?.displayName,
+        agentName: this.character.name || this.client.user?.displayName,
       });
     }
-
+    
     await this._saveRequestMessage(message, state);
+
+    state = await this.agent.runtime.updateRecentMessageState(state)
+
 
     if (shouldIgnore) {
       console.log("shouldIgnore", shouldIgnore);
@@ -411,16 +424,27 @@ export class DiscordClient extends EventEmitter {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.match(urlRegex) || [];
   }
-
-  private async handleAttachments(message: DiscordMessage) {
-    for (const attachment of message.attachments.values()) {
-      if (attachment.contentType?.startsWith('image/')) {
-        await this.handleImageAttachment(message, attachment);
-      } else if (attachment.contentType?.startsWith('video/')) {
-        await this.handleVideoAttachment(message, attachment);
+  
+  private async summarizeContent(content: string): Promise<string> {
+    const prompt = `Summarize the following content in a concise manner:\n\n${content}`;
+  
+    for (let i = 0; i < 3; i++) {
+      try {
+        const response = await this.agent.runtime.completion({
+          context: prompt,
+          model: 'gpt-4',
+          temperature: 0.7
+        });
+        return response;
+      } catch (error) {
+        console.error(`Attempt ${i + 1} failed:`, error);
+        if (i === 2) throw error;
       }
     }
+  
+    throw new Error('Failed to summarize content after 3 attempts');
   }
+  
 
   private async handleImageAttachment(message: DiscordMessage, attachment: Attachment) {
     const description = await this.imageRecognitionService.recognizeImage(attachment.url);
@@ -465,59 +489,6 @@ export class DiscordClient extends EventEmitter {
     } catch (error) {
       console.error(`Error processing URL ${url}:`, error);
       await message.reply(`Failed to process ${url}. Error: ${error.message}`);
-    }
-  }
-
-  private async summarizeContent(content: string): Promise<string> {
-    const prompt = `Summarize the following content in a concise manner:\n\n${content}`;
-
-    for (let i = 0; i < 3; i++) {
-      try {
-        const response = await this.agent.runtime.completion({
-          context: prompt,
-          model: 'gpt-4',
-          temperature: 0.7
-        });
-        return response;
-      } catch (error) {
-        console.error(`Attempt ${i + 1} failed:`, error);
-        if (i === 2) throw error;
-      }
-    }
-
-    throw new Error('Failed to summarize content after 3 attempts');
-  }
-
-  private async handleRegularMessage(message: DiscordMessage, user_id: UUID, userName: string, channelId: string) {
-    const textContent = message.content;
-
-    try {
-      const responseStream = await this.respondToText({
-        user_id,
-        userName,
-        channelId,
-        input: textContent,
-        requestedResponseType: ResponseType.RESPONSE_TEXT,
-        message,
-        discordMessage: message,
-      });
-
-      if (!responseStream) {
-        console.log("No response stream");
-        return;
-      }
-
-      let responseData = "";
-      for await (const chunk of responseStream) {
-        responseData += chunk;
-      }
-
-      message.channel.send(responseData);
-    } catch (error) {
-      console.error("Error responding to message:", error);
-      message.channel.send(
-        "Sorry, I encountered an error while processing your request."
-      );
     }
   }
 
