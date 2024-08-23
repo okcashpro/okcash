@@ -98,11 +98,12 @@ export class MessageManager {
     if (!userName && botToken) {
       userName = this.character?.name || (await this.fetchBotName(botToken));
     }
+    console.log(`Ensuring user ${userName} (${agentId}) exists`);
     this.agent.ensureUserExists(agentId, userName);
   }
 
   async checkBotAccount() {
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+    const agentId = this.agent.runtime.agentId!;
     const room_id = getUuid(this.client.user?.id as string) as UUID;
 
     const botName =
@@ -148,7 +149,7 @@ export class MessageManager {
 
       const room_id = getUuid(channelId) as UUID;
       const userIdUUID = getUuid(user_id) as UUID;
-      const agentId = getUuid(this.character.name as string) as UUID;
+      const agentId = this.agent.runtime.agentId;
 
       await this.ensureUserExists(
         agentId,
@@ -164,7 +165,7 @@ export class MessageManager {
       let shouldRespond = true;
 
       const callback = (content: Content) => {
-        message.channel.send(content.content);
+        sendMessageInChunks(message.channel as TextChannel, content.content);
       };
 
       const content: Content = {
@@ -374,13 +375,12 @@ Content: ${attachment.text}
     responseContent: Content,
   ) {
     const { room_id } = message;
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
     responseContent.content = responseContent.content?.trim();
 
     if (responseContent.content) {
       await this.agent.runtime.messageManager.createMemory({
-        user_id: agentId!,
+        user_id: this.agent.runtime.agentId!,
         content: { ...responseContent, user: this.character.name },
         room_id,
         embedding: embeddingZeroVector,

@@ -48,6 +48,7 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
     "@cliqz/adblocker-playwright": "^1.31.3",
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/voice": "^0.17.0",

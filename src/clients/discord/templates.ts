@@ -52,7 +52,7 @@ Heuristics:
 - If the message is short or does not contain much information, ignore.
 - If the message asks {{agentName}} to stop, stop.
 
-Here are some examples of how to respond:
+# RESPONSE EXAMPLES
 <user>: Hey {{agent}}, can you help me with something?
 Result: RESPOND
 
@@ -62,7 +62,7 @@ Result: IGNORE
 
 {{agentName}}: Oh, this is my favorite scene!
 <user 1>: lol sick
-<user 2>: why is it your favorite scene?
+<user 2>: wait, why is it your favorite scene?
 Result: RESPOND
 
 <user>: {{agentName}} stop responding
@@ -77,6 +77,11 @@ Result: RESPOND
 <user>: stfu bot
 <user>: i need help
 Result: IGNORE
+
+<user>: okay, i want to test something. can you say marco?
+{{agentName}}: marco
+<user>: great. okay, now do it again
+Result: RESPOND
 
 Response options are RESPOND, IGNORE and STOP.
 

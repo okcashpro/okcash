@@ -8,6 +8,7 @@ import timeProvider from "../providers/time.ts";
 import voiceStateProvider from "../providers/voiceState.ts";
 import settings from "../core/settings.ts";
 import elaborate from "../actions/elaborate.ts";
+import askClaude from "../actions/ask_claude.ts";
 
 import { adapter } from "./db.ts";
 import { AgentRuntime } from "../core/runtime.ts";
@@ -35,6 +36,7 @@ export class Agent extends EventEmitter {
         elaborate,
         joinvoice,
         leavevoice,
+        askClaude,
       ],
     });
   }
@@ -85,6 +87,7 @@ export class Agent extends EventEmitter {
   }
 
   async ensureParticipantInRoom(user_id: UUID, roomId: UUID) {
+    console.log(`Ensuring participant ${user_id} in room ${roomId}`);
     const data = adapter.db
       .prepare("SELECT * FROM participants WHERE user_id = ? AND room_id = ?")
       .get(user_id, roomId);
