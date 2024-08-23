@@ -37,6 +37,7 @@ import { defaultProviders, getProviders } from "./providers.ts";
 import { type Actor, type Memory } from "./types.ts";
 import settings from "./settings.ts";
 import LlamaService from "../services/llama.ts";
+import tiktoken, { TiktokenModel } from "tiktoken";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -236,6 +237,7 @@ export class AgentRuntime {
    * @param opts.frequency_penalty The frequency penalty to apply to the completion.
    * @param opts.presence_penalty The presence penalty to apply to the completion.
    * @param opts.temperature The temperature to apply to the completion.
+   * @param opts.max_context_length The maximum length of the context to apply to the completion.
    * @returns The completed message.
    */
   async completion({
@@ -245,6 +247,7 @@ export class AgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.7,
+    max_context_length = settings.OPENAI_API_KEY ? "127999" : "8192",
   }) {
     if (!settings.OPENAI_API_KEY) {
       if (!this.llamaService) {
@@ -262,6 +265,16 @@ export class AgentRuntime {
       // change the 'content' to 'content'
       (completionResponse as any).content = completionResponse.content;
       return JSON.stringify(completionResponse);
+    }
+
+    // Count tokens and truncate context if necessary
+    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
+    let tokens = encoding.encode(context);
+    const maxTokens = parseInt(max_context_length);
+    const textDecoder = new TextDecoder();
+    if (tokens.length > maxTokens) {
+      tokens = tokens.slice(-maxTokens);
+      context = textDecoder.decode(encoding.decode(tokens))
     }
 
     const requestOptions = {
@@ -614,6 +627,48 @@ export class AgentRuntime {
       (actor: Actor) => actor.id === this.agentId,
     )?.name;
 
+    let allAttachments = message.content.attachments || [];
+
+    if (recentMessagesData && Array.isArray(recentMessagesData)) {
+      const lastMessageWithAttachment = recentMessagesData.find(
+        (msg) => msg.content.attachments && msg.content.attachments.length > 0,  
+      );
+      
+      if (lastMessageWithAttachment) {
+        const lastMessageTime = new Date(lastMessageWithAttachment.created_at).getTime();
+        const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
+      
+        allAttachments = recentMessagesData.reverse()
+          .map((msg) => {
+            const msgTime = new Date(msg.created_at).getTime();
+            const isWithinTime = msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
+            console.log("isWithinTime?", isWithinTime);
+            const attachments = msg.content.attachments || [];
+            // if the message is out of the time range, set the attachment 'text' to '[Hidden]'
+            if (!isWithinTime) {
+              attachments.forEach((attachment) => {
+                attachment.text = "[Hidden]";
+              });
+            }
+            return attachments;
+          })
+          .flat();
+      }
+    }        
+  
+    const formattedAttachments = allAttachments
+      .map(
+        (attachment) => 
+          `ID: ${attachment.id}
+Name: ${attachment.title} 
+URL: ${attachment.url}
+Type: ${attachment.source}
+Description: ${attachment.description}
+Text: ${attachment.text}
+  `,
+       )
+      .join("\n");
+
     const initialState = {
       agentId: this.agentId,
       agentName,
@@ -634,8 +689,10 @@ export class AgentRuntime {
       recentFactsData,
       relevantFacts: addHeader("# Relevant Facts", relevantFacts),
       relevantFactsData,
+      attachments: formattedAttachments,
       ...additionalKeys,
     };
+    
 
     const actionPromises = this.actions.map(async (action: Action) => {
       const result = await action.validate(this, message, initialState);

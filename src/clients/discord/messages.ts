@@ -183,36 +183,8 @@ export class MessageManager {
         },
       )) as State;
 
-      let allAttachments = attachments || [];
-
-      if (state.recentMessagesData && Array.isArray(state.recentMessagesData)) {
-        allAttachments = allAttachments.concat(
-          state.recentMessagesData.flatMap(
-            (msg) => msg.content.attachments || [],
-          ),
-        );
-      }
-
-      const formattedAttachments = allAttachments
-        .map(
-          (attachment) =>
-            `ID: ${attachment.id}
-Name: ${attachment.title}
-URL: ${attachment.url}
-Type: ${attachment.source}
-Description: ${attachment.description}
-Content: ${attachment.text}
-`,
-        )
-        .join("\n");
-
-      state = {
-        ...state,
-        attachments: formattedAttachments,
-      };
-
       const messageToHandle: Message = {
-        ...{ content, user_id: userIdUUID, room_id },
+        ...{ content, user_id: agentId, room_id },
         content: {
           ...content,
           attachments,
@@ -222,11 +194,6 @@ Content: ${attachment.text}
       await this._saveRequestMessage(messageToHandle, state);
 
       state = await this.agent.runtime.updateRecentMessageState(state);
-
-      state = {
-        ...state,
-        attachments: formattedAttachments,
-      };
 
       if (!shouldIgnore) {
         shouldIgnore = await this._shouldIgnore(message);
@@ -285,17 +252,37 @@ Content: ${attachment.text}
   ): Promise<{ processedContent: string; attachments: Media[] }> {
     let processedContent = message.content;
     let attachments: Media[] = [];
-
+  
+    // Process code blocks in the message content
+    const codeBlockRegex = /```([\s\S]*?)```/g;
+    let match;
+    while ((match = codeBlockRegex.exec(processedContent))) {
+      const codeBlock = match[1];
+      const lines = codeBlock.split('\n');
+      const title = lines[0];
+      const description = lines.slice(0, 3).join('\n');
+      const attachmentId = `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+      attachments.push({
+        id: attachmentId,
+        url: '',
+        title: title || 'Code Block',
+        source: 'Code',
+        description: description,
+        text: codeBlock,
+      });
+      processedContent = processedContent.replace(match[0], `Code Block (${attachmentId})`);
+    }
+  
     // Process message attachments
     if (message.attachments.size > 0) {
       attachments = await this.attachmentManager.processAttachments(
         message.attachments,
       );
     }
-
+  
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const urls = processedContent.match(urlRegex) || [];
-
+  
     for (const url of urls) {
       if (this.youtubeService.isVideoUrl(url)) {
         const videoInfo = await this.youtubeService.processVideo(url);
@@ -324,72 +311,117 @@ Content: ${attachment.text}
         });
       }
     }
-
+  
     return { processedContent, attachments };
+  }  
+
+private async _saveRequestMessage(message: Message, state: State) {
+  const { content: senderContent } = message;
+
+  // Extract code blocks from the message content  
+  const codeBlockRegex = /```([\s\S]*?)```/g;
+  let match;
+  const attachments: Media[] = [];
+  while ((match = codeBlockRegex.exec((senderContent as Content).content))) {
+    const codeBlock = match[1];
+    const lines = codeBlock.split('\n');
+    const title = lines[0];
+    const description = lines.slice(0, 3).join('\n');
+    const attachmentId = `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+    attachments.push({
+      id: attachmentId,
+      url: '',
+      title: title || 'Code Block', 
+      source: 'Code',
+      description: description,
+      text: codeBlock,
+    });
+    (senderContent as Content).content = (senderContent as Content).content.replace(match[0], `Code Block (${attachmentId})`);
   }
 
-  private async _saveRequestMessage(message: Message, state: State) {
-    const { content } = message;
+  if ((senderContent as Content).content) {
+    const data2 = adapter.db
+      .prepare(
+        "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
+      )
+      .all("messages", message.user_id, message.room_id) as {
+      content: Content;
+    }[];
 
-    if ((content as Content).content) {
-      const data2 = adapter.db
-        .prepare(
-          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
-        )
-        .all("messages", message.user_id, message.room_id) as {
-        content: Content;
-      }[];
+    if (
+      data2.length > 0 &&
+      JSON.stringify(data2[0].content) === JSON.stringify(senderContent)
+    ) {
+    } else {
+      const senderName =
+        state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
+          ?.name || "Unknown User";
 
-      if (
-        data2.length > 0 &&
-        JSON.stringify(data2[0].content) === JSON.stringify(content)
-      ) {
-      } else {
-        const senderName =
-          state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
-            ?.name || "Unknown User";
+      const contentWithUser = {
+        ...(senderContent as Content),
+        user: senderName,
+        attachments,  
+      };
 
-        const contentWithUser = {
-          ...(content as Content),
-          user: senderName,
-        };
-
-        await this.agent.runtime.messageManager.createMemory({
-          user_id: message.user_id,
-          content: contentWithUser,
-          room_id: message.room_id,
-          embedding: embeddingZeroVector,
-        });
-      }
-      await this.agent.runtime.evaluate(message, {
-        ...state,
-        discordMessage: state.discordMessage,
-        discordClient: state.discordClient,
-      });
-    }
-  }
-
-  private async _saveResponseMessage(
-    message: Message,
-    state: State,
-    responseContent: Content,
-  ) {
-    const { room_id } = message;
-
-    responseContent.content = responseContent.content?.trim();
-
-    if (responseContent.content) {
       await this.agent.runtime.messageManager.createMemory({
-        user_id: this.agent.runtime.agentId!,
-        content: { ...responseContent, user: this.character.name },
-        room_id,
+        user_id: message.user_id,
+        content: contentWithUser,
+        room_id: message.room_id,
         embedding: embeddingZeroVector,
       });
-      await this.agent.runtime.evaluate(message, { ...state, responseContent });
-    } else {
-      console.warn("Empty response, skipping");
     }
+    await this.agent.runtime.evaluate(message, {
+      ...state,
+      discordMessage: state.discordMessage,
+      discordClient: state.discordClient,
+    });
   }
+}
+
+private async _saveResponseMessage(
+  message: Message,
+  state: State,
+  responseContent: Content,
+) {
+  const { room_id } = message;
+  const agentId = this.agent.runtime.agentId;
+
+  // Extract code blocks from the response content
+  const codeBlockRegex = /```([\s\S]*?)```/g;
+  let match;
+  const attachments: Media[] = [];
+  while ((match = codeBlockRegex.exec(responseContent.content))) {
+    const codeBlock = match[1];
+    const lines = codeBlock.split('\n');
+    const title = lines[0];
+    const description = lines.slice(0, 3).join('\n');
+    const attachmentId = `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+    attachments.push({
+      id: attachmentId,
+      url: '',
+      title: title || 'Code Block',
+      source: 'Code',
+      description: description,
+      text: codeBlock,
+    });
+    responseContent.content = responseContent.content.replace(match[0], `Code Block (${attachmentId})`);
+  }
+
+  responseContent.content = responseContent.content?.trim();
+
+  if (responseContent.content) {
+    await this.agent.runtime.messageManager.createMemory({
+      user_id: agentId!,
+      content: { ...responseContent, user: this.character.name, attachments },
+      room_id,
+      embedding: embeddingZeroVector,
+    });
+    await this.agent.runtime.evaluate(message, { ...state, responseContent });
+  } else {
+    console.warn("Empty response, skipping");
+  }
+}
+
 
   private _checkInterest(channelId: string): boolean {
     return !!this.interestChannels[channelId];

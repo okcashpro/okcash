@@ -2,6 +2,7 @@
     "compilerOptions": {
       "target": "es2022",
       "module": "es2022",
+      "lib": ["es2023"],
       "moduleResolution": "node",
       "outDir": "./dist",
       "rootDir": "./src",

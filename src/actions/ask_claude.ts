@@ -15,7 +15,7 @@ export const claudeHandlerTemplate =
 
 {{recentMessages}}
 
-# Instructions: Claude, I need your help in assisting the user with their last request. Please provide a helpful, thorough response. I have no arms, so you'll have to write out any implements and take care not to omit or leave TODOs for later.`
+# Instructions: Claude, I need your help in assisting the user with their last request. Please provide a helpful, thorough response. I have no arms, so you'll have to write out any implements and take care not to omit or leave TODOs for later. Also, please don't acknowledge the request, just do it.`
 
 export default {
   name: "ASK_CLAUDE",
@@ -40,14 +40,20 @@ export default {
     log_to_file(`${state.agentName}_${datestr}_claude_context`, context);
 
     let responseContent;
-    const { room_id } = message;
+    let callbackData: Content = {
+      content: responseContent,
+      action: "CLAUDE_RESPONSE",
+      source: "Claude",
+      attachments: []
+  };
+      const { room_id } = message;
 
     const anthropic = new Anthropic({
         // defaults to process.env["ANTHROPIC_API_KEY"]
         apiKey: settings.ANTHROPIC_API_KEY,
       });
       
-
+      let attachments = [];
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {      
       try {
         const response = await anthropic.messages.create({
@@ -63,7 +69,25 @@ export default {
             tools: []
           });
           
-      responseContent = "Claude said:\n" + (response.content[0] as any).text;
+          responseContent = (response.content[0] as any).text;
+        
+          // Store Claude's response as an attachment
+          const attachmentId = `claude-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+          const lines = responseContent.split('\n');
+          const description = lines.slice(0, 3).join('\n');
+          callbackData.content = responseContent;
+          callbackData.attachments.push({
+            id: attachmentId,
+            url: '',
+            title: 'Message from Claude',
+            source: 'Claude',
+            description,
+            text: responseContent,
+          });
+          callback(callbackData);
+          
+          // After sending the callback data to the client, abbreviate it to the reference
+          callbackData.content = `Claude said: (${attachmentId})`;  
 
       // log response to file
       log_to_file(
@@ -110,13 +134,8 @@ export default {
       }
     };
 
-    const callbackData: Content = {
-        content: responseContent,
-        action: "WAIT",
-        source: "Claude",
-    };
+
     console.log("Calling callback with data:", callbackData);
-    callback(callbackData);
 
     await _saveResponseMessage(message, state, callbackData);
 

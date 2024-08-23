@@ -84,6 +84,7 @@
     "sql.js": "^1.10.2",
     "sqlite-vss": "^0.1.2",
     "srt": "^0.0.3",
+    "tiktoken": "^1.0.16",
     "unique-names-generator": "^4.7.1",
     "uuid-by-string": "^4.0.0",
     "uuidv4": "^6.2.13",
