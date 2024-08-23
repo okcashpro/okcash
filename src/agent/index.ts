@@ -9,6 +9,10 @@ import voiceStateProvider from "../providers/voiceState.ts";
 import settings from "../core/settings.ts";
 import elaborate from "../actions/elaborate.ts";
 import askClaude from "../actions/ask_claude.ts";
+import mute_room from "../actions/mute_room.ts";
+import unmute_room from "../actions/unmute_room.ts";
+import follow_room from "../actions/follow_room.ts";
+import unfollow_room from "../actions/unfollow_room.ts";
 
 import { adapter } from "./db.ts";
 import { AgentRuntime } from "../core/runtime.ts";
@@ -28,15 +32,16 @@ export class Agent extends EventEmitter {
         channelStateProvider,
         voiceStateProvider,
         timeProvider,
-        // flavorProvider, // TODO: re-implement this
       ],
       actions: [
-        // TODO: Handle elaborating on Discord but *not* on Twitter
-        // (maybe different agents)
         elaborate,
         joinvoice,
         leavevoice,
         askClaude,
+        mute_room,
+        unmute_room,
+        follow_room,
+        unfollow_room,
       ],
     });
   }

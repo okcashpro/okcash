@@ -41,6 +41,23 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     return participants;
   }
 
+  async getParticipantUserState(roomId: UUID, userId: UUID): Promise<'FOLLOWED' | 'MUTED' | null> {
+    const sql = 'SELECT user_state FROM participants WHERE room_id = ? AND user_id = ?';
+    const stmt = this.db.prepare(sql);
+    stmt.bind([roomId, userId]);
+    const result = stmt.getAsObject() as { user_state: 'FOLLOWED' | 'MUTED' | null };
+    stmt.free();
+    return result.user_state ?? null;
+  }
+
+  async setParticipantUserState(roomId: UUID, userId: UUID, state: 'FOLLOWED' | 'MUTED' | null): Promise<void> {
+    const sql = 'UPDATE participants SET user_state = ? WHERE room_id = ? AND user_id = ?';
+    const stmt = this.db.prepare(sql);
+    stmt.bind([state, roomId, userId]);
+    stmt.step();
+    stmt.free();
+  }
+
   async getParticipantsForRoom(room_id: UUID): Promise<UUID[]> {
     const sql = "SELECT user_id FROM participants WHERE room_id = ?";
     const stmt = this.db.prepare(sql);

@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS "participants" (
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT,
     "room_id" TEXT,
+    "user_state" TEXT,
     "id" TEXT PRIMARY KEY,
     "last_message_read" TEXT,
     FOREIGN KEY ("user_id") REFERENCES "accounts"("id"),

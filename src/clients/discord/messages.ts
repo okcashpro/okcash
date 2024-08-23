@@ -202,10 +202,24 @@ export class MessageManager {
       if (shouldIgnore) {
         return;
       }
-      console.log("Interest handling");
+
       const hasInterest = this._checkInterest(channelId);
 
-      if ((!shouldRespond && hasInterest) || (shouldRespond && !hasInterest)) {
+      const agentUserState = await this.agent.runtime.databaseAdapter.getParticipantUserState(room_id, this.agent.runtime.agentId);
+
+      if (agentUserState === 'MUTED') {
+        if (!message.mentions.has(this.client.user.id) && !hasInterest) {
+          console.log("Ignoring muted room");
+          // Ignore muted rooms unless explicitly mentioned  
+          return;
+        }
+      }
+
+      if (agentUserState === 'FOLLOWED') {
+        console.log("Always responding in followed room");
+        shouldRespond = true; // Always respond in followed rooms
+      } else if ((!shouldRespond && hasInterest) || (shouldRespond && !hasInterest)) {
+        console.log("Checking if should respond");
         shouldRespond = await this._shouldRespond(message, state);
       }
 
