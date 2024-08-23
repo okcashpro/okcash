@@ -274,7 +274,7 @@ export class AgentRuntime {
     const textDecoder = new TextDecoder();
     if (tokens.length > maxTokens) {
       tokens = tokens.slice(-maxTokens);
-      context = textDecoder.decode(encoding.decode(tokens))
+      context = textDecoder.decode(encoding.decode(tokens));
     }
 
     const requestOptions = {
@@ -631,17 +631,21 @@ export class AgentRuntime {
 
     if (recentMessagesData && Array.isArray(recentMessagesData)) {
       const lastMessageWithAttachment = recentMessagesData.find(
-        (msg) => msg.content.attachments && msg.content.attachments.length > 0,  
+        (msg) => msg.content.attachments && msg.content.attachments.length > 0,
       );
-      
+
       if (lastMessageWithAttachment) {
-        const lastMessageTime = new Date(lastMessageWithAttachment.created_at).getTime();
+        const lastMessageTime = new Date(
+          lastMessageWithAttachment.created_at,
+        ).getTime();
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
-      
-        allAttachments = recentMessagesData.reverse()
+
+        allAttachments = recentMessagesData
+          .reverse()
           .map((msg) => {
             const msgTime = new Date(msg.created_at).getTime();
-            const isWithinTime = msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
+            const isWithinTime =
+              msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
             console.log("isWithinTime?", isWithinTime);
             const attachments = msg.content.attachments || [];
             // if the message is out of the time range, set the attachment 'text' to '[Hidden]'
@@ -654,11 +658,11 @@ export class AgentRuntime {
           })
           .flat();
       }
-    }        
-  
+    }
+
     const formattedAttachments = allAttachments
       .map(
-        (attachment) => 
+        (attachment) =>
           `ID: ${attachment.id}
 Name: ${attachment.title} 
 URL: ${attachment.url}
@@ -666,7 +670,7 @@ Type: ${attachment.source}
 Description: ${attachment.description}
 Text: ${attachment.text}
   `,
-       )
+      )
       .join("\n");
 
     const initialState = {
@@ -692,7 +696,6 @@ Text: ${attachment.text}
       attachments: formattedAttachments,
       ...additionalKeys,
     };
-    
 
     const actionPromises = this.actions.map(async (action: Action) => {
       const result = await action.validate(this, message, initialState);

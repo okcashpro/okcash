@@ -252,37 +252,41 @@ export class MessageManager {
   ): Promise<{ processedContent: string; attachments: Media[] }> {
     let processedContent = message.content;
     let attachments: Media[] = [];
-  
+
     // Process code blocks in the message content
     const codeBlockRegex = /```([\s\S]*?)```/g;
     let match;
     while ((match = codeBlockRegex.exec(processedContent))) {
       const codeBlock = match[1];
-      const lines = codeBlock.split('\n');
+      const lines = codeBlock.split("\n");
       const title = lines[0];
-      const description = lines.slice(0, 3).join('\n');
-      const attachmentId = `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+      const description = lines.slice(0, 3).join("\n");
+      const attachmentId =
+        `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
       attachments.push({
         id: attachmentId,
-        url: '',
-        title: title || 'Code Block',
-        source: 'Code',
+        url: "",
+        title: title || "Code Block",
+        source: "Code",
         description: description,
         text: codeBlock,
       });
-      processedContent = processedContent.replace(match[0], `Code Block (${attachmentId})`);
+      processedContent = processedContent.replace(
+        match[0],
+        `Code Block (${attachmentId})`,
+      );
     }
-  
+
     // Process message attachments
     if (message.attachments.size > 0) {
       attachments = await this.attachmentManager.processAttachments(
         message.attachments,
       );
     }
-  
+
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const urls = processedContent.match(urlRegex) || [];
-  
+
     for (const url of urls) {
       if (this.youtubeService.isVideoUrl(url)) {
         const videoInfo = await this.youtubeService.processVideo(url);
@@ -311,117 +315,123 @@ export class MessageManager {
         });
       }
     }
-  
+
     return { processedContent, attachments };
-  }  
-
-private async _saveRequestMessage(message: Message, state: State) {
-  const { content: senderContent } = message;
-
-  // Extract code blocks from the message content  
-  const codeBlockRegex = /```([\s\S]*?)```/g;
-  let match;
-  const attachments: Media[] = [];
-  while ((match = codeBlockRegex.exec((senderContent as Content).content))) {
-    const codeBlock = match[1];
-    const lines = codeBlock.split('\n');
-    const title = lines[0];
-    const description = lines.slice(0, 3).join('\n');
-    const attachmentId = `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
-    attachments.push({
-      id: attachmentId,
-      url: '',
-      title: title || 'Code Block', 
-      source: 'Code',
-      description: description,
-      text: codeBlock,
-    });
-    (senderContent as Content).content = (senderContent as Content).content.replace(match[0], `Code Block (${attachmentId})`);
   }
 
-  if ((senderContent as Content).content) {
-    const data2 = adapter.db
-      .prepare(
-        "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
-      )
-      .all("messages", message.user_id, message.room_id) as {
-      content: Content;
-    }[];
+  private async _saveRequestMessage(message: Message, state: State) {
+    const { content: senderContent } = message;
 
-    if (
-      data2.length > 0 &&
-      JSON.stringify(data2[0].content) === JSON.stringify(senderContent)
-    ) {
-    } else {
-      const senderName =
-        state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
-          ?.name || "Unknown User";
+    // Extract code blocks from the message content
+    const codeBlockRegex = /```([\s\S]*?)```/g;
+    let match;
+    const attachments: Media[] = [];
+    while ((match = codeBlockRegex.exec((senderContent as Content).content))) {
+      const codeBlock = match[1];
+      const lines = codeBlock.split("\n");
+      const title = lines[0];
+      const description = lines.slice(0, 3).join("\n");
+      const attachmentId =
+        `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+      attachments.push({
+        id: attachmentId,
+        url: "",
+        title: title || "Code Block",
+        source: "Code",
+        description: description,
+        text: codeBlock,
+      });
+      (senderContent as Content).content = (
+        senderContent as Content
+      ).content.replace(match[0], `Code Block (${attachmentId})`);
+    }
 
-      const contentWithUser = {
-        ...(senderContent as Content),
-        user: senderName,
-        attachments,  
-      };
+    if ((senderContent as Content).content) {
+      const data2 = adapter.db
+        .prepare(
+          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
+        )
+        .all("messages", message.user_id, message.room_id) as {
+        content: Content;
+      }[];
 
-      await this.agent.runtime.messageManager.createMemory({
-        user_id: message.user_id,
-        content: contentWithUser,
-        room_id: message.room_id,
-        embedding: embeddingZeroVector,
+      if (
+        data2.length > 0 &&
+        JSON.stringify(data2[0].content) === JSON.stringify(senderContent)
+      ) {
+      } else {
+        const senderName =
+          state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
+            ?.name || "Unknown User";
+
+        const contentWithUser = {
+          ...(senderContent as Content),
+          user: senderName,
+          attachments,
+        };
+
+        await this.agent.runtime.messageManager.createMemory({
+          user_id: message.user_id,
+          content: contentWithUser,
+          room_id: message.room_id,
+          embedding: embeddingZeroVector,
+        });
+      }
+      await this.agent.runtime.evaluate(message, {
+        ...state,
+        discordMessage: state.discordMessage,
+        discordClient: state.discordClient,
       });
     }
-    await this.agent.runtime.evaluate(message, {
-      ...state,
-      discordMessage: state.discordMessage,
-      discordClient: state.discordClient,
-    });
-  }
-}
-
-private async _saveResponseMessage(
-  message: Message,
-  state: State,
-  responseContent: Content,
-) {
-  const { room_id } = message;
-  const agentId = this.agent.runtime.agentId;
-
-  // Extract code blocks from the response content
-  const codeBlockRegex = /```([\s\S]*?)```/g;
-  let match;
-  const attachments: Media[] = [];
-  while ((match = codeBlockRegex.exec(responseContent.content))) {
-    const codeBlock = match[1];
-    const lines = codeBlock.split('\n');
-    const title = lines[0];
-    const description = lines.slice(0, 3).join('\n');
-    const attachmentId = `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
-    attachments.push({
-      id: attachmentId,
-      url: '',
-      title: title || 'Code Block',
-      source: 'Code',
-      description: description,
-      text: codeBlock,
-    });
-    responseContent.content = responseContent.content.replace(match[0], `Code Block (${attachmentId})`);
   }
 
-  responseContent.content = responseContent.content?.trim();
+  private async _saveResponseMessage(
+    message: Message,
+    state: State,
+    responseContent: Content,
+  ) {
+    const { room_id } = message;
+    const agentId = this.agent.runtime.agentId;
 
-  if (responseContent.content) {
-    await this.agent.runtime.messageManager.createMemory({
-      user_id: agentId!,
-      content: { ...responseContent, user: this.character.name, attachments },
-      room_id,
-      embedding: embeddingZeroVector,
-    });
-    await this.agent.runtime.evaluate(message, { ...state, responseContent });
-  } else {
-    console.warn("Empty response, skipping");
+    // Extract code blocks from the response content
+    const codeBlockRegex = /```([\s\S]*?)```/g;
+    let match;
+    const attachments: Media[] = [];
+    while ((match = codeBlockRegex.exec(responseContent.content))) {
+      const codeBlock = match[1];
+      const lines = codeBlock.split("\n");
+      const title = lines[0];
+      const description = lines.slice(0, 3).join("\n");
+      const attachmentId =
+        `code-${Date.now()}-${Math.floor(Math.random() * 1000)}`.slice(-5);
+      attachments.push({
+        id: attachmentId,
+        url: "",
+        title: title || "Code Block",
+        source: "Code",
+        description: description,
+        text: codeBlock,
+      });
+      responseContent.content = responseContent.content.replace(
+        match[0],
+        `Code Block (${attachmentId})`,
+      );
+    }
+
+    responseContent.content = responseContent.content?.trim();
+
+    if (responseContent.content) {
+      await this.agent.runtime.messageManager.createMemory({
+        user_id: agentId!,
+        content: { ...responseContent, user: this.character.name, attachments },
+        room_id,
+        embedding: embeddingZeroVector,
+      });
+      await this.agent.runtime.evaluate(message, { ...state, responseContent });
+    } else {
+      console.warn("Empty response, skipping");
+    }
   }
-}
-
 
   private _checkInterest(channelId: string): boolean {
     return !!this.interestChannels[channelId];
