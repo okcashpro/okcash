@@ -1,21 +1,24 @@
 import dotenv from "dotenv";
-import { getCachedEmbeddings, writeCachedEmbedding } from "../../test/cache.ts"
-import { createRuntime } from "../../test/createRuntime.ts"
+import { defaultActions } from "../../core/actions.ts";
+import { zeroUuid } from "../../core/constants.ts";
+import { type AgentRuntime } from "../../core/runtime.ts";
+import { type Message, type UUID } from "../../core/types.ts";
+import {
+  getCachedEmbeddings,
+  writeCachedEmbedding,
+} from "../../test_resources/cache.ts";
+import { createRuntime } from "../../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversation1,
   GetTellMeAboutYourselfConversation2,
   GetTellMeAboutYourselfConversation3,
   jimFacts,
-} from "../../test/data.ts"
-import { getOrCreateRelationship } from "../../test/getOrCreateRelationship.ts"
-import { populateMemories } from "../../test/populateMemories.ts"
-import { runAiTest } from "../../test/runAiTest.ts"
-import { type User } from "../../test/types.ts"
-import { defaultActions } from "../../actions.ts"
-import { zeroUuid } from "../../constants.ts"
-import { type AgentRuntime } from "../../runtime.ts"
-import { type Message, type UUID } from "../../types.ts"
-import evaluator from "../fact.ts"
+} from "../../test_resources/data.ts";
+import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../../test_resources/populateMemories.ts";
+import { runAiTest } from "../../test_resources/runAiTest.ts";
+import { type User } from "../../test_resources/types.ts";
+import evaluator from "../fact.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

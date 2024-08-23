@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 
-import { DatabaseAdapter } from "../database.ts"
+import { DatabaseAdapter } from "../core/database.ts";
 import {
   Account,
   Actor,
@@ -10,7 +10,7 @@ import {
   type Relationship,
   type UUID,
   Participant,
-} from "../types.ts"
+} from "../core/types.ts";
 
 import { sqliteTables } from "./sqlite/sqliteTables.ts";
 
@@ -118,9 +118,9 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
   }
 
   async createMemory(memory: Memory, tableName: string): Promise<void> {
-    console.log('*** createMemory ***')
-    console.log(memory)
-    console.log(memory.content?.attachments)
+    console.log("*** createMemory ***");
+    console.log(memory);
+    console.log(memory.content?.attachments);
     let isUnique = true;
     if (memory.embedding) {
       // Check if a similar memory already exists
@@ -137,13 +137,13 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       isUnique = similarMemories.length === 0;
     }
 
-    const content = JSON.stringify(memory.content)
+    const content = JSON.stringify(memory.content);
 
-    console.log("Memory being written")
-    console.log(content)
+    console.log("Memory being written");
+    console.log(content);
 
-    console.log("Attachments")
-    console.log(memory.content.attachments)
+    console.log("memory");
+    console.log(memory.content);
 
     // Insert the memory with the appropriate 'unique' value
     const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`) VALUES (?, ?, ?, ?, ?, ?, ?)`;

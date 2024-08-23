@@ -1,5 +1,5 @@
-import { AgentRuntime } from "../runtime.ts"
-import { Message, Provider, State } from "../types.ts"
+import { AgentRuntime } from "../core/runtime.ts";
+import { Message, Provider, State } from "../core/types.ts";
 
 const time: Provider = {
   get: async (_runtime: AgentRuntime, _message: Message, _state?: State) => {

@@ -16,22 +16,29 @@ import {
   Guild,
   GuildMember,
   VoiceChannel,
-  VoiceState
+  VoiceState,
 } from "discord.js";
 import fs from "fs";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { default as getUuid } from "uuid-by-string";
 import WavEncoder from "wav-encoder";
-import { Agent } from "../../agent.ts";
+import { Agent } from "../../agent/index.ts";
 import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
 import { TranscriptionService } from "../../services/transcription.ts";
-import settings from "../../settings.ts";
+import settings from "../../core/settings.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { MessageManager } from "./messages.ts";
 
-import { textToSpeech } from "../elevenlabs/index.ts";
 import EventEmitter from "events";
+import { composeContext } from "../../core/context.ts";
+import { adapter } from "../../agent/db.ts";
+import { log_to_file } from "../../core/logger.ts";
+import { embeddingZeroVector } from "../../core/memory.ts";
+import { parseJSONObjectFromText } from "../../core/parsing.ts";
+import { Actor, Character, Content, Message, State } from "../../core/types.ts";
+import { textToSpeech } from "../elevenlabs/index.ts";
+import { voiceHandlerTemplate } from "./templates.ts";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -45,18 +52,31 @@ export class VoiceManager extends EventEmitter {
   private speechSynthesizer: SpeechSynthesizer | null = null;
   transcriptionService: TranscriptionService;
   private messageManager: MessageManager;
+  character: Character;
 
-  constructor(client: Client, agent: Agent, messageManager: MessageManager) {
-    super()
+  constructor(
+    client: Client,
+    agent: Agent,
+    messageManager: MessageManager,
+    character: Character,
+  ) {
+    super();
     this.client = client;
+    this.character = character;
     this.agent = agent;
     this.transcriptionService = new TranscriptionService();
     this.messageManager = messageManager;
   }
 
-  async handleVoiceStateUpdate(oldState: VoiceState | null, newState: VoiceState | null) {
+  async handleVoiceStateUpdate(
+    oldState: VoiceState | null,
+    newState: VoiceState | null,
+  ) {
     if (newState?.member?.user.bot) return;
-    if (newState?.channelId != null && newState?.channelId != oldState?.channelId) {
+    if (
+      newState?.channelId != null &&
+      newState?.channelId != oldState?.channelId
+    ) {
       this.joinChannel(newState.channel as BaseGuildVoiceChannel);
     }
   }
@@ -70,19 +90,19 @@ export class VoiceManager extends EventEmitter {
     user_id: UUID,
     userName: string,
     channel: BaseGuildVoiceChannel,
-    audioStream: Readable
+    audioStream: Readable,
   ) {
     const channelId = channel.id;
 
     const callback = async (responseAudioStream) => {
       await this.playAudioStream(user_id, responseAudioStream);
-    }
+    };
 
     const buffers: Buffer[] = [];
     let totalLength = 0;
     const maxSilenceTime = 500; // Maximum pause duration in milliseconds
     let lastChunkTime = Date.now();
-    
+
     const monitor = new AudioMonitor(audioStream, 10000000, async (buffer) => {
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
@@ -100,10 +120,13 @@ export class VoiceManager extends EventEmitter {
           const text = await this.transcriptionService.transcribe(inputBuffer);
           const room_id = getUuid(channelId) as UUID;
           const userIdUUID = getUuid(user_id) as UUID;
-          const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+          const agentId = getUuid(
+            settings.DISCORD_APPLICATION_ID as string,
+          ) as UUID;
 
-          // Note: You might need to adjust this line depending on how you're managing the discordClient reference
-          const botName = await this.messageManager.fetchBotName(settings.DISCORD_API_TOKEN);
+          const botName = await this.messageManager.fetchBotName(
+            settings.DISCORD_API_TOKEN,
+          );
 
           await this.agent.ensureUserExists(agentId, botName);
           await this.agent.ensureUserExists(userIdUUID, userName);
@@ -112,25 +135,29 @@ export class VoiceManager extends EventEmitter {
           await this.agent.ensureParticipantInRoom(agentId, room_id);
 
           const state = await this.agent.runtime.composeState(
-            { content: { content: text, action: "WAIT", source: "Discord" }, user_id: userIdUUID, room_id },
+            {
+              content: { content: text, action: "WAIT", source: "Discord" },
+              user_id: userIdUUID,
+              room_id,
+            },
             {
               discordClient: this.client,
               agentName: botName,
-            }
+            },
           );
 
           if (text && text.startsWith("/")) {
             return null;
           }
 
-          const response = await this.messageManager.handleMessage({
+          const response = await this.handleVoiceMessage({
             message: {
               content: { content: text, action: "WAIT" },
               user_id: userIdUUID,
               room_id,
             },
-            callback: (str: any) => { },
-            state
+            callback: (str: any) => {},
+            state,
           });
 
           const content = (response.responseMessage ||
@@ -151,6 +178,254 @@ export class VoiceManager extends EventEmitter {
         }
       }
     });
+  }
+
+  async handleVoiceMessage({
+    message,
+    shouldIgnore = false,
+    shouldRespond = true,
+    callback,
+    state,
+  }: {
+    message: Message;
+    shouldIgnore?: boolean;
+    shouldRespond?: boolean;
+    callback: (response: string) => void;
+    state?: State;
+  }): Promise<Content> {
+    if (!message.content.content) {
+      return { content: "", action: "IGNORE" };
+    }
+
+    await this._saveRequestMessage(message, state);
+
+    state = await this.agent.runtime.updateRecentMessageState(state);
+
+    if (!shouldIgnore) {
+      shouldIgnore = await this._shouldIgnore(message);
+    }
+
+    if (shouldIgnore) {
+      return { content: "", action: "IGNORE" };
+    }
+
+    if (!shouldRespond) {
+      return { content: "", action: "IGNORE" };
+    }
+
+    let context = composeContext({
+      state,
+      template: voiceHandlerTemplate,
+    });
+
+    const responseContent = await this._generateResponse(
+      message,
+      state,
+      context,
+    );
+
+    await this._saveResponseMessage(message, state, responseContent);
+
+    this.agent.runtime
+      .processActions(message, responseContent, state)
+      .then((response: unknown) => {
+        if (response && (response as Content).content) {
+          callback((response as Content).content);
+        }
+      });
+
+    return responseContent;
+  }
+
+  private async _generateResponse(
+    message: Message,
+    state: State,
+    context: string,
+  ): Promise<Content> {
+    let responseContent: Content | null = null;
+    const { user_id, room_id } = message;
+
+    const datestr = new Date().toISOString().replace(/:/g, "-");
+
+    // log context to file
+    log_to_file(`${state.agentName}_${datestr}_voice_context`, context);
+
+    let response;
+
+    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+      try {
+        response = await this.agent.runtime.completion({
+          context,
+          stop: [],
+        });
+      } catch (error) {
+        console.error("Error in _generateResponse:", error);
+        // wait for 2 seconds
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log("Retrying...");
+      }
+
+      if (!response) {
+        continue;
+      }
+
+      log_to_file(`${state.agentName}_${datestr}_generate_response`, response);
+
+      const values = {
+        body: response,
+        user_id: user_id,
+        room_id,
+        type: "response",
+      };
+
+      adapter.db
+        .prepare(
+          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
+        )
+        .run([values.body, values.user_id, values.room_id, values.type]);
+
+      const parsedResponse = parseJSONObjectFromText(
+        response,
+      ) as unknown as Content;
+      // if (
+      //   !(parsedResponse?.user as string)?.includes(
+      //     (state as State).senderName as string
+      //   )
+      // ) {
+      if (!parsedResponse) {
+        continue;
+      }
+      responseContent = {
+        content: parsedResponse.content,
+        action: parsedResponse.action,
+      };
+      break;
+      // }
+    }
+
+    if (!responseContent) {
+      responseContent = {
+        content: "",
+        action: "IGNORE",
+      };
+    }
+
+    return responseContent;
+  }
+
+  private async _saveRequestMessage(message: Message, state: State) {
+    const { content } = message;
+
+    if ((content as Content).content) {
+      const data2 = adapter.db
+        .prepare(
+          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
+        )
+        .all("messages", message.user_id, message.room_id) as {
+        content: Content;
+      }[];
+
+      if (
+        data2.length > 0 &&
+        JSON.stringify(data2[0].content) === JSON.stringify(content)
+      ) {
+      } else {
+        const senderName =
+          state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
+            ?.name || "Unknown User";
+
+        const contentWithUser = {
+          ...(content as Content),
+          user: senderName,
+        };
+
+        await this.agent.runtime.messageManager.createMemory({
+          user_id: message.user_id,
+          content: contentWithUser,
+          room_id: message.room_id,
+          embedding: embeddingZeroVector,
+        });
+      }
+      await this.agent.runtime.evaluate(message, {
+        ...state,
+        discordMessage: state.discordMessage,
+        discordClient: state.discordClient,
+      });
+    }
+  }
+
+  private async _saveResponseMessage(
+    message: Message,
+    state: State,
+    responseContent: Content,
+  ) {
+    const { room_id } = message;
+    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
+
+    responseContent.content = responseContent.content?.trim();
+
+    if (responseContent.content) {
+      await this.agent.runtime.messageManager.createMemory({
+        user_id: agentId!,
+        content: { ...responseContent, user: this.character.name },
+        room_id,
+        embedding: embeddingZeroVector,
+      });
+      await this.agent.runtime.evaluate(message, { ...state, responseContent });
+    } else {
+      console.warn("Empty response, skipping");
+    }
+  }
+
+  private async _shouldIgnore(message: Message): Promise<boolean> {
+    // if the message is 3 characters or less, ignore it
+    if ((message.content as Content).content.length < 3) {
+      return true;
+    }
+
+    const loseInterestWords = [
+      // telling the bot to stop talking
+      "shut up",
+      "stop",
+      "dont talk",
+      "silence",
+      "stop talking",
+      "be quiet",
+      "hush",
+      "stfu",
+      "stupid bot",
+      "dumb bot",
+
+      // offensive words
+      "fuck",
+      "shit",
+      "damn",
+      "suck",
+      "dick",
+      "cock",
+      "sex",
+      "sexy",
+    ];
+    if (
+      (message.content as Content).content.length < 50 &&
+      loseInterestWords.some((word) =>
+        (message.content as Content).content.toLowerCase().includes(word),
+      )
+    ) {
+      return true;
+    }
+
+    const ignoreWords = ["k", "ok", "bye", "lol", "nm", "uh"];
+    if (
+      (message.content as Content).content.length < 8 &&
+      ignoreWords.some((word) =>
+        (message.content as Content).content.toLowerCase().includes(word),
+      )
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   async scanGuild(guild: Guild) {
@@ -254,9 +529,9 @@ export class VoiceManager extends EventEmitter {
     };
     const closeHandler = () => {
       console.log(`Opus decoder for ${member?.displayName} closed`);
-      opusDecoder.removeListener('error', errorHandler);
-      opusDecoder.removeListener('close', closeHandler);
-      receiveStream?.removeListener('close', streamCloseHandler);
+      opusDecoder.removeListener("error", errorHandler);
+      opusDecoder.removeListener("close", closeHandler);
+      receiveStream?.removeListener("close", streamCloseHandler);
     };
     opusDecoder.on("error", errorHandler);
     opusDecoder.on("close", closeHandler);
@@ -349,7 +624,7 @@ export class VoiceManager extends EventEmitter {
   async textToSpeech(text: string): Promise<Readable> {
     // check for elevenlabs API key
     if (process.env.ELEVENLABS_XI_API_KEY) {
-      return textToSpeech(text)
+      return textToSpeech(text);
     }
 
     if (!this.speechSynthesizer) {

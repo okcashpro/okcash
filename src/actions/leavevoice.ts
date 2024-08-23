@@ -6,8 +6,8 @@ import {
   Client,
   Message as DiscordMessage,
 } from "discord.js";
-import { AgentRuntime } from "../runtime.ts"
-import { Message, State, Action } from "../types.ts"
+import { AgentRuntime } from "../core/runtime.ts";
+import { Message, State, Action } from "../core/types.ts";
 
 export default {
   name: "LEAVE_VOICE",

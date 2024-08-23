@@ -9,7 +9,7 @@ import fs from "fs";
 import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
-import { Agent } from "../agent.ts"
+import { Agent } from "../agent/index.ts";
 class ImageRecognitionService {
   private modelId: string = "Xenova/moondream2";
   private device: string = "cpu";
@@ -31,10 +31,10 @@ class ImageRecognitionService {
       vision_encoder: string;
       decoder_model_merged: string;
     } = {
-        embed_tokens: "fp16",
-        vision_encoder: "q8",
-        decoder_model_merged: "q4",
-      },
+      embed_tokens: "fp16",
+      vision_encoder: "q8",
+      decoder_model_merged: "q4",
+    },
   ): Promise<void> {
     if (this.initialized) {
       return;
@@ -66,7 +66,9 @@ class ImageRecognitionService {
     this.initialized = true;
   }
 
-  async recognizeImage(imageUrl: string): Promise<string> {
+  async recognizeImage(
+    imageUrl: string,
+  ): Promise<{ title: string; description: string }> {
     console.log("recognizeImage", imageUrl);
 
     if (!this.initialized) {
@@ -81,7 +83,8 @@ class ImageRecognitionService {
     try {
       if (isGif) {
         console.log("Processing GIF: extracting first frame");
-        const { filePath, data } = await this.extractFirstFrameFromGif(imageUrl);
+        const { filePath, data } =
+          await this.extractFirstFrameFromGif(imageUrl);
         imageToProcess = filePath;
         imageData = data;
       } else {
@@ -97,12 +100,26 @@ class ImageRecognitionService {
         throw new Error("Failed to fetch image data");
       }
 
-      const prompt = "Describe this image.";
+      const prompt =
+        "Describe this image and give it a title. The first line sould be the title, and then a line break, then a detailed description of the image. Respond with the format 'title\ndescription'";
 
       if (this.device === "cloud") {
-        return await this.recognizeWithOpenAI(imageUrl, imageData, prompt, isGif);
+        const text = await this.recognizeWithOpenAI(
+          imageUrl,
+          imageData,
+          prompt,
+          isGif,
+        );
+        // split the first line off
+        const title = text.split("\n")[0];
+        const description = text.split("\n")[1];
+        return { title, description };
       } else {
-        return await this.recognizeWithXenova(imageToProcess, prompt);
+        const text = await this.recognizeWithXenova(imageToProcess, prompt);
+        // split the first line off
+        const title = text.split("\n")[0];
+        const description = text.split("\n")[1];
+        return { title, description };
       }
     } catch (error) {
       console.error("Error in recognizeImage:", error);
@@ -114,7 +131,12 @@ class ImageRecognitionService {
     }
   }
 
-  private async recognizeWithOpenAI(imageUrl: string, imageData: Buffer, prompt: string, isGif: boolean): Promise<string> {
+  private async recognizeWithOpenAI(
+    imageUrl: string,
+    imageData: Buffer,
+    prompt: string,
+    isGif: boolean,
+  ): Promise<string> {
     for (let retryAttempts = 0; retryAttempts < 3; retryAttempts++) {
       try {
         let body;
@@ -171,7 +193,10 @@ class ImageRecognitionService {
         const data = await response.json();
         return data.choices[0].message.content;
       } catch (error) {
-        console.log(`Error during OpenAI request (attempt ${retryAttempts + 1}):`, error);
+        console.log(
+          `Error during OpenAI request (attempt ${retryAttempts + 1}):`,
+          error,
+        );
         if (retryAttempts === 2) {
           throw error;
         }
@@ -180,7 +205,10 @@ class ImageRecognitionService {
     throw new Error("Failed to recognize image with OpenAI after 3 attempts");
   }
 
-  private async recognizeWithXenova(imageToProcess: string, prompt: string): Promise<string> {
+  private async recognizeWithXenova(
+    imageToProcess: string,
+    prompt: string,
+  ): Promise<string> {
     console.log("using Xenova model for image recognition");
     try {
       const image = await RawImage.fromURL(imageToProcess);

@@ -1,5 +1,5 @@
-import { type AgentRuntime } from "../runtime.ts"
-import { ActionExample, type Action, type Message } from "../types.ts"
+import { type AgentRuntime } from "../core/runtime.ts";
+import { ActionExample, type Action, type Message } from "../core/types.ts";
 
 export default {
   name: "IGNORE",
@@ -17,9 +17,6 @@ export default {
     runtime: AgentRuntime,
     message: Message,
   ): Promise<boolean> => {
-    if (runtime.debugMode) {
-      console.log("Ignored message: ", message.content);
-    }
     return true;
   },
   condition: "The agent wants to ignore the user",

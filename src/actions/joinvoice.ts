@@ -8,10 +8,10 @@ import {
   Guild,
   GuildMember,
 } from "discord.js";
-import { composeContext } from "../context.ts"
-import { log_to_file } from "../logger.ts"
-import { AgentRuntime } from "../runtime.ts"
-import { Action, Message, State } from "../types.ts"
+import { composeContext } from "../core/context.ts";
+import { log_to_file } from "../core/logger.ts";
+import { AgentRuntime } from "../core/runtime.ts";
+import { Action, Message, State } from "../core/types.ts";
 
 export default {
   name: "JOIN_VOICE",
@@ -148,7 +148,7 @@ You should only respond with the name of the voice channel or none, no commentar
           body: { message, context, response },
           user_id: message.user_id,
           room_id: message.room_id,
-          type: "elaborate",
+          type: "joinvoice",
         });
         if (response.trim()) {
           responseContent = response.trim();

@@ -1,8 +1,8 @@
-import { composeContext } from "../context.ts"
-import logger from "../logger.ts"
-import { type AgentRuntime } from "../runtime.ts"
-import { ActionExample, Content, Memory, type Message } from "../types.ts"
-import { parseJsonArrayFromText } from "../parsing.ts"
+import { composeContext } from "../core/context.ts";
+import logger from "../core/logger.ts";
+import { type AgentRuntime } from "../core/runtime.ts";
+import { ActionExample, Content, Memory, type Message } from "../core/types.ts";
+import { parseJsonArrayFromText } from "../core/parsing.ts";
 
 export const formatFacts = (facts: Memory[]) => {
   const messageStrings = facts
@@ -65,10 +65,6 @@ async function handler(runtime: AgentRuntime, message: Message) {
     template,
   });
 
-  if (runtime.debugMode) {
-    logger.log(context, "Fact context", "cyan");
-  }
-
   let facts;
 
   for (let i = 0; i < 3; i++) {
@@ -86,14 +82,7 @@ async function handler(runtime: AgentRuntime, message: Message) {
   }
 
   if (!facts) {
-    if (runtime.debugMode) {
-      logger.warn("No fact generated");
-    }
     return [];
-  }
-
-  if (runtime.debugMode) {
-    logger.log(JSON.stringify(facts), "Fact Output", "cyan");
   }
 
   const filteredFacts = facts

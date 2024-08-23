@@ -3,17 +3,13 @@ import {
   Message as DiscordMessage,
   TextChannel,
 } from "discord.js";
-import { AgentRuntime } from "../runtime.ts"
-import {
-  Message,
-  Provider,
-  State,
-} from "../types.ts"
+import { AgentRuntime } from "../core/runtime.ts";
+import { Message, Provider, State } from "../core/types.ts";
 
 const channelStateProvider: Provider = {
   get: async (runtime: AgentRuntime, message: Message, state?: State) => {
     const discordMessage = state?.discordMessage as DiscordMessage;
-    console.log('discordMessage', discordMessage)
+    console.log("discordMessage", discordMessage);
     const guild = discordMessage?.guild;
     const agentName = state?.agentName || "The agent";
     const senderName = state?.senderName || "someone";
@@ -39,7 +35,10 @@ const channelStateProvider: Provider = {
       "` (@" +
       guildId +
       ")";
-    if (channel.type === ChannelType.GuildText && (channel as TextChannel).topic) {
+    if (
+      channel.type === ChannelType.GuildText &&
+      (channel as TextChannel).topic
+    ) {
       // Check if the channel is a text channel
       response +=
         "\nThe topic of the channel is: " + (channel as TextChannel).topic;

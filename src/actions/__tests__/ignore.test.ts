@@ -1,23 +1,23 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test/createRuntime.ts"
+import { createRuntime } from "../../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversationTroll1,
   GetTellMeAboutYourselfConversationTroll2,
   Goodbye1,
-} from "../../test/data.ts"
-import { getOrCreateRelationship } from "../../test/getOrCreateRelationship.ts"
-import { populateMemories } from "../../test/populateMemories.ts"
-import { runAiTest } from "../../test/runAiTest.ts"
-import { type User } from "../../test/types.ts"
-import { zeroUuid } from "../../constants.ts"
-import { composeContext } from "../../context.ts"
-import logger from "../../logger.ts"
-import { embeddingZeroVector } from "../../memory.ts"
-import { type AgentRuntime } from "../../runtime.ts"
-import { messageHandlerTemplate } from "../../templates.ts"
-import { Content, State, type Message, type UUID } from "../../types.ts"
-import { parseJSONObjectFromText } from "../../parsing.ts"
-import action from "../IGNORE"
+} from "../../test_resources/data.ts";
+import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../../test_resources/populateMemories.ts";
+import { runAiTest } from "../../test_resources/runAiTest.ts";
+import { type User } from "../../test_resources/types.ts";
+import { zeroUuid } from "../../core/constants.ts";
+import { composeContext } from "../../core/context.ts";
+import logger from "../../core/logger.ts";
+import { embeddingZeroVector } from "../../core/memory.ts";
+import { type AgentRuntime } from "../../core/runtime.ts";
+import { messageHandlerTemplate } from "../../test_resources/templates.ts";
+import { Content, State, type Message, type UUID } from "../../core/types.ts";
+import { parseJSONObjectFromText } from "../../core/parsing.ts";
+import action from "../IGNORE";
 
 async function handleMessage(
   runtime: AgentRuntime,
@@ -51,10 +51,6 @@ async function handleMessage(
     state,
     template: messageHandlerTemplate,
   });
-
-  if (runtime.debugMode) {
-    logger.log(context, "Response Context", "cyan");
-  }
 
   let responseContent: Content | null = null;
   const { user_id, room_id } = message;

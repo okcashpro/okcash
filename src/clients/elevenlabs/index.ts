@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import settings from "../../settings.ts"
+import settings from "../../core/settings.ts";
 import { Readable, PassThrough } from "stream";
 
 export function getWavHeader(

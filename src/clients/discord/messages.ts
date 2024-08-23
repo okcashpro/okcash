@@ -1,22 +1,56 @@
 import { UUID } from "crypto";
 import { Client, Message as DiscordMessage } from "discord.js";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../agent.ts";
-import { composeContext } from "../../context.ts";
-import { adapter } from "../../db.ts";
-import { log_to_file } from "../../logger.ts";
-import { embeddingZeroVector } from "../../memory.ts";
-import { parseJSONObjectFromText } from "../../parsing.ts";
+import { Agent } from "../../agent/index.ts";
+import { composeContext } from "../../core/context.ts";
+import { adapter } from "../../agent/db.ts";
+import { log_to_file } from "../../core/logger.ts";
+import { embeddingZeroVector } from "../../core/memory.ts";
+import { parseJSONObjectFromText } from "../../core/parsing.ts";
 import { BrowserService } from "../../services/browser.ts";
 import ImageRecognitionService from "../../services/imageRecognition.ts";
+import { generateSummary } from "../../services/summary.ts";
 import { TranscriptionService } from "../../services/transcription.ts";
 import { YouTubeService } from "../../services/youtube.ts";
-import settings from "../../settings.ts";
-import { Actor, Content, Media, Message, State } from "../../types.ts";
-import { InterestChannels } from "./types.ts";
-
+import settings from "../../core/settings.ts";
+import { Actor, Content, Media, Message, State } from "../../core/types.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
+import { InterestChannels } from "./types.ts";
+
+import { TextChannel } from "discord.js";
+
+const MAX_MESSAGE_LENGTH = 1900;
+
+export async function sendMessageInChunks(
+  channel: TextChannel,
+  content: string,
+): Promise<void> {
+  const messages = splitMessage(content);
+  for (const message of messages) {
+    await channel.send(message);
+  }
+}
+
+function splitMessage(content: string): string[] {
+  const messages: string[] = [];
+  let currentMessage = "";
+
+  const lines = content.split("\n");
+  for (const line of lines) {
+    if (currentMessage.length + line.length + 1 > MAX_MESSAGE_LENGTH) {
+      messages.push(currentMessage.trim());
+      currentMessage = "";
+    }
+    currentMessage += line + "\n";
+  }
+
+  if (currentMessage.trim().length > 0) {
+    messages.push(currentMessage.trim());
+  }
+
+  return messages;
+}
 
 export class MessageManager {
   private client: Client;
@@ -34,20 +68,21 @@ export class MessageManager {
     discordClient: any,
     client: Client,
     agent: Agent,
-    character: any
+    character: any,
   ) {
     this.client = client;
     this.discordClient = discordClient;
     this.agent = agent;
     this.character = character;
-    this.browserService = new BrowserService();
+    this.browserService = new BrowserService(agent);
     this.transcriptionService = new TranscriptionService();
     this.youtubeService = new YouTubeService(this.transcriptionService);
     this.imageRecognitionService = new ImageRecognitionService(this.agent);
     this.attachmentManager = new AttachmentManager(
+      agent,
       this.imageRecognitionService,
       this.browserService,
-      this.youtubeService
+      this.youtubeService,
     );
   }
 
@@ -58,7 +93,7 @@ export class MessageManager {
   private async ensureUserExists(
     agentId: UUID,
     userName: string,
-    botToken: string | null = null
+    botToken: string | null = null,
   ) {
     if (!userName && botToken) {
       userName = this.character?.name || (await this.fetchBotName(botToken));
@@ -89,7 +124,7 @@ export class MessageManager {
     }
   }
 
-  async handleMessageCreate(message: DiscordMessage) {
+  async handleMessage(message: DiscordMessage) {
     if (message.interaction || message.author?.bot) return;
 
     const user_id = message.author.id as UUID;
@@ -100,10 +135,10 @@ export class MessageManager {
 
     try {
       const { processedContent, attachments } =
-        await this.processMessageContent(message);
+        await this.processMessageMedia(message);
 
       const audioAttachments = message.attachments.filter((attachment) =>
-        attachment.contentType?.startsWith("audio/")
+        attachment.contentType?.startsWith("audio/"),
       );
       if (audioAttachments.size > 0) {
         const processedAudioAttachments =
@@ -111,22 +146,185 @@ export class MessageManager {
         attachments.push(...processedAudioAttachments);
       }
 
-      await this.handleMessageWithMedia(
-        message,
-        user_id,
-        userName,
-        channelId,
-        processedContent,
-        attachments
+      const room_id = getUuid(channelId) as UUID;
+      const userIdUUID = getUuid(user_id) as UUID;
+      const agentId = getUuid(this.character.name as string) as UUID;
+
+      await this.ensureUserExists(
+        agentId,
+        this.character?.name ||
+          (await this.fetchBotName(this.discordClient.apiToken)),
+      );
+      await this.ensureUserExists(userIdUUID, userName);
+      await this.agent.ensureRoomExists(room_id);
+      await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
+      await this.agent.ensureParticipantInRoom(agentId, room_id);
+
+      let shouldIgnore = false;
+      let shouldRespond = true;
+
+      const callback = (content: Content) => {
+        message.channel.send(content.content);
+      };
+
+      const content: Content = {
+        content: processedContent,
+        action: "WAIT",
+        attachments: attachments,
+      };
+
+      let state = (await this.agent.runtime.composeState(
+        { content, user_id: userIdUUID, room_id },
+        {
+          discordClient: this.client,
+          discordMessage: message,
+          agentName: this.character.name || this.client.user?.displayName,
+        },
+      )) as State;
+
+      let allAttachments = attachments || [];
+
+      if (state.recentMessagesData && Array.isArray(state.recentMessagesData)) {
+        allAttachments = allAttachments.concat(
+          state.recentMessagesData.flatMap(
+            (msg) => msg.content.attachments || [],
+          ),
+        );
+      }
+
+      const formattedAttachments = allAttachments
+        .map(
+          (attachment) =>
+            `ID: ${attachment.id}
+Name: ${attachment.title}
+URL: ${attachment.url}
+Type: ${attachment.source}
+Description: ${attachment.description}
+Content: ${attachment.text}
+`,
+        )
+        .join("\n");
+
+      state = {
+        ...state,
+        attachments: formattedAttachments,
+      };
+
+      const messageToHandle: Message = {
+        ...{ content, user_id: userIdUUID, room_id },
+        content: {
+          ...content,
+          attachments,
+        },
+      };
+
+      await this._saveRequestMessage(messageToHandle, state);
+
+      state = await this.agent.runtime.updateRecentMessageState(state);
+
+      state = {
+        ...state,
+        attachments: formattedAttachments,
+      };
+
+      if (!shouldIgnore) {
+        shouldIgnore = await this._shouldIgnore(message);
+      }
+
+      if (shouldIgnore) {
+        return;
+      }
+      console.log("Interest handling");
+      const hasInterest = this._checkInterest(channelId);
+
+      if ((!shouldRespond && hasInterest) || (shouldRespond && !hasInterest)) {
+        shouldRespond = await this._shouldRespond(message, state);
+      }
+
+      if (!shouldRespond) {
+        return;
+      }
+
+      let context = composeContext({
+        state,
+        template: messageHandlerTemplate,
+      });
+
+      const responseContent = await this._generateResponse(
+        messageToHandle,
+        state,
+        context,
+      );
+
+      await this._saveResponseMessage(messageToHandle, state, responseContent);
+
+      if (responseContent.content) {
+        await sendMessageInChunks(
+          message.channel as TextChannel,
+          responseContent.content,
+        );
+      }
+
+      await this.agent.runtime.processActions(
+        messageToHandle,
+        responseContent,
+        state,
+        callback,
       );
     } catch (error) {
       console.error("Error handling message:", error);
       message.channel.send(
-        "Sorry, I encountered an error while processing your request."
+        "Sorry, I encountered an error while processing your request.",
       );
-    } finally {
-      await this.browserService.closeBrowser();
     }
+  }
+
+  async processMessageMedia(
+    message: DiscordMessage,
+  ): Promise<{ processedContent: string; attachments: Media[] }> {
+    let processedContent = message.content;
+    let attachments: Media[] = [];
+
+    // Process message attachments
+    if (message.attachments.size > 0) {
+      attachments = await this.attachmentManager.processAttachments(
+        message.attachments,
+      );
+    }
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urls = processedContent.match(urlRegex) || [];
+
+    for (const url of urls) {
+      if (this.youtubeService.isVideoUrl(url)) {
+        const videoInfo = await this.youtubeService.processVideo(url);
+        attachments.push({
+          id: `youtube-${Date.now()}`,
+          url: url,
+          title: videoInfo.title,
+          source: "YouTube",
+          description: videoInfo.description,
+          text: videoInfo.text,
+        });
+      } else {
+        const { title, bodyContent } =
+          await this.browserService.getPageContent(url);
+        const { title: newTitle, description } = await generateSummary(
+          this.agent.runtime,
+          title + "\n" + bodyContent,
+        );
+        attachments.push({
+          id: `webpage-${Date.now()}`,
+          url: url,
+          title: newTitle || "Web Page",
+          source: "Web",
+          description,
+          text: bodyContent,
+        });
+      }
+    }
+
+    return { processedContent, attachments };
   }
 
   private async _saveRequestMessage(message: Message, state: State) {
@@ -135,7 +333,7 @@ export class MessageManager {
     if ((content as Content).content) {
       const data2 = adapter.db
         .prepare(
-          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1"
+          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
         )
         .all("messages", message.user_id, message.room_id) as {
         content: Content;
@@ -170,235 +368,10 @@ export class MessageManager {
     }
   }
 
-  async processMessageContent(
-    message: DiscordMessage
-  ): Promise<{ processedContent: string; attachments: Media[] }> {
-    let processedContent = message.content;
-    let attachments: Media[] = [];
-
-    if (message.attachments.size > 0) {
-      attachments = await this.attachmentManager.processAttachments(
-        message.attachments
-      );
-    }
-
-    const urls = this.extractUrls(processedContent);
-    if (urls.length > 0) {
-      const { updatedContent, urlAttachments } = await this.processUrls(
-        processedContent,
-        urls
-      );
-      processedContent = updatedContent;
-      attachments = attachments.concat(urlAttachments);
-    }
-
-    return { processedContent, attachments };
-  }
-
-  private async processUrls(
-    content: string,
-    urls: string[]
-  ): Promise<{ updatedContent: string; urlAttachments: Media[] }> {
-    let updatedContent = content;
-    const urlAttachments: Media[] = [];
-
-    for (const url of urls) {
-      if (this.youtubeService.isVideoUrl(url)) {
-        const videoInfo = await this.youtubeService.processVideo(url);
-        urlAttachments.push({
-          id: `youtube-${Date.now()}`,
-          url: url,
-          title: videoInfo.title,
-          source: "YouTube",
-          description: videoInfo.description,
-          text: videoInfo.text,
-        });
-      } else {
-        const pageContent = await this.browserService.getPageContent(url);
-        urlAttachments.push({
-          id: `webpage-${Date.now()}`,
-          url: url,
-          title: "Web Page",
-          source: "Web",
-          description: pageContent.slice(0, 100) + "...",
-          text: pageContent,
-        });
-      }
-
-      const replacement = `[${urlAttachments[urlAttachments.length - 1].title}]`;
-      updatedContent = updatedContent.replace(url, replacement);
-    }
-
-    return { updatedContent, urlAttachments };
-  }
-
-  async handleMessageWithMedia(
-    message: DiscordMessage,
-    user_id: UUID,
-    userName: string,
-    channelId: string,
-    processedContent: string,
-    attachments: Media[]
-  ) {
-    const room_id = getUuid(channelId) as UUID;
-    const userIdUUID = getUuid(user_id) as UUID;
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
-
-    await this.ensureUserExists(
-      agentId,
-      this.character?.name ||
-        (await this.fetchBotName(this.discordClient.apiToken))
-    );
-    await this.ensureUserExists(userIdUUID, userName);
-    await this.agent.ensureRoomExists(room_id);
-    await this.agent.ensureParticipantInRoom(userIdUUID, room_id);
-    await this.agent.ensureParticipantInRoom(agentId, room_id);
-
-    const callback = (response: string) => {
-      message.channel.send(response);
-    };
-
-    const content: Content = {
-      content: processedContent,
-      action: "WAIT",
-      attachments: attachments,
-    };
-
-    const state = await this.agent.runtime.composeState(
-      { content, user_id: userIdUUID, room_id },
-      {
-        discordClient: this.client,
-        discordMessage: message,
-        agentName: this.character.name || this.client.user?.displayName,
-      }
-    );
-
-    const response = await this.handleMessage({
-      message: {
-        content,
-        user_id: userIdUUID,
-        room_id,
-      },
-      callback,
-      discordMessage: message,
-      state,
-      attachments,
-    });
-
-    const responseContent = (response.responseMessage ||
-      response.content ||
-      response.message) as string;
-
-    if (responseContent) {
-      message.channel.send(responseContent);
-    }
-  }
-
-  async handleMessage({
-    message,
-    hasInterest = true,
-    shouldIgnore = false,
-    shouldRespond = true,
-    callback,
-    state,
-    discordMessage,
-    attachments = [],
-  }: {
-    message: Message;
-    hasInterest?: boolean;
-    shouldIgnore?: boolean;
-    shouldRespond?: boolean;
-    callback: (response: string) => void;
-    state?: State;
-    discordMessage?: DiscordMessage;
-    attachments?: Media[];
-  }): Promise<Content> {
-    if (!message.content.content) {
-      return { content: "", action: "IGNORE" };
-    }
-
-    let allAttachments = attachments || [];
-
-    if (state.recentMessagesData && Array.isArray(state.recentMessagesData)) {
-      allAttachments = allAttachments.concat(
-        state.recentMessagesData.flatMap((msg) => msg.content.attachments || [])
-      );
-    }
-
-    const formattedAttachments = allAttachments
-      .map(
-        (attachment) =>
-          `Name: ${attachment.title}
-URL: ${attachment.url}
-Type: ${attachment.source}
-Description: ${attachment.description}
-Content: ${attachment.text}
-`
-      )
-      .join("\n");
-
-    state = {
-      ...state,
-      attachments: formattedAttachments,
-    };
-
-    message = {
-      ...message,
-      content: {
-        ...message.content,
-        attachments,
-      },
-    };
-
-    await this._saveRequestMessage(message, state);
-
-    state = await this.agent.runtime.updateRecentMessageState(state);
-
-    state = {
-      ...state,
-      attachments: formattedAttachments,
-    };
-
-    if (shouldIgnore) {
-      return { content: "", action: "IGNORE" };
-    }
-
-    if (!shouldRespond && hasInterest) {
-      shouldRespond = await this._checkShouldRespond(state, discordMessage);
-    }
-
-    if (!shouldRespond) {
-      return { content: "", action: "IGNORE" };
-    }
-
-    let context = composeContext({
-      state,
-      template: messageHandlerTemplate,
-    });
-
-    const responseContent = await this._generateResponse(
-      message,
-      state,
-      context
-    );
-
-    await this._saveResponseMessage(message, state, responseContent);
-
-    this.agent.runtime
-      .processActions(message, responseContent, state)
-      .then((response: unknown) => {
-        if (response && (response as Content).content) {
-          callback((response as Content).content);
-        }
-      });
-
-    return responseContent;
-  }
-
   private async _saveResponseMessage(
     message: Message,
     state: State,
-    responseContent: Content
+    responseContent: Content,
   ) {
     const { room_id } = message;
     const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
@@ -418,59 +391,179 @@ Content: ${attachment.text}
     }
   }
 
-  private async _checkShouldRespond(
+  private _checkInterest(channelId: string): boolean {
+    return !!this.interestChannels[channelId];
+  }
+
+  private async _shouldIgnore(message: DiscordMessage): Promise<boolean> {
+    let messageContent = message.content.toLowerCase();
+
+    // Replace the bot's @ping with the character name
+    const botMention = `<@!?${this.client.user?.id}>`;
+    messageContent = messageContent.replace(
+      new RegExp(botMention, "gi"),
+      this.character.name.toLowerCase(),
+    );
+
+    // Replace the bot's username with the character name
+    const botUsername = this.client.user?.username.toLowerCase();
+    messageContent = messageContent.replace(
+      new RegExp(`\\b${botUsername}\\b`, "g"),
+      this.character.name.toLowerCase(),
+    );
+
+    // strip all special characters
+    messageContent = messageContent.replace(/[^a-zA-Z0-9\s]/g, "");
+
+    // short responses where ruby should stop talking and disengage unless mentioned again
+    const loseInterestWords = [
+      "shut up",
+      "stop",
+      "please shut up",
+      "shut up please",
+      "dont talk",
+      "silence",
+      "stop talking",
+      "be quiet",
+      "hush",
+      "wtf",
+      "chill",
+      "stfu",
+      "stupid bot",
+      "dumb bot",
+      "stop responding",
+      "god damn it",
+      "god damn",
+      "goddamnit",
+      "can you not",
+      "can you stop",
+      "be quiet",
+      "hate you",
+      "hate this",
+      "fuck up",
+    ];
+    if (
+      messageContent.length < 100 &&
+      loseInterestWords.some((word) => messageContent.includes(word))
+    ) {
+      delete this.interestChannels[message.channelId];
+      return true;
+    }
+
+    const ignoreWords = ["fuck", "shit", "dick", "cock", "sex", "sexy"];
+    if (
+      messageContent.length < 50 &&
+      ignoreWords.some((word) => messageContent.includes(word))
+    ) {
+      return true;
+    }
+
+    const targetedPhrases = [
+      this.character.name + " stop responding",
+      this.character.name + " stop talking",
+      this.character.name + " shut up",
+      this.character.name + " stfu",
+      "stop talking" + this.character.name,
+      this.character.name + " stop talking",
+      "shut up " + this.character.name,
+      this.character.name + " shut up",
+      "stfu " + this.character.name,
+      this.character.name + " stfu",
+      "chill" + this.character.name,
+      this.character.name + " chill",
+    ];
+
+    // lose interest if pinged and told to stop responding
+    if (targetedPhrases.some((phrase) => messageContent.includes(phrase))) {
+      delete this.interestChannels[message.channelId];
+      return true;
+    }
+
+    // if the message is short, ignore but maintain interest
+    if (
+      !this.interestChannels[message.channelId] &&
+      messageContent.length < 2
+    ) {
+      return true;
+    }
+
+    const ignoreResponseWords = [
+      "lol",
+      "nm",
+      "uh",
+      "wtf",
+      "stfu",
+      "dumb",
+      "jfc",
+      "omg",
+    ];
+    if (
+      message.content.length < 4 &&
+      ignoreResponseWords.some((word) =>
+        message.content.toLowerCase().includes(word),
+      )
+    ) {
+      return true;
+    }
+    console.log("Not ignoring message:", message.content);
+    return false;
+  }
+
+  private async _shouldRespond(
+    message: DiscordMessage,
     state: State,
-    discordMessage: DiscordMessage
   ): Promise<boolean> {
-    const interestChannels = this.interestChannels;
+    if (message.author.id === this.client.user?.id) return false;
+    if (message.author.bot) return false;
+    if (message.mentions.has(this.client.user?.id as string)) return true;
+
+    const guild = message.guild;
+    const member = guild?.members.cache.get(this.client.user?.id as string);
+    const nickname = member?.nickname;
+
+    if (
+      message.content
+        .toLowerCase()
+        .includes(this.client.user?.username.toLowerCase() as string) ||
+      message.content
+        .toLowerCase()
+        .includes(this.client.user?.tag.toLowerCase() as string) ||
+      (nickname &&
+        message.content.toLowerCase().includes(nickname.toLowerCase()))
+    ) {
+      console.log("*** SHOULD RESPOND RESPONSE ***", "MENTIONED");
+      return true;
+    }
+
+    if (!message.guild) {
+      console.log("*** SHOULD RESPOND RESPONSE ***", "NO GUILD");
+      return true;
+    }
+
+    // If none of the above conditions are met, use the completion to decide
     const shouldRespondContext = composeContext({
       state,
       template: shouldRespondTemplate,
     });
 
-    const datestr = new Date().toISOString().replace(/:/g, "-");
+    const response = await this.agent.runtime.completion({
+      context: shouldRespondContext,
+      stop: [],
+    });
 
-    // log context to file
-    log_to_file(
-      `${state.agentName}_${datestr}_shouldrespond_context`,
-      shouldRespondContext
-    );
+    console.log("*** SHOULD RESPOND RESPONSE ***", response);
 
-    let response;
-
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      try {
-        response = await this.agent.runtime.completion({
-          context: shouldRespondContext,
-          temperature: 0.1,
-          frequency_penalty: 0.0,
-          presence_penalty: 0.0,
-        });
-        log_to_file(
-          `${state.agentName}_${datestr}_shouldrespond_response`,
-          response
-        );
-      } catch (error) {
-        console.error("Error in _checkShouldRespond:", error);
-        console.log("Retrying...");
-      }
-    }
-
-    if (response == null) {
-      console.error("No response in _checkShouldRespond");
-      return false;
-    }
-
-    if (response.toLowerCase().includes("respond")) {
+    // Parse the response and determine if the agent should respond
+    const lowerResponse = response.toLowerCase().trim();
+    if (lowerResponse.includes("respond")) {
       return true;
-    } else if (response.toLowerCase().includes("ignore")) {
+    } else if (lowerResponse.includes("ignore")) {
       return false;
-    } else if (response.toLowerCase().includes("stop")) {
-      if (interestChannels && this.interestChannels[discordMessage.channelId])
-        delete this.interestChannels[discordMessage.channelId];
+    } else if (lowerResponse.includes("stop")) {
+      delete this.interestChannels[message.channelId];
       return false;
     } else {
-      console.error("Invalid response:", response);
+      console.error("Invalid response from completion:", response);
       return false;
     }
   }
@@ -478,7 +571,7 @@ Content: ${attachment.text}
   private async _generateResponse(
     message: Message,
     state: State,
-    context: string
+    context: string,
   ): Promise<Content> {
     let responseContent: Content | null = null;
     const { user_id, room_id } = message;
@@ -518,12 +611,12 @@ Content: ${attachment.text}
 
       adapter.db
         .prepare(
-          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)"
+          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
         )
         .run([values.body, values.user_id, values.room_id, values.type]);
 
       const parsedResponse = parseJSONObjectFromText(
-        response
+        response,
       ) as unknown as Content;
       // if (
       //   !(parsedResponse?.user as string)?.includes(
@@ -551,26 +644,6 @@ Content: ${attachment.text}
     return responseContent;
   }
 
-  private async summarizeContent(content: string): Promise<string> {
-    const prompt = `Summarize the following content in a concise manner:\n\n${content}`;
-
-    for (let i = 0; i < 3; i++) {
-      try {
-        const response = await this.agent.runtime.completion({
-          context: prompt,
-          model: "gpt-4",
-          temperature: 0.7,
-        });
-        return response;
-      } catch (error) {
-        console.error(`Attempt ${i + 1} failed:`, error);
-        if (i === 2) throw error;
-      }
-    }
-
-    throw new Error("Failed to summarize content after 3 attempts");
-  }
-
   async fetchBotName(botToken: string) {
     const url = "https://discord.com/api/v10/users/@me";
 
@@ -587,10 +660,5 @@ Content: ${attachment.text}
 
     const data = await response.json();
     return data.username;
-  }
-
-  private extractUrls(content: string): string[] {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return content.match(urlRegex) || [];
   }
 }

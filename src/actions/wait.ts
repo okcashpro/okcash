@@ -1,5 +1,5 @@
-import { type AgentRuntime } from "../runtime.ts"
-import { type Action, type Message } from "../types.ts"
+import { type AgentRuntime } from "../core/runtime.ts";
+import { type Action, type Message } from "../core/types.ts";
 
 export default {
   name: "WAIT",
@@ -14,9 +14,6 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _message: Message,
   ): Promise<boolean> => {
-    if (runtime.debugMode) {
-      console.log("Waited.");
-    }
     return true;
   },
   condition: "The agent wants to wait for the user to respond",

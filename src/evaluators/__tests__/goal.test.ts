@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test/createRuntime.ts"
-import { getOrCreateRelationship } from "../../test/getOrCreateRelationship.ts"
-import { populateMemories } from "../../test/populateMemories.ts"
-import { runAiTest } from "../../test/runAiTest.ts"
-import { type User } from "../../test/types.ts"
-import { defaultActions } from "../../actions.ts"
-import { zeroUuid } from "../../constants.ts"
-import { createGoal, getGoals } from "../../goals.ts"
-import { type AgentRuntime } from "../../runtime.ts"
+import { createRuntime } from "../../test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../../test_resources/populateMemories.ts";
+import { runAiTest } from "../../test_resources/runAiTest.ts";
+import { type User } from "../../test_resources/types.ts";
+import { defaultActions } from "../../core/actions.ts";
+import { zeroUuid } from "../../core/constants.ts";
+import { createGoal, getGoals } from "../../core/goals.ts";
+import { type AgentRuntime } from "../../core/runtime.ts";
 import {
   Goal,
   GoalStatus,
@@ -15,8 +15,8 @@ import {
   State,
   type Message,
   type UUID,
-} from "../../types.ts"
-import evaluator from "../goal.ts"
+} from "../../core/types.ts";
+import evaluator from "../goal.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

@@ -1,5 +1,5 @@
 import { UUID } from "crypto";
-import { Content } from "../../types.ts"
+import { Content } from "../../core/types.ts";
 
 export type InterestChannels = {
   [key: string]: {

@@ -1,4 +1,4 @@
-import { SpeechSynthesizer } from "../services/speechSynthesis.ts"
+import { SpeechSynthesizer } from "../services/speechSynthesis.ts";
 
 class SpeechSynthesisService {
   private speechSynthesizer: SpeechSynthesizer | null = null;

@@ -1,12 +1,13 @@
-import { getDocument, PDFDocumentProxy } from 'pdfjs-dist';
-import { TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api';
+import { getDocument, PDFDocumentProxy } from "pdfjs-dist";
+import { TextItem, TextMarkedContent } from "pdfjs-dist/types/src/display/api";
 
 export class PdfService {
   async convertPdfToText(pdfBuffer: Buffer): Promise<string> {
     // Convert Buffer to Uint8Array
     const uint8Array = new Uint8Array(pdfBuffer);
-    
-    const pdf: PDFDocumentProxy = await getDocument({ data: uint8Array }).promise;
+
+    const pdf: PDFDocumentProxy = await getDocument({ data: uint8Array })
+      .promise;
     const numPages = pdf.numPages;
     const textPages: string[] = [];
 
@@ -16,15 +17,15 @@ export class PdfService {
       const pageText = textContent.items
         .filter(isTextItem)
         .map((item) => item.str)
-        .join(' ');
+        .join(" ");
       textPages.push(pageText);
     }
 
-    return textPages.join('\n');
+    return textPages.join("\n");
   }
 }
 
 // Type guard function
 function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
-  return 'str' in item;
+  return "str" in item;
 }

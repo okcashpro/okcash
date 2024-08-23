@@ -5,13 +5,13 @@ import {
   GatewayIntentBits,
   Guild,
   Partials,
-  Routes
+  Routes,
 } from "discord.js";
 import { EventEmitter } from "events";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../agent.ts";
-import { adapter } from "../../db.ts";
-import settings from "../../settings.ts";
+import { Agent } from "../../agent/index.ts";
+import { adapter } from "../../agent/db.ts";
+import settings from "../../core/settings.ts";
 import { commands } from "./commands.ts";
 
 import { MessageManager } from "./messages.ts";
@@ -43,8 +43,18 @@ export class DiscordClient extends EventEmitter {
     });
 
     this.agent = agent;
-    this.messageManager = new MessageManager(this, this.client, this.agent, this.character)
-    this.voiceManager = new VoiceManager(this.client, agent, this.messageManager);
+    this.messageManager = new MessageManager(
+      this,
+      this.client,
+      this.agent,
+      this.character,
+    );
+    this.voiceManager = new VoiceManager(
+      this.client,
+      agent,
+      this.messageManager,
+      this.character,
+    );
 
     this.client.once(Events.ClientReady, this.onClientReady.bind(this));
     this.client.login(this.apiToken);
@@ -54,11 +64,30 @@ export class DiscordClient extends EventEmitter {
   }
 
   private setupEventListeners() {
-    this.client.on("voiceStateUpdate", this.voiceManager.handleVoiceStateUpdate.bind(this.voiceManager));
+    // When joining to a new server
     this.client.on("guildCreate", this.handleGuildCreate.bind(this));
-    this.client.on("userStream", this.voiceManager.handleUserStream.bind(this.voiceManager));
-    this.client.on(Events.MessageCreate, this.messageManager.handleMessageCreate.bind(this.messageManager));
-    this.client.on(Events.InteractionCreate, this.handleInteractionCreate.bind(this));
+
+    // Handle voice events with the voice manager
+    this.client.on(
+      "voiceStateUpdate",
+      this.voiceManager.handleVoiceStateUpdate.bind(this.voiceManager),
+    );
+    this.client.on(
+      "userStream",
+      this.voiceManager.handleUserStream.bind(this.voiceManager),
+    );
+
+    // Handle a new message with the message manager
+    this.client.on(
+      Events.MessageCreate,
+      this.messageManager.handleMessage.bind(this.messageManager),
+    );
+
+    // Handle a new interaction
+    this.client.on(
+      Events.InteractionCreate,
+      this.handleInteractionCreate.bind(this),
+    );
   }
 
   private setupCommands() {
@@ -67,7 +96,7 @@ export class DiscordClient extends EventEmitter {
       try {
         await rest.put(
           Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
-          { body: commands }
+          { body: commands },
         );
       } catch (error) {
         console.error(error);
@@ -79,7 +108,7 @@ export class DiscordClient extends EventEmitter {
     console.log(`Logged in as ${readyClient.user?.tag}`);
     console.log("Use this URL to add the bot to your server:");
     console.log(
-      `https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`
+      `https://discord.com/oauth2/authorize?client_id=${readyClient.user?.id}&scope=bot`,
     );
     await this.onReady();
   }

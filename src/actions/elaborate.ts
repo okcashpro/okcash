@@ -1,23 +1,23 @@
-import { composeContext } from "../context.ts"
-import logger from "../logger.ts"
-import { embeddingZeroVector } from "../memory.ts"
-import { type AgentRuntime } from "../runtime.ts"
-import { messageHandlerTemplate } from "../templates.ts"
+import { composeContext } from "../core/context.ts";
+import { log_to_file } from "../core/logger.ts";
+import { embeddingZeroVector } from "../core/memory.ts";
+import { AgentRuntime } from "../core/runtime.ts";
+import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import {
-  Content,
-  State,
-  type Action,
-  type Message,
+  Action,
   ActionExample,
-} from "../types.ts"
-import { parseJSONObjectFromText } from "../parsing.ts"
+  Content,
+  Message,
+  State,
+} from "../core/types.ts";
+import { parseJSONObjectFromText } from "../core/parsing.ts";
 
 const maxContinuesInARow = 2;
 
 export default {
   name: "ELABORATE",
   description:
-    "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly! DO NOT USE WHEN ASKING A QUESTION, ALWAYS USE WAIT WHEN ASKING A QUESTION.",
+    "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly!",
   validate: async (runtime: AgentRuntime, message: Message) => {
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
@@ -25,7 +25,7 @@ export default {
       unique: false,
     });
     const agentMessages = recentMessagesData.filter(
-      (m) => m.user_id === runtime.agentId,
+      (m: { user_id: any }) => m.user_id === runtime.agentId,
     );
 
     // check if the last messages were all continues=
@@ -33,7 +33,8 @@ export default {
       const lastMessages = agentMessages.slice(0, maxContinuesInARow);
       if (lastMessages.length >= maxContinuesInARow) {
         const allContinues = lastMessages.every(
-          (m) => (m.content as Content).action === "ELABORATE",
+          (m: { content: any }) =>
+            (m.content as Content).action === "ELABORATE",
         );
         if (allContinues) {
           return false;
@@ -43,17 +44,26 @@ export default {
 
     return true;
   },
-  handler: async (runtime: AgentRuntime, message: Message, state: State) => {
+  handler: async (
+    runtime: AgentRuntime,
+    message: Message,
+    state: State,
+    options: any,
+    callback: any,
+  ) => {
     state = (await runtime.composeState(message)) as State;
+
+    console.log("discord client?");
+    console.log(state.discordClient);
 
     const context = composeContext({
       state,
       template: messageHandlerTemplate,
     });
+    const datestr = new Date().toISOString().replace(/:/g, "-");
 
-    if (runtime.debugMode) {
-      logger.log(context, "Continued Response Context", "cyan");
-    }
+    // log context to file
+    log_to_file(`${state.agentName}_${datestr}_elaborate_context`, context);
 
     let responseContent;
     const { user_id, room_id } = message;
@@ -64,9 +74,15 @@ export default {
         stop: [],
       });
 
+      // log response to file
+      log_to_file(
+        `${state.agentName}_${datestr}_elaborate_response_${3 - triesLeft}`,
+        response,
+      );
+
       runtime.databaseAdapter.log({
         body: { message, context, response },
-        user_id: user_id,
+        user_id,
         room_id,
         type: "elaborate",
       });
@@ -74,48 +90,33 @@ export default {
       const parsedResponse = parseJSONObjectFromText(
         response,
       ) as unknown as Content;
-      if (
-        (parsedResponse?.user as string).includes(state.agentName as string)
-      ) {
+
+      if (!parsedResponse) {
+        continue;
+      }
+      if ((parsedResponse?.user as any).includes(state.agentName as string)) {
         responseContent = parsedResponse;
         break;
+      } else {
+        console.log(
+          "Elaborate predicted a message from the user instead of the agent. Not elaborating.",
+        );
+        return;
       }
     }
 
     if (!responseContent) {
-      if (runtime.debugMode) {
-        logger.error("No response content");
-      }
-      // TODO: Verify that this is the correct response handling
-      return {
-        content: "No response.",
-        action: "IGNORE",
-      };
+      return;
     }
 
     // prevent repetition
     const messageExists = state.recentMessagesData
-      .filter((m) => m.user_id === runtime.agentId)
+      .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
       .slice(0, maxContinuesInARow + 1)
-      .some((m) => m.content === message.content);
+      .some((m: { content: any }) => m.content === message.content);
 
     if (messageExists) {
-      if (runtime.debugMode) {
-        logger.log(
-          "Message already exists in recentMessagesData",
-          "",
-          "yellow",
-        );
-      }
-
-      await runtime.messageManager.createMemory({
-        user_id: runtime.agentId,
-        content: responseContent,
-        room_id,
-        embedding: embeddingZeroVector,
-      });
-
-      return responseContent;
+      return;
     }
 
     const _saveResponseMessage = async (
@@ -128,8 +129,15 @@ export default {
       responseContent.content = responseContent.content?.trim();
 
       if (responseContent.content) {
+        console.log("create memory");
+        console.log("runtime.agentId");
+        console.log(runtime.agentId);
+        console.log("responseContent");
+        console.log(responseContent);
+        console.log("room_id");
+        console.log(room_id);
         await runtime.messageManager.createMemory({
-          user_id: runtime.agentId,
+          user_id: message.user_id,
           content: responseContent,
           room_id,
           embedding: embeddingZeroVector,
@@ -140,25 +148,28 @@ export default {
       }
     };
 
+    callback(responseContent);
+
     await _saveResponseMessage(message, state, responseContent);
 
     // if the action is ELABORATE, check if we are over maxContinuesInARow
     // if so, then we should change the action to WAIT
     if (responseContent.action === "ELABORATE") {
       const agentMessages = state.recentMessagesData
-        .filter((m) => m.user_id === runtime.agentId)
-        .map((m) => (m.content as Content).action);
+        .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
+        .map((m: { content: any }) => (m.content as Content).action);
 
       const lastMessages = agentMessages.slice(0, maxContinuesInARow);
       if (lastMessages.length >= maxContinuesInARow) {
-        const allContinues = lastMessages.every((m) => m === "ELABORATE");
+        const allContinues = lastMessages.every(
+          (m: string | undefined) => m === "ELABORATE",
+        );
         if (allContinues) {
           responseContent.action = "WAIT";
         }
       }
     }
 
-    await runtime.processActions(message, responseContent);
     return responseContent;
   },
   condition:
@@ -221,7 +232,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "That it’s more about moments than things.",
-          action: "WAIT",
+          action: "ELABORATE",
         },
       },
       {

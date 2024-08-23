@@ -1,14 +1,14 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test/createRuntime.ts"
-import { GetTellMeAboutYourselfConversation1 } from "../../test/data.ts"
-import { getOrCreateRelationship } from "../../test/getOrCreateRelationship.ts"
-import { populateMemories } from "../../test/populateMemories.ts"
-import { runAiTest } from "../../test/runAiTest.ts"
-import { type User } from "../../test/types.ts"
-import { zeroUuid } from "../../constants.ts"
-import { type AgentRuntime } from "../../runtime.ts"
-import { type Message, type UUID } from "../../types.ts"
-import action from "../wait.ts" // Import the wait action
+import { createRuntime } from "../../test_resources/createRuntime.ts";
+import { GetTellMeAboutYourselfConversation1 } from "../../test_resources/data.ts";
+import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../../test_resources/populateMemories.ts";
+import { runAiTest } from "../../test_resources/runAiTest.ts";
+import { type User } from "../../test_resources/types.ts";
+import { zeroUuid } from "../../core/constants.ts";
+import { type AgentRuntime } from "../../core/runtime.ts";
+import { type Message, type UUID } from "../../core/types.ts";
+import action from "../wait.ts"; // Import the wait action
 
 dotenv.config({ path: ".dev.vars" });
 
