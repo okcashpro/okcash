@@ -33,7 +33,7 @@ Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
 # Cloud Setup (with OpenAI)
 
 In addition to the environment variables above, you will need to add the following:
-
+```
 # OpenAI handles the bulk of the work with chat, TTS, image recognition, etc.
 OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
 
