@@ -140,6 +140,8 @@ class ImageRecognitionService {
 
       const detailedCaption = result["<DETAILED_CAPTION>"] as string;
 
+      // TODO: handle this better
+
       return { title: detailedCaption, description: detailedCaption };
     } catch (error) {
       console.error("Error in processImage:", error);

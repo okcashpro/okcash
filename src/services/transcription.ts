@@ -1,8 +1,12 @@
-import { nodewhisper } from 'nodejs-whisper';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
 import EventEmitter from 'events';
+import fs from 'fs';
+import { nodewhisper } from 'nodejs-whisper';
+import os from 'os';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export class TranscriptionService extends EventEmitter {
   private CONTENT_CACHE_DIR = './content_cache';
@@ -47,9 +51,18 @@ export class TranscriptionService extends EventEmitter {
     console.log('Transcribing audio with nodejs-whisper...');
 
     try {
+      // get the full path of this.CONTENT_CACHE_DIR
+      const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);
+
+      console.log("fullPath", fullPath)
+      const tempAudioFileShortPath = path.join(this.CONTENT_CACHE_DIR, `temp_${Date.now()}.mp3`);
+
       // Save the audio buffer to a temporary file
-      const tempAudioFile = path.join(this.CONTENT_CACHE_DIR, `temp_${Date.now()}.mp3`);
-      fs.writeFileSync(tempAudioFile, Buffer.from(audioBuffer));
+      const tempAudioFile = path.join(fullPath, `temp_${Date.now()}.mp3`);
+      fs.writeFileSync(tempAudioFileShortPath, Buffer.from(audioBuffer));
+
+      // wait for 1 second
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const output = await nodewhisper(tempAudioFile, {
         modelName: 'base.en',
@@ -70,7 +83,7 @@ export class TranscriptionService extends EventEmitter {
       });
 
       // Remove the temporary audio file
-      fs.unlinkSync(tempAudioFile);
+      fs.unlinkSync(tempAudioFileShortPath);
 
       console.log('Transcription output:', output);
 
