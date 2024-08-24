@@ -317,15 +317,13 @@ class LlamaService {
       grammarEvaluationState: useGrammar ? this.grammar : undefined,
       yieldEogToken: true,
     })) {
-      process.stdout.write(this.model!.detokenize([token]));
       const current = this.model!.detokenize([...responseTokens, token]);
-      console.log("current", current);
-
       if ([...stop, '://'].some(s => current.includes(s))) {
         console.log("Stop sequence found");
         break;
       }
       responseTokens.push(token);
+      process.stdout.write(this.model!.detokenize([token]));
       if(useGrammar){
         if(current.replaceAll('\n', '').includes('}```')){
           console.log("JSON block found");
