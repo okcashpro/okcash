@@ -239,7 +239,63 @@ export class AgentRuntime {
   }
 
   /**
-   * Send a message to the OpenAI API for completion.
+ * Send a message to the model for a text completion.
+ * @param opts - The options for the completion request.
+ * @param opts.context The context of the message to be completed.
+ * @param opts.stop A list of strings to stop the completion at.
+ * @param opts.model The model to use for completion.
+ * @param opts.frequency_penalty The frequency penalty to apply to the completion.
+ * @param opts.presence_penalty The presence penalty to apply to the completion.
+ * @param opts.temperature The temperature to apply to the completion.
+ * @param opts.max_context_length The maximum length of the context to apply to the completion.
+ * @returns The completed message.
+ */
+  async completion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096
+  }) {
+    console.log('*** completion context', context)
+    if (!settings.OPENAI_API_KEY) {
+      context = await this.trimTokens("gpt-4o", context, max_context_length);
+      console.log('*** completion context after trim', context)
+      return await this.llamaService.queueTextCompletion(context, temperature, stop, frequency_penalty, presence_penalty, max_response_length);
+    } else {
+      // just use openai, no difference
+      return await this.messageCompletion({ context, stop, model, frequency_penalty, presence_penalty, temperature, max_context_length, max_response_length });
+    }
+  }
+
+  /**
+   * Truncate the context to the maximum length allowed by the model.
+   * @param model The model to use for completion.
+   * @param context The context of the message to be completed.
+   * @param max_context_length The maximum length of the context to apply to the completion.
+   * @returns 
+   */
+  async trimTokens(model, context, maxTokens) {
+    // Count tokens and truncate context if necessary
+    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
+    let tokens = encoding.encode(context);
+    const textDecoder = new TextDecoder();
+    if (tokens.length > maxTokens) {
+      console.log('***** SLICE')
+      console.log("BEFORE:", tokens.length)
+      console.log("max_context_length:", maxTokens)
+      tokens = tokens.reverse().slice(maxTokens).reverse();
+      console.log("AFTER:", tokens.length)
+      context = textDecoder.decode(encoding.decode(tokens));
+    }
+    return context;
+  }
+
+  /**
+   * Send a message to the model for completion.
    * @param opts - The options for the completion request.
    * @param opts.context The context of the message to be completed.
    * @param opts.stop A list of strings to stop the completion at.
@@ -250,37 +306,30 @@ export class AgentRuntime {
    * @param opts.max_context_length The maximum length of the context to apply to the completion.
    * @returns The completed message.
    */
-  async completion({
+  async messageCompletion({
     context = "",
     stop = [],
     model = this.model,
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? "127999" : "8192",
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096
   }) {
+    context = await this.trimTokens("gpt-4o", context, max_context_length);
     if (!settings.OPENAI_API_KEY) {
-      const completionResponse = await this.llamaService.queueCompletionResponse(
+      const completionResponse = await this.llamaService.queueMessageCompletion(
         context,
         temperature,
         stop,
         frequency_penalty,
         presence_penalty,
+        max_response_length
       );
       console.log("Completion response: ", completionResponse);
       // change the 'content' to 'content'
       (completionResponse as any).content = completionResponse.content;
       return JSON.stringify(completionResponse);
-    }
-
-    // Count tokens and truncate context if necessary
-    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
-    let tokens = encoding.encode(context);
-    const maxTokens = parseInt(max_context_length);
-    const textDecoder = new TextDecoder();
-    if (tokens.length > maxTokens) {
-      tokens = tokens.slice(-maxTokens);
-      context = textDecoder.decode(encoding.decode(tokens));
     }
 
     const requestOptions = {
@@ -295,6 +344,7 @@ export class AgentRuntime {
         frequency_penalty,
         presence_penalty,
         temperature,
+        max_tokens: max_response_length,
         messages: [
           {
             role: "user",
@@ -473,7 +523,7 @@ export class AgentRuntime {
       template: evaluationTemplate,
     });
 
-    const result = await this.completion({
+    const result = await this.messageCompletion({
       context,
     });
 

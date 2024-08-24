@@ -528,7 +528,8 @@ export class MessageManager {
       try {
         response = await this.runtime.completion({
           context: shouldRespondContext,
-          stop: [],
+          stop: ['\n'],
+          max_response_length: 5
         });
         break;
       } catch (error) {
@@ -573,7 +574,7 @@ export class MessageManager {
   
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
-        response = await this.runtime.completion({
+        response = await this.runtime.messageCompletion({
           context,
           stop: [],
         });

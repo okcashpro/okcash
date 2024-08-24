@@ -55,11 +55,14 @@ interface QueuedMessage {
   context: string;
   temperature: number;
   stop: string[];
+  max_tokens: number;
   frequency_penalty: number;
   presence_penalty: number;
-  resolve: (value: GrammarData | PromiseLike<GrammarData>) => void;
+  useGrammar: boolean;
+  resolve: (value: GrammarData | string | PromiseLike<GrammarData | string>) => void;
   reject: (reason?: any) => void;
 }
+
 
 class LlamaService {
   private llama: Llama | undefined;
@@ -69,7 +72,6 @@ class LlamaService {
   private ctx: LlamaContext | undefined;
   private sequence: LlamaContextSequence | undefined;
   private modelUrl: string;
-  private device: string[] = ["cpu"];
 
   private messageQueue: QueuedMessage[] = [];
   private isProcessing: boolean = false;
@@ -199,14 +201,15 @@ class LlamaService {
     }
   }
 
-  async queueCompletionResponse(
+  async queueMessageCompletion(
     context: string,
     temperature: number,
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
+    max_tokens: number
   ): Promise<GrammarData> {
-    console.log("Queueing completion response");
+    console.log("Queueing message completion");
     return new Promise((resolve, reject) => {
       this.messageQueue.push({
         context,
@@ -214,6 +217,33 @@ class LlamaService {
         stop,
         frequency_penalty,
         presence_penalty,
+        max_tokens,
+        useGrammar: true,
+        resolve,
+        reject,
+      });
+      this.processQueue();
+    });
+  }
+
+  async queueTextCompletion(
+    context: string,
+    temperature: number,
+    stop: string[],
+    frequency_penalty: number,
+    presence_penalty: number,
+    max_tokens: number
+  ): Promise<string> {
+    console.log("Queueing text completion");
+    return new Promise((resolve, reject) => {
+      this.messageQueue.push({
+        context,
+        temperature,
+        stop,
+        frequency_penalty,
+        presence_penalty,
+        max_tokens,
+        useGrammar: false,
         resolve,
         reject,
       });
@@ -238,7 +268,9 @@ class LlamaService {
             message.temperature,
             message.stop,
             message.frequency_penalty,
-            message.presence_penalty
+            message.presence_penalty,
+            message.max_tokens,
+            message.useGrammar
           );
           message.resolve(response);
         } catch (error) {
@@ -256,54 +288,70 @@ class LlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-  ): Promise<GrammarData> {
+    max_tokens: number,
+    useGrammar: boolean
+  ): Promise<GrammarData | string> {
     if (!this.sequence) {
       throw new Error("Model not initialized.");
     }
 
-    console.log("Processing request");
+    console.log("***** COMPLETION")
     console.log(context)
+
     const tokens = this.model!.tokenize(context);
     
-    // const repeatPenalty: LlamaContextSequenceRepeatPenalty = {
-    //   punishTokens: () => this.sequence!.contextTokens,
-    //   penalty: 1.1,
-    //   frequencyPenalty: frequency_penalty,
-    //   presencePenalty: presence_penalty
-    // };
+    const repeatPenalty: LlamaContextSequenceRepeatPenalty = {
+      punishTokens: () => this.sequence!.contextTokens,
+      penalty: 1.1,
+      frequencyPenalty: frequency_penalty,
+      presencePenalty: presence_penalty
+    };
 
     const responseTokens: Token[] = [];
     console.log("Evaluating tokens");
     for await (const token of this.sequence.evaluate(tokens, {
       temperature: Number(temperature),
-      // stopSequences: stop,
-      // repeatPenalty: repeatPenalty,
-      grammarEvaluationState: this.grammar,
+      repeatPenalty: repeatPenalty,
+      grammarEvaluationState: useGrammar ? this.grammar : undefined,
+      yieldEogToken: true,
     })) {
-      // convert token to string and add to the cmd line
       process.stdout.write(this.model!.detokenize([token]));
+      const current = this.model!.detokenize([...responseTokens, token]);
+      console.log("current", current);
+      if ([...stop, '://'].some(s => current.includes(s))) {
+        console.log("Stop sequence found");
+        break;
+      }
       responseTokens.push(token);
+      if (responseTokens.length > max_tokens) {
+        console.log("Max tokens reached");
+        break;
+      }
     }
 
     const response = this.model!.detokenize(responseTokens);
 
-    console.log("Parsing response");
     if (!response) {
       throw new Error("Response is undefined");
     }
-    const parsedResponse = (
-      this.grammar as LlamaJsonSchemaGrammar<GbnfJsonSchema>
-    ).parse(response) as unknown as GrammarData;
-    if (!parsedResponse) {
-      throw new Error("Parsed response is undefined");
+
+    if (useGrammar) {
+      const parsedResponse = (
+        this.grammar as LlamaJsonSchemaGrammar<GbnfJsonSchema>
+      ).parse(response) as unknown as GrammarData;
+      if (!parsedResponse) {
+        throw new Error("Parsed response is undefined");
+      }
+      console.log("AI: " + parsedResponse.content);
+      await this.sequence.clearHistory();
+      return parsedResponse;
+    } else {
+      console.log("AI: " + response);
+      await this.sequence.clearHistory();
+      return response;
     }
-    console.log("AI: " + parsedResponse.content);
-
-    // Clear the history of the sequence after each response
-    await this.sequence.clearHistory();
-
-    return parsedResponse;
   }
+
 
   async getEmbeddingResponse(input: string): Promise<number[] | undefined> {
     if (!this.model) {

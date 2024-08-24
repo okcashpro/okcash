@@ -241,7 +241,7 @@ export class VoiceManager extends EventEmitter {
   
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
-        response = await this.runtime.completion({
+        response = await this.runtime.messageCompletion({
           context,
           stop: [],
         });

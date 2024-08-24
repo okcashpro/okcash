@@ -134,7 +134,7 @@ You should only respond with the name of the voice channel or none, no commentar
       let responseContent;
 
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        const response = await runtime.completion({
+        const response = await runtime.messageCompletion({
           context,
         });
 

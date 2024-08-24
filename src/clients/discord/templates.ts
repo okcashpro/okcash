@@ -67,67 +67,57 @@ About {{agentName}}:
 
 # INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
 
-Heuristics:
-- If the message is directed at {{agentName}}, respond.
-- If the message is highly interesting and highly relevant to {{agentName}}, respond.
-- If {{agentName}} hasn't responded in a while, ignore unless the message involves {{agentName}}.
-- If the message is short or does not contain much information, ignore.
-- If the message asks {{agentName}} to stop, stop.
-
 # RESPONSE EXAMPLES
 <user 1>: I just saw a really great movie
 <user 2>: Oh? Which movie?
-Result: IGNORE
-This was ignored because the message was not relevant to {{agentName}}.
+Result: [IGNORE]
 
 {{agentName}}: Oh, this is my favorite scene!
 <user 1>: lol sick
 <user 2>: wait, why is it your favorite scene?
-Result: RESPOND
+Result: [RESPOND]
 
 <user>: stfu bot
 <user>: i need help
-Result: IGNORE
-This was ignored because the user not not want help from {{agentName}} specifically.
+Result: [IGNORE]
 
 <user>: Hey {{agent}}, can you help me with something?
-Result: RESPOND
-This was responded to because the user wants help from {{agentName}}.
+Result: [RESPOND]
 
 <user>: Hey {{agent}}, can I ask you a question?
 {{agentName}}: Sure, what is it?
 <user>: can you ask claude to create a basic react module that demonstrates a counter?
-Result: RESPOND
+Result: [RESPOND]
 
 <user>: {{agentName}} can you tell me a story?
 {{agentName}}: Once upon a time, in a quaint little village, there was a curious girl named Elara.
 {{agentName}}: Elara was known for her adventurous spirit and her knack for finding beauty in the mundane.
 <user>: I'm loving it
-Result: RESPOND
+Result: [RESPOND]
 
 <user>: {{agentName}} stop responding
-Result: STOP
+Result: [STOP]
 
 <user>: okay, i want to test something. can you say marco?
 {{agentName}}: marco
 <user>: great. okay, now do it again
-Result: RESPOND
+Result: [RESPOND]
 
-Response options are RESPOND, IGNORE and STOP.
-
-{{agentName}} should respond to messages that are directed at them, or participate in conversations that are interesting or relevant to their background, IGNORE messages that are irrelevant to them, and should STOP if the conversation is concluded.
+Response options are [RESPOND], [IGNORE] and [STOP].
 
 {{agentName}} is in a room with other users and is very worried about being annoying and saying too much.
-{{agentName}} should RESPOND to messages that are directed at them, or participate in conversations that are interesting or relevant to their background.
-If a message is not interesting or relevant, {{agentName}} should IGNORE.
-Unless directly responding to a user, {{agentName}} should IGNORE to messages that are very short or do not contain much information.
-If a user asks {{agentName}} to be quiet, {{agentName}} should STOP!
-If {{agentName}} concludes a conversation and isn't part of the conversation anymore, {{agentName}} should STOP.
+Respond with [RESPOND] to messages that are directed at {{agentName}}, or participate in conversations that are interesting or relevant to their background.
+If a message is not interesting or relevant, respond with [IGNORE]
+Unless directly responding to a user, respond with [IGNORE] to messages that are very short or do not contain much information.
+If a user asks {{agentName}} to be quiet, respond with [STOP]
+If {{agentName}} concludes a conversation and isn't part of the conversation anymore, respond with [STOP]
 
-IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to IGNORE.
-If {{agentName}} is conversing with a user and they have not asked to stop, it is better to RESPOND.
+IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to respond with [IGNORE].
+If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
+
+# INSTRUCTIONS: Respond with [RESPOND] if {{agentName}} would respond, [IGNORE] if {{agentName}} would not respond to the last message or [STOP] if {{agentName}} would stop participating in the conversation entirely.
+
+Options: [RESPOND], [IGNORE], [STOP]
 
 {{recentMessages}}
-
-# INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, IGNORE if {{agentName}} should not respond to the last message or STOP if {{agentName}} should stop participating in the conversation entirely. Do not give any commentary. Your response should be ONE word.
-What does {{agentName}} do? Answer with RESPOND, IGNORE, STOP`;
+Result:`;

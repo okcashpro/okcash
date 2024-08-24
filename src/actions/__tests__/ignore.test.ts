@@ -56,7 +56,7 @@ async function handleMessage(
   const { user_id, room_id } = message;
 
   for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-    const response = await runtime.completion({
+    const response = await runtime.messageCompletion({
       context,
       stop: [],
     });
