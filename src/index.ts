@@ -69,11 +69,7 @@ const runtime = new AgentRuntime({
   model: "gpt-4o-mini",
   evaluators: [],
   character,
-  providers: [
-    channelStateProvider,
-    voiceStateProvider,
-    timeProvider,
-  ],
+  providers: [channelStateProvider, voiceStateProvider, timeProvider],
   actions: [
     // elaborate, // TODO: Handle elaborate with llama, and add shouldElaborate
     joinvoice,

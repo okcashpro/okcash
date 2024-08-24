@@ -8,7 +8,10 @@ import { Content, State, type Message, type UUID } from "../types.ts";
 import { createRuntime } from "../../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
 import { runAiTest } from "../../test_resources/runAiTest.ts";
-import { TEST_ACTION, TEST_ACTION_FAIL } from "../../test_resources/testAction.ts";
+import {
+  TEST_ACTION,
+  TEST_ACTION_FAIL,
+} from "../../test_resources/testAction.ts";
 import { type User } from "../../test_resources/types.ts";
 
 async function handleMessage(

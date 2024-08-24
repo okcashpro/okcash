@@ -239,17 +239,17 @@ export class AgentRuntime {
   }
 
   /**
- * Send a message to the model for a text completion.
- * @param opts - The options for the completion request.
- * @param opts.context The context of the message to be completed.
- * @param opts.stop A list of strings to stop the completion at.
- * @param opts.model The model to use for completion.
- * @param opts.frequency_penalty The frequency penalty to apply to the completion.
- * @param opts.presence_penalty The presence penalty to apply to the completion.
- * @param opts.temperature The temperature to apply to the completion.
- * @param opts.max_context_length The maximum length of the context to apply to the completion.
- * @returns The completed message.
- */
+   * Send a message to the model for a text completion.
+   * @param opts - The options for the completion request.
+   * @param opts.context The context of the message to be completed.
+   * @param opts.stop A list of strings to stop the completion at.
+   * @param opts.model The model to use for completion.
+   * @param opts.frequency_penalty The frequency penalty to apply to the completion.
+   * @param opts.presence_penalty The presence penalty to apply to the completion.
+   * @param opts.temperature The temperature to apply to the completion.
+   * @param opts.max_context_length The maximum length of the context to apply to the completion.
+   * @returns The completed message.
+   */
   async completion({
     context = "",
     stop = [],
@@ -258,16 +258,32 @@ export class AgentRuntime {
     presence_penalty = 0.0,
     temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }) {
-    console.log('*** completion context', context)
+    console.log("*** completion context", context);
     if (!settings.OPENAI_API_KEY) {
       context = await this.trimTokens("gpt-4o", context, max_context_length);
-      console.log('*** completion context after trim', context)
-      return await this.llamaService.queueTextCompletion(context, temperature, stop, frequency_penalty, presence_penalty, max_response_length);
+      console.log("*** completion context after trim", context);
+      return await this.llamaService.queueTextCompletion(
+        context,
+        temperature,
+        stop,
+        frequency_penalty,
+        presence_penalty,
+        max_response_length,
+      );
     } else {
       // just use openai, no difference
-      return await this.messageCompletion({ context, stop, model, frequency_penalty, presence_penalty, temperature, max_context_length, max_response_length });
+      return await this.messageCompletion({
+        context,
+        stop,
+        model,
+        frequency_penalty,
+        presence_penalty,
+        temperature,
+        max_context_length,
+        max_response_length,
+      });
     }
   }
 
@@ -276,7 +292,7 @@ export class AgentRuntime {
    * @param model The model to use for completion.
    * @param context The context of the message to be completed.
    * @param max_context_length The maximum length of the context to apply to the completion.
-   * @returns 
+   * @returns
    */
   async trimTokens(model, context, maxTokens) {
     // Count tokens and truncate context if necessary
@@ -284,11 +300,11 @@ export class AgentRuntime {
     let tokens = encoding.encode(context);
     const textDecoder = new TextDecoder();
     if (tokens.length > maxTokens) {
-      console.log('***** SLICE')
-      console.log("BEFORE:", tokens.length)
-      console.log("max_context_length:", maxTokens)
+      console.log("***** SLICE");
+      console.log("BEFORE:", tokens.length);
+      console.log("max_context_length:", maxTokens);
       tokens = tokens.reverse().slice(maxTokens).reverse();
-      console.log("AFTER:", tokens.length)
+      console.log("AFTER:", tokens.length);
       context = textDecoder.decode(encoding.decode(tokens));
     }
     return context;
@@ -314,7 +330,7 @@ export class AgentRuntime {
     presence_penalty = 0.0,
     temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }) {
     context = await this.trimTokens("gpt-4o", context, max_context_length);
     if (!settings.OPENAI_API_KEY) {
@@ -324,7 +340,7 @@ export class AgentRuntime {
         stop,
         frequency_penalty,
         presence_penalty,
-        max_response_length
+        max_response_length,
       );
       console.log("Completion response: ", completionResponse);
       // change the 'content' to 'content'
@@ -558,19 +574,19 @@ export class AgentRuntime {
    * Ensure the existence of a user in the database. If the user does not exist, they are added to the database.
    * @param user_id - The user ID to ensure the existence of.
    * @param userName - The user name to ensure the existence of.
-   * @returns 
+   * @returns
    */
 
   async ensureUserExists(user_id: UUID, userName: string | null) {
     const account = await this.databaseAdapter.getAccountById(user_id);
-    console.log("Account is")
-    console.log(account)
+    console.log("Account is");
+    console.log(account);
     if (!account) {
       await this.databaseAdapter.createAccount({
         id: user_id,
         name: userName || "Bot",
         email: (userName || "Bot") + "@discord",
-        details: { "summary": "" },
+        details: { summary: "" },
       });
       console.log(`User ${userName} created successfully.`);
     }
@@ -578,7 +594,8 @@ export class AgentRuntime {
 
   async ensureParticipantInRoom(user_id: UUID, roomId: UUID) {
     console.log(`Ensuring participant ${user_id} in room ${roomId}`);
-    const participants = await this.databaseAdapter.getParticipantsForRoom(roomId);
+    const participants =
+      await this.databaseAdapter.getParticipantsForRoom(roomId);
     if (!participants.includes(user_id)) {
       await this.databaseAdapter.addParticipant(user_id, roomId);
       console.log(`User ${user_id} linked to room ${roomId} successfully.`);
@@ -738,12 +755,14 @@ Text: ${attachment.text}
       .join("\n");
 
     // randomly get 3 bits of lore and join them into a paragraph, divided by \n
-    let lore = ""
+    let lore = "";
     // Assuming this.lore is an array of lore bits
     if (this.character.lore && this.character.lore.length > 0) {
-      const shuffledLore = [...this.character.lore].sort(() => Math.random() - 0.5);
+      const shuffledLore = [...this.character.lore].sort(
+        () => Math.random() - 0.5,
+      );
       const selectedLore = shuffledLore.slice(0, 3);
-      lore = selectedLore.join('\n');
+      lore = selectedLore.join("\n");
     }
 
     const initialState = {
@@ -751,7 +770,10 @@ Text: ${attachment.text}
       agentName,
       bio: this.character.bio || "",
       lore,
-      directions: (this.character?.style?.all?.join('\n') || "") + "\n" + (this.character?.style?.chat?.join('\n') || ""),
+      directions:
+        (this.character?.style?.all?.join("\n") || "") +
+        "\n" +
+        (this.character?.style?.chat?.join("\n") || ""),
       senderName,
       actors: addHeader("# Actors", actors),
       actorsData,

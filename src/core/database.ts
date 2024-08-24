@@ -284,8 +284,15 @@ export abstract class DatabaseAdapter {
    */
   abstract getParticipantsForRoom(room_id: UUID): Promise<UUID[]>;
 
-  abstract getParticipantUserState(roomId: UUID, userId: UUID): Promise<'FOLLOWED' | 'MUTED' | null>;
-  abstract setParticipantUserState(roomId: UUID, userId: UUID, state: 'FOLLOWED' | 'MUTED' | null): Promise<void>;
+  abstract getParticipantUserState(
+    roomId: UUID,
+    userId: UUID,
+  ): Promise<"FOLLOWED" | "MUTED" | null>;
+  abstract setParticipantUserState(
+    roomId: UUID,
+    userId: UUID,
+    state: "FOLLOWED" | "MUTED" | null,
+  ): Promise<void>;
 
   /**
    * Creates a new relationship between two users.

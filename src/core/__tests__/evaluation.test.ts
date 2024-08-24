@@ -3,7 +3,10 @@ import dotenv from "dotenv";
 import { createRuntime } from "../../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
 import { runAiTest } from "../../test_resources/runAiTest.ts";
-import { TEST_EVALUATOR, TEST_EVALUATOR_FAIL } from "../../test_resources/testEvaluator.ts";
+import {
+  TEST_EVALUATOR,
+  TEST_EVALUATOR_FAIL,
+} from "../../test_resources/testEvaluator.ts";
 import { type User } from "../../test_resources/types.ts";
 import { zeroUuid } from "../constants.ts";
 import { composeContext } from "../context.ts";

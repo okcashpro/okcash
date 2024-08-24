@@ -42,17 +42,17 @@ export class DiscordClient extends EventEmitter {
         GatewayIntentBits.GuildMessageTyping,
         GatewayIntentBits.GuildMessageReactions,
       ],
-      partials: [Partials.Channel, Partials.Message, Partials.User, Partials.Reaction],
+      partials: [
+        Partials.Channel,
+        Partials.Message,
+        Partials.User,
+        Partials.Reaction,
+      ],
     });
 
     this.runtime = runtime;
-    this.voiceManager = new VoiceManager(
-      this,
-    );
-    this.messageManager = new MessageManager(
-      this,
-      this.voiceManager,
-    );
+    this.voiceManager = new VoiceManager(this);
+    this.messageManager = new MessageManager(this, this.voiceManager);
 
     this.client.once(Events.ClientReady, this.onClientReady.bind(this));
     this.client.login(this.apiToken);
@@ -65,8 +65,14 @@ export class DiscordClient extends EventEmitter {
     // When joining to a new server
     this.client.on("guildCreate", this.handleGuildCreate.bind(this));
 
-    this.client.on(Events.MessageReactionAdd, this.handleReactionAdd.bind(this));
-    this.client.on(Events.MessageReactionRemove, this.handleReactionRemove.bind(this));
+    this.client.on(
+      Events.MessageReactionAdd,
+      this.handleReactionAdd.bind(this),
+    );
+    this.client.on(
+      Events.MessageReactionRemove,
+      this.handleReactionRemove.bind(this),
+    );
 
     // Handle voice events with the voice manager
     this.client.on(
@@ -128,15 +134,16 @@ export class DiscordClient extends EventEmitter {
       try {
         await reaction.fetch();
       } catch (error) {
-        console.error('Something went wrong when fetching the message:', error);
+        console.error("Something went wrong when fetching the message:", error);
         return;
       }
     }
 
     const messageContent = reaction.message.content;
-    const truncatedContent = messageContent.length > 50 
-      ? messageContent.substring(0, 50) + '...' 
-      : messageContent;
+    const truncatedContent =
+      messageContent.length > 50
+        ? messageContent.substring(0, 50) + "..."
+        : messageContent;
 
     const reactionMessage = `*<${emoji} emoji>: "${truncatedContent}"*`;
 
@@ -166,15 +173,16 @@ export class DiscordClient extends EventEmitter {
       try {
         await reaction.fetch();
       } catch (error) {
-        console.error('Something went wrong when fetching the message:', error);
+        console.error("Something went wrong when fetching the message:", error);
         return;
       }
     }
 
     const messageContent = reaction.message.content;
-    const truncatedContent = messageContent.length > 50 
-      ? messageContent.substring(0, 50) + '...' 
-      : messageContent;
+    const truncatedContent =
+      messageContent.length > 50
+        ? messageContent.substring(0, 50) + "..."
+        : messageContent;
 
     const reactionMessage = `*Removed <${emoji} emoji> from: "${truncatedContent}"*`;
 

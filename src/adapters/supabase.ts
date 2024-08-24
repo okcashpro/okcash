@@ -42,32 +42,39 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     return data as Participant[];
   }
 
-  async getParticipantUserState(roomId: UUID, userId: UUID): Promise<'FOLLOWED' | 'MUTED' | null> {
+  async getParticipantUserState(
+    roomId: UUID,
+    userId: UUID,
+  ): Promise<"FOLLOWED" | "MUTED" | null> {
     const { data, error } = await this.supabase
-      .from('participants')
-      .select('user_state')
-      .eq('room_id', roomId)
-      .eq('user_id', userId)
+      .from("participants")
+      .select("user_state")
+      .eq("room_id", roomId)
+      .eq("user_id", userId)
       .single();
 
     if (error) {
-      console.error('Error getting participant user state:', error);
+      console.error("Error getting participant user state:", error);
       return null;
     }
 
-    return data?.user_state as 'FOLLOWED' | 'MUTED' | null;
+    return data?.user_state as "FOLLOWED" | "MUTED" | null;
   }
 
-  async setParticipantUserState(roomId: UUID, userId: UUID, state: 'FOLLOWED' | 'MUTED' | null): Promise<void> {
+  async setParticipantUserState(
+    roomId: UUID,
+    userId: UUID,
+    state: "FOLLOWED" | "MUTED" | null,
+  ): Promise<void> {
     const { error } = await this.supabase
-      .from('participants')
+      .from("participants")
       .update({ user_state: state })
-      .eq('room_id', roomId)
-      .eq('user_id', userId);
+      .eq("room_id", roomId)
+      .eq("user_id", userId);
 
     if (error) {
-      console.error('Error setting participant user state:', error);
-      throw new Error('Failed to set participant user state');
+      console.error("Error setting participant user state:", error);
+      throw new Error("Failed to set participant user state");
     }
   }
 

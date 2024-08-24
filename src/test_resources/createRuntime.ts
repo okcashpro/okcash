@@ -58,51 +58,50 @@ export async function createRuntime({
         };
       }
       break;
-    case "supabase":
-      {
-        const module = await import("@supabase/supabase-js");
+    case "supabase": {
+      const module = await import("@supabase/supabase-js");
 
-        const { createClient } = module;
+      const { createClient } = module;
 
-        const supabase = createClient(
-          env?.SUPABASE_URL ?? SUPABASE_URL,
-          env?.SUPABASE_SERVICE_API_KEY ?? SUPABASE_ANON_KEY,
-        );
+      const supabase = createClient(
+        env?.SUPABASE_URL ?? SUPABASE_URL,
+        env?.SUPABASE_SERVICE_API_KEY ?? SUPABASE_ANON_KEY,
+      );
 
-        const { data } = await supabase.auth.signInWithPassword({
+      const { data } = await supabase.auth.signInWithPassword({
+        email: TEST_EMAIL!,
+        password: TEST_PASSWORD!,
+      });
+
+      user = data.user as User;
+      session = data.session as unknown as { user: User };
+
+      if (!session) {
+        const response = await supabase.auth.signUp({
           email: TEST_EMAIL!,
           password: TEST_PASSWORD!,
         });
 
-        user = data.user as User;
-        session = data.session as unknown as { user: User };
+        // Change the name of the user
+        const { error } = await supabase
+          .from("accounts")
+          .update({ name: "Test User" })
+          .eq("id", response.data.user?.id);
 
-        if (!session) {
-          const response = await supabase.auth.signUp({
-            email: TEST_EMAIL!,
-            password: TEST_PASSWORD!,
-          });
-
-          // Change the name of the user
-          const { error } = await supabase
-            .from("accounts")
-            .update({ name: "Test User" })
-            .eq("id", response.data.user?.id);
-
-          if (error) {
-            throw new Error("Create runtime error: " + JSON.stringify(error));
-          }
-
-          user = response.data.user as User;
-          session = response.data.session as unknown as { user: User };
+        if (error) {
+          throw new Error("Create runtime error: " + JSON.stringify(error));
         }
 
-        adapter = new SupabaseDatabaseAdapter(
-          env?.SUPABASE_URL ?? SUPABASE_URL,
-          env?.SUPABASE_SERVICE_API_KEY ?? SUPABASE_ANON_KEY,
-        );
+        user = response.data.user as User;
+        session = response.data.session as unknown as { user: User };
       }
-      case "sqlite":
+
+      adapter = new SupabaseDatabaseAdapter(
+        env?.SUPABASE_URL ?? SUPABASE_URL,
+        env?.SUPABASE_SERVICE_API_KEY ?? SUPABASE_ANON_KEY,
+      );
+    }
+    case "sqlite":
     default:
       {
         const module = await import("better-sqlite3");

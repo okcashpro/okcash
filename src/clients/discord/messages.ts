@@ -28,7 +28,7 @@ export async function sendMessageInChunks(
   const messages = splitMessage(content);
   for (const message of messages) {
     // TODO: This is a patch to replace common error, but we need to refactor actions so this doesn't happen
-    await channel.send(message.replace('(WAIT)', '').trim());
+    await channel.send(message.replace("(WAIT)", "").trim());
   }
 }
 
@@ -64,10 +64,7 @@ export class MessageManager {
   private discordClient: any;
   private voiceManager: VoiceManager;
 
-  constructor(
-    discordClient: any,
-    voiceManager: VoiceManager,
-  ) {
+  constructor(discordClient: any, voiceManager: VoiceManager) {
     this.client = discordClient.client;
     this.voiceManager = voiceManager;
     this.discordClient = discordClient;
@@ -82,13 +79,12 @@ export class MessageManager {
       this.browserService,
       this.youtubeService,
     );
-    
   }
 
   async onReady() {
     const agentId = this.runtime.agentId!;
     const room_id = getUuid(this.client.user?.id as string) as UUID;
-  
+
     await this.runtime.ensureUserExists(agentId, this.runtime.character.name);
     await this.runtime.ensureRoomExists(room_id);
     await this.runtime.ensureParticipantInRoom(agentId, room_id);
@@ -96,17 +92,17 @@ export class MessageManager {
 
   async handleMessage(message: DiscordMessage) {
     if (message.interaction || message.author?.bot) return;
-  
+
     const user_id = message.author.id as UUID;
     const userName = message.author.username;
     const channelId = message.channel.id;
-  
+
     await this.browserService.initialize();
-  
+
     try {
       const { processedContent, attachments } =
         await this.processMessageMedia(message);
-  
+
       const audioAttachments = message.attachments.filter((attachment) =>
         attachment.contentType?.startsWith("audio/"),
       );
@@ -115,35 +111,37 @@ export class MessageManager {
           await this.attachmentManager.processAttachments(audioAttachments);
         attachments.push(...processedAudioAttachments);
       }
-  
+
       const room_id = getUuid(channelId) as UUID;
       const userIdUUID = getUuid(user_id) as UUID;
       const agentId = this.runtime.agentId;
-  
-      await this.runtime.ensureUserExists(
-        agentId,
-        this.runtime.character.name
-      );
-  
+
+      await this.runtime.ensureUserExists(agentId, this.runtime.character.name);
+
       await this.runtime.ensureUserExists(userIdUUID, userName);
       await this.runtime.ensureRoomExists(room_id);
       await this.runtime.ensureParticipantInRoom(userIdUUID, room_id);
       await this.runtime.ensureParticipantInRoom(agentId, room_id);
-  
+
       let shouldIgnore = false;
       let shouldRespond = true;
-  
+
       const callback = async (content: Content) => {
         if (message.channel.type === ChannelType.GuildVoice) {
           // For voice channels, use text-to-speech
-          const audioStream = await this.voiceManager.textToSpeech(content.content);
+          const audioStream = await this.voiceManager.textToSpeech(
+            content.content,
+          );
           await this.voiceManager.playAudioStream(user_id, audioStream);
         } else {
           // For text channels, send the message
-          await sendMessageInChunks(message.channel as TextChannel, content.content);
+          await sendMessageInChunks(
+            message.channel as TextChannel,
+            content.content,
+          );
         }
       };
-  
+
       const content: Content = {
         content: processedContent,
         action: "WAIT",
@@ -151,16 +149,13 @@ export class MessageManager {
       };
 
       const userMessage = { content, user_id: userIdUUID, room_id };
-  
-      let state = (await this.runtime.composeState(
-        userMessage,
-        {
-          discordClient: this.client,
-          discordMessage: message,
-          agentName: this.runtime.character.name || this.client.user?.displayName,
-        },
-      )) as State;
-  
+
+      let state = (await this.runtime.composeState(userMessage, {
+        discordClient: this.client,
+        discordMessage: message,
+        agentName: this.runtime.character.name || this.client.user?.displayName,
+      })) as State;
+
       const messageToHandle: Message = {
         ...userMessage,
         content: {
@@ -168,60 +163,67 @@ export class MessageManager {
           attachments,
         },
       };
-  
+
       await this._saveRequestMessage(messageToHandle, state);
-  
+
       state = await this.runtime.updateRecentMessageState(state);
-  
+
       if (!shouldIgnore) {
         shouldIgnore = await this._shouldIgnore(message);
       }
-  
+
       if (shouldIgnore) {
         return;
       }
-  
+
       const hasInterest = this._checkInterest(channelId);
-  
-      const agentUserState = await this.runtime.databaseAdapter.getParticipantUserState(room_id, this.runtime.agentId);
-  
-      if (agentUserState === 'MUTED') {
+
+      const agentUserState =
+        await this.runtime.databaseAdapter.getParticipantUserState(
+          room_id,
+          this.runtime.agentId,
+        );
+
+      if (agentUserState === "MUTED") {
         if (!message.mentions.has(this.client.user.id) && !hasInterest) {
           console.log("Ignoring muted room");
-          // Ignore muted rooms unless explicitly mentioned  
+          // Ignore muted rooms unless explicitly mentioned
           return;
         }
       }
-  
-      if (agentUserState === 'FOLLOWED') {
+
+      if (agentUserState === "FOLLOWED") {
         console.log("Always responding in followed room");
         shouldRespond = true; // Always respond in followed rooms
-      } else if ((!shouldRespond && hasInterest) || (shouldRespond && !hasInterest)) {
+      } else if (
+        (!shouldRespond && hasInterest) ||
+        (shouldRespond && !hasInterest)
+      ) {
         console.log("Checking if should respond");
         shouldRespond = await this._shouldRespond(message, state);
       }
-  
+
       if (!shouldRespond) {
         return;
       }
-  
+
       let context = composeContext({
         state,
         template: messageHandlerTemplate,
       });
-  
+
       const responseContent = await this._generateResponse(
         messageToHandle,
         state,
         context,
       );
-  
+
       await this._saveResponseMessage(messageToHandle, state, responseContent);
-  
+
       if (responseContent.content) {
         await callback(responseContent);
       }
-  
+
       await this.runtime.processActions(
         messageToHandle,
         responseContent,
@@ -232,7 +234,8 @@ export class MessageManager {
       console.error("Error handling message:", error);
       if (message.channel.type === ChannelType.GuildVoice) {
         // For voice channels, use text-to-speech for the error message
-        const errorMessage = "Sorry, I encountered an error while processing your request.";
+        const errorMessage =
+          "Sorry, I encountered an error while processing your request.";
         const audioStream = await this.voiceManager.textToSpeech(errorMessage);
         await this.voiceManager.playAudioStream(user_id, audioStream);
       } else {
@@ -319,31 +322,31 @@ export class MessageManager {
 
   private async _saveRequestMessage(message: Message, state: State) {
     const { content: senderContent } = message;
-  
-    if ((senderContent as Content).content) {
-        const senderName =
-          state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
-            ?.name || "Unknown User";
-  
-        const contentWithUser = {
-          ...(senderContent as Content),
-          user: senderName,
-        };
-  
-        await this.runtime.messageManager.createMemory({
-          user_id: message.user_id,
-          content: contentWithUser,
-          room_id: message.room_id,
-          embedding: embeddingZeroVector,
-        });
 
-        await this.runtime.evaluate(message, {
+    if ((senderContent as Content).content) {
+      const senderName =
+        state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
+          ?.name || "Unknown User";
+
+      const contentWithUser = {
+        ...(senderContent as Content),
+        user: senderName,
+      };
+
+      await this.runtime.messageManager.createMemory({
+        user_id: message.user_id,
+        content: contentWithUser,
+        room_id: message.room_id,
+        embedding: embeddingZeroVector,
+      });
+
+      await this.runtime.evaluate(message, {
         ...state,
         discordMessage: state.discordMessage,
         discordClient: state.discordClient,
       });
     }
-  }  
+  }
 
   private async _saveResponseMessage(
     message: Message,
@@ -366,7 +369,7 @@ export class MessageManager {
       console.warn("Empty response, skipping");
     }
   }
-  
+
   private _checkInterest(channelId: string): boolean {
     return !!this.interestChannels[channelId];
   }
@@ -523,13 +526,13 @@ export class MessageManager {
     });
 
     let response = "";
-    
+
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
         response = await this.runtime.completion({
           context: shouldRespondContext,
-          stop: ['\n'],
-          max_response_length: 5
+          stop: ["\n"],
+          max_response_length: 5,
         });
         break;
       } catch (error) {
@@ -564,14 +567,14 @@ export class MessageManager {
   ): Promise<Content> {
     let responseContent: Content | null = null;
     const { user_id, room_id } = message;
-  
+
     const datestr = new Date().toISOString().replace(/:/g, "-");
-  
+
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
-  
+
     let response;
-  
+
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
         response = await this.runtime.messageCompletion({
@@ -584,20 +587,20 @@ export class MessageManager {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         console.log("Retrying...");
       }
-  
+
       if (!response) {
         continue;
       }
-  
+
       log_to_file(`${state.agentName}_${datestr}_generate_response`, response);
-  
+
       await this.runtime.databaseAdapter.log({
         body: { message, context, response },
         user_id: user_id,
         room_id,
         type: "response",
       });
-  
+
       const parsedResponse = parseJSONObjectFromText(
         response,
       ) as unknown as Content;
@@ -610,17 +613,16 @@ export class MessageManager {
       };
       break;
     }
-  
+
     if (!responseContent) {
       responseContent = {
         content: "",
         action: "IGNORE",
       };
     }
-  
+
     return responseContent;
   }
-  
 
   async fetchBotName(botToken: string) {
     const url = "https://discord.com/api/v10/users/@me";

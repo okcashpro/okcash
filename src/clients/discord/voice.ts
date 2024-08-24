@@ -53,9 +53,7 @@ export class VoiceManager extends EventEmitter {
   transcriptionService: TranscriptionService;
   character: Character;
 
-  constructor(
-    client: any,
-  ) {
+  constructor(client: any) {
     super();
     this.client = client.client;
     this.character = client.runtime.character;
@@ -115,11 +113,17 @@ export class VoiceManager extends EventEmitter {
           const text = await this.transcriptionService.transcribe(inputBuffer);
           const room_id = getUuid(channelId) as UUID;
           const userIdUUID = getUuid(user_id) as UUID;
-          await this.runtime.ensureUserExists(this.runtime.agentId, this.runtime.character.name);
+          await this.runtime.ensureUserExists(
+            this.runtime.agentId,
+            this.runtime.character.name,
+          );
           await this.runtime.ensureUserExists(userIdUUID, userName);
           await this.runtime.ensureRoomExists(room_id);
           await this.runtime.ensureParticipantInRoom(userIdUUID, room_id);
-          await this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id);
+          await this.runtime.ensureParticipantInRoom(
+            this.runtime.agentId,
+            room_id,
+          );
 
           const state = await this.runtime.composeState(
             {
@@ -231,14 +235,14 @@ export class VoiceManager extends EventEmitter {
   ): Promise<Content> {
     let responseContent: Content | null = null;
     const { user_id, room_id } = message;
-  
+
     const datestr = new Date().toISOString().replace(/:/g, "-");
-  
+
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
-  
+
     let response;
-  
+
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
         response = await this.runtime.messageCompletion({
@@ -251,20 +255,20 @@ export class VoiceManager extends EventEmitter {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         console.log("Retrying...");
       }
-  
+
       if (!response) {
         continue;
       }
-  
+
       log_to_file(`${state.agentName}_${datestr}_generate_response`, response);
-  
+
       await this.runtime.databaseAdapter.log({
         body: { message, context, response },
         user_id: user_id,
         room_id,
         type: "response",
       });
-  
+
       const parsedResponse = parseJSONObjectFromText(
         response,
       ) as unknown as Content;
@@ -277,45 +281,44 @@ export class VoiceManager extends EventEmitter {
       };
       break;
     }
-  
+
     if (!responseContent) {
       responseContent = {
         content: "",
         action: "IGNORE",
       };
     }
-  
+
     return responseContent;
   }
-  
 
   private async _saveRequestMessage(message: Message, state: State) {
     const { content: senderContent } = message;
-  
-    if ((senderContent as Content).content) {
-        const senderName =
-          state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
-            ?.name || "Unknown User";
-  
-        const contentWithUser = {
-          ...(senderContent as Content),
-          user: senderName,
-        };
-  
-        await this.runtime.messageManager.createMemory({
-          user_id: message.user_id,
-          content: contentWithUser,
-          room_id: message.room_id,
-          embedding: embeddingZeroVector,
-        });
 
-        await this.runtime.evaluate(message, {
+    if ((senderContent as Content).content) {
+      const senderName =
+        state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
+          ?.name || "Unknown User";
+
+      const contentWithUser = {
+        ...(senderContent as Content),
+        user: senderName,
+      };
+
+      await this.runtime.messageManager.createMemory({
+        user_id: message.user_id,
+        content: contentWithUser,
+        room_id: message.room_id,
+        embedding: embeddingZeroVector,
+      });
+
+      await this.runtime.evaluate(message, {
         ...state,
         discordMessage: state.discordMessage,
         discordClient: state.discordClient,
       });
     }
-  }  
+  }
 
   private async _saveResponseMessage(
     message: Message,

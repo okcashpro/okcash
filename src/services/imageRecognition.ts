@@ -33,37 +33,49 @@ class ImageRecognitionService {
     this.initialize();
   }
 
-  async initialize(modelId: string | null = null, device: string | null = null): Promise<void> {
+  async initialize(
+    modelId: string | null = null,
+    device: string | null = null,
+  ): Promise<void> {
     if (this.initialized) {
       return;
     }
-    
+
     this.modelId = modelId || "onnx-community/Florence-2-base-ft";
 
     env.allowLocalModels = false;
     env.allowRemoteModels = true;
-    env.backends.onnx.logLevel = 'fatal';
+    env.backends.onnx.logLevel = "fatal";
     env.backends.onnx.wasm.proxy = false;
     env.backends.onnx.wasm.numThreads = 1;
 
     console.log("Downloading model...");
 
-    this.model = await Florence2ForConditionalGeneration.from_pretrained(this.modelId, {
-      device: 'gpu',
-      progress_callback: (progress) => {
-        console.log(`Model download progress: ${JSON.stringify(progress.progress)}`);
+    this.model = await Florence2ForConditionalGeneration.from_pretrained(
+      this.modelId,
+      {
+        device: "gpu",
+        progress_callback: (progress) => {
+          console.log(
+            `Model download progress: ${JSON.stringify(progress.progress)}`,
+          );
+        },
       },
-    });
+    );
 
     console.log("Model downloaded successfully.");
 
-    this.processor = await AutoProcessor.from_pretrained(this.modelId) as Florence2Processor;
+    this.processor = (await AutoProcessor.from_pretrained(
+      this.modelId,
+    )) as Florence2Processor;
     this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId);
 
     this.initialized = true;
   }
 
-  async recognizeImage(imageUrl: string): Promise<{ title: string; description: string }> {
+  async recognizeImage(
+    imageUrl: string,
+  ): Promise<{ title: string; description: string }> {
     console.log("recognizeImage", imageUrl);
 
     this.queue.push(imageUrl);
@@ -71,7 +83,7 @@ class ImageRecognitionService {
 
     return new Promise((resolve, reject) => {
       const checkQueue = () => {
-        console.log('***** CHECKING QUEUE', this.queue);
+        console.log("***** CHECKING QUEUE", this.queue);
         const index = this.queue.indexOf(imageUrl);
         if (index !== -1) {
           setTimeout(checkQueue, 100);
@@ -98,8 +110,10 @@ class ImageRecognitionService {
     this.processing = false;
   }
 
-  private async processImage(imageUrl: string): Promise<{ title: string; description: string }> {
-    console.log('***** PROCESSING IMAGE', imageUrl);
+  private async processImage(
+    imageUrl: string,
+  ): Promise<{ title: string; description: string }> {
+    console.log("***** PROCESSING IMAGE", imageUrl);
     const isGif = imageUrl.toLowerCase().endsWith(".gif");
     let imageToProcess = imageUrl;
 
@@ -116,7 +130,7 @@ class ImageRecognitionService {
       const prompts = this.processor.construct_prompts("<DETAILED_CAPTION>");
       const textInputs = this.tokenizer(prompts);
 
-      console.log('***** GENERATING')
+      console.log("***** GENERATING");
 
       const generatedIds = (await this.model.generate({
         ...textInputs,
@@ -124,19 +138,23 @@ class ImageRecognitionService {
         max_new_tokens: 256,
       })) as Tensor;
 
-      console.log('***** GENERATED IDS', generatedIds);
+      console.log("***** GENERATED IDS", generatedIds);
 
       const generatedText = this.tokenizer.batch_decode(generatedIds, {
         skip_special_tokens: false,
       })[0];
 
-      console.log("***** GENERATED TEXT")
-      console.log(generatedText)
-      
-      const result = this.processor.post_process_generation(generatedText, "<DETAILED_CAPTION>", image.size);
+      console.log("***** GENERATED TEXT");
+      console.log(generatedText);
 
-      console.log("***** RESULT")
-      console.log(result)
+      const result = this.processor.post_process_generation(
+        generatedText,
+        "<DETAILED_CAPTION>",
+        image.size,
+      );
+
+      console.log("***** RESULT");
+      console.log(result);
 
       const detailedCaption = result["<DETAILED_CAPTION>"] as string;
 
@@ -152,26 +170,28 @@ class ImageRecognitionService {
     }
   }
 
-  private async extractFirstFrameFromGif(gifUrl: string): Promise<{ filePath: string }> {
+  private async extractFirstFrameFromGif(
+    gifUrl: string,
+  ): Promise<{ filePath: string }> {
     const frameData = await gifFrames({
-      url: gifUrl, 
+      url: gifUrl,
       frames: 1,
-      outputType: 'png',
+      outputType: "png",
     });
     const firstFrame = frameData[0];
 
-    const tempDir = os.tmpdir();  
+    const tempDir = os.tmpdir();
     const tempFilePath = path.join(tempDir, `gif_frame_${Date.now()}.png`);
 
     return new Promise((resolve, reject) => {
       const writeStream = fs.createWriteStream(tempFilePath);
       firstFrame.getImage().pipe(writeStream);
 
-      writeStream.on('finish', () => {
+      writeStream.on("finish", () => {
         resolve({ filePath: tempFilePath });
       });
 
-      writeStream.on('error', reject);
+      writeStream.on("error", reject);
     });
   }
 }

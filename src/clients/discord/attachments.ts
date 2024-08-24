@@ -182,10 +182,7 @@ export class AttachmentManager {
       const text = await this.pdfService.convertPdfToText(
         Buffer.from(pdfBuffer),
       );
-      const { title, description } = await generateSummary(
-        this.runtime,
-        text,
-      );
+      const { title, description } = await generateSummary(this.runtime, text);
 
       return {
         id: attachment.id,
@@ -214,10 +211,7 @@ export class AttachmentManager {
     try {
       const response = await fetch(attachment.url);
       const text = await response.text();
-      const { title, description } = await generateSummary(
-        this.runtime,
-        text,
-      );
+      const { title, description } = await generateSummary(this.runtime, text);
 
       return {
         id: attachment.id,

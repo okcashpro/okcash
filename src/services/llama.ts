@@ -9,11 +9,11 @@ import {
   LlamaJsonSchemaGrammar,
   LlamaModel,
   Token,
-  LlamaContextSequenceRepeatPenalty
+  LlamaContextSequenceRepeatPenalty,
 } from "node-llama-cpp";
 import fs from "fs";
 import https from "https";
-import si from 'systeminformation';
+import si from "systeminformation";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -59,10 +59,11 @@ interface QueuedMessage {
   frequency_penalty: number;
   presence_penalty: number;
   useGrammar: boolean;
-  resolve: (value: GrammarData | string | PromiseLike<GrammarData | string>) => void;
+  resolve: (
+    value: GrammarData | string | PromiseLike<GrammarData | string>,
+  ) => void;
   reject: (reason?: any) => void;
 }
-
 
 class LlamaService {
   private llama: Llama | undefined;
@@ -78,6 +79,7 @@ class LlamaService {
   private modelInitialized: boolean = false;
 
   constructor() {
+    console.log("Constructing");
     this.llama = undefined;
     this.model = undefined;
     this.modelUrl =
@@ -94,16 +96,18 @@ class LlamaService {
       console.log("Loading llama");
 
       const systemInfo = await si.graphics();
-      const hasCUDA = systemInfo.controllers.some(controller => controller.vendor.toLowerCase().includes('nvidia'));
+      const hasCUDA = systemInfo.controllers.some((controller) =>
+        controller.vendor.toLowerCase().includes("nvidia"),
+      );
 
       if (hasCUDA) {
-        console.log('**** CUDA detected');
+        console.log("**** CUDA detected");
       } else {
-        console.log('**** No CUDA detected - local response will be slow');
+        console.log("**** No CUDA detected - local response will be slow");
       }
 
       this.llama = await getLlama({
-        gpu: "auto"
+        gpu: "cuda",
       });
       console.log("Creating grammar");
       const grammar = new LlamaJsonSchemaGrammar(
@@ -123,7 +127,10 @@ class LlamaService {
       this.modelInitialized = true;
       this.processQueue();
     } catch (error) {
-      console.error("Model initialization failed. Deleting model and retrying...", error);
+      console.error(
+        "Model initialization failed. Deleting model and retrying...",
+        error,
+      );
       await this.deleteModel();
       await this.initializeModel();
     }
@@ -134,55 +141,60 @@ class LlamaService {
     if (!fs.existsSync(this.modelPath)) {
       console.log("this.modelPath", this.modelPath);
       console.log("Model not found. Downloading...");
-  
+
       await new Promise<void>((resolve, reject) => {
         const file = fs.createWriteStream(this.modelPath);
         let downloadedSize = 0;
-  
+
         const downloadModel = (url: string) => {
-          https.get(url, (response) => {
-            const isRedirect = response.statusCode >= 300 && response.statusCode < 400;
-            if (isRedirect) {
-              const redirectUrl = response.headers.location;
-              if (redirectUrl) {
-                console.log("Following redirect to:", redirectUrl);
-                downloadModel(redirectUrl);
-                return;
-              } else {
-                console.error("Redirect URL not found");
-                reject(new Error("Redirect URL not found"));
-                return;
+          https
+            .get(url, (response) => {
+              const isRedirect =
+                response.statusCode >= 300 && response.statusCode < 400;
+              if (isRedirect) {
+                const redirectUrl = response.headers.location;
+                if (redirectUrl) {
+                  console.log("Following redirect to:", redirectUrl);
+                  downloadModel(redirectUrl);
+                  return;
+                } else {
+                  console.error("Redirect URL not found");
+                  reject(new Error("Redirect URL not found"));
+                  return;
+                }
               }
-            }
-  
-            const totalSize = parseInt(
-              response.headers["content-length"] ?? "0",
-              10,
-            );
-  
-            response.on("data", (chunk) => {
-              downloadedSize += chunk.length;
-              file.write(chunk);
-  
-              // Log progress
-              const progress = ((downloadedSize / totalSize) * 100).toFixed(2);
-              process.stdout.write(`Downloaded ${progress}%\r`);
+
+              const totalSize = parseInt(
+                response.headers["content-length"] ?? "0",
+                10,
+              );
+
+              response.on("data", (chunk) => {
+                downloadedSize += chunk.length;
+                file.write(chunk);
+
+                // Log progress
+                const progress = ((downloadedSize / totalSize) * 100).toFixed(
+                  2,
+                );
+                process.stdout.write(`Downloaded ${progress}%\r`);
+              });
+
+              response.on("end", () => {
+                file.end();
+                console.log("\nModel downloaded successfully.");
+                resolve();
+              });
+            })
+            .on("error", (err) => {
+              fs.unlink(this.modelPath, () => {}); // Delete the file async
+              console.error("Download failed:", err.message);
+              reject(err);
             });
-  
-            response.on("end", () => {
-              file.end();
-              console.log("\nModel downloaded successfully.");
-              resolve();
-            });
-          }).on("error", (err) => {
-            fs.unlink(this.modelPath, () => {}); // Delete the file async
-            console.error("Download failed:", err.message);
-            reject(err);
-          });
         };
-  
+
         downloadModel(this.modelUrl);
-  
+
         file.on("error", (err) => {
           fs.unlink(this.modelPath, () => {}); // Delete the file async
           console.error("File write error:", err.message);
@@ -207,7 +219,7 @@ class LlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-    max_tokens: number
+    max_tokens: number,
   ): Promise<GrammarData> {
     console.log("Queueing message completion");
     return new Promise((resolve, reject) => {
@@ -232,7 +244,7 @@ class LlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-    max_tokens: number
+    max_tokens: number,
   ): Promise<string> {
     console.log("Queueing text completion");
     return new Promise((resolve, reject) => {
@@ -252,7 +264,11 @@ class LlamaService {
   }
 
   private async processQueue() {
-    if (this.isProcessing || this.messageQueue.length === 0 || !this.modelInitialized) {
+    if (
+      this.isProcessing ||
+      this.messageQueue.length === 0 ||
+      !this.modelInitialized
+    ) {
       return;
     }
 
@@ -270,7 +286,7 @@ class LlamaService {
             message.frequency_penalty,
             message.presence_penalty,
             message.max_tokens,
-            message.useGrammar
+            message.useGrammar,
           );
           message.resolve(response);
         } catch (error) {
@@ -289,7 +305,7 @@ class LlamaService {
     frequency_penalty: number,
     presence_penalty: number,
     max_tokens: number,
-    useGrammar: boolean
+    useGrammar: boolean,
   ): Promise<GrammarData | string> {
     if (!this.sequence) {
       throw new Error("Model not initialized.");
@@ -298,15 +314,17 @@ class LlamaService {
     const tokens = this.model!.tokenize(context);
 
     // TODO: Right now we are hard-coding this. We should make this configurable.
-    const wordsToPunish = ['ELABORATE']
+    const wordsToPunish = ["ELABORATE"];
     // tokenize the words to punish
-    const wordsToPunishTokens = wordsToPunish.map(word => this.model!.tokenize(word)).flat();
-    
+    const wordsToPunishTokens = wordsToPunish
+      .map((word) => this.model!.tokenize(word))
+      .flat();
+
     const repeatPenalty: LlamaContextSequenceRepeatPenalty = {
       punishTokens: () => wordsToPunishTokens,
-      penalty: 1.1,
+      penalty: 1.2,
       frequencyPenalty: frequency_penalty,
-      presencePenalty: presence_penalty
+      presencePenalty: presence_penalty,
     };
 
     const responseTokens: Token[] = [];
@@ -317,15 +335,26 @@ class LlamaService {
       grammarEvaluationState: useGrammar ? this.grammar : undefined,
       yieldEogToken: true,
     })) {
-      const current = this.model!.detokenize([...responseTokens, token]);
-      if ([...stop].some(s => current.includes(s))) {
+      const current = this.model.detokenize([...responseTokens, token]);
+      if ([...stop].some((s) => current.includes(s))) {
         console.log("Stop sequence found");
         break;
       }
+
+      // if current includes '://' and that is not immediate after http or https, then we should break
+      if (
+        current.includes("://") &&
+        !current.slice(-10).includes("http://") &&
+        !current.slice(-10).includes("https://")
+      ) {
+        console.log("Stop sequence found");
+        break;
+      }
+
       responseTokens.push(token);
       process.stdout.write(this.model!.detokenize([token]));
-      if(useGrammar){
-        if(current.replaceAll('\n', '').includes('}```')){
+      if (useGrammar) {
+        if (current.replaceAll("\n", "").includes("}```")) {
           console.log("JSON block found");
           break;
         }
@@ -343,7 +372,6 @@ class LlamaService {
     }
 
     if (useGrammar) {
-
       // extract everything between ```json and ```
       const jsonString = response.match(/```json(.*?)```/s)?.[1].trim();
       if (!jsonString) {
@@ -366,7 +394,6 @@ class LlamaService {
     }
   }
 
-
   async getEmbeddingResponse(input: string): Promise<number[] | undefined> {
     if (!this.model) {
       throw new Error("Model not initialized. Call initialize() first.");
@@ -376,7 +403,6 @@ class LlamaService {
     const embedding = await embeddingContext.getEmbeddingFor(input);
     return embedding?.vector;
   }
-
 }
 
 export default LlamaService;

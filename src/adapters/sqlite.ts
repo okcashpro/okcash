@@ -42,14 +42,27 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     return rows.map((row) => row.user_id as UUID);
   }
 
-  async getParticipantUserState(roomId: UUID, userId: UUID): Promise<'FOLLOWED' | 'MUTED' | null> {
-    const stmt = this.db.prepare('SELECT user_state FROM participants WHERE room_id = ? AND user_id = ?');
-    const res = stmt.get(roomId, userId) as { user_state: 'FOLLOWED' | 'MUTED' | null } | undefined;
+  async getParticipantUserState(
+    roomId: UUID,
+    userId: UUID,
+  ): Promise<"FOLLOWED" | "MUTED" | null> {
+    const stmt = this.db.prepare(
+      "SELECT user_state FROM participants WHERE room_id = ? AND user_id = ?",
+    );
+    const res = stmt.get(roomId, userId) as
+      | { user_state: "FOLLOWED" | "MUTED" | null }
+      | undefined;
     return res?.user_state ?? null;
   }
 
-  async setParticipantUserState(roomId: UUID, userId: UUID, state: 'FOLLOWED' | 'MUTED' | null): Promise<void> {
-    const stmt = this.db.prepare('UPDATE participants SET user_state = ? WHERE room_id = ? AND user_id = ?');
+  async setParticipantUserState(
+    roomId: UUID,
+    userId: UUID,
+    state: "FOLLOWED" | "MUTED" | null,
+  ): Promise<void> {
+    const stmt = this.db.prepare(
+      "UPDATE participants SET user_state = ? WHERE room_id = ? AND user_id = ?",
+    );
     stmt.run(state, roomId, userId);
   }
 
@@ -72,7 +85,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
   }
 
   async getAccountById(user_id: UUID): Promise<Account | null> {
-    console.log("getAccountById", user_id)
+    console.log("getAccountById", user_id);
     const sql = "SELECT * FROM accounts WHERE id = ?";
     const account = this.db.prepare(sql).get(user_id) as Account;
     if (!account) return null;

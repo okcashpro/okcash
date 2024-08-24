@@ -4,19 +4,10 @@ import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelatio
 import { type User } from "../../test_resources/types.ts";
 import { zeroUuid } from "../constants.ts";
 import { formatFacts } from "../../evaluators/fact.ts";
-import {
-  formatActors,
-  formatMessages,
-  getActorDetails,
-} from "../messages.ts";
+import { formatActors, formatMessages, getActorDetails } from "../messages.ts";
 import { createRelationship } from "../relationships.ts";
 import { type AgentRuntime } from "../runtime.ts";
-import {
-  type Actor,
-  type Content,
-  type Memory,
-  type UUID,
-} from "../types.ts";
+import { type Actor, type Content, type Memory, type UUID } from "../types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

@@ -2,7 +2,7 @@ import { SearchMode, Tweet } from "agent-twitter-client";
 import { UUID } from "crypto";
 import fs from "fs";
 import { default as getUuid } from "uuid-by-string";
-import { AgentRuntime } from "../../core/runtime.ts"
+import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
@@ -172,7 +172,10 @@ Notes:
       const twitterUserId = getUuid(selectedTweet.userId as string) as UUID;
       const twitterRoomId = getUuid("twitter") as UUID;
 
-      await this.runtime.ensureUserExists(twitterUserId, selectedTweet.username);
+      await this.runtime.ensureUserExists(
+        twitterUserId,
+        selectedTweet.username,
+      );
       await this.runtime.ensureRoomExists(twitterRoomId);
       await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
 

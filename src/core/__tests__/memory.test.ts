@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
-import { getCachedEmbeddings, writeCachedEmbedding } from "../../test_resources/cache.ts";
+import {
+  getCachedEmbeddings,
+  writeCachedEmbedding,
+} from "../../test_resources/cache.ts";
 import { createRuntime } from "../../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
 import { type User } from "../../test_resources/types.ts";
