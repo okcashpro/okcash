@@ -200,6 +200,10 @@ export class AgentRuntime {
     (opts.providers ?? defaultProviders).forEach((provider) => {
       this.registerContextProvider(provider);
     });
+
+    if (!settings.OPENAI_API_KEY && !this.llamaService) {
+      this.llamaService = new LlamaService();
+    }
   }
 
   /**
@@ -256,10 +260,6 @@ export class AgentRuntime {
     max_context_length = settings.OPENAI_API_KEY ? "127999" : "8192",
   }) {
     if (!settings.OPENAI_API_KEY) {
-      if (!this.llamaService) {
-        this.llamaService = new LlamaService();
-        await this.llamaService.initialize();
-      }
       const completionResponse = await this.llamaService.getCompletionResponse(
         context,
         temperature,
@@ -340,10 +340,6 @@ export class AgentRuntime {
    */
   async embed(input: string) {
     if (!settings.OPENAI_API_KEY) {
-      if (!this.llamaService) {
-        this.llamaService = new LlamaService();
-        await this.llamaService.initialize();
-      }
       return await this.llamaService.getEmbeddingResponse(input);
     }
     const embeddingModel = this.embeddingModel;

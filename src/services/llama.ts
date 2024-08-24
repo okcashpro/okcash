@@ -12,6 +12,7 @@ import {
 } from "node-llama-cpp";
 import fs from "fs";
 import https from "https";
+import si from 'systeminformation';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -57,6 +58,10 @@ class LlamaService {
   ctx: LlamaContext | undefined;
   session: LlamaChatSession | undefined;
   modelUrl: string;
+  device: string[] = ["cpu"];
+
+  private messageQueue: string[] = [];
+  private modelInitialized: boolean = false;
 
   constructor() {
     this.llama = undefined;
@@ -66,35 +71,56 @@ class LlamaService {
     const modelName = "model.gguf";
     console.log("modelName", modelName);
     this.modelPath = path.join(__dirname, modelName);
+    this.initializeModel();
+
   }
 
-  async initialize() {
-    if (this.llama) {
-      return;
+  async initializeModel() {
+    try {
+      await this.checkModel();
+      console.log("Loading llama");
+
+
+    // Dynamically detect available hardware
+    const systemInfo = await si.graphics();
+    const hasCUDA = systemInfo.controllers.some(controller => controller.vendor.toLowerCase().includes('nvidia'));
+
+    if (hasCUDA) {
+      console.log('**** CUDA detected');
+    } else {
+      console.log('**** No CUDA detected - local response will be slow');
     }
-    await this.checkModel();
-    console.log("Loading llama");
-    this.llama = await getLlama();
-    console.log("Creating grammar");
-    const grammar = new LlamaJsonSchemaGrammar(
-      this.llama,
-      jsonSchemaGrammar as GbnfJsonSchema,
-    );
-    this.grammar = grammar;
-    console.log("Loading model");
-    console.log("this.modelPath", this.modelPath);
-    // check if the model exists
-    if (!fs.existsSync(this.modelPath)) {
-      throw new Error("Model not found. Call checkModel() first.");
+
+      this.llama = await getLlama({
+        gpu: "auto"
+      });
+      console.log("Creating grammar");
+      const grammar = new LlamaJsonSchemaGrammar(
+        this.llama,
+        jsonSchemaGrammar as GbnfJsonSchema,
+      );
+      this.grammar = grammar;
+      console.log("Loading model");
+      console.log("this.modelPath", this.modelPath);
+
+      this.model = await this.llama.loadModel({ modelPath: this.modelPath });
+      console.log("Model GPU support", this.llama.getGpuDeviceNames());
+      console.log("Creating context");
+      this.ctx = await this.model.createContext();
+      console.log("Creating session");
+      this.session = new LlamaChatSession({
+        contextSequence: this.ctx.getSequence(),
+      });
+
+      this.modelInitialized = true;
+      await this.processMessageQueue();
+    } catch (error) {
+      console.error("Model initialization failed. Deleting model and retrying...", error);
+      await this.deleteModel();
+      await this.initializeModel();
     }
-    this.model = await this.llama.loadModel({ modelPath: this.modelPath });
-    console.log("Creating context");
-    this.ctx = await this.model.createContext();
-    console.log("Creating session");
-    this.session = new LlamaChatSession({
-      contextSequence: this.ctx.getSequence(),
-    });
   }
+
 
   async checkModel() {
     console.log("Checking model");
@@ -161,6 +187,22 @@ class LlamaService {
     }
   }
 
+  async deleteModel() {
+    if (fs.existsSync(this.modelPath)) {
+      fs.unlinkSync(this.modelPath);
+      console.log("Model deleted.");
+    }
+  }
+
+  async processMessageQueue() {
+    while (this.messageQueue.length > 0) {
+      const message = this.messageQueue.shift();
+      if (message) {
+        await this.getCompletionResponse(message, 0.7, [], 0, 0);
+      }
+    }
+  }
+
   async getCompletionResponse(
     context: string,
     temperature: number,
@@ -168,8 +210,10 @@ class LlamaService {
     frequency_penalty: number,
     presence_penalty: number,
   ): Promise<GrammarData> {
-    if (!this.model) {
-      throw new Error("Model not initialized. Call initialize() first.");
+    if (!this.modelInitialized) {
+      console.log("Model not initialized. Queueing message...");
+      this.messageQueue.push(context);
+      return Promise.reject(new Error("Model not initialized."));
     }
 
     const session = this.session;
