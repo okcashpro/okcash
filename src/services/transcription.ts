@@ -71,7 +71,7 @@ export class TranscriptionService extends EventEmitter {
       // wait for 1 second
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const output = await nodewhisper(tempAudioFile, {
+      let output = await nodewhisper(tempAudioFile, {
         modelName: "base.en",
         autoDownloadModelName: "base.en",
         verbose: true,
@@ -84,10 +84,24 @@ export class TranscriptionService extends EventEmitter {
           outputInCsv: false,
           translateToEnglish: false,
           wordTimestamps: false,
-          timestamps_length: 20,
+          timestamps_length: 60,
           splitOnWord: true,
         },
       });
+
+      // for each line in output, if the trimmed line starts with "["...
+      // look for the next "]" in the line, remove the ] and everything before it
+      // and replace the line with the new line
+      output = output
+        .split("\n")
+        .map((line) => {
+          if (line.trim().startsWith("[")) {
+            const endIndex = line.indexOf("]");
+            return line.substring(endIndex + 1);
+          }
+          return line;
+        })
+        .join("\n");
 
       // Remove the temporary audio file
       fs.unlinkSync(tempAudioFile);

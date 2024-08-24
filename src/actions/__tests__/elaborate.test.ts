@@ -10,7 +10,6 @@ import { type User } from "../../test_resources/types.ts";
 import { Content, type Message, type UUID } from "../../core/types.ts";
 import action from "../elaborate.ts";
 import ignore from "../ignore.ts";
-import wait from "../wait.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
@@ -53,7 +52,7 @@ describe("User Profile", () => {
   beforeAll(async () => {
     const setup = await createRuntime({
       env: process.env as Record<string, string>,
-      actions: [action, ignore, wait],
+      actions: [action, ignore],
     });
     user = setup.session.user;
     runtime = setup.runtime;
@@ -84,7 +83,7 @@ describe("User Profile", () => {
     await runAiTest("Test validate function response", async () => {
       const message: Message = {
         user_id: user.id as UUID,
-        content: { content: "Hello", action: "WAIT" },
+        content: { content: "Hello" },
         room_id: room_id as UUID,
       };
 
@@ -141,7 +140,6 @@ describe("User Profile", () => {
           content: {
             content:
               "Write a short story in three parts, using the ELABORATE action for each part.",
-            action: "WAIT",
           },
           room_id: room_id,
         };
@@ -192,7 +190,6 @@ describe("User Profile", () => {
         user_id: user?.id as UUID,
         content: {
           content: "Tell me more about your favorite food.",
-          action: "WAIT",
         },
         room_id: room_id as UUID,
       };

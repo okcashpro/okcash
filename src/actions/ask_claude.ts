@@ -161,18 +161,16 @@ export default {
         user: "{{user1}}",
         content: {
           content: "```js\nconst x = 10\n```",
-          action: "WAIT",
         },
       },
       {
         user: "{{user1}}",
         content: {
           content: "Hey, can you help me with the code I just pasted?",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user2}}",
         content: {
           content: "Let me ask Claude and get back to you.",
           action: "ASK_CLAUDE",
@@ -185,11 +183,10 @@ export default {
         content: {
           content:
             "I need to write a compelling cover letter for a job application as a marketing manager at a tech startup. Can you help me structure it and highlight key points?",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user2}}",
         content: {
           content: "I'll ask Claude to help you with that. Give me a second.",
           action: "ASK_CLAUDE",
@@ -202,11 +199,10 @@ export default {
         content: {
           content:
             "I'm planning a trip to Japan next month and I'm overwhelmed with all the information. Can you help me create a 10-day itinerary that covers Tokyo, Kyoto, and Osaka, including must-see attractions, local cuisine recommendations, and transportation tips?",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user2}}",
         content: {
           content:
             "No problem. I'll ask Claude to help create a detailed itinerary for you. Just a moment while I gather that information.",

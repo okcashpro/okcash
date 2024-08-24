@@ -24,6 +24,33 @@ export default {
       throw new Error("Discord client is not available in the state.");
     }
 
+    const keywords = [
+      "leave",
+      "exit",
+      "stop",
+      "quit",
+      "get off",
+      "get out",
+      "bye",
+      "cya",
+      "see you",
+      "hop off",
+      "get off",
+      "voice",
+      "vc",
+      "chat",
+      "call",
+      "meeting",
+      "discussion",
+    ];
+    if (
+      !keywords.some((keyword) =>
+        message.content.content.toLowerCase().includes(keyword),
+      )
+    ) {
+      return false;
+    }
+
     const client = state.discordClient as Client;
 
     // Check if the client is connected to any voice channel
@@ -66,7 +93,6 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Hey {{user2}}, leave the voice channel.",
-          action: "WAIT",
         },
       },
       {
@@ -82,7 +108,6 @@ export default {
         user: "{{user1}}",
         content: {
           content: "{{user2}}, I have to go now. Thanks for the voice chat!",
-          action: "WAIT",
         },
       },
       {
@@ -100,7 +125,6 @@ export default {
         content: {
           content:
             "Great discussion everyone! Let's wrap up this voice meeting.",
-          action: "WAIT",
         },
       },
       {
@@ -118,7 +142,6 @@ export default {
         content: {
           content:
             "Hey {{user2}}, I need to step away from the voice chat for a bit.",
-          action: "WAIT",
         },
       },
       {
@@ -136,7 +159,6 @@ export default {
         content: {
           content:
             "{{user2}}, I think we covered everything we needed to discuss. Ready to leave the voice channel?",
-          action: "WAIT",
         },
       },
       {

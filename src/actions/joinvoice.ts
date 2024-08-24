@@ -29,6 +29,30 @@ export default {
       throw new Error("Discord client is not available in the state.");
     }
 
+    // did they say something about joining a voice channel? if not, don't validate
+    const keywords = [
+      "join",
+      "come to",
+      "come on",
+      "enter",
+      "voice",
+      "chat",
+      "talk",
+      "call",
+      "hop on",
+      "get on",
+      "vc",
+      "meeting",
+      "discussion",
+    ];
+    if (
+      !keywords.some((keyword) =>
+        message.content.content.toLowerCase().includes(keyword),
+      )
+    ) {
+      return false;
+    }
+
     const client = state.discordClient as Client;
 
     // Check if the client is connected to any voice channel
@@ -200,7 +224,6 @@ You should only respond with the name of the voice channel or none, no commentar
         user: "{{user1}}",
         content: {
           content: "Hey, let's jump into the 'General' voice channel and chat!",
-          action: "WAIT",
         },
       },
       {
@@ -217,7 +240,6 @@ You should only respond with the name of the voice channel or none, no commentar
         content: {
           content:
             "{{user2}}, can you join the voice channel? I want to discuss our game strategy.",
-          action: "WAIT",
         },
       },
       {
@@ -234,7 +256,6 @@ You should only respond with the name of the voice channel or none, no commentar
         content: {
           content:
             "Hey {{user2}}, we're having a team meeting in the 'Conference' voice channel. Can you join us?",
-          action: "WAIT",
         },
       },
       {
@@ -251,7 +272,6 @@ You should only respond with the name of the voice channel or none, no commentar
         content: {
           content:
             "{{user2}}, let's have a quick voice chat in the 'Lounge' channel.",
-          action: "WAIT",
         },
       },
       {
@@ -268,7 +288,6 @@ You should only respond with the name of the voice channel or none, no commentar
         content: {
           content:
             "Hey {{user2}}, can you join me in the 'Music' voice channel? I want to share a new song with you.",
-          action: "WAIT",
         },
       },
       {

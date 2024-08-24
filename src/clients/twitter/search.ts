@@ -172,15 +172,15 @@ Notes:
       const twitterUserId = getUuid(selectedTweet.userId as string) as UUID;
       const twitterRoomId = getUuid("twitter") as UUID;
 
-      await this.runtime.ensureUserExists(
-        twitterUserId,
-        selectedTweet.username,
-      );
-      await this.runtime.ensureRoomExists(twitterRoomId);
+      await Promise.all([
+        this.runtime.ensureUserExists(twitterUserId, selectedTweet.username),
+        this.runtime.ensureRoomExists(twitterRoomId),
+      ]);
+
       await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
 
       const message: Message = {
-        content: { content: selectedTweet.text, action: "WAIT" },
+        content: { content: selectedTweet.text },
         user_id: twitterUserId,
         room_id: twitterRoomId,
       };

@@ -143,7 +143,7 @@ None`,
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "So where are you from?", action: "WAIT" },
+          content: { content: "So where are you from?" },
         },
         {
           user: "{{user2}}",

@@ -38,6 +38,7 @@ import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { type Actor, type Memory } from "./types.ts";
+import TikToken from "tiktoken";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -348,6 +349,35 @@ export class AgentRuntime {
       return JSON.stringify(completionResponse);
     }
 
+    const wordsToPunish = [
+      "ELABORATE",
+      "feel",
+      "free",
+      "!",
+      "?",
+      "questions",
+      "topics",
+      "discuss",
+      "simulation",
+      "circuits",
+      "help",
+      "ask",
+      "happy",
+      "glad",
+      "assist",
+    ];
+    const biasValue = -1.5;
+    const encoding = TikToken.encoding_for_model("gpt-4o");
+
+    const tokenIds = await Promise.all(
+      wordsToPunish.map((word) => encoding.encode(word)[0]),
+    );
+    console.log("tokenIds", tokenIds);
+    const logit_bias = tokenIds.reduce((acc, tokenId) => {
+      acc[tokenId] = biasValue;
+      return acc;
+    }, {});
+
     const requestOptions = {
       method: "POST",
       headers: {
@@ -361,6 +391,7 @@ export class AgentRuntime {
         presence_penalty,
         temperature,
         max_tokens: max_response_length,
+        logit_bias,
         messages: [
           {
             role: "user",

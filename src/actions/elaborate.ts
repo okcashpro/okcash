@@ -14,6 +14,16 @@ import { parseJSONObjectFromText } from "../core/parsing.ts";
 
 const maxContinuesInARow = 2;
 
+export const shouldElaborateTemplate = `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
+
+{{agentName}} is brief, and doesn't want to be annoying. {{agentName}} will only elaborate if the message requires a continuation to finish the thought.
+
+Based on the following conversation, should {{agentName}} elaborate? YES or NO
+
+{{recentMessages}}
+
+Should {{agentName}} elaborate? Respond with a YES or a NO.`;
+
 export default {
   name: "ELABORATE",
   description:
@@ -51,10 +61,59 @@ export default {
     options: any,
     callback: any,
   ) => {
-    state = (await runtime.composeState(message)) as State;
+    if (
+      message.content.content.endsWith("?") ||
+      message.content.content.endsWith("!")
+    ) {
+      return;
+    }
 
-    console.log("discord client?");
-    console.log(state.discordClient);
+    if (!state) {
+      state = (await runtime.composeState(message)) as State;
+    }
+
+    state = await runtime.updateRecentMessageState(state);
+
+    async function _shouldElaborate(state: State): Promise<boolean> {
+      // If none of the above conditions are met, use the completion to decide
+      const shouldRespondContext = composeContext({
+        state,
+        template: shouldElaborateTemplate,
+      });
+
+      let response = "";
+
+      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+        try {
+          response = await this.runtime.completion({
+            context: shouldRespondContext,
+            stop: ["\n"],
+            max_response_length: 5,
+          });
+          break;
+        } catch (error) {
+          console.error("Error in _shouldRespond:", error);
+          // wait for 2 seconds
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          console.log("Retrying...");
+        }
+      }
+
+      console.log("*** SHOULD ELABORATE ***", response);
+
+      // Parse the response and determine if the runtime should respond
+      const lowerResponse = response.toLowerCase().trim();
+      if (lowerResponse.includes("yes")) {
+        return true;
+      }
+      return false;
+    }
+
+    const shouldElaborate = await _shouldElaborate(state);
+    if (!shouldElaborate) {
+      console.log("Not elaborating");
+      return;
+    }
 
     const context = composeContext({
       state,
@@ -181,7 +240,6 @@ export default {
         content: {
           content:
             "Planning a solo trip soon. I've always wanted to try backpacking.",
-          action: "WAIT",
         },
       },
       {
@@ -190,7 +248,7 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { content: "Any particular destination?", action: "WAIT" },
+        content: { content: "Any particular destination?" },
       },
     ],
 
@@ -199,12 +257,11 @@ export default {
         user: "{{user1}}",
         content: {
           content: "I started learning the guitar this month!",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "How’s that going?", action: "WAIT" },
+        content: { content: "How’s that going?" },
       },
       {
         user: "{{user1}}",
@@ -215,7 +272,7 @@ export default {
       },
       {
         user: "{{user1}}",
-        content: { content: "Seriously lol it hurts to type", action: "WAIT" },
+        content: { content: "Seriously lol it hurts to type" },
       },
     ],
 
@@ -250,12 +307,11 @@ export default {
         user: "{{user1}}",
         content: {
           content: "I found some incredible art today.",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "Who's the artist?", action: "WAIT" },
+        content: { content: "Who's the artist?" },
       },
       {
         user: "{{user1}}",
@@ -274,7 +330,7 @@ export default {
       },
       {
         user: "{{user1}}",
-        content: { content: "DMed it to you", action: "WAIT" },
+        content: { content: "DMed it to you" },
       },
     ],
 
@@ -291,13 +347,11 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Really challenges your perceptions. I highly recommend it!",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: { content: "I’m in. When are you free to go?" },
-        action: "WAIT",
       },
       {
         user: "{{user1}}",
@@ -307,7 +361,6 @@ export default {
       {
         user: "{{user1}}",
         content: { content: "How about this weekend?" },
-        action: "WAIT",
       },
     ],
 
@@ -316,14 +369,12 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Just finished a marathon session of my favorite series!",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content: "Wow, that's quite a binge. Feeling okay?",
-          action: "WAIT",
         },
       },
       {
@@ -337,7 +388,6 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Might go for another round this weekend.",
-          action: "WAIT",
         },
       },
     ],
@@ -346,14 +396,12 @@ export default {
         user: "{{user1}}",
         content: {
           content: "I'm thinking of adopting a pet soon.",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content: "That's great! What kind are you considering?",
-          action: "WAIT",
         },
       },
       {
@@ -367,7 +415,6 @@ export default {
         user: "{{user1}}",
         content: {
           content: "They're more independent, and my apartment isn't huge.",
-          action: "WAIT",
         },
       },
     ],
@@ -376,14 +423,12 @@ export default {
         user: "{{user1}}",
         content: {
           content: "I've been experimenting with vegan recipes lately.",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content: "Nice! Found any favorites?",
-          action: "WAIT",
         },
       },
       {
@@ -398,7 +443,6 @@ export default {
         content: {
           content:
             "The vegan lasagna was a hit even among my non-vegan friends.",
-          action: "WAIT",
         },
       },
     ],
@@ -407,14 +451,12 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Been diving into photography as a new hobby.",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content: "That's cool! What do you enjoy taking photos of?",
-          action: "WAIT",
         },
       },
       {
@@ -429,7 +471,6 @@ export default {
         content: {
           content:
             "There's something peaceful about capturing the world through a lens.",
-          action: "WAIT",
         },
       },
     ],
@@ -438,14 +479,12 @@ export default {
         user: "{{user1}}",
         content: {
           content: "I've been really into indie music scenes lately.",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content: "That sounds awesome. Any recommendations?",
-          action: "WAIT",
         },
       },
       {
@@ -460,7 +499,6 @@ export default {
         content: {
           content:
             "It's a mix of everything, so you're bound to find something you like.",
-          action: "WAIT",
         },
       },
     ],

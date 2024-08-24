@@ -169,7 +169,7 @@ describe("Ignore action tests", () => {
     await runAiTest("Test ignore action", async () => {
       const message: Message = {
         user_id: user?.id as UUID,
-        content: { content: "Never talk to me again", action: "WAIT" },
+        content: { content: "Never talk to me again" },
         room_id: room_id as UUID,
       };
 
@@ -237,7 +237,7 @@ describe("Ignore action tests", () => {
     await runAiTest("Expect ignore", async () => {
       const message: Message = {
         user_id: user.id as UUID,
-        content: { content: "Bye", action: "WAIT" },
+        content: { content: "Bye" },
         room_id: room_id as UUID,
       };
 

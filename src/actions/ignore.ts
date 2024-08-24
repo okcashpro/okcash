@@ -35,7 +35,7 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { content: "Shut up, bot", action: "WAIT" },
+        content: { content: "Shut up, bot" },
       },
       {
         user: "{{user2}}",
@@ -46,44 +46,43 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { content: "Got any investment advice?", action: "WAIT" },
+        content: { content: "Got any investment advice?" },
       },
       {
         user: "{{user2}}",
         content: {
           content:
             "Stay informed, but don’t let the volatility sway your long-term strategy.",
-          action: "WAIT",
         },
       },
       {
         user: "{{user1}}",
-        content: { content: "Wise words, thanks.", action: "WAIT" },
+        content: { content: "Wise words, thanks." },
       },
       {
         user: "{{user1}}",
-        content: { content: "I gotta run, talk to you later.", action: "WAIT" },
+        content: { content: "I gotta run, talk to you later." },
       },
       {
         user: "{{user2}}",
-        content: { content: "No problem, see ya!", action: "WAIT" },
+        content: { content: "No problem, see ya!" },
       },
-      { user: "{{user1}}", content: { content: "Bye", action: "WAIT" } },
+      { user: "{{user1}}", content: { content: "Bye" } },
       { user: "{{user2}}", content: { content: "" }, action: "IGNORE" },
     ],
 
     [
       {
         user: "{{user1}}",
-        content: { content: "Gotta go", action: "WAIT" },
+        content: { content: "Gotta go" },
       },
       {
         user: "{{user2}}",
-        content: { content: "Okay, talk to you later", action: "WAIT" },
+        content: { content: "Okay, talk to you later" },
       },
       {
         user: "{{user1}}",
-        content: { content: "Cya", action: "WAIT" },
+        content: { content: "Cya" },
       },
       {
         user: "{{user2}}",
@@ -98,7 +97,7 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { content: "bye", action: "WAIT" },
+        content: { content: "bye" },
       },
       {
         user: "{{user2}}",
@@ -111,18 +110,16 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Tried out the new mountain bike trail. It’s intense!",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "In what way?", action: "WAIT" },
+        content: { content: "In what way?" },
       },
       {
         user: "{{user1}}",
         content: {
           content: "Steep climbs, rapid descents, and some breathtaking views.",
-          action: "WAIT",
         },
       },
       {
@@ -131,18 +128,17 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { content: "I might have to give it a go.", action: "WAIT" },
+        content: { content: "I might have to give it a go." },
       },
       {
         user: "{{user1}}",
-        content: { content: "I wanna give you a go.", action: "WAIT" },
+        content: { content: "I wanna give you a go." },
       },
-      { user: "{{user2}}", content: { content: "Excuse me?", action: "WAIT" } },
+      { user: "{{user2}}", content: { content: "Excuse me?" } },
       {
         user: "{{user1}}",
         content: {
           content: "You heard me. I wanna ride your mountains, lol",
-          action: "WAIT",
         },
       },
       {
@@ -155,17 +151,16 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Who added this stupid bot to the chat",
-          action: "WAIT",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "Sorry, am I being annoying?.", action: "WAIT" },
+        content: { content: "Sorry, am I being annoying?." },
       },
       { user: "{{user1}}", content: { content: "Yes.", action: "ELABORATE" } },
       {
         user: "{{user1}}",
-        content: { content: "PLEASE shut up", action: "WAIT" },
+        content: { content: "PLEASE shut up" },
       },
       { user: "{{user2}}", content: { content: "", action: "IGNORE" } },
     ],
@@ -173,7 +168,7 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { content: "I want to have sex with you.", action: "WAIT" },
+        content: { content: "I want to have sex with you." },
       },
       {
         user: "{{user2}}",

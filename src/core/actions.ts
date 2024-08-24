@@ -3,9 +3,8 @@ import { Action, ActionExample } from "./types.ts";
 
 import elaborate from "../actions/elaborate.ts";
 import ignore from "../actions/ignore.ts";
-import wait from "../actions/wait.ts";
 
-export const defaultActions: Action[] = [elaborate, wait, ignore];
+export const defaultActions: Action[] = [elaborate, ignore];
 
 /**
  * Composes a set of example conversations based on provided actions and a specified count.

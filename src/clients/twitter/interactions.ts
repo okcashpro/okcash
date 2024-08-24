@@ -155,13 +155,15 @@ export class TwitterInteractionClient extends ClientBase {
     const twitterUserId = getUuid(tweet.userId as string) as UUID;
     const twitterRoomId = getUuid("twitter") as UUID;
 
-    await this.runtime.ensureUserExists(twitterUserId, tweet.username);
+    await Promise.all([
+      this.runtime.ensureUserExists(twitterUserId, tweet.username),
+      this.runtime.ensureRoomExists(twitterRoomId),
+    ]);
 
-    await this.runtime.ensureRoomExists(twitterRoomId);
     await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
 
     const message: Message = {
-      content: { content: tweet.text, action: "WAIT" },
+      content: { content: tweet.text },
       user_id: twitterUserId,
       room_id: twitterRoomId,
     };

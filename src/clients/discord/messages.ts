@@ -27,8 +27,9 @@ export async function sendMessageInChunks(
 ): Promise<void> {
   const messages = splitMessage(content);
   for (const message of messages) {
-    // TODO: This is a patch to replace common error, but we need to refactor actions so this doesn't happen
-    await channel.send(message.replace("(WAIT)", "").trim());
+    if (message.trim().length > 0) {
+      await channel.send(message.trim());
+    }
   }
 }
 
@@ -85,8 +86,10 @@ export class MessageManager {
     const agentId = this.runtime.agentId!;
     const room_id = getUuid(this.client.user?.id as string) as UUID;
 
-    await this.runtime.ensureUserExists(agentId, this.runtime.character.name);
-    await this.runtime.ensureRoomExists(room_id);
+    await Promise.all([
+      this.runtime.ensureUserExists(agentId, this.runtime.character.name),
+      this.runtime.ensureRoomExists(room_id),
+    ]);
     await this.runtime.ensureParticipantInRoom(agentId, room_id);
   }
 
@@ -116,12 +119,16 @@ export class MessageManager {
       const userIdUUID = getUuid(user_id) as UUID;
       const agentId = this.runtime.agentId;
 
-      await this.runtime.ensureUserExists(agentId, this.runtime.character.name);
+      await Promise.all([
+        this.runtime.ensureUserExists(agentId, this.runtime.character.name),
+        this.runtime.ensureUserExists(userIdUUID, userName),
+        this.runtime.ensureRoomExists(room_id),
+      ]);
 
-      await this.runtime.ensureUserExists(userIdUUID, userName);
-      await this.runtime.ensureRoomExists(room_id);
-      await this.runtime.ensureParticipantInRoom(userIdUUID, room_id);
-      await this.runtime.ensureParticipantInRoom(agentId, room_id);
+      await Promise.all([
+        this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
+        this.runtime.ensureParticipantInRoom(agentId, room_id),
+      ]);
 
       let shouldIgnore = false;
       let shouldRespond = true;
@@ -144,7 +151,6 @@ export class MessageManager {
 
       const content: Content = {
         content: processedContent,
-        action: "WAIT",
         attachments: attachments,
       };
 

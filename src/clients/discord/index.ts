@@ -153,7 +153,7 @@ export class DiscordClient extends EventEmitter {
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
       user_id: userIdUUID,
-      content: { content: reactionMessage, action: "WAIT", source: "Discord" },
+      content: { content: reactionMessage, source: "Discord" },
       room_id,
       embedding: embeddingZeroVector,
     });
@@ -192,7 +192,7 @@ export class DiscordClient extends EventEmitter {
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
       user_id: userIdUUID,
-      content: { content: reactionMessage, action: "WAIT", source: "Discord" },
+      content: { content: reactionMessage, source: "Discord" },
       room_id,
       embedding: embeddingZeroVector,
     });

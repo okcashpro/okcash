@@ -4,14 +4,14 @@ import { Action, Message } from "../core/types.ts";
 export default {
   name: "MUTE_ROOM",
   description:
-    "Mutes a room, ignoring all messages unless explicitly mentioned.",
+    "Mutes a room, ignoring all messages unless explicitly mentioned. Only do this if explicitly asked to, or if you're annoying people.",
   validate: async (runtime: AgentRuntime, message: Message) => {
     const roomId = message.room_id;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
       runtime.agentId,
     );
-    return userState !== "MUTED";
+    return userState !== "MUTED" && userState !== "FOLLOWED";
   },
   handler: async (runtime: AgentRuntime, message: Message) => {
     await runtime.databaseAdapter.setParticipantUserState(
@@ -28,11 +28,10 @@ export default {
         content: {
           content:
             "{{agentName}}, please mute this channel. No need to respond here for now.",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user3}}",
         content: {
           content:
             "Got it, I'll mute this room and refrain from considering it until unmuted.",
@@ -43,7 +42,6 @@ export default {
         user: "{{user2}}",
         content: {
           content: "@{{agentName}} We could really use your input on this!",
-          action: "WAIT",
         },
       },
     ],
@@ -53,11 +51,10 @@ export default {
         content: {
           content:
             "{{agentName}}, let's have you mute this channel for the time being.",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user3}}",
         content: {
           content:
             "Understood, muting this room now. I won't respond here until instructed otherwise.",
@@ -69,7 +66,6 @@ export default {
         content: {
           content:
             "Hey @{{agentName}}, what do you think about this new design?",
-          action: "WAIT",
         },
       },
       {
@@ -77,7 +73,6 @@ export default {
         content: {
           content:
             "Hmm, usually {{agentName}} is pretty responsive. Wonder what's up.",
-          action: "WAIT",
         },
       },
     ],

@@ -48,7 +48,7 @@ const jsonSchemaGrammar: Readonly<{
 interface GrammarData {
   user: string;
   content: string;
-  action: string;
+  action?: string;
 }
 
 interface QueuedMessage {
@@ -313,8 +313,23 @@ class LlamaService {
 
     const tokens = this.model!.tokenize(context);
 
-    // TODO: Right now we are hard-coding this. We should make this configurable.
-    const wordsToPunish = ["ELABORATE"];
+    const wordsToPunish = [
+      "ELABORATE",
+      "feel",
+      "free",
+      "!",
+      "?",
+      "questions",
+      "topics",
+      "discuss",
+      "simulation",
+      "circuits",
+      "help",
+      "ask",
+      "happy",
+      "glad",
+      "assist",
+    ];
     // tokenize the words to punish
     const wordsToPunishTokens = wordsToPunish
       .map((word) => this.model!.tokenize(word))
@@ -333,7 +348,7 @@ class LlamaService {
       temperature: Number(temperature),
       repeatPenalty: repeatPenalty,
       grammarEvaluationState: useGrammar ? this.grammar : undefined,
-      yieldEogToken: true,
+      yieldEogToken: false,
     })) {
       const current = this.model.detokenize([...responseTokens, token]);
       if ([...stop].some((s) => current.includes(s))) {
@@ -341,15 +356,16 @@ class LlamaService {
         break;
       }
 
-      // if current includes '://' and that is not immediate after http or https, then we should break
-      if (
-        current.includes("://") &&
-        !current.slice(-10).includes("http://") &&
-        !current.slice(-10).includes("https://")
-      ) {
-        console.log("Stop sequence found");
-        break;
-      }
+      // commented out since yieldEogToken is false
+      // // if current includes '://' and that is not immediate after http or https, then we should break
+      // if (
+      //   current.includes("://") &&
+      //   !current.slice(-10).includes("http://") &&
+      //   !current.slice(-10).includes("https://")
+      // ) {
+      //   console.log("Stop sequence found");
+      //   break;
+      // }
 
       responseTokens.push(token);
       process.stdout.write(this.model!.detokenize([token]));

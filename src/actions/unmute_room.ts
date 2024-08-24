@@ -1,5 +1,3 @@
-// TODO: This has issues and needs to be fixed
-
 import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Message } from "../core/types.ts";
 
@@ -31,11 +29,10 @@ export default {
         content: {
           content:
             "{{agentName}}, you can unmute this channel now. Feel free to participate again.",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user3}}",
         content: {
           content:
             "Alright, unmuting this room. I'll start considering it for responses again.",
@@ -47,15 +44,13 @@ export default {
         content: {
           content:
             "I could use some help troubleshooting this bug. The error message isn't making sense.",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user3}}",
         content: {
           content:
             "Can you share the specific error message you're seeing? I'd be happy to take a look.",
-          action: "WAIT",
         },
       },
     ],
@@ -65,11 +60,10 @@ export default {
         content: {
           content:
             "{{agentName}}, please unmute this room. We could use your input again.",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user3}}",
         content: {
           content:
             "Unmuting now. I'm ready to assist and participate here once again.",
@@ -81,15 +75,13 @@ export default {
         content: {
           content:
             "Does anyone have experience with this new API we're supposed to integrate? It's not well documented.",
-          action: "WAIT",
         },
       },
       {
-        user: "{{agentName}}",
+        user: "{{user3}}",
         content: {
           content:
             "I've worked with that API before. The key is to authenticate with an OAuth2 token before making any requests. I can walk you through the setup.",
-          action: "WAIT",
         },
       },
     ],

@@ -61,7 +61,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 { "user": "{{agentName}}", "content": string, "action": "WAIT" }
 \`\`\``;
 
-export const shouldRespondTemplate = `# Task: Decide on it {{agentName}} should respond.
+export const shouldRespondTemplate = `# Task: Decide if {{agentName}} should respond.
 About {{agentName}}:
 {{bio}}
 

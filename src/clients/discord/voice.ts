@@ -117,17 +117,19 @@ export class VoiceManager extends EventEmitter {
             this.runtime.agentId,
             this.runtime.character.name,
           );
-          await this.runtime.ensureUserExists(userIdUUID, userName);
-          await this.runtime.ensureRoomExists(room_id);
-          await this.runtime.ensureParticipantInRoom(userIdUUID, room_id);
-          await this.runtime.ensureParticipantInRoom(
-            this.runtime.agentId,
-            room_id,
-          );
+          await Promise.all([
+            this.runtime.ensureUserExists(userIdUUID, userName),
+            this.runtime.ensureRoomExists(room_id),
+          ]);
+
+          await Promise.all([
+            this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
+            this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id),
+          ]);
 
           const state = await this.runtime.composeState(
             {
-              content: { content: text, action: "WAIT", source: "Discord" },
+              content: { content: text, source: "Discord" },
               user_id: userIdUUID,
               room_id,
             },
@@ -143,7 +145,7 @@ export class VoiceManager extends EventEmitter {
 
           const response = await this.handleVoiceMessage({
             message: {
-              content: { content: text, action: "WAIT" },
+              content: { content: text },
               user_id: userIdUUID,
               room_id,
             },
