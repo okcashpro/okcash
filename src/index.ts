@@ -16,9 +16,9 @@ import unmute_room from "./actions/unmute_room.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { AgentRuntime } from "./core/runtime.ts";
 import settings from "./core/settings.ts";
-import channelStateProvider from "./providers/channelState.ts";
+import channelStateProvider from "./clients/discord/providers/channelState.ts";
 import timeProvider from "./providers/time.ts";
-import voiceStateProvider from "./providers/voiceState.ts";
+import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
 
 interface Arguments {
   character?: string;
