@@ -75,7 +75,7 @@ const runtime = new AgentRuntime({
     timeProvider,
   ],
   actions: [
-    elaborate,
+    // elaborate, // TODO: Handle elaborate with llama, and add shouldElaborate
     joinvoice,
     leavevoice,
     askClaude,
