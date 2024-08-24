@@ -256,7 +256,7 @@ export class AgentRuntime {
     model = this.model,
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
-    temperature = 0.7,
+    temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? "127999" : "8192",
   }) {
     if (!settings.OPENAI_API_KEY) {

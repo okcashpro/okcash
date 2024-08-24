@@ -129,5 +129,5 @@ If {{agentName}} is conversing with a user and they have not asked to stop, it i
 
 {{recentMessages}}
 
-# INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, IGNORE if {{agentName}} should not respond to the last message or STOP if {{agentName}} should stop participating in the conversation entirely.
-What does {{agentName}} do? (RESPOND, IGNORE, STOP)`;
+# INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, IGNORE if {{agentName}} should not respond to the last message or STOP if {{agentName}} should stop participating in the conversation entirely. Do not give any commentary. Your response should be ONE word.
+What does {{agentName}} do? Answer with RESPOND, IGNORE, STOP`;
