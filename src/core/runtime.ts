@@ -260,7 +260,7 @@ export class AgentRuntime {
     max_context_length = settings.OPENAI_API_KEY ? "127999" : "8192",
   }) {
     if (!settings.OPENAI_API_KEY) {
-      const completionResponse = await this.llamaService.getCompletionResponse(
+      const completionResponse = await this.llamaService.queueCompletionResponse(
         context,
         temperature,
         stop,

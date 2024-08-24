@@ -4,11 +4,12 @@ import {
   GbnfJsonSchema,
   getLlama,
   Llama,
-  LlamaChatSession,
   LlamaContext,
+  LlamaContextSequence,
   LlamaJsonSchemaGrammar,
   LlamaModel,
   Token,
+  LlamaContextSequenceRepeatPenalty
 } from "node-llama-cpp";
 import fs from "fs";
 import https from "https";
@@ -50,17 +51,28 @@ interface GrammarData {
   action: string;
 }
 
+interface QueuedMessage {
+  context: string;
+  temperature: number;
+  stop: string[];
+  frequency_penalty: number;
+  presence_penalty: number;
+  resolve: (value: GrammarData | PromiseLike<GrammarData>) => void;
+  reject: (reason?: any) => void;
+}
+
 class LlamaService {
   private llama: Llama | undefined;
   private model: LlamaModel | undefined;
   private modelPath: string;
   private grammar: LlamaJsonSchemaGrammar<GbnfJsonSchema> | undefined;
-  ctx: LlamaContext | undefined;
-  session: LlamaChatSession | undefined;
-  modelUrl: string;
-  device: string[] = ["cpu"];
+  private ctx: LlamaContext | undefined;
+  private sequence: LlamaContextSequence | undefined;
+  private modelUrl: string;
+  private device: string[] = ["cpu"];
 
-  private messageQueue: string[] = [];
+  private messageQueue: QueuedMessage[] = [];
+  private isProcessing: boolean = false;
   private modelInitialized: boolean = false;
 
   constructor() {
@@ -72,7 +84,6 @@ class LlamaService {
     console.log("modelName", modelName);
     this.modelPath = path.join(__dirname, modelName);
     this.initializeModel();
-
   }
 
   async initializeModel() {
@@ -80,16 +91,14 @@ class LlamaService {
       await this.checkModel();
       console.log("Loading llama");
 
+      const systemInfo = await si.graphics();
+      const hasCUDA = systemInfo.controllers.some(controller => controller.vendor.toLowerCase().includes('nvidia'));
 
-    // Dynamically detect available hardware
-    const systemInfo = await si.graphics();
-    const hasCUDA = systemInfo.controllers.some(controller => controller.vendor.toLowerCase().includes('nvidia'));
-
-    if (hasCUDA) {
-      console.log('**** CUDA detected');
-    } else {
-      console.log('**** No CUDA detected - local response will be slow');
-    }
+      if (hasCUDA) {
+        console.log('**** CUDA detected');
+      } else {
+        console.log('**** No CUDA detected - local response will be slow');
+      }
 
       this.llama = await getLlama({
         gpu: "auto"
@@ -106,21 +115,17 @@ class LlamaService {
       this.model = await this.llama.loadModel({ modelPath: this.modelPath });
       console.log("Model GPU support", this.llama.getGpuDeviceNames());
       console.log("Creating context");
-      this.ctx = await this.model.createContext();
-      console.log("Creating session");
-      this.session = new LlamaChatSession({
-        contextSequence: this.ctx.getSequence(),
-      });
+      this.ctx = await this.model.createContext({ contextSize: 8192 });
+      this.sequence = this.ctx.getSequence();
 
       this.modelInitialized = true;
-      await this.processMessageQueue();
+      this.processQueue();
     } catch (error) {
       console.error("Model initialization failed. Deleting model and retrying...", error);
       await this.deleteModel();
       await this.initializeModel();
     }
   }
-
 
   async checkModel() {
     console.log("Checking model");
@@ -194,57 +199,109 @@ class LlamaService {
     }
   }
 
-  async processMessageQueue() {
-    while (this.messageQueue.length > 0) {
-      const message = this.messageQueue.shift();
-      if (message) {
-        await this.getCompletionResponse(message, 0.7, [], 0, 0);
-      }
-    }
-  }
-
-  async getCompletionResponse(
+  async queueCompletionResponse(
     context: string,
     temperature: number,
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
   ): Promise<GrammarData> {
-    if (!this.modelInitialized) {
-      console.log("Model not initialized. Queueing message...");
-      this.messageQueue.push(context);
-      return Promise.reject(new Error("Model not initialized."));
+    console.log("Queueing completion response");
+    return new Promise((resolve, reject) => {
+      this.messageQueue.push({
+        context,
+        temperature,
+        stop,
+        frequency_penalty,
+        presence_penalty,
+        resolve,
+        reject,
+      });
+      this.processQueue();
+    });
+  }
+
+  private async processQueue() {
+    if (this.isProcessing || this.messageQueue.length === 0 || !this.modelInitialized) {
+      return;
     }
 
-    const session = this.session;
+    this.isProcessing = true;
 
-    console.log("Prompting");
-    const response = await this.session?.prompt(context, {
-      onToken: (chunk: Token[]) => {
-        process.stdout.write(session?.context.model.detokenize(chunk) ?? "");
-      },
-      grammar: this.grammar,
+    while (this.messageQueue.length > 0) {
+      const message = this.messageQueue.shift();
+      if (message) {
+        try {
+          console.log("Processing message");
+          const response = await this.getCompletionResponse(
+            message.context,
+            message.temperature,
+            message.stop,
+            message.frequency_penalty,
+            message.presence_penalty
+          );
+          message.resolve(response);
+        } catch (error) {
+          message.reject(error);
+        }
+      }
+    }
+
+    this.isProcessing = false;
+  }
+
+  private async getCompletionResponse(
+    context: string,
+    temperature: number,
+    stop: string[],
+    frequency_penalty: number,
+    presence_penalty: number,
+  ): Promise<GrammarData> {
+    if (!this.sequence) {
+      throw new Error("Model not initialized.");
+    }
+
+    console.log("Processing request");
+    console.log(context)
+    const tokens = this.model!.tokenize(context);
+    
+    // const repeatPenalty: LlamaContextSequenceRepeatPenalty = {
+    //   punishTokens: () => this.sequence!.contextTokens,
+    //   penalty: 1.1,
+    //   frequencyPenalty: frequency_penalty,
+    //   presencePenalty: presence_penalty
+    // };
+
+    const responseTokens: Token[] = [];
+    console.log("Evaluating tokens");
+    for await (const token of this.sequence.evaluate(tokens, {
       temperature: Number(temperature),
-      customStopTriggers: stop,
-      repeatPenalty: {
-        frequencyPenalty: frequency_penalty,
-        presencePenalty: presence_penalty,
-      },
-    });
+      // stopSequences: stop,
+      // repeatPenalty: repeatPenalty,
+      grammarEvaluationState: this.grammar,
+    })) {
+      // convert token to string and add to the cmd line
+      process.stdout.write(this.model!.detokenize([token]));
+      responseTokens.push(token);
+    }
+
+    const response = this.model!.detokenize(responseTokens);
+
     console.log("Parsing response");
-    console.log("Response: ", response);
     if (!response) {
       throw new Error("Response is undefined");
     }
-    // TODO: Probably wrong
     const parsedResponse = (
       this.grammar as LlamaJsonSchemaGrammar<GbnfJsonSchema>
     ).parse(response) as unknown as GrammarData;
     if (!parsedResponse) {
       throw new Error("Parsed response is undefined");
     }
-    console.log("Parsed response: ", parsedResponse);
     console.log("AI: " + parsedResponse.content);
+
+    // Clear the history of the sequence after each response
+    await this.sequence.clearHistory();
+
     return parsedResponse;
   }
 
@@ -257,6 +314,7 @@ class LlamaService {
     const embedding = await embeddingContext.getEmbeddingFor(input);
     return embedding?.vector;
   }
+
 }
 
 export default LlamaService;

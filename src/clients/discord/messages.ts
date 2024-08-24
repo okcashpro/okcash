@@ -522,10 +522,22 @@ export class MessageManager {
       template: shouldRespondTemplate,
     });
 
-    const response = await this.runtime.completion({
-      context: shouldRespondContext,
-      stop: [],
-    });
+    let response = "";
+    
+    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+      try {
+        response = await this.runtime.completion({
+          context: shouldRespondContext,
+          stop: [],
+        });
+        break;
+      } catch (error) {
+        console.error("Error in _shouldRespond:", error);
+        // wait for 2 seconds
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log("Retrying...");
+      }
+    }
 
     console.log("*** SHOULD RESPOND RESPONSE ***", response);
 
