@@ -8,8 +8,8 @@ import { populateMemories } from "../../test_resources/populateMemories.ts";
 import { runAiTest } from "../../test_resources/runAiTest.ts";
 import { type User } from "../../test_resources/types.ts";
 import { Content, type Message, type UUID } from "../../core/types.ts";
-import action from "../ELABORATE";
-import ignore from "../IGNORE";
+import action from "../elaborate.ts";
+import ignore from "../ignore.ts";
 import wait from "../wait.ts";
 
 dotenv.config({ path: ".dev.vars" });
