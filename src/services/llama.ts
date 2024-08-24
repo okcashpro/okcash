@@ -82,6 +82,11 @@ class LlamaService {
     );
     this.grammar = grammar;
     console.log("Loading model");
+    console.log("this.modelPath", this.modelPath);
+    // check if the model exists
+    if (!fs.existsSync(this.modelPath)) {
+      throw new Error("Model not found. Call checkModel() first.");
+    }
     this.model = await this.llama.loadModel({ modelPath: this.modelPath });
     console.log("Creating context");
     this.ctx = await this.model.createContext();
