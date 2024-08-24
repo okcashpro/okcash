@@ -217,19 +217,19 @@ You should only respond with the name of the voice channel or none, no commentar
     }
   },
   condition:
-    "The agent wants to join a voice channel to participate in voice chat.",
+    "The agent wants to or has been asked to join a voice channel to participate in voice chat.",
   examples: [
     [
       {
         user: "{{user1}}",
         content: {
-          content: "Hey, let's jump into the 'General' voice channel and chat!",
+          content: "Hey, let's jump into the 'General' voice and chat",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Sure! I'm joining the voice channel now.",
+          content: "Sounds good",
           action: "JOIN_VOICE",
         },
       },
@@ -239,13 +239,13 @@ You should only respond with the name of the voice channel or none, no commentar
         user: "{{user1}}",
         content: {
           content:
-            "{{user2}}, can you join the voice channel? I want to discuss our game strategy.",
+            "{{user2}}, can you join the vc, I want to discuss our strat",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Absolutely! I'll join right now.",
+          content: "Sure I'll join right now",
           action: "JOIN_VOICE",
         },
       },
@@ -255,13 +255,13 @@ You should only respond with the name of the voice channel or none, no commentar
         user: "{{user1}}",
         content: {
           content:
-            "Hey {{user2}}, we're having a team meeting in the 'Conference' voice channel. Can you join us?",
+            "hey {{user2}}, we're having a team meeting in the 'conference' voice channel, plz join us",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Sure thing! I'll be right there.",
+          content: "OK see you there",
           action: "JOIN_VOICE",
         },
       },
@@ -277,7 +277,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user2}}",
         content: {
-          content: "Sounds good! Joining the 'Lounge' channel now.",
+          content: "kk be there in a sec",
           action: "JOIN_VOICE",
         },
       },
@@ -287,14 +287,59 @@ You should only respond with the name of the voice channel or none, no commentar
         user: "{{user1}}",
         content: {
           content:
-            "Hey {{user2}}, can you join me in the 'Music' voice channel? I want to share a new song with you.",
+            "Hey {{user2}}, can you join me in the 'Music' voice channel",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content:
-            "Oh, exciting! I'm joining the channel. Can't wait to hear it!",
+            "Sure",
+          action: "JOIN_VOICE",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "join voice chat with us {{user2}}",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "coming",
+          action: "JOIN_VOICE",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "hop in vc {{user2}}",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "joining now",
+          action: "JOIN_VOICE",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "get in vc with us {{user2}}",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "im in",
           action: "JOIN_VOICE",
         },
       },

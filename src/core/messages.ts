@@ -63,7 +63,9 @@ export const formatMessages = ({
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
 
-      const timestamp = message.created_at ? formatTimestamp(message.created_at) : '';
+      const timestamp = message.created_at
+        ? formatTimestamp(message.created_at)
+        : "";
       const shortId = message.user_id.slice(-5);
 
       return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
@@ -81,11 +83,10 @@ const formatTimestamp = (timestamp: string) => {
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   if (days > 0) {
-    return `${days} day${days > 1 ? 's' : ''} ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
   } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
   } else {
-    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
   }
 };
-

@@ -12,8 +12,8 @@ export const formatFacts = (facts: Memory[]) => {
 };
 
 const template =
-// {{actors}}
-`TASK: Extract Claims from the conversation as an array of claims in JSON format.
+  // {{actors}}
+  `TASK: Extract Claims from the conversation as an array of claims in JSON format.
 
 # START OF EXAMPLES
 These are an examples of the expected output of this task:
@@ -137,11 +137,11 @@ None`,
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "So where are you from?" },
+          content: { content: "So where are you from" },
         },
         {
           user: "{{user2}}",
-          content: { content: "I'm from the city." },
+          content: { content: "I'm from the city" },
         },
         {
           user: "{{user1}}",
@@ -155,7 +155,7 @@ None`,
           user: "{{user1}}",
           content: {
             content:
-              "Oh, I've never been there, but I know it's in California!",
+              "Oh, I've never been there, but I know it's in California",
           },
         },
       ] as ActionExample[],
@@ -211,16 +211,16 @@ Eva studied Philosophy before switching to Computer Science`,
           user: "{{user1}}",
           content: {
             content:
-              "Remember when we won the regional poker tournament last spring?",
+              "Remember when we won the regional poker tournament last spring",
           },
         },
         {
           user: "{{user2}}",
-          content: { content: "Of course! That was an incredible day." },
+          content: { content: "That was one of the best days of my life" },
         },
         {
           user: "{{user1}}",
-          content: { content: "It really put our poker club on the map." },
+          content: { content: "It really put our poker club on the map" },
         },
       ],
       outcome: `Claims:

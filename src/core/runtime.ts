@@ -351,6 +351,7 @@ export class AgentRuntime {
 
     const wordsToPunish = [
       "ELABORATE",
+      "please",
       "feel",
       "free",
       "!",

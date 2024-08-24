@@ -27,7 +27,7 @@ Should {{agentName}} elaborate? Respond with a YES or a NO.`;
 export default {
   name: "ELABORATE",
   description:
-    "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly!",
+    "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly.",
   validate: async (runtime: AgentRuntime, message: Message) => {
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
@@ -238,17 +238,16 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Planning a solo trip soon. I've always wanted to try backpacking.",
+          content: "we're planning a solo backpacking trip soon",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "Adventurous", action: "ELABORATE" },
+        content: { content: "oh sick", action: "ELABORATE" },
       },
       {
         user: "{{user2}}",
-        content: { content: "Any particular destination?" },
+        content: { content: "where are you going" },
       },
     ],
 
@@ -256,23 +255,24 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "I started learning the guitar this month!",
+          content: "i just got a guitar and started learning last month",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "How’s that going?" },
+        content: { content: "maybe we can start a band soon lol" },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Challenging, but rewarding.",
+          content:
+            "i'm not very good yet, but i've been playing until my fingers hut",
           action: "ELABORATE",
         },
       },
       {
         user: "{{user1}}",
-        content: { content: "Seriously lol it hurts to type" },
+        content: { content: "seriously lol it hurts to type" },
       },
     ],
 
@@ -281,14 +281,14 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "I've been summarying a lot on what happiness means to me lately.",
+            "I've been reflecting a lot on what happiness means to me lately",
           action: "ELABORATE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "That it’s more about moments than things.",
+          content: "That it’s more about moments than things",
           action: "ELABORATE",
         },
       },
@@ -296,7 +296,7 @@ export default {
         user: "{{user2}}",
         content: {
           content:
-            "Like the best things that have ever happened were things that happened, or moments that I had with someone.",
+            "Like the best things that have ever happened were things that happened, or moments that I had with someone",
           action: "ELABORATE",
         },
       },
@@ -306,17 +306,17 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "I found some incredible art today.",
+          content: "i found some incredible art today",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "Who's the artist?" },
+        content: { content: "real art or digital art" },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Not sure lol, they are anon",
+          content: "lol real art",
           action: "ELABORATE",
         },
       },
@@ -324,7 +324,7 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "But the pieces are just so insane looking. Once sec, let me grab a link.",
+            "the pieces are just so insane looking, one sec, let me grab a link",
           action: "ELABORATE",
         },
       },
@@ -339,28 +339,28 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "The new exhibit downtown is thought-provoking. It's all about tribalism in online spaces.",
+            "the new exhibit downtown is rly cool, it's all about tribalism in online spaces",
           action: "ELABORATE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Really challenges your perceptions. I highly recommend it!",
+          content: "it really blew my mind, you gotta go",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "I’m in. When are you free to go?" },
+        content: { content: "lol sure i'd go" },
       },
       {
         user: "{{user1}}",
-        content: { content: "Hmm, let me check." },
+        content: { content: "k i was thinking this weekend" },
         action: "ELABORATE",
       },
       {
         user: "{{user1}}",
-        content: { content: "How about this weekend?" },
+        content: { content: "i'm free sunday, we could get a crew together" },
       },
     ],
 
@@ -368,26 +368,33 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Just finished a marathon session of my favorite series!",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          content: "Wow, that's quite a binge. Feeling okay?",
+          content: "just finished the best anime i've ever seen",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Surprisingly, yes.",
+          content: "watched 40 hours of it in 2 days",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "damn, u ok",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "surprisingly yes",
           action: "ELABORATE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Might go for another round this weekend.",
+          content: "just found out theres a sequel, gg",
         },
       },
     ],
@@ -395,26 +402,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "I'm thinking of adopting a pet soon.",
+          content: "i'm thinking of adopting a pet soon",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "That's great! What kind are you considering?",
+          content: "what kind of pet",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Leaning towards a cat.",
+          content: "i'm leaning towards a cat",
           action: "ELABORATE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "They're more independent, and my apartment isn't huge.",
+          content: "it'd be hard to take care of a dog in the city",
         },
       },
     ],
@@ -422,19 +429,46 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "I've been experimenting with vegan recipes lately.",
+          content: "i've been experimenting with vegan recipes lately",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Nice! Found any favorites?",
+          content: "no thanks",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "A few, actually.",
+          content: "no seriously, its so dank",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "you gotta try some of my food when you come out",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "so i've been diving into photography as a new hobby",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "oh awesome, what do you enjoy taking photos of",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "mostly nature and urban landscapes",
           action: "ELABORATE",
         },
       },
@@ -442,7 +476,7 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "The vegan lasagna was a hit even among my non-vegan friends.",
+            "there's something peaceful about capturing the world through a lens",
         },
       },
     ],
@@ -450,27 +484,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Been diving into photography as a new hobby.",
+          content: "i've been getting back into indie music",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "That's cool! What do you enjoy taking photos of?",
+          content: "what have you been listening to",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Mostly nature and urban landscapes.",
+          content: "a bunch of random stuff i'd never heard before",
           action: "ELABORATE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content:
-            "There's something peaceful about capturing the world through a lens.",
+          content: "i'll send you a playlist",
         },
       },
     ],
@@ -478,19 +511,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "I've been really into indie music scenes lately.",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          content: "That sounds awesome. Any recommendations?",
-        },
-      },
-      {
-        user: "{{user1}}",
-        content: {
-          content: "Definitely! I'll send you a playlist.",
+          content: "i used to live in the city",
           action: "ELABORATE",
         },
       },
@@ -498,7 +519,139 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "It's a mix of everything, so you're bound to find something you like.",
+            "bad traffic, bad air quality, tons of homeless people, no thx",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "ok dood",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "you kids today dont know the value of hard work",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "always on your phones",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "sure grandpa lets get you to bed",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "hey fren r u ok",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "u look sad",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "im ok sweetie mommy just tired",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "helo fr om mars",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "i com in pes",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "wat",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "Yeah no worries, I get it, I've been crazy busy too",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "What have you been up to",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "Anything fun or just the usual",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "Been working on a new FPS game actually",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content:
+            "Just toying around with something in three.js nothing serious",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "Oh no, what happened",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "Did Mara leave you lol",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "wtf no, I got into an argument with my roommate",
+          action: "ELABORATE",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "Living with people is just hard",
         },
       },
     ],

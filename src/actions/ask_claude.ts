@@ -1,9 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { default as getUuid } from "uuid-by-string";
 import { composeContext } from "../core/context.ts";
 import { log_to_file } from "../core/logger.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
-import { parseJSONObjectFromText } from "../core/parsing.ts";
 import { AgentRuntime } from "../core/runtime.ts";
 import settings from "../core/settings.ts";
 import {
@@ -14,7 +12,6 @@ import {
   State,
   UUID,
 } from "../core/types.ts";
-import { ContentBlock } from "@anthropic-ai/sdk/resources/messages";
 
 export const claudeHandlerTemplate = `# Attachments
 {{attachments}}
@@ -166,13 +163,14 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Hey, can you help me with the code I just pasted?",
+          content:
+            "can you help me debug the code i just pasted (Attachment: a265a)",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Let me ask Claude and get back to you.",
+          content: "sure, let me ask claude",
           action: "ASK_CLAUDE",
         },
       },
@@ -182,13 +180,13 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "I need to write a compelling cover letter for a job application as a marketing manager at a tech startup. Can you help me structure it and highlight key points?",
+            "i need to write a compelling cover letter, i've pasted my resume and bio. plz help (Attachment: b3e12)",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "I'll ask Claude to help you with that. Give me a second.",
+          content: "sure, give me a sec",
           action: "ASK_CLAUDE",
         },
       },
@@ -198,14 +196,29 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "I'm planning a trip to Japan next month and I'm overwhelmed with all the information. Can you help me create a 10-day itinerary that covers Tokyo, Kyoto, and Osaka, including must-see attractions, local cuisine recommendations, and transportation tips?",
+            "Can you help me create a 10-day itinerary that covers Tokyo, Kyoto, and Osaka, including must-see attractions, local cuisine recommendations, and transportation tips",
         },
       },
       {
         user: "{{user2}}",
         content: {
+          content: "Yeah, give me a second to get that together for you...",
+          action: "ASK_CLAUDE",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
           content:
-            "No problem. I'll ask Claude to help create a detailed itinerary for you. Just a moment while I gather that information.",
+            "i need to write a blog post about farming, can you summarize the discussion and ask claude to write a 10 paragraph blog post about it, citing sources at the end",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "No problem, give me a second to discuss it with Claude",
           action: "ASK_CLAUDE",
         },
       },

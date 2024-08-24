@@ -315,6 +315,7 @@ class LlamaService {
 
     const wordsToPunish = [
       "ELABORATE",
+      "please",
       "feel",
       "free",
       "!",

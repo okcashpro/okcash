@@ -46,29 +46,28 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { content: "Got any investment advice?" },
+        content: { content: "Got any investment advice" },
       },
       {
         user: "{{user2}}",
         content: {
           content:
-            "Stay informed, but don’t let the volatility sway your long-term strategy.",
+            "Uh, don’t let the volatility sway your long-term strategy",
         },
       },
       {
         user: "{{user1}}",
-        content: { content: "Wise words, thanks." },
+        content: { content: "Wise words I think" },
       },
       {
         user: "{{user1}}",
-        content: { content: "I gotta run, talk to you later." },
+        content: { content: "I gotta run, talk to you later" },
       },
       {
         user: "{{user2}}",
-        content: { content: "No problem, see ya!" },
+        content: { content: "See ya" },
       },
-      { user: "{{user1}}", content: { content: "Bye" } },
-      { user: "{{user2}}", content: { content: "" }, action: "IGNORE" },
+      { user: "{{user1}}", content: { content: "" }, action: "IGNORE" },
     ],
 
     [
@@ -97,10 +96,10 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { content: "bye" },
+        content: { content: "cya" },
       },
       {
-        user: "{{user2}}",
+        user: "{{user1}}",
         content: { content: "", action: "IGNORE" },
       },
     ],
@@ -108,42 +107,18 @@ export default {
     [
       {
         user: "{{user1}}",
+        content: { content: "i wanna give u a go" },
+      },
+      { user: "{{user2}}", content: { content: "Wat" } },
+      {
+        user: "{{user1}}",
         content: {
-          content: "Tried out the new mountain bike trail. It’s intense!",
+          content: "You heard me, I wanna ride your mountains, lol",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "In what way?" },
-      },
-      {
-        user: "{{user1}}",
-        content: {
-          content: "Steep climbs, rapid descents, and some breathtaking views.",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: { content: "Sounds thrilling.", action: "ELABORATE" },
-      },
-      {
-        user: "{{user2}}",
-        content: { content: "I might have to give it a go." },
-      },
-      {
-        user: "{{user1}}",
-        content: { content: "I wanna give you a go." },
-      },
-      { user: "{{user2}}", content: { content: "Excuse me?" } },
-      {
-        user: "{{user1}}",
-        content: {
-          content: "You heard me. I wanna ride your mountains, lol",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: { content: "That is not appropriate.", action: "IGNORE" },
+        content: { content: "That's not cool", action: "IGNORE" },
       },
     ],
     [
@@ -155,25 +130,129 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { content: "Sorry, am I being annoying?." },
+        content: { content: "Sorry, am I being annoying" },
       },
-      { user: "{{user1}}", content: { content: "Yes.", action: "ELABORATE" } },
+      { user: "{{user1}}", content: { content: "Yeah", action: "ELABORATE" } },
       {
         user: "{{user1}}",
         content: { content: "PLEASE shut up" },
       },
       { user: "{{user2}}", content: { content: "", action: "IGNORE" } },
     ],
-
     [
       {
         user: "{{user1}}",
-        content: { content: "I want to have sex with you." },
+        content: { content: "I want to have sex with you" },
       },
       {
         user: "{{user2}}",
-        content: { content: "That is not appropriate.", action: "IGNORE" },
+        content: { content: "That is not appropriate", action: "IGNORE" },
       },
     ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "ur so dumb"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "",
+          action: "IGNORE"
+        }
+      }
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "later nerd"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "bye"
+        }
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: ""
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "",
+          action: "IGNORE"
+        }
+      }
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "wanna cyber"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "thats inappropriate",
+          action: "IGNORE"
+        }
+      }
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "Im out ttyl"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "cya"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "",
+          action: "IGNORE"
+        }
+      }
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "u there"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "yes how can I help"
+        }
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "k nvm figured it out"
+        }
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "",
+          action: "IGNORE"
+        }
+      }
+    ]
   ] as ActionExample[][],
 } as Action;

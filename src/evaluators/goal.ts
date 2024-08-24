@@ -161,20 +161,20 @@ export default {
         {
           user: "{{user1}}",
           content: {
-            content: "I've just finished chapter 20 of 'War and Peace'!",
+            content: "I've just finished chapter 20 of 'War and Peace'",
           },
         },
         {
           user: "{{user2}}",
           content: {
             content:
-              "That's great! Were you able to grasp the complexities of the characters?",
+              "Were you able to grasp the complexities of the characters",
           },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Yes, I've prepared some notes for our discussion.",
+            content: "Yep. I've prepared some notes for our discussion",
           },
         },
       ],
@@ -207,7 +207,7 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I managed to run 30 miles this week!" },
+          content: { content: "I managed to run 30 miles this week" },
         },
         {
           user: "{{user2}}",

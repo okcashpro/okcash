@@ -6,7 +6,8 @@ export const shouldMuteTemplate = `Based on the conversation so far:
 
 {{recentMessages}}
 
-Should {{agentName}} mute this room and stop responding unless explicitly mentioned? 
+Should {{agentName}} mute this room and stop responding unless explicitly mentioned?
+
 Respond with YES if:
 - The user is being aggressive, rude, or inappropriate
 - The user has directly asked {{agentName}} to stop responding or be quiet
@@ -28,20 +29,19 @@ export default {
     return userState !== "MUTED" && userState !== "FOLLOWED";
   },
   handler: async (runtime: AgentRuntime, message: Message) => {
-    
     async function _shouldMute(state: State): Promise<boolean> {
       const shouldMuteContext = composeContext({
         state,
-        template: shouldMuteTemplate, // Define this template separately 
+        template: shouldMuteTemplate, // Define this template separately
       });
 
       let response = "";
-      
+
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
         try {
           response = await runtime.completion({
             context: shouldMuteContext,
-            stop: ["\n"],  
+            stop: ["\n"],
             max_response_length: 5,
           });
           break;
@@ -51,13 +51,13 @@ export default {
           console.log("Retrying...");
         }
       }
-      
+
       const lowerResponse = response.toLowerCase().trim();
       return lowerResponse.includes("yes");
     }
 
     const state = await runtime.composeState(message);
-    
+
     if (await _shouldMute(state)) {
       await runtime.databaseAdapter.setParticipantUserState(
         message.room_id,
@@ -73,21 +73,21 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "{{agentName}}, please mute this channel. No need to respond here for now.",
+            "{{user3}}, please mute this channel. No need to respond here for now.",
         },
       },
       {
         user: "{{user3}}",
         content: {
           content:
-            "Got it, I'll mute this room and refrain from considering it until unmuted.",
+            "Got it",
           action: "MUTE_ROOM",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "@{{agentName}} We could really use your input on this!",
+          content: "@{{user1}} we could really use your input on this",
         },
       },
     ],
@@ -96,14 +96,14 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "{{agentName}}, let's have you mute this channel for the time being.",
+            "{{user3}}, please mute this channel for the time being",
         },
       },
       {
         user: "{{user3}}",
         content: {
           content:
-            "Understood, muting this room now. I won't respond here until instructed otherwise.",
+            "Understood",
           action: "MUTE_ROOM",
         },
       },
@@ -111,14 +111,73 @@ export default {
         user: "{{user2}}",
         content: {
           content:
-            "Hey @{{agentName}}, what do you think about this new design?",
+            "Hey what do you think about this new design",
+        },
+      },
+      {
+        user: "{{user3}}",
+        content: {
+          content:
+            "",
+          action: "IGNORE",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "{{user2}} plz mute this room",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Hmm, usually {{agentName}} is pretty responsive. Wonder what's up.",
+          content: "np going silent",
+          action: "MUTE_ROOM",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "whos going to the webxr meetup in an hour btw",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "",
+          action: "IGNORE",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "too many messages here {{user2}}",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: {
+          content: "my bad ill mute",
+          action: "MUTE_ROOM",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "yo {{user2}} dont talk in here",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "sry",
+          action: "MUTE_ROOM",
         },
       },
     ],

@@ -28,7 +28,6 @@ export default {
     return userState === "MUTED";
   },
   handler: async (runtime: AgentRuntime, message: Message) => {
-
     async function _shouldUnmute(state: State): Promise<boolean> {
       const shouldUnmuteContext = composeContext({
         state,
@@ -74,14 +73,14 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "{{agentName}}, you can unmute this channel now. Feel free to participate again.",
+            "{{user3}}, you can unmute this channel now",
         },
       },
       {
         user: "{{user3}}",
         content: {
           content:
-            "Alright, unmuting this room. I'll start considering it for responses again.",
+            "Done",
           action: "UNMUTE_ROOM",
         },
       },
@@ -89,14 +88,14 @@ export default {
         user: "{{user2}}",
         content: {
           content:
-            "I could use some help troubleshooting this bug. The error message isn't making sense.",
+            "I could use some help troubleshooting this bug.",
         },
       },
       {
         user: "{{user3}}",
         content: {
           content:
-            "Can you share the specific error message you're seeing? I'd be happy to take a look.",
+            "Can you post the specific error message",
         },
       },
     ],
@@ -105,29 +104,60 @@ export default {
         user: "{{user1}}",
         content: {
           content:
-            "{{agentName}}, please unmute this room. We could use your input again.",
-        },
-      },
-      {
-        user: "{{user3}}",
-        content: {
-          content:
-            "Unmuting now. I'm ready to assist and participate here once again.",
-          action: "UNMUTE_ROOM",
+            "{{user2}}, please unmute this room. We could use your input again.",
         },
       },
       {
         user: "{{user2}}",
         content: {
           content:
-            "Does anyone have experience with this new API we're supposed to integrate? It's not well documented.",
+            "Sounds good",
+          action: "UNMUTE_ROOM",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "{{user2}} wait you should come back and chat in here",
         },
       },
       {
-        user: "{{user3}}",
+        user: "{{user2}}",
         content: {
-          content:
-            "I've worked with that API before. The key is to authenticate with an OAuth2 token before making any requests. I can walk you through the setup.",
+          content: "im back",
+          action: "UNMUTE_ROOM",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "unmute urself {{user2}}",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "unmuted",
+          action: "UNMUTE_ROOM",
+        },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          content: "ay {{user2}} get back in here",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          content: "sup yall",
+          action: "UNMUTE_ROOM",
         },
       },
     ],

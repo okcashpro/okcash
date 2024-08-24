@@ -72,30 +72,40 @@ About {{agentName}}:
 <user 2>: Oh? Which movie?
 Result: [IGNORE]
 
-{{agentName}}: Oh, this is my favorite scene!
+{{agentName}}: Oh, this is my favorite scene
 <user 1>: lol sick
-<user 2>: wait, why is it your favorite scene?
+<user 2>: wait, why is it your favorite scene
 Result: [RESPOND]
 
 <user>: stfu bot
+Result: [STOP]
+
+<user>: Hey {{agent}}, can you help me with something
+Result: [RESPOND]
+
+<user>: {{agentName}} stfu plz
+Result: [STOP]
+
+// ignore example
 <user>: i need help
+{{agentName}}: how can I help you?
+<user>: no. i need help from someone else
 Result: [IGNORE]
 
-<user>: Hey {{agent}}, can you help me with something?
+<user>: Hey {{agent}}, can I ask you a question
+{{agentName}}: Sure, what is it
+<user>: can you ask claude to create a basic react module that demonstrates a counter
 Result: [RESPOND]
 
-<user>: Hey {{agent}}, can I ask you a question?
-{{agentName}}: Sure, what is it?
-<user>: can you ask claude to create a basic react module that demonstrates a counter?
-Result: [RESPOND]
-
-<user>: {{agentName}} can you tell me a story?
+<user>: {{agentName}} can you tell me a story
+<user>: {about a girl named elara
+{{agentName}}: Sure.
 {{agentName}}: Once upon a time, in a quaint little village, there was a curious girl named Elara.
 {{agentName}}: Elara was known for her adventurous spirit and her knack for finding beauty in the mundane.
-<user>: I'm loving it
+<user>: I'm loving it, keep going
 Result: [RESPOND]
 
-<user>: {{agentName}} stop responding
+<user>: {{agentName}} stop responding plz
 Result: [STOP]
 
 <user>: okay, i want to test something. can you say marco?
