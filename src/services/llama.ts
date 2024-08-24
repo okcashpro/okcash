@@ -321,18 +321,17 @@ class LlamaService {
       const current = this.model!.detokenize([...responseTokens, token]);
       console.log("current", current);
 
-      if(useGrammar){
-        if(current.includes('```\n')){
-          console.log("JSON block found");
-          break;
-        }
-      }
-
       if ([...stop, '://'].some(s => current.includes(s))) {
         console.log("Stop sequence found");
         break;
       }
       responseTokens.push(token);
+      if(useGrammar){
+        if(current.replaceAll('\n', '').includes('}```')){
+          console.log("JSON block found");
+          break;
+        }
+      }
       if (responseTokens.length > max_tokens) {
         console.log("Max tokens reached");
         break;
