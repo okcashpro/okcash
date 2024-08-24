@@ -295,13 +295,15 @@ class LlamaService {
       throw new Error("Model not initialized.");
     }
 
-    console.log("***** COMPLETION")
-    console.log(context)
-
     const tokens = this.model!.tokenize(context);
+
+    // TODO: Right now we are hard-coding this. We should make this configurable.
+    const wordsToPunish = ['ELABORATE']
+    // tokenize the words to punish
+    const wordsToPunishTokens = wordsToPunish.map(word => this.model!.tokenize(word)).flat();
     
     const repeatPenalty: LlamaContextSequenceRepeatPenalty = {
-      punishTokens: () => this.sequence!.contextTokens,
+      punishTokens: () => wordsToPunishTokens,
       penalty: 1.1,
       frequencyPenalty: frequency_penalty,
       presencePenalty: presence_penalty
@@ -336,9 +338,16 @@ class LlamaService {
     }
 
     if (useGrammar) {
+
+      // extract everything between ```json and ```
+      const jsonString = response.match(/```json(.*?)```/s)?.[1].trim();
+      if (!jsonString) {
+        throw new Error("JSON string not found");
+      }
+
       const parsedResponse = (
         this.grammar as LlamaJsonSchemaGrammar<GbnfJsonSchema>
-      ).parse(response) as unknown as GrammarData;
+      ).parse(jsonString) as unknown as GrammarData;
       if (!parsedResponse) {
         throw new Error("Parsed response is undefined");
       }
