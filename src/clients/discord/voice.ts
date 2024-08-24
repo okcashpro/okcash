@@ -115,14 +115,11 @@ export class VoiceManager extends EventEmitter {
           const text = await this.transcriptionService.transcribe(inputBuffer);
           const room_id = getUuid(channelId) as UUID;
           const userIdUUID = getUuid(user_id) as UUID;
-          const agentId = getUuid(
-            settings.DISCORD_APPLICATION_ID as string,
-          ) as UUID;
-          await this.runtime.ensureUserExists(agentId, this.runtime.character.name);
+          await this.runtime.ensureUserExists(this.runtime.agentId, this.runtime.character.name);
           await this.runtime.ensureUserExists(userIdUUID, userName);
           await this.runtime.ensureRoomExists(room_id);
           await this.runtime.ensureParticipantInRoom(userIdUUID, room_id);
-          await this.runtime.ensureParticipantInRoom(agentId, room_id);
+          await this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id);
 
           const state = await this.runtime.composeState(
             {
@@ -326,13 +323,12 @@ export class VoiceManager extends EventEmitter {
     responseContent: Content,
   ) {
     const { room_id } = message;
-    const agentId = getUuid(settings.DISCORD_APPLICATION_ID as string) as UUID;
 
     responseContent.content = responseContent.content?.trim();
 
     if (responseContent.content) {
       await this.runtime.messageManager.createMemory({
-        user_id: agentId!,
+        user_id: this.runtime.agentId,
         content: { ...responseContent, user: this.character.name },
         room_id,
         embedding: embeddingZeroVector,

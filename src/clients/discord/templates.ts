@@ -18,9 +18,12 @@ About {{agentName}}:
 {{bio}}
 {{lore}}
 
+# Important information about the world:
+{{providers}}
+
 # Attachments
 {{attachments}}
-{{providers}}
+
 {{actionNames}}
 {{actions}}
 

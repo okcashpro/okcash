@@ -27,7 +27,8 @@ export async function sendMessageInChunks(
 ): Promise<void> {
   const messages = splitMessage(content);
   for (const message of messages) {
-    await channel.send(message);
+    // TODO: This is a patch to replace common error, but we need to refactor actions so this doesn't happen
+    await channel.send(message.replace('(WAIT)', '').trim());
   }
 }
 
@@ -148,9 +149,11 @@ export class MessageManager {
         action: "WAIT",
         attachments: attachments,
       };
+
+      const userMessage = { content, user_id: userIdUUID, room_id };
   
       let state = (await this.runtime.composeState(
-        { content, user_id: userIdUUID, room_id },
+        userMessage,
         {
           discordClient: this.client,
           discordMessage: message,
@@ -159,7 +162,7 @@ export class MessageManager {
       )) as State;
   
       const messageToHandle: Message = {
-        ...{ content, user_id: agentId, room_id },
+        ...userMessage,
         content: {
           ...content,
           attachments,
