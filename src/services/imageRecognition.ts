@@ -1,245 +1,236 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import {
-  AutoProcessor,
-  AutoTokenizer,
-  Moondream1ForConditionalGeneration,
-  RawImage,
-} from "@xenova/transformers";
+import { fileURLToPath } from "url";
+import path from "path";
 import fs from "fs";
+import https from "https";
+import { AgentRuntime } from "../core/runtime.ts";
+import {
+  Llama,
+  LlamaModel,
+  LlamaContext,
+  getLlama,
+  LlamaContextSequence
+} from "node-llama-cpp";
 import gifFrames from "gif-frames";
 import os from "os";
-import path from "path";
-import { AgentRuntime } from "../core/runtime.ts";
+
+interface QueuedRequest {
+  imageUrl: string;
+  resolve: (value: { title: string; description: string } | PromiseLike<{ title: string; description: string }>) => void;
+  reject: (reason?: any) => void;
+}
+
 class ImageRecognitionService {
-  private modelId: string = "Xenova/moondream2";
-  private device: string = "cpu";
-  private model: Moondream1ForConditionalGeneration | null;
-  private processor: AutoProcessor | null = null;
-  private tokenizer: AutoTokenizer | null = null;
+  private modelPath: string;
+  private modelUrl: string;
+  private llama: Llama | undefined;
+  private model: LlamaModel | undefined;
+  private ctx: LlamaContext | undefined;ImageRecognitionService
+  private sequence: LlamaContextSequence | undefined;
   private initialized: boolean = false;
-  runtime: AgentRuntime;
+  private runtime: AgentRuntime;
+  private requestQueue: QueuedRequest[] = [];
+  private isProcessing: boolean = false;
 
   constructor(runtime: AgentRuntime) {
     this.runtime = runtime;
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    this.modelPath = path.join(__dirname, "llava-phi-3-mini.gguf");
+    this.modelUrl = "https://huggingface.co/xtuner/llava-phi-3-mini-gguf/resolve/main/llava-phi-3-mini-int4.gguf?download=true";
   }
 
-  async initialize(
-    modelId: string | null = null,
-    device: string | null = null,
-    dtype: {
-      embed_tokens: string;
-      vision_encoder: string;
-      decoder_model_merged: string;
-    } = {
-      embed_tokens: "fp16",
-      vision_encoder: "q8",
-      decoder_model_merged: "q4",
-    },
-  ): Promise<void> {
-    if (this.initialized) {
-      return;
+  async initialize(): Promise<void> {
+    if (this.initialized) return;
+
+    try {
+      await this.checkModel();
+      
+      console.log("Loading llama");
+      this.llama = await getLlama({
+        gpu: "auto"
+      });
+      
+      console.log("Loading model");
+      this.model = await this.llama.loadModel({ modelPath: this.modelPath });
+      
+      console.log("Creating context");
+      const contextParams = {
+        contextSize: 2048,
+        gpuLayers: -1, // Use all available GPU layers
+      };
+      this.ctx = await this.model.createContext(contextParams);
+      this.sequence = this.ctx.getSequence();
+
+      this.initialized = true;
+      console.log("ImageRecognitionService initialized successfully");
+    } catch (error) {
+      console.error("Failed to initialize ImageRecognitionService:", error);
+      throw error;
     }
-    // check for openai api key
-    if (process.env.OPENAI_API_KEY) {
-      // start recognition with openai
-      this.modelId = modelId || "gpt-4o-mini";
-      this.device = "cloud";
+  }
+
+  private async processImageRecognition(imageUrl: string): Promise<{ title: string; description: string }> {
+    if (!this.sequence || !this.model) {
+      throw new Error("ImageRecognitionService not properly initialized");
+    }
+
+    const imageData = await this.getImageData(imageUrl);
+    const base64Image = imageData.toString("base64");
+
+    const prompt = `Analyze the following image:
+[IMAGE]data:image/jpeg;base64,${base64Image}[/IMAGE]
+
+Provide a title and description for this image. The response should be in the following format:
+Title: <title>
+Description: <description>
+
+Be concise and accurate in your analysis.`;
+
+    const tokens = this.model.tokenize(prompt);
+    const responseTokens = [];
+
+    for await (const token of this.sequence.evaluate(tokens, {
+      temperature: 0.3,
+      topP: 0.9,
+    })) {
+      if(responseTokens.length > 512){
+        break;
+      }
+      responseTokens.push(token);
+      const partialResponse = this.model.detokenize(responseTokens);
+      if (partialResponse.includes("Description:") && partialResponse.split("Description:")[1].trim().length > 0) {
+        break;
+      }
+    }
+
+    const response = this.model.detokenize(responseTokens);
+    const [title, description] = this.parseResponse(response);
+
+    return { title, description };
+  }
+
+  async checkModel() {
+    console.log("Checking model");
+    if (!fs.existsSync(this.modelPath)) {
+      console.log("Model not found. Downloading...");
+  
+      await new Promise<void>((resolve, reject) => {
+        const file = fs.createWriteStream(this.modelPath);
+        let downloadedSize = 0;
+  
+        const downloadModel = (url: string) => {
+          https.get(url, (response) => {
+            const isRedirect = response.statusCode >= 300 && response.statusCode < 400;
+            if (isRedirect) {
+              const redirectUrl = response.headers.location;
+              if (redirectUrl) {
+                console.log("Following redirect to:", redirectUrl);
+                downloadModel(redirectUrl);
+                return;
+              } else {
+                console.error("Redirect URL not found");
+                reject(new Error("Redirect URL not found"));
+                return;
+              }
+            }
+  
+            const totalSize = parseInt(
+              response.headers["content-length"] ?? "0",
+              10,
+            );
+  
+            response.on("data", (chunk) => {
+              downloadedSize += chunk.length;
+              file.write(chunk);
+  
+              // Log progress
+              const progress = ((downloadedSize / totalSize) * 100).toFixed(2);
+              process.stdout.write(`Downloaded ${progress}%\r`);
+            });
+  
+            response.on("end", () => {
+              file.end();
+              console.log("\nModel downloaded successfully.");
+              resolve();
+            });
+          }).on("error", (err) => {
+            fs.unlink(this.modelPath, () => {}); // Delete the file async
+            console.error("Download failed:", err.message);
+            reject(err);
+          });
+        };
+  
+        downloadModel(this.modelUrl);
+  
+        file.on("error", (err) => {
+          fs.unlink(this.modelPath, () => {}); // Delete the file async
+          console.error("File write error:", err.message);
+          reject(err);
+        });
+      });
     } else {
-      // start recognition with xenova
-      this.modelId = modelId || "Xenova/moondream2";
-      this.device = device || "cpu";
-
-      this.processor = await AutoProcessor.from_pretrained(this.modelId);
-      this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId);
-      this.model = await Moondream1ForConditionalGeneration.from_pretrained(
-        this.modelId,
-        {
-          dtype: {
-            embed_tokens: dtype.embed_tokens, // or 'fp32'
-            vision_encoder: dtype.vision_encoder, // or 'q8'
-            decoder_model_merged: dtype.decoder_model_merged, // or 'q4'
-          },
-          device: this.device,
-        },
-      );
-    }
-    this.initialized = true;
-  }
-
-  async recognizeImage(
-    imageUrl: string,
-  ): Promise<{ title: string; description: string }> {
-    console.log("recognizeImage", imageUrl);
-
-    if (!this.initialized) {
-      console.log("initializing");
-      await this.initialize();
-    }
-
-    const isGif = imageUrl.toLowerCase().endsWith(".gif");
-    let imageToProcess = imageUrl;
-    let imageData: Buffer | null = null;
-
-    try {
-      if (isGif) {
-        console.log("Processing GIF: extracting first frame");
-        const { filePath, data } =
-          await this.extractFirstFrameFromGif(imageUrl);
-        imageToProcess = filePath;
-        imageData = data;
-      } else {
-        // For non-GIFs, fetch the image data
-        const response = await fetch(imageUrl);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch image: ${response.statusText}`);
-        }
-        imageData = Buffer.from(await response.arrayBuffer());
-      }
-
-      if (!imageData || imageData.length === 0) {
-        throw new Error("Failed to fetch image data");
-      }
-
-      const prompt =
-        "Describe this image and give it a title. The first line sould be the title, and then a line break, then a detailed description of the image. Respond with the format 'title\ndescription'";
-
-      if (this.device === "cloud") {
-        const text = await this.recognizeWithOpenAI(
-          imageUrl,
-          imageData,
-          prompt,
-          isGif,
-        );
-        // split the first line off
-        const title = text.split("\n")[0];
-        const description = text.split("\n")[1];
-        return { title, description };
-      } else {
-        const text = await this.recognizeWithXenova(imageToProcess, prompt);
-        // split the first line off
-        const title = text.split("\n")[0];
-        const description = text.split("\n")[1];
-        return { title, description };
-      }
-    } catch (error) {
-      console.error("Error in recognizeImage:", error);
-      throw error;
-    } finally {
-      if (isGif && imageToProcess !== imageUrl) {
-        fs.unlinkSync(imageToProcess);
-      }
+      console.log("Model already exists.");
     }
   }
 
-  private async recognizeWithOpenAI(
-    imageUrl: string,
-    imageData: Buffer,
-    prompt: string,
-    isGif: boolean,
-  ): Promise<string> {
-    for (let retryAttempts = 0; retryAttempts < 3; retryAttempts++) {
-      try {
-        let body;
-        if (isGif) {
-          const base64Image = imageData.toString("base64");
-          body = JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              {
-                role: "user",
-                content: [
-                  { type: "text", text: prompt },
-                  {
-                    type: "image_url",
-                    image_url: { url: `data:image/png;base64,${base64Image}` },
-                  },
-                ],
-              },
-            ],
-            max_tokens: 500,
-          });
-        } else {
-          body = JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              {
-                role: "user",
-                content: [
-                  { type: "text", text: prompt },
-                  { type: "image_url", image_url: { url: imageUrl } },
-                ],
-              },
-            ],
-            max_tokens: 300,
-          });
-        }
-
-        const response = await fetch(
-          "https://api.openai.com/v1/chat/completions",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-            },
-            body: body,
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.choices[0].message.content;
-      } catch (error) {
-        console.log(
-          `Error during OpenAI request (attempt ${retryAttempts + 1}):`,
-          error,
-        );
-        if (retryAttempts === 2) {
-          throw error;
-        }
-      }
-    }
-    throw new Error("Failed to recognize image with OpenAI after 3 attempts");
-  }
-
-  private async recognizeWithXenova(
-    imageToProcess: string,
-    prompt: string,
-  ): Promise<string> {
-    console.log("using Xenova model for image recognition");
-    try {
-      const image = await RawImage.fromURL(imageToProcess);
-      const visionInputs = await this.processor(image);
-
-      const output = await this.model.generate({
-        ...this.tokenizer(prompt),
-        ...visionInputs,
-        do_sample: false,
-        max_new_tokens: 64,
-      });
-
-      const decoded = this.tokenizer.batch_decode(output, {
-        skip_special_tokens: true,
-      });
-
-      return decoded[0];
-    } catch (error) {
-      console.error("Error processing image with Xenova model:", error);
-      throw error;
-    }
-  }
-
-  private async extractFirstFrameFromGif(
-    gifUrl: string,
-  ): Promise<{ filePath: string; data: Buffer }> {
-    const frameData = await gifFrames({
-      url: gifUrl,
-      frames: 1,
-      outputType: "png",
+  async recognizeImage(imageUrl: string): Promise<{ title: string; description: string }> {
+    return new Promise((resolve, reject) => {
+      this.requestQueue.push({ imageUrl, resolve, reject });
+      this.processQueue();
     });
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.isProcessing || this.requestQueue.length === 0) return;
+
+    this.isProcessing = true;
+
+    while (this.requestQueue.length > 0) {
+      const request = this.requestQueue.shift();
+      if (!request) continue;
+
+      try {
+        if (!this.initialized) {
+          await this.initialize();
+        }
+
+        const result = await this.processImageRecognition(request.imageUrl);
+        request.resolve(result);
+      } catch (error) {
+        request.reject(error);
+      }
+    }
+
+    this.isProcessing = false;
+  }
+
+  private parseResponse(response: string): [string, string] {
+    const titleMatch = response.match(/Title:\s*(.*)/i);
+    const descriptionMatch = response.match(/Description:\s*([\s\S]*)/i);
+
+    const title = titleMatch ? titleMatch[1].trim() : "Untitled";
+    const description = descriptionMatch ? descriptionMatch[1].trim() : "No description available.";
+
+    return [title, description];
+  }
+
+  private async getImageData(imageUrl: string): Promise<Buffer> {
+    const isGif = imageUrl.toLowerCase().endsWith(".gif");
+
+    if (isGif) {
+      console.log("Processing GIF: extracting first frame");
+      const { data } = await this.extractFirstFrameFromGif(imageUrl);
+      return data;
+    } else {
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+      return Buffer.from(await response.arrayBuffer());
+    }
+  }
+
+  private async extractFirstFrameFromGif(gifUrl: string): Promise<{ filePath: string; data: Buffer }> {
+    const frameData = await gifFrames({ url: gifUrl, frames: 1, outputType: "png" });
     const firstFrame = frameData[0];
 
     const tempDir = os.tmpdir();

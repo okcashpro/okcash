@@ -318,7 +318,7 @@ class LlamaService {
       yieldEogToken: true,
     })) {
       const current = this.model!.detokenize([...responseTokens, token]);
-      if ([...stop, '://'].some(s => current.includes(s))) {
+      if ([...stop].some(s => current.includes(s))) {
         console.log("Stop sequence found");
         break;
       }
