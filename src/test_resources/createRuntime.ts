@@ -1,4 +1,6 @@
 import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
+import { load } from "../adapters/sqlite/sqlite_vss.ts";
+import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
 import { SupabaseDatabaseAdapter } from "../adapters/supabase.ts";
 import { zeroUuid } from "../core/constants.ts";
 import { DatabaseAdapter } from "../core/database.ts";
@@ -11,8 +13,6 @@ import {
   TEST_PASSWORD,
 } from "./constants.ts";
 import { User } from "./types.ts";
-import { load } from "../adapters/sqlite/sqlite_vss.ts";
-import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
 
 export async function createRuntime({
   env,
@@ -34,27 +34,6 @@ export async function createRuntime({
   };
 
   switch (env?.TEST_DATABASE_CLIENT as string) {
-    case "sqlite":
-      {
-        const module = await import("better-sqlite3");
-
-        const Database = module.default;
-
-        // SQLite adapter
-        adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
-
-        // Load sqlite-vss
-        await load((adapter as SqliteDatabaseAdapter).db);
-        // Create a test user and session
-        user = {
-          id: zeroUuid,
-          email: "test@example.com",
-        } as User;
-        session = {
-          user: user,
-        };
-      }
-      break;
     case "sqljs":
       {
         const module = await import("sql.js");
@@ -68,7 +47,7 @@ export async function createRuntime({
         adapter = new SqlJsDatabaseAdapter(db);
 
         // Load sqlite-vss
-        // load((adapter as SqliteDatabaseAdapter).db);
+        load((adapter as SqlJsDatabaseAdapter).db);
         // Create a test user and session
         user = {
           id: zeroUuid,
@@ -80,7 +59,6 @@ export async function createRuntime({
       }
       break;
     case "supabase":
-    default:
       {
         const module = await import("@supabase/supabase-js");
 
@@ -123,6 +101,27 @@ export async function createRuntime({
           env?.SUPABASE_URL ?? SUPABASE_URL,
           env?.SUPABASE_SERVICE_API_KEY ?? SUPABASE_ANON_KEY,
         );
+      }
+      case "sqlite":
+    default:
+      {
+        const module = await import("better-sqlite3");
+
+        const Database = module.default;
+
+        // SQLite adapter
+        adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
+
+        // Load sqlite-vss
+        await load((adapter as SqliteDatabaseAdapter).db);
+        // Create a test user and session
+        user = {
+          id: zeroUuid,
+          email: "test@example.com",
+        } as User;
+        session = {
+          user: user,
+        };
       }
       break;
   }

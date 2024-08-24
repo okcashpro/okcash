@@ -4,8 +4,8 @@ import { EventEmitter } from "events";
 import fs from "fs";
 import path from "path";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../agent/index.ts";
-import { adapter } from "../../agent/db.ts";
+import { AgentRuntime } from "../../core/runtime.ts"
+// import { adapter } from "../../db.ts";
 import settings from "../../core/settings.ts";
 
 import { fileURLToPath } from "url";
@@ -24,7 +24,7 @@ const __dirname = path.dirname(__filename);
 
 export class ClientBase extends EventEmitter {
   twitterClient: Scraper;
-  agent: Agent;
+  runtime: AgentRuntime;
   character: Character;
   directions: string;
   model: string;
@@ -38,18 +38,18 @@ export class ClientBase extends EventEmitter {
   }
 
   constructor({
-    agent,
+    runtime,
     character,
     model = "gpt-4o-mini",
     callback = null,
   }: {
-    agent: Agent;
+    runtime: AgentRuntime;
     character: Character;
     model?: string;
     callback?: (self: ClientBase) => any;
   }) {
     super();
-    this.agent = agent;
+    this.runtime = runtime;
     this.twitterClient = new Scraper();
     this.character = character;
     this.directions =
@@ -59,7 +59,7 @@ export class ClientBase extends EventEmitter {
       character.style.post.join();
     this.callback = callback;
     this.model = model;
-    this.imageRecognitionService = new ImageRecognitionService(this.agent);
+    this.imageRecognitionService = new ImageRecognitionService(this.runtime);
 
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {
@@ -178,8 +178,8 @@ export class ClientBase extends EventEmitter {
         room_id,
         embedding: embeddingZeroVector,
       });
-      await this.agent.ensureUserExists(agentId, userName);
-      await this.agent.runtime.messageManager.createMemory(
+      await this.runtime.ensureUserExists(agentId, userName);
+      await this.runtime.messageManager.createMemory(
         {
           user_id: agentId!,
           content: responseContent,
@@ -188,7 +188,7 @@ export class ClientBase extends EventEmitter {
         },
         false,
       );
-      await this.agent.runtime.evaluate(message, { ...state, responseContent });
+      await this.runtime.evaluate(message, { ...state, responseContent });
     } else {
       console.warn("Empty response, skipping");
     }
@@ -198,35 +198,37 @@ export class ClientBase extends EventEmitter {
     const { content: senderContent } = message;
 
     if ((senderContent as Content).content) {
-      const data2 = adapter.db
-        .prepare(
-          "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
-        )
-        .all("messages", message.user_id, message.room_id) as {
-        content: Content;
-      }[];
+      console.warn("Code has been commented out, messages are not saved until refactor complete")
+      // TODO: Refactor to use runtime and memory manager APIs, don't directly call the db
+      // const data2 = adapter.db
+      //   .prepare(
+      //     "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
+      //   )
+      //   .all("messages", message.user_id, message.room_id) as {
+      //   content: Content;
+      // }[];
 
-      if (data2.length > 0 && data2[0].content === message.content) {
-        console.log("already saved", data2);
-      } else {
-        console.log("Creating memory", {
-          user_id: message.user_id,
-          content: senderContent,
-          room_id: message.room_id,
-          embedding: embeddingZeroVector,
-        });
-        await this.agent.runtime.messageManager.createMemory({
-          user_id: message.user_id,
-          content: senderContent,
-          room_id: message.room_id,
-          embedding: embeddingZeroVector,
-        });
-      }
-      await this.agent.runtime.evaluate(message, {
-        ...state,
-        twitterMessage: message,
-        twitterClient: this.twitterClient,
-      });
+      // if (data2.length > 0 && data2[0].content === message.content) {
+      //   console.log("already saved", data2);
+      // } else {
+      //   console.log("Creating memory", {
+      //     user_id: message.user_id,
+      //     content: senderContent,
+      //     room_id: message.room_id,
+      //     embedding: embeddingZeroVector,
+      //   });
+      //   await this.runtime.messageManager.createMemory({
+      //     user_id: message.user_id,
+      //     content: senderContent,
+      //     room_id: message.room_id,
+      //     embedding: embeddingZeroVector,
+      //   });
+      // }
+      // await this.runtime.evaluate(message, {
+      //   ...state,
+      //   twitterMessage: message,
+      //   twitterClient: this.twitterClient,
+      // });
     }
   }
 }

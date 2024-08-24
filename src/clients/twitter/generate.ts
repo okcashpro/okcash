@@ -1,10 +1,10 @@
 import { SearchMode } from "agent-twitter-client";
-import { Agent } from "../../agent.ts";
-import settings from "../../core/settings.ts";
-import { ClientBase } from "./base.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { composeContext } from "../../core/context.ts";
+import { log_to_file } from "../../core/logger.ts";
+import { AgentRuntime } from "../../core/runtime.ts";
+import settings from "../../core/settings.ts";
 import { State } from "../../core/types.ts";
+import { ClientBase } from "./base.ts";
 
 const newTweetPrompt = `{{recentConversations}}
 
@@ -32,10 +32,10 @@ export class TwitterGenerationClient extends ClientBase {
     generateNewTweetLoop();
   }
 
-  constructor(agent: Agent, character: any, model: string) {
+  constructor(runtime: AgentRuntime, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
-      agent,
+      runtime,
       character,
       model,
       callback: (self) => self.onReady(),
@@ -122,7 +122,7 @@ export class TwitterGenerationClient extends ClientBase {
       let newTweetContent;
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
         try {
-          newTweetContent = await this.agent.runtime.completion({
+          newTweetContent = await this.runtime.completion({
             context,
             stop: [],
             temperature: this.temperature,

@@ -1,16 +1,15 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../test/createRuntime.ts";
-import { getOrCreateRelationship } from "../test/getOrCreateRelationship.ts";
-import { runAiTest } from "../test/runAiTest.ts";
-import { TEST_ACTION, TEST_ACTION_FAIL } from "../test/testAction.ts";
-import { type User } from "../test/types.ts";
-import { composeContext } from "../core/context.ts";
-import logger from "../core/logger.ts";
-import { embeddingZeroVector } from "../core/memory.ts";
-import { type AgentRuntime } from "../core/runtime.ts";
 import { messageHandlerTemplate } from "../../test_resources/templates.ts";
-import { Content, State, type Message, type UUID } from "../core/types.ts";
-import { parseJSONObjectFromText } from "../core/parsing.ts";
+import { composeContext } from "../context.ts";
+import { embeddingZeroVector } from "../memory.ts";
+import { parseJSONObjectFromText } from "../parsing.ts";
+import { type AgentRuntime } from "../runtime.ts";
+import { Content, State, type Message, type UUID } from "../types.ts";
+import { createRuntime } from "../../test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
+import { runAiTest } from "../../test_resources/runAiTest.ts";
+import { TEST_ACTION, TEST_ACTION_FAIL } from "../../test_resources/testAction.ts";
+import { type User } from "../../test_resources/types.ts";
 
 async function handleMessage(
   runtime: AgentRuntime,

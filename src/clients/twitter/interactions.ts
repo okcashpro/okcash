@@ -2,8 +2,7 @@ import { SearchMode, Tweet } from "agent-twitter-client";
 import { UUID } from "crypto";
 import fs from "fs";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../agent/index.ts";
-import { adapter } from "../../agent/db.ts";
+import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
@@ -84,10 +83,10 @@ export class TwitterInteractionClient extends ClientBase {
     handleTwitterInteractionsLoop();
   }
 
-  constructor(agent: Agent, character: any, model: string) {
+  constructor(runtime: AgentRuntime, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
-      agent,
+      runtime,
       character,
       model,
       callback: (self) => self.onReady(),
@@ -156,10 +155,10 @@ export class TwitterInteractionClient extends ClientBase {
     const twitterUserId = getUuid(tweet.userId as string) as UUID;
     const twitterRoomId = getUuid("twitter") as UUID;
 
-    await this.agent.ensureUserExists(twitterUserId, tweet.username);
+    await this.runtime.ensureUserExists(twitterUserId, tweet.username);
 
-    await this.agent.ensureRoomExists(twitterRoomId);
-    await this.agent.ensureParticipantInRoom(twitterUserId, twitterRoomId);
+    await this.runtime.ensureRoomExists(twitterRoomId);
+    await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
 
     const message: Message = {
       content: { content: tweet.text, action: "WAIT" },
@@ -198,7 +197,7 @@ export class TwitterInteractionClient extends ClientBase {
     console.log("****** imageDescriptions");
     console.log(imageDescriptions);
 
-    let state = await this.agent.runtime.composeState(message, {
+    let state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
       twitterMessage: message,
       agentName: botTwitterUsername,
@@ -229,7 +228,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
 
     const nickname = settings.TWITTER_USERNAME;
 
-    state = await this.agent.runtime.composeState(message, {
+    state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
       twitterMessage: message,
       agentName: nickname,
@@ -241,7 +240,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
         template: shouldRespondTemplate,
       });
 
-      const response = await this.agent.runtime.completion({
+      const response = await this.runtime.completion({
         context: shouldRespondContext,
         stop: [],
         model: this.model,
@@ -287,7 +286,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
     const { user_id, room_id } = message;
 
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      const response = await this.agent.runtime.completion({
+      const response = await this.runtime.completion({
         context,
         stop: [],
         temperature: this.temperature,
@@ -305,11 +304,12 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
         type: "response",
       };
 
-      adapter.db
-        .prepare(
-          "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
-        )
-        .run([values.body, values.user_id, values.room_id, values.type]);
+      // TODO Replace with runtime.log function
+      // adapter.db
+      //   .prepare(
+      //     "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
+      //   )
+      //   .run([values.body, values.user_id, values.room_id, values.type]);
 
       const parsedResponse = parseJSONObjectFromText(
         response,
@@ -339,7 +339,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
     }
 
     await this.saveResponseMessage(message, state, responseContent);
-    this.agent.runtime.processActions(message, responseContent, state);
+    this.runtime.processActions(message, responseContent, state);
 
     const response = responseContent;
 

@@ -82,7 +82,7 @@ export function loadVss(db: Database): void {
   db.loadExtension(getVssLoadablePath().replace(".so", ""));
 }
 
-export function load(db: Database): void {
+export function load(db: any): void {
   loadVector(db);
   loadVss(db);
 }

@@ -1,15 +1,14 @@
 import { Attachment, Collection } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
-import { Agent } from "../../agent/index.ts";
+import { AgentRuntime } from "../../core/runtime.ts";
+import { Media } from "../../core/types.ts";
 import { BrowserService } from "../../services/browser.ts";
 import ImageRecognitionService from "../../services/imageRecognition.ts";
 import { PdfService } from "../../services/pdf.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { TranscriptionService } from "../../services/transcription.ts";
 import { YouTubeService } from "../../services/youtube.ts";
-import { Media } from "../../core/types.ts";
-
 export class AttachmentManager {
   private imageRecognitionService: ImageRecognitionService;
   private browserService: BrowserService;
@@ -17,15 +16,15 @@ export class AttachmentManager {
   private attachmentCache: Map<string, Media> = new Map();
   private transcriptionService: TranscriptionService;
   private pdfService: PdfService;
-  private agent: Agent;
+  private runtime: AgentRuntime;
 
   constructor(
-    agent: Agent,
+    runtime: AgentRuntime,
     imageRecognitionService: ImageRecognitionService,
     browserService: BrowserService,
     youtubeService: YouTubeService,
   ) {
-    this.agent = agent;
+    this.runtime = runtime;
     this.imageRecognitionService = imageRecognitionService;
     this.browserService = browserService;
     this.youtubeService = youtubeService;
@@ -103,7 +102,7 @@ export class AttachmentManager {
       const transcription =
         await this.transcriptionService.transcribe(audioData);
       const { title, description } = await generateSummary(
-        this.agent.runtime,
+        this.runtime,
         transcription,
       );
 
@@ -184,7 +183,7 @@ export class AttachmentManager {
         Buffer.from(pdfBuffer),
       );
       const { title, description } = await generateSummary(
-        this.agent.runtime,
+        this.runtime,
         text,
       );
 
@@ -216,7 +215,7 @@ export class AttachmentManager {
       const response = await fetch(attachment.url);
       const text = await response.text();
       const { title, description } = await generateSummary(
-        this.agent.runtime,
+        this.runtime,
         text,
       );
 
@@ -250,7 +249,7 @@ export class AttachmentManager {
         Buffer.from(audioData),
       );
       const { title, description } = await generateSummary(
-        this.agent.runtime,
+        this.runtime,
         transcription,
       );
 

@@ -7,9 +7,10 @@ import {
   formatEvaluatorNames,
   formatEvaluators,
 } from "./evaluators.ts";
-import logger from "./logger.ts";
 import { MemoryManager } from "./memory.ts";
+import { parseJsonArrayFromText } from "./parsing.ts";
 import {
+  Character,
   Content,
   Goal,
   Provider,
@@ -18,26 +19,25 @@ import {
   type Evaluator,
   type Message,
 } from "./types.ts";
-import { parseJsonArrayFromText } from "./parsing.ts";
 
+import { UUID } from "crypto";
+import tiktoken, { TiktokenModel } from "tiktoken";
+import { formatFacts } from "../evaluators/fact.ts";
+import LlamaService from "../services/llama.ts";
 import {
   composeActionExamples,
   formatActionConditions,
   formatActionNames,
   formatActions,
 } from "./actions.ts";
-import { UUID } from "crypto";
 import { zeroUuid } from "./constants.ts";
 import { DatabaseAdapter } from "./database.ts";
-import { formatFacts } from "../evaluators/fact.ts";
+import defaultCharacter from "./defaultCharacter.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { formatLore, getLore } from "./lore.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
-import { type Actor, type Memory } from "./types.ts";
 import settings from "./settings.ts";
-import LlamaService from "../services/llama.ts";
-import tiktoken, { TiktokenModel } from "tiktoken";
+import { type Actor, type Memory } from "./types.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -105,6 +105,11 @@ export class AgentRuntime {
   fetch = fetch;
 
   /**
+   * The character to use for the agent
+   */
+  character: Character;
+
+  /**
    * Store messages that are sent and received by the agent.
    */
   messageManager: MemoryManager = new MemoryManager({
@@ -155,6 +160,7 @@ export class AgentRuntime {
   constructor(opts: {
     conversationLength?: number; // number of messages to hold in the recent message cache
     agentId?: UUID; // ID of the agent
+    character?: Character; // The character to use for the agent
     token: string; // JWT token, can be a JWT token if outside worker, or an OpenAI token if inside worker
     serverUrl?: string; // The URL of the worker
     actions?: Action[]; // Optional custom actions
@@ -170,7 +176,7 @@ export class AgentRuntime {
     this.databaseAdapter = opts.databaseAdapter;
     this.agentId = opts.agentId ?? zeroUuid;
     this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
-
+    this.character = opts.character || defaultCharacter;
     if (!opts.databaseAdapter) {
       throw new Error("No database adapter provided");
     }
@@ -503,36 +509,48 @@ export class AgentRuntime {
   }
 
   /**
+   * Ensure the existence of a user in the database. If the user does not exist, they are added to the database.
+   * @param user_id - The user ID to ensure the existence of.
+   * @param userName - The user name to ensure the existence of.
+   * @returns 
+   */
+
+  async ensureUserExists(user_id: UUID, userName: string | null) {
+    const account = await this.databaseAdapter.getAccountById(user_id);
+    console.log("Account is")
+    console.log(account)
+    if (!account) {
+      await this.databaseAdapter.createAccount({
+        id: user_id,
+        name: userName || "Bot",
+        email: (userName || "Bot") + "@discord",
+        details: { "summary": "" },
+      });
+      console.log(`User ${userName} created successfully.`);
+    }
+  }
+
+  async ensureParticipantInRoom(user_id: UUID, roomId: UUID) {
+    console.log(`Ensuring participant ${user_id} in room ${roomId}`);
+    const participants = await this.databaseAdapter.getParticipantsForRoom(roomId);
+    if (!participants.includes(user_id)) {
+      await this.databaseAdapter.addParticipant(user_id, roomId);
+      console.log(`User ${user_id} linked to room ${roomId} successfully.`);
+    }
+  }
+
+  /**
    * Ensure the existence of a room between the agent and a user. If no room exists, a new room is created and the user
    * and agent are added as participants. The room ID is returned.
    * @param user_id - The user ID to create a room with.
    * @returns The room ID of the room between the agent and the user.
    * @throws An error if the room cannot be created.
    */
-  async ensureRoomExists(user_id: UUID, room_id?: UUID) {
-    if (room_id) {
-      // check if room exists
-      const created = await this.databaseAdapter.createRoom(room_id);
-      if (created) {
-        this.databaseAdapter.addParticipant(user_id, room_id);
-        this.databaseAdapter.addParticipant(this.agentId, room_id);
-      }
-      return room_id;
-    }
-    const rooms = await this.databaseAdapter.getRoomsForParticipants([
-      user_id,
-      this.agentId,
-    ]);
-
-    if (rooms.length === 0) {
-      const room_id = await this.databaseAdapter.createRoom();
-      this.databaseAdapter.addParticipant(user_id, room_id);
-      this.databaseAdapter.addParticipant(this.agentId, room_id);
-      return room_id;
-    }
-    // else return the first room
-    else {
-      return rooms[0];
+  async ensureRoomExists(roomId: UUID) {
+    const room = await this.databaseAdapter.getRoom(roomId);
+    if (!room) {
+      await this.databaseAdapter.createRoom(roomId);
+      console.log(`Room ${roomId} created successfully.`);
     }
   }
 
@@ -673,9 +691,21 @@ Text: ${attachment.text}
       )
       .join("\n");
 
+    // randomly get 3 bits of lore and join them into a paragraph, divided by \n
+    let lore = ""
+    // Assuming this.lore is an array of lore bits
+    if (this.character.lore && this.character.lore.length > 0) {
+      const shuffledLore = [...this.character.lore].sort(() => Math.random() - 0.5);
+      const selectedLore = shuffledLore.slice(0, 3);
+      lore = selectedLore.join('\n');
+    }
+
     const initialState = {
       agentId: this.agentId,
       agentName,
+      bio: this.character.bio || "",
+      lore,
+      directions: (this.character?.style?.all?.join('\n') || "") + "\n" + (this.character?.style?.chat?.join('\n') || ""),
       senderName,
       actors: addHeader("# Actors", actors),
       actorsData,
@@ -684,7 +714,6 @@ Text: ${attachment.text}
         "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
         goals,
       ),
-      // lore: addHeader("### Important Information", lore),
       // loreData,
       goalsData,
       recentMessages: addHeader("### Conversation Messages", recentMessages),

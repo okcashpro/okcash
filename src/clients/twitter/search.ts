@@ -2,7 +2,7 @@ import { SearchMode, Tweet } from "agent-twitter-client";
 import { UUID } from "crypto";
 import fs from "fs";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../agent/index.ts";
+import { AgentRuntime } from "../../core/runtime.ts"
 import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
@@ -43,10 +43,10 @@ Your response should not contain any questions. Brief, concise statements only.
 export class TwitterSearchClient extends ClientBase {
   private respondedTweets: Set<string> = new Set();
 
-  constructor(agent: Agent, character: any, model: string) {
+  constructor(runtime: AgentRuntime, character: any, model: string) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
-      agent,
+      runtime,
       character,
       model,
       callback: (self) => self.onReady(),
@@ -140,7 +140,7 @@ Notes:
       const logName = `${this.character.name}_search_${datestr}`;
       log_to_file(logName, prompt);
 
-      const mostInterestingTweetResponse = await this.agent.runtime.completion({
+      const mostInterestingTweetResponse = await this.runtime.completion({
         context: prompt,
         stop: [],
         temperature: this.temperature,
@@ -172,9 +172,9 @@ Notes:
       const twitterUserId = getUuid(selectedTweet.userId as string) as UUID;
       const twitterRoomId = getUuid("twitter") as UUID;
 
-      await this.agent.ensureUserExists(twitterUserId, selectedTweet.username);
-      await this.agent.ensureRoomExists(twitterRoomId);
-      await this.agent.ensureParticipantInRoom(twitterUserId, twitterRoomId);
+      await this.runtime.ensureUserExists(twitterUserId, selectedTweet.username);
+      await this.runtime.ensureRoomExists(twitterRoomId);
+      await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
 
       const message: Message = {
         content: { content: selectedTweet.text, action: "WAIT" },
@@ -234,7 +234,7 @@ Notes:
           .join("\n");
       };
 
-      const state = await this.agent.runtime.composeState(message, {
+      const state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
         recentConversations: formatRecentConversations(recentConversations),
         recentSearchResults: formatRecentSearchResults(recentSearchResults),
@@ -275,7 +275,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
 
       let responseContent: Content | null = null;
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        const response = await this.agent.runtime.completion({
+        const response = await this.runtime.completion({
           context,
           stop: [],
           temperature: this.temperature,
@@ -311,7 +311,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
       }
 
       await this.saveResponseMessage(message, state, responseContent);
-      this.agent.runtime.processActions(message, responseContent, state);
+      this.runtime.processActions(message, responseContent, state);
 
       const response = responseContent;
 

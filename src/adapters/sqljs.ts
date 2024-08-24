@@ -71,8 +71,6 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     return userIds;
   }
 
-  db: Database;
-
   constructor(db: Database) {
     super();
     this.db = db;

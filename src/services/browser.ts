@@ -6,7 +6,7 @@ import path from "path";
 import { Browser, BrowserContext, chromium, Page } from "playwright";
 import { default as getUuid } from "uuid-by-string";
 import { generateSummary } from "./summary.ts";
-import { Agent } from "../agent/index.ts";
+import { AgentRuntime } from "../core/runtime.ts";
 
 export class BrowserService {
   private browser: Browser | undefined;
@@ -14,10 +14,10 @@ export class BrowserService {
   private blocker: PlaywrightBlocker | undefined;
   private captchaSolver: CaptchaSolver;
   private CONTENT_CACHE_DIR = "./content_cache";
-  private agent: Agent;
+  private runtime: AgentRuntime;
 
-  constructor(agent: Agent = new Agent()) {
-    this.agent = agent;
+  constructor(runtime: AgentRuntime) {
+    this.runtime = runtime;
     this.browser = undefined;
     this.context = undefined;
     this.blocker = undefined;
@@ -121,7 +121,7 @@ export class BrowserService {
       const title = await page.evaluate(() => document.title);
       const bodyContent = await page.evaluate(() => document.body.innerText);
       const { description } = await generateSummary(
-        this.agent.runtime,
+        this.runtime,
         title + "\n" + bodyContent,
       );
       return { title, description, bodyContent };

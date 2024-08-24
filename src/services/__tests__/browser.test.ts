@@ -1,5 +1,6 @@
-import { BrowserService } from "../browser.ts";
 import dotenv from "dotenv";
+import { createRuntime } from "../../test_resources/createRuntime.ts";
+import { BrowserService } from "../browser.ts";
 
 dotenv.config();
 
@@ -7,7 +8,11 @@ describe("BrowserService", () => {
   let browserService: BrowserService;
 
   beforeAll(async () => {
-    browserService = new BrowserService();
+    const { runtime } = await createRuntime({
+      env: process.env as Record<string, string>,
+      actions: [],
+    });
+    browserService = new BrowserService(runtime);
     await browserService.initialize();
   });
 
@@ -16,7 +21,11 @@ describe("BrowserService", () => {
   });
 
   test("should initialize and close browser", async () => {
-    const newBrowserService = new BrowserService();
+    const { runtime } = await createRuntime({
+      env: process.env as Record<string, string>,
+      actions: [],
+    });
+    const newBrowserService = new BrowserService(runtime);
     await expect(newBrowserService.initialize()).resolves.not.toThrow();
     await expect(newBrowserService.closeBrowser()).resolves.not.toThrow();
   });

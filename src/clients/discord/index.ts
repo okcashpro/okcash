@@ -11,28 +11,26 @@ import {
 } from "discord.js";
 import { EventEmitter } from "events";
 import { default as getUuid } from "uuid-by-string";
-import { Agent } from "../../agent/index.ts";
-import { adapter } from "../../agent/db.ts";
 import settings from "../../core/settings.ts";
 import { commands } from "./commands.ts";
 
-import { MessageManager } from "./messages.ts";
-import { VoiceManager } from "./voice.ts";
 import { UUID } from "crypto";
 import { embeddingZeroVector } from "../../core/memory.ts";
+import { AgentRuntime } from "../../core/runtime.ts";
+import { MessageManager } from "./messages.ts";
+import { VoiceManager } from "./voice.ts";
 
 export class DiscordClient extends EventEmitter {
   apiToken: string;
   private client: Client;
-  private agent: Agent;
+  private runtime: AgentRuntime;
   character: any;
   private messageManager: MessageManager;
   private voiceManager: VoiceManager;
 
-  constructor(agent: Agent, character: any) {
+  constructor(runtime: AgentRuntime) {
     super();
     this.apiToken = settings.DISCORD_API_TOKEN as string;
-    this.character = character;
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -47,18 +45,13 @@ export class DiscordClient extends EventEmitter {
       partials: [Partials.Channel, Partials.Message, Partials.User, Partials.Reaction],
     });
 
-    this.agent = agent;
+    this.runtime = runtime;
+    this.voiceManager = new VoiceManager(
+      this,
+    );
     this.messageManager = new MessageManager(
       this,
-      this.client,
-      this.agent,
-      this.character,
-    );
-    this.voiceManager = new VoiceManager(
-      this.client,
-      agent,
-      this.messageManager,
-      this.character,
+      this.voiceManager,
     );
 
     this.client.once(Events.ClientReady, this.onClientReady.bind(this));
@@ -151,7 +144,7 @@ export class DiscordClient extends EventEmitter {
     const userIdUUID = getUuid(user.id) as UUID;
 
     // Save the reaction as a message
-    await this.agent.runtime.messageManager.createMemory({
+    await this.runtime.messageManager.createMemory({
       user_id: userIdUUID,
       content: { content: reactionMessage, action: "WAIT", source: "Discord" },
       room_id,
@@ -189,7 +182,7 @@ export class DiscordClient extends EventEmitter {
     const userIdUUID = getUuid(user.id) as UUID;
 
     // Save the reaction removal as a message
-    await this.agent.runtime.messageManager.createMemory({
+    await this.runtime.messageManager.createMemory({
       user_id: userIdUUID,
       content: { content: reactionMessage, action: "WAIT", source: "Discord" },
       room_id,
@@ -222,16 +215,6 @@ export class DiscordClient extends EventEmitter {
     for (const [, guild] of guilds) {
       const fullGuild = await guild.fetch();
       this.voiceManager.scanGuild(fullGuild);
-    }
-
-    // set the bio back to default
-    if (this.character?.bio) {
-      adapter.db
-        .prepare("UPDATE accounts SET details = ? WHERE id = ?")
-        .run(
-          JSON.stringify({ summary: this.character.bio }),
-          getUuid(this.client.user?.id as string),
-        );
     }
   }
 }

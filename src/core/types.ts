@@ -86,6 +86,9 @@ export interface Goal {
 export interface State {
   user_id?: UUID; // An optional ID of the user who sent the current message.
   agentId?: UUID; // An optional ID of the agent within the current conversation or context.
+  bio: string; // A string representation of the agent's bio.
+  lore: string; // A list of lore bits for the agent.
+  directions: string // A dictionary of lists of directions
   room_id: UUID; // The ID of the current room or conversation context.
   agentName?: string; // An optional name of the agent, used for referencing the agent in conversations.
   senderName?: string; // An optional name of the sender of the current message.
@@ -204,7 +207,7 @@ export interface Relationship {
 export interface Account {
   id: UUID;
   name: string;
-  details?: { [key: string]: unknown };
+  details?: { [key: string]: any };
   email?: string;
   avatar_url?: string;
 }
@@ -237,6 +240,7 @@ export type Media = {
 export type Character = {
   name: string;
   bio: string;
+  lore: string[];
   people: string[];
   topics: string[];
   adjectives: string[];

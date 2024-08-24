@@ -1,13 +1,22 @@
 export const messageHandlerTemplate =
   // `
-  // {{lore}}
-  // {{relevantFacts}}
-  // {{recentFacts}}
+
   // {{goals}}
   // {{actors}}
   `# Action Examples
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
+
+# Relevant facts that {{agentName}} knows:
+{{relevantFacts}}
+
+# Recent facts that {{agentName}} has learned:
+{{recentFacts}}
+
+# Task: Generate dialog and actions for the character {{agentName}}.
+About {{agentName}}:
+{{bio}}
+{{lore}}
 
 # Attachments
 {{attachments}}
@@ -18,6 +27,9 @@ export const messageHandlerTemplate =
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
+# Directions for {{agentName}}'s response
+{{direction}}
+
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}.
@@ -26,11 +38,13 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 { "user": "{{agentName}}", "content": string, "action": string }
 \`\`\``;
 
-export const voiceHandlerTemplate = `# Attachments
+export const voiceHandlerTemplate = `# Task: Generate conversational voice dialog for {{agentName}}.
+About {{agentName}}:
+{{bio}}
+
+# Attachments
 {{attachments}}
 {{providers}}
-{{actionNames}}
-{{actions}}
 
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
@@ -38,12 +52,17 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}.
+(Write the content, user and action fields are fixed)
 \nResponse format should be formatted in a JSON block like this:
 \`\`\`json
-{ "user": "{{agentName}}", "content": string, "action": string }
+{ "user": "{{agentName}}", "content": string, "action": "WAIT" }
 \`\`\``;
 
-export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
+export const shouldRespondTemplate = `# Task: Decide on it {{agentName}} should respond.
+About {{agentName}}:
+{{bio}}
+
+# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
 
 Heuristics:
 - If the message is directed at {{agentName}}, respond.

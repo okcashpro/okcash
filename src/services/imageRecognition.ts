@@ -9,7 +9,7 @@ import fs from "fs";
 import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
-import { Agent } from "../agent/index.ts";
+import { AgentRuntime } from "../core/runtime.ts";
 class ImageRecognitionService {
   private modelId: string = "Xenova/moondream2";
   private device: string = "cpu";
@@ -17,10 +17,10 @@ class ImageRecognitionService {
   private processor: AutoProcessor | null = null;
   private tokenizer: AutoTokenizer | null = null;
   private initialized: boolean = false;
-  agent: Agent;
+  runtime: AgentRuntime;
 
-  constructor(agent: Agent) {
-    this.agent = agent;
+  constructor(runtime: AgentRuntime) {
+    this.runtime = runtime;
   }
 
   async initialize(
