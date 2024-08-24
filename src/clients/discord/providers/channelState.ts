@@ -3,8 +3,8 @@ import {
   Message as DiscordMessage,
   TextChannel,
 } from "discord.js";
-import { AgentRuntime } from "../core/runtime.ts";
-import { Message, Provider, State } from "../core/types.ts";
+import { AgentRuntime } from "../../../core/runtime.ts";
+import { Message, Provider, State } from "../../../core/types.ts";
 
 const channelStateProvider: Provider = {
   get: async (runtime: AgentRuntime, message: Message, state?: State) => {
