@@ -62,7 +62,7 @@ class LlamaService {
     this.llama = undefined;
     this.model = undefined;
     this.modelUrl =
-      "https://huggingface.co/legraphista/Llama-3.1-Minitron-4B-Width-Base-GGUF/resolve/main/Llama-3.1-Minitron-4B-Width-Base.Q8_0.gguf?download=true";
+      "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
     const modelName = "model.gguf";
     console.log("modelName", modelName);
     this.modelPath = path.join(__dirname, modelName);

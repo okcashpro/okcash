@@ -70,7 +70,7 @@
     "gif-frames": "^1.0.1",
     "inquirer": "^9.2.14",
     "libsodium-wrappers": "^0.7.13",
-    "node-llama-cpp": "^3.0.0-beta.38",
+    "node-llama-cpp": "^3.0.0-beta.44",
     "node-wav": "^0.0.2",
     "nodemon": "^3.1.4",
     "onnxruntime-node": "^1.19.0",
