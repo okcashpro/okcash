@@ -320,6 +320,14 @@ class LlamaService {
       process.stdout.write(this.model!.detokenize([token]));
       const current = this.model!.detokenize([...responseTokens, token]);
       console.log("current", current);
+
+      if(useGrammar){
+        if(current.includes('```\n')){
+          console.log("JSON block found");
+          break;
+        }
+      }
+
       if ([...stop, '://'].some(s => current.includes(s))) {
         console.log("Stop sequence found");
         break;
