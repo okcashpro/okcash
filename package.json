@@ -11,7 +11,7 @@
     "watch": "tsc --watch",
     "dev": "nodemon",
     "eliza:discord": "npm run dev -- --discord",
-    "postinstall": "npx playwright install"
+    "postinstall": "npx playwright install-deps && npx playwright install"
   },
   "author": "",
   "license": "MIT",
@@ -80,6 +80,7 @@
     "prism-media": "^1.3.5",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-capsolver": "^2.0.1",
+    "sharp": "^0.33.5",
     "speech-synthesizer": "^1.0.0",
     "sql.js": "^1.10.2",
     "sqlite-vss": "^0.1.2",
@@ -96,6 +97,11 @@
     "youtube-dl-exec": "^3.0.7"
   },
   "optionalDependencies": {
-    "sqlite-vss-darwin-arm64": "^0.1.2"
+    "sqlite-vss-darwin-arm64": "^0.1.2",
+    "sqlite-vss-darwin-x64": "^0.1.2",
+    "sqlite-vss-linux-arm64": "^0.1.2",
+    "sqlite-vss-linux-x64": "^0.1.2",
+    "sqlite-vss-win32-arm64": "^0.1.2",
+    "sqlite-vss-win32-x64": "^0.1.2"
   }
 }
