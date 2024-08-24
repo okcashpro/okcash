@@ -1,6 +1,19 @@
+import { composeContext } from "../core/context.ts";
 import { AgentRuntime } from "../core/runtime.ts";
-import { Action, Message } from "../core/types.ts";
+import { Action, Message, State } from "../core/types.ts";
 
+const shouldUnfollowTemplate = `Based on the conversation so far:
+
+{{recentMessages}}
+
+Should {{agentName}} stop closely following this previously followed room and only respond when mentioned?
+Respond with YES if:
+- The user has suggested that {{agentName}} is over-participating or being disruptive  
+- {{agentName}}'s eagerness to contribute is not well-received by the users
+- The conversation has shifted to a topic where {{agentName}} has less to add
+
+Otherwise, respond with NO.  
+Only respond with YES or NO.`;
 export default {
   name: "UNFOLLOW_ROOM",
   description:
@@ -14,12 +27,45 @@ export default {
     return userState === "FOLLOWED";
   },
   handler: async (runtime: AgentRuntime, message: Message) => {
-    await runtime.databaseAdapter.setParticipantUserState(
-      message.room_id,
-      runtime.agentId,
-      null,
-    );
+
+    async function _shouldUnfollow(state: State): Promise<boolean> {
+      const shouldUnfollowContext = composeContext({
+        state,
+        template: shouldUnfollowTemplate, // Define this template separately
+      });
+
+      let response = "";
+
+      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+        try {
+          response = await runtime.completion({
+            context: shouldUnfollowContext,
+            stop: ["\n"],
+            max_response_length: 5,
+          });
+          break;
+        } catch (error) {
+          console.error("Error in _shouldUnfollow:", error);
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          console.log("Retrying...");
+        }
+      }
+
+      const lowerResponse = response.toLowerCase().trim();
+      return lowerResponse.includes("yes");
+    }
+
+    const state = await runtime.composeState(message);
+
+    if (await _shouldUnfollow(state)) {
+      await runtime.databaseAdapter.setParticipantUserState(
+        message.room_id,
+        runtime.agentId,
+        null,
+      );
+    }
   },
+
   condition:
     "The user no longer wants to auto-respond to all messages in a channel.",
   examples: [

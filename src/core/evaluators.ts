@@ -1,9 +1,9 @@
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import fact from "../evaluators/fact.ts";
-import goal from "../evaluators/goal.ts";
+// import goal from "../evaluators/goal.ts";
 import { ActionExample, type Evaluator } from "./types.ts";
 
-export const defaultEvaluators: Evaluator[] = [fact, goal];
+export const defaultEvaluators: Evaluator[] = [fact /*, goal*/];
 
 /**
  * Template used for the evaluation completion.

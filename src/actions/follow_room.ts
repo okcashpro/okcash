@@ -1,5 +1,19 @@
+import { composeContext } from "../core/context.ts";
 import { AgentRuntime } from "../core/runtime.ts";
-import { Action, Message } from "../core/types.ts";
+import { Action, Message, State } from "../core/types.ts";
+
+export const shouldFollowTemplate = `Based on the conversation so far:
+
+{{recentMessages}}
+
+Should {{agentName}} start following this room, eagerly participating without explicit mentions?  
+Respond with YES if:
+- The user has directly asked {{agentName}} to follow the conversation or participate more actively  
+- The conversation topic is highly engaging and {{agentName}}'s input would add significant value
+- {{agentName}} has unique insights to contribute and the users seem receptive
+
+Otherwise, respond with NO.
+Only respond with YES or NO.`;
 
 export default {
   name: "FOLLOW_ROOM",
@@ -29,12 +43,45 @@ export default {
     return userState !== "FOLLOWED" && userState !== "MUTED";
   },
   handler: async (runtime: AgentRuntime, message: Message) => {
-    await runtime.databaseAdapter.setParticipantUserState(
-      message.room_id,
-      runtime.agentId,
-      "FOLLOWED",
-    );
+
+    async function _shouldFollow(state: State): Promise<boolean> {
+      const shouldFollowContext = composeContext({
+        state,
+        template: shouldFollowTemplate, // Define this template separately  
+      });
+
+      let response = "";
+
+      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
+        try {
+          response = await runtime.completion({
+            context: shouldFollowContext,
+            stop: ["\n"],
+            max_response_length: 5,
+          });
+          break;
+        } catch (error) {
+          console.error("Error in _shouldFollow:", error);
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          console.log("Retrying...");
+        }
+      }
+
+      const lowerResponse = response.toLowerCase().trim();
+      return lowerResponse.includes("yes");
+    }
+
+    const state = await runtime.composeState(message);
+
+    if (await _shouldFollow(state)) {
+      await runtime.databaseAdapter.setParticipantUserState(
+        message.room_id,
+        runtime.agentId,
+        "FOLLOWED",
+      );
+    }
   },
+
   condition:
     "The user wants to always respond in a room without first checking with the completion call.",
   examples: [

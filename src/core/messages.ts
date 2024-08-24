@@ -63,8 +63,29 @@ export const formatMessages = ({
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
 
-      return `${formattedName} (${message.user_id.slice(-5)}): ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
+      const timestamp = message.created_at ? formatTimestamp(message.created_at) : '';
+      const shortId = message.user_id.slice(-5);
+
+      return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
     })
     .join("\n");
   return messageStrings;
 };
+
+const formatTimestamp = (timestamp: string) => {
+  const now = new Date();
+  const messageDate = new Date(timestamp);
+  const diff = now.getTime() - messageDate.getTime();
+  const minutes = Math.floor(diff / (1000 * 60));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (days > 0) {
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  } else if (hours > 0) {
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else {
+    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+  }
+};
+
