@@ -330,18 +330,9 @@ export class MessageManager {
     const { content: senderContent } = message;
 
     if ((senderContent as Content).content) {
-      const senderName =
-        state.actorsData?.find((actor: Actor) => actor.id === message.user_id)
-          ?.name || "Unknown User";
-
-      const contentWithUser = {
-        ...(senderContent as Content),
-        user: senderName,
-      };
-
       await this.runtime.messageManager.createMemory({
         user_id: message.user_id,
-        content: contentWithUser,
+        content: senderContent,
         room_id: message.room_id,
         embedding: embeddingZeroVector,
       });
