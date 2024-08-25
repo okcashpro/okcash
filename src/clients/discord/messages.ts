@@ -438,7 +438,10 @@ export class MessageManager {
     }
 
     // If we're not interested in the channel and it's a short message, ignore it
-    if (messageContent.length < 10 && !this.interestChannels[message.channelId]) {
+    if (
+      messageContent.length < 10 &&
+      !this.interestChannels[message.channelId]
+    ) {
       return true;
     }
 

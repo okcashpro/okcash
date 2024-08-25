@@ -1,5 +1,5 @@
 import { composeContext } from "../core/context.ts";
-import { Action, Message, State } from "../core/types.ts";
+import { Action, ActionExample, Message, State } from "../core/types.ts";
 
 const shouldUnfollowTemplate = `Based on the conversation so far:
 
@@ -310,5 +310,5 @@ export default {
         },
       },
     ],
-  ],
+  ] as ActionExample[][],
 } as Action;

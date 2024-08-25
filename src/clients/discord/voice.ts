@@ -15,7 +15,6 @@ import {
   Client,
   Guild,
   GuildMember,
-  Message as DiscordMessage,
   VoiceChannel,
   VoiceState,
 } from "discord.js";
@@ -25,11 +24,9 @@ import { Readable, pipeline } from "stream";
 import { default as getUuid } from "uuid-by-string";
 import WavEncoder from "wav-encoder";
 import { AgentRuntime } from "../../core/runtime.ts";
-import settings from "../../core/settings.ts";
 import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
 import { TranscriptionService } from "../../services/transcription.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
-import { MessageManager } from "./messages.ts";
 
 import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
@@ -76,6 +73,7 @@ export class VoiceManager extends EventEmitter {
 
   async handleGuildCreate(guild: Guild) {
     console.log(`Joined guild ${guild.name}`);
+    this.scanGuild(guild);
   }
 
   async handleUserStream(
@@ -110,6 +108,17 @@ export class VoiceManager extends EventEmitter {
 
         try {
           const text = await this.transcriptionService.transcribe(inputBuffer);
+
+          if (
+            (text.length < 5 &&
+              !text.toLowerCase().includes("yes") &&
+              !text.toLowerCase().includes("no")) ||
+            (text.length > 5 && text.toLowerCase().includes("ok")) ||
+            text.toLowerCase().includes("sure")
+          ) {
+            return;
+          }
+
           const room_id = getUuid(channelId) as UUID;
           const userIdUUID = getUuid(user_id) as UUID;
           await this.runtime.ensureUserExists(
@@ -393,6 +402,28 @@ export class VoiceManager extends EventEmitter {
     }
 
     return false;
+  }
+
+  async scanGuild(guild: Guild) {
+    const channels = (await guild.channels.fetch()).filter(
+      (channel) => channel?.type == ChannelType.GuildVoice,
+    );
+    let chosenChannel: BaseGuildVoiceChannel | null = null;
+
+    for (const [, channel] of channels) {
+      const voiceChannel = channel as BaseGuildVoiceChannel;
+      if (
+        voiceChannel.members.size > 0 &&
+        (chosenChannel === null ||
+          voiceChannel.members.size > chosenChannel.members.size)
+      ) {
+        chosenChannel = voiceChannel;
+      }
+    }
+
+    if (chosenChannel != null) {
+      this.joinChannel(chosenChannel);
+    }
   }
 
   async joinChannel(channel: BaseGuildVoiceChannel) {

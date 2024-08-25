@@ -264,14 +264,13 @@ export class AgentRuntime {
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }) {
-    console.log("*** completion context", context);
     if (!settings.OPENAI_API_KEY) {
       context = await this.trimTokens(
         "gpt-4o-mini",
         context,
         max_context_length,
       );
-      console.log("*** completion context after trim", context);
+
       return await this.llamaService.queueTextCompletion(
         context,
         temperature,
@@ -308,11 +307,8 @@ export class AgentRuntime {
     let tokens = encoding.encode(context);
     const textDecoder = new TextDecoder();
     if (tokens.length > maxTokens) {
-      console.log("***** SLICE");
-      console.log("BEFORE:", tokens.length);
-      console.log("max_context_length:", maxTokens);
       tokens = tokens.reverse().slice(maxTokens).reverse();
-      console.log("AFTER:", tokens.length);
+
       context = textDecoder.decode(encoding.decode(tokens));
     }
     return context;
@@ -350,7 +346,6 @@ export class AgentRuntime {
         presence_penalty,
         max_response_length,
       );
-      console.log("Completion response: ", completionResponse);
       // change the 'content' to 'content'
       (completionResponse as any).content = completionResponse.content;
       return JSON.stringify(completionResponse);
@@ -453,8 +448,6 @@ export class AgentRuntime {
         length: 1536,
       }),
     };
-    console.log("Running embeddings");
-    console.log(requestOptions);
     try {
       const response = await fetch(
         `${this.serverUrl}/embeddings`,
@@ -526,13 +519,11 @@ export class AgentRuntime {
    * @returns The results of the evaluation.
    */
   async evaluate(message: Message, state?: State) {
-    console.log("Evaluating message", message);
     const evaluatorPromises = this.evaluators.map(
       async (evaluator: Evaluator) => {
         if (!evaluator.handler) {
           return null;
         }
-        console.log;
         const result = await evaluator.validate(this, message, state);
         if (result) {
           return evaluator;
@@ -750,7 +741,6 @@ export class AgentRuntime {
             const msgTime = new Date(msg.created_at).getTime();
             const isWithinTime =
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
-            console.log("isWithinTime?", isWithinTime);
             const attachments = msg.content.attachments || [];
             // if the message is out of the time range, set the attachment 'text' to '[Hidden]'
             if (!isWithinTime) {

@@ -55,13 +55,15 @@ About {{agentName}}:
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
+# Directions for {{agentName}}'s response
+{{directions}}
+
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}.
-(Write the content, user and action fields are fixed)
 \nResponse format should be formatted in a JSON block like this:
 \`\`\`json
-{ "user": "{{agentName}}", "content": string, "action": "WAIT" }
+{ "user": "{{agentName}}", "content": string }
 \`\`\``;
 
 export const shouldRespondTemplate = `# Task: Decide if {{agentName}} should respond.

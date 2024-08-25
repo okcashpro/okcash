@@ -26,7 +26,7 @@ Should {{agentName}} elaborate? Respond with a YES or a NO.`;
 export default {
   name: "ELABORATE",
   description:
-    "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly.",
+    "ONLY use this action when the message necessitates a follow up. Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded. Use sparingly.",
   validate: async (runtime: any, message: Message) => {
     console.log("Validating elaborate");
     const recentMessagesData = await runtime.messageManager.getMemories({
@@ -212,7 +212,6 @@ export default {
     await _saveResponseMessage(message, state, responseContent);
 
     // if the action is ELABORATE, check if we are over maxContinuesInARow
-    // if so, then we should change the action to WAIT
     if (responseContent.action === "ELABORATE") {
       const agentMessages = state.recentMessagesData
         .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
@@ -224,7 +223,7 @@ export default {
           (m: string | undefined) => m === "ELABORATE",
         );
         if (allContinues) {
-          responseContent.action = "WAIT";
+          responseContent.action = null;
         }
       }
     }

@@ -200,6 +200,7 @@ export class DiscordClient extends EventEmitter {
 
   private handleGuildCreate(guild: Guild) {
     console.log(`Joined guild ${guild.name}`);
+    this.voiceManager.scanGuild(guild);
   }
 
   private async handleInteractionCreate(interaction: any) {
@@ -217,6 +218,12 @@ export class DiscordClient extends EventEmitter {
 
   private async onReady() {
     await this.messageManager.onReady();
+
+    const guilds = await this.client.guilds.fetch();
+    for (const [, guild] of guilds) {
+      const fullGuild = await guild.fetch();
+      this.voiceManager.scanGuild(fullGuild);
+    }
   }
 }
 

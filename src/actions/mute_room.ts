@@ -1,5 +1,5 @@
 import { composeContext } from "../core/context.ts";
-import { Action, Message, State } from "../core/types.ts";
+import { Action, ActionExample, Message, State } from "../core/types.ts";
 
 export const shouldMuteTemplate = `Based on the conversation so far:
 
@@ -175,5 +175,5 @@ export default {
         },
       },
     ],
-  ],
+  ] as ActionExample[][],
 } as Action;

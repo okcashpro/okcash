@@ -6,7 +6,7 @@ import {
   Client,
   Message as DiscordMessage,
 } from "discord.js";
-import { Message, State, Action } from "../core/types.ts";
+import { Message, State, Action, ActionExample } from "../core/types.ts";
 
 export default {
   name: "LEAVE_VOICE",
@@ -211,5 +211,5 @@ export default {
         },
       },
     ],
-  ],
+  ] as ActionExample[][],
 } as Action;

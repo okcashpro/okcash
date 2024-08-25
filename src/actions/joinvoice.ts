@@ -10,7 +10,7 @@ import {
 } from "discord.js";
 import { composeContext } from "../core/context.ts";
 import { log_to_file } from "../core/logger.ts";
-import { Action, Message, State } from "../core/types.ts";
+import { Action, ActionExample, Message, State } from "../core/types.ts";
 
 export default {
   name: "JOIN_VOICE",
@@ -342,5 +342,5 @@ You should only respond with the name of the voice channel or none, no commentar
         },
       },
     ],
-  ],
+  ] as ActionExample[][],
 } as Action;
