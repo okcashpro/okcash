@@ -188,7 +188,9 @@ export class ClientBase extends EventEmitter {
         },
         false,
       );
-      await this.runtime.evaluate(message, { ...state, responseContent });
+      state = await this.runtime.updateRecentMessageState(state);
+
+      await this.runtime.evaluate(message, state);
     } else {
       console.warn("Empty response, skipping");
     }

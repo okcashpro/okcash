@@ -13,7 +13,6 @@ export class AudioMonitor {
     maxSize: number,
     callback: (buffer: Buffer) => void,
   ) {
-    console.log("AudioMonitor created");
     this.readable = readable;
     this.maxSize = maxSize;
     this.readable.on("data", (chunk: Buffer) => {

@@ -91,13 +91,10 @@ export class TranscriptionService extends EventEmitter {
         file: file,
       });
 
-      console.log("result is");
-      console.log(result);
-
       const trimmedResult = (result as any).trim();
       console.log(`OpenAI speech to text: ${trimmedResult}`);
 
-      return trimmedResult.length < 5 ? null : trimmedResult;
+      return trimmedResult;
     } catch (error) {
       console.error("Error in OpenAI speech-to-text conversion:", error);
       if (error.response) {

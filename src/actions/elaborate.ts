@@ -1,7 +1,6 @@
 import { composeContext } from "../core/context.ts";
 import { log_to_file } from "../core/logger.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
-import { AgentRuntime } from "../core/runtime.ts";
 import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import {
   Action,
@@ -28,7 +27,7 @@ export default {
   name: "ELABORATE",
   description:
     "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly.",
-  validate: async (runtime: AgentRuntime, message: Message) => {
+  validate: async (runtime: any, message: Message) => {
     console.log("Validating elaborate");
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
@@ -56,7 +55,7 @@ export default {
     return true;
   },
   handler: async (
-    runtime: AgentRuntime,
+    runtime: any,
     message: Message,
     state: State,
     options: any,

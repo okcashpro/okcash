@@ -1,5 +1,4 @@
 import { composeContext } from "../core/context.ts";
-import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Message, State } from "../core/types.ts";
 
 export const shouldUnmuteTemplate = `Based on the conversation so far:
@@ -19,7 +18,7 @@ export default {
   name: "UNMUTE_ROOM",
   description:
     "Unmutes a room, allowing the agent to consider responding to messages again.",
-  validate: async (runtime: AgentRuntime, message: Message) => {
+  validate: async (runtime: any, message: Message) => {
     const roomId = message.room_id;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
@@ -27,7 +26,7 @@ export default {
     );
     return userState === "MUTED";
   },
-  handler: async (runtime: AgentRuntime, message: Message) => {
+  handler: async (runtime: any, message: Message) => {
     async function _shouldUnmute(state: State): Promise<boolean> {
       const shouldUnmuteContext = composeContext({
         state,

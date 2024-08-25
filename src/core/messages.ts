@@ -91,14 +91,7 @@ const formatTimestamp = (timestamp: string) => {
   // Adjust for the 7-hour difference
   messageDate = new Date(messageDate.getTime() - 7 * 60 * 60 * 1000);
 
-  console.log("Debugging timestamp:");
-  console.log("Client time:", clientNow.toISOString());
-  console.log("Estimated server time:", serverNow.toISOString());
-  console.log("Original message time:", timestamp);
-  console.log("Adjusted message time:", messageDate.toISOString());
-
   const diff = serverNow.getTime() - messageDate.getTime();
-  console.log("Time difference (ms):", diff);
 
   const absDiff = Math.abs(diff);
   const seconds = Math.floor(absDiff / 1000);

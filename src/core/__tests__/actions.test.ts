@@ -103,7 +103,8 @@ async function handleMessage(
         room_id,
         embedding: embeddingZeroVector,
       });
-      await runtime.evaluate(message, { ...state, responseContent });
+      state = await this.runtime.updateRecentMessageState(state);
+      await runtime.evaluate(message, state);
     } else {
       console.warn("Empty response, skipping");
     }

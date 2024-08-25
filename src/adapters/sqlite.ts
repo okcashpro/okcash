@@ -85,7 +85,6 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
   }
 
   async getAccountById(user_id: UUID): Promise<Account | null> {
-    console.log("getAccountById", user_id);
     const sql = "SELECT * FROM accounts WHERE id = ?";
     const account = this.db.prepare(sql).get(user_id) as Account;
     if (!account) return null;

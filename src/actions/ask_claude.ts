@@ -138,7 +138,7 @@ export default {
           room_id,
           embedding: embeddingZeroVector,
         });
-        await runtime.evaluate(message, { ...state, responseContent });
+        await runtime.evaluate(message, { ...state });
       } else {
         console.warn("Empty response from Claude, skipping");
       }

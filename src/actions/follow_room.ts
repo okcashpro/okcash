@@ -1,5 +1,4 @@
 import { composeContext } from "../core/context.ts";
-import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Message, State } from "../core/types.ts";
 
 export const shouldFollowTemplate = `Based on the conversation so far:
@@ -19,7 +18,7 @@ export default {
   name: "FOLLOW_ROOM",
   description:
     "Start following this channel with great interest, chiming in without needing to be explicitly mentioned. Only do this if explicitly asked to.",
-  validate: async (runtime: AgentRuntime, message: Message) => {
+  validate: async (runtime: any, message: Message) => {
     const keywords = [
       "follow",
       "participate",
@@ -28,7 +27,6 @@ export default {
       "take interest",
       "join",
     ];
-    console.log("message", message);
     if (
       !keywords.some((keyword) =>
         message.content.content.toLowerCase().includes(keyword),
@@ -43,7 +41,7 @@ export default {
     );
     return userState !== "FOLLOWED" && userState !== "MUTED";
   },
-  handler: async (runtime: AgentRuntime, message: Message) => {
+  handler: async (runtime: any, message: Message) => {
     async function _shouldFollow(state: State): Promise<boolean> {
       const shouldFollowContext = composeContext({
         state,

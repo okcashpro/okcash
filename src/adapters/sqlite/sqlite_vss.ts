@@ -53,8 +53,6 @@ function loadablePathResolver(name: string): string {
     `${name}.${extensionSuffix(platform)}`,
   );
 
-  console.log("loadablePath");
-  console.log(loadablePath);
   if (!statSync(loadablePath, { throwIfNoEntry: false })) {
     throw new Error(
       `Loadable extension for sqlite-vss not found. Was the ${packageName} package installed? Avoid using the --no-optional flag, as the optional dependencies for sqlite-vss are required.`,

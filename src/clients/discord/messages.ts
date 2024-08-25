@@ -346,11 +346,11 @@ export class MessageManager {
         embedding: embeddingZeroVector,
       });
 
-      await this.runtime.evaluate(message, {
-        ...state,
-        discordMessage: state.discordMessage,
-        discordClient: state.discordClient,
-      });
+      // await this.runtime.evaluate(message, {
+      //   ...state,
+      //   discordMessage: state.discordMessage,
+      //   discordClient: state.discordClient,
+      // });
     }
   }
 
@@ -370,7 +370,9 @@ export class MessageManager {
         room_id,
         embedding: embeddingZeroVector,
       });
-      await this.runtime.evaluate(message, { ...state, responseContent });
+      // refresh messages
+      state = await this.runtime.updateRecentMessageState(state);
+      await this.runtime.evaluate(message, state);
     } else {
       console.warn("Empty response, skipping");
     }
@@ -435,11 +437,8 @@ export class MessageManager {
       return true;
     }
 
-    const ignoreWords = ["fuck", "shit", "dick", "cock", "sex", "sexy"];
-    if (
-      messageContent.length < 50 &&
-      ignoreWords.some((word) => messageContent.includes(word))
-    ) {
+    // If we're not interested in the channel and it's a short message, ignore it
+    if (messageContent.length < 10 && !this.interestChannels[message.channelId]) {
       return true;
     }
 

@@ -1,17 +1,13 @@
-import { type AgentRuntime } from "../core/runtime.ts";
 import { ActionExample, type Action, type Message } from "../core/types.ts";
 
 export default {
   name: "IGNORE",
-  validate: async (_runtime: AgentRuntime, _message: Message) => {
+  validate: async (_runtime: any, _message: Message) => {
     return true;
   },
   description:
     "Ignore the user and do not respond. If the user is aggressive, creepy or is simply finished with the conversation, use this action. Or, if both you and the user have already said goodbye, use this action instead of saying bye again. Use IGNORE any time the conversation has naturally ended.",
-  handler: async (
-    runtime: AgentRuntime,
-    message: Message,
-  ): Promise<boolean> => {
+  handler: async (runtime: any, message: Message): Promise<boolean> => {
     return true;
   },
   condition: "The agent wants to ignore the user",

@@ -605,8 +605,6 @@ export class AgentRuntime {
 
   async ensureUserExists(user_id: UUID, userName: string | null) {
     const account = await this.databaseAdapter.getAccountById(user_id);
-    console.log("Account is");
-    console.log(account);
     if (!account) {
       await this.databaseAdapter.createAccount({
         id: user_id,
@@ -619,7 +617,6 @@ export class AgentRuntime {
   }
 
   async ensureParticipantInRoom(user_id: UUID, roomId: UUID) {
-    console.log(`Ensuring participant ${user_id} in room ${roomId}`);
     const participants =
       await this.databaseAdapter.getParticipantsForRoom(roomId);
     if (!participants.includes(user_id)) {

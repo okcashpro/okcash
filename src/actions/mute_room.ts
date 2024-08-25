@@ -1,5 +1,4 @@
 import { composeContext } from "../core/context.ts";
-import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Message, State } from "../core/types.ts";
 
 export const shouldMuteTemplate = `Based on the conversation so far:
@@ -20,7 +19,7 @@ export default {
   name: "MUTE_ROOM",
   description:
     "Mutes a room, ignoring all messages unless explicitly mentioned. Only do this if explicitly asked to, or if you're annoying people.",
-  validate: async (runtime: AgentRuntime, message: Message) => {
+  validate: async (runtime: any, message: Message) => {
     const roomId = message.room_id;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
@@ -28,7 +27,7 @@ export default {
     );
     return userState !== "MUTED" && userState !== "FOLLOWED";
   },
-  handler: async (runtime: AgentRuntime, message: Message) => {
+  handler: async (runtime: any, message: Message) => {
     async function _shouldMute(state: State): Promise<boolean> {
       const shouldMuteContext = composeContext({
         state,
