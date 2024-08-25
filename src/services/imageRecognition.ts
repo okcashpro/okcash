@@ -56,9 +56,9 @@ class ImageRecognitionService {
       {
         device: "gpu",
         progress_callback: (progress) => {
-          console.log(
-            `Model download progress: ${JSON.stringify(progress.progress)}`,
-          );
+          if (progress.status === "downloading") {
+            console.log(`Model download progress: ${JSON.stringify(progress)}`);
+          }
         },
       },
     );

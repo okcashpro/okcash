@@ -15,7 +15,9 @@ export const defaultActions: Action[] = [elaborate, ignore];
  */
 export const composeActionExamples = (actionsData: Action[], count: number) => {
   const actionExamples: ActionExample[][] = actionsData
-    .map((action: Action) => action.examples)
+    .map((action: Action) =>
+      action.examples.sort(() => 0.5 - Math.random()).slice(0, 5),
+    )
     .flat();
 
   const randomMessageExamples: ActionExample[][] = [];
@@ -44,6 +46,7 @@ export const composeActionExamples = (actionsData: Action[], count: number) => {
 
     return `\n${example
       .map((message) => {
+        console.log("message", message);
         let messageString = `${message.user}: ${message.content.content}${message.content.action ? ` (${message.content.action})` : ""}`;
         for (let i = 0; i < exampleNames.length; i++) {
           messageString = messageString.replaceAll(

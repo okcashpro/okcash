@@ -154,8 +154,7 @@ None`,
         {
           user: "{{user1}}",
           content: {
-            content:
-              "Oh, I've never been there, but I know it's in California",
+            content: "Oh, I've never been there, but I know it's in California",
           },
         },
       ] as ActionExample[],

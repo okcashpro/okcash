@@ -4,6 +4,10 @@ import { nodewhisper } from "nodejs-whisper";
 import os from "os";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import OpenAI from "openai";
+import { getWavHeader } from "../clients/elevenlabs/index.ts";
+import settings from "../core/settings.ts";
+import { File } from "formdata-node";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,11 +15,18 @@ const __dirname = dirname(__filename);
 export class TranscriptionService extends EventEmitter {
   private CONTENT_CACHE_DIR = "./content_cache";
   private isCudaAvailable: boolean = false;
+  private openai: OpenAI | null = null;
 
   constructor() {
     super();
     this.ensureCacheDirectoryExists();
-    this.detectCuda();
+    if (settings.OPENAI_API_KEY) {
+      this.openai = new OpenAI({
+        apiKey: settings.OPENAI_API_KEY,
+      });
+    } else {
+      this.detectCuda();
+    }
   }
 
   private ensureCacheDirectoryExists() {
@@ -55,6 +66,56 @@ export class TranscriptionService extends EventEmitter {
   }
 
   public async transcribe(audioBuffer: ArrayBuffer): Promise<string | null> {
+    if (this.openai) {
+      return this.transcribeWithOpenAI(audioBuffer);
+    } else {
+      return this.transcribeLocally(audioBuffer);
+    }
+  }
+
+  private async transcribeWithOpenAI(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
+    console.log("Transcribing audio with OpenAI...");
+
+    const wavHeader = getWavHeader(audioBuffer.byteLength, 16000);
+    const file = new File([wavHeader, audioBuffer], "audio.wav", {
+      type: "audio/wav",
+    });
+
+    try {
+      const result = await this.openai!.audio.transcriptions.create({
+        model: "whisper-1",
+        language: "en",
+        response_format: "text",
+        file: file,
+      });
+
+      console.log("result is");
+      console.log(result);
+
+      const trimmedResult = (result as any).trim();
+      console.log(`OpenAI speech to text: ${trimmedResult}`);
+
+      return trimmedResult.length < 5 ? null : trimmedResult;
+    } catch (error) {
+      console.error("Error in OpenAI speech-to-text conversion:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error setting up request:", error.message);
+      }
+      return null;
+    }
+  }
+
+  public async transcribeLocally(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     try {
       // get the full path of this.CONTENT_CACHE_DIR
       const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);

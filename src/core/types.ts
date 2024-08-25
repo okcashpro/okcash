@@ -241,6 +241,7 @@ export type Character = {
   name: string;
   bio: string;
   lore: string[];
+  messageExamples: MessageExample[][];
   people: string[];
   topics: string[];
   adjectives: string[];

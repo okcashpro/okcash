@@ -86,7 +86,8 @@ export default {
     });
     return true;
   },
-  condition: "The agent wants to or has been asked to leave the current voice channel.",
+  condition:
+    "The agent wants to or has been asked to leave the current voice channel.",
   examples: [
     [
       {
@@ -122,16 +123,14 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Great call everyone, hopping off now",
-            action: "LEAVE_VOICE",
+          content: "Great call everyone, hopping off now",
+          action: "LEAVE_VOICE",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Agreed, I'll hop off too",
+          content: "Agreed, I'll hop off too",
           action: "LEAVE_VOICE",
         },
       },
@@ -147,8 +146,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content:
-            "No worries, I'll leave the voice channel",
+          content: "No worries, I'll leave the voice channel",
           action: "LEAVE_VOICE",
         },
       },
@@ -164,8 +162,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Sounds good, see you both later",
+          content: "Sounds good, see you both later",
           action: "LEAVE_VOICE",
         },
       },

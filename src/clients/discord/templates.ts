@@ -18,6 +18,9 @@ About {{agentName}}:
 {{bio}}
 {{lore}}
 
+Examples of {{agentName}}'s dialog and actions:
+{{characterMessageExamples}}
+
 # Important information about the world:
 {{providers}}
 
@@ -35,7 +38,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 {{recentMessages}}
 
-# Instructions: Write the next message for {{agentName}}.
+# Instructions: Write the next message for {{agentName}}. Include an action, if apprpriate.
 \nResponse format should be formatted in a JSON block like this:
 \`\`\`json
 { "user": "{{agentName}}", "content": string, "action": string }
@@ -86,7 +89,6 @@ Result: [RESPOND]
 <user>: {{agentName}} stfu plz
 Result: [STOP]
 
-// ignore example
 <user>: i need help
 {{agentName}}: how can I help you?
 <user>: no. i need help from someone else

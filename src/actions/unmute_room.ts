@@ -72,30 +72,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user3}}, you can unmute this channel now",
+          content: "{{user3}}, you can unmute this channel now",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content:
-            "Done",
+          content: "Done",
           action: "UNMUTE_ROOM",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content:
-            "I could use some help troubleshooting this bug.",
+          content: "I could use some help troubleshooting this bug.",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content:
-            "Can you post the specific error message",
+          content: "Can you post the specific error message",
         },
       },
     ],
@@ -110,8 +106,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Sounds good",
+          content: "Sounds good",
           action: "UNMUTE_ROOM",
         },
       },

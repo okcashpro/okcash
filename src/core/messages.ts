@@ -35,6 +35,19 @@ export function formatActors({ actors }: { actors: Actor[] }) {
  * @param actors - list of actors
  * @returns string
  */
+let serverClientTimeDiff = 0;
+
+export const syncServerTime = (serverTime: string) => {
+  const serverDate = new Date(serverTime);
+  const clientDate = new Date();
+  serverClientTimeDiff = serverDate.getTime() - clientDate.getTime();
+  console.log(
+    "Time difference between server and client:",
+    serverClientTimeDiff,
+    "ms",
+  );
+};
+
 export const formatMessages = ({
   messages,
   actors,
@@ -75,18 +88,36 @@ export const formatMessages = ({
 };
 
 const formatTimestamp = (timestamp: string) => {
-  const now = new Date();
-  const messageDate = new Date(timestamp);
-  const diff = now.getTime() - messageDate.getTime();
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const clientNow = new Date();
+  const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
+  let messageDate = new Date(timestamp);
 
-  if (days > 0) {
-    return `${days} day${days > 1 ? "s" : ""} ago`;
-  } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  } else {
+  // Adjust for the 7-hour difference
+  messageDate = new Date(messageDate.getTime() - 7 * 60 * 60 * 1000);
+
+  console.log("Debugging timestamp:");
+  console.log("Client time:", clientNow.toISOString());
+  console.log("Estimated server time:", serverNow.toISOString());
+  console.log("Original message time:", timestamp);
+  console.log("Adjusted message time:", messageDate.toISOString());
+
+  const diff = serverNow.getTime() - messageDate.getTime();
+  console.log("Time difference (ms):", diff);
+
+  const absDiff = Math.abs(diff);
+  const seconds = Math.floor(absDiff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (absDiff < 60000) {
+    // Within 1 minute
+    return "just now";
+  } else if (minutes < 60) {
     return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+  } else if (hours < 24) {
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  } else {
+    return `${days} day${days !== 1 ? "s" : ""} ago`;
   }
 };

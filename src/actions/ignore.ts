@@ -51,8 +51,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Uh, don’t let the volatility sway your long-term strategy",
+          content: "Uh, don’t let the volatility sway your long-term strategy",
         },
       },
       {
@@ -153,106 +152,106 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "ur so dumb"
-        }
+          content: "ur so dumb",
+        },
       },
       {
         user: "{{user2}}",
         content: {
           content: "",
-          action: "IGNORE"
-        }
-      }
+          action: "IGNORE",
+        },
+      },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "later nerd"
-        }
+          content: "later nerd",
+        },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "bye"
-        }
+          content: "bye",
+        },
       },
       {
         user: "{{user1}}",
         content: {
-          content: ""
-        }
+          content: "",
+        },
       },
       {
         user: "{{user2}}",
         content: {
           content: "",
-          action: "IGNORE"
-        }
-      }
+          action: "IGNORE",
+        },
+      },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "wanna cyber"
-        }
+          content: "wanna cyber",
+        },
       },
       {
         user: "{{user2}}",
         content: {
           content: "thats inappropriate",
-          action: "IGNORE"
-        }
-      }
+          action: "IGNORE",
+        },
+      },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "Im out ttyl"
-        }
+          content: "Im out ttyl",
+        },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "cya"
-        }
+          content: "cya",
+        },
       },
       {
         user: "{{user2}}",
         content: {
           content: "",
-          action: "IGNORE"
-        }
-      }
+          action: "IGNORE",
+        },
+      },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "u there"
-        }
+          content: "u there",
+        },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "yes how can I help"
-        }
+          content: "yes how can I help",
+        },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "k nvm figured it out"
-        }
+          content: "k nvm figured it out",
+        },
       },
       {
         user: "{{user2}}",
         content: {
           content: "",
-          action: "IGNORE"
-        }
-      }
-    ]
+          action: "IGNORE",
+        },
+      },
+    ],
   ] as ActionExample[][],
 } as Action;

@@ -14,6 +14,7 @@ import {
 import fs from "fs";
 import https from "https";
 import si from "systeminformation";
+import { wordsToPunish } from "./wordsToPunish.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -313,24 +314,6 @@ class LlamaService {
 
     const tokens = this.model!.tokenize(context);
 
-    const wordsToPunish = [
-      "ELABORATE",
-      "please",
-      "feel",
-      "free",
-      "!",
-      "?",
-      "questions",
-      "topics",
-      "discuss",
-      "simulation",
-      "circuits",
-      "help",
-      "ask",
-      "happy",
-      "glad",
-      "assist",
-    ];
     // tokenize the words to punish
     const wordsToPunishTokens = wordsToPunish
       .map((word) => this.model!.tokenize(word))

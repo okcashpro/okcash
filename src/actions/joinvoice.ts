@@ -293,8 +293,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Sure",
+          content: "Sure",
           action: "JOIN_VOICE",
         },
       },

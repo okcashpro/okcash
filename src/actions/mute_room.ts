@@ -79,8 +79,7 @@ export default {
       {
         user: "{{user3}}",
         content: {
-          content:
-            "Got it",
+          content: "Got it",
           action: "MUTE_ROOM",
         },
       },
@@ -95,30 +94,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user3}}, please mute this channel for the time being",
+          content: "{{user3}}, please mute this channel for the time being",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content:
-            "Understood",
+          content: "Understood",
           action: "MUTE_ROOM",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content:
-            "Hey what do you think about this new design",
+          content: "Hey what do you think about this new design",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content:
-            "",
+          content: "",
           action: "IGNORE",
         },
       },

@@ -39,6 +39,8 @@ import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { type Actor, type Memory } from "./types.ts";
 import TikToken from "tiktoken";
+import { wordsToPunish } from "../services/wordsToPunish.ts";
+import { names, uniqueNamesGenerator } from "unique-names-generator";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -263,7 +265,11 @@ export class AgentRuntime {
   }) {
     console.log("*** completion context", context);
     if (!settings.OPENAI_API_KEY) {
-      context = await this.trimTokens("gpt-4o", context, max_context_length);
+      context = await this.trimTokens(
+        "gpt-4o-mini",
+        context,
+        max_context_length,
+      );
       console.log("*** completion context after trim", context);
       return await this.llamaService.queueTextCompletion(
         context,
@@ -333,7 +339,7 @@ export class AgentRuntime {
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }) {
-    context = await this.trimTokens("gpt-4o", context, max_context_length);
+    context = await this.trimTokens("gpt-4o-mini", context, max_context_length);
     if (!settings.OPENAI_API_KEY) {
       const completionResponse = await this.llamaService.queueMessageCompletion(
         context,
@@ -349,26 +355,8 @@ export class AgentRuntime {
       return JSON.stringify(completionResponse);
     }
 
-    const wordsToPunish = [
-      "ELABORATE",
-      "please",
-      "feel",
-      "free",
-      "!",
-      "?",
-      "questions",
-      "topics",
-      "discuss",
-      "simulation",
-      "circuits",
-      "help",
-      "ask",
-      "happy",
-      "glad",
-      "assist",
-    ];
     const biasValue = -1.5;
-    const encoding = TikToken.encoding_for_model("gpt-4o");
+    const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
     const tokenIds = await Promise.all(
       wordsToPunish.map((word) => encoding.encode(word)[0]),
@@ -797,11 +785,31 @@ Text: ${attachment.text}
       lore = selectedLore.join("\n");
     }
 
+    const formattedCharacterMessageExamples = this.character.messageExamples
+      .map((example) => {
+        const exampleNames = Array.from({ length: 5 }, () =>
+          uniqueNamesGenerator({ dictionaries: [names] }),
+        );
+
+        return example
+          .map((message) => {
+            let messageString = `${message.user}: ${message.content.content}`;
+            exampleNames.forEach((name, index) => {
+              const placeholder = `{{user${index + 1}}}`;
+              messageString = messageString.replaceAll(placeholder, name);
+            });
+            return messageString;
+          })
+          .join("\n");
+      })
+      .join("\n\n");
+
     const initialState = {
       agentId: this.agentId,
       agentName,
       bio: this.character.bio || "",
       lore,
+      characterMessageExamples: formattedCharacterMessageExamples,
       directions:
         (this.character?.style?.all?.join("\n") || "") +
         "\n" +
