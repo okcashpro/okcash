@@ -29,6 +29,7 @@ const jsonSchemaGrammar: Readonly<{
     };
     action: {
       type: string;
+      optional: true;
     };
   };
 }> = {
@@ -42,6 +43,7 @@ const jsonSchemaGrammar: Readonly<{
     },
     action: {
       type: "string",
+      optional: true,
     },
   },
 };
@@ -341,15 +343,15 @@ class LlamaService {
       }
 
       // commented out since yieldEogToken is false
-      // // if current includes '://' and that is not immediate after http or https, then we should break
-      // if (
-      //   current.includes("://") &&
-      //   !current.slice(-10).includes("http://") &&
-      //   !current.slice(-10).includes("https://")
-      // ) {
-      //   console.log("Stop sequence found");
-      //   break;
-      // }
+      // if current includes '://' and that is not immediate after http or https, then we should break
+      if (
+        current.includes("://") &&
+        !current.slice(-10).includes("http://") &&
+        !current.slice(-10).includes("https://")
+      ) {
+        console.log("Stop sequence found");
+        break;
+      }
 
       responseTokens.push(token);
       process.stdout.write(this.model!.detokenize([token]));
