@@ -1,13 +1,13 @@
 import EventEmitter from "events";
+import { File } from "formdata-node";
 import fs from "fs";
 import { nodewhisper } from "nodejs-whisper";
+import OpenAI from "openai";
 import os from "os";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import OpenAI from "openai";
 import { getWavHeader } from "../clients/elevenlabs/index.ts";
 import settings from "../core/settings.ts";
-import { File } from "formdata-node";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -110,26 +110,18 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeLocally(
-    audioBuffer: ArrayBuffer,
-  ): Promise<string | null> {
+  public async transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null> {
     try {
-      // get the full path of this.CONTENT_CACHE_DIR
       const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);
-
-      const tempAudioFileShortPath = path.join(
-        this.CONTENT_CACHE_DIR,
-        `temp_${Date.now()}.mp3`,
-      );
-
-      // Save the audio buffer to a temporary file
-      const tempAudioFile = path.join(fullPath, `temp_${Date.now()}.mp3`);
-      fs.writeFileSync(tempAudioFileShortPath, Buffer.from(audioBuffer));
-
-      // wait for 1 second
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      let output = await nodewhisper(tempAudioFile, {
+      const tempWavFile = path.join(fullPath, `temp_${Date.now()}.wav`);
+  
+      // Create a WAV file from the audio buffer
+      const wavHeader = getWavHeader(audioBuffer.byteLength, 16000);
+      const wavBuffer = Buffer.concat([wavHeader, Buffer.from(audioBuffer)]);
+      fs.writeFileSync(tempWavFile, wavBuffer);
+  
+      // Perform the transcription using nodejs-whisper
+      let output = await nodewhisper(tempWavFile, {
         modelName: "base.en",
         autoDownloadModelName: "base.en",
         verbose: true,
@@ -146,10 +138,8 @@ export class TranscriptionService extends EventEmitter {
           splitOnWord: true,
         },
       });
-
-      // for each line in output, if the trimmed line starts with "["...
-      // look for the next "]" in the line, remove the ] and everything before it
-      // and replace the line with the new line
+  
+      // Process the output
       output = output
         .split("\n")
         .map((line) => {
@@ -160,10 +150,10 @@ export class TranscriptionService extends EventEmitter {
           return line;
         })
         .join("\n");
-
-      // Remove the temporary audio file
-      fs.unlinkSync(tempAudioFile);
-
+  
+      // Remove the temporary WAV file
+      fs.unlinkSync(tempWavFile);
+  
       if (!output || output.length < 5) {
         return null;
       }
