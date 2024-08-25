@@ -377,14 +377,17 @@ class LlamaService {
           throw new Error("JSON string not found");
         }
       }
-
-      const parsedResponse = JSON.parse(jsonString);
-      if (!parsedResponse) {
-        throw new Error("Parsed response is undefined");
+      try {
+        const parsedResponse = JSON.parse(jsonString);
+        if (!parsedResponse) {
+          throw new Error("Parsed response is undefined");
+        }
+        console.log("AI: " + parsedResponse.content);
+        await this.sequence.clearHistory();
+        return parsedResponse;
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
       }
-      console.log("AI: " + parsedResponse.content);
-      await this.sequence.clearHistory();
-      return parsedResponse;
     } else {
       console.log("AI: " + response);
       await this.sequence.clearHistory();

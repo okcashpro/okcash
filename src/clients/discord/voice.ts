@@ -98,7 +98,7 @@ export class VoiceManager extends EventEmitter {
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
       if(!buffer) {
-        return;
+        
       }
       buffers.push(buffer);
       totalLength += buffer.length;
@@ -111,6 +111,8 @@ export class VoiceManager extends EventEmitter {
 
         try {
           const text = await this.transcriptionService.transcribe(inputBuffer);
+
+          if(!text) return;
 
           if (
             (text.length < 5 &&
