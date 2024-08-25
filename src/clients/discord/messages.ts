@@ -94,7 +94,7 @@ export class MessageManager {
   }
 
   async handleMessage(message: DiscordMessage) {
-    if (message.interaction || message.author?.bot) return;
+    if (message.interaction /* || message.author?.bot*/) return;
 
     const user_id = message.author.id as UUID;
     const userName = message.author.username;
@@ -501,7 +501,7 @@ export class MessageManager {
     state: State,
   ): Promise<boolean> {
     if (message.author.id === this.client.user?.id) return false;
-    if (message.author.bot) return false;
+    // if (message.author.bot) return false;
     if (message.mentions.has(this.client.user?.id as string)) return true;
 
     const guild = message.guild;

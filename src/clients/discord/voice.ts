@@ -320,12 +320,17 @@ export class VoiceManager extends EventEmitter {
         user: senderName,
       };
 
-      await this.runtime.messageManager.createMemory({
+
+      const memory = {
         user_id: message.user_id,
         content: contentWithUser,
         room_id: message.room_id,
         embedding: embeddingZeroVector,
-      });
+      }
+
+      console.log("voice memory being saved", memory);
+
+      await this.runtime.messageManager.createMemory(memory);
 
       // await this.runtime.evaluate(message, {
       //   ...state,
@@ -449,20 +454,20 @@ export class VoiceManager extends EventEmitter {
     });
 
     for (const [, member] of channel.members) {
-      if (member.user.bot) continue;
+      // if (member.user.bot) continue;
       this.monitorMember(member, channel);
     }
 
     connection.receiver.speaking.on("start", (user_id: string) => {
       const user = channel.members.get(user_id);
-      if (user?.user.bot) return;
+      // if (user?.user.bot) return;
       this.monitorMember(user as GuildMember, channel);
       this.streams.get(user_id)?.emit("speakingStarted");
     });
 
     connection.receiver.speaking.on("end", async (user_id: string) => {
       const user = channel.members.get(user_id);
-      if (user?.user.bot) return;
+      // if (user?.user.bot) return;
       this.streams.get(user_id)?.emit("speakingStopped");
     });
   }

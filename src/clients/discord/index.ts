@@ -122,7 +122,7 @@ export class DiscordClient extends EventEmitter {
 
   async handleReactionAdd(reaction: MessageReaction, user: User) {
     console.log("Reaction added");
-    if (user.bot) return;
+    // if (user.bot) return;
 
     let emoji = reaction.emoji.name;
     if (!emoji && reaction.emoji.id) {
@@ -161,7 +161,7 @@ export class DiscordClient extends EventEmitter {
 
   async handleReactionRemove(reaction: MessageReaction, user: User) {
     console.log("Reaction removed");
-    if (user.bot) return;
+    // if (user.bot) return;
 
     let emoji = reaction.emoji.name;
     if (!emoji && reaction.emoji.id) {
