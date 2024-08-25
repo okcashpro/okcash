@@ -378,9 +378,7 @@ class LlamaService {
         }
       }
 
-      const parsedResponse = (
-        this.grammar as LlamaJsonSchemaGrammar<GbnfJsonSchema>
-      ).parse(jsonString) as unknown as GrammarData;
+      const parsedResponse = JSON.parse(jsonString);
       if (!parsedResponse) {
         throw new Error("Parsed response is undefined");
       }
