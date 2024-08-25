@@ -367,12 +367,12 @@ class LlamaService {
 
     if (useGrammar) {
       // extract everything between ```json and ```
-      const jsonString = response.match(/```json(.*?)```/s)?.[1].trim();
+      let jsonString = response.match(/```json(.*?)```/s)?.[1].trim();
       if (!jsonString) {
         // try parsing response as JSON
         try {
-          const parsedResponse = JSON.parse(response);
-          console.log("parsedResponse", parsedResponse);
+          jsonString = JSON.parse(response);
+          console.log("parsedResponse", jsonString);
         } catch {
           throw new Error("JSON string not found");
         }
