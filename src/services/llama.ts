@@ -371,7 +371,7 @@ class LlamaService {
       if (!jsonString) {
         // try parsing response as JSON
         try {
-          const jsonString = JSON.stringify(JSON.parse(response));
+          jsonString = JSON.stringify(JSON.parse(response));
           console.log("parsedResponse", jsonString);
         } catch {
           throw new Error("JSON string not found");
