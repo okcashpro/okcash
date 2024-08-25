@@ -27,10 +27,6 @@ const jsonSchemaGrammar: Readonly<{
     content: {
       type: string;
     };
-    action: {
-      type: string;
-      optional: true;
-    };
   };
 }> = {
   type: "object",
@@ -40,10 +36,6 @@ const jsonSchemaGrammar: Readonly<{
     },
     content: {
       type: "string",
-    },
-    action: {
-      type: "string",
-      optional: true,
     },
   },
 };
