@@ -28,6 +28,7 @@ export default {
       "take interest",
       "join",
     ];
+    console.log("message", message);
     if (
       !keywords.some((keyword) =>
         message.content.content.toLowerCase().includes(keyword),

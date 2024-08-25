@@ -13,6 +13,7 @@ import {
   Character,
   Content,
   Goal,
+  Media,
   Provider,
   State,
   type Action,
@@ -355,13 +356,17 @@ export class AgentRuntime {
       return JSON.stringify(completionResponse);
     }
 
-    const biasValue = -1.5;
+    const biasValue = -30.0;
     const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
-    const tokenIds = await Promise.all(
-      wordsToPunish.map((word) => encoding.encode(word)[0]),
-    );
-    console.log("tokenIds", tokenIds);
+    const tokenIds = [
+      ...new Set(
+        await Promise.all(
+          wordsToPunish.map((word) => encoding.encode(word)[0]),
+        ),
+      ),
+    ];
+
     const logit_bias = tokenIds.reduce((acc, tokenId) => {
       acc[tokenId] = biasValue;
       return acc;
@@ -521,12 +526,13 @@ export class AgentRuntime {
    * @returns The results of the evaluation.
    */
   async evaluate(message: Message, state?: State) {
+    console.log("Evaluating message", message);
     const evaluatorPromises = this.evaluators.map(
       async (evaluator: Evaluator) => {
         if (!evaluator.handler) {
           return null;
         }
-
+        console.log;
         const result = await evaluator.validate(this, message, state);
         if (result) {
           return evaluator;
@@ -903,10 +909,48 @@ Text: ${attachment.text}
       }),
     });
 
+    let allAttachments = state.attachments || [];
+
+    if (recentMessagesData && Array.isArray(recentMessagesData)) {
+      const lastMessageWithAttachment = recentMessagesData.find(
+        (msg) => msg.content.attachments && msg.content.attachments.length > 0,
+      );
+
+      if (lastMessageWithAttachment) {
+        const lastMessageTime = new Date(
+          lastMessageWithAttachment.created_at,
+        ).getTime();
+        const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
+
+        allAttachments = recentMessagesData
+          .filter((msg) => {
+            const msgTime = new Date(msg.created_at).getTime();
+            return (
+              msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime
+            );
+          })
+          .flatMap((msg) => msg.content.attachments || []);
+      }
+    }
+
+    const formattedAttachments = (allAttachments as Media[])
+      .map(
+        (attachment) =>
+          `ID: ${attachment.id}
+Name: ${attachment.title}
+URL: ${attachment.url} 
+Type: ${attachment.source}
+Description: ${attachment.description}
+Text: ${attachment.text}
+    `,
+      )
+      .join("\n");
+
     return {
       ...state,
       recentMessages: addHeader("### Conversation Messages", recentMessages),
       recentMessagesData,
+      attachments: formattedAttachments,
     };
   }
 }

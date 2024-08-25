@@ -101,6 +101,9 @@
     "yargs": "^17.7.2",
     "youtube-dl-exec": "^3.0.7"
   },
+  "trustedDependencies": {
+    "@discordjs/opus": "github:discordjs/opus"
+  },
   "optionalDependencies": {
     "sqlite-vss-darwin-arm64": "^0.1.2",
     "sqlite-vss-darwin-x64": "^0.1.2",

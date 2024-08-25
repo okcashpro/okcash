@@ -3,12 +3,7 @@ import { ActionExample, type Action, type Message } from "../core/types.ts";
 
 export default {
   name: "IGNORE",
-  validate: async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _runtime: AgentRuntime,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _message: Message,
-  ) => {
+  validate: async (_runtime: AgentRuntime, _message: Message) => {
     return true;
   },
   description:

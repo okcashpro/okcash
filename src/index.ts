@@ -19,6 +19,7 @@ import settings from "./core/settings.ts";
 import channelStateProvider from "./clients/discord/providers/channelState.ts";
 import timeProvider from "./providers/time.ts";
 import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
+import { defaultActions } from "./core/actions.ts";
 
 interface Arguments {
   character?: string;
@@ -71,7 +72,7 @@ const runtime = new AgentRuntime({
   character,
   providers: [channelStateProvider, voiceStateProvider, timeProvider],
   actions: [
-    // elaborate, // TODO: Handle elaborate with llama, and add shouldElaborate
+    ...defaultActions,
     joinvoice,
     leavevoice,
     askClaude,

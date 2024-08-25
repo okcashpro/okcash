@@ -65,10 +65,6 @@ export const formatMessages = ({
         actors.find((actor: Actor) => actor.id === message.user_id)?.name ||
         "Unknown User";
 
-      if (messageAction === "IGNORE") {
-        messageContent = "*Ignored*";
-      }
-
       const attachments = (message.content as Content).attachments;
 
       const attachmentString =

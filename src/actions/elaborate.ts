@@ -29,6 +29,7 @@ export default {
   description:
     "ONLY use this action when the message necessitates a follow up. Do not use this when asking a question (use WAIT instead). Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded, use WAIT instead. Use sparingly.",
   validate: async (runtime: AgentRuntime, message: Message) => {
+    console.log("Validating elaborate");
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
       count: 10,
@@ -85,14 +86,14 @@ export default {
 
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
         try {
-          response = await this.runtime.completion({
+          response = await runtime.completion({
             context: shouldRespondContext,
             stop: ["\n"],
             max_response_length: 5,
           });
           break;
         } catch (error) {
-          console.error("Error in _shouldRespond:", error);
+          console.error("Error in _shouldElaborate:", error);
           // wait for 2 seconds
           await new Promise((resolve) => setTimeout(resolve, 2000));
           console.log("Retrying...");
