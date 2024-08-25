@@ -1,4 +1,3 @@
-import Debug, { Debugger } from "debug";
 import ESpeakNg from "espeak-ng";
 import * as fs from "fs";
 import ort from "onnxruntime-node";
@@ -382,8 +381,6 @@ const removeAuxSymbols = (text: string): string => {
  * @returns - Text.
  */
 const phonemeCleaner = (text: string) => {
-  // TODO: Implement missing number normalization: https://github.com/ianmarmour/speech-synthesizer/issues/1
-  // TODO: Implement missing abbreviation expansion: https://github.com/ianmarmour/speech-synthesizer/issues/2
   text = replaceSymbols(text);
   text = removeAuxSymbols(text);
   text = collapseWhitespace(text);
@@ -391,7 +388,6 @@ const phonemeCleaner = (text: string) => {
   return text;
 };
 class SpeechSynthesizer {
-  private debugger: Debugger;
   private tokenizer: VitsTokenizer;
   private phenomizer: EspeakPhonemizer;
   private session: ort.InferenceSession;
@@ -405,7 +401,6 @@ class SpeechSynthesizer {
       "_",
       "ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ",
     );
-    this.debugger = Debug("speech-synthesizer");
   }
 
   static async create(uri: string = "./model.onnx") {
@@ -429,7 +424,7 @@ class SpeechSynthesizer {
     // TODO: if we're on a mac, execution provider is cpu, otherwise test for cuda
 
     const opt: ort.InferenceSession.SessionOptions = {
-      executionProviders: ["cuda", "cpu"],
+      executionProviders: ["cuda", "gpu", "cpu"],
       logSeverityLevel: 3,
       logVerbosityLevel: 3,
       enableCpuMemArena: false,
@@ -455,22 +450,22 @@ class SpeechSynthesizer {
   async synthesize(text: string): Promise<any> {
     // Preformat text to remove random things like whitespace.
     const cleanedText = phonemeCleaner(text);
-    this.debugger("Cleaned Text:" + cleanedText);
+    console.log("Cleaned Text:" + cleanedText);
 
     // Convert text to phenomes using espeak-ng bindings.
     const phenomes = await this.phenomizer.phonemize(cleanedText);
-    this.debugger("Phenomes:" + phenomes);
+    console.log("Phenomes:" + phenomes);
 
     // Convert phonemes to tokens using our vits tokenizer.
     const tokens = this.tokenizer.tokenize(phenomes);
-    this.debugger("Tokens:" + tokens);
+    console.log("Tokens:" + tokens);
 
     // Add blank characters throughout our input tokens to make sure
     // the speed of our speech is correct.
     const paddedTokens = this.tokenizer.intersperseBlankChar(
       tokens.map(String),
     );
-    this.debugger("Padded Tokens:" + paddedTokens);
+    console.log("Padded Tokens:" + paddedTokens);
 
     const x = new ort.Tensor("int64", paddedTokens, [1, paddedTokens.length]);
     const x_length = new ort.Tensor("int64", [x.dims[1]]);

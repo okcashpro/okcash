@@ -88,19 +88,19 @@ export class AttachmentManager {
   ): Promise<Media> {
     try {
       const response = await fetch(attachment.url);
-      const audioVideoData = await response.arrayBuffer();
+      const audioVideoArrayBuffer = await response.arrayBuffer();
 
-      let audioData: Buffer;
+      let audioBuffer: Buffer;
       if (attachment.contentType?.startsWith("audio/")) {
-        audioData = Buffer.from(audioVideoData);
+        audioBuffer = Buffer.from(audioVideoArrayBuffer);
       } else if (attachment.contentType?.startsWith("video/mp4")) {
-        audioData = await this.extractAudioFromMP4(audioVideoData);
+        audioBuffer = await this.extractAudioFromMP4(audioVideoArrayBuffer);
       } else {
         throw new Error("Unsupported audio/video format");
       }
 
       const transcription =
-        await this.transcriptionService.transcribe(audioData);
+        await this.transcriptionService.transcribeAttachment(audioBuffer);
       const { title, description } = await generateSummary(
         this.runtime,
         transcription,
@@ -230,42 +230,6 @@ export class AttachmentManager {
         source: "Plaintext",
         description: "A plaintext document that could not be retrieved",
         text: `This is a plaintext attachment. File name: ${attachment.name}, Size: ${attachment.size} bytes`,
-      };
-    }
-  }
-
-  private async processAudioAttachment(attachment: Attachment): Promise<Media> {
-    try {
-      const response = await fetch(attachment.url);
-      const audioData = await response.arrayBuffer();
-
-      const transcription = await this.transcriptionService.transcribe(
-        Buffer.from(audioData),
-      );
-      const { title, description } = await generateSummary(
-        this.runtime,
-        transcription,
-      );
-
-      return {
-        id: attachment.id,
-        url: attachment.url,
-        title: title || "Audio Attachment",
-        source: "Audio",
-        description:
-          description ||
-          "User-upoaded audio attachment which has been transcribed",
-        text: transcription || "Audio content not available",
-      };
-    } catch (error) {
-      console.error(`Error processing audio attachment: ${error.message}`);
-      return {
-        id: attachment.id,
-        url: attachment.url,
-        title: "Audio Attachment",
-        source: "Audio",
-        description: "An audio attachment (transcription failed)",
-        text: `This is an audio attachment. File name: ${attachment.name}, Size: ${attachment.size} bytes, Content type: ${attachment.contentType}`,
       };
     }
   }

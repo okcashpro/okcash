@@ -65,6 +65,71 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
+  public async transcribeAttachment(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
+    if (this.openai) {
+      return this.transcribeWithOpenAI(audioBuffer);
+    } else {
+      return this.transcribeAttachmentLocally(audioBuffer);
+    }
+  }
+
+  public async transcribeAttachmentLocally(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
+    console.log("Transcribing audio with nodejs-whisper...");
+
+    try {
+      // get the full path of this.CONTENT_CACHE_DIR
+      const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);
+
+      console.log("fullPath", fullPath);
+      const tempAudioFileShortPath = path.join(
+        this.CONTENT_CACHE_DIR,
+        `temp_${Date.now()}.mp3`,
+      );
+
+      // Save the audio buffer to a temporary file
+      const tempAudioFile = path.join(fullPath, `temp_${Date.now()}.mp3`);
+      fs.writeFileSync(tempAudioFileShortPath, Buffer.from(audioBuffer));
+
+      // wait for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const output = await nodewhisper(tempAudioFile, {
+        modelName: "base.en",
+        autoDownloadModelName: "base.en",
+        verbose: true,
+        removeWavFileAfterTranscription: false,
+        withCuda: this.isCudaAvailable,
+        whisperOptions: {
+          outputInText: true,
+          outputInVtt: false,
+          outputInSrt: false,
+          outputInCsv: false,
+          translateToEnglish: false,
+          wordTimestamps: false,
+          timestamps_length: 20,
+          splitOnWord: true,
+        },
+      });
+
+      // TODO: Remove the temporary audio file
+      // fs.unlinkSync(tempAudioFile);
+
+      console.log("Transcription output:", output);
+
+      if (!output || output.length < 5) {
+        return null;
+      }
+      return output;
+    } catch (error) {
+      console.error("Error in speech-to-text conversion:", error);
+      return null;
+    }
+  }
+
   public async transcribe(audioBuffer: ArrayBuffer): Promise<string | null> {
     if (this.openai) {
       return this.transcribeWithOpenAI(audioBuffer);
@@ -110,16 +175,18 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null> {
+  public async transcribeLocally(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     try {
       const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);
       const tempWavFile = path.join(fullPath, `temp_${Date.now()}.wav`);
-  
+
       // Create a WAV file from the audio buffer
       const wavHeader = getWavHeader(audioBuffer.byteLength, 16000);
       const wavBuffer = Buffer.concat([wavHeader, Buffer.from(audioBuffer)]);
       fs.writeFileSync(tempWavFile, wavBuffer);
-  
+
       // Perform the transcription using nodejs-whisper
       let output = await nodewhisper(tempWavFile, {
         modelName: "base.en",
@@ -138,7 +205,7 @@ export class TranscriptionService extends EventEmitter {
           splitOnWord: true,
         },
       });
-  
+
       // Process the output
       output = output
         .split("\n")
@@ -150,10 +217,10 @@ export class TranscriptionService extends EventEmitter {
           return line;
         })
         .join("\n");
-  
+
       // Remove the temporary WAV file
-      fs.unlinkSync(tempWavFile);
-  
+      // fs.unlinkSync(tempWavFile);
+
       if (!output || output.length < 5) {
         return null;
       }

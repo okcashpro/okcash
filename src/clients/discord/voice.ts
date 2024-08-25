@@ -28,7 +28,6 @@ import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
 import { TranscriptionService } from "../../services/transcription.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 
-
 import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
@@ -97,8 +96,7 @@ export class VoiceManager extends EventEmitter {
     const monitor = new AudioMonitor(audioStream, 10000000, async (buffer) => {
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
-      if(!buffer) {
-        
+      if (!buffer) {
       }
       buffers.push(buffer);
       totalLength += buffer.length;
@@ -112,7 +110,7 @@ export class VoiceManager extends EventEmitter {
         try {
           const text = await this.transcriptionService.transcribe(inputBuffer);
 
-          if(!text) return;
+          if (!text) return;
 
           if (
             (text.length < 5 &&
@@ -316,7 +314,7 @@ export class VoiceManager extends EventEmitter {
         content: senderContent,
         room_id: message.room_id,
         embedding: embeddingZeroVector,
-      }
+      };
 
       console.log("voice memory being saved", memory);
 
