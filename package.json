@@ -13,6 +13,7 @@
     "watch": "tsc --watch",
     "dev": "nodemon",
     "eliza:discord": "npm run dev -- --discord",
+    "eliza:twitter": "npm run dev -- --twitter",
     "postinstall": "npx playwright install-deps && npx playwright install"
   },
   "author": "",
