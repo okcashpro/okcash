@@ -13,8 +13,7 @@ import {
   UUID,
 } from "../core/types.ts";
 
-export const claudeHandlerTemplate = `# Attachments
-{{attachments}}
+export const claudeHandlerTemplate = `{{attachments}}
 
 {{recentMessages}}
 

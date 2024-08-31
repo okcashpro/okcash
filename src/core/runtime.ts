@@ -22,9 +22,11 @@ import {
 } from "./types.ts";
 
 import { UUID } from "crypto";
-import tiktoken, { TiktokenModel } from "tiktoken";
+import { default as tiktoken, default as TikToken, TiktokenModel } from "tiktoken";
+import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
 import LlamaService from "../services/llama.ts";
+import { wordsToPunish } from "../services/wordsToPunish.ts";
 import {
   composeActionExamples,
   formatActionConditions,
@@ -36,12 +38,10 @@ import { DatabaseAdapter } from "./database.ts";
 import defaultCharacter from "./defaultCharacter.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
+import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { type Actor, type Memory } from "./types.ts";
-import TikToken from "tiktoken";
-import { wordsToPunish } from "../services/wordsToPunish.ts";
-import { names, uniqueNamesGenerator } from "unique-names-generator";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -651,8 +651,7 @@ export class AgentRuntime {
       recentMessagesData,
       recentFactsData,
       goalsData,
-      // loreData,
-    ]: [Actor[], Memory[], Memory[], Goal[] /*, Memory[]*/] = await Promise.all(
+    ]: [Actor[], Memory[], Memory[], Goal[]] = await Promise.all(
       [
         getActorDetails({ runtime: this, room_id }),
         this.messageManager.getMemories({
@@ -670,12 +669,6 @@ export class AgentRuntime {
           onlyInProgress: false,
           room_id,
         }),
-        // getLore({
-        //   runtime: this,
-        //   message: (message.content as Content).content,
-        //   count: 5,
-        //   match_threshold: 0.5,
-        // }),
       ],
     );
 
@@ -701,14 +694,18 @@ export class AgentRuntime {
 
     const actors = formatActors({ actors: actorsData ?? [] });
 
-    const recentMessages = formatMessages({
+    const recentMessageData = {
       actors: actorsData ?? [],
       messages: recentMessagesData.map((memory: Memory) => {
         const newMemory = { ...memory };
         delete newMemory.embedding;
         return newMemory;
       }),
-    });
+    }
+
+    const recentMessages = formatMessages(recentMessageData);
+
+    const recentPosts = formatPosts(recentMessageData);
 
     const recentFacts = formatFacts(recentFactsData);
     const relevantFacts = formatFacts(relevantFactsData);
@@ -778,6 +775,12 @@ Text: ${attachment.text}
       lore = selectedLore.join("\n");
     }
 
+    const formattedCharacterPostExamples = this.character.postExamples.map((post) => {
+      let messageString = `@${this.character.name}: ${post}`;
+      return messageString;
+    })
+      .join("\n");
+
     const formattedCharacterMessageExamples = this.character.messageExamples
       .map((example) => {
         const exampleNames = Array.from({ length: 5 }, () =>
@@ -799,32 +802,53 @@ Text: ${attachment.text}
 
     const initialState = {
       agentId: this.agentId,
+      // Character file stuff
       agentName,
       bio: this.character.bio || "",
       lore,
-      characterMessageExamples: formattedCharacterMessageExamples,
-      directions:
-        (this.character?.style?.all?.join("\n") || "") +
-        "\n" +
-        (this.character?.style?.chat?.join("\n") || ""),
+      adjective: this.character.adjectives && this.character.adjectives.length > 0 ?
+        this.character.adjectives[
+        Math.floor(Math.random() * this.character.adjectives.length)
+        ] : "",
+      topics: this.character.topics && this.character.topics.length > 0 ? addHeader(`### Topics for ${this.character.topics}`, this.character.topics
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 10)
+        .join(", ")) : "",
+      characterPostExamples: formattedCharacterPostExamples && formattedCharacterPostExamples.replaceAll('\n', '').length > 0 ? addHeader(`### Example Posts for ${this.character.name}`, formattedCharacterPostExamples) : "",
+      characterMessageExamples: formattedCharacterMessageExamples && formattedCharacterMessageExamples.replaceAll('\n', '').length > 0 ? addHeader(`### Example Conversations for ${this.character.name}`, formattedCharacterMessageExamples) : "",
+      messageDirections: (this.character?.style?.all?.length > 0 || this.character?.style?.chat.length > 0) ?
+        addHeader("### Message Directions for " + this.character.name,
+          (this.character?.style?.all?.join("\n") || "") +
+          (this.character?.style?.all?.length > 0 && this.character?.style?.chat.length > 0 ? "\n" : "") +
+          (this.character?.style?.chat?.join("\n") || "")
+        )
+        : "",
+      postDirections: (this.character?.style?.all?.length > 0 || this.character?.style?.post.length > 0) ?
+        addHeader("### Post Directions for " + this.character.name,
+          (this.character?.style?.all?.join("\n") || "") +
+          (this.character?.style?.all?.length > 0 && this.character?.style?.post.length > 0 ? "\n" : "") +
+          (this.character?.style?.post?.join("\n") || "")
+        )
+        : "",
+      // Agent runtime stuff
       senderName,
-      actors: addHeader("# Actors", actors),
+      actors: actors && actors.length > 0 ? addHeader("### Actors", actors) : "",
       actorsData,
       room_id,
-      goals: addHeader(
+      goals: goals && goals.length > 0 ? addHeader(
         "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
         goals,
-      ),
-      // loreData,
+      ) : "",
       goalsData,
-      recentMessages: addHeader("### Conversation Messages", recentMessages),
+      recentMessages: recentMessages && recentMessages.length > 0 ? addHeader("### Conversation Messages", recentMessages) : "",
+      recentPosts: recentPosts && recentPosts.length > 0 ? addHeader("### Recent Posts", recentPosts) : "",
       recentMessagesData,
-      recentFacts: addHeader("### Recent Facts", recentFacts),
+      recentFacts: recentFacts && recentFacts.length > 0 ? addHeader("### Recent Facts", recentFacts) : "",
       recentFactsData,
-      relevantFacts: addHeader("# Relevant Facts", relevantFacts),
+      relevantFacts: relevantFacts && relevantFacts.length > 0 ? addHeader("### Relevant Facts", relevantFacts) : "",
       relevantFactsData,
-      attachments: formattedAttachments,
-      ...additionalKeys,
+      attachments: formattedAttachments && formattedAttachments.length > 0 ? addHeader("### Attachments", formattedAttachments) : "",
+      ...additionalKeys
     };
 
     const actionPromises = this.actions.map(async (action: Action) => {
@@ -850,29 +874,18 @@ Text: ${attachment.text}
     ]);
 
     const evaluatorsData = resolvedEvaluators.filter(Boolean) as Evaluator[];
-    const evaluators = formatEvaluators(evaluatorsData);
-    const evaluatorNames = formatEvaluatorNames(evaluatorsData);
-    const evaluatorConditions = formatEvaluatorConditions(evaluatorsData);
-    const evaluatorExamples = formatEvaluatorExamples(evaluatorsData);
-
     const actionsData = resolvedActions.filter(Boolean) as Action[];
 
-    const formattedActionExamples =
-      `json\`\`\`\n` + composeActionExamples(actionsData, 10) + `\n\`\`\``;
-
     const actionState = {
-      actionNames: addHeader(
-        "### Available actions to respond with:",
-        formatActionNames(actionsData),
-      ),
-      actionConditions: formatActionConditions(actionsData),
-      actions: formatActions(actionsData),
-      actionExamples: addHeader("### Action Examples", formattedActionExamples),
+      actionNames: addHeader("### Possible response actions:", formatActionNames(actionsData)),
+      actionConditions: actionsData.length > 0 ? formatActionConditions(actionsData) : "",
+      actions: actionsData.length > 0 ? formatActions(actionsData) : "",
+      actionExamples: actionsData.length > 0 ? addHeader("### Action Examples", composeActionExamples(actionsData, 10)) : "",
       evaluatorsData,
-      evaluators,
-      evaluatorNames,
-      evaluatorConditions,
-      evaluatorExamples,
+      evaluators: evaluatorsData.length > 0 ? formatEvaluators(evaluatorsData) : "",
+      evaluatorNames: evaluatorsData.length > 0 ? formatEvaluatorNames(evaluatorsData) : "",
+      evaluatorConditions: evaluatorsData.length > 0 ? formatEvaluatorConditions(evaluatorsData) : "",
+      evaluatorExamples: evaluatorsData.length > 0 ? formatEvaluatorExamples(evaluatorsData) : "",
       providers,
     };
 

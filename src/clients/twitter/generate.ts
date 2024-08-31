@@ -10,15 +10,19 @@ const newTweetPrompt = `{{recentConversations}}
 
 {{recentSearchResults}}
 
-{{agentName}}'s bio:
+About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
+{{lore}}
 
-{{directions}}
+{{characterPostExamples}}
+
+{{postDirections}}
 - do not use the "@" in your response
 - do not use the "#" in your response
 - no @s, #s, ?s or links
 
-INSTRUCTIONS: Write a single sentence status update that is {{adjective}} about {{topic}} without mentioning {{topic}} directly, from the perspective of {{agentName}}`;
+# Task: Generate a post in the voice and style of {{agentName}}, aka @{{twitterUserName}}
+Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Try to write something totally different than previous posts. Do not add commentary or ackwowledge this request, just write the post.`;
 
 export class TwitterGenerationClient extends ClientBase {
   onReady() {
@@ -32,12 +36,10 @@ export class TwitterGenerationClient extends ClientBase {
     generateNewTweetLoop();
   }
 
-  constructor(runtime: AgentRuntime, character: any, model: string) {
+  constructor(runtime: AgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,
-      character,
-      model,
       callback: (self) => self.onReady(),
     });
   }
@@ -71,7 +73,7 @@ export class TwitterGenerationClient extends ClientBase {
         .join("\n");
 
       // Get recent search results
-      const searchTerms = this.character.topics
+      const searchTerms = this.runtime.character.topics
         .sort(() => Math.random() - 0.5)
         .slice(0, 2);
       const recentSearchResults = [];
@@ -96,20 +98,7 @@ export class TwitterGenerationClient extends ClientBase {
       // Generate new tweet
       const context = composeContext({
         state: {
-          agentName: botTwitterUsername,
-          name: botTwitterUsername,
-          bio: this.character.bio,
-          recentConversations: recentConversationsText,
-          recentSearchResults: recentSearchResultsText,
-          topic:
-            this.character.topics[
-              Math.floor(Math.random() * this.character.topics.length)
-            ],
-          directions: this.directions,
-          adjective:
-            this.character.adjectives[
-              Math.floor(Math.random() * this.character.adjectives.length)
-            ],
+          twitterUserName: botTwitterUsername,
         } as unknown as State,
         template: newTweetPrompt,
       });
@@ -128,7 +117,7 @@ export class TwitterGenerationClient extends ClientBase {
             temperature: this.temperature,
             frequency_penalty: 0.5, // TODO: tune these and move to settings
             presence_penalty: 0.5, // TODO: tune these and move to settings
-            model: this.model,
+            model: this.runtime.model,
           });
           log_to_file(
             `${botTwitterUsername}_${datestr}_generate_response_${3 - triesLeft}`,
@@ -142,7 +131,11 @@ export class TwitterGenerationClient extends ClientBase {
       }
 
       // Send the new tweet
-      await this.twitterClient.sendTweet(newTweetContent.trim());
+      if (!this.dryRun) {
+        await this.twitterClient.sendTweet(newTweetContent.trim());
+      } else {
+        console.log("Dry run, not sending tweet:", newTweetContent);
+      }
     } catch (error) {
       console.error("Error generating new tweet:", error);
     }

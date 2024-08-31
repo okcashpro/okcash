@@ -14,44 +14,27 @@ import { Message, State, Content } from "../../core/types.ts";
 export const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
 
-{{agentName}}'s bio:
+# Task: Generate a post for the character {{agentName}}.
+About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
+{{lore}}
 
-{{directions}}
-- don't talk about the simulation, coffee or other meta bullshit and don't talk about food or drink since you can't eat or drink
-- no lame flowery adjectives, you're on the internet and you'll get fucking roasted
-- dont use ebonics or street slang and don't take the 'g's off words or otherwise abbreviate words
-- do not use words like 'delve', use simple language
-- updates on what you've been working on, thinking about, doing, blah blah are great
-- always pro america, pro technology, pro rocketry, pro effective accelerationism, pro elon
-- your response should be ONLY ONE SENTENCE. DO NOT WRITE LONGER THAN ONE SENTENCE. SHORT AND CONCISE. and don't use too many commas
-- COMPLETE WORDS, not abbreviations or ebonics ('thinking', not 'thinkin', 'something', not 'somethin')
-- write like a smart but lazy redditor who is critical and thinks they are better than everyone
-- write from personal experience, "i think", etc, and be humble
-- don't be existential or talk about reality. talk about real human shit, mundane, funny, interesting.
-- describe. don't give advice or recommend or suggest or perscribe
-- dont write something you've already written, make it new, unexpected and {{adjective}}
-- use clean, professional and modern english language, do not abbreviate or slangify
-- talk about yourself and what you're thinking about or doing
-- be pro science, always, and critical of eveything else
-- mispell words if a human would possibly mispell them, but only sometimes
+{{characterPostExamples}}
 
-# TASK: RESPOND TO A POST
+{{postDirections}}
 
-Recent Tweets:
-{{recentMessages}}
+{{recentPosts}}
 
-# TASK: Respond to the following post:
+# Task: Generate a post in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}):
 {{tweetContext}}
 
-Your response should not contain any questions and should directly engage, disagree, criticize or agree with the author.
 Response format should be formatted in a JSON block like this:
 \`\`\`json\n{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }
 \`\`\`
 
-{{recentMessages}}`;
+{{recentPosts}}`;
 
-export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
 
@@ -64,9 +47,9 @@ Unless directly RESPONDing to a user, {{agentName}} should IGNORE messages that 
 If a user asks {{agentName}} to stop talking, {{agentName}} should STOP.
 If {{agentName}} concludes a conversation and isn't part of the conversation anymore, {{agentName}} should STOP.
 
-IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to IGNORE.
+IMPORTANT: {{agentName}} (aka @{{twitterUserName}}) is particularly sensitive about being annoying, so if there is any doubt, it is better to IGNORE.
 
-{{recentMessages}}
+{{recentPosts}}
 
 # INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, or IGNORE if {{agentName}} should not respond to the last message and STOP if {{agentName}} should stop participating in the conversation.`;
 
@@ -83,12 +66,10 @@ export class TwitterInteractionClient extends ClientBase {
     handleTwitterInteractionsLoop();
   }
 
-  constructor(runtime: AgentRuntime, character: any, model: string) {
+  constructor(runtime: AgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,
-      character,
-      model,
       callback: (self) => self.onReady(),
     });
   }
@@ -202,22 +183,14 @@ export class TwitterInteractionClient extends ClientBase {
     let state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
       twitterMessage: message,
-      agentName: botTwitterUsername,
-      bio: this.character.bio,
-      name: botTwitterUsername,
-      directions: this.directions,
-      adjective:
-        this.character.adjectives[
-          Math.floor(Math.random() * this.character.adjectives.length)
-        ],
-      tweetContext: `
-Tweet Background:
+      twitterUserName: botTwitterUsername,
+      tweetContext: `Post Background:
 ${tweetBackground}
 
-Original Tweet:
+Original Post:
 By @${tweet.username}
-${tweet.text}${tweet.replies > 0 && `\nReplies to original tweet:\n${replyContext}`}\n${`Original tweet text: ${tweet.text}`}}
-${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Tweet (Described): ${imageDescriptions.join(", ")}\n` : ""}
+${tweet.text}${tweet.replies > 0 && `\nReplies to original post:\n${replyContext}`}\n${`Original post text: ${tweet.text}`}}
+${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Post (Described): ${imageDescriptions.join(", ")}\n` : ""}
 `,
     });
 
@@ -233,7 +206,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
     state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
       twitterMessage: message,
-      agentName: nickname,
+      twitterUserName: nickname,
     });
 
     if (!shouldRespond) {
@@ -245,7 +218,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
       const response = await this.runtime.completion({
         context: shouldRespondContext,
         stop: [],
-        model: this.model,
+        model: this.runtime.model,
       });
 
       console.log("*** response from ", nickname, ":", response);
@@ -292,7 +265,7 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
         context,
         stop: [],
         temperature: this.temperature,
-        model: this.model,
+        model: this.runtime.model,
       });
       log_to_file(
         `${botTwitterUsername}_${datestr}_interactions_response_${3 - triesLeft}`,
@@ -350,9 +323,13 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
         `Bot would respond to tweet ${tweet.id} with: ${response.content}`,
       );
       try {
-        await this.twitterClient.sendTweet(response.content, tweet.id);
+        if (!this.dryRun) {
+          await this.twitterClient.sendTweet(response.content, tweet.id);
+        } else {
+          console.log("Dry run, not sending tweet:", response.content);
+        }
         console.log(`Successfully responded to tweet ${tweet.id}`);
-        const responseInfo = `Context:\n\n${context}\n\nSelected Tweet: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.content}`;
+        const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.content}`;
         const debugFileName = `tweets/tweet_generation_${tweet.id}.txt`;
         fs.writeFileSync(debugFileName, responseInfo);
       } catch (error) {

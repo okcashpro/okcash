@@ -9,9 +9,9 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 
 import { fileURLToPath } from "url";
-import ImageRecognitionService from "../../services/imageRecognition.ts";
-import { Character, Content, Message, State } from "../../core/types.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
+import { Content, Message, State } from "../../core/types.ts";
+import ImageRecognitionService from "../../services/imageRecognition.ts";
 
 export function extractAnswer(text: string): string {
   const startIndex = text.indexOf("Answer: ") + 8;
@@ -25,12 +25,11 @@ const __dirname = path.dirname(__filename);
 export class ClientBase extends EventEmitter {
   twitterClient: Scraper;
   runtime: AgentRuntime;
-  character: Character;
   directions: string;
-  model: string;
   lastCheckedTweetId: string | null = null;
   imageRecognitionService: ImageRecognitionService;
   temperature: number = 0.5;
+  dryRun: boolean = settings.TWITTER_DRY_RUN.toLowerCase() === "true";
   callback: (self: ClientBase) => any = null;
 
   onReady() {
@@ -39,26 +38,20 @@ export class ClientBase extends EventEmitter {
 
   constructor({
     runtime,
-    character,
-    model = "gpt-4o-mini",
     callback = null,
   }: {
     runtime: AgentRuntime;
-    character: Character;
-    model?: string;
     callback?: (self: ClientBase) => any;
   }) {
     super();
     this.runtime = runtime;
     this.twitterClient = new Scraper();
-    this.character = character;
     this.directions =
       "- " +
-      character.style.all.join("\n- ") +
+      this.runtime.character.style.all.join("\n- ") +
       "- " +
-      character.style.post.join();
+      this.runtime.character.style.post.join();
     this.callback = callback;
-    this.model = model;
     this.imageRecognitionService = new ImageRecognitionService(this.runtime);
 
     // Check for Twitter cookies

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from "fs";
 import yargs from "yargs";
 import { DiscordClient } from "./clients/discord/index.ts";
-// import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
-// import { TwitterSearchClient } from "./clients/twitter/search.ts";
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
+import { TwitterSearchClient } from "./clients/twitter/search.ts";
+import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
 import Database from "better-sqlite3";
 import askClaude from "./actions/ask_claude.ts";
 import elaborate from "./actions/elaborate.ts";
@@ -88,27 +89,23 @@ function startDiscord() {
 }
 
 // check if character has a 'model' field, if so use that, otherwise use 'gpt-4o-mini'
-// const model = character.model || "gpt-4o-mini";
+const model = character.model || "gpt-4o-mini";
 
-// async function startTwitter() {
-//   // console.log("Starting interaction client")
-//   // const twitterInteractionClient = new TwitterInteractionClient(agent, character, model);
-//   // // wait 2 seconds
-//   // await new Promise(resolve => setTimeout(resolve, 2000));
-//   console.log("Starting search client");
-//   const twitterSearchClient = new TwitterSearchClient(agent, character, model);
-//   await new Promise((resolve) => setTimeout(resolve, 2000));
-//   console.log("Starting generation client");
-//   const twitterGenerationClient = new TwitterGenerationClient(
-//     agent,
-//     character,
-//     model,
-//   );
-// }
+async function startTwitter() {
+  console.log("Starting interaction client")
+  const twitterInteractionClient = new TwitterInteractionClient(runtime);
+  // wait 2 seconds
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log("Starting search client");
+  const twitterSearchClient = new TwitterSearchClient(runtime);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  console.log("Starting generation client");
+  const twitterGenerationClient = new TwitterGenerationClient(runtime);
+}
 
 if (argv.discord || (!argv.twitter && !argv.discord)) {
   startDiscord();
 }
-// if (argv.twitter || (!argv.twitter && !argv.discord)) {
-//   startTwitter();
-// }
+if (argv.twitter || (!argv.twitter && !argv.discord)) {
+  startTwitter();
+}

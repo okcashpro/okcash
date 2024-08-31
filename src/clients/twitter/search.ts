@@ -7,7 +7,7 @@ import settings from "../../core/settings.ts";
 
 import { ClientBase } from "./base.ts";
 import { log_to_file } from "../../core/logger.ts";
-import { composeContext } from "../../core/context.ts";
+import { addHeader, composeContext } from "../../core/context.ts";
 import { Message, State, Content } from "../../core/types.ts";
 import { parseJSONObjectFromText } from "../../core/parsing.ts";
 
@@ -20,20 +20,18 @@ Recent conversations:
 Recent tweets which {{agentName}} may or may not find interesting:
 {{recentSearchResults}}
 
-Here are some of the topics {{agentName}} likes: {{topics}}
+{{topics}}
 
-{{agentName}}'s bio:
+About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
+{{lore}}
 
-# TASK: RESPOND TO A POST
+{{recentPosts}}
 
-Recent Tweets:
-{{recentMessages}}
+{{postDirections}}
+- Respond directly to the above post in an {{adjective}} way, as {{agentName}}
 
-{{directions}}
-- Respond directly to the above post in an {{adjective}} way, as{{agentName}}
-
-# TASK: Respond to the following post:
+# Task: Respond to the following post in the style and perspective of {{agentName}} (aka @{{twitterUserName}}).
 {{tweetContext}}
 
 Your response should not contain any questions. Brief, concise statements only.
@@ -43,12 +41,10 @@ Your response should not contain any questions. Brief, concise statements only.
 export class TwitterSearchClient extends ClientBase {
   private respondedTweets: Set<string> = new Set();
 
-  constructor(runtime: AgentRuntime, character: any, model: string) {
+  constructor(runtime: AgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,
-      character,
-      model,
       callback: (self) => self.onReady(),
     });
   }
@@ -75,11 +71,13 @@ export class TwitterSearchClient extends ClientBase {
   }
 
   private isValidTweet(tweet: Tweet): boolean {
+    // Filter out tweets with too many hashtags, @s, or $ signs, probably spam or garbage
     const hashtagCount = (tweet.text.match(/#/g) || []).length;
     const atCount = (tweet.text.match(/@/g) || []).length;
-    const hasDollarSign = tweet.text.includes("$");
+    const dollarSignCount = tweet.text.match(/\$/g) || [];
+    const totalCount = hashtagCount + atCount + dollarSignCount.length;
 
-    return hashtagCount <= 1 && atCount <= 2 && !hasDollarSign;
+    return hashtagCount <= 1 && atCount <= 2 && dollarSignCount.length <= 1 && totalCount <= 3;
   }
 
   private async engageWithSearchTerms() {
@@ -92,8 +90,8 @@ export class TwitterSearchClient extends ClientBase {
       }
 
       const searchTerm = [
-        ...this.character.topics /*, ...this.character.people*/,
-      ][Math.floor(Math.random() * this.character.topics.length)];
+        ...this.runtime.character.topics /*, ...this.character.people*/,
+      ][Math.floor(Math.random() * this.runtime.character.topics.length)];
 
       if (!fs.existsSync("tweets")) {
         fs.mkdirSync("tweets");
@@ -120,14 +118,14 @@ export class TwitterSearchClient extends ClientBase {
 Here are some tweets related to the search term "${searchTerm}":
 
 ${tweetsArray
-  .map(
-    (tweet) => `
+          .map(
+            (tweet) => `
   ID: ${tweet.id}
   Username: ${tweet.username}
   Text: ${tweet.text}
 `,
-  )
-  .join("\n")}
+          )
+          .join("\n")}
 
 Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
 Notes:
@@ -137,17 +135,17 @@ Notes:
   - Respond to tweets where there is an easy exchange of ideas to have with the user
   - ONLY respond with the ID of the tweet`;
       const datestr = new Date().toISOString().replace(/:/g, "-");
-      const logName = `${this.character.name}_search_${datestr}`;
+      const logName = `${this.runtime.character.name}_search_${datestr}`;
       log_to_file(logName, prompt);
 
       const mostInterestingTweetResponse = await this.runtime.completion({
         context: prompt,
         stop: [],
         temperature: this.temperature,
-        model: this.model,
+        model: this.runtime.model,
       });
 
-      const responseLogName = `${this.character.name}_search_${datestr}_result`;
+      const responseLogName = `${this.runtime.character.name}_search_${datestr}_result`;
       log_to_file(responseLogName, mostInterestingTweetResponse);
 
       const tweetId = mostInterestingTweetResponse.trim();
@@ -239,30 +237,16 @@ Notes:
 
       const state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
-        recentConversations: formatRecentConversations(recentConversations),
-        recentSearchResults: formatRecentSearchResults(recentSearchResults),
         twitterMessage: message,
-        agentName: botTwitterUsername,
-        bio: this.character.bio,
-        name: botTwitterUsername,
-        directions: this.directions,
-        adjectives: this.character.adjectives,
-        adjective:
-          this.character.adjectives[
-            Math.floor(Math.random() * this.character.adjectives.length)
-          ],
-        topics: this.character.topics
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 10)
-          .join(", "),
+        twitterUserName: botTwitterUsername,
         tweetContext: `
-Tweet Background:
+Post Background:
 ${tweetBackground}
 
-Original Tweet:
+Original Post:
 By @${selectedTweet.username}
-${selectedTweet.text}${replyContext.length > 0 && `\nReplies to original tweet:\n${replyContext}`}\n${`Original tweet text: ${selectedTweet.text}`}}
-${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Tweet (Described): ${imageDescriptions.join(", ")}\n` : ""}
+${selectedTweet.text}${replyContext.length > 0 && `\nReplies to original post:\n${replyContext}`}\n${`Original post text: ${selectedTweet.text}`}}
+${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Post (Described): ${imageDescriptions.join(", ")}\n` : ""}
 `,
       });
 
@@ -274,7 +258,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
       });
 
       console.log("*** Context:", context);
-      console.log("**** this.model", this.model);
+      console.log("**** this.model", this.runtime.model);
 
       let responseContent: Content | null = null;
       for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
@@ -282,7 +266,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
           context,
           stop: [],
           temperature: this.temperature,
-          model: this.model,
+          model: this.runtime.model,
           // images: selectedTweet.photos.map(photo => photo.url), // Pass image URLs to the completion API
         });
 
@@ -323,18 +307,22 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
           `Bot would respond to tweet ${selectedTweet.id} with: ${response.content}`,
         );
         try {
-          await this.twitterClient.sendTweet(
-            response.content,
-            selectedTweet.id,
-          );
+          if (!this.dryRun) {
+            await this.twitterClient.sendTweet(
+              response.content,
+              selectedTweet.id,
+            );
+          } else {
+            console.log("Dry run, not sending post:", response.content);
+          }
           console.log(`Successfully responded to tweet ${selectedTweet.id}`);
           this.respondedTweets.add(selectedTweet.id);
-          const responseInfo = `Context:\n\n${context}\n\nSelected Tweet: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.content}`;
+          const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.content}`;
           const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
           console.log(`Writing response tweet info to ${debugFileName}`);
           fs.writeFileSync(debugFileName, responseInfo);
         } catch (error) {
-          console.error(`Error sending response tweet: ${error}`);
+          console.error(`Error sending response post: ${error}`);
         }
       }
     } catch (error) {
@@ -360,7 +348,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
 
   private async getRecentSearchResults(): Promise<Tweet[]> {
     const recentSearchResults = [];
-    const searchTerm = this.character.topics
+    const searchTerm = this.runtime.character.topics
       .sort(() => 0.5 - Math.random())
       .slice(0, 2)
       .join(" ");

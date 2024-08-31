@@ -1,8 +1,5 @@
 export const messageHandlerTemplate =
-  // `
-
   // {{goals}}
-  // {{actors}}
   `# Action Examples
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
@@ -21,10 +18,8 @@ About {{agentName}}:
 Examples of {{agentName}}'s dialog and actions:
 {{characterMessageExamples}}
 
-# Important information about the world:
 {{providers}}
 
-# Attachments
 {{attachments}}
 
 {{actionNames}}
@@ -33,8 +28,7 @@ Examples of {{agentName}}'s dialog and actions:
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
-# Directions for {{agentName}}'s response
-{{directions}}
+{{messageDirections}}
 
 {{recentMessages}}
 
@@ -55,8 +49,7 @@ About {{agentName}}:
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
-# Directions for {{agentName}}'s response
-{{directions}}
+{{messageDirections}}
 
 {{recentMessages}}
 

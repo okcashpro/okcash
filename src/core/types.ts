@@ -88,7 +88,8 @@ export interface State {
   agentId?: UUID; // An optional ID of the agent within the current conversation or context.
   bio: string; // A string representation of the agent's bio.
   lore: string; // A list of lore bits for the agent.
-  directions: string; // A dictionary of lists of directions
+  messageDirections: string; // A string representation of directions for messages in the current state.
+  postDirections: string; // A string representation of directions for posting in the current state.
   room_id: UUID; // The ID of the current room or conversation context.
   agentName?: string; // An optional name of the agent, used for referencing the agent in conversations.
   senderName?: string; // An optional name of the sender of the current message.
@@ -242,6 +243,7 @@ export type Character = {
   bio: string;
   lore: string[];
   messageExamples: MessageExample[][];
+  postExamples: string[];
   people: string[];
   topics: string[];
   adjectives: string[];

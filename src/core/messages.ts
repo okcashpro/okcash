@@ -83,7 +83,7 @@ export const formatMessages = ({
   return messageStrings;
 };
 
-const formatTimestamp = (timestamp: string) => {
+export const formatTimestamp = (timestamp: string) => {
   const clientNow = new Date();
   const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
   let messageDate = new Date(timestamp);
