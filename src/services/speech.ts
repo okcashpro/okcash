@@ -387,10 +387,13 @@ const phonemeCleaner = (text: string) => {
 
   return text;
 };
-class SpeechSynthesizer {
+class SpeechService {
   private tokenizer: VitsTokenizer;
   private phenomizer: EspeakPhonemizer;
   private session: ort.InferenceSession;
+  
+  static modelPath: string = "./model.onnx";
+  private static instance: SpeechService | null = null;
 
   private constructor(session: ort.InferenceSession) {
     this.session = session;
@@ -403,7 +406,14 @@ class SpeechSynthesizer {
     );
   }
 
-  static async create(uri: string = "./model.onnx") {
+  static async generate(text: string): Promise<any> {
+    if (!this.instance) {
+      this.instance = await this.create();
+    }
+    return this.instance.synthesize(text);
+  }
+
+  private static async create(uri: string = this.modelPath) {
     // check if model.onnx exists
     if (!fs.existsSync(uri)) {
       console.log("Model file does not exist, downloading...");
@@ -443,11 +453,11 @@ class SpeechSynthesizer {
       session = await ort.InferenceSession.create(uri, opt);
     }
 
-    return new SpeechSynthesizer(session);
+    return new SpeechService(session);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async synthesize(text: string): Promise<any> {
+  private async synthesize(text: string): Promise<any> {
     // Preformat text to remove random things like whitespace.
     const cleanedText = phonemeCleaner(text);
     console.log("Cleaned Text:" + cleanedText);
@@ -491,4 +501,4 @@ class SpeechSynthesizer {
   }
 }
 
-export { SpeechSynthesizer };
+export { SpeechService };

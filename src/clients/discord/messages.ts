@@ -5,12 +5,8 @@ import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import { Actor, Content, Media, Message, State } from "../../core/types.ts";
-import { BrowserService } from "../../services/browser.ts";
-import ImageRecognitionService from "../../services/imageRecognition.ts";
+import { Content, Media, Message, State } from "../../core/types.ts";
 import { generateSummary } from "../../services/summary.ts";
-import { TranscriptionService } from "../../services/transcription.ts";
-import { YouTubeService } from "../../services/youtube.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
 import { InterestChannels } from "./types.ts";
@@ -56,10 +52,6 @@ function splitMessage(content: string): string[] {
 export class MessageManager {
   private client: Client;
   private runtime: AgentRuntime;
-  private imageRecognitionService: ImageRecognitionService;
-  private browserService: BrowserService;
-  private transcriptionService: TranscriptionService;
-  private youtubeService: YouTubeService;
   private attachmentManager: AttachmentManager;
   private interestChannels: InterestChannels = {};
   private discordClient: any;
@@ -70,15 +62,8 @@ export class MessageManager {
     this.voiceManager = voiceManager;
     this.discordClient = discordClient;
     this.runtime = discordClient.runtime;
-    this.browserService = new BrowserService(this.runtime);
-    this.transcriptionService = new TranscriptionService();
-    this.youtubeService = new YouTubeService(this.transcriptionService);
-    this.imageRecognitionService = new ImageRecognitionService(this.runtime);
     this.attachmentManager = new AttachmentManager(
       this.runtime,
-      this.imageRecognitionService,
-      this.browserService,
-      this.youtubeService,
     );
   }
 
@@ -100,7 +85,7 @@ export class MessageManager {
     const userName = message.author.username;
     const channelId = message.channel.id;
 
-    await this.browserService.initialize();
+    await this.runtime.browserService.initialize();
 
     try {
       const { processedContent, attachments } =
@@ -295,8 +280,8 @@ export class MessageManager {
     const urls = processedContent.match(urlRegex) || [];
 
     for (const url of urls) {
-      if (this.youtubeService.isVideoUrl(url)) {
-        const videoInfo = await this.youtubeService.processVideo(url);
+      if (this.runtime.videoService.isVideoUrl(url)) {
+        const videoInfo = await this.runtime.videoService.processVideo(url);
         attachments.push({
           id: `youtube-${Date.now()}`,
           url: url,
@@ -307,7 +292,7 @@ export class MessageManager {
         });
       } else {
         const { title, bodyContent } =
-          await this.browserService.getPageContent(url);
+          await this.runtime.browserService.getPageContent(url);
         const { title: newTitle, description } = await generateSummary(
           this.runtime,
           title + "\n" + bodyContent,

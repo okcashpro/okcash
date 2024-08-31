@@ -1,5 +1,4 @@
-import { type AgentRuntime } from "./runtime.ts";
-import { type Memory, type UUID } from "./types.ts";
+import { IAgentRuntimeBase, IMemoryManager, type Memory, type UUID } from "./types.ts";
 
 export const embeddingDimension = 1536;
 export const embeddingZeroVector = Array(embeddingDimension).fill(0);
@@ -10,11 +9,11 @@ const defaultMatchCount = 10;
 /**
  * Manage memories in the database.
  */
-export class MemoryManager {
+export class MemoryManager implements IMemoryManager {
   /**
    * The AgentRuntime instance associated with this manager.
    */
-  runtime: AgentRuntime;
+  runtime: IAgentRuntimeBase;
 
   /**
    * The name of the database table this manager operates on.
@@ -27,15 +26,10 @@ export class MemoryManager {
    * @param opts.tableName The name of the table this manager will operate on.
    * @param opts.runtime The AgentRuntime instance associated with this manager.
    */
-  constructor({
-    tableName,
-    runtime,
-  }: {
-    tableName: string;
-    runtime: AgentRuntime;
-  }) {
-    this.runtime = runtime;
-    this.tableName = tableName;
+  constructor(opts: { tableName: string; runtime: IAgentRuntimeBase }) {
+
+    this.runtime = opts.runtime;
+    this.tableName = opts.tableName;
   }
 
   /**

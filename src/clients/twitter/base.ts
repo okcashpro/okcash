@@ -52,7 +52,6 @@ export class ClientBase extends EventEmitter {
       "- " +
       this.runtime.character.style.post.join();
     this.callback = callback;
-    this.imageRecognitionService = new ImageRecognitionService(this.runtime);
 
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {

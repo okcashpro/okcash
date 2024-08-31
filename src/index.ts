@@ -88,17 +88,14 @@ function startDiscord() {
   const discordClient = new DiscordClient(runtime);
 }
 
-// check if character has a 'model' field, if so use that, otherwise use 'gpt-4o-mini'
-const model = character.model || "gpt-4o-mini";
-
 async function startTwitter() {
-  console.log("Starting interaction client")
-  const twitterInteractionClient = new TwitterInteractionClient(runtime);
-  // wait 2 seconds
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  console.log("Starting search client");
-  const twitterSearchClient = new TwitterSearchClient(runtime);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  // console.log("Starting interaction client")
+  // const twitterInteractionClient = new TwitterInteractionClient(runtime);
+  // // wait 2 seconds
+  // await new Promise(resolve => setTimeout(resolve, 2000));
+  // console.log("Starting search client");
+  // const twitterSearchClient = new TwitterSearchClient(runtime);
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
   console.log("Starting generation client");
   const twitterGenerationClient = new TwitterGenerationClient(runtime);
 }

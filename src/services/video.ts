@@ -2,17 +2,16 @@ import fs from "fs";
 import path from "path";
 import { default as getUuid } from "uuid-by-string";
 import youtubeDl from "youtube-dl-exec";
-import parseSrt from "srt";
-import { TranscriptionService } from "./transcription.ts";
+import { AgentRuntime } from "../core/runtime.ts";
 import { Media } from "../core/types.ts";
 
-export class YouTubeService {
-  private transcriptionService: TranscriptionService;
+export class VideoService {
   private CONTENT_CACHE_DIR = "./content_cache";
+  runtime: AgentRuntime;
 
-  constructor(transcriptionService: TranscriptionService) {
-    this.transcriptionService = transcriptionService;
+  constructor(runtime: AgentRuntime) {
     this.ensureCacheDirectoryExists();
+    this.runtime = runtime;
   }
 
   private ensureCacheDirectoryExists() {
@@ -182,7 +181,7 @@ export class YouTubeService {
 
     console.log("Starting transcription...");
     const startTime = Date.now();
-    const transcript = await this.transcriptionService.transcribe(audioBuffer);
+    const transcript = await this.runtime.transcriptionService.transcribe(audioBuffer);
     const endTime = Date.now();
     console.log(
       `Transcription completed in ${(endTime - startTime) / 1000} seconds`,

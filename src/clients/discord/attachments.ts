@@ -3,33 +3,15 @@ import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import { AgentRuntime } from "../../core/runtime.ts";
 import { Media } from "../../core/types.ts";
-import { BrowserService } from "../../services/browser.ts";
-import ImageRecognitionService from "../../services/imageRecognition.ts";
-import { PdfService } from "../../services/pdf.ts";
 import { generateSummary } from "../../services/summary.ts";
-import { TranscriptionService } from "../../services/transcription.ts";
-import { YouTubeService } from "../../services/youtube.ts";
 export class AttachmentManager {
-  private imageRecognitionService: ImageRecognitionService;
-  private browserService: BrowserService;
-  private youtubeService: YouTubeService;
   private attachmentCache: Map<string, Media> = new Map();
-  private transcriptionService: TranscriptionService;
-  private pdfService: PdfService;
   private runtime: AgentRuntime;
 
   constructor(
     runtime: AgentRuntime,
-    imageRecognitionService: ImageRecognitionService,
-    browserService: BrowserService,
-    youtubeService: YouTubeService,
   ) {
     this.runtime = runtime;
-    this.imageRecognitionService = imageRecognitionService;
-    this.browserService = browserService;
-    this.youtubeService = youtubeService;
-    this.transcriptionService = new TranscriptionService();
-    this.pdfService = new PdfService();
   }
 
   async processAttachments(
@@ -70,7 +52,7 @@ export class AttachmentManager {
       media = await this.processImageAttachment(attachment);
     } else if (
       attachment.contentType?.startsWith("video/") ||
-      this.youtubeService.isVideoUrl(attachment.url)
+      this.runtime.videoService.isVideoUrl(attachment.url)
     ) {
       media = await this.processVideoAttachment(attachment);
     } else {
@@ -100,7 +82,7 @@ export class AttachmentManager {
       }
 
       const transcription =
-        await this.transcriptionService.transcribeAttachment(audioBuffer);
+        await this.runtime.transcriptionService.transcribeAttachment(audioBuffer);
       const { title, description } = await generateSummary(
         this.runtime,
         transcription,
@@ -179,7 +161,7 @@ export class AttachmentManager {
     try {
       const response = await fetch(attachment.url);
       const pdfBuffer = await response.arrayBuffer();
-      const text = await this.pdfService.convertPdfToText(
+      const text = await this.runtime.pdfService.convertPdfToText(
         Buffer.from(pdfBuffer),
       );
       const { title, description } = await generateSummary(this.runtime, text);
@@ -237,7 +219,7 @@ export class AttachmentManager {
   private async processImageAttachment(attachment: Attachment): Promise<Media> {
     try {
       const { description, title } =
-        await this.imageRecognitionService.recognizeImage(attachment.url);
+        await this.runtime.imageRecognitionService.recognizeImage(attachment.url);
       return {
         id: attachment.id,
         url: attachment.url,
@@ -264,8 +246,8 @@ export class AttachmentManager {
   }
 
   private async processVideoAttachment(attachment: Attachment): Promise<Media> {
-    if (this.youtubeService.isVideoUrl(attachment.url)) {
-      const videoInfo = await this.youtubeService.processVideo(attachment.url);
+    if (this.runtime.videoService.isVideoUrl(attachment.url)) {
+      const videoInfo = await this.runtime.videoService.processVideo(attachment.url);
       return {
         id: attachment.id,
         url: attachment.url,

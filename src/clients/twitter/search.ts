@@ -5,11 +5,12 @@ import { default as getUuid } from "uuid-by-string";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 
-import { ClientBase } from "./base.ts";
+import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
-import { addHeader, composeContext } from "../../core/context.ts";
-import { Message, State, Content } from "../../core/types.ts";
 import { parseJSONObjectFromText } from "../../core/parsing.ts";
+import { Content, Message, State } from "../../core/types.ts";
+import { ClientBase } from "./base.ts";
+import { isValidTweet } from "./utils.ts";
 
 const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
@@ -70,16 +71,6 @@ export class TwitterSearchClient extends ClientBase {
     );
   }
 
-  private isValidTweet(tweet: Tweet): boolean {
-    // Filter out tweets with too many hashtags, @s, or $ signs, probably spam or garbage
-    const hashtagCount = (tweet.text.match(/#/g) || []).length;
-    const atCount = (tweet.text.match(/@/g) || []).length;
-    const dollarSignCount = tweet.text.match(/\$/g) || [];
-    const totalCount = hashtagCount + atCount + dollarSignCount.length;
-
-    return hashtagCount <= 1 && atCount <= 2 && dollarSignCount.length <= 1 && totalCount <= 3;
-  }
-
   private async engageWithSearchTerms() {
     console.log("Engaging with search terms");
     try {
@@ -104,7 +95,7 @@ export class TwitterSearchClient extends ClientBase {
       );
       const tweetsArray: Tweet[] = [];
       for await (const tweet of tweetsIterator) {
-        if (this.isValidTweet(tweet) && !this.respondedTweets.has(tweet.id)) {
+        if (isValidTweet(tweet) && !this.respondedTweets.has(tweet.id)) {
           tweetsArray.push(tweet);
         }
       }

@@ -1,5 +1,3 @@
-import { type AgentRuntime } from "./runtime.ts";
-
 /**
  * Represents a UUID, which is a universally unique identifier conforming to the UUID standard.
  */
@@ -133,7 +131,7 @@ export interface MessageExample {
  * Represents the type of a handler function, which takes a runtime instance, a message, and an optional state, and returns a promise resolving to any type.
  */
 export type Handler = (
-  runtime: AgentRuntime,
+  runtime: IAgentRuntime,
   message: Message,
   state?: State,
   options?: { [key: string]: unknown }, // additional options can be used for things like tests or state-passing on a chain
@@ -144,7 +142,7 @@ export type Handler = (
  * Represents the type of a validator function, which takes a runtime instance, a message, and an optional state, and returns a promise resolving to a boolean indicating whether the validation passed.
  */
 export type Validator = (
-  runtime: AgentRuntime,
+  runtime: IAgentRuntime,
   message: Message,
   state?: State,
 ) => Promise<boolean>;
@@ -186,7 +184,7 @@ export interface Evaluator {
  * Represents a provider, which is used to retrieve information or perform actions on behalf of the agent, such as fetching data from an external API or service.
  */
 export interface Provider {
-  get: (runtime: AgentRuntime, message: Message, state?: State) => Promise<any>;
+  get: (runtime: IAgentRuntime, message: Message, state?: State) => Promise<any>;
 }
 
 /**
@@ -253,3 +251,224 @@ export type Character = {
     post: string[];
   };
 };
+
+
+export interface IDatabaseAdapter {
+  db: any;
+
+  getAccountById(user_id: UUID): Promise<Account | null>;
+  createAccount(account: Account): Promise<boolean>;
+  getMemories(params: {
+    room_id: UUID;
+    count?: number;
+    unique?: boolean;
+    tableName: string;
+  }): Promise<Memory[]>;
+  getCachedEmbeddings(params: {
+    query_table_name: string;
+    query_threshold: number;
+    query_input: string;
+    query_field_name: string;
+    query_field_sub_name: string;
+    query_match_count: number;
+  }): Promise<{ embedding: number[]; levenshtein_score: number; }[]>;
+  log(params: {
+    body: { [key: string]: unknown };
+    user_id: UUID;
+    room_id: UUID;
+    type: string;
+  }): Promise<void>;
+  getActorDetails(params: { room_id: UUID }): Promise<Actor[]>;
+  searchMemories(params: {
+    tableName: string;
+    room_id: UUID;
+    embedding: number[];
+    match_threshold: number;
+    match_count: number;
+    unique: boolean;
+  }): Promise<Memory[]>;
+  updateGoalStatus(params: { goalId: UUID; status: GoalStatus }): Promise<void>;
+  searchMemoriesByEmbedding(
+    embedding: number[],
+    params: {
+      match_threshold?: number;
+      count?: number;
+      room_id?: UUID;
+      unique?: boolean;
+      tableName: string;
+    }
+  ): Promise<Memory[]>;
+  createMemory(memory: Memory, tableName: string, unique?: boolean): Promise<void>;
+  removeMemory(memoryId: UUID, tableName: string): Promise<void>;
+  removeAllMemories(room_id: UUID, tableName: string): Promise<void>;
+  countMemories(room_id: UUID, unique?: boolean, tableName?: string): Promise<number>;
+  getGoals(params: {
+    room_id: UUID;
+    user_id?: UUID | null;
+    onlyInProgress?: boolean;
+    count?: number;
+  }): Promise<Goal[]>;
+  updateGoal(goal: Goal): Promise<void>;
+  createGoal(goal: Goal): Promise<void>;
+  removeGoal(goalId: UUID): Promise<void>;
+  removeAllGoals(room_id: UUID): Promise<void>;
+  getRoom(room_id: UUID): Promise<UUID | null>;
+  createRoom(room_id?: UUID): Promise<UUID>;
+  removeRoom(room_id: UUID): Promise<void>;
+  getRoomsForParticipant(user_id: UUID): Promise<UUID[]>;
+  getRoomsForParticipants(userIds: UUID[]): Promise<UUID[]>;
+  addParticipant(user_id: UUID, room_id: UUID): Promise<boolean>;
+  removeParticipant(user_id: UUID, room_id: UUID): Promise<boolean>;
+  getParticipantsForAccount(user_id: UUID): Promise<Participant[]>;
+  getParticipantsForRoom(room_id: UUID): Promise<UUID[]>;
+  getParticipantUserState(roomId: UUID, userId: UUID): Promise<"FOLLOWED" | "MUTED" | null>;
+  setParticipantUserState(roomId: UUID, userId: UUID, state: "FOLLOWED" | "MUTED" | null): Promise<void>;
+  createRelationship(params: { userA: UUID; userB: UUID }): Promise<boolean>;
+  getRelationship(params: { userA: UUID; userB: UUID }): Promise<Relationship | null>;
+  getRelationships(params: { user_id: UUID }): Promise<Relationship[]>;
+}
+
+
+export interface IMemoryManager {
+  runtime: IAgentRuntimeBase;
+  tableName: string;
+
+  constructor: Function;
+
+  addEmbeddingToMemory(memory: Memory): Promise<Memory>;
+  getMemories(opts: {
+    room_id: UUID;
+    count?: number;
+    unique?: boolean;
+  }): Promise<Memory[]>;
+  getCachedEmbeddings(content: string): Promise<{ embedding: number[]; levenshtein_score: number; }[]>;
+  searchMemoriesByEmbedding(
+    embedding: number[],
+    opts: {
+      match_threshold?: number;
+      count?: number;
+      room_id: UUID;
+      unique?: boolean;
+    }
+  ): Promise<Memory[]>;
+  createMemory(memory: Memory, unique?: boolean): Promise<void>;
+  removeMemory(memoryId: UUID): Promise<void>;
+  removeAllMemories(room_id: UUID): Promise<void>;
+  countMemories(room_id: UUID, unique?: boolean): Promise<number>;
+}
+
+export interface IAgentRuntimeBase {
+  // Properties
+  agentId: UUID;
+  serverUrl: string;
+  databaseAdapter: IDatabaseAdapter;
+  token: string | null;
+  model: string;
+  embeddingModel: string;
+  character: Character;
+
+  // Methods
+  getConversationLength(): number;
+  completion(opts: {
+    context?: string;
+    stop?: string[];
+    model?: string;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    temperature?: number;
+    max_context_length?: number;
+    max_response_length?: number;
+  }): Promise<string>;
+  messageCompletion(opts: {
+    context?: string;
+    stop?: string[];
+    model?: string;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    temperature?: number;
+    max_context_length?: number;
+    max_response_length?: number;
+  }): Promise<string>;
+  embed(input: string): Promise<number[]>;
+  processActions(
+    message: Message,
+    content: Content,
+    state?: State,
+    callback?: (response: Content) => void
+  ): Promise<void>;
+  evaluate(message: Message, state?: State): Promise<string[]>;
+  ensureParticipantExists(user_id: UUID, room_id: UUID): Promise<void>;
+  ensureUserExists(user_id: UUID, userName: string | null): Promise<void>;
+  ensureParticipantInRoom(user_id: UUID, roomId: UUID): Promise<void>;
+  ensureRoomExists(roomId: UUID): Promise<void>;
+  composeState(
+    message: Message,
+    additionalKeys?: { [key: string]: unknown }
+  ): Promise<State>;
+  updateRecentMessageState(state: State): Promise<State>;
+}
+
+export interface IImageRecognitionService {
+  initialize(modelId?: string | null, device?: string | null): Promise<void>;
+  recognizeImage(imageUrl: string): Promise<{ title: string; description: string }>;
+}
+
+export interface ITranscriptionService {
+  transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null>;
+  transcribeAttachmentLocally(audioBuffer: ArrayBuffer): Promise<string | null>;
+  transcribe(audioBuffer: ArrayBuffer): Promise<string | null>;
+  transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null>;
+}
+
+export interface IVideoService {
+  isVideoUrl(url: string): boolean;
+  processVideo(url: string): Promise<Media>;
+}
+
+export interface ILlamaService {
+  initializeModel(): Promise<void>;
+  queueMessageCompletion(
+    context: string,
+    temperature: number,
+    stop: string[],
+    frequency_penalty: number,
+    presence_penalty: number,
+    max_tokens: number,
+  ): Promise<any>;
+  queueTextCompletion(
+    context: string,
+    temperature: number,
+    stop: string[],
+    frequency_penalty: number,
+    presence_penalty: number,
+    max_tokens: number,
+  ): Promise<string>;
+  getEmbeddingResponse(input: string): Promise<number[] | undefined>;
+}
+
+export interface IBrowserService {
+  initialize(): Promise<void>;
+  closeBrowser(): Promise<void>;
+  getPageContent(url: string): Promise<{ title: string; description: string; bodyContent: string }>;
+}
+
+export interface ISpeechService {
+  generate(text: string): Promise<any>;
+}
+
+export interface IPdfService {
+  convertPdfToText(pdfBuffer: Buffer): Promise<string>;
+}
+
+export interface IAgentRuntime extends IAgentRuntimeBase {
+  messageManager: IMemoryManager;
+  descriptionManager: IMemoryManager;
+  factManager: IMemoryManager;
+  loreManager: IMemoryManager;
+  imageRecognitionService: IImageRecognitionService;
+  transcriptionService: ITranscriptionService;
+  videoService: IVideoService;
+  llamaService: ILlamaService;
+  browserService: IBrowserService;
+  speechService: ISpeechService;
+}

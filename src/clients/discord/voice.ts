@@ -24,8 +24,6 @@ import { Readable, pipeline } from "stream";
 import { default as getUuid } from "uuid-by-string";
 import WavEncoder from "wav-encoder";
 import { AgentRuntime } from "../../core/runtime.ts";
-import { SpeechSynthesizer } from "../../services/speechSynthesis.ts";
-import { TranscriptionService } from "../../services/transcription.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 
 import EventEmitter from "events";
@@ -33,7 +31,7 @@ import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import { Actor, Character, Content, Message, State } from "../../core/types.ts";
+import { Content, Message, State } from "../../core/types.ts";
 import { textToSpeech } from "../elevenlabs/index.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
 
@@ -46,16 +44,11 @@ export class VoiceManager extends EventEmitter {
   private runtime: AgentRuntime;
   private streams: Map<string, Readable> = new Map();
   private connections: Map<string, VoiceConnection> = new Map();
-  private speechSynthesizer: SpeechSynthesizer | null = null;
-  transcriptionService: TranscriptionService;
-  character: Character;
 
   constructor(client: any) {
     super();
     this.client = client.client;
-    this.character = client.runtime.character;
     this.runtime = client.runtime;
-    this.transcriptionService = new TranscriptionService();
   }
 
   async handleVoiceStateUpdate(
@@ -108,7 +101,7 @@ export class VoiceManager extends EventEmitter {
         totalLength = 0;
 
         try {
-          const text = await this.transcriptionService.transcribe(inputBuffer);
+          const text = await this.runtime.transcriptionService.transcribe(inputBuffer);
 
           if (!text) return;
 
@@ -340,7 +333,7 @@ export class VoiceManager extends EventEmitter {
     if (responseContent.content) {
       await this.runtime.messageManager.createMemory({
         user_id: this.runtime.agentId,
-        content: { ...responseContent, user: this.character.name },
+        content: { ...responseContent, user: this.runtime.character.name },
         room_id,
         embedding: embeddingZeroVector,
       });
@@ -601,11 +594,8 @@ export class VoiceManager extends EventEmitter {
       return textToSpeech(text);
     }
 
-    if (!this.speechSynthesizer) {
-      this.speechSynthesizer = await SpeechSynthesizer.create("./model.onnx");
-    }
-    // Synthesize the speech to get a Float32Array of single channel 22050Hz audio data
-    const audio = await this.speechSynthesizer.synthesize(text);
+    // Generate the speech to get a Float32Array of single channel 22050Hz audio data
+    const audio = await this.runtime.speechService.generate(text);
 
     // Encode the audio data into a WAV format
     const { encode } = WavEncoder;
