@@ -122,7 +122,7 @@ export default {
         user: "{{user2}}",
         content: { content: "Sorry, am I being annoying" },
       },
-      { user: "{{user1}}", content: { content: "Yeah", action: "ELABORATE" } },
+      { user: "{{user1}}", content: { content: "Yeah", action: "CONTINUE" } },
       {
         user: "{{user1}}",
         content: { content: "PLEASE shut up" },

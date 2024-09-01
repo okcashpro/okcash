@@ -18,7 +18,7 @@ import path from "path";
 import { AgentRuntime } from "../core/runtime.ts";
 import settings from "../core/settings.ts";
 
-class ImageRecognitionService {
+class ImageDescriptionService {
   private modelId: string = "onnx-community/Florence-2-base-ft";
   private device: string = "gpu";
   private model: PreTrainedModel | null = null;
@@ -82,10 +82,10 @@ class ImageRecognitionService {
     this.initialized = true;
   }
 
-  async recognizeImage(
+  async describeImage(
     imageUrl: string,
   ): Promise<{ title: string; description: string }> {
-    console.log("recognizeImage", imageUrl);
+    console.log("describeImage", imageUrl);
 
     if (this.device === "cloud") {
       return this.recognizeWithOpenAI(imageUrl);
@@ -319,4 +319,4 @@ class ImageRecognitionService {
   }
 }
 
-export default ImageRecognitionService;
+export default ImageDescriptionService;

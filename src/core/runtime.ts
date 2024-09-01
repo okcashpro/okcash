@@ -34,7 +34,7 @@ import { default as tiktoken, default as TikToken, TiktokenModel } from "tiktoke
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
 import { BrowserService } from "../services/browser.ts";
-import ImageRecognitionService from "../services/imageRecognition.ts";
+import ImageDescriptionService from "../services/image.ts";
 import LlamaService from "../services/llama.ts";
 import { PdfService } from "../services/pdf.ts";
 import { SpeechService } from "../services/speech.ts";
@@ -122,7 +122,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
 
   transcriptionService: ITranscriptionService;
 
-  imageRecognitionService: IImageRecognitionService;
+  imageDescriptionService: IImageRecognitionService;
 
   browserService: IBrowserService;
 
@@ -248,7 +248,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
 
     this.transcriptionService = new TranscriptionService();
 
-    this.imageRecognitionService = new ImageRecognitionService(this);
+    this.imageDescriptionService = new ImageDescriptionService(this);
 
     this.browserService = new BrowserService(this);
 
@@ -858,6 +858,56 @@ Text: ${attachment.text}
       })
       .join("\n\n");
 
+      const getRecentInteractions = async (userA: UUID, userB: UUID): Promise<Memory[]> => {
+        // Find all rooms where userA and userB are participants
+      const rooms = await this.databaseAdapter.getRoomsForParticipants([userA, userB]);
+
+      // Fetch recent messages from the rooms
+      const recentMessages: Memory[] = [];
+      for (const room_id of rooms) {
+        const roomMessages = await this.messageManager.getMemories({
+          room_id,
+          count: 10, // Adjust the count as needed
+          unique: false,
+          user_ids: [userA, userB],
+        });
+        recentMessages.push(...roomMessages);
+      }
+
+      // Sort messages by timestamp in descending order
+      recentMessages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      // Take the most recent messages
+      const recentInteractionsData = recentMessages.slice(0, 10); // Adjust the count as needed
+      return recentInteractionsData;
+    }
+
+    const recentInteractions = (user_id !== this.agentId) ? await getRecentInteractions(user_id, this.agentId) : [];
+
+    const getRecentMessageInteractions = async (recentInteractionsData: Memory[]): Promise<string> => {
+      // Format the recent messages
+      const formattedInteractions = recentInteractionsData.map((message) => {
+        const sender = message.user_id === this.agentId ? this.character.name : "User";
+        return `${sender}: ${message.content.content}`;
+      }).join("\n");
+
+      return formattedInteractions;
+    }
+
+    const formattedMessageInteractions = await getRecentMessageInteractions(recentInteractions);
+
+    const getRecentPostInteractions = async (recentInteractionsData: Memory[]): Promise<string> => {
+      // Format the recent posts
+      const formattedInteractions = recentInteractionsData.map((message) => {
+        const sender = message.user_id === this.agentId ? this.character.name : "User";
+        return `${sender}: ${message.content.content}`;
+      }).join("\n");
+
+      return formattedInteractions;
+    }
+
+    const formattedPostInteractions = await getRecentPostInteractions(recentInteractions);
+
     const initialState = {
       agentId: this.agentId,
       // Character file stuff
@@ -868,6 +918,12 @@ Text: ${attachment.text}
         this.character.adjectives[
         Math.floor(Math.random() * this.character.adjectives.length)
         ] : "",
+        // Recent interactions between the sender and receiver, formatted as messages
+      recentMessageInteractions: formattedMessageInteractions,
+      // Recent interactions between the sender and receiver, formatted as posts
+      recentPostInteractions: formattedPostInteractions,
+      // Raw memory[] array of interactions
+      recentInteractionsData: recentInteractions,
       // randomly pick one topic
       topic: this.character.topics && this.character.topics.length > 0 ?
         this.character.topics[

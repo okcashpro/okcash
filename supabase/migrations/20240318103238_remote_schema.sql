@@ -87,7 +87,7 @@ $$;
 
 ALTER FUNCTION "public"."after_account_created"() OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."check_similarity_and_insert"("query_table_name" "text", "query_user_id" "uuid", "query_content" "jsonb", "query_room_id" "uuid", "query_embedding" "extensions"."vector", "similarity_threshold" double precision)
+CREATE OR REPLACE FUNCTION "public"."check_similarity_and_insert"("query_table_name" "text", "query_user_id" "uuid", "query_content" "jsonb", "query_room_id" "uuid", "query_embedding" "extensions"."vector", "similarity_threshold" double precision, "query_created_at" "timestamp with time zone")
 RETURNS "void"
 LANGUAGE "plpgsql"
 AS $$
@@ -122,8 +122,8 @@ BEGIN
 
     -- Prepare the insert query with 'unique' field set based on the presence of similar records or NULL query_embedding
     insert_query := format(
-        'INSERT INTO memories (user_id, content, room_id, type, embedding, "unique") ' ||  -- Insert into the 'memories' table
-        'VALUES (%L, %L, %L, %L, %L, %L)',
+        'INSERT INTO memories (user_id, content, room_id, type, embedding, "unique", created_at) ' ||  -- Insert into the 'memories' table
+        'VALUES (%L, %L, %L, %L, %L, %L, %L)',
         query_user_id,
         query_content,
         query_room_id,
@@ -344,7 +344,7 @@ $$;
 
 ALTER FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid", "only_in_progress" boolean, "row_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean DEFAULT false) 
+CREATE OR REPLACE FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean DEFAULT false, "query_user_ids" "uuid"[] DEFAULT NULL) 
 RETURNS TABLE("id" "uuid", "user_id" "uuid", "content" "jsonb", "created_at" timestamp with time zone, "room_id" "uuid", "embedding" "extensions"."vector")
 LANGUAGE "plpgsql"
 AS $_$
@@ -364,12 +364,14 @@ BEGIN
         AND type = %L
         %s -- Additional condition for 'unique' column based on query_unique
         %s -- Additional condition for room_id based on query_room_id
+        %s -- Additional condition for user_id based on query_user_ids
         ORDER BY created_at DESC
         LIMIT %L
         $fmt$,
         query_table_name,
         CASE WHEN query_unique THEN ' AND "unique" IS TRUE' ELSE '' END,
         CASE WHEN query_room_id IS NOT NULL THEN format(' AND room_id = %L', query_room_id) ELSE '' END,
+        CASE WHEN query_user_ids IS NOT NULL THEN format(' AND user_id = ANY(ARRAY[%s])', array_to_string(query_user_ids, ',')) ELSE '' END,
         query_count
     );
 
@@ -377,7 +379,7 @@ BEGIN
 END;
 $_$;
 
-ALTER FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean) OWNER TO "postgres";
+ALTER FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean, "query_user_ids" "uuid"[]) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_message_count"("p_user_id" "uuid") RETURNS TABLE("room_id" "uuid", "unread_messages_count" integer)
     LANGUAGE "plpgsql"

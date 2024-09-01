@@ -1,6 +1,19 @@
 # Eliza
 
-A powerful AI agent. Fully open source and local with Llama 3, runs on Mac, Windows, and Linux, or deploy on a light-weight device with OpenAI.
+<img src="./docs/eliza_banner.png" alt="Eliza Banner" width="100%">
+
+A useful AI agent, and a great friends.
+
+- Powerful Discord and Twitter bot with access to the internet
+- Voice-to-voice on Discord
+- Can read PDFs, transcribe audio and videos, summarize conversations, and more
+- Create your own characters or run a copy of Eliza herself
+- Highly extensible - create your own actions and clients to extend Eliza's capabilities
+- Runs on Mac, Windows, and Linux, or deploy on a light-weight device with OpenAI
+- Open source and local with Llama 3 and transformers.js
+- Or use OpenAI for cloud inference on a light-weight device
+- Fully integrated with Discord and Twitter
+- Written in Typescript
 
 # Environment Setup
 

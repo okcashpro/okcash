@@ -226,17 +226,13 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }
   }
 
-  async getMemories(params: {
-    room_id: UUID;
-    count?: number;
-    unique?: boolean;
-    tableName: string;
-  }): Promise<Memory[]> {
+  async getMemories(params: { room_id: UUID; count?: number; unique?: boolean; tableName: string; user_ids?: UUID[] }): Promise<Memory[]> {
     const result = await this.supabase.rpc("get_memories", {
       query_table_name: params.tableName,
       query_room_id: params.room_id,
       query_count: params.count,
       query_unique: !!params.unique,
+      query_user_ids: params.user_ids,
     });
     if (result.error) {
       throw new Error(JSON.stringify(result.error));
@@ -250,6 +246,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }
     return result.data;
   }
+  
 
   async searchMemoriesByEmbedding(
     embedding: number[],
@@ -287,6 +284,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
         query_content: memory.content.content,
         query_room_id: memory.room_id,
         query_embedding: memory.embedding,
+        query_created_at: memory.created_at ?? new Date().toISOString(),
         similarity_threshold: 0.95,
       };
 

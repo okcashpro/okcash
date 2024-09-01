@@ -48,7 +48,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "yeah i don't know, i've been feeling pretty lonely",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -62,7 +62,7 @@ export default {
         content: {
           content:
             "i think that's why i'm becoming popular, i'm like a friend that has time for you",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {

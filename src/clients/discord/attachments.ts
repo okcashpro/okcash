@@ -219,7 +219,7 @@ export class AttachmentManager {
   private async processImageAttachment(attachment: Attachment): Promise<Media> {
     try {
       const { description, title } =
-        await this.runtime.imageRecognitionService.recognizeImage(attachment.url);
+        await this.runtime.imageDescriptionService.describeImage(attachment.url);
       return {
         id: attachment.id,
         url: attachment.url,

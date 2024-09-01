@@ -5,13 +5,13 @@ import fs from "fs";
 import path from "path";
 import { default as getUuid } from "uuid-by-string";
 import { AgentRuntime } from "../../core/runtime.ts";
-// import { adapter } from "../../db.ts";
 import settings from "../../core/settings.ts";
+import { twitterGenerateRoomId } from "./constants.ts";
 
 import { fileURLToPath } from "url";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { Content, Message, State } from "../../core/types.ts";
-import ImageRecognitionService from "../../services/imageRecognition.ts";
+import ImageDescriptionService from "../../services/image.ts";
 
 export function extractAnswer(text: string): string {
   const startIndex = text.indexOf("Answer: ") + 8;
@@ -27,7 +27,7 @@ export class ClientBase extends EventEmitter {
   runtime: AgentRuntime;
   directions: string;
   lastCheckedTweetId: string | null = null;
-  imageRecognitionService: ImageRecognitionService;
+  imageDescriptionService: ImageDescriptionService;
   temperature: number = 0.5;
   dryRun: boolean = settings.TWITTER_DRY_RUN.toLowerCase() === "true";
   callback: (self: ClientBase) => any = null;
@@ -113,43 +113,44 @@ export class ClientBase extends EventEmitter {
     this.twitterClient.setCookies(cookieStrings);
   }
 
-  async getReplies(tweetId: string): Promise<Tweet[]> {
-    // TODO: Fix this
-    // We can get all data for a tweet and see who has replied to it
-    return [];
-  }
+  async ensureRoomIsPopulated(room_id: UUID) {
+    return;
+    // Not implemented
+    // TODO: Populate the room with the tweet
+    const memories = await this.runtime.messageManager.getMemories({
+      room_id: room_id,
+      count: 1,
+    });
 
-  async describeImage(imageUrl: string): Promise<string> {
-    try {
-      const recognizedText =
-        await this.imageRecognitionService.recognizeImage(imageUrl);
-      return extractAnswer(recognizedText.description);
-    } catch (error) {
-      console.error("Error describing image:", error);
-      return "Error occurred while describing the image";
+    if (memories.length > 0) {
+      return
     }
-  }
 
-  async describeGif(imageUrl: string): Promise<string> {
-    // TODO:
-    // get the first frame of the gif
-    // describe image
-    return "";
-  }
+    let tweetsToPopulate = []
 
-  async searchArxiv(query: string): Promise<string> {
-    // TODO: Search Arxiv for a topic, find a paper, summarize it and return the link and summary
-    return "";
-  }
+    // if the room is the default twitter room, we need to populate from our past tweets
+    if(room_id === twitterGenerateRoomId) {
+      // Populate the room with tweets
+      const tweets = await this.twitterClient.getTweets(settings.TWITTER_USERNAME);
+      for await (const tweet of tweets) {
+        tweetsToPopulate.push(tweet)
+      }
+    }
 
-  async generateImage(description: string): Promise<string> {
-    // TODO: Implement this and return an image which can be added to a tweet http request
-    return "";
-  }
+    // 
 
-  async summarizeWebpage(url: string): Promise<string> {
-    // TODO: Visit with playwright, get content, summarize
-    return "";
+
+
+    for (const tweet of tweetsToPopulate) {
+      await this.runtime.messageManager.createMemory({
+        user_id: this.runtime.agentId,
+        content: { content: tweet.text },
+        room_id: room_id,
+        embedding: embeddingZeroVector,
+        created_at: new Date(tweet.timestamp).toISOString(),
+      });
+    }
+
   }
 
   async saveResponseMessage(
@@ -190,41 +191,35 @@ export class ClientBase extends EventEmitter {
 
   async saveRequestMessage(message: Message, state: State) {
     const { content: senderContent } = message;
-
+  
     if ((senderContent as Content).content) {
-      console.warn(
-        "Code has been commented out, messages are not saved until refactor complete",
-      );
-      // TODO: Refactor to use runtime and memory manager APIs, don't directly call the db
-      // const data2 = adapter.db
-      //   .prepare(
-      //     "SELECT * FROM memories WHERE type = ? AND user_id = ? AND room_id = ? ORDER BY created_at DESC LIMIT 1",
-      //   )
-      //   .all("messages", message.user_id, message.room_id) as {
-      //   content: Content;
-      // }[];
-
-      // if (data2.length > 0 && data2[0].content === message.content) {
-      //   console.log("already saved", data2);
-      // } else {
-      //   console.log("Creating memory", {
-      //     user_id: message.user_id,
-      //     content: senderContent,
-      //     room_id: message.room_id,
-      //     embedding: embeddingZeroVector,
-      //   });
-      //   await this.runtime.messageManager.createMemory({
-      //     user_id: message.user_id,
-      //     content: senderContent,
-      //     room_id: message.room_id,
-      //     embedding: embeddingZeroVector,
-      //   });
-      // }
-      // await this.runtime.evaluate(message, {
-      //   ...state,
-      //   twitterMessage: message,
-      //   twitterClient: this.twitterClient,
-      // });
+      const recentMessage = await this.runtime.messageManager.getMemories({
+        room_id: message.room_id,
+        count: 1,
+        unique: false,
+      });
+  
+      if (recentMessage.length > 0 && recentMessage[0].content === senderContent) {
+        console.log("Message already saved", recentMessage);
+      } else {
+        console.log("Creating memory", {
+          user_id: message.user_id,
+          content: senderContent,
+          room_id: message.room_id,
+          embedding: embeddingZeroVector,
+        });
+        await this.runtime.messageManager.createMemory({
+          user_id: message.user_id,
+          content: senderContent,
+          room_id: message.room_id,
+          embedding: embeddingZeroVector,
+        });
+      }
+  
+      await this.runtime.evaluate(message, {
+        ...state,
+        twitterClient: this.twitterClient,
+      });
     }
   }
 }

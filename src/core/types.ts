@@ -10,6 +10,8 @@ export interface Content {
   content: string; // The main text content of the message.
   action?: string; // An optional action associated with the message, indicating a specific behavior or response required.
   source?: string; // The source of the content, if applicable, such as a reference or origin.
+  url?: string // The actual URL of the message or post, i.e. tweet URL or message link in discord
+  replyingTo?: UUID // If this is a message in a thread, or a reply, store this 
   attachments?: Media[];
   [key: string]: unknown; // Allows for additional properties to be included dynamically.
 }
@@ -107,6 +109,8 @@ export interface State {
   actionExamples?: string; // An optional string representation of examples of actions, for demonstration or testing.
   providers?: string; // An optional string representation of available providers and their descriptions, relevant to the current state.
   responseData?: Content; // An optional content object representing the agent's response in the current state.
+  recentInteractionsData?: Memory[]; // An optional array of memory objects representing recent interactions in the conversation.
+  recentInteractions?: string; // An optional string representation of recent interactions in the conversation.
   [key: string]: unknown; // Allows for additional properties to be included dynamically.
 }
 
@@ -205,7 +209,8 @@ export interface Relationship {
  */
 export interface Account {
   id: UUID;
-  name: string;
+  name: string; // The display name in the server or their name on Twitter
+  username: string; // Their actual username
   details?: { [key: string]: any };
   email?: string;
   avatar_url?: string;
@@ -263,6 +268,7 @@ export interface IDatabaseAdapter {
     count?: number;
     unique?: boolean;
     tableName: string;
+    user_ids?: UUID[];
   }): Promise<Memory[]>;
   getCachedEmbeddings(params: {
     query_table_name: string;
@@ -340,6 +346,7 @@ export interface IMemoryManager {
     room_id: UUID;
     count?: number;
     unique?: boolean;
+    user_ids?: UUID[];
   }): Promise<Memory[]>;
   getCachedEmbeddings(content: string): Promise<{ embedding: number[]; levenshtein_score: number; }[]>;
   searchMemoriesByEmbedding(
@@ -410,7 +417,7 @@ export interface IAgentRuntimeBase {
 
 export interface IImageRecognitionService {
   initialize(modelId?: string | null, device?: string | null): Promise<void>;
-  recognizeImage(imageUrl: string): Promise<{ title: string; description: string }>;
+  describeImage(imageUrl: string): Promise<{ title: string; description: string }>;
 }
 
 export interface ITranscriptionService {
@@ -465,7 +472,7 @@ export interface IAgentRuntime extends IAgentRuntimeBase {
   descriptionManager: IMemoryManager;
   factManager: IMemoryManager;
   loreManager: IMemoryManager;
-  imageRecognitionService: IImageRecognitionService;
+  imageDescriptionService: IImageRecognitionService;
   transcriptionService: ITranscriptionService;
   videoService: IVideoService;
   llamaService: ILlamaService;

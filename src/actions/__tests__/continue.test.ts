@@ -8,7 +8,7 @@ import { populateMemories } from "../../test_resources/populateMemories.ts";
 import { runAiTest } from "../../test_resources/runAiTest.ts";
 import { type User } from "../../test_resources/types.ts";
 import { Content, type Message, type UUID } from "../../core/types.ts";
-import action from "../elaborate.ts";
+import action from "../continue.ts";
 import ignore from "../ignore.ts";
 
 dotenv.config({ path: ".dev.vars" });
@@ -20,7 +20,7 @@ const GetContinueExample1 = (_user_id: UUID) => [
     content: {
       content:
         "Hmm, let think for a second, I was going to tell you about something...",
-      action: "ELABORATE",
+      action: "CONTINUE",
     },
   },
   {
@@ -28,14 +28,14 @@ const GetContinueExample1 = (_user_id: UUID) => [
     content: {
       content:
         "I remember now, I was going to tell you about my favorite food, which is pizza.",
-      action: "ELABORATE",
+      action: "CONTINUE",
     },
   },
   {
     user_id: zeroUuid,
     content: {
       content: "I love pizza, it's so delicious.",
-      action: "ELABORATE",
+      action: "CONTINUE",
     },
   },
 ];
@@ -98,7 +98,7 @@ describe("User Profile", () => {
         user_id: zeroUuid as UUID,
         content: {
           content: "Hello",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
         room_id: room_id as UUID,
       };
@@ -109,14 +109,14 @@ describe("User Profile", () => {
     });
   }, 60000);
 
-  test("Test repetition check on elaborate", async () => {
-    await runAiTest("Test repetition check on elaborate", async () => {
+  test("Test repetition check on continue", async () => {
+    await runAiTest("Test repetition check on continue", async () => {
       const message: Message = {
         user_id: zeroUuid as UUID,
         content: {
           content:
             "Hmm, let think for a second, I was going to tell you about something...",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
         room_id,
       };
@@ -127,19 +127,19 @@ describe("User Profile", () => {
 
       const result = (await handler(runtime, message)) as Content;
 
-      return result.action !== "ELABORATE";
+      return result.action !== "CONTINUE";
     });
   }, 60000);
 
-  test("Test multiple elaborate messages in a conversation", async () => {
+  test("Test multiple continue messages in a conversation", async () => {
     await runAiTest(
-      "Test multiple elaborate messages in a conversation",
+      "Test multiple continue messages in a conversation",
       async () => {
         const message: Message = {
           user_id: user?.id as UUID,
           content: {
             content:
-              "Write a short story in three parts, using the ELABORATE action for each part.",
+              "Write a short story in three parts, using the CONTINUE action for each part.",
           },
           room_id: room_id,
         };
@@ -162,24 +162,24 @@ describe("User Profile", () => {
           unique: false,
         });
 
-        const elaborateMessages = agentMessages.filter(
+        const continueMessages = agentMessages.filter(
           (m) =>
             m.user_id === zeroUuid &&
-            (m.content as Content).action === "ELABORATE",
+            (m.content as Content).action === "CONTINUE",
         );
 
         // Check if the agent sent more than one message
         const sentMultipleMessages =
           finalMessageCount - initialMessageCount > 2;
 
-        // Check if the agent used the ELABORATE action for each part
-        const usedElaborateAction = elaborateMessages.length === 3;
+        // Check if the agent used the CONTINUE action for each part
+        const usedContinueAction = continueMessages.length === 3;
         // Check if the agent's responses are not empty
         const responsesNotEmpty = agentMessages.every(
           (m) => (m.content as Content).content !== "",
         );
 
-        return sentMultipleMessages && usedElaborateAction && responsesNotEmpty;
+        return sentMultipleMessages && usedContinueAction && responsesNotEmpty;
       },
     );
   }, 60000);
@@ -209,8 +209,8 @@ describe("User Profile", () => {
       return finalMessageCount - initialMessageCount === 2;
     });
   }, 60000);
-  test("Test if not elaborate", async () => {
-    await runAiTest("Test if not elaborate", async () => {
+  test("Test if not continue", async () => {
+    await runAiTest("Test if not continue", async () => {
       // this is basically the same test as the one in ignore.test
       const message: Message = {
         user_id: user?.id as UUID,

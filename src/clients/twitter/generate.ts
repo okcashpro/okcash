@@ -1,14 +1,10 @@
-import { Scraper, SearchMode } from "agent-twitter-client";
-import { default as getUuid } from "uuid-by-string";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
-import { UUID } from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
-import { isValidTweet, searchRecentPosts } from "./utils.ts";
-
-const twitterGenerateRoomId = getUuid("twitter_generate_room") as UUID;
+import { twitterGenerateRoomId } from "./constants.ts";
+import { getRecentConversations, searchRecentPosts } from "./utils.ts";
 
 const newTweetPrompt = `{{recentSearchResultsText}}
 {{recentConversations}}
@@ -55,57 +51,21 @@ export class TwitterGenerationClient extends ClientBase {
         console.error("Twitter username not set in settings");
         return;
       }
-  
-      // Get recent conversations
-      const recentConversations = await this.twitterClient.fetchSearchTweets(
-        `@${botTwitterUsername} exclude:retweets`,
-        10,
-        SearchMode.Latest,
-      );
-  
-      const recentConversationsArray = [];
-  
-      // Format recent conversations
-      for (const conversation of recentConversations.tweets) {
-        let formattedConversation = `Name: ${conversation.name} (@${conversation.username})\n`;
-        formattedConversation += `Time: ${conversation.timeParsed.toLocaleString()}\n`;
-        formattedConversation += `Text: ${conversation.text}\n`;
-        
-        if (conversation.photos.length > 0) {
-          const photoDescriptions = await Promise.all(conversation.photos.map(async (photo) => {
-            const description = await this.runtime.imageRecognitionService.recognizeImage(photo.url);
-            return `[Photo: ${description.title} - ${description.description}]`;
-          }));
-          formattedConversation += `Photos: ${photoDescriptions.join(', ')}\n`;
-        }
-  
-        if (conversation.videos.length > 0) {
-          const videoTranscriptions = await Promise.all(conversation.videos.map(async (video) => {
-            const transcription = await this.runtime.videoService.processVideo(video.url);
-            return `[Video Transcription: ${transcription.text}]`;
-          }));
-          formattedConversation += `Videos: ${videoTranscriptions.join(', ')}\n`;
-        }
-  
-        formattedConversation += `Replies: ${conversation.replies}, Retweets: ${conversation.retweets}, Likes: ${conversation.likes}, Views: ${conversation.views ?? "Unknown"}\n`;
-        
-        recentConversationsArray.push(formattedConversation);
-      }
-  
-      // Sort recent conversations by timestamp
-      recentConversationsArray.sort((a, b) => {
-        const timeA = new Date(a.match(/Time: (.*)/)[1]).getTime();
-        const timeB = new Date(b.match(/Time: (.*)/)[1]).getTime();
-        return timeA - timeB;
-      });
-  
-      const recentConversationsText = recentConversationsArray.join('\n');
+
+    const recentConversationsText = await getRecentConversations(this.runtime, this.twitterClient, botTwitterUsername);
   
       // Wait 1.5-3.5 seconds to avoid rate limiting
-      const waitTime = Math.floor(Math.random() * 2000) + 1500;
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
+      await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 2000) + 1500));
 
+      await Promise.all([
+        this.runtime.ensureUserExists(this.runtime.agentId, this.runtime.character.name),
+        this.runtime.ensureRoomExists(twitterGenerateRoomId),
+      ]);
+    
+      await this.runtime.ensureParticipantInRoom(this.runtime.agentId, twitterGenerateRoomId);
       
+      await this.ensureRoomIsPopulated(twitterGenerateRoomId);
+
       const state = await this.runtime.composeState({ user_id: this.runtime.agentId, room_id: twitterGenerateRoomId, content: { content: "", action: "" } }, { twitterUserName: botTwitterUsername, recentConversations: recentConversationsText });
       const recentSearchResultsText = await searchRecentPosts(this.runtime, this.twitterClient, state.topic);
       state['recentSearchResultsText'] = recentSearchResultsText;

@@ -58,23 +58,17 @@ export class MemoryManager implements IMemoryManager {
    * @param opts.unique Whether to retrieve unique memories only.
    * @returns A Promise resolving to an array of Memory objects.
    */
-  async getMemories({
-    room_id,
-    count = 10,
-    unique = true,
-  }: {
-    room_id: UUID;
-    count?: number;
-    unique?: boolean;
-  }): Promise<Memory[]> {
+  async getMemories({ room_id, count = 10, unique = true, user_ids }: { room_id: UUID; count?: number; unique?: boolean; user_ids?: UUID[] }): Promise<Memory[]> {
     const result = await this.runtime.databaseAdapter.getMemories({
       room_id,
       count,
       unique,
       tableName: this.tableName,
+      user_ids,
     });
     return result;
   }
+  
 
   async getCachedEmbeddings(content: string): Promise<
     {
@@ -140,7 +134,7 @@ export class MemoryManager implements IMemoryManager {
    * @param unique Whether to check for similarity before insertion.
    * @returns A Promise that resolves when the operation completes.
    */
-  async createMemory(memory: Memory, unique = false): Promise<void> {
+  async createMemory(memory: Memory, unique = false, created_at?: Date): Promise<void> {
     await this.runtime.databaseAdapter.createMemory(
       memory,
       this.tableName,

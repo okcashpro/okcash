@@ -312,12 +312,6 @@ export class VoiceManager extends EventEmitter {
       console.log("voice memory being saved", memory);
 
       await this.runtime.messageManager.createMemory(memory);
-
-      // await this.runtime.evaluate(message, {
-      //   ...state,
-      //   discordMessage: state.discordMessage,
-      //   discordClient: state.discordClient,
-      // });
     }
   }
 

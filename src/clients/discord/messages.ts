@@ -137,6 +137,8 @@ export class MessageManager {
       const content: Content = {
         content: processedContent,
         attachments: attachments,
+        url: message.url,
+        replyingTo: message.reference?.messageId ? getUuid(message.reference.messageId) as UUID : undefined,
       };
 
       const userMessage = { content, user_id: userIdUUID, room_id };
@@ -321,12 +323,6 @@ export class MessageManager {
         room_id: message.room_id,
         embedding: embeddingZeroVector,
       });
-
-      // await this.runtime.evaluate(message, {
-      //   ...state,
-      //   discordMessage: state.discordMessage,
-      //   discordClient: state.discordClient,
-      // });
     }
   }
 

@@ -13,22 +13,22 @@ import { parseJSONObjectFromText } from "../core/parsing.ts";
 
 const maxContinuesInARow = 2;
 
-export const shouldElaborateTemplate = `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
+export const shouldContinueTemplate = `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
 
-{{agentName}} is brief, and doesn't want to be annoying. {{agentName}} will only elaborate if the message requires a continuation to finish the thought.
+{{agentName}} is brief, and doesn't want to be annoying. {{agentName}} will only continue if the message requires a continuation to finish the thought.
 
-Based on the following conversation, should {{agentName}} elaborate? YES or NO
+Based on the following conversation, should {{agentName}} continue? YES or NO
 
 {{recentMessages}}
 
-Should {{agentName}} elaborate? Respond with a YES or a NO.`;
+Should {{agentName}} continue? Respond with a YES or a NO.`;
 
 export default {
-  name: "ELABORATE",
+  name: "CONTINUE",
   description:
-    "ONLY use this action when the message necessitates a follow up. Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was ELABORATE, and the user has not responded. Use sparingly.",
+    "ONLY use this action when the message necessitates a follow up. Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was CONTINUE, and the user has not responded. Use sparingly.",
   validate: async (runtime: any, message: Message) => {
-    console.log("Validating elaborate");
+    console.log("Validating continue");
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
       count: 10,
@@ -44,7 +44,7 @@ export default {
       if (lastMessages.length >= maxContinuesInARow) {
         const allContinues = lastMessages.every(
           (m: { content: any }) =>
-            (m.content as Content).action === "ELABORATE",
+            (m.content as Content).action === "CONTINUE",
         );
         if (allContinues) {
           return false;
@@ -74,11 +74,11 @@ export default {
 
     state = await runtime.updateRecentMessageState(state);
 
-    async function _shouldElaborate(state: State): Promise<boolean> {
+    async function _shouldContinue(state: State): Promise<boolean> {
       // If none of the above conditions are met, use the completion to decide
       const shouldRespondContext = composeContext({
         state,
-        template: shouldElaborateTemplate,
+        template: shouldContinueTemplate,
       });
 
       let response = "";
@@ -92,14 +92,14 @@ export default {
           });
           break;
         } catch (error) {
-          console.error("Error in _shouldElaborate:", error);
+          console.error("Error in _shouldContinue:", error);
           // wait for 2 seconds
           await new Promise((resolve) => setTimeout(resolve, 2000));
           console.log("Retrying...");
         }
       }
 
-      console.log("*** SHOULD ELABORATE ***", response);
+      console.log("*** SHOULD CONTINUE ***", response);
 
       // Parse the response and determine if the runtime should respond
       const lowerResponse = response.toLowerCase().trim();
@@ -109,8 +109,8 @@ export default {
       return false;
     }
 
-    const shouldElaborate = await _shouldElaborate(state);
-    if (!shouldElaborate) {
+    const shouldContinue = await _shouldContinue(state);
+    if (!shouldContinue) {
       console.log("Not elaborating");
       return;
     }
@@ -122,7 +122,7 @@ export default {
     const datestr = new Date().toISOString().replace(/:/g, "-");
 
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_elaborate_context`, context);
+    log_to_file(`${state.agentName}_${datestr}_continue_context`, context);
 
     let responseContent;
     const { user_id, room_id } = message;
@@ -135,7 +135,7 @@ export default {
 
       // log response to file
       log_to_file(
-        `${state.agentName}_${datestr}_elaborate_response_${3 - triesLeft}`,
+        `${state.agentName}_${datestr}_continue_response_${3 - triesLeft}`,
         response,
       );
 
@@ -143,7 +143,7 @@ export default {
         body: { message, context, response },
         user_id,
         room_id,
-        type: "elaborate",
+        type: "continue",
       });
 
       const parsedResponse = parseJSONObjectFromText(
@@ -158,7 +158,7 @@ export default {
         break;
       } else {
         console.log(
-          "Elaborate predicted a message from the user instead of the agent. Not elaborating.",
+          "Continue predicted a message from the user instead of the agent. Not elaborating.",
         );
         return;
       }
@@ -211,8 +211,8 @@ export default {
 
     await _saveResponseMessage(message, state, responseContent);
 
-    // if the action is ELABORATE, check if we are over maxContinuesInARow
-    if (responseContent.action === "ELABORATE") {
+    // if the action is CONTINUE, check if we are over maxContinuesInARow
+    if (responseContent.action === "CONTINUE") {
       const agentMessages = state.recentMessagesData
         .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
         .map((m: { content: any }) => (m.content as Content).action);
@@ -220,7 +220,7 @@ export default {
       const lastMessages = agentMessages.slice(0, maxContinuesInARow);
       if (lastMessages.length >= maxContinuesInARow) {
         const allContinues = lastMessages.every(
-          (m: string | undefined) => m === "ELABORATE",
+          (m: string | undefined) => m === "CONTINUE",
         );
         if (allContinues) {
           responseContent.action = null;
@@ -231,7 +231,7 @@ export default {
     return responseContent;
   },
   condition:
-    "Only use ELABORATE if the message requires a continuation to finish the thought. If this actor is waiting for the other actor to respond, or the actor does not have more to say, do not use the ELABORATE action.",
+    "Only use CONTINUE if the message requires a continuation to finish the thought. If this actor is waiting for the other actor to respond, or the actor does not have more to say, do not use the CONTINUE action.",
   examples: [
     [
       {
@@ -242,7 +242,7 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { content: "oh sick", action: "ELABORATE" },
+        content: { content: "oh sick", action: "CONTINUE" },
       },
       {
         user: "{{user2}}",
@@ -266,7 +266,7 @@ export default {
         content: {
           content:
             "i'm not very good yet, but i've been playing until my fingers hut",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -281,14 +281,14 @@ export default {
         content: {
           content:
             "I've been reflecting a lot on what happiness means to me lately",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
           content: "That it’s more about moments than things",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -296,7 +296,7 @@ export default {
         content: {
           content:
             "Like the best things that have ever happened were things that happened, or moments that I had with someone",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
     ],
@@ -316,7 +316,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "lol real art",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -324,7 +324,7 @@ export default {
         content: {
           content:
             "the pieces are just so insane looking, one sec, let me grab a link",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -339,7 +339,7 @@ export default {
         content: {
           content:
             "the new exhibit downtown is rly cool, it's all about tribalism in online spaces",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -355,7 +355,7 @@ export default {
       {
         user: "{{user1}}",
         content: { content: "k i was thinking this weekend" },
-        action: "ELABORATE",
+        action: "CONTINUE",
       },
       {
         user: "{{user1}}",
@@ -374,7 +374,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "watched 40 hours of it in 2 days",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -387,7 +387,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "surprisingly yes",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -414,7 +414,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "i'm leaning towards a cat",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -441,7 +441,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "no seriously, its so dank",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -468,7 +468,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "mostly nature and urban landscapes",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -496,7 +496,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "a bunch of random stuff i'd never heard before",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -511,7 +511,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "i used to live in the city",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -533,7 +533,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "you kids today dont know the value of hard work",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -554,7 +554,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "hey fren r u ok",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -575,7 +575,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "helo fr om mars",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -602,7 +602,7 @@ export default {
         user: "{{user2}}",
         content: {
           content: "What have you been up to",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -615,7 +615,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Been working on a new FPS game actually",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -631,7 +631,7 @@ export default {
         user: "{{user1}}",
         content: {
           content: "Oh no, what happened",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {
@@ -644,7 +644,7 @@ export default {
         user: "{{user2}}",
         content: {
           content: "wtf no, I got into an argument with my roommate",
-          action: "ELABORATE",
+          action: "CONTINUE",
         },
       },
       {

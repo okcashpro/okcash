@@ -163,14 +163,8 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
 
     const content = JSON.stringify(memory.content);
 
-    console.log("Memory being written");
-    console.log(content);
-
-    console.log("memory");
-    console.log(memory.content);
-
     // Insert the memory with the appropriate 'unique' value
-    const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     this.db
       .prepare(sql)
       .run(
@@ -181,6 +175,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         memory.user_id,
         memory.room_id,
         isUnique ? 1 : 0,
+        memory.created_at ?? new Date().toISOString(),
       );
   }
 
@@ -325,12 +320,7 @@ AND room_id = ?`;
       );
   }
 
-  async getMemories(params: {
-    room_id: UUID;
-    count?: number;
-    unique?: boolean;
-    tableName: string;
-  }): Promise<Memory[]> {
+  async getMemories(params: { room_id: UUID; count?: number; unique?: boolean; tableName: string; user_ids?: UUID[] }): Promise<Memory[]> {
     if (!params.tableName) {
       throw new Error("tableName is required");
     }
@@ -338,28 +328,33 @@ AND room_id = ?`;
       throw new Error("room_id is required");
     }
     let sql = `SELECT * FROM memories WHERE type = ? AND room_id = ?`;
-
+  
     const queryParams = [params.tableName, params.room_id];
-
+  
     if (params.unique) {
-      sql += " AND `unique` = 1";
+      sql += " AND \`unique\` = 1";
     }
-
-    // get the most recent memories
+  
+    if (params.user_ids && params.user_ids.length > 0) {
+      sql += ` AND user_id IN (${params.user_ids.map(() => '?').join(',')})`;
+      queryParams.push(...params.user_ids);
+    }
+  
     sql += " ORDER BY created_at DESC";
-
+  
     if (params.count) {
       sql += " LIMIT ?";
       queryParams.push(params.count.toString());
     }
-
+  
     const memories = this.db.prepare(sql).all(...queryParams) as Memory[];
-
+  
     return memories.map((memory) => ({
       ...memory,
       content: JSON.parse(memory.content as unknown as string),
     }));
   }
+  
 
   async removeMemory(memoryId: UUID, tableName: string): Promise<void> {
     const sql = `DELETE FROM memories WHERE type = ? AND id = ?`;

@@ -7,7 +7,7 @@ import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
 import Database from "better-sqlite3";
 import askClaude from "./actions/ask_claude.ts";
-import elaborate from "./actions/elaborate.ts";
+import continue from "./actions/continue.ts";
 import follow_room from "./actions/follow_room.ts";
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
@@ -21,6 +21,7 @@ import channelStateProvider from "./clients/discord/providers/channelState.ts";
 import timeProvider from "./providers/time.ts";
 import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
 import { defaultActions } from "./core/actions.ts";
+import { wait } from "./clients/twitter/utils.ts";
 
 interface Arguments {
   character?: string;
@@ -89,15 +90,14 @@ function startDiscord() {
 }
 
 async function startTwitter() {
-  // console.log("Starting interaction client")
-  // const twitterInteractionClient = new TwitterInteractionClient(runtime);
-  // // wait 2 seconds
-  // await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log("Starting interaction client")
+  const twitterInteractionClient = new TwitterInteractionClient(runtime);
+  // wait()
   // console.log("Starting search client");
   // const twitterSearchClient = new TwitterSearchClient(runtime);
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
-  console.log("Starting generation client");
-  const twitterGenerationClient = new TwitterGenerationClient(runtime);
+  // wait()
+  // console.log("Starting generation client");
+  // const twitterGenerationClient = new TwitterGenerationClient(runtime);
 }
 
 if (argv.discord || (!argv.twitter && !argv.discord)) {
