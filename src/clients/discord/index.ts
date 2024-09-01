@@ -153,7 +153,7 @@ export class DiscordClient extends EventEmitter {
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
       user_id: userIdUUID,
-      content: { content: reactionMessage, source: "Discord" },
+      content: { text: reactionMessage, source: "Discord" },
       room_id,
       embedding: embeddingZeroVector,
     });
@@ -192,7 +192,7 @@ export class DiscordClient extends EventEmitter {
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
       user_id: userIdUUID,
-      content: { content: reactionMessage, source: "Discord" },
+      content: { text: reactionMessage, source: "Discord" },
       room_id,
       embedding: embeddingZeroVector,
     });
@@ -217,8 +217,6 @@ export class DiscordClient extends EventEmitter {
   }
 
   private async onReady() {
-    await this.messageManager.onReady();
-
     const guilds = await this.client.guilds.fetch();
     for (const [, guild] of guilds) {
       const fullGuild = await guild.fetch();

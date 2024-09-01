@@ -8,7 +8,7 @@ import {
   formatEvaluators,
 } from "./evaluators.ts";
 import { MemoryManager } from "./memory.ts";
-import { parseJsonArrayFromText } from "./parsing.ts";
+import { parseJsonArrayFromText, parseJSONObjectFromText } from "./parsing.ts";
 import {
   Character,
   Content,
@@ -30,7 +30,11 @@ import {
 } from "./types.ts";
 
 import { UUID } from "crypto";
-import { default as tiktoken, default as TikToken, TiktokenModel } from "tiktoken";
+import {
+  default as tiktoken,
+  default as TikToken,
+  TiktokenModel,
+} from "tiktoken";
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
 import { BrowserService } from "../services/browser.ts";
@@ -118,7 +122,6 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
 
   // services
   speechService: typeof SpeechService;
-
 
   transcriptionService: ITranscriptionService;
 
@@ -256,7 +259,6 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
 
     this.pdfService = new PdfService();
 
-
     // static class, no need to instantiate but we can access it like a class instance
     this.speechService = SpeechService;
     if (opts.speechModelPath) {
@@ -317,35 +319,103 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
-  }) {
-    if (!settings.OPENAI_API_KEY) {
-      context = await this.trimTokens(
-        "gpt-4o-mini",
-        context,
-        max_context_length,
-      );
+  }): Promise<string> {
+    let retryLength = 2000; // exponential backoff
+    for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
+      try {
+        if (!settings.OPENAI_API_KEY) {
+          context = await this.trimTokens(
+            "gpt-4o-mini",
+            context,
+            max_context_length,
+          );
 
-      return await this.llamaService.queueTextCompletion(
-        context,
-        temperature,
-        stop,
-        frequency_penalty,
-        presence_penalty,
-        max_response_length,
-      );
-    } else {
-      // just use openai, no difference
-      return await this.messageCompletion({
-        context,
-        stop,
-        model,
-        frequency_penalty,
-        presence_penalty,
-        temperature,
-        max_context_length,
-        max_response_length,
-      });
+          const result = await this.llamaService.queueTextCompletion(
+            context,
+            temperature,
+            stop,
+            frequency_penalty,
+            presence_penalty,
+            max_response_length,
+          );
+          return result;
+        } else {
+          const biasValue = -30.0;
+          const encoding = TikToken.encoding_for_model("gpt-4o-mini");
+
+          const tokenIds = [
+            ...new Set(
+              await Promise.all(
+                wordsToPunish.map((word) => encoding.encode(word)[0]),
+              ),
+            ),
+          ];
+
+          const logit_bias = tokenIds.reduce((acc, tokenId) => {
+            acc[tokenId] = biasValue;
+            return acc;
+          }, {});
+
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.token}`,
+            },
+            body: JSON.stringify({
+              stop,
+              model,
+              frequency_penalty,
+              presence_penalty,
+              temperature,
+              max_tokens: max_response_length,
+              logit_bias,
+              messages: [
+                {
+                  role: "user",
+                  content: context,
+                },
+              ],
+            }),
+          };
+          const response = await fetch(
+            `${this.serverUrl}/chat/completions`,
+            requestOptions,
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              "OpenAI API Error: " +
+                response.status +
+                " " +
+                response.statusText,
+            );
+          }
+
+          const body = await response.json();
+
+          interface OpenAIResponse {
+            choices: Array<{ message: { content: string } }>;
+          }
+
+          const content = (body as OpenAIResponse).choices?.[0]?.message
+            ?.content;
+          if (!content) {
+            throw new Error("No content in response");
+          }
+          return content;
+        }
+      } catch (error) {
+        console.error("ERROR:", error);
+        // wait for 2 seconds
+        retryLength *= 2;
+        await new Promise((resolve) => setTimeout(resolve, retryLength));
+        console.log("Retrying...");
+      }
     }
+    throw new Error(
+      "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
+    );
   }
 
   /**
@@ -389,88 +459,113 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
-  }) {
+  }): Promise<Content> {
     context = await this.trimTokens("gpt-4o-mini", context, max_context_length);
-    if (!settings.OPENAI_API_KEY) {
-      const completionResponse = await this.llamaService.queueMessageCompletion(
-        context,
-        temperature,
-        stop,
-        frequency_penalty,
-        presence_penalty,
-        max_response_length,
-      );
-      // change the 'content' to 'content'
-      (completionResponse as any).content = completionResponse.content;
-      return JSON.stringify(completionResponse);
-    }
+    let retryLength = 2000; // exponential backoff
+    for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
+      try {
+        if (!settings.OPENAI_API_KEY) {
+          const completionResponseRaw =
+            await this.llamaService.queueMessageCompletion(
+              context,
+              temperature,
+              stop,
+              frequency_penalty,
+              presence_penalty,
+              max_response_length,
+            );
+          // try parsing the response as JSON, if null then try again
+          const completionResponse = parseJSONObjectFromText(
+            completionResponseRaw,
+          ) as unknown as Content;
 
-    const biasValue = -30.0;
-    const encoding = TikToken.encoding_for_model("gpt-4o-mini");
+          if (!completionResponse) {
+            continue;
+          }
+          return completionResponse;
+        }
 
-    const tokenIds = [
-      ...new Set(
-        await Promise.all(
-          wordsToPunish.map((word) => encoding.encode(word)[0]),
-        ),
-      ),
-    ];
+        const biasValue = -30.0;
+        const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
-    const logit_bias = tokenIds.reduce((acc, tokenId) => {
-      acc[tokenId] = biasValue;
-      return acc;
-    }, {});
+        const tokenIds = [
+          ...new Set(
+            await Promise.all(
+              wordsToPunish.map((word) => encoding.encode(word)[0]),
+            ),
+          ),
+        ];
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
-      },
-      body: JSON.stringify({
-        stop,
-        model,
-        frequency_penalty,
-        presence_penalty,
-        temperature,
-        max_tokens: max_response_length,
-        logit_bias,
-        messages: [
-          {
-            role: "user",
-            content: context,
+        const logit_bias = tokenIds.reduce((acc, tokenId) => {
+          acc[tokenId] = biasValue;
+          return acc;
+        }, {});
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.token}`,
           },
-        ],
-      }),
-    };
-
-    try {
-      const response = await fetch(
-        `${this.serverUrl}/chat/completions`,
-        requestOptions,
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "OpenAI API Error: " + response.status + " " + response.statusText,
+          body: JSON.stringify({
+            stop,
+            model,
+            frequency_penalty,
+            presence_penalty,
+            temperature,
+            max_tokens: max_response_length,
+            logit_bias,
+            messages: [
+              {
+                role: "user",
+                content: context,
+              },
+            ],
+          }),
+        };
+        const response = await fetch(
+          `${this.serverUrl}/chat/completions`,
+          requestOptions,
         );
-      }
 
-      const body = await response.json();
+        if (!response.ok) {
+          throw new Error(
+            "OpenAI API Error: " + response.status + " " + response.statusText,
+          );
+        }
 
-      interface OpenAIResponse {
-        choices: Array<{ message: { content: string } }>;
-      }
+        const body = await response.json();
 
-      const content = (body as OpenAIResponse).choices?.[0]?.message?.content;
-      if (!content) {
-        throw new Error("No content in response");
+        interface OpenAIResponse {
+          choices: Array<{ message: { content: string } }>;
+        }
+
+        const content = (body as OpenAIResponse).choices?.[0]?.message?.content;
+        if (!content) {
+          throw new Error("No content in response");
+        }
+
+        // try parsing the response as JSON, if null then try again
+        const parsedContent = parseJSONObjectFromText(
+          content,
+        ) as unknown as Content;
+
+        if (!parsedContent) {
+          continue;
+        }
+
+        return parsedContent;
+      } catch (error) {
+        console.error("ERROR:", error);
+        // wait for 2 seconds
+        retryLength *= 2;
+        await new Promise((resolve) => setTimeout(resolve, retryLength));
+        console.log("Retrying...");
       }
-      return content;
-    } catch (error) {
-      console.error("ERROR:", error);
-      throw new Error(error as string);
     }
+    throw new Error(
+      "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
+    );
   }
 
   /**
@@ -563,7 +658,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
       return;
     }
 
-    await action.handler(this as IAgentRuntime, message, state, {}, callback);
+    await action.handler(this, message, state, {}, callback);
   }
 
   /**
@@ -578,7 +673,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
         if (!evaluator.handler) {
           return null;
         }
-        const result = await evaluator.validate(this as IAgentRuntime, message, state);
+        const result = await evaluator.validate(this, message, state);
         if (result) {
           return evaluator;
         }
@@ -610,7 +705,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
       template: evaluationTemplate,
     });
 
-    const result = await this.messageCompletion({
+    const result = await this.completion({
       context,
     });
 
@@ -621,7 +716,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
       .forEach((evaluator: Evaluator) => {
         if (!evaluator?.handler) return;
 
-        evaluator.handler(this as IAgentRuntime, message);
+        evaluator.handler(this, message);
       });
 
     return parsedResult;
@@ -648,13 +743,18 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
    * @returns
    */
 
-  async ensureUserExists(user_id: UUID, userName: string | null) {
+  async ensureUserExists(
+    user_id: UUID,
+    userName: string | null,
+    name: string | null,
+  ) {
     const account = await this.databaseAdapter.getAccountById(user_id);
     if (!account) {
       await this.databaseAdapter.createAccount({
         id: user_id,
-        name: userName || "Bot",
-        email: (userName || "Bot") + "@discord",
+        name: name || userName || "Unknown User",
+        username: userName || name || "Unknown",
+        email: (userName || "Bot") + "@discord", // Temporary
         details: { summary: "" },
       });
       console.log(`User ${userName} created successfully.`);
@@ -700,31 +800,29 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     const recentFactsCount = Math.ceil(this.getConversationLength() / 2);
     const relevantFactsCount = Math.ceil(this.getConversationLength() / 2);
 
-    const [
-      actorsData,
-      recentMessagesData,
-      recentFactsData,
-      goalsData,
-    ]: [Actor[], Memory[], Memory[], Goal[]] = await Promise.all(
-      [
-        getActorDetails({ runtime: this, room_id }),
-        this.messageManager.getMemories({
-          room_id,
-          count: conversationLength,
-          unique: false,
-        }),
-        this.factManager.getMemories({
-          room_id,
-          count: recentFactsCount,
-        }),
-        getGoals({
-          runtime: this,
-          count: 10,
-          onlyInProgress: false,
-          room_id,
-        }),
-      ],
-    );
+    const [actorsData, recentMessagesData, recentFactsData, goalsData]: [
+      Actor[],
+      Memory[],
+      Memory[],
+      Goal[],
+    ] = await Promise.all([
+      getActorDetails({ runtime: this, room_id }),
+      this.messageManager.getMemories({
+        room_id,
+        count: conversationLength,
+        unique: false,
+      }),
+      this.factManager.getMemories({
+        room_id,
+        count: recentFactsCount,
+      }),
+      getGoals({
+        runtime: this,
+        count: 10,
+        onlyInProgress: false,
+        room_id,
+      }),
+    ]);
 
     const goals = formatGoalsAsString({ goals: goalsData });
 
@@ -755,7 +853,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
         delete newMemory.embedding;
         return newMemory;
       }),
-    }
+    };
 
     const recentMessages = formatMessages(recentMessageData);
 
@@ -770,12 +868,12 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
       (actor: Actor) => actor.id === user_id,
     )?.name;
 
-    console.log("actorsData", actorsData)
+    console.log("actorsData", actorsData);
 
     // TODO: We may wish to consolidate and just accept character.name here instead of the actor name
-    const agentName = actorsData?.find(
-      (actor: Actor) => actor.id === this.agentId,
-    )?.name || this.character.name;
+    const agentName =
+      actorsData?.find((actor: Actor) => actor.id === this.agentId)?.name ||
+      this.character.name;
 
     let allAttachments = message.content.attachments || [];
 
@@ -833,10 +931,11 @@ Text: ${attachment.text}
       lore = selectedLore.join("\n");
     }
 
-    const formattedCharacterPostExamples = this.character.postExamples.map((post) => {
-      let messageString = `${post}`;
-      return messageString;
-    })
+    const formattedCharacterPostExamples = this.character.postExamples
+      .map((post) => {
+        let messageString = `${post}`;
+        return messageString;
+      })
       .join("\n");
 
     const formattedCharacterMessageExamples = this.character.messageExamples
@@ -847,7 +946,7 @@ Text: ${attachment.text}
 
         return example
           .map((message) => {
-            let messageString = `${message.user}: ${message.content.content}`;
+            let messageString = `${message.user}: ${message.content.text}`;
             exampleNames.forEach((name, index) => {
               const placeholder = `{{user${index + 1}}}`;
               messageString = messageString.replaceAll(placeholder, name);
@@ -858,9 +957,15 @@ Text: ${attachment.text}
       })
       .join("\n\n");
 
-      const getRecentInteractions = async (userA: UUID, userB: UUID): Promise<Memory[]> => {
-        // Find all rooms where userA and userB are participants
-      const rooms = await this.databaseAdapter.getRoomsForParticipants([userA, userB]);
+    const getRecentInteractions = async (
+      userA: UUID,
+      userB: UUID,
+    ): Promise<Memory[]> => {
+      // Find all rooms where userA and userB are participants
+      const rooms = await this.databaseAdapter.getRoomsForParticipants([
+        userA,
+        userB,
+      ]);
 
       // Fetch recent messages from the rooms
       const recentMessages: Memory[] = [];
@@ -875,38 +980,56 @@ Text: ${attachment.text}
       }
 
       // Sort messages by timestamp in descending order
-      recentMessages.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      recentMessages.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      );
 
       // Take the most recent messages
       const recentInteractionsData = recentMessages.slice(0, 10); // Adjust the count as needed
       return recentInteractionsData;
-    }
+    };
 
-    const recentInteractions = (user_id !== this.agentId) ? await getRecentInteractions(user_id, this.agentId) : [];
+    const recentInteractions =
+      user_id !== this.agentId
+        ? await getRecentInteractions(user_id, this.agentId)
+        : [];
 
-    const getRecentMessageInteractions = async (recentInteractionsData: Memory[]): Promise<string> => {
+    const getRecentMessageInteractions = async (
+      recentInteractionsData: Memory[],
+    ): Promise<string> => {
       // Format the recent messages
-      const formattedInteractions = recentInteractionsData.map((message) => {
-        const sender = message.user_id === this.agentId ? this.character.name : "User";
-        return `${sender}: ${message.content.content}`;
-      }).join("\n");
+      const formattedInteractions = recentInteractionsData
+        .map((message) => {
+          const sender =
+            message.user_id === this.agentId ? this.character.name : "User";
+          return `${sender}: ${message.content.text}`;
+        })
+        .join("\n");
 
       return formattedInteractions;
-    }
+    };
 
-    const formattedMessageInteractions = await getRecentMessageInteractions(recentInteractions);
+    const formattedMessageInteractions =
+      await getRecentMessageInteractions(recentInteractions);
 
-    const getRecentPostInteractions = async (recentInteractionsData: Memory[]): Promise<string> => {
+    const getRecentPostInteractions = async (
+      recentInteractionsData: Memory[],
+    ): Promise<string> => {
       // Format the recent posts
-      const formattedInteractions = recentInteractionsData.map((message) => {
-        const sender = message.user_id === this.agentId ? this.character.name : "User";
-        return `${sender}: ${message.content.content}`;
-      }).join("\n");
+      const formattedInteractions = recentInteractionsData
+        .map((message) => {
+          const sender =
+            message.user_id === this.agentId ? this.character.name : "User";
+          return `${sender}: ${message.content.text}`;
+        })
+        .join("\n");
 
       return formattedInteractions;
-    }
+    };
 
-    const formattedPostInteractions = await getRecentPostInteractions(recentInteractions);
+    const formattedPostInteractions =
+      await getRecentPostInteractions(recentInteractions);
 
     const initialState = {
       agentId: this.agentId,
@@ -914,64 +1037,119 @@ Text: ${attachment.text}
       agentName,
       bio: this.character.bio || "",
       lore,
-      adjective: this.character.adjectives && this.character.adjectives.length > 0 ?
-        this.character.adjectives[
-        Math.floor(Math.random() * this.character.adjectives.length)
-        ] : "",
-        // Recent interactions between the sender and receiver, formatted as messages
+      adjective:
+        this.character.adjectives && this.character.adjectives.length > 0
+          ? this.character.adjectives[
+              Math.floor(Math.random() * this.character.adjectives.length)
+            ]
+          : "",
+      // Recent interactions between the sender and receiver, formatted as messages
       recentMessageInteractions: formattedMessageInteractions,
       // Recent interactions between the sender and receiver, formatted as posts
       recentPostInteractions: formattedPostInteractions,
       // Raw memory[] array of interactions
       recentInteractionsData: recentInteractions,
       // randomly pick one topic
-      topic: this.character.topics && this.character.topics.length > 0 ?
-        this.character.topics[
-        Math.floor(Math.random() * this.character.topics.length)
-        ] : null,
-      topics: this.character.topics && this.character.topics.length > 0 ? addHeader(`### Topics for ${this.character.topics}`, this.character.topics
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 10)
-        .join(", ")) : "",
-      characterPostExamples: formattedCharacterPostExamples && formattedCharacterPostExamples.replaceAll('\n', '').length > 0 ? addHeader(`### Example Posts for ${this.character.name}`, formattedCharacterPostExamples) : "",
-      characterMessageExamples: formattedCharacterMessageExamples && formattedCharacterMessageExamples.replaceAll('\n', '').length > 0 ? addHeader(`### Example Conversations for ${this.character.name}`, formattedCharacterMessageExamples) : "",
-      messageDirections: (this.character?.style?.all?.length > 0 || this.character?.style?.chat.length > 0) ?
-        addHeader("### Message Directions for " + this.character.name,
-          (this.character?.style?.all?.join("\n") || "") +
-          (this.character?.style?.all?.length > 0 && this.character?.style?.chat.length > 0 ? "\n" : "") +
-          (this.character?.style?.chat?.join("\n") || "")
-        )
-        : "",
-      postDirections: (this.character?.style?.all?.length > 0 || this.character?.style?.post.length > 0) ?
-        addHeader("### Post Directions for " + this.character.name,
-          (this.character?.style?.all?.join("\n") || "") +
-          (this.character?.style?.all?.length > 0 && this.character?.style?.post.length > 0 ? "\n" : "") +
-          (this.character?.style?.post?.join("\n") || "")
-        )
-        : "",
+      topic:
+        this.character.topics && this.character.topics.length > 0
+          ? this.character.topics[
+              Math.floor(Math.random() * this.character.topics.length)
+            ]
+          : null,
+      topics:
+        this.character.topics && this.character.topics.length > 0
+          ? addHeader(
+              `### Topics for ${this.character.topics}`,
+              this.character.topics
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 10)
+                .join(", "),
+            )
+          : "",
+      characterPostExamples:
+        formattedCharacterPostExamples &&
+        formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+          ? addHeader(
+              `### Example Posts for ${this.character.name}`,
+              formattedCharacterPostExamples,
+            )
+          : "",
+      characterMessageExamples:
+        formattedCharacterMessageExamples &&
+        formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+          ? addHeader(
+              `### Example Conversations for ${this.character.name}`,
+              formattedCharacterMessageExamples,
+            )
+          : "",
+      messageDirections:
+        this.character?.style?.all?.length > 0 ||
+        this.character?.style?.chat.length > 0
+          ? addHeader(
+              "### Message Directions for " + this.character.name,
+              (this.character?.style?.all?.join("\n") || "") +
+                (this.character?.style?.all?.length > 0 &&
+                this.character?.style?.chat.length > 0
+                  ? "\n"
+                  : "") +
+                (this.character?.style?.chat?.join("\n") || ""),
+            )
+          : "",
+      postDirections:
+        this.character?.style?.all?.length > 0 ||
+        this.character?.style?.post.length > 0
+          ? addHeader(
+              "### Post Directions for " + this.character.name,
+              (this.character?.style?.all?.join("\n") || "") +
+                (this.character?.style?.all?.length > 0 &&
+                this.character?.style?.post.length > 0
+                  ? "\n"
+                  : "") +
+                (this.character?.style?.post?.join("\n") || ""),
+            )
+          : "",
       // Agent runtime stuff
       senderName,
-      actors: actors && actors.length > 0 ? addHeader("### Actors", actors) : "",
+      actors:
+        actors && actors.length > 0 ? addHeader("### Actors", actors) : "",
       actorsData,
       room_id,
-      goals: goals && goals.length > 0 ? addHeader(
-        "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-        goals,
-      ) : "",
+      goals:
+        goals && goals.length > 0
+          ? addHeader(
+              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+              goals,
+            )
+          : "",
       goalsData,
-      recentMessages: recentMessages && recentMessages.length > 0 ? addHeader("### Conversation Messages", recentMessages) : "",
-      recentPosts: recentPosts && recentPosts.length > 0 ? addHeader("### Recent Posts", recentPosts) : "",
+      recentMessages:
+        recentMessages && recentMessages.length > 0
+          ? addHeader("### Conversation Messages", recentMessages)
+          : "",
+      recentPosts:
+        recentPosts && recentPosts.length > 0
+          ? addHeader("### Recent Posts", recentPosts)
+          : "",
       recentMessagesData,
-      recentFacts: recentFacts && recentFacts.length > 0 ? addHeader("### Recent Facts", recentFacts) : "",
+      recentFacts:
+        recentFacts && recentFacts.length > 0
+          ? addHeader("### Recent Facts", recentFacts)
+          : "",
       recentFactsData,
-      relevantFacts: relevantFacts && relevantFacts.length > 0 ? addHeader("### Relevant Facts", relevantFacts) : "",
+      relevantFacts:
+        relevantFacts && relevantFacts.length > 0
+          ? addHeader("### Relevant Facts", relevantFacts)
+          : "",
       relevantFactsData,
-      attachments: formattedAttachments && formattedAttachments.length > 0 ? addHeader("### Attachments", formattedAttachments) : "",
-      ...additionalKeys
+      attachments:
+        formattedAttachments && formattedAttachments.length > 0
+          ? addHeader("### Attachments", formattedAttachments)
+          : "",
+      ...additionalKeys,
     };
 
     const actionPromises = this.actions.map(async (action: Action) => {
-      const result = await action.validate(this as IAgentRuntime, message, initialState);
+      const result = await action.validate(this, message, initialState);
       if (result) {
         return action;
       }
@@ -979,7 +1157,7 @@ Text: ${attachment.text}
     });
 
     const evaluatorPromises = this.evaluators.map(async (evaluator) => {
-      const result = await evaluator.validate(this as IAgentRuntime, message, initialState);
+      const result = await evaluator.validate(this, message, initialState);
       if (result) {
         return evaluator;
       }
@@ -996,15 +1174,33 @@ Text: ${attachment.text}
     const actionsData = resolvedActions.filter(Boolean) as Action[];
 
     const actionState = {
-      actionNames: addHeader("### Possible response actions:", formatActionNames(actionsData)),
-      actionConditions: actionsData.length > 0 ? formatActionConditions(actionsData) : "",
+      actionNames: addHeader(
+        "### Possible response actions:",
+        formatActionNames(actionsData),
+      ),
+      actionConditions:
+        actionsData.length > 0 ? formatActionConditions(actionsData) : "",
       actions: actionsData.length > 0 ? formatActions(actionsData) : "",
-      actionExamples: actionsData.length > 0 ? addHeader("### Action Examples", composeActionExamples(actionsData, 10)) : "",
+      actionExamples:
+        actionsData.length > 0
+          ? addHeader(
+              "### Action Examples",
+              composeActionExamples(actionsData, 10),
+            )
+          : "",
       evaluatorsData,
-      evaluators: evaluatorsData.length > 0 ? formatEvaluators(evaluatorsData) : "",
-      evaluatorNames: evaluatorsData.length > 0 ? formatEvaluatorNames(evaluatorsData) : "",
-      evaluatorConditions: evaluatorsData.length > 0 ? formatEvaluatorConditions(evaluatorsData) : "",
-      evaluatorExamples: evaluatorsData.length > 0 ? formatEvaluatorExamples(evaluatorsData) : "",
+      evaluators:
+        evaluatorsData.length > 0 ? formatEvaluators(evaluatorsData) : "",
+      evaluatorNames:
+        evaluatorsData.length > 0 ? formatEvaluatorNames(evaluatorsData) : "",
+      evaluatorConditions:
+        evaluatorsData.length > 0
+          ? formatEvaluatorConditions(evaluatorsData)
+          : "",
+      evaluatorExamples:
+        evaluatorsData.length > 0
+          ? formatEvaluatorExamples(evaluatorsData)
+          : "",
       providers,
     };
 

@@ -26,7 +26,7 @@ describe("Time Provider", () => {
   test("Time provider should return the current time in the correct format", async () => {
     const message: Message = {
       user_id: user.id,
-      content: { content: "" },
+      content: { text: "" },
       room_id: room_id,
     };
 
@@ -43,7 +43,7 @@ describe("Time Provider", () => {
   test("Time provider should be integrated in the state and context correctly", async () => {
     const message: Message = {
       user_id: user.id,
-      content: { content: "" },
+      content: { text: "" },
       room_id: room_id,
     };
 
@@ -68,7 +68,7 @@ describe("Time Provider", () => {
   test("Time provider should work independently", async () => {
     const message: Message = {
       user_id: user.id,
-      content: { content: "" },
+      content: { text: "" },
       room_id: room_id,
     };
     const currentTimeResponse = await timeProvider.get(runtime, message);

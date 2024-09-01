@@ -27,14 +27,14 @@ describe("Agent Runtime", () => {
     const memories = [
       {
         user_id: user?.id as UUID,
-        content: { content: "test memory from user" },
+        content: { text: "test memory from user" },
       },
-      { user_id: zeroUuid, content: { content: "test memory from agent" } },
+      { user_id: zeroUuid, content: { text: "test memory from agent" } },
     ];
 
     for (const { user_id, content } of memories) {
       try {
-        const embedding = await getCachedEmbeddings(content.content);
+        const embedding = await getCachedEmbeddings(content.text);
         const memory = await runtime.messageManager.addEmbeddingToMemory({
           user_id: user_id,
           content,
@@ -42,7 +42,7 @@ describe("Agent Runtime", () => {
           embedding,
         });
         if (!embedding) {
-          writeCachedEmbedding(content.content, memory.embedding as number[]);
+          writeCachedEmbedding(content.text, memory.embedding as number[]);
         }
         await runtime.messageManager.createMemory(memory);
       } catch (error) {
@@ -97,7 +97,7 @@ describe("Agent Runtime", () => {
 
     const message: Message = {
       user_id: user.id as UUID,
-      content: { content: "test message" },
+      content: { text: "test message" },
       room_id: room_id as UUID,
     };
 

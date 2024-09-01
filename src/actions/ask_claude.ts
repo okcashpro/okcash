@@ -49,7 +49,7 @@ export default {
 
     let responseContent;
     let callbackData: Content = {
-      content: responseContent,
+      text: responseContent,
       action: "CLAUDE_RESPONSE",
       source: "Claude",
       attachments: [],
@@ -128,7 +128,7 @@ export default {
     ) => {
       const { user_id, room_id } = message;
 
-      responseContent.content = responseContent.content?.trim();
+      responseContent.content = responseContent.text?.trim();
 
       if (responseContent.content) {
         await runtime.messageManager.createMemory({
@@ -156,7 +156,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "```js\nconst x = 10\n```",
+          text: "```js\nconst x = 10\n```",
         },
       },
       {
@@ -169,7 +169,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "sure, let me ask claude",
+          text: "sure, let me ask claude",
           action: "ASK_CLAUDE",
         },
       },
@@ -185,7 +185,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "sure, give me a sec",
+          text: "sure, give me a sec",
           action: "ASK_CLAUDE",
         },
       },
@@ -201,7 +201,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "Yeah, give me a second to get that together for you...",
+          text: "Yeah, give me a second to get that together for you...",
           action: "ASK_CLAUDE",
         },
       },
@@ -217,7 +217,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "No problem, give me a second to discuss it with Claude",
+          text: "No problem, give me a second to discuss it with Claude",
           action: "ASK_CLAUDE",
         },
       },

@@ -26,7 +26,7 @@ export const TEST_EVALUATOR = {
         {
           user: "{{user1}}",
           content: {
-            content: "Testing, testing, 123 123",
+            text: "Testing, testing, 123 123",
             action: "TEST_EVALUATOR",
           },
         },
@@ -56,7 +56,7 @@ export const TEST_EVALUATOR_FAIL = {
         {
           user: "{{user1}}",
           content: {
-            content: "Testing, testing, 123 123",
+            text: "Testing, testing, 123 123",
             action: "TEST_EVALUATOR_FAIL",
           },
         },

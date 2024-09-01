@@ -65,7 +65,7 @@ describe("Facts Evaluator", () => {
 
       const message: Message = {
         user_id: user.id as UUID,
-        content: { content: "" },
+        content: { text: "" },
         room_id,
       };
 
@@ -88,7 +88,7 @@ describe("Facts Evaluator", () => {
 
       const message: Message = {
         user_id: user.id as UUID,
-        content: { content: "" },
+        content: { text: "" },
         room_id,
       };
 
@@ -119,7 +119,7 @@ async function addFacts(
     const existingEmbedding = await getCachedEmbeddings(fact);
     const bakedMemory = await runtime.factManager.addEmbeddingToMemory({
       user_id: user_id,
-      content: { content: fact },
+      content: { text: fact },
       room_id: room_id,
       embedding: existingEmbedding,
     });

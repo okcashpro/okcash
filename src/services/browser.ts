@@ -62,18 +62,18 @@ export class BrowserService {
   ): Promise<{ title: string; description: string; bodyContent: string }> {
     const cacheKey = this.getCacheKey(url);
     const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${cacheKey}.json`);
-  
+
     if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
       fs.mkdirSync(this.CONTENT_CACHE_DIR, { recursive: true });
     }
-  
+
     if (fs.existsSync(cacheFilePath)) {
       return JSON.parse(fs.readFileSync(cacheFilePath, "utf-8")).content;
     }
-  
+
     const content = await this.fetchPageContent(url);
     fs.writeFileSync(cacheFilePath, JSON.stringify({ url, content }));
-  
+
     return content;
   }
 

@@ -161,20 +161,19 @@ export default {
         {
           user: "{{user1}}",
           content: {
-            content: "I've just finished chapter 20 of 'War and Peace'",
+            text: "I've just finished chapter 20 of 'War and Peace'",
           },
         },
         {
           user: "{{user2}}",
           content: {
-            content:
-              "Were you able to grasp the complexities of the characters",
+            text: "Were you able to grasp the complexities of the characters",
           },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Yep. I've prepared some notes for our discussion",
+            text: "Yep. I've prepared some notes for our discussion",
           },
         },
       ],
@@ -207,18 +206,17 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I managed to run 30 miles this week" },
+          content: { text: "I managed to run 30 miles this week" },
         },
         {
           user: "{{user2}}",
           content: {
-            content:
-              "Impressive progress! How do you feel about the half-marathon next month?",
+            text: "Impressive progress! How do you feel about the half-marathon next month?",
           },
         },
         {
           user: "{{user1}}",
-          content: { content: "I feel confident. The training is paying off." },
+          content: { text: "I feel confident. The training is paying off." },
         },
       ],
 
@@ -249,17 +247,16 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I've submitted the first draft of my thesis." },
+          content: { text: "I've submitted the first draft of my thesis." },
         },
         {
           user: "{{user2}}",
-          content: { content: "Well done. How is the prototype coming along?" },
+          content: { text: "Well done. How is the prototype coming along?" },
         },
         {
           user: "{{user1}}",
           content: {
-            content:
-              "It's almost done. I just need to finalize the testing phase.",
+            text: "It's almost done. I just need to finalize the testing phase.",
           },
         },
       ],
@@ -291,19 +288,18 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "How's the progress on the new features?" },
+          content: { text: "How's the progress on the new features?" },
         },
         {
           user: "{{user2}}",
           content: {
-            content:
-              "We've encountered some unexpected challenges and are currently troubleshooting.",
+            text: "We've encountered some unexpected challenges and are currently troubleshooting.",
           },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Let's move on and cancel the task.",
+            text: "Let's move on and cancel the task.",
           },
         },
       ],

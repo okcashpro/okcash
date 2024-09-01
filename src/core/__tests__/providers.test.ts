@@ -34,7 +34,7 @@ describe("TestProvider", () => {
   test("TestProvider should return 'Hello Test'", async () => {
     const message: Message = {
       user_id: zeroUuid,
-      content: { content: "" },
+      content: { text: "" },
       room_id: room_id,
     };
 

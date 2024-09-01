@@ -22,12 +22,12 @@ async function handleMessage(
   const _saveRequestMessage = async (message: Message, state: State) => {
     const { content: senderContent, user_id, room_id } = message;
 
-    const _senderContent = (senderContent as Content).content?.trim();
+    const _senderContent = (senderContent as Content).text?.trim();
     if (_senderContent) {
       await runtime.messageManager.createMemory({
         user_id: user_id!,
         content: {
-          content: _senderContent,
+          text: _senderContent,
           action: (message.content as Content)?.action ?? "null",
         },
         room_id,
@@ -62,27 +62,12 @@ async function handleMessage(
       room_id,
       type: "actions_test_completion",
     });
-
-    const parsedResponse = parseJSONObjectFromText(
-      response,
-    ) as unknown as Content;
-
-    if (
-      (parsedResponse.user as string)?.includes(
-        (state as State).agentName as string,
-      )
-    ) {
-      responseContent = {
-        content: parsedResponse.content,
-        action: parsedResponse.action,
-      };
-      break;
-    }
+    return response;
   }
 
   if (!responseContent) {
     responseContent = {
-      content: "",
+      text: "",
       action: "IGNORE",
     };
   }
@@ -94,7 +79,7 @@ async function handleMessage(
   ) => {
     const { room_id } = message;
 
-    responseContent.content = responseContent.content?.trim();
+    responseContent.content = responseContent.text?.trim();
 
     if (responseContent.content) {
       await runtime.messageManager.createMemory({
@@ -142,6 +127,7 @@ describe("Actions", () => {
       if (!account) {
         await runtime.databaseAdapter.createAccount({
           id: user.id as UUID,
+          username: "Test User",
           name: "Test User",
           email: user.email,
           avatar_url: "",
@@ -193,7 +179,7 @@ describe("Actions", () => {
     if (testAction && testAction.validate) {
       const isValid = await testAction.validate(runtime, {
         user_id: user.id as UUID,
-        content: { content: "Test message" },
+        content: { text: "Test message" },
         room_id: room_id,
       });
       expect(isValid).toBeTruthy();
@@ -208,8 +194,7 @@ describe("Actions", () => {
     const message: Message = {
       user_id: user.id as UUID,
       content: {
-        content:
-          "Please respond with the message 'ok' and the action TEST_ACTION",
+        text: "Please respond with the message 'ok' and the action TEST_ACTION",
       },
       room_id,
     };
@@ -226,8 +211,7 @@ describe("Actions", () => {
       const message: Message = {
         user_id: user.id as UUID,
         content: {
-          content:
-            "Please respond with the message 'ok' and the action TEST_ACTION",
+          text: "Please respond with the message 'ok' and the action TEST_ACTION",
         },
         room_id,
       };
@@ -251,7 +235,7 @@ describe("Actions", () => {
       const mockMessage: Message = {
         user_id: user.id as UUID,
         content: {
-          content: "Test message for TEST action",
+          text: "Test message for TEST action",
         },
         room_id,
       };

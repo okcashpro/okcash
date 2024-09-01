@@ -102,11 +102,14 @@ export class TwitterInteractionClient extends ClientBase {
       }
 
       // Check for replies to the bot's tweets
-      const botTweets = this.twitterClient.getTweetsAndReplies(botTwitterUsername, 20);
+      const botTweets = this.twitterClient.getTweetsAndReplies(
+        botTwitterUsername,
+        20,
+      );
       for await (const tweet of botTweets) {
         if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
           break;
-        // 
+        //
         tweetCandidates.push(tweet);
       }
 
@@ -142,42 +145,51 @@ export class TwitterInteractionClient extends ClientBase {
 
     // if the bot has already replied to this tweet, don't respond -- check the thread
     const thread = tweet.thread;
-    const botTweet = thread.find(t => t.username === botTwitterUsername);
+    const botTweet = thread.find((t) => t.username === botTwitterUsername);
     if (botTweet) {
       return;
     }
-  
+
     const twitterUserId = getUuid(tweet.userId as string) as UUID;
     const twitterRoomId = getUuid("twitter") as UUID;
-  
+
     await Promise.all([
-      this.runtime.ensureUserExists(twitterUserId, tweet.username),
+      this.runtime.ensureUserExists(
+        this.runtime.agentId,
+        settings.TWITTER_USERNAME,
+        this.runtime.character.name,
+      ),
+      this.runtime.ensureUserExists(twitterUserId, tweet.username, tweet.name),
       this.runtime.ensureRoomExists(twitterRoomId),
     ]);
-  
+
     await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
 
     await this.ensureRoomIsPopulated(twitterRoomId);
-      
-      const message: Message = {
-      content: { content: tweet.text },
+
+    const message: Message = {
+      content: { text: tweet.text },
       user_id: twitterUserId,
       room_id: twitterRoomId,
     };
-  
-    if (!message.content.content) {
-      return { content: "", action: "IGNORE" };
+
+    if (!message.content.text) {
+      return { text: "", action: "IGNORE" };
     }
 
     const formatTweet = (tweet: Tweet) => {
       return `  ID: ${tweet.id}
 From: ${tweet.name} (@${tweet.username})
 Text: ${tweet.text}`;
-    }
+    };
 
     // Fetch recent conversations
-    const recentConversationsText = await getRecentConversations(this.runtime, this.twitterClient, botTwitterUsername);
-  
+    const recentConversationsText = await getRecentConversations(
+      this.runtime,
+      this.twitterClient,
+      botTwitterUsername,
+    );
+
     const currentPost = formatTweet(tweet);
 
     let state = await this.runtime.composeState(message, {
@@ -186,10 +198,14 @@ Text: ${tweet.text}`;
       recentConversations: recentConversationsText,
       currentPost,
     });
-  
+
     // Fetch recent search results
-    const recentSearchResultsText = await searchRecentPosts(this.runtime, this.twitterClient, state.topic);
-    state['recentSearchResultsText'] = recentSearchResultsText;
+    const recentSearchResultsText = await searchRecentPosts(
+      this.runtime,
+      this.twitterClient,
+      state.topic,
+    );
+    state["recentSearchResultsText"] = recentSearchResultsText;
     const shouldRespondContext = composeContext({
       state,
       template: shouldRespondTemplate,
@@ -201,7 +217,7 @@ Text: ${tweet.text}`;
       model: this.runtime.model,
     });
 
-    console.log("shouldRespondContext", shouldRespondContext)
+    console.log("shouldRespondContext", shouldRespondContext);
 
     console.log("*** should respond?", shouldRespondResponse);
     let shouldRespond = true;
@@ -216,86 +232,55 @@ Text: ${tweet.text}`;
       console.error("Invalid response:", shouldRespondResponse);
       shouldRespond = false;
     }
-  
+
     if (!shouldRespond) {
       console.log("Not responding to message");
-      return { content: "", action: "IGNORE" };
+      return { text: "", action: "IGNORE" };
     }
-  
+
     const context = composeContext({
       state,
       template: messageHandlerTemplate,
     });
-  
+
     const datestr = new Date().toISOString().replace(/:/g, "-");
-  
+
     // log context to file
     log_to_file(
       `${botTwitterUsername}_${datestr}_interactions_context`,
       context,
     );
-  
-    let responseContent: Content | null = null;
-  
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      const response = await this.runtime.completion({
-        context,
-        stop: [],
-        temperature: this.temperature,
-        model: this.runtime.model,
-      });
-      log_to_file(
-        `${botTwitterUsername}_${datestr}_interactions_response_${3 - triesLeft}`,
-        response,
-      );
-      const parsedResponse = parseJSONObjectFromText(
-        response,
-      ) as unknown as Content;
-  
-      if (
-        !(parsedResponse?.user as string)?.includes(
-          (state as State).senderName as string,
-        )
-      ) {
-        if (!parsedResponse) {
-          continue;
-        }
-        responseContent = {
-          content: parsedResponse.content,
-          action: parsedResponse.action,
-        };
-        break;
-      }
-    }
-  
-    if (!responseContent) {
-      responseContent = {
-        content: "",
-        action: "IGNORE",
-      };
-    }
-  
-    await this.saveResponseMessage(message, state, responseContent);
-    this.runtime.processActions(message, responseContent, state);
-  
-    const response = responseContent;
-  
-    if (response.content) {
+
+    const response = await this.runtime.messageCompletion({
+      context,
+      stop: [],
+      temperature: this.temperature,
+      model: this.runtime.model,
+    });
+    log_to_file(
+      `${botTwitterUsername}_${datestr}_interactions_response`,
+      JSON.stringify(response),
+    );
+
+    await this.saveResponseMessage(message, state, response);
+    this.runtime.processActions(message, response, state);
+
+    if (response.text) {
       console.log(
-        `Bot would respond to tweet ${tweet.id} with: ${response.content}`,
+        `Bot would respond to tweet ${tweet.id} with: ${response.text}`,
       );
       try {
         if (!this.dryRun) {
-          await this.twitterClient.sendTweet(response.content, tweet.id);
+          await this.twitterClient.sendTweet(response.text, tweet.id);
         } else {
-          console.log("Dry run, not sending tweet:", response.content);
+          console.log("Dry run, not sending tweet:", response.text);
         }
         // we're running this in a loop, so wait a bit
         console.log(`Successfully responded to tweet ${tweet.id}`);
-        const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.content}`;
+        const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
         const debugFileName = `tweets/tweet_generation_${tweet.id}.txt`;
         fs.writeFileSync(debugFileName, responseInfo);
-        wait()
+        wait();
       } catch (error) {
         console.error(`Error sending response tweet: ${error}`);
       }

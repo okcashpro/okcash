@@ -52,58 +52,75 @@ export class TwitterGenerationClient extends ClientBase {
         return;
       }
 
-    const recentConversationsText = await getRecentConversations(this.runtime, this.twitterClient, botTwitterUsername);
-  
+      const recentConversationsText = await getRecentConversations(
+        this.runtime,
+        this.twitterClient,
+        botTwitterUsername,
+      );
+
       // Wait 1.5-3.5 seconds to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 2000) + 1500));
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.floor(Math.random() * 2000) + 1500),
+      );
 
       await Promise.all([
-        this.runtime.ensureUserExists(this.runtime.agentId, this.runtime.character.name),
+        this.runtime.ensureUserExists(
+          this.runtime.agentId,
+          settings.TWITTER_USERNAME,
+          this.runtime.character.name,
+        ),
         this.runtime.ensureRoomExists(twitterGenerateRoomId),
       ]);
-    
-      await this.runtime.ensureParticipantInRoom(this.runtime.agentId, twitterGenerateRoomId);
-      
+
+      await this.runtime.ensureParticipantInRoom(
+        this.runtime.agentId,
+        twitterGenerateRoomId,
+      );
+
       await this.ensureRoomIsPopulated(twitterGenerateRoomId);
 
-      const state = await this.runtime.composeState({ user_id: this.runtime.agentId, room_id: twitterGenerateRoomId, content: { content: "", action: "" } }, { twitterUserName: botTwitterUsername, recentConversations: recentConversationsText });
-      const recentSearchResultsText = await searchRecentPosts(this.runtime, this.twitterClient, state.topic);
-      state['recentSearchResultsText'] = recentSearchResultsText;
-      
-      // Generate new tweet  
+      const state = await this.runtime.composeState(
+        {
+          user_id: this.runtime.agentId,
+          room_id: twitterGenerateRoomId,
+          content: { text: "", action: "" },
+        },
+        {
+          twitterUserName: botTwitterUsername,
+          recentConversations: recentConversationsText,
+        },
+      );
+      const recentSearchResultsText = await searchRecentPosts(
+        this.runtime,
+        this.twitterClient,
+        state.topic,
+      );
+      state["recentSearchResultsText"] = recentSearchResultsText;
+
+      // Generate new tweet
       const context = composeContext({
         state,
         template: newTweetPrompt,
       });
-  
+
       const datestr = new Date().toISOString().replace(/:/g, "-");
-  
+
       // log context to file
       log_to_file(`${botTwitterUsername}_${datestr}_generate_context`, context);
-  
-      let newTweetContent;
-      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        try {
-          newTweetContent = await this.runtime.completion({
-            context,
-            stop: [],
-            temperature: this.temperature,
-            frequency_penalty: 0.5,
-            presence_penalty: 0.5,
-            model: this.runtime.model,
-          });
-          log_to_file(
-            `${botTwitterUsername}_${datestr}_generate_response_${3 - triesLeft}`,
-            newTweetContent,
-          );
-          break;
-        } catch (error) {
-          console.warn("Could not generate new tweet:", error);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          console.log("Retrying...");
-        }
-      }
-  
+
+      const newTweetContent = await this.runtime.completion({
+        context,
+        stop: [],
+        temperature: this.temperature,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+        model: this.runtime.model,
+      });
+      log_to_file(
+        `${botTwitterUsername}_${datestr}_generate_response`,
+        JSON.stringify(newTweetContent),
+      );
+
       // Send the new tweet
       if (!this.dryRun) {
         await this.twitterClient.sendTweet(newTweetContent.trim());

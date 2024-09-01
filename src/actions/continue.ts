@@ -6,6 +6,7 @@ import {
   Action,
   ActionExample,
   Content,
+  IAgentRuntime,
   Message,
   State,
 } from "../core/types.ts";
@@ -27,7 +28,7 @@ export default {
   name: "CONTINUE",
   description:
     "ONLY use this action when the message necessitates a follow up. Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was CONTINUE, and the user has not responded. Use sparingly.",
-  validate: async (runtime: any, message: Message) => {
+  validate: async (runtime: IAgentRuntime, message: Message) => {
     console.log("Validating continue");
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
@@ -43,8 +44,7 @@ export default {
       const lastMessages = agentMessages.slice(0, maxContinuesInARow);
       if (lastMessages.length >= maxContinuesInARow) {
         const allContinues = lastMessages.every(
-          (m: { content: any }) =>
-            (m.content as Content).action === "CONTINUE",
+          (m: { content: any }) => (m.content as Content).action === "CONTINUE",
         );
         if (allContinues) {
           return false;
@@ -55,15 +55,15 @@ export default {
     return true;
   },
   handler: async (
-    runtime: any,
+    runtime: IAgentRuntime,
     message: Message,
     state: State,
     options: any,
     callback: any,
   ) => {
     if (
-      message.content.content.endsWith("?") ||
-      message.content.content.endsWith("!")
+      message.content.text.endsWith("?") ||
+      message.content.text.endsWith("!")
     ) {
       return;
     }
@@ -81,23 +81,11 @@ export default {
         template: shouldContinueTemplate,
       });
 
-      let response = "";
-
-      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        try {
-          response = await runtime.completion({
-            context: shouldRespondContext,
-            stop: ["\n"],
-            max_response_length: 5,
-          });
-          break;
-        } catch (error) {
-          console.error("Error in _shouldContinue:", error);
-          // wait for 2 seconds
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          console.log("Retrying...");
-        }
-      }
+      let response = await runtime.completion({
+        context: shouldRespondContext,
+        stop: ["\n"],
+        max_response_length: 5,
+      });
 
       console.log("*** SHOULD CONTINUE ***", response);
 
@@ -124,49 +112,25 @@ export default {
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_continue_context`, context);
 
-    let responseContent;
     const { user_id, room_id } = message;
 
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      const response = await runtime.messageCompletion({
-        context,
-        stop: [],
-      });
+    const response = await runtime.messageCompletion({
+      context,
+      stop: [],
+    });
 
-      // log response to file
-      log_to_file(
-        `${state.agentName}_${datestr}_continue_response_${3 - triesLeft}`,
-        response,
-      );
+    // log response to file
+    log_to_file(
+      `${state.agentName}_${datestr}_continue_response`,
+      JSON.stringify(response),
+    );
 
-      runtime.databaseAdapter.log({
-        body: { message, context, response },
-        user_id,
-        room_id,
-        type: "continue",
-      });
-
-      const parsedResponse = parseJSONObjectFromText(
-        response,
-      ) as unknown as Content;
-
-      if (!parsedResponse) {
-        continue;
-      }
-      if ((parsedResponse?.user as any).includes(state.agentName as string)) {
-        responseContent = parsedResponse;
-        break;
-      } else {
-        console.log(
-          "Continue predicted a message from the user instead of the agent. Not elaborating.",
-        );
-        return;
-      }
-    }
-
-    if (!responseContent) {
-      return;
-    }
+    runtime.databaseAdapter.log({
+      body: { message, context, response },
+      user_id,
+      room_id,
+      type: "continue",
+    });
 
     // prevent repetition
     const messageExists = state.recentMessagesData
@@ -185,7 +149,7 @@ export default {
     ) => {
       const { room_id } = message;
 
-      responseContent.content = responseContent.content?.trim();
+      responseContent.content = responseContent.text?.trim();
 
       if (responseContent.content) {
         console.log("create memory");
@@ -207,12 +171,12 @@ export default {
       }
     };
 
-    callback(responseContent);
+    callback(response);
 
-    await _saveResponseMessage(message, state, responseContent);
+    await _saveResponseMessage(message, state, response);
 
     // if the action is CONTINUE, check if we are over maxContinuesInARow
-    if (responseContent.action === "CONTINUE") {
+    if (response.action === "CONTINUE") {
       const agentMessages = state.recentMessagesData
         .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
         .map((m: { content: any }) => (m.content as Content).action);
@@ -223,12 +187,12 @@ export default {
           (m: string | undefined) => m === "CONTINUE",
         );
         if (allContinues) {
-          responseContent.action = null;
+          response.action = null;
         }
       }
     }
 
-    return responseContent;
+    return response;
   },
   condition:
     "Only use CONTINUE if the message requires a continuation to finish the thought. If this actor is waiting for the other actor to respond, or the actor does not have more to say, do not use the CONTINUE action.",
@@ -237,16 +201,16 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "we're planning a solo backpacking trip soon",
+          text: "we're planning a solo backpacking trip soon",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "oh sick", action: "CONTINUE" },
+        content: { text: "oh sick", action: "CONTINUE" },
       },
       {
         user: "{{user2}}",
-        content: { content: "where are you going" },
+        content: { text: "where are you going" },
       },
     ],
 
@@ -254,12 +218,12 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "i just got a guitar and started learning last month",
+          text: "i just got a guitar and started learning last month",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "maybe we can start a band soon lol" },
+        content: { text: "maybe we can start a band soon lol" },
       },
       {
         user: "{{user1}}",
@@ -271,7 +235,7 @@ export default {
       },
       {
         user: "{{user1}}",
-        content: { content: "seriously lol it hurts to type" },
+        content: { text: "seriously lol it hurts to type" },
       },
     ],
 
@@ -287,7 +251,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "That it’s more about moments than things",
+          text: "That it’s more about moments than things",
           action: "CONTINUE",
         },
       },
@@ -305,17 +269,17 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "i found some incredible art today",
+          text: "i found some incredible art today",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "real art or digital art" },
+        content: { text: "real art or digital art" },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "lol real art",
+          text: "lol real art",
           action: "CONTINUE",
         },
       },
@@ -329,7 +293,7 @@ export default {
       },
       {
         user: "{{user1}}",
-        content: { content: "DMed it to you" },
+        content: { text: "DMed it to you" },
       },
     ],
 
@@ -345,21 +309,21 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "it really blew my mind, you gotta go",
+          text: "it really blew my mind, you gotta go",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "lol sure i'd go" },
+        content: { text: "lol sure i'd go" },
       },
       {
         user: "{{user1}}",
-        content: { content: "k i was thinking this weekend" },
+        content: { text: "k i was thinking this weekend" },
         action: "CONTINUE",
       },
       {
         user: "{{user1}}",
-        content: { content: "i'm free sunday, we could get a crew together" },
+        content: { text: "i'm free sunday, we could get a crew together" },
       },
     ],
 
@@ -367,33 +331,33 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "just finished the best anime i've ever seen",
+          text: "just finished the best anime i've ever seen",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "watched 40 hours of it in 2 days",
+          text: "watched 40 hours of it in 2 days",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "damn, u ok",
+          text: "damn, u ok",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "surprisingly yes",
+          text: "surprisingly yes",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "just found out theres a sequel, gg",
+          text: "just found out theres a sequel, gg",
         },
       },
     ],
@@ -401,26 +365,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "i'm thinking of adopting a pet soon",
+          text: "i'm thinking of adopting a pet soon",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "what kind of pet",
+          text: "what kind of pet",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "i'm leaning towards a cat",
+          text: "i'm leaning towards a cat",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "it'd be hard to take care of a dog in the city",
+          text: "it'd be hard to take care of a dog in the city",
         },
       },
     ],
@@ -428,26 +392,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "i've been experimenting with vegan recipes lately",
+          text: "i've been experimenting with vegan recipes lately",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "no thanks",
+          text: "no thanks",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "no seriously, its so dank",
+          text: "no seriously, its so dank",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "you gotta try some of my food when you come out",
+          text: "you gotta try some of my food when you come out",
         },
       },
     ],
@@ -455,19 +419,19 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "so i've been diving into photography as a new hobby",
+          text: "so i've been diving into photography as a new hobby",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "oh awesome, what do you enjoy taking photos of",
+          text: "oh awesome, what do you enjoy taking photos of",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "mostly nature and urban landscapes",
+          text: "mostly nature and urban landscapes",
           action: "CONTINUE",
         },
       },
@@ -483,26 +447,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "i've been getting back into indie music",
+          text: "i've been getting back into indie music",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "what have you been listening to",
+          text: "what have you been listening to",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "a bunch of random stuff i'd never heard before",
+          text: "a bunch of random stuff i'd never heard before",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "i'll send you a playlist",
+          text: "i'll send you a playlist",
         },
       },
     ],
@@ -510,7 +474,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "i used to live in the city",
+          text: "i used to live in the city",
           action: "CONTINUE",
         },
       },
@@ -524,7 +488,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "ok dood",
+          text: "ok dood",
         },
       },
     ],
@@ -532,20 +496,20 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "you kids today dont know the value of hard work",
+          text: "you kids today dont know the value of hard work",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "always on your phones",
+          text: "always on your phones",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "sure grandpa lets get you to bed",
+          text: "sure grandpa lets get you to bed",
         },
       },
     ],
@@ -553,20 +517,20 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "hey fren r u ok",
+          text: "hey fren r u ok",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "u look sad",
+          text: "u look sad",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "im ok sweetie mommy just tired",
+          text: "im ok sweetie mommy just tired",
         },
       },
     ],
@@ -574,20 +538,20 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "helo fr om mars",
+          text: "helo fr om mars",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "i com in pes",
+          text: "i com in pes",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "wat",
+          text: "wat",
         },
       },
     ],
@@ -595,26 +559,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Yeah no worries, I get it, I've been crazy busy too",
+          text: "Yeah no worries, I get it, I've been crazy busy too",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "What have you been up to",
+          text: "What have you been up to",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Anything fun or just the usual",
+          text: "Anything fun or just the usual",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Been working on a new FPS game actually",
+          text: "Been working on a new FPS game actually",
           action: "CONTINUE",
         },
       },
@@ -630,27 +594,27 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Oh no, what happened",
+          text: "Oh no, what happened",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "Did Mara leave you lol",
+          text: "Did Mara leave you lol",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "wtf no, I got into an argument with my roommate",
+          text: "wtf no, I got into an argument with my roommate",
           action: "CONTINUE",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Living with people is just hard",
+          text: "Living with people is just hard",
         },
       },
     ],

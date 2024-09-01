@@ -13,11 +13,11 @@ export async function populateMemories(
 ) {
   for (const conversation of conversations) {
     for (const c of conversation(user?.id as UUID)) {
-      const existingEmbedding = await getCachedEmbeddings(c.content.content);
+      const existingEmbedding = await getCachedEmbeddings(c.content.text);
       const bakedMemory = await runtime.messageManager.addEmbeddingToMemory({
         user_id: c.user_id as UUID,
         content: {
-          content: c.content.content,
+          text: c.content.text,
           action: c.content.action as string,
         },
         room_id,
@@ -25,10 +25,7 @@ export async function populateMemories(
       });
       await runtime.messageManager.createMemory(bakedMemory);
       if (!existingEmbedding) {
-        writeCachedEmbedding(
-          c.content.content,
-          bakedMemory.embedding as number[],
-        );
+        writeCachedEmbedding(c.content.text, bakedMemory.embedding as number[]);
         await new Promise((resolve) => setTimeout(resolve, 200));
       }
     }

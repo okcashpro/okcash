@@ -360,7 +360,13 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.free();
   }
 
-  async getMemories(params: { room_id: UUID; count?: number; unique?: boolean; tableName: string; user_ids?: UUID[] }): Promise<Memory[]> {
+  async getMemories(params: {
+    room_id: UUID;
+    count?: number;
+    unique?: boolean;
+    tableName: string;
+    user_ids?: UUID[];
+  }): Promise<Memory[]> {
     if (!params.tableName) {
       throw new Error("tableName is required");
     }
@@ -368,23 +374,28 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       throw new Error("room_id is required");
     }
     let sql = `SELECT * FROM memories WHERE type = ? AND room_id = ?`;
-  
+
     if (params.unique) {
-      sql += " AND \`unique\` = 1";
+      sql += " AND `unique` = 1";
     }
-  
+
     if (params.user_ids && params.user_ids.length > 0) {
-      sql += ` AND user_id IN (${params.user_ids.map(() => '?').join(',')})`;
+      sql += ` AND user_id IN (${params.user_ids.map(() => "?").join(",")})`;
     }
-  
+
     sql += " ORDER BY created_at DESC";
-  
+
     if (params.count) {
       sql += " LIMIT ?";
     }
-  
+
     const stmt = this.db.prepare(sql);
-    stmt.bind([params.tableName, params.room_id, ...(params.user_ids || []), ...(params.count ? [params.count] : [])]);
+    stmt.bind([
+      params.tableName,
+      params.room_id,
+      ...(params.user_ids || []),
+      ...(params.count ? [params.count] : []),
+    ]);
     const memories: Memory[] = [];
     while (stmt.step()) {
       const memory = stmt.getAsObject() as unknown as Memory;

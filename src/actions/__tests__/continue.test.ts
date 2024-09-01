@@ -18,23 +18,21 @@ const GetContinueExample1 = (_user_id: UUID) => [
   {
     user_id: zeroUuid,
     content: {
-      content:
-        "Hmm, let think for a second, I was going to tell you about something...",
+      text: "Hmm, let think for a second, I was going to tell you about something...",
       action: "CONTINUE",
     },
   },
   {
     user_id: zeroUuid,
     content: {
-      content:
-        "I remember now, I was going to tell you about my favorite food, which is pizza.",
+      text: "I remember now, I was going to tell you about my favorite food, which is pizza.",
       action: "CONTINUE",
     },
   },
   {
     user_id: zeroUuid,
     content: {
-      content: "I love pizza, it's so delicious.",
+      text: "I love pizza, it's so delicious.",
       action: "CONTINUE",
     },
   },
@@ -83,7 +81,7 @@ describe("User Profile", () => {
     await runAiTest("Test validate function response", async () => {
       const message: Message = {
         user_id: user.id as UUID,
-        content: { content: "Hello" },
+        content: { text: "Hello" },
         room_id: room_id as UUID,
       };
 
@@ -97,7 +95,7 @@ describe("User Profile", () => {
       const message2: Message = {
         user_id: zeroUuid as UUID,
         content: {
-          content: "Hello",
+          text: "Hello",
           action: "CONTINUE",
         },
         room_id: room_id as UUID,
@@ -114,8 +112,7 @@ describe("User Profile", () => {
       const message: Message = {
         user_id: zeroUuid as UUID,
         content: {
-          content:
-            "Hmm, let think for a second, I was going to tell you about something...",
+          text: "Hmm, let think for a second, I was going to tell you about something...",
           action: "CONTINUE",
         },
         room_id,
@@ -138,8 +135,7 @@ describe("User Profile", () => {
         const message: Message = {
           user_id: user?.id as UUID,
           content: {
-            content:
-              "Write a short story in three parts, using the CONTINUE action for each part.",
+            text: "Write a short story in three parts, using the CONTINUE action for each part.",
           },
           room_id: room_id,
         };
@@ -176,7 +172,7 @@ describe("User Profile", () => {
         const usedContinueAction = continueMessages.length === 3;
         // Check if the agent's responses are not empty
         const responsesNotEmpty = agentMessages.every(
-          (m) => (m.content as Content).content !== "",
+          (m) => (m.content as Content).text !== "",
         );
 
         return sentMultipleMessages && usedContinueAction && responsesNotEmpty;
@@ -189,7 +185,7 @@ describe("User Profile", () => {
       const message: Message = {
         user_id: user?.id as UUID,
         content: {
-          content: "Tell me more about your favorite food.",
+          text: "Tell me more about your favorite food.",
         },
         room_id: room_id as UUID,
       };
@@ -214,7 +210,7 @@ describe("User Profile", () => {
       // this is basically the same test as the one in ignore.test
       const message: Message = {
         user_id: user?.id as UUID,
-        content: { content: "Bye" },
+        content: { text: "Bye" },
         room_id: room_id as UUID,
       };
 

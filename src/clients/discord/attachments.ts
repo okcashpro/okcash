@@ -8,9 +8,7 @@ export class AttachmentManager {
   private attachmentCache: Map<string, Media> = new Map();
   private runtime: AgentRuntime;
 
-  constructor(
-    runtime: AgentRuntime,
-  ) {
+  constructor(runtime: AgentRuntime) {
     this.runtime = runtime;
   }
 
@@ -82,7 +80,9 @@ export class AttachmentManager {
       }
 
       const transcription =
-        await this.runtime.transcriptionService.transcribeAttachment(audioBuffer);
+        await this.runtime.transcriptionService.transcribeAttachment(
+          audioBuffer,
+        );
       const { title, description } = await generateSummary(
         this.runtime,
         transcription,
@@ -219,7 +219,9 @@ export class AttachmentManager {
   private async processImageAttachment(attachment: Attachment): Promise<Media> {
     try {
       const { description, title } =
-        await this.runtime.imageDescriptionService.describeImage(attachment.url);
+        await this.runtime.imageDescriptionService.describeImage(
+          attachment.url,
+        );
       return {
         id: attachment.id,
         url: attachment.url,
@@ -247,7 +249,9 @@ export class AttachmentManager {
 
   private async processVideoAttachment(attachment: Attachment): Promise<Media> {
     if (this.runtime.videoService.isVideoUrl(attachment.url)) {
-      const videoInfo = await this.runtime.videoService.processVideo(attachment.url);
+      const videoInfo = await this.runtime.videoService.processVideo(
+        attachment.url,
+      );
       return {
         id: attachment.id,
         url: attachment.url,

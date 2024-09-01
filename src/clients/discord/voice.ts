@@ -71,6 +71,7 @@ export class VoiceManager extends EventEmitter {
 
   async handleUserStream(
     user_id: UUID,
+    name: string,
     userName: string,
     channel: BaseGuildVoiceChannel,
     audioStream: Readable,
@@ -101,7 +102,8 @@ export class VoiceManager extends EventEmitter {
         totalLength = 0;
 
         try {
-          const text = await this.runtime.transcriptionService.transcribe(inputBuffer);
+          const text =
+            await this.runtime.transcriptionService.transcribe(inputBuffer);
 
           if (!text) return;
 
@@ -119,10 +121,11 @@ export class VoiceManager extends EventEmitter {
           const userIdUUID = getUuid(user_id) as UUID;
           await this.runtime.ensureUserExists(
             this.runtime.agentId,
+            this.client.user.username,
             this.runtime.character.name,
           );
           await Promise.all([
-            this.runtime.ensureUserExists(userIdUUID, userName),
+            this.runtime.ensureUserExists(userIdUUID, userName, name),
             this.runtime.ensureRoomExists(room_id),
           ]);
 
@@ -133,7 +136,7 @@ export class VoiceManager extends EventEmitter {
 
           const state = await this.runtime.composeState(
             {
-              content: { content: text, source: "Discord" },
+              content: { text: text, source: "Discord" },
               user_id: userIdUUID,
               room_id,
             },
@@ -149,7 +152,7 @@ export class VoiceManager extends EventEmitter {
 
           const response = await this.handleVoiceMessage({
             message: {
-              content: { content: text },
+              content: { text: text },
               user_id: userIdUUID,
               room_id,
             },
@@ -190,8 +193,8 @@ export class VoiceManager extends EventEmitter {
     callback: (response: string) => void;
     state?: State;
   }): Promise<Content> {
-    if (!message.content.content) {
-      return { content: "", action: "IGNORE" };
+    if (!message.content.text) {
+      return { text: "", action: "IGNORE" };
     }
 
     await this._saveRequestMessage(message, state);
@@ -203,11 +206,11 @@ export class VoiceManager extends EventEmitter {
     }
 
     if (shouldIgnore) {
-      return { content: "", action: "IGNORE" };
+      return { text: "", action: "IGNORE" };
     }
 
     if (!shouldRespond) {
-      return { content: "", action: "IGNORE" };
+      return { text: "", action: "IGNORE" };
     }
 
     let context = composeContext({
@@ -226,8 +229,8 @@ export class VoiceManager extends EventEmitter {
     this.runtime
       .processActions(message, responseContent, state)
       .then((response: unknown) => {
-        if (response && (response as Content).content) {
-          callback((response as Content).content);
+        if (response && (response as Content).text) {
+          callback((response as Content).text);
         }
       });
 
@@ -247,61 +250,35 @@ export class VoiceManager extends EventEmitter {
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
 
-    let response;
+    const response = await this.runtime.messageCompletion({
+      context,
+      stop: [],
+    });
 
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      try {
-        response = await this.runtime.messageCompletion({
-          context,
-          stop: [],
-        });
-      } catch (error) {
-        console.error("Error in _generateResponse:", error);
-        // wait for 2 seconds
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Retrying...");
-      }
-
-      if (!response) {
-        continue;
-      }
-
-      log_to_file(`${state.agentName}_${datestr}_generate_response`, response);
-
-      await this.runtime.databaseAdapter.log({
-        body: { message, context, response },
-        user_id: user_id,
-        room_id,
-        type: "response",
-      });
-
-      const parsedResponse = parseJSONObjectFromText(
-        response,
-      ) as unknown as Content;
-      if (!parsedResponse) {
-        continue;
-      }
-      responseContent = {
-        content: parsedResponse.content,
-        action: parsedResponse.action,
-      };
-      break;
+    if (!response) {
+      console.error("No response from runtime.messageCompletion");
+      return;
     }
 
-    if (!responseContent) {
-      responseContent = {
-        content: "",
-        action: "IGNORE",
-      };
-    }
+    log_to_file(
+      `${state.agentName}_${datestr}_generate_response`,
+      JSON.stringify(response),
+    );
 
-    return responseContent;
+    await this.runtime.databaseAdapter.log({
+      body: { message, context, response },
+      user_id: user_id,
+      room_id,
+      type: "response",
+    });
+
+    return response;
   }
 
   private async _saveRequestMessage(message: Message, state: State) {
     const { content: senderContent } = message;
 
-    if ((senderContent as Content).content) {
+    if ((senderContent as Content).text) {
       const memory = {
         user_id: message.user_id,
         content: senderContent,
@@ -322,7 +299,7 @@ export class VoiceManager extends EventEmitter {
   ) {
     const { room_id } = message;
 
-    responseContent.content = responseContent.content?.trim();
+    responseContent.content = responseContent.text?.trim();
 
     if (responseContent.content) {
       await this.runtime.messageManager.createMemory({
@@ -340,7 +317,7 @@ export class VoiceManager extends EventEmitter {
 
   private async _shouldIgnore(message: Message): Promise<boolean> {
     // if the message is 3 characters or less, ignore it
-    if ((message.content as Content).content.length < 3) {
+    if ((message.content as Content).text.length < 3) {
       return true;
     }
 
@@ -368,9 +345,9 @@ export class VoiceManager extends EventEmitter {
       "sexy",
     ];
     if (
-      (message.content as Content).content.length < 50 &&
+      (message.content as Content).text.length < 50 &&
       loseInterestWords.some((word) =>
-        (message.content as Content).content.toLowerCase().includes(word),
+        (message.content as Content).text.toLowerCase().includes(word),
       )
     ) {
       return true;
@@ -378,9 +355,9 @@ export class VoiceManager extends EventEmitter {
 
     const ignoreWords = ["k", "ok", "bye", "lol", "nm", "uh"];
     if (
-      (message.content as Content).content.length < 8 &&
+      (message.content as Content).text.length < 8 &&
       ignoreWords.some((word) =>
-        (message.content as Content).content.toLowerCase().includes(word),
+        (message.content as Content).text.toLowerCase().includes(word),
       )
     ) {
       return true;
@@ -452,7 +429,8 @@ export class VoiceManager extends EventEmitter {
     channel: BaseGuildVoiceChannel,
   ) {
     const user_id = member.id;
-    const userName = member.displayName;
+    const userName = member.user.username;
+    const name = member.user.displayName;
     const connection = getVoiceConnection(member.guild.id);
     const receiveStream = connection?.receiver.subscribe(user_id, {
       autoDestroy: true,
@@ -498,7 +476,14 @@ export class VoiceManager extends EventEmitter {
     opusDecoder.on("close", closeHandler);
     receiveStream?.on("close", streamCloseHandler);
 
-    this.client.emit("userStream", user_id, userName, channel, opusDecoder);
+    this.client.emit(
+      "userStream",
+      user_id,
+      name,
+      userName,
+      channel,
+      opusDecoder,
+    );
   }
 
   async playAudioStream(user_id: UUID, audioStream: Readable) {

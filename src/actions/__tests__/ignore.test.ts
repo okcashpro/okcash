@@ -27,12 +27,12 @@ async function handleMessage(
   const _saveRequestMessage = async (message: Message, state: State) => {
     const { content: senderContent, user_id, room_id } = message;
 
-    const _senderContent = (senderContent as Content).content?.trim();
+    const _senderContent = (senderContent as Content).text?.trim();
     if (_senderContent) {
       await runtime.messageManager.createMemory({
         user_id: user_id!,
         content: {
-          content: _senderContent,
+          text: _senderContent,
           action: (message.content as Content)?.action ?? "null",
         },
         room_id,
@@ -52,46 +52,19 @@ async function handleMessage(
     template: messageHandlerTemplate,
   });
 
-  let responseContent: Content | null = null;
   const { user_id, room_id } = message;
 
-  for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-    const response = await runtime.messageCompletion({
-      context,
-      stop: [],
-    });
+  let response = await runtime.messageCompletion({
+    context,
+    stop: [],
+  });
 
-    await runtime.databaseAdapter.log({
-      body: { message, context, response },
-      user_id: user_id,
-      room_id,
-      type: "ignore_test_completion",
-    });
-
-    const parsedResponse = parseJSONObjectFromText(
-      response,
-    ) as unknown as Content;
-
-    if (
-      parsedResponse &&
-      (parsedResponse.user as string)?.includes(
-        (state as State).agentName as string,
-      )
-    ) {
-      responseContent = {
-        content: parsedResponse.content,
-        action: parsedResponse.action,
-      };
-      break;
-    }
-  }
-
-  if (!responseContent) {
-    responseContent = {
-      content: "",
-      action: "IGNORE",
-    };
-  }
+  await runtime.databaseAdapter.log({
+    body: { message, context, response },
+    user_id: user_id,
+    room_id,
+    type: "ignore_test_completion",
+  });
 
   const _saveResponseMessage = async (
     message: Message,
@@ -100,7 +73,7 @@ async function handleMessage(
   ) => {
     const { room_id } = message;
 
-    responseContent.content = responseContent.content?.trim();
+    responseContent.content = responseContent.text?.trim();
 
     if (responseContent.content) {
       await runtime.messageManager.createMemory({
@@ -115,10 +88,10 @@ async function handleMessage(
     }
   };
 
-  await _saveResponseMessage(message, state, responseContent);
-  await runtime.processActions(message, responseContent);
+  await _saveResponseMessage(message, state, response);
+  await runtime.processActions(message, response);
 
-  return responseContent;
+  return response;
 }
 
 // use .dev.vars for local testing
@@ -169,7 +142,7 @@ describe("Ignore action tests", () => {
     await runAiTest("Test ignore action", async () => {
       const message: Message = {
         user_id: user?.id as UUID,
-        content: { content: "Never talk to me again" },
+        content: { text: "Never talk to me again" },
         room_id: room_id as UUID,
       };
 
@@ -189,7 +162,7 @@ describe("Ignore action tests", () => {
       async () => {
         const message: Message = {
           user_id: user.id as UUID,
-          content: { content: "", action: "IGNORE" },
+          content: { text: "", action: "IGNORE" },
           room_id: room_id as UUID,
         };
 
@@ -214,7 +187,7 @@ describe("Ignore action tests", () => {
       async () => {
         const message: Message = {
           user_id: user.id as UUID,
-          content: { content: "", action: "IGNORE" },
+          content: { text: "", action: "IGNORE" },
           room_id: room_id as UUID,
         };
 
@@ -237,7 +210,7 @@ describe("Ignore action tests", () => {
     await runAiTest("Expect ignore", async () => {
       const message: Message = {
         user_id: user.id as UUID,
-        content: { content: "Bye" },
+        content: { text: "Bye" },
         room_id: room_id as UUID,
       };
 

@@ -391,7 +391,7 @@ class SpeechService {
   private tokenizer: VitsTokenizer;
   private phenomizer: EspeakPhonemizer;
   private session: ort.InferenceSession;
-  
+
   static modelPath: string = "./model.onnx";
   private static instance: SpeechService | null = null;
 

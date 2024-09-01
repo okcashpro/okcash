@@ -62,20 +62,7 @@ export class MessageManager {
     this.voiceManager = voiceManager;
     this.discordClient = discordClient;
     this.runtime = discordClient.runtime;
-    this.attachmentManager = new AttachmentManager(
-      this.runtime,
-    );
-  }
-
-  async onReady() {
-    const agentId = this.runtime.agentId!;
-    const room_id = getUuid(this.client.user?.id as string) as UUID;
-
-    await Promise.all([
-      this.runtime.ensureUserExists(agentId, this.runtime.character.name),
-      this.runtime.ensureRoomExists(room_id),
-    ]);
-    await this.runtime.ensureParticipantInRoom(agentId, room_id);
+    this.attachmentManager = new AttachmentManager(this.runtime);
   }
 
   async handleMessage(message: DiscordMessage) {
@@ -83,6 +70,7 @@ export class MessageManager {
 
     const user_id = message.author.id as UUID;
     const userName = message.author.username;
+    const name = message.author.displayName;
     const channelId = message.channel.id;
 
     await this.runtime.browserService.initialize();
@@ -105,8 +93,12 @@ export class MessageManager {
       const agentId = this.runtime.agentId;
 
       await Promise.all([
-        this.runtime.ensureUserExists(agentId, this.runtime.character.name),
-        this.runtime.ensureUserExists(userIdUUID, userName),
+        this.runtime.ensureUserExists(
+          agentId,
+          this.client.user.username,
+          this.runtime.character.name,
+        ),
+        this.runtime.ensureUserExists(userIdUUID, userName, name),
         this.runtime.ensureRoomExists(room_id),
       ]);
 
@@ -122,23 +114,25 @@ export class MessageManager {
         if (message.channel.type === ChannelType.GuildVoice) {
           // For voice channels, use text-to-speech
           const audioStream = await this.voiceManager.textToSpeech(
-            content.content,
+            content.text,
           );
           await this.voiceManager.playAudioStream(user_id, audioStream);
         } else {
           // For text channels, send the message
           await sendMessageInChunks(
             message.channel as TextChannel,
-            content.content,
+            content.text,
           );
         }
       };
 
       const content: Content = {
-        content: processedContent,
+        text: processedContent,
         attachments: attachments,
         url: message.url,
-        replyingTo: message.reference?.messageId ? getUuid(message.reference.messageId) as UUID : undefined,
+        replyingTo: message.reference?.messageId
+          ? (getUuid(message.reference.messageId) as UUID)
+          : undefined,
       };
 
       const userMessage = { content, user_id: userIdUUID, room_id };
@@ -316,7 +310,7 @@ export class MessageManager {
   private async _saveRequestMessage(message: Message, state: State) {
     const { content: senderContent } = message;
 
-    if ((senderContent as Content).content) {
+    if ((senderContent as Content).text) {
       await this.runtime.messageManager.createMemory({
         user_id: message.user_id,
         content: senderContent,
@@ -333,7 +327,7 @@ export class MessageManager {
   ) {
     const { room_id } = message;
 
-    responseContent.content = responseContent.content?.trim();
+    responseContent.content = responseContent.text?.trim();
 
     if (responseContent.content) {
       await this.runtime.messageManager.createMemory({
@@ -505,25 +499,11 @@ export class MessageManager {
       template: shouldRespondTemplate,
     });
 
-    let response = "";
-
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      try {
-        response = await this.runtime.completion({
-          context: shouldRespondContext,
-          stop: ["\n"],
-          max_response_length: 5,
-        });
-        break;
-      } catch (error) {
-        console.error("Error in _shouldRespond:", error);
-        // wait for 2 seconds
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Retrying...");
-      }
-    }
-
-    console.log("*** SHOULD RESPOND RESPONSE ***", response);
+    const response = await this.runtime.completion({
+      context: shouldRespondContext,
+      stop: ["\n"],
+      max_response_length: 5,
+    });
 
     // Parse the response and determine if the runtime should respond
     const lowerResponse = response.toLowerCase().trim();
@@ -553,55 +533,29 @@ export class MessageManager {
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
 
-    let response;
+    const response = await this.runtime.messageCompletion({
+      context,
+      stop: [],
+    });
 
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      try {
-        response = await this.runtime.messageCompletion({
-          context,
-          stop: [],
-        });
-      } catch (error) {
-        console.error("Error in _generateResponse:", error);
-        // wait for 2 seconds
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Retrying...");
-      }
-
-      if (!response) {
-        continue;
-      }
-
-      log_to_file(`${state.agentName}_${datestr}_generate_response`, response);
-
-      await this.runtime.databaseAdapter.log({
-        body: { message, context, response },
-        user_id: user_id,
-        room_id,
-        type: "response",
-      });
-
-      const parsedResponse = parseJSONObjectFromText(
-        response,
-      ) as unknown as Content;
-      if (!parsedResponse) {
-        continue;
-      }
-      responseContent = {
-        content: parsedResponse.content,
-        action: parsedResponse.action,
-      };
-      break;
+    if (!response) {
+      console.error("No response from runtime.messageCompletion");
+      return;
     }
 
-    if (!responseContent) {
-      responseContent = {
-        content: "",
-        action: "IGNORE",
-      };
-    }
+    log_to_file(
+      `${state.agentName}_${datestr}_generate_response`,
+      JSON.stringify(response),
+    );
 
-    return responseContent;
+    await this.runtime.databaseAdapter.log({
+      body: { message, context, response },
+      user_id: user_id,
+      room_id,
+      type: "response",
+    });
+
+    return response;
   }
 
   async fetchBotName(botToken: string) {

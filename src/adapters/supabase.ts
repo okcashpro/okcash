@@ -226,7 +226,13 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }
   }
 
-  async getMemories(params: { room_id: UUID; count?: number; unique?: boolean; tableName: string; user_ids?: UUID[] }): Promise<Memory[]> {
+  async getMemories(params: {
+    room_id: UUID;
+    count?: number;
+    unique?: boolean;
+    tableName: string;
+    user_ids?: UUID[];
+  }): Promise<Memory[]> {
     const result = await this.supabase.rpc("get_memories", {
       query_table_name: params.tableName,
       query_room_id: params.room_id,
@@ -246,7 +252,6 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }
     return result.data;
   }
-  
 
   async searchMemoriesByEmbedding(
     embedding: number[],
@@ -281,7 +286,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
       const opts = {
         query_table_name: tableName,
         query_user_id: memory.user_id,
-        query_content: memory.content.content,
+        query_content: memory.content.text,
         query_room_id: memory.room_id,
         query_embedding: memory.embedding,
         query_created_at: memory.created_at ?? new Date().toISOString(),

@@ -181,7 +181,8 @@ export class VideoService {
 
     console.log("Starting transcription...");
     const startTime = Date.now();
-    const transcript = await this.runtime.transcriptionService.transcribe(audioBuffer);
+    const transcript =
+      await this.runtime.transcriptionService.transcribe(audioBuffer);
     const endTime = Date.now();
     console.log(
       `Transcription completed in ${(endTime - startTime) / 1000} seconds`,

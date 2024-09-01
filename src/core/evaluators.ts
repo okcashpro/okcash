@@ -97,7 +97,7 @@ export function formatEvaluatorExamples(evaluators: Evaluator[]) {
 
           const formattedMessages = example.messages
             .map((message: ActionExample) => {
-              let messageString = `${message.user}: ${message.content.content}`;
+              let messageString = `${message.user}: ${message.content.text}`;
               exampleNames.forEach((name, index) => {
                 const placeholder = `{{user${index + 1}}}`;
                 messageString = messageString.replaceAll(placeholder, name);

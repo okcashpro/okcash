@@ -1,5 +1,11 @@
 import { composeContext } from "../core/context.ts";
-import { Action, ActionExample, Message, State } from "../core/types.ts";
+import {
+  Action,
+  ActionExample,
+  IAgentRuntime,
+  Message,
+  State,
+} from "../core/types.ts";
 
 export const shouldUnmuteTemplate = `Based on the conversation so far:
 
@@ -18,7 +24,7 @@ export default {
   name: "UNMUTE_ROOM",
   description:
     "Unmutes a room, allowing the agent to consider responding to messages again.",
-  validate: async (runtime: any, message: Message) => {
+  validate: async (runtime: IAgentRuntime, message: Message) => {
     const roomId = message.room_id;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
@@ -26,29 +32,18 @@ export default {
     );
     return userState === "MUTED";
   },
-  handler: async (runtime: any, message: Message) => {
+  handler: async (runtime: IAgentRuntime, message: Message) => {
     async function _shouldUnmute(state: State): Promise<boolean> {
       const shouldUnmuteContext = composeContext({
         state,
         template: shouldUnmuteTemplate, // Define this template separately
       });
 
-      let response = "";
-
-      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        try {
-          response = await runtime.completion({
-            context: shouldUnmuteContext,
-            stop: ["\n"],
-            max_response_length: 5,
-          });
-          break;
-        } catch (error) {
-          console.error("Error in _shouldUnmute:", error);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          console.log("Retrying...");
-        }
-      }
+      const response = await runtime.completion({
+        context: shouldUnmuteContext,
+        stop: ["\n"],
+        max_response_length: 5,
+      });
 
       const lowerResponse = response.toLowerCase().trim();
       return lowerResponse.includes("yes");
@@ -71,26 +66,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "{{user3}}, you can unmute this channel now",
+          text: "{{user3}}, you can unmute this channel now",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content: "Done",
+          text: "Done",
           action: "UNMUTE_ROOM",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "I could use some help troubleshooting this bug.",
+          text: "I could use some help troubleshooting this bug.",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content: "Can you post the specific error message",
+          text: "Can you post the specific error message",
         },
       },
     ],
@@ -105,7 +100,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "Sounds good",
+          text: "Sounds good",
           action: "UNMUTE_ROOM",
         },
       },
@@ -114,13 +109,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "{{user2}} wait you should come back and chat in here",
+          text: "{{user2}} wait you should come back and chat in here",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "im back",
+          text: "im back",
           action: "UNMUTE_ROOM",
         },
       },
@@ -129,13 +124,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "unmute urself {{user2}}",
+          text: "unmute urself {{user2}}",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "unmuted",
+          text: "unmuted",
           action: "UNMUTE_ROOM",
         },
       },
@@ -144,13 +139,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "ay {{user2}} get back in here",
+          text: "ay {{user2}} get back in here",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "sup yall",
+          text: "sup yall",
           action: "UNMUTE_ROOM",
         },
       },

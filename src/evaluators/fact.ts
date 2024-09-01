@@ -94,7 +94,7 @@ async function handler(runtime: AgentRuntime, message: Message) {
   for (const fact of filteredFacts) {
     const factMemory = await runtime.factManager.addEmbeddingToMemory({
       user_id: agentId!,
-      content: { content: fact },
+      content: { text: fact },
       room_id,
     });
 
@@ -137,24 +137,24 @@ None`,
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "So where are you from" },
+          content: { text: "So where are you from" },
         },
         {
           user: "{{user2}}",
-          content: { content: "I'm from the city" },
+          content: { text: "I'm from the city" },
         },
         {
           user: "{{user1}}",
-          content: { content: "Which city?" },
+          content: { text: "Which city?" },
         },
         {
           user: "{{user2}}",
-          content: { content: "Oakland" },
+          content: { text: "Oakland" },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Oh, I've never been there, but I know it's in California",
+            text: "Oh, I've never been there, but I know it's in California",
           },
         },
       ] as ActionExample[],
@@ -171,19 +171,19 @@ Facts about the actors:
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I finally completed the marathon this year!" },
+          content: { text: "I finally completed the marathon this year!" },
         },
         {
           user: "{{user2}}",
-          content: { content: "Wow! How long did it take?" },
+          content: { text: "Wow! How long did it take?" },
         },
         {
           user: "{{user1}}",
-          content: { content: "A little over three hours." },
+          content: { text: "A little over three hours." },
         },
         {
           user: "{{user1}}",
-          content: { content: "I'm so proud of myself." },
+          content: { text: "I'm so proud of myself." },
         },
       ] as ActionExample[],
       outcome: `Claims:
@@ -209,19 +209,18 @@ Eva studied Philosophy before switching to Computer Science`,
         {
           user: "{{user1}}",
           content: {
-            content:
-              "Remember when we won the regional poker tournament last spring",
+            text: "Remember when we won the regional poker tournament last spring",
           },
         },
         {
           user: "{{user2}}",
-          content: { content: "That was one of the best days of my life" },
+          content: { text: "That was one of the best days of my life" },
         },
         {
           user: "{{user1}}",
-          content: { content: "It really put our poker club on the map" },
+          content: { text: "It really put our poker club on the map" },
         },
-      ],
+      ] as ActionExample[],
       outcome: `Claims:
 json\`\`\`
 [

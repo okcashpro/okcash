@@ -32,7 +32,7 @@ export const TEST_ACTION = {
       },
       {
         user: "{{user2}}",
-        content: { content: "testing 123", action: "TEST_ACTION" },
+        content: { text: "testing 123", action: "TEST_ACTION" },
       },
     ],
   ],
@@ -61,7 +61,7 @@ export const TEST_ACTION_FAIL = {
     [
       {
         user: "{{user1}}",
-        content: { content: "Testing failure", action: "TEST_ACTIONFALSE" },
+        content: { text: "Testing failure", action: "TEST_ACTIONFALSE" },
       },
     ],
   ],

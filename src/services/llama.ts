@@ -48,9 +48,7 @@ interface QueuedMessage {
   frequency_penalty: number;
   presence_penalty: number;
   useGrammar: boolean;
-  resolve: (
-    value: any | string | PromiseLike<any | string>,
-  ) => void;
+  resolve: (value: any | string | PromiseLike<any | string>) => void;
   reject: (reason?: any) => void;
 }
 

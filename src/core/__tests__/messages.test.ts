@@ -66,38 +66,38 @@ describe("Messages Library", () => {
   test("formatMessages should format messages into a readable string", async () => {
     const messages: Memory[] = [
       {
-        content: { content: "Hello" },
+        content: { text: "Hello" },
         user_id: user.id as UUID,
         room_id: "00000000-0000-0000-0000-000000000000",
       },
       {
-        content: { content: "How are you?" },
+        content: { text: "How are you?" },
         user_id: "00000000-0000-0000-0000-000000000000",
         room_id: "00000000-0000-0000-0000-000000000000",
       },
     ];
     const formattedMessages = formatMessages({ messages, actors });
     messages.forEach((message: Memory) => {
-      expect(formattedMessages).toContain((message.content as Content).content);
+      expect(formattedMessages).toContain((message.content as Content).text);
     });
   });
 
   test("formatFacts should format facts into a readable string", async () => {
     const facts: Memory[] = [
       {
-        content: { content: "Reflecting on the day" },
+        content: { text: "Reflecting on the day" },
         user_id: user.id as UUID,
         room_id: "00000000-0000-0000-0000-000000000000",
       },
       {
-        content: { content: "Thoughts and musings" },
+        content: { text: "Thoughts and musings" },
         user_id: "00000000-0000-0000-0000-000000000000",
         room_id: "00000000-0000-0000-0000-000000000000room",
       },
     ];
     const formattedFacts = formatFacts(facts);
     facts.forEach((fact) => {
-      expect(formattedFacts).toContain(fact.content.content);
+      expect(formattedFacts).toContain(fact.content.text);
     });
   });
 });

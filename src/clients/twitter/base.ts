@@ -123,34 +123,33 @@ export class ClientBase extends EventEmitter {
     });
 
     if (memories.length > 0) {
-      return
+      return;
     }
 
-    let tweetsToPopulate = []
+    let tweetsToPopulate = [];
 
     // if the room is the default twitter room, we need to populate from our past tweets
-    if(room_id === twitterGenerateRoomId) {
+    if (room_id === twitterGenerateRoomId) {
       // Populate the room with tweets
-      const tweets = await this.twitterClient.getTweets(settings.TWITTER_USERNAME);
+      const tweets = await this.twitterClient.getTweets(
+        settings.TWITTER_USERNAME,
+      );
       for await (const tweet of tweets) {
-        tweetsToPopulate.push(tweet)
+        tweetsToPopulate.push(tweet);
       }
     }
 
-    // 
-
-
+    //
 
     for (const tweet of tweetsToPopulate) {
       await this.runtime.messageManager.createMemory({
         user_id: this.runtime.agentId,
-        content: { content: tweet.text },
+        content: { text: tweet.text },
         room_id: room_id,
         embedding: embeddingZeroVector,
         created_at: new Date(tweet.timestamp).toISOString(),
       });
     }
-
   }
 
   async saveResponseMessage(
@@ -162,7 +161,7 @@ export class ClientBase extends EventEmitter {
     const { room_id } = message;
     const agentId = getUuid(userName) as UUID;
 
-    responseContent.content = responseContent.content?.trim();
+    responseContent.content = responseContent.text?.trim();
 
     if (responseContent.content) {
       console.log("Creating memory 2", {
@@ -171,7 +170,11 @@ export class ClientBase extends EventEmitter {
         room_id,
         embedding: embeddingZeroVector,
       });
-      await this.runtime.ensureUserExists(agentId, userName);
+      await this.runtime.ensureUserExists(
+        agentId,
+        userName,
+        this.runtime.character.name,
+      );
       await this.runtime.messageManager.createMemory(
         {
           user_id: agentId!,
@@ -191,15 +194,18 @@ export class ClientBase extends EventEmitter {
 
   async saveRequestMessage(message: Message, state: State) {
     const { content: senderContent } = message;
-  
-    if ((senderContent as Content).content) {
+
+    if ((senderContent as Content).text) {
       const recentMessage = await this.runtime.messageManager.getMemories({
         room_id: message.room_id,
         count: 1,
         unique: false,
       });
-  
-      if (recentMessage.length > 0 && recentMessage[0].content === senderContent) {
+
+      if (
+        recentMessage.length > 0 &&
+        recentMessage[0].content === senderContent
+      ) {
         console.log("Message already saved", recentMessage);
       } else {
         console.log("Creating memory", {
@@ -215,7 +221,7 @@ export class ClientBase extends EventEmitter {
           embedding: embeddingZeroVector,
         });
       }
-  
+
       await this.runtime.evaluate(message, {
         ...state,
         twitterClient: this.twitterClient,

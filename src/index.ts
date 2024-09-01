@@ -1,13 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Database from "better-sqlite3";
 import fs from "fs";
 import yargs from "yargs";
-import { DiscordClient } from "./clients/discord/index.ts";
-import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
-import { TwitterSearchClient } from "./clients/twitter/search.ts";
-import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
-import Database from "better-sqlite3";
 import askClaude from "./actions/ask_claude.ts";
-import continue from "./actions/continue.ts";
 import follow_room from "./actions/follow_room.ts";
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
@@ -15,13 +10,14 @@ import mute_room from "./actions/mute_room.ts";
 import unfollow_room from "./actions/unfollow_room.ts";
 import unmute_room from "./actions/unmute_room.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
+import { DiscordClient } from "./clients/discord/index.ts";
+import channelStateProvider from "./clients/discord/providers/channelState.ts";
+import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
+import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
+import { defaultActions } from "./core/actions.ts";
 import { AgentRuntime } from "./core/runtime.ts";
 import settings from "./core/settings.ts";
-import channelStateProvider from "./clients/discord/providers/channelState.ts";
 import timeProvider from "./providers/time.ts";
-import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
-import { defaultActions } from "./core/actions.ts";
-import { wait } from "./clients/twitter/utils.ts";
 
 interface Arguments {
   character?: string;
@@ -90,7 +86,7 @@ function startDiscord() {
 }
 
 async function startTwitter() {
-  console.log("Starting interaction client")
+  console.log("Starting interaction client");
   const twitterInteractionClient = new TwitterInteractionClient(runtime);
   // wait()
   // console.log("Starting search client");

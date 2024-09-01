@@ -10,7 +10,12 @@ import { log_to_file } from "../../core/logger.ts";
 import { parseJSONObjectFromText } from "../../core/parsing.ts";
 import { Content, Message, State } from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
-import { getRecentConversations, isValidTweet, searchRecentPosts, wait } from "./utils.ts";
+import {
+  getRecentConversations,
+  isValidTweet,
+  searchRecentPosts,
+  wait,
+} from "./utils.ts";
 
 const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
@@ -93,20 +98,21 @@ export class TwitterSearchClient extends ClientBase {
       const prompt = `
 Here are some tweets related to the search term "${searchTerm}":
 
-${tweetsArray.tweets.filter(tweet => {
-  // ignore tweets where any of the thread tweets contain a tweet by the bot
-  const thread = tweet.thread;
-  const botTweet = thread.find(t => t.username === botTwitterUsername);
-  return !botTweet;
-})
-          .map(
-            (tweet) => `
+${tweetsArray.tweets
+  .filter((tweet) => {
+    // ignore tweets where any of the thread tweets contain a tweet by the bot
+    const thread = tweet.thread;
+    const botTweet = thread.find((t) => t.username === botTwitterUsername);
+    return !botTweet;
+  })
+  .map(
+    (tweet) => `
   ID: ${tweet.id}
   From: ${tweet.name} (@${tweet.username})
   Text: ${tweet.text}
 `,
-          )
-          .join("\n")}
+  )
+  .join("\n")}
 
 Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
 Notes:
@@ -152,7 +158,16 @@ Notes:
       const twitterRoomId = getUuid("twitter") as UUID;
 
       await Promise.all([
-        this.runtime.ensureUserExists(twitterUserId, selectedTweet.username),
+        this.runtime.ensureUserExists(
+          this.runtime.agentId,
+          settings.TWITTER_USERNAME,
+          this.runtime.character.name,
+        ),
+        this.runtime.ensureUserExists(
+          twitterUserId,
+          selectedTweet.username,
+          selectedTweet.name,
+        ),
         this.runtime.ensureRoomExists(twitterRoomId),
       ]);
 
@@ -160,15 +175,14 @@ Notes:
 
       await this.ensureRoomIsPopulated(twitterRoomId);
 
-
       const message: Message = {
-        content: { content: selectedTweet.text },
+        content: { text: selectedTweet.text },
         user_id: twitterUserId,
         room_id: twitterRoomId,
       };
 
-      if (!message.content.content) {
-        return { content: "", action: "IGNORE" };
+      if (!message.content.text) {
+        return { text: "", action: "IGNORE" };
       }
 
       // Fetch replies and retweets
@@ -189,14 +203,23 @@ Notes:
       // Generate image descriptions using GPT-4 vision API
       const imageDescriptions = [];
       for (const photo of selectedTweet.photos) {
-        const description = await this.runtime.imageDescriptionService.describeImage(photo.url);
+        const description =
+          await this.runtime.imageDescriptionService.describeImage(photo.url);
         imageDescriptions.push(description);
       }
 
       await wait();
-      const recentConversations = await getRecentConversations(this.runtime, this.twitterClient, botTwitterUsername);
+      const recentConversations = await getRecentConversations(
+        this.runtime,
+        this.twitterClient,
+        botTwitterUsername,
+      );
       await wait();
-      const recentSearchResults = await searchRecentPosts(this.runtime, this.twitterClient, searchTerm);
+      const recentSearchResults = await searchRecentPosts(
+        this.runtime,
+        this.twitterClient,
+        searchTerm,
+      );
 
       const state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
@@ -247,7 +270,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
             continue;
           }
           responseContent = {
-            content: parsedResponse.content,
+            text: parsedResponse.text,
             action: parsedResponse.action,
           };
           break;
@@ -256,7 +279,7 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
 
       if (!responseContent) {
         responseContent = {
-          content: "",
+          text: "",
           action: "IGNORE",
         };
       }
@@ -266,23 +289,20 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
 
       const response = responseContent;
 
-      if (response.content) {
+      if (response.text) {
         console.log(
-          `Bot would respond to tweet ${selectedTweet.id} with: ${response.content}`,
+          `Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`,
         );
         try {
           if (!this.dryRun) {
             await wait();
-            await this.twitterClient.sendTweet(
-              response.content,
-              selectedTweet.id,
-            );
+            await this.twitterClient.sendTweet(response.text, selectedTweet.id);
           } else {
-            console.log("Dry run, not sending post:", response.content);
+            console.log("Dry run, not sending post:", response.text);
           }
           console.log(`Successfully responded to tweet ${selectedTweet.id}`);
           this.respondedTweets.add(selectedTweet.id);
-          const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.content}`;
+          const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.text}`;
           const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
           console.log(`Writing response tweet info to ${debugFileName}`);
           fs.writeFileSync(debugFileName, responseInfo);

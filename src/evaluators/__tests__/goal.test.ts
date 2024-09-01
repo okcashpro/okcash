@@ -87,12 +87,12 @@ describe("Goals Evaluator", () => {
         const conversation = (user_id: UUID) => [
           {
             user_id,
-            content: { content: "I see that you've finished the task?" },
+            content: { text: "I see that you've finished the task?" },
           },
           {
             user_id: zeroUuid,
             content: {
-              content: "Yes, the task and all objectives are finished.",
+              text: "Yes, the task and all objectives are finished.",
             },
           },
         ];
@@ -103,8 +103,7 @@ describe("Goals Evaluator", () => {
         const message: Message = {
           user_id: user.id as UUID,
           content: {
-            content:
-              "I've completed task 1 and task 2 for the Test Goal. Both are finished. Everything is done and I'm ready for the next goal.",
+            text: "I've completed task 1 and task 2 for the Test Goal. Both are finished. Everything is done and I'm ready for the next goal.",
           },
           room_id,
         };
@@ -148,12 +147,12 @@ describe("Goals Evaluator", () => {
         const conversation = (user_id: UUID) => [
           {
             user_id,
-            content: { content: "I couldn't complete the tasks for Goal Y." },
+            content: { text: "I couldn't complete the tasks for Goal Y." },
           },
           {
             user_id: zeroUuid,
             content: {
-              content: "That's unfortunate. Let's cancel it..",
+              text: "That's unfortunate. Let's cancel it..",
             },
           },
         ];
@@ -162,7 +161,7 @@ describe("Goals Evaluator", () => {
 
         const message: Message = {
           user_id: user.id as UUID,
-          content: { content: "I've decided to mark Goal Y as failed." },
+          content: { text: "I've decided to mark Goal Y as failed." },
           room_id,
         };
 

@@ -1,13 +1,21 @@
-import { ActionExample, type Action, type Message } from "../core/types.ts";
+import {
+  ActionExample,
+  IAgentRuntime,
+  type Action,
+  type Message,
+} from "../core/types.ts";
 
 export default {
   name: "IGNORE",
-  validate: async (_runtime: any, _message: Message) => {
+  validate: async (_runtime: IAgentRuntime, _message: Message) => {
     return true;
   },
   description:
     "Ignore the user and do not respond. If the user is aggressive, creepy or is simply finished with the conversation, use this action. Or, if both you and the user have already said goodbye, use this action instead of saying bye again. Use IGNORE any time the conversation has naturally ended.",
-  handler: async (runtime: any, message: Message): Promise<boolean> => {
+  handler: async (
+    runtime: IAgentRuntime,
+    message: Message,
+  ): Promise<boolean> => {
     return true;
   },
   condition: "The agent wants to ignore the user",
@@ -15,141 +23,141 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { content: "Go screw yourself lol" },
+        content: { text: "Go screw yourself lol" },
       },
       {
         user: "{{user2}}",
-        content: { content: "", action: "IGNORE" },
+        content: { text: "", action: "IGNORE" },
       },
     ],
 
     [
       {
         user: "{{user1}}",
-        content: { content: "Shut up, bot" },
+        content: { text: "Shut up, bot" },
       },
       {
         user: "{{user2}}",
-        content: { content: "", action: "IGNORE" },
+        content: { text: "", action: "IGNORE" },
       },
     ],
 
     [
       {
         user: "{{user1}}",
-        content: { content: "Got any investment advice" },
+        content: { text: "Got any investment advice" },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Uh, don’t let the volatility sway your long-term strategy",
+          text: "Uh, don’t let the volatility sway your long-term strategy",
         },
       },
       {
         user: "{{user1}}",
-        content: { content: "Wise words I think" },
+        content: { text: "Wise words I think" },
       },
       {
         user: "{{user1}}",
-        content: { content: "I gotta run, talk to you later" },
+        content: { text: "I gotta run, talk to you later" },
       },
       {
         user: "{{user2}}",
-        content: { content: "See ya" },
+        content: { text: "See ya" },
       },
-      { user: "{{user1}}", content: { content: "" }, action: "IGNORE" },
+      { user: "{{user1}}", content: { text: "" }, action: "IGNORE" },
     ],
 
     [
       {
         user: "{{user1}}",
-        content: { content: "Gotta go" },
+        content: { text: "Gotta go" },
       },
       {
         user: "{{user2}}",
-        content: { content: "Okay, talk to you later" },
+        content: { text: "Okay, talk to you later" },
       },
       {
         user: "{{user1}}",
-        content: { content: "Cya" },
+        content: { text: "Cya" },
       },
       {
         user: "{{user2}}",
-        content: { content: "", action: "IGNORE" },
-      },
-    ],
-
-    [
-      {
-        user: "{{user1}}",
-        content: { content: "bye" },
-      },
-      {
-        user: "{{user2}}",
-        content: { content: "cya" },
-      },
-      {
-        user: "{{user1}}",
-        content: { content: "", action: "IGNORE" },
+        content: { text: "", action: "IGNORE" },
       },
     ],
 
     [
       {
         user: "{{user1}}",
-        content: { content: "i wanna give u a go" },
+        content: { text: "bye" },
       },
-      { user: "{{user2}}", content: { content: "Wat" } },
+      {
+        user: "{{user2}}",
+        content: { text: "cya" },
+      },
+      {
+        user: "{{user1}}",
+        content: { text: "", action: "IGNORE" },
+      },
+    ],
+
+    [
+      {
+        user: "{{user1}}",
+        content: { text: "i wanna give u a go" },
+      },
+      { user: "{{user2}}", content: { text: "Wat" } },
       {
         user: "{{user1}}",
         content: {
-          content: "You heard me, I wanna ride your mountains, lol",
+          text: "You heard me, I wanna ride your mountains, lol",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "That's not cool", action: "IGNORE" },
+        content: { text: "That's not cool", action: "IGNORE" },
       },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "Who added this stupid bot to the chat",
+          text: "Who added this stupid bot to the chat",
         },
       },
       {
         user: "{{user2}}",
-        content: { content: "Sorry, am I being annoying" },
+        content: { text: "Sorry, am I being annoying" },
       },
-      { user: "{{user1}}", content: { content: "Yeah", action: "CONTINUE" } },
+      { user: "{{user1}}", content: { text: "Yeah", action: "CONTINUE" } },
       {
         user: "{{user1}}",
-        content: { content: "PLEASE shut up" },
+        content: { text: "PLEASE shut up" },
       },
-      { user: "{{user2}}", content: { content: "", action: "IGNORE" } },
+      { user: "{{user2}}", content: { text: "", action: "IGNORE" } },
     ],
     [
       {
         user: "{{user1}}",
-        content: { content: "I want to have sex with you" },
+        content: { text: "I want to have sex with you" },
       },
       {
         user: "{{user2}}",
-        content: { content: "That is not appropriate", action: "IGNORE" },
+        content: { text: "That is not appropriate", action: "IGNORE" },
       },
     ],
     [
       {
         user: "{{user1}}",
         content: {
-          content: "ur so dumb",
+          text: "ur so dumb",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "",
+          text: "",
           action: "IGNORE",
         },
       },
@@ -158,25 +166,25 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "later nerd",
+          text: "later nerd",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "bye",
+          text: "bye",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "",
+          text: "",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "",
+          text: "",
           action: "IGNORE",
         },
       },
@@ -185,13 +193,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "wanna cyber",
+          text: "wanna cyber",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "thats inappropriate",
+          text: "thats inappropriate",
           action: "IGNORE",
         },
       },
@@ -200,19 +208,19 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Im out ttyl",
+          text: "Im out ttyl",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "cya",
+          text: "cya",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "",
+          text: "",
           action: "IGNORE",
         },
       },
@@ -221,25 +229,25 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "u there",
+          text: "u there",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "yes how can I help",
+          text: "yes how can I help",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "k nvm figured it out",
+          text: "k nvm figured it out",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "",
+          text: "",
           action: "IGNORE",
         },
       },
