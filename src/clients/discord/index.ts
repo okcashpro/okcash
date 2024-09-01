@@ -14,7 +14,7 @@ import { default as getUuid } from "uuid-by-string";
 import settings from "../../core/settings.ts";
 import { commands } from "./commands.ts";
 
-import { UUID } from "crypto";
+import { UUID } from "../../core/types.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import { MessageManager } from "./messages.ts";

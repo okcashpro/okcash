@@ -56,6 +56,26 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     return result.user_state ?? null;
   }
 
+  async getMemoriesByRoomIds(params: { room_ids: UUID[]; tableName: string }): Promise<Memory[]> {
+    const placeholders = params.room_ids.map(() => '?').join(', ');
+    const sql = `SELECT * FROM memories WHERE type = ? AND room_id IN (${placeholders})`;
+    const stmt = this.db.prepare(sql);
+    const queryParams = [params.tableName, ...params.room_ids];
+    stmt.bind(queryParams);
+
+    const memories: Memory[] = [];
+    while (stmt.step()) {
+      const memory = stmt.getAsObject() as unknown as Memory;
+      memories.push({
+        ...memory,
+        created_at: new Date(memory.created_at),
+        content: JSON.parse(memory.content as unknown as string),
+      });
+    }
+    stmt.free();
+    return memories;
+  }
+
   async setParticipantUserState(
     roomId: UUID,
     userId: UUID,
@@ -177,6 +197,9 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     // Insert the memory with the appropriate 'unique' value
     const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const stmt = this.db.prepare(sql);
+
+    const created_at = (memory.created_at ?? new Date()).getTime();
+
     stmt.run([
       v4(),
       tableName,
@@ -185,7 +208,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       memory.user_id,
       memory.room_id,
       isUnique ? 1 : 0,
-      memory.created_at ?? new Date().toISOString(),
+      created_at,
     ]);
     stmt.free();
   }
@@ -226,6 +249,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       };
       memories.push({
         ...memory,
+        created_at: new Date(memory.created_at),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -283,6 +307,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       };
       memories.push({
         ...memory,
+        created_at: new Date(memory.created_at),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -327,6 +352,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.free();
 
     return memories.map((memory) => ({
+      ...memory,
+      created_at: new Date(memory.created_at),
       embedding: JSON.parse(memory.embedding as unknown as string),
       levenshtein_score: 0,
     }));
@@ -398,9 +425,11 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     ]);
     const memories: Memory[] = [];
     while (stmt.step()) {
+      // convert created_at to Date
       const memory = stmt.getAsObject() as unknown as Memory;
       memories.push({
         ...memory,
+        created_at: new Date(memory.created_at),
         content: JSON.parse(memory.content as unknown as string),
       });
     }

@@ -1,11 +1,12 @@
-import { composeContext } from "../core/context.ts";
+import { composeContext } from "../../../core/context.ts";
+import { booleanFooter } from "../../../core/parsing.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
   Message,
   State,
-} from "../core/types.ts";
+} from "../../../core/types.ts";
 
 const shouldUnfollowTemplate = `Based on the conversation so far:
 
@@ -17,8 +18,9 @@ Respond with YES if:
 - {{agentName}}'s eagerness to contribute is not well-received by the users
 - The conversation has shifted to a topic where {{agentName}} has less to add
 
-Otherwise, respond with NO.  
-Only respond with YES or NO.`;
+Otherwise, respond with NO.
+` + booleanFooter;
+
 export default {
   name: "UNFOLLOW_ROOM",
   description:
@@ -38,14 +40,13 @@ export default {
         template: shouldUnfollowTemplate, // Define this template separately
       });
 
-      const response = await runtime.completion({
+      const response = await runtime.booleanCompletion({
         context: shouldUnfollowContext,
         stop: ["\n"],
         max_response_length: 5,
       });
 
-      const lowerResponse = response.toLowerCase().trim();
-      return lowerResponse.includes("yes");
+      return response;
     }
 
     const state = await runtime.composeState(message);

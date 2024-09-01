@@ -7,13 +7,14 @@ import {
   type Relationship,
   type UUID,
   Participant,
+  IDatabaseAdapter,
 } from "./types.ts";
 
 /**
  * An abstract class representing a database adapter for managing various entities
  * like accounts, memories, actors, goals, and rooms.
  */
-export abstract class DatabaseAdapter {
+export abstract class DatabaseAdapter implements IDatabaseAdapter {
   /**
    * The database instance.
    */
@@ -41,6 +42,11 @@ export abstract class DatabaseAdapter {
     room_id: UUID;
     count?: number;
     unique?: boolean;
+    tableName: string;
+  }): Promise<Memory[]>;
+
+  abstract getMemoriesByRoomIds(params: {
+    room_ids: UUID[];
     tableName: string;
   }): Promise<Memory[]>;
 

@@ -1,7 +1,6 @@
-import { UUID } from "crypto";
 import { getRelationship } from "../core/relationships.ts";
 import { AgentRuntime } from "../core/runtime.ts";
-import { Relationship } from "../core/types.ts";
+import { Relationship, UUID } from "../core/types.ts";
 
 export async function getOrCreateRelationship({
   runtime,

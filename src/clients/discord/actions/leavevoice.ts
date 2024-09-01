@@ -12,7 +12,7 @@ import {
   Action,
   ActionExample,
   IAgentRuntime,
-} from "../core/types.ts";
+} from "../../../core/types.ts";
 
 export default {
   name: "LEAVE_VOICE",

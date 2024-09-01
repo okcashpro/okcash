@@ -59,26 +59,16 @@ async function handler(runtime: AgentRuntime, message: Message) {
     template,
   });
 
-  let facts;
-
-  for (let i = 0; i < 3; i++) {
-    const factText: string = await runtime.completion({
+  let facts = await runtime.objectArrayCompletion({
       context,
       stop: [],
     });
-    const parsedFacts = parseJsonArrayFromText(factText);
-    if (parsedFacts) {
-      facts = parsedFacts;
-      break;
-    }
-    // wait 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
 
   if (!facts) {
     return [];
   }
 
+  // If the fact is known or corrupted, remove it
   const filteredFacts = facts
     .filter((fact) => {
       return (
@@ -96,6 +86,7 @@ async function handler(runtime: AgentRuntime, message: Message) {
       user_id: agentId!,
       content: { text: fact },
       room_id,
+      created_at: new Date(),
     });
 
     await runtime.factManager.createMemory(factMemory, true);

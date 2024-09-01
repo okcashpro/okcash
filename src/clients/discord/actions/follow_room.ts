@@ -1,11 +1,12 @@
-import { composeContext } from "../core/context.ts";
+import { composeContext } from "../../../core/context.ts";
+import { booleanFooter } from "../../../core/parsing.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
   Message,
   State,
-} from "../core/types.ts";
+} from "../../../core/types.ts";
 
 export const shouldFollowTemplate = `Based on the conversation so far:
 
@@ -18,7 +19,7 @@ Respond with YES if:
 - {{agentName}} has unique insights to contribute and the users seem receptive
 
 Otherwise, respond with NO.
-Only respond with YES or NO.`;
+` + booleanFooter;
 
 export default {
   name: "FOLLOW_ROOM",
@@ -54,14 +55,13 @@ export default {
         template: shouldFollowTemplate, // Define this template separately
       });
 
-      const response = await runtime.completion({
+      const response = await runtime.booleanCompletion({
         context: shouldFollowContext,
         stop: ["\n"],
         max_response_length: 5,
       });
-
-      const lowerResponse = response.toLowerCase().trim();
-      return lowerResponse.includes("yes");
+      
+      return response;
     }
 
     const state = await runtime.composeState(message);

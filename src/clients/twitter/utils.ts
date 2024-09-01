@@ -1,6 +1,7 @@
 import { Scraper, SearchMode, Tweet } from "agent-twitter-client";
-import { IAgentRuntime } from "../../core/types.ts";
 import { addHeader } from "../../core/context.ts";
+import { IAgentRuntime } from "../../core/types.ts";
+import { ClientBase } from "./base.ts";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
   const waitTime =
@@ -167,3 +168,42 @@ export const searchRecentPosts = async (
     recentSearchResultsText,
   );
 };
+
+export async function buildConversationThread(tweet: Tweet, client: ClientBase): Promise<string> {
+  const thread: Tweet[] = [];
+  const visited: Set<string> = new Set();
+
+  async function processThread(currentTweet: Tweet) {
+    if(!currentTweet) {
+      return;
+    }
+    if (visited.has(currentTweet.id)) {
+      return;
+    }
+    visited.add(currentTweet.id);
+
+    thread.unshift(currentTweet);
+
+    if (currentTweet.inReplyToStatusId) {
+      const parentTweet = await client.getTweet(currentTweet.inReplyToStatusId);
+      await processThread(parentTweet);
+    }
+
+    console.log("******** currentTweet ********\n", currentTweet);
+
+    console.log('******* currentTweet.thread *******\n', currentTweet.thread);
+
+    for (const tweet of currentTweet.thread) {
+      const replyTweet = await client.getTweet(tweet.id);
+      await processThread(replyTweet);
+    }
+  }
+
+  await processThread(tweet);
+
+  const conversationText = thread
+    .map((t) => `[${t.username}]: ${t.text}`)
+    .join("\n");
+
+  return conversationText;
+}

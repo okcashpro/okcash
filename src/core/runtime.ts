@@ -8,14 +8,14 @@ import {
   formatEvaluators,
 } from "./evaluators.ts";
 import { MemoryManager } from "./memory.ts";
-import { parseJsonArrayFromText, parseJSONObjectFromText } from "./parsing.ts";
+import { parseBooleanFromText, parseJsonArrayFromText, parseJSONObjectFromText, parseShouldRespondFromText } from "./parsing.ts";
 import {
   Character,
   Content,
   Goal,
   IAgentRuntime,
-  IAgentRuntimeBase,
   IBrowserService,
+  IDatabaseAdapter,
   IImageRecognitionService,
   IMemoryManager,
   IPdfService,
@@ -26,10 +26,9 @@ import {
   State,
   type Action,
   type Evaluator,
-  type Message,
+  type Message
 } from "./types.ts";
 
-import { UUID } from "crypto";
 import {
   default as tiktoken,
   default as TikToken,
@@ -52,20 +51,19 @@ import {
   formatActions,
 } from "./actions.ts";
 import { zeroUuid } from "./constants.ts";
-import { DatabaseAdapter } from "./database.ts";
 import defaultCharacter from "./defaultCharacter.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
-import { type Actor, type Memory } from "./types.ts";
+import { UUID, type Actor, type Memory } from "./types.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
  * action registration, and interaction with external services like OpenAI and Supabase.
  */
-export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
+export class AgentRuntime implements IAgentRuntime {
   /**
    * Default count for recent messages to be kept in memory.
    * @private
@@ -83,7 +81,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
   /**
    * The database adapter used for interacting with the database.
    */
-  databaseAdapter: DatabaseAdapter;
+  databaseAdapter: IDatabaseAdapter;
 
   /**
    * Authentication token used for securing requests.
@@ -108,7 +106,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
   /**
    * The model to use for completion.
    */
-  model = "gpt-3.5-turbo-0125";
+  model = "gpt-4o-mini";
 
   /**
    * The model to use for embedding.
@@ -191,7 +189,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     providers?: Provider[];
     model?: string; // The model to use for completion
     embeddingModel?: string; // The model to use for embedding
-    databaseAdapter: DatabaseAdapter; // The database adapter used for interacting with the database
+    databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
     fetch?: typeof fetch | unknown;
     speechModelPath?: string;
   }) {
@@ -206,22 +204,22 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     }
 
     this.messageManager = new MemoryManager({
-      runtime: this as IAgentRuntimeBase,
+      runtime: this,
       tableName: "messages",
     });
 
     this.descriptionManager = new MemoryManager({
-      runtime: this as IAgentRuntimeBase,
+      runtime: this,
       tableName: "descriptions",
     });
 
     this.factManager = new MemoryManager({
-      runtime: this as IAgentRuntimeBase,
+      runtime: this,
       tableName: "facts",
     });
 
     this.loreManager = new MemoryManager({
-      runtime: this as IAgentRuntimeBase,
+      runtime: this,
       tableName: "lore",
     });
 
@@ -299,7 +297,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
   }
 
   /**
-   * Send a message to the model for a text completion.
+   * Send a message to the model for a text completion - receive a string back and parse how you'd like
    * @param opts - The options for the completion request.
    * @param opts.context The context of the message to be completed.
    * @param opts.stop A list of strings to stop the completion at.
@@ -320,16 +318,16 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }): Promise<string> {
-    let retryLength = 2000; // exponential backoff
+    let retryLength = 1000; // exponential backoff
     for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
       try {
+        context = await this.trimTokens(
+          "gpt-4o-mini",
+          context,
+          max_context_length,
+        );
         if (!settings.OPENAI_API_KEY) {
-          context = await this.trimTokens(
-            "gpt-4o-mini",
-            context,
-            max_context_length,
-          );
-
+          console.log("queueing text completion")
           const result = await this.llamaService.queueTextCompletion(
             context,
             temperature,
@@ -378,6 +376,7 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
               ],
             }),
           };
+          console.log("requestOptions", requestOptions)
           const response = await fetch(
             `${this.serverUrl}/chat/completions`,
             requestOptions,
@@ -386,9 +385,9 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
           if (!response.ok) {
             throw new Error(
               "OpenAI API Error: " +
-                response.status +
-                " " +
-                response.statusText,
+              response.status +
+              " " +
+              response.statusText,
             );
           }
 
@@ -438,6 +437,160 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     return context;
   }
 
+  async shouldRespondCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        const parsedResponse = parseShouldRespondFromText(response.trim());
+        if (parsedResponse) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in shouldRespondCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+  async booleanCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<boolean> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        const parsedResponse = parseBooleanFromText(response.trim());
+        if (parsedResponse !== null) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in booleanCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+  async stringArrayCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<string[]> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        const parsedResponse = parseJsonArrayFromText(response);
+        if (parsedResponse) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in stringArrayCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+  async objectArrayCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<any[]> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+
+        const parsedResponse = parseJsonArrayFromText(response);
+        if (parsedResponse) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in stringArrayCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+
   /**
    * Send a message to the model for completion.
    * @param opts - The options for the completion request.
@@ -461,94 +614,24 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }): Promise<Content> {
     context = await this.trimTokens("gpt-4o-mini", context, max_context_length);
-    let retryLength = 2000; // exponential backoff
-    for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
+    let retryLength = 1000; // exponential backoff
+    while (true) {
       try {
-        if (!settings.OPENAI_API_KEY) {
-          const completionResponseRaw =
-            await this.llamaService.queueMessageCompletion(
-              context,
-              temperature,
-              stop,
-              frequency_penalty,
-              presence_penalty,
-              max_response_length,
-            );
-          // try parsing the response as JSON, if null then try again
-          const completionResponse = parseJSONObjectFromText(
-            completionResponseRaw,
-          ) as unknown as Content;
-
-          if (!completionResponse) {
-            continue;
-          }
-          return completionResponse;
-        }
-
-        const biasValue = -30.0;
-        const encoding = TikToken.encoding_for_model("gpt-4o-mini");
-
-        const tokenIds = [
-          ...new Set(
-            await Promise.all(
-              wordsToPunish.map((word) => encoding.encode(word)[0]),
-            ),
-          ),
-        ];
-
-        const logit_bias = tokenIds.reduce((acc, tokenId) => {
-          acc[tokenId] = biasValue;
-          return acc;
-        }, {});
-
-        const requestOptions = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({
-            stop,
-            model,
-            frequency_penalty,
-            presence_penalty,
-            temperature,
-            max_tokens: max_response_length,
-            logit_bias,
-            messages: [
-              {
-                role: "user",
-                content: context,
-              },
-            ],
-          }),
-        };
-        const response = await fetch(
-          `${this.serverUrl}/chat/completions`,
-          requestOptions,
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            "OpenAI API Error: " + response.status + " " + response.statusText,
-          );
-        }
-
-        const body = await response.json();
-
-        interface OpenAIResponse {
-          choices: Array<{ message: { content: string } }>;
-        }
-
-        const content = (body as OpenAIResponse).choices?.[0]?.message?.content;
-        if (!content) {
-          throw new Error("No content in response");
-        }
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
 
         // try parsing the response as JSON, if null then try again
         const parsedContent = parseJSONObjectFromText(
-          content,
-        ) as unknown as Content;
+          response,
+        ) as Content;
 
         if (!parsedContent) {
           continue;
@@ -883,15 +966,13 @@ export class AgentRuntime implements IAgentRuntime, IAgentRuntimeBase {
       );
 
       if (lastMessageWithAttachment) {
-        const lastMessageTime = new Date(
-          lastMessageWithAttachment.created_at,
-        ).getTime();
+        const lastMessageTime = lastMessageWithAttachment.created_at.getTime();
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
 
         allAttachments = recentMessagesData
           .reverse()
           .map((msg) => {
-            const msgTime = new Date(msg.created_at).getTime();
+            const msgTime = msg.created_at.getTime();
             const isWithinTime =
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
             const attachments = msg.content.attachments || [];
@@ -980,10 +1061,7 @@ Text: ${attachment.text}
       }
 
       // Sort messages by timestamp in descending order
-      recentMessages.sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-      );
+      recentMessages.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
 
       // Take the most recent messages
       const recentInteractionsData = recentMessages.slice(0, 10); // Adjust the count as needed
@@ -1040,8 +1118,8 @@ Text: ${attachment.text}
       adjective:
         this.character.adjectives && this.character.adjectives.length > 0
           ? this.character.adjectives[
-              Math.floor(Math.random() * this.character.adjectives.length)
-            ]
+          Math.floor(Math.random() * this.character.adjectives.length)
+          ]
           : "",
       // Recent interactions between the sender and receiver, formatted as messages
       recentMessageInteractions: formattedMessageInteractions,
@@ -1053,60 +1131,60 @@ Text: ${attachment.text}
       topic:
         this.character.topics && this.character.topics.length > 0
           ? this.character.topics[
-              Math.floor(Math.random() * this.character.topics.length)
-            ]
+          Math.floor(Math.random() * this.character.topics.length)
+          ]
           : null,
       topics:
         this.character.topics && this.character.topics.length > 0
           ? addHeader(
-              `### Topics for ${this.character.topics}`,
-              this.character.topics
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 10)
-                .join(", "),
-            )
+            `### Topics for ${this.character.topics}`,
+            this.character.topics
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 10)
+              .join(", "),
+          )
           : "",
       characterPostExamples:
         formattedCharacterPostExamples &&
-        formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+          formattedCharacterPostExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-              `### Example Posts for ${this.character.name}`,
-              formattedCharacterPostExamples,
-            )
+            `### Example Posts for ${this.character.name}`,
+            formattedCharacterPostExamples,
+          )
           : "",
       characterMessageExamples:
         formattedCharacterMessageExamples &&
-        formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+          formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-              `### Example Conversations for ${this.character.name}`,
-              formattedCharacterMessageExamples,
-            )
+            `### Example Conversations for ${this.character.name}`,
+            formattedCharacterMessageExamples,
+          )
           : "",
       messageDirections:
         this.character?.style?.all?.length > 0 ||
-        this.character?.style?.chat.length > 0
+          this.character?.style?.chat.length > 0
           ? addHeader(
-              "### Message Directions for " + this.character.name,
-              (this.character?.style?.all?.join("\n") || "") +
-                (this.character?.style?.all?.length > 0 &&
-                this.character?.style?.chat.length > 0
-                  ? "\n"
-                  : "") +
-                (this.character?.style?.chat?.join("\n") || ""),
-            )
+            "### Message Directions for " + this.character.name,
+            (this.character?.style?.all?.join("\n") || "") +
+            (this.character?.style?.all?.length > 0 &&
+              this.character?.style?.chat.length > 0
+              ? "\n"
+              : "") +
+            (this.character?.style?.chat?.join("\n") || ""),
+          )
           : "",
       postDirections:
         this.character?.style?.all?.length > 0 ||
-        this.character?.style?.post.length > 0
+          this.character?.style?.post.length > 0
           ? addHeader(
-              "### Post Directions for " + this.character.name,
-              (this.character?.style?.all?.join("\n") || "") +
-                (this.character?.style?.all?.length > 0 &&
-                this.character?.style?.post.length > 0
-                  ? "\n"
-                  : "") +
-                (this.character?.style?.post?.join("\n") || ""),
-            )
+            "### Post Directions for " + this.character.name,
+            (this.character?.style?.all?.join("\n") || "") +
+            (this.character?.style?.all?.length > 0 &&
+              this.character?.style?.post.length > 0
+              ? "\n"
+              : "") +
+            (this.character?.style?.post?.join("\n") || ""),
+          )
           : "",
       // Agent runtime stuff
       senderName,
@@ -1117,9 +1195,9 @@ Text: ${attachment.text}
       goals:
         goals && goals.length > 0
           ? addHeader(
-              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-              goals,
-            )
+            "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+            goals,
+          )
           : "",
       goalsData,
       recentMessages:
@@ -1184,9 +1262,9 @@ Text: ${attachment.text}
       actionExamples:
         actionsData.length > 0
           ? addHeader(
-              "### Action Examples",
-              composeActionExamples(actionsData, 10),
-            )
+            "### Action Examples",
+            composeActionExamples(actionsData, 10),
+          )
           : "",
       evaluatorsData,
       evaluators:
@@ -1232,14 +1310,12 @@ Text: ${attachment.text}
       );
 
       if (lastMessageWithAttachment) {
-        const lastMessageTime = new Date(
-          lastMessageWithAttachment.created_at,
-        ).getTime();
+        const lastMessageTime = lastMessageWithAttachment.created_at.getTime();
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
 
         allAttachments = recentMessagesData
           .filter((msg) => {
-            const msgTime = new Date(msg.created_at).getTime();
+            const msgTime = msg.created_at.getTime();
             return (
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime
             );

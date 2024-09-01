@@ -8,7 +8,6 @@ import {
   getVoiceConnection,
   joinVoiceChannel,
 } from "@discordjs/voice";
-import { UUID } from "crypto";
 import {
   BaseGuildVoiceChannel,
   ChannelType,
@@ -30,8 +29,7 @@ import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import { Content, Message, State } from "../../core/types.ts";
+import { Content, Message, State, UUID } from "../../core/types.ts";
 import { textToSpeech } from "../elevenlabs/index.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
 

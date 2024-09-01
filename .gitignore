@@ -22,3 +22,7 @@ tweets/
 
 characters/
 logs/
+
+test-report.json
+content_cache/
+test_data/

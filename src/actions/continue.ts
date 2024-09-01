@@ -1,7 +1,8 @@
+import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import { composeContext } from "../core/context.ts";
 import { log_to_file } from "../core/logger.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
-import { messageHandlerTemplate } from "../clients/discord/templates.ts";
+import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
   ActionExample,
@@ -10,9 +11,8 @@ import {
   Message,
   State,
 } from "../core/types.ts";
-import { parseJSONObjectFromText } from "../core/parsing.ts";
 
-const maxContinuesInARow = 2;
+const maxContinuesInARow = 3;
 
 export const shouldContinueTemplate = `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
 
@@ -22,7 +22,7 @@ Based on the following conversation, should {{agentName}} continue? YES or NO
 
 {{recentMessages}}
 
-Should {{agentName}} continue? Respond with a YES or a NO.`;
+Should {{agentName}} continue? ` + booleanFooter;
 
 export default {
   name: "CONTINUE",
@@ -81,20 +81,13 @@ export default {
         template: shouldContinueTemplate,
       });
 
-      let response = await runtime.completion({
+      let response = await runtime.booleanCompletion({
         context: shouldRespondContext,
         stop: ["\n"],
         max_response_length: 5,
       });
 
-      console.log("*** SHOULD CONTINUE ***", response);
-
-      // Parse the response and determine if the runtime should respond
-      const lowerResponse = response.toLowerCase().trim();
-      if (lowerResponse.includes("yes")) {
-        return true;
-      }
-      return false;
+      return response;
     }
 
     const shouldContinue = await _shouldContinue(state);

@@ -1,23 +1,21 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
+import { zeroUuid } from "../core/constants.ts";
+import { composeContext } from "../core/context.ts";
+import { embeddingZeroVector } from "../core/memory.ts";
+import { type AgentRuntime } from "../core/runtime.ts";
+import { Content, State, type Message, type UUID } from "../core/types.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversationTroll1,
   GetTellMeAboutYourselfConversationTroll2,
   Goodbye1,
-} from "../../test_resources/data.ts";
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { populateMemories } from "../../test_resources/populateMemories.ts";
-import { runAiTest } from "../../test_resources/runAiTest.ts";
-import { type User } from "../../test_resources/types.ts";
-import { zeroUuid } from "../../core/constants.ts";
-import { composeContext } from "../../core/context.ts";
-import logger from "../../core/logger.ts";
-import { embeddingZeroVector } from "../../core/memory.ts";
-import { type AgentRuntime } from "../../core/runtime.ts";
-import { messageHandlerTemplate } from "../../test_resources/templates.ts";
-import { Content, State, type Message, type UUID } from "../../core/types.ts";
-import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import action from "../ignore.ts";
+} from "../test_resources/data.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../test_resources/populateMemories.ts";
+import { runAiTest } from "../test_resources/runAiTest.ts";
+import { messageHandlerTemplate } from "../test_resources/templates.ts";
+import { type User } from "../test_resources/types.ts";
+import action from "./ignore.ts";
 
 async function handleMessage(
   runtime: AgentRuntime,

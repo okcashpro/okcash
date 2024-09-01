@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { BrowserService } from "../browser.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { BrowserService } from "./browser.ts";
 
 dotenv.config();
 

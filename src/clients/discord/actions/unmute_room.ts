@@ -1,11 +1,12 @@
-import { composeContext } from "../core/context.ts";
+import { composeContext } from "../../../core/context.ts";
+import { booleanFooter } from "../../../core/parsing.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
   Message,
   State,
-} from "../core/types.ts";
+} from "../../../core/types.ts";
 
 export const shouldUnmuteTemplate = `Based on the conversation so far:
 
@@ -18,7 +19,7 @@ Respond with YES if:
 - The tone of the conversation has improved and {{agentName}}'s input would be welcome
 
 Otherwise, respond with NO.
-Only respond with YES or NO.`;
+` + booleanFooter;
 
 export default {
   name: "UNMUTE_ROOM",
@@ -39,14 +40,13 @@ export default {
         template: shouldUnmuteTemplate, // Define this template separately
       });
 
-      const response = await runtime.completion({
+      const response = await runtime.booleanCompletion({
         context: shouldUnmuteContext,
         stop: ["\n"],
         max_response_length: 5,
       });
 
-      const lowerResponse = response.toLowerCase().trim();
-      return lowerResponse.includes("yes");
+      return response;
     }
 
     const state = await runtime.composeState(message);

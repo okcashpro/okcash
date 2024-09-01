@@ -71,10 +71,9 @@ export const formatMessages = ({
         attachments && attachments.length > 0
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
-
-      const timestamp = message.created_at
-        ? formatTimestamp(message.created_at)
-        : "";
+          
+      const timestamp = formatTimestamp(message.created_at);
+      
       const shortId = message.user_id.slice(-5);
 
       return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
@@ -83,10 +82,18 @@ export const formatMessages = ({
   return messageStrings;
 };
 
-export const formatTimestamp = (timestamp: string) => {
+export const formatTimestamp = (messageDate: Date) => {
   const clientNow = new Date();
   const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
-  let messageDate = new Date(timestamp);
+
+  // what type of object is messageDate?
+  console.log('messageDate', messageDate)
+  console.log(typeof messageDate)
+
+  // if messageDate is a string, convert it to a date
+  if (typeof messageDate === 'string') {
+    messageDate = new Date(messageDate);
+  }
 
   // Adjust for the 7-hour difference
   messageDate = new Date(messageDate.getTime() - 7 * 60 * 60 * 1000);

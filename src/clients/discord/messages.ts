@@ -1,11 +1,9 @@
-import { UUID } from "crypto";
 import { ChannelType, Client, Message as DiscordMessage } from "discord.js";
 import { default as getUuid } from "uuid-by-string";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import { Content, Media, Message, State } from "../../core/types.ts";
+import { Content, Media, Message, State, UUID } from "../../core/types.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
@@ -149,6 +147,7 @@ export class MessageManager {
           ...content,
           attachments,
         },
+        created_at: new Date(message.createdTimestamp),
       };
 
       await this._saveRequestMessage(messageToHandle, state);
@@ -312,9 +311,8 @@ export class MessageManager {
 
     if ((senderContent as Content).text) {
       await this.runtime.messageManager.createMemory({
-        user_id: message.user_id,
+        ...message,
         content: senderContent,
-        room_id: message.room_id,
         embedding: embeddingZeroVector,
       });
     }
@@ -499,23 +497,21 @@ export class MessageManager {
       template: shouldRespondTemplate,
     });
 
-    const response = await this.runtime.completion({
+    const response = await this.runtime.shouldRespondCompletion({
       context: shouldRespondContext,
       stop: ["\n"],
       max_response_length: 5,
     });
-
-    // Parse the response and determine if the runtime should respond
-    const lowerResponse = response.toLowerCase().trim();
-    if (lowerResponse.includes("respond")) {
+    
+    if (response === "RESPOND") {
       return true;
-    } else if (lowerResponse.includes("ignore")) {
+    } else if (response === "IGNORE") {
       return false;
-    } else if (lowerResponse.includes("stop")) {
+    } else if (response === "STOP") {
       delete this.interestChannels[message.channelId];
       return false;
     } else {
-      console.error("Invalid response from completion:", response);
+      console.error("Invalid response from response completion:", response);
       return false;
     }
   }

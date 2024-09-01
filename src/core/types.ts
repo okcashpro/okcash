@@ -47,7 +47,7 @@ export interface Actor {
 export interface Memory {
   id?: UUID; // An optional unique identifier for the memory.
   user_id: UUID; // The user ID associated with the memory.
-  created_at?: string; // An optional timestamp indicating when the memory was created.
+  created_at?: Date; // An optional timestamp indicating when the memory was created.
   content: Content; // The content of the memory, which can be a structured object or a plain string.
   embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
   room_id: UUID; // The room or conversation ID associated with the memory.
@@ -121,6 +121,8 @@ export interface Message {
   user_id: UUID; // The ID of the user who sent the message.
   content: Content; // The content of the message, which can be a structured object or a plain string.
   room_id: UUID; // The ID of the room or conversation context in which the message was sent.
+  created_at?: Date; // The timestamp of when the message was sent.
+  inReplyTo?: UUID; // If this is a message in a thread, or a reply, store this
 }
 
 /**
@@ -263,7 +265,6 @@ export type Character = {
 
 export interface IDatabaseAdapter {
   db: any;
-
   getAccountById(user_id: UUID): Promise<Account | null>;
   createAccount(account: Account): Promise<boolean>;
   getMemories(params: {
@@ -273,6 +274,7 @@ export interface IDatabaseAdapter {
     tableName: string;
     user_ids?: UUID[];
   }): Promise<Memory[]>;
+  getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]>;
   getCachedEmbeddings(params: {
     query_table_name: string;
     query_threshold: number;
@@ -356,7 +358,7 @@ export interface IDatabaseAdapter {
 }
 
 export interface IMemoryManager {
-  runtime: IAgentRuntimeBase;
+  runtime: IAgentRuntime;
   tableName: string;
 
   constructor: Function;
@@ -371,6 +373,7 @@ export interface IMemoryManager {
   getCachedEmbeddings(
     content: string,
   ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
+  getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]>;
   searchMemoriesByEmbedding(
     embedding: number[],
     opts: {
@@ -386,7 +389,7 @@ export interface IMemoryManager {
   countMemories(room_id: UUID, unique?: boolean): Promise<number>;
 }
 
-export interface IAgentRuntimeBase {
+export interface IAgentRuntime {
   // Properties
   agentId: UUID;
   serverUrl: string;
@@ -395,6 +398,17 @@ export interface IAgentRuntimeBase {
   model: string;
   embeddingModel: string;
   character: Character;
+
+  messageManager: IMemoryManager;
+  descriptionManager: IMemoryManager;
+  factManager: IMemoryManager;
+  loreManager: IMemoryManager;
+  imageDescriptionService: IImageRecognitionService;
+  transcriptionService: ITranscriptionService;
+  videoService: IVideoService;
+  llamaService: ILlamaService;
+  browserService: IBrowserService;
+  speechService: ISpeechService;
 
   // Methods
   getConversationLength(): number;
@@ -408,6 +422,36 @@ export interface IAgentRuntimeBase {
     max_context_length?: number;
     max_response_length?: number;
   }): Promise<string>;
+  stringArrayCompletion(opts: {
+    context?: string;
+    stop?: string[];
+    model?: string;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    temperature?: number;
+    max_context_length?: number;
+    max_response_length?: number;
+  }): Promise<string[]>;
+  shouldRespondCompletion(opts: {
+    context?: string;
+    stop?: string[];
+    model?: string;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    temperature?: number;
+    max_context_length?: number;
+    max_response_length?: number;
+  }): Promise<"RESPOND" | "IGNORE" | "STOP" | null>;
+  booleanCompletion(opts: {
+    context?: string;
+    stop?: string[];
+    model?: string;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    temperature?: number;
+    max_context_length?: number;
+    max_response_length?: number;
+  }): Promise<boolean>;
   messageCompletion(opts: {
     context?: string;
     stop?: string[];
@@ -495,17 +539,4 @@ export interface ISpeechService {
 
 export interface IPdfService {
   convertPdfToText(pdfBuffer: Buffer): Promise<string>;
-}
-
-export interface IAgentRuntime extends IAgentRuntimeBase {
-  messageManager: IMemoryManager;
-  descriptionManager: IMemoryManager;
-  factManager: IMemoryManager;
-  loreManager: IMemoryManager;
-  imageDescriptionService: IImageRecognitionService;
-  transcriptionService: ITranscriptionService;
-  videoService: IVideoService;
-  llamaService: ILlamaService;
-  browserService: IBrowserService;
-  speechService: ISpeechService;
 }

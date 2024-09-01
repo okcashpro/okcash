@@ -98,6 +98,26 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
+  async getMemoriesByRoomIds(params: { room_ids: UUID[]; tableName: string }): Promise<Memory[]> {
+    const { data, error } = await this.supabase
+      .from(params.tableName)
+      .select('*')
+      .in('room_id', params.room_ids);
+  
+    if (error) {
+      console.error('Error retrieving memories by room IDs:', error);
+      return [];
+    }
+
+    // map created_at to Date
+    const memories = data.map((memory) => ({
+      ...memory,
+      created_at: new Date(memory.created_at),
+    }));
+
+    return memories as Memory[];
+  }  
+
   async getAccountById(user_id: UUID): Promise<Account | null> {
     const { data, error } = await this.supabase
       .from("accounts")
@@ -174,7 +194,10 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     if (result.error) {
       throw new Error(JSON.stringify(result.error));
     }
-    return result.data;
+    return result.data.map((memory) => ({
+      ...memory,
+      created_at: new Date(memory.created_at),
+    }));
   }
 
   async getCachedEmbeddings(opts: {
@@ -274,7 +297,10 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     if (result.error) {
       throw new Error(JSON.stringify(result.error));
     }
-    return result.data;
+    return result.data.map((memory) => ({
+      ...memory,
+      created_at: new Date(memory.created_at),
+    }));
   }
 
   async createMemory(
@@ -282,6 +308,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     tableName: string,
     unique = false,
   ): Promise<void> {
+    const created_at = memory.created_at.getTime() ?? new Date().getTime();
     if (unique) {
       const opts = {
         query_table_name: tableName,
@@ -289,7 +316,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
         query_content: memory.content.text,
         query_room_id: memory.room_id,
         query_embedding: memory.embedding,
-        query_created_at: memory.created_at ?? new Date().toISOString(),
+        query_created_at: created_at,
         similarity_threshold: 0.95,
       };
 
@@ -304,7 +331,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     } else {
       const result = await this.supabase
         .from("memories")
-        .insert({ ...memory, type: tableName });
+        .insert({ ...memory, created_at, type: tableName });
       const { error } = result;
       if (error) {
         throw new Error(JSON.stringify(error));

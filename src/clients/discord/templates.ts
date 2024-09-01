@@ -1,3 +1,5 @@
+import { messageCompletionFooter, shouldRespondFooter } from "../../core/parsing.ts";
+
 export const messageHandlerTemplate =
   // {{goals}}
   `# Action Examples
@@ -33,10 +35,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}. Include an action, if appropriate.
-\nResponse format should be formatted in a JSON block like this:
-\`\`\`json
-{ "user": "{{agentName}}", "content": string, "action": string }
-\`\`\``;
+` + messageCompletionFooter;
 
 export const voiceHandlerTemplate = `# Task: Generate conversational voice dialog for {{agentName}}.
 About {{agentName}}:
@@ -54,10 +53,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}.
-\nResponse format should be formatted in a JSON block like this:
-\`\`\`json
-{ "user": "{{agentName}}", "content": string }
-\`\`\``;
+` + messageCompletionFooter;
 
 export const shouldRespondTemplate = `# Task: Decide if {{agentName}} should respond.
 About {{agentName}}:
@@ -122,9 +118,7 @@ If {{agentName}} concludes a conversation and isn't part of the conversation any
 IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to respond with [IGNORE].
 If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
 
-# INSTRUCTIONS: Respond with [RESPOND] if {{agentName}} would respond, [IGNORE] if {{agentName}} would not respond to the last message or [STOP] if {{agentName}} would stop participating in the conversation entirely.
-
-Options: [RESPOND], [IGNORE], [STOP]
-
 {{recentMessages}}
-Result:`;
+
+# INSTRUCTIONS: Choose the option that best describes {{agentName}}'s response to the last message.
+` + shouldRespondFooter;

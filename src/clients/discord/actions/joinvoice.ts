@@ -8,15 +8,15 @@ import {
   Guild,
   GuildMember,
 } from "discord.js";
-import { composeContext } from "../core/context.ts";
-import { log_to_file } from "../core/logger.ts";
+import { composeContext } from "../../../core/context.ts";
+import { log_to_file } from "../../../core/logger.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
   Message,
   State,
-} from "../core/types.ts";
+} from "../../../core/types.ts";
 
 export default {
   name: "JOIN_VOICE",

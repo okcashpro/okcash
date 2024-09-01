@@ -1,11 +1,12 @@
-import { composeContext } from "../core/context.ts";
+import { composeContext } from "../../../core/context.ts";
+import { booleanFooter } from "../../../core/parsing.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
   Message,
   State,
-} from "../core/types.ts";
+} from "../../../core/types.ts";
 
 export const shouldMuteTemplate = `Based on the conversation so far:
 
@@ -18,8 +19,8 @@ Respond with YES if:
 - The user has directly asked {{agentName}} to stop responding or be quiet
 - {{agentName}}'s responses are not well-received or are annoying the user(s)
 
-Otherwise, respond with NO. 
-Only respond with YES or NO.`;
+Otherwise, respond with NO.
+` + booleanFooter;
 
 export default {
   name: "MUTE_ROOM",
@@ -40,14 +41,13 @@ export default {
         template: shouldMuteTemplate, // Define this template separately
       });
 
-      const response = await runtime.completion({
+      const response = await runtime.booleanCompletion({
         context: shouldMuteContext,
         stop: ["\n"],
         max_response_length: 5,
       });
 
-      const lowerResponse = response.toLowerCase().trim();
-      return lowerResponse.includes("yes");
+      return response;
     }
 
     const state = await runtime.composeState(message);

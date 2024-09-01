@@ -25,9 +25,9 @@ export const formatPosts = ({
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
 
-      const timestamp = message.created_at
-        ? formatTimestamp(message.created_at)
-        : "";
+      console.log('message.created_at', message.created_at)
+
+      const timestamp = formatTimestamp(message.created_at);
       const shortId = message.user_id.slice(-5);
 
       return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;

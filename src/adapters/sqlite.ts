@@ -141,6 +141,25 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       .filter((row): row is Actor => row !== null);
   }
 
+  async getMemoriesByRoomIds(params: { room_ids: UUID[]; tableName: string }): Promise<Memory[]> {
+    const placeholders = params.room_ids.map(() => '?').join(', ');
+    const sql = `SELECT * FROM memories WHERE type = ? AND room_id IN (${placeholders})`;
+    const stmt = this.db.prepare(sql);
+    const queryParams = [params.tableName, ...params.room_ids];
+  
+    const memories: Memory[] = [];
+    const rows = stmt.all(...queryParams) as (Memory & { content: string })[];
+    rows.forEach((row) => {
+      memories.push({
+        ...row,
+        created_at: new Date(row.created_at),
+        content: JSON.parse(row.content),
+      });
+    });
+    
+    return memories;
+  }  
+
   async createMemory(memory: Memory, tableName: string): Promise<void> {
     console.log("*** createMemory ***");
     console.log(memory);
@@ -163,6 +182,11 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
 
     const content = JSON.stringify(memory.content);
 
+    const created_at = (memory.created_at ?? new Date()).getTime();
+
+    console.log('***** INSERTING MEMORY *****')
+    console.log(memory)
+
     // Insert the memory with the appropriate 'unique' value
     const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     this.db
@@ -175,7 +199,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         memory.user_id,
         memory.room_id,
         isUnique ? 1 : 0,
-        memory.created_at ?? new Date().toISOString(),
+        created_at,
       );
   }
 
@@ -210,6 +234,7 @@ AND room_id = ?`;
     })[];
     return memories.map((memory) => ({
       ...memory,
+      created_at: new Date(memory.created_at),
       content: JSON.parse(memory.content as unknown as string),
     }));
   }
@@ -357,6 +382,7 @@ AND room_id = ?`;
 
     return memories.map((memory) => ({
       ...memory,
+      created_at: new Date(memory.created_at),
       content: JSON.parse(memory.content as unknown as string),
     }));
   }

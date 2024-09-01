@@ -1,16 +1,14 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
-import { UUID } from "crypto";
 import fs from "fs";
 import { default as getUuid } from "uuid-by-string";
+import { composeContext } from "../../core/context.ts";
+import { log_to_file } from "../../core/logger.ts";
+import { messageCompletionFooter, shouldRespondFooter } from "../../core/parsing.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
-
+import { Message, UUID } from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
-import { log_to_file } from "../../core/logger.ts";
-import { composeContext } from "../../core/context.ts";
-import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import { Message, State, Content } from "../../core/types.ts";
-import { getRecentConversations, searchRecentPosts, wait } from "./utils.ts";
+import { buildConversationThread, getRecentConversations, searchRecentPosts, wait } from "./utils.ts";
 
 export const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
@@ -33,9 +31,7 @@ About {{agentName}} (@{{twitterUserName}}):
 ***currentPost
 {{currentPost}}
 
-Response format should be formatted in a JSON block like this:
-\`\`\`json\n{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }
-\`\`\``;
+` + messageCompletionFooter;
 
 export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
@@ -56,7 +52,8 @@ IMPORTANT: {{agentName}} (aka @{{twitterUserName}}) is particularly sensitive ab
 
 {{currentPost}}
 
-# INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, or IGNORE if {{agentName}} should not respond to the last message and STOP if {{agentName}} should stop participating in the conversation.`;
+# INSTRUCTIONS: Respond with [RESPOND] if {{agentName}} should respond, or [IGNORE] if {{agentName}} should not respond to the last message and [STOP] if {{agentName}} should stop participating in the conversation.
+` + shouldRespondFooter;
 
 export class TwitterInteractionClient extends ClientBase {
   onReady() {
@@ -79,7 +76,7 @@ export class TwitterInteractionClient extends ClientBase {
     });
   }
 
-  private async handleTwitterInteractions() {
+  async handleTwitterInteractions() {
     console.log("Checking Twitter interactions");
     try {
       const botTwitterUsername = settings.TWITTER_USERNAME;
@@ -109,7 +106,6 @@ export class TwitterInteractionClient extends ClientBase {
       for await (const tweet of botTweets) {
         if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
           break;
-        //
         tweetCandidates.push(tweet);
       }
 
@@ -118,60 +114,65 @@ export class TwitterInteractionClient extends ClientBase {
 
       // for each tweet candidate, handle the tweet
       for (const tweet of uniqueTweetCandidates) {
-        await this.handleTweet(tweet);
+        const conversationId = tweet.conversationId;
+        const tweetId = tweet.id;
+
+        const room_id = getUuid(conversationId) as UUID;
+        await this.runtime.ensureRoomExists(room_id);
+
+        const userIdUUID = getUuid(tweet.userId as string) as UUID;
+        const agentId = this.runtime.agentId;
+
+        await Promise.all([
+          this.runtime.ensureUserExists(agentId, settings.TWITTER_USERNAME, this.runtime.character.name),
+          this.runtime.ensureUserExists(userIdUUID, tweet.username, tweet.name),
+        ]);
+
+        await Promise.all([
+          this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
+          this.runtime.ensureParticipantInRoom(agentId, room_id),
+        ]);
+
+        const conversationThread = await buildConversationThread(tweet, this);
+
+        const message = {
+          content: { text: tweet.text },
+          user_id: userIdUUID,
+          room_id,
+        };
+
+        await this.handleTweet({
+          tweet,
+          message,
+          conversationThread,
+        });
       }
 
       // Update the last checked tweet ID
-      const latestTweet =
-        await this.twitterClient.getLatestTweet(botTwitterUsername);
+      const latestTweet = await this.twitterClient.getLatestTweet(botTwitterUsername);
       if (latestTweet) {
         this.lastCheckedTweetId = latestTweet.id;
       }
-      console.log(
-        "Finished checking Twitter interactions, latest tweet is:",
-        latestTweet,
-      );
+      console.log("Finished checking Twitter interactions, latest tweet is:", latestTweet);
     } catch (error) {
       console.error("Error handling Twitter interactions:", error);
     }
   }
 
-  private async handleTweet(tweet: Tweet) {
+  private async handleTweet({
+    tweet,
+    message,
+    conversationThread,
+  }: {
+    tweet: Tweet;
+    message: Message;
+    conversationThread: string;
+  }) {
     const botTwitterUsername = settings.TWITTER_USERNAME;
     if (tweet.username === botTwitterUsername) {
       // Skip processing if the tweet is from the bot itself
       return;
     }
-
-    // if the bot has already replied to this tweet, don't respond -- check the thread
-    const thread = tweet.thread;
-    const botTweet = thread.find((t) => t.username === botTwitterUsername);
-    if (botTweet) {
-      return;
-    }
-
-    const twitterUserId = getUuid(tweet.userId as string) as UUID;
-    const twitterRoomId = getUuid("twitter") as UUID;
-
-    await Promise.all([
-      this.runtime.ensureUserExists(
-        this.runtime.agentId,
-        settings.TWITTER_USERNAME,
-        this.runtime.character.name,
-      ),
-      this.runtime.ensureUserExists(twitterUserId, tweet.username, tweet.name),
-      this.runtime.ensureRoomExists(twitterRoomId),
-    ]);
-
-    await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
-
-    await this.ensureRoomIsPopulated(twitterRoomId);
-
-    const message: Message = {
-      content: { text: tweet.text },
-      user_id: twitterUserId,
-      room_id: twitterRoomId,
-    };
 
     if (!message.content.text) {
       return { text: "", action: "IGNORE" };
@@ -179,8 +180,8 @@ export class TwitterInteractionClient extends ClientBase {
 
     const formatTweet = (tweet: Tweet) => {
       return `  ID: ${tweet.id}
-From: ${tweet.name} (@${tweet.username})
-Text: ${tweet.text}`;
+  From: ${tweet.name} (@${tweet.username})
+  Text: ${tweet.text}`;
     };
 
     // Fetch recent conversations
@@ -211,27 +212,11 @@ Text: ${tweet.text}`;
       template: shouldRespondTemplate,
     });
 
-    const shouldRespondResponse = await this.runtime.completion({
+    const shouldRespond = await this.runtime.shouldRespondCompletion({
       context: shouldRespondContext,
       stop: [],
       model: this.runtime.model,
     });
-
-    console.log("shouldRespondContext", shouldRespondContext);
-
-    console.log("*** should respond?", shouldRespondResponse);
-    let shouldRespond = true;
-
-    if (shouldRespondResponse.toLowerCase().includes("respond")) {
-      shouldRespond = true;
-    } else if (shouldRespondResponse.toLowerCase().includes("ignore")) {
-      shouldRespond = false;
-    } else if (shouldRespondResponse.toLowerCase().includes("stop")) {
-      shouldRespond = false;
-    } else {
-      console.error("Invalid response:", shouldRespondResponse);
-      shouldRespond = false;
-    }
 
     if (!shouldRespond) {
       console.log("Not responding to message");
@@ -239,7 +224,16 @@ Text: ${tweet.text}`;
     }
 
     const context = composeContext({
-      state,
+      state: {
+        ...state,
+        tweetContext: `
+  Post Background:
+  ${conversationThread}
+  
+  Original Post:
+  ${currentPost}
+  `,
+      },
       template: messageHandlerTemplate,
     });
 
@@ -271,7 +265,9 @@ Text: ${tweet.text}`;
       );
       try {
         if (!this.dryRun) {
-          await this.twitterClient.sendTweet(response.text, tweet.id);
+          await this.requestQueue.add(async () => {
+            await this.twitterClient.sendTweet(response.text, tweet.id);
+          });
         } else {
           console.log("Dry run, not sending tweet:", response.text);
         }
@@ -280,7 +276,7 @@ Text: ${tweet.text}`;
         const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
         const debugFileName = `tweets/tweet_generation_${tweet.id}.txt`;
         fs.writeFileSync(debugFileName, responseInfo);
-        wait();
+        await wait();
       } catch (error) {
         console.error(`Error sending response tweet: ${error}`);
       }

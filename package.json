@@ -14,7 +14,11 @@
     "dev": "nodemon",
     "eliza:discord": "npm run dev -- --discord",
     "eliza:twitter": "npm run dev -- --twitter",
-    "postinstall": "npx playwright install-deps && npx playwright install"
+    "postinstall": "npx playwright install-deps && npx playwright install",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --runInBand --watch -f",
+    "test:sqlite": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" TEST_DATABASE_CLIENT=sqlite jest --runInBand --watch -f",
+    "test:sqljs": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" TEST_DATABASE_CLIENT=sqljs jest --runInBand --watch -f"
+
   },
   "author": "",
   "license": "MIT",

@@ -1,15 +1,15 @@
 import dotenv from "dotenv";
-import { zeroUuid } from "../../core/constants.ts";
-import { type AgentRuntime } from "../../core/runtime.ts";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { Goodbye1 } from "../../test_resources/data.ts";
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { populateMemories } from "../../test_resources/populateMemories.ts";
-import { runAiTest } from "../../test_resources/runAiTest.ts";
-import { type User } from "../../test_resources/types.ts";
-import { Content, type Message, type UUID } from "../../core/types.ts";
-import action from "../continue.ts";
-import ignore from "../ignore.ts";
+import { zeroUuid } from "../core/constants.ts";
+import { type AgentRuntime } from "../core/runtime.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { Goodbye1 } from "../test_resources/data.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../test_resources/populateMemories.ts";
+import { runAiTest } from "../test_resources/runAiTest.ts";
+import { type User } from "../test_resources/types.ts";
+import { Content, type Message, type UUID } from "../core/types.ts";
+import action from "./continue.ts";
+import ignore from "./ignore.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
