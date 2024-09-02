@@ -187,7 +187,7 @@ export class ClientBase extends EventEmitter {
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
-      // await this.populateTimeline();
+      await this.populateTimeline();
 
       if (callback) {
         callback(this);

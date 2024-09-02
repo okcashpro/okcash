@@ -151,6 +151,11 @@ export class MemoryManager implements IMemoryManager {
     memory: Memory,
     unique = false,
   ): Promise<void> {
+    const existingMessage = await this.runtime.databaseAdapter.getMemoryById(memory.id);
+    if (existingMessage) {
+      console.log("Memory already exists, skipping");
+      return;
+    }
     await this.runtime.databaseAdapter.createMemory(
       memory,
       this.tableName,
@@ -164,6 +169,11 @@ export class MemoryManager implements IMemoryManager {
     const result = await this.runtime.databaseAdapter.getMemoriesByRoomIds({
       room_ids: params.room_ids,
     });
+    return result;
+  }
+
+  async getMemoryById(id: UUID): Promise<Memory | null> {
+    const result = await this.runtime.databaseAdapter.getMemoryById(id);
     return result;
   }
   

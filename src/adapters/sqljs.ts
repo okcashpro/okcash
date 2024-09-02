@@ -177,6 +177,15 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     return rows;
   }
 
+  async getMemoryById(id: UUID): Promise<Memory | null> {
+    const sql = "SELECT * FROM memories WHERE id = ?";
+    const stmt = this.db.prepare(sql);
+    stmt.bind([id]);
+    const memory = stmt.getAsObject() as unknown as Memory | undefined;
+    stmt.free();
+    return memory || null;
+  }
+
   async createMemory(memory: Memory, tableName: string): Promise<void> {
     let isUnique = true;
     if (memory.embedding) {

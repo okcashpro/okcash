@@ -85,8 +85,6 @@ class ImageDescriptionService {
   async describeImage(
     imageUrl: string,
   ): Promise<{ title: string; description: string }> {
-    console.log("describeImage", imageUrl);
-
     if (this.device === "cloud") {
       return this.recognizeWithOpenAI(imageUrl);
     } else {

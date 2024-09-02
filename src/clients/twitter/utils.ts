@@ -188,8 +188,6 @@ export async function buildConversationThread(tweet: Tweet, client: ClientBase):
     if (currentTweet.inReplyToStatus) {
       await processThread(currentTweet.inReplyToStatus);
     }
-
-    console.log("******** currentTweet ********\n", currentTweet);
   }
 
   await processThread(tweet);

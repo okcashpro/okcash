@@ -303,6 +303,21 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }));
   }
 
+  async getMemoryById(memoryId: UUID): Promise<Memory | null> {
+    const { data, error } = await this.supabase
+      .from("memories")
+      .select("*")
+      .eq("id", memoryId)
+      .single();
+  
+    if (error) {
+      console.error("Error retrieving memory by ID:", error);
+      return null;
+    }
+  
+    return data as Memory;
+  }  
+
   async createMemory(
     memory: Memory,
     tableName: string,

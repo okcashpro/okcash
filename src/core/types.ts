@@ -274,6 +274,7 @@ export interface IDatabaseAdapter {
     tableName: string;
     user_ids?: UUID[];
   }): Promise<Memory[]>;
+  getMemoryById(id: UUID): Promise<Memory | null>;
   getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]>;
   getCachedEmbeddings(params: {
     query_table_name: string;
@@ -373,6 +374,7 @@ export interface IMemoryManager {
   getCachedEmbeddings(
     content: string,
   ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
+  getMemoryById(id: UUID): Promise<Memory | null>;
   getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]>;
   searchMemoriesByEmbedding(
     embedding: number[],

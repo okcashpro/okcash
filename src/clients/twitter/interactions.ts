@@ -57,7 +57,6 @@ IMPORTANT: {{agentName}} (aka @{{twitterUserName}}) is particularly sensitive ab
 
 export class TwitterInteractionClient extends ClientBase {
   onReady() {
-    console.log("Checking Twitter interactions");
     const handleTwitterInteractionsLoop = () => {
       this.handleTwitterInteractions();
       setTimeout(

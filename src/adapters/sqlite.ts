@@ -160,11 +160,26 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     return memories;
   }  
 
+  async getMemoryById(memoryId: UUID): Promise<Memory | null> {
+    const sql = "SELECT * FROM memories WHERE id = ?";
+    const stmt = this.db.prepare(sql);
+    stmt.bind([memoryId]);
+    const memory = stmt.get() as Memory | undefined;
+  
+    if (memory) {
+      return {
+        ...memory,
+        created_at: new Date(memory.created_at),
+        content: JSON.parse(memory.content as unknown as string),
+      };
+    }
+  
+    return null;
+  }
+
   async createMemory(memory: Memory, tableName: string): Promise<void> {
-    console.log("*** createMemory ***");
-    console.log(memory);
-    console.log(memory.content?.attachments);
     let isUnique = true;
+
     if (memory.embedding) {
       // Check if a similar memory already exists
       const similarMemories = await this.searchMemoriesByEmbedding(
@@ -183,9 +198,6 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     const content = JSON.stringify(memory.content);
 
     const created_at = (memory.created_at ?? new Date()).getTime();
-
-    console.log('***** INSERTING MEMORY *****')
-    console.log(memory)
 
     // Insert the memory with the appropriate 'unique' value
     const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;

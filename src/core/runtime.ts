@@ -376,7 +376,7 @@ export class AgentRuntime implements IAgentRuntime {
               ],
             }),
           };
-          console.log("requestOptions", requestOptions)
+
           const response = await fetch(
             `${this.serverUrl}/chat/completions`,
             requestOptions,
@@ -950,8 +950,6 @@ export class AgentRuntime implements IAgentRuntime {
     const senderName = actorsData?.find(
       (actor: Actor) => actor.id === user_id,
     )?.name;
-
-    console.log("actorsData", actorsData);
 
     // TODO: We may wish to consolidate and just accept character.name here instead of the actor name
     const agentName =

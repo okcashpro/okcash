@@ -50,6 +50,8 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
     tableName: string;
   }): Promise<Memory[]>;
 
+  abstract getMemoryById(id: UUID): Promise<Memory | null>;
+
   /**
    * Retrieves cached embeddings based on the specified query parameters.
    * @param params An object containing parameters for the embedding retrieval.
