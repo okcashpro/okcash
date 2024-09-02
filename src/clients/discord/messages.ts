@@ -63,7 +63,7 @@ export class MessageManager {
     this.attachmentManager = new AttachmentManager(this.runtime);
   }
 
-  async handleMessage(message: DiscordMessage, cacheOnly: boolean = false) {
+  async handleMessage(message: DiscordMessage) {
     if (message.interaction /* || message.author?.bot*/) return;
   
     const user_id = message.author.id as UUID;
@@ -107,7 +107,7 @@ export class MessageManager {
   
       const messageId = getUuid(message.id) as UUID;
   
-      // Check if the message already exists in the database
+      // Check if the message already exists in the cache or database
       const existingMessage = await this.runtime.messageManager.getMemoryById(messageId);
   
       if (existingMessage) {
@@ -164,18 +164,14 @@ export class MessageManager {
   
       await this._saveRequestMessage(messageToHandle, state);
   
-      // Save the message to the database
+      // Save the message to the database and cache
       await this.runtime.messageManager.createMemory({
-        id: messageId as UUID,
+        id: messageId,
         user_id: userIdUUID,
         content: messageToHandle.content,
         room_id,
         created_at: new Date(message.createdTimestamp),
       });
-  
-      if (cacheOnly) {
-        return;
-      }
   
       state = await this.runtime.updateRecentMessageState(state);
   
@@ -256,7 +252,8 @@ export class MessageManager {
         );
       }
     }
-  }  
+  }
+  
 
   async cacheMessages(channel: TextChannel, count: number = 20) {
     const messages = await channel.messages.fetch({ limit: count });
