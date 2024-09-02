@@ -1,3 +1,5 @@
+// Example index where we start the twitter and discord clients and init a runtime
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Database from "better-sqlite3";
 import fs from "fs";

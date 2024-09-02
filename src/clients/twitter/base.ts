@@ -89,7 +89,7 @@ export class ClientBase extends EventEmitter {
       console.warn("Tweet is undefined, skipping cache");
       return;
     }
-    const cacheDir = path.join(__dirname, "tweetcache", tweet.conversationId, `${tweet.id}.json`);
+    const cacheDir = path.join(__dirname, "../../../tweetcache", tweet.conversationId, `${tweet.id}.json`);
     await fs.promises.mkdir(path.dirname(cacheDir), { recursive: true });
     await fs.promises.writeFile(cacheDir, JSON.stringify(tweet, null, 2));
     this.tweetCache.set(tweet.id, tweet);
@@ -158,8 +158,6 @@ export class ClientBase extends EventEmitter {
         const cookiesArray = JSON.parse(
           fs.readFileSync(cookiesFilePath, "utf-8"),
         );
-        console.log("cookies");
-        console.log(cookiesArray);
         this.setCookiesFromArray(cookiesArray);
       } else {
         console.log("settings.TWITTER_USERNAME");
@@ -175,8 +173,6 @@ export class ClientBase extends EventEmitter {
             return this.twitterClient.getCookies();
           })
           .then((cookies) => {
-            console.log("cookies");
-            console.log(cookies);
             fs.writeFileSync(cookiesFilePath, JSON.stringify(cookies), "utf-8");
           })
           .catch((error) => {
@@ -191,7 +187,7 @@ export class ClientBase extends EventEmitter {
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
-      await this.populateTimeline();
+      // await this.populateTimeline();
 
       if (callback) {
         callback(this);

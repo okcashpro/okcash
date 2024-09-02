@@ -5,15 +5,14 @@ import { SqliteDatabaseAdapter } from "../../adapters/sqlite.ts";
 import defaultCharacter from "../../core/defaultCharacter.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
-import { TwitterGenerationClient } from "./generate.ts";
+import { TwitterInteractionClient } from "./interactions.ts";
 import { buildConversationThread } from "./utils.ts";
-
 
 const __dirname = path.dirname(new URL(".", import.meta.url).pathname);
 
 describe("buildConversationThread", () => {
   let runtime: AgentRuntime;
-  let client: TwitterGenerationClient;
+  let client: TwitterInteractionClient;
 
   beforeAll(async () => {
     // Create an instance of the AgentRuntime
@@ -29,11 +28,10 @@ describe("buildConversationThread", () => {
     });
 
     // Create an instance of the TwitterGenerationClient
-    client = new TwitterGenerationClient(runtime);
+    client = new TwitterInteractionClient(runtime);
 
     // Load cached Twitter credentials
     const cookiesFilePath = path.join(__dirname, "./twitter/cookies.json");
-    console.log("cookiesFilePath", cookiesFilePath);
     if (fs.existsSync(cookiesFilePath)) {
       const cookiesArray = JSON.parse(
         fs.readFileSync(cookiesFilePath, "utf-8"),
@@ -45,16 +43,11 @@ describe("buildConversationThread", () => {
   });
 
   it("should build a conversation thread from a tweet ID", async () => {
-    const tweetId = "1826442010414518617";
+    const tweetId = "1830058678197895517";
 
-    // Check if the tweet is already cached
-    let tweet = await client.getCachedTweet(tweetId);
-
-    // If the tweet is not cached, fetch it from the API and cache it
-    if (!tweet) {
-      tweet = await client.getTweet(tweetId);
-      await client.cacheTweet(tweet);
-    }
+    // Fetch the tweet from the API
+    const tweet = await client.getTweet(tweetId);
+    console.log("Original tweet:", JSON.stringify(tweet, null, 2));
 
     // Build the conversation thread
     const thread = await buildConversationThread(tweet, client);
@@ -63,7 +56,8 @@ describe("buildConversationThread", () => {
     console.log(thread);
 
     // Add assertions based on the expected structure and content of the thread
-    expect(thread).toContain("[AcquiredWithin]: @BennisVirginia I'm not sure about it, in some ways I think we will lose some freedoms but maybe become freer.");
-    expect(thread).toContain("[rubyresearch]: @AcquiredWithin @BennisVirginia freedom's just a fancy word for chaos anyway");
-  });
+    expect(thread.includes("By: Aya Bochman (@ayaboch)")).toBe(true);
+    expect(thread.includes("@ayaboch @DanBochman You should do nothing. Its opensource code, you have too much to lose by fighting this fight, this post will get u blacklisted be aware")).toBe(true);
+    expect(thread.includes("@BLUECOW009 @ayaboch @DanBochman That's not how it works")).toBe(true);
+  }, 30000);
 });

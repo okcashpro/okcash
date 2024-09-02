@@ -170,11 +170,12 @@ export const searchRecentPosts = async (
 };
 
 export async function buildConversationThread(tweet: Tweet, client: ClientBase): Promise<string> {
-  const thread: Tweet[] = [];
+  let thread: Tweet[] = [];
   const visited: Set<string> = new Set();
 
   async function processThread(currentTweet: Tweet) {
-    if(!currentTweet) {
+    if (!currentTweet) {
+      console.log("No current tweet found");
       return;
     }
     if (visited.has(currentTweet.id)) {
@@ -184,26 +185,35 @@ export async function buildConversationThread(tweet: Tweet, client: ClientBase):
 
     thread.unshift(currentTweet);
 
-    if (currentTweet.inReplyToStatusId) {
-      const parentTweet = await client.getTweet(currentTweet.inReplyToStatusId);
-      await processThread(parentTweet);
+    if (currentTweet.inReplyToStatus) {
+      await processThread(currentTweet.inReplyToStatus);
     }
 
     console.log("******** currentTweet ********\n", currentTweet);
-
-    console.log('******* currentTweet.thread *******\n', currentTweet.thread);
-
-    for (const tweet of currentTweet.thread) {
-      const replyTweet = await client.getTweet(tweet.id);
-      await processThread(replyTweet);
-    }
   }
 
   await processThread(tweet);
 
+  // Make sure that tweets are unique and sorted by timestamp
+  thread = [...new Set(thread)];
+  thread.sort((a, b) => new Date(a.timeParsed).getTime() - new Date(b.timeParsed).getTime());
+
   const conversationText = thread
-    .map((t) => `[${t.username}]: ${t.text}`)
-    .join("\n");
+    .map((t) => {
+      const post = [];
+      post.push(`By: ${t.name} (@${t.username})`);
+      post.push(`ID: ${t.id}`);
+      if (t.inReplyToStatusId) {
+        post.push(`In Reply To: ${t.inReplyToStatusId}`);
+      }
+      post.push(`Time: ${t.timeParsed.toLocaleString()}`);
+      post.push(`Content:`)
+      post.push("---");
+      post.push(t.text);
+      post.push("---");
+      return post.join("\n");
+    })
+    .join("\n\n");
 
   return conversationText;
 }
