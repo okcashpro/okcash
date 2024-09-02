@@ -31,7 +31,7 @@ describe("buildConversationThread", () => {
     client = new TwitterInteractionClient(runtime);
 
     // Load cached Twitter credentials
-    const cookiesFilePath = path.join(__dirname, "./twitter/cookies.json");
+    const cookiesFilePath = path.join(__dirname, "../../../twitter_cookies.json");
     if (fs.existsSync(cookiesFilePath)) {
       const cookiesArray = JSON.parse(
         fs.readFileSync(cookiesFilePath, "utf-8"),

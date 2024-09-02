@@ -7,7 +7,7 @@ import settings from "../../core/settings.ts";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
-import { Message, State, UUID } from "../../core/types.ts";
+import { State, UUID } from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
@@ -18,6 +18,9 @@ import {
 
 const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
+
+Recent interactions between {{agentName}} and other users:
+{{recentPostInteractions}}
 
 Recent conversations:
 {{recentConversations}}
@@ -220,11 +223,9 @@ export class TwitterSearchClient extends ClientBase {
       const context = composeContext({
         state: {
           ...state,
-          tweetContext: `
-  Post Background:
-  ${conversationThread}
+          tweetContext: `${conversationThread ? `Post Thread:\n${conversationThread}\n` : ""}
   
-  Original Post:
+  Post which {{agentName}} is responding to:
   ${(state as State).tweetContext}
   `,
         },

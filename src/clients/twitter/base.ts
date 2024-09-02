@@ -79,7 +79,7 @@ export class ClientBase extends EventEmitter {
   lastCheckedTweetId: string | null = null;
   imageDescriptionService: ImageDescriptionService;
   temperature: number = 0.5;
-  dryRun: boolean = settings.TWITTER_DRY_RUN.toLowerCase() === "true";
+  dryRun: boolean = settings.TWITTER_DRY_RUN?.toLowerCase() === "true";
 
   private tweetCache: Map<string, Tweet> = new Map();
   requestQueue: RequestQueue = new RequestQueue();
@@ -153,7 +153,7 @@ export class ClientBase extends EventEmitter {
       const cookiesArray = JSON.parse(settings.TWITTER_COOKIES);
       this.setCookiesFromArray(cookiesArray);
     } else {
-      const cookiesFilePath = path.join(__dirname, "cookies.json");
+      const cookiesFilePath = path.join(__dirname, "../../../twitter_cookies.json");
       if (fs.existsSync(cookiesFilePath)) {
         const cookiesArray = JSON.parse(
           fs.readFileSync(cookiesFilePath, "utf-8"),

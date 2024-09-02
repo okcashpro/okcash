@@ -2,7 +2,7 @@ const jsonBlockPattern = /```json\n([\s\S]*?)\n```/;
 
 export const messageCompletionFooter = `\nResponse format should be formatted in a JSON block like this:
 \`\`\`json
-{ "user": "{{agentName}}", "content": string, "action": string }
+{ "user": "{{agentName}}", "text": string, "action": string }
 \`\`\``;
 
 export const shouldRespondFooter = `The available options are [RESPOND], [IGNORE], or [STOP]. Choose the most appropriate option.
@@ -10,7 +10,7 @@ export const shouldRespondFooter = `The available options are [RESPOND], [IGNORE
 Your response must include one of the options.`;
 
 export const parseShouldRespondFromText = (text: string): "RESPOND" | "IGNORE" | "STOP" | null => {
-  const match = text.match(/^(RESPOND|IGNORE|STOP)$/i);
+  const match = text.trim().replace("[", "").toUpperCase().replace("]", "").match(/^(RESPOND|IGNORE|STOP)$/i);
   return match ? (match[0].toUpperCase() as "RESPOND" | "IGNORE" | "STOP") : null;
 };
 

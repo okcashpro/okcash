@@ -1,3 +1,4 @@
+import ffmpeg from 'fluent-ffmpeg';
 import fs from "fs";
 import path from "path";
 import { default as getUuid } from "uuid-by-string";
@@ -71,6 +72,23 @@ export class VideoService {
   }
 
   private async fetchVideoInfo(url: string): Promise<any> {
+    if (url.endsWith('.mp4') || url.includes('.mp4?')) {
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          // If the URL is a direct link to an MP4 file, return a simplified video info object
+          return {
+            title: path.basename(url),
+            description: '',
+            channel: '',
+          };
+        }
+      } catch (error) {
+        console.error('Error downloading MP4 file:', error);
+        // Fall back to using youtube-dl if direct download fails
+      }
+    }
+
     try {
       const result = await youtubeDl(url, {
         dumpJson: true,
@@ -198,19 +216,45 @@ export class VideoService {
       this.CONTENT_CACHE_DIR,
       `${this.getVideoId(url)}.mp3`,
     );
+  
     try {
-      console.log("Transcribing audio");
-      await youtubeDl(url, {
-        verbose: true,
-        extractAudio: true,
-        audioFormat: "mp3",
-        output: outputFile,
-        writeInfoJson: true,
-      });
+      if (url.endsWith('.mp4') || url.includes('.mp4?')) {
+        console.log("Direct MP4 file detected, downloading and converting to MP3");
+        const tempMp4File = path.join(this.CONTENT_CACHE_DIR, `${this.getVideoId(url)}.mp4`);
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        fs.writeFileSync(tempMp4File, buffer);
+  
+        await new Promise<void>((resolve, reject) => {
+          ffmpeg(tempMp4File)
+            .output(outputFile)
+            .noVideo()
+            .audioCodec('libmp3lame')
+            .on('end', () => {
+              fs.unlinkSync(tempMp4File);
+              resolve();
+            })
+            .on('error', (err) => {
+              reject(err);
+            })
+            .run();
+        });
+      } else {
+        console.log("YouTube video detected, downloading audio with youtube-dl");
+        await youtubeDl(url, {
+          verbose: true,
+          extractAudio: true,
+          audioFormat: "mp3",
+          output: outputFile,
+          writeInfoJson: true,
+        });
+      }
       return outputFile;
     } catch (error) {
       console.error("Error downloading audio:", error);
       throw new Error("Failed to download audio");
     }
   }
+  
 }

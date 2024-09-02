@@ -27,3 +27,4 @@ test-report.json
 content_cache/
 test_data/
 tweetcache/
+twitter_cookies.json

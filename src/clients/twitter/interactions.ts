@@ -24,6 +24,9 @@ About {{agentName}} (@{{twitterUserName}}):
 ***postDirections
 {{postDirections}}
 
+Recent interactions between {{agentName}} and other users:
+{{recentPostInteractions}}
+
 ***recentPosts
 {{recentPosts}}
 
@@ -61,19 +64,32 @@ export class TwitterInteractionClient extends ClientBase {
       this.handleTwitterInteractions();
       setTimeout(
         handleTwitterInteractionsLoop,
-        Math.floor(Math.random() * 300000) + 600000,
+        Math.floor(Math.random() * 10000) + 10000,
       ); // Random interval between 10-15 minutes
     };
     handleTwitterInteractionsLoop();
   }
 
+  private tweetCacheFilePath = 'tweetcache/latest_checked_tweet_id.txt';
+
   constructor(runtime: AgentRuntime) {
-    // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,
       callback: (self) => self.onReady(),
     });
-  }
+  
+    try {
+      if (fs.existsSync(this.tweetCacheFilePath)) {
+        const data = fs.readFileSync(this.tweetCacheFilePath, 'utf-8');
+        this.lastCheckedTweetId = data.trim();
+        console.log('Loaded lastCheckedTweetId:', this.lastCheckedTweetId);
+      } else {
+        console.warn('Tweet cache file not found.');
+      }
+    } catch (error) {
+      console.error('Error loading latest checked tweet ID from file:', error);
+    }
+  }  
 
   async handleTwitterInteractions() {
     console.log("Checking Twitter interactions");
@@ -83,76 +99,94 @@ export class TwitterInteractionClient extends ClientBase {
         console.error("Twitter username not set in settings");
         return;
       }
-
+  
       // Check for mentions
       const mentions = this.twitterClient.searchTweets(
         `@${botTwitterUsername}`,
-        20,
+        3,
         SearchMode.Latest,
       );
       const tweetCandidates: Tweet[] = [];
       for await (const tweet of mentions) {
-        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
-          break;
         tweetCandidates.push(tweet);
       }
-
+  
       // Check for replies to the bot's tweets
       const botTweets = this.twitterClient.getTweetsAndReplies(
         botTwitterUsername,
-        20,
+        3,
       );
       for await (const tweet of botTweets) {
-        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
-          break;
         tweetCandidates.push(tweet);
       }
-
+  
       // de-duplicate tweetCandidates with a set
       const uniqueTweetCandidates = [...new Set(tweetCandidates)];
-
+  
+      // Sort tweet candidates by ID in ascending order
+      uniqueTweetCandidates.sort((a, b) => a.id.localeCompare(b.id));
+  
       // for each tweet candidate, handle the tweet
       for (const tweet of uniqueTweetCandidates) {
-        const conversationId = tweet.conversationId;
-        const tweetId = tweet.id;
+        console.log("this.lastCheckedTweetId", this.lastCheckedTweetId);
+        console.log("tweet.id", tweet.id);
+        if (!this.lastCheckedTweetId || tweet.id > this.lastCheckedTweetId) {
+          console.log("handling tweet", tweet.id);
+          const conversationId = tweet.conversationId;
+          const tweetId = tweet.id;
+  
+          const room_id = getUuid(conversationId) as UUID;
+          await this.runtime.ensureRoomExists(room_id);
+  
+          const userIdUUID = getUuid(tweet.userId as string) as UUID;
+          const agentId = this.runtime.agentId;
+  
+          await Promise.all([
+            this.runtime.ensureUserExists(agentId, settings.TWITTER_USERNAME, this.runtime.character.name),
+            this.runtime.ensureUserExists(userIdUUID, tweet.username, tweet.name),
+          ]);
+  
+          await Promise.all([
+            this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
+            this.runtime.ensureParticipantInRoom(agentId, room_id),
+          ]);
+  
+          const conversationThread = await buildConversationThread(tweet, this);
+  
+          const message = {
+            content: { text: tweet.text },
+            user_id: userIdUUID,
+            room_id,
+          };
 
-        const room_id = getUuid(conversationId) as UUID;
-        await this.runtime.ensureRoomExists(room_id);
+          await this.handleTweet({
+            tweet,
+            message,
+            conversationThread,
+          });
+  
+          // Update the last checked tweet ID after processing each tweet
+          this.lastCheckedTweetId = tweet.id;
+console.log('Updated lastCheckedTweetId:', this.lastCheckedTweetId);
 
-        const userIdUUID = getUuid(tweet.userId as string) as UUID;
-        const agentId = this.runtime.agentId;
+try {
+  fs.writeFileSync(this.tweetCacheFilePath, this.lastCheckedTweetId.toString(), 'utf-8');
+  console.log('Saved lastCheckedTweetId:', this.lastCheckedTweetId);
 
-        await Promise.all([
-          this.runtime.ensureUserExists(agentId, settings.TWITTER_USERNAME, this.runtime.character.name),
-          this.runtime.ensureUserExists(userIdUUID, tweet.username, tweet.name),
-        ]);
-
-        await Promise.all([
-          this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
-          this.runtime.ensureParticipantInRoom(agentId, room_id),
-        ]);
-
-        const conversationThread = await buildConversationThread(tweet, this);
-
-        const message = {
-          content: { text: tweet.text },
-          user_id: userIdUUID,
-          room_id,
-        };
-
-        await this.handleTweet({
-          tweet,
-          message,
-          conversationThread,
-        });
+          } catch (error) {
+            console.error('Error saving latest checked tweet ID to file:', error);
+          }
+        }
       }
-
-      // Update the last checked tweet ID
-      const latestTweet = await this.twitterClient.getLatestTweet(botTwitterUsername);
-      if (latestTweet) {
-        this.lastCheckedTweetId = latestTweet.id;
+  
+      // Save the latest checked tweet ID to the file
+      try {
+        fs.writeFileSync(this.tweetCacheFilePath, this.lastCheckedTweetId.toString(), 'utf-8');
+      } catch (error) {
+        console.error('Error saving latest checked tweet ID to file:', error);
       }
-      console.log("Finished checking Twitter interactions, latest tweet is:", latestTweet);
+  
+      console.log("Finished checking Twitter interactions");
     } catch (error) {
       console.error("Error handling Twitter interactions:", error);
     }
@@ -167,16 +201,18 @@ export class TwitterInteractionClient extends ClientBase {
     message: Message;
     conversationThread: string;
   }) {
+    console.log("handleTweet", tweet.id);
     const botTwitterUsername = settings.TWITTER_USERNAME;
     if (tweet.username === botTwitterUsername) {
+      console.log("skipping tweet from bot itself", tweet.id);
       // Skip processing if the tweet is from the bot itself
       return;
     }
 
     if (!message.content.text) {
+      console.log("skipping tweet with no text", tweet.id);
       return { text: "", action: "IGNORE" };
     }
-
     const formatTweet = (tweet: Tweet) => {
       return `  ID: ${tweet.id}
   From: ${tweet.name} (@${tweet.username})
@@ -192,6 +228,11 @@ export class TwitterInteractionClient extends ClientBase {
 
     const currentPost = formatTweet(tweet);
 
+    console.log("currentPost", currentPost);
+
+
+    console.log("composeState");
+
     let state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
       twitterUserName: botTwitterUsername,
@@ -199,17 +240,14 @@ export class TwitterInteractionClient extends ClientBase {
       currentPost,
     });
 
-    // Fetch recent search results
-    const recentSearchResultsText = await searchRecentPosts(
-      this.runtime,
-      this.twitterClient,
-      state.topic,
-    );
-    state["recentSearchResultsText"] = recentSearchResultsText;
+    console.log("composeState done");
+
     const shouldRespondContext = composeContext({
       state,
       template: shouldRespondTemplate,
     });
+
+    console.log("shouldRespondContext");
 
     const shouldRespond = await this.runtime.shouldRespondCompletion({
       context: shouldRespondContext,
@@ -221,6 +259,8 @@ export class TwitterInteractionClient extends ClientBase {
       console.log("Not responding to message");
       return { text: "", action: "IGNORE" };
     }
+
+    console.log("composeContext");
 
     const context = composeContext({
       state: {
@@ -244,6 +284,8 @@ export class TwitterInteractionClient extends ClientBase {
       context,
     );
 
+    console.log("messageCompletion");
+
     const response = await this.runtime.messageCompletion({
       context,
       stop: [],
@@ -254,6 +296,8 @@ export class TwitterInteractionClient extends ClientBase {
       `${botTwitterUsername}_${datestr}_interactions_response`,
       JSON.stringify(response),
     );
+
+    console.log("**** messageCompletion response", response);
 
     await this.saveResponseMessage(message, state, response);
     this.runtime.processActions(message, response, state);
@@ -273,6 +317,10 @@ export class TwitterInteractionClient extends ClientBase {
         // we're running this in a loop, so wait a bit
         console.log(`Successfully responded to tweet ${tweet.id}`);
         const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
+        // f tweets folder dont exist, create
+        if (!fs.existsSync("tweets")) {
+          fs.mkdirSync("tweets");
+        }
         const debugFileName = `tweets/tweet_generation_${tweet.id}.txt`;
         fs.writeFileSync(debugFileName, responseInfo);
         await wait();
