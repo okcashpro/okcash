@@ -100,7 +100,7 @@ export const searchRecentPosts = async (
   for (const tweet of tweets.tweets.filter((tweet) => isValidTweet(tweet))) {
     let formattedTweet = `Name: ${tweet.name} (@${tweet.username})\n`;
     formattedTweet += `Time: ${tweet.timeParsed.toLocaleString()}\n`;
-    formattedTweet += `Text: ${tweet.text}\n`;
+    formattedTweet += `Text: ${tweet.text}\n---\n`;
 
     if (tweet.photos.length > 0) {
       const photoDescriptions = await Promise.all(

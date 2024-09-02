@@ -65,7 +65,7 @@ export class TwitterSearchClient extends ClientBase {
     this.engageWithSearchTerms();
     setTimeout(
       () => this.engageWithSearchTermsLoop(),
-      Math.floor(Math.random() * 10000) + 60000,
+      Math.floor(Math.random() * 100000) + 600000,
     );
   }
 

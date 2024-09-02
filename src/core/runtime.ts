@@ -341,11 +341,13 @@ export class AgentRuntime implements IAgentRuntime {
           const biasValue = -30.0;
           const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
+          const mappedWords = wordsToPunish.map((word) => encoding.encode(word, [], "all")[0]);
+
+          console.log("mappedWords", mappedWords);
+
           const tokenIds = [
             ...new Set(
-              await Promise.all(
-                wordsToPunish.map((word) => encoding.encode(word)[0]),
-              ),
+                mappedWords,
             ),
           ];
 
