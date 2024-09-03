@@ -34,10 +34,8 @@ About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
 
-*** characterPostExamples
 {{characterPostExamples}}
 
-***postDirections
 {{postDirections}}
 
 Recent interactions between {{agentName}} and other users:
@@ -96,7 +94,6 @@ export class TwitterInteractionClient extends ClientBase {
       if (fs.existsSync(this.tweetCacheFilePath)) {
         const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
         this.lastCheckedTweetId = data.trim();
-        console.log("Loaded lastCheckedTweetId:", this.lastCheckedTweetId);
       } else {
         console.warn("Tweet cache file not found.");
       }
@@ -110,14 +107,12 @@ export class TwitterInteractionClient extends ClientBase {
     try {
       // Check for mentions
       const tweetCandidates = (
-        await this.twitterClient.fetchSearchTweets(
+        await this.fetchSearchTweets(
           `@${settings.TWITTER_USERNAME}`,
           20,
           SearchMode.Latest,
         )
       ).tweets;
-
-      console.log("tweetCandidates after botTweets", tweetCandidates);
 
       // de-duplicate tweetCandidates with a set
       const uniqueTweetCandidates = [...new Set(tweetCandidates)];
@@ -127,19 +122,15 @@ export class TwitterInteractionClient extends ClientBase {
 
       // for each tweet candidate, handle the tweet
       for (const tweet of uniqueTweetCandidates) {
-        console.log("this.lastCheckedTweetId", this.lastCheckedTweetId);
-        console.log("tweet.id", tweet.id);
         if (!this.lastCheckedTweetId || tweet.id > this.lastCheckedTweetId) {
-          console.log("handling tweet", tweet.id);
           if (tweet.userId === this.twitterUserId) {
-            console.log("skipping tweet from self", tweet.id);
             continue;
           }
 
           const conversationId = tweet.conversationId;
 
-          const room_id = stringToUuid(conversationId);
-          await this.runtime.ensureRoomExists(room_id);
+          const roomId = stringToUuid(conversationId);
+          await this.runtime.ensureRoomExists(roomId);
 
           const userIdUUID = stringToUuid(tweet.userId as string);
           const agentId = this.runtime.agentId;
@@ -160,16 +151,16 @@ export class TwitterInteractionClient extends ClientBase {
           ]);
 
           await Promise.all([
-            this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
-            this.runtime.ensureParticipantInRoom(agentId, room_id),
+            this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+            this.runtime.ensureParticipantInRoom(agentId, roomId),
           ]);
 
           await buildConversationThread(tweet, this);
 
           const message = {
             content: { text: tweet.text },
-            user_id: userIdUUID,
-            room_id,
+            userId: userIdUUID,
+            roomId,
           };
 
           await this.handleTweet({
@@ -179,7 +170,6 @@ export class TwitterInteractionClient extends ClientBase {
 
           // Update the last checked tweet ID after processing each tweet
           this.lastCheckedTweetId = tweet.id;
-          console.log("Updated lastCheckedTweetId:", this.lastCheckedTweetId);
 
           try {
             fs.writeFileSync(
@@ -187,7 +177,7 @@ export class TwitterInteractionClient extends ClientBase {
               this.lastCheckedTweetId.toString(),
               "utf-8",
             );
-            console.log("Saved lastCheckedTweetId:", this.lastCheckedTweetId);
+
           } catch (error) {
             console.error(
               "Error saving latest checked tweet ID to file:",
@@ -240,7 +230,7 @@ export class TwitterInteractionClient extends ClientBase {
     // Fetch recent conversations
     const recentConversationsText = await getRecentConversations(
       this.runtime,
-      this.twitterClient,
+      this,
       settings.TWITTER_USERNAME,
     );
 
@@ -264,14 +254,14 @@ export class TwitterInteractionClient extends ClientBase {
 
     if (!tweetExists) {
       const userIdUUID = stringToUuid(tweet.userId as string);
-      const room_id = stringToUuid(tweet.conversationId);
+      const roomId = stringToUuid(tweet.conversationId);
 
       const message = {
         id: tweetId,
         content: { text: tweet.text, url: tweet.permanentUrl, inReplyTo: tweet.inReplyToStatusId ? stringToUuid(tweet.inReplyToStatusId) : undefined },
-        user_id: userIdUUID,
-        room_id,
-        created_at: new Date(tweet.timestamp),
+        userId: userIdUUID,
+        roomId,
+        createdAt: new Date(tweet.timestamp),
       };
       this.saveRequestMessage(message, state);
     }
@@ -296,8 +286,6 @@ export class TwitterInteractionClient extends ClientBase {
       return { text: "", action: "IGNORE" };
     }
 
-    console.log("composeContext");
-
     const context = composeContext({
       state,
       template: messageHandlerTemplate,
@@ -311,8 +299,6 @@ export class TwitterInteractionClient extends ClientBase {
       context,
     );
 
-    console.log("messageCompletion");
-
     const response = await this.runtime.messageCompletion({
       context,
       stop: [],
@@ -324,18 +310,14 @@ export class TwitterInteractionClient extends ClientBase {
       JSON.stringify(response),
     );
 
-    console.log("**** messageCompletion response", response);
     if (response.text) {
-      console.log(
-        `Bot would respond to tweet ${tweet.id} with: ${response.text}`,
-      );
       try {
         if (!this.dryRun) {
           const callback: HandlerCallback = async (response: Content) => {
             const memories = await sendTweetChunks(
               this,
               response,
-              message.room_id,
+              message.roomId,
               settings.TWITTER_USERNAME,
             );
             return memories;
@@ -357,8 +339,6 @@ export class TwitterInteractionClient extends ClientBase {
         } else {
           console.log("Dry run, not sending tweet:", response.text);
         }
-        // we're running this in a loop, so wait a bit
-        console.log(`Successfully responded to tweet ${tweet.id}`);
         const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
         // f tweets folder dont exist, create
         if (!fs.existsSync("tweets")) {

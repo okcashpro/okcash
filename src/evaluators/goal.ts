@@ -50,7 +50,7 @@ async function handler(
   // get goals
   let goalsData = await getGoals({
     runtime,
-    room_id: message.room_id,
+    roomId: message.roomId,
     onlyInProgress: options.onlyInProgress as boolean,
   });
 
@@ -72,7 +72,7 @@ async function handler(
   // get goals
   goalsData = await getGoals({
     runtime,
-    room_id: message.room_id,
+    roomId: message.roomId,
     onlyInProgress: true,
   });
 
@@ -129,7 +129,7 @@ export default {
       runtime,
       count: 1,
       onlyInProgress: true,
-      room_id: message.room_id,
+      roomId: message.roomId,
     });
     return goals.length > 0;
   },

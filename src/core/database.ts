@@ -21,10 +21,10 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
   db: any;
   /**
    * Retrieves an account by its ID.
-   * @param user_id The UUID of the user account to retrieve.
+   * @param userId The UUID of the user account to retrieve.
    * @returns A Promise that resolves to the Account object or null if not found.
    */
-  abstract getAccountById(user_id: UUID): Promise<Account | null>;
+  abstract getAccountById(userId: UUID): Promise<Account | null>;
 
   /**
    * Creates a new account in the database.
@@ -39,14 +39,14 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
    * @returns A Promise that resolves to an array of Memory objects.
    */
   abstract getMemories(params: {
-    room_id: UUID;
+    roomId: UUID;
     count?: number;
     unique?: boolean;
     tableName: string;
   }): Promise<Memory[]>;
 
   abstract getMemoriesByRoomIds(params: {
-    room_ids: UUID[];
+    roomIds: UUID[];
     tableName: string;
   }): Promise<Memory[]>;
 
@@ -85,17 +85,17 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
    */
   abstract log(params: {
     body: { [key: string]: unknown };
-    user_id: UUID;
-    room_id: UUID;
+    userId: UUID;
+    roomId: UUID;
     type: string;
   }): Promise<void>;
 
   /**
    * Retrieves details of actors in a given room.
-   * @param params An object containing the room_id to search for actors.
+   * @param params An object containing the roomId to search for actors.
    * @returns A Promise that resolves to an array of Actor objects.
    */
-  abstract getActorDetails(params: { room_id: UUID }): Promise<Actor[]>;
+  abstract getActorDetails(params: { roomId: UUID }): Promise<Actor[]>;
 
   /**
    * Searches for memories based on embeddings and other specified parameters.
@@ -104,7 +104,7 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
    */
   abstract searchMemories(params: {
     tableName: string;
-    room_id: UUID;
+    roomId: UUID;
     embedding: number[];
     match_threshold: number;
     match_count: number;
@@ -132,7 +132,7 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
     params: {
       match_threshold?: number;
       count?: number;
-      room_id?: UUID;
+      roomId?: UUID;
       unique?: boolean;
       tableName: string;
     },
@@ -161,21 +161,21 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
 
   /**
    * Removes all memories associated with a specific room.
-   * @param room_id The UUID of the room whose memories should be removed.
+   * @param roomId The UUID of the room whose memories should be removed.
    * @param tableName The table from which the memories should be removed.
    * @returns A Promise that resolves when all memories have been removed.
    */
-  abstract removeAllMemories(room_id: UUID, tableName: string): Promise<void>;
+  abstract removeAllMemories(roomId: UUID, tableName: string): Promise<void>;
 
   /**
    * Counts the number of memories in a specific room.
-   * @param room_id The UUID of the room for which to count memories.
+   * @param roomId The UUID of the room for which to count memories.
    * @param unique Specifies whether to count only unique memories.
    * @param tableName Optional table name to count memories from.
    * @returns A Promise that resolves to the number of memories.
    */
   abstract countMemories(
-    room_id: UUID,
+    roomId: UUID,
     unique?: boolean,
     tableName?: string,
   ): Promise<number>;
@@ -186,8 +186,8 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
    * @returns A Promise that resolves to an array of Goal objects.
    */
   abstract getGoals(params: {
-    room_id: UUID;
-    user_id?: UUID | null;
+    roomId: UUID;
+    userId?: UUID | null;
     onlyInProgress?: boolean;
     count?: number;
   }): Promise<Goal[]>;
@@ -215,38 +215,38 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
 
   /**
    * Removes all goals associated with a specific room.
-   * @param room_id The UUID of the room whose goals should be removed.
+   * @param roomId The UUID of the room whose goals should be removed.
    * @returns A Promise that resolves when all goals have been removed.
    */
-  abstract removeAllGoals(room_id: UUID): Promise<void>;
+  abstract removeAllGoals(roomId: UUID): Promise<void>;
 
   /**
    * Retrieves the room ID for a given room, if it exists.
-   * @param room_id The UUID of the room to retrieve.
+   * @param roomId The UUID of the room to retrieve.
    * @returns A Promise that resolves to the room ID or null if not found.
    */
-  abstract getRoom(room_id: UUID): Promise<UUID | null>;
+  abstract getRoom(roomId: UUID): Promise<UUID | null>;
 
   /**
    * Creates a new room with an optional specified ID.
-   * @param room_id Optional UUID to assign to the new room.
+   * @param roomId Optional UUID to assign to the new room.
    * @returns A Promise that resolves to the UUID of the created room.
    */
-  abstract createRoom(room_id?: UUID): Promise<UUID>;
+  abstract createRoom(roomId?: UUID): Promise<UUID>;
 
   /**
    * Removes a specific room from the database.
-   * @param room_id The UUID of the room to remove.
+   * @param roomId The UUID of the room to remove.
    * @returns A Promise that resolves when the room has been removed.
    */
-  abstract removeRoom(room_id: UUID): Promise<void>;
+  abstract removeRoom(roomId: UUID): Promise<void>;
 
   /**
    * Retrieves room IDs for which a specific user is a participant.
-   * @param user_id The UUID of the user.
+   * @param userId The UUID of the user.
    * @returns A Promise that resolves to an array of room IDs.
    */
-  abstract getRoomsForParticipant(user_id: UUID): Promise<UUID[]>;
+  abstract getRoomsForParticipant(userId: UUID): Promise<UUID[]>;
 
   /**
    * Retrieves room IDs for which specific users are participants.
@@ -257,40 +257,40 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
 
   /**
    * Adds a user as a participant to a specific room.
-   * @param user_id The UUID of the user to add as a participant.
-   * @param room_id The UUID of the room to which the user will be added.
+   * @param userId The UUID of the user to add as a participant.
+   * @param roomId The UUID of the room to which the user will be added.
    * @returns A Promise that resolves to a boolean indicating success or failure.
    */
-  abstract addParticipant(user_id: UUID, room_id: UUID): Promise<boolean>;
+  abstract addParticipant(userId: UUID, roomId: UUID): Promise<boolean>;
 
   /**
    * Removes a user as a participant from a specific room.
-   * @param user_id The UUID of the user to remove as a participant.
-   * @param room_id The UUID of the room from which the user will be removed.
+   * @param userId The UUID of the user to remove as a participant.
+   * @param roomId The UUID of the room from which the user will be removed.
    * @returns A Promise that resolves to a boolean indicating success or failure.
    */
-  abstract removeParticipant(user_id: UUID, room_id: UUID): Promise<boolean>;
+  abstract removeParticipant(userId: UUID, roomId: UUID): Promise<boolean>;
 
   /**
    * Retrieves participants associated with a specific account.
-   * @param user_id The UUID of the account.
+   * @param userId The UUID of the account.
    * @returns A Promise that resolves to an array of Participant objects.
    */
-  abstract getParticipantsForAccount(user_id: UUID): Promise<Participant[]>;
+  abstract getParticipantsForAccount(userId: UUID): Promise<Participant[]>;
 
   /**
    * Retrieves participants associated with a specific account.
-   * @param user_id The UUID of the account.
+   * @param userId The UUID of the account.
    * @returns A Promise that resolves to an array of Participant objects.
    */
-  abstract getParticipantsForAccount(user_id: UUID): Promise<Participant[]>;
+  abstract getParticipantsForAccount(userId: UUID): Promise<Participant[]>;
 
   /**
    * Retrieves participants for a specific room.
-   * @param room_id The UUID of the room for which to retrieve participants.
+   * @param roomId The UUID of the room for which to retrieve participants.
    * @returns A Promise that resolves to an array of UUIDs representing the participants.
    */
-  abstract getParticipantsForRoom(room_id: UUID): Promise<UUID[]>;
+  abstract getParticipantsForRoom(roomId: UUID): Promise<UUID[]>;
 
   abstract getParticipantUserState(
     roomId: UUID,
@@ -327,5 +327,5 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
    * @param params An object containing the UUID of the user.
    * @returns A Promise that resolves to an array of Relationship objects.
    */
-  abstract getRelationships(params: { user_id: UUID }): Promise<Relationship[]>;
+  abstract getRelationships(params: { userId: UUID }): Promise<Relationship[]>;
 }

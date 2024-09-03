@@ -57,28 +57,28 @@ export class MemoryManager implements IMemoryManager {
   /**
    * Retrieves a list of memories by user IDs, with optional deduplication.
    * @param opts Options including user IDs, count, and uniqueness.
-   * @param opts.room_id The room ID to retrieve memories for.
+   * @param opts.roomId The room ID to retrieve memories for.
    * @param opts.count The number of memories to retrieve.
    * @param opts.unique Whether to retrieve unique memories only.
    * @returns A Promise resolving to an array of Memory objects.
    */
   async getMemories({
-    room_id,
+    roomId,
     count = 10,
     unique = true,
-    user_ids,
+    userIds,
   }: {
-    room_id: UUID;
+    roomId: UUID;
     count?: number;
     unique?: boolean;
-    user_ids?: UUID[];
+    userIds?: UUID[];
   }): Promise<Memory[]> {
     const result = await this.runtime.databaseAdapter.getMemories({
-      room_id,
+      roomId,
       count,
       unique,
       tableName: this.tableName,
-      user_ids,
+      userIds,
     });
     return result;
   }
@@ -106,7 +106,7 @@ export class MemoryManager implements IMemoryManager {
    * @param opts Options including match threshold, count, user IDs, and uniqueness.
    * @param opts.match_threshold The similarity threshold for matching memories.
    * @param opts.count The maximum number of memories to retrieve.
-   * @param opts.room_id The room ID to retrieve memories for.
+   * @param opts.roomId The room ID to retrieve memories for.
    * @param opts.unique Whether to retrieve unique memories only.
    * @returns A Promise resolving to an array of Memory objects that match the embedding.
    */
@@ -115,20 +115,20 @@ export class MemoryManager implements IMemoryManager {
     opts: {
       match_threshold?: number;
       count?: number;
-      room_id: UUID;
+      roomId: UUID;
       unique?: boolean;
     },
   ): Promise<Memory[]> {
     const {
       match_threshold = defaultMatchThreshold,
       count = defaultMatchCount,
-      room_id,
+      roomId,
       unique,
     } = opts;
 
     const searchOpts = {
       tableName: this.tableName,
-      room_id,
+      roomId,
       embedding: embedding,
       match_threshold: match_threshold,
       match_count: count,
@@ -162,9 +162,9 @@ export class MemoryManager implements IMemoryManager {
     );
   }
 
-  async getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]> {
+  async getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]> {
     const result = await this.runtime.databaseAdapter.getMemoriesByRoomIds({
-      room_ids: params.room_ids,
+      roomIds: params.roomIds,
     });
     return result;
   }
@@ -185,25 +185,25 @@ export class MemoryManager implements IMemoryManager {
 
   /**
    * Removes all memories associated with a set of user IDs.
-   * @param room_id The room ID to remove memories for.
+   * @param roomId The room ID to remove memories for.
    * @returns A Promise that resolves when the operation completes.
    */
-  async removeAllMemories(room_id: UUID): Promise<void> {
+  async removeAllMemories(roomId: UUID): Promise<void> {
     await this.runtime.databaseAdapter.removeAllMemories(
-      room_id,
+      roomId,
       this.tableName,
     );
   }
 
   /**
    * Counts the number of memories associated with a set of user IDs, with an option for uniqueness.
-   * @param room_id The room ID to count memories for.
+   * @param roomId The room ID to count memories for.
    * @param unique Whether to count unique memories only.
    * @returns A Promise resolving to the count of memories.
    */
-  async countMemories(room_id: UUID, unique = true): Promise<number> {
+  async countMemories(roomId: UUID, unique = true): Promise<number> {
     return await this.runtime.databaseAdapter.countMemories(
-      room_id,
+      roomId,
       unique,
       this.tableName,
     );

@@ -23,7 +23,7 @@ dotenv.config({ path: ".dev.vars" });
 describe("Goals Evaluator", () => {
   let user: User;
   let runtime: AgentRuntime;
-  let room_id: UUID;
+  let roomId: UUID;
 
   beforeAll(async () => {
     const setup = await createRuntime({
@@ -44,7 +44,7 @@ describe("Goals Evaluator", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data.room_id;
+    roomId = data.roomId;
 
     await cleanup();
   });
@@ -55,7 +55,7 @@ describe("Goals Evaluator", () => {
 
   async function cleanup() {
     // delete all goals for the user
-    await runtime.databaseAdapter.removeAllMemories(room_id, "goals");
+    await runtime.databaseAdapter.removeAllMemories(roomId, "goals");
   }
 
   async function createTestGoal(name: string, objectives: Objective[]) {
@@ -64,8 +64,8 @@ describe("Goals Evaluator", () => {
       goal: {
         name,
         status: GoalStatus.IN_PROGRESS,
-        room_id,
-        user_id: user.id as UUID,
+        roomId,
+        userId: user.id as UUID,
         objectives,
       },
     });
@@ -84,28 +84,28 @@ describe("Goals Evaluator", () => {
         ]);
 
         // Simulate a conversation indicating failure to achieve "Goal Y"
-        const conversation = (user_id: UUID) => [
+        const conversation = (userId: UUID) => [
           {
-            user_id,
+            userId,
             content: { text: "I see that you've finished the task?" },
           },
           {
-            user_id: zeroUuid,
+            userId: zeroUuid,
             content: {
               text: "Yes, the task and all objectives are finished.",
             },
           },
         ];
 
-        await populateMemories(runtime, user, room_id, [conversation]);
+        await populateMemories(runtime, user, roomId, [conversation]);
 
         // Simulate a conversation indicating the completion of both objectives
         const message: Memory = {
-          user_id: user.id as UUID,
+          userId: user.id as UUID,
           content: {
             text: "I've completed task 1 and task 2 for the Test Goal. Both are finished. Everything is done and I'm ready for the next goal.",
           },
-          room_id,
+          roomId,
         };
 
         // Process the message with the goal evaluator
@@ -116,7 +116,7 @@ describe("Goals Evaluator", () => {
         // Fetch the updated goal to verify the objectives and status were updated
         const updatedGoals = await getGoals({
           runtime,
-          room_id,
+          roomId,
           onlyInProgress: false,
         });
 
@@ -144,25 +144,25 @@ describe("Goals Evaluator", () => {
         ]);
 
         // Simulate a conversation indicating failure to achieve "Goal Y"
-        const conversation = (user_id: UUID) => [
+        const conversation = (userId: UUID) => [
           {
-            user_id,
+            userId,
             content: { text: "I couldn't complete the tasks for Goal Y." },
           },
           {
-            user_id: zeroUuid,
+            userId: zeroUuid,
             content: {
               text: "That's unfortunate. Let's cancel it..",
             },
           },
         ];
 
-        await populateMemories(runtime, user, room_id, [conversation]);
+        await populateMemories(runtime, user, roomId, [conversation]);
 
         const message: Memory = {
-          user_id: user.id as UUID,
+          userId: user.id as UUID,
           content: { text: "I've decided to mark Goal Y as failed." },
-          room_id,
+          roomId,
         };
 
         await evaluator.handler(runtime, message, {} as State, {
@@ -171,7 +171,7 @@ describe("Goals Evaluator", () => {
 
         const goals = await getGoals({
           runtime,
-          room_id,
+          roomId,
           onlyInProgress: false,
         });
 

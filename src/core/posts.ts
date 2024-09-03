@@ -8,21 +8,15 @@ export const formatPosts = ({
   actors: Actor[];
 }) => {
   const messageStrings = messages
-    .filter((message: Memory) => message.user_id)
+    .filter((message: Memory) => message.userId)
     .map((message: Memory) => {
-      console.log("********* message", JSON.stringify(message, null, 2));
-
-      console.log("Message user id is", message.user_id);
-      console.log("Actors are", actors);
-      console.log("Username is", message.content.username);
-
-      const actor = actors.find((actor: Actor) => actor.id === message.user_id);
+      const actor = actors.find((actor: Actor) => actor.id === message.userId);
       const userName = actor?.name || "Unknown User";
       const displayName = actor?.username || "unknown";
 
       return `Name: ${userName} (@${displayName})
 ID: ${message.id}
-Date: ${message.created_at}
+Date: ${message.createdAt}
 Text:
 ${message.content.text}
 ---`;

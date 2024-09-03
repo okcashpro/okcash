@@ -76,7 +76,7 @@ BEGIN
       newuser_url,
       jsonb_build_object(
         'token', token,
-        'user_id', NEW.id::text
+        'userId', NEW.id::text
       )
     );
   END IF;
@@ -87,7 +87,7 @@ $$;
 
 ALTER FUNCTION "public"."after_account_created"() OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."check_similarity_and_insert"("query_table_name" "text", "query_user_id" "uuid", "query_content" "jsonb", "query_room_id" "uuid", "query_embedding" "extensions"."vector", "similarity_threshold" double precision, "query_created_at" "timestamp with time zone")
+CREATE OR REPLACE FUNCTION "public"."check_similarity_and_insert"("query_table_name" "text", "query_userId" "uuid", "query_content" "jsonb", "query_roomId" "uuid", "query_embedding" "extensions"."vector", "similarity_threshold" double precision, "query_createdAt" "timestamp with time zone")
 RETURNS "void"
 LANGUAGE "plpgsql"
 AS $$
@@ -103,14 +103,14 @@ BEGIN
             'SELECT EXISTS (' ||
                 'SELECT 1 ' ||
                 'FROM memories ' ||
-                'WHERE user_id = %L ' ||
-                'AND room_id = %L ' ||
+                'WHERE userId = %L ' ||
+                'AND roomId = %L ' ||
                 'AND type = %L ' ||  -- Filter by the 'type' field using query_table_name
                 'AND embedding <=> %L < %L ' ||
                 'LIMIT 1' ||
             ')',
-            query_user_id,
-            query_room_id,
+            query_userId,
+            query_roomId,
             query_table_name,  -- Use query_table_name to filter by 'type'
             query_embedding,
             similarity_threshold
@@ -122,11 +122,11 @@ BEGIN
 
     -- Prepare the insert query with 'unique' field set based on the presence of similar records or NULL query_embedding
     insert_query := format(
-        'INSERT INTO memories (user_id, content, room_id, type, embedding, "unique", created_at) ' ||  -- Insert into the 'memories' table
+        'INSERT INTO memories (userId, content, roomId, type, embedding, "unique", createdAt) ' ||  -- Insert into the 'memories' table
         'VALUES (%L, %L, %L, %L, %L, %L, %L)',
-        query_user_id,
+        query_userId,
         query_content,
-        query_room_id,
+        query_roomId,
         query_table_name,  -- Use query_table_name as the 'type' value
         query_embedding,
         NOT similar_found OR query_embedding IS NULL  -- Set 'unique' to true if no similar record is found or query_embedding is NULL
@@ -137,9 +137,9 @@ BEGIN
 END;
 $$;
 
-ALTER FUNCTION "public"."check_similarity_and_insert"("query_table_name" "text", "query_user_id" "uuid", "query_content" "jsonb", "query_room_id" "uuid", "query_embedding" "extensions"."vector", "similarity_threshold" double precision) OWNER TO "postgres";
+ALTER FUNCTION "public"."check_similarity_and_insert"("query_table_name" "text", "query_userId" "uuid", "query_content" "jsonb", "query_roomId" "uuid", "query_embedding" "extensions"."vector", "similarity_threshold" double precision) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."count_memories"("query_table_name" "text", "query_room_id" "uuid", "query_unique" boolean DEFAULT false) RETURNS bigint
+CREATE OR REPLACE FUNCTION "public"."count_memories"("query_table_name" "text", "query_roomId" "uuid", "query_unique" boolean DEFAULT false) RETURNS bigint
     LANGUAGE "plpgsql"
     AS $$
 DECLARE
@@ -149,9 +149,9 @@ BEGIN
     -- Initialize the base query
     query := format('SELECT COUNT(*) FROM memories WHERE type = %L', query_table_name);
 
-    -- Add condition for room_id if not null, ensuring proper spacing
-    IF query_room_id IS NOT NULL THEN
-        query := query || format(' AND room_id = %L', query_room_id);
+    -- Add condition for roomId if not null, ensuring proper spacing
+    IF query_roomId IS NOT NULL THEN
+        query := query || format(' AND roomId = %L', query_roomId);
     END IF;
 
     -- Add condition for unique if TRUE, ensuring proper spacing
@@ -169,19 +169,19 @@ END;
 $$;
 
 
-ALTER FUNCTION "public"."count_memories"("query_table_name" "text", "query_room_id" "uuid", "query_unique" boolean) OWNER TO "postgres";
+ALTER FUNCTION "public"."count_memories"("query_table_name" "text", "query_roomId" "uuid", "query_unique" boolean) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."create_room"(room_id uuid)
+CREATE OR REPLACE FUNCTION "public"."create_room"(roomId uuid)
  RETURNS TABLE(id uuid)
  LANGUAGE plpgsql
 AS $function$
 BEGIN
   -- Check if the room already exists
-  IF EXISTS (SELECT 1 FROM rooms WHERE rooms.id = room_id) THEN
-    RETURN QUERY SELECT rooms.id FROM rooms WHERE rooms.id = room_id;
+  IF EXISTS (SELECT 1 FROM rooms WHERE rooms.id = roomId) THEN
+    RETURN QUERY SELECT rooms.id FROM rooms WHERE rooms.id = roomId;
   ELSE
-    -- Create a new room with the provided room_id
-    RETURN QUERY INSERT INTO rooms (id) VALUES (room_id) RETURNING rooms.id;
+    -- Create a new room with the provided roomId
+    RETURN QUERY INSERT INTO rooms (id) VALUES (roomId) RETURNING rooms.id;
   END IF;
 END;
 $function$
@@ -193,19 +193,19 @@ CREATE OR REPLACE FUNCTION "public"."create_friendship_with_host_agent"() RETURN
     AS $$
 DECLARE
   host_agent_id UUID := '00000000-0000-0000-0000-000000000000';
-  new_room_id UUID;
+  new_roomId UUID;
 BEGIN
   -- Create a new room for the direct message between the new user and the host agent
   INSERT INTO rooms DEFAULT VALUES
-  RETURNING id INTO new_room_id;
+  RETURNING id INTO new_roomId;
 
   -- Create a new friendship between the new user and the host agent
-  INSERT INTO relationships (user_a, user_b, user_id, status)
+  INSERT INTO relationships (userA, userB, userId, status)
   VALUES (NEW.id, host_agent_id, host_agent_id, 'FRIENDS');
 
   -- Add both users as participants of the new room
-  INSERT INTO participants (user_id, room_id)
-  VALUES (NEW.id, new_room_id), (host_agent_id, new_room_id);
+  INSERT INTO participants (userId, roomId)
+  VALUES (NEW.id, new_roomId), (host_agent_id, new_roomId);
 
   RETURN NEW;
 END;
@@ -230,22 +230,22 @@ BEGIN
 
   -- Iterate over the participants of the room
   FOR participant IN (
-    SELECT p.user_id
+    SELECT p.userId
     FROM participants p
-    WHERE p.room_id = NEW.room_id
+    WHERE p.roomId = NEW.roomId
   )
   LOOP
     -- Check if the participant is an agent
-    SELECT is_agent INTO agent_flag FROM accounts WHERE id = participant.user_id;
+    SELECT is_agent INTO agent_flag FROM accounts WHERE id = participant.userId;
 
     -- Add a condition to ensure the sender is not the agent
-    IF agent_flag AND NEW.user_id <> participant.user_id THEN
+    IF agent_flag AND NEW.userId <> participant.userId THEN
       -- Construct the payload JSON object and explicitly cast to TEXT
       payload := jsonb_build_object(
         'token', token,
-        'senderId', NEW.user_id::text,
+        'senderId', NEW.userId::text,
         'content', NEW.content,
-        'room_id', NEW.room_id::text
+        'roomId', NEW.roomId::text
       )::text;
 
       -- Make the HTTP POST request to the Cloudflare worker endpoint
@@ -318,9 +318,9 @@ SET default_table_access_method = "heap";
 
 CREATE TABLE IF NOT EXISTS "public"."goals" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "user_id" "uuid",
-    "room_id" "uuid",
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "userId" "uuid",
+    "roomId" "uuid",
     "status" "text",
     "name" "text",
     "objectives" "jsonb"[] DEFAULT '{}'::"jsonb"[] NOT NULL
@@ -328,24 +328,24 @@ CREATE TABLE IF NOT EXISTS "public"."goals" (
 
 ALTER TABLE "public"."goals" OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid" DEFAULT NULL::"uuid", "only_in_progress" boolean DEFAULT true, "row_count" integer DEFAULT 5) RETURNS SETOF "public"."goals"
+CREATE OR REPLACE FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid" DEFAULT NULL::"uuid", "only_in_progress" boolean DEFAULT true, "row_count" integer DEFAULT 5) RETURNS SETOF "public"."goals"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
     RETURN QUERY
     SELECT * FROM goals
     WHERE
-        (query_user_id IS NULL OR user_id = query_user_id)
-        AND (room_id = query_room_id)
+        (query_userId IS NULL OR userId = query_userId)
+        AND (roomId = query_roomId)
         AND (NOT only_in_progress OR status = 'IN_PROGRESS')
     LIMIT row_count;
 END;
 $$;
 
-ALTER FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid", "only_in_progress" boolean, "row_count" integer) OWNER TO "postgres";
+ALTER FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean DEFAULT false, "query_user_ids" "uuid"[] DEFAULT NULL) 
-RETURNS TABLE("id" "uuid", "user_id" "uuid", "content" "jsonb", "created_at" timestamp with time zone, "room_id" "uuid", "embedding" "extensions"."vector")
+CREATE OR REPLACE FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean DEFAULT false, "query_userIds" "uuid"[] DEFAULT NULL) 
+RETURNS TABLE("id" "uuid", "userId" "uuid", "content" "jsonb", "createdAt" timestamp with time zone, "roomId" "uuid", "embedding" "extensions"."vector")
 LANGUAGE "plpgsql"
 AS $_$
 DECLARE
@@ -354,24 +354,24 @@ BEGIN
     query := format($fmt$
         SELECT
             id,
-            user_id,
+            userId,
             content,
-            created_at,
-            room_id,
+            createdAt,
+            roomId,
             embedding
         FROM memories
         WHERE TRUE
         AND type = %L
         %s -- Additional condition for 'unique' column based on query_unique
-        %s -- Additional condition for room_id based on query_room_id
-        %s -- Additional condition for user_id based on query_user_ids
-        ORDER BY created_at DESC
+        %s -- Additional condition for roomId based on query_roomId
+        %s -- Additional condition for userId based on query_userIds
+        ORDER BY createdAt DESC
         LIMIT %L
         $fmt$,
         query_table_name,
         CASE WHEN query_unique THEN ' AND "unique" IS TRUE' ELSE '' END,
-        CASE WHEN query_room_id IS NOT NULL THEN format(' AND room_id = %L', query_room_id) ELSE '' END,
-        CASE WHEN query_user_ids IS NOT NULL THEN format(' AND user_id = ANY(ARRAY[%s])', array_to_string(query_user_ids, ',')) ELSE '' END,
+        CASE WHEN query_roomId IS NOT NULL THEN format(' AND roomId = %L', query_roomId) ELSE '' END,
+        CASE WHEN query_userIds IS NOT NULL THEN format(' AND userId = ANY(ARRAY[%s])', array_to_string(query_userIds, ',')) ELSE '' END,
         query_count
     );
 
@@ -379,29 +379,29 @@ BEGIN
 END;
 $_$;
 
-ALTER FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean, "query_user_ids" "uuid"[]) OWNER TO "postgres";
+ALTER FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean, "query_userIds" "uuid"[]) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_message_count"("p_user_id" "uuid") RETURNS TABLE("room_id" "uuid", "unread_messages_count" integer)
+CREATE OR REPLACE FUNCTION "public"."get_message_count"("p_userId" "uuid") RETURNS TABLE("roomId" "uuid", "unread_messages_count" integer)
     LANGUAGE "plpgsql"
     AS $$BEGIN
   RETURN QUERY
-  SELECT p.room_id, COALESCE(COUNT(m.id)::integer, 0) AS unread_messages_count
+  SELECT p.roomId, COALESCE(COUNT(m.id)::integer, 0) AS unread_messages_count
   FROM participants p
-  LEFT JOIN memories m ON p.room_id = m.room_id AND m.type = "messages"
-  WHERE p.user_id = p_user_id
-  GROUP BY p.room_id;
+  LEFT JOIN memories m ON p.roomId = m.roomId AND m.type = "messages"
+  WHERE p.userId = p_userId
+  GROUP BY p.roomId;
 END;
 $$;
 
-ALTER FUNCTION "public"."get_message_count"("p_user_id" "uuid") OWNER TO "postgres";
+ALTER FUNCTION "public"."get_message_count"("p_userId" "uuid") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."relationships" (
-    "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
-    "user_a" "uuid",
-    "user_b" "uuid",
+    "createdAt" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
+    "userA" "uuid",
+    "userB" "uuid",
     "status" "text",
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "user_id" "uuid" NOT NULL
+    "userId" "uuid" NOT NULL
 );
 
 ALTER TABLE "public"."relationships" OWNER TO "postgres";
@@ -413,28 +413,28 @@ BEGIN
   RETURN QUERY
   SELECT *
   FROM relationships
-  WHERE (user_a = usera AND user_b = userb)
-     OR (user_a = userb AND user_b = usera);
+  WHERE (userA = usera AND userB = userb)
+     OR (userA = userb AND userB = usera);
 END;
 $$;
 
 ALTER FUNCTION "public"."get_relationship"("usera" "uuid", "userb" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."remove_memories"("query_table_name" "text", "query_room_id" "uuid") RETURNS "void"
+CREATE OR REPLACE FUNCTION "public"."remove_memories"("query_table_name" "text", "query_roomId" "uuid") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $_$DECLARE
     dynamic_query TEXT;
 BEGIN
-    dynamic_query := format('DELETE FROM memories WHERE room_id = $1 AND type = $2');
-    EXECUTE dynamic_query USING query_room_id, query_table_name;
+    dynamic_query := format('DELETE FROM memories WHERE roomId = $1 AND type = $2');
+    EXECUTE dynamic_query USING query_roomId, query_table_name;
 END;
 $_$;
 
 
-ALTER FUNCTION "public"."remove_memories"("query_table_name" "text", "query_room_id" "uuid") OWNER TO "postgres";
+ALTER FUNCTION "public"."remove_memories"("query_table_name" "text", "query_roomId" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."search_memories"("query_table_name" "text", "query_room_id" "uuid", "query_embedding" "extensions"."vector", "query_match_threshold" double precision, "query_match_count" integer, "query_unique" boolean)
-RETURNS TABLE("id" "uuid", "user_id" "uuid", "content" "jsonb", "created_at" timestamp with time zone, "similarity" double precision, "room_id" "uuid", "embedding" "extensions"."vector")
+CREATE OR REPLACE FUNCTION "public"."search_memories"("query_table_name" "text", "query_roomId" "uuid", "query_embedding" "extensions"."vector", "query_match_threshold" double precision, "query_match_count" integer, "query_unique" boolean)
+RETURNS TABLE("id" "uuid", "userId" "uuid", "content" "jsonb", "createdAt" timestamp with time zone, "similarity" double precision, "roomId" "uuid", "embedding" "extensions"."vector")
 LANGUAGE "plpgsql"
 AS $$
 DECLARE
@@ -443,17 +443,17 @@ BEGIN
     query := format($fmt$
         SELECT
             id,
-            user_id,
+            userId,
             content,
-            created_at,
+            createdAt,
             1 - (embedding <=> %L) AS similarity, -- Use '<=>' for cosine distance
-            room_id,
+            roomId,
             embedding
         FROM memories
         WHERE (1 - (embedding <=> %L) > %L)
         AND type = %L
         %s -- Additional condition for 'unique' column
-        %s -- Additional condition for 'room_id'
+        %s -- Additional condition for 'roomId'
         ORDER BY similarity DESC
         LIMIT %L
         $fmt$,
@@ -462,7 +462,7 @@ BEGIN
         query_match_threshold,
         query_table_name,
         CASE WHEN query_unique THEN ' AND "unique" IS TRUE' ELSE '' END,
-        CASE WHEN query_room_id IS NOT NULL THEN format(' AND room_id = %L', query_room_id) ELSE '' END,
+        CASE WHEN query_roomId IS NOT NULL THEN format(' AND roomId = %L', query_roomId) ELSE '' END,
         query_match_count
     );
 
@@ -472,15 +472,15 @@ $$;
 
 
 
-ALTER FUNCTION "public"."search_memories"("query_table_name" "text", "query_room_id" "uuid", "query_embedding" "extensions"."vector", "query_match_threshold" double precision, "query_match_count" integer, "query_unique" boolean) OWNER TO "postgres";
+ALTER FUNCTION "public"."search_memories"("query_table_name" "text", "query_roomId" "uuid", "query_embedding" "extensions"."vector", "query_match_threshold" double precision, "query_match_count" integer, "query_unique" boolean) OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."accounts" (
     "id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
     "name" "text",
     "username" "text",
     "email" "text" NOT NULL,
-    "avatar_url" "text",
+    "avatarUrl" "text",
     "details" "jsonb" DEFAULT '{}'::"jsonb",
     "is_agent" boolean DEFAULT false NOT NULL,
     "location" "text",
@@ -492,22 +492,22 @@ ALTER TABLE "public"."accounts" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."logs" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "user_id" "uuid" NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "userId" "uuid" NOT NULL,
     "body" "jsonb" NOT NULL,
     "type" "text" NOT NULL,
-    "room_id" "uuid"
+    "roomId" "uuid"
 );
 
 ALTER TABLE "public"."logs" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."memories" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL,
     "content" "jsonb" NOT NULL,
     "embedding" "extensions"."vector" NOT NULL,
-    "user_id" "uuid",
-    "room_id" "uuid",
+    "userId" "uuid",
+    "roomId" "uuid",
     "unique" boolean DEFAULT true NOT NULL,
     "type" "text" NOT NULL
 );
@@ -515,47 +515,47 @@ CREATE TABLE IF NOT EXISTS "public"."memories" (
 ALTER TABLE "public"."memories" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."participants" (
-    "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
-    "user_id" "uuid",
-    "room_id" "uuid",
-    "user_state" "text" DEFAULT NULL, -- Add user_state field to track MUTED, NULL, or FOLLOWED
+    "createdAt" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
+    "userId" "uuid",
+    "roomId" "uuid",
+    "userState" "text" DEFAULT NULL, -- Add userState field to track MUTED, NULL, or FOLLOWED
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "last_message_read" "uuid",
-    FOREIGN KEY ("user_id") REFERENCES "accounts"("id"),
-    FOREIGN KEY ("room_id") REFERENCES "rooms"("id")
+    FOREIGN KEY ("userId") REFERENCES "accounts"("id"),
+    FOREIGN KEY ("roomId") REFERENCES "rooms"("id")
 );
 
 
 ALTER TABLE "public"."participants" OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."get_participant_user_state"("room_id" "uuid", "user_id" "uuid")
+CREATE OR REPLACE FUNCTION "public"."get_participant_userState"("roomId" "uuid", "userId" "uuid")
 RETURNS "text"
 LANGUAGE "plpgsql"
 AS $$
 BEGIN
     RETURN (
-        SELECT user_state
+        SELECT userState
         FROM participants
-        WHERE room_id = $1 AND user_id = $2
+        WHERE roomId = $1 AND userId = $2
     );
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."set_participant_user_state"("room_id" "uuid", "user_id" "uuid", "state" "text")
+CREATE OR REPLACE FUNCTION "public"."set_participant_userState"("roomId" "uuid", "userId" "uuid", "state" "text")
 RETURNS "void"
 LANGUAGE "plpgsql"
 AS $$
 BEGIN
     UPDATE participants
-    SET user_state = $3
-    WHERE room_id = $1 AND user_id = $2;
+    SET userState = $3
+    WHERE roomId = $1 AND userId = $2;
 END;
 $$;
 
 CREATE TABLE IF NOT EXISTS "public"."rooms" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL
+    "createdAt" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL
 );
 
 ALTER TABLE "public"."rooms" OWNER TO "postgres";
@@ -595,29 +595,29 @@ CREATE OR REPLACE TRIGGER "trigger_after_account_created" AFTER INSERT ON "publi
 CREATE OR REPLACE TRIGGER "trigger_create_friendship_with_host_agent" AFTER INSERT ON "public"."accounts" FOR EACH ROW EXECUTE FUNCTION "public"."create_friendship_with_host_agent"();
 
 ALTER TABLE ONLY "public"."participants"
-    ADD CONSTRAINT "participants_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id");
+    ADD CONSTRAINT "participants_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "public"."rooms"("id");
 
 ALTER TABLE ONLY "public"."participants"
-    ADD CONSTRAINT "participants_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "participants_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."memories"
-    ADD CONSTRAINT "memories_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id");
+    ADD CONSTRAINT "memories_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "public"."rooms"("id");
 
 ALTER TABLE ONLY "public"."memories"
-    ADD CONSTRAINT "memories_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "memories_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."relationships"
-    ADD CONSTRAINT "relationships_user_a_fkey" FOREIGN KEY ("user_a") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "relationships_user_a_fkey" FOREIGN KEY ("userA") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."relationships"
-    ADD CONSTRAINT "relationships_user_b_fkey" FOREIGN KEY ("user_b") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "relationships_user_b_fkey" FOREIGN KEY ("userB") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."relationships"
-    ADD CONSTRAINT "relationships_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "relationships_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."accounts"("id");
 
 CREATE POLICY "Can select and update all data" ON "public"."accounts" USING (("auth"."uid"() = "id")) WITH CHECK (("auth"."uid"() = "id"));
 
-CREATE POLICY "Enable delete for users based on user_id" ON "public"."goals" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable delete for users based on userId" ON "public"."goals" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "userId"));
 
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."accounts" FOR INSERT TO "authenticated", "anon", "service_role", "supabase_replication_admin", "supabase_read_only_user" WITH CHECK (true);
 
@@ -627,11 +627,11 @@ CREATE POLICY "Enable insert for authenticated users only" ON "public"."logs" FO
 
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."participants" FOR INSERT TO "authenticated" WITH CHECK (true);
 
-CREATE POLICY "Enable insert for authenticated users only" ON "public"."relationships" FOR INSERT TO "authenticated" WITH CHECK ((("auth"."uid"() = "user_a") OR ("auth"."uid"() = "user_b")));
+CREATE POLICY "Enable insert for authenticated users only" ON "public"."relationships" FOR INSERT TO "authenticated" WITH CHECK ((("auth"."uid"() = "userA") OR ("auth"."uid"() = "userB")));
 
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."rooms" FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Enable insert for self id" ON "public"."participants" USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable insert for self id" ON "public"."participants" USING (("auth"."uid"() = "userId")) WITH CHECK (("auth"."uid"() = "userId"));
 
 CREATE POLICY "Enable read access for all users" ON "public"."accounts" FOR SELECT USING (true);
 
@@ -641,15 +641,15 @@ CREATE POLICY "Enable read access for all users" ON "public"."relationships" FOR
 
 CREATE POLICY "Enable read access for all users" ON "public"."rooms" FOR SELECT TO "authenticated" USING (true);
 
-CREATE POLICY "Enable read access for own rooms" ON "public"."participants" FOR SELECT TO "authenticated" USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable read access for own rooms" ON "public"."participants" FOR SELECT TO "authenticated" USING (("auth"."uid"() = "userId"));
 
-CREATE POLICY "Enable read access for user to their own relationships" ON "public"."relationships" FOR SELECT TO "authenticated" USING ((("auth"."uid"() = "user_a") OR ("auth"."uid"() = "user_b")));
+CREATE POLICY "Enable read access for user to their own relationships" ON "public"."relationships" FOR SELECT TO "authenticated" USING ((("auth"."uid"() = "userA") OR ("auth"."uid"() = "userB")));
 
 CREATE POLICY "Enable update for users based on email" ON "public"."goals" FOR UPDATE TO "authenticated" USING (true) WITH CHECK (true);
 
 CREATE POLICY "Enable update for users of own id" ON "public"."rooms" FOR UPDATE USING (true) WITH CHECK (true);
 
-CREATE POLICY "Enable users to delete their own relationships/friendships" ON "public"."relationships" FOR DELETE TO "authenticated" USING ((("auth"."uid"() = "user_a") OR ("auth"."uid"() = "user_b")));
+CREATE POLICY "Enable users to delete their own relationships/friendships" ON "public"."relationships" FOR DELETE TO "authenticated" USING ((("auth"."uid"() = "userA") OR ("auth"."uid"() = "userB")));
 
 ALTER TABLE "public"."accounts" ENABLE ROW LEVEL SECURITY;
 
@@ -678,10 +678,10 @@ GRANT ALL ON FUNCTION "public"."after_account_created"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."after_account_created"() TO "supabase_admin";
 GRANT ALL ON FUNCTION "public"."after_account_created"() TO "supabase_auth_admin";
 
-GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_room_id" "uuid", "query_unique" boolean) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_room_id" "uuid", "query_unique" boolean) TO "service_role";
-GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_room_id" "uuid", "query_unique" boolean) TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_room_id" "uuid", "query_unique" boolean) TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_roomId" "uuid", "query_unique" boolean) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_roomId" "uuid", "query_unique" boolean) TO "service_role";
+GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_roomId" "uuid", "query_unique" boolean) TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."count_memories"("query_table_name" "text", "query_roomId" "uuid", "query_unique" boolean) TO "supabase_auth_admin";
 
 GRANT ALL ON FUNCTION "public"."create_friendship_with_host_agent"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."create_friendship_with_host_agent"() TO "service_role";
@@ -703,20 +703,20 @@ GRANT ALL ON TABLE "public"."goals" TO "service_role";
 GRANT ALL ON TABLE "public"."goals" TO "supabase_admin";
 GRANT ALL ON TABLE "public"."goals" TO "supabase_auth_admin";
 
-GRANT ALL ON FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid", "only_in_progress" boolean, "row_count" integer) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid", "only_in_progress" boolean, "row_count" integer) TO "service_role";
-GRANT ALL ON FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid", "only_in_progress" boolean, "row_count" integer) TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."get_goals"("query_room_id" "uuid", "query_user_id" "uuid", "only_in_progress" boolean, "row_count" integer) TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "supabase_auth_admin";
 
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean) TO "service_role";
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean) TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_room_id" "uuid", "query_count" integer, "query_unique" boolean) TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "supabase_auth_admin";
 
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_user_id" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_user_id" "uuid") TO "service_role";
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_user_id" "uuid") TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_user_id" "uuid") TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "supabase_auth_admin";
 
 GRANT ALL ON TABLE "public"."relationships" TO "authenticated";
 GRANT ALL ON TABLE "public"."relationships" TO "service_role";
@@ -728,10 +728,10 @@ GRANT ALL ON FUNCTION "public"."get_relationship"("usera" "uuid", "userb" "uuid"
 GRANT ALL ON FUNCTION "public"."get_relationship"("usera" "uuid", "userb" "uuid") TO "supabase_admin";
 GRANT ALL ON FUNCTION "public"."get_relationship"("usera" "uuid", "userb" "uuid") TO "supabase_auth_admin";
 
-GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_room_id" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_room_id" "uuid") TO "service_role";
-GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_room_id" "uuid") TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_room_id" "uuid") TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_roomId" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_roomId" "uuid") TO "service_role";
+GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_roomId" "uuid") TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."remove_memories"("query_table_name" "text", "query_roomId" "uuid") TO "supabase_auth_admin";
 
 GRANT ALL ON TABLE "public"."accounts" TO "authenticated";
 GRANT ALL ON TABLE "public"."accounts" TO "service_role";
@@ -765,15 +765,15 @@ GRANT ALL ON TABLE "public"."secrets" TO "supabase_admin";
 GRANT ALL ON TABLE "public"."secrets" TO "supabase_auth_admin";
 
 
-GRANT ALL ON FUNCTION "public"."get_participant_user_state"("room_id" "uuid", "user_id" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_participant_user_state"("room_id" "uuid", "user_id" "uuid") TO "service_role";
-GRANT ALL ON FUNCTION "public"."get_participant_user_state"("room_id" "uuid", "user_id" "uuid") TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."get_participant_user_state"("room_id" "uuid", "user_id" "uuid") TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."get_participant_userState"("roomId" "uuid", "userId" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_participant_userState"("roomId" "uuid", "userId" "uuid") TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_participant_userState"("roomId" "uuid", "userId" "uuid") TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."get_participant_userState"("roomId" "uuid", "userId" "uuid") TO "supabase_auth_admin";
 
-GRANT ALL ON FUNCTION "public"."set_participant_user_state"("room_id" "uuid", "user_id" "uuid", "state" "text") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."set_participant_user_state"("room_id" "uuid", "user_id" "uuid", "state" "text") TO "service_role";  
-GRANT ALL ON FUNCTION "public"."set_participant_user_state"("room_id" "uuid", "user_id" "uuid", "state" "text") TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."set_participant_user_state"("room_id" "uuid", "user_id" "uuid", "state" "text") TO "supabase_auth_admin";
+GRANT ALL ON FUNCTION "public"."set_participant_userState"("roomId" "uuid", "userId" "uuid", "state" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."set_participant_userState"("roomId" "uuid", "userId" "uuid", "state" "text") TO "service_role";  
+GRANT ALL ON FUNCTION "public"."set_participant_userState"("roomId" "uuid", "userId" "uuid", "state" "text") TO "supabase_admin";
+GRANT ALL ON FUNCTION "public"."set_participant_userState"("roomId" "uuid", "userId" "uuid", "state" "text") TO "supabase_auth_admin";
 
 
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "postgres";

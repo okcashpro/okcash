@@ -15,23 +15,23 @@ import { sqliteTables } from "./sqlite/sqliteTables.ts";
 import { Database } from "./sqljs/types.ts";
 
 export class SqlJsDatabaseAdapter extends DatabaseAdapter {
-  async getRoom(room_id: UUID): Promise<UUID | null> {
+  async getRoom(roomId: UUID): Promise<UUID | null> {
     const sql = "SELECT id FROM rooms WHERE id = ?";
     const stmt = this.db.prepare(sql);
-    stmt.bind([room_id]);
+    stmt.bind([roomId]);
     const room = stmt.getAsObject() as { id: string } | undefined;
     stmt.free();
     return room ? (room.id as UUID) : null;
   }
 
-  async getParticipantsForAccount(user_id: UUID): Promise<Participant[]> {
+  async getParticipantsForAccount(userId: UUID): Promise<Participant[]> {
     const sql = `
-      SELECT p.id, p.user_id, p.room_id, p.last_message_read
+      SELECT p.id, p.userId, p.roomId, p.last_message_read
       FROM participants p
-      WHERE p.user_id = ?
+      WHERE p.userId = ?
     `;
     const stmt = this.db.prepare(sql);
-    stmt.bind([user_id]);
+    stmt.bind([userId]);
     const participants: Participant[] = [];
     while (stmt.step()) {
       const participant = stmt.getAsObject() as unknown as Participant;
@@ -46,24 +46,24 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     userId: UUID,
   ): Promise<"FOLLOWED" | "MUTED" | null> {
     const sql =
-      "SELECT user_state FROM participants WHERE room_id = ? AND user_id = ?";
+      "SELECT userState FROM participants WHERE roomId = ? AND userId = ?";
     const stmt = this.db.prepare(sql);
     stmt.bind([roomId, userId]);
     const result = stmt.getAsObject() as {
-      user_state: "FOLLOWED" | "MUTED" | null;
+      userState: "FOLLOWED" | "MUTED" | null;
     };
     stmt.free();
-    return result.user_state ?? null;
+    return result.userState ?? null;
   }
 
   async getMemoriesByRoomIds(params: {
-    room_ids: UUID[];
+    roomIds: UUID[];
     tableName: string;
   }): Promise<Memory[]> {
-    const placeholders = params.room_ids.map(() => "?").join(", ");
-    const sql = `SELECT * FROM memories WHERE type = ? AND room_id IN (${placeholders})`;
+    const placeholders = params.roomIds.map(() => "?").join(", ");
+    const sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
     const stmt = this.db.prepare(sql);
-    const queryParams = [params.tableName, ...params.room_ids];
+    const queryParams = [params.tableName, ...params.roomIds];
     stmt.bind(queryParams);
 
     const memories: Memory[] = [];
@@ -71,7 +71,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       const memory = stmt.getAsObject() as unknown as Memory;
       memories.push({
         ...memory,
-        created_at: new Date(memory.created_at),
+        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -85,21 +85,21 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     state: "FOLLOWED" | "MUTED" | null,
   ): Promise<void> {
     const sql =
-      "UPDATE participants SET user_state = ? WHERE room_id = ? AND user_id = ?";
+      "UPDATE participants SET userState = ? WHERE roomId = ? AND userId = ?";
     const stmt = this.db.prepare(sql);
     stmt.bind([state, roomId, userId]);
     stmt.step();
     stmt.free();
   }
 
-  async getParticipantsForRoom(room_id: UUID): Promise<UUID[]> {
-    const sql = "SELECT user_id FROM participants WHERE room_id = ?";
+  async getParticipantsForRoom(roomId: UUID): Promise<UUID[]> {
+    const sql = "SELECT userId FROM participants WHERE roomId = ?";
     const stmt = this.db.prepare(sql);
-    stmt.bind([room_id]);
+    stmt.bind([roomId]);
     const userIds: UUID[] = [];
     while (stmt.step()) {
-      const row = stmt.getAsObject() as { user_id: string };
-      userIds.push(row.user_id as UUID);
+      const row = stmt.getAsObject() as { userId: string };
+      userIds.push(row.userId as UUID);
     }
     stmt.free();
     return userIds;
@@ -120,10 +120,10 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     }
   }
 
-  async getAccountById(user_id: UUID): Promise<Account | null> {
+  async getAccountById(userId: UUID): Promise<Account | null> {
     const sql = "SELECT * FROM accounts WHERE id = ?";
     const stmt = this.db.prepare(sql);
-    stmt.bind([user_id]);
+    stmt.bind([userId]);
     const account = stmt.getAsObject() as unknown as Account | undefined;
 
     if (account && typeof account.details === "string") {
@@ -137,7 +137,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
   async createAccount(account: Account): Promise<boolean> {
     try {
       const sql = `
-      INSERT INTO accounts (id, name, username, email, avatar_url, details)
+      INSERT INTO accounts (id, name, username, email, avatarUrl, details)
       VALUES (?, ?, ?, ?, ?, ?)
       `;
       const stmt = this.db.prepare(sql);
@@ -146,7 +146,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         account.name,
         account.username || "",
         account.email || "",
-        account.avatar_url || "",
+        account.avatarUrl || "",
         JSON.stringify(account.details),
       ]);
       stmt.free();
@@ -157,15 +157,15 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     }
   }
 
-  async getActorDetails(params: { room_id: UUID }): Promise<Actor[]> {
+  async getActorDetails(params: { roomId: UUID }): Promise<Actor[]> {
     const sql = `
       SELECT a.id, a.name, a.username, a.details
       FROM participants p
-      LEFT JOIN accounts a ON p.user_id = a.id
-      WHERE p.room_id = ?
+      LEFT JOIN accounts a ON p.userId = a.id
+      WHERE p.roomId = ?
     `;
     const stmt = this.db.prepare(sql);
-    stmt.bind([params.room_id]);
+    stmt.bind([params.roomId]);
     const rows: Actor[] = [];
     while (stmt.step()) {
       const row = stmt.getAsObject() as unknown as Actor;
@@ -198,7 +198,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         memory.embedding,
         {
           tableName,
-          room_id: memory.room_id,
+          roomId: memory.roomId,
           match_threshold: 0.95, // 5% similarity threshold
           count: 1,
         },
@@ -208,27 +208,27 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     }
 
     // Insert the memory with the appropriate 'unique' value
-    const sql = `INSERT INTO memories (id, type, content, embedding, user_id, room_id, \`unique\`, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const stmt = this.db.prepare(sql);
 
-    const created_at = (memory.created_at ?? new Date()).getTime();
+    const createdAt = (memory.createdAt ?? new Date()).getTime();
 
     stmt.run([
       v4(),
       tableName,
       JSON.stringify(memory.content),
       JSON.stringify(memory.embedding),
-      memory.user_id,
-      memory.room_id,
+      memory.userId,
+      memory.roomId,
       isUnique ? 1 : 0,
-      created_at,
+      createdAt,
     ]);
     stmt.free();
   }
 
   async searchMemories(params: {
     tableName: string;
-    room_id: UUID;
+    roomId: UUID;
     embedding: number[];
     match_threshold: number;
     match_count: number;
@@ -241,7 +241,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       // `, (1 - vss_distance_l2(embedding, ?)) AS similarity` +
       ` FROM memories
   WHERE type = ?
-  AND room_id = ?`;
+  AND roomId = ?`;
 
     if (params.unique) {
       sql += " AND `unique` = 1";
@@ -252,7 +252,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.bind([
       // JSON.stringify(params.embedding),
       params.tableName,
-      params.room_id,
+      params.roomId,
       // params.match_count,
     ]);
     const memories: (Memory & { similarity: number })[] = [];
@@ -262,7 +262,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       };
       memories.push({
         ...memory,
-        created_at: new Date(memory.created_at),
+        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -275,7 +275,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     params: {
       match_threshold?: number;
       count?: number;
-      room_id?: UUID;
+      roomId?: UUID;
       unique?: boolean;
       tableName: string;
     },
@@ -290,8 +290,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     if (params.unique) {
       sql += " AND `unique` = 1";
     }
-    if (params.room_id) {
-      sql += " AND room_id = ?";
+    if (params.roomId) {
+      sql += " AND roomId = ?";
     }
     // TODO: Uncomment when we compile sql.js with vss
     // sql += ` ORDER BY similarity DESC`;
@@ -305,8 +305,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       // JSON.stringify(embedding),
       params.tableName,
     ];
-    if (params.room_id) {
-      bindings.push(params.room_id);
+    if (params.roomId) {
+      bindings.push(params.roomId);
     }
     if (params.count) {
       bindings.push(params.count.toString());
@@ -320,7 +320,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       };
       memories.push({
         ...memory,
-        created_at: new Date(memory.created_at),
+        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -366,7 +366,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
 
     return memories.map((memory) => ({
       ...memory,
-      created_at: new Date(memory.created_at),
+      createdAt: new Date(memory.createdAt),
       embedding: JSON.parse(memory.embedding as unknown as string),
       levenshtein_score: 0,
     }));
@@ -384,46 +384,46 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
 
   async log(params: {
     body: { [key: string]: unknown };
-    user_id: UUID;
-    room_id: UUID;
+    userId: UUID;
+    roomId: UUID;
     type: string;
   }): Promise<void> {
     const sql =
-      "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)";
+      "INSERT INTO logs (body, userId, roomId, type) VALUES (?, ?, ?, ?)";
     const stmt = this.db.prepare(sql);
     stmt.run([
       JSON.stringify(params.body),
-      params.user_id,
-      params.room_id,
+      params.userId,
+      params.roomId,
       params.type,
     ]);
     stmt.free();
   }
 
   async getMemories(params: {
-    room_id: UUID;
+    roomId: UUID;
     count?: number;
     unique?: boolean;
     tableName: string;
-    user_ids?: UUID[];
+    userIds?: UUID[];
   }): Promise<Memory[]> {
     if (!params.tableName) {
       throw new Error("tableName is required");
     }
-    if (!params.room_id) {
-      throw new Error("room_id is required");
+    if (!params.roomId) {
+      throw new Error("roomId is required");
     }
-    let sql = `SELECT * FROM memories WHERE type = ? AND room_id = ?`;
+    let sql = `SELECT * FROM memories WHERE type = ? AND roomId = ?`;
 
     if (params.unique) {
       sql += " AND `unique` = 1";
     }
 
-    if (params.user_ids && params.user_ids.length > 0) {
-      sql += ` AND user_id IN (${params.user_ids.map(() => "?").join(",")})`;
+    if (params.userIds && params.userIds.length > 0) {
+      sql += ` AND userId IN (${params.userIds.map(() => "?").join(",")})`;
     }
 
-    sql += " ORDER BY created_at DESC";
+    sql += " ORDER BY createdAt DESC";
 
     if (params.count) {
       sql += " LIMIT ?";
@@ -432,17 +432,17 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     const stmt = this.db.prepare(sql);
     stmt.bind([
       params.tableName,
-      params.room_id,
-      ...(params.user_ids || []),
+      params.roomId,
+      ...(params.userIds || []),
       ...(params.count ? [params.count] : []),
     ]);
     const memories: Memory[] = [];
     while (stmt.step()) {
-      // convert created_at to Date
+      // convert createdAt to Date
       const memory = stmt.getAsObject() as unknown as Memory;
       memories.push({
         ...memory,
-        created_at: new Date(memory.created_at),
+        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -457,15 +457,15 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.free();
   }
 
-  async removeAllMemories(room_id: UUID, tableName: string): Promise<void> {
-    const sql = `DELETE FROM memories WHERE type = ? AND room_id = ?`;
+  async removeAllMemories(roomId: UUID, tableName: string): Promise<void> {
+    const sql = `DELETE FROM memories WHERE type = ? AND roomId = ?`;
     const stmt = this.db.prepare(sql);
-    stmt.run([tableName, room_id]);
+    stmt.run([tableName, roomId]);
     stmt.free();
   }
 
   async countMemories(
-    room_id: UUID,
+    roomId: UUID,
     unique = true,
     tableName = "",
   ): Promise<number> {
@@ -473,13 +473,13 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       throw new Error("tableName is required");
     }
 
-    let sql = `SELECT COUNT(*) as count FROM memories WHERE type = ? AND room_id = ?`;
+    let sql = `SELECT COUNT(*) as count FROM memories WHERE type = ? AND roomId = ?`;
     if (unique) {
       sql += " AND `unique` = 1";
     }
 
     const stmt = this.db.prepare(sql);
-    stmt.bind([tableName, room_id]);
+    stmt.bind([tableName, roomId]);
 
     let count = 0;
     if (stmt.step()) {
@@ -492,17 +492,17 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
   }
 
   async getGoals(params: {
-    room_id: UUID;
-    user_id?: UUID | null;
+    roomId: UUID;
+    userId?: UUID | null;
     onlyInProgress?: boolean;
     count?: number;
   }): Promise<Goal[]> {
-    let sql = "SELECT * FROM goals WHERE room_id = ?";
-    const bindings: (string | number)[] = [params.room_id];
+    let sql = "SELECT * FROM goals WHERE roomId = ?";
+    const bindings: (string | number)[] = [params.roomId];
 
-    if (params.user_id) {
-      sql += " AND user_id = ?";
-      bindings.push(params.user_id);
+    if (params.userId) {
+      sql += " AND userId = ?";
+      bindings.push(params.userId);
     }
 
     if (params.onlyInProgress) {
@@ -546,12 +546,12 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
 
   async createGoal(goal: Goal): Promise<void> {
     const sql =
-      "INSERT INTO goals (id, room_id, user_id, name, status, objectives) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO goals (id, roomId, userId, name, status, objectives) VALUES (?, ?, ?, ?, ?, ?)";
     const stmt = this.db.prepare(sql);
     stmt.run([
       goal.id ?? v4(),
-      goal.room_id,
-      goal.user_id,
+      goal.roomId,
+      goal.userId,
       goal.name,
       goal.status,
       JSON.stringify(goal.objectives),
@@ -566,70 +566,70 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.free();
   }
 
-  async removeAllGoals(room_id: UUID): Promise<void> {
-    const sql = "DELETE FROM goals WHERE room_id = ?";
+  async removeAllGoals(roomId: UUID): Promise<void> {
+    const sql = "DELETE FROM goals WHERE roomId = ?";
     const stmt = this.db.prepare(sql);
-    stmt.run([room_id]);
+    stmt.run([roomId]);
     stmt.free();
   }
 
-  async createRoom(room_id?: UUID): Promise<UUID> {
-    room_id = room_id || (v4() as UUID);
+  async createRoom(roomId?: UUID): Promise<UUID> {
+    roomId = roomId || (v4() as UUID);
     try {
       const sql = "INSERT INTO rooms (id) VALUES (?)";
       const stmt = this.db.prepare(sql);
-      stmt.run([room_id ?? (v4() as UUID)]);
+      stmt.run([roomId ?? (v4() as UUID)]);
       stmt.free();
     } catch (error) {
       console.log("Error creating room", error);
     }
-    return room_id as UUID;
+    return roomId as UUID;
   }
 
-  async removeRoom(room_id: UUID): Promise<void> {
+  async removeRoom(roomId: UUID): Promise<void> {
     const sql = "DELETE FROM rooms WHERE id = ?";
     const stmt = this.db.prepare(sql);
-    stmt.run([room_id]);
+    stmt.run([roomId]);
     stmt.free();
   }
 
-  async getRoomsForParticipant(user_id: UUID): Promise<UUID[]> {
-    const sql = "SELECT room_id FROM participants WHERE user_id = ?";
+  async getRoomsForParticipant(userId: UUID): Promise<UUID[]> {
+    const sql = "SELECT roomId FROM participants WHERE userId = ?";
     const stmt = this.db.prepare(sql);
-    stmt.bind([user_id]);
-    const rows: { room_id: string }[] = [];
+    stmt.bind([userId]);
+    const rows: { roomId: string }[] = [];
     while (stmt.step()) {
-      const row = stmt.getAsObject() as unknown as { room_id: string };
+      const row = stmt.getAsObject() as unknown as { roomId: string };
       rows.push(row);
     }
     stmt.free();
-    return rows.map((row) => row.room_id as UUID);
+    return rows.map((row) => row.roomId as UUID);
   }
 
   async getRoomsForParticipants(userIds: UUID[]): Promise<UUID[]> {
     // Assuming userIds is an array of UUID strings, prepare a list of placeholders
     const placeholders = userIds.map(() => "?").join(", ");
     // Construct the SQL query with the correct number of placeholders
-    const sql = `SELECT room_id FROM participants WHERE user_id IN (${placeholders})`;
+    const sql = `SELECT roomId FROM participants WHERE userId IN (${placeholders})`;
     const stmt = this.db.prepare(sql);
     // Execute the query with the userIds array spread into arguments
     stmt.bind(userIds);
-    const rows: { room_id: string }[] = [];
+    const rows: { roomId: string }[] = [];
     while (stmt.step()) {
-      const row = stmt.getAsObject() as unknown as { room_id: string };
+      const row = stmt.getAsObject() as unknown as { roomId: string };
       rows.push(row);
     }
     stmt.free();
-    // Map and return the room_id values as UUIDs
-    return rows.map((row) => row.room_id as UUID);
+    // Map and return the roomId values as UUIDs
+    return rows.map((row) => row.roomId as UUID);
   }
 
-  async addParticipant(user_id: UUID, room_id: UUID): Promise<boolean> {
+  async addParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
     try {
       const sql =
-        "INSERT INTO participants (id, user_id, room_id) VALUES (?, ?, ?)";
+        "INSERT INTO participants (id, userId, roomId) VALUES (?, ?, ?)";
       const stmt = this.db.prepare(sql);
-      stmt.run([v4(), user_id, room_id]);
+      stmt.run([v4(), userId, roomId]);
       stmt.free();
       return true;
     } catch (error) {
@@ -638,11 +638,11 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     }
   }
 
-  async removeParticipant(user_id: UUID, room_id: UUID): Promise<boolean> {
+  async removeParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
     try {
-      const sql = "DELETE FROM participants WHERE user_id = ? AND room_id = ?";
+      const sql = "DELETE FROM participants WHERE userId = ? AND roomId = ?";
       const stmt = this.db.prepare(sql);
-      stmt.run([user_id, room_id]);
+      stmt.run([userId, roomId]);
       stmt.free();
       return true;
     } catch (error) {
@@ -659,7 +659,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       throw new Error("userA and userB are required");
     }
     const sql =
-      "INSERT INTO relationships (id, user_a, user_b, user_id) VALUES (?, ?, ?, ?)";
+      "INSERT INTO relationships (id, userA, userB, userId) VALUES (?, ?, ?, ?)";
     const stmt = this.db.prepare(sql);
     stmt.run([v4(), params.userA, params.userB, params.userA]);
     stmt.free();
@@ -673,7 +673,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     let relationship: Relationship | null = null;
     try {
       const sql =
-        "SELECT * FROM relationships WHERE (user_a = ? AND user_b = ?) OR (user_a = ? AND user_b = ?)";
+        "SELECT * FROM relationships WHERE (userA = ? AND userB = ?) OR (userA = ? AND userB = ?)";
       const stmt = this.db.prepare(sql);
       stmt.bind([params.userA, params.userB, params.userB, params.userA]);
 
@@ -687,10 +687,10 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     return relationship;
   }
 
-  async getRelationships(params: { user_id: UUID }): Promise<Relationship[]> {
-    const sql = "SELECT * FROM relationships WHERE (user_a = ? OR user_b = ?)";
+  async getRelationships(params: { userId: UUID }): Promise<Relationship[]> {
+    const sql = "SELECT * FROM relationships WHERE (userA = ? OR userB = ?)";
     const stmt = this.db.prepare(sql);
-    stmt.bind([params.user_id, params.user_id]);
+    stmt.bind([params.userId, params.userId]);
     const relationships: Relationship[] = [];
     while (stmt.step()) {
       const relationship = stmt.getAsObject() as unknown as Relationship;

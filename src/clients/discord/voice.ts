@@ -68,7 +68,7 @@ export class VoiceManager extends EventEmitter {
   }
 
   async handleUserStream(
-    user_id: UUID,
+    userId: UUID,
     name: string,
     userName: string,
     channel: BaseGuildVoiceChannel,
@@ -110,8 +110,8 @@ export class VoiceManager extends EventEmitter {
             return;
           }
 
-          const room_id = stringToUuid(channelId);
-          const userIdUUID = stringToUuid(user_id);
+          const roomId = stringToUuid(channelId);
+          const userIdUUID = stringToUuid(userId);
           await this.runtime.ensureUserExists(
             this.runtime.agentId,
             this.client.user.username,
@@ -119,19 +119,19 @@ export class VoiceManager extends EventEmitter {
           );
           await Promise.all([
             this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
-            this.runtime.ensureRoomExists(room_id),
+            this.runtime.ensureRoomExists(roomId),
           ]);
 
           await Promise.all([
-            this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
-            this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id),
+            this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+            this.runtime.ensureParticipantInRoom(this.runtime.agentId, roomId),
           ]);
 
           const state = await this.runtime.composeState(
             {
               content: { text: text, source: "Discord" },
-              user_id: userIdUUID,
-              room_id,
+              userId: userIdUUID,
+              roomId,
             },
             {
               discordClient: this.client,
@@ -147,10 +147,10 @@ export class VoiceManager extends EventEmitter {
             memory: {
               id: stringToUuid(channelId + "-voice-message-" + Date.now()),
               content: { text: text },
-              user_id: userIdUUID,
-              room_id,
+              userId: userIdUUID,
+              roomId,
               embedding: embeddingZeroVector,
-              created_at: new Date(),
+              createdAt: new Date(),
             },
             state,
           });
@@ -166,7 +166,7 @@ export class VoiceManager extends EventEmitter {
           let responseStream = await this.textToSpeech(content);
 
           if (responseStream) {
-            await this.playAudioStream(user_id, responseStream as Readable);
+            await this.playAudioStream(userId, responseStream as Readable);
           }
         } catch (error) {
           console.error("Error processing audio stream:", error);
@@ -217,17 +217,17 @@ export class VoiceManager extends EventEmitter {
       context,
     );
     const callback: HandlerCallback = async (content: Content) => {
-      const { room_id } = memory;
+      const { roomId } = memory;
 
       const responseMemory: Memory = {
         id: stringToUuid(memory.id + "-voice-response-" + Date.now()),
-        user_id: this.runtime.agentId,
+        userId: this.runtime.agentId,
         content: {
           ...content,
           user: this.runtime.character.name,
           inReplyTo: memory.id,
         },
-        room_id,
+        roomId,
         embedding: embeddingZeroVector,
       };
 
@@ -254,7 +254,7 @@ export class VoiceManager extends EventEmitter {
     context: string,
   ): Promise<Content> {
     let responseContent: Content | null = null;
-    const { user_id, room_id } = message;
+    const { userId, roomId } = message;
 
     const datestr = new Date().toISOString().replace(/:/g, "-");
 
@@ -278,8 +278,8 @@ export class VoiceManager extends EventEmitter {
 
     await this.runtime.databaseAdapter.log({
       body: { message, context, response },
-      user_id: user_id,
-      room_id,
+      userId: userId,
+      roomId,
       type: "response",
     });
 
@@ -381,17 +381,17 @@ export class VoiceManager extends EventEmitter {
       this.monitorMember(member, channel);
     }
 
-    connection.receiver.speaking.on("start", (user_id: string) => {
-      const user = channel.members.get(user_id);
+    connection.receiver.speaking.on("start", (userId: string) => {
+      const user = channel.members.get(userId);
       // if (user?.user.bot) return;
       this.monitorMember(user as GuildMember, channel);
-      this.streams.get(user_id)?.emit("speakingStarted");
+      this.streams.get(userId)?.emit("speakingStarted");
     });
 
-    connection.receiver.speaking.on("end", async (user_id: string) => {
-      const user = channel.members.get(user_id);
+    connection.receiver.speaking.on("end", async (userId: string) => {
+      const user = channel.members.get(userId);
       // if (user?.user.bot) return;
-      this.streams.get(user_id)?.emit("speakingStopped");
+      this.streams.get(userId)?.emit("speakingStopped");
     });
   }
 
@@ -399,11 +399,11 @@ export class VoiceManager extends EventEmitter {
     member: GuildMember,
     channel: BaseGuildVoiceChannel,
   ) {
-    const user_id = member.id;
+    const userId = member.id;
     const userName = member.user.username;
     const name = member.user.displayName;
     const connection = getVoiceConnection(member.guild.id);
-    const receiveStream = connection?.receiver.subscribe(user_id, {
+    const receiveStream = connection?.receiver.subscribe(userId, {
       autoDestroy: true,
       emitClose: true,
     });
@@ -424,8 +424,8 @@ export class VoiceManager extends EventEmitter {
         }
       },
     );
-    this.streams.set(user_id, opusDecoder);
-    this.connections.set(user_id, connection as VoiceConnection);
+    this.streams.set(userId, opusDecoder);
+    this.connections.set(userId, connection as VoiceConnection);
     opusDecoder.on("error", (err: any) => {
       console.log(`Opus decoding error: ${err}`);
     });
@@ -434,8 +434,8 @@ export class VoiceManager extends EventEmitter {
     };
     const streamCloseHandler = () => {
       console.log(`voice stream from ${member?.displayName} closed`);
-      this.streams.delete(user_id);
-      this.connections.delete(user_id);
+      this.streams.delete(userId);
+      this.connections.delete(userId);
     };
     const closeHandler = () => {
       console.log(`Opus decoder for ${member?.displayName} closed`);
@@ -449,7 +449,7 @@ export class VoiceManager extends EventEmitter {
 
     this.client.emit(
       "userStream",
-      user_id,
+      userId,
       name,
       userName,
       channel,
@@ -457,10 +457,10 @@ export class VoiceManager extends EventEmitter {
     );
   }
 
-  async playAudioStream(user_id: UUID, audioStream: Readable) {
-    const connection = this.connections.get(user_id);
+  async playAudioStream(userId: UUID, audioStream: Readable) {
+    const connection = this.connections.get(userId);
     if (connection == null) {
-      console.log(`No connection for user ${user_id}`);
+      console.log(`No connection for user ${userId}`);
       return;
     }
     const audioPlayer = createAudioPlayer({

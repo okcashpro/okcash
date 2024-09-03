@@ -27,7 +27,7 @@ export default {
   description:
     "Stop following this channel. You can still respond if explicitly mentioned, but you won't automatically chime in anymore. Unfollow if you're annoying people or have been asked to.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
-    const roomId = message.room_id;
+    const roomId = message.roomId;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
       runtime.agentId,
@@ -54,7 +54,7 @@ export default {
 
     if (await _shouldUnfollow(state)) {
       await runtime.databaseAdapter.setParticipantUserState(
-        message.room_id,
+        message.roomId,
         runtime.agentId,
         null,
       );

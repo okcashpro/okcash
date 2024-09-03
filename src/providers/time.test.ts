@@ -11,7 +11,7 @@ dotenv.config({ path: ".dev.vars" });
 describe("Time Provider", () => {
   let runtime: AgentRuntime;
   let user: { id: UUID };
-  let room_id: UUID;
+  let roomId: UUID;
 
   beforeAll(async () => {
     const setup = await createRuntime({
@@ -20,14 +20,14 @@ describe("Time Provider", () => {
     });
     runtime = setup.runtime;
     user = { id: setup.session.user?.id as UUID };
-    room_id = zeroUuid;
+    roomId = zeroUuid;
   });
 
   test("Time provider should return the current time in the correct format", async () => {
     const message: Memory = {
-      user_id: user.id,
+      userId: user.id,
       content: { text: "" },
-      room_id: room_id,
+      roomId: roomId,
     };
 
     const currentTimeResponse = await timeProvider.get(
@@ -42,9 +42,9 @@ describe("Time Provider", () => {
 
   test("Time provider should be integrated in the state and context correctly", async () => {
     const message: Memory = {
-      user_id: user.id,
+      userId: user.id,
       content: { text: "" },
-      room_id: room_id,
+      roomId: roomId,
     };
 
     // Manually integrate the time provider's response into the state
@@ -67,9 +67,9 @@ describe("Time Provider", () => {
 
   test("Time provider should work independently", async () => {
     const message: Memory = {
-      user_id: user.id,
+      userId: user.id,
       content: { text: "" },
-      room_id: room_id,
+      roomId: roomId,
     };
     const currentTimeResponse = await timeProvider.get(runtime, message);
 

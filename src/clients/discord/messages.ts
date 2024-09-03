@@ -76,7 +76,7 @@ export class MessageManager {
   async handleMessage(message: DiscordMessage) {
     if (message.interaction /* || message.author?.bot*/) return;
 
-    const user_id = message.author.id as UUID;
+    const userId = message.author.id as UUID;
     const userName = message.author.username;
     const name = message.author.displayName;
     const channelId = message.channel.id;
@@ -96,8 +96,8 @@ export class MessageManager {
         attachments.push(...processedAudioAttachments);
       }
 
-      const room_id = stringToUuid(channelId);
-      const userIdUUID = stringToUuid(user_id);
+      const roomId = stringToUuid(channelId);
+      const userIdUUID = stringToUuid(userId);
       const agentId = this.runtime.agentId;
 
       await Promise.all([
@@ -107,12 +107,12 @@ export class MessageManager {
           this.runtime.character.name,
         ),
         this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
-        this.runtime.ensureRoomExists(room_id),
+        this.runtime.ensureRoomExists(roomId),
       ]);
 
       await Promise.all([
-        this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
-        this.runtime.ensureParticipantInRoom(agentId, room_id),
+        this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+        this.runtime.ensureParticipantInRoom(agentId, roomId),
       ]);
 
       const messageId = stringToUuid(message.id);
@@ -140,7 +140,7 @@ export class MessageManager {
           : undefined,
       };
 
-      const userMessage = { content, user_id: userIdUUID, room_id };
+      const userMessage = { content, userId: userIdUUID, roomId };
 
       let state = (await this.runtime.composeState(userMessage, {
         discordClient: this.client,
@@ -151,10 +151,10 @@ export class MessageManager {
       const memory: Memory = {
         id: stringToUuid(message.id),
         ...userMessage,
-        user_id: userIdUUID,
-        room_id,
+        userId: userIdUUID,
+        roomId,
         content,
-        created_at: new Date(message.createdTimestamp),
+        createdAt: new Date(message.createdTimestamp),
         embedding: embeddingZeroVector,
       };
 
@@ -176,7 +176,7 @@ export class MessageManager {
 
       const agentUserState =
         await this.runtime.databaseAdapter.getParticipantUserState(
-          room_id,
+          roomId,
           this.runtime.agentId,
         );
 
@@ -229,12 +229,12 @@ export class MessageManager {
           const audioStream = await this.voiceManager.textToSpeech(
             content.text,
           );
-          await this.voiceManager.playAudioStream(user_id, audioStream);
+          await this.voiceManager.playAudioStream(userId, audioStream);
           const memory: Memory = {
             id: stringToUuid(message.id),
-            user_id: this.runtime.agentId,
+            userId: this.runtime.agentId,
             content,
-            room_id,
+            roomId,
             embedding: embeddingZeroVector,
           };
           return [memory];
@@ -257,16 +257,16 @@ export class MessageManager {
             notFirstMessage = true;
             const memory: Memory = {
               id: stringToUuid(m.id),
-              user_id: this.runtime.agentId,
+              userId: this.runtime.agentId,
               content: {
                 ...content,
                 action,
                 inReplyTo: messageId,
                 url: m.url,
               },
-              room_id,
+              roomId,
               embedding: embeddingZeroVector,
-              created_at: new Date(m.createdTimestamp),
+              createdAt: new Date(m.createdTimestamp),
             };
             memories.push(memory);
           }
@@ -296,7 +296,7 @@ export class MessageManager {
         const errorMessage =
           "Sorry, I encountered an error while processing your request.";
         const audioStream = await this.voiceManager.textToSpeech(errorMessage);
-        await this.voiceManager.playAudioStream(user_id, audioStream);
+        await this.voiceManager.playAudioStream(userId, audioStream);
       } else {
         // For text channels, send the error message
         await message.channel.send(
@@ -526,12 +526,10 @@ export class MessageManager {
       (nickname &&
         message.content.toLowerCase().includes(nickname.toLowerCase()))
     ) {
-      console.log("*** SHOULD RESPOND RESPONSE ***", "MENTIONED");
       return true;
     }
 
     if (!message.guild) {
-      console.log("*** SHOULD RESPOND RESPONSE ***", "NO GUILD");
       return true;
     }
 
@@ -566,7 +564,7 @@ export class MessageManager {
     context: string,
   ): Promise<Content> {
     let responseContent: Content | null = null;
-    const { user_id, room_id } = message;
+    const { userId, roomId } = message;
 
     const datestr = new Date().toISOString().replace(/:/g, "-");
 
@@ -590,8 +588,8 @@ export class MessageManager {
 
     await this.runtime.databaseAdapter.log({
       body: { message, context, response },
-      user_id: user_id,
-      room_id,
+      userId: userId,
+      roomId,
       type: "response",
     });
 

@@ -14,23 +14,23 @@ import ignore from "./ignore.ts";
 dotenv.config({ path: ".dev.vars" });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const GetContinueExample1 = (_user_id: UUID) => [
+const GetContinueExample1 = (_userId: UUID) => [
   {
-    user_id: zeroUuid,
+    userId: zeroUuid,
     content: {
       text: "Hmm, let think for a second, I was going to tell you about something...",
       action: "CONTINUE",
     },
   },
   {
-    user_id: zeroUuid,
+    userId: zeroUuid,
     content: {
       text: "I remember now, I was going to tell you about my favorite food, which is pizza.",
       action: "CONTINUE",
     },
   },
   {
-    user_id: zeroUuid,
+    userId: zeroUuid,
     content: {
       text: "I love pizza, it's so delicious.",
       action: "CONTINUE",
@@ -41,7 +41,7 @@ const GetContinueExample1 = (_user_id: UUID) => [
 describe("User Profile", () => {
   let user: User;
   let runtime: AgentRuntime;
-  let room_id: UUID = zeroUuid;
+  let roomId: UUID = zeroUuid;
 
   afterAll(async () => {
     await cleanup();
@@ -61,7 +61,7 @@ describe("User Profile", () => {
       userB: zeroUuid,
     });
 
-    room_id = data.room_id;
+    roomId = data.roomId;
 
     await cleanup();
   });
@@ -71,8 +71,8 @@ describe("User Profile", () => {
   });
 
   async function cleanup() {
-    await runtime.factManager.removeAllMemories(room_id);
-    await runtime.messageManager.removeAllMemories(room_id);
+    await runtime.factManager.removeAllMemories(roomId);
+    await runtime.messageManager.removeAllMemories(roomId);
   }
 
   // test validate function response
@@ -80,9 +80,9 @@ describe("User Profile", () => {
   test("Test validate function response", async () => {
     await runAiTest("Test validate function response", async () => {
       const message: Memory = {
-        user_id: user.id as UUID,
+        userId: user.id as UUID,
         content: { text: "Hello" },
-        room_id: room_id as UUID,
+        roomId: roomId as UUID,
       };
 
       const validate = action.validate!;
@@ -90,15 +90,15 @@ describe("User Profile", () => {
       const result = await validate(runtime, message);
 
       // try again with GetContinueExample1, expect to be false
-      await populateMemories(runtime, user, room_id, [GetContinueExample1]);
+      await populateMemories(runtime, user, roomId, [GetContinueExample1]);
 
       const message2: Memory = {
-        user_id: zeroUuid as UUID,
+        userId: zeroUuid as UUID,
         content: {
           text: "Hello",
           action: "CONTINUE",
         },
-        room_id: room_id as UUID,
+        roomId: roomId as UUID,
       };
 
       const result2 = await validate(runtime, message2);
@@ -110,17 +110,17 @@ describe("User Profile", () => {
   test("Test repetition check on continue", async () => {
     await runAiTest("Test repetition check on continue", async () => {
       const message: Memory = {
-        user_id: zeroUuid as UUID,
+        userId: zeroUuid as UUID,
         content: {
           text: "Hmm, let think for a second, I was going to tell you about something...",
           action: "CONTINUE",
         },
-        room_id,
+        roomId,
       };
 
       const handler = action.handler!;
 
-      await populateMemories(runtime, user, room_id, [GetContinueExample1]);
+      await populateMemories(runtime, user, roomId, [GetContinueExample1]);
 
       const result = (await handler(runtime, message)) as Content;
 
@@ -133,34 +133,34 @@ describe("User Profile", () => {
       "Test multiple continue messages in a conversation",
       async () => {
         const message: Memory = {
-          user_id: user?.id as UUID,
+          userId: user?.id as UUID,
           content: {
             text: "Write a short story in three parts, using the CONTINUE action for each part.",
           },
-          room_id: room_id,
+          roomId: roomId,
         };
 
         const initialMessageCount = await runtime.messageManager.countMemories(
-          room_id,
+          roomId,
           false,
         );
 
         await action.handler!(runtime, message);
 
         const finalMessageCount = await runtime.messageManager.countMemories(
-          room_id,
+          roomId,
           false,
         );
 
         const agentMessages = await runtime.messageManager.getMemories({
-          room_id,
+          roomId,
           count: finalMessageCount - initialMessageCount,
           unique: false,
         });
 
         const continueMessages = agentMessages.filter(
           (m) =>
-            m.user_id === zeroUuid &&
+            m.userId === zeroUuid &&
             (m.content as Content).action === "CONTINUE",
         );
 
@@ -183,22 +183,22 @@ describe("User Profile", () => {
   test("Test if message is added to database", async () => {
     await runAiTest("Test if message is added to database", async () => {
       const message: Memory = {
-        user_id: user?.id as UUID,
+        userId: user?.id as UUID,
         content: {
           text: "Tell me more about your favorite food.",
         },
-        room_id: room_id as UUID,
+        roomId: roomId as UUID,
       };
 
       const initialMessageCount = await runtime.messageManager.countMemories(
-        room_id,
+        roomId,
         false,
       );
 
       await action.handler!(runtime, message);
 
       const finalMessageCount = await runtime.messageManager.countMemories(
-        room_id,
+        roomId,
         false,
       );
 
@@ -209,14 +209,14 @@ describe("User Profile", () => {
     await runAiTest("Test if not continue", async () => {
       // this is basically the same test as the one in ignore.test
       const message: Memory = {
-        user_id: user?.id as UUID,
+        userId: user?.id as UUID,
         content: { text: "Bye" },
-        room_id: room_id as UUID,
+        roomId: roomId as UUID,
       };
 
       const handler = action.handler!;
 
-      await populateMemories(runtime, user, room_id, [Goodbye1]);
+      await populateMemories(runtime, user, roomId, [Goodbye1]);
 
       const result = (await handler(runtime, message)) as Content;
 

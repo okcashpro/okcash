@@ -27,7 +27,7 @@ export default {
   description:
     "Unmutes a room, allowing the agent to consider responding to messages again.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
-    const roomId = message.room_id;
+    const roomId = message.roomId;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
       runtime.agentId,
@@ -54,7 +54,7 @@ export default {
 
     if (await _shouldUnmute(state)) {
       await runtime.databaseAdapter.setParticipantUserState(
-        message.room_id,
+        message.roomId,
         runtime.agentId,
         null,
       );

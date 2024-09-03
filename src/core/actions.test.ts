@@ -17,18 +17,18 @@ async function handleMessage(
   state?: State,
 ) {
   const _saveRequestMessage = async (message: Memory, state: State) => {
-    const { content: senderContent, user_id, room_id } = message;
+    const { content: senderContent, userId, roomId } = message;
 
     const _senderContent = (senderContent as Content).text?.trim();
     if (_senderContent) {
       await runtime.messageManager.createMemory({
         id: stringToUuid(message.id),
-        user_id: user_id!,
+        userId: userId!,
         content: {
           text: _senderContent,
           action: (message.content as Content)?.action ?? "null",
         },
-        room_id,
+        roomId,
         embedding: embeddingZeroVector,
       });
       await runtime.evaluate(message, state);
@@ -46,7 +46,7 @@ async function handleMessage(
   });
 
   let responseContent: Content | null = null;
-  const { user_id, room_id } = message;
+  const { userId, roomId } = message;
 
   for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
     const response = await runtime.messageCompletion({
@@ -56,8 +56,8 @@ async function handleMessage(
 
     runtime.databaseAdapter.log({
       body: { message, context, response },
-      user_id: user_id,
-      room_id,
+      userId: userId,
+      roomId,
       type: "actions_test_completion",
     });
     return response;
@@ -72,9 +72,9 @@ async function handleMessage(
 
   if (responseContent.text) {
     const response = {
-      user_id: runtime.agentId,
+      userId: runtime.agentId,
       content: responseContent,
-      room_id,
+      roomId,
       embedding: embeddingZeroVector,
     };
     await runtime.messageManager.createMemory(response);
@@ -95,7 +95,7 @@ dotenv.config({ path: ".dev.vars" });
 describe("Actions", () => {
   let user: User;
   let runtime: AgentRuntime;
-  let room_id: UUID;
+  let roomId: UUID;
 
   beforeAll(async () => {
     const { session, runtime: _runtime } = await createRuntime({
@@ -118,7 +118,7 @@ describe("Actions", () => {
           username: "Test User",
           name: "Test User",
           email: user.email,
-          avatar_url: "",
+          avatarUrl: "",
         });
       }
     }
@@ -134,7 +134,7 @@ describe("Actions", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data!.room_id;
+    roomId = data!.roomId;
 
     await cleanup();
   });
@@ -144,8 +144,8 @@ describe("Actions", () => {
   });
 
   async function cleanup() {
-    await runtime.factManager.removeAllMemories(room_id);
-    await runtime.messageManager.removeAllMemories(room_id);
+    await runtime.factManager.removeAllMemories(roomId);
+    await runtime.messageManager.removeAllMemories(roomId);
   }
 
   // Test that actions are being loaded into context properly
@@ -166,9 +166,9 @@ describe("Actions", () => {
     expect(testAction).toBeDefined();
     if (testAction && testAction.validate) {
       const isValid = await testAction.validate(runtime, {
-        user_id: user.id as UUID,
+        userId: user.id as UUID,
         content: { text: "Test message" },
-        room_id: room_id,
+        roomId: roomId,
       });
       expect(isValid).toBeTruthy();
     } else {
@@ -180,11 +180,11 @@ describe("Actions", () => {
 
   test("Test that actions are properly validated in state", async () => {
     const message: Memory = {
-      user_id: user.id as UUID,
+      userId: user.id as UUID,
       content: {
         text: "Please respond with the message 'ok' and the action TEST_ACTION",
       },
-      room_id,
+      roomId,
     };
 
     const state = await runtime.composeState(message);
@@ -197,11 +197,11 @@ describe("Actions", () => {
   test("Validate that TEST_ACTION is in the state", async () => {
     await runAiTest("Validate TEST_ACTION is in the state", async () => {
       const message: Memory = {
-        user_id: user.id as UUID,
+        userId: user.id as UUID,
         content: {
           text: "Please respond with the message 'ok' and the action TEST_ACTION",
         },
-        room_id,
+        roomId,
       };
 
       const response = await handleMessage(runtime, message);
@@ -221,11 +221,11 @@ describe("Actions", () => {
       }
 
       const mockMessage: Memory = {
-        user_id: user.id as UUID,
+        userId: user.id as UUID,
         content: {
           text: "Test message for TEST action",
         },
-        room_id,
+        roomId,
       };
 
       const response = await testAction.handler(runtime, mockMessage);

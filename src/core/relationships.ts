@@ -33,32 +33,32 @@ export async function getRelationship({
 
 export async function getRelationships({
   runtime,
-  user_id,
+  userId,
 }: {
   runtime: AgentRuntime;
-  user_id: UUID;
+  userId: UUID;
 }) {
-  return runtime.databaseAdapter.getRelationships({ user_id });
+  return runtime.databaseAdapter.getRelationships({ userId });
 }
 
 export async function formatRelationships({
   runtime,
-  user_id,
+  userId,
 }: {
   runtime: AgentRuntime;
-  user_id: UUID;
+  userId: UUID;
 }) {
-  const relationships = await getRelationships({ runtime, user_id });
+  const relationships = await getRelationships({ runtime, userId });
 
   const formattedRelationships = relationships.map(
     (relationship: Relationship) => {
-      const { user_a, user_b } = relationship;
+      const { userA, userB } = relationship;
 
-      if (user_a === user_id) {
-        return user_b;
+      if (userA === userId) {
+        return userB;
       }
 
-      return user_a;
+      return userA;
     },
   );
 

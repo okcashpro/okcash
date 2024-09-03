@@ -5,11 +5,11 @@ BEGIN TRANSACTION;
 -- Table: accounts
 CREATE TABLE IF NOT EXISTS "accounts" (
     "id" TEXT PRIMARY KEY,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT,
     "username" TEXT,
     "email" TEXT NOT NULL,
-    "avatar_url" TEXT,
+    "avatarUrl" TEXT,
     "details" TEXT DEFAULT '{}' CHECK(json_valid("details")) -- Ensuring details is a valid JSON field
 );
 
@@ -17,67 +17,67 @@ CREATE TABLE IF NOT EXISTS "accounts" (
 CREATE TABLE IF NOT EXISTS "memories" (
     "id" TEXT PRIMARY KEY,
     "type" TEXT NOT NULL,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "content" TEXT NOT NULL,
     "embedding" BLOB NOT NULL, -- TODO: EMBEDDING ARRAY, CONVERT TO BEST FORMAT FOR SQLITE-VSS (JSON?)
-    "user_id" TEXT,
-    "room_id" TEXT,
+    "userId" TEXT,
+    "roomId" TEXT,
     "unique" INTEGER DEFAULT 1 NOT NULL,
-    FOREIGN KEY ("user_id") REFERENCES "accounts"("id"),
-    FOREIGN KEY ("room_id") REFERENCES "rooms"("id")
+    FOREIGN KEY ("userId") REFERENCES "accounts"("id"),
+    FOREIGN KEY ("roomId") REFERENCES "rooms"("id")
 );
 
 -- Table: goals
 CREATE TABLE IF NOT EXISTS "goals" (
     "id" TEXT PRIMARY KEY,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "user_id" TEXT,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT,
     "name" TEXT,
     "status" TEXT,
     "description" TEXT,
-    "room_id" TEXT,
+    "roomId" TEXT,
     "objectives" TEXT DEFAULT '[]' NOT NULL CHECK(json_valid("objectives")) -- Ensuring objectives is a valid JSON array
 );
 
 -- Table: logs
 CREATE TABLE IF NOT EXISTS "logs" (
     "id" TEXT PRIMARY KEY,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "user_id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
     "body" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "room_id" TEXT NOT NULL
+    "roomId" TEXT NOT NULL
 );
 
 -- Table: participants
 CREATE TABLE IF NOT EXISTS "participants" (
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "user_id" TEXT,
-    "room_id" TEXT,
-    "user_state" TEXT,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT,
+    "roomId" TEXT,
+    "userState" TEXT,
     "id" TEXT PRIMARY KEY,
     "last_message_read" TEXT,
-    FOREIGN KEY ("user_id") REFERENCES "accounts"("id"),
-    FOREIGN KEY ("room_id") REFERENCES "rooms"("id")
+    FOREIGN KEY ("userId") REFERENCES "accounts"("id"),
+    FOREIGN KEY ("roomId") REFERENCES "rooms"("id")
 );
 
 -- Table: relationships
 CREATE TABLE IF NOT EXISTS "relationships" (
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "user_a" TEXT NOT NULL,
-    "user_b" TEXT NOT NULL,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "userA" TEXT NOT NULL,
+    "userB" TEXT NOT NULL,
     "status" "text",
     "id" TEXT PRIMARY KEY,
-    "user_id" TEXT NOT NULL,
-    FOREIGN KEY ("user_a") REFERENCES "accounts"("id"),
-    FOREIGN KEY ("user_b") REFERENCES "accounts"("id"),
-    FOREIGN KEY ("user_id") REFERENCES "accounts"("id")
+    "userId" TEXT NOT NULL,
+    FOREIGN KEY ("userA") REFERENCES "accounts"("id"),
+    FOREIGN KEY ("userB") REFERENCES "accounts"("id"),
+    FOREIGN KEY ("userId") REFERENCES "accounts"("id")
 );
 
 -- Table: rooms
 CREATE TABLE IF NOT EXISTS "rooms" (
     "id" TEXT PRIMARY KEY,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Index: relationships_id_key

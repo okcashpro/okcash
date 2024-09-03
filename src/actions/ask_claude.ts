@@ -37,7 +37,7 @@ export default {
     callback: HandlerCallback,
   ) => {
     state = (await runtime.composeState(message)) as State;
-    const user_id = runtime.agentId;
+    const userId = runtime.agentId;
 
     const context = composeContext({
       state,
@@ -56,7 +56,7 @@ export default {
       source: "Claude",
       attachments: [],
     };
-    const { room_id } = message;
+    const { roomId } = message;
 
     const anthropic = new Anthropic({
       // defaults to process.env["ANTHROPIC_API_KEY"]
@@ -109,8 +109,8 @@ export default {
 
         runtime.databaseAdapter.log({
           body: { message, context, response: responseContent },
-          user_id: user_id as UUID,
-          room_id,
+          userId: userId as UUID,
+          roomId,
           type: "claude",
         });
         break;
@@ -125,9 +125,9 @@ export default {
     }
 
     const response = {
-      user_id,
+      userId,
       content: callbackData,
-      room_id,
+      roomId,
       embedding: embeddingZeroVector,
     };
 

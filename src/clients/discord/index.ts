@@ -153,7 +153,7 @@ export class DiscordClient extends EventEmitter {
 
     const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
 
-    const room_id = stringToUuid(reaction.message.channel.id);
+    const roomId = stringToUuid(reaction.message.channel.id);
     const userIdUUID = stringToUuid(user.id);
 
     // Generate a unique UUID for the reaction
@@ -162,14 +162,14 @@ export class DiscordClient extends EventEmitter {
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
         id: reactionUUID, // This is the ID of the reaction message
-        user_id: userIdUUID,
+        userId: userIdUUID,
         content: {
             text: reactionMessage,
             source: "Discord",
             inReplyTo: stringToUuid(reaction.message.id) // This is the ID of the original message
         },
-        room_id,
-        created_at: new Date(),
+        roomId,
+        createdAt: new Date(),
         embedding: embeddingZeroVector,
     });
 }
@@ -201,7 +201,7 @@ async handleReactionRemove(reaction: MessageReaction, user: User) {
 
     const reactionMessage = `*Removed <${emoji} emoji> from: "${truncatedContent}"*`;
 
-    const room_id = stringToUuid(reaction.message.channel.id);
+    const roomId = stringToUuid(reaction.message.channel.id);
     const userIdUUID = stringToUuid(user.id);
 
     // Generate a unique UUID for the reaction removal
@@ -210,14 +210,14 @@ async handleReactionRemove(reaction: MessageReaction, user: User) {
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
         id: reactionUUID, // This is the ID of the reaction removal message
-        user_id: userIdUUID,
+        userId: userIdUUID,
         content: {
             text: reactionMessage,
             source: "Discord",
             inReplyTo: stringToUuid(reaction.message.id) // This is the ID of the original message
         },
-        room_id,
-        created_at: new Date(),
+        roomId,
+        createdAt: new Date(),
         embedding: embeddingZeroVector,
     });
 }

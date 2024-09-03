@@ -42,7 +42,7 @@ export default {
     ) {
       return false;
     }
-    const roomId = message.room_id;
+    const roomId = message.roomId;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
       runtime.agentId,
@@ -69,7 +69,7 @@ export default {
 
     if (await _shouldFollow(state)) {
       await runtime.databaseAdapter.setParticipantUserState(
-        message.room_id,
+        message.roomId,
         runtime.agentId,
         "FOLLOWED",
       );

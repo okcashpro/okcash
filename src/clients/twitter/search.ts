@@ -88,11 +88,34 @@ export class TwitterSearchClient extends ClientBase {
         fs.mkdirSync("tweets");
       }
 
-      const tweetsArray = await this.twitterClient.fetchSearchTweets(
-        searchTerm,
-        20,
-        SearchMode.Latest,
+      const tweetsArray = await this.requestQueue.add(async () =>
+        await this.fetchSearchTweets(
+          searchTerm,
+          200,
+          SearchMode.Top,
+        )
+      )
+
+      const recentTweets = await this.requestQueue.add(async () =>
+        await this.fetchSearchTweets(
+          searchTerm,
+          200,
+          SearchMode.Latest,
+        )
+      )
+
+      const allTweets = [...tweetsArray.tweets, ...recentTweets.tweets];
+
+      const uniqueTweets = allTweets.filter(
+        (tweet, index, self) =>
+          index ===
+          self.findIndex((t) => t.id === tweet.id),
       );
+
+      // randomly slice .tweets down to 20
+      tweetsArray.tweets = uniqueTweets.sort(
+        () => Math.random() - 0.5,
+      ).slice(0, 20);
 
       if (tweetsArray.tweets.length === 0) {
         console.log("No valid tweets found for the search term");
@@ -103,22 +126,22 @@ export class TwitterSearchClient extends ClientBase {
   Here are some tweets related to the search term "${searchTerm}":
   
   ${tweetsArray.tweets
-    .filter((tweet) => {
-      // ignore tweets where any of the thread tweets contain a tweet by the bot
-      const thread = tweet.thread;
-      const botTweet = thread.find(
-        (t) => t.username === settings.TWITTER_USERNAME,
-      );
-      return !botTweet;
-    })
-    .map(
-      (tweet) => `
+          .filter((tweet) => {
+            // ignore tweets where any of the thread tweets contain a tweet by the bot
+            const thread = tweet.thread;
+            const botTweet = thread.find(
+              (t) => t.username === settings.TWITTER_USERNAME,
+            );
+            return !botTweet;
+          })
+          .map(
+            (tweet) => `
     ID: ${tweet.id}
     From: ${tweet.name} (@${tweet.username})
     Text: ${tweet.text}
   `,
-    )
-    .join("\n")}
+          )
+          .join("\n")}
   
   Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
   Notes:
@@ -162,8 +185,8 @@ export class TwitterSearchClient extends ClientBase {
       }
 
       const conversationId = selectedTweet.conversationId;
-      const room_id = stringToUuid(conversationId);
-      await this.runtime.ensureRoomExists(room_id);
+      const roomId = stringToUuid(conversationId);
+      await this.runtime.ensureRoomExists(roomId);
 
       const userIdUUID = stringToUuid(selectedTweet.userId as string);
       await Promise.all([
@@ -182,8 +205,8 @@ export class TwitterSearchClient extends ClientBase {
       ]);
 
       await Promise.all([
-        this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
-        this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id),
+        this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+        this.runtime.ensureParticipantInRoom(this.runtime.agentId, roomId),
       ]);
 
       // crawl additional conversation tweets, if there are any
@@ -192,9 +215,9 @@ export class TwitterSearchClient extends ClientBase {
       const message = {
         id: stringToUuid(selectedTweet.id),
         content: { text: selectedTweet.text, url: selectedTweet.permanentUrl, inReplyTo: selectedTweet.inReplyToStatusId ? stringToUuid(selectedTweet.inReplyToStatusId) : undefined },
-        user_id: userIdUUID,
-        room_id,
-        created_at: new Date(selectedTweet.timestamp),
+        userId: userIdUUID,
+        roomId,
+        createdAt: new Date(selectedTweet.timestamp),
       };
 
       if (!message.content.text) {
@@ -227,7 +250,7 @@ export class TwitterSearchClient extends ClientBase {
       await wait();
       const recentConversations = await getRecentConversations(
         this.runtime,
-        this.twitterClient,
+        this,
         settings.TWITTER_USERNAME,
       );
       await wait();
@@ -295,7 +318,7 @@ export class TwitterSearchClient extends ClientBase {
             const memories = await sendTweetChunks(
               this,
               response,
-              message.room_id,
+              message.roomId,
               settings.TWITTER_USERNAME,
             );
             return memories;

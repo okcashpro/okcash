@@ -32,12 +32,12 @@ export default {
   validate: async (runtime: IAgentRuntime, message: Memory) => {
     console.log("Validating continue");
     const recentMessagesData = await runtime.messageManager.getMemories({
-      room_id: message.room_id,
+      roomId: message.roomId,
       count: 10,
       unique: false,
     });
     const agentMessages = recentMessagesData.filter(
-      (m: { user_id: any }) => m.user_id === runtime.agentId,
+      (m: { userId: any }) => m.userId === runtime.agentId,
     );
 
     // check if the last messages were all continues=
@@ -106,7 +106,7 @@ export default {
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_continue_context`, context);
 
-    const { user_id, room_id } = message;
+    const { userId, roomId } = message;
 
     let response = await runtime.messageCompletion({
       context,
@@ -123,14 +123,14 @@ export default {
 
     runtime.databaseAdapter.log({
       body: { message, context, response },
-      user_id,
-      room_id,
+      userId,
+      roomId,
       type: "continue",
     });
 
     // prevent repetition
     const messageExists = state.recentMessagesData
-      .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
+      .filter((m: { userId: any }) => m.userId === runtime.agentId)
       .slice(0, maxContinuesInARow + 1)
       .some((m: { content: any }) => m.content === message.content);
 
@@ -143,7 +143,7 @@ export default {
     // if the action is CONTINUE, check if we are over maxContinuesInARow
     if (response.action === "CONTINUE") {
       const agentMessages = state.recentMessagesData
-        .filter((m: { user_id: any }) => m.user_id === runtime.agentId)
+        .filter((m: { userId: any }) => m.userId === runtime.agentId)
         .map((m: { content: any }) => (m.content as Content).action);
 
       const lastMessages = agentMessages.slice(0, maxContinuesInARow);

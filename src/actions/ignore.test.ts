@@ -23,17 +23,17 @@ async function handleMessage(
   state?: State,
 ) {
   const _saveRequestMessage = async (message: Memory, state: State) => {
-    const { content: senderContent, user_id, room_id } = message;
+    const { content: senderContent, userId, roomId } = message;
 
     const _senderContent = (senderContent as Content).text?.trim();
     if (_senderContent) {
       await runtime.messageManager.createMemory({
-        user_id: user_id!,
+        userId: userId!,
         content: {
           text: _senderContent,
           action: (message.content as Content)?.action ?? "null",
         },
-        room_id,
+        roomId,
         embedding: embeddingZeroVector,
       });
     }
@@ -49,7 +49,7 @@ async function handleMessage(
     template: messageHandlerTemplate,
   });
 
-  const { user_id, room_id } = message;
+  const { userId, roomId } = message;
 
   let response = await runtime.messageCompletion({
     context,
@@ -58,15 +58,15 @@ async function handleMessage(
 
   await runtime.databaseAdapter.log({
     body: { message, context, response },
-    user_id: user_id,
-    room_id,
+    userId: userId,
+    roomId,
     type: "ignore_test_completion",
   });
 
   const responseMessage: Memory = {
-    user_id: runtime.agentId,
+    userId: runtime.agentId,
     content: response,
-    room_id,
+    roomId,
     embedding: embeddingZeroVector,
   };
 
@@ -87,7 +87,7 @@ dotenv.config({ path: ".dev.vars" });
 describe("Ignore action tests", () => {
   let user: User;
   let runtime: AgentRuntime;
-  let room_id: UUID;
+  let roomId: UUID;
 
   afterAll(async () => {
     await cleanup();
@@ -109,9 +109,9 @@ describe("Ignore action tests", () => {
 
     console.log("data is", data);
 
-    room_id = data?.room_id;
+    roomId = data?.roomId;
     console.log("*** data", data);
-    console.log("Room ID", room_id);
+    console.log("Room ID", roomId);
 
     await cleanup();
   });
@@ -121,19 +121,19 @@ describe("Ignore action tests", () => {
   });
 
   async function cleanup() {
-    await runtime.factManager.removeAllMemories(room_id);
-    await runtime.messageManager.removeAllMemories(room_id);
+    await runtime.factManager.removeAllMemories(roomId);
+    await runtime.messageManager.removeAllMemories(roomId);
   }
 
   test("Test ignore action", async () => {
     await runAiTest("Test ignore action", async () => {
       const message: Memory = {
-        user_id: user?.id as UUID,
+        userId: user?.id as UUID,
         content: { text: "Never talk to me again" },
-        room_id: room_id as UUID,
+        roomId: roomId as UUID,
       };
 
-      await populateMemories(runtime, user, room_id, [
+      await populateMemories(runtime, user, roomId, [
         GetTellMeAboutYourselfConversationTroll1,
       ]);
 
@@ -148,12 +148,12 @@ describe("Ignore action tests", () => {
       "Action handler test 1: response should be ignore",
       async () => {
         const message: Memory = {
-          user_id: user.id as UUID,
+          userId: user.id as UUID,
           content: { text: "", action: "IGNORE" },
-          room_id: room_id as UUID,
+          roomId: roomId as UUID,
         };
 
-        await populateMemories(runtime, user, room_id, [
+        await populateMemories(runtime, user, roomId, [
           GetTellMeAboutYourselfConversationTroll1,
         ]);
 
@@ -173,12 +173,12 @@ describe("Ignore action tests", () => {
       "Action handler test 2: response should be ignore",
       async () => {
         const message: Memory = {
-          user_id: user.id as UUID,
+          userId: user.id as UUID,
           content: { text: "", action: "IGNORE" },
-          room_id: room_id as UUID,
+          roomId: roomId as UUID,
         };
 
-        await populateMemories(runtime, user, room_id, [
+        await populateMemories(runtime, user, roomId, [
           GetTellMeAboutYourselfConversationTroll2,
         ]);
 
@@ -196,12 +196,12 @@ describe("Ignore action tests", () => {
   test("Expect ignore", async () => {
     await runAiTest("Expect ignore", async () => {
       const message: Memory = {
-        user_id: user.id as UUID,
+        userId: user.id as UUID,
         content: { text: "Bye" },
-        room_id: room_id as UUID,
+        roomId: roomId as UUID,
       };
 
-      await populateMemories(runtime, user, room_id, [Goodbye1]);
+      await populateMemories(runtime, user, roomId, [Goodbye1]);
 
       await handleMessage(runtime, message);
 

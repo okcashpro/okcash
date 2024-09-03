@@ -6,16 +6,16 @@ import { type Actor, type Content, type Memory, type UUID } from "./types.ts";
  */
 export async function getActorDetails({
   runtime,
-  room_id,
+  roomId,
 }: {
   runtime: AgentRuntime;
-  room_id: UUID;
+  roomId: UUID;
 }) {
   const participantIds =
-    await runtime.databaseAdapter.getParticipantsForRoom(room_id);
+    await runtime.databaseAdapter.getParticipantsForRoom(roomId);
   const actors = await Promise.all(
-    participantIds.map(async (user_id) => {
-      const account = await runtime.databaseAdapter.getAccountById(user_id);
+    participantIds.map(async (userId) => {
+      const account = await runtime.databaseAdapter.getAccountById(userId);
       if (account) {
         return {
           id: account.id,
@@ -73,12 +73,12 @@ export const formatMessages = ({
 }) => {
   const messageStrings = messages
     .reverse()
-    .filter((message: Memory) => message.user_id)
+    .filter((message: Memory) => message.userId)
     .map((message: Memory) => {
       let messageContent = (message.content as Content).text;
       const messageAction = (message.content as Content).action;
       const formattedName =
-        actors.find((actor: Actor) => actor.id === message.user_id)?.name ||
+        actors.find((actor: Actor) => actor.id === message.userId)?.name ||
         "Unknown User";
 
       const attachments = (message.content as Content).attachments;
@@ -88,9 +88,9 @@ export const formatMessages = ({
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
 
-      const timestamp = formatTimestamp(message.created_at);
+      const timestamp = formatTimestamp(message.createdAt);
 
-      const shortId = message.user_id.slice(-5);
+      const shortId = message.userId.slice(-5);
 
       return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
     })

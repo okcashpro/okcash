@@ -22,11 +22,11 @@ describe("Messages Library", () => {
     user = setup.session.user;
     actors = await getActorDetails({
       runtime,
-      room_id: "00000000-0000-0000-0000-000000000000",
+      roomId: "00000000-0000-0000-0000-000000000000",
     });
   });
 
-  test("getActorDetails should return actors based on given room_id", async () => {
+  test("getActorDetails should return actors based on given roomId", async () => {
     // create a room and add a user to it
     const userA = user?.id as UUID;
     const userB = zeroUuid;
@@ -37,7 +37,7 @@ describe("Messages Library", () => {
       userB,
     });
 
-    const { room_id } = await getOrCreateRelationship({
+    const { roomId } = await getOrCreateRelationship({
       runtime,
       userA,
       userB,
@@ -45,7 +45,7 @@ describe("Messages Library", () => {
 
     const result = await getActorDetails({
       runtime,
-      room_id,
+      roomId,
     });
 
     expect(result.length).toBeGreaterThan(0);
@@ -67,13 +67,13 @@ describe("Messages Library", () => {
     const messages: Memory[] = [
       {
         content: { text: "Hello" },
-        user_id: user.id as UUID,
-        room_id: "00000000-0000-0000-0000-000000000000",
+        userId: user.id as UUID,
+        roomId: "00000000-0000-0000-0000-000000000000",
       },
       {
         content: { text: "How are you?" },
-        user_id: "00000000-0000-0000-0000-000000000000",
-        room_id: "00000000-0000-0000-0000-000000000000",
+        userId: "00000000-0000-0000-0000-000000000000",
+        roomId: "00000000-0000-0000-0000-000000000000",
       },
     ];
     const formattedMessages = formatMessages({ messages, actors });
@@ -86,13 +86,13 @@ describe("Messages Library", () => {
     const facts: Memory[] = [
       {
         content: { text: "Reflecting on the day" },
-        user_id: user.id as UUID,
-        room_id: "00000000-0000-0000-0000-000000000000",
+        userId: user.id as UUID,
+        roomId: "00000000-0000-0000-0000-000000000000",
       },
       {
         content: { text: "Thoughts and musings" },
-        user_id: "00000000-0000-0000-0000-000000000000",
-        room_id: "00000000-0000-0000-0000-000000000000room",
+        userId: "00000000-0000-0000-0000-000000000000",
+        roomId: "00000000-0000-0000-0000-000000000000room",
       },
     ];
     const formattedFacts = formatFacts(facts);

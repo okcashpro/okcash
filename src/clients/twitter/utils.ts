@@ -30,7 +30,7 @@ export const isValidTweet = (tweet: Tweet): boolean => {
 
 export const getRecentConversations = async (
   runtime: IAgentRuntime,
-  twitterClient: Scraper,
+  twitterClient: ClientBase,
   botTwitterUsername: string,
 ) => {
   // Get recent conversations
@@ -191,19 +191,19 @@ export async function buildConversationThread(
     );
     if (!memory) {
       console.log("Creating memory for tweet", currentTweet.id);
-      const room_id = stringToUuid(currentTweet.conversationId);
-      const user_id = stringToUuid(currentTweet.userId);
-      await client.runtime.ensureRoomExists(room_id);
+      const roomId = stringToUuid(currentTweet.conversationId);
+      const userId = stringToUuid(currentTweet.userId);
+      await client.runtime.ensureRoomExists(roomId);
       await client.runtime.ensureUserExists(
-        user_id,
+        userId,
         currentTweet.username,
         currentTweet.name,
         "twitter",
       );
-      await client.runtime.ensureParticipantInRoom(user_id, room_id);
+      await client.runtime.ensureParticipantInRoom(userId, roomId);
       await client.runtime.ensureParticipantInRoom(
         client.runtime.agentId,
-        room_id,
+        roomId,
       );
       client.runtime.messageManager.createMemory({
         id: stringToUuid(currentTweet.id),
@@ -211,9 +211,9 @@ export async function buildConversationThread(
           text: currentTweet.text,
           inReplyTo: currentTweet.inReplyToStatusId ? stringToUuid(currentTweet.inReplyToStatusId) : undefined,
         },
-        created_at: new Date(currentTweet.timestamp),
-        room_id,
-        user_id,
+        createdAt: new Date(currentTweet.timestamp),
+        roomId,
+        userId,
         embedding: embeddingZeroVector,
       });
     }
@@ -235,10 +235,12 @@ export async function buildConversationThread(
 export async function sendTweetChunks(
   client: ClientBase,
   content: Content,
-  room_id: UUID,
+  roomId: UUID,
   twitterUsername: string,
 ): Promise<Memory[]> {
+  console.log("Sending tweet chunks", content);
   const tweetChunks = splitTweetContent(content.text);
+  console.log("Tweet chunks", tweetChunks);
   const sentTweets: Tweet[] = [];
 
   for (const chunk of tweetChunks) {
@@ -269,11 +271,11 @@ export async function sendTweetChunks(
 
   const memories: Memory[] = sentTweets.map((tweet) => ({
     id: stringToUuid(tweet.id),
-    user_id: client.runtime.agentId,
+    userId: client.runtime.agentId,
     content: { text: tweet.text, inReplyTo: tweet.inReplyToStatusId ? stringToUuid(tweet.inReplyToStatusId) : undefined },
-    room_id,
+    roomId,
     embedding: embeddingZeroVector,
-    created_at: new Date(tweet.timestamp),
+    createdAt: new Date(tweet.timestamp),
   }));
 
   return memories;

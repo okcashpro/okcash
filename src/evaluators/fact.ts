@@ -51,7 +51,7 @@ Response should be a JSON object array inside a JSON markdown block. Correct res
 async function handler(runtime: AgentRuntime, message: Memory) {
   const state = await runtime.composeState(message);
 
-  const { agentId, room_id } = state;
+  const { agentId, roomId } = state;
 
   const context = composeContext({
     state,
@@ -82,10 +82,10 @@ async function handler(runtime: AgentRuntime, message: Memory) {
 
   for (const fact of filteredFacts) {
     const factMemory = await runtime.factManager.addEmbeddingToMemory({
-      user_id: agentId!,
+      userId: agentId!,
       content: { text: fact },
-      room_id,
-      created_at: new Date(),
+      roomId,
+      createdAt: new Date(),
     });
 
     await runtime.factManager.createMemory(factMemory, true);
@@ -104,7 +104,7 @@ export default {
     message: Memory,
   ): Promise<boolean> => {
     const messageCount = (await runtime.messageManager.countMemories(
-      message.room_id,
+      message.roomId,
     )) as number;
 
     const reflectionCount = Math.ceil(runtime.getConversationLength() / 2);

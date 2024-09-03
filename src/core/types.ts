@@ -28,7 +28,7 @@ export interface ActionExample {
  * Represents an example of content, typically used for demonstrating or testing purposes. Includes user, content, optional action, and optional source.
  */
 export interface ConversationExample {
-  user_id: UUID; // The user associated with the message.
+  userId: UUID; // The user associated with the message.
   content: Content; // The content of the message.
 }
 
@@ -62,8 +62,8 @@ export enum GoalStatus {
  */
 export interface Goal {
   id?: UUID; // A unique identifier for the goal.
-  room_id: UUID; // A list of user IDs associated with the goal, for goals relevant to specific users or groups.
-  user_id: UUID; // The user ID of the goal's owner or the user who is primarily responsible for the goal.
+  roomId: UUID; // A list of user IDs associated with the goal, for goals relevant to specific users or groups.
+  userId: UUID; // The user ID of the goal's owner or the user who is primarily responsible for the goal.
   name: string; // The name or title of the goal.
   status: GoalStatus; // The current status of the goal, such as "in progress" or "completed".
   objectives: Objective[]; // A list of objectives that make up the goal.
@@ -73,13 +73,13 @@ export interface Goal {
  * Represents the state of the conversation or context in which the agent is operating, including information about users, messages, goals, and other relevant data.
  */
 export interface State {
-  user_id?: UUID; // An optional ID of the user who sent the current message.
+  userId?: UUID; // An optional ID of the user who sent the current message.
   agentId?: UUID; // An optional ID of the agent within the current conversation or context.
   bio: string; // A string representation of the agent's bio.
   lore: string; // A list of lore bits for the agent.
   messageDirections: string; // A string representation of directions for messages in the current state.
   postDirections: string; // A string representation of directions for posting in the current state.
-  room_id: UUID; // The ID of the current room or conversation context.
+  roomId: UUID; // The ID of the current room or conversation context.
   agentName?: string; // An optional name of the agent, used for referencing the agent in conversations.
   senderName?: string; // An optional name of the sender of the current message.
   actors: string; // A string representation of the actors involved in the conversation, including their details.
@@ -108,11 +108,11 @@ export interface State {
  */
 export interface Memory {
   id?: UUID; // An optional unique identifier for the memory.
-  user_id: UUID; // The user ID associated with the memory.
-  created_at?: Date; // An optional timestamp indicating when the memory was created.
+  userId: UUID; // The user ID associated with the memory.
+  createdAt?: Date; // An optional timestamp indicating when the memory was created.
   content: Content; // The content of the memory, which can be a structured object or a plain string.
   embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
-  room_id: UUID; // The room or conversation ID associated with the memory.
+  roomId: UUID; // The room or conversation ID associated with the memory.
 }
 
 /**
@@ -191,12 +191,12 @@ export interface Provider {
  */
 export interface Relationship {
   id: UUID;
-  user_a: UUID;
-  user_b: UUID;
-  user_id: UUID;
-  room_id: UUID;
+  userA: UUID;
+  userB: UUID;
+  userId: UUID;
+  roomId: UUID;
   status: string;
-  created_at?: string;
+  createdAt?: string;
 }
 
 /**
@@ -208,7 +208,7 @@ export interface Account {
   username: string; // Their actual username
   details?: { [key: string]: any };
   email?: string;
-  avatar_url?: string;
+  avatarUrl?: string;
 }
 
 /**
@@ -254,17 +254,17 @@ export type Character = {
 
 export interface IDatabaseAdapter {
   db: any;
-  getAccountById(user_id: UUID): Promise<Account | null>;
+  getAccountById(userId: UUID): Promise<Account | null>;
   createAccount(account: Account): Promise<boolean>;
   getMemories(params: {
-    room_id: UUID;
+    roomId: UUID;
     count?: number;
     unique?: boolean;
     tableName: string;
-    user_ids?: UUID[];
+    userIds?: UUID[];
   }): Promise<Memory[]>;
   getMemoryById(id: UUID): Promise<Memory | null>;
-  getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]>;
+  getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
   getCachedEmbeddings(params: {
     query_table_name: string;
     query_threshold: number;
@@ -275,14 +275,14 @@ export interface IDatabaseAdapter {
   }): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
   log(params: {
     body: { [key: string]: unknown };
-    user_id: UUID;
-    room_id: UUID;
+    userId: UUID;
+    roomId: UUID;
     type: string;
   }): Promise<void>;
-  getActorDetails(params: { room_id: UUID }): Promise<Actor[]>;
+  getActorDetails(params: { roomId: UUID }): Promise<Actor[]>;
   searchMemories(params: {
     tableName: string;
-    room_id: UUID;
+    roomId: UUID;
     embedding: number[];
     match_threshold: number;
     match_count: number;
@@ -294,7 +294,7 @@ export interface IDatabaseAdapter {
     params: {
       match_threshold?: number;
       count?: number;
-      room_id?: UUID;
+      roomId?: UUID;
       unique?: boolean;
       tableName: string;
     },
@@ -305,31 +305,31 @@ export interface IDatabaseAdapter {
     unique?: boolean,
   ): Promise<void>;
   removeMemory(memoryId: UUID, tableName: string): Promise<void>;
-  removeAllMemories(room_id: UUID, tableName: string): Promise<void>;
+  removeAllMemories(roomId: UUID, tableName: string): Promise<void>;
   countMemories(
-    room_id: UUID,
+    roomId: UUID,
     unique?: boolean,
     tableName?: string,
   ): Promise<number>;
   getGoals(params: {
-    room_id: UUID;
-    user_id?: UUID | null;
+    roomId: UUID;
+    userId?: UUID | null;
     onlyInProgress?: boolean;
     count?: number;
   }): Promise<Goal[]>;
   updateGoal(goal: Goal): Promise<void>;
   createGoal(goal: Goal): Promise<void>;
   removeGoal(goalId: UUID): Promise<void>;
-  removeAllGoals(room_id: UUID): Promise<void>;
-  getRoom(room_id: UUID): Promise<UUID | null>;
-  createRoom(room_id?: UUID): Promise<UUID>;
-  removeRoom(room_id: UUID): Promise<void>;
-  getRoomsForParticipant(user_id: UUID): Promise<UUID[]>;
+  removeAllGoals(roomId: UUID): Promise<void>;
+  getRoom(roomId: UUID): Promise<UUID | null>;
+  createRoom(roomId?: UUID): Promise<UUID>;
+  removeRoom(roomId: UUID): Promise<void>;
+  getRoomsForParticipant(userId: UUID): Promise<UUID[]>;
   getRoomsForParticipants(userIds: UUID[]): Promise<UUID[]>;
-  addParticipant(user_id: UUID, room_id: UUID): Promise<boolean>;
-  removeParticipant(user_id: UUID, room_id: UUID): Promise<boolean>;
-  getParticipantsForAccount(user_id: UUID): Promise<Participant[]>;
-  getParticipantsForRoom(room_id: UUID): Promise<UUID[]>;
+  addParticipant(userId: UUID, roomId: UUID): Promise<boolean>;
+  removeParticipant(userId: UUID, roomId: UUID): Promise<boolean>;
+  getParticipantsForAccount(userId: UUID): Promise<Participant[]>;
+  getParticipantsForRoom(roomId: UUID): Promise<UUID[]>;
   getParticipantUserState(
     roomId: UUID,
     userId: UUID,
@@ -344,7 +344,7 @@ export interface IDatabaseAdapter {
     userA: UUID;
     userB: UUID;
   }): Promise<Relationship | null>;
-  getRelationships(params: { user_id: UUID }): Promise<Relationship[]>;
+  getRelationships(params: { userId: UUID }): Promise<Relationship[]>;
 }
 
 export interface IMemoryManager {
@@ -355,29 +355,29 @@ export interface IMemoryManager {
 
   addEmbeddingToMemory(memory: Memory): Promise<Memory>;
   getMemories(opts: {
-    room_id: UUID;
+    roomId: UUID;
     count?: number;
     unique?: boolean;
-    user_ids?: UUID[];
+    userIds?: UUID[];
   }): Promise<Memory[]>;
   getCachedEmbeddings(
     content: string,
   ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
   getMemoryById(id: UUID): Promise<Memory | null>;
-  getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]>;
+  getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
   searchMemoriesByEmbedding(
     embedding: number[],
     opts: {
       match_threshold?: number;
       count?: number;
-      room_id: UUID;
+      roomId: UUID;
       unique?: boolean;
     },
   ): Promise<Memory[]>;
   createMemory(memory: Memory, unique?: boolean): Promise<void>;
   removeMemory(memoryId: UUID): Promise<void>;
-  removeAllMemories(room_id: UUID): Promise<void>;
-  countMemories(room_id: UUID, unique?: boolean): Promise<number>;
+  removeAllMemories(roomId: UUID): Promise<void>;
+  countMemories(roomId: UUID, unique?: boolean): Promise<number>;
 }
 
 export interface IAgentRuntime {
@@ -461,13 +461,13 @@ export interface IAgentRuntime {
     callback?: HandlerCallback,
   ): Promise<void>;
   evaluate(message: Memory, state?: State): Promise<string[]>;
-  ensureParticipantExists(user_id: UUID, room_id: UUID): Promise<void>;
+  ensureParticipantExists(userId: UUID, roomId: UUID): Promise<void>;
   ensureUserExists(
-    user_id: UUID,
+    userId: UUID,
     userName: string | null,
     name: string | null,
   ): Promise<void>;
-  ensureParticipantInRoom(user_id: UUID, roomId: UUID): Promise<void>;
+  ensureParticipantInRoom(userId: UUID, roomId: UUID): Promise<void>;
   ensureRoomExists(roomId: UUID): Promise<void>;
   composeState(
     message: Memory,

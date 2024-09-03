@@ -49,7 +49,7 @@ export class TwitterGenerationClient extends ClientBase {
     try {
       const recentConversationsText = await getRecentConversations(
         this.runtime,
-        this.twitterClient,
+        this,
         settings.TWITTER_USERNAME,
       );
 
@@ -67,8 +67,8 @@ export class TwitterGenerationClient extends ClientBase {
 
       const state = await this.runtime.composeState(
         {
-          user_id: this.runtime.agentId,
-          room_id: stringToUuid("twitter_generate_room"),
+          userId: this.runtime.agentId,
+          roomId: stringToUuid("twitter_generate_room"),
           content: { text: "", action: "" },
         },
         {
@@ -131,22 +131,22 @@ export class TwitterGenerationClient extends ClientBase {
 
           const postId = tweet.id;
           const conversationId = tweet.conversationId;
-          const room_id = stringToUuid(conversationId);
+          const roomId = stringToUuid(conversationId);
 
-          await this.runtime.ensureRoomExists(room_id);
+          await this.runtime.ensureRoomExists(roomId);
           await this.runtime.ensureParticipantInRoom(
             this.runtime.agentId,
-            room_id,
+            roomId,
           );
           await this.cacheTweet(tweet);
 
           await this.runtime.messageManager.createMemory({
             id: stringToUuid(postId),
-            user_id: this.runtime.agentId,
+            userId: this.runtime.agentId,
             content: { text: newTweetContent.trim(), url: tweet.permanentUrl },
-            room_id,
+            roomId,
             embedding: embeddingZeroVector,
-            created_at: new Date(tweet.timestamp),
+            createdAt: new Date(tweet.timestamp),
           });
         } else {
           console.error("Failed to post tweet");
