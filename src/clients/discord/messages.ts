@@ -262,10 +262,11 @@ export class MessageManager {
                 ...content,
                 action,
                 inReplyTo: messageId,
+                url: m.url,
               },
               room_id,
               embedding: embeddingZeroVector,
-              created_at: new Date(),
+              created_at: new Date(m.createdTimestamp),
             };
             memories.push(memory);
           }
