@@ -29,7 +29,7 @@ import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, Message, State, UUID } from "../../core/types.ts";
+import { Content, Memory, State, UUID } from "../../core/types.ts";
 import { textToSpeech } from "../elevenlabs/index.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
 
@@ -185,7 +185,7 @@ export class VoiceManager extends EventEmitter {
     callback,
     state,
   }: {
-    message: Message;
+    message: Memory;
     shouldIgnore?: boolean;
     shouldRespond?: boolean;
     callback: (response: string) => void;
@@ -236,7 +236,7 @@ export class VoiceManager extends EventEmitter {
   }
 
   private async _generateResponse(
-    message: Message,
+    message: Memory,
     state: State,
     context: string,
   ): Promise<Content> {
@@ -273,11 +273,12 @@ export class VoiceManager extends EventEmitter {
     return response;
   }
 
-  private async _saveRequestMessage(message: Message, state: State) {
+  private async _saveRequestMessage(message: Memory, state: State) {
     const { content: senderContent } = message;
 
     if ((senderContent as Content).text) {
       const memory = {
+        id: getUuid(message.id) as UUID,
         user_id: message.user_id,
         content: senderContent,
         room_id: message.room_id,
@@ -291,7 +292,7 @@ export class VoiceManager extends EventEmitter {
   }
 
   private async _saveResponseMessage(
-    message: Message,
+    message: Memory,
     state: State,
     responseContent: Content,
   ) {
@@ -301,6 +302,7 @@ export class VoiceManager extends EventEmitter {
 
     if (responseContent.content) {
       await this.runtime.messageManager.createMemory({
+        id: getUuid(message.id) as UUID,
         user_id: this.runtime.agentId,
         content: { ...responseContent, user: this.runtime.character.name },
         room_id,
@@ -313,7 +315,7 @@ export class VoiceManager extends EventEmitter {
     }
   }
 
-  private async _shouldIgnore(message: Message): Promise<boolean> {
+  private async _shouldIgnore(message: Memory): Promise<boolean> {
     // if the message is 3 characters or less, ignore it
     if ((message.content as Content).text.length < 3) {
       return true;

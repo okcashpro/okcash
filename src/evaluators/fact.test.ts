@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { defaultActions } from "../core/actions.ts";
 import { zeroUuid } from "../core/constants.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
-import { type Message, type UUID } from "../core/types.ts";
+import { type Memory, type UUID } from "../core/types.ts";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
@@ -63,7 +63,7 @@ describe("Facts Evaluator", () => {
         GetTellMeAboutYourselfConversation1,
       ]);
 
-      const message: Message = {
+      const message: Memory = {
         user_id: user.id as UUID,
         content: { text: "" },
         room_id,
@@ -86,7 +86,7 @@ describe("Facts Evaluator", () => {
 
       await addFacts(runtime, user.id as UUID, room_id, jimFacts);
 
-      const message: Message = {
+      const message: Memory = {
         user_id: user.id as UUID,
         content: { text: "" },
         room_id,

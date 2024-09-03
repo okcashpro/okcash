@@ -26,7 +26,7 @@ import {
   State,
   type Action,
   type Evaluator,
-  type Message
+  type Memory
 } from "./types.ts";
 
 import {
@@ -57,7 +57,7 @@ import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
-import { UUID, type Actor, type Memory } from "./types.ts";
+import { UUID, type Actor } from "./types.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -338,12 +338,10 @@ export class AgentRuntime implements IAgentRuntime {
           );
           return result;
         } else {
-          const biasValue = -30.0;
+          const biasValue = -20.0;
           const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
           const mappedWords = wordsToPunish.map((word) => encoding.encode(word, [], "all")[0]);
-
-          console.log("mappedWords", mappedWords);
 
           const tokenIds = [
             ...new Set(
@@ -728,7 +726,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @param content The content of the message to process actions from.
    */
   async processActions(
-    message: Message,
+    message: Memory,
     content: Content,
     state?: State,
     callback?: (response: Content) => void,
@@ -758,7 +756,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @param state The state of the agent.
    * @returns The results of the evaluation.
    */
-  async evaluate(message: Message, state?: State) {
+  async evaluate(message: Memory, state?: State) {
     const evaluatorPromises = this.evaluators.map(
       async (evaluator: Evaluator) => {
         if (!evaluator.handler) {
@@ -882,7 +880,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @returns The state of the agent.
    */
   async composeState(
-    message: Message,
+    message: Memory,
     additionalKeys: { [key: string]: unknown } = {},
   ) {
     const { user_id, room_id } = message;
@@ -935,20 +933,13 @@ export class AgentRuntime implements IAgentRuntime {
       });
     }
 
+    console.log('********* actorsData', actorsData);
+
     const actors = formatActors({ actors: actorsData ?? [] });
 
-    const recentMessageData = {
-      actors: actorsData ?? [],
-      messages: recentMessagesData.map((memory: Memory) => {
-        const newMemory = { ...memory };
-        delete newMemory.embedding;
-        return newMemory;
-      }),
-    };
+    const recentMessages = formatMessages({ messages: recentMessagesData, actors: actorsData });
 
-    const recentMessages = formatMessages(recentMessageData);
-
-    const recentPosts = formatPosts(recentMessageData);
+    const recentPosts = formatPosts({ messages: recentMessagesData, actors: actorsData });
 
     const recentFacts = formatFacts(recentFactsData);
     const relevantFacts = formatFacts(relevantFactsData);
@@ -1054,23 +1045,17 @@ Text: ${attachment.text}
         userB,
       ]);
 
-      // Fetch recent messages from the rooms
-      const recentMessages: Memory[] = [];
-      for (const room_id of rooms) {
-        const roomMessages = await this.messageManager.getMemories({
-          room_id,
-          count: 10, // Adjust the count as needed
-          unique: false,
-          user_ids: [userA, userB],
-        });
-        recentMessages.push(...roomMessages);
-      }
+  
+    // Check the existing memories in the database
+    const existingMemories = await this.messageManager.getMemoriesByRoomIds({
+      room_ids: rooms,
+    });
 
       // Sort messages by timestamp in descending order
-      recentMessages.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+      existingMemories.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
 
       // Take the most recent messages
-      const recentInteractionsData = recentMessages.slice(0, 10); // Adjust the count as needed
+      const recentInteractionsData = existingMemories.slice(0, 20);
       return recentInteractionsData;
     };
 
@@ -1079,6 +1064,12 @@ Text: ${attachment.text}
         ? await getRecentInteractions(user_id, this.agentId)
         : [];
 
+    console.log('********* recentInteractions', recentInteractions);
+
+    if (user_id === this.agentId) {
+      console.log('********* user_id === this.agentId');
+    }
+
     const getRecentMessageInteractions = async (
       recentInteractionsData: Memory[],
     ): Promise<string> => {
@@ -1086,7 +1077,7 @@ Text: ${attachment.text}
       const formattedInteractions = recentInteractionsData
         .map((message) => {
           const sender =
-            message.user_id === this.agentId ? this.character.name : "User";
+            message.user_id === this.agentId ? this.character.name : message.content.name;
           return `${sender}: ${message.content.text}`;
         })
         .join("\n");
@@ -1097,23 +1088,20 @@ Text: ${attachment.text}
     const formattedMessageInteractions =
       await getRecentMessageInteractions(recentInteractions);
 
-    const getRecentPostInteractions = async (
-      recentInteractionsData: Memory[],
-    ): Promise<string> => {
-      // Format the recent posts
-      const formattedInteractions = recentInteractionsData
-        .map((message) => {
-          const sender =
-            message.user_id === this.agentId ? this.character.name : "User";
-          return `${sender}: ${message.content.text}`;
-        })
-        .join("\n");
-
-      return formattedInteractions;
-    };
+      const getRecentPostInteractions = async (
+        recentInteractionsData: Memory[],
+        actors: Actor[],
+      ): Promise<string> => {
+        const formattedInteractions = formatPosts({
+          messages: recentInteractionsData,
+          actors,
+        });
+      
+        return formattedInteractions;
+      };
 
     const formattedPostInteractions =
-      await getRecentPostInteractions(recentInteractions);
+      await getRecentPostInteractions(recentInteractions, actorsData);
 
     const initialState = {
       agentId: this.agentId,

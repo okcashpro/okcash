@@ -37,20 +37,9 @@ export interface ConversationExample {
  */
 export interface Actor {
   name: string; // The name of the actor.
+  username: string; // The username of the actor.
   details: { tagline: string; summary: string; quote: string }; // Additional details about the actor, including a tagline, a summary, and a favorite quote.
   id: UUID; // A unique identifier for the actor.
-}
-
-/**
- * Represents a memory record, which could be a message or any other piece of information remembered by the system, including its content, associated user IDs, and optionally, its embedding vector for similarity comparisons.
- */
-export interface Memory {
-  id?: UUID; // An optional unique identifier for the memory.
-  user_id: UUID; // The user ID associated with the memory.
-  created_at?: Date; // An optional timestamp indicating when the memory was created.
-  content: Content; // The content of the memory, which can be a structured object or a plain string.
-  embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
-  room_id: UUID; // The room or conversation ID associated with the memory.
 }
 
 /**
@@ -115,14 +104,15 @@ export interface State {
 }
 
 /**
- * Represents a message within the conversation, including its content and associated metadata such as the sender, agent, and room IDs.
+ * Represents a memory record, which could be a message or any other piece of information remembered by the system, including its content, associated user IDs, and optionally, its embedding vector for similarity comparisons.
  */
-export interface Message {
-  user_id: UUID; // The ID of the user who sent the message.
-  content: Content; // The content of the message, which can be a structured object or a plain string.
-  room_id: UUID; // The ID of the room or conversation context in which the message was sent.
-  created_at?: Date; // The timestamp of when the message was sent.
-  inReplyTo?: UUID; // If this is a message in a thread, or a reply, store this
+export interface Memory {
+  id?: UUID; // An optional unique identifier for the memory.
+  user_id: UUID; // The user ID associated with the memory.
+  created_at?: Date; // An optional timestamp indicating when the memory was created.
+  content: Content; // The content of the memory, which can be a structured object or a plain string.
+  embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
+  room_id: UUID; // The room or conversation ID associated with the memory.
 }
 
 /**
@@ -138,7 +128,7 @@ export interface MessageExample {
  */
 export type Handler = (
   runtime: IAgentRuntime,
-  message: Message,
+  message: Memory,
   state?: State,
   options?: { [key: string]: unknown }, // additional options can be used for things like tests or state-passing on a chain
   callback?: (response: Content) => void,
@@ -149,7 +139,7 @@ export type Handler = (
  */
 export type Validator = (
   runtime: IAgentRuntime,
-  message: Message,
+  message: Memory,
   state?: State,
 ) => Promise<boolean>;
 
@@ -192,7 +182,7 @@ export interface Evaluator {
 export interface Provider {
   get: (
     runtime: IAgentRuntime,
-    message: Message,
+    message: Memory,
     state?: State,
   ) => Promise<any>;
 }
@@ -466,12 +456,12 @@ export interface IAgentRuntime {
   }): Promise<Content>;
   embed(input: string): Promise<number[]>;
   processActions(
-    message: Message,
+    message: Memory,
     content: Content,
     state?: State,
     callback?: (response: Content) => void,
   ): Promise<void>;
-  evaluate(message: Message, state?: State): Promise<string[]>;
+  evaluate(message: Memory, state?: State): Promise<string[]>;
   ensureParticipantExists(user_id: UUID, room_id: UUID): Promise<void>;
   ensureUserExists(
     user_id: UUID,
@@ -481,7 +471,7 @@ export interface IAgentRuntime {
   ensureParticipantInRoom(user_id: UUID, roomId: UUID): Promise<void>;
   ensureRoomExists(roomId: UUID): Promise<void>;
   composeState(
-    message: Message,
+    message: Memory,
     additionalKeys?: { [key: string]: unknown },
   ): Promise<State>;
   updateRecentMessageState(state: State): Promise<State>;

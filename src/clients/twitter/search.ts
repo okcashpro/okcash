@@ -7,7 +7,7 @@ import settings from "../../core/settings.ts";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
-import { State, UUID } from "../../core/types.ts";
+import { Memory, State, UUID } from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
@@ -15,6 +15,7 @@ import {
   searchRecentPosts,
   wait
 } from "./utils.ts";
+import { embeddingZeroVector } from "../../core/memory.ts";
 
 const messageHandlerTemplate = `{{relevantFacts}}
 {{recentFacts}}
@@ -34,13 +35,13 @@ About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
 
+{{postDirections}}
+Respond directly to the above post in an {{adjective}} way, as {{agentName}}
+
 {{recentPosts}}
 
-{{postDirections}}
-- Respond directly to the above post in an {{adjective}} way, as {{agentName}}
-
 # Task: Respond to the following post in the style and perspective of {{agentName}} (aka @{{twitterUserName}}).
-{{tweetContext}}
+{{currentPost}}
 
 Your response should not contain any questions. Brief, concise statements only.
 
@@ -164,9 +165,11 @@ export class TwitterSearchClient extends ClientBase {
         this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id),
       ]);
   
-      const conversationThread = await buildConversationThread(selectedTweet, this);
+      // crawl additional conversation tweets, if there are any
+      await buildConversationThread(selectedTweet, this);
   
       const message = {
+        id: getUuid(selectedTweet.id) as UUID,
         content: { text: selectedTweet.text },
         user_id: userIdUUID,
         room_id,
@@ -221,14 +224,7 @@ export class TwitterSearchClient extends ClientBase {
       await this.saveRequestMessage(message, state as State);
   
       const context = composeContext({
-        state: {
-          ...state,
-          tweetContext: `${conversationThread ? `Post Thread:\n${conversationThread}\n` : ""}
-  
-  Post which {{agentName}} is responding to:
-  ${(state as State).tweetContext}
-  `,
-        },
+        state,
         template: messageHandlerTemplate,
       });
     
@@ -243,9 +239,7 @@ export class TwitterSearchClient extends ClientBase {
       });
   
       log_to_file(`${botTwitterUsername}_${datestr}_search_response`, JSON.stringify(responseContent));
-  
-      await this.saveResponseMessage(message, state, responseContent);
-      this.runtime.processActions(message, responseContent, state);
+
   
       const response = responseContent;
   
@@ -253,9 +247,27 @@ export class TwitterSearchClient extends ClientBase {
         console.log(`Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`);
         try {
           if (!this.dryRun) {
-            await this.requestQueue.add(async () => {
-              await this.twitterClient.sendTweet(response.text, selectedTweet.id);
+            const success = await this.requestQueue.add(async () => {
+              return await this.twitterClient.sendTweet(response.text, selectedTweet.id);
             });
+
+            if (success) {
+              const tweet = await this.requestQueue.add(async () => await this.twitterClient.getLatestTweet(botTwitterUsername));
+              if (!tweet) {
+                console.error("Failed to get latest tweet after posting it");
+                return;
+              }
+
+            const memory: Memory = {
+              id: getUuid(tweet.id) as UUID,
+              user_id: this.runtime.agentId,
+              content: responseContent,
+              room_id,
+              embedding: embeddingZeroVector,
+            }
+            await this.saveResponseMessage(memory, state);
+            this.runtime.processActions(memory, responseContent, state);
+            }
           } else {
             console.log("Dry run, not sending post:", response.text);
           }

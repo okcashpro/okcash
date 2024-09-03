@@ -20,6 +20,13 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import { MessageManager } from "./messages.ts";
 import { VoiceManager } from "./voice.ts";
 
+import follow_room from "../../actions/follow_room.ts";
+import joinvoice from "./actions/joinvoice.ts";
+import leavevoice from "./actions/leavevoice.ts";
+import mute_room from "../../actions/mute_room.ts";
+import unfollow_room from "../../actions/unfollow_room.ts";
+import unmute_room from "../../actions/unmute_room.ts";
+
 export class DiscordClient extends EventEmitter {
   apiToken: string;
   private client: Client;
@@ -59,6 +66,9 @@ export class DiscordClient extends EventEmitter {
 
     this.setupEventListeners();
     this.setupCommands();
+
+    this.runtime.registerAction(joinvoice);
+    this.runtime.registerAction(leavevoice);
   }
 
   private setupEventListeners() {
@@ -152,6 +162,7 @@ export class DiscordClient extends EventEmitter {
 
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
+      id: getUuid(reaction.message.id) as UUID,
       user_id: userIdUUID,
       content: { text: reactionMessage, source: "Discord" },
       room_id,
@@ -191,6 +202,7 @@ export class DiscordClient extends EventEmitter {
 
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
+      id: getUuid(reaction.message.id) as UUID,
       user_id: userIdUUID,
       content: { text: reactionMessage, source: "Discord" },
       room_id,

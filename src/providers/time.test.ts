@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { composeContext } from "../core/context.ts";
 import { AgentRuntime } from "../core/runtime.ts";
-import { type Message, type State, type UUID } from "../core/types.ts";
+import { type Memory, type State, type UUID } from "../core/types.ts";
 import timeProvider from "./time.ts";
 import { zeroUuid } from "../core/constants.ts";
 
@@ -24,7 +24,7 @@ describe("Time Provider", () => {
   });
 
   test("Time provider should return the current time in the correct format", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id,
       content: { text: "" },
       room_id: room_id,
@@ -41,7 +41,7 @@ describe("Time Provider", () => {
   });
 
   test("Time provider should be integrated in the state and context correctly", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id,
       content: { text: "" },
       room_id: room_id,
@@ -66,7 +66,7 @@ describe("Time Provider", () => {
   });
 
   test("Time provider should work independently", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id,
       content: { text: "" },
       room_id: room_id,

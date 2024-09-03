@@ -3,7 +3,7 @@ import { default as getUuid } from "uuid-by-string";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, Media, Message, State, UUID } from "../../core/types.ts";
+import { Content, Media, Memory, State, UUID } from "../../core/types.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
@@ -153,8 +153,11 @@ export class MessageManager {
         agentName: this.runtime.character.name || this.client.user?.displayName,
       })) as State;
   
-      const messageToHandle: Message = {
+      const memory: Memory = {
+        id: getUuid(message.id) as UUID,
         ...userMessage,
+        user_id: userIdUUID,
+        room_id,
         content: {
           ...content,
           attachments,
@@ -162,16 +165,10 @@ export class MessageManager {
         created_at: new Date(message.createdTimestamp),
       };
   
-      await this._saveRequestMessage(messageToHandle, state);
+      await this._saveRequestMessage(memory, state);
   
       // Save the message to the database and cache
-      await this.runtime.messageManager.createMemory({
-        id: messageId,
-        user_id: userIdUUID,
-        content: messageToHandle.content,
-        room_id,
-        created_at: new Date(message.createdTimestamp),
-      });
+      await this.runtime.messageManager.createMemory(memory);
   
       state = await this.runtime.updateRecentMessageState(state);
   
@@ -220,19 +217,19 @@ export class MessageManager {
       });
   
       const responseContent = await this._generateResponse(
-        messageToHandle,
+        memory,
         state,
         context,
       );
   
-      await this._saveResponseMessage(messageToHandle, state, responseContent);
+      await this._saveResponseMessage(memory, state, responseContent);
   
       if (responseContent.content) {
         await callback(responseContent);
       }
   
       await this.runtime.processActions(
-        messageToHandle,
+        memory,
         responseContent,
         state,
         callback,
@@ -335,7 +332,7 @@ export class MessageManager {
     return { processedContent, attachments };
   }
 
-  private async _saveRequestMessage(message: Message, state: State) {
+  private async _saveRequestMessage(message: Memory, state: State) {
     const { content: senderContent } = message;
 
     if ((senderContent as Content).text) {
@@ -348,7 +345,7 @@ export class MessageManager {
   }
 
   private async _saveResponseMessage(
-    message: Message,
+    message: Memory,
     state: State,
     responseContent: Content,
   ) {
@@ -358,6 +355,7 @@ export class MessageManager {
 
     if (responseContent.content) {
       await this.runtime.messageManager.createMemory({
+        id: getUuid(message.id) as UUID,
         user_id: this.runtime.agentId,
         content: { ...responseContent, user: this.runtime.character.name },
         room_id,
@@ -546,7 +544,7 @@ export class MessageManager {
   }
 
   private async _generateResponse(
-    message: Message,
+    message: Memory,
     state: State,
     context: string,
   ): Promise<Content> {

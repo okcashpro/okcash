@@ -8,7 +8,7 @@ import {
   Action,
   ActionExample,
   Content,
-  Message,
+  Memory,
   State,
   UUID,
 } from "../core/types.ts";
@@ -23,13 +23,13 @@ export default {
   name: "ASK_CLAUDE",
   description:
     "Asks Claude for assistance with the user's request, providing the current conversation context and attachments.",
-  validate: async (runtime: AgentRuntime, message: Message, state: State) => {
+  validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
     // Check if the ANTHROPIC_API_KEY is set in the environment variables
     return !!settings.ANTHROPIC_API_KEY;
   },
   handler: async (
     runtime: AgentRuntime,
-    message: Message,
+    message: Memory,
     state: State,
     options: any,
     callback: any,
@@ -122,7 +122,7 @@ export default {
     }
 
     const _saveResponseMessage = async (
-      message: Message,
+      message: Memory,
       state: State,
       responseContent: Content,
     ) => {

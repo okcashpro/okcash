@@ -1,9 +1,4 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { populateMemories } from "../test_resources/populateMemories.ts";
-import { runAiTest } from "../test_resources/runAiTest.ts";
-import { type User } from "../test_resources/types.ts";
 import { defaultActions } from "../core/actions.ts";
 import { zeroUuid } from "../core/constants.ts";
 import { createGoal, getGoals } from "../core/goals.ts";
@@ -13,9 +8,14 @@ import {
   GoalStatus,
   Objective,
   State,
-  type Message,
+  type Memory,
   type UUID,
 } from "../core/types.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../test_resources/populateMemories.ts";
+import { runAiTest } from "../test_resources/runAiTest.ts";
+import { type User } from "../test_resources/types.ts";
 import evaluator from "./goal.ts";
 
 dotenv.config({ path: ".dev.vars" });
@@ -100,7 +100,7 @@ describe("Goals Evaluator", () => {
         await populateMemories(runtime, user, room_id, [conversation]);
 
         // Simulate a conversation indicating the completion of both objectives
-        const message: Message = {
+        const message: Memory = {
           user_id: user.id as UUID,
           content: {
             text: "I've completed task 1 and task 2 for the Test Goal. Both are finished. Everything is done and I'm ready for the next goal.",
@@ -159,7 +159,7 @@ describe("Goals Evaluator", () => {
 
         await populateMemories(runtime, user, room_id, [conversation]);
 
-        const message: Message = {
+        const message: Memory = {
           user_id: user.id as UUID,
           content: { text: "I've decided to mark Goal Y as failed." },
           room_id,

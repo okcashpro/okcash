@@ -3,7 +3,7 @@ import { zeroUuid } from "../core/constants.ts";
 import { composeContext } from "../core/context.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
-import { Content, State, type Message, type UUID } from "../core/types.ts";
+import { Content, Memory, State, type UUID } from "../core/types.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversationTroll1,
@@ -19,10 +19,10 @@ import action from "./ignore.ts";
 
 async function handleMessage(
   runtime: AgentRuntime,
-  message: Message,
+  message: Memory,
   state?: State,
 ) {
-  const _saveRequestMessage = async (message: Message, state: State) => {
+  const _saveRequestMessage = async (message: Memory, state: State) => {
     const { content: senderContent, user_id, room_id } = message;
 
     const _senderContent = (senderContent as Content).text?.trim();
@@ -65,7 +65,7 @@ async function handleMessage(
   });
 
   const _saveResponseMessage = async (
-    message: Message,
+    message: Memory,
     state: State,
     responseContent: Content,
   ) => {
@@ -138,7 +138,7 @@ describe("Ignore action tests", () => {
 
   test("Test ignore action", async () => {
     await runAiTest("Test ignore action", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: user?.id as UUID,
         content: { text: "Never talk to me again" },
         room_id: room_id as UUID,
@@ -158,7 +158,7 @@ describe("Ignore action tests", () => {
     await runAiTest(
       "Action handler test 1: response should be ignore",
       async () => {
-        const message: Message = {
+        const message: Memory = {
           user_id: user.id as UUID,
           content: { text: "", action: "IGNORE" },
           room_id: room_id as UUID,
@@ -183,7 +183,7 @@ describe("Ignore action tests", () => {
     await runAiTest(
       "Action handler test 2: response should be ignore",
       async () => {
-        const message: Message = {
+        const message: Memory = {
           user_id: user.id as UUID,
           content: { text: "", action: "IGNORE" },
           room_id: room_id as UUID,
@@ -206,7 +206,7 @@ describe("Ignore action tests", () => {
 
   test("Expect ignore", async () => {
     await runAiTest("Expect ignore", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: user.id as UUID,
         content: { text: "Bye" },
         room_id: room_id as UUID,

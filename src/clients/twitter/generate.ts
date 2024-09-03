@@ -133,6 +133,7 @@ export class TwitterGenerationClient extends ClientBase {
           await this.cacheTweet(tweet);
     
           await this.runtime.messageManager.createMemory({
+            id: getUuid(postId) as UUID,
             user_id: this.runtime.agentId,
             content: { text: newTweetContent.trim() },
             room_id,

@@ -1,13 +1,13 @@
 import { composeContext } from "../core/context.ts";
 import { getGoals } from "../core/goals.ts";
+import { parseJsonArrayFromText } from "../core/parsing.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
 import {
+  Memory,
   Objective,
   type Goal,
-  type Message,
-  type State,
+  type State
 } from "../core/types.ts";
-import { parseJsonArrayFromText } from "../core/parsing.ts";
 
 const template = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.
@@ -48,7 +48,7 @@ Response format should be:
 
 async function handler(
   runtime: AgentRuntime,
-  message: Message,
+  message: Memory,
   state: State | undefined,
   options: { [key: string]: unknown } = { onlyInProgress: true },
 ): Promise<Goal[]> {
@@ -127,7 +127,7 @@ export default {
   name: "UPDATE_GOAL",
   validate: async (
     runtime: AgentRuntime,
-    message: Message,
+    message: Memory,
   ): Promise<boolean> => {
     // Check if there are active goals that could potentially be updated
     const goals = await getGoals({

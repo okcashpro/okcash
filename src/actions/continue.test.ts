@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 import { zeroUuid } from "../core/constants.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
+import { Content, Memory, type UUID } from "../core/types.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { Goodbye1 } from "../test_resources/data.ts";
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { populateMemories } from "../test_resources/populateMemories.ts";
 import { runAiTest } from "../test_resources/runAiTest.ts";
 import { type User } from "../test_resources/types.ts";
-import { Content, type Message, type UUID } from "../core/types.ts";
 import action from "./continue.ts";
 import ignore from "./ignore.ts";
 
@@ -79,7 +79,7 @@ describe("User Profile", () => {
 
   test("Test validate function response", async () => {
     await runAiTest("Test validate function response", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: user.id as UUID,
         content: { text: "Hello" },
         room_id: room_id as UUID,
@@ -92,7 +92,7 @@ describe("User Profile", () => {
       // try again with GetContinueExample1, expect to be false
       await populateMemories(runtime, user, room_id, [GetContinueExample1]);
 
-      const message2: Message = {
+      const message2: Memory = {
         user_id: zeroUuid as UUID,
         content: {
           text: "Hello",
@@ -109,7 +109,7 @@ describe("User Profile", () => {
 
   test("Test repetition check on continue", async () => {
     await runAiTest("Test repetition check on continue", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: zeroUuid as UUID,
         content: {
           text: "Hmm, let think for a second, I was going to tell you about something...",
@@ -132,7 +132,7 @@ describe("User Profile", () => {
     await runAiTest(
       "Test multiple continue messages in a conversation",
       async () => {
-        const message: Message = {
+        const message: Memory = {
           user_id: user?.id as UUID,
           content: {
             text: "Write a short story in three parts, using the CONTINUE action for each part.",
@@ -182,7 +182,7 @@ describe("User Profile", () => {
 
   test("Test if message is added to database", async () => {
     await runAiTest("Test if message is added to database", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: user?.id as UUID,
         content: {
           text: "Tell me more about your favorite food.",
@@ -208,7 +208,7 @@ describe("User Profile", () => {
   test("Test if not continue", async () => {
     await runAiTest("Test if not continue", async () => {
       // this is basically the same test as the one in ignore.test
-      const message: Message = {
+      const message: Memory = {
         user_id: user?.id as UUID,
         content: { text: "Bye" },
         room_id: room_id as UUID,

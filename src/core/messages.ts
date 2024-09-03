@@ -11,9 +11,26 @@ export async function getActorDetails({
   runtime: AgentRuntime;
   room_id: UUID;
 }) {
-  const actors = await runtime.databaseAdapter.getActorDetails({ room_id });
-  return actors as Actor[];
+  const participantIds = await runtime.databaseAdapter.getParticipantsForRoom(room_id);
+  const actors = await Promise.all(
+    participantIds.map(async (user_id) => {
+      const account = await runtime.databaseAdapter.getAccountById(user_id);
+      if (account) {
+        return {
+          id: account.id,
+          name: account.name,
+          username: account.username,
+          details: account.details,
+        };
+      }
+      return null;
+    })
+  );
+
+  return actors.filter((actor): actor is Actor => actor !== null);
 }
+
+
 
 /**
  * Format actors into a string

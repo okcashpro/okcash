@@ -1,6 +1,6 @@
 import time from "../providers/time.ts";
 import { AgentRuntime } from "./runtime.ts";
-import { State, type Message, type Provider } from "./types.ts";
+import { State, type Memory, type Provider } from "./types.ts";
 
 export const defaultProviders: Provider[] = [time];
 
@@ -13,7 +13,7 @@ export const defaultProviders: Provider[] = [time];
  */
 export async function getProviders(
   runtime: AgentRuntime,
-  message: Message,
+  message: Memory,
   state?: State,
 ) {
   const providerResults = await Promise.all(

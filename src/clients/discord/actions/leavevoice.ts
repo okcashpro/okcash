@@ -7,16 +7,16 @@ import {
   Message as DiscordMessage,
 } from "discord.js";
 import {
-  Message,
-  State,
   Action,
   ActionExample,
   IAgentRuntime,
+  Memory,
+  State
 } from "../../../core/types.ts";
 
 export default {
   name: "LEAVE_VOICE",
-  validate: async (runtime: IAgentRuntime, message: Message, state: State) => {
+  validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
     if (!state) {
       throw new Error("State is not available.");
     }
@@ -66,7 +66,7 @@ export default {
   description: "Leave the current voice channel.",
   handler: async (
     runtime: IAgentRuntime,
-    message: Message,
+    message: Memory,
     state: State,
   ): Promise<boolean> => {
     if (!state.discordClient) {

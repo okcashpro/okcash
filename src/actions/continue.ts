@@ -8,8 +8,8 @@ import {
   ActionExample,
   Content,
   IAgentRuntime,
-  Message,
-  State,
+  Memory,
+  State
 } from "../core/types.ts";
 
 const maxContinuesInARow = 3;
@@ -28,7 +28,7 @@ export default {
   name: "CONTINUE",
   description:
     "ONLY use this action when the message necessitates a follow up. Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was CONTINUE, and the user has not responded. Use sparingly.",
-  validate: async (runtime: IAgentRuntime, message: Message) => {
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
     console.log("Validating continue");
     const recentMessagesData = await runtime.messageManager.getMemories({
       room_id: message.room_id,
@@ -56,7 +56,7 @@ export default {
   },
   handler: async (
     runtime: IAgentRuntime,
-    message: Message,
+    message: Memory,
     state: State,
     options: any,
     callback: any,
@@ -136,7 +136,7 @@ export default {
     }
 
     const _saveResponseMessage = async (
-      message: Message,
+      message: Memory,
       state: State,
       responseContent: Content,
     ) => {

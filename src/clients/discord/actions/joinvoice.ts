@@ -14,13 +14,13 @@ import {
   Action,
   ActionExample,
   IAgentRuntime,
-  Message,
-  State,
+  Memory,
+  State
 } from "../../../core/types.ts";
 
 export default {
   name: "JOIN_VOICE",
-  validate: async (_runtime: IAgentRuntime, message: Message, state: State) => {
+  validate: async (_runtime: IAgentRuntime, message: Memory, state: State) => {
     if (!state) {
       throw new Error("State is not available.");
     }
@@ -68,7 +68,7 @@ export default {
   description: "Join a voice channel to participate in voice chat.",
   handler: async (
     runtime: IAgentRuntime,
-    message: Message,
+    message: Memory,
     state: State,
   ): Promise<boolean> => {
     if (!state) {

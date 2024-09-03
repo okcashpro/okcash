@@ -1,7 +1,6 @@
 import { composeContext } from "../core/context.ts";
-import { parseJsonArrayFromText } from "../core/parsing.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
-import { ActionExample, Content, Memory, type Message } from "../core/types.ts";
+import { ActionExample, Content, Memory } from "../core/types.ts";
 
 export const formatFacts = (facts: Memory[]) => {
   const messageStrings = facts
@@ -49,7 +48,7 @@ Response should be a JSON object array inside a JSON markdown block. Correct res
 ]
 \`\`\``;
 
-async function handler(runtime: AgentRuntime, message: Message) {
+async function handler(runtime: AgentRuntime, message: Memory) {
   const state = await runtime.composeState(message);
 
   const { agentId, room_id } = state;
@@ -102,7 +101,7 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runtime: AgentRuntime,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    message: Message,
+    message: Memory,
   ): Promise<boolean> => {
     const messageCount = (await runtime.messageManager.countMemories(
       message.room_id,

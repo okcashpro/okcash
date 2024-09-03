@@ -8,7 +8,7 @@ import settings from "../../core/settings.ts";
 
 import { fileURLToPath } from "url";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, Message, State, UUID } from "../../core/types.ts";
+import { Content, Memory, State, UUID } from "../../core/types.ts";
 import ImageDescriptionService from "../../services/image.ts";
 
 import glob from "glob";
@@ -73,6 +73,7 @@ class RequestQueue {
 }
 
 export class ClientBase extends EventEmitter {
+  static _twitterClient: Scraper;
   twitterClient: Scraper;
   runtime: AgentRuntime;
   directions: string;
@@ -83,6 +84,7 @@ export class ClientBase extends EventEmitter {
 
   private tweetCache: Map<string, Tweet> = new Map();
   requestQueue: RequestQueue = new RequestQueue();
+  twitterUserId: string;
 
   async cacheTweet(tweet: Tweet): Promise<void> {
     if(!tweet) {
@@ -138,7 +140,14 @@ export class ClientBase extends EventEmitter {
   }) {
     super();
     this.runtime = runtime;
-    this.twitterClient = new Scraper();
+    if(ClientBase._twitterClient) {
+      this.twitterClient = ClientBase._twitterClient;
+      console.log('******** using cached twitter client');
+    } else {
+      this.twitterClient = new Scraper();
+      ClientBase._twitterClient = this.twitterClient;
+      console.log('******** using new twitter client');
+    }
     this.directions =
       "- " +
       this.runtime.character.style.all.join("\n- ") +
@@ -146,22 +155,22 @@ export class ClientBase extends EventEmitter {
       this.runtime.character.style.post.join();
     this.callback = callback;
 
+    // async initialization
+    (async () => {
     // Check for Twitter cookies
     if (settings.TWITTER_COOKIES) {
       console.log("settings.TWITTER_COOKIES");
       console.log(settings.TWITTER_COOKIES);
       const cookiesArray = JSON.parse(settings.TWITTER_COOKIES);
-      this.setCookiesFromArray(cookiesArray);
+      await this.setCookiesFromArray(cookiesArray);
     } else {
       const cookiesFilePath = path.join(__dirname, "../../../twitter_cookies.json");
       if (fs.existsSync(cookiesFilePath)) {
         const cookiesArray = JSON.parse(
           fs.readFileSync(cookiesFilePath, "utf-8"),
         );
-        this.setCookiesFromArray(cookiesArray);
+        await this.setCookiesFromArray(cookiesArray);
       } else {
-        console.log("settings.TWITTER_USERNAME");
-        console.log(settings.TWITTER_USERNAME);
         this.twitterClient
           .login(
             settings.TWITTER_USERNAME,
@@ -181,13 +190,18 @@ export class ClientBase extends EventEmitter {
       }
     }
 
-    (async () => {
       while (!(await this.twitterClient.isLoggedIn())) {
         console.log("Waiting for Twitter login");
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
+      console.log("***** getting twitter userId");
+      const userId = await this.twitterClient.getUserIdByScreenName(settings.TWITTER_USERNAME);
+      console.log("***** twitter userId is", userId);
+      this.twitterUserId = userId;
 
+      console.log("***** populating timeline");
       await this.populateTimeline();
+      console.log("***** timeline populated");
 
       if (callback) {
         callback(this);
@@ -195,15 +209,7 @@ export class ClientBase extends EventEmitter {
     })();
   }
 
-  private async populateTimeline() {
-    // Get the most recent 20 tweets from our timeline
-    const timelineTweets = await this.twitterClient.getTweets(settings.TWITTER_USERNAME, 20);
-
-    const timelineTweetsArray = [];
-    for await (const tweet of timelineTweets) {
-      timelineTweetsArray.push(tweet);
-    }
-  
+  private async populateTimeline() {  
     // Get the most recent 20 mentions and interactions
     const mentionsAndInteractions = await this.twitterClient.fetchSearchTweets(
       `@${settings.TWITTER_USERNAME}`,
@@ -212,7 +218,9 @@ export class ClientBase extends EventEmitter {
     );
   
     // Combine the timeline tweets and mentions/interactions
-    const allTweets = [...timelineTweetsArray, ...mentionsAndInteractions.tweets];
+    const allTweets = [...mentionsAndInteractions.tweets];
+
+    console.log("***** all tweets", allTweets.length);
   
     // Create a Set to store unique tweet IDs
     const tweetIdsToCheck = new Set<string>();
@@ -224,11 +232,15 @@ export class ClientBase extends EventEmitter {
   
     // Convert the Set to an array of UUIDs
     const tweetUuids = Array.from(tweetIdsToCheck).map((id) => getUuid(id) as UUID);
+
+    console.log("***** tweetUuids", tweetUuids.length);
   
     // Check the existing memories in the database
     const existingMemories = await this.runtime.messageManager.getMemoriesByRoomIds({
       room_ids: tweetUuids,
     });
+
+    console.log("***** existingMemories", existingMemories.length);
   
     // Create a Set to store the existing memory IDs
     const existingMemoryIds = new Set<UUID>(existingMemories.map((memory) => memory.room_id));
@@ -236,15 +248,29 @@ export class ClientBase extends EventEmitter {
     // Filter out the tweets that already exist in the database
     const tweetsToSave = allTweets.filter((tweet) => !existingMemoryIds.has(getUuid(tweet.id) as UUID));
   
+    console.log("***** tweets to save", tweetsToSave.length);
+    await this.runtime.ensureUserExists(this.runtime.agentId, settings.TWITTER_USERNAME, this.runtime.character.name);
+
     // Save the new tweets as memories
     for (const tweet of tweetsToSave) {
-      const room_id = tweet.conversationId;
+      console.log("***** tweet", tweet);
+      const room_id = getUuid(tweet.conversationId) as UUID;
+      const tweetuserId = getUuid(tweet.userId) as UUID;
   
       await this.runtime.ensureRoomExists(room_id);
+      // ensure user is in the room
+      console.log("ensure agent is in the room");
+      await this.runtime.ensureParticipantExists(this.runtime.agentId, room_id);
+
+      console.log("ensure user exists");
+      await this.runtime.ensureUserExists(tweetuserId, tweet.username, tweet.name);
+      console.log("ensure participant exists");
+      await this.runtime.ensureParticipantExists(tweetuserId, room_id);
 
       await this.runtime.messageManager.createMemory({
-        user_id: this.runtime.agentId,
-        content: { text: tweet.text },
+        id: getUuid(tweet.id) as UUID,
+        user_id: tweetuserId,
+        content: { text: tweet.text, url: tweet.permanentUrl },
         room_id,
         embedding: embeddingZeroVector,
         created_at: new Date(tweet.timestamp),
@@ -253,55 +279,40 @@ export class ClientBase extends EventEmitter {
   }
   
 
-  setCookiesFromArray(cookiesArray: any[]) {
+  async setCookiesFromArray(cookiesArray: any[]) {
     const cookieStrings = cookiesArray.map(
       (cookie) =>
         `${cookie.key}=${cookie.value}; Domain=${cookie.domain}; Path=${cookie.path}; ${cookie.secure ? "Secure" : ""}; ${cookie.httpOnly ? "HttpOnly" : ""}; SameSite=${cookie.sameSite || "Lax"}`,
     );
-    this.twitterClient.setCookies(cookieStrings);
+    await this.twitterClient.setCookies(cookieStrings);
   }
 
   async saveResponseMessage(
-    message: Message,
+    memory: Memory,
     state: State,
-    responseContent: Content,
     userName: string = settings.TWITTER_USERNAME,
   ) {
-    const { room_id } = message;
-    const agentId = getUuid(userName) as UUID;
+    memory.content.text = memory.content.text?.trim();
 
-    responseContent.content = responseContent.text?.trim();
-
-    if (responseContent.content) {
-      console.log("Creating memory 2", {
-        user_id: agentId!,
-        content: responseContent,
-        room_id,
-        embedding: embeddingZeroVector,
-      });
+    if (memory.content && memory.content.text) {
       await this.runtime.ensureUserExists(
-        agentId,
+        this.runtime.agentId,
         userName,
         this.runtime.character.name,
       );
       await this.runtime.messageManager.createMemory(
-        {
-          user_id: agentId!,
-          content: responseContent,
-          room_id,
-          embedding: embeddingZeroVector,
-        },
+        memory,
         false,
       );
       state = await this.runtime.updateRecentMessageState(state);
 
-      await this.runtime.evaluate(message, state);
+      await this.runtime.evaluate(memory, state);
     } else {
       console.warn("Empty response, skipping");
     }
   }
 
-  async saveRequestMessage(message: Message, state: State) {
+  async saveRequestMessage(message: Memory, state: State) {
     const { content: senderContent } = message;
 
     if ((senderContent as Content).text) {
@@ -324,6 +335,7 @@ export class ClientBase extends EventEmitter {
           embedding: embeddingZeroVector,
         });
         await this.runtime.messageManager.createMemory({
+          id: message.id,
           user_id: message.user_id,
           content: senderContent,
           room_id: message.room_id,

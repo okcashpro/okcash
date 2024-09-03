@@ -1,7 +1,9 @@
 import { Scraper, SearchMode, Tweet } from "agent-twitter-client";
 import { addHeader } from "../../core/context.ts";
-import { IAgentRuntime } from "../../core/types.ts";
+import { IAgentRuntime, UUID } from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
+import { default as getUuid } from "uuid-by-string";
+import { embeddingZeroVector } from "../../core/memory.ts";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
   const waitTime =
@@ -169,7 +171,7 @@ export const searchRecentPosts = async (
   );
 };
 
-export async function buildConversationThread(tweet: Tweet, client: ClientBase): Promise<string> {
+export async function buildConversationThread(tweet: Tweet, client: ClientBase): Promise<void> {
   let thread: Tweet[] = [];
   const visited: Set<string> = new Set();
 
@@ -177,6 +179,28 @@ export async function buildConversationThread(tweet: Tweet, client: ClientBase):
     if (!currentTweet) {
       console.log("No current tweet found");
       return;
+    }
+    // check if the current tweet has already been saved
+    const memory = await client.runtime.messageManager.getMemoryById(getUuid(currentTweet.id) as UUID);
+    if (!memory) {
+      console.log("Creating memory for tweet", currentTweet.id);
+      const room_id = getUuid(currentTweet.conversationId) as UUID;
+      const user_id = getUuid(currentTweet.userId) as UUID;
+      await client.runtime.ensureRoomExists(room_id);
+      await client.runtime.ensureUserExists(user_id, currentTweet.username, currentTweet.name);
+      await client.runtime.ensureParticipantInRoom(user_id, room_id);
+      await client.runtime.ensureParticipantInRoom(client.runtime.agentId, room_id);
+      client.runtime.messageManager.createMemory({
+        id: getUuid(currentTweet.id) as UUID,
+        content: {
+          text: currentTweet.text,
+          username: currentTweet.username,
+          name: currentTweet.name,
+        },
+        room_id,
+        user_id,
+        embedding: embeddingZeroVector,
+      });
     }
     if (visited.has(currentTweet.id)) {
       return;
@@ -191,27 +215,4 @@ export async function buildConversationThread(tweet: Tweet, client: ClientBase):
   }
 
   await processThread(tweet);
-
-  // Make sure that tweets are unique and sorted by timestamp
-  thread = [...new Set(thread)];
-  thread.sort((a, b) => new Date(a.timeParsed).getTime() - new Date(b.timeParsed).getTime());
-
-  const conversationText = thread
-    .map((t) => {
-      const post = [];
-      post.push(`By: ${t.name} (@${t.username})`);
-      post.push(`ID: ${t.id}`);
-      if (t.inReplyToStatusId) {
-        post.push(`In Reply To: ${t.inReplyToStatusId}`);
-      }
-      post.push(`Time: ${t.timeParsed.toLocaleString()}`);
-      post.push(`Content:`)
-      post.push("---");
-      post.push(t.text);
-      post.push("---");
-      return post.join("\n");
-    })
-    .join("\n\n");
-
-  return conversationText;
 }

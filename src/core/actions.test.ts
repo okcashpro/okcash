@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { default as getUuid } from "uuid-by-string";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { runAiTest } from "../test_resources/runAiTest.ts";
@@ -11,19 +12,20 @@ import { type User } from "../test_resources/types.ts";
 import { composeContext } from "./context.ts";
 import { embeddingZeroVector } from "./memory.ts";
 import { type AgentRuntime } from "./runtime.ts";
-import { Content, State, type Message, type UUID } from "./types.ts";
+import { Content, State, type Memory, type UUID } from "./types.ts";
 
 async function handleMessage(
   runtime: AgentRuntime,
-  message: Message,
+  message: Memory,
   state?: State,
 ) {
-  const _saveRequestMessage = async (message: Message, state: State) => {
+  const _saveRequestMessage = async (message: Memory, state: State) => {
     const { content: senderContent, user_id, room_id } = message;
 
     const _senderContent = (senderContent as Content).text?.trim();
     if (_senderContent) {
       await runtime.messageManager.createMemory({
+        id: getUuid(message.id) as UUID,
         user_id: user_id!,
         content: {
           text: _senderContent,
@@ -72,7 +74,7 @@ async function handleMessage(
   }
 
   const _saveResponseMessage = async (
-    message: Message,
+    message: Memory,
     state: State,
     responseContent: Content,
   ) => {
@@ -190,7 +192,7 @@ describe("Actions", () => {
   });
 
   test("Test that actions are properly validated in state", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id as UUID,
       content: {
         text: "Please respond with the message 'ok' and the action TEST_ACTION",
@@ -207,7 +209,7 @@ describe("Actions", () => {
   // Validate that TEST_ACTION is in the state
   test("Validate that TEST_ACTION is in the state", async () => {
     await runAiTest("Validate TEST_ACTION is in the state", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: user.id as UUID,
         content: {
           text: "Please respond with the message 'ok' and the action TEST_ACTION",
@@ -231,7 +233,7 @@ describe("Actions", () => {
         return false; // Return false to indicate the test setup failed
       }
 
-      const mockMessage: Message = {
+      const mockMessage: Memory = {
         user_id: user.id as UUID,
         content: {
           text: "Test message for TEST action",

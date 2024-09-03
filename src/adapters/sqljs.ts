@@ -134,13 +134,14 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
   async createAccount(account: Account): Promise<boolean> {
     try {
       const sql = `
-      INSERT INTO accounts (id, name, email, avatar_url, details)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO accounts (id, name, username, email, avatar_url, details)
+      VALUES (?, ?, ?, ?, ?, ?)
       `;
       const stmt = this.db.prepare(sql);
       stmt.run([
         account.id ?? v4(),
         account.name,
+        account.username || "",
         account.email || "",
         account.avatar_url || "",
         JSON.stringify(account.details),
@@ -155,7 +156,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
 
   async getActorDetails(params: { room_id: UUID }): Promise<Actor[]> {
     const sql = `
-      SELECT a.id, a.name, a.details
+      SELECT a.id, a.name, a.username, a.details
       FROM participants p
       LEFT JOIN accounts a ON p.user_id = a.id
       WHERE p.room_id = ?

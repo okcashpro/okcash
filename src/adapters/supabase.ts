@@ -145,7 +145,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
         .select(
           `
           participants:participants(
-            account:accounts(id, name, details)
+            account:accounts(id, name, username, details)
           )
       `,
         )
@@ -165,6 +165,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
               name: user?.name,
               details: user?.details,
               id: user?.id,
+              username: user?.username,
             };
           }),
         )

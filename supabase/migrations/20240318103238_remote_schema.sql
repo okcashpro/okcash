@@ -478,6 +478,7 @@ CREATE TABLE IF NOT EXISTS "public"."accounts" (
     "id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
     "created_at" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
     "name" "text",
+    "username" "text",
     "email" "text" NOT NULL,
     "avatar_url" "text",
     "details" "jsonb" DEFAULT '{}'::"jsonb",

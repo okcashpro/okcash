@@ -1,12 +1,12 @@
-import { composeContext } from "../../../core/context.ts";
-import { booleanFooter } from "../../../core/parsing.ts";
+import { composeContext } from "../core/context.ts";
+import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
-  Message,
-  State,
-} from "../../../core/types.ts";
+  Memory,
+  State
+} from "../core/types.ts";
 
 export const shouldFollowTemplate = `Based on the conversation so far:
 
@@ -25,7 +25,7 @@ export default {
   name: "FOLLOW_ROOM",
   description:
     "Start following this channel with great interest, chiming in without needing to be explicitly mentioned. Only do this if explicitly asked to.",
-  validate: async (runtime: IAgentRuntime, message: Message) => {
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
     const keywords = [
       "follow",
       "participate",
@@ -48,7 +48,7 @@ export default {
     );
     return userState !== "FOLLOWED" && userState !== "MUTED";
   },
-  handler: async (runtime: IAgentRuntime, message: Message) => {
+  handler: async (runtime: IAgentRuntime, message: Memory) => {
     async function _shouldFollow(state: State): Promise<boolean> {
       const shouldFollowContext = composeContext({
         state,

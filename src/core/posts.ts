@@ -1,5 +1,4 @@
-import { formatTimestamp } from "./messages.ts";
-import type { Actor, Content, Memory } from "./types.ts";
+import type { Actor, Memory } from "./types.ts";
 
 export const formatPosts = ({
   messages,
@@ -9,29 +8,28 @@ export const formatPosts = ({
   actors: Actor[];
 }) => {
   const messageStrings = messages
-    .reverse()
     .filter((message: Memory) => message.user_id)
     .map((message: Memory) => {
-      let messageContent = (message.content as Content).text;
-      const messageAction = (message.content as Content).action;
-      const formattedName =
-        actors.find((actor: Actor) => actor.id === message.user_id)?.name ||
-        "Unknown User";
 
-      const attachments = (message.content as Content).attachments;
+      console.log("********* message", JSON.stringify(message, null, 2));
 
-      const attachmentString =
-        attachments && attachments.length > 0
-          ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
-          : "";
+      console.log("Message user id is", message.user_id);
+      console.log("Actors are", actors);
+      console.log("Username is", message.content.username);
 
-      console.log('message.created_at', message.created_at)
+      const actor = actors.find((actor: Actor) => actor.id === message.user_id);
+      const userName = actor?.name || "Unknown User";
+      const displayName = actor?.username || "unknown";
 
-      const timestamp = formatTimestamp(message.created_at);
-      const shortId = message.user_id.slice(-5);
-
-      return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
+      return `Name: ${userName} (@${displayName})
+ID: ${message.id}
+Date: ${message.created_at}
+Text:
+${message.content.text}
+---`;
     })
     .join("\n");
   return messageStrings;
 };
+
+

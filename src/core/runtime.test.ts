@@ -8,7 +8,7 @@ import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationsh
 import { type User } from "../test_resources/types.ts";
 import { zeroUuid } from "./constants.ts";
 import { AgentRuntime } from "./runtime.ts";
-import { type Message, type UUID } from "./types.ts";
+import { type Memory, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
@@ -95,7 +95,7 @@ describe("Agent Runtime", () => {
       console.error("Error creating memories", error);
     }
 
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id as UUID,
       content: { text: "test message" },
       room_id: room_id as UUID,

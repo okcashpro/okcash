@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "accounts" (
     "id" TEXT PRIMARY KEY,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT,
+    "username" TEXT,
     "email" TEXT NOT NULL,
     "avatar_url" TEXT,
     "details" TEXT DEFAULT '{}' CHECK(json_valid("details")) -- Ensuring details is a valid JSON field

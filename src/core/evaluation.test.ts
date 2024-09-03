@@ -12,7 +12,7 @@ import { zeroUuid } from "./constants.ts";
 import { composeContext } from "./context.ts";
 import { evaluationTemplate } from "./evaluators.ts";
 import { AgentRuntime } from "./runtime.ts";
-import { Message, UUID } from "./types.ts";
+import { Memory, UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
@@ -58,7 +58,7 @@ describe("Evaluation Process", () => {
   });
 
   test("Check if test and examples appear in state", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id as UUID,
       content: { text: "Test message for evaluation" },
       room_id,
@@ -76,7 +76,7 @@ describe("Evaluation Process", () => {
   });
 
   test("Run the TEST_EVALUATOR handler and validate output", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id as UUID,
       content: { text: "Run TEST_EVALUATOR handler" },
       room_id,
@@ -88,7 +88,7 @@ describe("Evaluation Process", () => {
 
   test("Run the evaluation process", async () => {
     await runAiTest("Run the evaluation process", async () => {
-      const message: Message = {
+      const message: Memory = {
         user_id: user.id as UUID,
         content: {
           text: "We are in testing mode. We want to make sure that the test passes by replying with the evaluator TEST_EVALUATOR in the array of evaluators that are returned. Please run the TEST_EVALUATOR",
@@ -110,7 +110,7 @@ describe("Evaluation Process", () => {
       evaluators: [fact],
     });
 
-    const message: Message = {
+    const message: Memory = {
       user_id: user.id as UUID,
       content: { text: "Test message for evaluation" },
       room_id,

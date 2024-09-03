@@ -1,19 +1,19 @@
 import dotenv from "dotenv";
 import { createRuntime } from "../test_resources/createRuntime.ts";
+import { zeroUuid } from "./constants.ts";
 import { AgentRuntime } from "./runtime.ts";
 import {
-  type Message,
+  type Memory,
   type Provider,
   type State,
   type UUID,
 } from "./types.ts";
-import { zeroUuid } from "./constants.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 const TestProvider: Provider = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  get: async (_runtime: AgentRuntime, _message: Message, _state?: State) => {
+  get: async (_runtime: AgentRuntime, _message: Memory, _state?: State) => {
     return "Hello Test";
   },
 };
@@ -32,7 +32,7 @@ describe("TestProvider", () => {
   });
 
   test("TestProvider should return 'Hello Test'", async () => {
-    const message: Message = {
+    const message: Memory = {
       user_id: zeroUuid,
       content: { text: "" },
       room_id: room_id,

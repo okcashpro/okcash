@@ -1,12 +1,12 @@
-import { composeContext } from "../../../core/context.ts";
-import { booleanFooter } from "../../../core/parsing.ts";
+import { composeContext } from "../core/context.ts";
+import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
   ActionExample,
   IAgentRuntime,
-  Message,
-  State,
-} from "../../../core/types.ts";
+  Memory,
+  State
+} from "../core/types.ts";
 
 const shouldUnfollowTemplate = `Based on the conversation so far:
 
@@ -25,7 +25,7 @@ export default {
   name: "UNFOLLOW_ROOM",
   description:
     "Stop following this channel. You can still respond if explicitly mentioned, but you won't automatically chime in anymore. Unfollow if you're annoying people or have been asked to.",
-  validate: async (runtime: IAgentRuntime, message: Message) => {
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
     const roomId = message.room_id;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
@@ -33,7 +33,7 @@ export default {
     );
     return userState === "FOLLOWED";
   },
-  handler: async (runtime: IAgentRuntime, message: Message) => {
+  handler: async (runtime: IAgentRuntime, message: Memory) => {
     async function _shouldUnfollow(state: State): Promise<boolean> {
       const shouldUnfollowContext = composeContext({
         state,

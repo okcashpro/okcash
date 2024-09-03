@@ -1,5 +1,5 @@
 import { type AgentRuntime } from "../core/runtime.ts";
-import { type Action, type Message } from "../core/types.ts";
+import { type Action, type Memory } from "../core/types.ts";
 
 export const TEST_ACTION = {
   name: "TEST_ACTION",
@@ -7,14 +7,14 @@ export const TEST_ACTION = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _runtime: AgentRuntime,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _message: Message,
+    _message: Memory,
   ) => {
     return true;
   },
   description: "This is a test action, for use in testing.",
   handler: async (
     runtime: AgentRuntime,
-    message: Message,
+    message: Memory,
   ): Promise<boolean> => {
     return true;
   },
@@ -44,14 +44,14 @@ export const TEST_ACTION_FAIL = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _runtime: AgentRuntime,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _message: Message,
+    _message: Memory,
   ) => {
     return false;
   },
   description: "This is a test action, for use in testing.",
   handler: async (
     runtime: AgentRuntime,
-    message: Message,
+    message: Memory,
   ): Promise<boolean> => {
     return false;
   },
