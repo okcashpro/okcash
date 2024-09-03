@@ -98,14 +98,17 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
-  async getMemoriesByRoomIds(params: { room_ids: UUID[]; tableName: string }): Promise<Memory[]> {
+  async getMemoriesByRoomIds(params: {
+    room_ids: UUID[];
+    tableName: string;
+  }): Promise<Memory[]> {
     const { data, error } = await this.supabase
       .from(params.tableName)
-      .select('*')
-      .in('room_id', params.room_ids);
-  
+      .select("*")
+      .in("room_id", params.room_ids);
+
     if (error) {
-      console.error('Error retrieving memories by room IDs:', error);
+      console.error("Error retrieving memories by room IDs:", error);
       return [];
     }
 
@@ -116,7 +119,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }));
 
     return memories as Memory[];
-  }  
+  }
 
   async getAccountById(user_id: UUID): Promise<Account | null> {
     const { data, error } = await this.supabase
@@ -310,14 +313,14 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
       .select("*")
       .eq("id", memoryId)
       .single();
-  
+
     if (error) {
       console.error("Error retrieving memory by ID:", error);
       return null;
     }
-  
+
     return data as Memory;
-  }  
+  }
 
   async createMemory(
     memory: Memory,

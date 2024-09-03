@@ -12,10 +12,7 @@ export const TEST_ACTION = {
     return true;
   },
   description: "This is a test action, for use in testing.",
-  handler: async (
-    runtime: AgentRuntime,
-    message: Memory,
-  ): Promise<boolean> => {
+  handler: async (runtime: AgentRuntime, message: Memory): Promise<boolean> => {
     return true;
   },
   condition:
@@ -49,10 +46,7 @@ export const TEST_ACTION_FAIL = {
     return false;
   },
   description: "This is a test action, for use in testing.",
-  handler: async (
-    runtime: AgentRuntime,
-    message: Memory,
-  ): Promise<boolean> => {
+  handler: async (runtime: AgentRuntime, message: Memory): Promise<boolean> => {
     return false;
   },
   condition:

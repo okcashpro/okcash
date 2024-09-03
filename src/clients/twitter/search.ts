@@ -1,23 +1,31 @@
 import { SearchMode } from "agent-twitter-client";
 import fs from "fs";
-import { default as getUuid } from "uuid-by-string";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
-import { Memory, State, UUID } from "../../core/types.ts";
+import {
+  Content,
+  HandlerCallback,
+  Memory,
+  State,
+  UUID,
+} from "../../core/types.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
   getRecentConversations,
   searchRecentPosts,
-  wait
+  sendTweetChunks,
+  wait,
 } from "./utils.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 
-const messageHandlerTemplate = `{{relevantFacts}}
+const messageHandlerTemplate =
+  `{{relevantFacts}}
 {{recentFacts}}
 
 Recent interactions between {{agentName}} and other users:
@@ -54,7 +62,6 @@ export class TwitterSearchClient extends ClientBase {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,
-      callback: (self) => self.onReady(),
     });
   }
 
@@ -73,25 +80,25 @@ export class TwitterSearchClient extends ClientBase {
   private async engageWithSearchTerms() {
     console.log("Engaging with search terms");
     try {
-      const botTwitterUsername = settings.TWITTER_USERNAME;
-      if (!botTwitterUsername) {
-        console.error("Twitter username not set in settings");
-        return;
-      }
-  
-      const searchTerm = [...this.runtime.character.topics][Math.floor(Math.random() * this.runtime.character.topics.length)];
-  
+      const searchTerm = [...this.runtime.character.topics][
+        Math.floor(Math.random() * this.runtime.character.topics.length)
+      ];
+
       if (!fs.existsSync("tweets")) {
         fs.mkdirSync("tweets");
       }
-  
-      const tweetsArray = await this.twitterClient.fetchSearchTweets(searchTerm, 20, SearchMode.Latest);
-  
+
+      const tweetsArray = await this.twitterClient.fetchSearchTweets(
+        searchTerm,
+        20,
+        SearchMode.Latest,
+      );
+
       if (tweetsArray.tweets.length === 0) {
         console.log("No valid tweets found for the search term");
         return;
       }
-  
+
       const prompt = `
   Here are some tweets related to the search term "${searchTerm}":
   
@@ -99,7 +106,9 @@ export class TwitterSearchClient extends ClientBase {
     .filter((tweet) => {
       // ignore tweets where any of the thread tweets contain a tweet by the bot
       const thread = tweet.thread;
-      const botTweet = thread.find((t) => t.username === botTwitterUsername);
+      const botTweet = thread.find(
+        (t) => t.username === settings.TWITTER_USERNAME,
+      );
       return !botTweet;
     })
     .map(
@@ -118,95 +127,119 @@ export class TwitterSearchClient extends ClientBase {
     - Respond to tweets that are not retweets
     - Respond to tweets where there is an easy exchange of ideas to have with the user
     - ONLY respond with the ID of the tweet`;
-  
+
       const datestr = new Date().toISOString().replace(/:/g, "-");
       const logName = `${this.runtime.character.name}_search_${datestr}`;
       log_to_file(logName, prompt);
-  
+
       const mostInterestingTweetResponse = await this.runtime.completion({
         context: prompt,
         stop: [],
         temperature: this.temperature,
         model: this.runtime.model,
       });
-  
+
       const responseLogName = `${this.runtime.character.name}_search_${datestr}_result`;
       log_to_file(responseLogName, mostInterestingTweetResponse);
-  
+
       const tweetId = mostInterestingTweetResponse.trim();
       const selectedTweet = tweetsArray.tweets.find(
-        (tweet) => tweet.id.toString().includes(tweetId) || tweetId.includes(tweet.id.toString()),
+        (tweet) =>
+          tweet.id.toString().includes(tweetId) ||
+          tweetId.includes(tweet.id.toString()),
       );
-  
+
       if (!selectedTweet) {
         console.log("No matching tweet found for the selected ID");
         return console.log("Selected tweet ID:", tweetId);
       }
-  
+
       console.log("Selected tweet to reply to:", selectedTweet);
-  
-      if (selectedTweet.username === botTwitterUsername) {
+
+      if (selectedTweet.username === settings.TWITTER_USERNAME) {
         console.log("Skipping tweet from bot itself");
         return;
       }
-  
+
       const conversationId = selectedTweet.conversationId;
-      const room_id = getUuid(conversationId) as UUID;
+      const room_id = stringToUuid(conversationId);
       await this.runtime.ensureRoomExists(room_id);
-  
-      const userIdUUID = getUuid(selectedTweet.userId as string) as UUID;
+
+      const userIdUUID = stringToUuid(selectedTweet.userId as string);
       await Promise.all([
-        this.runtime.ensureUserExists(this.runtime.agentId, settings.TWITTER_USERNAME, this.runtime.character.name),
-        this.runtime.ensureUserExists(userIdUUID, selectedTweet.username, selectedTweet.name),
+        this.runtime.ensureUserExists(
+          this.runtime.agentId,
+          settings.TWITTER_USERNAME,
+          this.runtime.character.name,
+          "twitter",
+        ),
+        this.runtime.ensureUserExists(
+          userIdUUID,
+          selectedTweet.username,
+          selectedTweet.name,
+          "twitter",
+        ),
       ]);
-  
+
       await Promise.all([
         this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
         this.runtime.ensureParticipantInRoom(this.runtime.agentId, room_id),
       ]);
-  
+
       // crawl additional conversation tweets, if there are any
       await buildConversationThread(selectedTweet, this);
-  
+
       const message = {
-        id: getUuid(selectedTweet.id) as UUID,
-        content: { text: selectedTweet.text },
+        id: stringToUuid(selectedTweet.id),
+        content: { text: selectedTweet.text, url: selectedTweet.permanentUrl, inReplyTo: selectedTweet.inReplyToStatusId ? stringToUuid(selectedTweet.inReplyToStatusId) : undefined },
         user_id: userIdUUID,
         room_id,
+        created_at: new Date(selectedTweet.timestamp),
       };
-  
+
       if (!message.content.text) {
         return { text: "", action: "IGNORE" };
       }
-  
+
       // Fetch replies and retweets
       const replies = selectedTweet.thread;
       const replyContext = replies
-        .filter((reply) => reply.username !== botTwitterUsername)
+        .filter((reply) => reply.username !== settings.TWITTER_USERNAME)
         .map((reply) => `@${reply.username}: ${reply.text}`)
         .join("\n");
-  
+
       let tweetBackground = "";
       if (selectedTweet.isRetweet) {
-        const originalTweet = await this.requestQueue.add(() => this.twitterClient.getTweet(selectedTweet.id));
+        const originalTweet = await this.requestQueue.add(() =>
+          this.twitterClient.getTweet(selectedTweet.id),
+        );
         tweetBackground = `Retweeting @${originalTweet.username}: ${originalTweet.text}`;
       }
-  
+
       // Generate image descriptions using GPT-4 vision API
       const imageDescriptions = [];
       for (const photo of selectedTweet.photos) {
-        const description = await this.runtime.imageDescriptionService.describeImage(photo.url);
+        const description =
+          await this.runtime.imageDescriptionService.describeImage(photo.url);
         imageDescriptions.push(description);
       }
-  
+
       await wait();
-      const recentConversations = await getRecentConversations(this.runtime, this.twitterClient, botTwitterUsername);
+      const recentConversations = await getRecentConversations(
+        this.runtime,
+        this.twitterClient,
+        settings.TWITTER_USERNAME,
+      );
       await wait();
-      const recentSearchResults = await searchRecentPosts(this.runtime, this.twitterClient, searchTerm);
-  
-      const state = await this.runtime.composeState(message, {
+      const recentSearchResults = await searchRecentPosts(
+        this.runtime,
+        this.twitterClient,
+        searchTerm,
+      );
+
+      let state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
-        twitterUserName: botTwitterUsername,
+        twitterUserName: settings.TWITTER_USERNAME,
         recentConversations,
         recentSearchResults,
         tweetContext: `
@@ -220,67 +253,84 @@ export class TwitterSearchClient extends ClientBase {
   ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Post (Described): ${imageDescriptions.join(", ")}\n` : ""}
   `,
       });
-  
+
       await this.saveRequestMessage(message, state as State);
-  
+
       const context = composeContext({
         state,
         template: messageHandlerTemplate,
       });
-    
+
       // log context to file
-      log_to_file(`${botTwitterUsername}_${datestr}_search_context`, context);
-  
+      log_to_file(
+        `${settings.TWITTER_USERNAME}_${datestr}_search_context`,
+        context,
+      );
+
       const responseContent = await this.runtime.messageCompletion({
         context,
         stop: [],
         temperature: this.temperature,
         model: this.runtime.model,
       });
-  
-      log_to_file(`${botTwitterUsername}_${datestr}_search_response`, JSON.stringify(responseContent));
 
-  
+      log_to_file(
+        `${settings.TWITTER_USERNAME}_${datestr}_search_response`,
+        JSON.stringify(responseContent),
+      );
+
       const response = responseContent;
-  
-      if (response.text) {
-        console.log(`Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`);
-        try {
-          if (!this.dryRun) {
-            const success = await this.requestQueue.add(async () => {
-              return await this.twitterClient.sendTweet(response.text, selectedTweet.id);
-            });
 
-            if (success) {
-              const tweet = await this.requestQueue.add(async () => await this.twitterClient.getLatestTweet(botTwitterUsername));
-              if (!tweet) {
-                console.error("Failed to get latest tweet after posting it");
-                return;
-              }
+      if (!response.text) {
+        console.log("Returning: No response text found");
+        return;
+      }
 
-            const memory: Memory = {
-              id: getUuid(tweet.id) as UUID,
-              user_id: this.runtime.agentId,
-              content: responseContent,
-              room_id,
-              embedding: embeddingZeroVector,
-            }
-            await this.saveResponseMessage(memory, state);
-            this.runtime.processActions(memory, responseContent, state);
-            }
-          } else {
-            console.log("Dry run, not sending post:", response.text);
+      console.log(
+        `Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`,
+      );
+      try {
+        if (!this.dryRun) {
+          const callback: HandlerCallback = async (response: Content) => {
+            const memories = await sendTweetChunks(
+              this,
+              response,
+              message.room_id,
+              settings.TWITTER_USERNAME,
+            );
+            return memories;
+          };
+
+          const responseMessages = await callback(responseContent);
+
+          state = await this.runtime.updateRecentMessageState(state);
+
+          for (const responseMessage of responseMessages) {
+            await this.runtime.messageManager.createMemory(responseMessage, false);
           }
-          console.log(`Successfully responded to tweet ${selectedTweet.id}`);
-          this.respondedTweets.add(selectedTweet.id);
-          const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.text}`;
-          const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
-          console.log(`Writing response tweet info to ${debugFileName}`);
-          fs.writeFileSync(debugFileName, responseInfo);
-          await wait();
-        } catch (error) {
-          console.error(`Error sending response post: ${error}`);
+
+          state = await this.runtime.updateRecentMessageState(state);
+
+          await this.runtime.evaluate(message, state);
+
+          await this.runtime.processActions(
+            message,
+            responseMessages,
+            state,
+            callback,
+          );
+        } else {
+          console.log("Dry run, not sending post:", response.text);
         }
+        console.log(`Successfully responded to tweet ${selectedTweet.id}`);
+        this.respondedTweets.add(selectedTweet.id);
+        const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.text}`;
+        const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
+        console.log(`Writing response tweet info to ${debugFileName}`);
+        fs.writeFileSync(debugFileName, responseInfo);
+        await wait();
+      } catch (error) {
+        console.error(`Error sending response post: ${error}`);
       }
     } catch (error) {
       console.error("Error engaging with search terms:", error);

@@ -2,12 +2,7 @@ import dotenv from "dotenv";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { zeroUuid } from "./constants.ts";
 import { AgentRuntime } from "./runtime.ts";
-import {
-  type Memory,
-  type Provider,
-  type State,
-  type UUID,
-} from "./types.ts";
+import { type Memory, type Provider, type State, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

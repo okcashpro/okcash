@@ -9,7 +9,8 @@ export const defaultEvaluators: Evaluator[] = [fact /*, goal*/];
 /**
  * Template used for the evaluation completion.
  */
-export const evaluationTemplate = `TASK: Based on the conversation and conditions, determine which evaluation functions are appropriate to call.
+export const evaluationTemplate =
+  `TASK: Based on the conversation and conditions, determine which evaluation functions are appropriate to call.
 Examples:
 {{evaluatorExamples}}
 

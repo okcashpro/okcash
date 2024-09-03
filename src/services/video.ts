@@ -1,10 +1,10 @@
-import ffmpeg from 'fluent-ffmpeg';
+import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
-import { default as getUuid } from "uuid-by-string";
 import youtubeDl from "youtube-dl-exec";
 import { AgentRuntime } from "../core/runtime.ts";
 import { Media } from "../core/types.ts";
+import { stringToUuid } from "../core/uuid.ts";
 
 export class VideoService {
   private CONTENT_CACHE_DIR = "./content_cache";
@@ -68,23 +68,23 @@ export class VideoService {
   }
 
   private getVideoId(url: string): string {
-    return getUuid(url) as string;
+    return stringToUuid(url);
   }
 
   private async fetchVideoInfo(url: string): Promise<any> {
-    if (url.endsWith('.mp4') || url.includes('.mp4?')) {
+    if (url.endsWith(".mp4") || url.includes(".mp4?")) {
       try {
         const response = await fetch(url);
         if (response.ok) {
           // If the URL is a direct link to an MP4 file, return a simplified video info object
           return {
             title: path.basename(url),
-            description: '',
-            channel: '',
+            description: "",
+            channel: "",
           };
         }
       } catch (error) {
-        console.error('Error downloading MP4 file:', error);
+        console.error("Error downloading MP4 file:", error);
         // Fall back to using youtube-dl if direct download fails
       }
     }
@@ -216,32 +216,39 @@ export class VideoService {
       this.CONTENT_CACHE_DIR,
       `${this.getVideoId(url)}.mp3`,
     );
-  
+
     try {
-      if (url.endsWith('.mp4') || url.includes('.mp4?')) {
-        console.log("Direct MP4 file detected, downloading and converting to MP3");
-        const tempMp4File = path.join(this.CONTENT_CACHE_DIR, `${this.getVideoId(url)}.mp4`);
+      if (url.endsWith(".mp4") || url.includes(".mp4?")) {
+        console.log(
+          "Direct MP4 file detected, downloading and converting to MP3",
+        );
+        const tempMp4File = path.join(
+          this.CONTENT_CACHE_DIR,
+          `${this.getVideoId(url)}.mp4`,
+        );
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         fs.writeFileSync(tempMp4File, buffer);
-  
+
         await new Promise<void>((resolve, reject) => {
           ffmpeg(tempMp4File)
             .output(outputFile)
             .noVideo()
-            .audioCodec('libmp3lame')
-            .on('end', () => {
+            .audioCodec("libmp3lame")
+            .on("end", () => {
               fs.unlinkSync(tempMp4File);
               resolve();
             })
-            .on('error', (err) => {
+            .on("error", (err) => {
               reject(err);
             })
             .run();
         });
       } else {
-        console.log("YouTube video detected, downloading audio with youtube-dl");
+        console.log(
+          "YouTube video detected, downloading audio with youtube-dl",
+        );
         await youtubeDl(url, {
           verbose: true,
           extractAudio: true,
@@ -256,5 +263,4 @@ export class VideoService {
       throw new Error("Failed to download audio");
     }
   }
-  
 }

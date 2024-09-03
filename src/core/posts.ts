@@ -10,7 +10,6 @@ export const formatPosts = ({
   const messageStrings = messages
     .filter((message: Memory) => message.user_id)
     .map((message: Memory) => {
-
       console.log("********* message", JSON.stringify(message, null, 2));
 
       console.log("Message user id is", message.user_id);
@@ -31,5 +30,3 @@ ${message.content.text}
     .join("\n");
   return messageStrings;
 };
-
-

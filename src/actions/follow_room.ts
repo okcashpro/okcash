@@ -5,10 +5,11 @@ import {
   ActionExample,
   IAgentRuntime,
   Memory,
-  State
+  State,
 } from "../core/types.ts";
 
-export const shouldFollowTemplate = `Based on the conversation so far:
+export const shouldFollowTemplate =
+  `Based on the conversation so far:
 
 {{recentMessages}}
 
@@ -60,7 +61,7 @@ export default {
         stop: ["\n"],
         max_response_length: 5,
       });
-      
+
       return response;
     }
 

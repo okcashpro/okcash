@@ -15,7 +15,7 @@ import {
   ActionExample,
   IAgentRuntime,
   Memory,
-  State
+  State,
 } from "../../../core/types.ts";
 
 export default {

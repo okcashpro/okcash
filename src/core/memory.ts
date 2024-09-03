@@ -2,7 +2,7 @@ import {
   IAgentRuntime,
   IMemoryManager,
   type Memory,
-  type UUID
+  type UUID,
 } from "./types.ts";
 
 export const embeddingDimension = 1536;
@@ -147,11 +147,10 @@ export class MemoryManager implements IMemoryManager {
    * @param unique Whether to check for similarity before insertion.
    * @returns A Promise that resolves when the operation completes.
    */
-  async createMemory(
-    memory: Memory,
-    unique = false,
-  ): Promise<void> {
-    const existingMessage = await this.runtime.databaseAdapter.getMemoryById(memory.id);
+  async createMemory(memory: Memory, unique = false): Promise<void> {
+    const existingMessage = await this.runtime.databaseAdapter.getMemoryById(
+      memory.id,
+    );
     if (existingMessage) {
       console.log("Memory already exists, skipping");
       return;
@@ -163,9 +162,7 @@ export class MemoryManager implements IMemoryManager {
     );
   }
 
-  async getMemoriesByRoomIds(params: {
-    room_ids: UUID[];
-  }): Promise<Memory[]> {
+  async getMemoriesByRoomIds(params: { room_ids: UUID[] }): Promise<Memory[]> {
     const result = await this.runtime.databaseAdapter.getMemoriesByRoomIds({
       room_ids: params.room_ids,
     });
@@ -176,7 +173,7 @@ export class MemoryManager implements IMemoryManager {
     const result = await this.runtime.databaseAdapter.getMemoryById(id);
     return result;
   }
-  
+
   /**
    * Removes a memory from the database by its ID.
    * @param memoryId The ID of the memory to remove.

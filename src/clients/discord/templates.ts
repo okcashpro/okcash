@@ -1,4 +1,7 @@
-import { messageCompletionFooter, shouldRespondFooter } from "../../core/parsing.ts";
+import {
+  messageCompletionFooter,
+  shouldRespondFooter,
+} from "../../core/parsing.ts";
 
 export const messageHandlerTemplate =
   // {{goals}}
@@ -37,7 +40,8 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 # Instructions: Write the next message for {{agentName}}. Include an action, if appropriate.
 ` + messageCompletionFooter;
 
-export const voiceHandlerTemplate = `# Task: Generate conversational voice dialog for {{agentName}}.
+export const voiceHandlerTemplate =
+  `# Task: Generate conversational voice dialog for {{agentName}}.
 About {{agentName}}:
 {{bio}}
 
@@ -55,7 +59,8 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 # Instructions: Write the next message for {{agentName}}.
 ` + messageCompletionFooter;
 
-export const shouldRespondTemplate = `# Task: Decide if {{agentName}} should respond.
+export const shouldRespondTemplate =
+  `# Task: Decide if {{agentName}} should respond.
 About {{agentName}}:
 {{bio}}
 

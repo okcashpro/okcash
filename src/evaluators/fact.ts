@@ -59,9 +59,9 @@ async function handler(runtime: AgentRuntime, message: Memory) {
   });
 
   let facts = await runtime.objectArrayCompletion({
-      context,
-      stop: [],
-    });
+    context,
+    stop: [],
+  });
 
   if (!facts) {
     return [];

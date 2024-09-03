@@ -8,11 +8,17 @@ import {
   formatEvaluators,
 } from "./evaluators.ts";
 import { MemoryManager } from "./memory.ts";
-import { parseBooleanFromText, parseJsonArrayFromText, parseJSONObjectFromText, parseShouldRespondFromText } from "./parsing.ts";
+import {
+  parseBooleanFromText,
+  parseJsonArrayFromText,
+  parseJSONObjectFromText,
+  parseShouldRespondFromText,
+} from "./parsing.ts";
 import {
   Character,
   Content,
   Goal,
+  HandlerCallback,
   IAgentRuntime,
   IBrowserService,
   IDatabaseAdapter,
@@ -26,7 +32,7 @@ import {
   State,
   type Action,
   type Evaluator,
-  type Memory
+  type Memory,
 } from "./types.ts";
 
 import {
@@ -327,7 +333,7 @@ export class AgentRuntime implements IAgentRuntime {
           max_context_length,
         );
         if (!settings.OPENAI_API_KEY) {
-          console.log("queueing text completion")
+          console.log("queueing text completion");
           const result = await this.llamaService.queueTextCompletion(
             context,
             temperature,
@@ -341,13 +347,11 @@ export class AgentRuntime implements IAgentRuntime {
           const biasValue = -20.0;
           const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
-          const mappedWords = wordsToPunish.map((word) => encoding.encode(word, [], "all")[0]);
+          const mappedWords = wordsToPunish.map(
+            (word) => encoding.encode(word, [], "all")[0],
+          );
 
-          const tokenIds = [
-            ...new Set(
-                mappedWords,
-            ),
-          ];
+          const tokenIds = [...new Set(mappedWords)];
 
           const logit_bias = tokenIds.reduce((acc, tokenId) => {
             acc[tokenId] = biasValue;
@@ -385,9 +389,9 @@ export class AgentRuntime implements IAgentRuntime {
           if (!response.ok) {
             throw new Error(
               "OpenAI API Error: " +
-              response.status +
-              " " +
-              response.statusText,
+                response.status +
+                " " +
+                response.statusText,
             );
           }
 
@@ -582,7 +586,6 @@ export class AgentRuntime implements IAgentRuntime {
           max_response_length,
         });
 
-
         const parsedResponse = parseJsonArrayFromText(response);
         if (parsedResponse) {
           return parsedResponse;
@@ -595,7 +598,6 @@ export class AgentRuntime implements IAgentRuntime {
       retryDelay *= 2;
     }
   }
-
 
   /**
    * Send a message to the model for completion.
@@ -635,9 +637,7 @@ export class AgentRuntime implements IAgentRuntime {
         });
 
         // try parsing the response as JSON, if null then try again
-        const parsedContent = parseJSONObjectFromText(
-          response,
-        ) as Content;
+        const parsedContent = parseJSONObjectFromText(response) as Content;
 
         if (!parsedContent) {
           continue;
@@ -727,20 +727,20 @@ export class AgentRuntime implements IAgentRuntime {
    */
   async processActions(
     message: Memory,
-    content: Content,
+    responses: Memory[],
     state?: State,
-    callback?: (response: Content) => void,
+    callback?: HandlerCallback,
   ): Promise<void> {
-    if (!content.action) {
+    if (!responses[0].content?.action) {
       return;
     }
 
     const action = this.actions.find(
-      (a: { name: string }) => a.name === content.action,
+      (a: { name: string }) => a.name === responses[0].content.action,
     )!;
 
     if (!action) {
-      return console.warn("No action found for", content.action);
+      return console.warn("No action found for", responses[0].content.action);
     }
 
     if (!action.handler) {
@@ -836,6 +836,8 @@ export class AgentRuntime implements IAgentRuntime {
     user_id: UUID,
     userName: string | null,
     name: string | null,
+    email?: string | null,
+    source?: string | null,
   ) {
     const account = await this.databaseAdapter.getAccountById(user_id);
     if (!account) {
@@ -843,7 +845,7 @@ export class AgentRuntime implements IAgentRuntime {
         id: user_id,
         name: name || userName || "Unknown User",
         username: userName || name || "Unknown",
-        email: (userName || "Bot") + "@discord", // Temporary
+        email: email || ((userName || "Bot") + "@" + source || "Unknown"), // Temporary
         details: { summary: "" },
       });
       console.log(`User ${userName} created successfully.`);
@@ -933,13 +935,19 @@ export class AgentRuntime implements IAgentRuntime {
       });
     }
 
-    console.log('********* actorsData', actorsData);
+    console.log("********* actorsData", actorsData);
 
     const actors = formatActors({ actors: actorsData ?? [] });
 
-    const recentMessages = formatMessages({ messages: recentMessagesData, actors: actorsData });
+    const recentMessages = formatMessages({
+      messages: recentMessagesData,
+      actors: actorsData,
+    });
 
-    const recentPosts = formatPosts({ messages: recentMessagesData, actors: actorsData });
+    const recentPosts = formatPosts({
+      messages: recentMessagesData,
+      actors: actorsData,
+    });
 
     const recentFacts = formatFacts(recentFactsData);
     const relevantFacts = formatFacts(relevantFactsData);
@@ -1045,14 +1053,15 @@ Text: ${attachment.text}
         userB,
       ]);
 
-  
-    // Check the existing memories in the database
-    const existingMemories = await this.messageManager.getMemoriesByRoomIds({
-      room_ids: rooms,
-    });
+      // Check the existing memories in the database
+      const existingMemories = await this.messageManager.getMemoriesByRoomIds({
+        room_ids: rooms,
+      });
 
       // Sort messages by timestamp in descending order
-      existingMemories.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+      existingMemories.sort(
+        (a, b) => b.created_at.getTime() - a.created_at.getTime(),
+      );
 
       // Take the most recent messages
       const recentInteractionsData = existingMemories.slice(0, 20);
@@ -1064,10 +1073,10 @@ Text: ${attachment.text}
         ? await getRecentInteractions(user_id, this.agentId)
         : [];
 
-    console.log('********* recentInteractions', recentInteractions);
+    console.log("********* recentInteractions", recentInteractions);
 
     if (user_id === this.agentId) {
-      console.log('********* user_id === this.agentId');
+      console.log("********* user_id === this.agentId");
     }
 
     const getRecentMessageInteractions = async (
@@ -1077,7 +1086,9 @@ Text: ${attachment.text}
       const formattedInteractions = recentInteractionsData
         .map((message) => {
           const sender =
-            message.user_id === this.agentId ? this.character.name : message.content.name;
+            message.user_id === this.agentId
+              ? this.character.name
+              : message.content.name;
           return `${sender}: ${message.content.text}`;
         })
         .join("\n");
@@ -1088,20 +1099,22 @@ Text: ${attachment.text}
     const formattedMessageInteractions =
       await getRecentMessageInteractions(recentInteractions);
 
-      const getRecentPostInteractions = async (
-        recentInteractionsData: Memory[],
-        actors: Actor[],
-      ): Promise<string> => {
-        const formattedInteractions = formatPosts({
-          messages: recentInteractionsData,
-          actors,
-        });
-      
-        return formattedInteractions;
-      };
+    const getRecentPostInteractions = async (
+      recentInteractionsData: Memory[],
+      actors: Actor[],
+    ): Promise<string> => {
+      const formattedInteractions = formatPosts({
+        messages: recentInteractionsData,
+        actors,
+      });
 
-    const formattedPostInteractions =
-      await getRecentPostInteractions(recentInteractions, actorsData);
+      return formattedInteractions;
+    };
+
+    const formattedPostInteractions = await getRecentPostInteractions(
+      recentInteractions,
+      actorsData,
+    );
 
     const initialState = {
       agentId: this.agentId,
@@ -1112,8 +1125,8 @@ Text: ${attachment.text}
       adjective:
         this.character.adjectives && this.character.adjectives.length > 0
           ? this.character.adjectives[
-          Math.floor(Math.random() * this.character.adjectives.length)
-          ]
+              Math.floor(Math.random() * this.character.adjectives.length)
+            ]
           : "",
       // Recent interactions between the sender and receiver, formatted as messages
       recentMessageInteractions: formattedMessageInteractions,
@@ -1125,60 +1138,60 @@ Text: ${attachment.text}
       topic:
         this.character.topics && this.character.topics.length > 0
           ? this.character.topics[
-          Math.floor(Math.random() * this.character.topics.length)
-          ]
+              Math.floor(Math.random() * this.character.topics.length)
+            ]
           : null,
       topics:
         this.character.topics && this.character.topics.length > 0
           ? addHeader(
-            `### Topics for ${this.character.topics}`,
-            this.character.topics
-              .sort(() => 0.5 - Math.random())
-              .slice(0, 10)
-              .join(", "),
-          )
+              `### Topics for ${this.character.topics}`,
+              this.character.topics
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 10)
+                .join(", "),
+            )
           : "",
       characterPostExamples:
         formattedCharacterPostExamples &&
-          formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+        formattedCharacterPostExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-            `### Example Posts for ${this.character.name}`,
-            formattedCharacterPostExamples,
-          )
+              `### Example Posts for ${this.character.name}`,
+              formattedCharacterPostExamples,
+            )
           : "",
       characterMessageExamples:
         formattedCharacterMessageExamples &&
-          formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+        formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-            `### Example Conversations for ${this.character.name}`,
-            formattedCharacterMessageExamples,
-          )
+              `### Example Conversations for ${this.character.name}`,
+              formattedCharacterMessageExamples,
+            )
           : "",
       messageDirections:
         this.character?.style?.all?.length > 0 ||
-          this.character?.style?.chat.length > 0
+        this.character?.style?.chat.length > 0
           ? addHeader(
-            "### Message Directions for " + this.character.name,
-            (this.character?.style?.all?.join("\n") || "") +
-            (this.character?.style?.all?.length > 0 &&
-              this.character?.style?.chat.length > 0
-              ? "\n"
-              : "") +
-            (this.character?.style?.chat?.join("\n") || ""),
-          )
+              "### Message Directions for " + this.character.name,
+              (this.character?.style?.all?.join("\n") || "") +
+                (this.character?.style?.all?.length > 0 &&
+                this.character?.style?.chat.length > 0
+                  ? "\n"
+                  : "") +
+                (this.character?.style?.chat?.join("\n") || ""),
+            )
           : "",
       postDirections:
         this.character?.style?.all?.length > 0 ||
-          this.character?.style?.post.length > 0
+        this.character?.style?.post.length > 0
           ? addHeader(
-            "### Post Directions for " + this.character.name,
-            (this.character?.style?.all?.join("\n") || "") +
-            (this.character?.style?.all?.length > 0 &&
-              this.character?.style?.post.length > 0
-              ? "\n"
-              : "") +
-            (this.character?.style?.post?.join("\n") || ""),
-          )
+              "### Post Directions for " + this.character.name,
+              (this.character?.style?.all?.join("\n") || "") +
+                (this.character?.style?.all?.length > 0 &&
+                this.character?.style?.post.length > 0
+                  ? "\n"
+                  : "") +
+                (this.character?.style?.post?.join("\n") || ""),
+            )
           : "",
       // Agent runtime stuff
       senderName,
@@ -1189,9 +1202,9 @@ Text: ${attachment.text}
       goals:
         goals && goals.length > 0
           ? addHeader(
-            "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-            goals,
-          )
+              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+              goals,
+            )
           : "",
       goalsData,
       recentMessages:
@@ -1256,9 +1269,9 @@ Text: ${attachment.text}
       actionExamples:
         actionsData.length > 0
           ? addHeader(
-            "### Action Examples",
-            composeActionExamples(actionsData, 10),
-          )
+              "### Action Examples",
+              composeActionExamples(actionsData, 10),
+            )
           : "",
       evaluatorsData,
       evaluators:
@@ -1276,7 +1289,7 @@ Text: ${attachment.text}
       providers,
     };
 
-    return { ...initialState, ...actionState };
+    return { ...initialState, ...actionState } as State;
   }
 
   async updateRecentMessageState(state: State): Promise<State> {
@@ -1336,6 +1349,6 @@ Text: ${attachment.text}
       recentMessages: addHeader("### Conversation Messages", recentMessages),
       recentMessagesData,
       attachments: formattedAttachments,
-    };
+    } as State;
   }
 }

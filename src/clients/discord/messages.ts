@@ -1,9 +1,15 @@
 import { ChannelType, Client, Message as DiscordMessage } from "discord.js";
-import { default as getUuid } from "uuid-by-string";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, Media, Memory, State, UUID } from "../../core/types.ts";
+import {
+  Content,
+  HandlerCallback,
+  Media,
+  Memory,
+  State,
+  UUID,
+} from "../../core/types.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
@@ -12,19 +18,23 @@ import { InterestChannels } from "./types.ts";
 import { TextChannel } from "discord.js";
 import { AgentRuntime } from "../../core/runtime.ts";
 import { VoiceManager } from "./voice.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 
 const MAX_MESSAGE_LENGTH = 1900;
 
 export async function sendMessageInChunks(
   channel: TextChannel,
   content: string,
-): Promise<void> {
+): Promise<DiscordMessage[]> {
+  const sentMessages: DiscordMessage[] = [];
   const messages = splitMessage(content);
   for (const message of messages) {
     if (message.trim().length > 0) {
-      await channel.send(message.trim());
+      const m = await channel.send(message.trim());
+      sentMessages.push(m);
     }
   }
+  return sentMessages;
 }
 
 function splitMessage(content: string): string[] {
@@ -65,18 +75,18 @@ export class MessageManager {
 
   async handleMessage(message: DiscordMessage) {
     if (message.interaction /* || message.author?.bot*/) return;
-  
+
     const user_id = message.author.id as UUID;
     const userName = message.author.username;
     const name = message.author.displayName;
     const channelId = message.channel.id;
-  
+
     await this.runtime.browserService.initialize();
-  
+
     try {
       const { processedContent, attachments } =
         await this.processMessageMedia(message);
-  
+
       const audioAttachments = message.attachments.filter((attachment) =>
         attachment.contentType?.startsWith("audio/"),
       );
@@ -85,109 +95,91 @@ export class MessageManager {
           await this.attachmentManager.processAttachments(audioAttachments);
         attachments.push(...processedAudioAttachments);
       }
-  
-      const room_id = getUuid(channelId) as UUID;
-      const userIdUUID = getUuid(user_id) as UUID;
+
+      const room_id = stringToUuid(channelId);
+      const userIdUUID = stringToUuid(user_id);
       const agentId = this.runtime.agentId;
-  
+
       await Promise.all([
         this.runtime.ensureUserExists(
           agentId,
           this.client.user.username,
           this.runtime.character.name,
         ),
-        this.runtime.ensureUserExists(userIdUUID, userName, name),
+        this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
         this.runtime.ensureRoomExists(room_id),
       ]);
-  
+
       await Promise.all([
         this.runtime.ensureParticipantInRoom(userIdUUID, room_id),
         this.runtime.ensureParticipantInRoom(agentId, room_id),
       ]);
-  
-      const messageId = getUuid(message.id) as UUID;
-  
+
+      const messageId = stringToUuid(message.id);
+
       // Check if the message already exists in the cache or database
-      const existingMessage = await this.runtime.messageManager.getMemoryById(messageId);
-  
+      const existingMessage =
+        await this.runtime.messageManager.getMemoryById(messageId);
+
       if (existingMessage) {
         // If the message content is the same, return early
         if (existingMessage.content.text === message.content) {
           return;
         }
       }
-  
+
       let shouldIgnore = false;
       let shouldRespond = true;
-  
-      const callback = async (content: Content) => {
-        if (message.channel.type === ChannelType.GuildVoice) {
-          // For voice channels, use text-to-speech
-          const audioStream = await this.voiceManager.textToSpeech(
-            content.text,
-          );
-          await this.voiceManager.playAudioStream(user_id, audioStream);
-        } else {
-          // For text channels, send the message
-          await sendMessageInChunks(
-            message.channel as TextChannel,
-            content.text,
-          );
-        }
-      };
-  
+
       const content: Content = {
         text: processedContent,
         attachments: attachments,
         url: message.url,
-        replyingTo: message.reference?.messageId
-          ? (getUuid(message.reference.messageId) as UUID)
+        inReplyTo: message.reference?.messageId
+          ? stringToUuid(message.reference.messageId)
           : undefined,
       };
-  
+
       const userMessage = { content, user_id: userIdUUID, room_id };
-  
+
       let state = (await this.runtime.composeState(userMessage, {
         discordClient: this.client,
         discordMessage: message,
         agentName: this.runtime.character.name || this.client.user?.displayName,
       })) as State;
-  
+
       const memory: Memory = {
-        id: getUuid(message.id) as UUID,
+        id: stringToUuid(message.id),
         ...userMessage,
         user_id: userIdUUID,
         room_id,
-        content: {
-          ...content,
-          attachments,
-        },
+        content,
         created_at: new Date(message.createdTimestamp),
+        embedding: embeddingZeroVector,
       };
-  
-      await this._saveRequestMessage(memory, state);
-  
-      // Save the message to the database and cache
-      await this.runtime.messageManager.createMemory(memory);
-  
+
+      if (content.text) {
+        await this.runtime.messageManager.createMemory(memory);
+      }
+
       state = await this.runtime.updateRecentMessageState(state);
-  
+
       if (!shouldIgnore) {
         shouldIgnore = await this._shouldIgnore(message);
       }
-  
+
       if (shouldIgnore) {
         return;
       }
-  
+
       const hasInterest = this._checkInterest(channelId);
-  
+
       const agentUserState =
         await this.runtime.databaseAdapter.getParticipantUserState(
           room_id,
           this.runtime.agentId,
         );
-  
+
       if (agentUserState === "MUTED") {
         if (!message.mentions.has(this.client.user.id) && !hasInterest) {
           console.log("Ignoring muted room");
@@ -195,7 +187,7 @@ export class MessageManager {
           return;
         }
       }
-  
+
       if (agentUserState === "FOLLOWED") {
         console.log("Always responding in followed room");
         shouldRespond = true; // Always respond in followed rooms
@@ -206,31 +198,93 @@ export class MessageManager {
         console.log("Checking if should respond");
         shouldRespond = await this._shouldRespond(message, state);
       }
-  
+
       if (!shouldRespond) {
         return;
       }
-  
+
       let context = composeContext({
         state,
         template: messageHandlerTemplate,
       });
-  
+
       const responseContent = await this._generateResponse(
         memory,
         state,
         context,
       );
-  
-      await this._saveResponseMessage(memory, state, responseContent);
-  
-      if (responseContent.content) {
-        await callback(responseContent);
+
+      responseContent.text = responseContent.text?.trim();
+
+      if (!responseContent.text) {
+        return;
       }
-  
+
+      const callback: HandlerCallback = async (content: Content) => {
+        if(message.id && !content.inReplyTo) {
+          content.inReplyTo = stringToUuid(message.id);
+        }
+        if (message.channel.type === ChannelType.GuildVoice) {
+          // For voice channels, use text-to-speech
+          const audioStream = await this.voiceManager.textToSpeech(
+            content.text,
+          );
+          await this.voiceManager.playAudioStream(user_id, audioStream);
+          const memory: Memory = {
+            id: stringToUuid(message.id),
+            user_id: this.runtime.agentId,
+            content,
+            room_id,
+            embedding: embeddingZeroVector,
+          };
+          return [memory];
+        } else {
+          // For text channels, send the message
+          const messages = await sendMessageInChunks(
+            message.channel as TextChannel,
+            content.text,
+          );
+          let notFirstMessage = false;
+          let memories: Memory[] = [];
+          for (const m of messages) {
+            let action = content.action
+            // If there's only one message or it's the last message, keep the original action
+            // For multiple messages, set all but the last to 'CONTINUE'
+            if (messages.length > 1 && m !== messages[messages.length - 1]) {
+              action = "CONTINUE";
+            }
+            
+            notFirstMessage = true;
+            const memory: Memory = {
+              id: stringToUuid(m.id),
+              user_id: this.runtime.agentId,
+              content: {
+                ...content,
+                action,
+                inReplyTo: messageId,
+              },
+              room_id,
+              embedding: embeddingZeroVector,
+              created_at: new Date(),
+            };
+            memories.push(memory);
+          }
+          for (const m of memories) {
+            await this.runtime.messageManager.createMemory(m);
+          }
+          return memories;
+        }
+      };
+
+      const responseMessages = await callback(responseContent);
+
+      state = await this.runtime.updateRecentMessageState(state);
+
+      await this.runtime.evaluate(memory, state);
+
       await this.runtime.processActions(
         memory,
-        responseContent,
+        responseMessages,
         state,
         callback,
       );
@@ -250,7 +304,6 @@ export class MessageManager {
       }
     }
   }
-  
 
   async cacheMessages(channel: TextChannel, count: number = 20) {
     const messages = await channel.messages.fetch({ limit: count });
@@ -330,43 +383,6 @@ export class MessageManager {
     }
 
     return { processedContent, attachments };
-  }
-
-  private async _saveRequestMessage(message: Memory, state: State) {
-    const { content: senderContent } = message;
-
-    if ((senderContent as Content).text) {
-      await this.runtime.messageManager.createMemory({
-        ...message,
-        content: senderContent,
-        embedding: embeddingZeroVector,
-      });
-    }
-  }
-
-  private async _saveResponseMessage(
-    message: Memory,
-    state: State,
-    responseContent: Content,
-  ) {
-    const { room_id } = message;
-
-    responseContent.content = responseContent.text?.trim();
-
-    if (responseContent.content) {
-      await this.runtime.messageManager.createMemory({
-        id: getUuid(message.id) as UUID,
-        user_id: this.runtime.agentId,
-        content: { ...responseContent, user: this.runtime.character.name },
-        room_id,
-        embedding: embeddingZeroVector,
-      });
-      // refresh messages
-      state = await this.runtime.updateRecentMessageState(state);
-      await this.runtime.evaluate(message, state);
-    } else {
-      console.warn("Empty response, skipping");
-    }
   }
 
   private _checkInterest(channelId: string): boolean {
@@ -529,7 +545,7 @@ export class MessageManager {
       stop: ["\n"],
       max_response_length: 5,
     });
-    
+
     if (response === "RESPOND") {
       return true;
     } else if (response === "IGNORE") {

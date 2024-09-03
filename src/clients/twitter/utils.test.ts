@@ -31,14 +31,19 @@ describe("buildConversationThread", () => {
     client = new TwitterInteractionClient(runtime);
 
     // Load cached Twitter credentials
-    const cookiesFilePath = path.join(__dirname, "../../../twitter_cookies.json");
+    const cookiesFilePath = path.join(
+      __dirname,
+      "../../../twitter_cookies.json",
+    );
     if (fs.existsSync(cookiesFilePath)) {
       const cookiesArray = JSON.parse(
         fs.readFileSync(cookiesFilePath, "utf-8"),
       );
       client.setCookiesFromArray(cookiesArray);
     } else {
-      throw new Error("Twitter credentials not found. Please provide valid cookies.json.");
+      throw new Error(
+        "Twitter credentials not found. Please provide valid cookies.json.",
+      );
     }
   });
 

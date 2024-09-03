@@ -11,7 +11,8 @@ export async function getActorDetails({
   runtime: AgentRuntime;
   room_id: UUID;
 }) {
-  const participantIds = await runtime.databaseAdapter.getParticipantsForRoom(room_id);
+  const participantIds =
+    await runtime.databaseAdapter.getParticipantsForRoom(room_id);
   const actors = await Promise.all(
     participantIds.map(async (user_id) => {
       const account = await runtime.databaseAdapter.getAccountById(user_id);
@@ -24,13 +25,11 @@ export async function getActorDetails({
         };
       }
       return null;
-    })
+    }),
   );
 
   return actors.filter((actor): actor is Actor => actor !== null);
 }
-
-
 
 /**
  * Format actors into a string
@@ -88,9 +87,9 @@ export const formatMessages = ({
         attachments && attachments.length > 0
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
-          
+
       const timestamp = formatTimestamp(message.created_at);
-      
+
       const shortId = message.user_id.slice(-5);
 
       return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
@@ -104,11 +103,11 @@ export const formatTimestamp = (messageDate: Date) => {
   const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
 
   // what type of object is messageDate?
-  console.log('messageDate', messageDate)
-  console.log(typeof messageDate)
+  console.log("messageDate", messageDate);
+  console.log(typeof messageDate);
 
   // if messageDate is a string, convert it to a date
-  if (typeof messageDate === 'string') {
+  if (typeof messageDate === "string") {
     messageDate = new Date(messageDate);
   }
 

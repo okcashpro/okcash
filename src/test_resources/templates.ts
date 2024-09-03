@@ -1,6 +1,7 @@
 import { messageCompletionFooter } from "../core/parsing.ts";
 
-export const messageHandlerTemplate = `{{actionExamples}}
+export const messageHandlerTemplate =
+  `{{actionExamples}}
 
 # IMPORTANT: DO NOT USE THE INFORMATION FROM THE EXAMPLES ABOVE. THE EXAMPLES ARE FOR REFERENCE ONLY.
 

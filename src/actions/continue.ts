@@ -1,20 +1,21 @@
 import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import { composeContext } from "../core/context.ts";
 import { log_to_file } from "../core/logger.ts";
-import { embeddingZeroVector } from "../core/memory.ts";
 import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
   ActionExample,
   Content,
+  HandlerCallback,
   IAgentRuntime,
   Memory,
-  State
+  State,
 } from "../core/types.ts";
 
 const maxContinuesInARow = 3;
 
-export const shouldContinueTemplate = `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
+export const shouldContinueTemplate =
+  `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
 
 {{agentName}} is brief, and doesn't want to be annoying. {{agentName}} will only continue if the message requires a continuation to finish the thought.
 
@@ -59,7 +60,7 @@ export default {
     message: Memory,
     state: State,
     options: any,
-    callback: any,
+    callback: HandlerCallback,
   ) => {
     if (
       message.content.text.endsWith("?") ||
@@ -107,10 +108,12 @@ export default {
 
     const { user_id, room_id } = message;
 
-    const response = await runtime.messageCompletion({
+    let response = await runtime.messageCompletion({
       context,
       stop: [],
     });
+
+    response.inReplyTo = message.id;
 
     // log response to file
     log_to_file(
@@ -135,38 +138,7 @@ export default {
       return;
     }
 
-    const _saveResponseMessage = async (
-      message: Memory,
-      state: State,
-      responseContent: Content,
-    ) => {
-      const { room_id } = message;
-
-      responseContent.content = responseContent.text?.trim();
-
-      if (responseContent.content) {
-        console.log("create memory");
-        console.log("runtime.agentId");
-        console.log(runtime.agentId);
-        console.log("responseContent");
-        console.log(responseContent);
-        console.log("room_id");
-        console.log(room_id);
-        await runtime.messageManager.createMemory({
-          user_id: message.user_id,
-          content: responseContent,
-          room_id,
-          embedding: embeddingZeroVector,
-        });
-        await runtime.evaluate(message, { ...state, responseContent });
-      } else {
-        console.warn("Empty response, skipping");
-      }
-    };
-
-    callback(response);
-
-    await _saveResponseMessage(message, state, response);
+    await callback(response);
 
     // if the action is CONTINUE, check if we are over maxContinuesInARow
     if (response.action === "CONTINUE") {

@@ -89,7 +89,7 @@ function startDiscord() {
 async function startTwitter() {
   console.log("Starting interaction client");
   const twitterInteractionClient = new TwitterInteractionClient(runtime);
-  wait()
+  wait();
   // console.log("Starting search client");
   // const twitterSearchClient = new TwitterSearchClient(runtime);
   // wait()

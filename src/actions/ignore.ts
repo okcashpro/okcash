@@ -2,7 +2,7 @@ import {
   ActionExample,
   IAgentRuntime,
   Memory,
-  type Action
+  type Action,
 } from "../core/types.ts";
 
 export default {

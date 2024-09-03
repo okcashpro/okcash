@@ -20,7 +20,6 @@ import {
 import fs from "fs";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { default as getUuid } from "uuid-by-string";
 import WavEncoder from "wav-encoder";
 import { AgentRuntime } from "../../core/runtime.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
@@ -29,7 +28,8 @@ import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, Memory, State, UUID } from "../../core/types.ts";
+import { Content, HandlerCallback, Memory, State, UUID } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { textToSpeech } from "../elevenlabs/index.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
 
@@ -75,11 +75,6 @@ export class VoiceManager extends EventEmitter {
     audioStream: Readable,
   ) {
     const channelId = channel.id;
-
-    const callback = async (responseAudioStream) => {
-      await this.playAudioStream(user_id, responseAudioStream);
-    };
-
     const buffers: Buffer[] = [];
     let totalLength = 0;
     const maxSilenceTime = 500; // Maximum pause duration in milliseconds
@@ -115,15 +110,15 @@ export class VoiceManager extends EventEmitter {
             return;
           }
 
-          const room_id = getUuid(channelId) as UUID;
-          const userIdUUID = getUuid(user_id) as UUID;
+          const room_id = stringToUuid(channelId);
+          const userIdUUID = stringToUuid(user_id);
           await this.runtime.ensureUserExists(
             this.runtime.agentId,
             this.client.user.username,
             this.runtime.character.name,
           );
           await Promise.all([
-            this.runtime.ensureUserExists(userIdUUID, userName, name),
+            this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
             this.runtime.ensureRoomExists(room_id),
           ]);
 
@@ -149,12 +144,14 @@ export class VoiceManager extends EventEmitter {
           }
 
           const response = await this.handleVoiceMessage({
-            message: {
+            memory: {
+              id: stringToUuid(channelId + "-voice-message-" + Date.now()),
               content: { text: text },
               user_id: userIdUUID,
               room_id,
+              embedding: embeddingZeroVector,
+              created_at: new Date(),
             },
-            callback: (str: any) => {},
             state,
           });
 
@@ -169,7 +166,7 @@ export class VoiceManager extends EventEmitter {
           let responseStream = await this.textToSpeech(content);
 
           if (responseStream) {
-            callback(responseStream as Readable);
+            await this.playAudioStream(user_id, responseStream as Readable);
           }
         } catch (error) {
           console.error("Error processing audio stream:", error);
@@ -179,28 +176,26 @@ export class VoiceManager extends EventEmitter {
   }
 
   async handleVoiceMessage({
-    message,
+    memory,
     shouldIgnore = false,
     shouldRespond = true,
-    callback,
     state,
   }: {
-    message: Memory;
+    memory: Memory;
     shouldIgnore?: boolean;
     shouldRespond?: boolean;
-    callback: (response: string) => void;
     state?: State;
   }): Promise<Content> {
-    if (!message.content.text) {
+    if (!memory.content.text) {
       return { text: "", action: "IGNORE" };
     }
 
-    await this._saveRequestMessage(message, state);
+    await this.runtime.messageManager.createMemory(memory);
 
     state = await this.runtime.updateRecentMessageState(state);
 
     if (!shouldIgnore) {
-      shouldIgnore = await this._shouldIgnore(message);
+      shouldIgnore = await this._shouldIgnore(memory);
     }
 
     if (shouldIgnore) {
@@ -217,20 +212,38 @@ export class VoiceManager extends EventEmitter {
     });
 
     const responseContent = await this._generateResponse(
-      message,
+      memory,
       state,
       context,
     );
+    const callback: HandlerCallback = async (content: Content) => {
+      const { room_id } = memory;
 
-    await this._saveResponseMessage(message, state, responseContent);
+      const responseMemory: Memory = {
+        id: stringToUuid(memory.id + "-voice-response-" + Date.now()),
+        user_id: this.runtime.agentId,
+        content: {
+          ...content,
+          user: this.runtime.character.name,
+          inReplyTo: memory.id,
+        },
+        room_id,
+        embedding: embeddingZeroVector,
+      };
 
-    this.runtime
-      .processActions(message, responseContent, state)
-      .then((response: unknown) => {
-        if (response && (response as Content).text) {
-          callback((response as Content).text);
-        }
-      });
+      if (responseMemory.content.text?.trim()) {
+        await this.runtime.messageManager.createMemory(responseMemory);
+        state = await this.runtime.updateRecentMessageState(state);
+        await this.runtime.evaluate(memory, state);
+      } else {
+        console.warn("Empty response, skipping");
+      }
+      return [responseMemory];
+    }
+
+    const responseMemories = await callback(responseContent);
+
+    await this.runtime.processActions(memory, responseMemories, state, callback)
 
     return responseContent;
   }
@@ -271,48 +284,6 @@ export class VoiceManager extends EventEmitter {
     });
 
     return response;
-  }
-
-  private async _saveRequestMessage(message: Memory, state: State) {
-    const { content: senderContent } = message;
-
-    if ((senderContent as Content).text) {
-      const memory = {
-        id: getUuid(message.id) as UUID,
-        user_id: message.user_id,
-        content: senderContent,
-        room_id: message.room_id,
-        embedding: embeddingZeroVector,
-      };
-
-      console.log("voice memory being saved", memory);
-
-      await this.runtime.messageManager.createMemory(memory);
-    }
-  }
-
-  private async _saveResponseMessage(
-    message: Memory,
-    state: State,
-    responseContent: Content,
-  ) {
-    const { room_id } = message;
-
-    responseContent.content = responseContent.text?.trim();
-
-    if (responseContent.content) {
-      await this.runtime.messageManager.createMemory({
-        id: getUuid(message.id) as UUID,
-        user_id: this.runtime.agentId,
-        content: { ...responseContent, user: this.runtime.character.name },
-        room_id,
-        embedding: embeddingZeroVector,
-      });
-      state = await this.runtime.updateRecentMessageState(state);
-      await this.runtime.evaluate(message, state);
-    } else {
-      console.warn("Empty response, skipping");
-    }
   }
 
   private async _shouldIgnore(message: Memory): Promise<boolean> {

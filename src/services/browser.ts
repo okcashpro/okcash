@@ -4,9 +4,9 @@ import fetch from "cross-fetch";
 import fs from "fs";
 import path from "path";
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { default as getUuid } from "uuid-by-string";
 import { generateSummary } from "./summary.ts";
 import { AgentRuntime } from "../core/runtime.ts";
+import { stringToUuid } from "../core/uuid.ts";
 
 export class BrowserService {
   private browser: Browser | undefined;
@@ -78,7 +78,7 @@ export class BrowserService {
   }
 
   private getCacheKey(url: string): string {
-    return getUuid(url) as string;
+    return stringToUuid(url);
   }
 
   private async fetchPageContent(

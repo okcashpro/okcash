@@ -11,7 +11,7 @@ export interface Content {
   action?: string; // An optional action associated with the message, indicating a specific behavior or response required.
   source?: string; // The source of the content, if applicable, such as a reference or origin.
   url?: string; // The actual URL of the message or post, i.e. tweet URL or message link in discord
-  replyingTo?: UUID; // If this is a message in a thread, or a reply, store this
+  inReplyTo?: UUID; // If this is a message in a thread, or a reply, store this
   attachments?: Media[];
   [key: string]: unknown; // Allows for additional properties to be included dynamically.
 }
@@ -131,8 +131,11 @@ export type Handler = (
   message: Memory,
   state?: State,
   options?: { [key: string]: unknown }, // additional options can be used for things like tests or state-passing on a chain
-  callback?: (response: Content) => void,
+  callback?: HandlerCallback,
 ) => Promise<unknown>;
+
+//
+export type HandlerCallback = (response: Content) => Promise<Memory[]>;
 
 /**
  * Represents the type of a validator function, which takes a runtime instance, a message, and an optional state, and returns a promise resolving to a boolean indicating whether the validation passed.
@@ -180,11 +183,7 @@ export interface Evaluator {
  * Represents a provider, which is used to retrieve information or perform actions on behalf of the agent, such as fetching data from an external API or service.
  */
 export interface Provider {
-  get: (
-    runtime: IAgentRuntime,
-    message: Memory,
-    state?: State,
-  ) => Promise<any>;
+  get: (runtime: IAgentRuntime, message: Memory, state?: State) => Promise<any>;
 }
 
 /**
@@ -457,9 +456,9 @@ export interface IAgentRuntime {
   embed(input: string): Promise<number[]>;
   processActions(
     message: Memory,
-    content: Content,
+    responses: Memory[],
     state?: State,
-    callback?: (response: Content) => void,
+    callback?: HandlerCallback,
   ): Promise<void>;
   evaluate(message: Memory, state?: State): Promise<string[]>;
   ensureParticipantExists(user_id: UUID, room_id: UUID): Promise<void>;

@@ -2,12 +2,7 @@ import { composeContext } from "../core/context.ts";
 import { getGoals } from "../core/goals.ts";
 import { parseJsonArrayFromText } from "../core/parsing.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
-import {
-  Memory,
-  Objective,
-  type Goal,
-  type State
-} from "../core/types.ts";
+import { Memory, Objective, type Goal, type State } from "../core/types.ts";
 
 const template = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.

@@ -5,10 +5,11 @@ import {
   ActionExample,
   IAgentRuntime,
   Memory,
-  State
+  State,
 } from "../core/types.ts";
 
-const shouldUnfollowTemplate = `Based on the conversation so far:
+const shouldUnfollowTemplate =
+  `Based on the conversation so far:
 
 {{recentMessages}}
 

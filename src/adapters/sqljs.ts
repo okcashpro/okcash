@@ -56,8 +56,11 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     return result.user_state ?? null;
   }
 
-  async getMemoriesByRoomIds(params: { room_ids: UUID[]; tableName: string }): Promise<Memory[]> {
-    const placeholders = params.room_ids.map(() => '?').join(', ');
+  async getMemoriesByRoomIds(params: {
+    room_ids: UUID[];
+    tableName: string;
+  }): Promise<Memory[]> {
+    const placeholders = params.room_ids.map(() => "?").join(", ");
     const sql = `SELECT * FROM memories WHERE type = ? AND room_id IN (${placeholders})`;
     const stmt = this.db.prepare(sql);
     const queryParams = [params.tableName, ...params.room_ids];

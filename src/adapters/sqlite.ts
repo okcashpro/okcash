@@ -142,12 +142,15 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       .filter((row): row is Actor => row !== null);
   }
 
-  async getMemoriesByRoomIds(params: { room_ids: UUID[]; tableName: string }): Promise<Memory[]> {
-    const placeholders = params.room_ids.map(() => '?').join(', ');
+  async getMemoriesByRoomIds(params: {
+    room_ids: UUID[];
+    tableName: string;
+  }): Promise<Memory[]> {
+    const placeholders = params.room_ids.map(() => "?").join(", ");
     const sql = `SELECT * FROM memories WHERE type = ? AND room_id IN (${placeholders})`;
     const stmt = this.db.prepare(sql);
     const queryParams = [params.tableName, ...params.room_ids];
-  
+
     const memories: Memory[] = [];
     const rows = stmt.all(...queryParams) as (Memory & { content: string })[];
     rows.forEach((row) => {
@@ -157,16 +160,16 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         content: JSON.parse(row.content),
       });
     });
-    
+
     return memories;
-  }  
+  }
 
   async getMemoryById(memoryId: UUID): Promise<Memory | null> {
     const sql = "SELECT * FROM memories WHERE id = ?";
     const stmt = this.db.prepare(sql);
     stmt.bind([memoryId]);
     const memory = stmt.get() as Memory | undefined;
-  
+
     if (memory) {
       return {
         ...memory,
@@ -174,7 +177,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         content: JSON.parse(memory.content as unknown as string),
       };
     }
-  
+
     return null;
   }
 

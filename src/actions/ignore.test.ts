@@ -36,7 +36,6 @@ async function handleMessage(
         room_id,
         embedding: embeddingZeroVector,
       });
-      await runtime.evaluate(message, state);
     }
   };
 
@@ -64,32 +63,22 @@ async function handleMessage(
     type: "ignore_test_completion",
   });
 
-  const _saveResponseMessage = async (
-    message: Memory,
-    state: State,
-    responseContent: Content,
-  ) => {
-    const { room_id } = message;
-
-    responseContent.content = responseContent.text?.trim();
-
-    if (responseContent.content) {
-      await runtime.messageManager.createMemory({
-        user_id: runtime.agentId,
-        content: responseContent,
-        room_id,
-        embedding: embeddingZeroVector,
-      });
-      await runtime.evaluate(message, { ...state, responseContent });
-    } else {
-      console.warn("Empty response, skipping");
-    }
+  const responseMessage: Memory = {
+    user_id: runtime.agentId,
+    content: response,
+    room_id,
+    embedding: embeddingZeroVector,
   };
 
-  await _saveResponseMessage(message, state, response);
-  await runtime.processActions(message, response);
+  if (responseMessage.content.text?.trim()) {
+    await runtime.messageManager.createMemory(responseMessage);
+    await runtime.evaluate(message, state);
+    await runtime.processActions(message, [responseMessage]);
+  } else {
+    console.warn("Empty response, skipping");
+  }
 
-  return response;
+  return responseMessage;
 }
 
 // use .dev.vars for local testing
@@ -150,7 +139,7 @@ describe("Ignore action tests", () => {
 
       const result = await handleMessage(runtime, message);
 
-      return result.action === "IGNORE";
+      return result.content.action === "IGNORE";
     });
   }, 120000);
 

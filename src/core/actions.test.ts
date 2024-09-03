@@ -1,18 +1,15 @@
 import dotenv from "dotenv";
-import { default as getUuid } from "uuid-by-string";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { runAiTest } from "../test_resources/runAiTest.ts";
 import { messageHandlerTemplate } from "../test_resources/templates.ts";
-import {
-  TEST_ACTION,
-  TEST_ACTION_FAIL,
-} from "../test_resources/testAction.ts";
+import { TEST_ACTION, TEST_ACTION_FAIL } from "../test_resources/testAction.ts";
 import { type User } from "../test_resources/types.ts";
 import { composeContext } from "./context.ts";
 import { embeddingZeroVector } from "./memory.ts";
 import { type AgentRuntime } from "./runtime.ts";
 import { Content, State, type Memory, type UUID } from "./types.ts";
+import { stringToUuid } from "./uuid.ts";
 
 async function handleMessage(
   runtime: AgentRuntime,
@@ -25,7 +22,7 @@ async function handleMessage(
     const _senderContent = (senderContent as Content).text?.trim();
     if (_senderContent) {
       await runtime.messageManager.createMemory({
-        id: getUuid(message.id) as UUID,
+        id: stringToUuid(message.id),
         user_id: user_id!,
         content: {
           text: _senderContent,
@@ -73,31 +70,21 @@ async function handleMessage(
     };
   }
 
-  const _saveResponseMessage = async (
-    message: Memory,
-    state: State,
-    responseContent: Content,
-  ) => {
-    const { room_id } = message;
+  if (responseContent.text) {
+    const response = {
+      user_id: runtime.agentId,
+      content: responseContent,
+      room_id,
+      embedding: embeddingZeroVector,
+    };
+    await runtime.messageManager.createMemory(response);
 
-    responseContent.content = responseContent.text?.trim();
-
-    if (responseContent.content) {
-      await runtime.messageManager.createMemory({
-        user_id: runtime.agentId,
-        content: responseContent,
-        room_id,
-        embedding: embeddingZeroVector,
-      });
-      state = await this.runtime.updateRecentMessageState(state);
-      await runtime.evaluate(message, state);
-    } else {
-      console.warn("Empty response, skipping");
-    }
-  };
-
-  await _saveResponseMessage(message, state, responseContent);
-  await runtime.processActions(message, responseContent);
+    state = await this.runtime.updateRecentMessageState(state);
+    await runtime.processActions(message, [response], state);
+    await runtime.evaluate(message, state);
+  } else {
+    console.warn("Empty response, skipping");
+  }
 
   return responseContent;
 }
