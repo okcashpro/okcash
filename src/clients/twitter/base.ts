@@ -241,26 +241,32 @@ export class ClientBase extends EventEmitter {
   ): Promise<QueryTweetsResponse> {
     // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
     // if we dont get a response in 5 seconds, something is wrong
-    const timeoutPromise = new Promise((resolve, _) =>
+    const timeoutPromise = new Promise((_, reject) =>
       setTimeout(
-        () => resolve(console.error("Timeout waiting for Twitter API response")),
-        5000,
-      ),
+        () => reject(new Error("Timeout waiting for Twitter API response")),
+        10000
+      )
     );
 
     try {
-      const result = await this.requestQueue.add(async () =>
-      await Promise.race([
-        this.twitterClient.fetchSearchTweets(
-          query,
-          maxTweets,
-          searchMode,
-          cursor,
-        ),
-        timeoutPromise,
-        ])
-      );
-      return (result ?? { tweets: [] }) as QueryTweetsResponse;
+      try {
+
+        const result = await this.requestQueue.add(async () =>
+          await Promise.race([
+            this.twitterClient.fetchSearchTweets(
+              query,
+              maxTweets,
+              searchMode,
+              cursor,
+            ),
+            timeoutPromise,
+          ])
+        );
+        return (result ?? { tweets: [] }) as QueryTweetsResponse;
+      } catch (error) {
+        console.error("Error fetching search tweets:", error);
+        return { tweets: [] };
+      }
     } catch (error) {
       console.error("Error fetching search tweets:", error);
       return { tweets: [] };

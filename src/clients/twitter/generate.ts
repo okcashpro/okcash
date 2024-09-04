@@ -5,11 +5,8 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import { getRecentConversations, searchRecentPosts } from "./utils.ts";
 
-const newTweetPrompt = `{{recentSearchResultsText}}
-{{recentConversations}}
-{{recentPosts}}
+const newTweetPrompt = `{{recentPosts}}
 
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
@@ -48,11 +45,11 @@ export class TwitterGenerationClient extends ClientBase {
   private async generateNewTweet() {
     console.log("Generating new tweet");
     try {
-      const recentConversationsText = await getRecentConversations(
-        this.runtime,
-        this,
-        settings.TWITTER_USERNAME,
-      );
+      // const recentConversationsText = await getRecentConversations(
+      //   this.runtime,
+      //   this,
+      //   settings.TWITTER_USERNAME,
+      // );
 
       // Wait 1.5-3.5 seconds to avoid rate limiting
       await new Promise((resolve) =>
@@ -74,15 +71,15 @@ export class TwitterGenerationClient extends ClientBase {
         },
         {
           twitterUserName: settings.TWITTER_USERNAME,
-          recentConversations: recentConversationsText,
+          // recentConversations: recentConversationsText,
         },
       );
-      const recentSearchResultsText = await searchRecentPosts(
-        this.runtime,
-        this,
-        state.topic as string,
-      );
-      state["recentSearchResultsText"] = recentSearchResultsText;
+      // const recentSearchResultsText = await searchRecentPosts(
+      //   this.runtime,
+      //   this,
+      //   state.topic as string,
+      // );
+      // state["recentSearchResultsText"] = recentSearchResultsText;
 
       // Generate new tweet
       const context = composeContext({

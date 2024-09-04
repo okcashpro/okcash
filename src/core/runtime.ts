@@ -1121,7 +1121,8 @@ Text: ${attachment.text}
     // if bio is a string, use it. if its an array, pick one at random
     let bio = this.character.bio || "";
     if (Array.isArray(bio)) {
-      bio = bio[Math.floor(Math.random() * bio.length)];
+      // get three random bio strings and join them with " "
+      bio = bio.sort(() => 0.5 - Math.random()).slice(0, 3).join(" ");
     }
 
     const initialState = {
@@ -1151,13 +1152,16 @@ Text: ${attachment.text}
           : null,
       topics:
         this.character.topics && this.character.topics.length > 0
-          ? addHeader(
-            `### Topics ${this.character.name} is interested in:`,
-            this.character.topics
-              .sort(() => 0.5 - Math.random())
-              .slice(0, 10)
-              .join(", "),
-          )
+          ? `${this.character.name} is interested in ` + this.character.topics
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 5)
+            .map((topic, index) => {
+              if (index === this.character.topics.length - 1) {
+                return topic + " and ";
+              }
+              return topic + ", ";
+            })
+            .join("")
           : "",
       characterPostExamples:
         formattedCharacterPostExamples &&
