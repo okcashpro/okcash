@@ -31,6 +31,7 @@ export const messageHandlerTemplate =
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
+{{topics}}
 
 {{characterPostExamples}}
 
@@ -75,8 +76,8 @@ export class TwitterInteractionClient extends ClientBase {
       this.handleTwitterInteractions();
       setTimeout(
         handleTwitterInteractionsLoop,
-        Math.floor(Math.random() * 10000) + 10000,
-      ); // Random interval between 10-15 minutes
+        (Math.floor(Math.random() * (5 - 2 + 1)) + 2) * 60 * 1000,
+      ); // Random interval between 2-5 minutes
     };
     handleTwitterInteractionsLoop();
   }

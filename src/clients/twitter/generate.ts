@@ -14,6 +14,7 @@ const newTweetPrompt = `{{recentSearchResultsText}}
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
+{{topics}}
 
 {{characterPostExamples}}
 
@@ -31,8 +32,8 @@ export class TwitterGenerationClient extends ClientBase {
       this.generateNewTweet();
       setTimeout(
         generateNewTweetLoop,
-        Math.floor(Math.random() * 300000) + 600000,
-      ); // Random interval between 10-15 minutes
+        (Math.floor(Math.random() * (60 - 45 + 1)) + 45) * 60 * 1000,
+      ); // Random interval between 45-60 minutes
     };
     generateNewTweetLoop();
   }

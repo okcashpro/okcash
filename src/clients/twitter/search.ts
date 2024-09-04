@@ -9,10 +9,9 @@ import { messageCompletionFooter } from "../../core/parsing.ts";
 import {
   Content,
   HandlerCallback,
-  Memory,
-  State,
-  UUID,
+  State
 } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
@@ -21,8 +20,6 @@ import {
   sendTweetChunks,
   wait,
 } from "./utils.ts";
-import { embeddingZeroVector } from "../../core/memory.ts";
-import { stringToUuid } from "../../core/uuid.ts";
 
 const messageHandlerTemplate =
   `{{relevantFacts}}
@@ -37,11 +34,10 @@ Recent conversations:
 Recent tweets which {{agentName}} may or may not find interesting:
 {{recentSearchResults}}
 
-{{topics}}
-
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
+{{topics}}
 
 {{postDirections}}
 Respond directly to the above post in an {{adjective}} way, as {{agentName}}
@@ -73,7 +69,7 @@ export class TwitterSearchClient extends ClientBase {
     this.engageWithSearchTerms();
     setTimeout(
       () => this.engageWithSearchTermsLoop(),
-      Math.floor(Math.random() * 100000) + 600000,
+      (Math.floor(Math.random() * (60 - 45 + 1)) + 45) * 60 * 1000,
     );
   }
 

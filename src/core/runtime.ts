@@ -1118,11 +1118,17 @@ Text: ${attachment.text}
       actorsData,
     );
 
+    // if bio is a string, use it. if its an array, pick one at random
+    let bio = this.character.bio || "";
+    if (Array.isArray(bio)) {
+      bio = bio[Math.floor(Math.random() * bio.length)];
+    }
+
     const initialState = {
       agentId: this.agentId,
       // Character file stuff
       agentName,
-      bio: this.character.bio || "",
+      bio,
       lore,
       adjective:
         this.character.adjectives && this.character.adjectives.length > 0
@@ -1146,7 +1152,7 @@ Text: ${attachment.text}
       topics:
         this.character.topics && this.character.topics.length > 0
           ? addHeader(
-            `### Topics for ${this.character.topics}`,
+            `### Topics ${this.character.name} is interested in:`,
             this.character.topics
               .sort(() => 0.5 - Math.random())
               .slice(0, 10)
@@ -1174,12 +1180,13 @@ Text: ${attachment.text}
           this.character?.style?.chat.length > 0
           ? addHeader(
             "### Message Directions for " + this.character.name,
-            (this.character?.style?.all?.join("\n") || "") +
-            (this.character?.style?.all?.length > 0 &&
-              this.character?.style?.chat.length > 0
-              ? "\n"
-              : "") +
-            (this.character?.style?.chat?.join("\n") || ""),
+            (() => {
+              const all = this.character?.style?.all || [];
+              const chat = this.character?.style?.chat || [];
+              const shuffled = [...all, ...chat].sort(() => 0.5 - Math.random());
+              const allSliced = shuffled.slice(0, 15);
+              return allSliced.concat(allSliced).join("\n");
+            })(),
           )
           : "",
       postDirections:
@@ -1187,12 +1194,12 @@ Text: ${attachment.text}
           this.character?.style?.post.length > 0
           ? addHeader(
             "### Post Directions for " + this.character.name,
-            (this.character?.style?.all?.join("\n") || "") +
-            (this.character?.style?.all?.length > 0 &&
-              this.character?.style?.post.length > 0
-              ? "\n"
-              : "") +
-            (this.character?.style?.post?.join("\n") || ""),
+            (() => {
+              const all = this.character?.style?.all || [];
+              const post = this.character?.style?.post || [];
+              const shuffled = [...all, ...post].sort(() => 0.5 - Math.random());
+              return shuffled.slice(0, 15).join("\n");
+            })(),
           )
           : "",
       // Agent runtime stuff
