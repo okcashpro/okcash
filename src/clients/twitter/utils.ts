@@ -242,6 +242,7 @@ export async function sendTweetChunks(
   content: Content,
   roomId: UUID,
   twitterUsername: string,
+  inReplyTo: string,
 ): Promise<Memory[]> {
   console.log("Sending tweet chunks", content);
   const tweetChunks = splitTweetContent(content.text);
@@ -250,11 +251,12 @@ export async function sendTweetChunks(
 
   for (const chunk of tweetChunks) {
     const success = await client.requestQueue.add(async () => {
-      if (sentTweets.length === 0) {
-        return await client.twitterClient.sendTweet(chunk);
+      if (inReplyTo) {
+        console.log('***** REPLYING')
+        return await client.twitterClient.sendTweet(chunk, inReplyTo);
       } else {
-        const lastTweetId = sentTweets[sentTweets.length - 1].id;
-        return await client.twitterClient.sendTweet(chunk, lastTweetId);
+        console.log('***** NOT REPLYING')
+        return await client.twitterClient.sendTweet(chunk);
       }
     });
     if (success) {

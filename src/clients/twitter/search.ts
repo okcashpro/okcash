@@ -90,12 +90,12 @@ export class TwitterSearchClient extends ClientBase {
 
       const tweetsArray = await this.requestQueue.add(
         async () =>
-          await this.fetchSearchTweets(searchTerm, 200, SearchMode.Top),
+          await this.fetchSearchTweets(searchTerm, 50, SearchMode.Top),
       );
 
       const recentTweets = await this.requestQueue.add(
         async () =>
-          await this.fetchSearchTweets(searchTerm, 200, SearchMode.Latest),
+          await this.fetchSearchTweets(searchTerm, 50, SearchMode.Latest),
       );
 
       const allTweets = [...tweetsArray.tweets, ...recentTweets.tweets];
@@ -295,6 +295,8 @@ export class TwitterSearchClient extends ClientBase {
         temperature: this.temperature,
         model: this.runtime.model,
       });
+
+      responseContent.inReplyTo = message.id;
 
       log_to_file(
         `${settings.TWITTER_USERNAME}_${datestr}_search_response`,

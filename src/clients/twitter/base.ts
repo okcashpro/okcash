@@ -83,7 +83,8 @@ export class ClientBase extends EventEmitter {
   twitterClient: Scraper;
   runtime: AgentRuntime;
   directions: string;
-  lastCheckedTweetId: string | null = null;
+  lastCheckedTweetId: number | null = null;
+  tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
   imageDescriptionService: ImageDescriptionService;
   temperature: number = 0.5;
   dryRun: boolean = settings.TWITTER_DRY_RUN?.toLowerCase() === "true";
@@ -163,6 +164,17 @@ export class ClientBase extends EventEmitter {
       this.runtime.character.style.all.join("\n- ") +
       "- " +
       this.runtime.character.style.post.join();
+
+      try {
+        if (fs.existsSync(this.tweetCacheFilePath)) {
+          const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
+          this.lastCheckedTweetId = parseInt(data.trim());
+        } else {
+          console.warn("Tweet cache file not found.");
+        }
+      } catch (error) {
+        console.error("Error loading latest checked tweet ID from file:", error);
+      }
 
     // async initialization
     (async () => {
@@ -259,9 +271,6 @@ export class ClientBase extends EventEmitter {
       // Read the cached search results from the file
       const cachedResults = JSON.parse(fs.readFileSync(cacheFile, "utf-8"));
   
-      // Create a Set to store the IDs of cached tweets
-      const cachedTweetIds = new Set(cachedResults.map((tweet) => tweet.id));
-  
       // Get the existing memories from the database
       const existingMemories = await this.runtime.messageManager.getMemoriesByRoomIds({
         roomIds: cachedResults.map((tweet) => stringToUuid(tweet.conversationId)),
@@ -284,7 +293,7 @@ export class ClientBase extends EventEmitter {
         // Save the missing tweets as memories
         for (const tweet of tweetsToSave) {
           const roomId = stringToUuid(tweet.conversationId);
-          const tweetuserId = stringToUuid(tweet.userId);
+          const tweetuserId = tweet.userId === this.twitterUserId ? this.runtime.agentId : stringToUuid(tweet.userId);
   
           await this.runtime.ensureRoomExists(roomId);
           await this.runtime.ensureParticipantExists(this.runtime.agentId, roomId);
@@ -304,6 +313,17 @@ export class ClientBase extends EventEmitter {
               ? stringToUuid(tweet.inReplyToStatusId)
               : undefined,
           } as Content;
+
+          console.log("Creating memory for tweet", tweet.id);
+
+          // check if it already exists
+          const memory = await this.runtime.messageManager.getMemoryById(
+            stringToUuid(tweet.id),
+          );
+          if (memory) {
+            console.log("Memory already exists, skipping timeline population");
+            break;
+          }
   
           await this.runtime.messageManager.createMemory({
             id: stringToUuid(tweet.id),
@@ -364,7 +384,7 @@ export class ClientBase extends EventEmitter {
     // Save the new tweets as memories
     for (const tweet of tweetsToSave) {
       const roomId = stringToUuid(tweet.conversationId);
-      const tweetuserId = stringToUuid(tweet.userId);
+      const tweetuserId = tweet.userId === this.twitterUserId ? this.runtime.agentId : stringToUuid(tweet.userId);
   
       await this.runtime.ensureRoomExists(roomId);
       await this.runtime.ensureParticipantExists(this.runtime.agentId, roomId);

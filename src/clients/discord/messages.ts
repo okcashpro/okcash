@@ -21,11 +21,12 @@ import { VoiceManager } from "./voice.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { SpeechService } from "../../services/speech.ts";
 
-const MAX_MESSAGE_LENGTH = 1900;
+const MAX_MESSAGE_LENGTH = 1990;
 
 export async function sendMessageInChunks(
   channel: TextChannel,
   content: string,
+  inReplyTo: string,
 ): Promise<DiscordMessage[]> {
   const sentMessages: DiscordMessage[] = [];
   const messages = splitMessage(content);
@@ -216,6 +217,7 @@ export class MessageManager {
       );
 
       responseContent.text = responseContent.text?.trim();
+      responseContent.inReplyTo = stringToUuid(message.id);
 
       if (!responseContent.text) {
         return;
@@ -242,6 +244,7 @@ export class MessageManager {
           const messages = await sendMessageInChunks(
             message.channel as TextChannel,
             content.text,
+            message.id
           );
           let notFirstMessage = false;
           let memories: Memory[] = [];

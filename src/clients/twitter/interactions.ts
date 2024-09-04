@@ -2,7 +2,6 @@ import { SearchMode, Tweet } from "agent-twitter-client";
 import fs from "fs";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
-import { embeddingZeroVector } from "../../core/memory.ts";
 import {
   messageCompletionFooter,
   shouldRespondFooter,
@@ -13,9 +12,9 @@ import {
   Content,
   HandlerCallback,
   Memory,
-  State,
-  UUID,
+  State
 } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
@@ -23,7 +22,6 @@ import {
   sendTweetChunks,
   wait,
 } from "./utils.ts";
-import { stringToUuid } from "../../core/uuid.ts";
 
 export const messageHandlerTemplate =
   `{{relevantFacts}}
@@ -83,23 +81,10 @@ export class TwitterInteractionClient extends ClientBase {
     handleTwitterInteractionsLoop();
   }
 
-  private tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
-
   constructor(runtime: AgentRuntime) {
     super({
       runtime,
     });
-
-    try {
-      if (fs.existsSync(this.tweetCacheFilePath)) {
-        const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
-        this.lastCheckedTweetId = data.trim();
-      } else {
-        console.warn("Tweet cache file not found.");
-      }
-    } catch (error) {
-      console.error("Error loading latest checked tweet ID from file:", error);
-    }
   }
 
   async handleTwitterInteractions() {
@@ -118,15 +103,11 @@ export class TwitterInteractionClient extends ClientBase {
       const uniqueTweetCandidates = [...new Set(tweetCandidates)];
 
       // Sort tweet candidates by ID in ascending order
-      uniqueTweetCandidates.sort((a, b) => a.id.localeCompare(b.id));
+      uniqueTweetCandidates.sort((a, b) => a.id.localeCompare(b.id)).filter(tweet => tweet.userId !== this.twitterUserId);
 
       // for each tweet candidate, handle the tweet
       for (const tweet of uniqueTweetCandidates) {
-        if (!this.lastCheckedTweetId || tweet.id > this.lastCheckedTweetId) {
-          if (tweet.userId === this.twitterUserId) {
-            continue;
-          }
-
+        if (!this.lastCheckedTweetId || parseInt(tweet.id) > this.lastCheckedTweetId) {
           const conversationId = tweet.conversationId;
 
           const roomId = stringToUuid(conversationId);
@@ -169,7 +150,7 @@ export class TwitterInteractionClient extends ClientBase {
           });
 
           // Update the last checked tweet ID after processing each tweet
-          this.lastCheckedTweetId = tweet.id;
+          this.lastCheckedTweetId = parseInt(tweet.id);
 
           try {
             fs.writeFileSync(
@@ -310,6 +291,9 @@ export class TwitterInteractionClient extends ClientBase {
       temperature: this.temperature,
       model: this.runtime.model,
     });
+
+    response.inReplyTo = stringToUuid(tweet.id);
+
     log_to_file(
       `${settings.TWITTER_USERNAME}_${datestr}_interactions_response`,
       JSON.stringify(response),
@@ -324,6 +308,7 @@ export class TwitterInteractionClient extends ClientBase {
               response,
               message.roomId,
               settings.TWITTER_USERNAME,
+              tweet.id
             );
             return memories;
           };
