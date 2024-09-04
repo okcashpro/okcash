@@ -90,11 +90,11 @@ async function startTwitter() {
   console.log("Starting interaction client");
   const twitterInteractionClient = new TwitterInteractionClient(runtime);
   wait();
-  // console.log("Starting search client");
-  // const twitterSearchClient = new TwitterSearchClient(runtime);
-  // wait()
-  // console.log("Starting generation client");
-  // const twitterGenerationClient = new TwitterGenerationClient(runtime);
+  console.log("Starting search client");
+  const twitterSearchClient = new TwitterSearchClient(runtime);
+  wait()
+  console.log("Starting generation client");
+  const twitterGenerationClient = new TwitterGenerationClient(runtime);
 }
 
 if (argv.discord || (!argv.twitter && !argv.discord)) {

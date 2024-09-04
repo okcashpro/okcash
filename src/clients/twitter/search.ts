@@ -251,7 +251,7 @@ export class TwitterSearchClient extends ClientBase {
       await wait();
       const recentSearchResults = await searchRecentPosts(
         this.runtime,
-        this.twitterClient,
+        this,
         searchTerm,
       );
 

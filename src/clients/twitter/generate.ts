@@ -3,7 +3,6 @@ import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
-import { UUID } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { getRecentConversations, searchRecentPosts } from "./utils.ts";
@@ -11,6 +10,7 @@ import { getRecentConversations, searchRecentPosts } from "./utils.ts";
 const newTweetPrompt = `{{recentSearchResultsText}}
 {{recentConversations}}
 {{recentPosts}}
+
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
@@ -79,7 +79,7 @@ export class TwitterGenerationClient extends ClientBase {
       );
       const recentSearchResultsText = await searchRecentPosts(
         this.runtime,
-        this.twitterClient,
+        this,
         state.topic as string,
       );
       state["recentSearchResultsText"] = recentSearchResultsText;
