@@ -607,10 +607,10 @@ ALTER TABLE ONLY "public"."memories"
     ADD CONSTRAINT "memories_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."relationships"
-    ADD CONSTRAINT "relationships_user_a_fkey" FOREIGN KEY ("userA") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "relationships_userA_fkey" FOREIGN KEY ("userA") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."relationships"
-    ADD CONSTRAINT "relationships_user_b_fkey" FOREIGN KEY ("userB") REFERENCES "public"."accounts"("id");
+    ADD CONSTRAINT "relationships_userB_fkey" FOREIGN KEY ("userB") REFERENCES "public"."accounts"("id");
 
 ALTER TABLE ONLY "public"."relationships"
     ADD CONSTRAINT "relationships_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."accounts"("id");

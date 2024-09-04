@@ -1052,15 +1052,21 @@ Text: ${attachment.text}
         userB,
       ]);
 
+      console.log("*** getRecentInteractions: Rooms", rooms);
+
       // Check the existing memories in the database
       const existingMemories = await this.messageManager.getMemoriesByRoomIds({
         roomIds: rooms,
       });
 
+      console.log("*** getRecentInteractions: Existing Memories", existingMemories);
+
       // Sort messages by timestamp in descending order
       existingMemories.sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
       );
+
+      console.log("*** getRecentInteractions: Sorted Memories", existingMemories);
 
       // Take the most recent messages
       const recentInteractionsData = existingMemories.slice(0, 20);

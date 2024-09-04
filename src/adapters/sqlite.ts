@@ -144,6 +144,10 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     roomIds: UUID[];
     tableName: string;
   }): Promise<Memory[]> {
+    if(!params.tableName) {
+      // default to messages
+      params.tableName = "messages";
+    }
     const placeholders = params.roomIds.map(() => "?").join(", ");
     const sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
     const stmt = this.db.prepare(sql);
