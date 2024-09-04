@@ -37,6 +37,7 @@ import {
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
+import { SpeechService } from "../../services/speech.ts";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -173,7 +174,7 @@ export class VoiceManager extends EventEmitter {
             return null;
           }
 
-          let responseStream = await this.textToSpeech(content);
+          let responseStream = await SpeechService.generate(content);
 
           if (responseStream) {
             await this.playAudioStream(userId, responseStream as Readable);
