@@ -1,31 +1,31 @@
 import dotenv from "dotenv";
-import { defaultActions } from "../../core/actions.ts";
-import { zeroUuid } from "../../core/constants.ts";
-import { type AgentRuntime } from "../../core/runtime.ts";
-import { type Message, type UUID } from "../../core/types.ts";
+import { defaultActions } from "../core/actions.ts";
+import { zeroUuid } from "../core/constants.ts";
+import { type AgentRuntime } from "../core/runtime.ts";
+import { type Memory, type UUID } from "../core/types.ts";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
-} from "../../test_resources/cache.ts";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
+} from "../test_resources/cache.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversation1,
   GetTellMeAboutYourselfConversation2,
   GetTellMeAboutYourselfConversation3,
   jimFacts,
-} from "../../test_resources/data.ts";
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { populateMemories } from "../../test_resources/populateMemories.ts";
-import { runAiTest } from "../../test_resources/runAiTest.ts";
-import { type User } from "../../test_resources/types.ts";
-import evaluator from "../fact.ts";
+} from "../test_resources/data.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../test_resources/populateMemories.ts";
+import { runAiTest } from "../test_resources/runAiTest.ts";
+import { type User } from "../test_resources/types.ts";
+import evaluator from "./fact.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Facts Evaluator", () => {
   let user: User;
   let runtime: AgentRuntime;
-  let room_id = zeroUuid;
+  let roomId = zeroUuid;
 
   beforeAll(async () => {
     const setup = await createRuntime({
@@ -50,7 +50,7 @@ describe("Facts Evaluator", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data.room_id;
+    roomId = data.roomId;
   });
 
   afterAll(async () => {
@@ -59,14 +59,14 @@ describe("Facts Evaluator", () => {
 
   test("Extract facts from conversations", async () => {
     await runAiTest("Extract programmer and startup facts", async () => {
-      await populateMemories(runtime, user, room_id, [
+      await populateMemories(runtime, user, roomId, [
         GetTellMeAboutYourselfConversation1,
       ]);
 
-      const message: Message = {
-        user_id: user.id as UUID,
-        content: { content: "" },
-        room_id,
+      const message: Memory = {
+        userId: user.id as UUID,
+        content: { text: "" },
+        roomId,
       };
 
       const result = await evaluator.handler(runtime, message);
@@ -79,17 +79,17 @@ describe("Facts Evaluator", () => {
     });
 
     await runAiTest("Extract married fact, ignoring known facts", async () => {
-      await populateMemories(runtime, user, room_id, [
+      await populateMemories(runtime, user, roomId, [
         GetTellMeAboutYourselfConversation2,
         GetTellMeAboutYourselfConversation3,
       ]);
 
-      await addFacts(runtime, user.id as UUID, room_id, jimFacts);
+      await addFacts(runtime, user.id as UUID, roomId, jimFacts);
 
-      const message: Message = {
-        user_id: user.id as UUID,
-        content: { content: "" },
-        room_id,
+      const message: Memory = {
+        userId: user.id as UUID,
+        content: { text: "" },
+        roomId,
       };
 
       const result = await evaluator.handler(runtime, message);
@@ -104,23 +104,23 @@ describe("Facts Evaluator", () => {
   }, 120000); // Adjust the timeout as needed for your tests
 });
 
-async function cleanup(runtime: AgentRuntime, room_id: UUID) {
-  await runtime.factManager.removeAllMemories(room_id);
-  await runtime.messageManager.removeAllMemories(room_id);
+async function cleanup(runtime: AgentRuntime, roomId: UUID) {
+  await runtime.factManager.removeAllMemories(roomId);
+  await runtime.messageManager.removeAllMemories(roomId);
 }
 
 async function addFacts(
   runtime: AgentRuntime,
-  user_id: UUID,
-  room_id: UUID,
+  userId: UUID,
+  roomId: UUID,
   facts: string[],
 ) {
   for (const fact of facts) {
     const existingEmbedding = await getCachedEmbeddings(fact);
     const bakedMemory = await runtime.factManager.addEmbeddingToMemory({
-      user_id: user_id,
-      content: { content: fact },
-      room_id: room_id,
+      userId: userId,
+      content: { text: fact },
+      roomId: roomId,
       embedding: existingEmbedding,
     });
     await runtime.factManager.createMemory(bakedMemory);

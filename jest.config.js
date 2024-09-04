@@ -12,4 +12,13 @@ export default {
   // collectCoverage: true,
   // collectCoverageFrom: ["**/*.{ts}", "!**/*.test.{ts}", "!**/node_modules/**", "!**/vendor/**"],
   // coverageDirectory: "../coverage",
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      useESM: true,
+    }],
+  },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  extensionsToTreatAsEsm: ['.ts'],
 };

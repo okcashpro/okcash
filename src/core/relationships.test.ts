@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test_resources/createRuntime.ts"; // Adjust the import path as needed
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { type User } from "../../test_resources/types.ts";
-import { zeroUuid } from "../constants.ts";
-import { createRelationship, getRelationships } from "../relationships.ts"; // Adjust the import path as needed
-import { AgentRuntime } from "../runtime.ts";
-import { type UUID } from "../types.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts"; // Adjust the import path as needed
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { type User } from "../test_resources/types.ts";
+import { zeroUuid } from "./constants.ts";
+import { createRelationship, getRelationships } from "./relationships.ts"; // Adjust the import path as needed
+import { AgentRuntime } from "./runtime.ts";
+import { type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
@@ -48,8 +48,8 @@ describe("Relationships Module", () => {
       userB,
     });
     expect(relationship).toBeDefined();
-    expect(relationship?.user_a).toBe(userA);
-    expect(relationship?.user_b).toBe(userB);
+    expect(relationship?.userA).toBe(userA);
+    expect(relationship?.userB).toBe(userB);
   });
 
   test("getRelationships retrieves all relationships for a user", async () => {
@@ -60,12 +60,12 @@ describe("Relationships Module", () => {
 
     const relationships = await getRelationships({
       runtime,
-      user_id: userA,
+      userId: userA,
     });
     expect(relationships).toBeDefined();
     expect(relationships.length).toBeGreaterThan(0);
     expect(
-      relationships.some((r) => r.user_a === userA || r.user_b === userA),
+      relationships.some((r) => r.userA === userA || r.userB === userA),
     ).toBeTruthy();
   });
 });

@@ -1,7 +1,6 @@
 import { composeContext } from "../core/context.ts";
-import { parseJsonArrayFromText } from "../core/parsing.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
-import { ActionExample, Content, Memory, type Message } from "../core/types.ts";
+import { ActionExample, Content, Memory } from "../core/types.ts";
 
 export const formatFacts = (facts: Memory[]) => {
   const messageStrings = facts
@@ -49,36 +48,26 @@ Response should be a JSON object array inside a JSON markdown block. Correct res
 ]
 \`\`\``;
 
-async function handler(runtime: AgentRuntime, message: Message) {
+async function handler(runtime: AgentRuntime, message: Memory) {
   const state = await runtime.composeState(message);
 
-  const { agentId, room_id } = state;
+  const { agentId, roomId } = state;
 
   const context = composeContext({
     state,
     template,
   });
 
-  let facts;
-
-  for (let i = 0; i < 3; i++) {
-    const factText: string = await runtime.completion({
-      context,
-      stop: [],
-    });
-    const parsedFacts = parseJsonArrayFromText(factText);
-    if (parsedFacts) {
-      facts = parsedFacts;
-      break;
-    }
-    // wait 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
+  let facts = await runtime.objectArrayCompletion({
+    context,
+    stop: [],
+  });
 
   if (!facts) {
     return [];
   }
 
+  // If the fact is known or corrupted, remove it
   const filteredFacts = facts
     .filter((fact) => {
       return (
@@ -93,9 +82,10 @@ async function handler(runtime: AgentRuntime, message: Message) {
 
   for (const fact of filteredFacts) {
     const factMemory = await runtime.factManager.addEmbeddingToMemory({
-      user_id: agentId!,
-      content: { content: fact },
-      room_id,
+      userId: agentId!,
+      content: { text: fact },
+      roomId,
+      createdAt: new Date(),
     });
 
     await runtime.factManager.createMemory(factMemory, true);
@@ -111,10 +101,10 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runtime: AgentRuntime,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    message: Message,
+    message: Memory,
   ): Promise<boolean> => {
     const messageCount = (await runtime.messageManager.countMemories(
-      message.room_id,
+      message.roomId,
     )) as number;
 
     const reflectionCount = Math.ceil(runtime.getConversationLength() / 2);
@@ -137,24 +127,24 @@ None`,
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "So where are you from" },
+          content: { text: "So where are you from" },
         },
         {
           user: "{{user2}}",
-          content: { content: "I'm from the city" },
+          content: { text: "I'm from the city" },
         },
         {
           user: "{{user1}}",
-          content: { content: "Which city?" },
+          content: { text: "Which city?" },
         },
         {
           user: "{{user2}}",
-          content: { content: "Oakland" },
+          content: { text: "Oakland" },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Oh, I've never been there, but I know it's in California",
+            text: "Oh, I've never been there, but I know it's in California",
           },
         },
       ] as ActionExample[],
@@ -171,19 +161,19 @@ Facts about the actors:
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I finally completed the marathon this year!" },
+          content: { text: "I finally completed the marathon this year!" },
         },
         {
           user: "{{user2}}",
-          content: { content: "Wow! How long did it take?" },
+          content: { text: "Wow! How long did it take?" },
         },
         {
           user: "{{user1}}",
-          content: { content: "A little over three hours." },
+          content: { text: "A little over three hours." },
         },
         {
           user: "{{user1}}",
-          content: { content: "I'm so proud of myself." },
+          content: { text: "I'm so proud of myself." },
         },
       ] as ActionExample[],
       outcome: `Claims:
@@ -209,19 +199,18 @@ Eva studied Philosophy before switching to Computer Science`,
         {
           user: "{{user1}}",
           content: {
-            content:
-              "Remember when we won the regional poker tournament last spring",
+            text: "Remember when we won the regional poker tournament last spring",
           },
         },
         {
           user: "{{user2}}",
-          content: { content: "That was one of the best days of my life" },
+          content: { text: "That was one of the best days of my life" },
         },
         {
           user: "{{user1}}",
-          content: { content: "It really put our poker club on the map" },
+          content: { text: "It really put our poker club on the map" },
         },
-      ],
+      ] as ActionExample[],
       outcome: `Claims:
 json\`\`\`
 [

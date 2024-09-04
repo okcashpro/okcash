@@ -1,10 +1,10 @@
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { Action, ActionExample } from "./types.ts";
 
-import elaborate from "../actions/elaborate.ts";
+import cont from "../actions/continue.ts";
 import ignore from "../actions/ignore.ts";
 
-export const defaultActions: Action[] = [elaborate, ignore];
+export const defaultActions: Action[] = [cont, ignore];
 
 /**
  * Composes a set of example conversations based on provided actions and a specified count.
@@ -46,7 +46,7 @@ export const composeActionExamples = (actionsData: Action[], count: number) => {
 
     return `\n${example
       .map((message) => {
-        let messageString = `${message.user}: ${message.content.content}${message.content.action ? ` (${message.content.action})` : ""}`;
+        let messageString = `${message.user}: ${message.content.text}${message.content.action ? ` (${message.content.action})` : ""}`;
         for (let i = 0; i < exampleNames.length; i++) {
           messageString = messageString.replaceAll(
             `{{user${i + 1}}}`,

@@ -8,23 +8,48 @@ import {
   formatEvaluators,
 } from "./evaluators.ts";
 import { MemoryManager } from "./memory.ts";
-import { parseJsonArrayFromText } from "./parsing.ts";
+import {
+  parseBooleanFromText,
+  parseJsonArrayFromText,
+  parseJSONObjectFromText,
+  parseShouldRespondFromText,
+} from "./parsing.ts";
 import {
   Character,
   Content,
   Goal,
+  HandlerCallback,
+  IAgentRuntime,
+  IBrowserService,
+  IDatabaseAdapter,
+  IImageRecognitionService,
+  IMemoryManager,
+  IPdfService,
+  ITranscriptionService,
+  IVideoService,
   Media,
   Provider,
   State,
   type Action,
   type Evaluator,
-  type Message,
+  type Memory,
 } from "./types.ts";
 
-import { UUID } from "crypto";
-import tiktoken, { TiktokenModel } from "tiktoken";
+import {
+  default as tiktoken,
+  default as TikToken,
+  TiktokenModel,
+} from "tiktoken";
+import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
+import { BrowserService } from "../services/browser.ts";
+import ImageDescriptionService from "../services/image.ts";
 import LlamaService from "../services/llama.ts";
+import { PdfService } from "../services/pdf.ts";
+import { SpeechService } from "../services/speech.ts";
+import { TranscriptionService } from "../services/transcription.ts";
+import { VideoService } from "../services/video.ts";
+import { wordsToPunish } from "../services/wordsToPunish.ts";
 import {
   composeActionExamples,
   formatActionConditions,
@@ -32,22 +57,19 @@ import {
   formatActions,
 } from "./actions.ts";
 import { zeroUuid } from "./constants.ts";
-import { DatabaseAdapter } from "./database.ts";
 import defaultCharacter from "./defaultCharacter.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
+import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
-import { type Actor, type Memory } from "./types.ts";
-import TikToken from "tiktoken";
-import { wordsToPunish } from "../services/wordsToPunish.ts";
-import { names, uniqueNamesGenerator } from "unique-names-generator";
+import { UUID, type Actor } from "./types.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
  * action registration, and interaction with external services like OpenAI and Supabase.
  */
-export class AgentRuntime {
+export class AgentRuntime implements IAgentRuntime {
   /**
    * Default count for recent messages to be kept in memory.
    * @private
@@ -65,7 +87,7 @@ export class AgentRuntime {
   /**
    * The database adapter used for interacting with the database.
    */
-  databaseAdapter: DatabaseAdapter;
+  databaseAdapter: IDatabaseAdapter;
 
   /**
    * Authentication token used for securing requests.
@@ -90,7 +112,7 @@ export class AgentRuntime {
   /**
    * The model to use for completion.
    */
-  model = "gpt-3.5-turbo-0125";
+  model = "gpt-4o-mini";
 
   /**
    * The model to use for embedding.
@@ -101,6 +123,19 @@ export class AgentRuntime {
    * Local Llama if no OpenAI key is present
    */
   llamaService: LlamaService | null = null;
+
+  // services
+  speechService: typeof SpeechService;
+
+  transcriptionService: ITranscriptionService;
+
+  imageDescriptionService: IImageRecognitionService;
+
+  browserService: IBrowserService;
+
+  videoService: IVideoService;
+
+  pdfService: IPdfService;
 
   /**
    * Fetch function to use
@@ -116,34 +151,22 @@ export class AgentRuntime {
   /**
    * Store messages that are sent and received by the agent.
    */
-  messageManager: MemoryManager = new MemoryManager({
-    runtime: this,
-    tableName: "messages",
-  });
+  messageManager: IMemoryManager;
 
   /**
    * Store and recall descriptions of users based on conversations.
    */
-  descriptionManager: MemoryManager = new MemoryManager({
-    runtime: this,
-    tableName: "descriptions",
-  });
+  descriptionManager: IMemoryManager;
 
   /**
    * Manage the fact and recall of facts.
    */
-  factManager: MemoryManager = new MemoryManager({
-    runtime: this,
-    tableName: "facts",
-  });
+  factManager: IMemoryManager;
 
   /**
    * Manage the creation and recall of static information (documents, historical game lore, etc)
    */
-  loreManager: MemoryManager = new MemoryManager({
-    runtime: this,
-    tableName: "lore",
-  });
+  loreManager: IMemoryManager;
 
   /**
    * Creates an instance of AgentRuntime.
@@ -172,8 +195,9 @@ export class AgentRuntime {
     providers?: Provider[];
     model?: string; // The model to use for completion
     embeddingModel?: string; // The model to use for embedding
-    databaseAdapter: DatabaseAdapter; // The database adapter used for interacting with the database
+    databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
     fetch?: typeof fetch | unknown;
+    speechModelPath?: string;
   }) {
     this.#conversationLength =
       opts.conversationLength ?? this.#conversationLength;
@@ -184,6 +208,26 @@ export class AgentRuntime {
     if (!opts.databaseAdapter) {
       throw new Error("No database adapter provided");
     }
+
+    this.messageManager = new MemoryManager({
+      runtime: this,
+      tableName: "messages",
+    });
+
+    this.descriptionManager = new MemoryManager({
+      runtime: this,
+      tableName: "descriptions",
+    });
+
+    this.factManager = new MemoryManager({
+      runtime: this,
+      tableName: "facts",
+    });
+
+    this.loreManager = new MemoryManager({
+      runtime: this,
+      tableName: "lore",
+    });
 
     this.serverUrl = opts.serverUrl ?? this.serverUrl;
     this.model = opts.model ?? this.model;
@@ -207,6 +251,22 @@ export class AgentRuntime {
 
     if (!settings.OPENAI_API_KEY && !this.llamaService) {
       this.llamaService = new LlamaService();
+    }
+
+    this.transcriptionService = new TranscriptionService();
+
+    this.imageDescriptionService = new ImageDescriptionService(this);
+
+    this.browserService = new BrowserService(this);
+
+    this.videoService = new VideoService(this);
+
+    this.pdfService = new PdfService();
+
+    // static class, no need to instantiate but we can access it like a class instance
+    this.speechService = SpeechService;
+    if (opts.speechModelPath) {
+      SpeechService.modelPath = opts.speechModelPath;
     }
   }
 
@@ -243,7 +303,7 @@ export class AgentRuntime {
   }
 
   /**
-   * Send a message to the model for a text completion.
+   * Send a message to the model for a text completion - receive a string back and parse how you'd like
    * @param opts - The options for the completion request.
    * @param opts.context The context of the message to be completed.
    * @param opts.stop A list of strings to stop the completion at.
@@ -263,35 +323,102 @@ export class AgentRuntime {
     temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
-  }) {
-    if (!settings.OPENAI_API_KEY) {
-      context = await this.trimTokens(
-        "gpt-4o-mini",
-        context,
-        max_context_length,
-      );
+  }): Promise<string> {
+    let retryLength = 1000; // exponential backoff
+    for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
+      try {
+        context = await this.trimTokens(
+          "gpt-4o-mini",
+          context,
+          max_context_length,
+        );
+        if (!settings.OPENAI_API_KEY) {
+          console.log("queueing text completion");
+          const result = await this.llamaService.queueTextCompletion(
+            context,
+            temperature,
+            stop,
+            frequency_penalty,
+            presence_penalty,
+            max_response_length,
+          );
+          return result;
+        } else {
+          const biasValue = -20.0;
+          const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
-      return await this.llamaService.queueTextCompletion(
-        context,
-        temperature,
-        stop,
-        frequency_penalty,
-        presence_penalty,
-        max_response_length,
-      );
-    } else {
-      // just use openai, no difference
-      return await this.messageCompletion({
-        context,
-        stop,
-        model,
-        frequency_penalty,
-        presence_penalty,
-        temperature,
-        max_context_length,
-        max_response_length,
-      });
+          const mappedWords = wordsToPunish.map(
+            (word) => encoding.encode(word, [], "all")[0],
+          );
+
+          const tokenIds = [...new Set(mappedWords)];
+
+          const logit_bias = tokenIds.reduce((acc, tokenId) => {
+            acc[tokenId] = biasValue;
+            return acc;
+          }, {});
+
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.token}`,
+            },
+            body: JSON.stringify({
+              stop,
+              model,
+              frequency_penalty,
+              presence_penalty,
+              temperature,
+              max_tokens: max_response_length,
+              logit_bias,
+              messages: [
+                {
+                  role: "user",
+                  content: context,
+                },
+              ],
+            }),
+          };
+
+          const response = await fetch(
+            `${this.serverUrl}/chat/completions`,
+            requestOptions,
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              "OpenAI API Error: " +
+              response.status +
+              " " +
+              response.statusText,
+            );
+          }
+
+          const body = await response.json();
+
+          interface OpenAIResponse {
+            choices: Array<{ message: { content: string } }>;
+          }
+
+          const content = (body as OpenAIResponse).choices?.[0]?.message
+            ?.content;
+          if (!content) {
+            throw new Error("No content in response");
+          }
+          return content;
+        }
+      } catch (error) {
+        console.error("ERROR:", error);
+        // wait for 2 seconds
+        retryLength *= 2;
+        await new Promise((resolve) => setTimeout(resolve, retryLength));
+        console.log("Retrying...");
+      }
     }
+    throw new Error(
+      "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
+    );
   }
 
   /**
@@ -312,6 +439,164 @@ export class AgentRuntime {
       context = textDecoder.decode(encoding.decode(tokens));
     }
     return context;
+  }
+
+  async shouldRespondCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        console.log("shouldRespondCompletion");
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        console.log("shouldRespondCompletion response", response);
+
+        const parsedResponse = parseShouldRespondFromText(response.trim());
+        if (parsedResponse) {
+          console.log("shouldRespondCompletion parsedResponse", parsedResponse);
+          return parsedResponse;
+        } else {
+          console.log("shouldRespondCompletion no response");
+        }
+      } catch (error) {
+        console.error("Error in shouldRespondCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+  async booleanCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<boolean> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        const parsedResponse = parseBooleanFromText(response.trim());
+        if (parsedResponse !== null) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in booleanCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+  async stringArrayCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<string[]> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        const parsedResponse = parseJsonArrayFromText(response);
+        if (parsedResponse) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in stringArrayCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
+  }
+
+  async objectArrayCompletion({
+    context = "",
+    stop = [],
+    model = this.model,
+    frequency_penalty = 0.0,
+    presence_penalty = 0.0,
+    temperature = 0.3,
+    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
+    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+  }): Promise<any[]> {
+    let retryDelay = 1000;
+
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        const parsedResponse = parseJsonArrayFromText(response);
+        if (parsedResponse) {
+          return parsedResponse;
+        }
+      } catch (error) {
+        console.error("Error in stringArrayCompletion:", error);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      retryDelay *= 2;
+    }
   }
 
   /**
@@ -335,88 +620,41 @@ export class AgentRuntime {
     temperature = 0.3,
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
-  }) {
+  }): Promise<Content> {
     context = await this.trimTokens("gpt-4o-mini", context, max_context_length);
-    if (!settings.OPENAI_API_KEY) {
-      const completionResponse = await this.llamaService.queueMessageCompletion(
-        context,
-        temperature,
-        stop,
-        frequency_penalty,
-        presence_penalty,
-        max_response_length,
-      );
-      // change the 'content' to 'content'
-      (completionResponse as any).content = completionResponse.content;
-      return JSON.stringify(completionResponse);
+    let retryLength = 1000; // exponential backoff
+    while (true) {
+      try {
+        const response = await this.completion({
+          context,
+          stop,
+          model,
+          frequency_penalty,
+          presence_penalty,
+          temperature,
+          max_context_length,
+          max_response_length,
+        });
+
+        // try parsing the response as JSON, if null then try again
+        const parsedContent = parseJSONObjectFromText(response) as Content;
+
+        if (!parsedContent) {
+          continue;
+        }
+
+        return parsedContent;
+      } catch (error) {
+        console.error("ERROR:", error);
+        // wait for 2 seconds
+        retryLength *= 2;
+        await new Promise((resolve) => setTimeout(resolve, retryLength));
+        console.log("Retrying...");
+      }
     }
-
-    const biasValue = -30.0;
-    const encoding = TikToken.encoding_for_model("gpt-4o-mini");
-
-    const tokenIds = [
-      ...new Set(
-        await Promise.all(
-          wordsToPunish.map((word) => encoding.encode(word)[0]),
-        ),
-      ),
-    ];
-
-    const logit_bias = tokenIds.reduce((acc, tokenId) => {
-      acc[tokenId] = biasValue;
-      return acc;
-    }, {});
-
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
-      },
-      body: JSON.stringify({
-        stop,
-        model,
-        frequency_penalty,
-        presence_penalty,
-        temperature,
-        max_tokens: max_response_length,
-        logit_bias,
-        messages: [
-          {
-            role: "user",
-            content: context,
-          },
-        ],
-      }),
-    };
-
-    try {
-      const response = await fetch(
-        `${this.serverUrl}/chat/completions`,
-        requestOptions,
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "OpenAI API Error: " + response.status + " " + response.statusText,
-        );
-      }
-
-      const body = await response.json();
-
-      interface OpenAIResponse {
-        choices: Array<{ message: { content: string } }>;
-      }
-
-      const content = (body as OpenAIResponse).choices?.[0]?.message?.content;
-      if (!content) {
-        throw new Error("No content in response");
-      }
-      return content;
-    } catch (error) {
-      console.error("ERROR:", error);
-      throw new Error(error as string);
-    }
+    throw new Error(
+      "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
+    );
   }
 
   /**
@@ -488,28 +726,28 @@ export class AgentRuntime {
    * @param content The content of the message to process actions from.
    */
   async processActions(
-    message: Message,
-    content: Content,
+    message: Memory,
+    responses: Memory[],
     state?: State,
-    callback?: (response: Content) => void,
-  ) {
-    if (!content.action) {
+    callback?: HandlerCallback,
+  ): Promise<void> {
+    if (!responses[0].content?.action) {
       return;
     }
 
     const action = this.actions.find(
-      (a: { name: string }) => a.name === content.action,
+      (a: { name: string }) => a.name === responses[0].content.action,
     )!;
 
     if (!action) {
-      return console.warn("No action found for", content.action);
+      return console.warn("No action found for", responses[0].content.action);
     }
 
     if (!action.handler) {
       return;
     }
 
-    return await action.handler(this, message, state, {}, callback);
+    await action.handler(this, message, state, {}, callback);
   }
 
   /**
@@ -518,7 +756,7 @@ export class AgentRuntime {
    * @param state The state of the agent.
    * @returns The results of the evaluation.
    */
-  async evaluate(message: Message, state?: State) {
+  async evaluate(message: Memory, state?: State) {
     const evaluatorPromises = this.evaluators.map(
       async (evaluator: Evaluator) => {
         if (!evaluator.handler) {
@@ -556,7 +794,7 @@ export class AgentRuntime {
       template: evaluationTemplate,
     });
 
-    const result = await this.messageCompletion({
+    const result = await this.completion({
       context,
     });
 
@@ -575,51 +813,58 @@ export class AgentRuntime {
 
   /**
    * Ensure the existence of a participant in the room. If the participant does not exist, they are added to the room.
-   * @param user_id - The user ID to ensure the existence of.
+   * @param userId - The user ID to ensure the existence of.
    * @throws An error if the participant cannot be added.
    */
-  async ensureParticipantExists(user_id: UUID, room_id: UUID) {
+  async ensureParticipantExists(userId: UUID, roomId: UUID) {
     const participants =
-      await this.databaseAdapter.getParticipantsForAccount(user_id);
+      await this.databaseAdapter.getParticipantsForAccount(userId);
 
     if (participants?.length === 0) {
-      await this.databaseAdapter.addParticipant(user_id, room_id);
+      await this.databaseAdapter.addParticipant(userId, roomId);
     }
   }
 
   /**
    * Ensure the existence of a user in the database. If the user does not exist, they are added to the database.
-   * @param user_id - The user ID to ensure the existence of.
+   * @param userId - The user ID to ensure the existence of.
    * @param userName - The user name to ensure the existence of.
    * @returns
    */
 
-  async ensureUserExists(user_id: UUID, userName: string | null) {
-    const account = await this.databaseAdapter.getAccountById(user_id);
+  async ensureUserExists(
+    userId: UUID,
+    userName: string | null,
+    name: string | null,
+    email?: string | null,
+    source?: string | null,
+  ) {
+    const account = await this.databaseAdapter.getAccountById(userId);
     if (!account) {
       await this.databaseAdapter.createAccount({
-        id: user_id,
-        name: userName || "Bot",
-        email: (userName || "Bot") + "@discord",
+        id: userId,
+        name: name || userName || "Unknown User",
+        username: userName || name || "Unknown",
+        email: email || (userName || "Bot") + "@" + source || "Unknown", // Temporary
         details: { summary: "" },
       });
       console.log(`User ${userName} created successfully.`);
     }
   }
 
-  async ensureParticipantInRoom(user_id: UUID, roomId: UUID) {
+  async ensureParticipantInRoom(userId: UUID, roomId: UUID) {
     const participants =
       await this.databaseAdapter.getParticipantsForRoom(roomId);
-    if (!participants.includes(user_id)) {
-      await this.databaseAdapter.addParticipant(user_id, roomId);
-      console.log(`User ${user_id} linked to room ${roomId} successfully.`);
+    if (!participants.includes(userId)) {
+      await this.databaseAdapter.addParticipant(userId, roomId);
+      console.log(`User ${userId} linked to room ${roomId} successfully.`);
     }
   }
 
   /**
    * Ensure the existence of a room between the agent and a user. If no room exists, a new room is created and the user
    * and agent are added as participants. The room ID is returned.
-   * @param user_id - The user ID to create a room with.
+   * @param userId - The user ID to create a room with.
    * @returns The room ID of the room between the agent and the user.
    * @throws An error if the room cannot be created.
    */
@@ -637,47 +882,38 @@ export class AgentRuntime {
    * @returns The state of the agent.
    */
   async composeState(
-    message: Message,
+    message: Memory,
     additionalKeys: { [key: string]: unknown } = {},
   ) {
-    const { user_id, room_id } = message;
+    const { userId, roomId } = message;
 
     const conversationLength = this.getConversationLength();
     const recentFactsCount = Math.ceil(this.getConversationLength() / 2);
     const relevantFactsCount = Math.ceil(this.getConversationLength() / 2);
 
-    const [
-      actorsData,
-      recentMessagesData,
-      recentFactsData,
-      goalsData,
-      // loreData,
-    ]: [Actor[], Memory[], Memory[], Goal[] /*, Memory[]*/] = await Promise.all(
-      [
-        getActorDetails({ runtime: this, room_id }),
-        this.messageManager.getMemories({
-          room_id,
-          count: conversationLength,
-          unique: false,
-        }),
-        this.factManager.getMemories({
-          room_id,
-          count: recentFactsCount,
-        }),
-        getGoals({
-          runtime: this,
-          count: 10,
-          onlyInProgress: false,
-          room_id,
-        }),
-        // getLore({
-        //   runtime: this,
-        //   message: (message.content as Content).content,
-        //   count: 5,
-        //   match_threshold: 0.5,
-        // }),
-      ],
-    );
+    const [actorsData, recentMessagesData, recentFactsData, goalsData]: [
+      Actor[],
+      Memory[],
+      Memory[],
+      Goal[],
+    ] = await Promise.all([
+      getActorDetails({ runtime: this, roomId }),
+      this.messageManager.getMemories({
+        roomId,
+        count: conversationLength,
+        unique: false,
+      }),
+      this.factManager.getMemories({
+        roomId,
+        count: recentFactsCount,
+      }),
+      getGoals({
+        runtime: this,
+        count: 10,
+        onlyInProgress: false,
+        roomId,
+      }),
+    ]);
 
     const goals = formatGoalsAsString({ goals: goalsData });
 
@@ -688,7 +924,7 @@ export class AgentRuntime {
         await this.factManager.searchMemoriesByEmbedding(
           recentFactsData[0].embedding!,
           {
-            room_id,
+            roomId,
             count: relevantFactsCount,
           },
         )
@@ -702,12 +938,14 @@ export class AgentRuntime {
     const actors = formatActors({ actors: actorsData ?? [] });
 
     const recentMessages = formatMessages({
-      actors: actorsData ?? [],
-      messages: recentMessagesData.map((memory: Memory) => {
-        const newMemory = { ...memory };
-        delete newMemory.embedding;
-        return newMemory;
-      }),
+      messages: recentMessagesData,
+      actors: actorsData,
+    });
+
+    const recentPosts = formatPosts({
+      messages: recentMessagesData,
+      actors: actorsData,
+      conversationHeader: false,
     });
 
     const recentFacts = formatFacts(recentFactsData);
@@ -716,11 +954,13 @@ export class AgentRuntime {
     // const lore = formatLore(loreData);
 
     const senderName = actorsData?.find(
-      (actor: Actor) => actor.id === user_id,
+      (actor: Actor) => actor.id === userId,
     )?.name;
-    const agentName = actorsData?.find(
-      (actor: Actor) => actor.id === this.agentId,
-    )?.name;
+
+    // TODO: We may wish to consolidate and just accept character.name here instead of the actor name
+    const agentName =
+      actorsData?.find((actor: Actor) => actor.id === this.agentId)?.name ||
+      this.character.name;
 
     let allAttachments = message.content.attachments || [];
 
@@ -730,15 +970,13 @@ export class AgentRuntime {
       );
 
       if (lastMessageWithAttachment) {
-        const lastMessageTime = new Date(
-          lastMessageWithAttachment.created_at,
-        ).getTime();
+        const lastMessageTime = lastMessageWithAttachment.createdAt.getTime();
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
 
         allAttachments = recentMessagesData
           .reverse()
           .map((msg) => {
-            const msgTime = new Date(msg.created_at).getTime();
+            const msgTime = msg.createdAt.getTime();
             const isWithinTime =
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
             const attachments = msg.content.attachments || [];
@@ -778,6 +1016,13 @@ Text: ${attachment.text}
       lore = selectedLore.join("\n");
     }
 
+    const formattedCharacterPostExamples = this.character.postExamples
+      .map((post) => {
+        let messageString = `${post}`;
+        return messageString;
+      })
+      .join("\n");
+
     const formattedCharacterMessageExamples = this.character.messageExamples
       .map((example) => {
         const exampleNames = Array.from({ length: 5 }, () =>
@@ -786,7 +1031,7 @@ Text: ${attachment.text}
 
         return example
           .map((message) => {
-            let messageString = `${message.user}: ${message.content.content}`;
+            let messageString = `${message.user}: ${message.content.text}`;
             exampleNames.forEach((name, index) => {
               const placeholder = `{{user${index + 1}}}`;
               messageString = messageString.replaceAll(placeholder, name);
@@ -797,33 +1042,207 @@ Text: ${attachment.text}
       })
       .join("\n\n");
 
+    const getRecentInteractions = async (
+      userA: UUID,
+      userB: UUID,
+    ): Promise<Memory[]> => {
+      // Find all rooms where userA and userB are participants
+      const rooms = await this.databaseAdapter.getRoomsForParticipants([
+        userA,
+        userB,
+      ]);
+
+      // Check the existing memories in the database
+      const existingMemories = await this.messageManager.getMemoriesByRoomIds({
+        // filter out the current room id from rooms
+        roomIds: rooms.filter((room) => room !== roomId),
+
+      });
+
+      // Sort messages by timestamp in descending order
+      existingMemories.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      );
+
+      // Take the most recent messages
+      const recentInteractionsData = existingMemories.slice(0, 20);
+      return recentInteractionsData;
+    };
+
+    const recentInteractions =
+      userId !== this.agentId
+        ? await getRecentInteractions(userId, this.agentId)
+        : [];
+
+    const getRecentMessageInteractions = async (
+      recentInteractionsData: Memory[],
+    ): Promise<string> => {
+      // Format the recent messages
+      const formattedInteractions = await recentInteractionsData
+        .map(async (message) => {
+          const isSelf = message.userId === this.agentId;
+          let sender;
+          if (isSelf) {
+            sender = this.character.name;
+          } else {
+            const accountId = await this.databaseAdapter.getAccountById(
+              message.userId,
+            );
+            sender = accountId?.username || "unknown";
+          }
+          return `${sender}: ${message.content.text}`;
+        })
+        .join("\n");
+
+      return formattedInteractions;
+    };
+
+    const formattedMessageInteractions =
+      await getRecentMessageInteractions(recentInteractions);
+
+    const getRecentPostInteractions = async (
+      recentInteractionsData: Memory[],
+      actors: Actor[],
+    ): Promise<string> => {
+      const formattedInteractions = formatPosts({
+        messages: recentInteractionsData,
+        actors,
+        conversationHeader: true,
+      });
+
+      return formattedInteractions;
+    };
+
+    const formattedPostInteractions = await getRecentPostInteractions(
+      recentInteractions,
+      actorsData,
+    );
+
+    // if bio is a string, use it. if its an array, pick one at random
+    let bio = this.character.bio || "";
+    if (Array.isArray(bio)) {
+      // get three random bio strings and join them with " "
+      bio = bio.sort(() => 0.5 - Math.random()).slice(0, 3).join(" ");
+    }
+
     const initialState = {
       agentId: this.agentId,
+      // Character file stuff
       agentName,
-      bio: this.character.bio || "",
+      bio,
       lore,
-      characterMessageExamples: formattedCharacterMessageExamples,
-      directions:
-        (this.character?.style?.all?.join("\n") || "") +
-        "\n" +
-        (this.character?.style?.chat?.join("\n") || ""),
+      adjective:
+        this.character.adjectives && this.character.adjectives.length > 0
+          ? this.character.adjectives[
+          Math.floor(Math.random() * this.character.adjectives.length)
+          ]
+          : "",
+      // Recent interactions between the sender and receiver, formatted as messages
+      recentMessageInteractions: formattedMessageInteractions,
+      // Recent interactions between the sender and receiver, formatted as posts
+      recentPostInteractions: formattedPostInteractions,
+      // Raw memory[] array of interactions
+      recentInteractionsData: recentInteractions,
+      // randomly pick one topic
+      topic:
+        this.character.topics && this.character.topics.length > 0
+          ? this.character.topics[
+          Math.floor(Math.random() * this.character.topics.length)
+          ]
+          : null,
+      topics:
+        this.character.topics && this.character.topics.length > 0
+          ? `${this.character.name} is interested in ` + this.character.topics
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 5)
+            .map((topic, index) => {
+              if (index === this.character.topics.length - 1) {
+                return topic + " and ";
+              }
+              return topic + ", ";
+            })
+            .join("")
+          : "",
+      characterPostExamples:
+        formattedCharacterPostExamples &&
+          formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+          ? addHeader(
+            `### Example Posts for ${this.character.name}`,
+            formattedCharacterPostExamples,
+          )
+          : "",
+      characterMessageExamples:
+        formattedCharacterMessageExamples &&
+          formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+          ? addHeader(
+            `### Example Conversations for ${this.character.name}`,
+            formattedCharacterMessageExamples,
+          )
+          : "",
+      messageDirections:
+        this.character?.style?.all?.length > 0 ||
+          this.character?.style?.chat.length > 0
+          ? addHeader(
+            "### Message Directions for " + this.character.name,
+            (() => {
+              const all = this.character?.style?.all || [];
+              const chat = this.character?.style?.chat || [];
+              const shuffled = [...all, ...chat].sort(() => 0.5 - Math.random());
+              const allSliced = shuffled.slice(0, 15);
+              return allSliced.concat(allSliced).join("\n");
+            })(),
+          )
+          : "",
+      postDirections:
+        this.character?.style?.all?.length > 0 ||
+          this.character?.style?.post.length > 0
+          ? addHeader(
+            "### Post Directions for " + this.character.name,
+            (() => {
+              const all = this.character?.style?.all || [];
+              const post = this.character?.style?.post || [];
+              const shuffled = [...all, ...post].sort(() => 0.5 - Math.random());
+              return shuffled.slice(0, 15).join("\n");
+            })(),
+          )
+          : "",
+      // Agent runtime stuff
       senderName,
-      actors: addHeader("# Actors", actors),
+      actors:
+        actors && actors.length > 0 ? addHeader("### Actors", actors) : "",
       actorsData,
-      room_id,
-      goals: addHeader(
-        "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-        goals,
-      ),
-      // loreData,
+      roomId,
+      goals:
+        goals && goals.length > 0
+          ? addHeader(
+            "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+            goals,
+          )
+          : "",
       goalsData,
-      recentMessages: addHeader("### Conversation Messages", recentMessages),
+      recentMessages:
+        recentMessages && recentMessages.length > 0
+          ? addHeader("### Conversation Messages", recentMessages)
+          : "",
+      recentPosts:
+        recentPosts && recentPosts.length > 0
+          ? addHeader("### Posts in Thread", recentPosts)
+          : "",
       recentMessagesData,
-      recentFacts: addHeader("### Recent Facts", recentFacts),
+      recentFacts:
+        recentFacts && recentFacts.length > 0
+          ? addHeader("### Recent Facts", recentFacts)
+          : "",
       recentFactsData,
-      relevantFacts: addHeader("# Relevant Facts", relevantFacts),
+      relevantFacts:
+        relevantFacts && relevantFacts.length > 0
+          ? addHeader("### Relevant Facts", relevantFacts)
+          : "",
       relevantFactsData,
-      attachments: formattedAttachments,
+      attachments:
+        formattedAttachments && formattedAttachments.length > 0
+          ? addHeader("### Attachments", formattedAttachments)
+          : "",
       ...additionalKeys,
     };
 
@@ -850,39 +1269,46 @@ Text: ${attachment.text}
     ]);
 
     const evaluatorsData = resolvedEvaluators.filter(Boolean) as Evaluator[];
-    const evaluators = formatEvaluators(evaluatorsData);
-    const evaluatorNames = formatEvaluatorNames(evaluatorsData);
-    const evaluatorConditions = formatEvaluatorConditions(evaluatorsData);
-    const evaluatorExamples = formatEvaluatorExamples(evaluatorsData);
-
     const actionsData = resolvedActions.filter(Boolean) as Action[];
-
-    const formattedActionExamples =
-      `json\`\`\`\n` + composeActionExamples(actionsData, 10) + `\n\`\`\``;
 
     const actionState = {
       actionNames: addHeader(
-        "### Available actions to respond with:",
+        "### Possible response actions:",
         formatActionNames(actionsData),
       ),
-      actionConditions: formatActionConditions(actionsData),
-      actions: formatActions(actionsData),
-      actionExamples: addHeader("### Action Examples", formattedActionExamples),
+      actionConditions:
+        actionsData.length > 0 ? formatActionConditions(actionsData) : "",
+      actions: actionsData.length > 0 ? formatActions(actionsData) : "",
+      actionExamples:
+        actionsData.length > 0
+          ? addHeader(
+            "### Action Examples",
+            composeActionExamples(actionsData, 10),
+          )
+          : "",
       evaluatorsData,
-      evaluators,
-      evaluatorNames,
-      evaluatorConditions,
-      evaluatorExamples,
+      evaluators:
+        evaluatorsData.length > 0 ? formatEvaluators(evaluatorsData) : "",
+      evaluatorNames:
+        evaluatorsData.length > 0 ? formatEvaluatorNames(evaluatorsData) : "",
+      evaluatorConditions:
+        evaluatorsData.length > 0
+          ? formatEvaluatorConditions(evaluatorsData)
+          : "",
+      evaluatorExamples:
+        evaluatorsData.length > 0
+          ? formatEvaluatorExamples(evaluatorsData)
+          : "",
       providers,
     };
 
-    return { ...initialState, ...actionState };
+    return { ...initialState, ...actionState } as State;
   }
 
   async updateRecentMessageState(state: State): Promise<State> {
     const conversationLength = this.getConversationLength();
     const recentMessagesData = await this.messageManager.getMemories({
-      room_id: state.room_id,
+      roomId: state.roomId,
       count: conversationLength,
       unique: false,
     });
@@ -904,14 +1330,12 @@ Text: ${attachment.text}
       );
 
       if (lastMessageWithAttachment) {
-        const lastMessageTime = new Date(
-          lastMessageWithAttachment.created_at,
-        ).getTime();
+        const lastMessageTime = lastMessageWithAttachment.createdAt.getTime();
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
 
         allAttachments = recentMessagesData
           .filter((msg) => {
-            const msgTime = new Date(msg.created_at).getTime();
+            const msgTime = msg.createdAt.getTime();
             return (
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime
             );
@@ -938,6 +1362,6 @@ Text: ${attachment.text}
       recentMessages: addHeader("### Conversation Messages", recentMessages),
       recentMessagesData,
       attachments: formattedAttachments,
-    };
+    } as State;
   }
 }

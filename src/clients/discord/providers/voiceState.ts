@@ -1,10 +1,10 @@
 import { getVoiceConnection } from "@discordjs/voice";
-import { Message, Provider, State } from "../../../core/types.ts";
 import { ChannelType, Message as DiscordMessage } from "discord.js";
 import { AgentRuntime } from "../../../core/runtime.ts";
+import { Memory, Provider, State } from "../../../core/types.ts";
 
 const voiceStateProvider: Provider = {
-  get: async (runtime: AgentRuntime, message: Message, state?: State) => {
+  get: async (runtime: AgentRuntime, message: Memory, state?: State) => {
     const connection = getVoiceConnection(
       (state?.discordMessage as DiscordMessage)?.guild?.id as string,
     );

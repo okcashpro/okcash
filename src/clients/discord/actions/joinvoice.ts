@@ -8,13 +8,19 @@ import {
   Guild,
   GuildMember,
 } from "discord.js";
-import { composeContext } from "../core/context.ts";
-import { log_to_file } from "../core/logger.ts";
-import { Action, ActionExample, Message, State } from "../core/types.ts";
+import { composeContext } from "../../../core/context.ts";
+import { log_to_file } from "../../../core/logger.ts";
+import {
+  Action,
+  ActionExample,
+  IAgentRuntime,
+  Memory,
+  State,
+} from "../../../core/types.ts";
 
 export default {
   name: "JOIN_VOICE",
-  validate: async (_runtime: any, message: Message, state: State) => {
+  validate: async (_runtime: IAgentRuntime, message: Memory, state: State) => {
     if (!state) {
       throw new Error("State is not available.");
     }
@@ -46,7 +52,7 @@ export default {
     ];
     if (
       !keywords.some((keyword) =>
-        message.content.content.toLowerCase().includes(keyword),
+        message.content.text.toLowerCase().includes(keyword),
       )
     ) {
       return false;
@@ -61,8 +67,8 @@ export default {
   },
   description: "Join a voice channel to participate in voice chat.",
   handler: async (
-    runtime: any,
-    message: Message,
+    runtime: IAgentRuntime,
+    message: Memory,
     state: State,
   ): Promise<boolean> => {
     if (!state) {
@@ -138,7 +144,7 @@ You should only respond with the name of the voice channel or none, no commentar
 `;
 
       const guessState = {
-        userMessage: message.content.content,
+        userMessage: message.content.text,
         voiceChannels: voiceChannels
           .map((channel) => (channel as { name: string }).name)
           .join("\n"),
@@ -154,32 +160,24 @@ You should only respond with the name of the voice channel or none, no commentar
       // log context to file
       log_to_file(`${state.agentName}_${datestr}_joinvoice_context`, context);
 
-      let responseContent;
+      const responseContent = await runtime.completion({
+        context,
+      });
 
-      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        const response = await runtime.messageCompletion({
-          context,
-        });
+      // log response to file
+      log_to_file(
+        `${state.agentName}_${datestr}_joinvoice_response`,
+        responseContent,
+      );
 
-        // log response to file
-        log_to_file(
-          `${state.agentName}_${datestr}_joinvoice_response_${3 - triesLeft}`,
-          response,
-        );
+      runtime.databaseAdapter.log({
+        body: { message, context, response: responseContent },
+        userId: message.userId,
+        roomId: message.roomId,
+        type: "joinvoice",
+      });
 
-        runtime.databaseAdapter.log({
-          body: { message, context, response },
-          user_id: message.user_id,
-          room_id: message.room_id,
-          type: "joinvoice",
-        });
-        if (response.trim()) {
-          responseContent = response.trim();
-          break;
-        }
-      }
-
-      if (responseContent) {
+      if (responseContent && responseContent.trim().length > 0) {
         // join the voice channel
         const channelName = responseContent.toLowerCase();
 
@@ -222,13 +220,13 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "Hey, let's jump into the 'General' voice and chat",
+          text: "Hey, let's jump into the 'General' voice and chat",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Sounds good",
+          text: "Sounds good",
           action: "JOIN_VOICE",
         },
       },
@@ -244,7 +242,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user2}}",
         content: {
-          content: "Sure I'll join right now",
+          text: "Sure I'll join right now",
           action: "JOIN_VOICE",
         },
       },
@@ -260,7 +258,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user2}}",
         content: {
-          content: "OK see you there",
+          text: "OK see you there",
           action: "JOIN_VOICE",
         },
       },
@@ -276,7 +274,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user2}}",
         content: {
-          content: "kk be there in a sec",
+          text: "kk be there in a sec",
           action: "JOIN_VOICE",
         },
       },
@@ -292,7 +290,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user2}}",
         content: {
-          content: "Sure",
+          text: "Sure",
           action: "JOIN_VOICE",
         },
       },
@@ -301,13 +299,13 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "join voice chat with us {{user2}}",
+          text: "join voice chat with us {{user2}}",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "coming",
+          text: "coming",
           action: "JOIN_VOICE",
         },
       },
@@ -316,13 +314,13 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "hop in vc {{user2}}",
+          text: "hop in vc {{user2}}",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "joining now",
+          text: "joining now",
           action: "JOIN_VOICE",
         },
       },
@@ -331,13 +329,13 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content: "get in vc with us {{user2}}",
+          text: "get in vc with us {{user2}}",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "im in",
+          text: "im in",
           action: "JOIN_VOICE",
         },
       },

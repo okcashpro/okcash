@@ -2,47 +2,47 @@ import dotenv from "dotenv";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
-} from "../../test_resources/cache.ts";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { type User } from "../../test_resources/types.ts";
-import { zeroUuid } from "../constants.ts";
-import { AgentRuntime } from "../runtime.ts";
-import { type Message, type UUID } from "../types.ts";
+} from "../test_resources/cache.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { type User } from "../test_resources/types.ts";
+import { zeroUuid } from "./constants.ts";
+import { AgentRuntime } from "./runtime.ts";
+import { type Memory, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Agent Runtime", () => {
   let user: User;
   let runtime: AgentRuntime;
-  let room_id: UUID = zeroUuid;
+  let roomId: UUID = zeroUuid;
 
   // Helper function to clear memories
   async function clearMemories() {
-    await runtime.messageManager.removeAllMemories(room_id);
+    await runtime.messageManager.removeAllMemories(roomId);
   }
 
   // Helper function to create memories
   async function createMemories() {
     const memories = [
       {
-        user_id: user?.id as UUID,
-        content: { content: "test memory from user" },
+        userId: user?.id as UUID,
+        content: { text: "test memory from user" },
       },
-      { user_id: zeroUuid, content: { content: "test memory from agent" } },
+      { userId: zeroUuid, content: { text: "test memory from agent" } },
     ];
 
-    for (const { user_id, content } of memories) {
+    for (const { userId, content } of memories) {
       try {
-        const embedding = await getCachedEmbeddings(content.content);
+        const embedding = await getCachedEmbeddings(content.text);
         const memory = await runtime.messageManager.addEmbeddingToMemory({
-          user_id: user_id,
+          userId: userId,
           content,
-          room_id,
+          roomId,
           embedding,
         });
         if (!embedding) {
-          writeCachedEmbedding(content.content, memory.embedding as number[]);
+          writeCachedEmbedding(content.text, memory.embedding as number[]);
         }
         await runtime.messageManager.createMemory(memory);
       } catch (error) {
@@ -69,7 +69,7 @@ describe("Agent Runtime", () => {
     if (!data) {
       throw new Error("Relationship not found");
     }
-    room_id = data.room_id;
+    roomId = data.roomId;
     await clearMemories(); // Clear memories before each test
   });
 
@@ -95,10 +95,10 @@ describe("Agent Runtime", () => {
       console.error("Error creating memories", error);
     }
 
-    const message: Message = {
-      user_id: user.id as UUID,
-      content: { content: "test message" },
-      room_id: room_id as UUID,
+    const message: Memory = {
+      userId: user.id as UUID,
+      content: { text: "test message" },
+      roomId: roomId as UUID,
     };
 
     const state = await runtime.composeState(message);

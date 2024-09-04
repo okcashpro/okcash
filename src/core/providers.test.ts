@@ -1,26 +1,21 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { AgentRuntime } from "../runtime.ts";
-import {
-  type Message,
-  type Provider,
-  type State,
-  type UUID,
-} from "../types.ts";
-import { zeroUuid } from "../constants.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { zeroUuid } from "./constants.ts";
+import { AgentRuntime } from "./runtime.ts";
+import { type Memory, type Provider, type State, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 const TestProvider: Provider = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  get: async (_runtime: AgentRuntime, _message: Message, _state?: State) => {
+  get: async (_runtime: AgentRuntime, _message: Memory, _state?: State) => {
     return "Hello Test";
   },
 };
 
 describe("TestProvider", () => {
   let runtime: AgentRuntime;
-  let room_id: UUID;
+  let roomId: UUID;
 
   beforeAll(async () => {
     const setup = await createRuntime({
@@ -28,14 +23,14 @@ describe("TestProvider", () => {
       providers: [TestProvider],
     });
     runtime = setup.runtime;
-    room_id = zeroUuid;
+    roomId = zeroUuid;
   });
 
   test("TestProvider should return 'Hello Test'", async () => {
-    const message: Message = {
-      user_id: zeroUuid,
-      content: { content: "" },
-      room_id: room_id,
+    const message: Memory = {
+      userId: zeroUuid,
+      content: { text: "" },
+      roomId: roomId,
     };
 
     const testProviderResponse = await TestProvider.get(

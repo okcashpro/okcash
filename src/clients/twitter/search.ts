@@ -1,18 +1,32 @@
-import { SearchMode, Tweet } from "agent-twitter-client";
-import { UUID } from "crypto";
+import { SearchMode } from "agent-twitter-client";
 import fs from "fs";
-import { default as getUuid } from "uuid-by-string";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 
-import { ClientBase } from "./base.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { composeContext } from "../../core/context.ts";
-import { Message, State, Content } from "../../core/types.ts";
-import { parseJSONObjectFromText } from "../../core/parsing.ts";
+import { log_to_file } from "../../core/logger.ts";
+import { messageCompletionFooter } from "../../core/parsing.ts";
+import {
+  Content,
+  HandlerCallback,
+  State
+} from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
+import { ClientBase } from "./base.ts";
+import {
+  buildConversationThread,
+  getRecentConversations,
+  searchRecentPosts,
+  sendTweetChunks,
+  wait,
+} from "./utils.ts";
 
-const messageHandlerTemplate = `{{relevantFacts}}
+const messageHandlerTemplate =
+  `{{relevantFacts}}
 {{recentFacts}}
+
+Recent interactions between {{agentName}} and other users:
+{{recentPostInteractions}}
 
 Recent conversations:
 {{recentConversations}}
@@ -20,36 +34,30 @@ Recent conversations:
 Recent tweets which {{agentName}} may or may not find interesting:
 {{recentSearchResults}}
 
-Here are some of the topics {{agentName}} likes: {{topics}}
-
-{{agentName}}'s bio:
+About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
+{{lore}}
+{{topics}}
 
-# TASK: RESPOND TO A POST
+{{postDirections}}
+Respond directly to the above post in an {{adjective}} way, as {{agentName}}
 
-Recent Tweets:
-{{recentMessages}}
+{{recentPosts}}
 
-{{directions}}
-- Respond directly to the above post in an {{adjective}} way, as{{agentName}}
-
-# TASK: Respond to the following post:
-{{tweetContext}}
+# Task: Respond to the following post in the style and perspective of {{agentName}} (aka @{{twitterUserName}}).
+{{currentPost}}
 
 Your response should not contain any questions. Brief, concise statements only.
-- Response format should be formatted in a JSON block like this:
-\`\`\`json\n{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }\`\`\``;
+
+` + messageCompletionFooter;
 
 export class TwitterSearchClient extends ClientBase {
   private respondedTweets: Set<string> = new Set();
 
-  constructor(runtime: AgentRuntime, character: any, model: string) {
+  constructor(runtime: AgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,
-      character,
-      model,
-      callback: (self) => self.onReady(),
     });
   }
 
@@ -61,97 +69,93 @@ export class TwitterSearchClient extends ClientBase {
     this.engageWithSearchTerms();
     setTimeout(
       () => this.engageWithSearchTermsLoop(),
-      Math.floor(Math.random() * 10000) + 60000,
+      (Math.floor(Math.random() * (60 - 45 + 1)) + 45) * 60 * 1000,
     );
-  }
-
-  private async wait(minDuration = 1000, maxDuration = 3000) {
-    await new Promise((resolve) =>
-      setTimeout(
-        resolve,
-        Math.floor(Math.random() * (maxDuration - minDuration)) + minDuration,
-      ),
-    );
-  }
-
-  private isValidTweet(tweet: Tweet): boolean {
-    const hashtagCount = (tweet.text.match(/#/g) || []).length;
-    const atCount = (tweet.text.match(/@/g) || []).length;
-    const hasDollarSign = tweet.text.includes("$");
-
-    return hashtagCount <= 1 && atCount <= 2 && !hasDollarSign;
   }
 
   private async engageWithSearchTerms() {
     console.log("Engaging with search terms");
     try {
-      const botTwitterUsername = settings.TWITTER_USERNAME;
-      if (!botTwitterUsername) {
-        console.error("Twitter username not set in settings");
-        return;
-      }
-
-      const searchTerm = [
-        ...this.character.topics /*, ...this.character.people*/,
-      ][Math.floor(Math.random() * this.character.topics.length)];
+      const searchTerm = [...this.runtime.character.topics][
+        Math.floor(Math.random() * this.runtime.character.topics.length)
+      ];
 
       if (!fs.existsSync("tweets")) {
         fs.mkdirSync("tweets");
       }
 
-      const tweetsIterator = this.twitterClient.searchTweets(
-        searchTerm,
-        20,
-        SearchMode.Latest,
+      const tweetsArray = await this.requestQueue.add(
+        async () =>
+          await this.fetchSearchTweets(searchTerm, 50, SearchMode.Top),
       );
-      const tweetsArray: Tweet[] = [];
-      for await (const tweet of tweetsIterator) {
-        if (this.isValidTweet(tweet) && !this.respondedTweets.has(tweet.id)) {
-          tweetsArray.push(tweet);
-        }
-      }
 
-      if (tweetsArray.length === 0) {
+      const recentTweets = await this.requestQueue.add(
+        async () =>
+          await this.fetchSearchTweets(searchTerm, 50, SearchMode.Latest),
+      );
+
+      const allTweets = [...tweetsArray.tweets, ...recentTweets.tweets];
+
+      const uniqueTweets = allTweets.filter(
+        (tweet, index, self) =>
+          index === self.findIndex((t) => t.id === tweet.id),
+      );
+
+      // randomly slice .tweets down to 20
+      tweetsArray.tweets = uniqueTweets
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 20);
+
+      if (tweetsArray.tweets.length === 0) {
         console.log("No valid tweets found for the search term");
         return;
       }
 
       const prompt = `
-Here are some tweets related to the search term "${searchTerm}":
+  Here are some tweets related to the search term "${searchTerm}":
+  
+  ${tweetsArray.tweets
+    .filter((tweet) => {
+      // ignore tweets where any of the thread tweets contain a tweet by the bot
+      const thread = tweet.thread;
+      const botTweet = thread.find(
+        (t) => t.username === settings.TWITTER_USERNAME,
+      );
+      return !botTweet;
+    })
+    .map(
+      (tweet) => `
+    ID: ${tweet.id}
+    From: ${tweet.name} (@${tweet.username})
+    Text: ${tweet.text}
+  `,
+    )
+    .join("\n")}
+  
+  Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
+  Notes:
+    - Respond to English tweets only
+    - Respond to tweets that don't have a lot of hashtags, links, URLs or images
+    - Respond to tweets that are not retweets
+    - Respond to tweets where there is an easy exchange of ideas to have with the user
+    - ONLY respond with the ID of the tweet`;
 
-${tweetsArray
-  .map(
-    (tweet) => `
-  ID: ${tweet.id}
-  Username: ${tweet.username}
-  Text: ${tweet.text}
-`,
-  )
-  .join("\n")}
-
-Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
-Notes:
-  - Respond to English tweets only
-  - Respond to tweets that don't have a lot of hashtags, links, URLs or images
-  - Respond to tweets that are not retweets
-  - Respond to tweets where there is an easy exchange of ideas to have with the user
-  - ONLY respond with the ID of the tweet`;
       const datestr = new Date().toISOString().replace(/:/g, "-");
-      const logName = `${this.character.name}_search_${datestr}`;
+      const logName = `${this.runtime.character.name}_search_${datestr}`;
       log_to_file(logName, prompt);
 
       const mostInterestingTweetResponse = await this.runtime.completion({
         context: prompt,
         stop: [],
         temperature: this.temperature,
-        model: this.model,
+        model: this.runtime.model,
       });
 
-      const responseLogName = `${this.character.name}_search_${datestr}_result`;
+      const responseLogName = `${this.runtime.character.name}_search_${datestr}_result`;
       log_to_file(responseLogName, mostInterestingTweetResponse);
 
       const tweetId = mostInterestingTweetResponse.trim();
-      const selectedTweet = tweetsArray.find(
+      const selectedTweet = tweetsArray.tweets.find(
         (tweet) =>
           tweet.id.toString().includes(tweetId) ||
           tweetId.includes(tweet.id.toString()),
@@ -164,42 +168,68 @@ Notes:
 
       console.log("Selected tweet to reply to:", selectedTweet);
 
-      if (selectedTweet.username === botTwitterUsername) {
+      if (selectedTweet.username === settings.TWITTER_USERNAME) {
         console.log("Skipping tweet from bot itself");
         return;
       }
 
-      const twitterUserId = getUuid(selectedTweet.userId as string) as UUID;
-      const twitterRoomId = getUuid("twitter") as UUID;
+      const conversationId = selectedTweet.conversationId;
+      const roomId = stringToUuid(conversationId);
+      await this.runtime.ensureRoomExists(roomId);
 
+      const userIdUUID = stringToUuid(selectedTweet.userId as string);
       await Promise.all([
-        this.runtime.ensureUserExists(twitterUserId, selectedTweet.username),
-        this.runtime.ensureRoomExists(twitterRoomId),
+        this.runtime.ensureUserExists(
+          this.runtime.agentId,
+          settings.TWITTER_USERNAME,
+          this.runtime.character.name,
+          "twitter",
+        ),
+        this.runtime.ensureUserExists(
+          userIdUUID,
+          selectedTweet.username,
+          selectedTweet.name,
+          "twitter",
+        ),
       ]);
 
-      await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
+      await Promise.all([
+        this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+        this.runtime.ensureParticipantInRoom(this.runtime.agentId, roomId),
+      ]);
 
-      const message: Message = {
-        content: { content: selectedTweet.text },
-        user_id: twitterUserId,
-        room_id: twitterRoomId,
+      // crawl additional conversation tweets, if there are any
+      await buildConversationThread(selectedTweet, this);
+
+      const message = {
+        id: stringToUuid(selectedTweet.id),
+        content: {
+          text: selectedTweet.text,
+          url: selectedTweet.permanentUrl,
+          inReplyTo: selectedTweet.inReplyToStatusId
+            ? stringToUuid(selectedTweet.inReplyToStatusId)
+            : undefined,
+        },
+        userId: userIdUUID,
+        roomId,
+        createdAt: new Date(selectedTweet.timestamp * 1000),
       };
 
-      if (!message.content.content) {
-        return { content: "", action: "IGNORE" };
+      if (!message.content.text) {
+        return { text: "", action: "IGNORE" };
       }
 
       // Fetch replies and retweets
-      const replies = await this.getReplies(selectedTweet.id);
+      const replies = selectedTweet.thread;
       const replyContext = replies
-        .filter((reply) => reply.username !== botTwitterUsername)
+        .filter((reply) => reply.username !== settings.TWITTER_USERNAME)
         .map((reply) => `@${reply.username}: ${reply.text}`)
         .join("\n");
 
       let tweetBackground = "";
       if (selectedTweet.isRetweet) {
-        const originalTweet = await this.twitterClient.getTweet(
-          selectedTweet.id,
+        const originalTweet = await this.requestQueue.add(() =>
+          this.twitterClient.getTweet(selectedTweet.id),
         );
         tweetBackground = `Retweeting @${originalTweet.username}: ${originalTweet.text}`;
       }
@@ -207,63 +237,39 @@ Notes:
       // Generate image descriptions using GPT-4 vision API
       const imageDescriptions = [];
       for (const photo of selectedTweet.photos) {
-        const description = await this.describeImage(photo.url);
+        const description =
+          await this.runtime.imageDescriptionService.describeImage(photo.url);
         imageDescriptions.push(description);
       }
 
-      console.log("****** imageDescriptions");
-      console.log(imageDescriptions);
+      await wait();
+      const recentConversations = await getRecentConversations(
+        this.runtime,
+        this,
+        settings.TWITTER_USERNAME,
+      );
+      await wait();
+      const recentSearchResults = await searchRecentPosts(
+        this.runtime,
+        this,
+        searchTerm,
+      );
 
-      await this.wait();
-      const recentConversations = await this.getRecentConversations();
-      await this.wait();
-      const recentSearchResults = await this.getRecentSearchResults();
-
-      const formatRecentConversations = (conversations: Tweet[]) => {
-        return conversations
-          .reverse()
-          .map(
-            (tweet) =>
-              `@${tweet.username}: ${tweet.text.replace(/\n/g, "\\n")}`,
-          )
-          .join("\n");
-      };
-
-      const formatRecentSearchResults = (searchResults: Tweet[]) => {
-        return searchResults
-          .map(
-            (tweet) => `${tweet.username}: ${tweet.text.replace(/\n/g, "\\n")}`,
-          )
-          .join("\n");
-      };
-
-      const state = await this.runtime.composeState(message, {
+      let state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
-        recentConversations: formatRecentConversations(recentConversations),
-        recentSearchResults: formatRecentSearchResults(recentSearchResults),
-        twitterMessage: message,
-        agentName: botTwitterUsername,
-        bio: this.character.bio,
-        name: botTwitterUsername,
-        directions: this.directions,
-        adjectives: this.character.adjectives,
-        adjective:
-          this.character.adjectives[
-            Math.floor(Math.random() * this.character.adjectives.length)
-          ],
-        topics: this.character.topics
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 10)
-          .join(", "),
+        twitterUserName: settings.TWITTER_USERNAME,
+        recentConversations,
+        recentSearchResults,
         tweetContext: `
-Tweet Background:
-${tweetBackground}
-
-Original Tweet:
-By @${selectedTweet.username}
-${selectedTweet.text}${replyContext.length > 0 && `\nReplies to original tweet:\n${replyContext}`}\n${`Original tweet text: ${selectedTweet.text}`}}
-${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Tweet (Described): ${imageDescriptions.join(", ")}\n` : ""}
-`,
+  Post Background:
+  ${tweetBackground}
+  
+  Original Post:
+  By @${selectedTweet.username}
+  ${selectedTweet.text}${replyContext.length > 0 && `\nReplies to original post:\n${replyContext}`}
+  ${`Original post text: ${selectedTweet.text}`}
+  ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Post (Described): ${imageDescriptions.join(", ")}\n` : ""}
+  `,
       });
 
       await this.saveRequestMessage(message, state as State);
@@ -273,118 +279,85 @@ ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : "
         template: messageHandlerTemplate,
       });
 
-      console.log("*** Context:", context);
-      console.log("**** this.model", this.model);
+      // log context to file
+      log_to_file(
+        `${settings.TWITTER_USERNAME}_${datestr}_search_context`,
+        context,
+      );
 
-      let responseContent: Content | null = null;
-      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        const response = await this.runtime.completion({
-          context,
-          stop: [],
-          temperature: this.temperature,
-          model: this.model,
-          // images: selectedTweet.photos.map(photo => photo.url), // Pass image URLs to the completion API
-        });
+      const responseContent = await this.runtime.messageCompletion({
+        context,
+        stop: [],
+        temperature: this.temperature,
+        model: this.runtime.model,
+      });
 
-        const parsedResponse = parseJSONObjectFromText(
-          response,
-        ) as unknown as Content;
-        console.log("parsedResponse", parsedResponse);
-        if (
-          !(parsedResponse?.user as string)?.includes(
-            (state as State).senderName as string,
-          )
-        ) {
-          if (!parsedResponse) {
-            continue;
-          }
-          responseContent = {
-            content: parsedResponse.content,
-            action: parsedResponse.action,
-          };
-          break;
-        }
-      }
+      responseContent.inReplyTo = message.id;
 
-      if (!responseContent) {
-        responseContent = {
-          content: "",
-          action: "IGNORE",
-        };
-      }
-
-      await this.saveResponseMessage(message, state, responseContent);
-      this.runtime.processActions(message, responseContent, state);
+      log_to_file(
+        `${settings.TWITTER_USERNAME}_${datestr}_search_response`,
+        JSON.stringify(responseContent),
+      );
 
       const response = responseContent;
 
-      if (response.content) {
-        console.log(
-          `Bot would respond to tweet ${selectedTweet.id} with: ${response.content}`,
-        );
-        try {
-          await this.twitterClient.sendTweet(
-            response.content,
-            selectedTweet.id,
+      if (!response.text) {
+        console.log("Returning: No response text found");
+        return;
+      }
+
+      console.log(
+        `Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`,
+      );
+      try {
+        if (!this.dryRun) {
+          const callback: HandlerCallback = async (response: Content) => {
+            const memories = await sendTweetChunks(
+              this,
+              response,
+              message.roomId,
+              settings.TWITTER_USERNAME,
+              tweetId
+            );
+            return memories;
+          };
+
+          const responseMessages = await callback(responseContent);
+
+          state = await this.runtime.updateRecentMessageState(state);
+
+          for (const responseMessage of responseMessages) {
+            await this.runtime.messageManager.createMemory(
+              responseMessage,
+              false,
+            );
+          }
+
+          state = await this.runtime.updateRecentMessageState(state);
+
+          await this.runtime.evaluate(message, state);
+
+          await this.runtime.processActions(
+            message,
+            responseMessages,
+            state,
+            callback,
           );
-          console.log(`Successfully responded to tweet ${selectedTweet.id}`);
-          this.respondedTweets.add(selectedTweet.id);
-          const responseInfo = `Context:\n\n${context}\n\nSelected Tweet: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.content}`;
-          const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
-          console.log(`Writing response tweet info to ${debugFileName}`);
-          fs.writeFileSync(debugFileName, responseInfo);
-        } catch (error) {
-          console.error(`Error sending response tweet: ${error}`);
+        } else {
+          console.log("Dry run, not sending post:", response.text);
         }
+        console.log(`Successfully responded to tweet ${selectedTweet.id}`);
+        this.respondedTweets.add(selectedTweet.id);
+        const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.text}`;
+        const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
+        console.log(`Writing response tweet info to ${debugFileName}`);
+        fs.writeFileSync(debugFileName, responseInfo);
+        await wait();
+      } catch (error) {
+        console.error(`Error sending response post: ${error}`);
       }
     } catch (error) {
       console.error("Error engaging with search terms:", error);
     }
-  }
-
-  private async getRecentConversations(): Promise<Tweet[]> {
-    const botTwitterUsername = settings.TWITTER_USERNAME;
-    const recentConversations = this.twitterClient.searchTweets(
-      `@${botTwitterUsername}`,
-      20,
-      SearchMode.Latest,
-    );
-
-    const recentConversationsArray = [];
-    for await (const conversation of recentConversations) {
-      recentConversationsArray.push(conversation);
-    }
-
-    return recentConversationsArray.reverse();
-  }
-
-  private async getRecentSearchResults(): Promise<Tweet[]> {
-    const recentSearchResults = [];
-    const searchTerm = this.character.topics
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 2)
-      .join(" ");
-
-    const tweets = this.twitterClient.searchTweets(
-      searchTerm,
-      10,
-      SearchMode.Latest,
-    );
-    for await (const tweet of tweets) {
-      recentSearchResults.push(tweet);
-    }
-
-    if (!fs.existsSync("searches")) {
-      fs.mkdirSync("searches");
-    }
-
-    const timestamp = new Date().toISOString().replace(/:/g, "-");
-    const searchResultsFileName = `searches/search_results_${timestamp}.txt`;
-    fs.writeFileSync(
-      searchResultsFileName,
-      JSON.stringify(recentSearchResults, null, 2),
-    );
-
-    return recentSearchResults;
   }
 }

@@ -1,10 +1,9 @@
-import { UUID } from "crypto";
-import { Content } from "../../core/types.ts";
+import { Content, UUID } from "../../core/types.ts";
 
 export type InterestChannels = {
   [key: string]: {
     lastMessageSent: number;
-    messages: { user_id: UUID; userName: string; content: Content }[];
+    messages: { userId: UUID; userName: string; content: Content }[];
   };
 };
 

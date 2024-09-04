@@ -10,15 +10,18 @@ import {
   User,
 } from "discord.js";
 import { EventEmitter } from "events";
-import { default as getUuid } from "uuid-by-string";
 import settings from "../../core/settings.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { commands } from "./commands.ts";
 
-import { UUID } from "crypto";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
+import { UUID } from "../../core/types.ts";
 import { MessageManager } from "./messages.ts";
 import { VoiceManager } from "./voice.ts";
+
+import joinvoice from "./actions/joinvoice.ts";
+import leavevoice from "./actions/leavevoice.ts";
 
 export class DiscordClient extends EventEmitter {
   apiToken: string;
@@ -59,6 +62,9 @@ export class DiscordClient extends EventEmitter {
 
     this.setupEventListeners();
     this.setupCommands();
+
+    this.runtime.registerAction(joinvoice);
+    this.runtime.registerAction(leavevoice);
   }
 
   private setupEventListeners() {
@@ -141,20 +147,31 @@ export class DiscordClient extends EventEmitter {
 
     const messageContent = reaction.message.content;
     const truncatedContent =
-      messageContent.length > 50
-        ? messageContent.substring(0, 50) + "..."
+      messageContent.length > 100
+        ? messageContent.substring(0, 100) + "..."
         : messageContent;
 
-    const reactionMessage = `*<${emoji} emoji>: "${truncatedContent}"*`;
+    const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
 
-    const room_id = getUuid(reaction.message.channel.id) as UUID;
-    const userIdUUID = getUuid(user.id) as UUID;
+    const roomId = stringToUuid(reaction.message.channel.id);
+    const userIdUUID = stringToUuid(user.id);
+
+    // Generate a unique UUID for the reaction
+    const reactionUUID = stringToUuid(
+      `${reaction.message.id}-${user.id}-${emoji}`,
+    );
 
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
-      user_id: userIdUUID,
-      content: { content: reactionMessage, source: "Discord" },
-      room_id,
+      id: reactionUUID, // This is the ID of the reaction message
+      userId: userIdUUID,
+      content: {
+        text: reactionMessage,
+        source: "Discord",
+        inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
+      },
+      roomId,
+      createdAt: new Date(),
       embedding: embeddingZeroVector,
     });
   }
@@ -186,14 +203,25 @@ export class DiscordClient extends EventEmitter {
 
     const reactionMessage = `*Removed <${emoji} emoji> from: "${truncatedContent}"*`;
 
-    const room_id = getUuid(reaction.message.channel.id) as UUID;
-    const userIdUUID = getUuid(user.id) as UUID;
+    const roomId = stringToUuid(reaction.message.channel.id);
+    const userIdUUID = stringToUuid(user.id);
+
+    // Generate a unique UUID for the reaction removal
+    const reactionUUID = stringToUuid(
+      `${reaction.message.id}-${user.id}-${emoji}-removed`,
+    );
 
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
-      user_id: userIdUUID,
-      content: { content: reactionMessage, source: "Discord" },
-      room_id,
+      id: reactionUUID, // This is the ID of the reaction removal message
+      userId: userIdUUID,
+      content: {
+        text: reactionMessage,
+        source: "Discord",
+        inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
+      },
+      roomId,
+      createdAt: new Date(),
       embedding: embeddingZeroVector,
     });
   }
@@ -217,8 +245,6 @@ export class DiscordClient extends EventEmitter {
   }
 
   private async onReady() {
-    await this.messageManager.onReady();
-
     const guilds = await this.client.guilds.fetch();
     for (const [, guild] of guilds) {
       const fullGuild = await guild.fetch();

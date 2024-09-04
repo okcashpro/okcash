@@ -1,4 +1,7 @@
-export const messageHandlerTemplate = `{{actionExamples}}
+import { messageCompletionFooter } from "../core/parsing.ts";
+
+export const messageHandlerTemplate =
+  `{{actionExamples}}
 
 # IMPORTANT: DO NOT USE THE INFORMATION FROM THE EXAMPLES ABOVE. THE EXAMPLES ARE FOR REFERENCE ONLY.
 
@@ -21,9 +24,5 @@ export const messageHandlerTemplate = `{{actionExamples}}
 
 # INSTRUCTIONS: Generate the next message in the scene for {{agentName}}
 
-Response format should be formatted in a JSON block like this:
-\`\`\`json
-{ "user": "{{agentName}}", "content": string, "action": string }
-\`\`\`
-
-{{recentMessages}}`;
+{{recentMessages}}
+` + messageCompletionFooter;

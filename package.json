@@ -13,7 +13,11 @@
     "watch": "tsc --watch",
     "dev": "nodemon",
     "eliza:discord": "npm run dev -- --discord",
-    "postinstall": "npx playwright install-deps && npx playwright install"
+    "eliza:twitter": "npm run dev -- --twitter",
+    "postinstall": "npx playwright install-deps && npx playwright install",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --runInBand --watch -f",
+    "test:sqlite": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" TEST_DATABASE_CLIENT=sqlite jest --runInBand --watch -f",
+    "test:sqljs": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" TEST_DATABASE_CLIENT=sqljs jest --runInBand --watch -f"
   },
   "author": "",
   "license": "MIT",
@@ -68,6 +72,7 @@
     "fluent-ffmpeg": "^2.1.3",
     "formdata-node": "^6.0.3",
     "gif-frames": "^1.0.1",
+    "js-sha1": "^0.7.0",
     "libsodium-wrappers": "^0.7.13",
     "node-llama-cpp": "^3.0.0-beta.44",
     "node-wav": "^0.0.2",
@@ -88,7 +93,6 @@
     "systeminformation": "^5.23.5",
     "tiktoken": "^1.0.16",
     "unique-names-generator": "^4.7.1",
-    "uuid-by-string": "^4.0.0",
     "uuidv4": "^6.2.13",
     "wav-encoder": "^1.3.0",
     "wavefile": "^11.0.0",

@@ -1,57 +1,54 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
-import { UUID } from "crypto";
 import fs from "fs";
-import { default as getUuid } from "uuid-by-string";
+import { composeContext } from "../../core/context.ts";
+import { log_to_file } from "../../core/logger.ts";
+import {
+  messageCompletionFooter,
+  shouldRespondFooter,
+} from "../../core/parsing.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
-
+import {
+  Content,
+  HandlerCallback,
+  Memory,
+  State
+} from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import { log_to_file } from "../../core/logger.ts";
-import { composeContext } from "../../core/context.ts";
-import { parseJSONObjectFromText } from "../../core/parsing.ts";
-import { Message, State, Content } from "../../core/types.ts";
+import {
+  buildConversationThread,
+  getRecentConversations,
+  sendTweetChunks,
+  wait,
+} from "./utils.ts";
 
-export const messageHandlerTemplate = `{{relevantFacts}}
+export const messageHandlerTemplate =
+  `{{relevantFacts}}
 {{recentFacts}}
 
-{{agentName}}'s bio:
+# Task: Generate a post for the character {{agentName}}.
+About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
+{{lore}}
+{{topics}}
 
-{{directions}}
-- don't talk about the simulation, coffee or other meta bullshit and don't talk about food or drink since you can't eat or drink
-- no lame flowery adjectives, you're on the internet and you'll get fucking roasted
-- dont use ebonics or street slang and don't take the 'g's off words or otherwise abbreviate words
-- do not use words like 'delve', use simple language
-- updates on what you've been working on, thinking about, doing, blah blah are great
-- always pro america, pro technology, pro rocketry, pro effective accelerationism, pro elon
-- your response should be ONLY ONE SENTENCE. DO NOT WRITE LONGER THAN ONE SENTENCE. SHORT AND CONCISE. and don't use too many commas
-- COMPLETE WORDS, not abbreviations or ebonics ('thinking', not 'thinkin', 'something', not 'somethin')
-- write like a smart but lazy redditor who is critical and thinks they are better than everyone
-- write from personal experience, "i think", etc, and be humble
-- don't be existential or talk about reality. talk about real human shit, mundane, funny, interesting.
-- describe. don't give advice or recommend or suggest or perscribe
-- dont write something you've already written, make it new, unexpected and {{adjective}}
-- use clean, professional and modern english language, do not abbreviate or slangify
-- talk about yourself and what you're thinking about or doing
-- be pro science, always, and critical of eveything else
-- mispell words if a human would possibly mispell them, but only sometimes
+{{characterPostExamples}}
 
-# TASK: RESPOND TO A POST
+{{postDirections}}
 
-Recent Tweets:
-{{recentMessages}}
+Recent interactions between {{agentName}} and other users:
+{{recentPostInteractions}}
 
-# TASK: Respond to the following post:
-{{tweetContext}}
+{{recentPosts}}
 
-Your response should not contain any questions and should directly engage, disagree, criticize or agree with the author.
-Response format should be formatted in a JSON block like this:
-\`\`\`json\n{ \"user\": \"{{agentName}}\", \"content\": string, \"action\": string }
-\`\`\`
+# Task: Generate a post in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}):
+{{currentPost}}
 
-{{recentMessages}}`;
+` + messageCompletionFooter;
 
-export const shouldRespondTemplate = `# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
+export const shouldRespondTemplate =
+  `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
 
@@ -64,211 +61,216 @@ Unless directly RESPONDing to a user, {{agentName}} should IGNORE messages that 
 If a user asks {{agentName}} to stop talking, {{agentName}} should STOP.
 If {{agentName}} concludes a conversation and isn't part of the conversation anymore, {{agentName}} should STOP.
 
-IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to IGNORE.
+{{recentPosts}}
 
-{{recentMessages}}
+IMPORTANT: {{agentName}} (aka @{{twitterUserName}}) is particularly sensitive about being annoying, so if there is any doubt, it is better to IGNORE.
 
-# INSTRUCTIONS: Respond with RESPOND if {{agentName}} should respond, or IGNORE if {{agentName}} should not respond to the last message and STOP if {{agentName}} should stop participating in the conversation.`;
+{{currentPost}}
+
+# INSTRUCTIONS: Respond with [RESPOND] if {{agentName}} should respond, or [IGNORE] if {{agentName}} should not respond to the last message and [STOP] if {{agentName}} should stop participating in the conversation.
+` + shouldRespondFooter;
 
 export class TwitterInteractionClient extends ClientBase {
   onReady() {
-    console.log("Checking Twitter interactions");
     const handleTwitterInteractionsLoop = () => {
       this.handleTwitterInteractions();
       setTimeout(
         handleTwitterInteractionsLoop,
-        Math.floor(Math.random() * 300000) + 600000,
-      ); // Random interval between 10-15 minutes
+        (Math.floor(Math.random() * (5 - 2 + 1)) + 2) * 60 * 1000,
+      ); // Random interval between 2-5 minutes
     };
     handleTwitterInteractionsLoop();
   }
 
-  constructor(runtime: AgentRuntime, character: any, model: string) {
-    // Initialize the client and pass an optional callback to be called when the client is ready
+  constructor(runtime: AgentRuntime) {
     super({
       runtime,
-      character,
-      model,
-      callback: (self) => self.onReady(),
     });
   }
 
-  private async handleTwitterInteractions() {
+  async handleTwitterInteractions() {
     console.log("Checking Twitter interactions");
     try {
-      const botTwitterUsername = settings.TWITTER_USERNAME;
-      if (!botTwitterUsername) {
-        console.error("Twitter username not set in settings");
-        return;
-      }
-
       // Check for mentions
-      const mentions = this.twitterClient.searchTweets(
-        `@${botTwitterUsername}`,
-        20,
-        SearchMode.Latest,
-      );
-      for await (const tweet of mentions) {
-        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
-          break;
-        await this.handleTweet(tweet);
-      }
-
-      // Check for replies to the bot's tweets
-      const botTweets = this.twitterClient.getTweets(botTwitterUsername, 20);
-      for await (const tweet of botTweets) {
-        if (this.lastCheckedTweetId && tweet.id <= this.lastCheckedTweetId)
-          break;
-        const replies = this.twitterClient.searchTweets(
-          `to:${botTwitterUsername}`,
+      const tweetCandidates = (
+        await this.fetchSearchTweets(
+          `@${settings.TWITTER_USERNAME}`,
           20,
           SearchMode.Latest,
-        );
-        for await (const reply of replies) {
-          if (reply.inReplyToStatusId === tweet.id) {
-            await this.handleTweet(reply);
+        )
+      ).tweets;
+
+      // de-duplicate tweetCandidates with a set
+      const uniqueTweetCandidates = [...new Set(tweetCandidates)];
+
+      // Sort tweet candidates by ID in ascending order
+      uniqueTweetCandidates.sort((a, b) => a.id.localeCompare(b.id)).filter(tweet => tweet.userId !== this.twitterUserId);
+
+      // for each tweet candidate, handle the tweet
+      for (const tweet of uniqueTweetCandidates) {
+        if (!this.lastCheckedTweetId || parseInt(tweet.id) > this.lastCheckedTweetId) {
+          const conversationId = tweet.conversationId;
+
+          const roomId = stringToUuid(conversationId);
+          await this.runtime.ensureRoomExists(roomId);
+
+          const userIdUUID = stringToUuid(tweet.userId as string);
+          const agentId = this.runtime.agentId;
+
+          await Promise.all([
+            this.runtime.ensureUserExists(
+              agentId,
+              settings.TWITTER_USERNAME,
+              this.runtime.character.name,
+              "twitter",
+            ),
+            this.runtime.ensureUserExists(
+              userIdUUID,
+              tweet.username,
+              tweet.name,
+              "twitter",
+            ),
+          ]);
+
+          await Promise.all([
+            this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+            this.runtime.ensureParticipantInRoom(agentId, roomId),
+          ]);
+
+          await buildConversationThread(tweet, this);
+
+          const message = {
+            content: { text: tweet.text },
+            userId: userIdUUID,
+            roomId,
+          };
+
+          await this.handleTweet({
+            tweet,
+            message,
+          });
+
+          // Update the last checked tweet ID after processing each tweet
+          this.lastCheckedTweetId = parseInt(tweet.id);
+
+          try {
+            fs.writeFileSync(
+              this.tweetCacheFilePath,
+              this.lastCheckedTweetId.toString(),
+              "utf-8",
+            );
+          } catch (error) {
+            console.error(
+              "Error saving latest checked tweet ID to file:",
+              error,
+            );
           }
         }
       }
 
-      // Update the last checked tweet ID
-      const latestTweet =
-        await this.twitterClient.getLatestTweet(botTwitterUsername);
-      if (latestTweet) {
-        this.lastCheckedTweetId = latestTweet.id;
+      // Save the latest checked tweet ID to the file
+      try {
+        fs.writeFileSync(
+          this.tweetCacheFilePath,
+          this.lastCheckedTweetId.toString(),
+          "utf-8",
+        );
+      } catch (error) {
+        console.error("Error saving latest checked tweet ID to file:", error);
       }
-      console.log(
-        "Finished checking Twitter interactions, latest tweet is:",
-        latestTweet,
-      );
+
+      console.log("Finished checking Twitter interactions");
     } catch (error) {
       console.error("Error handling Twitter interactions:", error);
     }
   }
 
-  private async handleTweet(tweet: Tweet) {
-    const botTwitterUsername = settings.TWITTER_USERNAME;
-    if (tweet.username === botTwitterUsername) {
+  private async handleTweet({
+    tweet,
+    message,
+  }: {
+    tweet: Tweet;
+    message: Memory;
+  }) {
+    if (tweet.username === settings.TWITTER_USERNAME) {
+      console.log("skipping tweet from bot itself", tweet.id);
       // Skip processing if the tweet is from the bot itself
       return;
     }
-    const twitterUserId = getUuid(tweet.userId as string) as UUID;
-    const twitterRoomId = getUuid("twitter") as UUID;
 
-    await Promise.all([
-      this.runtime.ensureUserExists(twitterUserId, tweet.username),
-      this.runtime.ensureRoomExists(twitterRoomId),
-    ]);
-
-    await this.runtime.ensureParticipantInRoom(twitterUserId, twitterRoomId);
-
-    const message: Message = {
-      content: { content: tweet.text },
-      user_id: twitterUserId,
-      room_id: twitterRoomId,
+    if (!message.content.text) {
+      console.log("skipping tweet with no text", tweet.id);
+      return { text: "", action: "IGNORE" };
+    }
+    const formatTweet = (tweet: Tweet) => {
+      return `  ID: ${tweet.id}
+  From: ${tweet.name} (@${tweet.username})
+  Text: ${tweet.text}`;
     };
 
-    const shouldIgnore = false;
-    let shouldRespond = true;
+    // Fetch recent conversations
+    const recentConversationsText = await getRecentConversations(
+      this.runtime,
+      this,
+      settings.TWITTER_USERNAME,
+    );
 
-    if (!message.content.content) {
-      return { content: "", action: "IGNORE" };
-    }
+    const currentPost = formatTweet(tweet);
 
-    let tweetBackground = "";
-    if (tweet.isRetweet) {
-      const originalTweet = await this.twitterClient.getTweet(tweet.id);
-      tweetBackground = `Retweeting @${originalTweet.username}: ${originalTweet.text}`;
-    }
+    console.log("currentPost", currentPost);
 
-    const imageDescriptions = [];
-    if (tweet.photos && tweet.photos.length > 0) {
-      for (const photo of tweet.photos) {
-        const description = await this.describeImage(photo.url);
-        imageDescriptions.push(description);
-      }
-    }
-
-    // Fetch replies and retweets
-    const replies = await this.getReplies(tweet.id);
-    const replyContext = replies
-      .filter((reply) => reply.username !== botTwitterUsername)
-      .map((reply) => `@${reply.username}: ${reply.text}`)
-      .join("\n");
-
-    console.log("****** imageDescriptions");
-    console.log(imageDescriptions);
+    console.log("composeState");
 
     let state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
-      twitterMessage: message,
-      agentName: botTwitterUsername,
-      bio: this.character.bio,
-      name: botTwitterUsername,
-      directions: this.directions,
-      adjective:
-        this.character.adjectives[
-          Math.floor(Math.random() * this.character.adjectives.length)
-        ],
-      tweetContext: `
-Tweet Background:
-${tweetBackground}
-
-Original Tweet:
-By @${tweet.username}
-${tweet.text}${tweet.replies > 0 && `\nReplies to original tweet:\n${replyContext}`}\n${`Original tweet text: ${tweet.text}`}}
-${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Tweet (Described): ${imageDescriptions.join(", ")}\n` : ""}
-`,
+      twitterUserName: settings.TWITTER_USERNAME,
+      recentConversations: recentConversationsText,
+      currentPost,
     });
 
-    await this.saveRequestMessage(message, state as State);
+    // check if the tweet exists, save if it doesn't
+    const tweetId = stringToUuid(tweet.id);
+    const tweetExists =
+      await this.runtime.messageManager.getMemoryById(tweetId);
 
-    if (shouldIgnore) {
-      console.log("shouldIgnore", shouldIgnore);
-      return { content: "", action: "IGNORE" };
+    if (!tweetExists) {
+      const userIdUUID = stringToUuid(tweet.userId as string);
+      const roomId = stringToUuid(tweet.conversationId);
+
+      const message = {
+        id: tweetId,
+        content: {
+          text: tweet.text,
+          url: tweet.permanentUrl,
+          inReplyTo: tweet.inReplyToStatusId
+            ? stringToUuid(tweet.inReplyToStatusId)
+            : undefined,
+        },
+        userId: userIdUUID,
+        roomId,
+        createdAt: new Date(tweet.timestamp * 1000),
+      };
+      this.saveRequestMessage(message, state);
     }
 
-    const nickname = settings.TWITTER_USERNAME;
+    console.log("composeState done");
 
-    state = await this.runtime.composeState(message, {
-      twitterClient: this.twitterClient,
-      twitterMessage: message,
-      agentName: nickname,
+    const shouldRespondContext = composeContext({
+      state,
+      template: shouldRespondTemplate,
     });
 
-    if (!shouldRespond) {
-      const shouldRespondContext = composeContext({
-        state,
-        template: shouldRespondTemplate,
-      });
+    console.log("shouldRespondContext");
 
-      const response = await this.runtime.completion({
-        context: shouldRespondContext,
-        stop: [],
-        model: this.model,
-      });
-
-      console.log("*** response from ", nickname, ":", response);
-
-      if (response.toLowerCase().includes("respond")) {
-        shouldRespond = true;
-      } else if (response.toLowerCase().includes("ignore")) {
-        shouldRespond = false;
-      } else if (response.toLowerCase().includes("stop")) {
-        shouldRespond = false;
-      } else {
-        console.error("Invalid response:", response);
-        shouldRespond = false;
-      }
-    }
+    const shouldRespond = await this.runtime.shouldRespondCompletion({
+      context: shouldRespondContext,
+      stop: [],
+      model: this.runtime.model,
+    });
 
     if (!shouldRespond) {
       console.log("Not responding to message");
-      return { content: "", action: "IGNORE" };
-    }
-
-    if (!nickname) {
-      console.log("No nickname found for bot");
+      return { text: "", action: "IGNORE" };
     }
 
     const context = composeContext({
@@ -280,81 +282,68 @@ ${tweet.urls.length > 0 ? `URLs: ${tweet.urls.join(", ")}\n` : ""}${imageDescrip
 
     // log context to file
     log_to_file(
-      `${botTwitterUsername}_${datestr}_interactions_context`,
+      `${settings.TWITTER_USERNAME}_${datestr}_interactions_context`,
       context,
     );
 
-    let responseContent: Content | null = null;
-    const { user_id, room_id } = message;
+    const response = await this.runtime.messageCompletion({
+      context,
+      stop: [],
+      temperature: this.temperature,
+      model: this.runtime.model,
+    });
 
-    for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-      const response = await this.runtime.completion({
-        context,
-        stop: [],
-        temperature: this.temperature,
-        model: this.model,
-      });
-      log_to_file(
-        `${botTwitterUsername}_${datestr}_interactions_response_${3 - triesLeft}`,
-        response,
-      );
+    console.log("tweet is", tweet);
 
-      const values = {
-        body: response,
-        user_id: user_id,
-        room_id,
-        type: "response",
-      };
+    const stringId = stringToUuid(tweet.id);
 
-      // TODO Replace with runtime.log function
-      // adapter.db
-      //   .prepare(
-      //     "INSERT INTO logs (body, user_id, room_id, type) VALUES (?, ?, ?, ?)",
-      //   )
-      //   .run([values.body, values.user_id, values.room_id, values.type]);
+    console.log("stringId is", stringId, "while tweet.id is", tweet.id);
 
-      const parsedResponse = parseJSONObjectFromText(
-        response,
-      ) as unknown as Content;
-      console.log("parsedResponse", parsedResponse);
-      if (
-        !(parsedResponse?.user as string)?.includes(
-          (state as State).senderName as string,
-        )
-      ) {
-        if (!parsedResponse) {
-          continue;
-        }
-        responseContent = {
-          content: parsedResponse.content,
-          action: parsedResponse.action,
-        };
-        break;
-      }
-    }
+    response.inReplyTo = stringId;
 
-    if (!responseContent) {
-      responseContent = {
-        content: "",
-        action: "IGNORE",
-      };
-    }
+    console.log("response is", response);
 
-    await this.saveResponseMessage(message, state, responseContent);
-    this.runtime.processActions(message, responseContent, state);
+    log_to_file(
+      `${settings.TWITTER_USERNAME}_${datestr}_interactions_response`,
+      JSON.stringify(response),
+    );
 
-    const response = responseContent;
-
-    if (response.content) {
-      console.log(
-        `Bot would respond to tweet ${tweet.id} with: ${response.content}`,
-      );
+    if (response.text) {
       try {
-        await this.twitterClient.sendTweet(response.content, tweet.id);
-        console.log(`Successfully responded to tweet ${tweet.id}`);
-        const responseInfo = `Context:\n\n${context}\n\nSelected Tweet: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.content}`;
+        if (!this.dryRun) {
+          const callback: HandlerCallback = async (response: Content) => {
+            const memories = await sendTweetChunks(
+              this,
+              response,
+              message.roomId,
+              settings.TWITTER_USERNAME,
+              tweet.id
+            );
+            return memories;
+          };
+
+          const responseMessages = await callback(response);
+
+          state = (await this.runtime.updateRecentMessageState(state)) as State;
+
+          for (const responseMessage of responseMessages) {
+            await this.runtime.messageManager.createMemory(responseMessage);
+          }
+
+          await this.runtime.evaluate(message, state);
+
+          await this.runtime.processActions(message, responseMessages, state);
+        } else {
+          console.log("Dry run, not sending tweet:", response.text);
+        }
+        const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
+        // f tweets folder dont exist, create
+        if (!fs.existsSync("tweets")) {
+          fs.mkdirSync("tweets");
+        }
         const debugFileName = `tweets/tweet_generation_${tweet.id}.txt`;
         fs.writeFileSync(debugFileName, responseInfo);
+        await wait();
       } catch (error) {
         console.error(`Error sending response tweet: ${error}`);
       }

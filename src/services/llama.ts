@@ -40,12 +40,6 @@ const jsonSchemaGrammar: Readonly<{
   },
 };
 
-interface GrammarData {
-  user: string;
-  content: string;
-  action?: string;
-}
-
 interface QueuedMessage {
   context: string;
   temperature: number;
@@ -54,9 +48,7 @@ interface QueuedMessage {
   frequency_penalty: number;
   presence_penalty: number;
   useGrammar: boolean;
-  resolve: (
-    value: GrammarData | string | PromiseLike<GrammarData | string>,
-  ) => void;
+  resolve: (value: any | string | PromiseLike<any | string>) => void;
   reject: (reason?: any) => void;
 }
 
@@ -215,7 +207,7 @@ class LlamaService {
     frequency_penalty: number,
     presence_penalty: number,
     max_tokens: number,
-  ): Promise<GrammarData> {
+  ): Promise<any> {
     console.log("Queueing message completion");
     return new Promise((resolve, reject) => {
       this.messageQueue.push({
@@ -301,7 +293,7 @@ class LlamaService {
     presence_penalty: number,
     max_tokens: number,
     useGrammar: boolean,
-  ): Promise<GrammarData | string> {
+  ): Promise<any | string> {
     if (!this.sequence) {
       throw new Error("Model not initialized.");
     }

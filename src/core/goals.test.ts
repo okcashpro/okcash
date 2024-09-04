@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { type User } from "../../test_resources/types.ts";
-import { zeroUuid } from "../constants.ts";
-import { createGoal, getGoals, updateGoal } from "../goals.ts";
-import { AgentRuntime } from "../runtime.ts";
-import { GoalStatus, type Goal, type UUID } from "../types.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { type User } from "../test_resources/types.ts";
+import { zeroUuid } from "./constants.ts";
+import { createGoal, getGoals, updateGoal } from "./goals.ts";
+import { AgentRuntime } from "./runtime.ts";
+import { GoalStatus, type Goal, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 describe("Goals", () => {
@@ -31,8 +31,8 @@ describe("Goals", () => {
     const newGoal: Goal = {
       name: "Test Create Goal",
       status: GoalStatus.IN_PROGRESS,
-      room_id: zeroUuid,
-      user_id: user?.id as UUID,
+      roomId: zeroUuid,
+      userId: user?.id as UUID,
       objectives: [
         {
           description: "Test Objective",
@@ -49,8 +49,8 @@ describe("Goals", () => {
     // Verify the goal is created in the database
     const goals = await getGoals({
       runtime,
-      user_id: user?.id as UUID,
-      room_id: zeroUuid,
+      userId: user?.id as UUID,
+      roomId: zeroUuid,
       onlyInProgress: false,
     });
 
@@ -66,8 +66,8 @@ describe("Goals", () => {
     const newGoal: Goal = {
       name: "Test Create Goal",
       status: GoalStatus.IN_PROGRESS,
-      room_id: zeroUuid,
-      user_id: user?.id as UUID,
+      roomId: zeroUuid,
+      userId: user?.id as UUID,
       objectives: [
         {
           description: "Test Objective",
@@ -84,7 +84,7 @@ describe("Goals", () => {
     // retrieve the goal from the database
     let goals = await getGoals({
       runtime,
-      room_id: zeroUuid,
+      roomId: zeroUuid,
       onlyInProgress: false,
     });
     const existingGoal = goals.find(
@@ -99,7 +99,7 @@ describe("Goals", () => {
     // Verify the goal's status is updated in the database
     goals = await getGoals({
       runtime,
-      room_id: zeroUuid,
+      roomId: zeroUuid,
       onlyInProgress: false,
     });
 

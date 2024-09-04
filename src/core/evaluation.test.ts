@@ -1,26 +1,25 @@
-import { UUID } from "crypto";
 import dotenv from "dotenv";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { runAiTest } from "../../test_resources/runAiTest.ts";
+import fact from "../evaluators/fact.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { runAiTest } from "../test_resources/runAiTest.ts";
 import {
   TEST_EVALUATOR,
   TEST_EVALUATOR_FAIL,
-} from "../../test_resources/testEvaluator.ts";
-import { type User } from "../../test_resources/types.ts";
-import { zeroUuid } from "../constants.ts";
-import { composeContext } from "../context.ts";
-import { evaluationTemplate } from "../evaluators.ts";
-import fact from "../../evaluators/fact.ts";
-import { AgentRuntime } from "../runtime.ts";
-import { Message } from "../types.ts";
+} from "../test_resources/testEvaluator.ts";
+import { type User } from "../test_resources/types.ts";
+import { zeroUuid } from "./constants.ts";
+import { composeContext } from "./context.ts";
+import { evaluationTemplate } from "./evaluators.ts";
+import { AgentRuntime } from "./runtime.ts";
+import { Memory, UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Evaluation Process", () => {
   let runtime: AgentRuntime;
   let user: User;
-  let room_id: UUID;
+  let roomId: UUID;
 
   beforeAll(async () => {
     const setup = await createRuntime({
@@ -40,7 +39,7 @@ describe("Evaluation Process", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data!.room_id;
+    roomId = data!.roomId;
   });
 
   test("Validate the format of the examples from the evaluator", () => {
@@ -59,10 +58,10 @@ describe("Evaluation Process", () => {
   });
 
   test("Check if test and examples appear in state", async () => {
-    const message: Message = {
-      user_id: user.id as UUID,
-      content: { content: "Test message for evaluation" },
-      room_id,
+    const message: Memory = {
+      userId: user.id as UUID,
+      content: { text: "Test message for evaluation" },
+      roomId,
     };
 
     const state = await runtime.composeState(message);
@@ -77,10 +76,10 @@ describe("Evaluation Process", () => {
   });
 
   test("Run the TEST_EVALUATOR handler and validate output", async () => {
-    const message: Message = {
-      user_id: user.id as UUID,
-      content: { content: "Run TEST_EVALUATOR handler" },
-      room_id,
+    const message: Memory = {
+      userId: user.id as UUID,
+      content: { text: "Run TEST_EVALUATOR handler" },
+      roomId,
     };
 
     const result = await TEST_EVALUATOR.handler(runtime, message);
@@ -89,13 +88,12 @@ describe("Evaluation Process", () => {
 
   test("Run the evaluation process", async () => {
     await runAiTest("Run the evaluation process", async () => {
-      const message: Message = {
-        user_id: user.id as UUID,
+      const message: Memory = {
+        userId: user.id as UUID,
         content: {
-          content:
-            "We are in testing mode. We want to make sure that the test passes by replying with the evaluator TEST_EVALUATOR in the array of evaluators that are returned. Please run the TEST_EVALUATOR",
+          text: "We are in testing mode. We want to make sure that the test passes by replying with the evaluator TEST_EVALUATOR in the array of evaluators that are returned. Please run the TEST_EVALUATOR",
         },
-        room_id,
+        roomId,
       };
 
       const state = await runtime.composeState(message);
@@ -112,10 +110,10 @@ describe("Evaluation Process", () => {
       evaluators: [fact],
     });
 
-    const message: Message = {
-      user_id: user.id as UUID,
-      content: { content: "Test message for evaluation" },
-      room_id,
+    const message: Memory = {
+      userId: user.id as UUID,
+      content: { text: "Test message for evaluation" },
+      roomId,
     };
 
     const state = await runtime.composeState(message);

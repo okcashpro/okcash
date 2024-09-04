@@ -4,9 +4,9 @@ import fetch from "cross-fetch";
 import fs from "fs";
 import path from "path";
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { default as getUuid } from "uuid-by-string";
 import { generateSummary } from "./summary.ts";
 import { AgentRuntime } from "../core/runtime.ts";
+import { stringToUuid } from "../core/uuid.ts";
 
 export class BrowserService {
   private browser: Browser | undefined;
@@ -59,7 +59,7 @@ export class BrowserService {
 
   async getPageContent(
     url: string,
-  ): Promise<{ title: string; bodyContent: string }> {
+  ): Promise<{ title: string; description: string; bodyContent: string }> {
     const cacheKey = this.getCacheKey(url);
     const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${cacheKey}.json`);
 
@@ -70,13 +70,15 @@ export class BrowserService {
     if (fs.existsSync(cacheFilePath)) {
       return JSON.parse(fs.readFileSync(cacheFilePath, "utf-8")).content;
     }
+
     const content = await this.fetchPageContent(url);
     fs.writeFileSync(cacheFilePath, JSON.stringify({ url, content }));
+
     return content;
   }
 
   private getCacheKey(url: string): string {
-    return getUuid(url) as string;
+    return stringToUuid(url);
   }
 
   private async fetchPageContent(

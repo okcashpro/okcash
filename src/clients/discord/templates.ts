@@ -1,8 +1,10 @@
-export const messageHandlerTemplate =
-  // `
+import {
+  messageCompletionFooter,
+  shouldRespondFooter,
+} from "../../core/parsing.ts";
 
+export const messageHandlerTemplate =
   // {{goals}}
-  // {{actors}}
   `# Action Examples
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
@@ -21,10 +23,8 @@ About {{agentName}}:
 Examples of {{agentName}}'s dialog and actions:
 {{characterMessageExamples}}
 
-# Important information about the world:
 {{providers}}
 
-# Attachments
 {{attachments}}
 
 {{actionNames}}
@@ -33,18 +33,15 @@ Examples of {{agentName}}'s dialog and actions:
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
-# Directions for {{agentName}}'s response
-{{directions}}
+{{messageDirections}}
 
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}. Include an action, if appropriate.
-\nResponse format should be formatted in a JSON block like this:
-\`\`\`json
-{ "user": "{{agentName}}", "content": string, "action": string }
-\`\`\``;
+` + messageCompletionFooter;
 
-export const voiceHandlerTemplate = `# Task: Generate conversational voice dialog for {{agentName}}.
+export const voiceHandlerTemplate =
+  `# Task: Generate conversational voice dialog for {{agentName}}.
 About {{agentName}}:
 {{bio}}
 
@@ -55,18 +52,15 @@ About {{agentName}}:
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
-# Directions for {{agentName}}'s response
-{{directions}}
+{{messageDirections}}
 
 {{recentMessages}}
 
 # Instructions: Write the next message for {{agentName}}.
-\nResponse format should be formatted in a JSON block like this:
-\`\`\`json
-{ "user": "{{agentName}}", "content": string }
-\`\`\``;
+` + messageCompletionFooter;
 
-export const shouldRespondTemplate = `# Task: Decide if {{agentName}} should respond.
+export const shouldRespondTemplate =
+  `# Task: Decide if {{agentName}} should respond.
 About {{agentName}}:
 {{bio}}
 
@@ -78,7 +72,7 @@ About {{agentName}}:
 Result: [IGNORE]
 
 {{agentName}}: Oh, this is my favorite scene
-<user 1>: lol sick
+<user 1>: sick
 <user 2>: wait, why is it your favorite scene
 Result: [RESPOND]
 
@@ -129,9 +123,7 @@ If {{agentName}} concludes a conversation and isn't part of the conversation any
 IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to respond with [IGNORE].
 If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
 
-# INSTRUCTIONS: Respond with [RESPOND] if {{agentName}} would respond, [IGNORE] if {{agentName}} would not respond to the last message or [STOP] if {{agentName}} would stop participating in the conversation entirely.
-
-Options: [RESPOND], [IGNORE], [STOP]
-
 {{recentMessages}}
-Result:`;
+
+# INSTRUCTIONS: Choose the option that best describes {{agentName}}'s response to the last message.
+` + shouldRespondFooter;

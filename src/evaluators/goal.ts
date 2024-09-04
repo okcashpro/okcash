@@ -1,13 +1,8 @@
 import { composeContext } from "../core/context.ts";
 import { getGoals } from "../core/goals.ts";
-import { type AgentRuntime } from "../core/runtime.ts";
-import {
-  Objective,
-  type Goal,
-  type Message,
-  type State,
-} from "../core/types.ts";
 import { parseJsonArrayFromText } from "../core/parsing.ts";
+import { type AgentRuntime } from "../core/runtime.ts";
+import { Memory, Objective, type Goal, type State } from "../core/types.ts";
 
 const template = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.
@@ -48,14 +43,14 @@ Response format should be:
 
 async function handler(
   runtime: AgentRuntime,
-  message: Message,
+  message: Memory,
   state: State | undefined,
   options: { [key: string]: unknown } = { onlyInProgress: true },
 ): Promise<Goal[]> {
   // get goals
   let goalsData = await getGoals({
     runtime,
-    room_id: message.room_id,
+    roomId: message.roomId,
     onlyInProgress: options.onlyInProgress as boolean,
   });
 
@@ -77,7 +72,7 @@ async function handler(
   // get goals
   goalsData = await getGoals({
     runtime,
-    room_id: message.room_id,
+    roomId: message.roomId,
     onlyInProgress: true,
   });
 
@@ -127,14 +122,14 @@ export default {
   name: "UPDATE_GOAL",
   validate: async (
     runtime: AgentRuntime,
-    message: Message,
+    message: Memory,
   ): Promise<boolean> => {
     // Check if there are active goals that could potentially be updated
     const goals = await getGoals({
       runtime,
       count: 1,
       onlyInProgress: true,
-      room_id: message.room_id,
+      roomId: message.roomId,
     });
     return goals.length > 0;
   },
@@ -161,20 +156,19 @@ export default {
         {
           user: "{{user1}}",
           content: {
-            content: "I've just finished chapter 20 of 'War and Peace'",
+            text: "I've just finished chapter 20 of 'War and Peace'",
           },
         },
         {
           user: "{{user2}}",
           content: {
-            content:
-              "Were you able to grasp the complexities of the characters",
+            text: "Were you able to grasp the complexities of the characters",
           },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Yep. I've prepared some notes for our discussion",
+            text: "Yep. I've prepared some notes for our discussion",
           },
         },
       ],
@@ -207,18 +201,17 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I managed to run 30 miles this week" },
+          content: { text: "I managed to run 30 miles this week" },
         },
         {
           user: "{{user2}}",
           content: {
-            content:
-              "Impressive progress! How do you feel about the half-marathon next month?",
+            text: "Impressive progress! How do you feel about the half-marathon next month?",
           },
         },
         {
           user: "{{user1}}",
-          content: { content: "I feel confident. The training is paying off." },
+          content: { text: "I feel confident. The training is paying off." },
         },
       ],
 
@@ -249,17 +242,16 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "I've submitted the first draft of my thesis." },
+          content: { text: "I've submitted the first draft of my thesis." },
         },
         {
           user: "{{user2}}",
-          content: { content: "Well done. How is the prototype coming along?" },
+          content: { text: "Well done. How is the prototype coming along?" },
         },
         {
           user: "{{user1}}",
           content: {
-            content:
-              "It's almost done. I just need to finalize the testing phase.",
+            text: "It's almost done. I just need to finalize the testing phase.",
           },
         },
       ],
@@ -291,19 +283,18 @@ export default {
       messages: [
         {
           user: "{{user1}}",
-          content: { content: "How's the progress on the new features?" },
+          content: { text: "How's the progress on the new features?" },
         },
         {
           user: "{{user2}}",
           content: {
-            content:
-              "We've encountered some unexpected challenges and are currently troubleshooting.",
+            text: "We've encountered some unexpected challenges and are currently troubleshooting.",
           },
         },
         {
           user: "{{user1}}",
           content: {
-            content: "Let's move on and cancel the task.",
+            text: "Let's move on and cancel the task.",
           },
         },
       ],

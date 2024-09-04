@@ -1,7 +1,15 @@
 import { composeContext } from "../core/context.ts";
-import { Action, ActionExample, Message, State } from "../core/types.ts";
+import { booleanFooter } from "../core/parsing.ts";
+import {
+  Action,
+  ActionExample,
+  IAgentRuntime,
+  Memory,
+  State,
+} from "../core/types.ts";
 
-export const shouldMuteTemplate = `Based on the conversation so far:
+export const shouldMuteTemplate =
+  `Based on the conversation so far:
 
 {{recentMessages}}
 
@@ -12,54 +20,42 @@ Respond with YES if:
 - The user has directly asked {{agentName}} to stop responding or be quiet
 - {{agentName}}'s responses are not well-received or are annoying the user(s)
 
-Otherwise, respond with NO. 
-Only respond with YES or NO.`;
+Otherwise, respond with NO.
+` + booleanFooter;
 
 export default {
   name: "MUTE_ROOM",
   description:
     "Mutes a room, ignoring all messages unless explicitly mentioned. Only do this if explicitly asked to, or if you're annoying people.",
-  validate: async (runtime: any, message: Message) => {
-    const roomId = message.room_id;
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    const roomId = message.roomId;
     const userState = await runtime.databaseAdapter.getParticipantUserState(
       roomId,
       runtime.agentId,
     );
     return userState !== "MUTED" && userState !== "FOLLOWED";
   },
-  handler: async (runtime: any, message: Message) => {
+  handler: async (runtime: IAgentRuntime, message: Memory) => {
     async function _shouldMute(state: State): Promise<boolean> {
       const shouldMuteContext = composeContext({
         state,
         template: shouldMuteTemplate, // Define this template separately
       });
 
-      let response = "";
+      const response = await runtime.booleanCompletion({
+        context: shouldMuteContext,
+        stop: ["\n"],
+        max_response_length: 5,
+      });
 
-      for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-        try {
-          response = await runtime.completion({
-            context: shouldMuteContext,
-            stop: ["\n"],
-            max_response_length: 5,
-          });
-          break;
-        } catch (error) {
-          console.error("Error in _shouldMute:", error);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          console.log("Retrying...");
-        }
-      }
-
-      const lowerResponse = response.toLowerCase().trim();
-      return lowerResponse.includes("yes");
+      return response;
     }
 
     const state = await runtime.composeState(message);
 
     if (await _shouldMute(state)) {
       await runtime.databaseAdapter.setParticipantUserState(
-        message.room_id,
+        message.roomId,
         runtime.agentId,
         "MUTED",
       );
@@ -78,14 +74,14 @@ export default {
       {
         user: "{{user3}}",
         content: {
-          content: "Got it",
+          text: "Got it",
           action: "MUTE_ROOM",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "@{{user1}} we could really use your input on this",
+          text: "@{{user1}} we could really use your input on this",
         },
       },
     ],
@@ -93,26 +89,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "{{user3}}, please mute this channel for the time being",
+          text: "{{user3}}, please mute this channel for the time being",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content: "Understood",
+          text: "Understood",
           action: "MUTE_ROOM",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Hey what do you think about this new design",
+          text: "Hey what do you think about this new design",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          content: "",
+          text: "",
           action: "IGNORE",
         },
       },
@@ -121,26 +117,26 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "{{user2}} plz mute this room",
+          text: "{{user2}} plz mute this room",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "np going silent",
+          text: "np going silent",
           action: "MUTE_ROOM",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "whos going to the webxr meetup in an hour btw",
+          text: "whos going to the webxr meetup in an hour btw",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "",
+          text: "",
           action: "IGNORE",
         },
       },
@@ -149,13 +145,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "too many messages here {{user2}}",
+          text: "too many messages here {{user2}}",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          content: "my bad ill mute",
+          text: "my bad ill mute",
           action: "MUTE_ROOM",
         },
       },
@@ -164,13 +160,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "yo {{user2}} dont talk in here",
+          text: "yo {{user2}} dont talk in here",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "sry",
+          text: "sry",
           action: "MUTE_ROOM",
         },
       },

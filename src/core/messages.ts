@@ -6,13 +6,29 @@ import { type Actor, type Content, type Memory, type UUID } from "./types.ts";
  */
 export async function getActorDetails({
   runtime,
-  room_id,
+  roomId,
 }: {
   runtime: AgentRuntime;
-  room_id: UUID;
+  roomId: UUID;
 }) {
-  const actors = await runtime.databaseAdapter.getActorDetails({ room_id });
-  return actors as Actor[];
+  const participantIds =
+    await runtime.databaseAdapter.getParticipantsForRoom(roomId);
+  const actors = await Promise.all(
+    participantIds.map(async (userId) => {
+      const account = await runtime.databaseAdapter.getAccountById(userId);
+      if (account) {
+        return {
+          id: account.id,
+          name: account.name,
+          username: account.username,
+          details: account.details,
+        };
+      }
+      return null;
+    }),
+  );
+
+  return actors.filter((actor): actor is Actor => actor !== null);
 }
 
 /**
@@ -57,12 +73,12 @@ export const formatMessages = ({
 }) => {
   const messageStrings = messages
     .reverse()
-    .filter((message: Memory) => message.user_id)
+    .filter((message: Memory) => message.userId)
     .map((message: Memory) => {
-      let messageContent = (message.content as Content).content;
+      let messageContent = (message.content as Content).text;
       const messageAction = (message.content as Content).action;
       const formattedName =
-        actors.find((actor: Actor) => actor.id === message.user_id)?.name ||
+        actors.find((actor: Actor) => actor.id === message.userId)?.name ||
         "Unknown User";
 
       const attachments = (message.content as Content).attachments;
@@ -72,10 +88,9 @@ export const formatMessages = ({
           ? ` (Attachments: ${attachments.map((media) => `[${media.id} - ${media.title} (${media.url})]`).join(", ")})`
           : "";
 
-      const timestamp = message.created_at
-        ? formatTimestamp(message.created_at)
-        : "";
-      const shortId = message.user_id.slice(-5);
+      const timestamp = formatTimestamp(message.createdAt);
+
+      const shortId = message.userId.slice(-5);
 
       return `(${timestamp}) [${shortId}] ${formattedName}: ${messageContent}${attachmentString}${messageAction && messageAction !== "null" ? ` (${messageAction})` : ""}`;
     })
@@ -83,13 +98,18 @@ export const formatMessages = ({
   return messageStrings;
 };
 
-const formatTimestamp = (timestamp: string) => {
+export const formatTimestamp = (messageDate: Date) => {
   const clientNow = new Date();
   const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
-  let messageDate = new Date(timestamp);
 
-  // Adjust for the 7-hour difference
-  messageDate = new Date(messageDate.getTime() - 7 * 60 * 60 * 1000);
+  // what type of object is messageDate?
+  console.log("messageDate", messageDate);
+  console.log(typeof messageDate);
+
+  // if messageDate is a string, convert it to a date
+  if (typeof messageDate === "string") {
+    messageDate = new Date(messageDate);
+  }
 
   const diff = serverNow.getTime() - messageDate.getTime();
 

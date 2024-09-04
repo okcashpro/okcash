@@ -6,11 +6,17 @@ import {
   Client,
   Message as DiscordMessage,
 } from "discord.js";
-import { Message, State, Action, ActionExample } from "../core/types.ts";
+import {
+  Action,
+  ActionExample,
+  IAgentRuntime,
+  Memory,
+  State,
+} from "../../../core/types.ts";
 
 export default {
   name: "LEAVE_VOICE",
-  validate: async (runtime: any, message: Message, state: State) => {
+  validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
     if (!state) {
       throw new Error("State is not available.");
     }
@@ -44,7 +50,7 @@ export default {
     ];
     if (
       !keywords.some((keyword) =>
-        message.content.content.toLowerCase().includes(keyword),
+        message.content.text.toLowerCase().includes(keyword),
       )
     ) {
       return false;
@@ -59,8 +65,8 @@ export default {
   },
   description: "Leave the current voice channel.",
   handler: async (
-    runtime: any,
-    message: Message,
+    runtime: IAgentRuntime,
+    message: Memory,
     state: State,
   ): Promise<boolean> => {
     if (!state.discordClient) {
@@ -92,13 +98,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Hey {{user2}} please leave the voice channel",
+          text: "Hey {{user2}} please leave the voice channel",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Sure",
+          text: "Sure",
           action: "LEAVE_VOICE",
         },
       },
@@ -107,13 +113,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "I have to go now but thanks for the chat",
+          text: "I have to go now but thanks for the chat",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "You too, talk to you later",
+          text: "You too, talk to you later",
           action: "LEAVE_VOICE",
         },
       },
@@ -122,14 +128,14 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "Great call everyone, hopping off now",
+          text: "Great call everyone, hopping off now",
           action: "LEAVE_VOICE",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "Agreed, I'll hop off too",
+          text: "Agreed, I'll hop off too",
           action: "LEAVE_VOICE",
         },
       },
@@ -145,7 +151,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "No worries, I'll leave the voice channel",
+          text: "No worries, I'll leave the voice channel",
           action: "LEAVE_VOICE",
         },
       },
@@ -161,7 +167,7 @@ export default {
       {
         user: "{{user2}}",
         content: {
-          content: "Sounds good, see you both later",
+          text: "Sounds good, see you both later",
           action: "LEAVE_VOICE",
         },
       },
@@ -170,13 +176,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "leave voice {{user2}}",
+          text: "leave voice {{user2}}",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "ok leaving",
+          text: "ok leaving",
           action: "LEAVE_VOICE",
         },
       },
@@ -185,13 +191,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "plz leave the voice chat {{user2}}",
+          text: "plz leave the voice chat {{user2}}",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "aight im out",
+          text: "aight im out",
           action: "LEAVE_VOICE",
         },
       },
@@ -200,13 +206,13 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content: "yo {{user2}} gtfo the vc",
+          text: "yo {{user2}} gtfo the vc",
         },
       },
       {
         user: "{{user2}}",
         content: {
-          content: "sorry, talk to you later",
+          text: "sorry, talk to you later",
           action: "LEAVE_VOICE",
         },
       },

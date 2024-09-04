@@ -2,20 +2,20 @@ import dotenv from "dotenv";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
-} from "../../test_resources/cache.ts";
-import { createRuntime } from "../../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../../test_resources/getOrCreateRelationship.ts";
-import { type User } from "../../test_resources/types.ts";
-import { zeroUuid } from "../constants.ts";
-import { MemoryManager } from "../memory.ts";
-import { type Content, type Memory, type UUID } from "../types.ts";
+} from "../test_resources/cache.ts";
+import { createRuntime } from "../test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
+import { type User } from "../test_resources/types.ts";
+import { zeroUuid } from "./constants.ts";
+import { MemoryManager } from "./memory.ts";
+import { type Content, type Memory, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 describe("Memory", () => {
   let memoryManager: MemoryManager;
   let runtime = null;
   let user: User;
-  let room_id: UUID = zeroUuid;
+  let roomId: UUID = zeroUuid;
 
   beforeAll(async () => {
     const result = await createRuntime({
@@ -34,7 +34,7 @@ describe("Memory", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data.room_id;
+    roomId = data.roomId;
 
     memoryManager = new MemoryManager({
       tableName: "messages",
@@ -43,11 +43,11 @@ describe("Memory", () => {
   });
 
   beforeEach(async () => {
-    await memoryManager.removeAllMemories(room_id);
+    await memoryManager.removeAllMemories(roomId);
   });
 
   afterAll(async () => {
-    await memoryManager.removeAllMemories(room_id);
+    await memoryManager.removeAllMemories(roomId);
   });
 
   test("Search memories by embedding similarity", async () => {
@@ -64,9 +64,9 @@ describe("Memory", () => {
 
     // Create and add embedding to the similar and dissimilar memories
     const similarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: similarMemoryContent },
-      room_id: room_id,
+      userId: user?.id as UUID,
+      content: { text: similarMemoryContent },
+      roomId: roomId,
       embedding,
     });
     if (!embedding) {
@@ -80,9 +80,9 @@ describe("Memory", () => {
     embedding = await getCachedEmbeddings(dissimilarMemoryContent);
 
     const dissimilarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: dissimilarMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: dissimilarMemoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -97,7 +97,7 @@ describe("Memory", () => {
     const searchedMemories = await memoryManager.searchMemoriesByEmbedding(
       baseMemory!,
       {
-        room_id,
+        roomId,
         count: 1,
       },
     );
@@ -105,14 +105,13 @@ describe("Memory", () => {
     // Check that the similar memory is included in the search results and the dissimilar one is not or ranks lower
     expect(
       searchedMemories.some(
-        (memory) =>
-          (memory.content as Content).content === similarMemoryContent,
+        (memory) => (memory.content as Content).text === similarMemoryContent,
       ),
     ).toBe(true);
     expect(
       searchedMemories.some(
         (memory) =>
-          (memory.content as Content).content === dissimilarMemoryContent,
+          (memory.content as Content).text === dissimilarMemoryContent,
       ),
     ).toBe(false);
   }, 60000);
@@ -127,9 +126,9 @@ describe("Memory", () => {
 
     // Create and add embedding to the query memory
     const queryMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: queryMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: queryMemoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -143,9 +142,9 @@ describe("Memory", () => {
     embedding = await getCachedEmbeddings(highSimilarityContent);
     // Create and add embedding to the high and low similarity memories
     const highSimilarityMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: highSimilarityContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: highSimilarityContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -158,9 +157,9 @@ describe("Memory", () => {
 
     embedding = await getCachedEmbeddings(lowSimilarityContent);
     const lowSimilarityMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: lowSimilarityContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: lowSimilarityContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -175,17 +174,17 @@ describe("Memory", () => {
     const searchedMemories = await memoryManager.searchMemoriesByEmbedding(
       queryMemory.embedding!,
       {
-        room_id,
+        roomId,
         count: 10,
       },
     );
 
     // Check that the high similarity memory ranks higher than the low similarity memory
     const highSimilarityIndex = searchedMemories.findIndex(
-      (memory) => (memory.content as Content).content === highSimilarityContent,
+      (memory) => (memory.content as Content).text === highSimilarityContent,
     );
     const lowSimilarityIndex = searchedMemories.findIndex(
-      (memory) => (memory.content as Content).content === lowSimilarityContent,
+      (memory) => (memory.content as Content).text === lowSimilarityContent,
     );
 
     expect(highSimilarityIndex).toBeLessThan(lowSimilarityIndex);
@@ -195,7 +194,7 @@ describe("Memory - Basic tests", () => {
   let memoryManager: MemoryManager;
   let runtime = null;
   let user: User;
-  let room_id: UUID;
+  let roomId: UUID;
 
   // Setup before all tests
   beforeAll(async () => {
@@ -215,7 +214,7 @@ describe("Memory - Basic tests", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data.room_id;
+    roomId = data.roomId;
 
     memoryManager = new MemoryManager({
       tableName: "messages", // Adjust based on your actual table name
@@ -225,7 +224,7 @@ describe("Memory - Basic tests", () => {
 
   // Cleanup after all tests
   afterAll(async () => {
-    await memoryManager.removeAllMemories(room_id);
+    await memoryManager.removeAllMemories(roomId);
   });
 
   test("Memory lifecycle: create, search, count, and remove", async () => {
@@ -234,33 +233,33 @@ describe("Memory - Basic tests", () => {
     );
     // Create a test memory
     const testMemory: Memory = await memoryManager.addEmbeddingToMemory({
-      user_id: user.id as UUID,
-      content: { content: "Test content for memory lifecycle" },
-      room_id: room_id,
+      userId: user.id as UUID,
+      content: { text: "Test content for memory lifecycle" },
+      roomId: roomId,
       embedding,
     });
     if (!embedding) {
       writeCachedEmbedding(
-        (testMemory.content as Content).content as string,
+        (testMemory.content as Content).text as string,
         testMemory.embedding as number[],
       );
     }
     await memoryManager.createMemory(testMemory);
 
     const createdMemories = await memoryManager.getMemories({
-      room_id,
+      roomId,
       count: 100,
     });
 
     // Verify creation by counting memories
-    const initialCount = await memoryManager.countMemories(room_id, false);
+    const initialCount = await memoryManager.countMemories(roomId, false);
     expect(initialCount).toBeGreaterThan(0);
 
     // Search memories by embedding
     const searchedMemories = await memoryManager.searchMemoriesByEmbedding(
       testMemory.embedding!,
       {
-        room_id,
+        roomId,
         count: 5,
       },
     );
@@ -268,12 +267,12 @@ describe("Memory - Basic tests", () => {
 
     // Remove a specific memory
     await memoryManager.removeMemory(createdMemories[0].id!);
-    const afterRemovalCount = await memoryManager.countMemories(room_id);
+    const afterRemovalCount = await memoryManager.countMemories(roomId);
     expect(afterRemovalCount).toBeLessThan(initialCount);
 
     // Remove all memories for the test user
-    await memoryManager.removeAllMemories(room_id);
-    const finalCount = await memoryManager.countMemories(room_id);
+    await memoryManager.removeAllMemories(roomId);
+    const finalCount = await memoryManager.countMemories(roomId);
     expect(finalCount).toEqual(0);
   });
 });
@@ -281,7 +280,7 @@ describe("Memory - Extended Tests", () => {
   let memoryManager: MemoryManager;
   let runtime = null;
   let user: User;
-  let room_id: UUID;
+  let roomId: UUID;
 
   beforeAll(async () => {
     const result = await createRuntime({
@@ -300,9 +299,9 @@ describe("Memory - Extended Tests", () => {
       throw new Error("Relationship not found");
     }
 
-    room_id = data.room_id;
+    roomId = data.roomId;
 
-    if (!room_id) throw new Error("Room not found");
+    if (!roomId) throw new Error("Room not found");
 
     memoryManager = new MemoryManager({
       tableName: "messages",
@@ -311,11 +310,11 @@ describe("Memory - Extended Tests", () => {
   });
 
   beforeEach(async () => {
-    await memoryManager.removeAllMemories(room_id);
+    await memoryManager.removeAllMemories(roomId);
   });
 
   afterAll(async () => {
-    await memoryManager.removeAllMemories(room_id);
+    await memoryManager.removeAllMemories(roomId);
   });
 
   test("Test cosine similarity value equality", async () => {
@@ -330,9 +329,9 @@ describe("Memory - Extended Tests", () => {
 
     // Create and add embedding to the similar and dissimilar memories
     const similarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: similarMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: similarMemoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -347,7 +346,7 @@ describe("Memory - Extended Tests", () => {
     const searchedMemories = await memoryManager.searchMemoriesByEmbedding(
       baseMemory!,
       {
-        room_id,
+        roomId,
         count: 1,
       },
     );
@@ -370,9 +369,9 @@ describe("Memory - Extended Tests", () => {
 
     // Create and add embedding to the similar and dissimilar memories
     const similarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: similarMemoryContent },
-      room_id: room_id,
+      userId: user?.id as UUID,
+      content: { text: similarMemoryContent },
+      roomId: roomId,
       embedding,
     });
     if (!embedding) {
@@ -388,7 +387,7 @@ describe("Memory - Extended Tests", () => {
       baseMemory!,
       {
         match_threshold: 0.01,
-        room_id,
+        roomId,
         count: 1,
       },
     );
@@ -409,9 +408,9 @@ describe("Memory - Extended Tests", () => {
 
     // Create and add embedding to the similar and dissimilar memories
     const newMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: memoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: memoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -423,9 +422,9 @@ describe("Memory - Extended Tests", () => {
 
     // Create and add embedding to the similar and dissimilar memories
     const similarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: similarMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: similarMemoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -436,8 +435,8 @@ describe("Memory - Extended Tests", () => {
     }
     await memoryManager.createMemory(similarMemory, true);
 
-    const allCount = await memoryManager.countMemories(room_id, false);
-    const uniqueCount = await memoryManager.countMemories(room_id, true);
+    const allCount = await memoryManager.countMemories(roomId, false);
+    const uniqueCount = await memoryManager.countMemories(roomId, true);
 
     expect(allCount > uniqueCount).toBe(true);
   });
@@ -455,9 +454,9 @@ describe("Memory - Extended Tests", () => {
 
     // Create and add embedding to the similar and dissimilar memories
     const similarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: similarMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: similarMemoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -471,9 +470,9 @@ describe("Memory - Extended Tests", () => {
     embedding = await getCachedEmbeddings(dissimilarMemoryContent);
 
     const dissimilarMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: dissimilarMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: dissimilarMemoryContent },
+      roomId,
       embedding: await getCachedEmbeddings(dissimilarMemoryContent),
     });
     if (!embedding) {
@@ -488,7 +487,7 @@ describe("Memory - Extended Tests", () => {
     const searchedMemories = await memoryManager.searchMemoriesByEmbedding(
       baseMemory!,
       {
-        room_id,
+        roomId,
         count: 1,
       },
     );
@@ -496,14 +495,13 @@ describe("Memory - Extended Tests", () => {
     // Check that the similar memory is included in the search results and the dissimilar one is not or ranks lower
     expect(
       searchedMemories.some(
-        (memory) =>
-          (memory.content as Content).content === similarMemoryContent,
+        (memory) => (memory.content as Content).text === similarMemoryContent,
       ),
     ).toBe(true);
     expect(
       searchedMemories.some(
         (memory) =>
-          (memory.content as Content).content === dissimilarMemoryContent,
+          (memory.content as Content).text === dissimilarMemoryContent,
       ),
     ).toBe(false);
   }, 60000);
@@ -518,9 +516,9 @@ describe("Memory - Extended Tests", () => {
 
     // Create and add embedding to the query memory
     const queryMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: queryMemoryContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: queryMemoryContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -534,9 +532,9 @@ describe("Memory - Extended Tests", () => {
     embedding = await getCachedEmbeddings(highSimilarityContent);
     // Create and add embedding to the high and low similarity memories
     const highSimilarityMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: highSimilarityContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: highSimilarityContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -549,9 +547,9 @@ describe("Memory - Extended Tests", () => {
 
     embedding = await getCachedEmbeddings(lowSimilarityContent);
     const lowSimilarityMemory = await memoryManager.addEmbeddingToMemory({
-      user_id: user?.id as UUID,
-      content: { content: lowSimilarityContent },
-      room_id,
+      userId: user?.id as UUID,
+      content: { text: lowSimilarityContent },
+      roomId,
       embedding,
     });
     if (!embedding) {
@@ -566,17 +564,17 @@ describe("Memory - Extended Tests", () => {
     const searchedMemories = await memoryManager.searchMemoriesByEmbedding(
       queryMemory.embedding!,
       {
-        room_id,
+        roomId,
         count: 10,
       },
     );
 
     // Check that the high similarity memory ranks higher than the low similarity memory
     const highSimilarityIndex = searchedMemories.findIndex(
-      (memory) => (memory.content as Content).content === highSimilarityContent,
+      (memory) => (memory.content as Content).text === highSimilarityContent,
     );
     const lowSimilarityIndex = searchedMemories.findIndex(
-      (memory) => (memory.content as Content).content === lowSimilarityContent,
+      (memory) => (memory.content as Content).text === lowSimilarityContent,
     );
 
     expect(highSimilarityIndex).toBeLessThan(lowSimilarityIndex);
