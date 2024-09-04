@@ -6,8 +6,8 @@ import OpenAI from "openai";
 import os from "os";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { getWavHeader } from "../clients/elevenlabs/index.ts";
 import settings from "../core/settings.ts";
+import { getWavHeader } from "./audioUtils.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -1,4 +1,9 @@
-import { QueryTweetsResponse, Scraper, SearchMode, Tweet } from "agent-twitter-client";
+import {
+  QueryTweetsResponse,
+  Scraper,
+  SearchMode,
+  Tweet,
+} from "agent-twitter-client";
 import { EventEmitter } from "events";
 import fs from "fs";
 import path from "path";
@@ -144,11 +149,7 @@ export class ClientBase extends EventEmitter {
     throw new Error("Not implemented in base class, please call from subclass");
   }
 
-  constructor({
-    runtime,
-  }: {
-    runtime: AgentRuntime;
-  }) {
+  constructor({ runtime }: { runtime: AgentRuntime }) {
     super();
     this.runtime = runtime;
     if (ClientBase._twitterClient) {
@@ -218,14 +219,29 @@ export class ClientBase extends EventEmitter {
     })();
   }
 
-  async fetchSearchTweets(query: string, maxTweets: number, searchMode: SearchMode, cursor?: string): Promise<QueryTweetsResponse> {
+  async fetchSearchTweets(
+    query: string,
+    maxTweets: number,
+    searchMode: SearchMode,
+    cursor?: string,
+  ): Promise<QueryTweetsResponse> {
     // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
     // if we dont get a response in 5 seconds, something is wrong
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout waiting for Twitter API response')), 5000));
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("Timeout waiting for Twitter API response")),
+        5000,
+      ),
+    );
 
     try {
       const result = await Promise.race([
-        this.twitterClient.fetchSearchTweets(query, maxTweets, searchMode, cursor),
+        this.twitterClient.fetchSearchTweets(
+          query,
+          maxTweets,
+          searchMode,
+          cursor,
+        ),
         timeoutPromise,
       ]);
       return (result ?? { tweets: [] }) as QueryTweetsResponse;
@@ -236,6 +252,29 @@ export class ClientBase extends EventEmitter {
   }
 
   private async populateTimeline() {
+    const cacheFile = "timeline_cache.json";
+
+    // Check if the cache file exists
+    if (fs.existsSync(cacheFile)) {
+      // Read the cached search results from the file
+      const cachedResults = JSON.parse(fs.readFileSync(cacheFile, "utf-8"));
+
+      // Check if the cached results exist in the database
+      const existingMemories =
+        await this.runtime.messageManager.getMemoriesByRoomIds({
+          roomIds: cachedResults.map((tweet) =>
+            stringToUuid(tweet.conversationId),
+          ),
+        });
+
+      if (existingMemories.length === cachedResults.length) {
+        console.log(
+          "Cached results already exist in the database. Skipping timeline population.",
+        );
+        return;
+      }
+    }
+
     // Get the most recent 20 mentions and interactions
     const mentionsAndInteractions = await this.fetchSearchTweets(
       `@${settings.TWITTER_USERNAME}`,
@@ -298,16 +337,25 @@ export class ClientBase extends EventEmitter {
         "twitter",
       );
       await this.runtime.ensureParticipantExists(tweetuserId, roomId);
-      const content = { text: tweet.text, url: tweet.permanentUrl, inReplyTo: tweet.inReplyToStatusId ? stringToUuid(tweet.inReplyToStatusId) : undefined } as Content;
+      const content = {
+        text: tweet.text,
+        url: tweet.permanentUrl,
+        inReplyTo: tweet.inReplyToStatusId
+          ? stringToUuid(tweet.inReplyToStatusId)
+          : undefined,
+      } as Content;
       await this.runtime.messageManager.createMemory({
         id: stringToUuid(tweet.id),
         userId: tweetuserId,
         content: content,
         roomId,
         embedding: embeddingZeroVector,
-        createdAt: new Date(tweet.timestamp),
+        createdAt: new Date(tweet.timestamp * 1000),
       });
     }
+
+    // Cache the search results to the file
+    fs.writeFileSync(cacheFile, JSON.stringify(allTweets));
   }
 
   async setCookiesFromArray(cookiesArray: any[]) {
@@ -334,7 +382,7 @@ export class ClientBase extends EventEmitter {
       } else {
         await this.runtime.messageManager.createMemory({
           ...message,
-          embedding: embeddingZeroVector, 
+          embedding: embeddingZeroVector,
         });
       }
 

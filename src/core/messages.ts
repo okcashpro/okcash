@@ -111,9 +111,6 @@ export const formatTimestamp = (messageDate: Date) => {
     messageDate = new Date(messageDate);
   }
 
-  // Adjust for the 7-hour difference
-  messageDate = new Date(messageDate.getTime() - 7 * 60 * 60 * 1000);
-
   const diff = serverNow.getTime() - messageDate.getTime();
 
   const absDiff = Math.abs(diff);

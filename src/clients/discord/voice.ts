@@ -28,9 +28,14 @@ import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, HandlerCallback, Memory, State, UUID } from "../../core/types.ts";
+import {
+  Content,
+  HandlerCallback,
+  Memory,
+  State,
+  UUID,
+} from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
-import { textToSpeech } from "../elevenlabs/index.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
 
 // These values are chosen for compatibility with picovoice components
@@ -118,7 +123,12 @@ export class VoiceManager extends EventEmitter {
             this.runtime.character.name,
           );
           await Promise.all([
-            this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
+            this.runtime.ensureUserExists(
+              userIdUUID,
+              userName,
+              name,
+              "discord",
+            ),
             this.runtime.ensureRoomExists(roomId),
           ]);
 
@@ -239,11 +249,16 @@ export class VoiceManager extends EventEmitter {
         console.warn("Empty response, skipping");
       }
       return [responseMemory];
-    }
+    };
 
     const responseMemories = await callback(responseContent);
 
-    await this.runtime.processActions(memory, responseMemories, state, callback)
+    await this.runtime.processActions(
+      memory,
+      responseMemories,
+      state,
+      callback,
+    );
 
     return responseContent;
   }
@@ -536,31 +551,5 @@ export class VoiceManager extends EventEmitter {
       console.error("Error leaving voice channel:", error);
       await interaction.reply("Failed to leave the voice channel.");
     }
-  }
-
-  async textToSpeech(text: string): Promise<Readable> {
-    // check for elevenlabs API key
-    if (process.env.ELEVENLABS_XI_API_KEY) {
-      return textToSpeech(text);
-    }
-
-    // Generate the speech to get a Float32Array of single channel 22050Hz audio data
-    const audio = await this.runtime.speechService.generate(text);
-
-    // Encode the audio data into a WAV format
-    const { encode } = WavEncoder;
-    const audioData = {
-      sampleRate: 22050,
-      channelData: [audio],
-    };
-    const wavArrayBuffer = encode.sync(audioData);
-
-    // TODO: Move to a temp file
-    // Convert the ArrayBuffer to a Buffer and save it to a file
-    fs.writeFileSync("buffer.wav", Buffer.from(wavArrayBuffer));
-
-    // now read the file
-    const wavStream = fs.createReadStream("buffer.wav");
-    return wavStream;
   }
 }

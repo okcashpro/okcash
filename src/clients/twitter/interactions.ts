@@ -177,7 +177,6 @@ export class TwitterInteractionClient extends ClientBase {
               this.lastCheckedTweetId.toString(),
               "utf-8",
             );
-
           } catch (error) {
             console.error(
               "Error saving latest checked tweet ID to file:",
@@ -258,10 +257,16 @@ export class TwitterInteractionClient extends ClientBase {
 
       const message = {
         id: tweetId,
-        content: { text: tweet.text, url: tweet.permanentUrl, inReplyTo: tweet.inReplyToStatusId ? stringToUuid(tweet.inReplyToStatusId) : undefined },
+        content: {
+          text: tweet.text,
+          url: tweet.permanentUrl,
+          inReplyTo: tweet.inReplyToStatusId
+            ? stringToUuid(tweet.inReplyToStatusId)
+            : undefined,
+        },
         userId: userIdUUID,
         roomId,
-        createdAt: new Date(tweet.timestamp),
+        createdAt: new Date(tweet.timestamp * 1000),
       };
       this.saveRequestMessage(message, state);
     }
@@ -325,9 +330,7 @@ export class TwitterInteractionClient extends ClientBase {
 
           const responseMessages = await callback(response);
 
-          state = (await this.runtime.updateRecentMessageState(
-            state,
-          )) as State;
+          state = (await this.runtime.updateRecentMessageState(state)) as State;
 
           for (const responseMessage of responseMessages) {
             await this.runtime.messageManager.createMemory(responseMessage);

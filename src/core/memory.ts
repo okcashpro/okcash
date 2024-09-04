@@ -148,6 +148,7 @@ export class MemoryManager implements IMemoryManager {
    * @returns A Promise that resolves when the operation completes.
    */
   async createMemory(memory: Memory, unique = false): Promise<void> {
+    console.log("Creating memory", memory.createdAt);
     const existingMessage = await this.runtime.databaseAdapter.getMemoryById(
       memory.id,
     );

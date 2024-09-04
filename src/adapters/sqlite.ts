@@ -20,9 +20,7 @@ import { Database } from "better-sqlite3";
 export class SqliteDatabaseAdapter extends DatabaseAdapter {
   async getRoom(roomId: UUID): Promise<UUID | null> {
     const sql = "SELECT id FROM rooms WHERE id = ?";
-    const room = this.db.prepare(sql).get(roomId) as
-      | { id: string }
-      | undefined;
+    const room = this.db.prepare(sql).get(roomId) as { id: string } | undefined;
     return room ? (room.id as UUID) : null;
   }
 

@@ -88,34 +88,27 @@ export class TwitterSearchClient extends ClientBase {
         fs.mkdirSync("tweets");
       }
 
-      const tweetsArray = await this.requestQueue.add(async () =>
-        await this.fetchSearchTweets(
-          searchTerm,
-          200,
-          SearchMode.Top,
-        )
-      )
+      const tweetsArray = await this.requestQueue.add(
+        async () =>
+          await this.fetchSearchTweets(searchTerm, 200, SearchMode.Top),
+      );
 
-      const recentTweets = await this.requestQueue.add(async () =>
-        await this.fetchSearchTweets(
-          searchTerm,
-          200,
-          SearchMode.Latest,
-        )
-      )
+      const recentTweets = await this.requestQueue.add(
+        async () =>
+          await this.fetchSearchTweets(searchTerm, 200, SearchMode.Latest),
+      );
 
       const allTweets = [...tweetsArray.tweets, ...recentTweets.tweets];
 
       const uniqueTweets = allTweets.filter(
         (tweet, index, self) =>
-          index ===
-          self.findIndex((t) => t.id === tweet.id),
+          index === self.findIndex((t) => t.id === tweet.id),
       );
 
       // randomly slice .tweets down to 20
-      tweetsArray.tweets = uniqueTweets.sort(
-        () => Math.random() - 0.5,
-      ).slice(0, 20);
+      tweetsArray.tweets = uniqueTweets
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 20);
 
       if (tweetsArray.tweets.length === 0) {
         console.log("No valid tweets found for the search term");
@@ -126,22 +119,22 @@ export class TwitterSearchClient extends ClientBase {
   Here are some tweets related to the search term "${searchTerm}":
   
   ${tweetsArray.tweets
-          .filter((tweet) => {
-            // ignore tweets where any of the thread tweets contain a tweet by the bot
-            const thread = tweet.thread;
-            const botTweet = thread.find(
-              (t) => t.username === settings.TWITTER_USERNAME,
-            );
-            return !botTweet;
-          })
-          .map(
-            (tweet) => `
+    .filter((tweet) => {
+      // ignore tweets where any of the thread tweets contain a tweet by the bot
+      const thread = tweet.thread;
+      const botTweet = thread.find(
+        (t) => t.username === settings.TWITTER_USERNAME,
+      );
+      return !botTweet;
+    })
+    .map(
+      (tweet) => `
     ID: ${tweet.id}
     From: ${tweet.name} (@${tweet.username})
     Text: ${tweet.text}
   `,
-          )
-          .join("\n")}
+    )
+    .join("\n")}
   
   Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
   Notes:
@@ -214,10 +207,16 @@ export class TwitterSearchClient extends ClientBase {
 
       const message = {
         id: stringToUuid(selectedTweet.id),
-        content: { text: selectedTweet.text, url: selectedTweet.permanentUrl, inReplyTo: selectedTweet.inReplyToStatusId ? stringToUuid(selectedTweet.inReplyToStatusId) : undefined },
+        content: {
+          text: selectedTweet.text,
+          url: selectedTweet.permanentUrl,
+          inReplyTo: selectedTweet.inReplyToStatusId
+            ? stringToUuid(selectedTweet.inReplyToStatusId)
+            : undefined,
+        },
         userId: userIdUUID,
         roomId,
-        createdAt: new Date(selectedTweet.timestamp),
+        createdAt: new Date(selectedTweet.timestamp * 1000),
       };
 
       if (!message.content.text) {
@@ -329,7 +328,10 @@ export class TwitterSearchClient extends ClientBase {
           state = await this.runtime.updateRecentMessageState(state);
 
           for (const responseMessage of responseMessages) {
-            await this.runtime.messageManager.createMemory(responseMessage, false);
+            await this.runtime.messageManager.createMemory(
+              responseMessage,
+              false,
+            );
           }
 
           state = await this.runtime.updateRecentMessageState(state);

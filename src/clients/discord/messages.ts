@@ -19,6 +19,7 @@ import { TextChannel } from "discord.js";
 import { AgentRuntime } from "../../core/runtime.ts";
 import { VoiceManager } from "./voice.ts";
 import { stringToUuid } from "../../core/uuid.ts";
+import { SpeechService } from "../../services/speech.ts";
 
 const MAX_MESSAGE_LENGTH = 1900;
 
@@ -221,14 +222,12 @@ export class MessageManager {
       }
 
       const callback: HandlerCallback = async (content: Content) => {
-        if(message.id && !content.inReplyTo) {
+        if (message.id && !content.inReplyTo) {
           content.inReplyTo = stringToUuid(message.id);
         }
         if (message.channel.type === ChannelType.GuildVoice) {
           // For voice channels, use text-to-speech
-          const audioStream = await this.voiceManager.textToSpeech(
-            content.text,
-          );
+          const audioStream = await SpeechService.generate(content.text);
           await this.voiceManager.playAudioStream(userId, audioStream);
           const memory: Memory = {
             id: stringToUuid(message.id),
@@ -247,13 +246,13 @@ export class MessageManager {
           let notFirstMessage = false;
           let memories: Memory[] = [];
           for (const m of messages) {
-            let action = content.action
+            let action = content.action;
             // If there's only one message or it's the last message, keep the original action
             // For multiple messages, set all but the last to 'CONTINUE'
             if (messages.length > 1 && m !== messages[messages.length - 1]) {
               action = "CONTINUE";
             }
-            
+
             notFirstMessage = true;
             const memory: Memory = {
               id: stringToUuid(m.id),
@@ -295,7 +294,7 @@ export class MessageManager {
         // For voice channels, use text-to-speech for the error message
         const errorMessage =
           "Sorry, I encountered an error while processing your request.";
-        const audioStream = await this.voiceManager.textToSpeech(errorMessage);
+        const audioStream = await SpeechService.generate(errorMessage);
         await this.voiceManager.playAudioStream(userId, audioStream);
       } else {
         // For text channels, send the error message

@@ -845,7 +845,7 @@ export class AgentRuntime implements IAgentRuntime {
         id: userId,
         name: name || userName || "Unknown User",
         username: userName || name || "Unknown",
-        email: email || ((userName || "Bot") + "@" + source || "Unknown"), // Temporary
+        email: email || (userName || "Bot") + "@" + source || "Unknown", // Temporary
         details: { summary: "" },
       });
       console.log(`User ${userName} created successfully.`);
@@ -1075,12 +1075,18 @@ Text: ${attachment.text}
       recentInteractionsData: Memory[],
     ): Promise<string> => {
       // Format the recent messages
-      const formattedInteractions = recentInteractionsData
-        .map((message) => {
-          const sender =
-            message.userId === this.agentId
-              ? this.character.name
-              : message.content.name;
+      const formattedInteractions = await recentInteractionsData
+        .map(async (message) => {
+          const isSelf = message.userId === this.agentId;
+          let sender;
+          if (isSelf) {
+            sender = this.character.name;
+          } else {
+            const accountId = await this.databaseAdapter.getAccountById(
+              message.userId,
+            );
+            sender = accountId?.username || "unknown";
+          }
           return `${sender}: ${message.content.text}`;
         })
         .join("\n");

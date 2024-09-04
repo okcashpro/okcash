@@ -132,24 +132,24 @@ export class DiscordClient extends EventEmitter {
 
     let emoji = reaction.emoji.name;
     if (!emoji && reaction.emoji.id) {
-        emoji = `<:${reaction.emoji.name}:${reaction.emoji.id}>`;
+      emoji = `<:${reaction.emoji.name}:${reaction.emoji.id}>`;
     }
 
     // Fetch the full message if it's a partial
     if (reaction.partial) {
-        try {
-            await reaction.fetch();
-        } catch (error) {
-            console.error("Something went wrong when fetching the message:", error);
-            return;
-        }
+      try {
+        await reaction.fetch();
+      } catch (error) {
+        console.error("Something went wrong when fetching the message:", error);
+        return;
+      }
     }
 
     const messageContent = reaction.message.content;
     const truncatedContent =
-        messageContent.length > 100
-            ? messageContent.substring(0, 100) + "..."
-            : messageContent;
+      messageContent.length > 100
+        ? messageContent.substring(0, 100) + "..."
+        : messageContent;
 
     const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
 
@@ -157,47 +157,49 @@ export class DiscordClient extends EventEmitter {
     const userIdUUID = stringToUuid(user.id);
 
     // Generate a unique UUID for the reaction
-    const reactionUUID = stringToUuid(`${reaction.message.id}-${user.id}-${emoji}`);
+    const reactionUUID = stringToUuid(
+      `${reaction.message.id}-${user.id}-${emoji}`,
+    );
 
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
-        id: reactionUUID, // This is the ID of the reaction message
-        userId: userIdUUID,
-        content: {
-            text: reactionMessage,
-            source: "Discord",
-            inReplyTo: stringToUuid(reaction.message.id) // This is the ID of the original message
-        },
-        roomId,
-        createdAt: new Date(),
-        embedding: embeddingZeroVector,
+      id: reactionUUID, // This is the ID of the reaction message
+      userId: userIdUUID,
+      content: {
+        text: reactionMessage,
+        source: "Discord",
+        inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
+      },
+      roomId,
+      createdAt: new Date(),
+      embedding: embeddingZeroVector,
     });
-}
+  }
 
-async handleReactionRemove(reaction: MessageReaction, user: User) {
+  async handleReactionRemove(reaction: MessageReaction, user: User) {
     console.log("Reaction removed");
     // if (user.bot) return;
 
     let emoji = reaction.emoji.name;
     if (!emoji && reaction.emoji.id) {
-        emoji = `<:${reaction.emoji.name}:${reaction.emoji.id}>`;
+      emoji = `<:${reaction.emoji.name}:${reaction.emoji.id}>`;
     }
 
     // Fetch the full message if it's a partial
     if (reaction.partial) {
-        try {
-            await reaction.fetch();
-        } catch (error) {
-            console.error("Something went wrong when fetching the message:", error);
-            return;
-        }
+      try {
+        await reaction.fetch();
+      } catch (error) {
+        console.error("Something went wrong when fetching the message:", error);
+        return;
+      }
     }
 
     const messageContent = reaction.message.content;
     const truncatedContent =
-        messageContent.length > 50
-            ? messageContent.substring(0, 50) + "..."
-            : messageContent;
+      messageContent.length > 50
+        ? messageContent.substring(0, 50) + "..."
+        : messageContent;
 
     const reactionMessage = `*Removed <${emoji} emoji> from: "${truncatedContent}"*`;
 
@@ -205,22 +207,24 @@ async handleReactionRemove(reaction: MessageReaction, user: User) {
     const userIdUUID = stringToUuid(user.id);
 
     // Generate a unique UUID for the reaction removal
-    const reactionUUID = stringToUuid(`${reaction.message.id}-${user.id}-${emoji}-removed`);
+    const reactionUUID = stringToUuid(
+      `${reaction.message.id}-${user.id}-${emoji}-removed`,
+    );
 
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
-        id: reactionUUID, // This is the ID of the reaction removal message
-        userId: userIdUUID,
-        content: {
-            text: reactionMessage,
-            source: "Discord",
-            inReplyTo: stringToUuid(reaction.message.id) // This is the ID of the original message
-        },
-        roomId,
-        createdAt: new Date(),
-        embedding: embeddingZeroVector,
+      id: reactionUUID, // This is the ID of the reaction removal message
+      userId: userIdUUID,
+      content: {
+        text: reactionMessage,
+        source: "Discord",
+        inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
+      },
+      roomId,
+      createdAt: new Date(),
+      embedding: embeddingZeroVector,
     });
-}
+  }
 
   private handleGuildCreate(guild: Guild) {
     console.log(`Joined guild ${guild.name}`);

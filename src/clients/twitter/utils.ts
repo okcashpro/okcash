@@ -209,11 +209,16 @@ export async function buildConversationThread(
         id: stringToUuid(currentTweet.id),
         content: {
           text: currentTweet.text,
-          inReplyTo: currentTweet.inReplyToStatusId ? stringToUuid(currentTweet.inReplyToStatusId) : undefined,
+          inReplyTo: currentTweet.inReplyToStatusId
+            ? stringToUuid(currentTweet.inReplyToStatusId)
+            : undefined,
         },
-        createdAt: new Date(currentTweet.timestamp),
+        createdAt: new Date(currentTweet.timestamp * 1000),
         roomId,
-        userId,
+        userId:
+          currentTweet.userId === client.twitterUserId
+            ? client.runtime.agentId
+            : stringToUuid(currentTweet.userId),
         embedding: embeddingZeroVector,
       });
     }
@@ -272,10 +277,15 @@ export async function sendTweetChunks(
   const memories: Memory[] = sentTweets.map((tweet) => ({
     id: stringToUuid(tweet.id),
     userId: client.runtime.agentId,
-    content: { text: tweet.text, inReplyTo: tweet.inReplyToStatusId ? stringToUuid(tweet.inReplyToStatusId) : undefined },
+    content: {
+      text: tweet.text,
+      inReplyTo: tweet.inReplyToStatusId
+        ? stringToUuid(tweet.inReplyToStatusId)
+        : undefined,
+    },
     roomId,
     embedding: embeddingZeroVector,
-    createdAt: new Date(tweet.timestamp),
+    createdAt: new Date(tweet.timestamp * 1000),
   }));
 
   return memories;

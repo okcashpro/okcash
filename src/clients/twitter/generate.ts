@@ -146,7 +146,7 @@ export class TwitterGenerationClient extends ClientBase {
             content: { text: newTweetContent.trim(), url: tweet.permanentUrl },
             roomId,
             embedding: embeddingZeroVector,
-            createdAt: new Date(tweet.timestamp),
+            createdAt: new Date(tweet.timestamp * 1000),
           });
         } else {
           console.error("Failed to post tweet");
