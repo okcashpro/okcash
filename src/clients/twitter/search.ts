@@ -321,6 +321,7 @@ export class TwitterSearchClient extends ClientBase {
               response,
               message.roomId,
               settings.TWITTER_USERNAME,
+              tweetId
             );
             return memories;
           };

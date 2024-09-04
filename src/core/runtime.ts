@@ -945,6 +945,7 @@ export class AgentRuntime implements IAgentRuntime {
     const recentPosts = formatPosts({
       messages: recentMessagesData,
       actors: actorsData,
+      conversationHeader: false,
     });
 
     const recentFacts = formatFacts(recentFactsData);
@@ -1104,6 +1105,7 @@ Text: ${attachment.text}
       const formattedInteractions = formatPosts({
         messages: recentInteractionsData,
         actors,
+        conversationHeader: true,
       });
 
       return formattedInteractions;
@@ -1211,7 +1213,7 @@ Text: ${attachment.text}
           : "",
       recentPosts:
         recentPosts && recentPosts.length > 0
-          ? addHeader("### Recent Posts", recentPosts)
+          ? addHeader("### Posts in Thread", recentPosts)
           : "",
       recentMessagesData,
       recentFacts:

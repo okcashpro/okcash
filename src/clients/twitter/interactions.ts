@@ -292,7 +292,15 @@ export class TwitterInteractionClient extends ClientBase {
       model: this.runtime.model,
     });
 
-    response.inReplyTo = stringToUuid(tweet.id);
+    console.log("tweet is", tweet);
+
+    const stringId = stringToUuid(tweet.id);
+
+    console.log("stringId is", stringId, "while tweet.id is", tweet.id);
+
+    response.inReplyTo = stringId;
+
+    console.log("response is", response);
 
     log_to_file(
       `${settings.TWITTER_USERNAME}_${datestr}_interactions_response`,

@@ -2,6 +2,10 @@ import { sha1 } from "js-sha1";
 import { UUID } from "./types";
 
 export function stringToUuid(target: string): UUID {
+  if (typeof target === "number") {
+    target = (target as number).toString();
+  }
+
   if (typeof target !== "string") {
     throw TypeError("Value must be string");
   }
@@ -21,18 +25,16 @@ export function stringToUuid(target: string): UUID {
     return out;
   };
 
-  const escapedStr = unescape(encodeURIComponent(target));
+  const escapedStr = encodeURIComponent(target);
   const buffer = new Uint8Array(escapedStr.length);
   for (let i = 0; i < escapedStr.length; i++) {
     buffer[i] = escapedStr[i].charCodeAt(0);
   }
 
-  const str = new TextDecoder().decode(buffer);
-
-  const hash = sha1(str);
+  const hash = sha1(buffer);
   const hashBuffer = new Uint8Array(hash.length / 2);
   for (let i = 0; i < hash.length; i += 2) {
-    buffer[i / 2] = parseInt(hash.substr(i, 2), 16);
+    hashBuffer[i / 2] = parseInt(hash.slice(i, i + 2), 16);
   }
 
   return (_uint8ArrayToHex(hashBuffer.slice(0, 4)) +
