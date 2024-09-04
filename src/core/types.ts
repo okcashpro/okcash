@@ -238,7 +238,7 @@ export type Media = {
 
 export type Character = {
   name: string;
-  bio: string;
+  bio: string | string[];
   lore: string[];
   messageExamples: MessageExample[][];
   postExamples: string[];
