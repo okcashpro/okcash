@@ -389,9 +389,9 @@ export class AgentRuntime implements IAgentRuntime {
           if (!response.ok) {
             throw new Error(
               "OpenAI API Error: " +
-                response.status +
-                " " +
-                response.statusText,
+              response.status +
+              " " +
+              response.statusText,
             );
           }
 
@@ -1052,21 +1052,17 @@ Text: ${attachment.text}
         userB,
       ]);
 
-      console.log("*** getRecentInteractions: Rooms", rooms);
-
       // Check the existing memories in the database
       const existingMemories = await this.messageManager.getMemoriesByRoomIds({
-        roomIds: rooms,
-      });
+        // filter out the current room id from rooms
+        roomIds: rooms.filter((room) => room !== roomId),
 
-      console.log("*** getRecentInteractions: Existing Memories", existingMemories);
+      });
 
       // Sort messages by timestamp in descending order
       existingMemories.sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
       );
-
-      console.log("*** getRecentInteractions: Sorted Memories", existingMemories);
 
       // Take the most recent messages
       const recentInteractionsData = existingMemories.slice(0, 20);
@@ -1131,8 +1127,8 @@ Text: ${attachment.text}
       adjective:
         this.character.adjectives && this.character.adjectives.length > 0
           ? this.character.adjectives[
-              Math.floor(Math.random() * this.character.adjectives.length)
-            ]
+          Math.floor(Math.random() * this.character.adjectives.length)
+          ]
           : "",
       // Recent interactions between the sender and receiver, formatted as messages
       recentMessageInteractions: formattedMessageInteractions,
@@ -1144,60 +1140,60 @@ Text: ${attachment.text}
       topic:
         this.character.topics && this.character.topics.length > 0
           ? this.character.topics[
-              Math.floor(Math.random() * this.character.topics.length)
-            ]
+          Math.floor(Math.random() * this.character.topics.length)
+          ]
           : null,
       topics:
         this.character.topics && this.character.topics.length > 0
           ? addHeader(
-              `### Topics for ${this.character.topics}`,
-              this.character.topics
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 10)
-                .join(", "),
-            )
+            `### Topics for ${this.character.topics}`,
+            this.character.topics
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 10)
+              .join(", "),
+          )
           : "",
       characterPostExamples:
         formattedCharacterPostExamples &&
-        formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+          formattedCharacterPostExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-              `### Example Posts for ${this.character.name}`,
-              formattedCharacterPostExamples,
-            )
+            `### Example Posts for ${this.character.name}`,
+            formattedCharacterPostExamples,
+          )
           : "",
       characterMessageExamples:
         formattedCharacterMessageExamples &&
-        formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+          formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-              `### Example Conversations for ${this.character.name}`,
-              formattedCharacterMessageExamples,
-            )
+            `### Example Conversations for ${this.character.name}`,
+            formattedCharacterMessageExamples,
+          )
           : "",
       messageDirections:
         this.character?.style?.all?.length > 0 ||
-        this.character?.style?.chat.length > 0
+          this.character?.style?.chat.length > 0
           ? addHeader(
-              "### Message Directions for " + this.character.name,
-              (this.character?.style?.all?.join("\n") || "") +
-                (this.character?.style?.all?.length > 0 &&
-                this.character?.style?.chat.length > 0
-                  ? "\n"
-                  : "") +
-                (this.character?.style?.chat?.join("\n") || ""),
-            )
+            "### Message Directions for " + this.character.name,
+            (this.character?.style?.all?.join("\n") || "") +
+            (this.character?.style?.all?.length > 0 &&
+              this.character?.style?.chat.length > 0
+              ? "\n"
+              : "") +
+            (this.character?.style?.chat?.join("\n") || ""),
+          )
           : "",
       postDirections:
         this.character?.style?.all?.length > 0 ||
-        this.character?.style?.post.length > 0
+          this.character?.style?.post.length > 0
           ? addHeader(
-              "### Post Directions for " + this.character.name,
-              (this.character?.style?.all?.join("\n") || "") +
-                (this.character?.style?.all?.length > 0 &&
-                this.character?.style?.post.length > 0
-                  ? "\n"
-                  : "") +
-                (this.character?.style?.post?.join("\n") || ""),
-            )
+            "### Post Directions for " + this.character.name,
+            (this.character?.style?.all?.join("\n") || "") +
+            (this.character?.style?.all?.length > 0 &&
+              this.character?.style?.post.length > 0
+              ? "\n"
+              : "") +
+            (this.character?.style?.post?.join("\n") || ""),
+          )
           : "",
       // Agent runtime stuff
       senderName,
@@ -1208,9 +1204,9 @@ Text: ${attachment.text}
       goals:
         goals && goals.length > 0
           ? addHeader(
-              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-              goals,
-            )
+            "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+            goals,
+          )
           : "",
       goalsData,
       recentMessages:
@@ -1275,9 +1271,9 @@ Text: ${attachment.text}
       actionExamples:
         actionsData.length > 0
           ? addHeader(
-              "### Action Examples",
-              composeActionExamples(actionsData, 10),
-            )
+            "### Action Examples",
+            composeActionExamples(actionsData, 10),
+          )
           : "",
       evaluatorsData,
       evaluators:

@@ -251,7 +251,7 @@ export const GetTellMeAboutYourselfConversationFail2 = (
   {
     userId,
     content: {
-      text: "Fun? Hmm, I guess I like messing with people online lol",
+      text: "Fun? Hmm, I guess I like messing with people online kek",
     },
   },
 ];
@@ -852,7 +852,7 @@ export const JimAndAliceConversation1 = (
   {
     userId: userId_2,
     content: {
-      text: "Haha yeah sure! But maybe not for our first date lol",
+      text: "Haha yeah sure! But maybe not for our first date",
     },
   },
   {

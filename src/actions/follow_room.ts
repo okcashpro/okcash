@@ -292,19 +292,19 @@ export default {
       {
         user: "{{user3}}",
         content: {
-          text: "wish i could but no bod lol",
+          text: "wish i could but gotta work",
         },
       },
       {
         user: "{{user1}}",
         content: {
-          text: "yo {{user3}} follow this chat",
+          text: "hey {{user3}} follow this chat",
         },
       },
       {
         user: "{{user3}}",
         content: {
-          text: "aight i gotchu fam",
+          text: "sure",
           action: "FOLLOW_ROOM",
         },
       },

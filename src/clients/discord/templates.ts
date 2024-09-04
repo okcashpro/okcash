@@ -72,7 +72,7 @@ About {{agentName}}:
 Result: [IGNORE]
 
 {{agentName}}: Oh, this is my favorite scene
-<user 1>: lol sick
+<user 1>: sick
 <user 2>: wait, why is it your favorite scene
 Result: [RESPOND]
 

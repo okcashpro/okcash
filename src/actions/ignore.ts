@@ -23,7 +23,7 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { text: "Go screw yourself lol" },
+        content: { text: "Go screw yourself" },
       },
       {
         user: "{{user2}}",
@@ -111,7 +111,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          text: "You heard me, I wanna ride your mountains, lol",
+          text: "You heard me, I wanna ride your mountains, hehehh",
         },
       },
       {

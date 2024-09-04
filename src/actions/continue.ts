@@ -188,7 +188,7 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { text: "maybe we can start a band soon lol" },
+        content: { text: "maybe we can start a band soon haha" },
       },
       {
         user: "{{user1}}",
@@ -200,7 +200,7 @@ export default {
       },
       {
         user: "{{user1}}",
-        content: { text: "seriously lol it hurts to type" },
+        content: { text: "seriously it hurts to type" },
       },
     ],
 
@@ -244,7 +244,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          text: "lol real art",
+          text: "real art",
           action: "CONTINUE",
         },
       },
@@ -279,7 +279,7 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { text: "lol sure i'd go" },
+        content: { text: "sure i'd go" },
       },
       {
         user: "{{user1}}",
@@ -566,7 +566,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          text: "Did Mara leave you lol",
+          text: "Did Mara leave you kek",
         },
       },
       {
