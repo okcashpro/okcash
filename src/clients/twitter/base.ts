@@ -241,9 +241,9 @@ export class ClientBase extends EventEmitter {
   ): Promise<QueryTweetsResponse> {
     // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
     // if we dont get a response in 5 seconds, something is wrong
-    const timeoutPromise = new Promise((_, reject) =>
+    const timeoutPromise = new Promise((resolve, _) =>
       setTimeout(
-        () => reject(new Error("Timeout waiting for Twitter API response")),
+        () => resolve(console.error("Timeout waiting for Twitter API response")),
         5000,
       ),
     );
