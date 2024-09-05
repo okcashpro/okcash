@@ -237,6 +237,7 @@ export type Media = {
 };
 
 export type Character = {
+  id?: UUID; // optional UUID which can be passed down to identify the character
   name: string;
   bio: string | string[];
   lore: string[];
@@ -245,6 +246,9 @@ export type Character = {
   people: string[];
   topics: string[];
   adjectives: string[];
+  settings?: {
+    secrets?: { [key: string]: string };
+  };
   style: {
     all: string[];
     chat: string[];
@@ -412,6 +416,7 @@ export interface IAgentRuntime {
     bleed: number,
     model: string,
   ): Promise<string[]>;
+  getSetting(key: string): string | null;
 
   // Methods
   getConversationLength(): number;
@@ -537,7 +542,7 @@ export interface IBrowserService {
 }
 
 export interface ISpeechService {
-  generate(text: string): Promise<any>;
+  generate(runtime: IAgentRuntime, text: string): Promise<any>;
 }
 
 export interface IPdfService {

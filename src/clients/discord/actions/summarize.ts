@@ -4,7 +4,6 @@ import { embeddingZeroVector } from "../../../core/memory.ts";
 import { getActorDetails } from "../../../core/messages.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
 import { AgentRuntime } from "../../../core/runtime.ts";
-import settings from "../../../core/settings.ts";
 import {
   Action,
   ActionExample,
@@ -238,22 +237,15 @@ const summarizeAction = {
     let memoryString = "";
 
     let currentSummary = "";
+    const chunkSize = runtime.getSetting("OPENAI_API_KEY") ? 100000 : 3500;
 
-    const chunkSize =
-      settings.OPENAI_API_KEY && settings.OPENAI_API_KEY.length > 0
-        ? 100000
-        : 3500;
-
-    // 3. break into chunks -- each message should include the full text of any attachments below the message
     const chunks = await runtime.splitChunks(
       memoryString,
       chunkSize,
       0,
       "gpt-4o-mini",
-    ); // TODO: write this function, needs to chunk differently based on different context length of different completion services
-    // If it's openai, we can chunk 100k tokens, if its llama we can only chunk 4k tokens
+    );
 
-    // 4. process each chunk with llama or chatgpt gpt-4o-mini to get a { summary, attachments }
     const datestr = new Date().toISOString().replace(/:/g, "-");
 
     state.memoriesWithAttachments = formattedMemories;

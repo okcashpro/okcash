@@ -2,10 +2,10 @@ import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
 import { load } from "../adapters/sqlite/sqlite_vss.ts";
 import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
 import { SupabaseDatabaseAdapter } from "../adapters/supabase.ts";
-import { zeroUuid } from "../core/constants.ts";
 import { DatabaseAdapter } from "../core/database.ts";
 import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Evaluator, Provider } from "../core/types.ts";
+import { zeroUuid } from "../test_resources/constants.ts";
 import {
   SUPABASE_ANON_KEY,
   SUPABASE_URL,

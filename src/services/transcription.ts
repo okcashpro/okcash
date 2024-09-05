@@ -6,7 +6,7 @@ import OpenAI from "openai";
 import os from "os";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import settings from "../core/settings.ts";
+import { IAgentRuntime } from "../core/types.ts";
 import { getWavHeader } from "./audioUtils.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,13 +16,15 @@ export class TranscriptionService extends EventEmitter {
   private CONTENT_CACHE_DIR = "./content_cache";
   private isCudaAvailable: boolean = false;
   private openai: OpenAI | null = null;
+  private runtime: IAgentRuntime;
 
-  constructor() {
+  constructor(runtime: IAgentRuntime) {
     super();
+    this.runtime = runtime;
     this.ensureCacheDirectoryExists();
-    if (settings.OPENAI_API_KEY) {
+    if (this.runtime.getSetting("OPENAI_API_KEY")) {
       this.openai = new OpenAI({
-        apiKey: settings.OPENAI_API_KEY,
+        apiKey: this.runtime.getSetting("OPENAI_API_KEY"),
       });
     } else {
       this.detectCuda();

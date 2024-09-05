@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
+import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { type User } from "../test_resources/types.ts";
-import { zeroUuid } from "./constants.ts";
 import { createGoal, getGoals, updateGoal } from "./goals.ts";
 import { AgentRuntime } from "./runtime.ts";
 import { GoalStatus, type Goal, type UUID } from "./types.ts";

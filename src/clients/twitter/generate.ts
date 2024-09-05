@@ -2,7 +2,6 @@ import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
-import settings from "../../core/settings.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 
@@ -48,7 +47,7 @@ export class TwitterGenerationClient extends ClientBase {
       // const recentConversationsText = await getRecentConversations(
       //   this.runtime,
       //   this,
-      //   settings.TWITTER_USERNAME,
+      //   this.runtime.getSetting("TWITTER_USERNAME"),
       // );
 
       // Wait 1.5-3.5 seconds to avoid rate limiting
@@ -58,7 +57,7 @@ export class TwitterGenerationClient extends ClientBase {
 
       await this.runtime.ensureUserExists(
         this.runtime.agentId,
-        settings.TWITTER_USERNAME,
+        this.runtime.getSetting("TWITTER_USERNAME"),
         this.runtime.character.name,
         "twitter",
       );
@@ -70,7 +69,7 @@ export class TwitterGenerationClient extends ClientBase {
           content: { text: "", action: "" },
         },
         {
-          twitterUserName: settings.TWITTER_USERNAME,
+          twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
           // recentConversations: recentConversationsText,
         },
       );
@@ -91,7 +90,7 @@ export class TwitterGenerationClient extends ClientBase {
 
       // log context to file
       log_to_file(
-        `${settings.TWITTER_USERNAME}_${datestr}_generate_context`,
+        `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_context`,
         context,
       );
 
@@ -104,7 +103,7 @@ export class TwitterGenerationClient extends ClientBase {
         model: this.runtime.model,
       });
       log_to_file(
-        `${settings.TWITTER_USERNAME}_${datestr}_generate_response`,
+        `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_response`,
         JSON.stringify(newTweetContent),
       );
 
@@ -119,7 +118,7 @@ export class TwitterGenerationClient extends ClientBase {
           const tweet = await this.requestQueue.add(
             async () =>
               await this.twitterClient.getLatestTweet(
-                settings.TWITTER_USERNAME,
+                this.runtime.getSetting("TWITTER_USERNAME"),
               ),
           );
           if (!tweet) {

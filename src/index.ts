@@ -66,7 +66,7 @@ try {
 
 const runtime = new AgentRuntime({
   databaseAdapter: new SqliteDatabaseAdapter(new Database("./db.sqlite")),
-  token: settings.OPENAI_API_KEY as string,
+  token: character.settings?.secrets?.OPENAI_API_KEY ?? character.settings?.OPENAI_API_KEY ?? settings.OPENAI_API_KEY as string,
   serverUrl: "https://api.openai.com/v1",
   model: "gpt-4o-mini",
   evaluators: [],

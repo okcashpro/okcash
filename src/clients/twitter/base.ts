@@ -8,7 +8,6 @@ import { EventEmitter } from "events";
 import fs from "fs";
 import path from "path";
 import { AgentRuntime } from "../../core/runtime.ts";
-import settings from "../../core/settings.ts";
 
 import { fileURLToPath } from "url";
 import { embeddingZeroVector } from "../../core/memory.ts";
@@ -17,7 +16,6 @@ import ImageDescriptionService from "../../services/image.ts";
 
 import glob from "glob";
 import { stringToUuid } from "../../core/uuid.ts";
-import { wait } from "./utils.ts";
 
 export function extractAnswer(text: string): string {
   const startIndex = text.indexOf("Answer: ") + 8;
@@ -87,7 +85,7 @@ export class ClientBase extends EventEmitter {
   tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
   imageDescriptionService: ImageDescriptionService;
   temperature: number = 0.5;
-  dryRun: boolean = settings.TWITTER_DRY_RUN?.toLowerCase() === "true";
+  dryRun: boolean = false;
 
   private tweetCache: Map<string, Tweet> = new Map();
   requestQueue: RequestQueue = new RequestQueue();
@@ -159,6 +157,7 @@ export class ClientBase extends EventEmitter {
       this.twitterClient = new Scraper();
       ClientBase._twitterClient = this.twitterClient;
     }
+    this.dryRun = this.runtime.getSetting("TWITTER_DRY_RUN")?.toLowerCase() === "true"
     this.directions =
       "- " +
       this.runtime.character.style.all.join("\n- ") +
@@ -179,14 +178,15 @@ export class ClientBase extends EventEmitter {
     // async initialization
     (async () => {
       // Check for Twitter cookies
-      if (settings.TWITTER_COOKIES) {
-        const cookiesArray = JSON.parse(settings.TWITTER_COOKIES);
+      if (this.runtime.getSetting("TWITTER_COOKIES")) {
+        const cookiesArray = JSON.parse(this.runtime.getSetting("TWITTER_COOKIES"));
         await this.setCookiesFromArray(cookiesArray);
       } else {
         const cookiesFilePath = path.join(
           __dirname,
-          "../../../twitter_cookies.json",
+          "../../../tweetcache/" + this.runtime.getSetting("TWITTER_USERNAME") + "_cookies.json",
         );
+        console.log("Cookies file path:", cookiesFilePath);
         if (fs.existsSync(cookiesFilePath)) {
           const cookiesArray = JSON.parse(
             fs.readFileSync(cookiesFilePath, "utf-8"),
@@ -195,9 +195,9 @@ export class ClientBase extends EventEmitter {
         } else {
           this.twitterClient
             .login(
-              settings.TWITTER_USERNAME,
-              settings.TWITTER_PASSWORD,
-              settings.TWITTER_EMAIL,
+              this.runtime.getSetting("TWITTER_USERNAME"),
+              this.runtime.getSetting("TWITTER_PASSWORD"),
+              this.runtime.getSetting("TWITTER_EMAIL"),
             )
             .then(() => {
               console.log("Logged in to Twitter");
@@ -223,7 +223,7 @@ export class ClientBase extends EventEmitter {
       const userId = await this.requestQueue.add(
         async () =>
           await this.twitterClient.getUserIdByScreenName(
-            settings.TWITTER_USERNAME,
+            this.runtime.getSetting("TWITTER_USERNAME"),
           ),
       );
       this.twitterUserId = userId;
@@ -367,7 +367,7 @@ export class ClientBase extends EventEmitter {
 
     // Get the most recent 20 mentions and interactions
     const mentionsAndInteractions = await this.fetchSearchTweets(
-      `@${settings.TWITTER_USERNAME}`,
+      `@${this.runtime.getSetting("TWITTER_USERNAME")}`,
       20,
       SearchMode.Latest,
     );
@@ -406,7 +406,7 @@ export class ClientBase extends EventEmitter {
 
     await this.runtime.ensureUserExists(
       this.runtime.agentId,
-      settings.TWITTER_USERNAME,
+      this.runtime.getSetting("TWITTER_USERNAME"),
       this.runtime.character.name,
       "twitter",
     );

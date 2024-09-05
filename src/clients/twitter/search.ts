@@ -1,7 +1,6 @@
 import { SearchMode } from "agent-twitter-client";
 import fs from "fs";
 import { AgentRuntime } from "../../core/runtime.ts";
-import settings from "../../core/settings.ts";
 
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
@@ -115,7 +114,7 @@ export class TwitterSearchClient extends ClientBase {
       // ignore tweets where any of the thread tweets contain a tweet by the bot
       const thread = tweet.thread;
       const botTweet = thread.find(
-        (t) => t.username === settings.TWITTER_USERNAME,
+        (t) => t.username === this.runtime.getSetting("TWITTER_USERNAME"),
       );
       return !botTweet;
     })
@@ -164,7 +163,7 @@ export class TwitterSearchClient extends ClientBase {
 
       console.log("Selected tweet to reply to:", selectedTweet);
 
-      if (selectedTweet.username === settings.TWITTER_USERNAME) {
+      if (selectedTweet.username === this.runtime.getSetting("TWITTER_USERNAME")) {
         console.log("Skipping tweet from bot itself");
         return;
       }
@@ -177,7 +176,7 @@ export class TwitterSearchClient extends ClientBase {
       await Promise.all([
         this.runtime.ensureUserExists(
           this.runtime.agentId,
-          settings.TWITTER_USERNAME,
+          this.runtime.getSetting("TWITTER_USERNAME"),
           this.runtime.character.name,
           "twitter",
         ),
@@ -218,7 +217,7 @@ export class TwitterSearchClient extends ClientBase {
       // Fetch replies and retweets
       const replies = selectedTweet.thread;
       const replyContext = replies
-        .filter((reply) => reply.username !== settings.TWITTER_USERNAME)
+        .filter((reply) => reply.username !== this.runtime.getSetting("TWITTER_USERNAME"))
         .map((reply) => `@${reply.username}: ${reply.text}`)
         .join("\n");
 
@@ -242,7 +241,7 @@ export class TwitterSearchClient extends ClientBase {
       const recentConversations = await getRecentConversations(
         this.runtime,
         this,
-        settings.TWITTER_USERNAME,
+        this.runtime.getSetting("TWITTER_USERNAME"),
       );
       await wait();
       const recentSearchResults = await searchRecentPosts(
@@ -253,7 +252,7 @@ export class TwitterSearchClient extends ClientBase {
 
       let state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
-        twitterUserName: settings.TWITTER_USERNAME,
+        twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
         recentConversations,
         recentSearchResults,
         tweetContext: `
@@ -277,7 +276,7 @@ export class TwitterSearchClient extends ClientBase {
 
       // log context to file
       log_to_file(
-        `${settings.TWITTER_USERNAME}_${datestr}_search_context`,
+        `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_context`,
         context,
       );
 
@@ -291,7 +290,7 @@ export class TwitterSearchClient extends ClientBase {
       responseContent.inReplyTo = message.id;
 
       log_to_file(
-        `${settings.TWITTER_USERNAME}_${datestr}_search_response`,
+        `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_response`,
         JSON.stringify(responseContent),
       );
 
@@ -312,7 +311,7 @@ export class TwitterSearchClient extends ClientBase {
               this,
               response,
               message.roomId,
-              settings.TWITTER_USERNAME,
+              this.runtime.getSetting("TWITTER_USERNAME"),
               tweetId,
             );
             return memories;

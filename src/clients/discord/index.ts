@@ -10,13 +10,11 @@ import {
   User,
 } from "discord.js";
 import { EventEmitter } from "events";
-import settings from "../../core/settings.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { commands } from "./commands.ts";
 
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
-import { UUID } from "../../core/types.ts";
 import { MessageManager } from "./messages.ts";
 import { VoiceManager } from "./voice.ts";
 
@@ -33,7 +31,7 @@ export class DiscordClient extends EventEmitter {
 
   constructor(runtime: AgentRuntime) {
     super();
-    this.apiToken = settings.DISCORD_API_TOKEN as string;
+    this.apiToken = runtime.getSetting("DISCORD_API_TOKEN") as string;
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -108,7 +106,7 @@ export class DiscordClient extends EventEmitter {
     (async () => {
       try {
         await rest.put(
-          Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
+          Routes.applicationCommands(this.runtime.getSetting("DISCORD_APPLICATION_ID")),
           { body: commands },
         );
       } catch (error) {

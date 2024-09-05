@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import { zeroUuid } from "../core/constants.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
 import { Content, Memory, type UUID } from "../core/types.ts";
+import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { Goodbye1 } from "../test_resources/data.ts";
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";

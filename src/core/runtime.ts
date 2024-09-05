@@ -56,7 +56,6 @@ import {
   formatActionNames,
   formatActions,
 } from "./actions.ts";
-import { zeroUuid } from "./constants.ts";
 import defaultCharacter from "./defaultCharacter.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
@@ -64,6 +63,7 @@ import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
+import { stringToUuid } from "./uuid.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -78,7 +78,7 @@ export class AgentRuntime implements IAgentRuntime {
   /**
    * The ID of the agent
    */
-  agentId: UUID = zeroUuid;
+  agentId: UUID;
   /**
    * The base URL of the server where the agent's requests are processed.
    */
@@ -202,7 +202,8 @@ export class AgentRuntime implements IAgentRuntime {
     this.#conversationLength =
       opts.conversationLength ?? this.#conversationLength;
     this.databaseAdapter = opts.databaseAdapter;
-    this.agentId = opts.agentId ?? zeroUuid;
+    // use the character id if it exists, otherwise use the agentId if it is passed in, otherwise use the character name
+    this.agentId = this.character.id ?? opts.agentId ?? stringToUuid(this.character.name);
     this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
     this.character = opts.character || defaultCharacter;
     if (!opts.databaseAdapter) {
@@ -249,11 +250,11 @@ export class AgentRuntime implements IAgentRuntime {
       this.registerContextProvider(provider);
     });
 
-    if (!settings.OPENAI_API_KEY && !this.llamaService) {
+    if (!this.getSetting("OPENAI_API_KEY") && !this.llamaService) {
       this.llamaService = new LlamaService();
     }
 
-    this.transcriptionService = new TranscriptionService();
+    this.transcriptionService = new TranscriptionService(this);
 
     this.imageDescriptionService = new ImageDescriptionService(this);
 
@@ -268,6 +269,24 @@ export class AgentRuntime implements IAgentRuntime {
     if (opts.speechModelPath) {
       SpeechService.modelPath = opts.speechModelPath;
     }
+  }
+
+  getSetting(key: string) {
+    // check if the key is in the character.settings.secrets object
+    if (this.character.settings?.secrets?.[key]) {
+      return this.character.settings.secrets[key];
+    }
+    // if not, check if it's in the settings object
+    if (this.character.settings?.[key]) {
+      return this.character.settings[key];
+    }
+
+    // if not, check if it's in the settings object
+    if (settings[key]) {
+      return settings[key];
+    }
+
+    return null;
   }
 
   /**
@@ -321,8 +340,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<string> {
     let retryLength = 1000; // exponential backoff
     for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
@@ -332,7 +351,7 @@ export class AgentRuntime implements IAgentRuntime {
           max_context_length,
           "gpt-4o-mini",
         );
-        if (!settings.OPENAI_API_KEY) {
+        if (!this.getSetting("OPENAI_API_KEY")) {
           console.log("queueing text completion");
           const result = await this.llamaService.queueTextCompletion(
             context,
@@ -448,8 +467,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
     let retryDelay = 1000;
 
@@ -520,8 +539,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<boolean> {
     let retryDelay = 1000;
 
@@ -558,8 +577,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<string[]> {
     let retryDelay = 1000;
 
@@ -596,8 +615,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<any[]> {
     let retryDelay = 1000;
 
@@ -646,8 +665,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<Content> {
     context = this.trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff
@@ -691,7 +710,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @returns The embedding of the input.
    */
   async embed(input: string) {
-    if (!settings.OPENAI_API_KEY) {
+    if (!this.getSetting("OPENAI_API_KEY")) {
       return await this.llamaService.getEmbeddingResponse(input);
     }
     const embeddingModel = this.embeddingModel;
