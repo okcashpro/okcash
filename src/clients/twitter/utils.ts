@@ -34,12 +34,13 @@ export const getRecentConversations = async (
   botTwitterUsername: string,
 ) => {
   // Get recent conversations
-  const recentConversations = await twitterClient.requestQueue.add(async () =>
-    await twitterClient.fetchSearchTweets(
-      `@${botTwitterUsername} exclude:retweets`,
-      25,
-      SearchMode.Latest,
-    )
+  const recentConversations = await twitterClient.requestQueue.add(
+    async () =>
+      await twitterClient.fetchSearchTweets(
+        `@${botTwitterUsername} exclude:retweets`,
+        25,
+        SearchMode.Latest,
+      ),
   );
 
   const recentConversationsArray = [];
@@ -96,12 +97,13 @@ export const searchRecentPosts = async (
   searchTerm: string,
 ) => {
   const recentSearchResults = [];
-  const tweets = await client.requestQueue.add(async () =>
-    await client.twitterClient.fetchSearchTweets(
-      searchTerm + " exclude:replies exclude:retweets",
-      25,
-      SearchMode.Latest,
-    ),
+  const tweets = await client.requestQueue.add(
+    async () =>
+      await client.twitterClient.fetchSearchTweets(
+        searchTerm + " exclude:replies exclude:retweets",
+        25,
+        SearchMode.Latest,
+      ),
   );
 
   // Format search results
@@ -150,10 +152,9 @@ export const searchRecentPosts = async (
         const waitTime = Math.floor(Math.random() * 2000) + 1500;
         await new Promise((resolve) => setTimeout(resolve, waitTime));
         // now look up the original tweet
-        const originalTweet = await client.requestQueue.add(async () =>
-          await client.twitterClient.getTweet(
-            tweet.inReplyToStatusId,
-          ),
+        const originalTweet = await client.requestQueue.add(
+          async () =>
+            await client.twitterClient.getTweet(tweet.inReplyToStatusId),
         );
         formattedTweet += `\nIn reply to:\n`;
         formattedTweet += `Name: ${originalTweet.name} (@${originalTweet.username})\n`;
@@ -258,8 +259,8 @@ export async function sendTweetChunks(
   const sentTweets: Tweet[] = [];
 
   for (const chunk of tweetChunks) {
-    const success = await client.requestQueue.add(async () =>
-      await client.twitterClient.sendTweet(chunk, inReplyTo)
+    const success = await client.requestQueue.add(
+      async () => await client.twitterClient.sendTweet(chunk, inReplyTo),
     );
     if (success) {
       const tweet = await client.requestQueue.add(async () => {

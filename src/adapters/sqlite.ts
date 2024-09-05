@@ -144,7 +144,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     roomIds: UUID[];
     tableName: string;
   }): Promise<Memory[]> {
-    if(!params.tableName) {
+    if (!params.tableName) {
       // default to messages
       params.tableName = "messages";
     }
@@ -395,12 +395,11 @@ AND roomId = ?`;
       sql += ` AND createdAt >= ?`;
       queryParams.push(params.start.getTime().toString());
     }
-  
+
     if (params.end) {
       sql += ` AND createdAt <= ?`;
       queryParams.push(params.end.getTime().toString());
     }
-  
 
     sql += " ORDER BY createdAt DESC";
 

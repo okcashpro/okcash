@@ -17,7 +17,7 @@ import {
 export default {
   name: "LEAVE_VOICE",
   validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
-    if(message.content.source !== "discord") {
+    if (message.content.source !== "discord") {
       // not a discord message
       return false;
     }

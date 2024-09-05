@@ -266,35 +266,35 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
       .from(params.tableName)
       .select("*")
       .eq("roomId", params.roomId);
-  
+
     if (params.start) {
       query.gte("createdAt", params.start.toISOString());
     }
-  
+
     if (params.end) {
       query.lte("createdAt", params.end.toISOString());
     }
-  
+
     if (params.unique) {
       query.eq("unique", true);
     }
-  
+
     if (params.userIds && params.userIds.length > 0) {
       query.in("userId", params.userIds);
     }
-  
+
     query.order("createdAt", { ascending: false });
-  
+
     if (params.count) {
       query.limit(params.count);
     }
-  
+
     const { data, error } = await query;
-  
+
     if (error) {
       throw new Error(`Error retrieving memories: ${error.message}`);
     }
-  
+
     return data as Memory[];
   }
 

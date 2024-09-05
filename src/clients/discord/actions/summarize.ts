@@ -13,7 +13,7 @@ import {
   IAgentRuntime,
   Media,
   Memory,
-  State
+  State,
 } from "../../../core/types.ts";
 
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
@@ -50,7 +50,11 @@ Your response must be formatted as a JSON block with this structure:
 \`\`\`
 `;
 
-const getDateRange = async (runtime: IAgentRuntime, message: Memory, state: State) => {
+const getDateRange = async (
+  runtime: IAgentRuntime,
+  message: Memory,
+  state: State,
+) => {
   state = (await runtime.composeState(message)) as State;
 
   const context = composeContext({
@@ -62,34 +66,57 @@ const getDateRange = async (runtime: IAgentRuntime, message: Memory, state: Stat
     const response = await runtime.completion({
       model: "gpt-4o-mini",
       context,
-    })
+    });
     // try parsing to a json object
-    const parsedResponse = parseJSONObjectFromText(response) as { objective: string, start: string | number, end: string | number } | null;
+    const parsedResponse = parseJSONObjectFromText(response) as {
+      objective: string;
+      start: string | number;
+      end: string | number;
+    } | null;
     // see if it contains objective, start and end
     if (parsedResponse) {
-      if (parsedResponse.objective && parsedResponse.start && parsedResponse.end) {
-
+      if (
+        parsedResponse.objective &&
+        parsedResponse.start &&
+        parsedResponse.end
+      ) {
         // TODO: parse start and end into timestamps
-        const startIntegerString = (parsedResponse.start as string).match(/\d+/)?.[0];
-        const endIntegerString = (parsedResponse.end as string).match(/\d+/)?.[0];
+        const startIntegerString = (parsedResponse.start as string).match(
+          /\d+/,
+        )?.[0];
+        const endIntegerString = (parsedResponse.end as string).match(
+          /\d+/,
+        )?.[0];
 
         // parse multiplier
         const multipliers = {
-          "seconds": 1,
-          "minutes": 60,
-          "hours": 3600,
-          "days": 86400,
-        }
+          seconds: 1,
+          minutes: 60,
+          hours: 3600,
+          days: 86400,
+        };
 
-        const startMultiplier = (parsedResponse.start as string).match(/seconds|minutes|hours|days/)?.[0];
-        const endMultiplier = (parsedResponse.end as string).match(/seconds|minutes|hours|days/)?.[0];
+        const startMultiplier = (parsedResponse.start as string).match(
+          /seconds|minutes|hours|days/,
+        )?.[0];
+        const endMultiplier = (parsedResponse.end as string).match(
+          /seconds|minutes|hours|days/,
+        )?.[0];
 
-        const startInteger = startIntegerString ? parseInt(startIntegerString) : 0;
+        const startInteger = startIntegerString
+          ? parseInt(startIntegerString)
+          : 0;
         const endInteger = endIntegerString ? parseInt(endIntegerString) : 0;
 
         // multiply by multiplier
-        let startTime = startInteger * multipliers[startMultiplier as keyof typeof multipliers] * 1000;
-        let endTime = endInteger * multipliers[endMultiplier as keyof typeof multipliers] * 1000;
+        let startTime =
+          startInteger *
+          multipliers[startMultiplier as keyof typeof multipliers] *
+          1000;
+        let endTime =
+          endInteger *
+          multipliers[endMultiplier as keyof typeof multipliers] *
+          1000;
 
         // if endTime is 0, set it to 2 hours ago
         if (endTime === 0) {
@@ -104,12 +131,11 @@ const getDateRange = async (runtime: IAgentRuntime, message: Memory, state: Stat
       }
     }
   }
-}
+};
 
 const summarizeAction = {
   name: "SUMMARIZE",
-  description:
-    "Summarizes the conversation and attachments.",
+  description: "Summarizes the conversation and attachments.",
   validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
     if (message.content.source !== "discord") {
       return false;
@@ -152,7 +178,9 @@ const summarizeAction = {
       "bring me up to speed",
       "catch me up",
     ];
-    return keywords.some(keyword => message.content.text.toLowerCase().includes(keyword.toLowerCase()));
+    return keywords.some((keyword) =>
+      message.content.text.toLowerCase().includes(keyword.toLowerCase()),
+    );
   },
   handler: async (
     runtime: IAgentRuntime,
@@ -172,9 +200,9 @@ const summarizeAction = {
     };
     const { roomId } = message;
 
-    // 1. extract date range from the message 
+    // 1. extract date range from the message
     const dateRange = await getDateRange(runtime, message, state);
-    if(!dateRange) {
+    if (!dateRange) {
       console.error("Couldn't get date range from message");
       return;
     }
@@ -188,26 +216,41 @@ const summarizeAction = {
       end: new Date(end),
     });
 
-    const actors = await getActorDetails({ runtime: runtime as AgentRuntime, roomId });
+    const actors = await getActorDetails({
+      runtime: runtime as AgentRuntime,
+      roomId,
+    });
 
     const actorMap = new Map(actors.map((actor) => [actor.id, actor]));
 
-    const formattedMemories = memories.map((memory) => {
-      const attachments = memory.content.attachments?.map((attachment: Media) => {
-        return `---\nAttachment: ${attachment.id}\n${attachment.description}\n${attachment.text}\n---`;
-      }).join("\n");
-      return `${actorMap.get(memory.userId)?.name ?? "Unknown User"} (${actorMap.get(memory.userId)?.username ?? ""}): ${memory.content.text}\n${attachments}`;
-    }).join("\n");
+    const formattedMemories = memories
+      .map((memory) => {
+        const attachments = memory.content.attachments
+          ?.map((attachment: Media) => {
+            return `---\nAttachment: ${attachment.id}\n${attachment.description}\n${attachment.text}\n---`;
+          })
+          .join("\n");
+        return `${actorMap.get(memory.userId)?.name ?? "Unknown User"} (${actorMap.get(memory.userId)?.username ?? ""}): ${memory.content.text}\n${attachments}`;
+      })
+      .join("\n");
 
     // format the messages and attachments into a string
     let memoryString = "";
 
     let currentSummary = "";
 
-    const chunkSize = settings.OPENAI_API_KEY && settings.OPENAI_API_KEY.length > 0 ? 100000 : 3500;
+    const chunkSize =
+      settings.OPENAI_API_KEY && settings.OPENAI_API_KEY.length > 0
+        ? 100000
+        : 3500;
 
     // 3. break into chunks -- each message should include the full text of any attachments below the message
-    const chunks = await runtime.splitChunks(memoryString, chunkSize, 0, "gpt-4o-mini"); // TODO: write this function, needs to chunk differently based on different context length of different completion services
+    const chunks = await runtime.splitChunks(
+      memoryString,
+      chunkSize,
+      0,
+      "gpt-4o-mini",
+    ); // TODO: write this function, needs to chunk differently based on different context length of different completion services
     // If it's openai, we can chunk 100k tokens, if its llama we can only chunk 4k tokens
 
     // 4. process each chunk with llama or chatgpt gpt-4o-mini to get a { summary, attachments }
@@ -223,10 +266,17 @@ const summarizeAction = {
       const context = composeContext({
         state,
         // make sure it fits, we can pad the tokens a bit
-        template: runtime.trimTokens(summarizationTemplate, chunkSize + 500, "gpt-4o-mini"),
+        template: runtime.trimTokens(
+          summarizationTemplate,
+          chunkSize + 500,
+          "gpt-4o-mini",
+        ),
       });
 
-      log_to_file(`${state.agentName}_${datestr}_summarization_context`, context);
+      log_to_file(
+        `${state.agentName}_${datestr}_summarization_context`,
+        context,
+      );
 
       // TODO: if this is llama, we need to do that instead
       const summary = await runtime.completion({
@@ -234,14 +284,19 @@ const summarizeAction = {
         context,
       });
 
-      log_to_file(`${state.agentName}_${datestr}_summarization_response_${i}`, summary);
+      log_to_file(
+        `${state.agentName}_${datestr}_summarization_response_${i}`,
+        summary,
+      );
 
       currentSummary = currentSummary + "\n" + summary;
     }
 
-
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_summarization_summary`, currentSummary);
+    log_to_file(
+      `${state.agentName}_${datestr}_summarization_summary`,
+      currentSummary,
+    );
 
     // call callback with it -- twitter and discord client can separately handle what to do, IMO we may way to add gists so the agent can post a gist and link to it later
 
@@ -313,8 +368,7 @@ const summarizeAction = {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Can you summarize what moon and avf are talking about?",
+          content: "Can you summarize what moon and avf are talking about?",
         },
       },
       {
@@ -345,4 +399,3 @@ const summarizeAction = {
 } as Action;
 
 export default summarizeAction;
-

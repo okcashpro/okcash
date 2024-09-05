@@ -389,9 +389,9 @@ export class AgentRuntime implements IAgentRuntime {
           if (!response.ok) {
             throw new Error(
               "OpenAI API Error: " +
-              response.status +
-              " " +
-              response.statusText,
+                response.status +
+                " " +
+                response.statusText,
             );
           }
 
@@ -494,19 +494,22 @@ export class AgentRuntime implements IAgentRuntime {
     const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
     const tokens = encoding.encode(content);
     const chunks: string[] = [];
-  
+
     for (let i = 0; i < tokens.length; i += chunkSize) {
       const chunk = tokens.slice(i, i + chunkSize);
       const decodedChunk = encoding.decode(chunk);
-  
+
       // Append bleed characters from the previous chunk
       const startBleed = i > 0 ? content.slice(i - bleed, i) : "";
       // Append bleed characters from the next chunk
-      const endBleed = i + chunkSize < tokens.length ? content.slice(i + chunkSize, i + chunkSize + bleed) : "";
-  
+      const endBleed =
+        i + chunkSize < tokens.length
+          ? content.slice(i + chunkSize, i + chunkSize + bleed)
+          : "";
+
       chunks.push(startBleed + decodedChunk + endBleed);
     }
-  
+
     return chunks;
   }
 
@@ -1081,7 +1084,6 @@ Text: ${attachment.text}
       const existingMemories = await this.messageManager.getMemoriesByRoomIds({
         // filter out the current room id from rooms
         roomIds: rooms.filter((room) => room !== roomId),
-
       });
 
       // Sort messages by timestamp in descending order
@@ -1147,7 +1149,10 @@ Text: ${attachment.text}
     let bio = this.character.bio || "";
     if (Array.isArray(bio)) {
       // get three random bio strings and join them with " "
-      bio = bio.sort(() => 0.5 - Math.random()).slice(0, 3).join(" ");
+      bio = bio
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3)
+        .join(" ");
     }
 
     const initialState = {
@@ -1159,8 +1164,8 @@ Text: ${attachment.text}
       adjective:
         this.character.adjectives && this.character.adjectives.length > 0
           ? this.character.adjectives[
-          Math.floor(Math.random() * this.character.adjectives.length)
-          ]
+              Math.floor(Math.random() * this.character.adjectives.length)
+            ]
           : "",
       // Recent interactions between the sender and receiver, formatted as messages
       recentMessageInteractions: formattedMessageInteractions,
@@ -1172,64 +1177,69 @@ Text: ${attachment.text}
       topic:
         this.character.topics && this.character.topics.length > 0
           ? this.character.topics[
-          Math.floor(Math.random() * this.character.topics.length)
-          ]
+              Math.floor(Math.random() * this.character.topics.length)
+            ]
           : null,
       topics:
         this.character.topics && this.character.topics.length > 0
-          ? `${this.character.name} is interested in ` + this.character.topics
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 5)
-            .map((topic, index) => {
-              if (index === this.character.topics.length - 1) {
-                return topic + " and ";
-              }
-              return topic + ", ";
-            })
-            .join("")
+          ? `${this.character.name} is interested in ` +
+            this.character.topics
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 5)
+              .map((topic, index) => {
+                if (index === this.character.topics.length - 1) {
+                  return topic + " and ";
+                }
+                return topic + ", ";
+              })
+              .join("")
           : "",
       characterPostExamples:
         formattedCharacterPostExamples &&
-          formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+        formattedCharacterPostExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-            `### Example Posts for ${this.character.name}`,
-            formattedCharacterPostExamples,
-          )
+              `### Example Posts for ${this.character.name}`,
+              formattedCharacterPostExamples,
+            )
           : "",
       characterMessageExamples:
         formattedCharacterMessageExamples &&
-          formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+        formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-            `### Example Conversations for ${this.character.name}`,
-            formattedCharacterMessageExamples,
-          )
+              `### Example Conversations for ${this.character.name}`,
+              formattedCharacterMessageExamples,
+            )
           : "",
       messageDirections:
         this.character?.style?.all?.length > 0 ||
-          this.character?.style?.chat.length > 0
+        this.character?.style?.chat.length > 0
           ? addHeader(
-            "### Message Directions for " + this.character.name,
-            (() => {
-              const all = this.character?.style?.all || [];
-              const chat = this.character?.style?.chat || [];
-              const shuffled = [...all, ...chat].sort(() => 0.5 - Math.random());
-              const allSliced = shuffled.slice(0, conversationLength / 2);
-              return allSliced.concat(allSliced).join("\n");
-            })(),
-          )
+              "### Message Directions for " + this.character.name,
+              (() => {
+                const all = this.character?.style?.all || [];
+                const chat = this.character?.style?.chat || [];
+                const shuffled = [...all, ...chat].sort(
+                  () => 0.5 - Math.random(),
+                );
+                const allSliced = shuffled.slice(0, conversationLength / 2);
+                return allSliced.concat(allSliced).join("\n");
+              })(),
+            )
           : "",
       postDirections:
         this.character?.style?.all?.length > 0 ||
-          this.character?.style?.post.length > 0
+        this.character?.style?.post.length > 0
           ? addHeader(
-            "### Post Directions for " + this.character.name,
-            (() => {
-              const all = this.character?.style?.all || [];
-              const post = this.character?.style?.post || [];
-              const shuffled = [...all, ...post].sort(() => 0.5 - Math.random());
-              return shuffled.slice(0, conversationLength / 2).join("\n");
-            })(),
-          )
+              "### Post Directions for " + this.character.name,
+              (() => {
+                const all = this.character?.style?.all || [];
+                const post = this.character?.style?.post || [];
+                const shuffled = [...all, ...post].sort(
+                  () => 0.5 - Math.random(),
+                );
+                return shuffled.slice(0, conversationLength / 2).join("\n");
+              })(),
+            )
           : "",
       // Agent runtime stuff
       senderName,
@@ -1240,9 +1250,9 @@ Text: ${attachment.text}
       goals:
         goals && goals.length > 0
           ? addHeader(
-            "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-            goals,
-          )
+              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+              goals,
+            )
           : "",
       goalsData,
       recentMessages:
@@ -1307,9 +1317,9 @@ Text: ${attachment.text}
       actionExamples:
         actionsData.length > 0
           ? addHeader(
-            "### Action Examples",
-            composeActionExamples(actionsData, 10),
-          )
+              "### Action Examples",
+              composeActionExamples(actionsData, 10),
+            )
           : "",
       evaluatorsData,
       evaluators:

@@ -406,7 +406,12 @@ export interface IAgentRuntime {
   speechService: ISpeechService;
 
   trimTokens(text: string, maxTokens: number, model: string): string;
-  splitChunks(content: string, chunkSize: number, bleed: number, model: string): Promise<string[]>;
+  splitChunks(
+    content: string,
+    chunkSize: number,
+    bleed: number,
+    model: string,
+  ): Promise<string[]>;
 
   // Methods
   getConversationLength(): number;

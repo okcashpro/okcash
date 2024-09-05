@@ -92,7 +92,7 @@ async function startTwitter() {
   wait();
   console.log("Starting search client");
   const twitterSearchClient = new TwitterSearchClient(runtime);
-  wait()
+  wait();
   console.log("Starting generation client");
   const twitterGenerationClient = new TwitterGenerationClient(runtime);
 }

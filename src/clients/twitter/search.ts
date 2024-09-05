@@ -6,11 +6,7 @@ import settings from "../../core/settings.ts";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
-import {
-  Content,
-  HandlerCallback,
-  State
-} from "../../core/types.ts";
+import { Content, HandlerCallback, State } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
@@ -317,7 +313,7 @@ export class TwitterSearchClient extends ClientBase {
               response,
               message.roomId,
               settings.TWITTER_USERNAME,
-              tweetId
+              tweetId,
             );
             return memories;
           };

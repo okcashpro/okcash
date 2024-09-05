@@ -440,29 +440,29 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       throw new Error("roomId is required");
     }
     let sql = `SELECT * FROM memories WHERE type = ? AND roomId = ?`;
-  
+
     if (params.start) {
       sql += ` AND createdAt >= ?`;
     }
-  
+
     if (params.end) {
       sql += ` AND createdAt <= ?`;
     }
-  
+
     if (params.unique) {
       sql += " AND `unique` = 1";
     }
-  
+
     if (params.userIds && params.userIds.length > 0) {
       sql += ` AND userId IN (${params.userIds.map(() => "?").join(",")})`;
     }
-  
+
     sql += " ORDER BY createdAt DESC";
-  
+
     if (params.count) {
       sql += " LIMIT ?";
     }
-  
+
     const stmt = this.db.prepare(sql);
     stmt.bind([
       params.tableName,

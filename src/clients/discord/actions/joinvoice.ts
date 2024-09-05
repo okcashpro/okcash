@@ -21,7 +21,7 @@ import {
 export default {
   name: "JOIN_VOICE",
   validate: async (_runtime: IAgentRuntime, message: Memory, state: State) => {
-    if(message.content.source !== "discord") {
+    if (message.content.source !== "discord") {
       // not a discord message
       return false;
     }

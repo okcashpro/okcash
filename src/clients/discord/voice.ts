@@ -159,7 +159,7 @@ export class VoiceManager extends EventEmitter {
             roomId,
             embedding: embeddingZeroVector,
             createdAt: new Date(),
-          }
+          };
 
           if (!memory.content.text) {
             return { text: "", action: "IGNORE" };

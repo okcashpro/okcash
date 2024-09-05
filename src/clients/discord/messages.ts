@@ -245,7 +245,7 @@ export class MessageManager {
           const messages = await sendMessageInChunks(
             message.channel as TextChannel,
             content.text,
-            message.id
+            message.id,
           );
           let notFirstMessage = false;
           let memories: Memory[] = [];

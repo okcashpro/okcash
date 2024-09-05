@@ -90,7 +90,9 @@ export function parseJsonArrayFromText(text: string) {
  * @param text - The input text from which to extract and parse the JSON object.
  * @returns An object parsed from the JSON string if successful; otherwise, null or the result of parsing an array.
  */
-export function parseJSONObjectFromText(text: string): Record<string, any> | null {
+export function parseJSONObjectFromText(
+  text: string,
+): Record<string, any> | null {
   let jsonData = null;
 
   const jsonBlockMatch = text.match(jsonBlockPattern);

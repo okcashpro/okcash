@@ -8,12 +8,7 @@ import {
 } from "../../core/parsing.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
-import {
-  Content,
-  HandlerCallback,
-  Memory,
-  State
-} from "../../core/types.ts";
+import { Content, HandlerCallback, Memory, State } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
@@ -104,11 +99,16 @@ export class TwitterInteractionClient extends ClientBase {
       const uniqueTweetCandidates = [...new Set(tweetCandidates)];
 
       // Sort tweet candidates by ID in ascending order
-      uniqueTweetCandidates.sort((a, b) => a.id.localeCompare(b.id)).filter(tweet => tweet.userId !== this.twitterUserId);
+      uniqueTweetCandidates
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .filter((tweet) => tweet.userId !== this.twitterUserId);
 
       // for each tweet candidate, handle the tweet
       for (const tweet of uniqueTweetCandidates) {
-        if (!this.lastCheckedTweetId || parseInt(tweet.id) > this.lastCheckedTweetId) {
+        if (
+          !this.lastCheckedTweetId ||
+          parseInt(tweet.id) > this.lastCheckedTweetId
+        ) {
           const conversationId = tweet.conversationId;
 
           const roomId = stringToUuid(conversationId);
@@ -317,7 +317,7 @@ export class TwitterInteractionClient extends ClientBase {
               response,
               message.roomId,
               settings.TWITTER_USERNAME,
-              tweet.id
+              tweet.id,
             );
             return memories;
           };
