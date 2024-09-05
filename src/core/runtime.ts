@@ -328,9 +328,9 @@ export class AgentRuntime implements IAgentRuntime {
     for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
       try {
         context = await this.trimTokens(
-          "gpt-4o-mini",
           context,
           max_context_length,
+          "gpt-4o-mini",
         );
         if (!settings.OPENAI_API_KEY) {
           console.log("queueing text completion");
@@ -428,7 +428,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @param max_context_length The maximum length of the context to apply to the completion.
    * @returns
    */
-  async trimTokens(model, context, maxTokens) {
+  trimTokens(context, maxTokens, model = this.model) {
     // Count tokens and truncate context if necessary
     const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
     let tokens = encoding.encode(context);
@@ -483,6 +483,31 @@ export class AgentRuntime implements IAgentRuntime {
       await new Promise((resolve) => setTimeout(resolve, retryDelay));
       retryDelay *= 2;
     }
+  }
+
+  async splitChunks(
+    content: string,
+    chunkSize: number,
+    bleed: number = 100,
+    model = this.model,
+  ): Promise<string[]> {
+    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
+    const tokens = encoding.encode(content);
+    const chunks: string[] = [];
+  
+    for (let i = 0; i < tokens.length; i += chunkSize) {
+      const chunk = tokens.slice(i, i + chunkSize);
+      const decodedChunk = encoding.decode(chunk);
+  
+      // Append bleed characters from the previous chunk
+      const startBleed = i > 0 ? content.slice(i - bleed, i) : "";
+      // Append bleed characters from the next chunk
+      const endBleed = i + chunkSize < tokens.length ? content.slice(i + chunkSize, i + chunkSize + bleed) : "";
+  
+      chunks.push(startBleed + decodedChunk + endBleed);
+    }
+  
+    return chunks;
   }
 
   async booleanCompletion({
@@ -621,7 +646,7 @@ export class AgentRuntime implements IAgentRuntime {
     max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
     max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
   }): Promise<Content> {
-    context = await this.trimTokens("gpt-4o-mini", context, max_context_length);
+    context = this.trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff
     while (true) {
       try {
@@ -1188,7 +1213,7 @@ Text: ${attachment.text}
               const all = this.character?.style?.all || [];
               const chat = this.character?.style?.chat || [];
               const shuffled = [...all, ...chat].sort(() => 0.5 - Math.random());
-              const allSliced = shuffled.slice(0, 15);
+              const allSliced = shuffled.slice(0, conversationLength / 2);
               return allSliced.concat(allSliced).join("\n");
             })(),
           )
@@ -1202,7 +1227,7 @@ Text: ${attachment.text}
               const all = this.character?.style?.all || [];
               const post = this.character?.style?.post || [];
               const shuffled = [...all, ...post].sort(() => 0.5 - Math.random());
-              return shuffled.slice(0, 15).join("\n");
+              return shuffled.slice(0, conversationLength / 2).join("\n");
             })(),
           )
           : "",

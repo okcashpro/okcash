@@ -141,7 +141,7 @@ export class TwitterGenerationClient extends ClientBase {
           await this.runtime.messageManager.createMemory({
             id: stringToUuid(postId),
             userId: this.runtime.agentId,
-            content: { text: newTweetContent.trim(), url: tweet.permanentUrl },
+            content: { text: newTweetContent.trim(), url: tweet.permanentUrl, source: "twitter" },
             roomId,
             embedding: embeddingZeroVector,
             createdAt: new Date(tweet.timestamp * 1000),

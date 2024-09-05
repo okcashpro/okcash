@@ -167,7 +167,7 @@ export class DiscordClient extends EventEmitter {
       userId: userIdUUID,
       content: {
         text: reactionMessage,
-        source: "Discord",
+        source: "discord",
         inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
       },
       roomId,
@@ -217,7 +217,7 @@ export class DiscordClient extends EventEmitter {
       userId: userIdUUID,
       content: {
         text: reactionMessage,
-        source: "Discord",
+        source: "discord",
         inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
       },
       roomId,

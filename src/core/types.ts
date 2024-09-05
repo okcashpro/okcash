@@ -262,6 +262,8 @@ export interface IDatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]>;
   getMemoryById(id: UUID): Promise<Memory | null>;
   getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
@@ -359,6 +361,8 @@ export interface IMemoryManager {
     count?: number;
     unique?: boolean;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]>;
   getCachedEmbeddings(
     content: string,
@@ -400,6 +404,9 @@ export interface IAgentRuntime {
   llamaService: ILlamaService;
   browserService: IBrowserService;
   speechService: ISpeechService;
+
+  trimTokens(text: string, maxTokens: number, model: string): string;
+  splitChunks(content: string, chunkSize: number, bleed: number, model: string): Promise<string[]>;
 
   // Methods
   getConversationLength(): number;

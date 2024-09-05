@@ -215,6 +215,8 @@ export async function buildConversationThread(
         id: stringToUuid(currentTweet.id),
         content: {
           text: currentTweet.text,
+          source: "twitter",
+          url: currentTweet.permanentUrl,
           inReplyTo: currentTweet.inReplyToStatusId
             ? stringToUuid(currentTweet.inReplyToStatusId)
             : undefined,
@@ -281,6 +283,8 @@ export async function sendTweetChunks(
     userId: client.runtime.agentId,
     content: {
       text: tweet.text,
+      source: "twitter",
+      url: tweet.permanentUrl,
       inReplyTo: tweet.inReplyToStatusId
         ? stringToUuid(tweet.inReplyToStatusId)
         : undefined,

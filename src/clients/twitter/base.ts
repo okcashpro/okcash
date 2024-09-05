@@ -257,7 +257,7 @@ export class ClientBase extends EventEmitter {
               query,
               maxTweets,
               searchMode,
-              cursor,
+              cursor, 
             ),
             timeoutPromise,
           ])
@@ -319,6 +319,7 @@ export class ClientBase extends EventEmitter {
           const content = {
             text: tweet.text,
             url: tweet.permanentUrl,
+            source: "twitter",
             inReplyTo: tweet.inReplyToStatusId
               ? stringToUuid(tweet.inReplyToStatusId)
               : undefined,
@@ -410,6 +411,7 @@ export class ClientBase extends EventEmitter {
       const content = {
         text: tweet.text,
         url: tweet.permanentUrl,
+        source: "twitter",
         inReplyTo: tweet.inReplyToStatusId
           ? stringToUuid(tweet.inReplyToStatusId)
           : undefined,

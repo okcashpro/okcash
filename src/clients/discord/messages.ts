@@ -136,6 +136,7 @@ export class MessageManager {
       const content: Content = {
         text: processedContent,
         attachments: attachments,
+        source: "discord",
         url: message.url,
         inReplyTo: message.reference?.messageId
           ? stringToUuid(message.reference.messageId)
