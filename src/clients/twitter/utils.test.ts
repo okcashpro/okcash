@@ -20,7 +20,6 @@ describe("buildConversationThread", () => {
       databaseAdapter: new SqliteDatabaseAdapter(new Database(":memory:")),
       token: settings.OPENAI_API_KEY as string,
       serverUrl: "https://api.openai.com/v1",
-      model: "gpt-4o-mini",
       evaluators: [],
       character: defaultCharacter,
       providers: [],

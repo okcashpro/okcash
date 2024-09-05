@@ -84,7 +84,7 @@ export class ClientBase extends EventEmitter {
   lastCheckedTweetId: number | null = null;
   tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
   imageDescriptionService: ImageDescriptionService;
-  temperature: number = 0.5;
+  temperature: number = 0.7;
   dryRun: boolean = false;
 
   private tweetCache: Map<string, Tweet> = new Map();
@@ -240,16 +240,13 @@ export class ClientBase extends EventEmitter {
     searchMode: SearchMode,
     cursor?: string,
   ): Promise<QueryTweetsResponse> {
-    // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
-    // if we dont get a response in 5 seconds, something is wrong
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(
-        () => reject(new Error("Timeout waiting for Twitter API response")),
-        10000,
-      ),
-    );
-
     try {
+      // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
+      // if we dont get a response in 5 seconds, something is wrong
+      const timeoutPromise = new Promise((resolve) =>
+        setTimeout(() => resolve({ tweets: [] }), 10000)
+      );
+  
       try {
         const result = await this.requestQueue.add(
           async () =>
@@ -272,7 +269,7 @@ export class ClientBase extends EventEmitter {
       console.error("Error fetching search tweets:", error);
       return { tweets: [] };
     }
-  }
+  }  
 
   private async populateTimeline() {
     const cacheFile = "timeline_cache.json";

@@ -63,7 +63,6 @@ const getDateRange = async (
 
   for (let i = 0; i < 5; i++) {
     const response = await runtime.completion({
-      model: "gpt-4o-mini",
       context,
     });
     // try parsing to a json object
@@ -272,7 +271,6 @@ const summarizeAction = {
 
       // TODO: if this is llama, we need to do that instead
       const summary = await runtime.completion({
-        model: "gpt-4o-mini",
         context,
       });
 

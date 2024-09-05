@@ -203,7 +203,7 @@ export class AgentRuntime implements IAgentRuntime {
       opts.conversationLength ?? this.#conversationLength;
     this.databaseAdapter = opts.databaseAdapter;
     // use the character id if it exists, otherwise use the agentId if it is passed in, otherwise use the character name
-    this.agentId = this.character.id ?? opts.agentId ?? stringToUuid(this.character.name);
+    this.agentId = opts.character.id ?? opts.agentId ?? stringToUuid(opts.character.name);
     this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
     this.character = opts.character || defaultCharacter;
     if (!opts.databaseAdapter) {
@@ -231,8 +231,8 @@ export class AgentRuntime implements IAgentRuntime {
     });
 
     this.serverUrl = opts.serverUrl ?? this.serverUrl;
-    this.model = opts.model ?? this.model;
-    this.embeddingModel = opts.embeddingModel ?? this.embeddingModel;
+    this.model = this.character.settings?.model ?? opts.model ?? this.model;
+    this.embeddingModel = this.character.settings?.embeddingModel ?? opts.embeddingModel ?? this.embeddingModel;
     if (!this.serverUrl) {
       console.warn("No serverUrl provided, defaulting to localhost");
     }
@@ -251,16 +251,16 @@ export class AgentRuntime implements IAgentRuntime {
     });
 
     if (!this.getSetting("OPENAI_API_KEY") && !this.llamaService) {
-      this.llamaService = new LlamaService();
+      this.llamaService = LlamaService.getInstance();
     }
 
-    this.transcriptionService = new TranscriptionService(this);
+    this.transcriptionService = TranscriptionService.getInstance(this);
 
-    this.imageDescriptionService = new ImageDescriptionService(this);
+    this.imageDescriptionService = ImageDescriptionService.getInstance(this);
 
-    this.browserService = new BrowserService(this);
+    this.browserService = BrowserService.getInstance(this);
 
-    this.videoService = new VideoService(this);
+    this.videoService = VideoService.getInstance(this);
 
     this.pdfService = new PdfService();
 
@@ -662,8 +662,8 @@ export class AgentRuntime implements IAgentRuntime {
     context = "",
     stop = [],
     model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
+    frequency_penalty = 0.6,
+    presence_penalty = 0.6,
     temperature = 0.3,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,

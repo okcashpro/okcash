@@ -100,7 +100,6 @@ export class TwitterGenerationClient extends ClientBase {
         temperature: this.temperature,
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
-        model: this.runtime.model,
       });
       log_to_file(
         `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_response`,

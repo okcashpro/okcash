@@ -264,7 +264,6 @@ export class TwitterInteractionClient extends ClientBase {
     const shouldRespond = await this.runtime.shouldRespondCompletion({
       context: shouldRespondContext,
       stop: [],
-      model: this.runtime.model,
     });
 
     if (!shouldRespond) {
@@ -289,7 +288,6 @@ export class TwitterInteractionClient extends ClientBase {
       context,
       stop: [],
       temperature: this.temperature,
-      model: this.runtime.model,
     });
 
     console.log("tweet is", tweet);

@@ -143,7 +143,6 @@ export class TwitterSearchClient extends ClientBase {
         context: prompt,
         stop: [],
         temperature: this.temperature,
-        model: this.runtime.model,
       });
 
       const responseLogName = `${this.runtime.character.name}_search_${datestr}_result`;
@@ -284,7 +283,6 @@ export class TwitterSearchClient extends ClientBase {
         context,
         stop: [],
         temperature: this.temperature,
-        model: this.runtime.model,
       });
 
       responseContent.inReplyTo = message.id;

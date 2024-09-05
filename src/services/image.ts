@@ -18,6 +18,7 @@ import path from "path";
 import { AgentRuntime } from "../core/runtime.ts";
 
 class ImageDescriptionService {
+  private static instance: ImageDescriptionService | null = null;
   private modelId: string = "onnx-community/Florence-2-base-ft";
   private device: string = "gpu";
   private model: PreTrainedModel | null = null;
@@ -29,9 +30,16 @@ class ImageDescriptionService {
   private queue: string[] = [];
   private processing: boolean = false;
 
-  constructor(runtime: AgentRuntime) {
+  private constructor(runtime: AgentRuntime) {
     this.runtime = runtime;
     this.initialize();
+  }
+
+  public static getInstance(runtime: AgentRuntime): ImageDescriptionService {
+    if (!ImageDescriptionService.instance) {
+      ImageDescriptionService.instance = new ImageDescriptionService(runtime);
+    }
+    return ImageDescriptionService.instance;
   }
 
   async initialize(
@@ -291,7 +299,7 @@ class ImageDescriptionService {
   }
 
   private async extractFirstFrameFromGif(
-    gifUrl: string,
+    gifUrl: string
   ): Promise<{ filePath: string }> {
     const frameData = await gifFrames({
       url: gifUrl,

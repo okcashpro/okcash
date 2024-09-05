@@ -12,7 +12,7 @@ describe("BrowserService", () => {
       env: process.env as Record<string, string>,
       actions: [],
     });
-    browserService = new BrowserService(runtime);
+    browserService = BrowserService.getInstance(runtime);
     await browserService.initialize();
   });
 
@@ -25,7 +25,7 @@ describe("BrowserService", () => {
       env: process.env as Record<string, string>,
       actions: [],
     });
-    const newBrowserService = new BrowserService(runtime);
+    const newBrowserService = BrowserService.getInstance(runtime);
     await expect(newBrowserService.initialize()).resolves.not.toThrow();
     await expect(newBrowserService.closeBrowser()).resolves.not.toThrow();
   });

@@ -7,12 +7,23 @@ import { Media } from "../core/types.ts";
 import { stringToUuid } from "../core/uuid.ts";
 
 export class VideoService {
+  private static instance: VideoService | null = null;
   private CONTENT_CACHE_DIR = "./content_cache";
   runtime: AgentRuntime;
 
-  constructor(runtime: AgentRuntime) {
+  private queue: string[] = [];
+  private processing: boolean = false;
+
+  private constructor(runtime: AgentRuntime) {
     this.ensureCacheDirectoryExists();
     this.runtime = runtime;
+  }
+
+  public static getInstance(runtime: AgentRuntime): VideoService {
+    if (!VideoService.instance) {
+      VideoService.instance = new VideoService(runtime);
+    }
+    return VideoService.instance;
   }
 
   private ensureCacheDirectoryExists() {
@@ -30,6 +41,40 @@ export class VideoService {
   }
 
   public async processVideo(url: string): Promise<Media> {
+    this.queue.push(url);
+    this.processQueue();
+
+    return new Promise((resolve, reject) => {
+      const checkQueue = () => {
+        console.log("***** CHECKING QUEUE", this.queue);
+        const index = this.queue.indexOf(url);
+        if (index !== -1) {
+          setTimeout(checkQueue, 100);
+        } else {
+          // ??? Might be a bug here.
+          resolve((async () => await this.processVideoFromUrl(url)) as unknown as Promise<Media>);
+        }
+      };
+      checkQueue();
+    });
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.processing || this.queue.length === 0) {
+      return;
+    }
+
+    this.processing = true;
+
+    while (this.queue.length > 0) {
+      const videoUrl = this.queue.shift();
+      await this.processVideoFromUrl(videoUrl);
+    }
+
+    this.processing = false;
+  }
+
+  private async processVideoFromUrl(url: string): Promise<Media> {
     // Extract YouTube ID from URL
     const videoId =
       url.match(
@@ -55,7 +100,7 @@ export class VideoService {
 
     const result: Media = {
       id: videoUuid,
-      url: url,
+      url: url, 
       title: videoInfo.title,
       source: videoInfo.channel,
       description: videoInfo.description,
@@ -126,8 +171,7 @@ export class VideoService {
       if (videoInfo.automatic_captions && videoInfo.automatic_captions.en) {
         console.log("Automatic captions found");
         const captionUrl = videoInfo.automatic_captions.en[0].url;
-        const captionContent = await this.downloadCaption(captionUrl);
-        return this.parseCaption(captionContent);
+        const captionContent = await this.downloadCaption(captionUrl); return this.parseCaption(captionContent);
       }
 
       // Check if it's a music video
@@ -182,7 +226,7 @@ export class VideoService {
       .map((block) => block.split("\n").slice(2).join(" "))
       .join(" ");
   }
-
+  
   private async downloadSRT(url: string): Promise<string> {
     console.log("downloadSRT");
     const response = await fetch(url);

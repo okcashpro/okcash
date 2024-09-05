@@ -53,6 +53,7 @@ interface QueuedMessage {
 }
 
 class LlamaService {
+  private static instance: LlamaService | null = null;
   private llama: Llama | undefined;
   private model: LlamaModel | undefined;
   private modelPath: string;
@@ -65,7 +66,7 @@ class LlamaService {
   private isProcessing: boolean = false;
   private modelInitialized: boolean = false;
 
-  constructor() {
+  private constructor() {
     console.log("Constructing");
     this.llama = undefined;
     this.model = undefined;
@@ -77,14 +78,21 @@ class LlamaService {
     this.initializeModel();
   }
 
+  public static getInstance(): LlamaService {
+    if (!LlamaService.instance) {
+      LlamaService.instance = new LlamaService();
+    }
+    return LlamaService.instance;
+  }
+
   async initializeModel() {
     try {
       await this.checkModel();
       console.log("Loading llama");
 
       const systemInfo = await si.graphics();
-      const hasCUDA = systemInfo.controllers.some((controller) =>
-        controller.vendor.toLowerCase().includes("nvidia"),
+      const hasCUDA = systemInfo.controllers.some((controller) => 
+        controller.vendor.toLowerCase().includes("nvidia")
       );
 
       if (hasCUDA) {
@@ -99,7 +107,7 @@ class LlamaService {
       console.log("Creating grammar");
       const grammar = new LlamaJsonSchemaGrammar(
         this.llama,
-        jsonSchemaGrammar as GbnfJsonSchema,
+        jsonSchemaGrammar as GbnfJsonSchema
       );
       this.grammar = grammar;
       console.log("Loading model");
@@ -114,10 +122,7 @@ class LlamaService {
       this.modelInitialized = true;
       this.processQueue();
     } catch (error) {
-      console.error(
-        "Model initialization failed. Deleting model and retrying...",
-        error,
-      );
+      console.error("Model initialization failed. Deleting model and retrying...", error);
       await this.deleteModel();
       await this.initializeModel();
     }
@@ -136,8 +141,7 @@ class LlamaService {
         const downloadModel = (url: string) => {
           https
             .get(url, (response) => {
-              const isRedirect =
-                response.statusCode >= 300 && response.statusCode < 400;
+              const isRedirect = response.statusCode >= 300 && response.statusCode < 400;
               if (isRedirect) {
                 const redirectUrl = response.headers.location;
                 if (redirectUrl) {
@@ -151,19 +155,14 @@ class LlamaService {
                 }
               }
 
-              const totalSize = parseInt(
-                response.headers["content-length"] ?? "0",
-                10,
-              );
+              const totalSize = parseInt(response.headers["content-length"] ?? "0", 10);
 
               response.on("data", (chunk) => {
                 downloadedSize += chunk.length;
                 file.write(chunk);
 
                 // Log progress
-                const progress = ((downloadedSize / totalSize) * 100).toFixed(
-                  2,
-                );
+                const progress = ((downloadedSize / totalSize) * 100).toFixed(2);
                 process.stdout.write(`Downloaded ${progress}%\r`);
               });
 
@@ -195,8 +194,8 @@ class LlamaService {
 
   async deleteModel() {
     if (fs.existsSync(this.modelPath)) {
-      fs.unlinkSync(this.modelPath);
-      console.log("Model deleted.");
+    fs.unlinkSync(this.modelPath);
+    console.log("Model deleted.");
     }
   }
 
@@ -206,7 +205,7 @@ class LlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-    max_tokens: number,
+    max_tokens: number
   ): Promise<any> {
     console.log("Queueing message completion");
     return new Promise((resolve, reject) => {
@@ -231,7 +230,7 @@ class LlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-    max_tokens: number,
+    max_tokens: number
   ): Promise<string> {
     console.log("Queueing text completion");
     return new Promise((resolve, reject) => {
@@ -251,11 +250,7 @@ class LlamaService {
   }
 
   private async processQueue() {
-    if (
-      this.isProcessing ||
-      this.messageQueue.length === 0 ||
-      !this.modelInitialized
-    ) {
+    if (this.isProcessing || this.messageQueue.length === 0 || !this.modelInitialized) {
       return;
     }
 
@@ -273,7 +268,7 @@ class LlamaService {
             message.frequency_penalty,
             message.presence_penalty,
             message.max_tokens,
-            message.useGrammar,
+            message.useGrammar
           );
           message.resolve(response);
         } catch (error) {
@@ -292,7 +287,7 @@ class LlamaService {
     frequency_penalty: number,
     presence_penalty: number,
     max_tokens: number,
-    useGrammar: boolean,
+    useGrammar: boolean
   ): Promise<any | string> {
     if (!this.sequence) {
       throw new Error("Model not initialized.");
@@ -322,17 +317,6 @@ class LlamaService {
     })) {
       const current = this.model.detokenize([...responseTokens, token]);
       if ([...stop].some((s) => current.includes(s))) {
-        console.log("Stop sequence found");
-        break;
-      }
-
-      // commented out since yieldEogToken is false
-      // if current includes '://' and that is not immediate after http or https, then we should break
-      if (
-        current.includes("://") &&
-        !current.slice(-10).includes("http://") &&
-        !current.slice(-10).includes("https://")
-      ) {
         console.log("Stop sequence found");
         break;
       }
