@@ -175,7 +175,9 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
       similarity_boost: runtime.getSetting("ELEVENLABS_VOICE_SIMILARITY_BOOST"),
       stability: runtime.getSetting("ELEVENLABS_VOICE_STABILITY"),
       style: runtime.getSetting("ELEVENLABS_VOICE_STYLE"),
-      use_speaker_boost: runtime.getSetting("ELEVENLABS_VOICE_USE_SPEAKER_BOOST"),
+      use_speaker_boost: runtime.getSetting(
+        "ELEVENLABS_VOICE_USE_SPEAKER_BOOST",
+      ),
     },
   };
   const options = {
@@ -510,7 +512,10 @@ class SpeechService {
     );
   }
 
-  static async generate(runtime: IAgentRuntime, text: string): Promise<Readable> {
+  static async generate(
+    runtime: IAgentRuntime,
+    text: string,
+  ): Promise<Readable> {
     // check for elevenlabs API key
     if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
       return textToSpeech(runtime, text);

@@ -5,14 +5,19 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import { addHeader, composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
-import { Content, HandlerCallback, IAgentRuntime, State } from "../../core/types.ts";
+import {
+  Content,
+  HandlerCallback,
+  IAgentRuntime,
+  State,
+} from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
   isValidTweet,
   sendTweetChunks,
-  wait
+  wait,
 } from "./utils.ts";
 
 const messageHandlerTemplate =
@@ -84,11 +89,18 @@ export class TwitterSearchClient extends ClientBase {
       console.log("Search tweets fetched");
 
       const homeTimeline = await this.fetchHomeTimeline(50);
-      fs.writeFileSync("tweetcache/home_timeline.json", JSON.stringify(homeTimeline, null, 2));
+      fs.writeFileSync(
+        "tweetcache/home_timeline.json",
+        JSON.stringify(homeTimeline, null, 2),
+      );
 
-      const formattedHomeTimeline = `### ${this.runtime.character.name}'s Home Timeline\n\n` + homeTimeline.map((tweet) => {
-        return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
-      }).join("\n");
+      const formattedHomeTimeline =
+        `### ${this.runtime.character.name}'s Home Timeline\n\n` +
+        homeTimeline
+          .map((tweet) => {
+            return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
+          })
+          .join("\n");
 
       // randomly slice .tweets down to 20
       const slicedTweets = recentTweets.tweets
@@ -99,7 +111,6 @@ export class TwitterSearchClient extends ClientBase {
         console.log("No valid tweets found for the search term");
         return;
       }
-
 
       const prompt = `
   Here are some tweets related to the search term "${searchTerm}":
@@ -157,7 +168,9 @@ export class TwitterSearchClient extends ClientBase {
 
       console.log("Selected tweet to reply to:", selectedTweet);
 
-      if (selectedTweet.username === this.runtime.getSetting("TWITTER_USERNAME")) {
+      if (
+        selectedTweet.username === this.runtime.getSetting("TWITTER_USERNAME")
+      ) {
         console.log("Skipping tweet from bot itself");
         return;
       }
@@ -211,7 +224,10 @@ export class TwitterSearchClient extends ClientBase {
       // Fetch replies and retweets
       const replies = selectedTweet.thread;
       const replyContext = replies
-        .filter((reply) => reply.username !== this.runtime.getSetting("TWITTER_USERNAME"))
+        .filter(
+          (reply) =>
+            reply.username !== this.runtime.getSetting("TWITTER_USERNAME"),
+        )
         .map((reply) => `@${reply.username}: ${reply.text}`)
         .join("\n");
 
@@ -245,24 +261,28 @@ export class TwitterSearchClient extends ClientBase {
               SearchMode.Latest,
             ),
         );
-      
+
         // Format search results
-        for (const tweet of tweets.tweets.filter((tweet) => isValidTweet(tweet))) {
+        for (const tweet of tweets.tweets.filter((tweet) =>
+          isValidTweet(tweet),
+        )) {
           let formattedTweet = `Name: ${tweet.name} (@${tweet.username})\n`;
           formattedTweet += `Time: ${tweet.timeParsed.toLocaleString()}\n`;
           formattedTweet += `Text: ${tweet.text}\n---\n`;
-      
+
           if (tweet.photos.length > 0) {
             const photoDescriptions = await Promise.all(
               tweet.photos.map(async (photo) => {
                 const description =
-                  await runtime.imageDescriptionService.describeImage(photo.url);
+                  await runtime.imageDescriptionService.describeImage(
+                    photo.url,
+                  );
                 return `[Photo: ${description.title} - ${description.description}]`;
               }),
             );
             formattedTweet += `Photos: ${photoDescriptions.join(", ")}\n`;
           }
-      
+
           if (tweet.videos.length > 0) {
             const videoTranscriptions = await Promise.all(
               tweet.videos.map(async (video) => {
@@ -274,9 +294,9 @@ export class TwitterSearchClient extends ClientBase {
             );
             formattedTweet += `Videos: ${videoTranscriptions.join(", ")}\n`;
           }
-      
+
           formattedTweet += `Replies: ${tweet.replies}, Retweets: ${tweet.retweets}, Likes: ${tweet.likes}, Views: ${tweet.views ?? "Unknown"}\n`;
-      
+
           // If tweet is a reply, find the original tweet and include it
           if (tweet.inReplyToStatusId) {
             const originalTweet = tweets.tweets.find(
@@ -302,17 +322,17 @@ export class TwitterSearchClient extends ClientBase {
               formattedTweet += `Text: ${originalTweet.text}\n`;
             }
           }
-      
+
           recentSearchResults.push(formattedTweet);
         }
-      
+
         // Sort search results by timestamp
         recentSearchResults.sort((a, b) => {
           const timeA = new Date(a.match(/Time: (.*)/)[1]).getTime();
           const timeB = new Date(b.match(/Time: (.*)/)[1]).getTime();
           return timeA - timeB;
         });
-      
+
         const recentSearchResultsText = recentSearchResults.join("\n");
         return addHeader(
           "### Recent Search Results for " + searchTerm,

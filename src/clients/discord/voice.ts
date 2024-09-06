@@ -230,7 +230,10 @@ export class VoiceManager extends EventEmitter {
             return null;
           }
 
-          let responseStream = await SpeechService.generate(this.runtime, content);
+          let responseStream = await SpeechService.generate(
+            this.runtime,
+            content,
+          );
 
           if (responseStream) {
             await this.playAudioStream(userId, responseStream as Readable);

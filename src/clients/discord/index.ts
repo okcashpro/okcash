@@ -108,7 +108,9 @@ export class DiscordClient extends EventEmitter {
     (async () => {
       try {
         await rest.put(
-          Routes.applicationCommands(this.runtime.getSetting("DISCORD_APPLICATION_ID")),
+          Routes.applicationCommands(
+            this.runtime.getSetting("DISCORD_APPLICATION_ID"),
+          ),
           { body: commands },
         );
       } catch (error) {

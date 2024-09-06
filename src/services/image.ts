@@ -299,7 +299,7 @@ class ImageDescriptionService {
   }
 
   private async extractFirstFrameFromGif(
-    gifUrl: string
+    gifUrl: string,
   ): Promise<{ filePath: string }> {
     const frameData = await gifFrames({
       url: gifUrl,

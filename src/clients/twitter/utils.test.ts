@@ -32,7 +32,9 @@ describe("buildConversationThread", () => {
     // Load cached Twitter credentials
     const cookiesFilePath = path.join(
       __dirname,
-      "../../../tweetcache/" + runtime.getSetting("TWITTER_USERNAME") + "_cookies.json"
+      "../../../tweetcache/" +
+        runtime.getSetting("TWITTER_USERNAME") +
+        "_cookies.json",
     );
     console.log("Cookies file path:", cookiesFilePath);
     if (fs.existsSync(cookiesFilePath)) {

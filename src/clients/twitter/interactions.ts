@@ -10,11 +10,7 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import { Content, HandlerCallback, Memory, State } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import {
-  buildConversationThread,
-  sendTweetChunks,
-  wait
-} from "./utils.ts";
+import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
 
 export const messageHandlerTemplate =
   `{{relevantFacts}}
@@ -211,18 +207,27 @@ export class TwitterInteractionClient extends ClientBase {
     };
     const currentPost = formatTweet(tweet);
 
-    let homeTimeline = []
+    let homeTimeline = [];
     // read the file if it exists
     if (fs.existsSync("tweetcache/home_timeline.json")) {
-      homeTimeline = JSON.parse(fs.readFileSync("tweetcache/home_timeline.json", "utf-8"));
+      homeTimeline = JSON.parse(
+        fs.readFileSync("tweetcache/home_timeline.json", "utf-8"),
+      );
     } else {
       homeTimeline = await this.fetchHomeTimeline(50);
-      fs.writeFileSync("tweetcache/home_timeline.json", JSON.stringify(homeTimeline, null, 2));
+      fs.writeFileSync(
+        "tweetcache/home_timeline.json",
+        JSON.stringify(homeTimeline, null, 2),
+      );
     }
 
-    const formattedHomeTimeline = `### ${this.runtime.character.name}'s Home Timeline\n\n` + homeTimeline.map((tweet) => {
-      return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
-    }).join("\n");
+    const formattedHomeTimeline =
+      `### ${this.runtime.character.name}'s Home Timeline\n\n` +
+      homeTimeline
+        .map((tweet) => {
+          return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
+        })
+        .join("\n");
 
     let state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,

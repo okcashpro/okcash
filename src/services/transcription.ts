@@ -61,7 +61,7 @@ export class TranscriptionService extends EventEmitter {
     } else if (platform === "win32") {
       const cudaPath = path.join(
         process.env.CUDA_PATH ||
-        "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0",
+          "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0",
         "bin",
         "nvcc.exe",
       );

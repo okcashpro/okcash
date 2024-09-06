@@ -81,7 +81,10 @@ export class BrowserService {
         if (index !== -1) {
           setTimeout(checkQueue, 100);
         } else {
-          resolve((async () => await this.fetchPageContent(url)) as unknown as Promise<any>);
+          resolve(
+            (async () =>
+              await this.fetchPageContent(url)) as unknown as Promise<any>,
+          );
         }
       };
       checkQueue();

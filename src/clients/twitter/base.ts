@@ -157,7 +157,8 @@ export class ClientBase extends EventEmitter {
       this.twitterClient = new Scraper();
       ClientBase._twitterClient = this.twitterClient;
     }
-    this.dryRun = this.runtime.getSetting("TWITTER_DRY_RUN")?.toLowerCase() === "true"
+    this.dryRun =
+      this.runtime.getSetting("TWITTER_DRY_RUN")?.toLowerCase() === "true";
     this.directions =
       "- " +
       this.runtime.character.style.all.join("\n- ") +
@@ -176,14 +177,18 @@ export class ClientBase extends EventEmitter {
     }
     const cookiesFilePath = path.join(
       __dirname,
-      "../../../tweetcache/" + this.runtime.getSetting("TWITTER_USERNAME") + "_cookies.json",
+      "../../../tweetcache/" +
+        this.runtime.getSetting("TWITTER_USERNAME") +
+        "_cookies.json",
     );
 
     // async initialization
     (async () => {
       // Check for Twitter cookies
       if (this.runtime.getSetting("TWITTER_COOKIES")) {
-        const cookiesArray = JSON.parse(this.runtime.getSetting("TWITTER_COOKIES"));
+        const cookiesArray = JSON.parse(
+          this.runtime.getSetting("TWITTER_COOKIES"),
+        );
         await this.setCookiesFromArray(cookiesArray);
       } else {
         console.log("Cookies file path:", cookiesFilePath);
@@ -193,19 +198,14 @@ export class ClientBase extends EventEmitter {
           );
           await this.setCookiesFromArray(cookiesArray);
         } else {
-          await this.twitterClient
-            .login(
-              this.runtime.getSetting("TWITTER_USERNAME"),
-              this.runtime.getSetting("TWITTER_PASSWORD"),
-              this.runtime.getSetting("TWITTER_EMAIL"),
-            )
-            console.log("Logged in to Twitter");
-            const cookies = await this.twitterClient.getCookies();
-            fs.writeFileSync(
-              cookiesFilePath,
-              JSON.stringify(cookies),
-              "utf-8",
-            );
+          await this.twitterClient.login(
+            this.runtime.getSetting("TWITTER_USERNAME"),
+            this.runtime.getSetting("TWITTER_PASSWORD"),
+            this.runtime.getSetting("TWITTER_EMAIL"),
+          );
+          console.log("Logged in to Twitter");
+          const cookies = await this.twitterClient.getCookies();
+          fs.writeFileSync(cookiesFilePath, JSON.stringify(cookies), "utf-8");
         }
       }
 
@@ -223,11 +223,7 @@ export class ClientBase extends EventEmitter {
           );
 
           const cookies = await this.twitterClient.getCookies();
-          fs.writeFileSync(
-            cookiesFilePath,
-            JSON.stringify(cookies),
-            "utf-8",
-          );
+          fs.writeFileSync(cookiesFilePath, JSON.stringify(cookies), "utf-8");
           loggedInWaits = 0;
         }
         loggedInWaits++;
@@ -250,9 +246,8 @@ export class ClientBase extends EventEmitter {
   async fetchHomeTimeline(count: number): Promise<Tweet[]> {
     const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
 
-    
     return homeTimeline.map((tweet) => {
-      console.log("tweet.legacy.entities", tweet.legacy)
+      console.log("tweet.legacy.entities", tweet.legacy);
 
       return {
         id: tweet.rest_id,
@@ -265,10 +260,16 @@ export class ClientBase extends EventEmitter {
         conversationId: tweet.legacy.conversation_id_str,
         hashtags: tweet.legacy.entities.hashtags,
         mentions: tweet.legacy.entities.user_mentions,
-        photos: tweet.legacy.entities.media?.filter((media) => media.type === "photo") ?? [],
+        photos:
+          tweet.legacy.entities.media?.filter(
+            (media) => media.type === "photo",
+          ) ?? [],
         thread: [],
         urls: tweet.legacy.entities.urls,
-        videos: tweet.legacy.entities.media?.filter((media) => media.type === "video") ?? [],
+        videos:
+          tweet.legacy.entities.media?.filter(
+            (media) => media.type === "video",
+          ) ?? [],
       };
     });
   }
@@ -283,9 +284,9 @@ export class ClientBase extends EventEmitter {
       // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
       // if we dont get a response in 5 seconds, something is wrong
       const timeoutPromise = new Promise((resolve) =>
-        setTimeout(() => resolve({ tweets: [] }), 10000)
+        setTimeout(() => resolve({ tweets: [] }), 10000),
       );
-  
+
       try {
         const result = await this.requestQueue.add(
           async () =>
@@ -308,7 +309,7 @@ export class ClientBase extends EventEmitter {
       console.error("Error fetching search tweets:", error);
       return { tweets: [] };
     }
-  }  
+  }
 
   private async populateTimeline() {
     const cacheFile = "timeline_cache.json";

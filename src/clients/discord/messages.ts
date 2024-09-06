@@ -230,7 +230,10 @@ export class MessageManager {
         }
         if (message.channel.type === ChannelType.GuildVoice) {
           // For voice channels, use text-to-speech
-          const audioStream = await SpeechService.generate(this.runtime, content.text);
+          const audioStream = await SpeechService.generate(
+            this.runtime,
+            content.text,
+          );
           await this.voiceManager.playAudioStream(userId, audioStream);
           const memory: Memory = {
             id: stringToUuid(message.id),
@@ -296,9 +299,11 @@ export class MessageManager {
       console.error("Error handling message:", error);
       if (message.channel.type === ChannelType.GuildVoice) {
         // For voice channels, use text-to-speech for the error message
-        const errorMessage =
-          "Sorry, I had a glitch. What was that?";
-        const audioStream = await SpeechService.generate(this.runtime, errorMessage);
+        const errorMessage = "Sorry, I had a glitch. What was that?";
+        const audioStream = await SpeechService.generate(
+          this.runtime,
+          errorMessage,
+        );
         await this.voiceManager.playAudioStream(userId, audioStream);
       } else {
         // For text channels, send the error message

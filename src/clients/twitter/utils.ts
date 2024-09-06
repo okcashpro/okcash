@@ -132,7 +132,6 @@ export async function sendTweetChunks(
     } as Tweet;
 
     sentTweets.push(finalTweet);
-
   }
 
   const memories: Memory[] = sentTweets.map((tweet) => ({

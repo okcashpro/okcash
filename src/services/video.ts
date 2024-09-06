@@ -52,7 +52,10 @@ export class VideoService {
           setTimeout(checkQueue, 100);
         } else {
           // ??? Might be a bug here.
-          resolve((async () => await this.processVideoFromUrl(url)) as unknown as Promise<Media>);
+          resolve(
+            (async () =>
+              await this.processVideoFromUrl(url)) as unknown as Promise<Media>,
+          );
         }
       };
       checkQueue();
@@ -100,7 +103,7 @@ export class VideoService {
 
     const result: Media = {
       id: videoUuid,
-      url: url, 
+      url: url,
       title: videoInfo.title,
       source: videoInfo.channel,
       description: videoInfo.description,
@@ -171,7 +174,8 @@ export class VideoService {
       if (videoInfo.automatic_captions && videoInfo.automatic_captions.en) {
         console.log("Automatic captions found");
         const captionUrl = videoInfo.automatic_captions.en[0].url;
-        const captionContent = await this.downloadCaption(captionUrl); return this.parseCaption(captionContent);
+        const captionContent = await this.downloadCaption(captionUrl);
+        return this.parseCaption(captionContent);
       }
 
       // Check if it's a music video
@@ -226,7 +230,7 @@ export class VideoService {
       .map((block) => block.split("\n").slice(2).join(" "))
       .join(" ");
   }
-  
+
   private async downloadSRT(url: string): Promise<string> {
     console.log("downloadSRT");
     const response = await fetch(url);

@@ -30,7 +30,7 @@ interface Arguments {
 
 let argv: Arguments = {
   character: "./src/agent/default_character.json",
-  characters: undefined
+  characters: undefined,
 };
 
 try {
@@ -53,33 +53,35 @@ try {
 // Load character
 const characterPath = argv.character;
 
-const characterPaths = argv.characters?.split(',').map((path) => path.trim());
+const characterPaths = argv.characters?.split(",").map((path) => path.trim());
 
-const characters = []
+const characters = [];
 
 if (characterPaths?.length > 0) {
   for (const path of characterPaths) {
     try {
       const character = JSON.parse(fs.readFileSync(path, "utf8"));
-      characters.push(character)
+      characters.push(character);
     } catch (e) {
-      console.log(`Error loading character from ${path}: ${e}`)
+      console.log(`Error loading character from ${path}: ${e}`);
     }
   }
 }
 
 try {
   const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
-  characters.push(character)
+  characters.push(character);
 } catch (e) {
-  console.log(`Error loading character from ${characterPath}: ${e}`)
+  console.log(`Error loading character from ${characterPath}: ${e}`);
 }
 
 async function startAgent(character: Character) {
-  console.log("Starting agent for character " + character.name)
+  console.log("Starting agent for character " + character.name);
   const runtime = new AgentRuntime({
     databaseAdapter: new SqliteDatabaseAdapter(new Database("./db.sqlite")),
-    token: character.settings?.secrets?.OPENAI_API_KEY ?? settings.OPENAI_API_KEY as string,
+    token:
+      character.settings?.secrets?.OPENAI_API_KEY ??
+      (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
     model: "gpt-4o-mini",
     evaluators: [],
@@ -97,7 +99,7 @@ async function startAgent(character: Character) {
 
   function startDiscord(runtime) {
     const discordClient = new DiscordClient(runtime);
-    return discordClient
+    return discordClient;
   }
 
   async function startTwitter(runtime) {
@@ -114,27 +116,29 @@ async function startAgent(character: Character) {
       // twitterInteractionClient,
       twitterSearchClient,
       // twitterGenerationClient,
-    }
+    };
   }
 
   if (!character.clients) {
-    return console.error("No clients found for character " + character.name)
+    return console.error("No clients found for character " + character.name);
   }
 
-  const clients = []
+  const clients = [];
 
-  if (character.clients.map(str => str.toLowerCase()).includes("discord")) {
-    const discordClient = startDiscord(runtime)
-    clients.push(discordClient)
+  if (character.clients.map((str) => str.toLowerCase()).includes("discord")) {
+    const discordClient = startDiscord(runtime);
+    clients.push(discordClient);
   }
 
-  if (character.clients.map(str => str.toLowerCase()).includes("twitter")) {
+  if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
     const {
       // twitterInteractionClient,
       twitterSearchClient,
       // twitterGenerationClient,
     } = await startTwitter(runtime);
-    clients.push(/*, twitterInteractionClient */ twitterSearchClient /*, twitterGenerationClient*/)
+    clients.push(
+      /*, twitterInteractionClient */ twitterSearchClient /*, twitterGenerationClient*/,
+    );
   }
 
   return clients;
@@ -142,20 +146,20 @@ async function startAgent(character: Character) {
 
 const startAgents = async () => {
   if (characters.length === 0) {
-    console.log("No characters found, using default character")
-    characters.push(defaultCharacter)
+    console.log("No characters found, using default character");
+    characters.push(defaultCharacter);
   }
   for (const character of characters) {
-    await startAgent(character)
+    await startAgent(character);
   }
-}
+};
 
-startAgents()
+startAgents();
 
 // way for user input to quit
 const stdin = process.stdin;
 
 stdin.resume();
-stdin.setEncoding('utf8');
+stdin.setEncoding("utf8");
 
-console.log('Press Ctrl+C to quit');
+console.log("Press Ctrl+C to quit");

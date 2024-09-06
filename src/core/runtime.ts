@@ -203,7 +203,8 @@ export class AgentRuntime implements IAgentRuntime {
       opts.conversationLength ?? this.#conversationLength;
     this.databaseAdapter = opts.databaseAdapter;
     // use the character id if it exists, otherwise use the agentId if it is passed in, otherwise use the character name
-    this.agentId = opts.character.id ?? opts.agentId ?? stringToUuid(opts.character.name);
+    this.agentId =
+      opts.character.id ?? opts.agentId ?? stringToUuid(opts.character.name);
     this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
     this.character = opts.character || defaultCharacter;
     if (!opts.databaseAdapter) {
@@ -232,7 +233,10 @@ export class AgentRuntime implements IAgentRuntime {
 
     this.serverUrl = opts.serverUrl ?? this.serverUrl;
     this.model = this.character.settings?.model ?? opts.model ?? this.model;
-    this.embeddingModel = this.character.settings?.embeddingModel ?? opts.embeddingModel ?? this.embeddingModel;
+    this.embeddingModel =
+      this.character.settings?.embeddingModel ??
+      opts.embeddingModel ??
+      this.embeddingModel;
     if (!this.serverUrl) {
       console.warn("No serverUrl provided, defaulting to localhost");
     }
