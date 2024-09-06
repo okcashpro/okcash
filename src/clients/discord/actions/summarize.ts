@@ -65,6 +65,7 @@ const getDateRange = async (
     const response = await runtime.completion({
       context,
     });
+    console.log("response", response)
     // try parsing to a json object
     const parsedResponse = parseJSONObjectFromText(response) as {
       objective: string;
@@ -88,17 +89,17 @@ const getDateRange = async (
 
         // parse multiplier
         const multipliers = {
-          seconds: 1,
-          minutes: 60,
-          hours: 3600,
-          days: 86400,
+          second: 1,
+          minute: 60,
+          hour: 3600,
+          day: 86400,
         };
 
         const startMultiplier = (parsedResponse.start as string).match(
-          /seconds|minutes|hours|days/,
+          /second|minute|hour|day/,
         )?.[0];
         const endMultiplier = (parsedResponse.end as string).match(
-          /seconds|minutes|hours|days/,
+          /second|minute|hour|day/,
         )?.[0];
 
         const startInteger = startIntegerString
@@ -111,15 +112,16 @@ const getDateRange = async (
           startInteger *
           multipliers[startMultiplier as keyof typeof multipliers] *
           1000;
+
+          console.log("startTime", startTime)
+
+
         let endTime =
           endInteger *
           multipliers[endMultiplier as keyof typeof multipliers] *
           1000;
 
-        // if endTime is 0, set it to 2 hours ago
-        if (endTime === 0) {
-          endTime = Date.now() - 2 * 3600 * 1000;
-        }
+        console.log("endTime", endTime)
 
         // get the current time and subtract the start and end times
         parsedResponse.start = Date.now() - startTime;
@@ -205,19 +207,26 @@ const summarizeAction = {
       return;
     }
 
+    console.log("dateRange", dateRange)
+
     const { objective, start, end } = dateRange;
 
     // 2. get these memories from the database
     const memories = await runtime.messageManager.getMemories({
       roomId,
-      start: new Date(start),
-      end: new Date(end),
+      // subtract start from current time
+      start: new Date(parseInt(start as string)),
+      end: new Date(parseInt(end as string)),
     });
+
+    console.log("memories", memories)
 
     const actors = await getActorDetails({
       runtime: runtime as AgentRuntime,
       roomId,
     });
+
+    console.log("actors", actors)
 
     const actorMap = new Map(actors.map((actor) => [actor.id, actor]));
 
@@ -232,25 +241,24 @@ const summarizeAction = {
       })
       .join("\n");
 
-    // format the messages and attachments into a string
-    let memoryString = "";
-
     let currentSummary = "";
     const chunkSize = runtime.getSetting("OPENAI_API_KEY") ? 100000 : 3500;
 
     const chunks = await runtime.splitChunks(
-      memoryString,
+      formattedMemories,
       chunkSize,
       0,
       "gpt-4o-mini",
     );
 
+    console.log("chunks ", chunks.length)
     const datestr = new Date().toISOString().replace(/:/g, "-");
 
     state.memoriesWithAttachments = formattedMemories;
     state.objective = objective;
 
     for (let i = 0; i < chunks.length; i++) {
+      console.log("chunk", i)
       const chunk = chunks[i];
       state.currentSummary = currentSummary;
       state.currentChunk = chunk;

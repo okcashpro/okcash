@@ -10,16 +10,13 @@ import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
 import channelStateProvider from "./clients/discord/providers/channelState.ts";
 import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
-import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
+import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { defaultActions } from "./core/actions.ts";
+import defaultCharacter from "./core/defaultCharacter.ts";
 import { AgentRuntime } from "./core/runtime.ts";
 import settings from "./core/settings.ts";
-import timeProvider from "./providers/time.ts";
-import { wait } from "./clients/twitter/utils.ts";
-import { TwitterSearchClient } from "./clients/twitter/search.ts";
-import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
 import { Character } from "./core/types.ts";
-import defaultCharacter from "./core/defaultCharacter.ts";
+import timeProvider from "./providers/time.ts";
 
 interface Arguments {
   character?: string;
@@ -30,7 +27,7 @@ interface Arguments {
 
 let argv: Arguments = {
   character: "./src/agent/default_character.json",
-  characters: undefined,
+  characters: "",
 };
 
 try {
@@ -69,8 +66,10 @@ if (characterPaths?.length > 0) {
 }
 
 try {
-  const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
-  characters.push(character);
+  if(characterPath) {
+    const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
+    characters.push(character);
+  }
 } catch (e) {
   console.log(`Error loading character from ${characterPath}: ${e}`);
 }

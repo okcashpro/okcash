@@ -27,8 +27,7 @@ export default {
     }
 
     if (!state.discordClient) {
-      console.error("Discord client is not available in the state.");
-      throw new Error("Discord client is not available in the state.");
+      return;
     }
 
     // did they say something about joining a voice channel? if not, don't validate
@@ -73,7 +72,7 @@ export default {
     }
 
     if (!state.discordClient) {
-      throw new Error("Discord client is not available in the state.");
+      return;
     }
     if (!state.discordMessage) {
       throw new Error("Discord message is not available in the state.");

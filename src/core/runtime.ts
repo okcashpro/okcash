@@ -270,9 +270,6 @@ export class AgentRuntime implements IAgentRuntime {
 
     // static class, no need to instantiate but we can access it like a class instance
     this.speechService = SpeechService;
-    if (opts.speechModelPath) {
-      SpeechService.modelPath = opts.speechModelPath;
-    }
   }
 
   getSetting(key: string) {

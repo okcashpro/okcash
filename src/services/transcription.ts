@@ -19,7 +19,7 @@ export class TranscriptionService extends EventEmitter {
   private openai: OpenAI | null = null;
   private runtime: IAgentRuntime;
 
-  private queue: ArrayBuffer[] = [];
+  private queue: { audioBuffer: ArrayBuffer; resolve: Function }[] = [];
   private processing: boolean = false;
 
   private constructor(runtime: IAgentRuntime) {
@@ -78,29 +78,21 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeAttachment(
-    audioBuffer: ArrayBuffer,
-  ): Promise<string | null> {
-    this.queue.push(audioBuffer);
-    this.processQueue();
+  public async transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null> {
+    return new Promise((resolve) => {
+      this.queue.push({ audioBuffer, resolve });
+      if (!this.processing) {
+        this.processQueue();
+      }
+    });
+  }
 
-    return new Promise((resolve, reject) => {
-      const checkQueue = () => {
-        console.log("***** CHECKING QUEUE", this.queue);
-        const index = this.queue.indexOf(audioBuffer);
-        if (index !== -1) {
-          setTimeout(checkQueue, 100);
-        } else {
-          resolve((async () => {
-            if (this.openai) {
-              return await this.transcribeWithOpenAI(audioBuffer);
-            } else {
-              return await this.transcribeAttachmentLocally(audioBuffer);
-            }
-          }) as unknown as Promise<string | null>);
-        }
-      };
-      checkQueue();
+  public async transcribe(audioBuffer: ArrayBuffer): Promise<string | null> {
+    return new Promise((resolve) => {
+      this.queue.push({ audioBuffer, resolve });
+      if (!this.processing) {
+        this.processQueue();
+      }
     });
   }
 
@@ -159,30 +151,6 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribe(audioBuffer: ArrayBuffer): Promise<string | null> {
-    this.queue.push(audioBuffer);
-    this.processQueue();
-
-    return new Promise((resolve, reject) => {
-      const checkQueue = () => {
-        console.log("***** CHECKING QUEUE", this.queue);
-        const index = this.queue.indexOf(audioBuffer);
-        if (index !== -1) {
-          setTimeout(checkQueue, 100);
-        } else {
-          resolve((async () => {
-            if (this.openai) {
-              return await this.transcribeWithOpenAI(audioBuffer);
-            } else {
-              return await this.transcribeLocally(audioBuffer);
-            }
-          }) as unknown as Promise<string | null>);
-        }
-      };
-      checkQueue();
-    });
-  }
-
   private async processQueue(): Promise<void> {
     if (this.processing || this.queue.length === 0) {
       return;
@@ -191,16 +159,21 @@ export class TranscriptionService extends EventEmitter {
     this.processing = true;
 
     while (this.queue.length > 0) {
-      const audioBuffer = this.queue.shift();
+      const { audioBuffer, resolve } = this.queue.shift()!;
+      let result: string | null = null;
+
       if (this.openai) {
-        await this.transcribeWithOpenAI(audioBuffer);
+        result = await this.transcribeWithOpenAI(audioBuffer);
       } else {
-        await this.transcribeLocally(audioBuffer);
+        result = await this.transcribeLocally(audioBuffer);
       }
+
+      resolve(result);
     }
 
     this.processing = false;
   }
+
 
   private async transcribeWithOpenAI(
     audioBuffer: ArrayBuffer,

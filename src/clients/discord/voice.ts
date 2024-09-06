@@ -99,8 +99,9 @@ export class VoiceManager extends EventEmitter {
         totalLength = 0;
 
         try {
-          const text =
-            await this.runtime.transcriptionService.transcribe(inputBuffer);
+          console.log("transcribing");
+          const text = await this.runtime.transcriptionService.transcribe(inputBuffer);
+          console.log("text: ", text)
 
           if (!text) return;
 
@@ -187,6 +188,7 @@ export class VoiceManager extends EventEmitter {
             context,
           );
           const callback: HandlerCallback = async (content: Content) => {
+            console.log("callback content: ", content)
             const { roomId } = memory;
 
             const responseMemory: Memory = {
@@ -204,6 +206,14 @@ export class VoiceManager extends EventEmitter {
             if (responseMemory.content.text?.trim()) {
               await this.runtime.messageManager.createMemory(responseMemory);
               state = await this.runtime.updateRecentMessageState(state);
+              let responseStream = await SpeechService.generate(
+                this.runtime,
+                content.text,
+              );
+
+              if (responseStream) {
+                await this.playAudioStream(userId, responseStream as Readable);
+              }
               await this.runtime.evaluate(memory, state);
             } else {
               console.warn("Empty response, skipping");
@@ -212,13 +222,6 @@ export class VoiceManager extends EventEmitter {
           };
 
           const responseMemories = await callback(responseContent);
-
-          await this.runtime.processActions(
-            memory,
-            responseMemories,
-            state,
-            callback,
-          );
 
           const response = responseContent;
 
@@ -230,14 +233,15 @@ export class VoiceManager extends EventEmitter {
             return null;
           }
 
-          let responseStream = await SpeechService.generate(
-            this.runtime,
-            content,
+          console.log("responseMemories: ", responseMemories)
+
+          await this.runtime.processActions(
+            memory,
+            responseMemories,
+            state,
+            callback,
           );
 
-          if (responseStream) {
-            await this.playAudioStream(userId, responseStream as Readable);
-          }
         } catch (error) {
           console.error("Error processing audio stream:", error);
         }
@@ -285,6 +289,8 @@ export class VoiceManager extends EventEmitter {
   }
 
   private async _shouldIgnore(message: Memory): Promise<boolean> {
+    console.log("message: ", message);
+    console.log("message.content: ", message.content);
     // if the message is 3 characters or less, ignore it
     if ((message.content as Content).text.length < 3) {
       return true;
@@ -316,7 +322,7 @@ export class VoiceManager extends EventEmitter {
     if (
       (message.content as Content).text.length < 50 &&
       loseInterestWords.some((word) =>
-        (message.content as Content).text.toLowerCase().includes(word),
+        (message.content as Content).text?.toLowerCase().includes(word),
       )
     ) {
       return true;
@@ -324,9 +330,9 @@ export class VoiceManager extends EventEmitter {
 
     const ignoreWords = ["k", "ok", "bye", "lol", "nm", "uh"];
     if (
-      (message.content as Content).text.length < 8 &&
+      (message.content as Content).text?.length < 8 &&
       ignoreWords.some((word) =>
-        (message.content as Content).text.toLowerCase().includes(word),
+        (message.content as Content).text?.toLowerCase().includes(word),
       )
     ) {
       return true;

@@ -63,7 +63,7 @@ export default {
     state: State,
   ): Promise<boolean> => {
     if (!state.discordClient) {
-      throw new Error("Discord client is not available in the state.");
+      return;
     }
     if (!state.discordMessage) {
       throw new Error("Discord message is not available in the state.");

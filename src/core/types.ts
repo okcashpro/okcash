@@ -549,7 +549,6 @@ export interface IBrowserService {
 }
 
 export interface ISpeechService {
-  generate(runtime: IAgentRuntime, text: string): Promise<any>;
 }
 
 export interface IPdfService {

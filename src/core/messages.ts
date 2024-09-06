@@ -102,10 +102,6 @@ export const formatTimestamp = (messageDate: Date) => {
   const clientNow = new Date();
   const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
 
-  // what type of object is messageDate?
-  console.log("messageDate", messageDate);
-  console.log(typeof messageDate);
-
   // if messageDate is a string, convert it to a date
   if (typeof messageDate === "string") {
     messageDate = new Date(messageDate);

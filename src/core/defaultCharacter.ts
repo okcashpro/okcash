@@ -25,8 +25,7 @@ const defaultCharacter: Character = {
       ELEVENLABS_VOICE_STYLE: "0.66",
     },
     voice: {
-      model: "voices/eliza.onnx",
-      url: "https://media.githubusercontent.com/media/lalalune/eliza-voices/main/eliza.onnx?download=true",
+      model: "en_US-hfc_female-medium",
     }
   },
   bio: [
