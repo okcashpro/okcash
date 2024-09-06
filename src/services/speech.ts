@@ -496,17 +496,13 @@ const phonemeCleaner = (text: string) => {
 class SpeechService {
   private tokenizer: VitsTokenizer;
   private phenomizer: EspeakPhonemizer;
-  private session: ort.InferenceSession;
+  private sessions: Map<string, ort.InferenceSession> = new Map();
 
-  static modelPath: string = "./model.onnx";
-  private static instance: SpeechService | null = null;
-
-  private constructor(session: ort.InferenceSession) {
-    this.session = session;
+  private constructor() {
     this.phenomizer = new EspeakPhonemizer("en-us");
     this.tokenizer = new VitsTokenizer(
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-      ';:,.!?¡¿—…"«»“” ',
+      ';:,.!?¡¿—…"«»"" ',
       "_",
       "ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ",
     );
@@ -521,12 +517,16 @@ class SpeechService {
       return textToSpeech(runtime, text);
     }
 
-    if (!this.instance) {
-      this.instance = await this.create();
+    const modelPath = runtime.character.settings.voice.model;
+    
+    let instance = this.instances.get(modelPath);
+    if (!instance) {
+      instance = await this.create(modelPath, runtime.character.settings.voice.url);
+      this.instances.set(modelPath, instance);
     }
 
     // Generate the speech to get a Float32Array of single channel 22050Hz audio data
-    const audio = await SpeechService.instance.synthesize(text);
+    const audio = await instance.synthesize(text, modelPath);
 
     // Encode the audio data into a WAV format
     const { encode } = WavEncoder;
@@ -545,22 +545,27 @@ class SpeechService {
     return wavStream;
   }
 
-  private static async create(uri: string = this.modelPath) {
-    // check if model.onnx exists
-    if (!fs.existsSync(uri)) {
-      console.log("Model file does not exist, downloading...");
-      const response = await fetch(
-        "https://media.githubusercontent.com/media/ianmarmour/speech-synthesizer/main/model/vits.onnx?download=true",
-      );
+  private static instances: Map<string, SpeechService> = new Map();
+
+  private static async create(modelPath: string, downloadPath: string) {
+    // if ./voices does not exist, create it
+    if (!fs.existsSync("./voices")) {
+      fs.mkdirSync("./voices"); 
+    }
+    
+    // check if model exists
+    if (!fs.existsSync(modelPath)) {
+      console.log(`Model file ${modelPath} does not exist, downloading...`);
+      const response = await fetch(downloadPath);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const buffer = await response.arrayBuffer();
-      fs.writeFileSync(uri, Buffer.from(buffer));
+      fs.writeFileSync(modelPath, Buffer.from(buffer));
 
-      console.log("Model downloaded and saved successfully.");
+      console.log(`Model ${modelPath} downloaded and saved successfully.`);
     }
 
     // TODO: if we're on a mac, execution provider is cpu, otherwise test for cuda
@@ -574,22 +579,23 @@ class SpeechService {
       enableProfiling: false,
       graphOptimizationLevel: "disabled",
     };
+
     let session: ort.InferenceSession;
 
     if (typeof window === "undefined") {
       // Only read in the model file in NodeJS.
-      const model = fs.readFileSync(uri);
-
+      const model = fs.readFileSync(modelPath);
       session = await ort.InferenceSession.create(model, opt);
     } else {
-      session = await ort.InferenceSession.create(uri, opt);
+      session = await ort.InferenceSession.create(modelPath, opt);
     }
 
-    return new SpeechService(session);
+    const service = new SpeechService();
+    service.sessions.set(modelPath, session);
+    return service;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private async synthesize(text: string): Promise<any> {
+  private async synthesize(text: string, modelPath: string): Promise<any> {
     // Preformat text to remove random things like whitespace.
     const cleanedText = phonemeCleaner(text);
     console.log("Cleaned Text:" + cleanedText);
@@ -627,7 +633,12 @@ class SpeechService {
       scales: scales,
     };
 
-    const output = await this.session.run(input, {});
+    const session = this.sessions.get(modelPath);
+    if (!session) {
+      throw new Error(`No session found for model path: ${modelPath}`);
+    }
+
+    const output = await session.run(input, {});
 
     return output.output.data;
   }

@@ -249,6 +249,10 @@ export type Character = {
   clients: string[]; // list of clients the character can interact with
   settings?: {
     secrets?: { [key: string]: string };
+    voice?: {
+      model?: string;
+      url?: string;
+    };
     model?: string;
     embeddingModel?: string;
   };
