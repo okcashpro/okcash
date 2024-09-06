@@ -1206,8 +1206,12 @@ Text: ${attachment.text}
               .sort(() => 0.5 - Math.random())
               .slice(0, 5)
               .map((topic, index) => {
-                if (index === this.character.topics.length - 1) {
+                if (index === this.character.topics.length - 2) {
                   return topic + " and ";
+                }
+                // if last topic, don't add a comma
+                if (index === this.character.topics.length - 1) {
+                  return topic;
                 }
                 return topic + ", ";
               })

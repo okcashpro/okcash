@@ -174,6 +174,10 @@ export class ClientBase extends EventEmitter {
     } catch (error) {
       console.error("Error loading latest checked tweet ID from file:", error);
     }
+    const cookiesFilePath = path.join(
+      __dirname,
+      "../../../tweetcache/" + this.runtime.getSetting("TWITTER_USERNAME") + "_cookies.json",
+    );
 
     // async initialization
     (async () => {
@@ -182,10 +186,6 @@ export class ClientBase extends EventEmitter {
         const cookiesArray = JSON.parse(this.runtime.getSetting("TWITTER_COOKIES"));
         await this.setCookiesFromArray(cookiesArray);
       } else {
-        const cookiesFilePath = path.join(
-          __dirname,
-          "../../../tweetcache/" + this.runtime.getSetting("TWITTER_USERNAME") + "_cookies.json",
-        );
         console.log("Cookies file path:", cookiesFilePath);
         if (fs.existsSync(cookiesFilePath)) {
           const cookiesArray = JSON.parse(
@@ -193,32 +193,44 @@ export class ClientBase extends EventEmitter {
           );
           await this.setCookiesFromArray(cookiesArray);
         } else {
-          this.twitterClient
+          await this.twitterClient
             .login(
               this.runtime.getSetting("TWITTER_USERNAME"),
               this.runtime.getSetting("TWITTER_PASSWORD"),
               this.runtime.getSetting("TWITTER_EMAIL"),
             )
-            .then(() => {
-              console.log("Logged in to Twitter");
-              return this.twitterClient.getCookies();
-            })
-            .then((cookies) => {
-              fs.writeFileSync(
-                cookiesFilePath,
-                JSON.stringify(cookies),
-                "utf-8",
-              );
-            })
-            .catch((error) => {
-              console.error("Error logging in to Twitter:", error);
-            });
+            console.log("Logged in to Twitter");
+            const cookies = await this.twitterClient.getCookies();
+            fs.writeFileSync(
+              cookiesFilePath,
+              JSON.stringify(cookies),
+              "utf-8",
+            );
         }
       }
+
+      let loggedInWaits = 0;
 
       while (!(await this.twitterClient.isLoggedIn())) {
         console.log("Waiting for Twitter login");
         await new Promise((resolve) => setTimeout(resolve, 2000));
+        if (loggedInWaits > 10) {
+          console.error("Failed to login to Twitter");
+          await this.twitterClient.login(
+            this.runtime.getSetting("TWITTER_USERNAME"),
+            this.runtime.getSetting("TWITTER_PASSWORD"),
+            this.runtime.getSetting("TWITTER_EMAIL"),
+          );
+
+          const cookies = await this.twitterClient.getCookies();
+          fs.writeFileSync(
+            cookiesFilePath,
+            JSON.stringify(cookies),
+            "utf-8",
+          );
+          loggedInWaits = 0;
+        }
+        loggedInWaits++;
       }
       const userId = await this.requestQueue.add(
         async () =>
@@ -226,12 +238,39 @@ export class ClientBase extends EventEmitter {
             this.runtime.getSetting("TWITTER_USERNAME"),
           ),
       );
+      console.log("Twitter user ID:", userId);
       this.twitterUserId = userId;
 
       await this.populateTimeline();
 
       this.onReady();
     })();
+  }
+
+  async fetchHomeTimeline(count: number): Promise<Tweet[]> {
+    const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
+
+    
+    return homeTimeline.map((tweet) => {
+      console.log("tweet.legacy.entities", tweet.legacy)
+
+      return {
+        id: tweet.rest_id,
+        name: tweet.core.user_results.result.legacy.name,
+        username: tweet.core.user_results.result.legacy.screen_name,
+        text: tweet.legacy.full_text,
+        inReplyToStatusId: tweet.legacy.in_reply_to_status_id_str,
+        createdAt: tweet.legacy.created_at,
+        userId: tweet.legacy.user_id_str,
+        conversationId: tweet.legacy.conversation_id_str,
+        hashtags: tweet.legacy.entities.hashtags,
+        mentions: tweet.legacy.entities.user_mentions,
+        photos: tweet.legacy.entities.media?.filter((media) => media.type === "photo") ?? [],
+        thread: [],
+        urls: tweet.legacy.entities.urls,
+        videos: tweet.legacy.entities.media?.filter((media) => media.type === "video") ?? [],
+      };
+    });
   }
 
   async fetchSearchTweets(

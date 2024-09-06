@@ -12,14 +12,15 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
-  getRecentConversations,
   sendTweetChunks,
-  wait,
+  wait
 } from "./utils.ts";
 
 export const messageHandlerTemplate =
   `{{relevantFacts}}
 {{recentFacts}}
+
+{{timeline}}
 
 # Task: Generate a post for the character {{agentName}}.
 About {{agentName}} (@{{twitterUserName}}):
@@ -108,6 +109,7 @@ export class TwitterInteractionClient extends ClientBase {
           !this.lastCheckedTweetId ||
           parseInt(tweet.id) > this.lastCheckedTweetId
         ) {
+          console.log("Processing tweet", tweet.id);
           const conversationId = tweet.conversationId;
 
           const roomId = stringToUuid(conversationId);
@@ -201,30 +203,32 @@ export class TwitterInteractionClient extends ClientBase {
       console.log("skipping tweet with no text", tweet.id);
       return { text: "", action: "IGNORE" };
     }
+    console.log("handling tweet", tweet.id);
     const formatTweet = (tweet: Tweet) => {
       return `  ID: ${tweet.id}
   From: ${tweet.name} (@${tweet.username})
   Text: ${tweet.text}`;
     };
-
-    // Fetch recent conversations
-    const recentConversationsText = await getRecentConversations(
-      this.runtime,
-      this,
-      this.runtime.getSetting("TWITTER_USERNAME"),
-    );
-
     const currentPost = formatTweet(tweet);
 
-    console.log("currentPost", currentPost);
+    let homeTimeline = []
+    // read the file if it exists
+    if (fs.existsSync("tweetcache/home_timeline.json")) {
+      homeTimeline = JSON.parse(fs.readFileSync("tweetcache/home_timeline.json", "utf-8"));
+    } else {
+      homeTimeline = await this.fetchHomeTimeline(50);
+      fs.writeFileSync("tweetcache/home_timeline.json", JSON.stringify(homeTimeline, null, 2));
+    }
 
-    console.log("composeState");
+    const formattedHomeTimeline = `### ${this.runtime.character.name}'s Home Timeline\n\n` + homeTimeline.map((tweet) => {
+      return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
+    }).join("\n");
 
     let state = await this.runtime.composeState(message, {
       twitterClient: this.twitterClient,
       twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
-      recentConversations: recentConversationsText,
       currentPost,
+      timeline: formattedHomeTimeline,
     });
 
     // check if the tweet exists, save if it doesn't
@@ -233,6 +237,7 @@ export class TwitterInteractionClient extends ClientBase {
       await this.runtime.messageManager.getMemoryById(tweetId);
 
     if (!tweetExists) {
+      console.log("tweet does not exist, saving");
       const userIdUUID = stringToUuid(tweet.userId as string);
       const roomId = stringToUuid(tweet.conversationId);
 
@@ -271,6 +276,8 @@ export class TwitterInteractionClient extends ClientBase {
       return { text: "", action: "IGNORE" };
     }
 
+    console.log("shouldRespond", shouldRespond);
+
     const context = composeContext({
       state,
       template: messageHandlerTemplate,
@@ -289,6 +296,8 @@ export class TwitterInteractionClient extends ClientBase {
       stop: [],
       temperature: this.temperature,
     });
+
+    console.log("response", response);
 
     console.log("tweet is", tweet);
 
