@@ -157,6 +157,30 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     }
   }
 
+  async getActorById(params: { roomId: UUID }): Promise<Actor[]> {
+    const sql = `
+      SELECT a.id, a.name, a.username, a.details
+      FROM participants p
+      LEFT JOIN accounts a ON p.userId = a.id
+      WHERE p.roomId = ?
+    `;
+    const stmt = this.db.prepare(sql);
+    stmt.bind([params.roomId]);
+    const rows: Actor[] = [];
+    while (stmt.step()) {
+      const row = stmt.getAsObject() as unknown as Actor;
+      rows.push({
+        ...row,
+        details:
+          typeof row.details === "string"
+            ? JSON.parse(row.details)
+            : row.details,
+      });
+    }
+    stmt.free();
+    return rows;
+  }
+
   async getActorDetails(params: { roomId: UUID }): Promise<Actor[]> {
     const sql = `
       SELECT a.id, a.name, a.username, a.details
@@ -406,6 +430,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]> {
     if (!params.tableName) {
       throw new Error("tableName is required");
@@ -414,6 +440,14 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       throw new Error("roomId is required");
     }
     let sql = `SELECT * FROM memories WHERE type = ? AND roomId = ?`;
+
+    if (params.start) {
+      sql += ` AND createdAt >= ?`;
+    }
+
+    if (params.end) {
+      sql += ` AND createdAt <= ?`;
+    }
 
     if (params.unique) {
       sql += " AND `unique` = 1";
@@ -433,12 +467,13 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.bind([
       params.tableName,
       params.roomId,
+      ...(params.start ? [params.start.getTime()] : []),
+      ...(params.end ? [params.end.getTime()] : []),
       ...(params.userIds || []),
       ...(params.count ? [params.count] : []),
     ]);
     const memories: Memory[] = [];
     while (stmt.step()) {
-      // convert createdAt to Date
       const memory = stmt.getAsObject() as unknown as Memory;
       memories.push({
         ...memory,

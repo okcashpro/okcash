@@ -1,6 +1,3 @@
-// Example index where we start the twitter and discord clients and init a runtime
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Database from "better-sqlite3";
 import fs from "fs";
 import yargs from "yargs";
@@ -21,17 +18,19 @@ import timeProvider from "./providers/time.ts";
 import { wait } from "./clients/twitter/utils.ts";
 import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
+import { Character } from "./core/types.ts";
+import defaultCharacter from "./core/defaultCharacter.ts";
 
 interface Arguments {
   character?: string;
+  characters?: string;
   twitter?: boolean;
   discord?: boolean;
 }
 
 let argv: Arguments = {
   character: "./src/agent/default_character.json",
-  twitter: false,
-  discord: false,
+  characters: undefined,
 };
 
 try {
@@ -41,13 +40,9 @@ try {
       type: "string",
       description: "Path to the character JSON file",
     })
-    .option("twitter", {
-      type: "boolean",
-      description: "Start only the Twitter client",
-    })
-    .option("discord", {
-      type: "boolean",
-      description: "Start only the Discord client",
+    .option("characters", {
+      type: "string",
+      description: "Comma separated list of paths to character JSON files",
     })
     .parseSync() as Arguments;
 } catch (error) {
@@ -57,49 +52,114 @@ try {
 
 // Load character
 const characterPath = argv.character;
-let character = null;
+
+const characterPaths = argv.characters?.split(",").map((path) => path.trim());
+
+const characters = [];
+
+if (characterPaths?.length > 0) {
+  for (const path of characterPaths) {
+    try {
+      const character = JSON.parse(fs.readFileSync(path, "utf8"));
+      characters.push(character);
+    } catch (e) {
+      console.log(`Error loading character from ${path}: ${e}`);
+    }
+  }
+}
+
 try {
-  character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
+  const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
+  characters.push(character);
 } catch (e) {
-  console.error("Unable to parse character. Using default");
+  console.log(`Error loading character from ${characterPath}: ${e}`);
 }
 
-const runtime = new AgentRuntime({
-  databaseAdapter: new SqliteDatabaseAdapter(new Database("./db.sqlite")),
-  token: settings.OPENAI_API_KEY as string,
-  serverUrl: "https://api.openai.com/v1",
-  model: "gpt-4o-mini",
-  evaluators: [],
-  character,
-  providers: [channelStateProvider, voiceStateProvider, timeProvider],
-  actions: [
-    ...defaultActions,
-    askClaude,
-    follow_room,
-    mute_room,
-    unfollow_room,
-    unmute_room,
-  ],
-});
+async function startAgent(character: Character) {
+  console.log("Starting agent for character " + character.name);
+  const runtime = new AgentRuntime({
+    databaseAdapter: new SqliteDatabaseAdapter(new Database("./db.sqlite")),
+    token:
+      character.settings?.secrets?.OPENAI_API_KEY ??
+      (settings.OPENAI_API_KEY as string),
+    serverUrl: "https://api.openai.com/v1",
+    model: "gpt-4o-mini",
+    evaluators: [],
+    character,
+    providers: [channelStateProvider, voiceStateProvider, timeProvider],
+    actions: [
+      ...defaultActions,
+      askClaude,
+      follow_room,
+      mute_room,
+      unfollow_room,
+      unmute_room,
+    ],
+  });
 
-function startDiscord() {
-  const discordClient = new DiscordClient(runtime);
+  function startDiscord(runtime) {
+    const discordClient = new DiscordClient(runtime);
+    return discordClient;
+  }
+
+  async function startTwitter(runtime) {
+    console.log("Starting search client");
+    const twitterSearchClient = new TwitterSearchClient(runtime);
+    // await wait();
+    // console.log("Starting interaction client");
+    // const twitterInteractionClient = new TwitterInteractionClient(runtime);
+    // await wait();
+    // console.log("Starting generation client");
+    // const twitterGenerationClient = new TwitterGenerationClient(runtime);
+
+    return {
+      // twitterInteractionClient,
+      twitterSearchClient,
+      // twitterGenerationClient,
+    };
+  }
+
+  if (!character.clients) {
+    return console.error("No clients found for character " + character.name);
+  }
+
+  const clients = [];
+
+  if (character.clients.map((str) => str.toLowerCase()).includes("discord")) {
+    const discordClient = startDiscord(runtime);
+    clients.push(discordClient);
+  }
+
+  if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
+    const {
+      // twitterInteractionClient,
+      twitterSearchClient,
+      // twitterGenerationClient,
+    } = await startTwitter(runtime);
+    clients.push(
+      /*, twitterInteractionClient */ twitterSearchClient /*, twitterGenerationClient*/,
+    );
+  }
+
+  return clients;
 }
 
-async function startTwitter() {
-  // console.log("Starting interaction client");
-  // const twitterInteractionClient = new TwitterInteractionClient(runtime);
-  // wait();
-  // console.log("Starting search client");
-  // const twitterSearchClient = new TwitterSearchClient(runtime);
-  // wait()
-  console.log("Starting generation client");
-  const twitterGenerationClient = new TwitterGenerationClient(runtime);
-}
+const startAgents = async () => {
+  if (characters.length === 0) {
+    console.log("No characters found, using default character");
+    characters.push(defaultCharacter);
+  }
+  for (const character of characters) {
+    await startAgent(character);
+  }
+};
 
-if (argv.discord || (!argv.twitter && !argv.discord)) {
-  startDiscord();
-}
-if (argv.twitter || (!argv.twitter && !argv.discord)) {
-  startTwitter();
-}
+startAgents();
+
+// way for user input to quit
+const stdin = process.stdin;
+
+stdin.resume();
+stdin.setEncoding("utf8");
+
+console.log("Press Ctrl+C to quit");

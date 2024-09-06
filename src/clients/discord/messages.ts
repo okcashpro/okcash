@@ -136,6 +136,7 @@ export class MessageManager {
       const content: Content = {
         text: processedContent,
         attachments: attachments,
+        source: "discord",
         url: message.url,
         inReplyTo: message.reference?.messageId
           ? stringToUuid(message.reference.messageId)
@@ -229,7 +230,10 @@ export class MessageManager {
         }
         if (message.channel.type === ChannelType.GuildVoice) {
           // For voice channels, use text-to-speech
-          const audioStream = await SpeechService.generate(content.text);
+          const audioStream = await SpeechService.generate(
+            this.runtime,
+            content.text,
+          );
           await this.voiceManager.playAudioStream(userId, audioStream);
           const memory: Memory = {
             id: stringToUuid(message.id),
@@ -244,7 +248,7 @@ export class MessageManager {
           const messages = await sendMessageInChunks(
             message.channel as TextChannel,
             content.text,
-            message.id
+            message.id,
           );
           let notFirstMessage = false;
           let memories: Memory[] = [];
@@ -295,9 +299,11 @@ export class MessageManager {
       console.error("Error handling message:", error);
       if (message.channel.type === ChannelType.GuildVoice) {
         // For voice channels, use text-to-speech for the error message
-        const errorMessage =
-          "Sorry, I encountered an error while processing your request.";
-        const audioStream = await SpeechService.generate(errorMessage);
+        const errorMessage = "Sorry, I had a glitch. What was that?";
+        const audioStream = await SpeechService.generate(
+          this.runtime,
+          errorMessage,
+        );
         await this.voiceManager.playAudioStream(userId, audioStream);
       } else {
         // For text channels, send the error message

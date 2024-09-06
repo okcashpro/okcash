@@ -28,157 +28,6 @@ export const isValidTweet = (tweet: Tweet): boolean => {
   );
 };
 
-export const getRecentConversations = async (
-  runtime: IAgentRuntime,
-  twitterClient: ClientBase,
-  botTwitterUsername: string,
-) => {
-  // Get recent conversations
-  const recentConversations = await twitterClient.requestQueue.add(async () =>
-    await twitterClient.fetchSearchTweets(
-      `@${botTwitterUsername} exclude:retweets`,
-      25,
-      SearchMode.Latest,
-    )
-  );
-
-  const recentConversationsArray = [];
-
-  // Format recent conversations
-  for (const conversation of recentConversations.tweets) {
-    let formattedConversation = `Name: ${conversation.name} (@${conversation.username})\n`;
-    formattedConversation += `Time: ${conversation.timeParsed.toLocaleString()}\n`;
-    formattedConversation += `Text: ${conversation.text}\n`;
-
-    if (conversation.photos.length > 0) {
-      const photoDescriptions = await Promise.all(
-        conversation.photos.map(async (photo) => {
-          const description =
-            await runtime.imageDescriptionService.describeImage(photo.url);
-          return `[Photo: ${description.title} - ${description.description}]`;
-        }),
-      );
-      formattedConversation += `Photos: ${photoDescriptions.join(", ")}\n`;
-    }
-
-    if (conversation.videos.length > 0) {
-      const videoTranscriptions = await Promise.all(
-        conversation.videos.map(async (video) => {
-          const transcription = await runtime.videoService.processVideo(
-            video.url,
-          );
-          return `[Video Transcription: ${transcription.text}]`;
-        }),
-      );
-      formattedConversation += `Videos: ${videoTranscriptions.join(", ")}\n`;
-    }
-
-    formattedConversation += `Replies: ${conversation.replies}, Retweets: ${conversation.retweets}, Likes: ${conversation.likes}, Views: ${conversation.views ?? "Unknown"}\n`;
-
-    recentConversationsArray.push(formattedConversation);
-  }
-
-  // Sort recent conversations by timestamp
-  recentConversationsArray.sort((a, b) => {
-    const timeA = new Date(a.match(/Time: (.*)/)[1]).getTime();
-    const timeB = new Date(b.match(/Time: (.*)/)[1]).getTime();
-    return timeA - timeB;
-  });
-
-  const recentConversationsText = recentConversationsArray.join("\n");
-
-  return addHeader("### Recent Post Interactions", recentConversationsText);
-};
-
-export const searchRecentPosts = async (
-  runtime: IAgentRuntime,
-  client: ClientBase,
-  searchTerm: string,
-) => {
-  const recentSearchResults = [];
-  const tweets = await client.requestQueue.add(async () =>
-    await client.twitterClient.fetchSearchTweets(
-      searchTerm + " exclude:replies exclude:retweets",
-      25,
-      SearchMode.Latest,
-    ),
-  );
-
-  // Format search results
-  for (const tweet of tweets.tweets.filter((tweet) => isValidTweet(tweet))) {
-    let formattedTweet = `Name: ${tweet.name} (@${tweet.username})\n`;
-    formattedTweet += `Time: ${tweet.timeParsed.toLocaleString()}\n`;
-    formattedTweet += `Text: ${tweet.text}\n---\n`;
-
-    if (tweet.photos.length > 0) {
-      const photoDescriptions = await Promise.all(
-        tweet.photos.map(async (photo) => {
-          const description =
-            await runtime.imageDescriptionService.describeImage(photo.url);
-          return `[Photo: ${description.title} - ${description.description}]`;
-        }),
-      );
-      formattedTweet += `Photos: ${photoDescriptions.join(", ")}\n`;
-    }
-
-    if (tweet.videos.length > 0) {
-      const videoTranscriptions = await Promise.all(
-        tweet.videos.map(async (video) => {
-          const transcription = await runtime.videoService.processVideo(
-            video.url,
-          );
-          return `[Video Transcription: ${transcription.text}]`;
-        }),
-      );
-      formattedTweet += `Videos: ${videoTranscriptions.join(", ")}\n`;
-    }
-
-    formattedTweet += `Replies: ${tweet.replies}, Retweets: ${tweet.retweets}, Likes: ${tweet.likes}, Views: ${tweet.views ?? "Unknown"}\n`;
-
-    // If tweet is a reply, find the original tweet and include it
-    if (tweet.inReplyToStatusId) {
-      const originalTweet = tweets.tweets.find(
-        (t) => t.id === tweet.inReplyToStatusId,
-      );
-      if (originalTweet) {
-        formattedTweet += `\nIn reply to:\n`;
-        formattedTweet += `Name: ${originalTweet.name} (@${originalTweet.username})\n`;
-        formattedTweet += `Time: ${originalTweet.timeParsed.toLocaleString()}\n`;
-        formattedTweet += `Text: ${originalTweet.text}\n`;
-      } else {
-        // wait 1.5-3.5 seconds to avoid rate limiting
-        const waitTime = Math.floor(Math.random() * 2000) + 1500;
-        await new Promise((resolve) => setTimeout(resolve, waitTime));
-        // now look up the original tweet
-        const originalTweet = await client.requestQueue.add(async () =>
-          await client.twitterClient.getTweet(
-            tweet.inReplyToStatusId,
-          ),
-        );
-        formattedTweet += `\nIn reply to:\n`;
-        formattedTweet += `Name: ${originalTweet.name} (@${originalTweet.username})\n`;
-        formattedTweet += `Time: ${originalTweet.timeParsed.toLocaleString()}\n`;
-        formattedTweet += `Text: ${originalTweet.text}\n`;
-      }
-    }
-
-    recentSearchResults.push(formattedTweet);
-  }
-
-  // Sort search results by timestamp
-  recentSearchResults.sort((a, b) => {
-    const timeA = new Date(a.match(/Time: (.*)/)[1]).getTime();
-    const timeB = new Date(b.match(/Time: (.*)/)[1]).getTime();
-    return timeA - timeB;
-  });
-
-  const recentSearchResultsText = recentSearchResults.join("\n");
-  return addHeader(
-    "### Recent Search Results for " + searchTerm,
-    recentSearchResultsText,
-  );
-};
-
 export async function buildConversationThread(
   tweet: Tweet,
   client: ClientBase,
@@ -215,6 +64,8 @@ export async function buildConversationThread(
         id: stringToUuid(currentTweet.id),
         content: {
           text: currentTweet.text,
+          source: "twitter",
+          url: currentTweet.permanentUrl,
           inReplyTo: currentTweet.inReplyToStatusId
             ? stringToUuid(currentTweet.inReplyToStatusId)
             : undefined,
@@ -256,24 +107,31 @@ export async function sendTweetChunks(
   const sentTweets: Tweet[] = [];
 
   for (const chunk of tweetChunks) {
-    const success = await client.requestQueue.add(async () =>
-      await client.twitterClient.sendTweet(chunk, inReplyTo)
+    const result = await client.requestQueue.add(
+      async () => await client.twitterClient.sendTweet(chunk, inReplyTo),
     );
-    if (success) {
-      const tweet = await client.requestQueue.add(async () => {
-        return await client.twitterClient.getLatestTweet(
-          twitterUsername,
-          false,
-        );
-      });
-      if (tweet) {
-        sentTweets.push(tweet);
-      } else {
-        console.error("Failed to get latest tweet after posting it");
-      }
-    } else {
-      console.error("Failed to send tweet");
-    }
+    console.log("send tweet result:\n", result);
+    const body = await result.json();
+    console.log("send tweet body:\n", body);
+    const tweetResult = body.data.create_tweet.tweet_results.result;
+
+    const finalTweet = {
+      id: tweetResult.rest_id,
+      text: tweetResult.legacy.full_text,
+      conversationId: tweetResult.legacy.conversation_id_str,
+      createdAt: tweetResult.legacy.created_at,
+      userId: tweetResult.legacy.user_id_str,
+      inReplyToStatusId: tweetResult.legacy.in_reply_to_status_id_str,
+      permanentUrl: `https://twitter.com/${twitterUsername}/status/${tweetResult.rest_id}`,
+      hashtags: [],
+      mentions: [],
+      photos: [],
+      thread: [],
+      urls: [],
+      videos: [],
+    } as Tweet;
+
+    sentTweets.push(finalTweet);
   }
 
   const memories: Memory[] = sentTweets.map((tweet) => ({
@@ -281,6 +139,8 @@ export async function sendTweetChunks(
     userId: client.runtime.agentId,
     content: {
       text: tweet.text,
+      source: "twitter",
+      url: tweet.permanentUrl,
       inReplyTo: tweet.inReplyToStatusId
         ? stringToUuid(tweet.inReplyToStatusId)
         : undefined,

@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import fact from "../evaluators/fact.ts";
+import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { runAiTest } from "../test_resources/runAiTest.ts";
@@ -8,7 +9,6 @@ import {
   TEST_EVALUATOR_FAIL,
 } from "../test_resources/testEvaluator.ts";
 import { type User } from "../test_resources/types.ts";
-import { zeroUuid } from "./constants.ts";
 import { composeContext } from "./context.ts";
 import { evaluationTemplate } from "./evaluators.ts";
 import { AgentRuntime } from "./runtime.ts";

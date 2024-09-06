@@ -30,14 +30,16 @@ export const formatPosts = ({
   const sortedRooms = Object.entries(groupedMessages).sort(
     ([, messagesA], [, messagesB]) =>
       messagesB[messagesB.length - 1].createdAt.getTime() -
-      messagesA[messagesA.length - 1].createdAt.getTime()
+      messagesA[messagesA.length - 1].createdAt.getTime(),
   );
 
   const formattedPosts = sortedRooms.map(([roomId, roomMessages]) => {
     const messageStrings = roomMessages
       .filter((message: Memory) => message.userId)
       .map((message: Memory) => {
-        const actor = actors.find((actor: Actor) => actor.id === message.userId);
+        const actor = actors.find(
+          (actor: Actor) => actor.id === message.userId,
+        );
         const userName = actor?.name || "Unknown User";
         const displayName = actor?.username || "unknown";
 
@@ -48,7 +50,9 @@ Text:
 ${message.content.text}`;
       });
 
-    const header = conversationHeader ? `Conversation: ${roomId.slice(-5)}\n` : "";
+    const header = conversationHeader
+      ? `Conversation: ${roomId.slice(-5)}\n`
+      : "";
     return `${header}${messageStrings.join("\n\n")}`;
   });
 

@@ -67,11 +67,15 @@ export class MemoryManager implements IMemoryManager {
     count = 10,
     unique = true,
     userIds,
+    start,
+    end,
   }: {
     roomId: UUID;
     count?: number;
     unique?: boolean;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]> {
     const result = await this.runtime.databaseAdapter.getMemories({
       roomId,
@@ -79,6 +83,8 @@ export class MemoryManager implements IMemoryManager {
       unique,
       tableName: this.tableName,
       userIds,
+      start,
+      end,
     });
     return result;
   }

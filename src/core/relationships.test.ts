@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
+import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts"; // Adjust the import path as needed
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { type User } from "../test_resources/types.ts";
-import { zeroUuid } from "./constants.ts";
 import { createRelationship, getRelationships } from "./relationships.ts"; // Adjust the import path as needed
 import { AgentRuntime } from "./runtime.ts";
 import { type UUID } from "./types.ts";

@@ -1,14 +1,14 @@
 // Current image recognition service -- local recognition working, no openai recognition
 import {
-  env,
-  Florence2ForConditionalGeneration,
   AutoProcessor,
   AutoTokenizer,
+  env,
+  Florence2ForConditionalGeneration,
+  Florence2Processor,
+  PreTrainedModel,
+  PreTrainedTokenizer,
   RawImage,
   type Tensor,
-  PreTrainedModel,
-  Florence2Processor,
-  PreTrainedTokenizer,
 } from "@huggingface/transformers";
 
 import fs from "fs";
@@ -16,9 +16,9 @@ import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
 import { AgentRuntime } from "../core/runtime.ts";
-import settings from "../core/settings.ts";
 
 class ImageDescriptionService {
+  private static instance: ImageDescriptionService | null = null;
   private modelId: string = "onnx-community/Florence-2-base-ft";
   private device: string = "gpu";
   private model: PreTrainedModel | null = null;
@@ -30,9 +30,16 @@ class ImageDescriptionService {
   private queue: string[] = [];
   private processing: boolean = false;
 
-  constructor(runtime: AgentRuntime) {
+  private constructor(runtime: AgentRuntime) {
     this.runtime = runtime;
     this.initialize();
+  }
+
+  public static getInstance(runtime: AgentRuntime): ImageDescriptionService {
+    if (!ImageDescriptionService.instance) {
+      ImageDescriptionService.instance = new ImageDescriptionService(runtime);
+    }
+    return ImageDescriptionService.instance;
   }
 
   async initialize(
@@ -43,7 +50,7 @@ class ImageDescriptionService {
       return;
     }
 
-    if (settings.OPENAI_API_KEY) {
+    if (this.runtime.getSetting("OPENAI_API_KEY")) {
       this.modelId = "gpt-4o-mini";
       this.device = "cloud";
     } else {
@@ -191,7 +198,7 @@ class ImageDescriptionService {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${settings.OPENAI_API_KEY}`,
+              Authorization: `Bearer ${this.runtime.getSetting("OPENAI_API_KEY")}`,
             },
             body: body,
           },

@@ -56,7 +56,6 @@ import {
   formatActionNames,
   formatActions,
 } from "./actions.ts";
-import { zeroUuid } from "./constants.ts";
 import defaultCharacter from "./defaultCharacter.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
@@ -64,6 +63,7 @@ import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
+import { stringToUuid } from "./uuid.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -78,7 +78,7 @@ export class AgentRuntime implements IAgentRuntime {
   /**
    * The ID of the agent
    */
-  agentId: UUID = zeroUuid;
+  agentId: UUID;
   /**
    * The base URL of the server where the agent's requests are processed.
    */
@@ -202,7 +202,9 @@ export class AgentRuntime implements IAgentRuntime {
     this.#conversationLength =
       opts.conversationLength ?? this.#conversationLength;
     this.databaseAdapter = opts.databaseAdapter;
-    this.agentId = opts.agentId ?? zeroUuid;
+    // use the character id if it exists, otherwise use the agentId if it is passed in, otherwise use the character name
+    this.agentId =
+      opts.character.id ?? opts.agentId ?? stringToUuid(opts.character.name);
     this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
     this.character = opts.character || defaultCharacter;
     if (!opts.databaseAdapter) {
@@ -230,8 +232,11 @@ export class AgentRuntime implements IAgentRuntime {
     });
 
     this.serverUrl = opts.serverUrl ?? this.serverUrl;
-    this.model = opts.model ?? this.model;
-    this.embeddingModel = opts.embeddingModel ?? this.embeddingModel;
+    this.model = this.character.settings?.model ?? opts.model ?? this.model;
+    this.embeddingModel =
+      this.character.settings?.embeddingModel ??
+      opts.embeddingModel ??
+      this.embeddingModel;
     if (!this.serverUrl) {
       console.warn("No serverUrl provided, defaulting to localhost");
     }
@@ -249,17 +254,17 @@ export class AgentRuntime implements IAgentRuntime {
       this.registerContextProvider(provider);
     });
 
-    if (!settings.OPENAI_API_KEY && !this.llamaService) {
-      this.llamaService = new LlamaService();
+    if (!this.getSetting("OPENAI_API_KEY") && !this.llamaService) {
+      this.llamaService = LlamaService.getInstance();
     }
 
-    this.transcriptionService = new TranscriptionService();
+    this.transcriptionService = TranscriptionService.getInstance(this);
 
-    this.imageDescriptionService = new ImageDescriptionService(this);
+    this.imageDescriptionService = ImageDescriptionService.getInstance(this);
 
-    this.browserService = new BrowserService(this);
+    this.browserService = BrowserService.getInstance(this);
 
-    this.videoService = new VideoService(this);
+    this.videoService = VideoService.getInstance(this);
 
     this.pdfService = new PdfService();
 
@@ -268,6 +273,24 @@ export class AgentRuntime implements IAgentRuntime {
     if (opts.speechModelPath) {
       SpeechService.modelPath = opts.speechModelPath;
     }
+  }
+
+  getSetting(key: string) {
+    // check if the key is in the character.settings.secrets object
+    if (this.character.settings?.secrets?.[key]) {
+      return this.character.settings.secrets[key];
+    }
+    // if not, check if it's in the settings object
+    if (this.character.settings?.[key]) {
+      return this.character.settings[key];
+    }
+
+    // if not, check if it's in the settings object
+    if (settings[key]) {
+      return settings[key];
+    }
+
+    return null;
   }
 
   /**
@@ -321,18 +344,18 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<string> {
     let retryLength = 1000; // exponential backoff
     for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
       try {
         context = await this.trimTokens(
-          "gpt-4o-mini",
           context,
           max_context_length,
+          "gpt-4o-mini",
         );
-        if (!settings.OPENAI_API_KEY) {
+        if (!this.getSetting("OPENAI_API_KEY")) {
           console.log("queueing text completion");
           const result = await this.llamaService.queueTextCompletion(
             context,
@@ -389,9 +412,9 @@ export class AgentRuntime implements IAgentRuntime {
           if (!response.ok) {
             throw new Error(
               "OpenAI API Error: " +
-              response.status +
-              " " +
-              response.statusText,
+                response.status +
+                " " +
+                response.statusText,
             );
           }
 
@@ -428,7 +451,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @param max_context_length The maximum length of the context to apply to the completion.
    * @returns
    */
-  async trimTokens(model, context, maxTokens) {
+  trimTokens(context, maxTokens, model = this.model) {
     // Count tokens and truncate context if necessary
     const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
     let tokens = encoding.encode(context);
@@ -448,8 +471,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
     let retryDelay = 1000;
 
@@ -485,6 +508,34 @@ export class AgentRuntime implements IAgentRuntime {
     }
   }
 
+  async splitChunks(
+    content: string,
+    chunkSize: number,
+    bleed: number = 100,
+    model = this.model,
+  ): Promise<string[]> {
+    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
+    const tokens = encoding.encode(content);
+    const chunks: string[] = [];
+
+    for (let i = 0; i < tokens.length; i += chunkSize) {
+      const chunk = tokens.slice(i, i + chunkSize);
+      const decodedChunk = encoding.decode(chunk);
+
+      // Append bleed characters from the previous chunk
+      const startBleed = i > 0 ? content.slice(i - bleed, i) : "";
+      // Append bleed characters from the next chunk
+      const endBleed =
+        i + chunkSize < tokens.length
+          ? content.slice(i + chunkSize, i + chunkSize + bleed)
+          : "";
+
+      chunks.push(startBleed + decodedChunk + endBleed);
+    }
+
+    return chunks;
+  }
+
   async booleanCompletion({
     context = "",
     stop = [],
@@ -492,8 +543,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<boolean> {
     let retryDelay = 1000;
 
@@ -530,8 +581,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<string[]> {
     let retryDelay = 1000;
 
@@ -568,8 +619,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<any[]> {
     let retryDelay = 1000;
 
@@ -615,13 +666,13 @@ export class AgentRuntime implements IAgentRuntime {
     context = "",
     stop = [],
     model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
+    frequency_penalty = 0.6,
+    presence_penalty = 0.6,
     temperature = 0.3,
-    max_context_length = settings.OPENAI_API_KEY ? 127000 : 8000,
-    max_response_length = settings.OPENAI_API_KEY ? 8192 : 4096,
+    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
+    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<Content> {
-    context = await this.trimTokens("gpt-4o-mini", context, max_context_length);
+    context = this.trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff
     while (true) {
       try {
@@ -663,7 +714,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @returns The embedding of the input.
    */
   async embed(input: string) {
-    if (!settings.OPENAI_API_KEY) {
+    if (!this.getSetting("OPENAI_API_KEY")) {
       return await this.llamaService.getEmbeddingResponse(input);
     }
     const embeddingModel = this.embeddingModel;
@@ -1056,7 +1107,6 @@ Text: ${attachment.text}
       const existingMemories = await this.messageManager.getMemoriesByRoomIds({
         // filter out the current room id from rooms
         roomIds: rooms.filter((room) => room !== roomId),
-
       });
 
       // Sort messages by timestamp in descending order
@@ -1122,7 +1172,10 @@ Text: ${attachment.text}
     let bio = this.character.bio || "";
     if (Array.isArray(bio)) {
       // get three random bio strings and join them with " "
-      bio = bio.sort(() => 0.5 - Math.random()).slice(0, 3).join(" ");
+      bio = bio
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3)
+        .join(" ");
     }
 
     const initialState = {
@@ -1134,8 +1187,8 @@ Text: ${attachment.text}
       adjective:
         this.character.adjectives && this.character.adjectives.length > 0
           ? this.character.adjectives[
-          Math.floor(Math.random() * this.character.adjectives.length)
-          ]
+              Math.floor(Math.random() * this.character.adjectives.length)
+            ]
           : "",
       // Recent interactions between the sender and receiver, formatted as messages
       recentMessageInteractions: formattedMessageInteractions,
@@ -1147,64 +1200,73 @@ Text: ${attachment.text}
       topic:
         this.character.topics && this.character.topics.length > 0
           ? this.character.topics[
-          Math.floor(Math.random() * this.character.topics.length)
-          ]
+              Math.floor(Math.random() * this.character.topics.length)
+            ]
           : null,
       topics:
         this.character.topics && this.character.topics.length > 0
-          ? `${this.character.name} is interested in ` + this.character.topics
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 5)
-            .map((topic, index) => {
-              if (index === this.character.topics.length - 1) {
-                return topic + " and ";
-              }
-              return topic + ", ";
-            })
-            .join("")
+          ? `${this.character.name} is interested in ` +
+            this.character.topics
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 5)
+              .map((topic, index) => {
+                if (index === this.character.topics.length - 2) {
+                  return topic + " and ";
+                }
+                // if last topic, don't add a comma
+                if (index === this.character.topics.length - 1) {
+                  return topic;
+                }
+                return topic + ", ";
+              })
+              .join("")
           : "",
       characterPostExamples:
         formattedCharacterPostExamples &&
-          formattedCharacterPostExamples.replaceAll("\n", "").length > 0
+        formattedCharacterPostExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-            `### Example Posts for ${this.character.name}`,
-            formattedCharacterPostExamples,
-          )
+              `### Example Posts for ${this.character.name}`,
+              formattedCharacterPostExamples,
+            )
           : "",
       characterMessageExamples:
         formattedCharacterMessageExamples &&
-          formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
+        formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-            `### Example Conversations for ${this.character.name}`,
-            formattedCharacterMessageExamples,
-          )
+              `### Example Conversations for ${this.character.name}`,
+              formattedCharacterMessageExamples,
+            )
           : "",
       messageDirections:
         this.character?.style?.all?.length > 0 ||
-          this.character?.style?.chat.length > 0
+        this.character?.style?.chat.length > 0
           ? addHeader(
-            "### Message Directions for " + this.character.name,
-            (() => {
-              const all = this.character?.style?.all || [];
-              const chat = this.character?.style?.chat || [];
-              const shuffled = [...all, ...chat].sort(() => 0.5 - Math.random());
-              const allSliced = shuffled.slice(0, 15);
-              return allSliced.concat(allSliced).join("\n");
-            })(),
-          )
+              "### Message Directions for " + this.character.name,
+              (() => {
+                const all = this.character?.style?.all || [];
+                const chat = this.character?.style?.chat || [];
+                const shuffled = [...all, ...chat].sort(
+                  () => 0.5 - Math.random(),
+                );
+                const allSliced = shuffled.slice(0, conversationLength / 2);
+                return allSliced.concat(allSliced).join("\n");
+              })(),
+            )
           : "",
       postDirections:
         this.character?.style?.all?.length > 0 ||
-          this.character?.style?.post.length > 0
+        this.character?.style?.post.length > 0
           ? addHeader(
-            "### Post Directions for " + this.character.name,
-            (() => {
-              const all = this.character?.style?.all || [];
-              const post = this.character?.style?.post || [];
-              const shuffled = [...all, ...post].sort(() => 0.5 - Math.random());
-              return shuffled.slice(0, 15).join("\n");
-            })(),
-          )
+              "### Post Directions for " + this.character.name,
+              (() => {
+                const all = this.character?.style?.all || [];
+                const post = this.character?.style?.post || [];
+                const shuffled = [...all, ...post].sort(
+                  () => 0.5 - Math.random(),
+                );
+                return shuffled.slice(0, conversationLength / 2).join("\n");
+              })(),
+            )
           : "",
       // Agent runtime stuff
       senderName,
@@ -1215,9 +1277,9 @@ Text: ${attachment.text}
       goals:
         goals && goals.length > 0
           ? addHeader(
-            "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
-            goals,
-          )
+              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+              goals,
+            )
           : "",
       goalsData,
       recentMessages:
@@ -1282,9 +1344,9 @@ Text: ${attachment.text}
       actionExamples:
         actionsData.length > 0
           ? addHeader(
-            "### Action Examples",
-            composeActionExamples(actionsData, 10),
-          )
+              "### Action Examples",
+              composeActionExamples(actionsData, 10),
+            )
           : "",
       evaluatorsData,
       evaluators:

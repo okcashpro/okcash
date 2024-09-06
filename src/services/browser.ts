@@ -9,6 +9,7 @@ import { AgentRuntime } from "../core/runtime.ts";
 import { stringToUuid } from "../core/uuid.ts";
 
 export class BrowserService {
+  private static instance: BrowserService | null = null;
   private browser: Browser | undefined;
   private context: BrowserContext | undefined;
   private blocker: PlaywrightBlocker | undefined;
@@ -16,13 +17,23 @@ export class BrowserService {
   private CONTENT_CACHE_DIR = "./content_cache";
   private runtime: AgentRuntime;
 
-  constructor(runtime: AgentRuntime) {
+  private queue: string[] = [];
+  private processing: boolean = false;
+
+  private constructor(runtime: AgentRuntime) {
     this.runtime = runtime;
     this.browser = undefined;
     this.context = undefined;
     this.blocker = undefined;
     this.captchaSolver = new CaptchaSolver(process.env.CAPSOLVER_API_KEY || "");
     this.ensureCacheDirectoryExists();
+  }
+
+  public static getInstance(runtime: AgentRuntime): BrowserService {
+    if (!BrowserService.instance) {
+      BrowserService.instance = new BrowserService(runtime);
+    }
+    return BrowserService.instance;
   }
 
   private ensureCacheDirectoryExists() {
@@ -60,6 +71,48 @@ export class BrowserService {
   async getPageContent(
     url: string,
   ): Promise<{ title: string; description: string; bodyContent: string }> {
+    this.queue.push(url);
+    this.processQueue();
+
+    return new Promise((resolve, reject) => {
+      const checkQueue = () => {
+        console.log("***** CHECKING QUEUE", this.queue);
+        const index = this.queue.indexOf(url);
+        if (index !== -1) {
+          setTimeout(checkQueue, 100);
+        } else {
+          resolve(
+            (async () =>
+              await this.fetchPageContent(url)) as unknown as Promise<any>,
+          );
+        }
+      };
+      checkQueue();
+    });
+  }
+
+  private getCacheKey(url: string): string {
+    return stringToUuid(url);
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.processing || this.queue.length === 0) {
+      return;
+    }
+
+    this.processing = true;
+
+    while (this.queue.length > 0) {
+      const url = this.queue.shift();
+      await this.fetchPageContent(url);
+    }
+
+    this.processing = false;
+  }
+
+  private async fetchPageContent(
+    url: string,
+  ): Promise<{ title: string; description: string; bodyContent: string }> {
     const cacheKey = this.getCacheKey(url);
     const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${cacheKey}.json`);
 
@@ -71,19 +124,6 @@ export class BrowserService {
       return JSON.parse(fs.readFileSync(cacheFilePath, "utf-8")).content;
     }
 
-    const content = await this.fetchPageContent(url);
-    fs.writeFileSync(cacheFilePath, JSON.stringify({ url, content }));
-
-    return content;
-  }
-
-  private getCacheKey(url: string): string {
-    return stringToUuid(url);
-  }
-
-  private async fetchPageContent(
-    url: string,
-  ): Promise<{ title: string; description: string; bodyContent: string }> {
     let page: Page | undefined;
 
     try {
@@ -126,7 +166,9 @@ export class BrowserService {
         this.runtime,
         title + "\n" + bodyContent,
       );
-      return { title, description, bodyContent };
+      const content = { title, description, bodyContent };
+      fs.writeFileSync(cacheFilePath, JSON.stringify({ url, content }));
+      return content;
     } catch (error) {
       console.error("Error:", error);
       throw error;

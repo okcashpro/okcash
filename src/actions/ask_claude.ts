@@ -3,7 +3,6 @@ import { composeContext } from "../core/context.ts";
 import { log_to_file } from "../core/logger.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
 import { AgentRuntime } from "../core/runtime.ts";
-import settings from "../core/settings.ts";
 import {
   Action,
   ActionExample,
@@ -27,7 +26,7 @@ export default {
     "Asks Claude for assistance with the user's request, providing the current conversation context and attachments.",
   validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
     // Check if the ANTHROPIC_API_KEY is set in the environment variables
-    return !!settings.ANTHROPIC_API_KEY;
+    return !!runtime.getSetting("ANTHROPIC_API_KEY");
   },
   handler: async (
     runtime: IAgentRuntime,
@@ -60,7 +59,7 @@ export default {
 
     const anthropic = new Anthropic({
       // defaults to process.env["ANTHROPIC_API_KEY"]
-      apiKey: settings.ANTHROPIC_API_KEY,
+      apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
     });
 
     let attachments = [];

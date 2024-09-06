@@ -1,12 +1,15 @@
+import { Tweet } from "agent-twitter-client";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
-import settings from "../../core/settings.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
+import fs from "fs";
 
 const newTweetPrompt = `{{recentPosts}}
+
+{{timeline}}
 
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
@@ -45,23 +48,34 @@ export class TwitterGenerationClient extends ClientBase {
   private async generateNewTweet() {
     console.log("Generating new tweet");
     try {
-      // const recentConversationsText = await getRecentConversations(
-      //   this.runtime,
-      //   this,
-      //   settings.TWITTER_USERNAME,
-      // );
-
-      // Wait 1.5-3.5 seconds to avoid rate limiting
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.floor(Math.random() * 2000) + 1500),
-      );
-
       await this.runtime.ensureUserExists(
         this.runtime.agentId,
-        settings.TWITTER_USERNAME,
+        this.runtime.getSetting("TWITTER_USERNAME"),
         this.runtime.character.name,
         "twitter",
       );
+
+      let homeTimeline = [];
+      // read the file if it exists
+      if (fs.existsSync("tweetcache/home_timeline.json")) {
+        homeTimeline = JSON.parse(
+          fs.readFileSync("tweetcache/home_timeline.json", "utf-8"),
+        );
+      } else {
+        homeTimeline = await this.fetchHomeTimeline(50);
+        fs.writeFileSync(
+          "tweetcache/home_timeline.json",
+          JSON.stringify(homeTimeline, null, 2),
+        );
+      }
+
+      const formattedHomeTimeline =
+        `### ${this.runtime.character.name}'s Home Timeline\n\n` +
+        homeTimeline
+          .map((tweet) => {
+            return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
+          })
+          .join("\n");
 
       const state = await this.runtime.composeState(
         {
@@ -70,17 +84,10 @@ export class TwitterGenerationClient extends ClientBase {
           content: { text: "", action: "" },
         },
         {
-          twitterUserName: settings.TWITTER_USERNAME,
-          // recentConversations: recentConversationsText,
+          twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
+          timeline: formattedHomeTimeline,
         },
       );
-      // const recentSearchResultsText = await searchRecentPosts(
-      //   this.runtime,
-      //   this,
-      //   state.topic as string,
-      // );
-      // state["recentSearchResultsText"] = recentSearchResultsText;
-
       // Generate new tweet
       const context = composeContext({
         state,
@@ -91,7 +98,7 @@ export class TwitterGenerationClient extends ClientBase {
 
       // log context to file
       log_to_file(
-        `${settings.TWITTER_USERNAME}_${datestr}_generate_context`,
+        `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_context`,
         context,
       );
 
@@ -101,54 +108,65 @@ export class TwitterGenerationClient extends ClientBase {
         temperature: this.temperature,
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
-        model: this.runtime.model,
       });
       log_to_file(
-        `${settings.TWITTER_USERNAME}_${datestr}_generate_response`,
+        `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_response`,
         JSON.stringify(newTweetContent),
       );
 
       // Send the new tweet
       if (!this.dryRun) {
-        const success = await this.requestQueue.add(
+        const result = await this.requestQueue.add(
           async () =>
             await this.twitterClient.sendTweet(newTweetContent.trim()),
         );
 
-        if (success) {
-          const tweet = await this.requestQueue.add(
-            async () =>
-              await this.twitterClient.getLatestTweet(
-                settings.TWITTER_USERNAME,
-              ),
-          );
-          if (!tweet) {
-            console.error("Failed to get latest tweet after posting it");
-            return;
-          }
+        console.log("send tweet result:\n", result);
 
-          const postId = tweet.id;
-          const conversationId = tweet.conversationId;
-          const roomId = stringToUuid(conversationId);
+        // read the body of the response
+        const body = await result.json();
+        console.log("send tweet body:\n", body);
+        const tweetResult = body.data.create_tweet.tweet_results.result;
 
-          await this.runtime.ensureRoomExists(roomId);
-          await this.runtime.ensureParticipantInRoom(
-            this.runtime.agentId,
-            roomId,
-          );
-          await this.cacheTweet(tweet);
+        const tweet = {
+          id: tweetResult.rest_id,
+          text: tweetResult.legacy.full_text,
+          conversationId: tweetResult.legacy.conversation_id_str,
+          createdAt: tweetResult.legacy.created_at,
+          userId: tweetResult.legacy.user_id_str,
+          inReplyToStatusId: tweetResult.legacy.in_reply_to_status_id_str,
+          permanentUrl: `https://twitter.com/${this.runtime.getSetting("TWITTER_USERNAME")}/status/${tweetResult.rest_id}`,
+          hashtags: [],
+          mentions: [],
+          photos: [],
+          thread: [],
+          urls: [],
+          videos: [],
+        } as Tweet;
 
-          await this.runtime.messageManager.createMemory({
-            id: stringToUuid(postId),
-            userId: this.runtime.agentId,
-            content: { text: newTweetContent.trim(), url: tweet.permanentUrl },
-            roomId,
-            embedding: embeddingZeroVector,
-            createdAt: new Date(tweet.timestamp * 1000),
-          });
-        } else {
-          console.error("Failed to post tweet");
-        }
+        const postId = tweet.id;
+        const conversationId = tweet.conversationId;
+        const roomId = stringToUuid(conversationId);
+
+        await this.runtime.ensureRoomExists(roomId);
+        await this.runtime.ensureParticipantInRoom(
+          this.runtime.agentId,
+          roomId,
+        );
+        await this.cacheTweet(tweet);
+
+        await this.runtime.messageManager.createMemory({
+          id: stringToUuid(postId),
+          userId: this.runtime.agentId,
+          content: {
+            text: newTweetContent.trim(),
+            url: tweet.permanentUrl,
+            source: "twitter",
+          },
+          roomId,
+          embedding: embeddingZeroVector,
+          createdAt: new Date(tweet.timestamp * 1000),
+        });
       } else {
         console.log("Dry run, not sending tweet:", newTweetContent);
       }

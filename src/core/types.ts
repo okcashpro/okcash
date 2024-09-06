@@ -237,6 +237,7 @@ export type Media = {
 };
 
 export type Character = {
+  id?: UUID; // optional UUID which can be passed down to identify the character
   name: string;
   bio: string | string[];
   lore: string[];
@@ -245,6 +246,12 @@ export type Character = {
   people: string[];
   topics: string[];
   adjectives: string[];
+  clients: string[]; // list of clients the character can interact with
+  settings?: {
+    secrets?: { [key: string]: string };
+    model?: string;
+    embeddingModel?: string;
+  };
   style: {
     all: string[];
     chat: string[];
@@ -262,6 +269,8 @@ export interface IDatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]>;
   getMemoryById(id: UUID): Promise<Memory | null>;
   getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
@@ -359,6 +368,8 @@ export interface IMemoryManager {
     count?: number;
     unique?: boolean;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]>;
   getCachedEmbeddings(
     content: string,
@@ -400,6 +411,15 @@ export interface IAgentRuntime {
   llamaService: ILlamaService;
   browserService: IBrowserService;
   speechService: ISpeechService;
+
+  trimTokens(text: string, maxTokens: number, model: string): string;
+  splitChunks(
+    content: string,
+    chunkSize: number,
+    bleed: number,
+    model: string,
+  ): Promise<string[]>;
+  getSetting(key: string): string | null;
 
   // Methods
   getConversationLength(): number;
@@ -525,7 +545,7 @@ export interface IBrowserService {
 }
 
 export interface ISpeechService {
-  generate(text: string): Promise<any>;
+  generate(runtime: IAgentRuntime, text: string): Promise<any>;
 }
 
 export interface IPdfService {

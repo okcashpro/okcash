@@ -20,7 +20,6 @@ describe("buildConversationThread", () => {
       databaseAdapter: new SqliteDatabaseAdapter(new Database(":memory:")),
       token: settings.OPENAI_API_KEY as string,
       serverUrl: "https://api.openai.com/v1",
-      model: "gpt-4o-mini",
       evaluators: [],
       character: defaultCharacter,
       providers: [],
@@ -33,8 +32,11 @@ describe("buildConversationThread", () => {
     // Load cached Twitter credentials
     const cookiesFilePath = path.join(
       __dirname,
-      "../../../twitter_cookies.json",
+      "../../../tweetcache/" +
+        runtime.getSetting("TWITTER_USERNAME") +
+        "_cookies.json",
     );
+    console.log("Cookies file path:", cookiesFilePath);
     if (fs.existsSync(cookiesFilePath)) {
       const cookiesArray = JSON.parse(
         fs.readFileSync(cookiesFilePath, "utf-8"),

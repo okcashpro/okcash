@@ -21,12 +21,9 @@ import {
 export default {
   name: "JOIN_VOICE",
   validate: async (_runtime: IAgentRuntime, message: Memory, state: State) => {
-    if (!state) {
-      throw new Error("State is not available.");
-    }
-
-    if (!state.discordMessage) {
-      return; // discordMessage isn't available in voice channels
+    if (message.content.source !== "discord") {
+      // not a discord message
+      return false;
     }
 
     if (!state.discordClient) {

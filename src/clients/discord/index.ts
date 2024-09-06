@@ -10,18 +10,17 @@ import {
   User,
 } from "discord.js";
 import { EventEmitter } from "events";
-import settings from "../../core/settings.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { commands } from "./commands.ts";
 
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { AgentRuntime } from "../../core/runtime.ts";
-import { UUID } from "../../core/types.ts";
 import { MessageManager } from "./messages.ts";
 import { VoiceManager } from "./voice.ts";
 
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
+import summarize from "./actions/summarize.ts";
 
 export class DiscordClient extends EventEmitter {
   apiToken: string;
@@ -33,7 +32,7 @@ export class DiscordClient extends EventEmitter {
 
   constructor(runtime: AgentRuntime) {
     super();
-    this.apiToken = settings.DISCORD_API_TOKEN as string;
+    this.apiToken = runtime.getSetting("DISCORD_API_TOKEN") as string;
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -65,6 +64,7 @@ export class DiscordClient extends EventEmitter {
 
     this.runtime.registerAction(joinvoice);
     this.runtime.registerAction(leavevoice);
+    this.runtime.registerAction(summarize);
   }
 
   private setupEventListeners() {
@@ -108,7 +108,9 @@ export class DiscordClient extends EventEmitter {
     (async () => {
       try {
         await rest.put(
-          Routes.applicationCommands(settings.DISCORD_APPLICATION_ID!),
+          Routes.applicationCommands(
+            this.runtime.getSetting("DISCORD_APPLICATION_ID"),
+          ),
           { body: commands },
         );
       } catch (error) {
@@ -167,7 +169,7 @@ export class DiscordClient extends EventEmitter {
       userId: userIdUUID,
       content: {
         text: reactionMessage,
-        source: "Discord",
+        source: "discord",
         inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
       },
       roomId,
@@ -217,7 +219,7 @@ export class DiscordClient extends EventEmitter {
       userId: userIdUUID,
       content: {
         text: reactionMessage,
-        source: "Discord",
+        source: "discord",
         inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
       },
       roomId,

@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
 import { defaultActions } from "../core/actions.ts";
-import { zeroUuid } from "../core/constants.ts";
 import { type AgentRuntime } from "../core/runtime.ts";
 import { type Memory, type UUID } from "../core/types.ts";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
 } from "../test_resources/cache.ts";
+import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversation1,

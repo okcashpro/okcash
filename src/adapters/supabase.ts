@@ -259,25 +259,43 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
+    start?: Date;
+    end?: Date;
   }): Promise<Memory[]> {
-    const result = await this.supabase.rpc("get_memories", {
-      query_table_name: params.tableName,
-      query_roomId: params.roomId,
-      query_count: params.count,
-      query_unique: !!params.unique,
-      query_userIds: params.userIds,
-    });
-    if (result.error) {
-      throw new Error(JSON.stringify(result.error));
+    const query = this.supabase
+      .from(params.tableName)
+      .select("*")
+      .eq("roomId", params.roomId);
+
+    if (params.start) {
+      query.gte("createdAt", params.start.toISOString());
     }
-    if (!result.data) {
-      console.warn("data was null, no memories found for", {
-        roomId: params.roomId,
-        count: params.count,
-      });
-      return [];
+
+    if (params.end) {
+      query.lte("createdAt", params.end.toISOString());
     }
-    return result.data;
+
+    if (params.unique) {
+      query.eq("unique", true);
+    }
+
+    if (params.userIds && params.userIds.length > 0) {
+      query.in("userId", params.userIds);
+    }
+
+    query.order("createdAt", { ascending: false });
+
+    if (params.count) {
+      query.limit(params.count);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new Error(`Error retrieving memories: ${error.message}`);
+    }
+
+    return data as Memory[];
   }
 
   async searchMemoriesByEmbedding(

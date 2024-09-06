@@ -17,10 +17,8 @@ import {
   VoiceChannel,
   VoiceState,
 } from "discord.js";
-import fs from "fs";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import WavEncoder from "wav-encoder";
 import { AgentRuntime } from "../../core/runtime.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 
@@ -36,8 +34,8 @@ import {
   UUID,
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
-import { voiceHandlerTemplate } from "./templates.ts";
 import { SpeechService } from "../../services/speech.ts";
+import { voiceHandlerTemplate } from "./templates.ts";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -138,7 +136,7 @@ export class VoiceManager extends EventEmitter {
             this.runtime.ensureParticipantInRoom(this.runtime.agentId, roomId),
           ]);
 
-          const state = await this.runtime.composeState(
+          let state = await this.runtime.composeState(
             {
               content: { text: text, source: "Discord" },
               userId: userIdUUID,
@@ -154,17 +152,75 @@ export class VoiceManager extends EventEmitter {
             return null;
           }
 
-          const response = await this.handleVoiceMessage({
-            memory: {
-              id: stringToUuid(channelId + "-voice-message-" + Date.now()),
-              content: { text: text },
-              userId: userIdUUID,
+          const memory = {
+            id: stringToUuid(channelId + "-voice-message-" + Date.now()),
+            content: { text: text, source: "discord", url: channel.url },
+            userId: userIdUUID,
+            roomId,
+            embedding: embeddingZeroVector,
+            createdAt: new Date(),
+          };
+
+          if (!memory.content.text) {
+            return { text: "", action: "IGNORE" };
+          }
+
+          await this.runtime.messageManager.createMemory(memory);
+
+          state = await this.runtime.updateRecentMessageState(state);
+
+          // this is a little gross after refactoring
+          let shouldIgnore = await this._shouldIgnore(memory);
+
+          if (shouldIgnore) {
+            return { text: "", action: "IGNORE" };
+          }
+
+          let context = composeContext({
+            state,
+            template: voiceHandlerTemplate,
+          });
+
+          const responseContent = await this._generateResponse(
+            memory,
+            state,
+            context,
+          );
+          const callback: HandlerCallback = async (content: Content) => {
+            const { roomId } = memory;
+
+            const responseMemory: Memory = {
+              id: stringToUuid(memory.id + "-voice-response-" + Date.now()),
+              userId: this.runtime.agentId,
+              content: {
+                ...content,
+                user: this.runtime.character.name,
+                inReplyTo: memory.id,
+              },
               roomId,
               embedding: embeddingZeroVector,
-              createdAt: new Date(),
-            },
+            };
+
+            if (responseMemory.content.text?.trim()) {
+              await this.runtime.messageManager.createMemory(responseMemory);
+              state = await this.runtime.updateRecentMessageState(state);
+              await this.runtime.evaluate(memory, state);
+            } else {
+              console.warn("Empty response, skipping");
+            }
+            return [responseMemory];
+          };
+
+          const responseMemories = await callback(responseContent);
+
+          await this.runtime.processActions(
+            memory,
+            responseMemories,
             state,
-          });
+            callback,
+          );
+
+          const response = responseContent;
 
           const content = (response.responseMessage ||
             response.content ||
@@ -174,7 +230,10 @@ export class VoiceManager extends EventEmitter {
             return null;
           }
 
-          let responseStream = await SpeechService.generate(content);
+          let responseStream = await SpeechService.generate(
+            this.runtime,
+            content,
+          );
 
           if (responseStream) {
             await this.playAudioStream(userId, responseStream as Readable);
@@ -186,90 +245,11 @@ export class VoiceManager extends EventEmitter {
     });
   }
 
-  async handleVoiceMessage({
-    memory,
-    shouldIgnore = false,
-    shouldRespond = true,
-    state,
-  }: {
-    memory: Memory;
-    shouldIgnore?: boolean;
-    shouldRespond?: boolean;
-    state?: State;
-  }): Promise<Content> {
-    if (!memory.content.text) {
-      return { text: "", action: "IGNORE" };
-    }
-
-    await this.runtime.messageManager.createMemory(memory);
-
-    state = await this.runtime.updateRecentMessageState(state);
-
-    if (!shouldIgnore) {
-      shouldIgnore = await this._shouldIgnore(memory);
-    }
-
-    if (shouldIgnore) {
-      return { text: "", action: "IGNORE" };
-    }
-
-    if (!shouldRespond) {
-      return { text: "", action: "IGNORE" };
-    }
-
-    let context = composeContext({
-      state,
-      template: voiceHandlerTemplate,
-    });
-
-    const responseContent = await this._generateResponse(
-      memory,
-      state,
-      context,
-    );
-    const callback: HandlerCallback = async (content: Content) => {
-      const { roomId } = memory;
-
-      const responseMemory: Memory = {
-        id: stringToUuid(memory.id + "-voice-response-" + Date.now()),
-        userId: this.runtime.agentId,
-        content: {
-          ...content,
-          user: this.runtime.character.name,
-          inReplyTo: memory.id,
-        },
-        roomId,
-        embedding: embeddingZeroVector,
-      };
-
-      if (responseMemory.content.text?.trim()) {
-        await this.runtime.messageManager.createMemory(responseMemory);
-        state = await this.runtime.updateRecentMessageState(state);
-        await this.runtime.evaluate(memory, state);
-      } else {
-        console.warn("Empty response, skipping");
-      }
-      return [responseMemory];
-    };
-
-    const responseMemories = await callback(responseContent);
-
-    await this.runtime.processActions(
-      memory,
-      responseMemories,
-      state,
-      callback,
-    );
-
-    return responseContent;
-  }
-
   private async _generateResponse(
     message: Memory,
     state: State,
     context: string,
   ): Promise<Content> {
-    let responseContent: Content | null = null;
     const { userId, roomId } = message;
 
     const datestr = new Date().toISOString().replace(/:/g, "-");
@@ -281,6 +261,8 @@ export class VoiceManager extends EventEmitter {
       context,
       stop: [],
     });
+
+    response.source = "discord";
 
     if (!response) {
       console.error("No response from runtime.messageCompletion");

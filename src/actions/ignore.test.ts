@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { zeroUuid } from "../core/constants.ts";
+import { zeroUuid } from "../test_resources/constants.ts";
 import { composeContext } from "../core/context.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
 import { type AgentRuntime } from "../core/runtime.ts";

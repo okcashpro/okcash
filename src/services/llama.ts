@@ -53,6 +53,7 @@ interface QueuedMessage {
 }
 
 class LlamaService {
+  private static instance: LlamaService | null = null;
   private llama: Llama | undefined;
   private model: LlamaModel | undefined;
   private modelPath: string;
@@ -65,7 +66,7 @@ class LlamaService {
   private isProcessing: boolean = false;
   private modelInitialized: boolean = false;
 
-  constructor() {
+  private constructor() {
     console.log("Constructing");
     this.llama = undefined;
     this.model = undefined;
@@ -75,6 +76,13 @@ class LlamaService {
     console.log("modelName", modelName);
     this.modelPath = path.join(__dirname, modelName);
     this.initializeModel();
+  }
+
+  public static getInstance(): LlamaService {
+    if (!LlamaService.instance) {
+      LlamaService.instance = new LlamaService();
+    }
+    return LlamaService.instance;
   }
 
   async initializeModel() {
@@ -322,17 +330,6 @@ class LlamaService {
     })) {
       const current = this.model.detokenize([...responseTokens, token]);
       if ([...stop].some((s) => current.includes(s))) {
-        console.log("Stop sequence found");
-        break;
-      }
-
-      // commented out since yieldEogToken is false
-      // if current includes '://' and that is not immediate after http or https, then we should break
-      if (
-        current.includes("://") &&
-        !current.slice(-10).includes("http://") &&
-        !current.slice(-10).includes("https://")
-      ) {
         console.log("Stop sequence found");
         break;
       }

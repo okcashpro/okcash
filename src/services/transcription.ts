@@ -6,27 +6,40 @@ import OpenAI from "openai";
 import os from "os";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import settings from "../core/settings.ts";
+import { IAgentRuntime } from "../core/types.ts";
 import { getWavHeader } from "./audioUtils.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export class TranscriptionService extends EventEmitter {
+  private static instance: TranscriptionService | null = null;
   private CONTENT_CACHE_DIR = "./content_cache";
   private isCudaAvailable: boolean = false;
   private openai: OpenAI | null = null;
+  private runtime: IAgentRuntime;
 
-  constructor() {
+  private queue: ArrayBuffer[] = [];
+  private processing: boolean = false;
+
+  private constructor(runtime: IAgentRuntime) {
     super();
+    this.runtime = runtime;
     this.ensureCacheDirectoryExists();
-    if (settings.OPENAI_API_KEY) {
+    if (this.runtime.getSetting("OPENAI_API_KEY")) {
       this.openai = new OpenAI({
-        apiKey: settings.OPENAI_API_KEY,
+        apiKey: this.runtime.getSetting("OPENAI_API_KEY"),
       });
     } else {
       this.detectCuda();
     }
+  }
+
+  public static getInstance(runtime: IAgentRuntime): TranscriptionService {
+    if (!TranscriptionService.instance) {
+      TranscriptionService.instance = new TranscriptionService(runtime);
+    }
+    return TranscriptionService.instance;
   }
 
   private ensureCacheDirectoryExists() {
@@ -68,11 +81,27 @@ export class TranscriptionService extends EventEmitter {
   public async transcribeAttachment(
     audioBuffer: ArrayBuffer,
   ): Promise<string | null> {
-    if (this.openai) {
-      return this.transcribeWithOpenAI(audioBuffer);
-    } else {
-      return this.transcribeAttachmentLocally(audioBuffer);
-    }
+    this.queue.push(audioBuffer);
+    this.processQueue();
+
+    return new Promise((resolve, reject) => {
+      const checkQueue = () => {
+        console.log("***** CHECKING QUEUE", this.queue);
+        const index = this.queue.indexOf(audioBuffer);
+        if (index !== -1) {
+          setTimeout(checkQueue, 100);
+        } else {
+          resolve((async () => {
+            if (this.openai) {
+              return await this.transcribeWithOpenAI(audioBuffer);
+            } else {
+              return await this.transcribeAttachmentLocally(audioBuffer);
+            }
+          }) as unknown as Promise<string | null>);
+        }
+      };
+      checkQueue();
+    });
   }
 
   public async transcribeAttachmentLocally(
@@ -131,11 +160,46 @@ export class TranscriptionService extends EventEmitter {
   }
 
   public async transcribe(audioBuffer: ArrayBuffer): Promise<string | null> {
-    if (this.openai) {
-      return this.transcribeWithOpenAI(audioBuffer);
-    } else {
-      return this.transcribeLocally(audioBuffer);
+    this.queue.push(audioBuffer);
+    this.processQueue();
+
+    return new Promise((resolve, reject) => {
+      const checkQueue = () => {
+        console.log("***** CHECKING QUEUE", this.queue);
+        const index = this.queue.indexOf(audioBuffer);
+        if (index !== -1) {
+          setTimeout(checkQueue, 100);
+        } else {
+          resolve((async () => {
+            if (this.openai) {
+              return await this.transcribeWithOpenAI(audioBuffer);
+            } else {
+              return await this.transcribeLocally(audioBuffer);
+            }
+          }) as unknown as Promise<string | null>);
+        }
+      };
+      checkQueue();
+    });
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.processing || this.queue.length === 0) {
+      return;
     }
+
+    this.processing = true;
+
+    while (this.queue.length > 0) {
+      const audioBuffer = this.queue.shift();
+      if (this.openai) {
+        await this.transcribeWithOpenAI(audioBuffer);
+      } else {
+        await this.transcribeLocally(audioBuffer);
+      }
+    }
+
+    this.processing = false;
   }
 
   private async transcribeWithOpenAI(
