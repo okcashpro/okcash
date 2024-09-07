@@ -23,11 +23,9 @@ export const summarizationTemplate = `# Summarized so far (we are adding to this
 
 Summarization objective: {{objective}}
 
-# Instructions: Summarize the conversation so far. Return the summary, as well as a list of attachments that should be included in the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details to the objective.
+# Instructions: Summarize the conversation so far. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details to the objective. Return a string inside a JSON block in this form:
 \`\`\`json
-{
-  "summary": "<The summary of the current conversation section, continuing from the current summary.>",
-}
+"<The summary of the current conversation section, continuing from the current summary.>"
 \`\`\`
 `;
 
@@ -89,10 +87,10 @@ const getDateRange = async (
 
         // parse multiplier
         const multipliers = {
-          second: 1,
-          minute: 60,
-          hour: 3600,
-          day: 86400,
+          second: 1 * 1000,
+          minute: 60 * 1000,
+          hour: 3600 * 1000,
+          day: 86400 * 1000,
         };
 
         const startMultiplier = (parsedResponse.start as string).match(
@@ -110,16 +108,14 @@ const getDateRange = async (
         // multiply by multiplier
         let startTime =
           startInteger *
-          multipliers[startMultiplier as keyof typeof multipliers] *
-          1000;
+          multipliers[startMultiplier as keyof typeof multipliers];
 
           console.log("startTime", startTime)
 
 
         let endTime =
           endInteger *
-          multipliers[endMultiplier as keyof typeof multipliers] *
-          1000;
+          multipliers[endMultiplier as keyof typeof multipliers];
 
         console.log("endTime", endTime)
 
@@ -215,8 +211,10 @@ const summarizeAction = {
     const memories = await runtime.messageManager.getMemories({
       roomId,
       // subtract start from current time
-      start: new Date(parseInt(start as string)),
-      end: new Date(parseInt(end as string)),
+      start: parseInt(start as string),
+      end: parseInt(end as string),
+      count: 10000,
+      unique: false,
     });
 
     console.log("memories", memories)
@@ -252,7 +250,7 @@ const summarizeAction = {
     );
 
     console.log("chunks ", chunks.length)
-    const datestr = new Date().toISOString().replace(/:/g, "-");
+    const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     state.memoriesWithAttachments = formattedMemories;
     state.objective = objective;
@@ -277,7 +275,6 @@ const summarizeAction = {
         context,
       );
 
-      // TODO: if this is llama, we need to do that instead
       const summary = await runtime.completion({
         context,
       });
@@ -305,15 +302,8 @@ const summarizeAction = {
 
     callbackData.text = currentSummary;
 
-    const response = {
-      userId,
-      content: callbackData,
-      roomId,
-      embedding: embeddingZeroVector,
-    };
-
     if (currentSummary.trim()) {
-      await runtime.messageManager.createMemory(response);
+      callback(callbackData)
       await runtime.evaluate(message, state);
     } else {
       console.warn("Empty response from Claude, skipping");

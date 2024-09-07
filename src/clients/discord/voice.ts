@@ -159,7 +159,7 @@ export class VoiceManager extends EventEmitter {
             userId: userIdUUID,
             roomId,
             embedding: embeddingZeroVector,
-            createdAt: new Date(),
+            createdAt: Date.now(),
           };
 
           if (!memory.content.text) {
@@ -256,7 +256,7 @@ export class VoiceManager extends EventEmitter {
   ): Promise<Content> {
     const { userId, roomId } = message;
 
-    const datestr = new Date().toISOString().replace(/:/g, "-");
+    const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_generate_context`, context);

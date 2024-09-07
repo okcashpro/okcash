@@ -51,19 +51,6 @@ export function formatActors({ actors }: { actors: Actor[] }) {
  * @param actors - list of actors
  * @returns string
  */
-let serverClientTimeDiff = 0;
-
-export const syncServerTime = (serverTime: string) => {
-  const serverDate = new Date(serverTime);
-  const clientDate = new Date();
-  serverClientTimeDiff = serverDate.getTime() - clientDate.getTime();
-  console.log(
-    "Time difference between server and client:",
-    serverClientTimeDiff,
-    "ms",
-  );
-};
-
 export const formatMessages = ({
   messages,
   actors,
@@ -98,16 +85,9 @@ export const formatMessages = ({
   return messageStrings;
 };
 
-export const formatTimestamp = (messageDate: Date) => {
-  const clientNow = new Date();
-  const serverNow = new Date(clientNow.getTime() + serverClientTimeDiff);
-
-  // if messageDate is a string, convert it to a date
-  if (typeof messageDate === "string") {
-    messageDate = new Date(messageDate);
-  }
-
-  const diff = serverNow.getTime() - messageDate.getTime();
+export const formatTimestamp = (messageDate: number) => {
+  const now = new Date();
+  const diff = now.getTime() - messageDate;
 
   const absDiff = Math.abs(diff);
   const seconds = Math.floor(absDiff / 1000);
@@ -116,7 +96,6 @@ export const formatTimestamp = (messageDate: Date) => {
   const days = Math.floor(hours / 24);
 
   if (absDiff < 60000) {
-    // Within 1 minute
     return "just now";
   } else if (minutes < 60) {
     return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;

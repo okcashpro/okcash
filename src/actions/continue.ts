@@ -101,7 +101,7 @@ export default {
       state,
       template: messageHandlerTemplate,
     });
-    const datestr = new Date().toISOString().replace(/:/g, "-");
+    const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_continue_context`, context);

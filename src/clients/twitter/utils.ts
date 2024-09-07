@@ -70,7 +70,7 @@ export async function buildConversationThread(
             ? stringToUuid(currentTweet.inReplyToStatusId)
             : undefined,
         },
-        createdAt: new Date(currentTweet.timestamp * 1000),
+        createdAt: currentTweet.timestamp * 1000,
         roomId,
         userId:
           currentTweet.userId === client.twitterUserId
@@ -147,7 +147,7 @@ export async function sendTweetChunks(
     },
     roomId,
     embedding: embeddingZeroVector,
-    createdAt: new Date(tweet.timestamp * 1000),
+    createdAt: tweet.timestamp * 1000,
   }));
 
   return memories;

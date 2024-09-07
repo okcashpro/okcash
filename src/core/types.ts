@@ -109,7 +109,7 @@ export interface State {
 export interface Memory {
   id?: UUID; // An optional unique identifier for the memory.
   userId: UUID; // The user ID associated with the memory.
-  createdAt?: Date; // An optional timestamp indicating when the memory was created.
+  createdAt?: number; // An optional timestamp indicating when the memory was created.
   content: Content; // The content of the memory, which can be a structured object or a plain string.
   embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
   roomId: UUID; // The room or conversation ID associated with the memory.
@@ -273,8 +273,8 @@ export interface IDatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
-    start?: Date;
-    end?: Date;
+    start?: number;
+    end?: number;
   }): Promise<Memory[]>;
   getMemoryById(id: UUID): Promise<Memory | null>;
   getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
@@ -372,8 +372,8 @@ export interface IMemoryManager {
     count?: number;
     unique?: boolean;
     userIds?: UUID[];
-    start?: Date;
-    end?: Date;
+    start?: number;
+    end?: number;
   }): Promise<Memory[]>;
   getCachedEmbeddings(
     content: string,

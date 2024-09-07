@@ -1018,13 +1018,13 @@ export class AgentRuntime implements IAgentRuntime {
       );
 
       if (lastMessageWithAttachment) {
-        const lastMessageTime = lastMessageWithAttachment.createdAt.getTime();
+        const lastMessageTime = lastMessageWithAttachment.createdAt;
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
 
         allAttachments = recentMessagesData
           .reverse()
           .map((msg) => {
-            const msgTime = msg.createdAt.getTime();
+            const msgTime = msg.createdAt;
             const isWithinTime =
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
             const attachments = msg.content.attachments || [];
@@ -1108,7 +1108,7 @@ Text: ${attachment.text}
 
       // Sort messages by timestamp in descending order
       existingMemories.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+        (a, b) => b.createdAt - a.createdAt,
       );
 
       // Take the most recent messages
@@ -1387,14 +1387,14 @@ Text: ${attachment.text}
       const lastMessageWithAttachment = recentMessagesData.find(
         (msg) => msg.content.attachments && msg.content.attachments.length > 0,
       );
-
+    
       if (lastMessageWithAttachment) {
-        const lastMessageTime = lastMessageWithAttachment.createdAt.getTime();
+        const lastMessageTime = lastMessageWithAttachment.createdAt;
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
-
+    
         allAttachments = recentMessagesData
           .filter((msg) => {
-            const msgTime = msg.createdAt.getTime();
+            const msgTime = msg.createdAt;
             return (
               msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime
             );
@@ -1402,6 +1402,7 @@ Text: ${attachment.text}
           .flatMap((msg) => msg.content.attachments || []);
       }
     }
+    
 
     const formattedAttachments = (allAttachments as Media[])
       .map(

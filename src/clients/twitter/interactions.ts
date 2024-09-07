@@ -257,7 +257,7 @@ export class TwitterInteractionClient extends ClientBase {
         },
         userId: userIdUUID,
         roomId,
-        createdAt: new Date(tweet.timestamp * 1000),
+        createdAt: tweet.timestamp * 1000,
       };
       this.saveRequestMessage(message, state);
     }
@@ -288,7 +288,7 @@ export class TwitterInteractionClient extends ClientBase {
       template: messageHandlerTemplate,
     });
 
-    const datestr = new Date().toISOString().replace(/:/g, "-");
+    const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
     log_to_file(

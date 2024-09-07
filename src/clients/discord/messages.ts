@@ -157,7 +157,7 @@ export class MessageManager {
         userId: userIdUUID,
         roomId,
         content,
-        createdAt: new Date(message.createdTimestamp),
+        createdAt: message.createdTimestamp,
         embedding: embeddingZeroVector,
       };
 
@@ -274,7 +274,7 @@ export class MessageManager {
               },
               roomId,
               embedding: embeddingZeroVector,
-              createdAt: new Date(m.createdTimestamp),
+              createdAt: m.createdTimestamp,
             };
             memories.push(memory);
           }
@@ -576,7 +576,7 @@ export class MessageManager {
     let responseContent: Content | null = null;
     const { userId, roomId } = message;
 
-    const datestr = new Date().toISOString().replace(/:/g, "-");
+    const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_generate_context`, context);

@@ -151,7 +151,7 @@ You should only respond with the name of the voice channel or none, no commentar
         state: guessState as unknown as State,
       });
 
-      const datestr = new Date().toISOString().replace(/:/g, "-");
+      const datestr = new Date().toUTCString().replace(/:/g, "-");
 
       // log context to file
       log_to_file(`${state.agentName}_${datestr}_joinvoice_context`, context);

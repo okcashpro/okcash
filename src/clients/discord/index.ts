@@ -173,7 +173,7 @@ export class DiscordClient extends EventEmitter {
         inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
       },
       roomId,
-      createdAt: new Date(),
+      createdAt: Date.now(),
       embedding: embeddingZeroVector,
     });
   }
@@ -223,7 +223,7 @@ export class DiscordClient extends EventEmitter {
         inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
       },
       roomId,
-      createdAt: new Date(),
+      createdAt: Date.now(),
       embedding: embeddingZeroVector,
     });
   }

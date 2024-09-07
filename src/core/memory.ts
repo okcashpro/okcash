@@ -74,8 +74,8 @@ export class MemoryManager implements IMemoryManager {
     count?: number;
     unique?: boolean;
     userIds?: UUID[];
-    start?: Date;
-    end?: Date;
+    start?: number;
+    end?: number;
   }): Promise<Memory[]> {
     const result = await this.runtime.databaseAdapter.getMemories({
       roomId,

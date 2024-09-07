@@ -94,7 +94,7 @@ export class TwitterGenerationClient extends ClientBase {
         template: newTweetPrompt,
       });
 
-      const datestr = new Date().toISOString().replace(/:/g, "-");
+      const datestr = new Date().toUTCString().replace(/:/g, "-");
 
       // log context to file
       log_to_file(
@@ -165,7 +165,7 @@ export class TwitterGenerationClient extends ClientBase {
           },
           roomId,
           embedding: embeddingZeroVector,
-          createdAt: new Date(tweet.timestamp * 1000),
+          createdAt: tweet.timestamp * 1000,
         });
       } else {
         console.log("Dry run, not sending tweet:", newTweetContent);

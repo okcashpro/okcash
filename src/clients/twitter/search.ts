@@ -141,7 +141,7 @@ export class TwitterSearchClient extends ClientBase {
     - Respond to tweets where there is an easy exchange of ideas to have with the user
     - ONLY respond with the ID of the tweet`;
 
-      const datestr = new Date().toISOString().replace(/:/g, "-");
+      const datestr = new Date().toUTCString().replace(/:/g, "-");
       const logName = `${this.runtime.character.name}_search_${datestr}`;
       log_to_file(logName, prompt);
 
@@ -214,7 +214,8 @@ export class TwitterSearchClient extends ClientBase {
         },
         userId: userIdUUID,
         roomId,
-        createdAt: new Date(selectedTweet.timestamp * 1000),
+        // Timestamps are in seconds, but we need them in milliseconds
+        createdAt: selectedTweet.timestamp * 1000,
       };
 
       if (!message.content.text) {
@@ -262,8 +263,10 @@ export class TwitterSearchClient extends ClientBase {
             ),
         );
 
+        const sortedTweets = tweets.tweets.sort((a, b) => b.timestamp - a.timestamp);
+
         // Format search results
-        for (const tweet of tweets.tweets.filter((tweet) =>
+        for (const tweet of sortedTweets.filter((tweet) =>
           isValidTweet(tweet),
         )) {
           let formattedTweet = `Name: ${tweet.name} (@${tweet.username})\n`;
@@ -325,13 +328,6 @@ export class TwitterSearchClient extends ClientBase {
 
           recentSearchResults.push(formattedTweet);
         }
-
-        // Sort search results by timestamp
-        recentSearchResults.sort((a, b) => {
-          const timeA = new Date(a.match(/Time: (.*)/)[1]).getTime();
-          const timeB = new Date(b.match(/Time: (.*)/)[1]).getTime();
-          return timeA - timeB;
-        });
 
         const recentSearchResultsText = recentSearchResults.join("\n");
         return addHeader(

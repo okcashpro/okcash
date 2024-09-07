@@ -391,7 +391,7 @@ export class ClientBase extends EventEmitter {
             content: content,
             roomId,
             embedding: embeddingZeroVector,
-            createdAt: new Date(tweet.timestamp * 1000),
+            createdAt: tweet.timestamp * 1000,
           });
         }
 
@@ -482,7 +482,7 @@ export class ClientBase extends EventEmitter {
         content: content,
         roomId,
         embedding: embeddingZeroVector,
-        createdAt: new Date(tweet.timestamp * 1000),
+        createdAt: tweet.timestamp * 1000,
       });
     }
 

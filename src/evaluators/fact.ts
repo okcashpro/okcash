@@ -85,7 +85,7 @@ async function handler(runtime: AgentRuntime, message: Memory) {
       userId: agentId!,
       content: { text: fact },
       roomId,
-      createdAt: new Date(),
+      createdAt: Date.now(),
     });
 
     await runtime.factManager.createMemory(factMemory, true);

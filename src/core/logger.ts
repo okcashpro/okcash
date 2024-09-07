@@ -54,7 +54,7 @@ export function log_to_file(
   }
 
   let fullPath = path.join(logDirectory, filename);
-  const timestamp = new Date().toISOString();
+  const timestamp = new Date().toUTCString();
   const logEntry = `[${timestamp}] ${message}\n`;
 
   // if full path doesnt end in .log or .txt, append .log

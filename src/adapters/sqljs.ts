@@ -71,7 +71,6 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       const memory = stmt.getAsObject() as unknown as Memory;
       memories.push({
         ...memory,
-        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -235,7 +234,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const stmt = this.db.prepare(sql);
 
-    const createdAt = (memory.createdAt ?? new Date()).getTime();
+    const createdAt = (memory.createdAt ?? Date.now());
 
     stmt.run([
       v4(),
@@ -286,7 +285,6 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       };
       memories.push({
         ...memory,
-        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -344,7 +342,6 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       };
       memories.push({
         ...memory,
-        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }
@@ -390,7 +387,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
 
     return memories.map((memory) => ({
       ...memory,
-      createdAt: new Date(memory.createdAt),
+      createdAt: memory.createdAt ?? Date.now(),
       embedding: JSON.parse(memory.embedding as unknown as string),
       levenshtein_score: 0,
     }));
@@ -430,8 +427,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
-    start?: Date;
-    end?: Date;
+    start?: number;
+    end?: number;
   }): Promise<Memory[]> {
     if (!params.tableName) {
       throw new Error("tableName is required");
@@ -467,8 +464,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     stmt.bind([
       params.tableName,
       params.roomId,
-      ...(params.start ? [params.start.getTime()] : []),
-      ...(params.end ? [params.end.getTime()] : []),
+      ...(params.start ? [params.start] : []),
+      ...(params.end ? [params.end] : []),
       ...(params.userIds || []),
       ...(params.count ? [params.count] : []),
     ]);
@@ -477,7 +474,6 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
       const memory = stmt.getAsObject() as unknown as Memory;
       memories.push({
         ...memory,
-        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       });
     }

@@ -247,6 +247,7 @@ export class VideoService {
 
     console.log("Starting transcription...");
     const startTime = Date.now();
+    // make sure startTime is in UTC
     const transcript =
       await this.runtime.transcriptionService.transcribe(audioBuffer);
     const endTime = Date.now();

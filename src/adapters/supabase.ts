@@ -115,7 +115,6 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     // map createdAt to Date
     const memories = data.map((memory) => ({
       ...memory,
-      createdAt: new Date(memory.createdAt),
     }));
 
     return memories as Memory[];
@@ -200,7 +199,6 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }
     return result.data.map((memory) => ({
       ...memory,
-      createdAt: new Date(memory.createdAt),
     }));
   }
 
@@ -259,8 +257,8 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
-    start?: Date;
-    end?: Date;
+    start?: number;
+    end?: number;
   }): Promise<Memory[]> {
     const query = this.supabase
       .from(params.tableName)
@@ -268,11 +266,11 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
       .eq("roomId", params.roomId);
 
     if (params.start) {
-      query.gte("createdAt", params.start.toISOString());
+      query.gte("createdAt", params.start);
     }
 
     if (params.end) {
-      query.lte("createdAt", params.end.toISOString());
+      query.lte("createdAt", params.end);
     }
 
     if (params.unique) {
@@ -321,7 +319,6 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     }
     return result.data.map((memory) => ({
       ...memory,
-      createdAt: new Date(memory.createdAt),
     }));
   }
 
@@ -345,7 +342,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     tableName: string,
     unique = false,
   ): Promise<void> {
-    const createdAt = memory.createdAt.getTime() ?? new Date().getTime();
+    const createdAt = memory.createdAt ?? Date.now();
     if (unique) {
       const opts = {
         query_table_name: tableName,

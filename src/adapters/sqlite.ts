@@ -158,7 +158,6 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     rows.forEach((row) => {
       memories.push({
         ...row,
-        createdAt: new Date(row.createdAt),
         content: JSON.parse(row.content),
       });
     });
@@ -175,7 +174,6 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     if (memory) {
       return {
         ...memory,
-        createdAt: new Date(memory.createdAt),
         content: JSON.parse(memory.content as unknown as string),
       };
     }
@@ -203,7 +201,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
 
     const content = JSON.stringify(memory.content);
 
-    const createdAt = (memory.createdAt ?? new Date()).getTime();
+    const createdAt = memory.createdAt ?? Date.now();
 
     // Insert the memory with the appropriate 'unique' value
     const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -247,14 +245,16 @@ AND roomId = ?`;
       params.match_count,
     ];
 
+
     const memories = this.db.prepare(sql).all(...queryParams) as (Memory & {
       similarity: number;
     })[];
-    return memories.map((memory) => ({
+    return memories.map((memory) => {
+      return {
       ...memory,
-      createdAt: new Date(memory.createdAt),
+      createdAt: typeof memory.createdAt === 'string' ? Date.parse(memory.createdAt as string) : memory.createdAt,
       content: JSON.parse(memory.content as unknown as string),
-    }));
+    }});
   }
 
   async searchMemoriesByEmbedding(
@@ -297,6 +297,7 @@ AND roomId = ?`;
     })[];
     return memories.map((memory) => ({
       ...memory,
+      createdAt: typeof memory.createdAt === 'string' ? Date.parse(memory.createdAt as string) : memory.createdAt,
       content: JSON.parse(memory.content as unknown as string),
     }));
   }
@@ -369,8 +370,8 @@ AND roomId = ?`;
     unique?: boolean;
     tableName: string;
     userIds?: UUID[];
-    start?: Date;
-    end?: Date;
+    start?: number;
+    end?: number;
   }): Promise<Memory[]> {
     if (!params.tableName) {
       throw new Error("tableName is required");
@@ -380,7 +381,7 @@ AND roomId = ?`;
     }
     let sql = `SELECT * FROM memories WHERE type = ? AND roomId = ?`;
 
-    const queryParams = [params.tableName, params.roomId];
+    const queryParams = [params.tableName, params.roomId] as any[];
 
     if (params.unique) {
       sql += " AND `unique` = 1";
@@ -393,26 +394,26 @@ AND roomId = ?`;
 
     if (params.start) {
       sql += ` AND createdAt >= ?`;
-      queryParams.push(params.start.getTime().toString());
+      queryParams.push(params.start);
     }
 
     if (params.end) {
       sql += ` AND createdAt <= ?`;
-      queryParams.push(params.end.getTime().toString());
+      queryParams.push(params.end);
     }
 
     sql += " ORDER BY createdAt DESC";
 
     if (params.count) {
       sql += " LIMIT ?";
-      queryParams.push(params.count.toString());
+      queryParams.push(params.count);
     }
 
     const memories = this.db.prepare(sql).all(...queryParams) as Memory[];
 
     return memories.map((memory) => ({
       ...memory,
-      createdAt: new Date(memory.createdAt),
+      createdAt: typeof memory.createdAt === 'string' ? Date.parse(memory.createdAt as string) : memory.createdAt,
       content: JSON.parse(memory.content as unknown as string),
     }));
   }
