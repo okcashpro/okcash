@@ -1,5 +1,3 @@
-// @ts-nocheck
-import * as Echogarden from 'echogarden';
 import { PassThrough, Readable } from "stream";
 import { IAgentRuntime, ISpeechService } from "../core/types.ts";
 import { getWavHeader } from "./audioUtils.ts";
@@ -106,6 +104,7 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
 }
 
 class SpeechService implements ISpeechService {
+  static Echogarden: any;
   static async generate(
     runtime: IAgentRuntime,
     text: string,
@@ -114,7 +113,11 @@ class SpeechService implements ISpeechService {
     if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
       return textToSpeech(runtime, text);
     }
-    const { audio } = await Echogarden.synthesize(text, { engine: 'vits', voice: 'en_US-hfc_female-medium' });
+    if(!this.Echogarden) {
+      const Echogarden = await import('echogarden');
+      this.Echogarden = Echogarden;
+    }
+    const { audio } = await this.Echogarden.synthesize(text, { engine: 'vits', voice: 'en_US-hfc_female-medium' });
 
     let wavStream: Readable;
     if (audio instanceof Buffer) {
