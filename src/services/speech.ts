@@ -114,10 +114,12 @@ class SpeechService implements ISpeechService {
       return textToSpeech(runtime, text);
     }
     if(!this.Echogarden) {
-      const Echogarden = await import('echogarden');
-      this.Echogarden = Echogarden;
+      console.error("Local voice disabled for a second")
+      return;
+      // const Echogarden = await import('echogarden');
+      // this.Echogarden = Echogarden;
     }
-    const { audio } = await this.Echogarden.synthesize(text, { engine: 'vits', voice: 'en_US-hfc_female-medium' });
+    const { audio } = await this.Echogarden?.synthesize(text, { engine: 'vits', voice: 'en_US-hfc_female-medium' });
 
     let wavStream: Readable;
     if (audio instanceof Buffer) {
