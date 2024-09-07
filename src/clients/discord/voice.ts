@@ -105,12 +105,10 @@ export class VoiceManager extends EventEmitter {
 
           if (!text) return;
 
+          // handle whisper cases
           if (
-            (text.length < 5 &&
-              !text.toLowerCase().includes("yes") &&
-              !text.toLowerCase().includes("no")) ||
-            (text.length > 5 && text.toLowerCase().includes("ok")) ||
-            text.toLowerCase().includes("sure")
+            (text.length < 15 && text.includes("[BLANK_AUDIO]")) ||
+            (text.length < 5 && text.toLowerCase().includes("you"))
           ) {
             return;
           }
