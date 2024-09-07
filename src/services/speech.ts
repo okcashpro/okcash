@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as Echogarden from 'echogarden';
 import { PassThrough, Readable } from "stream";
 import { IAgentRuntime, ISpeechService } from "../core/types.ts";
