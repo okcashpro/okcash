@@ -309,7 +309,7 @@ export class MessageManager {
         await this.voiceManager.playAudioStream(userId, audioStream);
       } else {
         // For text channels, send the error message
-        await message.channel.send(
+        await message.reply(
           "Sorry, I encountered an error while processing your request.",
         );
       }
