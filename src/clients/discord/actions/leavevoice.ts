@@ -16,6 +16,14 @@ import {
 
 export default {
   name: "LEAVE_VOICE",
+  similes: [
+    "LEAVE_VOICE",
+    "LEAVE_VC",
+    "LEAVE_VOICE_CHAT",
+    "LEAVE_VOICE_CHANNEL",
+    "LEAVE_MEETING",
+    "LEAVE_CALL",
+  ],
   validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
     if (message.content.source !== "discord") {
       // not a discord message
@@ -65,18 +73,22 @@ export default {
     if (!state.discordClient) {
       return;
     }
-    if (!state.discordMessage) {
+
+    const discordMessage = (state.discordMessage ||
+      state.discordChannel) as DiscordMessage;
+
+    if (!discordMessage) {
       throw new Error("Discord message is not available in the state.");
     }
     const voiceChannels = (state.discordClient as Client)?.guilds.cache
-      .get((state.discordMessage as DiscordMessage).guild?.id as string)
+      .get((discordMessage as DiscordMessage).guild?.id as string)
       ?.channels.cache.filter(
         (channel: Channel) => channel.type === ChannelType.GuildVoice,
       );
 
     voiceChannels?.forEach((channel: Channel) => {
       const connection = getVoiceConnection(
-        (state.discordMessage as DiscordMessage).guild?.id as string,
+        (discordMessage as DiscordMessage).guild?.id as string,
       );
       if (connection) {
         connection.destroy();
@@ -84,8 +96,6 @@ export default {
     });
     return true;
   },
-  condition:
-    "The agent wants to or has been asked to leave the current voice channel.",
   examples: [
     [
       {

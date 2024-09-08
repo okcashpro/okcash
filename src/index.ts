@@ -66,7 +66,7 @@ if (characterPaths?.length > 0) {
 }
 
 try {
-  if(characterPath) {
+  if (characterPath) {
     const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
     characters.push(character);
   }

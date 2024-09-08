@@ -27,6 +27,7 @@ Should {{agentName}} continue? ` + booleanFooter;
 
 export default {
   name: "CONTINUE",
+  similes: ["ELABORATE", "KEEP_TALKING"],
   description:
     "ONLY use this action when the message necessitates a follow up. Do not use this action when the conversation is finished or the user does not wish to speak (use IGNORE instead). If the last message action was CONTINUE, and the user has not responded. Use sparingly.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -159,8 +160,6 @@ export default {
 
     return response;
   },
-  condition:
-    "Only use CONTINUE if the message requires a continuation to finish the thought. If this actor is waiting for the other actor to respond, or the actor does not have more to say, do not use the CONTINUE action.",
   examples: [
     [
       {

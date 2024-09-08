@@ -135,8 +135,6 @@ export default {
   },
   description:
     "Analyze the conversation and update the status of the goals based on the new information provided.",
-  condition:
-    "The conversation provides new information relevant to the current goals.",
   handler,
   examples: [
     {

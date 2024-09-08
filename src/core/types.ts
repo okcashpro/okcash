@@ -150,7 +150,7 @@ export type Validator = (
  * Represents an action that the agent can perform, including conditions for its use, a description, examples, a handler function, and a validation function.
  */
 export interface Action {
-  condition: string; // A description of the conditions under which the action is appropriate.
+  similes: string[]; // An array of strings representing the similies of the action.
   description: string; // A detailed description of what the action entails.
   examples: ActionExample[][]; // An array of arrays of content examples demonstrating the action.
   handler: Handler; // The function that handles the action.
@@ -162,6 +162,7 @@ export interface Action {
  * Represents an example for evaluation, including the context, an array of message examples, and the expected outcome.
  */
 export interface EvaluationExample {
+  similes: string[]; // An array of strings representing the similies of the action.
   context: string; // The context in which the evaluation example is set.
   messages: Array<ActionExample>; // An array of message examples relevant to the evaluation.
   outcome: string; // The expected outcome of the evaluation, typically in a structured format such as JSON.
@@ -171,7 +172,6 @@ export interface EvaluationExample {
  * Represents an evaluator, which is used to assess and guide the agent's responses based on the current context and state.
  */
 export interface Evaluator {
-  condition: string; // A description of the conditions under which the evaluator is applicable.
   description: string; // A detailed description of what the evaluator assesses or guides.
   examples: EvaluationExample[]; // An array of evaluation examples demonstrating the evaluator.
   handler: Handler; // The function that handles the evaluation.
@@ -548,8 +548,7 @@ export interface IBrowserService {
   ): Promise<{ title: string; description: string; bodyContent: string }>;
 }
 
-export interface ISpeechService {
-}
+export interface ISpeechService {}
 
 export interface IPdfService {
   convertPdfToText(pdfBuffer: Buffer): Promise<string>;

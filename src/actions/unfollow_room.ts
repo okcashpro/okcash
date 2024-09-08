@@ -24,6 +24,12 @@ Otherwise, respond with NO.
 
 export default {
   name: "UNFOLLOW_ROOM",
+  similes: [
+    "UNFOLLOW_CHAT",
+    "UNFOLLOW_CONVERSATION",
+    "UNFOLLOW_ROOM",
+    "UNFOLLOW_THREAD",
+  ],
   description:
     "Stop following this channel. You can still respond if explicitly mentioned, but you won't automatically chime in anymore. Unfollow if you're annoying people or have been asked to.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -60,9 +66,6 @@ export default {
       );
     }
   },
-
-  condition:
-    "The user no longer wants to auto-respond to all messages in a channel.",
   examples: [
     [
       {

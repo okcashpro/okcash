@@ -7,6 +7,7 @@ import {
 
 export default {
   name: "IGNORE",
+  similes: ["STOP_TALKING", "STOP_CHATTING", "STOP_CONVERSATION"],
   validate: async (_runtime: IAgentRuntime, _message: Memory) => {
     return true;
   },
@@ -18,7 +19,6 @@ export default {
   ): Promise<boolean> => {
     return true;
   },
-  condition: "The agent wants to ignore the user",
   examples: [
     [
       {

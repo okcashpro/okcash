@@ -15,8 +15,6 @@ export const TEST_ACTION = {
   handler: async (runtime: AgentRuntime, message: Memory): Promise<boolean> => {
     return true;
   },
-  condition:
-    "We are in a testing environment and want to test the action handler.",
   examples: [
     [
       {
@@ -49,8 +47,6 @@ export const TEST_ACTION_FAIL = {
   handler: async (runtime: AgentRuntime, message: Memory): Promise<boolean> => {
     return false;
   },
-  condition:
-    "We are in a testing environment and want to test the action handler failing.",
   examples: [
     [
       {

@@ -70,7 +70,7 @@ export class TwitterGenerationClient extends ClientBase {
       }
 
       const formattedHomeTimeline =
-        `### ${this.runtime.character.name}'s Home Timeline\n\n` +
+        `# ${this.runtime.character.name}'s Home Timeline\n\n` +
         homeTimeline
           .map((tweet) => {
             return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;

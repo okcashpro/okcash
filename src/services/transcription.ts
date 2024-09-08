@@ -78,7 +78,9 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null> {
+  public async transcribeAttachment(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     return new Promise((resolve) => {
       this.queue.push({ audioBuffer, resolve });
       if (!this.processing) {
@@ -173,7 +175,6 @@ export class TranscriptionService extends EventEmitter {
 
     this.processing = false;
   }
-
 
   private async transcribeWithOpenAI(
     audioBuffer: ArrayBuffer,

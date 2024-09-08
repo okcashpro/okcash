@@ -22,6 +22,7 @@ export const claudeHandlerTemplate = `{{attachments}}
 
 export default {
   name: "ASK_CLAUDE",
+  similes: ["CLAUDE", "CALL_CLAUDE", "ANTHROPIC", "SONNET", "OPUS"],
   description:
     "Asks Claude for assistance with the user's request, providing the current conversation context and attachments.",
   validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
@@ -139,8 +140,6 @@ export default {
 
     return callbackData;
   },
-  condition:
-    "The agent needs assistance from Claude to better respond to the user's request.",
   examples: [
     [
       {

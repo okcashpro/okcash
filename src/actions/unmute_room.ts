@@ -24,6 +24,12 @@ Otherwise, respond with NO.
 
 export default {
   name: "UNMUTE_ROOM",
+  similes: [
+    "UNMUTE_CHAT",
+    "UNMUTE_CONVERSATION",
+    "UNMUTE_ROOM",
+    "UNMUTE_THREAD",
+  ],
   description:
     "Unmutes a room, allowing the agent to consider responding to messages again.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -60,8 +66,6 @@ export default {
       );
     }
   },
-  condition:
-    "The user wants to re-enable the agent to consider responding in a previously muted room.",
   examples: [
     [
       {

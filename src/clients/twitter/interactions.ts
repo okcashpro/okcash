@@ -222,7 +222,7 @@ export class TwitterInteractionClient extends ClientBase {
     }
 
     const formattedHomeTimeline =
-      `### ${this.runtime.character.name}'s Home Timeline\n\n` +
+      `# ${this.runtime.character.name}'s Home Timeline\n\n` +
       homeTimeline
         .map((tweet) => {
           return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
@@ -269,8 +269,6 @@ export class TwitterInteractionClient extends ClientBase {
       template: shouldRespondTemplate,
     });
 
-    console.log("shouldRespondContext");
-
     const shouldRespond = await this.runtime.shouldRespondCompletion({
       context: shouldRespondContext,
       stop: [],
@@ -280,8 +278,6 @@ export class TwitterInteractionClient extends ClientBase {
       console.log("Not responding to message");
       return { text: "", action: "IGNORE" };
     }
-
-    console.log("shouldRespond", shouldRespond);
 
     const context = composeContext({
       state,

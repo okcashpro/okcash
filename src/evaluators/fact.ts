@@ -113,8 +113,6 @@ export default {
   },
   description:
     "Extract factual information about the people in the conversation, the current events in the world, and anything else that might be important to remember.",
-  condition:
-    "New factual information was revealed in the recent conversation which should be remembered.",
   handler,
   examples: [
     {

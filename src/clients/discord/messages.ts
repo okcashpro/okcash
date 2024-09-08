@@ -226,9 +226,9 @@ export class MessageManager {
         if (message.id && !content.inReplyTo) {
           content.inReplyTo = stringToUuid(message.id);
         }
-        console.log("received callback", message.channel.type)
+        console.log("received callback", message.channel.type);
         if (message.channel.type === ChannelType.GuildVoice) {
-          console.log("generating voice")
+          console.log("generating voice");
           // For voice channels, use text-to-speech
           const audioStream = await SpeechService.generate(
             this.runtime,

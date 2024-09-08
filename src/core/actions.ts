@@ -15,31 +15,14 @@ export const defaultActions: Action[] = [cont, ignore];
  */
 export const composeActionExamples = (actionsData: Action[], count: number) => {
   const actionExamples: ActionExample[][] = actionsData
+    .sort(() => 0.5 - Math.random())
     .map((action: Action) =>
       action.examples.sort(() => 0.5 - Math.random()).slice(0, 5),
     )
-    .flat();
+    .flat()
+    .slice(0, count);
 
-  const randomMessageExamples: ActionExample[][] = [];
-
-  // make sure count is not more than actionExamples
-  const maxCount = actionExamples.length;
-  if (count > maxCount) {
-    count = maxCount;
-  }
-
-  while (
-    randomMessageExamples.length < count &&
-    randomMessageExamples.length < actionExamples.length
-  ) {
-    const randomIndex = Math.floor(Math.random() * actionExamples.length);
-    const randomExample = actionExamples[randomIndex];
-    if (!randomMessageExamples.includes(randomExample)) {
-      randomMessageExamples.push(randomExample);
-    }
-  }
-
-  const formattedExamples = randomMessageExamples.map((example) => {
+  const formattedExamples = actionExamples.map((example) => {
     const exampleNames = Array.from({ length: 5 }, () =>
       uniqueNamesGenerator({ dictionaries: [names] }),
     );
@@ -62,25 +45,15 @@ export const composeActionExamples = (actionsData: Action[], count: number) => {
 };
 
 /**
- * Formats the provided actions into a string listing each action's name and description.
- * @param actions - An array of `Action` objects to format.
- * @returns A formatted string listing each action's name and description.
- */
-export function getFormattedActions(actions: Action[]) {
-  return actions
-    .map((action) => {
-      return `${action.name} - ${action.description}`;
-    })
-    .join("\n");
-}
-
-/**
  * Formats the names of the provided actions into a comma-separated string.
  * @param actions - An array of `Action` objects from which to extract names.
  * @returns A comma-separated string of action names.
  */
 export function formatActionNames(actions: Action[]) {
-  return actions.map((action: Action) => `${action.name}`).join(", ");
+  return actions
+    .sort(() => 0.5 - Math.random())
+    .map((action: Action) => `${action.name}`)
+    .join(", ");
 }
 
 /**
@@ -90,17 +63,7 @@ export function formatActionNames(actions: Action[]) {
  */
 export function formatActions(actions: Action[]) {
   return actions
+    .sort(() => 0.5 - Math.random())
     .map((action: Action) => `${action.name}: ${action.description}`)
-    .join(",\n");
-}
-
-/**
- * Formats the conditions for each provided action into a string, listing each action's name and its associated condition, separated by commas and newlines.
- * @param actions - An array of `Action` objects from which to extract conditions.
- * @returns A string listing each action's name and its condition.
- */
-export function formatActionConditions(actions: Action[]) {
-  return actions
-    .map((action: Action) => `'${action.name}: ${action.condition}'`)
     .join(",\n");
 }

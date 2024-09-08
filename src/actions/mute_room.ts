@@ -25,6 +25,7 @@ Otherwise, respond with NO.
 
 export default {
   name: "MUTE_ROOM",
+  similes: ["MUTE_CHAT", "MUTE_CONVERSATION", "MUTE_ROOM", "MUTE_THREAD"],
   description:
     "Mutes a room, ignoring all messages unless explicitly mentioned. Only do this if explicitly asked to, or if you're annoying people.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -61,7 +62,6 @@ export default {
       );
     }
   },
-  condition: "The user wants to ignore a room unless explicitly mentioned.",
   examples: [
     [
       {

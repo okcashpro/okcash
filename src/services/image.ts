@@ -100,7 +100,6 @@ class ImageDescriptionService {
 
       return new Promise((resolve, reject) => {
         const checkQueue = () => {
-          console.log("***** CHECKING QUEUE", this.queue);
           const index = this.queue.indexOf(imageUrl);
           if (index !== -1) {
             setTimeout(checkQueue, 100);

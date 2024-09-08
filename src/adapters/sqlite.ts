@@ -245,16 +245,19 @@ AND roomId = ?`;
       params.match_count,
     ];
 
-
     const memories = this.db.prepare(sql).all(...queryParams) as (Memory & {
       similarity: number;
     })[];
     return memories.map((memory) => {
       return {
-      ...memory,
-      createdAt: typeof memory.createdAt === 'string' ? Date.parse(memory.createdAt as string) : memory.createdAt,
-      content: JSON.parse(memory.content as unknown as string),
-    }});
+        ...memory,
+        createdAt:
+          typeof memory.createdAt === "string"
+            ? Date.parse(memory.createdAt as string)
+            : memory.createdAt,
+        content: JSON.parse(memory.content as unknown as string),
+      };
+    });
   }
 
   async searchMemoriesByEmbedding(
@@ -297,7 +300,10 @@ AND roomId = ?`;
     })[];
     return memories.map((memory) => ({
       ...memory,
-      createdAt: typeof memory.createdAt === 'string' ? Date.parse(memory.createdAt as string) : memory.createdAt,
+      createdAt:
+        typeof memory.createdAt === "string"
+          ? Date.parse(memory.createdAt as string)
+          : memory.createdAt,
       content: JSON.parse(memory.content as unknown as string),
     }));
   }
@@ -413,7 +419,10 @@ AND roomId = ?`;
 
     return memories.map((memory) => ({
       ...memory,
-      createdAt: typeof memory.createdAt === 'string' ? Date.parse(memory.createdAt as string) : memory.createdAt,
+      createdAt:
+        typeof memory.createdAt === "string"
+          ? Date.parse(memory.createdAt as string)
+          : memory.createdAt,
       content: JSON.parse(memory.content as unknown as string),
     }));
   }

@@ -33,7 +33,11 @@ export class VideoService {
   }
 
   public isVideoUrl(url: string): boolean {
-    return url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com");
+    return (
+      url.includes("youtube.com") ||
+      url.includes("youtu.be") ||
+      url.includes("vimeo.com")
+    );
   }
 
   public async processVideo(url: string): Promise<Media> {
@@ -75,9 +79,15 @@ export class VideoService {
   }
 
   private async processVideoFromUrl(url: string): Promise<Media> {
-    const videoId = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/)?.[1] || "";
+    const videoId =
+      url.match(
+        /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/,
+      )?.[1] || "";
     const videoUuid = this.getVideoId(videoId);
-    const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${videoUuid}.json`);
+    const cacheFilePath = path.join(
+      this.CONTENT_CACHE_DIR,
+      `${videoUuid}.json`,
+    );
 
     if (fs.existsSync(cacheFilePath)) {
       console.log("Returning cached video file");

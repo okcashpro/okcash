@@ -21,9 +21,6 @@ INSTRUCTIONS: You are helping me to decide which appropriate functions to call b
 Evaluator Functions:
 {{evaluators}}
 
-Evaluator Conditions:
-{{evaluatorConditions}}
-
 TASK: Based on the most recent conversation, determine which evaluators functions are appropriate to call to call.
 Include the name of evaluators that are relevant and should be called in the array
 Available evaluator names to include are {{evaluatorNames}}
@@ -49,19 +46,6 @@ export function formatEvaluators(evaluators: Evaluator[]) {
   return evaluators
     .map(
       (evaluator: Evaluator) => `'${evaluator.name}: ${evaluator.description}'`,
-    )
-    .join(",\n");
-}
-
-/**
- * Formats the conditions under which each evaluator is relevant into a readable string.
- * @param evaluators - An array of evaluator objects.
- * @returns A string that concatenates the name and condition of each evaluator, separated by a colon and a newline character.
- */
-export function formatEvaluatorConditions(evaluators: Evaluator[]) {
-  return evaluators
-    .map(
-      (evaluator: Evaluator) => `'${evaluator.name}: ${evaluator.condition}'`,
     )
     .join(",\n");
 }

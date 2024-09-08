@@ -113,29 +113,32 @@ class SpeechService implements ISpeechService {
     if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
       return textToSpeech(runtime, text);
     }
-    const { audio } = await synthesize(text, { engine: 'vits', voice: 'en_US-hfc_female-medium' });
+    const { audio } = await synthesize(text, {
+      engine: "vits",
+      voice: "en_US-hfc_female-medium",
+    });
 
     let wavStream: Readable;
     if (audio instanceof Buffer) {
-      console.log('audio is a buffer');
+      console.log("audio is a buffer");
       wavStream = Readable.from(audio);
-    } else if ('audioChannels' in audio && 'sampleRate' in audio) {
-      console.log('audio is a RawAudio');
+    } else if ("audioChannels" in audio && "sampleRate" in audio) {
+      console.log("audio is a RawAudio");
       const floatBuffer = Buffer.from(audio.audioChannels[0].buffer);
-      console.log('buffer length: ', floatBuffer.length);
-      
+      console.log("buffer length: ", floatBuffer.length);
+
       // Get the sample rate from the RawAudio object
       const sampleRate = audio.sampleRate;
-      
+
       // Create a Float32Array view of the floatBuffer
       const floatArray = new Float32Array(floatBuffer.buffer);
-      
+
       // Convert 32-bit float audio to 16-bit PCM
       const pcmBuffer = new Int16Array(floatArray.length);
       for (let i = 0; i < floatArray.length; i++) {
         pcmBuffer[i] = Math.round(floatArray[i] * 32767);
       }
-      
+
       // Prepend WAV header to the buffer
       const wavHeaderBuffer = getWavHeader(
         pcmBuffer.length * 2,
@@ -143,11 +146,14 @@ class SpeechService implements ISpeechService {
         1,
         16,
       );
-      const wavBuffer = Buffer.concat([wavHeaderBuffer, Buffer.from(pcmBuffer.buffer)]);
-      
+      const wavBuffer = Buffer.concat([
+        wavHeaderBuffer,
+        Buffer.from(pcmBuffer.buffer),
+      ]);
+
       wavStream = Readable.from(wavBuffer);
     } else {
-      throw new Error('Unsupported audio format');
+      throw new Error("Unsupported audio format");
     }
 
     return wavStream;

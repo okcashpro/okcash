@@ -95,7 +95,7 @@ export class TwitterSearchClient extends ClientBase {
       );
 
       const formattedHomeTimeline =
-        `### ${this.runtime.character.name}'s Home Timeline\n\n` +
+        `# ${this.runtime.character.name}'s Home Timeline\n\n` +
         homeTimeline
           .map((tweet) => {
             return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
@@ -263,7 +263,9 @@ export class TwitterSearchClient extends ClientBase {
             ),
         );
 
-        const sortedTweets = tweets.tweets.sort((a, b) => b.timestamp - a.timestamp);
+        const sortedTweets = tweets.tweets.sort(
+          (a, b) => b.timestamp - a.timestamp,
+        );
 
         // Format search results
         for (const tweet of sortedTweets.filter((tweet) =>
@@ -331,7 +333,7 @@ export class TwitterSearchClient extends ClientBase {
 
         const recentSearchResultsText = recentSearchResults.join("\n");
         return addHeader(
-          "### Recent Search Results for " + searchTerm,
+          "# Recent Search Results for " + searchTerm,
           recentSearchResultsText,
         );
       };

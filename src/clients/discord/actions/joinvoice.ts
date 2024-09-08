@@ -20,6 +20,14 @@ import {
 
 export default {
   name: "JOIN_VOICE",
+  similes: [
+    "JOIN_VOICE",
+    "JOIN_VC",
+    "JOIN_VOICE_CHAT",
+    "JOIN_VOICE_CHANNEL",
+    "JOIN_MEETING",
+    "JOIN_CALL",
+  ],
   validate: async (_runtime: IAgentRuntime, message: Memory, state: State) => {
     if (message.content.source !== "discord") {
       // not a discord message
@@ -71,14 +79,15 @@ export default {
       console.error("State is not available.");
     }
 
-    if (!state.discordClient) {
-      return;
-    }
-    if (!state.discordMessage) {
-      throw new Error("Discord message is not available in the state.");
+    // We normalize data in from voice channels
+    let discordMessage = (state.discordChannel ||
+      state.discordMessage) as DiscordMessage;
+
+    if (!discordMessage.content) {
+      discordMessage.content = message.content.text;
     }
 
-    const id = (state?.discordMessage as DiscordMessage).guild?.id as string;
+    const id = (discordMessage as DiscordMessage).guild?.id as string;
     const client = state.discordClient as Client;
     const voiceChannels = (
       client.guilds.cache.get(id) as Guild
@@ -86,9 +95,8 @@ export default {
       (channel: Channel) => channel.type === ChannelType.GuildVoice,
     );
 
-    const channelName = (
-      state.discordMessage as DiscordMessage
-    ).content.toLowerCase();
+    const messageContent = discordMessage.content;
+
     const targetChannel = voiceChannels.find((channel) => {
       const name = (channel as { name: string }).name.toLowerCase();
 
@@ -96,36 +104,32 @@ export default {
       const replacedName = name.replace(/[^a-z0-9 ]/g, "");
 
       return (
-        name.includes(channelName) ||
-        channelName.includes(name) ||
-        replacedName.includes(channelName) ||
-        channelName.includes(replacedName)
+        name.includes(messageContent) ||
+        messageContent.includes(name) ||
+        replacedName.includes(messageContent) ||
+        messageContent.includes(replacedName)
       );
     });
 
     if (targetChannel) {
       joinVoiceChannel({
         channelId: targetChannel.id,
-        guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
+        guildId: (discordMessage as DiscordMessage).guild?.id as string,
         adapterCreator: (client.guilds.cache.get(id) as Guild)
           .voiceAdapterCreator,
       });
       return true;
     } else {
-      const member = (state.discordMessage as DiscordMessage)
-        .member as GuildMember;
-      if (member.voice.channel) {
+      const member = (discordMessage as DiscordMessage).member as GuildMember;
+      if (member?.voice?.channel) {
         joinVoiceChannel({
           channelId: member.voice.channel.id,
-          guildId: (state.discordMessage as DiscordMessage).guild?.id as string,
+          guildId: (discordMessage as DiscordMessage).guild?.id as string,
           adapterCreator: (client.guilds.cache.get(id) as Guild)
             .voiceAdapterCreator,
         });
         return true;
       }
-
-      // LLM parse to make an informed decision
-      // TODO: Get all of the voice channels for this guild as a list
 
       const messageTemplate = `
 The user has requested to join a voice channel.
@@ -194,8 +198,7 @@ You should only respond with the name of the voice channel or none, no commentar
         if (targetChannel) {
           joinVoiceChannel({
             channelId: targetChannel.id,
-            guildId: (state.discordMessage as DiscordMessage).guild
-              ?.id as string,
+            guildId: (discordMessage as DiscordMessage).guild?.id as string,
             adapterCreator: (client.guilds.cache.get(id) as Guild)
               .voiceAdapterCreator,
           });
@@ -203,14 +206,12 @@ You should only respond with the name of the voice channel or none, no commentar
         }
       }
 
-      await (state.discordMessage as DiscordMessage).reply(
+      await (discordMessage as DiscordMessage).reply(
         "I couldn't figure out which channel you wanted me to join.",
       );
       return false;
     }
   },
-  condition:
-    "The agent wants to or has been asked to join a voice channel to participate in voice chat.",
   examples: [
     [
       {

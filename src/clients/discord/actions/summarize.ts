@@ -63,7 +63,7 @@ const getDateRange = async (
     const response = await runtime.completion({
       context,
     });
-    console.log("response", response)
+    console.log("response", response);
     // try parsing to a json object
     const parsedResponse = parseJSONObjectFromText(response) as {
       objective: string;
@@ -110,14 +110,12 @@ const getDateRange = async (
           startInteger *
           multipliers[startMultiplier as keyof typeof multipliers];
 
-          console.log("startTime", startTime)
-
+        console.log("startTime", startTime);
 
         let endTime =
-          endInteger *
-          multipliers[endMultiplier as keyof typeof multipliers];
+          endInteger * multipliers[endMultiplier as keyof typeof multipliers];
 
-        console.log("endTime", endTime)
+        console.log("endTime", endTime);
 
         // get the current time and subtract the start and end times
         parsedResponse.start = Date.now() - startTime;
@@ -131,6 +129,14 @@ const getDateRange = async (
 
 const summarizeAction = {
   name: "SUMMARIZE",
+  similes: [
+    "RECAP",
+    "SUMMARY",
+    "SUMMARIZATION",
+    "REPORT",
+    "CHAT_SUMMARY",
+    "CONVERSATION_SUMMARY",
+  ],
   description: "Summarizes the conversation and attachments.",
   validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
     if (message.content.source !== "discord") {
@@ -203,7 +209,7 @@ const summarizeAction = {
       return;
     }
 
-    console.log("dateRange", dateRange)
+    console.log("dateRange", dateRange);
 
     const { objective, start, end } = dateRange;
 
@@ -217,14 +223,14 @@ const summarizeAction = {
       unique: false,
     });
 
-    console.log("memories", memories)
+    console.log("memories", memories);
 
     const actors = await getActorDetails({
       runtime: runtime as AgentRuntime,
       roomId,
     });
 
-    console.log("actors", actors)
+    console.log("actors", actors);
 
     const actorMap = new Map(actors.map((actor) => [actor.id, actor]));
 
@@ -249,14 +255,14 @@ const summarizeAction = {
       "gpt-4o-mini",
     );
 
-    console.log("chunks ", chunks.length)
+    console.log("chunks ", chunks.length);
     const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     state.memoriesWithAttachments = formattedMemories;
     state.objective = objective;
 
     for (let i = 0; i < chunks.length; i++) {
-      console.log("chunk", i)
+      console.log("chunk", i);
       const chunk = chunks[i];
       state.currentSummary = currentSummary;
       state.currentChunk = chunk;
@@ -303,7 +309,7 @@ const summarizeAction = {
     callbackData.text = currentSummary;
 
     if (currentSummary.trim()) {
-      callback(callbackData)
+      callback(callbackData);
       await runtime.evaluate(message, state);
     } else {
       console.warn("Empty response from Claude, skipping");
@@ -311,8 +317,6 @@ const summarizeAction = {
 
     return callbackData;
   },
-  condition:
-    "The agent needs assistance from Claude to better respond to the user's request.",
   examples: [
     [
       {

@@ -17,7 +17,6 @@ export const TEST_EVALUATOR = {
     return await Promise.resolve(true);
   },
   description: "Test evaluator.",
-  condition: "When we are evualating whether tests work.",
   handler,
   examples: [
     {
@@ -47,7 +46,6 @@ export const TEST_EVALUATOR_FAIL = {
     return await Promise.resolve(false);
   },
   description: "Test failure of the evaluator and validation.",
-  condition: "When we are evualating whether tests work.",
   handler,
   examples: [
     {

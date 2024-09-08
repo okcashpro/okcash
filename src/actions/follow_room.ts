@@ -24,6 +24,12 @@ Otherwise, respond with NO.
 
 export default {
   name: "FOLLOW_ROOM",
+  similes: [
+    "FOLLOW_CHAT",
+    "FOLLOW_CHANNEL",
+    "FOLLOW_CONVERSATION",
+    "FOLLOW_THREAD",
+  ],
   description:
     "Start following this channel with great interest, chiming in without needing to be explicitly mentioned. Only do this if explicitly asked to.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -75,9 +81,6 @@ export default {
       );
     }
   },
-
-  condition:
-    "The user wants to always respond in a room without first checking with the completion call.",
   examples: [
     [
       {

@@ -74,10 +74,9 @@ export class BrowserService {
     await this.initialize();
     this.queue.push(url);
     this.processQueue();
-  
+
     return new Promise((resolve, reject) => {
       const checkQueue = async () => {
-        console.log("***** CHECKING QUEUE", this.queue);
         const index = this.queue.indexOf(url);
         if (index !== -1) {
           setTimeout(checkQueue, 100);

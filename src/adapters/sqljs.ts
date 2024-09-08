@@ -234,7 +234,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const stmt = this.db.prepare(sql);
 
-    const createdAt = (memory.createdAt ?? Date.now());
+    const createdAt = memory.createdAt ?? Date.now();
 
     stmt.run([
       v4(),

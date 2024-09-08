@@ -2,7 +2,6 @@ import { addHeader, composeContext } from "./context.ts";
 import {
   defaultEvaluators,
   evaluationTemplate,
-  formatEvaluatorConditions,
   formatEvaluatorExamples,
   formatEvaluatorNames,
   formatEvaluators,
@@ -52,7 +51,6 @@ import { VideoService } from "../services/video.ts";
 import { wordsToPunish } from "../services/wordsToPunish.ts";
 import {
   composeActionExamples,
-  formatActionConditions,
   formatActionNames,
   formatActions,
 } from "./actions.ts";
@@ -783,9 +781,26 @@ export class AgentRuntime implements IAgentRuntime {
       return;
     }
 
-    const action = this.actions.find(
-      (a: { name: string }) => a.name === responses[0].content.action,
-    )!;
+    let action = this.actions.find(
+      (a: { name: string }) =>
+        a.name.toLowerCase().replace("_", "") ===
+        responses[0].content.action.toLowerCase().replace("_", ""),
+    );
+
+    if (!action) {
+      // each action has a .similes array, lets see if we can find a match
+      for (let _action of this.actions) {
+        const simileAction = _action.similes.find(
+          (simile) =>
+            simile.toLocaleLowerCase().replace("_", "") ===
+            responses[0].content.action.toLocaleLowerCase().replace("_", ""),
+        );
+        if (simileAction) {
+          action = _action;
+          break;
+        }
+      }
+    }
 
     if (!action) {
       return console.warn("No action found for", responses[0].content.action);
@@ -828,16 +843,12 @@ export class AgentRuntime implements IAgentRuntime {
 
     const evaluators = formatEvaluators(evaluatorsData as Evaluator[]);
     const evaluatorNames = formatEvaluatorNames(evaluatorsData as Evaluator[]);
-    const evaluatorConditions = formatEvaluatorConditions(
-      evaluatorsData as Evaluator[],
-    );
 
     const context = composeContext({
       state: {
         ...state,
         evaluators,
         evaluatorNames,
-        evaluatorConditions,
       } as State,
       template: evaluationTemplate,
     });
@@ -1107,9 +1118,7 @@ Text: ${attachment.text}
       });
 
       // Sort messages by timestamp in descending order
-      existingMemories.sort(
-        (a, b) => b.createdAt - a.createdAt,
-      );
+      existingMemories.sort((a, b) => b.createdAt - a.createdAt);
 
       // Take the most recent messages
       const recentInteractionsData = existingMemories.slice(0, 20);
@@ -1222,7 +1231,7 @@ Text: ${attachment.text}
         formattedCharacterPostExamples &&
         formattedCharacterPostExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-              `### Example Posts for ${this.character.name}`,
+              `# Example Posts for ${this.character.name}`,
               formattedCharacterPostExamples,
             )
           : "",
@@ -1230,7 +1239,7 @@ Text: ${attachment.text}
         formattedCharacterMessageExamples &&
         formattedCharacterMessageExamples.replaceAll("\n", "").length > 0
           ? addHeader(
-              `### Example Conversations for ${this.character.name}`,
+              `# Example Conversations for ${this.character.name}`,
               formattedCharacterMessageExamples,
             )
           : "",
@@ -1238,7 +1247,7 @@ Text: ${attachment.text}
         this.character?.style?.all?.length > 0 ||
         this.character?.style?.chat.length > 0
           ? addHeader(
-              "### Message Directions for " + this.character.name,
+              "# Message Directions for " + this.character.name,
               (() => {
                 const all = this.character?.style?.all || [];
                 const chat = this.character?.style?.chat || [];
@@ -1254,7 +1263,7 @@ Text: ${attachment.text}
         this.character?.style?.all?.length > 0 ||
         this.character?.style?.post.length > 0
           ? addHeader(
-              "### Post Directions for " + this.character.name,
+              "# Post Directions for " + this.character.name,
               (() => {
                 const all = this.character?.style?.all || [];
                 const post = this.character?.style?.post || [];
@@ -1267,40 +1276,39 @@ Text: ${attachment.text}
           : "",
       // Agent runtime stuff
       senderName,
-      actors:
-        actors && actors.length > 0 ? addHeader("### Actors", actors) : "",
+      actors: actors && actors.length > 0 ? addHeader("# Actors", actors) : "",
       actorsData,
       roomId,
       goals:
         goals && goals.length > 0
           ? addHeader(
-              "### Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
+              "# Goals\n{{agentName}} should prioritize accomplishing the objectives that are in progress.",
               goals,
             )
           : "",
       goalsData,
       recentMessages:
         recentMessages && recentMessages.length > 0
-          ? addHeader("### Conversation Messages", recentMessages)
+          ? addHeader("# Conversation Messages", recentMessages)
           : "",
       recentPosts:
         recentPosts && recentPosts.length > 0
-          ? addHeader("### Posts in Thread", recentPosts)
+          ? addHeader("# Posts in Thread", recentPosts)
           : "",
       recentMessagesData,
       recentFacts:
         recentFacts && recentFacts.length > 0
-          ? addHeader("### Recent Facts", recentFacts)
+          ? addHeader("# Recent Facts", recentFacts)
           : "",
       recentFactsData,
       relevantFacts:
         relevantFacts && relevantFacts.length > 0
-          ? addHeader("### Relevant Facts", relevantFacts)
+          ? addHeader("# Relevant Facts", relevantFacts)
           : "",
       relevantFactsData,
       attachments:
         formattedAttachments && formattedAttachments.length > 0
-          ? addHeader("### Attachments", formattedAttachments)
+          ? addHeader("# Attachments", formattedAttachments)
           : "",
       ...additionalKeys,
     };
@@ -1331,17 +1339,13 @@ Text: ${attachment.text}
     const actionsData = resolvedActions.filter(Boolean) as Action[];
 
     const actionState = {
-      actionNames: addHeader(
-        "### Possible response actions:",
-        formatActionNames(actionsData),
-      ),
-      actionConditions:
-        actionsData.length > 0 ? formatActionConditions(actionsData) : "",
+      actionNames:
+        "Possible response actions:" + formatActionNames(actionsData),
       actions: actionsData.length > 0 ? formatActions(actionsData) : "",
       actionExamples:
         actionsData.length > 0
           ? addHeader(
-              "### Action Examples",
+              "# Action Examples",
               composeActionExamples(actionsData, 10),
             )
           : "",
@@ -1350,10 +1354,6 @@ Text: ${attachment.text}
         evaluatorsData.length > 0 ? formatEvaluators(evaluatorsData) : "",
       evaluatorNames:
         evaluatorsData.length > 0 ? formatEvaluatorNames(evaluatorsData) : "",
-      evaluatorConditions:
-        evaluatorsData.length > 0
-          ? formatEvaluatorConditions(evaluatorsData)
-          : "",
       evaluatorExamples:
         evaluatorsData.length > 0
           ? formatEvaluatorExamples(evaluatorsData)
@@ -1387,11 +1387,11 @@ Text: ${attachment.text}
       const lastMessageWithAttachment = recentMessagesData.find(
         (msg) => msg.content.attachments && msg.content.attachments.length > 0,
       );
-    
+
       if (lastMessageWithAttachment) {
         const lastMessageTime = lastMessageWithAttachment.createdAt;
         const oneHourBeforeLastMessage = lastMessageTime - 60 * 60 * 1000; // 1 hour before last message
-    
+
         allAttachments = recentMessagesData
           .filter((msg) => {
             const msgTime = msg.createdAt;
@@ -1402,7 +1402,6 @@ Text: ${attachment.text}
           .flatMap((msg) => msg.content.attachments || []);
       }
     }
-    
 
     const formattedAttachments = (allAttachments as Media[])
       .map(
@@ -1419,7 +1418,7 @@ Text: ${attachment.text}
 
     return {
       ...state,
-      recentMessages: addHeader("### Conversation Messages", recentMessages),
+      recentMessages: addHeader("# Conversation Messages", recentMessages),
       recentMessagesData,
       attachments: formattedAttachments,
     } as State;
