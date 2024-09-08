@@ -1383,7 +1383,7 @@ Text: ${attachment.text}
       }),
     });
 
-    let allAttachments = state.attachments || [];
+    let allAttachments = [];
 
     if (recentMessagesData && Array.isArray(recentMessagesData)) {
       const lastMessageWithAttachment = recentMessagesData.find(
@@ -1398,14 +1398,14 @@ Text: ${attachment.text}
           .filter((msg) => {
             const msgTime = msg.createdAt;
             return (
-              msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime
+              msgTime >= oneHourBeforeLastMessage
             );
           })
           .flatMap((msg) => msg.content.attachments || []);
       }
     }
 
-    const formattedAttachments = (allAttachments as Media[])
+    const formattedAttachments = allAttachments
       .map(
         (attachment) =>
           `ID: ${attachment.id}
