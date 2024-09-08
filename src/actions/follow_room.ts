@@ -101,8 +101,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user3}}, please start participating in discussions in this channel",
+          text: "{{user3}}, please start participating in discussions in this channel",
         },
       },
       {

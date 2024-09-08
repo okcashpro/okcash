@@ -67,8 +67,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user3}}, please mute this channel. No need to respond here for now.",
+          text: "{{user3}}, please mute this channel. No need to respond here for now.",
         },
       },
       {

@@ -17,8 +17,7 @@ export const TEST_ACTION = {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Please respond with the message 'testing 123' and the action TEST_ACTION",
+          text: "Please respond with the message 'testing 123' and the action TEST_ACTION",
           action: "TEST_ACTION",
         },
       },

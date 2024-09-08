@@ -232,8 +232,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user2}}, can you join the vc, I want to discuss our strat",
+          text: "{{user2}}, can you join the vc, I want to discuss our strat",
         },
       },
       {
@@ -248,8 +247,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content:
-            "hey {{user2}}, we're having a team meeting in the 'conference' voice channel, plz join us",
+          text: "hey {{user2}}, we're having a team meeting in the 'conference' voice channel, plz join us",
         },
       },
       {
@@ -264,8 +262,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user2}}, let's have a quick voice chat in the 'Lounge' channel.",
+          text: "{{user2}}, let's have a quick voice chat in the 'Lounge' channel.",
         },
       },
       {
@@ -280,8 +277,7 @@ You should only respond with the name of the voice channel or none, no commentar
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Hey {{user2}}, can you join me in the 'Music' voice channel",
+          text: "Hey {{user2}}, can you join me in the 'Music' voice channel",
         },
       },
       {

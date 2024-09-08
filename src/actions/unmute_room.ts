@@ -98,8 +98,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user2}}, please unmute this room. We could use your input again.",
+          text: "{{user2}}, please unmute this room. We could use your input again.",
         },
       },
       {

@@ -150,8 +150,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "can you help me debug the code i just pasted (Attachment: a265a)",
+          text: "can you help me debug the code i just pasted (Attachment: a265a)",
         },
       },
       {
@@ -166,8 +165,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "i need to write a compelling cover letter, i've pasted my resume and bio. plz help (Attachment: b3e12)",
+          text: "i need to write a compelling cover letter, i've pasted my resume and bio. plz help (Attachment: b3e12)",
         },
       },
       {
@@ -182,8 +180,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Can you help me create a 10-day itinerary that covers Tokyo, Kyoto, and Osaka, including must-see attractions, local cuisine recommendations, and transportation tips",
+          text: "Can you help me create a 10-day itinerary that covers Tokyo, Kyoto, and Osaka, including must-see attractions, local cuisine recommendations, and transportation tips",
         },
       },
       {
@@ -198,8 +195,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "i need to write a blog post about farming, can you summarize the discussion and ask claude to write a 10 paragraph blog post about it, citing sources at the end",
+          text: "i need to write a blog post about farming, can you summarize the discussion and ask claude to write a 10 paragraph blog post about it, citing sources at the end",
         },
       },
       {

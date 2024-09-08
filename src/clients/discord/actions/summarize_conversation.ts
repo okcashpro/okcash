@@ -323,8 +323,7 @@ const summarizeAction = {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "can you give me a detailed report on what we're talking about?",
+          text: "can you give me a detailed report on what we're talking about?",
         },
       },
       {
@@ -339,8 +338,7 @@ const summarizeAction = {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "please summarize the conversation we just had and include this blogpost i'm linking (Attachment: b3e12)",
+          text: "please summarize the conversation we just had and include this blogpost i'm linking (Attachment: b3e12)",
         },
       },
       {
@@ -370,8 +368,7 @@ const summarizeAction = {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "i need to write a blog post about farming, can you summarize the discussion from a few hours ago?",
+          text: "i need to write a blog post about farming, can you summarize the discussion from a few hours ago?",
         },
       },
       {

@@ -151,8 +151,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "Hey {{user2}} I need you to step away from the voice chat for a bit",
+          text: "Hey {{user2}} I need you to step away from the voice chat for a bit",
         },
       },
       {
@@ -167,8 +166,7 @@ export default {
       {
         user: "{{user1}}",
         content: {
-          content:
-            "{{user2}}, I think we covered everything, you can leave the voice chat now",
+          text: "{{user2}}, I think we covered everything, you can leave the voice chat now",
         },
       },
       {
