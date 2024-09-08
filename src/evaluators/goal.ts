@@ -120,6 +120,12 @@ async function handler(
 
 export default {
   name: "UPDATE_GOAL",
+  similes: [
+    "UPDATE_GOALS",
+    "EDIT_GOAL",
+    "UPDATE_GOAL_STATUS",
+    "UPDATE_OBJECTIVES",
+  ],
   validate: async (
     runtime: AgentRuntime,
     message: Memory,

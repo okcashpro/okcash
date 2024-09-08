@@ -95,24 +95,6 @@ export function formatEvaluatorExamples(evaluators: Evaluator[]) {
 }
 
 /**
- * Generates a string describing the conditions under which each evaluator example is relevant.
- * @param evaluators - An array of evaluator objects, each containing examples.
- * @returns A string that describes the conditions for each evaluator example, formatted with the evaluator name, example number, and condition.
- */
-export function formatEvaluatorExampleConditions(evaluators: Evaluator[]) {
-  return evaluators
-    .map((evaluator) =>
-      evaluator.examples
-        .map(
-          (_example, index) =>
-            `${evaluator.name} Example ${index + 1}: ${evaluator.condition}`,
-        )
-        .join("\n"),
-    )
-    .join("\n\n");
-}
-
-/**
  * Generates a string summarizing the descriptions of each evaluator example.
  * @param evaluators - An array of evaluator objects, each containing examples.
  * @returns A string that summarizes the descriptions for each evaluator example, formatted with the evaluator name, example number, and description.

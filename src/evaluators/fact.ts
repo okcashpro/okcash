@@ -97,6 +97,13 @@ async function handler(runtime: AgentRuntime, message: Memory) {
 
 export default {
   name: "GET_FACTS",
+  similes: [
+    "GET_CLAIMS",
+    "EXTRACT_CLAIMS",
+    "EXTRACT_FACTS",
+    "EXTRACT_CLAIM",
+    "EXTRACT_INFORMATION",
+  ],
   validate: async (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runtime: AgentRuntime,
