@@ -27,15 +27,37 @@ export async function sendMessageInChunks(
   channel: TextChannel,
   content: string,
   inReplyTo: string,
+  files: any[],
 ): Promise<DiscordMessage[]> {
   const sentMessages: DiscordMessage[] = [];
   const messages = splitMessage(content);
-  for (const message of messages) {
+
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
     if (message.trim().length > 0) {
-      const m = await channel.send(message.trim());
+      const options: any = {
+        content: message.trim(),
+      };
+
+      // if (i === 0 && inReplyTo) {
+      //   // Reply to the specified message for the first chunk
+      //   options.reply = {
+      //     messageReference: inReplyTo,
+      //   };
+      // }
+
+      if (i === messages.length - 1 && files && files.length > 0) {
+        console.log("files are here");
+        console.log(files);
+        // Attach files to the last message chunk
+        options.files = files;
+      }
+
+      const m = await channel.send(options);
       sentMessages.push(m);
     }
   }
+
   return sentMessages;
 }
 
@@ -76,14 +98,19 @@ export class MessageManager {
   }
 
   async handleMessage(message: DiscordMessage) {
-    if (message.interaction /* || message.author?.bot*/) return;
-
+    if (
+      message.interaction ||
+      message.author.id === this.client.user?.id /* || message.author?.bot*/
+    )
+      return;
+    console.log("handling message");
     const userId = message.author.id as UUID;
     const userName = message.author.username;
     const name = message.author.displayName;
     const channelId = message.channel.id;
 
     try {
+      console.log("processing media");
       const { processedContent, attachments } =
         await this.processMessageMedia(message);
 
@@ -223,7 +250,10 @@ export class MessageManager {
         return;
       }
 
-      const callback: HandlerCallback = async (content: Content) => {
+      const callback: HandlerCallback = async (
+        content: Content,
+        files: any[],
+      ) => {
         if (message.id && !content.inReplyTo) {
           content.inReplyTo = stringToUuid(message.id);
         }
@@ -250,6 +280,7 @@ export class MessageManager {
             message.channel as TextChannel,
             content.text,
             message.id,
+            files,
           );
           let notFirstMessage = false;
           let memories: Memory[] = [];
@@ -400,6 +431,8 @@ export class MessageManager {
   }
 
   private async _shouldIgnore(message: DiscordMessage): Promise<boolean> {
+    // if the message is from us, ignore
+    if (message.author.id === this.client.user?.id) return true;
     let messageContent = message.content.toLowerCase();
 
     // Replace the bot's @ping with the character name

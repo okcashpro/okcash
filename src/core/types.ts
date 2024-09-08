@@ -135,7 +135,10 @@ export type Handler = (
 ) => Promise<unknown>;
 
 //
-export type HandlerCallback = (response: Content) => Promise<Memory[]>;
+export type HandlerCallback = (
+  response: Content,
+  files?: any,
+) => Promise<Memory[]>;
 
 /**
  * Represents the type of a validator function, which takes a runtime instance, a message, and an optional state, and returns a promise resolving to a boolean indicating whether the validation passed.

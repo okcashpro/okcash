@@ -39,13 +39,57 @@ export class VideoService {
     );
   }
 
+  public async downloadMedia(url: string): Promise<string> {
+    const videoId = this.getVideoId(url);
+    const outputFile = path.join(this.CONTENT_CACHE_DIR, `${videoId}.mp4`);
+
+    // if it already exists, return it
+    if (fs.existsSync(outputFile)) {
+      return outputFile;
+    }
+
+    try {
+      await youtubeDl(url, {
+        verbose: true,
+        output: outputFile,
+        writeInfoJson: true,
+      });
+      return outputFile;
+    } catch (error) {
+      console.error("Error downloading media:", error);
+      throw new Error("Failed to download media");
+    }
+  }
+
+  public async downloadVideo(videoInfo: any): Promise<string> {
+    const videoId = this.getVideoId(videoInfo.webpage_url);
+    const outputFile = path.join(this.CONTENT_CACHE_DIR, `${videoId}.mp4`);
+
+    // if it already exists, return it
+    if (fs.existsSync(outputFile)) {
+      return outputFile;
+    }
+
+    try {
+      await youtubeDl(videoInfo.webpage_url, {
+        verbose: true,
+        output: outputFile,
+        format: "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+        writeInfoJson: true,
+      });
+      return outputFile;
+    } catch (error) {
+      console.error("Error downloading video:", error);
+      throw new Error("Failed to download video");
+    }
+  }
+
   public async processVideo(url: string): Promise<Media> {
     this.queue.push(url);
     this.processQueue();
 
     return new Promise((resolve, reject) => {
       const checkQueue = async () => {
-        console.log("***** CHECKING VIDEO QUEUE", this.queue);
         const index = this.queue.indexOf(url);
         if (index !== -1) {
           setTimeout(checkQueue, 100);
@@ -116,7 +160,7 @@ export class VideoService {
     return stringToUuid(url);
   }
 
-  private async fetchVideoInfo(url: string): Promise<any> {
+  async fetchVideoInfo(url: string): Promise<any> {
     if (url.endsWith(".mp4") || url.includes(".mp4?")) {
       try {
         const response = await fetch(url);
@@ -147,7 +191,6 @@ export class VideoService {
         subLang: "en",
         skipDownload: true,
       });
-      console.log("YouTube-DL result:", JSON.stringify(result, null, 2));
       return result;
     } catch (error) {
       console.error("Error fetching video info:", error);
@@ -203,7 +246,6 @@ export class VideoService {
     console.log("Parsing caption");
     try {
       const jsonContent = JSON.parse(captionContent);
-      console.log(jsonContent);
       if (jsonContent.events) {
         return jsonContent.events
           .filter((event) => event.segs)
@@ -234,17 +276,34 @@ export class VideoService {
     return await response.text();
   }
 
-  private async transcribeAudio(url: string): Promise<string> {
-    console.log("Downloading audio for transcription...");
-    const audioFilePath = await this.downloadAudio(url);
-    console.log(`Audio downloaded to ${audioFilePath}`);
+  async transcribeAudio(url: string): Promise<string> {
+    console.log("Preparing audio for transcription...");
+    const mp4FilePath = path.join(
+      this.CONTENT_CACHE_DIR,
+      `${this.getVideoId(url)}.mp4`,
+    );
+    const mp3FilePath = path.join(
+      this.CONTENT_CACHE_DIR,
+      `${this.getVideoId(url)}.mp3`,
+    );
 
-    const audioBuffer = fs.readFileSync(audioFilePath);
+    if (!fs.existsSync(mp3FilePath)) {
+      if (fs.existsSync(mp4FilePath)) {
+        console.log("MP4 file found. Converting to MP3...");
+        await this.convertMp4ToMp3(mp4FilePath, mp3FilePath);
+      } else {
+        console.log("Downloading audio...");
+        await this.downloadAudio(url, mp3FilePath);
+      }
+    }
+
+    console.log(`Audio prepared at ${mp3FilePath}`);
+
+    const audioBuffer = fs.readFileSync(mp3FilePath);
     console.log(`Audio file size: ${audioBuffer.length} bytes`);
 
     console.log("Starting transcription...");
     const startTime = Date.now();
-    // make sure startTime is in UTC
     const transcript =
       await this.runtime.transcriptionService.transcribe(audioBuffer);
     const endTime = Date.now();
@@ -252,38 +311,39 @@ export class VideoService {
       `Transcription completed in ${(endTime - startTime) / 1000} seconds`,
     );
 
-    fs.unlinkSync(audioFilePath);
+    // Don't delete the MP3 file as it might be needed for future use
     return transcript || "Transcription failed";
   }
 
-  public async downloadMedia(url: string): Promise<string> {
-    const videoId = this.getVideoId(url);
-    const outputFile = path.join(this.CONTENT_CACHE_DIR, `${videoId}.mp4`);
-
-    // if it already exists, return it
-    if (fs.existsSync(outputFile)) {
-      return outputFile;
-    }
-
-    try {
-      await youtubeDl(url, {
-        verbose: true,
-        output: outputFile,
-        writeInfoJson: true,
-      });
-      return outputFile;
-    } catch (error) {
-      console.error("Error downloading media:", error);
-      throw new Error("Failed to download media");
-    }
+  private async convertMp4ToMp3(
+    inputPath: string,
+    outputPath: string,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      ffmpeg(inputPath)
+        .output(outputPath)
+        .noVideo()
+        .audioCodec("libmp3lame")
+        .on("end", () => {
+          console.log("Conversion to MP3 complete");
+          resolve();
+        })
+        .on("error", (err) => {
+          console.error("Error converting to MP3:", err);
+          reject(err);
+        })
+        .run();
+    });
   }
 
-  private async downloadAudio(url: string): Promise<string> {
+  private async downloadAudio(
+    url: string,
+    outputFile: string,
+  ): Promise<string> {
     console.log("Downloading audio");
-    const outputFile = path.join(
-      this.CONTENT_CACHE_DIR,
-      `${this.getVideoId(url)}.mp3`,
-    );
+    outputFile =
+      outputFile ??
+      path.join(this.CONTENT_CACHE_DIR, `${this.getVideoId(url)}.mp3`);
 
     try {
       if (url.endsWith(".mp4") || url.includes(".mp4?")) {
