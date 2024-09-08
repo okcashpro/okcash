@@ -62,7 +62,7 @@
     "@echogarden/espeak-ng-emscripten": "^0.1.2",
     "@echogarden/kissfft-wasm": "^0.1.1",
     "@echogarden/speex-resampler-wasm": "^0.1.1",
-    "@huggingface/transformers": "3.0.0-alpha.9",
+    "@huggingface/transformers": "^3.0.0-alpha.14",
     "@supabase/supabase-js": "^2.39.3",
     "agent-twitter-client": "^0.0.13",
     "alawmulaw": "^6.0.0",
@@ -119,10 +119,12 @@
     "youtube-dl-exec": "^3.0.7"
   },
   "trustedDependencies": {
+    "onnxruntime-node": "1.19.0",
     "@discordjs/opus": "github:discordjs/opus",
     "sharp": "^0.33.5"
   },
   "optionalDependencies": {
+    "sharp": "^0.33.5",
     "sqlite-vss-darwin-arm64": "^0.1.2",
     "sqlite-vss-darwin-x64": "^0.1.2",
     "sqlite-vss-linux-arm64": "^0.1.2",

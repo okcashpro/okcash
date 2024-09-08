@@ -31,6 +31,11 @@ const channelStateProvider: Provider = {
     const guildId = guild.id; // The ID of the guild
     const channel = discordMessage.channel;
 
+    if (!channel) {
+      console.log("channel is null");
+      return "";
+    }
+
     let response =
       agentName +
       " is currently having a conversation in the channel `@" +

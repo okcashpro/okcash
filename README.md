@@ -15,6 +15,15 @@ A useful AI agent, and a great friends.
 - Fully integrated with Discord and Twitter
 - Written in Typescript
 
+# Requires Node 20+
+If you are getting strange issues when starting up, make sure you're using Node 20+. Some APIs are not compatible with previous versions. You can check your node version with `node -v`. If you need to install a new version of node, we recommend using [nvm](https://github.com/nvm-sh/nvm).
+
+## Additional Requirements
+You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
+```
+npm install --include=optional sharp
+```
+
 # Environment Setup
 
 You will need to add environment variables to your .env file to connect to various platforms:
