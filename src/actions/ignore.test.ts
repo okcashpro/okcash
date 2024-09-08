@@ -2,8 +2,13 @@ import dotenv from "dotenv";
 import { zeroUuid } from "../test_resources/constants.ts";
 import { composeContext } from "../core/context.ts";
 import { embeddingZeroVector } from "../core/memory.ts";
-import { type AgentRuntime } from "../core/runtime.ts";
-import { Content, Memory, State, type UUID } from "../core/types.ts";
+import {
+  Content,
+  IAgentRuntime,
+  Memory,
+  State,
+  type UUID,
+} from "../core/types.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversationTroll1,
@@ -18,7 +23,7 @@ import { type User } from "../test_resources/types.ts";
 import action from "./ignore.ts";
 
 async function handleMessage(
-  runtime: AgentRuntime,
+  runtime: IAgentRuntime,
   message: Memory,
   state?: State,
 ) {
@@ -86,7 +91,7 @@ dotenv.config({ path: ".dev.vars" });
 
 describe("Ignore action tests", () => {
   let user: User;
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId: UUID;
 
   afterAll(async () => {

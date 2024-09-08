@@ -1039,11 +1039,9 @@ export class AgentRuntime implements IAgentRuntime {
         allAttachments = recentMessagesData
           .reverse()
           .map((msg) => {
-            const msgTime = msg.createdAt;
-            const isWithinTime =
-              msgTime >= oneHourBeforeLastMessage && msgTime <= lastMessageTime;
+            const msgTime = msg.createdAt ?? Date.now();
+            const isWithinTime = msgTime >= oneHourBeforeLastMessage;
             const attachments = msg.content.attachments || [];
-            // if the message is out of the time range, set the attachment 'text' to '[Hidden]'
             if (!isWithinTime) {
               attachments.forEach((attachment) => {
                 attachment.text = "[Hidden]";

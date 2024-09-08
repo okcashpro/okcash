@@ -6,13 +6,18 @@ import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationsh
 import { type User } from "../test_resources/types.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { createRelationship } from "./relationships.ts";
-import { type AgentRuntime } from "./runtime.ts";
-import { type Actor, type Content, type Memory, type UUID } from "./types.ts";
+import {
+  IAgentRuntime,
+  type Actor,
+  type Content,
+  type Memory,
+  type UUID,
+} from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Messages Library", () => {
-  let runtime: AgentRuntime, user: User, actors: Actor[];
+  let runtime: IAgentRuntime, user: User, actors: Actor[];
 
   beforeAll(async () => {
     const setup = await createRuntime({

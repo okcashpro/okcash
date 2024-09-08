@@ -1,18 +1,15 @@
-import { type AgentRuntime } from "../core/runtime.ts";
-import { type Action, type Memory } from "../core/types.ts";
+import { IAgentRuntime, type Action, type Memory } from "../core/types.ts";
 
 export const TEST_ACTION = {
   name: "TEST_ACTION",
-  validate: async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _runtime: AgentRuntime,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _message: Memory,
-  ) => {
+  validate: async (_runtime: IAgentRuntime, _message: Memory) => {
     return true;
   },
   description: "This is a test action, for use in testing.",
-  handler: async (runtime: AgentRuntime, message: Memory): Promise<boolean> => {
+  handler: async (
+    runtime: IAgentRuntime,
+    message: Memory,
+  ): Promise<boolean> => {
     return true;
   },
   examples: [
@@ -35,16 +32,14 @@ export const TEST_ACTION = {
 
 export const TEST_ACTION_FAIL = {
   name: "TEST_ACTION_FAIL",
-  validate: async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _runtime: AgentRuntime,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _message: Memory,
-  ) => {
+  validate: async (_runtime: IAgentRuntime, _message: Memory) => {
     return false;
   },
   description: "This is a test action, for use in testing.",
-  handler: async (runtime: AgentRuntime, message: Memory): Promise<boolean> => {
+  handler: async (
+    runtime: IAgentRuntime,
+    message: Memory,
+  ): Promise<boolean> => {
     return false;
   },
   examples: [

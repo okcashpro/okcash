@@ -2,24 +2,23 @@ import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
 import youtubeDl from "youtube-dl-exec";
-import { AgentRuntime } from "../core/runtime.ts";
-import { Media } from "../core/types.ts";
+import { IAgentRuntime, Media } from "../core/types.ts";
 import { stringToUuid } from "../core/uuid.ts";
 
 export class VideoService {
   private static instance: VideoService | null = null;
   private CONTENT_CACHE_DIR = "./content_cache";
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
 
   private queue: string[] = [];
   private processing: boolean = false;
 
-  private constructor(runtime: AgentRuntime) {
+  private constructor(runtime: IAgentRuntime) {
     this.ensureCacheDirectoryExists();
     this.runtime = runtime;
   }
 
-  public static getInstance(runtime: AgentRuntime): VideoService {
+  public static getInstance(runtime: IAgentRuntime): VideoService {
     if (!VideoService.instance) {
       VideoService.instance = new VideoService(runtime);
     }
@@ -255,6 +254,28 @@ export class VideoService {
 
     fs.unlinkSync(audioFilePath);
     return transcript || "Transcription failed";
+  }
+
+  public async downloadMedia(url: string): Promise<string> {
+    const videoId = this.getVideoId(url);
+    const outputFile = path.join(this.CONTENT_CACHE_DIR, `${videoId}.mp4`);
+
+    // if it already exists, return it
+    if (fs.existsSync(outputFile)) {
+      return outputFile;
+    }
+
+    try {
+      await youtubeDl(url, {
+        verbose: true,
+        output: outputFile,
+        writeInfoJson: true,
+      });
+      return outputFile;
+    } catch (error) {
+      console.error("Error downloading media:", error);
+      throw new Error("Failed to download media");
+    }
   }
 
   private async downloadAudio(url: string): Promise<string> {

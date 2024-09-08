@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import { defaultActions } from "../core/actions.ts";
 import { createGoal, getGoals } from "../core/goals.ts";
-import { type AgentRuntime } from "../core/runtime.ts";
 import {
   Goal,
   GoalStatus,
+  IAgentRuntime,
   Objective,
   State,
   type Memory,
@@ -22,7 +22,7 @@ dotenv.config({ path: ".dev.vars" });
 
 describe("Goals Evaluator", () => {
   let user: User;
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId: UUID;
 
   beforeAll(async () => {

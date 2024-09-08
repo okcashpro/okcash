@@ -1,5 +1,10 @@
-import { AgentRuntime } from "./runtime.ts";
-import { type Actor, type Content, type Memory, type UUID } from "./types.ts";
+import {
+  IAgentRuntime,
+  type Actor,
+  type Content,
+  type Memory,
+  type UUID,
+} from "./types.ts";
 
 /**
  * Get details for a list of actors.
@@ -8,7 +13,7 @@ export async function getActorDetails({
   runtime,
   roomId,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   roomId: UUID;
 }) {
   const participantIds =

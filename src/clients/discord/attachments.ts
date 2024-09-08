@@ -1,14 +1,13 @@
 import { Attachment, Collection } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
-import { AgentRuntime } from "../../core/runtime.ts";
-import { Media } from "../../core/types.ts";
+import { IAgentRuntime, Media } from "../../core/types.ts";
 import { generateSummary } from "../../services/summary.ts";
 export class AttachmentManager {
   private attachmentCache: Map<string, Media> = new Map();
-  private runtime: AgentRuntime;
+  private runtime: IAgentRuntime;
 
-  constructor(runtime: AgentRuntime) {
+  constructor(runtime: IAgentRuntime) {
     this.runtime = runtime;
   }
 

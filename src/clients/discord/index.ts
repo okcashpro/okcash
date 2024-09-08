@@ -14,24 +14,25 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { commands } from "./commands.ts";
 
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { AgentRuntime } from "../../core/runtime.ts";
 import { MessageManager } from "./messages.ts";
 import { VoiceManager } from "./voice.ts";
 
+import { IAgentRuntime } from "../../core/types.ts";
+import chat_with_attachments from "./actions/chat_with_attachments.ts";
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
 import summarize from "./actions/summarize_conversation.ts";
-import chat_with_attachments from "./actions/chat_with_attachments.ts";
+import transcribe_media from "./actions/transcribe_media.ts";
 
 export class DiscordClient extends EventEmitter {
   apiToken: string;
   private client: Client;
-  private runtime: AgentRuntime;
+  private runtime: IAgentRuntime;
   character: any;
   private messageManager: MessageManager;
   private voiceManager: VoiceManager;
 
-  constructor(runtime: AgentRuntime) {
+  constructor(runtime: IAgentRuntime) {
     super();
     this.apiToken = runtime.getSetting("DISCORD_API_TOKEN") as string;
     this.client = new Client({
@@ -67,6 +68,7 @@ export class DiscordClient extends EventEmitter {
     this.runtime.registerAction(leavevoice);
     this.runtime.registerAction(summarize);
     this.runtime.registerAction(chat_with_attachments);
+    this.runtime.registerAction(transcribe_media);
   }
 
   private setupEventListeners() {

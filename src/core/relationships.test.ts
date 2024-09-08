@@ -4,13 +4,12 @@ import { createRuntime } from "../test_resources/createRuntime.ts"; // Adjust th
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { type User } from "../test_resources/types.ts";
 import { createRelationship, getRelationships } from "./relationships.ts"; // Adjust the import path as needed
-import { AgentRuntime } from "./runtime.ts";
-import { type UUID } from "./types.ts";
+import { IAgentRuntime, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Relationships Module", () => {
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let user: User;
 
   beforeAll(async () => {

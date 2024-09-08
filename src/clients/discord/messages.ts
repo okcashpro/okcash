@@ -5,6 +5,7 @@ import { embeddingZeroVector } from "../../core/memory.ts";
 import {
   Content,
   HandlerCallback,
+  IAgentRuntime,
   Media,
   Memory,
   State,
@@ -16,7 +17,6 @@ import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
 import { InterestChannels } from "./types.ts";
 
 import { TextChannel } from "discord.js";
-import { AgentRuntime } from "../../core/runtime.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { SpeechService } from "../../services/speech.ts";
 import { VoiceManager } from "./voice.ts";
@@ -61,7 +61,7 @@ function splitMessage(content: string): string[] {
 
 export class MessageManager {
   private client: Client;
-  private runtime: AgentRuntime;
+  private runtime: IAgentRuntime;
   private attachmentManager: AttachmentManager;
   private interestChannels: InterestChannels = {};
   private discordClient: any;
@@ -105,6 +105,7 @@ export class MessageManager {
           agentId,
           this.client.user.username,
           this.runtime.character.name,
+          "discord",
         ),
         this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
         this.runtime.ensureRoomExists(roomId),

@@ -12,7 +12,7 @@ export default {
     return true;
   },
   description:
-    "Ignore the user and do not respond. If the user is aggressive, creepy or is simply finished with the conversation, use this action. Or, if both you and the user have already said goodbye, use this action instead of saying bye again. Use IGNORE any time the conversation has naturally ended.",
+    "Call this action if ignoring the user. If the user is aggressive, creepy or is finished with the conversation, use this action. Or, if both you and the user have already said goodbye, use this action instead of saying bye again. Use IGNORE any time the conversation has naturally ended. Do not use IGNORE if the user has engaged directly.",
   handler: async (
     runtime: IAgentRuntime,
     message: Memory,
@@ -99,24 +99,6 @@ export default {
       {
         user: "{{user1}}",
         content: { text: "", action: "IGNORE" },
-      },
-    ],
-
-    [
-      {
-        user: "{{user1}}",
-        content: { text: "i wanna give u a go" },
-      },
-      { user: "{{user2}}", content: { text: "Wat" } },
-      {
-        user: "{{user1}}",
-        content: {
-          text: "You heard me, I wanna ride your mountains, hehehh",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: { text: "That's not cool", action: "IGNORE" },
       },
     ],
     [

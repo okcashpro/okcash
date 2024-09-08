@@ -1,12 +1,11 @@
-import { type AgentRuntime } from "./runtime.ts";
-import { type Relationship, type UUID } from "./types.ts";
+import { IAgentRuntime, type Relationship, type UUID } from "./types.ts";
 
 export async function createRelationship({
   runtime,
   userA,
   userB,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   userA: UUID;
   userB: UUID;
 }): Promise<boolean> {
@@ -21,7 +20,7 @@ export async function getRelationship({
   userA,
   userB,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   userA: UUID;
   userB: UUID;
 }) {
@@ -35,7 +34,7 @@ export async function getRelationships({
   runtime,
   userId,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   userId: UUID;
 }) {
   return runtime.databaseAdapter.getRelationships({ userId });
@@ -45,7 +44,7 @@ export async function formatRelationships({
   runtime,
   userId,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   userId: UUID;
 }) {
   const relationships = await getRelationships({ runtime, userId });

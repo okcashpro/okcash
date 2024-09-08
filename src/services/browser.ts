@@ -4,9 +4,9 @@ import fetch from "cross-fetch";
 import fs from "fs";
 import path from "path";
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { generateSummary } from "./summary.ts";
-import { AgentRuntime } from "../core/runtime.ts";
+import { IAgentRuntime } from "../core/types.ts";
 import { stringToUuid } from "../core/uuid.ts";
+import { generateSummary } from "./summary.ts";
 
 export class BrowserService {
   private static instance: BrowserService | null = null;
@@ -15,12 +15,12 @@ export class BrowserService {
   private blocker: PlaywrightBlocker | undefined;
   private captchaSolver: CaptchaSolver;
   private CONTENT_CACHE_DIR = "./content_cache";
-  private runtime: AgentRuntime;
+  private runtime: IAgentRuntime;
 
   private queue: string[] = [];
   private processing: boolean = false;
 
-  private constructor(runtime: AgentRuntime) {
+  private constructor(runtime: IAgentRuntime) {
     this.runtime = runtime;
     this.browser = undefined;
     this.context = undefined;
@@ -29,7 +29,7 @@ export class BrowserService {
     this.ensureCacheDirectoryExists();
   }
 
-  public static getInstance(runtime: AgentRuntime): BrowserService {
+  public static getInstance(runtime: IAgentRuntime): BrowserService {
     if (!BrowserService.instance) {
       BrowserService.instance = new BrowserService(runtime);
     }

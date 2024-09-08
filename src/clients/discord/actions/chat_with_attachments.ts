@@ -1,7 +1,6 @@
 import { composeContext } from "../../../core/context.ts";
 import { log_to_file } from "../../../core/logger.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
-import { AgentRuntime } from "../../../core/runtime.ts";
 import {
   Action,
   ActionExample,
@@ -90,7 +89,7 @@ const summarizeAction = {
   ],
   description:
     "Answer a user request informed by specific attachments based on their IDs. If a user asks to chat with a PDF, or wants more specific information about a link or video or anything else they've attached, this is the action to use.",
-  validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
+  validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
     if (message.content.source !== "discord") {
       return false;
     }

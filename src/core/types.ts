@@ -404,6 +404,8 @@ export interface IAgentRuntime {
   model: string;
   embeddingModel: string;
   character: Character;
+  providers: Provider[];
+  actions: Action[];
 
   messageManager: IMemoryManager;
   descriptionManager: IMemoryManager;
@@ -415,6 +417,7 @@ export interface IAgentRuntime {
   llamaService: ILlamaService;
   browserService: IBrowserService;
   speechService: ISpeechService;
+  pdfService: IPdfService;
 
   trimTokens(text: string, maxTokens: number, model: string): string;
   splitChunks(
@@ -477,6 +480,15 @@ export interface IAgentRuntime {
     max_context_length?: number;
     max_response_length?: number;
   }): Promise<Content>;
+  objectArrayCompletion(opts: {
+    context?: string;
+    stop?: string[];
+    model?: string;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    temperature?: number;
+    max_context_length?: number;
+  }): Promise<any[]>;
   embed(input: string): Promise<number[]>;
   processActions(
     message: Memory,
@@ -490,7 +502,9 @@ export interface IAgentRuntime {
     userId: UUID,
     userName: string | null,
     name: string | null,
+    source: string | null,
   ): Promise<void>;
+  registerAction(action: Action): void;
   ensureParticipantInRoom(userId: UUID, roomId: UUID): Promise<void>;
   ensureRoomExists(roomId: UUID): Promise<void>;
   composeState(

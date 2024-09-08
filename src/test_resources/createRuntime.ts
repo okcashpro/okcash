@@ -3,6 +3,7 @@ import { load } from "../adapters/sqlite/sqlite_vss.ts";
 import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
 import { SupabaseDatabaseAdapter } from "../adapters/supabase.ts";
 import { DatabaseAdapter } from "../core/database.ts";
+import { IAgentRuntime } from "../core/types.ts";
 import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Evaluator, Provider } from "../core/types.ts";
 import { zeroUuid } from "../test_resources/constants.ts";

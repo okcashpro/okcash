@@ -1,11 +1,11 @@
 import { Tweet } from "agent-twitter-client";
+import fs from "fs";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { AgentRuntime } from "../../core/runtime.ts";
+import { IAgentRuntime } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import fs from "fs";
 
 const newTweetPrompt = `{{recentPosts}}
 
@@ -38,7 +38,7 @@ export class TwitterGenerationClient extends ClientBase {
     generateNewTweetLoop();
   }
 
-  constructor(runtime: AgentRuntime) {
+  constructor(runtime: IAgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,

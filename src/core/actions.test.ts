@@ -7,12 +7,17 @@ import { TEST_ACTION, TEST_ACTION_FAIL } from "../test_resources/testAction.ts";
 import { type User } from "../test_resources/types.ts";
 import { composeContext } from "./context.ts";
 import { embeddingZeroVector } from "./memory.ts";
-import { type AgentRuntime } from "./runtime.ts";
-import { Content, State, type Memory, type UUID } from "./types.ts";
+import {
+  Content,
+  IAgentRuntime,
+  State,
+  type Memory,
+  type UUID,
+} from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
 
 async function handleMessage(
-  runtime: AgentRuntime,
+  runtime: IAgentRuntime,
   message: Memory,
   state?: State,
 ) {
@@ -94,7 +99,7 @@ dotenv.config({ path: ".dev.vars" });
 
 describe("Actions", () => {
   let user: User;
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId: UUID;
 
   beforeAll(async () => {

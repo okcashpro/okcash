@@ -3,11 +3,10 @@ import {
   Message as DiscordMessage,
   TextChannel,
 } from "discord.js";
-import { AgentRuntime } from "../../../core/runtime.ts";
-import { Memory, Provider, State } from "../../../core/types.ts";
+import { IAgentRuntime, Memory, Provider, State } from "../../../core/types.ts";
 
 const channelStateProvider: Provider = {
-  get: async (runtime: AgentRuntime, message: Memory, state?: State) => {
+  get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
     const discordMessage = state?.discordMessage as DiscordMessage;
     console.log("discordMessage", discordMessage);
     const guild = discordMessage?.guild;

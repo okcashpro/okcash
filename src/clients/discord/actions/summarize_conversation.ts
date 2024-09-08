@@ -1,9 +1,7 @@
 import { composeContext } from "../../../core/context.ts";
 import { log_to_file } from "../../../core/logger.ts";
-import { embeddingZeroVector } from "../../../core/memory.ts";
 import { getActorDetails } from "../../../core/messages.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
-import { AgentRuntime } from "../../../core/runtime.ts";
 import {
   Action,
   ActionExample,
@@ -135,7 +133,7 @@ const summarizeAction = {
     "CONVERSATION_SUMMARY",
   ],
   description: "Summarizes the conversation and attachments.",
-  validate: async (runtime: AgentRuntime, message: Memory, state: State) => {
+  validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
     if (message.content.source !== "discord") {
       return false;
     }
@@ -223,7 +221,7 @@ const summarizeAction = {
     console.log("memories", memories);
 
     const actors = await getActorDetails({
-      runtime: runtime as AgentRuntime,
+      runtime: runtime as IAgentRuntime,
       roomId,
     });
 

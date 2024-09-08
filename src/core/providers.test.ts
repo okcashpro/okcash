@@ -1,20 +1,25 @@
 import dotenv from "dotenv";
 import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
-import { AgentRuntime } from "./runtime.ts";
-import { type Memory, type Provider, type State, type UUID } from "./types.ts";
+import {
+  IAgentRuntime,
+  type Memory,
+  type Provider,
+  type State,
+  type UUID,
+} from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 const TestProvider: Provider = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  get: async (_runtime: AgentRuntime, _message: Memory, _state?: State) => {
+  get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
     return "Hello Test";
   },
 };
 
 describe("TestProvider", () => {
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId: UUID;
 
   beforeAll(async () => {

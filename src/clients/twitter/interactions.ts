@@ -6,8 +6,13 @@ import {
   messageCompletionFooter,
   shouldRespondFooter,
 } from "../../core/parsing.ts";
-import { AgentRuntime } from "../../core/runtime.ts";
-import { Content, HandlerCallback, Memory, State } from "../../core/types.ts";
+import {
+  Content,
+  HandlerCallback,
+  IAgentRuntime,
+  Memory,
+  State,
+} from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
@@ -73,7 +78,7 @@ export class TwitterInteractionClient extends ClientBase {
     handleTwitterInteractionsLoop();
   }
 
-  constructor(runtime: AgentRuntime) {
+  constructor(runtime: IAgentRuntime) {
     super({
       runtime,
     });

@@ -1,7 +1,5 @@
 import { SearchMode } from "agent-twitter-client";
 import fs from "fs";
-import { AgentRuntime } from "../../core/runtime.ts";
-
 import { addHeader, composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
@@ -52,7 +50,7 @@ Your response should not contain any questions. Brief, concise statements only.
 export class TwitterSearchClient extends ClientBase {
   private respondedTweets: Set<string> = new Set();
 
-  constructor(runtime: AgentRuntime) {
+  constructor(runtime: IAgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
       runtime,

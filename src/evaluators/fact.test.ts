@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import { defaultActions } from "../core/actions.ts";
-import { type AgentRuntime } from "../core/runtime.ts";
-import { type Memory, type UUID } from "../core/types.ts";
+import { IAgentRuntime, type Memory, type UUID } from "../core/types.ts";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
@@ -24,7 +23,7 @@ dotenv.config({ path: ".dev.vars" });
 
 describe("Facts Evaluator", () => {
   let user: User;
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId = zeroUuid;
 
   beforeAll(async () => {
@@ -104,13 +103,13 @@ describe("Facts Evaluator", () => {
   }, 120000); // Adjust the timeout as needed for your tests
 });
 
-async function cleanup(runtime: AgentRuntime, roomId: UUID) {
+async function cleanup(runtime: IAgentRuntime, roomId: UUID) {
   await runtime.factManager.removeAllMemories(roomId);
   await runtime.messageManager.removeAllMemories(roomId);
 }
 
 async function addFacts(
-  runtime: AgentRuntime,
+  runtime: IAgentRuntime,
   userId: UUID,
   roomId: UUID,
   facts: string[],

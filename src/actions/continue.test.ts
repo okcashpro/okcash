@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
-import { type AgentRuntime } from "../core/runtime.ts";
-import { Content, Memory, type UUID } from "../core/types.ts";
+import { Content, IAgentRuntime, Memory, type UUID } from "../core/types.ts";
 import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { Goodbye1 } from "../test_resources/data.ts";
@@ -40,7 +39,7 @@ const GetContinueExample1 = (_userId: UUID) => [
 
 describe("User Profile", () => {
   let user: User;
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId: UUID = zeroUuid;
 
   afterAll(async () => {

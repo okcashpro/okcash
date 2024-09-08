@@ -1,5 +1,9 @@
-import { AgentRuntime } from "./runtime.ts";
-import { type Goal, type Objective, type UUID } from "./types.ts";
+import {
+  IAgentRuntime,
+  type Goal,
+  type Objective,
+  type UUID,
+} from "./types.ts";
 
 export const getGoals = async ({
   runtime,
@@ -8,7 +12,7 @@ export const getGoals = async ({
   onlyInProgress = true,
   count = 5,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   roomId: UUID;
   userId?: UUID;
   onlyInProgress?: boolean;
@@ -41,7 +45,7 @@ export const updateGoal = async ({
   runtime,
   goal,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   goal: Goal;
 }) => {
   return runtime.databaseAdapter.updateGoal(goal);
@@ -51,7 +55,7 @@ export const createGoal = async ({
   runtime,
   goal,
 }: {
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   goal: Goal;
 }) => {
   return runtime.databaseAdapter.createGoal(goal);

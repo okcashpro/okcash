@@ -7,11 +7,15 @@ import {
 import { EventEmitter } from "events";
 import fs from "fs";
 import path from "path";
-import { AgentRuntime } from "../../core/runtime.ts";
-
 import { fileURLToPath } from "url";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { Content, Memory, State, UUID } from "../../core/types.ts";
+import {
+  Content,
+  IAgentRuntime,
+  Memory,
+  State,
+  UUID,
+} from "../../core/types.ts";
 import ImageDescriptionService from "../../services/image.ts";
 
 import glob from "glob";
@@ -79,7 +83,7 @@ class RequestQueue {
 export class ClientBase extends EventEmitter {
   static _twitterClient: Scraper;
   twitterClient: Scraper;
-  runtime: AgentRuntime;
+  runtime: IAgentRuntime;
   directions: string;
   lastCheckedTweetId: number | null = null;
   tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
@@ -148,7 +152,7 @@ export class ClientBase extends EventEmitter {
     throw new Error("Not implemented in base class, please call from subclass");
   }
 
-  constructor({ runtime }: { runtime: AgentRuntime }) {
+  constructor({ runtime }: { runtime: IAgentRuntime }) {
     super();
     this.runtime = runtime;
     if (ClientBase._twitterClient) {

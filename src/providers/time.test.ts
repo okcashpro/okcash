@@ -1,7 +1,11 @@
 import dotenv from "dotenv";
 import { composeContext } from "../core/context.ts";
-import { AgentRuntime } from "../core/runtime.ts";
-import { type Memory, type State, type UUID } from "../core/types.ts";
+import {
+  IAgentRuntime,
+  type Memory,
+  type State,
+  type UUID,
+} from "../core/types.ts";
 import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import timeProvider from "./time.ts";
@@ -9,7 +13,7 @@ import timeProvider from "./time.ts";
 dotenv.config({ path: ".dev.vars" });
 
 describe("Time Provider", () => {
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let user: { id: UUID };
   let roomId: UUID;
 

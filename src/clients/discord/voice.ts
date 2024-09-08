@@ -19,7 +19,6 @@ import {
 } from "discord.js";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { AgentRuntime } from "../../core/runtime.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 
 import EventEmitter from "events";
@@ -29,6 +28,7 @@ import { embeddingZeroVector } from "../../core/memory.ts";
 import {
   Content,
   HandlerCallback,
+  IAgentRuntime,
   Memory,
   State,
   UUID,
@@ -43,7 +43,7 @@ const DECODE_SAMPLE_RATE = 16000;
 
 export class VoiceManager extends EventEmitter {
   private client: Client;
-  private runtime: AgentRuntime;
+  private runtime: IAgentRuntime;
   private streams: Map<string, Readable> = new Map();
   private connections: Map<string, VoiceConnection> = new Map();
 
@@ -120,6 +120,7 @@ export class VoiceManager extends EventEmitter {
             this.runtime.agentId,
             this.client.user.username,
             this.runtime.character.name,
+            "discord",
           );
           await Promise.all([
             this.runtime.ensureUserExists(

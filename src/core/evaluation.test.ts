@@ -11,13 +11,12 @@ import {
 import { type User } from "../test_resources/types.ts";
 import { composeContext } from "./context.ts";
 import { evaluationTemplate } from "./evaluators.ts";
-import { AgentRuntime } from "./runtime.ts";
-import { Memory, UUID } from "./types.ts";
+import { IAgentRuntime, Memory, UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Evaluation Process", () => {
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let user: User;
   let roomId: UUID;
 

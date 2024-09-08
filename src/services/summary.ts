@@ -1,8 +1,8 @@
 import { parseJSONObjectFromText } from "../core/parsing.ts";
-import { AgentRuntime } from "../core/runtime.ts";
+import { IAgentRuntime } from "../core/types.ts";
 
 export async function generateSummary(
-  runtime: AgentRuntime,
+  runtime: IAgentRuntime,
   text: string,
 ): Promise<{ title: string; description: string }> {
   // make sure text is under 128k characters

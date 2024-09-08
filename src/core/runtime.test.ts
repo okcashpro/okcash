@@ -7,14 +7,13 @@ import { zeroUuid } from "../test_resources/constants.ts";
 import { createRuntime } from "../test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
 import { type User } from "../test_resources/types.ts";
-import { AgentRuntime } from "./runtime.ts";
-import { type Memory, type UUID } from "./types.ts";
+import { IAgentRuntime, type Memory, type UUID } from "./types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 describe("Agent Runtime", () => {
   let user: User;
-  let runtime: AgentRuntime;
+  let runtime: IAgentRuntime;
   let roomId: UUID = zeroUuid;
 
   // Helper function to clear memories
