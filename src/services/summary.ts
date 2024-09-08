@@ -5,6 +5,11 @@ export async function generateSummary(
   runtime: AgentRuntime,
   text: string,
 ): Promise<{ title: string; description: string }> {
+
+
+  // make sure text is under 128k characters
+  text = runtime.trimTokens(text, 100000, "gpt-4o-mini");
+
   const prompt = `Please generate a concise summary for the following text:
   
   Text: """

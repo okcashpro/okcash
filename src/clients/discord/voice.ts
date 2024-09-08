@@ -68,7 +68,7 @@ export class VoiceManager extends EventEmitter {
 
   async handleGuildCreate(guild: Guild) {
     console.log(`Joined guild ${guild.name}`);
-    this.scanGuild(guild);
+    // this.scanGuild(guild);
   }
 
   async handleUserStream(

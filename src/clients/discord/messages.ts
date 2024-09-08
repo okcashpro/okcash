@@ -17,9 +17,9 @@ import { InterestChannels } from "./types.ts";
 
 import { TextChannel } from "discord.js";
 import { AgentRuntime } from "../../core/runtime.ts";
-import { VoiceManager } from "./voice.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { SpeechService } from "../../services/speech.ts";
+import { VoiceManager } from "./voice.ts";
 
 const MAX_MESSAGE_LENGTH = 1990;
 
@@ -82,8 +82,6 @@ export class MessageManager {
     const userName = message.author.username;
     const name = message.author.displayName;
     const channelId = message.channel.id;
-
-    await this.runtime.browserService.initialize();
 
     try {
       const { processedContent, attachments } =

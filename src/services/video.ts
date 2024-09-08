@@ -33,11 +33,7 @@ export class VideoService {
   }
 
   public isVideoUrl(url: string): boolean {
-    return (
-      url.includes("youtube.com") ||
-      url.includes("youtu.be") ||
-      url.includes("vimeo.com")
-    );
+    return url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com");
   }
 
   public async processVideo(url: string): Promise<Media> {
@@ -45,17 +41,18 @@ export class VideoService {
     this.processQueue();
 
     return new Promise((resolve, reject) => {
-      const checkQueue = () => {
-        console.log("***** CHECKING QUEUE", this.queue);
+      const checkQueue = async () => {
+        console.log("***** CHECKING VIDEO QUEUE", this.queue);
         const index = this.queue.indexOf(url);
         if (index !== -1) {
           setTimeout(checkQueue, 100);
         } else {
-          // ??? Might be a bug here.
-          resolve(
-            (async () =>
-              await this.processVideoFromUrl(url)) as unknown as Promise<Media>,
-          );
+          try {
+            const result = await this.processVideoFromUrl(url);
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
         }
       };
       checkQueue();
@@ -70,28 +67,20 @@ export class VideoService {
     this.processing = true;
 
     while (this.queue.length > 0) {
-      const videoUrl = this.queue.shift();
-      await this.processVideoFromUrl(videoUrl);
+      const url = this.queue.shift()!;
+      await this.processVideoFromUrl(url);
     }
 
     this.processing = false;
   }
 
   private async processVideoFromUrl(url: string): Promise<Media> {
-    // Extract YouTube ID from URL
-    const videoId =
-      url.match(
-        /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/,
-      )?.[1] || "";
+    const videoId = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/)?.[1] || "";
     const videoUuid = this.getVideoId(videoId);
-    const cacheFilePath = path.join(
-      this.CONTENT_CACHE_DIR,
-      `${videoUuid}.json`,
-    );
+    const cacheFilePath = path.join(this.CONTENT_CACHE_DIR, `${videoUuid}.json`);
 
-    // Check if the result is already cached
     if (fs.existsSync(cacheFilePath)) {
-      console.log("Returning cached file");
+      console.log("Returning cached video file");
       return JSON.parse(fs.readFileSync(cacheFilePath, "utf-8")) as Media;
     }
 
@@ -110,7 +99,6 @@ export class VideoService {
       text: transcript,
     };
 
-    // Cache the result
     fs.writeFileSync(cacheFilePath, JSON.stringify(result));
     return result;
   }

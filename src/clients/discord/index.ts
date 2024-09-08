@@ -247,11 +247,11 @@ export class DiscordClient extends EventEmitter {
   }
 
   private async onReady() {
-    const guilds = await this.client.guilds.fetch();
-    for (const [, guild] of guilds) {
-      const fullGuild = await guild.fetch();
-      this.voiceManager.scanGuild(fullGuild);
-    }
+    // const guilds = await this.client.guilds.fetch();
+    // for (const [, guild] of guilds) {
+    //   const fullGuild = await guild.fetch();
+    //   this.voiceManager.scanGuild(fullGuild);
+    // }
   }
 }
 
