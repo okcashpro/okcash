@@ -20,7 +20,8 @@ import { VoiceManager } from "./voice.ts";
 
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
-import summarize from "./actions/summarize.ts";
+import summarize from "./actions/summarize_conversation.ts";
+import chat_with_attachments from "./actions/chat_with_attachments.ts";
 
 export class DiscordClient extends EventEmitter {
   apiToken: string;
@@ -65,6 +66,7 @@ export class DiscordClient extends EventEmitter {
     this.runtime.registerAction(joinvoice);
     this.runtime.registerAction(leavevoice);
     this.runtime.registerAction(summarize);
+    this.runtime.registerAction(chat_with_attachments);
   }
 
   private setupEventListeners() {

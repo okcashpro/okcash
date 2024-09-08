@@ -781,10 +781,14 @@ export class AgentRuntime implements IAgentRuntime {
       return;
     }
 
+    const normalizedAction = responses[0].content.action
+      .toLowerCase()
+      .replace("_", "");
+
     let action = this.actions.find(
       (a: { name: string }) =>
-        a.name.toLowerCase().replace("_", "") ===
-        responses[0].content.action.toLowerCase().replace("_", ""),
+        a.name.toLowerCase().replace("_", "").includes(normalizedAction) ||
+        normalizedAction.includes(a.name.toLowerCase().replace("_", "")),
     );
 
     if (!action) {
@@ -792,8 +796,8 @@ export class AgentRuntime implements IAgentRuntime {
       for (let _action of this.actions) {
         const simileAction = _action.similes.find(
           (simile) =>
-            simile.toLocaleLowerCase().replace("_", "") ===
-            responses[0].content.action.toLocaleLowerCase().replace("_", ""),
+            simile.toLowerCase().replace("_", "").includes(normalizedAction) ||
+            normalizedAction.includes(simile.toLowerCase().replace("_", "")),
         );
         if (simileAction) {
           action = _action;

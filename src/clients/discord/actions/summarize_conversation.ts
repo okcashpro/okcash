@@ -125,12 +125,12 @@ const getDateRange = async (
 };
 
 const summarizeAction = {
-  name: "SUMMARIZE",
+  name: "SUMMARIZE_CONVERSATION",
   similes: [
     "RECAP",
-    "SUMMARY",
+    "RECAP_CONVERSATION",
+    "SUMMARIZE_CHAT",
     "SUMMARIZATION",
-    "REPORT",
     "CHAT_SUMMARY",
     "CONVERSATION_SUMMARY",
   ],
