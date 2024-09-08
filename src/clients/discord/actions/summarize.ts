@@ -23,17 +23,14 @@ export const summarizationTemplate = `# Summarized so far (we are adding to this
 
 Summarization objective: {{objective}}
 
-# Instructions: Summarize the conversation so far. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details to the objective. Return a string inside a JSON block in this form:
-\`\`\`json
-"<The summary of the current conversation section, continuing from the current summary.>"
-\`\`\`
-`;
+# Instructions: Summarize the conversation so far. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details to the objective. Only respond with the new summary text.
+Your response should be extremely detailed and include any and all relevant information.`;
 
 export const dateRangeTemplate = `# Messages we are summarizing (the conversation is continued after this)
 {{recentMessages}}
 
 # Instructions: {{senderName}} is requesting a summary of the conversation. Your goal is to determine their objective, along with the range of dates that their request covers.
-The "objective" is a short description of what the user wants to summarize.
+The "objective" is a detailed description of what the user wants to summarize based on the conversation. If they just ask for a general summary, you can either base it off the converation if the summary range is very recent, or set the object to be general, like "a detailed summary of the conversation between all users".
 The "start" and "end" are the range of dates that the user wants to summarize, relative to the current time. The start and end should be relative to the current time, and measured in seconds, minutes, hours and days. The format is "2 days ago" or "3 hours ago" or "4 minutes ago" or "5 seconds ago", i.e. "<integer> <unit> ago".
 If you aren't sure, you can use a default range of "0 minutes ago" to "2 hours ago" or more. Better to err on the side of including too much than too little.
 

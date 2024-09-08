@@ -30,6 +30,10 @@ export default {
       return false;
     }
 
+    if (!state.discordClient) {
+      return false;
+    }
+
     const keywords = [
       "leave",
       "exit",
