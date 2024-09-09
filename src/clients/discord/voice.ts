@@ -237,8 +237,11 @@ export class VoiceManager extends EventEmitter {
     const channelId = channel.id;
     const buffers: Buffer[] = [];
     let totalLength = 0;
-    const maxSilenceTime = 500; // Maximum pause duration in milliseconds
+    const maxSilenceTime = 1000; // Maximum pause duration in milliseconds
+    const minSilenceTime = 50; // Minimum silence duration to trigger transcription
     let lastChunkTime = Date.now();
+    let transcriptionStarted = false;
+    let transcriptionText = "";
     console.log("new audio monitor for: ", userId);
 
     const monitor = new AudioMonitor(audioStream, 10000000, async (buffer) => {
@@ -246,12 +249,16 @@ export class VoiceManager extends EventEmitter {
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
       if (!buffer) {
+        // Handle error
+        console.error("Empty buffer received");
+        return;
       }
       buffers.push(buffer);
       totalLength += buffer.length;
       lastChunkTime = currentTime;
 
-      if (silenceDuration > maxSilenceTime || totalLength >= 1000000) {
+      if (silenceDuration > minSilenceTime && !transcriptionStarted) {
+        transcriptionStarted = true;
         const inputBuffer = Buffer.concat(buffers, totalLength);
         buffers.length = 0;
         totalLength = 0;
@@ -260,18 +267,31 @@ export class VoiceManager extends EventEmitter {
           // Convert Opus to WAV and add the header
           const wavBuffer = await this.convertOpusToWav(inputBuffer);
 
-          console.log("transcribing");
+          console.log("starting transcription");
           const text =
             await this.runtime.transcriptionService.transcribe(wavBuffer);
-          console.log("text: ", text);
+          console.log("transcribed text: ", text);
+          transcriptionText += text;
+        } catch (error) {
+          console.error("Error processing audio stream:", error);
+        }
+      }
 
-          if (!text) return;
+      if (silenceDuration > maxSilenceTime && transcriptionStarted) {
+        console.log("transcription finished");
+        transcriptionStarted = false;
+
+        if (!transcriptionText) return;
+
+        try {
+          const text = transcriptionText;
 
           // handle whisper cases
           if (
             (text.length < 15 && text.includes("[BLANK_AUDIO]")) ||
             (text.length < 5 && text.toLowerCase().includes("you"))
           ) {
+            transcriptionText = ""; // Reset transcription text
             return;
           }
 
@@ -312,6 +332,7 @@ export class VoiceManager extends EventEmitter {
           );
 
           if (text && text.startsWith("/")) {
+            transcriptionText = ""; // Reset transcription text
             return null;
           }
 
@@ -325,6 +346,7 @@ export class VoiceManager extends EventEmitter {
           };
 
           if (!memory.content.text) {
+            transcriptionText = ""; // Reset transcription text
             return { text: "", action: "IGNORE" };
           }
 
@@ -332,10 +354,10 @@ export class VoiceManager extends EventEmitter {
 
           state = await this.runtime.updateRecentMessageState(state);
 
-          // this is a little gross after refactoring
           let shouldIgnore = await this._shouldIgnore(memory);
 
           if (shouldIgnore) {
+            transcriptionText = ""; // Reset transcription text
             return { text: "", action: "IGNORE" };
           }
 
@@ -349,6 +371,7 @@ export class VoiceManager extends EventEmitter {
             state,
             context,
           );
+
           const callback: HandlerCallback = async (content: Content) => {
             console.log("callback content: ", content);
             const { roomId } = memory;
@@ -392,6 +415,7 @@ export class VoiceManager extends EventEmitter {
             response.message) as string;
 
           if (!content) {
+            transcriptionText = ""; // Reset transcription text
             return null;
           }
 
@@ -403,8 +427,11 @@ export class VoiceManager extends EventEmitter {
             state,
             callback,
           );
+
+          transcriptionText = ""; // Reset transcription text
         } catch (error) {
-          console.error("Error processing audio stream:", error);
+          console.error("Error processing transcribed text:", error);
+          transcriptionText = ""; // Reset transcription text
         }
       }
     });
