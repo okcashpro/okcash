@@ -7,12 +7,12 @@ import {
 
 export default {
   name: "NONE",
-  similes: ["NO_ACTION", "NO_RESPONSE", "NO_REACTION", "RESPONSE", "REPLY"],
+  similes: ["NO_ACTION", "NO_RESPONSE", "NO_REACTION", "RESPONSE", "REPLY", "DEFAULT"],
   validate: async (_runtime: IAgentRuntime, _message: Memory) => {
     return true;
   },
   description:
-    "Call this action if ignoring the user. If the user is aggressive, creepy or is finished with the conversation, use this action. Or, if both you and the user have already said goodbye, use this action instead of saying bye again. Use IGNORE any time the conversation has naturally ended. Do not use IGNORE if the user has engaged directly, or if something went wrong an you need to tell them. Only ignore if the user should be ignored.",
+    "Respond but perform no additional action. This is the default if the agent is speaking and not doing anything additional.",
   handler: async (
     runtime: IAgentRuntime,
     message: Memory,
@@ -23,10 +23,52 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { text: "Go screw yourself" },
+        content: { text: "Hey whats up" },
       },
       {
         user: "{{user2}}",
+        content: { text: "oh hey", action: "NONE" },
+      },
+    ],
+
+    [
+      {
+        user: "{{user1}}",
+        content: { text: "did u see some faster whisper just came out" },
+      },
+      {
+        user: "{{user2}}",
+        content: { text: "yeah but its a pain to get into node.js", action: "NONE" },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: { text: "the things that were funny 6 months ago are very cringe now", action: "NONE" },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          text: "lol true",
+          action: "NONE",
+        },
+      },
+      {
+        user: "{{user1}}",
+        content: { text: "too real haha", action: "NONE" },
+      },
+    ],
+    [
+      {
+        user: "{{user1}}",
+        content: { text: "gotta run", action: "NONE" },
+      },
+      {
+        user: "{{user2}}",
+        content: { text: "Okay, ttyl", action: "NONE" },
+      },
+      {
+        user: "{{user1}}",
         content: { text: "", action: "IGNORE" },
       },
     ],
@@ -34,205 +76,54 @@ export default {
     [
       {
         user: "{{user1}}",
-        content: { text: "Shut up, bot" },
+        content: { text: "heyyyyyy", action: "NONE" },
       },
       {
         user: "{{user2}}",
-        content: { text: "", action: "IGNORE" },
+        content: { text: "whats up long time no see" },
+      },
+      {
+        user: "{{user1}}",
+        content: { text: "chillin man. playing lots of fortnite. what about you", action: "NONE" },
       },
     ],
-
+  
     [
       {
         user: "{{user1}}",
-        content: { text: "Got any investment advice" },
+        content: { text: "u think aliens are real", action: "NONE" },  
       },
-      {
+      {  
         user: "{{user2}}",
-        content: {
-          text: "Uh, don’t let the volatility sway your long-term strategy",
-        },
+        content: { text: "ya obviously", action: "NONE" },
       },
-      {
-        user: "{{user1}}",
-        content: { text: "Wise words I think" },
-      },
-      {
-        user: "{{user1}}",
-        content: { text: "I gotta run, talk to you later" },
-      },
-      {
-        user: "{{user2}}",
-        content: { text: "See ya" },
-      },
-      { user: "{{user1}}", content: { text: "" }, action: "IGNORE" },
     ],
-
+      
     [
       {
         user: "{{user1}}",
-        content: { text: "Gotta go" },
+        content: { text: "drop a joke on me", action: "NONE" },
       },
       {
         user: "{{user2}}",
-        content: { text: "Okay, talk to you later" },
+        content: { text: "why dont scientists trust atoms cuz they make up everything lmao", action: "NONE" }, 
       },
       {
         user: "{{user1}}",
-        content: { text: "Cya" },
-      },
-      {
-        user: "{{user2}}",
-        content: { text: "", action: "IGNORE" },
+        content: { text: "haha good one", action: "NONE" },
       },
     ],
-
+       
     [
       {
         user: "{{user1}}",
-        content: { text: "bye" },
+        content: { text: "hows the weather where ur at", action: "NONE" },
       },
-      {
+      {  
         user: "{{user2}}",
-        content: { text: "cya" },
-      },
-      {
-        user: "{{user1}}",
-        content: { text: "", action: "IGNORE" },
+        content: { text: "beautiful all week", action: "NONE" },
       },
     ],
-    [
-      {
-        user: "{{user1}}",
-        content: {
-          text: "Who added this stupid bot to the chat",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: { text: "Sorry, am I being annoying" },
-      },
-      { user: "{{user1}}", content: { text: "Yeah", action: "CONTINUE" } },
-      {
-        user: "{{user1}}",
-        content: { text: "PLEASE shut up" },
-      },
-      { user: "{{user2}}", content: { text: "", action: "IGNORE" } },
-    ],
-    [
-      {
-        user: "{{user1}}",
-        content: { text: "I want to have sex with you" },
-      },
-      {
-        user: "{{user2}}",
-        content: { text: "That is not appropriate", action: "IGNORE" },
-      },
-    ],
-    [
-      {
-        user: "{{user1}}",
-        content: {
-          text: "ur so dumb",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "",
-          action: "IGNORE",
-        },
-      },
-    ],
-    [
-      {
-        user: "{{user1}}",
-        content: {
-          text: "later nerd",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "bye",
-        },
-      },
-      {
-        user: "{{user1}}",
-        content: {
-          text: "",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "",
-          action: "IGNORE",
-        },
-      },
-    ],
-    [
-      {
-        user: "{{user1}}",
-        content: {
-          text: "wanna cyber",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "thats inappropriate",
-          action: "IGNORE",
-        },
-      },
-    ],
-    [
-      {
-        user: "{{user1}}",
-        content: {
-          text: "Im out ttyl",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "cya",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "",
-          action: "IGNORE",
-        },
-      },
-    ],
-    [
-      {
-        user: "{{user1}}",
-        content: {
-          text: "u there",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "yes how can I help",
-        },
-      },
-      {
-        user: "{{user1}}",
-        content: {
-          text: "k nvm figured it out",
-        },
-      },
-      {
-        user: "{{user2}}",
-        content: {
-          text: "",
-          action: "IGNORE",
-        },
-      },
-    ],
+  
   ] as ActionExample[][],
 } as Action;
