@@ -312,7 +312,7 @@ const summarizeAction = {
           ...callbackData,
           text: `I've attached the summary of the conversation from \`${new Date(parseInt(start as string)).toString()}\` to \`${new Date(parseInt(end as string)).toString()}\` as a text file.`,
         },
-        [summaryFilename]
+        [summaryFilename],
       );
     } else {
       console.warn("Empty response from Claude, skipping");
@@ -361,7 +361,7 @@ const summarizeAction = {
       {
         user: "{{user1}}",
         content: {
-          content: "Can you summarize what moon and avf are talking about?",
+          text: "Can you summarize what moon and avf are talking about?",
         },
       },
       {

@@ -146,7 +146,7 @@ const transcribeMediaAction = {
           ...callbackData,
           text: `I've attached the transcript of the requested media as a text file.`,
         },
-        [transcriptFilename]
+        [transcriptFilename],
       );
     } else {
       console.warn("Empty response from Claude, skipping");

@@ -34,7 +34,10 @@ export async function sendMessageInChunks(
 
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
-    if (message.trim().length > 0 || (i === messages.length - 1 && files && files.length > 0)) {
+    if (
+      message.trim().length > 0 ||
+      (i === messages.length - 1 && files && files.length > 0)
+    ) {
       const options: any = {
         content: message.trim(),
       };
@@ -65,15 +68,17 @@ function splitMessage(content: string): string[] {
 
   const rawLines = content?.split("\n") || [];
   // split all lines into MAX_MESSAGE_LENGTH chunks so any long lines are split
-  const lines = rawLines.map(line => {
-    const chunks = [];
-    while (line.length > MAX_MESSAGE_LENGTH) {
-      chunks.push(line.slice(0, MAX_MESSAGE_LENGTH));
-      line = line.slice(MAX_MESSAGE_LENGTH);
-    }
-    chunks.push(line);
-    return chunks;
-  }).flat();
+  const lines = rawLines
+    .map((line) => {
+      const chunks = [];
+      while (line.length > MAX_MESSAGE_LENGTH) {
+        chunks.push(line.slice(0, MAX_MESSAGE_LENGTH));
+        line = line.slice(MAX_MESSAGE_LENGTH);
+      }
+      chunks.push(line);
+      return chunks;
+    })
+    .flat();
 
   for (const line of lines) {
     if (currentMessage.length + line.length + 1 > MAX_MESSAGE_LENGTH) {
@@ -218,11 +223,15 @@ export class MessageManager {
           this.runtime.agentId,
         );
 
-      if (agentUserState === "MUTED" && !message.mentions.has(this.client.user.id) && !hasInterest) {
-          console.log("Ignoring muted room");
-          // Ignore muted rooms unless explicitly mentioned
-          return;
-        }
+      if (
+        agentUserState === "MUTED" &&
+        !message.mentions.has(this.client.user.id) &&
+        !hasInterest
+      ) {
+        console.log("Ignoring muted room");
+        // Ignore muted rooms unless explicitly mentioned
+        return;
+      }
 
       if (agentUserState === "FOLLOWED") {
         console.log("Always responding in followed room");
@@ -239,7 +248,7 @@ export class MessageManager {
         return;
       }
 
-      console.log("Responding")
+      console.log("Responding");
 
       let context = composeContext({
         state,
@@ -251,8 +260,8 @@ export class MessageManager {
         state,
         context,
       );
-      
-      console.log("Response\n", responseContent)
+
+      console.log("Response\n", responseContent);
 
       responseContent.text = responseContent.text?.trim();
       responseContent.inReplyTo = stringToUuid(message.id);
@@ -622,7 +631,10 @@ export class MessageManager {
     const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_discord_message_context`, context);
+    log_to_file(
+      `${state.agentName}_${datestr}_discord_message_context`,
+      context,
+    );
 
     const response = await this.runtime.messageCompletion({
       context,

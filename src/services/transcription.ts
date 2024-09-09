@@ -93,13 +93,21 @@ export class TranscriptionService extends EventEmitter {
   }
 
   private async convertAudio(inputBuffer: ArrayBuffer): Promise<Buffer> {
-    const inputPath = path.join(this.CONTENT_CACHE_DIR, `input_${Date.now()}.wav`);
-    const outputPath = path.join(this.CONTENT_CACHE_DIR, `output_${Date.now()}.wav`);
+    const inputPath = path.join(
+      this.CONTENT_CACHE_DIR,
+      `input_${Date.now()}.wav`,
+    );
+    const outputPath = path.join(
+      this.CONTENT_CACHE_DIR,
+      `output_${Date.now()}.wav`,
+    );
 
     fs.writeFileSync(inputPath, Buffer.from(inputBuffer));
 
     try {
-      const { stdout } = await execAsync(`ffprobe -v error -show_entries stream=codec_name,sample_rate,channels -of json "${inputPath}"`);
+      const { stdout } = await execAsync(
+        `ffprobe -v error -show_entries stream=codec_name,sample_rate,channels -of json "${inputPath}"`,
+      );
       const probeResult = JSON.parse(stdout);
       const stream = probeResult.streams[0];
 
@@ -132,12 +140,14 @@ export class TranscriptionService extends EventEmitter {
 
     const filename = `${prefix}_${Date.now()}.wav`;
     const filePath = path.join(this.DEBUG_AUDIO_DIR, filename);
-    
+
     fs.writeFileSync(filePath, Buffer.from(audioBuffer));
     console.log(`Debug audio saved: ${filePath}`);
   }
 
-  public async transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null> {
+  public async transcribeAttachment(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     return await this.transcribe(audioBuffer);
   }
 
@@ -154,7 +164,9 @@ export class TranscriptionService extends EventEmitter {
     });
   }
 
-  public async transcribeAttachmentLocally(audioBuffer: ArrayBuffer): Promise<string | null> {
+  public async transcribeAttachmentLocally(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     return this.transcribeLocally(audioBuffer);
   }
 
@@ -181,17 +193,21 @@ export class TranscriptionService extends EventEmitter {
     this.processing = false;
   }
 
-  private async transcribeWithOpenAI(audioBuffer: ArrayBuffer): Promise<string | null> {
+  private async transcribeWithOpenAI(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     console.log("Transcribing audio with OpenAI...");
 
     try {
       await this.saveDebugAudio(audioBuffer, "openai_input_original");
 
       const convertedBuffer = await this.convertAudio(audioBuffer);
-      
+
       await this.saveDebugAudio(convertedBuffer, "openai_input_converted");
 
-      const file = new File([convertedBuffer], "audio.wav", { type: "audio/wav" });
+      const file = new File([convertedBuffer], "audio.wav", {
+        type: "audio/wav",
+      });
 
       const result = await this.openai!.audio.transcriptions.create({
         model: "whisper-1",
@@ -219,7 +235,9 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null> {
+  public async transcribeLocally(
+    audioBuffer: ArrayBuffer,
+  ): Promise<string | null> {
     try {
       console.log("Transcribing audio locally...");
 
@@ -229,7 +247,10 @@ export class TranscriptionService extends EventEmitter {
 
       await this.saveDebugAudio(convertedBuffer, "local_input_converted");
 
-      const tempWavFile = path.join(this.CONTENT_CACHE_DIR, `temp_${Date.now()}.wav`);
+      const tempWavFile = path.join(
+        this.CONTENT_CACHE_DIR,
+        `temp_${Date.now()}.wav`,
+      );
       fs.writeFileSync(tempWavFile, convertedBuffer);
 
       console.log(`Temporary WAV file created: ${tempWavFile}`);

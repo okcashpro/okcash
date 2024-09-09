@@ -1393,9 +1393,7 @@ Text: ${attachment.text}
         allAttachments = recentMessagesData
           .filter((msg) => {
             const msgTime = msg.createdAt;
-            return (
-              msgTime >= oneHourBeforeLastMessage
-            );
+            return msgTime >= oneHourBeforeLastMessage;
           })
           .flatMap((msg) => msg.content.attachments || []);
       }

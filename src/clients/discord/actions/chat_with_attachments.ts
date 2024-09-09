@@ -226,9 +226,8 @@ const summarizeAction = {
           ...callbackData,
           text: `I've attached the summary of the requested attachments as a text file.`,
         },
-        [summaryFilename]
+        [summaryFilename],
       );
-
     } else {
       console.warn("Empty response from Claude, skipping");
     }

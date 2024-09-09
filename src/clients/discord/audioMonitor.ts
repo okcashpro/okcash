@@ -50,6 +50,13 @@ export class AudioMonitor {
     });
   }
 
+  stop() {
+    this.readable.removeAllListeners("data");
+    this.readable.removeAllListeners("end");
+    this.readable.removeAllListeners("speakingStopped");
+    this.readable.removeAllListeners("speakingStarted");
+  }
+
   isFlagged() {
     return this.lastFlagged >= 0;
   }

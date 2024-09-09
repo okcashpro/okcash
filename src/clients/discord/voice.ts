@@ -20,7 +20,8 @@ import {
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { AudioMonitor } from "./audioMonitor.ts";
-
+import fs from "fs";
+import path from "path";
 import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
@@ -36,6 +37,11 @@ import {
 import { stringToUuid } from "../../core/uuid.ts";
 import { SpeechService } from "../../services/speech.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
+import { getWavHeader } from "../../services/audioUtils.ts";
+import { exec } from "child_process";
+import { opus } from "prism-media";
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -46,6 +52,10 @@ export class VoiceManager extends EventEmitter {
   private runtime: IAgentRuntime;
   private streams: Map<string, Readable> = new Map();
   private connections: Map<string, VoiceConnection> = new Map();
+  private activeMonitors: Map<
+    string,
+    { channel: BaseGuildVoiceChannel; monitor: AudioMonitor }
+  > = new Map();
 
   constructor(client: any) {
     super();
@@ -53,16 +63,162 @@ export class VoiceManager extends EventEmitter {
     this.runtime = client.runtime;
   }
 
-  async handleVoiceStateUpdate(
-    oldState: VoiceState | null,
-    newState: VoiceState | null,
+  async handleVoiceStateUpdate(oldState: VoiceState, newState: VoiceState) {
+    const oldChannelId = oldState.channelId;
+    const newChannelId = newState.channelId;
+    const member = newState.member;
+    if (!member) return;
+    if (member.id === this.client.user?.id) {
+      return;
+    }
+
+    // Ignore mute/unmute events
+    if (oldChannelId === newChannelId) {
+      return;
+    }
+
+    // User leaving a channel where the bot is present
+    if (oldChannelId && this.connections.has(oldChannelId)) {
+      this.stopMonitoringMember(member.id);
+    }
+
+    // User joining a channel where the bot is present
+    if (newChannelId && this.connections.has(newChannelId)) {
+      await this.monitorMember(
+        member,
+        newState.channel as BaseGuildVoiceChannel,
+      );
+    }
+  }
+
+  async joinChannel(channel: BaseGuildVoiceChannel) {
+    const oldConnection = getVoiceConnection(channel.guildId as string);
+    if (oldConnection) {
+      try {
+        oldConnection.destroy();
+      } catch (error) {
+        console.error("Error leaving voice channel:", error);
+      }
+    }
+    const connection = joinVoiceChannel({
+      channelId: channel.id,
+      guildId: channel.guild.id,
+      adapterCreator: channel.guild.voiceAdapterCreator,
+      selfDeaf: false,
+      selfMute: false,
+    });
+
+    for (const [, member] of channel.members) {
+      if (!member.user.bot) {
+        this.monitorMember(member, channel);
+      }
+    }
+
+    connection.receiver.speaking.on("start", (userId: string) => {
+      const user = channel.members.get(userId);
+      if (!user?.user.bot) {
+        this.monitorMember(user as GuildMember, channel);
+        this.streams.get(userId)?.emit("speakingStarted");
+      }
+    });
+
+    connection.receiver.speaking.on("end", async (userId: string) => {
+      const user = channel.members.get(userId);
+      if (!user?.user.bot) {
+        this.streams.get(userId)?.emit("speakingStopped");
+      }
+    });
+  }
+
+  private async monitorMember(
+    member: GuildMember,
+    channel: BaseGuildVoiceChannel,
   ) {
-    if (newState?.member?.user.bot) return;
-    if (
-      newState?.channelId != null &&
-      newState?.channelId != oldState?.channelId
-    ) {
-      this.joinChannel(newState.channel as BaseGuildVoiceChannel);
+    const userId = member.id;
+    const userName = member.user.username;
+    const name = member.user.displayName;
+    const connection = getVoiceConnection(member.guild.id);
+    const receiveStream = connection?.receiver.subscribe(userId, {
+      autoDestroy: true,
+      emitClose: true,
+    });
+    if (!receiveStream || receiveStream.readableLength === 0) {
+      return;
+    }
+    const opusDecoder = new prism.opus.Decoder({
+      channels: 1,
+      rate: DECODE_SAMPLE_RATE,
+      frameSize: DECODE_FRAME_SIZE,
+    });
+    pipeline(
+      receiveStream as AudioReceiveStream,
+      opusDecoder as any,
+      (err: Error | null) => {
+        if (err) {
+          console.log(`Opus decoding pipeline error: ${err}`);
+        }
+      },
+    );
+    this.streams.set(userId, opusDecoder);
+    this.connections.set(userId, connection as VoiceConnection);
+    opusDecoder.on("error", (err: any) => {
+      console.log(`Opus decoding error: ${err}`);
+    });
+    const errorHandler = (err: any) => {
+      console.log(`Opus decoding error: ${err}`);
+    };
+    const streamCloseHandler = () => {
+      console.log(`voice stream from ${member?.displayName} closed`);
+      this.streams.delete(userId);
+      this.connections.delete(userId);
+    };
+    const closeHandler = () => {
+      console.log(`Opus decoder for ${member?.displayName} closed`);
+      opusDecoder.removeListener("error", errorHandler);
+      opusDecoder.removeListener("close", closeHandler);
+      receiveStream?.removeListener("close", streamCloseHandler);
+    };
+    opusDecoder.on("error", errorHandler);
+    opusDecoder.on("close", closeHandler);
+    receiveStream?.on("close", streamCloseHandler);
+
+    this.client.emit(
+      "userStream",
+      userId,
+      name,
+      userName,
+      channel,
+      opusDecoder,
+    );
+  }
+
+  leaveChannel(channel: BaseGuildVoiceChannel) {
+    const connection = this.connections.get(channel.id);
+    if (connection) {
+      connection.destroy();
+      this.connections.delete(channel.id);
+    }
+
+    // Stop monitoring all members in this channel
+    for (const [memberId, monitorInfo] of this.activeMonitors) {
+      if (
+        monitorInfo.channel.id === channel.id &&
+        memberId !== this.client.user?.id
+      ) {
+        this.stopMonitoringMember(memberId);
+      }
+    }
+
+    console.log(`Left voice channel: ${channel.name} (${channel.id})`);
+  }
+
+  stopMonitoringMember(memberId: string) {
+    const monitorInfo = this.activeMonitors.get(memberId);
+    if (monitorInfo) {
+      monitorInfo.monitor.stop();
+      this.activeMonitors.delete(memberId);
+      this.streams.delete(memberId);
+      console.log(`Stopped monitoring user ${memberId}`);
     }
   }
 
@@ -83,8 +239,10 @@ export class VoiceManager extends EventEmitter {
     let totalLength = 0;
     const maxSilenceTime = 500; // Maximum pause duration in milliseconds
     let lastChunkTime = Date.now();
+    console.log("new audio monitor for: ", userId);
 
     const monitor = new AudioMonitor(audioStream, 10000000, async (buffer) => {
+      console.log("buffer: ", buffer);
       const currentTime = Date.now();
       const silenceDuration = currentTime - lastChunkTime;
       if (!buffer) {
@@ -99,9 +257,12 @@ export class VoiceManager extends EventEmitter {
         totalLength = 0;
 
         try {
+          // Convert Opus to WAV and add the header
+          const wavBuffer = await this.convertOpusToWav(inputBuffer);
+
           console.log("transcribing");
           const text =
-            await this.runtime.transcriptionService.transcribe(inputBuffer);
+            await this.runtime.transcriptionService.transcribe(wavBuffer);
           console.log("text: ", text);
 
           if (!text) return;
@@ -249,6 +410,21 @@ export class VoiceManager extends EventEmitter {
     });
   }
 
+  private async convertOpusToWav(pcmBuffer: Buffer): Promise<Buffer> {
+    try {
+      // Generate the WAV header
+      const wavHeader = getWavHeader(pcmBuffer.length, DECODE_SAMPLE_RATE);
+
+      // Concatenate the WAV header and PCM data
+      const wavBuffer = Buffer.concat([wavHeader, pcmBuffer]);
+
+      return wavBuffer;
+    } catch (error) {
+      console.error("Error converting PCM to WAV:", error);
+      throw error;
+    }
+  }
+
   private async _generateResponse(
     message: Memory,
     state: State,
@@ -361,104 +537,6 @@ export class VoiceManager extends EventEmitter {
     if (chosenChannel != null) {
       this.joinChannel(chosenChannel);
     }
-  }
-
-  async joinChannel(channel: BaseGuildVoiceChannel) {
-    const oldConnection = getVoiceConnection(channel.guildId as string);
-    if (oldConnection) {
-      try {
-        oldConnection.destroy();
-      } catch (error) {
-        console.error("Error leaving voice channel:", error);
-      }
-    }
-    const connection = joinVoiceChannel({
-      channelId: channel.id,
-      guildId: channel.guild.id,
-      adapterCreator: channel.guild.voiceAdapterCreator,
-      selfDeaf: false,
-      selfMute: false,
-    });
-
-    for (const [, member] of channel.members) {
-      // if (member.user.bot) continue;
-      this.monitorMember(member, channel);
-    }
-
-    connection.receiver.speaking.on("start", (userId: string) => {
-      const user = channel.members.get(userId);
-      // if (user?.user.bot) return;
-      this.monitorMember(user as GuildMember, channel);
-      this.streams.get(userId)?.emit("speakingStarted");
-    });
-
-    connection.receiver.speaking.on("end", async (userId: string) => {
-      const user = channel.members.get(userId);
-      // if (user?.user.bot) return;
-      this.streams.get(userId)?.emit("speakingStopped");
-    });
-  }
-
-  private async monitorMember(
-    member: GuildMember,
-    channel: BaseGuildVoiceChannel,
-  ) {
-    const userId = member.id;
-    const userName = member.user.username;
-    const name = member.user.displayName;
-    const connection = getVoiceConnection(member.guild.id);
-    const receiveStream = connection?.receiver.subscribe(userId, {
-      autoDestroy: true,
-      emitClose: true,
-    });
-    if (receiveStream && receiveStream.readableLength > 0) {
-      return;
-    }
-    const opusDecoder = new prism.opus.Decoder({
-      channels: 1,
-      rate: DECODE_SAMPLE_RATE,
-      frameSize: DECODE_FRAME_SIZE,
-    });
-    pipeline(
-      receiveStream as AudioReceiveStream,
-      opusDecoder as any,
-      (err: Error | null) => {
-        if (err) {
-          console.log(`Opus decoding pipeline error: ${err}`);
-        }
-      },
-    );
-    this.streams.set(userId, opusDecoder);
-    this.connections.set(userId, connection as VoiceConnection);
-    opusDecoder.on("error", (err: any) => {
-      console.log(`Opus decoding error: ${err}`);
-    });
-    const errorHandler = (err: any) => {
-      console.log(`Opus decoding error: ${err}`);
-    };
-    const streamCloseHandler = () => {
-      console.log(`voice stream from ${member?.displayName} closed`);
-      this.streams.delete(userId);
-      this.connections.delete(userId);
-    };
-    const closeHandler = () => {
-      console.log(`Opus decoder for ${member?.displayName} closed`);
-      opusDecoder.removeListener("error", errorHandler);
-      opusDecoder.removeListener("close", closeHandler);
-      receiveStream?.removeListener("close", streamCloseHandler);
-    };
-    opusDecoder.on("error", errorHandler);
-    opusDecoder.on("close", closeHandler);
-    receiveStream?.on("close", streamCloseHandler);
-
-    this.client.emit(
-      "userStream",
-      userId,
-      name,
-      userName,
-      channel,
-      opusDecoder,
-    );
   }
 
   async playAudioStream(userId: UUID, audioStream: Readable) {
