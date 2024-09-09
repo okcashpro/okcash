@@ -21,7 +21,7 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { SpeechService } from "../../services/speech.ts";
 import { VoiceManager } from "./voice.ts";
 
-const MAX_MESSAGE_LENGTH = 1990;
+const MAX_MESSAGE_LENGTH = 1900;
 
 export async function sendMessageInChunks(
   channel: TextChannel,
@@ -34,7 +34,7 @@ export async function sendMessageInChunks(
 
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
-    if (message.trim().length > 0) {
+    if (message.trim().length > 0 || (i === messages.length - 1 && files && files.length > 0)) {
       const options: any = {
         content: message.trim(),
       };
@@ -47,8 +47,6 @@ export async function sendMessageInChunks(
       // }
 
       if (i === messages.length - 1 && files && files.length > 0) {
-        console.log("files are here");
-        console.log(files);
         // Attach files to the last message chunk
         options.files = files;
       }
@@ -65,7 +63,18 @@ function splitMessage(content: string): string[] {
   const messages: string[] = [];
   let currentMessage = "";
 
-  const lines = content.split("\n");
+  const rawLines = content?.split("\n") || [];
+  // split all lines into MAX_MESSAGE_LENGTH chunks so any long lines are split
+  const lines = rawLines.map(line => {
+    const chunks = [];
+    while (line.length > MAX_MESSAGE_LENGTH) {
+      chunks.push(line.slice(0, MAX_MESSAGE_LENGTH));
+      line = line.slice(MAX_MESSAGE_LENGTH);
+    }
+    chunks.push(line);
+    return chunks;
+  }).flat();
+
   for (const line of lines) {
     if (currentMessage.length + line.length + 1 > MAX_MESSAGE_LENGTH) {
       messages.push(currentMessage.trim());
@@ -110,7 +119,6 @@ export class MessageManager {
     const channelId = message.channel.id;
 
     try {
-      console.log("processing media");
       const { processedContent, attachments } =
         await this.processMessageMedia(message);
 
@@ -196,11 +204,12 @@ export class MessageManager {
       if (!shouldIgnore) {
         shouldIgnore = await this._shouldIgnore(message);
       }
+      console.log("Received a message from ", message.author.username);
+      console.log(message.content);
 
       if (shouldIgnore) {
         return;
       }
-
       const hasInterest = this._checkInterest(channelId);
 
       const agentUserState =
@@ -209,13 +218,11 @@ export class MessageManager {
           this.runtime.agentId,
         );
 
-      if (agentUserState === "MUTED") {
-        if (!message.mentions.has(this.client.user.id) && !hasInterest) {
+      if (agentUserState === "MUTED" && !message.mentions.has(this.client.user.id) && !hasInterest) {
           console.log("Ignoring muted room");
           // Ignore muted rooms unless explicitly mentioned
           return;
         }
-      }
 
       if (agentUserState === "FOLLOWED") {
         console.log("Always responding in followed room");
@@ -232,6 +239,8 @@ export class MessageManager {
         return;
       }
 
+      console.log("Responding")
+
       let context = composeContext({
         state,
         template: messageHandlerTemplate,
@@ -242,6 +251,8 @@ export class MessageManager {
         state,
         context,
       );
+      
+      console.log("Response\n", responseContent)
 
       responseContent.text = responseContent.text?.trim();
       responseContent.inReplyTo = stringToUuid(message.id);
@@ -611,7 +622,7 @@ export class MessageManager {
     const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
+    log_to_file(`${state.agentName}_${datestr}_discord_message_context`, context);
 
     const response = await this.runtime.messageCompletion({
       context,
@@ -624,7 +635,7 @@ export class MessageManager {
     }
 
     log_to_file(
-      `${state.agentName}_${datestr}_generate_response`,
+      `${state.agentName}_${datestr}_discord_message_response`,
       JSON.stringify(response),
     );
 

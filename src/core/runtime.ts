@@ -473,7 +473,6 @@ export class AgentRuntime implements IAgentRuntime {
 
     while (true) {
       try {
-        console.log("shouldRespondCompletion");
         const response = await this.completion({
           context,
           stop,
@@ -485,11 +484,8 @@ export class AgentRuntime implements IAgentRuntime {
           max_response_length,
         });
 
-        console.log("shouldRespondCompletion response", response);
-
         const parsedResponse = parseShouldRespondFromText(response.trim());
         if (parsedResponse) {
-          console.log("shouldRespondCompletion parsedResponse", parsedResponse);
           return parsedResponse;
         } else {
           console.log("shouldRespondCompletion no response");
@@ -1342,7 +1338,7 @@ Text: ${attachment.text}
 
     const actionState = {
       actionNames:
-        "Possible response actions:" + formatActionNames(actionsData),
+        "Possible response actions: " + formatActionNames(actionsData),
       actions: actionsData.length > 0 ? formatActions(actionsData) : "",
       actionExamples:
         actionsData.length > 0

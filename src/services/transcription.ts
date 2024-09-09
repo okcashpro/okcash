@@ -1,20 +1,24 @@
 import EventEmitter from "events";
-import { File } from "formdata-node";
+import { exec } from "child_process";
 import fs from "fs";
+import path from "path";
+import { promisify } from "util";
+import { getWavHeader } from "./audioUtils.ts";
 import { nodewhisper } from "nodejs-whisper";
 import OpenAI from "openai";
+import { File } from "formdata-node";
 import os from "os";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
 import { IAgentRuntime } from "../core/types.ts";
-import { getWavHeader } from "./audioUtils.ts";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+const execAsync = promisify(exec);
 
 export class TranscriptionService extends EventEmitter {
   private static instance: TranscriptionService | null = null;
-  private CONTENT_CACHE_DIR = "./content_cache";
+  private CONTENT_CACHE_DIR: string;
+  private DEBUG_AUDIO_DIR: string;
+  private TARGET_SAMPLE_RATE = 16000; // Common sample rate for speech recognition
   private isCudaAvailable: boolean = false;
   private openai: OpenAI | null = null;
   private runtime: IAgentRuntime;
@@ -25,7 +29,11 @@ export class TranscriptionService extends EventEmitter {
   private constructor(runtime: IAgentRuntime) {
     super();
     this.runtime = runtime;
+    const rootDir = path.resolve(__dirname, "../../");
+    this.CONTENT_CACHE_DIR = path.join(rootDir, "content_cache");
+    this.DEBUG_AUDIO_DIR = path.join(rootDir, "debug_audio");
     this.ensureCacheDirectoryExists();
+    this.ensureDebugDirectoryExists();
     if (this.runtime.getSetting("OPENAI_API_KEY")) {
       this.openai = new OpenAI({
         apiKey: this.runtime.getSetting("OPENAI_API_KEY"),
@@ -44,7 +52,13 @@ export class TranscriptionService extends EventEmitter {
 
   private ensureCacheDirectoryExists() {
     if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
-      fs.mkdirSync(this.CONTENT_CACHE_DIR);
+      fs.mkdirSync(this.CONTENT_CACHE_DIR, { recursive: true });
+    }
+  }
+
+  private ensureDebugDirectoryExists() {
+    if (!fs.existsSync(this.DEBUG_AUDIO_DIR)) {
+      fs.mkdirSync(this.DEBUG_AUDIO_DIR, { recursive: true });
     }
   }
 
@@ -78,18 +92,60 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeAttachment(
-    audioBuffer: ArrayBuffer,
-  ): Promise<string | null> {
-    return new Promise((resolve) => {
-      this.queue.push({ audioBuffer, resolve });
-      if (!this.processing) {
-        this.processQueue();
+  private async convertAudio(inputBuffer: ArrayBuffer): Promise<Buffer> {
+    const inputPath = path.join(this.CONTENT_CACHE_DIR, `input_${Date.now()}.wav`);
+    const outputPath = path.join(this.CONTENT_CACHE_DIR, `output_${Date.now()}.wav`);
+
+    fs.writeFileSync(inputPath, Buffer.from(inputBuffer));
+
+    try {
+      const { stdout } = await execAsync(`ffprobe -v error -show_entries stream=codec_name,sample_rate,channels -of json "${inputPath}"`);
+      const probeResult = JSON.parse(stdout);
+      const stream = probeResult.streams[0];
+
+      console.log("Input audio info:", stream);
+
+      let ffmpegCommand = `ffmpeg -i "${inputPath}" -ar ${this.TARGET_SAMPLE_RATE} -ac 1`;
+
+      if (stream.codec_name === "pcm_f32le") {
+        ffmpegCommand += " -acodec pcm_s16le";
       }
-    });
+
+      ffmpegCommand += ` "${outputPath}"`;
+
+      console.log("FFmpeg command:", ffmpegCommand);
+
+      await execAsync(ffmpegCommand);
+
+      const convertedBuffer = fs.readFileSync(outputPath);
+      fs.unlinkSync(inputPath);
+      fs.unlinkSync(outputPath);
+      return convertedBuffer;
+    } catch (error) {
+      console.error("Error converting audio:", error);
+      throw error;
+    }
+  }
+
+  private async saveDebugAudio(audioBuffer: ArrayBuffer, prefix: string) {
+    this.ensureDebugDirectoryExists();
+
+    const filename = `${prefix}_${Date.now()}.wav`;
+    const filePath = path.join(this.DEBUG_AUDIO_DIR, filename);
+    
+    fs.writeFileSync(filePath, Buffer.from(audioBuffer));
+    console.log(`Debug audio saved: ${filePath}`);
+  }
+
+  public async transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null> {
+    return await this.transcribe(audioBuffer);
   }
 
   public async transcribe(audioBuffer: ArrayBuffer): Promise<string | null> {
+    // if the audio buffer is less than .2 seconds, just return null
+    if (audioBuffer.byteLength < 0.2 * 16000) {
+      return null;
+    }
     return new Promise((resolve) => {
       this.queue.push({ audioBuffer, resolve });
       if (!this.processing) {
@@ -98,59 +154,8 @@ export class TranscriptionService extends EventEmitter {
     });
   }
 
-  public async transcribeAttachmentLocally(
-    audioBuffer: ArrayBuffer,
-  ): Promise<string | null> {
-    console.log("Transcribing audio with nodejs-whisper...");
-
-    try {
-      // get the full path of this.CONTENT_CACHE_DIR
-      const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);
-
-      console.log("fullPath", fullPath);
-      const tempAudioFileShortPath = path.join(
-        this.CONTENT_CACHE_DIR,
-        `temp_${Date.now()}.mp3`,
-      );
-
-      // Save the audio buffer to a temporary file
-      const tempAudioFile = path.join(fullPath, `temp_${Date.now()}.mp3`);
-      fs.writeFileSync(tempAudioFileShortPath, Buffer.from(audioBuffer));
-
-      // wait for 1 second
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      const output = await nodewhisper(tempAudioFile, {
-        modelName: "base.en",
-        autoDownloadModelName: "base.en",
-        verbose: true,
-        removeWavFileAfterTranscription: false,
-        withCuda: this.isCudaAvailable,
-        whisperOptions: {
-          outputInText: true,
-          outputInVtt: false,
-          outputInSrt: false,
-          outputInCsv: false,
-          translateToEnglish: false,
-          wordTimestamps: false,
-          timestamps_length: 20,
-          splitOnWord: true,
-        },
-      });
-
-      // TODO: Remove the temporary audio file
-      // fs.unlinkSync(tempAudioFile);
-
-      console.log("Transcription output:", output);
-
-      if (!output || output.length < 5) {
-        return null;
-      }
-      return output;
-    } catch (error) {
-      console.error("Error in speech-to-text conversion:", error);
-      return null;
-    }
+  public async transcribeAttachmentLocally(audioBuffer: ArrayBuffer): Promise<string | null> {
+    return this.transcribeLocally(audioBuffer);
   }
 
   private async processQueue(): Promise<void> {
@@ -176,17 +181,18 @@ export class TranscriptionService extends EventEmitter {
     this.processing = false;
   }
 
-  private async transcribeWithOpenAI(
-    audioBuffer: ArrayBuffer,
-  ): Promise<string | null> {
+  private async transcribeWithOpenAI(audioBuffer: ArrayBuffer): Promise<string | null> {
     console.log("Transcribing audio with OpenAI...");
 
-    const wavHeader = getWavHeader(audioBuffer.byteLength, 16000);
-    const file = new File([wavHeader, audioBuffer], "audio.wav", {
-      type: "audio/wav",
-    });
-
     try {
+      await this.saveDebugAudio(audioBuffer, "openai_input_original");
+
+      const convertedBuffer = await this.convertAudio(audioBuffer);
+      
+      await this.saveDebugAudio(convertedBuffer, "openai_input_converted");
+
+      const file = new File([convertedBuffer], "audio.wav", { type: "audio/wav" });
+
       const result = await this.openai!.audio.transcriptions.create({
         model: "whisper-1",
         language: "en",
@@ -195,7 +201,7 @@ export class TranscriptionService extends EventEmitter {
       });
 
       const trimmedResult = (result as any).trim();
-      console.log(`OpenAI speech to text: ${trimmedResult}`);
+      console.log(`OpenAI speech to text result: "${trimmedResult}"`);
 
       return trimmedResult;
     } catch (error) {
@@ -213,19 +219,21 @@ export class TranscriptionService extends EventEmitter {
     }
   }
 
-  public async transcribeLocally(
-    audioBuffer: ArrayBuffer,
-  ): Promise<string | null> {
+  public async transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null> {
     try {
-      const fullPath = path.join(__dirname, "../../", this.CONTENT_CACHE_DIR);
-      const tempWavFile = path.join(fullPath, `temp_${Date.now()}.wav`);
+      console.log("Transcribing audio locally...");
 
-      // Create a WAV file from the audio buffer
-      const wavHeader = getWavHeader(audioBuffer.byteLength, 16000);
-      const wavBuffer = Buffer.concat([wavHeader, Buffer.from(audioBuffer)]);
-      fs.writeFileSync(tempWavFile, wavBuffer);
+      await this.saveDebugAudio(audioBuffer, "local_input_original");
 
-      // Perform the transcription using nodejs-whisper
+      const convertedBuffer = await this.convertAudio(audioBuffer);
+
+      await this.saveDebugAudio(convertedBuffer, "local_input_converted");
+
+      const tempWavFile = path.join(this.CONTENT_CACHE_DIR, `temp_${Date.now()}.wav`);
+      fs.writeFileSync(tempWavFile, convertedBuffer);
+
+      console.log(`Temporary WAV file created: ${tempWavFile}`);
+
       let output = await nodewhisper(tempWavFile, {
         modelName: "base.en",
         autoDownloadModelName: "base.en",
@@ -244,7 +252,8 @@ export class TranscriptionService extends EventEmitter {
         },
       });
 
-      // Process the output
+      console.log("Raw output from nodejs-whisper:", output);
+
       output = output
         .split("\n")
         .map((line) => {
@@ -256,15 +265,17 @@ export class TranscriptionService extends EventEmitter {
         })
         .join("\n");
 
-      // Remove the temporary WAV file
-      // fs.unlinkSync(tempWavFile);
+      console.log("Processed output:", output);
+
+      fs.unlinkSync(tempWavFile);
 
       if (!output || output.length < 5) {
+        console.log("Output is null or too short, returning null");
         return null;
       }
       return output;
     } catch (error) {
-      console.error("Error in speech-to-text conversion:", error);
+      console.error("Error in local speech-to-text conversion:", error);
       return null;
     }
   }

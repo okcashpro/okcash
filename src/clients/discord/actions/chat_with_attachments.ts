@@ -10,7 +10,7 @@ import {
   Memory,
   State,
 } from "../../../core/types.ts";
-
+import fs from "fs";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 
@@ -19,8 +19,7 @@ export const summarizationTemplate = `# Summarized so far (we are adding to this
 
 Summarization objective: {{objective}}
 
-# Instructions: Summarize the attachments. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details based on the objective. Only respond with the new summary text.
-Your response should be extremely detailed and include any and all relevant information.`;
+# Instructions: Summarize the attachments. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details based on the objective. Only respond with the new summary text.`;
 
 export const attachmentIdsTemplate = `# Messages we are summarizing 
 {{recentMessages}}
@@ -219,8 +218,17 @@ const summarizeAction = {
     callbackData.text = currentSummary;
 
     if (currentSummary.trim()) {
-      callback(callbackData);
-      await runtime.evaluate(message, state);
+      const summaryFilename = `content_cache/summary_${Date.now()}.txt`;
+      // save the summary to a file
+      fs.writeFileSync(summaryFilename, currentSummary);
+      await callback(
+        {
+          ...callbackData,
+          text: `I've attached the summary of the requested attachments as a text file.`,
+        },
+        [summaryFilename]
+      );
+
     } else {
       console.warn("Empty response from Claude, skipping");
     }

@@ -259,7 +259,7 @@ export class VoiceManager extends EventEmitter {
     const datestr = new Date().toUTCString().replace(/:/g, "-");
 
     // log context to file
-    log_to_file(`${state.agentName}_${datestr}_generate_context`, context);
+    log_to_file(`${state.agentName}_${datestr}_discord_voice_context`, context);
 
     const response = await this.runtime.messageCompletion({
       context,
@@ -274,7 +274,7 @@ export class VoiceManager extends EventEmitter {
     }
 
     log_to_file(
-      `${state.agentName}_${datestr}_generate_response`,
+      `${state.agentName}_${datestr}_discord_voice_response`,
       JSON.stringify(response),
     );
 

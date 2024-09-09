@@ -12,7 +12,7 @@ import {
   Memory,
   State,
 } from "../../../core/types.ts";
-
+import fs from "fs";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 
@@ -304,8 +304,16 @@ const summarizeAction = {
     callbackData.text = currentSummary;
 
     if (currentSummary.trim()) {
-      callback(callbackData);
-      await runtime.evaluate(message, state);
+      const summaryFilename = `content_cache/conversation_summary_${Date.now()}.txt`;
+      // save the summary to a file
+      fs.writeFileSync(summaryFilename, currentSummary);
+      await callback(
+        {
+          ...callbackData,
+          text: `I've attached the summary of the conversation from \`${new Date(parseInt(start as string)).toString()}\` to \`${new Date(parseInt(end as string)).toString()}\` as a text file.`,
+        },
+        [summaryFilename]
+      );
     } else {
       console.warn("Empty response from Claude, skipping");
     }

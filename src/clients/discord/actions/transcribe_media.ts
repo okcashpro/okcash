@@ -10,7 +10,7 @@ import {
   Memory,
   State,
 } from "../../../core/types.ts";
-
+import fs from "fs";
 export const transcriptionTemplate = `# Transcription of media file
 {{mediaTranscript}}
 
@@ -135,35 +135,19 @@ const transcribeMediaAction = {
 
     const mediaTranscript = attachment.text;
 
-    const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-    const context = composeContext({
-      state: {
-        ...state,
-        mediaTranscript,
-      },
-      template: transcriptionTemplate,
-    });
-
-    log_to_file(
-      `${state.agentName}_${datestr}_transcribe_media_context`,
-      context,
-    );
-
-    const transcript = await runtime.completion({
-      context,
-    });
-
-    log_to_file(
-      `${state.agentName}_${datestr}_transcribe_media_response`,
-      transcript,
-    );
-
-    callbackData.text = transcript.trim();
+    callbackData.text = mediaTranscript.trim();
 
     if (callbackData.text) {
-      callback(callbackData);
-      await runtime.evaluate(message, state);
+      const transcriptFilename = `content_cache/transcript_${Date.now()}.txt`;
+      // save the transcript to a file
+      fs.writeFileSync(transcriptFilename, callbackData.text);
+      await callback(
+        {
+          ...callbackData,
+          text: `I've attached the transcript of the requested media as a text file.`,
+        },
+        [transcriptFilename]
+      );
     } else {
       console.warn("Empty response from Claude, skipping");
     }

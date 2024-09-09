@@ -3,8 +3,9 @@ import { Action, ActionExample } from "./types.ts";
 
 import cont from "../actions/continue.ts";
 import ignore from "../actions/ignore.ts";
+import none from "../actions/none.ts";
 
-export const defaultActions: Action[] = [cont, ignore];
+export const defaultActions: Action[] = [cont, ignore, none];
 
 /**
  * Composes a set of example conversations based on provided actions and a specified count.
