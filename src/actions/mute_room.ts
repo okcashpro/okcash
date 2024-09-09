@@ -25,7 +25,7 @@ Otherwise, respond with NO.
 
 export default {
   name: "MUTE_ROOM",
-  similes: ["MUTE_CHAT", "MUTE_CONVERSATION", "MUTE_ROOM", "MUTE_THREAD"],
+  similes: ["MUTE_CHAT", "MUTE_CONVERSATION", "MUTE_ROOM", "MUTE_THREAD", "MUTE_CHANNEL"],
   description:
     "Mutes a room, ignoring all messages unless explicitly mentioned. Only do this if explicitly asked to, or if you're annoying people.",
   validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -34,7 +34,7 @@ export default {
       roomId,
       runtime.agentId,
     );
-    return userState !== "MUTED" && userState !== "FOLLOWED";
+    return userState !== "MUTED";
   },
   handler: async (runtime: IAgentRuntime, message: Memory) => {
     async function _shouldMute(state: State): Promise<boolean> {
