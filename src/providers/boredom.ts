@@ -2,7 +2,7 @@ import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 
 const boredomLevels = [
   {
-    minScore: -4,
+    minScore: -10000,
     statusMessages: [
       "{{agentName}} is feeling very engaged with the conversation and seems to be providing value to the conversation",
       // ... TODO: Add more status messages
@@ -207,9 +207,6 @@ const boredom: Provider = {
     const now = Date.now(); // Current UTC timestamp
     const fifteenMinutesAgo = now - 15 * 60 * 1000; // 15 minutes ago in UTC
 
-    console.log("fifteenMinutesAgo", new Date(fifteenMinutesAgo).toISOString());
-    console.log("now", new Date(now).toISOString());
-
     const recentMessages = await runtime.messageManager.getMemories({
       roomId: message.roomId,
       start: fifteenMinutesAgo,
@@ -218,35 +215,27 @@ const boredom: Provider = {
       unique: false,
     });
 
-
-    console.log("recentMessages", recentMessages);
-
     let boredomScore = 0;
 
     for (const recentMessage of recentMessages) {
       const messageText = recentMessage.content.text.toLowerCase();
 
       if (recentMessage.userId !== agentId) {
-        console.log("subtract 1 from boredom score");
         // if message text includes any of the interest words, subtract 1 from the boredom score
         if (interestWords.some((word) => messageText.includes(word))) {
           boredomScore -= 1;
         }
         if (messageText.includes("?")) {
-          console.log("subtract 1 from boredom score");
           boredomScore -= 1;
         }
         if (cringeWords.some((word) => messageText.includes(word))) {
-          console.log("add 1 to boredom score");
           boredomScore += 1;
         }
       } else {
         if (interestWords.some((word) => messageText.includes(word))) {
-          console.log("subtract 1 from boredom score");
           boredomScore -= 1;
         }
         if (messageText.includes("?")) {
-          console.log("add 1 to boredom score");
           boredomScore += 1;
         }
       }
@@ -259,8 +248,6 @@ const boredom: Provider = {
         boredomScore += 1;
       }
     }
-
-    console.log("boredomScore", boredomScore);
 
     const boredomLevel = boredomLevels
       .filter((level) => boredomScore >= level.minScore)
