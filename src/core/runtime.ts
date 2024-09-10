@@ -1339,7 +1339,10 @@ Text: ${attachment.text}
     const actionState = {
       actionNames:
         "Possible response actions: " + formatActionNames(actionsData),
-      actions: actionsData.length > 0 ? formatActions(actionsData) : "",
+      actions:
+        actionsData.length > 0
+          ? addHeader("# Available Actions", formatActions(actionsData))
+          : "",
       actionExamples:
         actionsData.length > 0
           ? addHeader(
@@ -1356,7 +1359,10 @@ Text: ${attachment.text}
         evaluatorsData.length > 0
           ? formatEvaluatorExamples(evaluatorsData)
           : "",
-      providers,
+      providers: addHeader(
+        `# Additional Information About ${this.character.name} and The World`,
+        providers,
+      ),
     };
 
     return { ...initialState, ...actionState } as State;

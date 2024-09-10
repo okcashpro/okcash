@@ -203,12 +203,23 @@ const boredom: Provider = {
   get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
     const agentId = runtime.agentId;
     const agentName = state?.agentName || "The agent";
-    const fifteenMinutesAgo = Date.now() - 15 * 60 * 1000;
+
+    const now = Date.now(); // Current UTC timestamp
+    const fifteenMinutesAgo = now - 15 * 60 * 1000; // 15 minutes ago in UTC
+
+    console.log("fifteenMinutesAgo", new Date(fifteenMinutesAgo).toISOString());
+    console.log("now", new Date(now).toISOString());
 
     const recentMessages = await runtime.messageManager.getMemories({
       roomId: message.roomId,
       start: fifteenMinutesAgo,
+      end: now,
+      count: 20,
+      unique: false,
     });
+
+
+    console.log("recentMessages", recentMessages);
 
     let boredomScore = 0;
 
@@ -216,21 +227,26 @@ const boredom: Provider = {
       const messageText = recentMessage.content.text.toLowerCase();
 
       if (recentMessage.userId !== agentId) {
+        console.log("subtract 1 from boredom score");
         // if message text includes any of the interest words, subtract 1 from the boredom score
         if (interestWords.some((word) => messageText.includes(word))) {
           boredomScore -= 1;
         }
         if (messageText.includes("?")) {
+          console.log("subtract 1 from boredom score");
           boredomScore -= 1;
         }
         if (cringeWords.some((word) => messageText.includes(word))) {
+          console.log("add 1 to boredom score");
           boredomScore += 1;
         }
       } else {
         if (interestWords.some((word) => messageText.includes(word))) {
+          console.log("subtract 1 from boredom score");
           boredomScore -= 1;
         }
         if (messageText.includes("?")) {
+          console.log("add 1 to boredom score");
           boredomScore += 1;
         }
       }
@@ -244,17 +260,17 @@ const boredom: Provider = {
       }
     }
 
+    console.log("boredomScore", boredomScore);
+
     const boredomLevel = boredomLevels
       .filter((level) => boredomScore >= level.minScore)
       .pop();
 
-    if (boredomLevel) {
-      const randomIndex = Math.floor(
-        Math.random() * boredomLevel.statusMessages.length,
-      );
-      const selectedMessage = boredomLevel.statusMessages[randomIndex];
-      return selectedMessage.replace("{{agentName}}", agentName);
-    }
+    const randomIndex = Math.floor(
+      Math.random() * boredomLevel.statusMessages.length,
+    );
+    const selectedMessage = boredomLevel.statusMessages[randomIndex];
+    return selectedMessage.replace("{{agentName}}", agentName);
 
     return "";
   },
