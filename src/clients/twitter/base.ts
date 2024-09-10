@@ -250,31 +250,34 @@ export class ClientBase extends EventEmitter {
   async fetchHomeTimeline(count: number): Promise<Tweet[]> {
     const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
 
-    return homeTimeline.map((tweet) => {
-      console.log("tweet.legacy.entities", tweet.legacy);
-
-      return {
+    return homeTimeline.filter(t => t.__typename !== "TweetWithVisibilityResults").map((tweet) => {
+      console.log("tweet is", tweet);
+      const obj =  {
         id: tweet.rest_id,
-        name: tweet.core.user_results.result.legacy.name,
-        username: tweet.core.user_results.result.legacy.screen_name,
-        text: tweet.legacy.full_text,
-        inReplyToStatusId: tweet.legacy.in_reply_to_status_id_str,
-        createdAt: tweet.legacy.created_at,
-        userId: tweet.legacy.user_id_str,
-        conversationId: tweet.legacy.conversation_id_str,
-        hashtags: tweet.legacy.entities.hashtags,
-        mentions: tweet.legacy.entities.user_mentions,
-        photos:
-          tweet.legacy.entities.media?.filter(
+        name: tweet.name ?? tweet.core?.user_results?.result?.legacy.name,
+        username: tweet.username ?? tweet.core?.user_results?.result?.legacy.screen_name,
+        text: tweet.text ?? tweet.legacy?.full_text,
+        inReplyToStatusId: tweet.inReplyToStatusId ?? tweet.legacy?.in_reply_to_status_id_str,
+        createdAt: tweet.createdAt ?? tweet.legacy?.created_at,
+        userId: tweet.userId ?? tweet.legacy?.user_id_str,
+        conversationId: tweet.conversationId ?? tweet.legacy?.conversation_id_str,
+        hashtags: tweet.hashtags ?? tweet.legacy?.entities.hashtags,
+        mentions: tweet.mentions ?? tweet.legacy?.entities.user_mentions,
+        photos: tweet.photos ??
+          tweet.legacy?.entities.media?.filter(
             (media) => media.type === "photo",
           ) ?? [],
         thread: [],
-        urls: tweet.legacy.entities.urls,
-        videos:
-          tweet.legacy.entities.media?.filter(
+        urls: tweet.urls ?? tweet.legacy?.entities.urls,
+        videos: tweet.videos ??
+          tweet.legacy?.entities.media?.filter(
             (media) => media.type === "video",
           ) ?? [],
       };
+
+      console.log("obj is", obj);
+
+      return obj;
     });
   }
 
