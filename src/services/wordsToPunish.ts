@@ -3,6 +3,7 @@ export const wordsToPunish = [
   " feel",
   " free",
   "!",
+  "–",
   "?",
   ".",
   ",",

@@ -22,13 +22,10 @@ const messageHandlerTemplate =
   `{{relevantFacts}}
 {{recentFacts}}
 
+{{timeline}}
+
 Recent interactions between {{agentName}} and other users:
 {{recentPostInteractions}}
-
-Recent tweets which {{agentName}} may or may not find interesting:
-{{recentSearchResults}}
-
-{{timeline}}
 
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
@@ -36,11 +33,10 @@ About {{agentName}} (@{{twitterUserName}}):
 {{topics}}
 
 {{postDirections}}
-Respond directly to the above post in an {{adjective}} way, as {{agentName}}
 
 {{recentPosts}}
 
-# Task: Respond to the following post in the style and perspective of {{agentName}} (aka @{{twitterUserName}}).
+# Task: Respond to the following post in the style and perspective of {{agentName}} (aka @{{twitterUserName}}). Write a {{adjective}} response for {{agentName}} to say directly in response to the post. don't generalize.
 {{currentPost}}
 
 Your response should not contain any questions. Brief, concise statements only.
@@ -80,10 +76,9 @@ export class TwitterSearchClient extends ClientBase {
         fs.mkdirSync("tweets");
       }
       console.log("Fetching search tweets");
-      // wait 5 seconds
+      // TODO: we wait 5 seconds here to avoid getting rate limited on startup, but we should queue
       await new Promise((resolve) => setTimeout(resolve, 5000));
-      console.log("searchTerm is", searchTerm);
-      const recentTweets = await this.fetchSearchTweets(searchTerm, 20, SearchMode.Latest);
+      const recentTweets = await this.fetchSearchTweets(searchTerm, 20, SearchMode.Top);
       console.log("Search tweets fetched");
 
       const homeTimeline = await this.fetchHomeTimeline(50);
@@ -246,106 +241,9 @@ export class TwitterSearchClient extends ClientBase {
         imageDescriptions.push(description);
       }
 
-      const searchRecentPosts = async (
-        runtime: IAgentRuntime,
-        client: ClientBase,
-        searchTerm: string,
-      ) => {
-        const recentSearchResults = [];
-        const tweets = await client.requestQueue.add(
-          async () =>
-            await client.twitterClient.fetchSearchTweets(
-              searchTerm + " exclude:replies exclude:retweets",
-              25,
-              SearchMode.Latest,
-            ),
-        );
-
-        const sortedTweets = tweets.tweets.sort(
-          (a, b) => b.timestamp - a.timestamp,
-        );
-
-        // Format search results
-        for (const tweet of sortedTweets.filter((tweet) =>
-          isValidTweet(tweet),
-        )) {
-          let formattedTweet = `Name: ${tweet.name} (@${tweet.username})\n`;
-          formattedTweet += `Time: ${tweet.timeParsed.toLocaleString()}\n`;
-          formattedTweet += `Text: ${tweet.text}\n---\n`;
-
-          if (tweet.photos.length > 0) {
-            const photoDescriptions = await Promise.all(
-              tweet.photos.map(async (photo) => {
-                const description =
-                  await runtime.imageDescriptionService.describeImage(
-                    photo.url,
-                  );
-                return `[Photo: ${description.title} - ${description.description}]`;
-              }),
-            );
-            formattedTweet += `Photos: ${photoDescriptions.join(", ")}\n`;
-          }
-
-          if (tweet.videos.length > 0) {
-            const videoTranscriptions = await Promise.all(
-              tweet.videos.map(async (video) => {
-                const transcription = await runtime.videoService.processVideo(
-                  video.url,
-                );
-                return `[Video Transcription: ${transcription.text}]`;
-              }),
-            );
-            formattedTweet += `Videos: ${videoTranscriptions.join(", ")}\n`;
-          }
-
-          formattedTweet += `Replies: ${tweet.replies}, Retweets: ${tweet.retweets}, Likes: ${tweet.likes}, Views: ${tweet.views ?? "Unknown"}\n`;
-
-          // If tweet is a reply, find the original tweet and include it
-          if (tweet.inReplyToStatusId) {
-            const originalTweet = tweets.tweets.find(
-              (t) => t.id === tweet.inReplyToStatusId,
-            );
-            if (originalTweet) {
-              formattedTweet += `\nIn reply to:\n`;
-              formattedTweet += `Name: ${originalTweet.name} (@${originalTweet.username})\n`;
-              formattedTweet += `Time: ${originalTweet.timeParsed.toLocaleString()}\n`;
-              formattedTweet += `Text: ${originalTweet.text}\n`;
-            } else {
-              // wait 1.5-3.5 seconds to avoid rate limiting
-              const waitTime = Math.floor(Math.random() * 2000) + 1500;
-              await new Promise((resolve) => setTimeout(resolve, waitTime));
-              // now look up the original tweet
-              const originalTweet = await client.requestQueue.add(
-                async () =>
-                  await client.twitterClient.getTweet(tweet.inReplyToStatusId),
-              );
-              formattedTweet += `\nIn reply to:\n`;
-              formattedTweet += `Name: ${originalTweet.name} (@${originalTweet.username})\n`;
-              formattedTweet += `Time: ${originalTweet.timeParsed.toLocaleString()}\n`;
-              formattedTweet += `Text: ${originalTweet.text}\n`;
-            }
-          }
-
-          recentSearchResults.push(formattedTweet);
-        }
-
-        const recentSearchResultsText = recentSearchResults.join("\n");
-        return addHeader(
-          "# Recent Search Results for " + searchTerm,
-          recentSearchResultsText,
-        );
-      };
-
-      const recentSearchResults = await searchRecentPosts(
-        this.runtime,
-        this,
-        searchTerm,
-      );
-
       let state = await this.runtime.composeState(message, {
         twitterClient: this.twitterClient,
         twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
-        recentSearchResults,
         timeline: formattedHomeTimeline,
         tweetContext: `${tweetBackground}
   
