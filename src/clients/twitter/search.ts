@@ -80,10 +80,10 @@ export class TwitterSearchClient extends ClientBase {
         fs.mkdirSync("tweets");
       }
       console.log("Fetching search tweets");
-      const recentTweets = await this.requestQueue.add(
-        async () =>
-          await this.fetchSearchTweets(searchTerm, 50, SearchMode.Latest),
-      );
+      // wait 5 seconds
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      console.log("searchTerm is", searchTerm);
+      const recentTweets = await this.fetchSearchTweets(searchTerm, 20, SearchMode.Latest);
       console.log("Search tweets fetched");
 
       const homeTimeline = await this.fetchHomeTimeline(50);

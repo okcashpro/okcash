@@ -304,6 +304,7 @@ export class ClientBase extends EventEmitter {
               timeoutPromise,
             ]),
         );
+        console.log("result", result);
         return (result ?? { tweets: [] }) as QueryTweetsResponse;
       } catch (error) {
         console.error("Error fetching search tweets:", error);
