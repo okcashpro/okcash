@@ -2,7 +2,7 @@
 
 <img src="./docs/eliza_banner.png" alt="Eliza Banner" width="100%">
 
-A useful AI agent, and a great friends.
+A useful AI agent, and a great friend.
 
 - Powerful Discord and Twitter bot with access to the internet
 - Voice-to-voice on Discord
