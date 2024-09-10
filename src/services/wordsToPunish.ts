@@ -4,6 +4,7 @@ export const wordsToPunish = [
   " free",
   "!",
   "–",
+  "—",
   "?",
   ".",
   ",",
