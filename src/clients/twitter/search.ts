@@ -271,7 +271,9 @@ export class TwitterSearchClient extends ClientBase {
       const responseContent = await this.runtime.messageCompletion({
         context,
         stop: [],
-        temperature: this.temperature,
+        temperature: this.temperature + 0.3,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
       });
 
       responseContent.inReplyTo = message.id;
