@@ -8,14 +8,13 @@ import unfollow_room from "./actions/unfollow_room.ts";
 import unmute_room from "./actions/unmute_room.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
-import channelStateProvider from "./clients/discord/providers/channelState.ts";
-import voiceStateProvider from "./clients/discord/providers/voiceState.ts";
 import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { defaultActions } from "./core/actions.ts";
 import defaultCharacter from "./core/defaultCharacter.ts";
 import { AgentRuntime } from "./core/runtime.ts";
 import settings from "./core/settings.ts";
 import { Character } from "./core/types.ts";
+import boredomProvider from "./providers/boredom.ts";
 import timeProvider from "./providers/time.ts";
 
 interface Arguments {
@@ -85,7 +84,7 @@ async function startAgent(character: Character) {
     model: "gpt-4o-mini",
     evaluators: [],
     character,
-    providers: [channelStateProvider, voiceStateProvider, timeProvider],
+    providers: [timeProvider, boredomProvider],
     actions: [
       ...defaultActions,
       askClaude,

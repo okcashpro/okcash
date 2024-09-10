@@ -7,7 +7,14 @@ import {
 
 export default {
   name: "NONE",
-  similes: ["NO_ACTION", "NO_RESPONSE", "NO_REACTION", "RESPONSE", "REPLY", "DEFAULT"],
+  similes: [
+    "NO_ACTION",
+    "NO_RESPONSE",
+    "NO_REACTION",
+    "RESPONSE",
+    "REPLY",
+    "DEFAULT",
+  ],
   validate: async (_runtime: IAgentRuntime, _message: Memory) => {
     return true;
   },
@@ -38,13 +45,19 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { text: "yeah but its a pain to get into node.js", action: "NONE" },
+        content: {
+          text: "yeah but its a pain to get into node.js",
+          action: "NONE",
+        },
       },
     ],
     [
       {
         user: "{{user1}}",
-        content: { text: "the things that were funny 6 months ago are very cringe now", action: "NONE" },
+        content: {
+          text: "the things that were funny 6 months ago are very cringe now",
+          action: "NONE",
+        },
       },
       {
         user: "{{user2}}",
@@ -84,21 +97,24 @@ export default {
       },
       {
         user: "{{user1}}",
-        content: { text: "chillin man. playing lots of fortnite. what about you", action: "NONE" },
+        content: {
+          text: "chillin man. playing lots of fortnite. what about you",
+          action: "NONE",
+        },
       },
     ],
-  
+
     [
       {
         user: "{{user1}}",
-        content: { text: "u think aliens are real", action: "NONE" },  
+        content: { text: "u think aliens are real", action: "NONE" },
       },
-      {  
+      {
         user: "{{user2}}",
         content: { text: "ya obviously", action: "NONE" },
       },
     ],
-      
+
     [
       {
         user: "{{user1}}",
@@ -106,24 +122,26 @@ export default {
       },
       {
         user: "{{user2}}",
-        content: { text: "why dont scientists trust atoms cuz they make up everything lmao", action: "NONE" }, 
+        content: {
+          text: "why dont scientists trust atoms cuz they make up everything lmao",
+          action: "NONE",
+        },
       },
       {
         user: "{{user1}}",
         content: { text: "haha good one", action: "NONE" },
       },
     ],
-       
+
     [
       {
         user: "{{user1}}",
         content: { text: "hows the weather where ur at", action: "NONE" },
       },
-      {  
+      {
         user: "{{user2}}",
         content: { text: "beautiful all week", action: "NONE" },
       },
     ],
-  
   ] as ActionExample[][],
 } as Action;
