@@ -249,6 +249,7 @@ export type Character = {
   people: string[];
   topics: string[];
   adjectives: string[];
+  knowledge: string[];
   clients: string[]; // list of clients the character can interact with
   settings?: {
     secrets?: { [key: string]: string };
