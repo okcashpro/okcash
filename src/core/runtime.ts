@@ -310,7 +310,7 @@ export class AgentRuntime implements IAgentRuntime {
       const knowledgeId = stringToUuid(knowledgeItem);
       const existingDocument = await this.documentsManager.getMemoryById(knowledgeId);
       if (!existingDocument) {
-        console.log("Processing knowledge for ", this.character.name, " - ",  existingDocument.content?.text?.slice(0, 100))
+        console.log("Processing knowledge for ", this.character.name, " - ",  knowledgeItem.slice(0, 100))
         await this.documentsManager.createMemory({
           embedding: embeddingZeroVector,
           id: knowledgeId,
