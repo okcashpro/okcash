@@ -625,7 +625,6 @@ export class MessageManager {
     state: State,
     context: string,
   ): Promise<Content> {
-    let responseContent: Content | null = null;
     const { userId, roomId } = message;
 
     const datestr = new Date().toUTCString().replace(/:/g, "-");
@@ -639,6 +638,7 @@ export class MessageManager {
     const response = await this.runtime.messageCompletion({
       context,
       stop: [],
+      model: "gpt-4o",
     });
 
     if (!response) {
