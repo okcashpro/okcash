@@ -186,6 +186,11 @@ export class ClientBase extends EventEmitter {
         "_cookies.json",
     );
 
+    const dir = path.dirname(cookiesFilePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
     // async initialization
     (async () => {
       // Check for Twitter cookies

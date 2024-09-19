@@ -56,6 +56,8 @@ export class TwitterGenerationClient extends ClientBase {
       );
 
       let homeTimeline = [];
+
+      if (!fs.existsSync("tweetcache")) fs.mkdirSync("tweetcache");
       // read the file if it exists
       if (fs.existsSync("tweetcache/home_timeline.json")) {
         homeTimeline = JSON.parse(
