@@ -321,13 +321,9 @@ export class AgentRuntime implements IAgentRuntime {
             text: knowledgeItem,
           },
         });
-        console.log("document created", knowledgeItem);
         const fragments = await this.splitChunks(knowledgeItem, 1200, 200);
-        console.log("fragments", fragments);
         for (const fragment of fragments) {
-          console.log("embedding fragment", fragment);
           const embedding = await this.embed(fragment);
-          console.log("embedding", embedding);
           await this.fragmentsManager.createMemory({
             id: stringToUuid(fragment),
             roomId: this.agentId,
