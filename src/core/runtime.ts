@@ -303,7 +303,7 @@ export class AgentRuntime implements IAgentRuntime {
   private async processCharacterKnowledge(knowledge: string[]) {
     for (const knowledgeItem of knowledge) {
       const knowledgeId = stringToUuid(knowledgeItem);
-      const existingDocument = await this.documentsManager.getMemoryById(knowledgeItem.id as UUID);
+      const existingDocument = await this.documentsManager.getMemoryById(knowledgeId);
       if (!existingDocument) {
         await this.documentsManager.createMemory({
           id: knowledgeId,

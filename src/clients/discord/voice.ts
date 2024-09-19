@@ -17,12 +17,10 @@ import {
   VoiceChannel,
   VoiceState,
 } from "discord.js";
+import EventEmitter from "events";
+import path from "path";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { AudioMonitor } from "./audioMonitor.ts";
-import fs from "fs";
-import path from "path";
-import EventEmitter from "events";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
@@ -35,11 +33,10 @@ import {
   UUID,
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
-import { SpeechService } from "../../services/speech.ts";
-import { voiceHandlerTemplate } from "./templates.ts";
 import { getWavHeader } from "../../services/audioUtils.ts";
-import { exec } from "child_process";
-import { opus } from "prism-media";
+import { SpeechService } from "../../services/speech.ts";
+import { AudioMonitor } from "./audioMonitor.ts";
+import { voiceHandlerTemplate } from "./templates.ts";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
