@@ -638,7 +638,7 @@ export class MessageManager {
     const response = await this.runtime.messageCompletion({
       context,
       stop: [],
-      model: "gpt-4o",
+      model: "gpt-4o-2024-08-06",
     });
 
     if (!response) {

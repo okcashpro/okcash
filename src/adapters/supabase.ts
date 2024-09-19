@@ -345,6 +345,7 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     const createdAt = memory.createdAt ?? Date.now();
     if (unique) {
       const opts = {
+        // TODO: Add ID option, optionally
         query_table_name: tableName,
         query_userId: memory.userId,
         query_content: memory.content.text,

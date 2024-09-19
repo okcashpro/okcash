@@ -237,7 +237,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     const createdAt = memory.createdAt ?? Date.now();
 
     stmt.run([
-      v4(),
+      memory.id ?? v4(),
       tableName,
       JSON.stringify(memory.content),
       JSON.stringify(memory.embedding),

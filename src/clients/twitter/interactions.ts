@@ -301,7 +301,7 @@ export class TwitterInteractionClient extends ClientBase {
       context,
       stop: [],
       temperature: this.temperature,
-      model: "gpt-4o",
+      model: "gpt-4o-2024-08-06",
     });
 
     console.log("response", response);

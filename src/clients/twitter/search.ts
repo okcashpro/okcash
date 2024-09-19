@@ -274,7 +274,7 @@ export class TwitterSearchClient extends ClientBase {
         temperature: this.temperature + 0.3,
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
-        model: "gpt-4o",
+        model: "gpt-4o-2024-08-06",
       });
 
       responseContent.inReplyTo = message.id;

@@ -208,7 +208,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     this.db
       .prepare(sql)
       .run(
-        v4(),
+        memory.id ?? v4(),
         tableName,
         content,
         JSON.stringify(memory.embedding),
