@@ -1,7 +1,7 @@
+# OK • Okcash
+
 ![Okcash](https://i.imgur.com/3tetgJ4.png)
 [![OK Network](https://img.shields.io/badge/network%20status-stable-brightgreen.svg?style=flat-square)](http://okcash.network) [![OK NetworkU](https://img.shields.io/badge/network%20uptime-100%25-gre.svg?style=flat-square)](http://okcash.network) [![Okcash License](https://img.shields.io/github/license/okcashpro/okcash?color=green&style=flat-square)](https://github.com/okcashpro/okcash/blob/master/COPYING) [![OK Bitcoin Discord](https://img.shields.io/discord/213747404745211904?label=discord&style=flat-square)](https://discord.gg/grvpc8c)
-
-# OK • Okcash
 
 # Join the OK Community: Embrace OK Multichain
 
