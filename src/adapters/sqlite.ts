@@ -16,6 +16,7 @@ import {
 import { sqliteTables } from "./sqlite/sqliteTables.ts";
 
 import { Database } from "better-sqlite3";
+import { embeddingZeroVector } from "../core/memory.ts";
 
 export class SqliteDatabaseAdapter extends DatabaseAdapter {
   async getRoom(roomId: UUID): Promise<UUID | null> {
@@ -211,7 +212,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         memory.id ?? v4(),
         tableName,
         content,
-        JSON.stringify(memory.embedding),
+        JSON.stringify(memory.embedding ?? embeddingZeroVector),
         memory.userId,
         memory.roomId,
         isUnique ? 1 : 0,
