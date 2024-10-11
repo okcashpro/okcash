@@ -6,7 +6,7 @@ import { DatabaseAdapter } from "../core/database.ts";
 import { IAgentRuntime } from "../core/types.ts";
 import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Evaluator, Provider } from "../core/types.ts";
-import { zeroUuid } from "../test_resources/constants.ts";
+import { zeroUuid } from "./constants.ts";
 import {
   SUPABASE_ANON_KEY,
   SUPABASE_URL,

@@ -9,6 +9,7 @@ import unmute_room from "./actions/unmute_room.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
 import { TwitterSearchClient } from "./clients/twitter/search.ts";
+import DirectClient from "./clients/direct/index.ts";
 import { defaultActions } from "./core/actions.ts";
 import defaultCharacter from "./core/defaultCharacter.ts";
 import { AgentRuntime } from "./core/runtime.ts";
@@ -55,6 +56,9 @@ const characterPath = argv.character;
 const characterPaths = argv.characters?.split(",").map((path) => path.trim());
 
 const characters = [];
+
+const directClient = new DirectClient();
+directClient.start(3000);
 
 if (characterPaths?.length > 0) {
   for (const path of characterPaths) {
@@ -141,6 +145,8 @@ async function startAgent(character: Character) {
       twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
     );
   }
+
+  directClient.registerAgent(runtime);
 
   return clients;
 }

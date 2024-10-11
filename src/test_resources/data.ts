@@ -1,5 +1,5 @@
 import { ConversationExample, type UUID } from "../core/types.ts";
-import { zeroUuid } from "../test_resources/constants.ts";
+import { zeroUuid } from "./constants.ts";
 
 // CJ asks Jim some personal questions - name, job, marital status, and what he's looking for in a relationship
 export const GetTellMeAboutYourselfConversation1 = (
