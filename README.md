@@ -2,18 +2,18 @@
 
 <img src="./docs/eliza_banner.png" alt="Eliza Banner" width="100%">
 
-A useful AI agent, and a great friend.
+Make new friends.
 
-- Powerful Discord and Twitter bot with access to the internet
-- Voice-to-voice on Discord
-- Can read PDFs, transcribe audio and videos, summarize conversations, and more
-- Create your own characters or run a copy of Eliza herself
+- Multi-agent simulation framework
+- Add as many unique characters as you want with [characterfile](https://github.com/lalalune/characterfile/)
+- Full-featured Discord and Twitter connectors, with Discord voice channel support
+- Full conversational and document RAG memory
+- Can read links and PDFs, transcribe audio and videos, summarize conversations, and more
 - Highly extensible - create your own actions and clients to extend Eliza's capabilities
-- Runs on Mac, Windows, and Linux, or deploy on a light-weight device with OpenAI
-- Open source and local with Llama 3 and transformers.js
-- Or use OpenAI for cloud inference on a light-weight device
-- Fully integrated with Discord and Twitter
-- Written in Typescript
+- Supports open source and local models (default configured with Nous Hermes Llama 3.1B)
+- Supports OpenAI for cloud inference on a light-weight device
+- "Ask Claude" mode for calling Claude on more complex queries
+- 100% Typescript
 
 # Requires Node 20+
 If you are getting strange issues when starting up, make sure you're using Node 20+. Some APIs are not compatible with previous versions. You can check your node version with `node -v`. If you need to install a new version of node, we recommend using [nvm](https://github.com/nvm-sh/nvm).
