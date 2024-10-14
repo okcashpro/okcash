@@ -26,8 +26,6 @@ About {{agentName}}:
 
 {{attachments}}
 
-{{actions}}
-
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 
@@ -35,7 +33,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 {{recentMessages}}
 
-# Instructions: Write the next message for {{agentName}}. Include an action, if appropriate. {{actionNames}}
+# Instructions: Write the next message for {{agentName}}. Ignore "action".
 ` + messageCompletionFooter;
 
 

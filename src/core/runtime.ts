@@ -469,8 +469,6 @@ export class AgentRuntime implements IAgentRuntime {
             }),
           };
 
-          console.log("requestOptions", requestOptions)
-
           const response = await fetch(
             `${this.serverUrl}/chat/completions`,
             requestOptions,
@@ -491,8 +489,12 @@ export class AgentRuntime implements IAgentRuntime {
             choices: Array<{ message: { content: string } }>;
           }
 
-          const content = (body as OpenAIResponse).choices?.[0]?.message
-            ?.content;
+          const message = (body as OpenAIResponse).choices?.[0]?.message
+
+          console.log("Message is", message)
+
+          const content = message?.content;
+
           if (!content) {
             throw new Error("No content in response");
           }
@@ -751,10 +753,13 @@ export class AgentRuntime implements IAgentRuntime {
           max_response_length,
         });
 
+        console.log("*** response", response)
+
         // try parsing the response as JSON, if null then try again
         const parsedContent = parseJSONObjectFromText(response) as Content;
 
         if (!parsedContent) {
+          console.log("parsedContent is null, retrying")
           continue;
         }
 
