@@ -469,6 +469,8 @@ export class AgentRuntime implements IAgentRuntime {
             }),
           };
 
+          console.log("requestOptions", requestOptions)
+
           const response = await fetch(
             `${this.serverUrl}/chat/completions`,
             requestOptions,
