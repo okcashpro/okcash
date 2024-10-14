@@ -67,12 +67,12 @@ export class DiscordClient extends EventEmitter {
     this.setupEventListeners();
     this.setupCommands();
 
-    this.runtime.registerAction(joinvoice);
-    this.runtime.registerAction(leavevoice);
-    this.runtime.registerAction(summarize);
-    this.runtime.registerAction(chat_with_attachments);
-    this.runtime.registerAction(transcribe_media);
-    this.runtime.registerAction(download_media);
+    // this.runtime.registerAction(joinvoice);
+    // this.runtime.registerAction(leavevoice);
+    // this.runtime.registerAction(summarize);
+    // this.runtime.registerAction(chat_with_attachments);
+    // this.runtime.registerAction(transcribe_media);
+    // this.runtime.registerAction(download_media);
 
     this.runtime.providers.push(channelStateProvider);
     this.runtime.providers.push(voiceStateProvider);

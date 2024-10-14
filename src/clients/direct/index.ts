@@ -10,6 +10,10 @@ import {
 import { stringToUuid } from "../../core/uuid.ts";
 import cors from "cors";
 import { messageCompletionFooter } from "../../core/parsing.ts";
+import multer, { File } from 'multer';
+import { Request as ExpressRequest } from 'express';
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export const messageHandlerTemplate =
   // {{goals}}
@@ -57,14 +61,56 @@ class DirectClient {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
 
+// Define an interface that extends the Express Request interface
+interface CustomRequest extends ExpressRequest {
+  file: File;
+}
+
+// Update the route handler to use CustomRequest instead of express.Request
+this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequest, res: express.Response) => {
+  const audioFile = req.file; // Access the uploaded file using req.file
+  const agentId = req.params.agentId;
+
+  if (!audioFile) {
+    res.status(400).send("No audio file provided");
+    return;
+  }
+
+  let agent = this.agents.get(agentId);
+
+  // if agent is null, look for agent with the same name
+  if (!agent) {
+    agent = Array.from(this.agents.values()).find((a) => a.character.name.toLowerCase() === agentId.toLowerCase());
+  }
+
+  if (!agent) {
+    res.status(404).send("Agent not found");
+    return;
+  }
+
+  const formData = new FormData();
+  const audioBlob = new Blob([audioFile.buffer], { type: audioFile.mimetype });
+  formData.append('file', audioBlob, audioFile.originalname);
+  formData.append('model', 'whisper-1');
+
+  const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${agent.token}`,
+    },
+    body: formData,
+  });
+
+  const data = await response.json();
+  res.json(data);
+});
+
     this.app.post("/:agentId/message", async (req: express.Request, res: express.Response) => {
-      console.log("Receied message");
       let agentId = req.params.agentId;
       const roomId = stringToUuid(req.body.roomId ?? "default-room");
       const userId = stringToUuid(req.body.userId ?? "user");
       
       let agent = this.agents.get(agentId);
-      console.log("this.agents", Array.from(this.agents.values()).map((a) => a.character.name));
 
       // if agent is null, look for agent with the same name
       if (!agent) {
@@ -75,8 +121,6 @@ class DirectClient {
         res.status(404).send("Agent not found");
         return;
       }
-
-      console.log("agent.agentId", agent.agentId)
 
       await Promise.all([
         agent.ensureUserExists(
@@ -115,8 +159,6 @@ class DirectClient {
         createdAt: Date.now(),
       };
 
-      console.log("memory", memory);
-
       await agent.messageManager.createMemory(memory);
 
 
@@ -129,17 +171,11 @@ class DirectClient {
         template: messageHandlerTemplate,
       });
 
-      console.log("sending");
-
-      console.log("context", context);
-
       const response = await agent.messageCompletion({
         context,
         model: 'gpt-4o-mini',
         stop: [],
       });
-
-      console.log("response");
 
       // save response to memory
       const responseMessage = {
