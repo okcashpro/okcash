@@ -13,11 +13,11 @@ import { messageCompletionFooter } from "../../core/parsing.ts";
 
 export const messageHandlerTemplate =
   // {{goals}}
-  `# Action Examples
-{{actionExamples}}
-(Action examples are for reference only. Do not use the information from them in your response.)
+//   `# Action Examples
+// {{actionExamples}}
+// (Action examples are for reference only. Do not use the information from them in your response.)
 
-# Task: Generate dialog and actions for the character {{agentName}}.
+`# Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
 {{bio}}
 {{lore}}
@@ -60,6 +60,7 @@ class DirectClient {
     this.app.use(bodyParser.urlencoded({ extended: true }));
 
     this.app.post("/:agentId/message", async (req: express.Request, res: express.Response) => {
+      console.log("Receied message");
       let agentId = req.params.agentId;
       const roomId = stringToUuid(req.body.roomId ?? "default-room");
       const userId = stringToUuid(req.body.userId ?? "user");
@@ -79,21 +80,21 @@ class DirectClient {
 
       console.log("agent.agentId", agent.agentId)
 
-      await Promise.all([
-        agent.ensureUserExists(
-          agent.agentId,
-          agent.character.name ?? "Agent",
-          agent.character.name ?? "Agent",
-          "direct",
-        ),
-        agent.ensureUserExists(userId, req.body.userName ?? "User", req.body.name ?? "User", "direct"),
-        agent.ensureRoomExists(roomId),
-      ]);
+      // await Promise.all([
+      //   agent.ensureUserExists(
+      //     agent.agentId,
+      //     agent.character.name ?? "Agent",
+      //     agent.character.name ?? "Agent",
+      //     "direct",
+      //   ),
+      //   agent.ensureUserExists(userId, req.body.userName ?? "User", req.body.name ?? "User", "direct"),
+      //   agent.ensureRoomExists(roomId),
+      // ]);
 
-      await Promise.all([
-        agent.ensureParticipantInRoom(userId, roomId),
-        agent.ensureParticipantInRoom(agent.agentId, roomId),
-      ]);
+      // await Promise.all([
+      //   agent.ensureParticipantInRoom(userId, roomId),
+      //   agent.ensureParticipantInRoom(agent.agentId, roomId),
+      // ]);
 
       const text = req.body.text;
       const messageId = stringToUuid(Date.now().toString());
@@ -116,7 +117,11 @@ class DirectClient {
         createdAt: Date.now(),
       };
 
+      console.log("memory", memory);
+
       await agent.messageManager.createMemory(memory);
+
+      
 
 
       const state = (await agent.composeState(userMessage, {
@@ -129,6 +134,8 @@ class DirectClient {
       });
 
       console.log("sending");
+
+      console.log("context", context);
 
       const response = await agent.messageCompletion({
         context,
