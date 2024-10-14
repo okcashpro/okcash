@@ -119,8 +119,6 @@ class DirectClient {
 
       await agent.messageManager.createMemory(memory);
 
-      
-
 
       const state = (await agent.composeState(userMessage, {
         agentName: agent.character.name,
@@ -146,6 +144,7 @@ class DirectClient {
       // save response to memory
       const responseMessage = {
         ...userMessage,
+        userId: agent.agentId,
         content: response,
       };
 
