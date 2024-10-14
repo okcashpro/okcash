@@ -68,12 +68,9 @@ export default {
   description:
     "Downloads a video or audio file from a URL and attaches it to the response message.",
   validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
-    const videoService = VideoService.getInstance(runtime);
-    if (!state) {
-      state = (await runtime.composeState(message)) as State;
+    if (message.content.source !== "discord") {
+      return false;
     }
-    const mediaUrl = await getMediaUrl(runtime, message, state);
-    return mediaUrl !== null && videoService.isVideoUrl(mediaUrl);
   },
   handler: async (
     runtime: IAgentRuntime,
