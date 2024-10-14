@@ -82,8 +82,9 @@ try {
 
 async function startAgent(character: Character) {
   console.log("Starting agent for character " + character.name);
+  const db = new SqliteDatabaseAdapter(new Database("./db.sqlite"))
   const runtime = new AgentRuntime({
-    databaseAdapter: new SqliteDatabaseAdapter(new Database("./db.sqlite")),
+    databaseAdapter: db,
     token:
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
@@ -99,6 +100,21 @@ async function startAgent(character: Character) {
       mute_room,
       unfollow_room,
       unmute_room,
+    ],
+  });
+
+  const directRuntime = new AgentRuntime({
+    databaseAdapter: db,
+    token:
+      character.settings?.secrets?.OPENAI_API_KEY ??
+      (settings.OPENAI_API_KEY as string),
+    serverUrl: "https://api.openai.com/v1",
+    model: "gpt-4o-mini",
+    evaluators: [],
+    character,
+    providers: [timeProvider, boredomProvider],
+    actions: [
+      ...defaultActions,
     ],
   });
 
@@ -146,7 +162,7 @@ async function startAgent(character: Character) {
     );
   }
 
-  directClient.registerAgent(runtime);
+  directClient.registerAgent(directRuntime);
 
   return clients;
 }

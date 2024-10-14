@@ -489,11 +489,11 @@ export class AgentRuntime implements IAgentRuntime {
             choices: Array<{ message: { content: string } }>;
           }
 
-          const message = (body as OpenAIResponse).choices?.[0]?.message
+          console.log("context is", context)
 
-          console.log("Message is", message)
+          const content = (body as OpenAIResponse).choices?.[0]?.message?.content
 
-          const content = message?.content;
+          console.log("Message is", content)
 
           if (!content) {
             throw new Error("No content in response");
