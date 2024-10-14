@@ -17,19 +17,10 @@ export const messageHandlerTemplate =
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
 
-# Relevant facts that {{agentName}} knows:
-{{relevantFacts}}
-
-# Recent facts that {{agentName}} has learned:
-{{recentFacts}}
-
 # Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
 {{bio}}
 {{lore}}
-
-Examples of {{agentName}}'s dialog and actions:
-{{characterMessageExamples}}
 
 {{providers}}
 
@@ -137,13 +128,15 @@ class DirectClient {
         template: messageHandlerTemplate,
       });
 
-      console.log("context", context);
+      console.log("sending");
 
       const response = await agent.messageCompletion({
         context,
         model: 'gpt-4o-mini',
         stop: [],
       });
+
+      console.log("response");
 
       // save response to memory
       const responseMessage = {
