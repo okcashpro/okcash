@@ -120,6 +120,7 @@ export class TwitterGenerationClient extends ClientBase {
 
       // Send the new tweet
       if (!this.dryRun) {
+        try {
         const result = await this.requestQueue.add(
           async () =>
             await this.twitterClient.sendTweet(newTweetContent.trim()),
@@ -170,7 +171,10 @@ export class TwitterGenerationClient extends ClientBase {
           roomId,
           embedding: embeddingZeroVector,
           createdAt: tweet.timestamp * 1000,
-        });
+          });
+        } catch (error) {
+          console.error("Error sending tweet:", error);
+        }
       } else {
         console.log("Dry run, not sending tweet:", newTweetContent);
       }
