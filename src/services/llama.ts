@@ -75,7 +75,11 @@ class LlamaService {
     const modelName = "model.gguf";
     console.log("modelName", modelName);
     this.modelPath = path.join(__dirname, modelName);
-    this.initializeModel();
+    try {
+      this.initializeModel();
+    } catch (error) {
+      console.error("Error initializing model", error);
+    }
   }
 
   public static getInstance(): LlamaService {
