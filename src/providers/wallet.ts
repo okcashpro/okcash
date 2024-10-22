@@ -1,8 +1,8 @@
 // TokenBalanceProvider.ts
 import { Connection, PublicKey } from "@solana/web3.js";
-import { getTokenBalance, getTokenPriceInSol } from "./tokenUtils";
+import { getTokenBalances, getTokenPriceInSol } from "./tokenUtils";
 
-export class TokenBalanceProvider {
+export class WalletProvider {
   private connection: Connection;
   private walletPublicKey: PublicKey;
 
@@ -12,7 +12,7 @@ export class TokenBalanceProvider {
   }
 
   async getFormattedTokenBalances(): Promise<string> {
-    const tokenBalances = await getTokenBalance(this.connection, this.walletPublicKey);
+    const tokenBalances = await getTokenBalances(this.connection, this.walletPublicKey);
     
     let formattedBalances = "Token Balances:\n";
     let totalValueInSol = 0;

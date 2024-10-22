@@ -25,6 +25,8 @@ export const messageHandlerTemplate =
 
 {{timeline}}
 
+{{providers}}
+
 # Task: Generate a post for the character {{agentName}}.
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}

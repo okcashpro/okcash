@@ -1,46 +1,119 @@
-export class TokenSwapAction {
-    private connection: Connection;
-    private walletPublicKey: PublicKey;
-  
-    constructor(connection: Connection, walletPublicKey: PublicKey) {
-      this.connection = connection;
-      this.walletPublicKey = walletPublicKey;
-    }
-  
-    async execute(
-      inputTokenSymbol: string, 
-      outputTokenSymbol: string, 
-      amount: number
-    ): Promise<void> {
-      try {
-        const swapResult = await swapToken(
-          this.connection,
-          this.walletPublicKey,
-          inputTokenSymbol,
-          outputTokenSymbol,
-          amount
-        );
-  
-        console.log("Swap Quote:");
-        console.log(swapResult.quote);
-  
-        const confirmSwap = await promptConfirmation();
-        if (!confirmSwap) {
-          console.log("Swap canceled by user");
-          return;
-        }
-  
-        const transaction = Transaction.from(Buffer.from(swapResult.swapTransaction, "base64"));
-        transaction.sign(this.walletKeyPair);
-        
-        const txid = await this.connection.sendRawTransaction(transaction.serialize());
-        await this.connection.confirmTransaction(txid);
-  
-        console.log("Swap completed successfully!");
-        console.log(`Transaction ID: ${txid}`);
-      } catch (error) {
-        console.error("Error during token swap:", error);
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import fetch from "cross-fetch";
+import {
+  ActionExample,
+  IAgentRuntime,
+  Memory,
+  type Action,
+} from "../core/types.ts";
+
+async function swapToken(
+  connection: Connection,
+  walletPublicKey: PublicKey,
+  inputTokenSymbol: string,
+  outputTokenSymbol: string,
+  amount: number
+): Promise<any> {
+  const quoteResponse = await fetch(
+    `https://quote-api.jup.ag/v6/quote?inputMint=${inputTokenSymbol}&outputMint=${outputTokenSymbol}&amount=${amount * 10 ** 6}&slippageBps=50`
+  );
+  const quoteData = await quoteResponse.json();
+
+  const swapResponse = await fetch("https://quote-api.jup.ag/v6/swap", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      quoteResponse: quoteData.data,
+      userPublicKey: walletPublicKey.toString(),
+      wrapAndUnwrapSol: true,
+    }),
+  });
+
+  return await swapResponse.json();
+}
+
+async function promptConfirmation(): Promise<boolean> {
+  // Implement your own confirmation logic here
+  // This is just a placeholder example
+  const confirmSwap = window.confirm("Confirm the token swap?");
+  return confirmSwap;
+}
+
+export default {
+  name: "TOKEN_SWAP",
+  similes: ["SWAP_TOKENS", "TRADE_TOKENS", "EXCHANGE_TOKENS"],
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    // Check if the necessary parameters are provided in the message
+    const { inputTokenSymbol, outputTokenSymbol, amount } = message.content;
+    return inputTokenSymbol && outputTokenSymbol && amount;
+  },
+  description:
+    "Perform a token swap using the Jupiter API. Requires input token symbol, output token symbol, and swap amount.",
+  handler: async (runtime: IAgentRuntime, message: Memory): Promise<boolean> => {
+    const { inputTokenSymbol, outputTokenSymbol, amount } = message.content;
+
+    try {
+      const connection = new Connection("https://api.mainnet-beta.solana.com");
+      const walletPublicKey = new PublicKey(runtime.walletPublicKey);
+
+      const swapResult = await swapToken(
+        connection,
+        walletPublicKey,
+        inputTokenSymbol as string,
+        outputTokenSymbol as string,
+        amount as number
+      );
+
+      console.log("Swap Quote:");
+      console.log(swapResult.quote);
+
+      const confirmSwap = await promptConfirmation();
+      if (!confirmSwap) {
+        console.log("Swap canceled by user");
+        return false;
       }
+
+      const transaction = Transaction.from(Buffer.from(swapResult.swapTransaction, "base64"));
+      transaction.sign(runtime.walletKeyPair);
+
+      const txid = await connection.sendRawTransaction(transaction.serialize());
+      await connection.confirmTransaction(txid);
+
+      console.log("Swap completed successfully!");
+      console.log(`Transaction ID: ${txid}`);
+
+      return true;
+    } catch (error) {
+      console.error("Error during token swap:", error);
+      return false;
     }
-  }
-  
+  },
+  examples: [
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          inputTokenSymbol: "SOL",
+          outputTokenSymbol: "USDC",
+          amount: 0.1
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          text: "Swapping 0.1 SOL for USDC...",
+          action: "TOKEN_SWAP",
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          text: "Swap completed successfully! Transaction ID: ...",
+        },
+      },
+    ],
+    // Add more examples as needed
+  ] as ActionExample[][],
+} as Action;

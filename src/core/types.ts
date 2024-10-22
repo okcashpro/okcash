@@ -1,3 +1,5 @@
+import { Keypair } from "@solana/web3.js";
+
 /**
  * Represents a UUID, which is a universally unique identifier conforming to the UUID standard.
  */
@@ -410,6 +412,8 @@ export interface IAgentRuntime {
   character: Character;
   providers: Provider[];
   actions: Action[];
+  walletPublicKey: string;
+  walletKeyPair: Keypair;
 
   messageManager: IMemoryManager;
   descriptionManager: IMemoryManager;

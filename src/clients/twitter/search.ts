@@ -26,6 +26,8 @@ const messageHandlerTemplate =
 
 {{timeline}}
 
+{{providers}}
+
 Recent interactions between {{agentName}} and other users:
 {{recentPostInteractions}}
 
@@ -74,8 +76,8 @@ export class TwitterSearchClient extends ClientBase {
         Math.floor(Math.random() * this.runtime.character.topics.length)
       ];
 
-      if (!fs.existsSync("tweets")) {
-        fs.mkdirSync("tweets");
+      if (!fs.existsSync("tweetcache")) {
+        fs.mkdirSync("tweetcache");
       }
       console.log("Fetching search tweets");
       // TODO: we wait 5 seconds here to avoid getting rate limited on startup, but we should queue
@@ -338,7 +340,7 @@ export class TwitterSearchClient extends ClientBase {
         console.log(`Successfully responded to tweet ${selectedTweet.id}`);
         this.respondedTweets.add(selectedTweet.id);
         const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${selectedTweet.id} - ${selectedTweet.username}: ${selectedTweet.text}\nAgent's Output:\n${response.text}`;
-        const debugFileName = `tweets/tweet_generation_${selectedTweet.id}.txt`;
+        const debugFileName = `tweetcache/tweet_generation_${selectedTweet.id}.txt`;
         console.log(`Writing response tweet info to ${debugFileName}`);
         fs.writeFileSync(debugFileName, responseInfo);
         await wait();
