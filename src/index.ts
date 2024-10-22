@@ -89,7 +89,7 @@ async function startAgent(character: Character) {
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
-    model: "gpt-4o-mini",
+    model: "gpt-4-turbo",
     evaluators: [],
     character,
     providers: [timeProvider, boredomProvider],
@@ -109,7 +109,7 @@ async function startAgent(character: Character) {
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
-    model: "gpt-4o-mini",
+    model: "gpt-4-turbo",
     evaluators: [],
     character,
     providers: [timeProvider, boredomProvider],

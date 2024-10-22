@@ -101,14 +101,12 @@ export async function sendTweetChunks(
   twitterUsername: string,
   inReplyTo: string,
 ): Promise<Memory[]> {
-  console.log("Sending tweet chunks", content);
   const tweetChunks = splitTweetContent(content.text);
-  console.log("Tweet chunks", tweetChunks);
   const sentTweets: Tweet[] = [];
 
   for (const chunk of tweetChunks) {
     const result = await client.requestQueue.add(
-      async () => await client.twitterClient.sendTweet(chunk, inReplyTo),
+      async () => await client.twitterClient.sendTweet(chunk.replaceAll(/\\n/g, "\n").trim(), inReplyTo),
     );
     console.log("send tweet result:\n", result);
     const body = await result.json();

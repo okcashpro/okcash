@@ -88,7 +88,7 @@ export class ClientBase extends EventEmitter {
   lastCheckedTweetId: number | null = null;
   tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
   imageDescriptionService: ImageDescriptionService;
-  temperature: number = 0.7;
+  temperature: number = 0.3;
   dryRun: boolean = false;
 
   private tweetCache: Map<string, Tweet> = new Map();
@@ -238,11 +238,24 @@ export class ClientBase extends EventEmitter {
         loggedInWaits++;
       }
       const userId = await this.requestQueue.add(
-        async () =>
-          await this.twitterClient.getUserIdByScreenName(
-            this.runtime.getSetting("TWITTER_USERNAME"),
-          ),
+        async () => {
+          // wait 3 seconds before getting the user id
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          try{
+
+            return await this.twitterClient.getUserIdByScreenName(
+              this.runtime.getSetting("TWITTER_USERNAME"),
+            );
+          } catch (error) {
+            console.error("Error getting user ID:", error);
+            return null;
+          }
+        },
       );
+      if(!userId){
+        console.error("Failed to get user ID");
+        return;
+      }
       console.log("Twitter user ID:", userId);
       this.twitterUserId = userId;
 
@@ -312,7 +325,6 @@ export class ClientBase extends EventEmitter {
               timeoutPromise,
             ]),
         );
-        console.log("result", result);
         return (result ?? { tweets: [] }) as QueryTweetsResponse;
       } catch (error) {
         console.error("Error fetching search tweets:", error);

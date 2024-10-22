@@ -435,6 +435,8 @@ export interface IAgentRuntime {
   // Methods
   getConversationLength(): number;
   completion(opts: {
+    serverUrl?: string;
+    token?: string;
     context?: string;
     stop?: string[];
     model?: string;
@@ -445,6 +447,8 @@ export interface IAgentRuntime {
     max_response_length?: number;
   }): Promise<string>;
   stringArrayCompletion(opts: {
+    serverUrl?: string;
+    token?: string;
     context?: string;
     stop?: string[];
     model?: string;
@@ -455,6 +459,8 @@ export interface IAgentRuntime {
     max_response_length?: number;
   }): Promise<string[]>;
   shouldRespondCompletion(opts: {
+    serverUrl?: string;
+    token?: string;
     context?: string;
     stop?: string[];
     model?: string;
@@ -465,6 +471,8 @@ export interface IAgentRuntime {
     max_response_length?: number;
   }): Promise<"RESPOND" | "IGNORE" | "STOP" | null>;
   booleanCompletion(opts: {
+    serverUrl?: string;
+    token?: string;
     context?: string;
     stop?: string[];
     model?: string;
@@ -475,6 +483,8 @@ export interface IAgentRuntime {
     max_response_length?: number;
   }): Promise<boolean>;
   messageCompletion(opts: {
+    serverUrl?: string;
+    token?: string;
     context?: string;
     stop?: string[];
     model?: string;
@@ -485,6 +495,8 @@ export interface IAgentRuntime {
     max_response_length?: number;
   }): Promise<Content>;
   objectArrayCompletion(opts: {
+    serverUrl?: string;
+    token?: string;
     context?: string;
     stop?: string[];
     model?: string;

@@ -110,7 +110,7 @@ export class AgentRuntime implements IAgentRuntime {
   /**
    * The model to use for completion.
    */
-  model = "gpt-4o-mini";
+  model = "gpt-4-turbo";
 
   /**
    * The model to use for embedding.
@@ -409,9 +409,12 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
+    token = this.token,
+    serverUrl = this.serverUrl,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<string> {
+
     let retryLength = 1000; // exponential backoff
     for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
       try {
@@ -450,16 +453,16 @@ export class AgentRuntime implements IAgentRuntime {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${this.token}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              stop,
+              // stop,
               model,
-              frequency_penalty,
-              presence_penalty,
+              // frequency_penalty,
+              // presence_penalty,
               temperature,
               max_tokens: max_response_length,
-              logit_bias,
+              // logit_bias,
               messages: [
                 {
                   role: "user",
@@ -470,11 +473,12 @@ export class AgentRuntime implements IAgentRuntime {
           };
 
           const response = await fetch(
-            `${this.serverUrl}/chat/completions`,
+            `${serverUrl}/chat/completions`,
             requestOptions,
           );
 
           if (!response.ok) {
+            console.log("response is", response)
             throw new Error(
               "OpenAI API Error: " +
                 response.status +
@@ -540,6 +544,7 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
+    serverUrl = this.serverUrl,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
@@ -551,6 +556,7 @@ export class AgentRuntime implements IAgentRuntime {
           context,
           stop,
           model,
+          serverUrl,
           frequency_penalty,
           presence_penalty,
           temperature,
@@ -609,6 +615,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
+    serverUrl = this.serverUrl,
+    token = this.token,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<boolean> {
@@ -620,6 +628,8 @@ export class AgentRuntime implements IAgentRuntime {
           context,
           stop,
           model,
+          serverUrl,
+          token,
           frequency_penalty,
           presence_penalty,
           temperature,
@@ -647,6 +657,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
+    serverUrl = this.serverUrl,
+    token = this.token,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<string[]> {
@@ -658,6 +670,8 @@ export class AgentRuntime implements IAgentRuntime {
           context,
           stop,
           model,
+          serverUrl,
+          token,
           frequency_penalty,
           presence_penalty,
           temperature,
@@ -685,6 +699,8 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.0,
     presence_penalty = 0.0,
     temperature = 0.3,
+    serverUrl = this.serverUrl,
+    token = this.token,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<any[]> {
@@ -696,6 +712,8 @@ export class AgentRuntime implements IAgentRuntime {
           context,
           stop,
           model,
+          serverUrl,
+          token,
           frequency_penalty,
           presence_penalty,
           temperature,
@@ -735,26 +753,28 @@ export class AgentRuntime implements IAgentRuntime {
     frequency_penalty = 0.6,
     presence_penalty = 0.6,
     temperature = 0.3,
+    serverUrl = this.serverUrl,
+    token = this.token,
     max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
     max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
   }): Promise<Content> {
+    console.log("messageCompletion serverUrl is", serverUrl)
     context = this.trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff
     while (true) {
       try {
         const response = await this.completion({
           context,
+          serverUrl,
           stop,
           model,
+          token,
           frequency_penalty,
           presence_penalty,
           temperature,
           max_context_length,
           max_response_length,
         });
-
-        console.log("*** response", response)
-
         // try parsing the response as JSON, if null then try again
         const parsedContent = parseJSONObjectFromText(response) as Content;
 
