@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/actions/joinVoice
 import { joinVoiceChannel } from "@discordjs/voice";
 import {
