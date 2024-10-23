@@ -232,23 +232,22 @@ export class AgentRuntime implements IAgentRuntime {
       throw new Error("No database adapter provided");
     }
     // if not set, get from settings
-    this.walletPublicKey = opts.walletPublicKey ?? this.getSetting("WALLET_PUBLIC_KEY");
-    this.walletKeyPair = opts.walletKeyPair ?? (() => {
-      const secretKey = this.getSetting("WALLET_SECRET_KEY");
-      if (!secretKey) {
-        console.warn("WALLET_SECRET_KEY not set in settings");
-        return undefined;
-      }
-      try {
-        // secret key is 2eETRBeJFNfxAmPzTxfRynebRjTYK9WBLeAE5JhfxdzAxjJG8ZCbmHX1WadTRdcEpE7HRELVp6cbCfZFY6Qw9BgR
-        const keypair = Keypair.fromSecretKey(Uint8Array.from(Buffer.from(secretKey, 'hex')));
-        console.log("Keypair is", keypair);
-        return keypair;
-      } catch (error) {
-        console.error("Error creating wallet key pair:", error);
-        return undefined;
-      }
-    })();
+    // this.walletPublicKey = opts.walletPublicKey ?? this.getSetting("WALLET_PUBLIC_KEY");
+    // this.walletKeyPair = opts.walletKeyPair ?? (() => {
+    //   const secretKey = this.getSetting("WALLET_SECRET_KEY");
+    //   if (!secretKey) {
+    //     console.warn("WALLET_SECRET_KEY not set in settings");
+    //     return undefined;
+    //   }
+    //   try {
+    //     // secret key is 2eETRBeJFNfxAmPzTxfRynebRjTYK9WBLeAE5JhfxdzAxjJG8ZCbmHX1WadTRdcEpE7HRELVp6cbCfZFY6Qw9BgR
+    //     const keypair = Keypair.fromSecretKey(Uint8Array.from(Buffer.from(secretKey, 'hex')));
+    //     console.log("Keypair is", keypair);
+    //     return keypair;
+    //   } catch (error) {
+    //     console.log("WARNING: Error creating wallet key pair:", error);
+    //   }
+    // })();
 
     this.messageManager = new MemoryManager({
       runtime: this,
@@ -509,12 +508,12 @@ export class AgentRuntime implements IAgentRuntime {
           } else {
             (requestOptions.body as any).frequency_penalty = frequency_penalty;
             (requestOptions.body as any).presence_penalty = presence_penalty;
-            // (requestOptions.body as any).logit_bias = logit_bias;
+            (requestOptions.body as any).logit_bias = logit_bias;
           }
 
           // stringify the body
           (requestOptions as any).body = JSON.stringify(requestOptions.body);
-
+          console.log("requestOptions", requestOptions)
           const response = await fetch(
             `${serverUrl}/chat/completions`,
             requestOptions as any,
