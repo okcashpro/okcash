@@ -17,6 +17,7 @@ import settings from "./core/settings.ts";
 import { Character } from "./core/types.ts";
 import boredomProvider from "./providers/boredom.ts";
 import timeProvider from "./providers/time.ts";
+import walletProvider from "./providers/wallet.ts";
 import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
 import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
 import { wait } from "./clients/twitter/utils.ts";
@@ -92,14 +93,14 @@ async function startAgent(character: Character) {
     model: "gpt-4-turbo",
     evaluators: [],
     character,
-    providers: [timeProvider, boredomProvider],
+    providers: [timeProvider, boredomProvider, walletProvider],
     actions: [
       ...defaultActions,
       askClaude,
       follow_room,
-      mute_room,
       unfollow_room,
       unmute_room,
+      mute_room,
     ],
   });
 
