@@ -637,8 +637,13 @@ export class MessageManager {
 
     const response = await this.runtime.messageCompletion({
       context,
-      stop: [],
-      model: "gpt-4o-2024-08-06",
+      stop: ["<|eot_id|>","<|eom_id|>"],
+        serverUrl: this.runtime.getSetting("X_SERVER_URL") ?? this.runtime.serverUrl,
+        token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
+        model: this.runtime.getSetting("XAI_MODEL") ? this.runtime.getSetting("XAI_MODEL") : "gpt-4o-mini",
+        temperature: 1.2,
+        frequency_penalty: 1.5,
+        presence_penalty: 0.8,
     });
 
     if (!response) {

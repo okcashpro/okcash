@@ -32,10 +32,12 @@ export class TwitterGenerationClient extends ClientBase {
       this.generateNewTweet();
       setTimeout(
         generateNewTweetLoop,
-        (Math.floor(Math.random() * (8 - 4 + 1)) + 4) * 60 * 60 * 1000,
+        (Math.floor(Math.random() * (60 - 30 + 1)) + 30) * 60 * 1000,
       ); // Random interval between 4-8 hours
     };
-    generateNewTweetLoop();
+    setTimeout(() => {
+      generateNewTweetLoop();
+    }, 10 * 60 * 1000); // Call after 10 minutes the first time
   }
 
   constructor(runtime: IAgentRuntime) {
@@ -110,8 +112,8 @@ export class TwitterGenerationClient extends ClientBase {
         serverUrl: this.runtime.getSetting("X_SERVER_URL") ?? this.runtime.serverUrl,
         token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
         temperature: this.temperature,
-        frequency_penalty: 0.3,
-        presence_penalty: 0.3,
+        frequency_penalty: 1.5,
+        presence_penalty: 1.5,
         model: this.runtime.getSetting("XAI_MODEL") ? this.runtime.getSetting("XAI_MODEL") : "gpt-4o-mini",
       });
       console.log("newTweetContent", newTweetContent);

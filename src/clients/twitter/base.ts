@@ -88,7 +88,7 @@ export class ClientBase extends EventEmitter {
   lastCheckedTweetId: number | null = null;
   tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
   imageDescriptionService: ImageDescriptionService;
-  temperature: number = 0.3;
+  temperature: number = 1.3;
   dryRun: boolean = false;
 
   private tweetCache: Map<string, Tweet> = new Map();

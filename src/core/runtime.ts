@@ -486,8 +486,8 @@ export class AgentRuntime implements IAgentRuntime {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-              // stop,
+            body: {
+              stop,
               model,
               // frequency_penalty,
               // presence_penalty,
@@ -500,12 +500,20 @@ export class AgentRuntime implements IAgentRuntime {
                   content: context,
                 },
               ],
-            }),
+            },
           };
+
+          // if the model includes llama, set reptition_penalty to frequency_penalty
+          if (model.includes("llama")) {
+            (requestOptions.body as any).repetition_penalty = frequency_penalty;
+          }
+
+          // stringify the body
+          (requestOptions as any).body = JSON.stringify(requestOptions.body);
 
           const response = await fetch(
             `${serverUrl}/chat/completions`,
-            requestOptions,
+            requestOptions as any,
           );
 
           if (!response.ok) {
@@ -806,9 +814,10 @@ export class AgentRuntime implements IAgentRuntime {
           max_context_length,
           max_response_length,
         });
+        console.log("response is", response)
         // try parsing the response as JSON, if null then try again
         const parsedContent = parseJSONObjectFromText(response) as Content;
-
+        console.log("parsedContent is", parsedContent)
         if (!parsedContent) {
           console.log("parsedContent is null, retrying")
           continue;
@@ -1203,13 +1212,17 @@ Text: ${attachment.text}
     }
 
     const formattedCharacterPostExamples = this.character.postExamples
+      .sort(() => 0.5 - Math.random())
       .map((post) => {
         let messageString = `${post}`;
         return messageString;
       })
+      .slice(0, 50)
       .join("\n");
 
     const formattedCharacterMessageExamples = this.character.messageExamples
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 5)
       .map((example) => {
         const exampleNames = Array.from({ length: 5 }, () =>
           uniqueNamesGenerator({ dictionaries: [names] }),
