@@ -143,6 +143,7 @@ export class TwitterSearchClient extends ClientBase {
       log_to_file(logName, prompt);
 
       const mostInterestingTweetResponse = await this.runtime.completion({
+        model: "gpt-4o-mini",
         context: prompt,
         stop: [],
         temperature: this.temperature,
@@ -276,8 +277,8 @@ export class TwitterSearchClient extends ClientBase {
         context,
         stop: [],
         temperature: this.temperature,
-        frequency_penalty: 1.5,
-        presence_penalty: 1.3,
+        // frequency_penalty: 1.5,
+        // presence_penalty: 1.3,
         serverUrl: this.runtime.getSetting("X_SERVER_URL") ?? this.runtime.serverUrl,
         token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
         model: this.runtime.getSetting("XAI_MODEL") ? this.runtime.getSetting("XAI_MODEL") : "gpt-4o-mini",
