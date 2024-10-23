@@ -506,6 +506,10 @@ export class AgentRuntime implements IAgentRuntime {
           // if the model includes llama, set reptition_penalty to frequency_penalty
           if (model.includes("llama")) {
             (requestOptions.body as any).repetition_penalty = frequency_penalty;
+          } else {
+            (requestOptions.body as any).frequency_penalty = frequency_penalty;
+            (requestOptions.body as any).presence_penalty = presence_penalty;
+            // (requestOptions.body as any).logit_bias = logit_bias;
           }
 
           // stringify the body

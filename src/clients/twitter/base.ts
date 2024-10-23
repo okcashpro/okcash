@@ -88,7 +88,7 @@ export class ClientBase extends EventEmitter {
   lastCheckedTweetId: number | null = null;
   tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
   imageDescriptionService: ImageDescriptionService;
-  temperature: number = 1.3;
+  temperature: number = 0.5;
   dryRun: boolean = false;
 
   private tweetCache: Map<string, Tweet> = new Map();
@@ -240,7 +240,7 @@ export class ClientBase extends EventEmitter {
       const userId = await this.requestQueue.add(
         async () => {
           // wait 3 seconds before getting the user id
-          await new Promise((resolve) => setTimeout(resolve, 3000));
+          await new Promise((resolve) => setTimeout(resolve, 10000));
           try{
 
             return await this.twitterClient.getUserIdByScreenName(

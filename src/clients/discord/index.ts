@@ -174,6 +174,32 @@ export class DiscordClient extends EventEmitter {
       `${reaction.message.id}-${user.id}-${emoji}`,
     );
 
+    // ensure the user id and room id are valid
+    if (!userIdUUID || !roomId) {
+      console.error("Invalid user id or room id");
+      return;
+    }
+    const agentId = this.runtime.agentId;
+    const userName = reaction.message.author.username;
+    const name = reaction.message.author.displayName;
+    await Promise.all([
+      
+    this.runtime.ensureUserExists(
+      agentId,
+      this.client.user.username,
+      this.runtime.character.name,
+      "discord",
+    ),
+    this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
+    this.runtime.ensureRoomExists(roomId),
+  ]);
+
+  await Promise.all([
+    this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+    this.runtime.ensureParticipantInRoom(agentId, roomId),
+  ]);
+
+
     // Save the reaction as a message
     await this.runtime.messageManager.createMemory({
       id: reactionUUID, // This is the ID of the reaction message

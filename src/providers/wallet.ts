@@ -1,7 +1,66 @@
-// TokenBalanceProvider.ts
+import { getAccount, getAssociatedTokenAddress } from "@solana/spl-token";
 import { Connection, PublicKey } from "@solana/web3.js";
-import { getTokenBalances, getTokenPriceInSol } from "./tokenUtils";
 import fetch from "cross-fetch";
+import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
+
+export async function getTokenPriceInSol(tokenSymbol: string): Promise<number> {
+  const response = await fetch(`https://price.jup.ag/v6/price?ids=${tokenSymbol}`);
+  const data = await response.json();
+  return data.data[tokenSymbol].price;
+}
+
+async function getTokenBalance(
+  connection: Connection,
+  walletPublicKey: PublicKey,
+  tokenMintAddress: PublicKey
+): Promise<number> {
+  const tokenAccountAddress = await getAssociatedTokenAddress(tokenMintAddress, walletPublicKey);
+
+  try {
+    const tokenAccount = await getAccount(connection, tokenAccountAddress);
+    const tokenAmount = tokenAccount.amount as unknown as number;
+    return tokenAmount;
+  } catch (error) {
+    console.error(`Error retrieving balance for token: ${tokenMintAddress.toBase58()}`, error);
+    return 0;
+  }
+}
+
+async function getTokenBalances(
+  connection: Connection,
+  walletPublicKey: PublicKey
+): Promise<{ [tokenName: string]: number }> {
+  const tokenBalances: { [tokenName: string]: number } = {};
+
+  // Add the token mint addresses you want to retrieve balances for
+  const tokenMintAddresses = [
+    new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // USDC
+    new PublicKey("So11111111111111111111111111111111111111112"), // SOL
+    // Add more token mint addresses as needed
+  ];
+
+  for (const mintAddress of tokenMintAddresses) {
+    const tokenName = getTokenName(mintAddress);
+    const balance = await getTokenBalance(connection, walletPublicKey, mintAddress);
+    tokenBalances[tokenName] = balance;
+  }
+
+  return tokenBalances;
+}
+
+function getTokenName(mintAddress: PublicKey): string {
+  // Implement a mapping of mint addresses to token names
+  const tokenNameMap: { [mintAddress: string]: string } = {
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "USDC",
+    "So11111111111111111111111111111111111111112": "SOL",
+    // Add more token mint addresses and their corresponding names
+  };
+
+  return tokenNameMap[mintAddress.toBase58()] || "Unknown Token";
+}
+
+export { getTokenBalance, getTokenBalances };
+
 
 interface Item {
   name: string;
@@ -100,3 +159,37 @@ export class WalletProvider {
     }
   }
 }
+
+
+const walletProvider: Provider = {
+  get: async (runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+    try {
+      const walletPublicKey = new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"));
+      const connection = new Connection(runtime.getSetting("RPC_ENDPOINT"));
+
+      const provider = new WalletProvider(connection, walletPublicKey);
+      const portfolio = await provider.fetchPortfolioValue(walletPublicKey.toBase58());
+      const prices = await provider.fetchPrices();
+
+      let formattedBalances = `Wallet Address: ${walletPublicKey.toBase58()}\n\n`;
+      formattedBalances += `Total Portfolio Value: $${portfolio.totalUsd}\n\n`;
+      formattedBalances += "Token Balances:\n";
+
+      for (const item of portfolio.items) {
+        formattedBalances += `${item.name} (${item.symbol}): ${item.uiAmount} ($${item.valueUSD})\n`;
+      }
+
+      formattedBalances += "\nCurrent Prices:\n";
+      formattedBalances += `Solana: $${prices.solana.usd}\n`;
+      formattedBalances += `Bitcoin: $${prices.bitcoin.usd}\n`;
+      formattedBalances += `Ethereum: $${prices.ethereum.usd}\n`;
+
+      return formattedBalances;
+    } catch (error) {
+      console.error("Error fetching wallet information:", error);
+      return "Failed to fetch wallet information.";
+    }
+  },
+};
+
+export default walletProvider;

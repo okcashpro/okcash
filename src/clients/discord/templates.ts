@@ -71,6 +71,10 @@ About {{agentName}}:
 # INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
 
 # RESPONSE EXAMPLES
+<user 1>: I just saw a really great movie
+<user 2>: Oh? Which movie?
+Result: [IGNORE]
+
 {{agentName}}: Oh, this is my favorite scene
 <user 1>: sick
 <user 2>: wait, why is it your favorite scene
@@ -120,10 +124,10 @@ Unless directly responding to a user, respond with [IGNORE] to messages that are
 If a user asks {{agentName}} to be quiet, respond with [STOP]
 If {{agentName}} concludes a conversation and isn't part of the conversation anymore, respond with [STOP]
 
+IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to respond with [IGNORE].
+If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
+
 {{recentMessages}}
 
-If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
-If {{agentName}} is interactived with or challenged they should respond with [RESPOND].
-
-# INSTRUCTIONS: Choose the option that best describes {{agentName}}'s response to the last message.
+# INSTRUCTIONS: Choose the option that best describes {{agentName}}'s response to the last message. Ignore messages if they are addressed to someone else.
 ` + shouldRespondFooter;

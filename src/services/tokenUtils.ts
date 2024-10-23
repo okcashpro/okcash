@@ -1,6 +1,5 @@
-// tokenUtils.ts
-import { Connection, PublicKey, ParsedAccountData, TokenAmount } from "@solana/web3.js";
 import { getAccount, getAssociatedTokenAddress } from "@solana/spl-token";
+import { Connection, PublicKey } from "@solana/web3.js";
 
 export async function getTokenPriceInSol(tokenSymbol: string): Promise<number> {
   const response = await fetch(`https://price.jup.ag/v6/price?ids=${tokenSymbol}`);
