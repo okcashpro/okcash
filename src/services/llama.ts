@@ -18,7 +18,7 @@ import { wordsToPunish } from "./wordsToPunish.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const jsonSchemaGrammar: {
+const jsonSchemaGrammar: Readonly<{
   type: string;
   properties: {
     user: {
@@ -28,7 +28,7 @@ const jsonSchemaGrammar: {
       type: string;
     };
   };
-} = {
+}> = {
   type: "object",
   properties: {
     user: {

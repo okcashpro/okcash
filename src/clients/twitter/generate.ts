@@ -112,8 +112,8 @@ export class TwitterGenerationClient extends ClientBase {
         serverUrl: this.runtime.getSetting("X_SERVER_URL") ?? this.runtime.serverUrl,
         token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
         temperature: this.temperature,
-        frequency_penalty: 1.5,
-        presence_penalty: 1.5,
+        // frequency_penalty: 1.5,
+        // presence_penalty: 1.5,
         model: this.runtime.getSetting("XAI_MODEL") ? this.runtime.getSetting("XAI_MODEL") : "gpt-4o-mini",
       });
       console.log("newTweetContent", newTweetContent);

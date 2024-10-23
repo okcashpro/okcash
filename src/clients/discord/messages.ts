@@ -642,8 +642,8 @@ export class MessageManager {
         token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
         model: this.runtime.getSetting("XAI_MODEL") ? this.runtime.getSetting("XAI_MODEL") : "gpt-4o-mini",
         temperature: 0.7,
-        frequency_penalty: 1.5,
-        presence_penalty: 1.5,
+        // frequency_penalty: 1.5,
+        // presence_penalty: 1.5,
     });
 
     if (!response) {

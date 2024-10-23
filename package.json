@@ -11,6 +11,7 @@
     "start:service:ruby": "pm2 start npm --name=\"ruby\" --restart-delay=3000 --max-restarts=10 -- run start:ruby",
     "stop:service:ruby": "pm2 stop ruby",
     "start:ruby": "node --loader ts-node/esm src/index.ts --characters=\"characters/ruby.character.json\"",
+    "start:ruby-degen": "node --loader ts-node/esm src/index.ts --characters=\"characters/ruby.character.json\",\"characters/degenspartan.json\"",
     "watch": "tsc --watch",
     "dev": "nodemon",
     "postinstall": "npx playwright install-deps && npx playwright install",
