@@ -100,7 +100,7 @@ async function startAgent(character: Character) {
       follow_room,
       unfollow_room,
       unmute_room,
-      mute_room,
+      // mute_room,
     ],
   });
 
