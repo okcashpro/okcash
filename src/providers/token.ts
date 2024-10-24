@@ -29,7 +29,7 @@ const PROVIDER_CONFIG = {
   },
   TOKEN_SECURITY_ENDPOINT: "/defi/token_security?address=",
   TOKEN_TRADE_DATA_ENDPOINT: "/defi/v3/token/trade-data/single?address=",
-  DEX_SCREENER_API: "https://api.dexscreener.com/latest/dex/tokens/", // Example endpoint
+  DEX_SCREENER_API: "https://api.dexscreener.com/latest/dex/tokens/",
 };
 
 export class TokenProvider {
@@ -490,7 +490,7 @@ export class TokenProvider {
     let page = 1;
     const limit = 1000;
     let cursor;
-
+    //HELIOUS_API_KEY needs to be added
     const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIOUS_API_KEY || ""}`;
     console.log({ url });
 
