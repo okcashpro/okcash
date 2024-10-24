@@ -32,12 +32,12 @@ export class TwitterGenerationClient extends ClientBase {
       this.generateNewTweet();
       setTimeout(
         generateNewTweetLoop,
-        (Math.floor(Math.random() * (60 - 30 + 1)) + 30) * 60 * 1000,
+        (Math.floor(Math.random() * (45 - 15 + 1)) + 15) * 60 * 1000,
       ); // Random interval between 4-8 hours
     };
     setTimeout(() => {
       generateNewTweetLoop();
-    }, 10 * 60 * 1000); // Call after 10 minutes the first time
+    }, 5 * 60 * 1000); // Wait 5 minutes before starting the loop
   }
 
   constructor(runtime: IAgentRuntime) {
@@ -112,8 +112,8 @@ export class TwitterGenerationClient extends ClientBase {
         serverUrl: this.runtime.getSetting("X_SERVER_URL") ?? this.runtime.serverUrl,
         token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
         temperature: this.temperature,
-        // frequency_penalty: 1.5,
-        // presence_penalty: 1.5,
+        frequency_penalty: 1.2,
+        // presence_penalty: 0.7,
         model: this.runtime.getSetting("XAI_MODEL") ? this.runtime.getSetting("XAI_MODEL") : "gpt-4o-mini",
       });
       console.log("newTweetContent", newTweetContent);
@@ -122,12 +122,25 @@ export class TwitterGenerationClient extends ClientBase {
         JSON.stringify(newTweetContent),
       );
 
+      const slice = newTweetContent.replaceAll(/\\n/g, "\n").trim();
+
+      let content = slice
+      // .slice(0, 280);
+      // // if its bigger than 280, delete the last line
+      // if (content.length > 280) {
+      //   content = content.slice(0, content.lastIndexOf("\n"));
+      // }
+
+      // if(content.length < 1) {
+      //   content = slice.slice(0, 280);
+      // }
+
       // Send the new tweet
       if (!this.dryRun) {
         try {
         const result = await this.requestQueue.add(
           async () =>
-            await this  .twitterClient.sendTweet(newTweetContent.replaceAll(/\\n/g, "\n").trim()),
+            await this.twitterClient.sendTweet(content),
         );
 
         console.log("send tweet result:\n", result);
