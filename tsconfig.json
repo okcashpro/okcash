@@ -1,21 +1,25 @@
 {
-    "compilerOptions": {
-      "target": "es2022",
-      "module": "es2022",
-      "lib": ["es2023", "dom"],
-      "moduleResolution": "node",
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": false,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": false,
-      "allowImportingTsExtensions": true,
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "resolveJsonModule": true,
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist"]
-  }
-  
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "NodeNext",
+    "lib": ["es2023", "dom"],
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": false,
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "resolveJsonModule": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifiers": true,
+    "transpileOnly": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

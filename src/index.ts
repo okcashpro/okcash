@@ -8,7 +8,7 @@ import unfollow_room from "./actions/unfollow_room.ts";
 import unmute_room from "./actions/unmute_room.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
-import { TwitterSearchClient } from "./clients/twitter/search.ts";
+//import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import DirectClient from "./clients/direct/index.ts";
 import { defaultActions } from "./core/actions.ts";
 import defaultCharacter from "./core/defaultCharacter.ts";
@@ -17,15 +17,15 @@ import settings from "./core/settings.ts";
 import { Character } from "./core/types.ts";
 import boredomProvider from "./providers/boredom.ts";
 import timeProvider from "./providers/time.ts";
-import walletProvider from "./providers/wallet.ts";
-import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
-import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
-import { wait } from "./clients/twitter/utils.ts";
+// import walletProvider from "./providers/wallet.ts";
+//import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
+//import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
+//import { wait } from "./clients/twitter/utils.ts";
 
 interface Arguments {
   character?: string;
   characters?: string;
-  twitter?: boolean;
+  //twitter?: boolean;
   discord?: boolean;
 }
 
@@ -90,11 +90,10 @@ async function startAgent(character: Character) {
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
-    embeddingModel: character.settings?.embeddingModel || "text-embedding-3-small",
-    model: "gpt-4o-mini",
+    model: "gpt-4-turbo",
     evaluators: [],
     character,
-    providers: [timeProvider, boredomProvider, walletProvider],
+    providers: [timeProvider, boredomProvider],
     actions: [
       ...defaultActions,
       askClaude,
@@ -111,7 +110,7 @@ async function startAgent(character: Character) {
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
-    model: "gpt-4o",
+    model: "gpt-4-turbo",
     evaluators: [],
     character,
     providers: [timeProvider, boredomProvider],
@@ -125,22 +124,22 @@ async function startAgent(character: Character) {
     return discordClient;
   }
 
-  async function startTwitter(runtime) {
-    console.log("Starting search client");
-    const twitterSearchClient = new TwitterSearchClient(runtime);
-    await wait();
-    console.log("Starting interaction client");
-    const twitterInteractionClient = new TwitterInteractionClient(runtime);
-    await wait();
-    console.log("Starting generation client");
-    const twitterGenerationClient = new TwitterGenerationClient(runtime);
-
-    return {
-      twitterInteractionClient,
-      twitterSearchClient,
-      twitterGenerationClient,
-    };
-  }
+  //async function startTwitter(runtime) {
+  //  console.log("Starting search client");
+  //  const twitterSearchClient = new TwitterSearchClient(runtime);
+  //  await wait();
+  //  console.log("Starting interaction client");
+  //  const twitterInteractionClient = new TwitterInteractionClient(runtime);
+  //  await wait();
+  //  console.log("Starting generation client");
+  //  const twitterGenerationClient = new TwitterGenerationClient(runtime);
+  //
+  //  return {
+  //    twitterInteractionClient,
+  //    twitterSearchClient,
+  //    twitterGenerationClient,
+  //  };
+  //}
 
   if (!character.clients) {
     return console.error("No clients found for character " + character.name);
@@ -153,16 +152,16 @@ async function startAgent(character: Character) {
     clients.push(discordClient);
   }
 
-  if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
-    const {
-      twitterInteractionClient,
-      twitterSearchClient,
-      twitterGenerationClient,
-    } = await startTwitter(runtime);
-    clients.push(
-      twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
-    );
-  }
+  //if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
+  //  const {
+  //    twitterInteractionClient,
+  //    twitterSearchClient,
+  //    twitterGenerationClient,
+  //  } = await startTwitter(runtime);
+  //  clients.push(
+  //    twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
+  //  );
+  //}
 
   directClient.registerAgent(directRuntime);
 
