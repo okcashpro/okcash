@@ -1,7 +1,7 @@
 import { Connection, PublicKey, ParsedAccountData } from "@solana/web3.js";
-import fetch from "cross-fetch";
+// import fetch from "cross-fetch";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types";
-import settings from "../core/settings.ts";
+import settings from "../core/settings";
 import BigNumber from "bignumber.js";
 import { TOKEN_PROGRAM_ID, AccountLayout } from "@solana/spl-token";
 import {
@@ -13,8 +13,8 @@ import {
   HolderData,
 } from "../types/token";
 import NodeCache from "node-cache";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 
 const PROVIDER_CONFIG = {
   BIRDEYE_API: "https://public-api.birdeye.so",
@@ -32,12 +32,12 @@ const PROVIDER_CONFIG = {
   DEX_SCREENER_API: "https://api.dexscreener.com/latest/dex/tokens/", // Example endpoint
 };
 
-class TokenProvider {
+export class TokenProvider {
   private cache: NodeCache;
   private cacheDir: string;
 
   constructor(
-    private connection: Connection,
+    //  private connection: Connection,
     private tokenAddress: string
   ) {
     this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
@@ -49,6 +49,7 @@ class TokenProvider {
 
   private readCacheFromFile<T>(cacheKey: string): T | null {
     const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
+    console.log({ filePath });
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf-8");
       const parsed = JSON.parse(fileContent);
@@ -469,37 +470,46 @@ class TokenProvider {
     const allHoldersMap = new Map<string, number>();
     let page = 1;
     const limit = 1000;
+    let cursor;
 
-    const heliusUrl = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIUS_API_KEY}`;
+    const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIOUS_API_KEY || ""}`;
+    console.log({ url });
 
     try {
       while (true) {
+        let params = {
+          limit: limit,
+          displayOptions: {},
+          mint: this.tokenAddress,
+          cursor: cursor,
+        };
+        if (cursor != undefined) {
+          params.cursor = cursor;
+        }
         console.log(`Fetching holders - Page ${page}`);
-
-        const response = await fetch(heliusUrl, {
+        if (page > 2) {
+          break;
+        }
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             jsonrpc: "2.0",
+            id: "helius-test",
             method: "getTokenAccounts",
-            page: page,
-            limit: limit,
-            mint: this.tokenAddress,
+            params: params,
           }),
         });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Helius API error: ${response.status} ${response.statusText} - ${errorText}`
-          );
-        }
-
         const data = await response.json();
 
-        if (!data || !data.token_accounts || data.token_accounts.length === 0) {
+        if (
+          !data ||
+          !data.result.token_accounts ||
+          data.result.token_accounts.length === 0
+        ) {
           console.log(
             `No more holders found. Total pages fetched: ${page - 1}`
           );
@@ -507,10 +517,10 @@ class TokenProvider {
         }
 
         console.log(
-          `Processing ${data.token_accounts.length} holders from page ${page}`
+          `Processing ${data.result.token_accounts.length} holders from page ${page}`
         );
 
-        data.token_accounts.forEach((account: any) => {
+        data.result.token_accounts.forEach((account: any) => {
           const owner = account.owner;
           const balance = parseFloat(account.amount);
 
@@ -520,7 +530,7 @@ class TokenProvider {
             allHoldersMap.set(owner, balance);
           }
         });
-
+        cursor = data.result.cursor;
         page++;
       }
 
@@ -734,7 +744,7 @@ const tokenProvider: Provider = {
     _state?: State
   ): Promise<string> => {
     try {
-      const provider = new TokenProvider(connection, tokenAddress);
+      const provider = new TokenProvider(/*connection,*/ tokenAddress);
       return provider.getFormattedTokenReport();
     } catch (error) {
       console.error("Error fetching token data:", error);
