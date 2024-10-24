@@ -52,12 +52,12 @@ describe("TokenProvider Tests", () => {
     //console.log the securityData
     console.log({ securityData });
 
-    const holderList = await tokenProvider.fetchHolderList();
+    //  const holderList = await tokenProvider.fetchHolderList();
 
-    console.log({ holderList });
+    //  console.log({ holderList });
 
-    //  const tokenReport = await tokenProvider.getFormattedTokenReport();
-    //  console.log({ tokenReport });
+    const tokenReport = await tokenProvider.getFormattedTokenReport();
+    console.log({ tokenReport });
 
     // Ensure the mock was called
     expect(fetchSpy).toHaveBeenCalled();

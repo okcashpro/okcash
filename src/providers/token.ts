@@ -507,6 +507,7 @@ export class TokenProvider {
 
         if (
           !data ||
+          !data.result ||
           !data.result.token_accounts ||
           data.result.token_accounts.length === 0
         ) {
