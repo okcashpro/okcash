@@ -6,10 +6,10 @@ import {
   Llama,
   LlamaContext,
   LlamaContextSequence,
+  LlamaContextSequenceRepeatPenalty,
   LlamaJsonSchemaGrammar,
   LlamaModel,
   Token,
-  LlamaContextSequenceRepeatPenalty,
 } from "node-llama-cpp";
 import fs from "fs";
 import https from "https";
@@ -96,7 +96,7 @@ class LlamaService {
 
       const systemInfo = await si.graphics();
       const hasCUDA = systemInfo.controllers.some((controller) =>
-        controller.vendor.toLowerCase().includes("nvidia"),
+        controller.vendor.toLowerCase().includes("nvidia")
       );
 
       if (hasCUDA) {
@@ -148,8 +148,8 @@ class LlamaService {
         const downloadModel = (url: string) => {
           https
             .get(url, (response) => {
-              const isRedirect =
-                response.statusCode >= 300 && response.statusCode < 400;
+              const isRedirect = response.statusCode >= 300 &&
+                response.statusCode < 400;
               if (isRedirect) {
                 const redirectUrl = response.headers.location;
                 if (redirectUrl) {
@@ -326,12 +326,14 @@ class LlamaService {
 
     const responseTokens: Token[] = [];
     console.log("Evaluating tokens");
-    for await (const token of this.sequence.evaluate(tokens, {
-      temperature: Number(temperature),
-      repeatPenalty: repeatPenalty,
-      grammarEvaluationState: useGrammar ? this.grammar : undefined,
-      yieldEogToken: false,
-    })) {
+    for await (
+      const token of this.sequence.evaluate(tokens, {
+        temperature: Number(temperature),
+        repeatPenalty: repeatPenalty,
+        grammarEvaluationState: useGrammar ? this.grammar : undefined,
+        yieldEogToken: false,
+      })
+    ) {
       const current = this.model.detokenize([...responseTokens, token]);
       if ([...stop].some((s) => current.includes(s))) {
         console.log("Stop sequence found");
@@ -395,7 +397,7 @@ class LlamaService {
 
     const embeddingContext = await this.model.createEmbeddingContext();
     const embedding = await embeddingContext.getEmbeddingFor(input);
-    return embedding?.vector;
+    return embedding?.vector ? [...embedding.vector] : undefined;
   }
 }
 
