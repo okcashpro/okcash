@@ -120,6 +120,8 @@ export class TokenProvider {
           },
         });
 
+        console.log({ response });
+
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(
@@ -157,6 +159,7 @@ export class TokenProvider {
     }
     const url = `${PROVIDER_CONFIG.BIRDEYE_API}${PROVIDER_CONFIG.TOKEN_SECURITY_ENDPOINT}${this.tokenAddress}`;
     const data = await this.fetchWithRetry(url);
+    console.log({ data });
 
     if (!data?.success || !data?.data) {
       throw new Error("No token security data available");
@@ -187,7 +190,19 @@ export class TokenProvider {
     }
 
     const url = `${PROVIDER_CONFIG.BIRDEYE_API}${PROVIDER_CONFIG.TOKEN_TRADE_DATA_ENDPOINT}${this.tokenAddress}`;
-    const data = await this.fetchWithRetry(url);
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "X-API-KEY": settings.BIRDEYE_API_KEY || "",
+      },
+    };
+
+    const data = await fetch(url, options)
+      .then((res) => res.json())
+      .catch((err) => console.error(err));
+
+    console.log({ data });
 
     if (!data?.success || !data?.data) {
       throw new Error("No token trade data available");
@@ -400,7 +415,11 @@ export class TokenProvider {
     const url = `https://api.dexscreener.com/latest/dex/search?q=${this.tokenAddress}`;
     try {
       console.log(`Fetching DexScreener data for token: ${this.tokenAddress}`);
-      const data = await this.fetchWithRetry(url);
+      const data = await fetch(url)
+        .then((res) => res.json())
+        .catch((err) => {
+          console.error(err);
+        });
 
       if (!data || !data.pairs) {
         throw new Error("No DexScreener data available");
@@ -637,7 +656,7 @@ export class TokenProvider {
       );
       const isDexScreenerListed = dexData.pairs.length > 0;
       const isDexScreenerPaid = dexData.pairs.some(
-        (pair) => pair.boosts.active > 0
+        (pair) => pair.boosts && pair.boosts.active > 0
       );
 
       const processedData: ProcessedTokenData = {
@@ -652,7 +671,7 @@ export class TokenProvider {
         isDexScreenerPaid,
       };
 
-      console.log("Processed token data:", processedData);
+      // console.log("Processed token data:", processedData);
       return processedData;
     } catch (error) {
       console.error("Error processing token data:", error);
@@ -714,7 +733,7 @@ export class TokenProvider {
         output += `- URL: ${pair.url}\n`;
         output += `- Price USD: $${new BigNumber(pair.priceUsd).toFixed(6)}\n`;
         output += `- Volume (24h USD): $${new BigNumber(pair.volume.h24).toFixed(2)}\n`;
-        output += `- Boosts Active: ${pair.boosts.active}\n`;
+        output += `- Boosts Active: ${pair.boosts && pair.boosts.active}\n`;
         output += `- Liquidity USD: $${new BigNumber(pair.liquidity.usd).toFixed(2)}\n`;
       });
     }

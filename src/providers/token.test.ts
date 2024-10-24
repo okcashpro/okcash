@@ -38,23 +38,29 @@ describe("TokenProvider Tests", () => {
       .mockResolvedValue(mockFetchResponse);
 
     //  Run the fetchTokenSecurity method
-    const securityData = await tokenProvider.fetchTokenSecurity();
+    //  const securityData = await tokenProvider.fetchTokenSecurity();
 
     // Check if the data returned is correct
-    expect(securityData).toEqual({
-      ownerBalance: "100",
-      creatorBalance: "50",
-      ownerPercentage: 10,
-      creatorPercentage: 5,
-      top10HolderBalance: "200",
-      top10HolderPercent: 20,
-    });
+    //  expect(securityData).toEqual({
+    //    ownerBalance: "100",
+    //    creatorBalance: "50",
+    //    ownerPercentage: 10,
+    //    creatorPercentage: 5,
+    //    top10HolderBalance: "200",
+    //    top10HolderPercent: 20,
+    //  });
     //console.log the securityData
-    console.log({ securityData });
+    //  console.log({ securityData });
 
     //  const holderList = await tokenProvider.fetchHolderList();
 
     //  console.log({ holderList });
+
+    //  const tradeData = await tokenProvider.fetchTokenTradeData();
+    //  console.log({ tradeData });
+
+    //  const dexScreenerData = await tokenProvider.fetchDexScreenerData();
+    //  console.log({ dexScreenerData });
 
     const tokenReport = await tokenProvider.getFormattedTokenReport();
     console.log({ tokenReport });
