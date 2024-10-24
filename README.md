@@ -31,4 +31,4 @@ You can run Grok models by setting the `XAI_MODEL` environment variable to `grok
 You can run OpenAI models by setting the `XAI_MODEL` environment variable to `gpt-4o-mini` or `gpt-4o`
 
 # Discord Bot
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
+For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-applicat
