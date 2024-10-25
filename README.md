@@ -1,8 +1,6 @@
-# Degen Spartan AI
+# eliza
 
-So you want to make your own AI, huh?
-
-This isn't for the faint of heart. You're gonna need to learn how to run a Node.js application and edit some text files.
+A cognitive framework for social agents and multi-agent simulations.
 
 # Install Node.js
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
