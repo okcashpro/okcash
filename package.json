@@ -11,7 +11,7 @@
     "start:service:ruby": "pm2 start npm --name=\"ruby\" --restart-delay=3000 --max-restarts=10 -- run start:ruby",
     "stop:service:ruby": "pm2 stop ruby",
     "start:ruby": "node --loader ts-node/esm src/index.ts --characters=\"characters/ruby.character.json\"",
-    "start:ruby-degen": "node --loader ts-node/esm src/index.ts --characters=\"characters/ruby.character.json\",\"characters/degenspartan.json\"",
+    "start:degen": "node --loader ts-node/esm src/index.ts --characters=\"characters/degenspartan.json\"",
     "watch": "tsc --watch",
     "dev": "nodemon",
     "postinstall": "npx playwright install-deps && npx playwright install",
@@ -137,7 +137,7 @@
     "whisper-turbo": "^0.11.0",
     "ws": "^8.16.0",
     "yargs": "^17.7.2",
-    "youtube-dl-exec": "^3.0.7"
+    "youtube-dl-exec": "^3.0.10"
   },
   "trustedDependencies": {
     "onnxruntime-node": "1.19.0",

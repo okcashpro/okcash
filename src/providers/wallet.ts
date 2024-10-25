@@ -4,13 +4,8 @@ import { IAgentRuntime, Memory, Provider, State } from "../core/types";
 import settings from "../core/settings.ts";
 import BigNumber from "bignumber.js";
 
-// Bot's wallet configuration
-const BOT_WALLET = {
-  publicKey: settings.WALLET_PUBLIC_KEY,
-  description: "{{userName}}'s Wallet"
-};
-
 console.log("settings.BIRDEYE_API_KEY", settings.BIRDEYE_API_KEY);
+console.log("WALLET_PUBLIC_KEY", settings.WALLET_PUBLIC_KEY);
 
 // Provider configuration
 const PROVIDER_CONFIG = {
@@ -63,20 +58,20 @@ class WalletProvider {
     private walletPublicKey: PublicKey
   ) {}
 
-  private async fetchWithRetry(url: string, options: RequestInit = {}): Promise<any> {
+  private async fetchWithRetry(runtime, url: string, options: RequestInit = {}): Promise<any> {
     let lastError: Error;
+
+    console.log("runtime", runtime);
 
     for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
       try {
-        console.log(`Attempt ${i + 1}: Fetching data from ${url}`);
-        console.log("settings.BIRDEYE_API_KEY", settings.BIRDEYE_API_KEY);
-        
+        console.log(`Attempt ${i + 1}: Fetching data from ${url}`);        
         const response = await fetch(url, {
           ...options,
           headers: {
             'Accept': 'application/json',
             'x-chain': 'solana',
-            'X-API-KEY': settings.BIRDEYE_API_KEY || '',
+            'X-API-KEY': runtime.getSetting('BIRDEYE_API_KEY', '') || '',
             ...options.headers
           }
         });
@@ -107,10 +102,11 @@ class WalletProvider {
     throw lastError;
   }
 
-  async fetchPortfolioValue(): Promise<WalletPortfolio> {
+  async fetchPortfolioValue(runtime): Promise<WalletPortfolio> {
     try {
       console.log(`Fetching portfolio value for wallet: ${this.walletPublicKey.toBase58()}`);
       const walletData = await this.fetchWithRetry(
+        runtime,
         `${PROVIDER_CONFIG.BIRDEYE_API}/v1/wallet/token_list?wallet=${this.walletPublicKey.toBase58()}`
       );
 
@@ -121,7 +117,7 @@ class WalletProvider {
 
       const data = walletData.data;
       const totalUsd = new BigNumber(data.totalUsd.toString());
-      const prices = await this.fetchPrices();
+      const prices = await this.fetchPrices(runtime);
       const solPriceInUSD = new BigNumber(prices.solana.usd.toString());
 
       const items = data.items.map((item: any) => ({
@@ -156,7 +152,7 @@ class WalletProvider {
     }
   }
 
-  async fetchPrices(): Promise<Prices> {
+  async fetchPrices(runtime): Promise<Prices> {
     try {
       const { SOL, BTC, ETH } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
       const tokens = [SOL, BTC, ETH];
@@ -170,6 +166,7 @@ class WalletProvider {
 
       for (const token of tokens) {
         const response = await this.fetchWithRetry(
+          runtime,
           `${PROVIDER_CONFIG.BIRDEYE_API}/defi/price?address=${token}`,
           {
             headers: {
@@ -195,8 +192,8 @@ class WalletProvider {
     }
   }
 
-  formatPortfolio(portfolio: WalletPortfolio, prices: Prices): string {
-    let output = `${BOT_WALLET.description}\n`;
+  formatPortfolio(runtime, portfolio: WalletPortfolio, prices: Prices): string {
+    let output = `${runtime.character.description}\n`;
     output += `Wallet Address: ${this.walletPublicKey.toBase58()}\n\n`;
     
     const totalUsdFormatted = new BigNumber(portfolio.totalUsd).toFixed(2);
@@ -230,47 +227,55 @@ class WalletProvider {
     return output;
   }
 
-  async getFormattedPortfolio(): Promise<string> {
+  async getFormattedPortfolio(runtime): Promise<string> {
     try {
       console.log("Generating formatted portfolio report...");
       const [portfolio, prices] = await Promise.all([
-        this.fetchPortfolioValue(),
-        this.fetchPrices()
+        this.fetchPortfolioValue(runtime),
+        this.fetchPrices(runtime)
       ]);
       
       console.log("Portfolio and prices fetched successfully");
 
-      return this.formatPortfolio(portfolio, prices);
+      return this.formatPortfolio(runtime, portfolio, prices);
     } catch (error) {
       console.error("Error generating portfolio report:", error);
       return "Unable to fetch wallet information. Please try again later.";
     }
-  }
-
-  static getBotWalletAddress(): string {
-    return `${BOT_WALLET.description}\nWallet Address: ${BOT_WALLET.publicKey}`;
   }
 }
 
 const walletProvider: Provider = {
   get: async (runtime: IAgentRuntime, _message: Memory, _state?: State): Promise<string> => {
     try {
-      console.log("Initializing wallet provider...");
-      // Always use the bot's wallet
-      const publicKey = new PublicKey(BOT_WALLET.publicKey);
+      // Validate wallet configuration
+      if (!settings.WALLET_PUBLIC_KEY) {
+        throw new Error("Wallet public key is not configured in settings");
+      }
+
+      // Validate public key format before creating instance
+      if (typeof settings.WALLET_PUBLIC_KEY !== 'string' || settings.WALLET_PUBLIC_KEY.trim() === '') {
+        throw new Error("Invalid wallet public key format");
+      }
+
+      let publicKey: PublicKey;
+      try {
+        publicKey = new PublicKey(settings.WALLET_PUBLIC_KEY);
+      } catch (error) {
+        console.error("Error creating PublicKey:", error);
+        throw new Error("Invalid wallet public key format");
+      }
+
       const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
       const provider = new WalletProvider(connection, publicKey);
-      
-      console.log("Wallet provider initialized successfully");
 
-      return await provider.getFormattedPortfolio();
+      return await provider.getFormattedPortfolio(runtime);
     } catch (error) {
       console.error("Error in wallet provider:", error);
-      return "Failed to fetch wallet information. Please check your configuration.";
+      return `Failed to fetch wallet information: ${error instanceof Error ? error.message : 'Unknown error'}`;
     }
   }
 };
 
 // Module exports
 export default walletProvider;
-export const getBotWalletAddress = WalletProvider.getBotWalletAddress;

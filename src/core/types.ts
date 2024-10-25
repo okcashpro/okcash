@@ -412,8 +412,6 @@ export interface IAgentRuntime {
   character: Character;
   providers: Provider[];
   actions: Action[];
-  walletPublicKey: string;
-  walletKeyPair: Keypair;
 
   messageManager: IMemoryManager;
   descriptionManager: IMemoryManager;

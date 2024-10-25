@@ -94,16 +94,6 @@ export class AgentRuntime implements IAgentRuntime {
   token: string | null;
 
   /**
-   * The public key of the wallet.
-   */
-  walletPublicKey: string;
-
-  /**
-   * The keypair of the wallet.
-   */
-  walletKeyPair: Keypair;
-
-  /**
    * Custom actions that the agent can perform.
    */
   actions: Action[] = [];
@@ -217,8 +207,6 @@ export class AgentRuntime implements IAgentRuntime {
     databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
     fetch?: typeof fetch | unknown;
     speechModelPath?: string;
-    walletPublicKey?: string;
-    walletKeyPair?: Keypair;
   }) {
     this.#conversationLength =
       opts.conversationLength ?? this.#conversationLength;
@@ -231,23 +219,6 @@ export class AgentRuntime implements IAgentRuntime {
     if (!opts.databaseAdapter) {
       throw new Error("No database adapter provided");
     }
-    // if not set, get from settings
-    // this.walletPublicKey = opts.walletPublicKey ?? this.getSetting("WALLET_PUBLIC_KEY");
-    // this.walletKeyPair = opts.walletKeyPair ?? (() => {
-    //   const secretKey = this.getSetting("WALLET_SECRET_KEY");
-    //   if (!secretKey) {
-    //     console.warn("WALLET_SECRET_KEY not set in settings");
-    //     return undefined;
-    //   }
-    //   try {
-    //     // secret key is 2eETRBeJFNfxAmPzTxfRynebRjTYK9WBLeAE5JhfxdzAxjJG8ZCbmHX1WadTRdcEpE7HRELVp6cbCfZFY6Qw9BgR
-    //     const keypair = Keypair.fromSecretKey(Uint8Array.from(Buffer.from(secretKey, 'hex')));
-    //     console.log("Keypair is", keypair);
-    //     return keypair;
-    //   } catch (error) {
-    //     console.log("WARNING: Error creating wallet key pair:", error);
-    //   }
-    // })();
 
     this.messageManager = new MemoryManager({
       runtime: this,
