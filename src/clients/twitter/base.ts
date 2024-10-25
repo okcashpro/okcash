@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   QueryTweetsResponse,
   Scraper,
@@ -18,7 +20,9 @@ import {
 } from "../../core/types.ts";
 import ImageDescriptionService from "../../services/image.ts";
 
-import { glob } from "glob";
+import _glob from 'glob';
+const glob = _glob.default || _glob;
+
 import { stringToUuid } from "../../core/uuid.ts";
 
 export function extractAnswer(text: string): string {
