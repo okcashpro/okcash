@@ -20,8 +20,7 @@ import {
 } from "../../core/types.ts";
 import ImageDescriptionService from "../../services/image.ts";
 
-import _glob from 'glob';
-const glob = _glob.default || _glob;
+import { glob } from "glob";
 
 import { stringToUuid } from "../../core/uuid.ts";
 

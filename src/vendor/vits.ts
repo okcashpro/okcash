@@ -1836,6 +1836,7 @@ let JiebaWasmInstance: typeof import("jieba-wasm");
 async function getWasmInstance() {
   if (!JiebaWasmInstance) {
     const { default: JibeaWasm } = await import("jieba-wasm");
+    // @ts-ignore
     JiebaWasmInstance = JibeaWasm;
   }
 
