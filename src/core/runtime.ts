@@ -320,7 +320,7 @@ export class AgentRuntime implements IAgentRuntime {
     this.speechService = SpeechService;
 
     if (opts.character && opts.character.knowledge && opts.character.knowledge.length > 0) {
-      this.processCharacterKnowledge(opts.character.knowledge);
+      // this.processCharacterKnowledge(opts.character.knowledge);
     }
   }
 
@@ -337,6 +337,7 @@ export class AgentRuntime implements IAgentRuntime {
     this.ensureParticipantExists(this.agentId, this.agentId);
 
     for (const knowledgeItem of knowledge) {
+      continue;
       const knowledgeId = stringToUuid(knowledgeItem);
       const existingDocument = await this.documentsManager.getMemoryById(knowledgeId);
       if (!existingDocument) {
@@ -504,10 +505,14 @@ export class AgentRuntime implements IAgentRuntime {
 
           // if the model includes llama, set reptition_penalty to frequency_penalty
           if (model.includes("llama")) {
-            // (requestOptions.body as any).repetition_penalty = frequency_penalty;
+            (requestOptions.body as any).repetition_penalty = frequency_penalty ?? 1.2;
+            // delete presence_penalty and frequency_penalty
+            delete (requestOptions.body as any).presence_penalty;
+            delete (requestOptions.body as any).logit_bias;
+            delete (requestOptions.body as any).frequency_penalty;
           } else {
-            // (requestOptions.body as any).frequency_penalty = frequency_penalty;
-            // (requestOptions.body as any).presence_penalty = presence_penalty;
+            (requestOptions.body as any).frequency_penalty = frequency_penalty;
+            (requestOptions.body as any).presence_penalty = presence_penalty;
             (requestOptions.body as any).logit_bias = logit_bias;
           }
 

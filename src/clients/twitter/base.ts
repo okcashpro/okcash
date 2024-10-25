@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   QueryTweetsResponse,
   Scraper,
@@ -18,7 +20,8 @@ import {
 } from "../../core/types.ts";
 import ImageDescriptionService from "../../services/image.ts";
 
-import glob from "glob";
+import { glob } from "glob";
+
 import { stringToUuid } from "../../core/uuid.ts";
 
 export function extractAnswer(text: string): string {
@@ -140,7 +143,7 @@ export class ClientBase extends EventEmitter {
     }
 
     const tweet = await this.requestQueue.add(() =>
-      this.twitterClient.getTweet(tweetId),
+      this.twitterClient.getTweet(tweetId)
     );
     await this.cacheTweet(tweet);
     return tweet;
@@ -163,8 +166,7 @@ export class ClientBase extends EventEmitter {
     }
     this.dryRun =
       this.runtime.getSetting("TWITTER_DRY_RUN")?.toLowerCase() === "true";
-    this.directions =
-      "- " +
+    this.directions = "- " +
       this.runtime.character.style.all.join("\n- ") +
       "- " +
       this.runtime.character.style.post.join();
@@ -241,8 +243,7 @@ export class ClientBase extends EventEmitter {
         async () => {
           // wait 3 seconds before getting the user id
           await new Promise((resolve) => setTimeout(resolve, 10000));
-          try{
-
+          try {
             return await this.twitterClient.getUserIdByScreenName(
               this.runtime.getSetting("TWITTER_USERNAME"),
             );
@@ -252,7 +253,7 @@ export class ClientBase extends EventEmitter {
           }
         },
       );
-      if(!userId){
+      if (!userId) {
         console.error("Failed to get user ID");
         return;
       }
@@ -268,17 +269,22 @@ export class ClientBase extends EventEmitter {
   async fetchHomeTimeline(count: number): Promise<Tweet[]> {
     const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
 
-    return homeTimeline.filter(t => t.__typename !== "TweetWithVisibilityResults").map((tweet) => {
+    return homeTimeline.filter((t) =>
+      t.__typename !== "TweetWithVisibilityResults"
+    ).map((tweet) => {
       console.log("tweet is", tweet);
-      const obj =  {
+      const obj = {
         id: tweet.rest_id,
         name: tweet.name ?? tweet.core?.user_results?.result?.legacy.name,
-        username: tweet.username ?? tweet.core?.user_results?.result?.legacy.screen_name,
+        username: tweet.username ??
+          tweet.core?.user_results?.result?.legacy.screen_name,
         text: tweet.text ?? tweet.legacy?.full_text,
-        inReplyToStatusId: tweet.inReplyToStatusId ?? tweet.legacy?.in_reply_to_status_id_str,
+        inReplyToStatusId: tweet.inReplyToStatusId ??
+          tweet.legacy?.in_reply_to_status_id_str,
         createdAt: tweet.createdAt ?? tweet.legacy?.created_at,
         userId: tweet.userId ?? tweet.legacy?.user_id_str,
-        conversationId: tweet.conversationId ?? tweet.legacy?.conversation_id_str,
+        conversationId: tweet.conversationId ??
+          tweet.legacy?.conversation_id_str,
         hashtags: tweet.hashtags ?? tweet.legacy?.entities.hashtags,
         mentions: tweet.mentions ?? tweet.legacy?.entities.user_mentions,
         photos: tweet.photos ??
@@ -309,7 +315,7 @@ export class ClientBase extends EventEmitter {
       // Sometimes this fails because we are rate limited. in this case, we just need to return an empty array
       // if we dont get a response in 5 seconds, something is wrong
       const timeoutPromise = new Promise((resolve) =>
-        setTimeout(() => resolve({ tweets: [] }), 10000),
+        setTimeout(() => resolve({ tweets: [] }), 10000)
       );
 
       try {
@@ -345,10 +351,10 @@ export class ClientBase extends EventEmitter {
       const cachedResults = JSON.parse(fs.readFileSync(cacheFile, "utf-8"));
 
       // Get the existing memories from the database
-      const existingMemories =
-        await this.runtime.messageManager.getMemoriesByRoomIds({
+      const existingMemories = await this.runtime.messageManager
+        .getMemoriesByRoomIds({
           roomIds: cachedResults.map((tweet) =>
-            stringToUuid(tweet.conversationId),
+            stringToUuid(tweet.conversationId)
           ),
         });
 
@@ -359,7 +365,7 @@ export class ClientBase extends EventEmitter {
 
       // Check if any of the cached tweets exist in the existing memories
       const someCachedTweetsExist = cachedResults.some((tweet) =>
-        existingMemoryIds.has(tweet.id),
+        existingMemoryIds.has(tweet.id)
       );
 
       if (someCachedTweetsExist) {
@@ -371,10 +377,9 @@ export class ClientBase extends EventEmitter {
         // Save the missing tweets as memories
         for (const tweet of tweetsToSave) {
           const roomId = stringToUuid(tweet.conversationId);
-          const tweetuserId =
-            tweet.userId === this.twitterUserId
-              ? this.runtime.agentId
-              : stringToUuid(tweet.userId);
+          const tweetuserId = tweet.userId === this.twitterUserId
+            ? this.runtime.agentId
+            : stringToUuid(tweet.userId);
 
           await this.runtime.ensureRoomExists(roomId);
           await this.runtime.ensureParticipantExists(
@@ -447,12 +452,12 @@ export class ClientBase extends EventEmitter {
 
     // Convert the Set to an array of UUIDs
     const tweetUuids = Array.from(tweetIdsToCheck).map((id) =>
-      stringToUuid(id),
+      stringToUuid(id)
     );
 
     // Check the existing memories in the database
-    const existingMemories =
-      await this.runtime.messageManager.getMemoriesByRoomIds({
+    const existingMemories = await this.runtime.messageManager
+      .getMemoriesByRoomIds({
         roomIds: tweetUuids,
       });
 
@@ -476,10 +481,9 @@ export class ClientBase extends EventEmitter {
     // Save the new tweets as memories
     for (const tweet of tweetsToSave) {
       const roomId = stringToUuid(tweet.conversationId);
-      const tweetuserId =
-        tweet.userId === this.twitterUserId
-          ? this.runtime.agentId
-          : stringToUuid(tweet.userId);
+      const tweetuserId = tweet.userId === this.twitterUserId
+        ? this.runtime.agentId
+        : stringToUuid(tweet.userId);
 
       await this.runtime.ensureRoomExists(roomId);
       await this.runtime.ensureParticipantExists(this.runtime.agentId, roomId);
@@ -518,7 +522,11 @@ export class ClientBase extends EventEmitter {
   async setCookiesFromArray(cookiesArray: any[]) {
     const cookieStrings = cookiesArray.map(
       (cookie) =>
-        `${cookie.key}=${cookie.value}; Domain=${cookie.domain}; Path=${cookie.path}; ${cookie.secure ? "Secure" : ""}; ${cookie.httpOnly ? "HttpOnly" : ""}; SameSite=${cookie.sameSite || "Lax"}`,
+        `${cookie.key}=${cookie.value}; Domain=${cookie.domain}; Path=${cookie.path}; ${
+          cookie.secure ? "Secure" : ""
+        }; ${cookie.httpOnly ? "HttpOnly" : ""}; SameSite=${
+          cookie.sameSite || "Lax"
+        }`,
     );
     await this.twitterClient.setCookies(cookieStrings);
   }
