@@ -104,7 +104,5 @@ ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
 ELEVENLABS_OUTPUT_FORMAT=pcm_16000
 ```
 
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
-
 # Discord Bot
 For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
