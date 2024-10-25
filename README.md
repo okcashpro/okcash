@@ -2,7 +2,7 @@
 
 <img src="./docs/eliza_banner.png" alt="Eliza Banner" width="100%">
 
-Make new friends.
+* As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAindreessen](https://x.com/pmairca) *
 
 - Multi-agent simulation framework
 - Add as many unique characters as you want with [characterfile](https://github.com/lalalune/characterfile/)
