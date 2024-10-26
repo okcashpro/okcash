@@ -39,12 +39,16 @@ export function isCreateAndBuyContent(
   content: any
 ): content is CreateAndBuyContent {
   return (
-    (typeof content.deployerPrivateKey === "string" &&
-      typeof content.tokenMetadata === "object" &&
-      typeof content.buyAmountSol === "string") ||
-    (typeof content.buyAmountSol === "number" &&
-      typeof content.priorityFee === "number" &&
-      typeof content.allowOffCurve === "boolean")
+    typeof content.deployerPrivateKey === "string" &&
+    typeof content.tokenMetadata === "object" &&
+    content.tokenMetadata !== null &&
+    (typeof content.buyAmountSol === "string" ||
+      typeof content.buyAmountSol === "number") &&
+    typeof content.priorityFee === "object" &&
+    content.priorityFee !== null &&
+    typeof content.priorityFee.unitLimit === "number" &&
+    typeof content.priorityFee.unitPrice === "number" &&
+    typeof content.allowOffCurve === "boolean"
   );
 }
 
