@@ -67,12 +67,12 @@ export class DiscordClient extends EventEmitter {
     this.setupEventListeners();
     this.setupCommands();
 
-    // this.runtime.registerAction(joinvoice);
-    // this.runtime.registerAction(leavevoice);
-    // this.runtime.registerAction(summarize);
-    // this.runtime.registerAction(chat_with_attachments);
-    // this.runtime.registerAction(transcribe_media);
-    // this.runtime.registerAction(download_media);
+    this.runtime.registerAction(joinvoice);
+    this.runtime.registerAction(leavevoice);
+    this.runtime.registerAction(summarize);
+    this.runtime.registerAction(chat_with_attachments);
+    this.runtime.registerAction(transcribe_media);
+    this.runtime.registerAction(download_media);
 
     this.runtime.providers.push(channelStateProvider);
     this.runtime.providers.push(voiceStateProvider);
@@ -250,6 +250,37 @@ export class DiscordClient extends EventEmitter {
       `${reaction.message.id}-${user.id}-${emoji}-removed`,
     );
 
+    const agentId = this.runtime.agentId;
+    const userName = reaction.message.author.username;
+    const name = reaction.message.author.displayName;
+
+
+    console.log("reactionUUID", reactionUUID);
+    console.log("userIdUUID", userIdUUID);
+    console.log("roomId", roomId);
+    console.log("agentId", agentId);
+    console.log("userName", userName);
+    console.log("name", name);
+
+    await Promise.all([
+      
+    this.runtime.ensureUserExists(
+      agentId,
+      this.client.user.username,
+      this.runtime.character.name,
+      "discord",
+    ),
+    this.runtime.ensureUserExists(userIdUUID, userName, name, "discord"),
+    this.runtime.ensureRoomExists(roomId),
+  ]);
+
+  await Promise.all([
+    this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
+    this.runtime.ensureParticipantInRoom(agentId, roomId),
+  ]);
+
+  try {
+    
     // Save the reaction removal as a message
     await this.runtime.messageManager.createMemory({
       id: reactionUUID, // This is the ID of the reaction removal message
@@ -262,7 +293,10 @@ export class DiscordClient extends EventEmitter {
       roomId,
       createdAt: Date.now(),
       embedding: embeddingZeroVector,
-    });
+      });
+    } catch (error) {
+      console.error("Error creating reaction removal message:", error);
+    }
   }
 
   private handleGuildCreate(guild: Guild) {

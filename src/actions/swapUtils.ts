@@ -11,10 +11,11 @@ import {
    BlockhashWithExpiryBlockHeight,
  } from "@solana/web3.js";
  import { getAssociatedTokenAddress } from "@solana/spl-token";
+import settings from "../core/settings";
  
- const solAddress = process.env.SOL_ADDRESS;
- const SLIPPAGE = process.env.SLIPPAGE;
- const connection = new Connection(process.env.RPC_URL!);
+ const solAddress = settings.SOL_ADDRESS;
+ const SLIPPAGE = settings.SLIPPAGE;
+ const connection = new Connection(settings.RPC_URL!);
  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  
  export async function delayedCall<T>(

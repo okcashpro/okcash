@@ -1,4 +1,4 @@
-import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
 import fetch from "cross-fetch";
 import {
   ActionExample,
@@ -56,7 +56,7 @@ export default {
 
     try {
       const connection = new Connection("https://api.mainnet-beta.solana.com");
-      const walletPublicKey = new PublicKey(runtime.walletPublicKey);
+      const walletPublicKey = new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"));
 
       const swapResult = await swapToken(
         connection,
@@ -76,7 +76,9 @@ export default {
       }
 
       const transaction = Transaction.from(Buffer.from(swapResult.swapTransaction, "base64"));
-      transaction.sign(runtime.walletKeyPair);
+      const privateKey = runtime.getSetting("WALLET_PRIVATE_KEY");
+      const keypair = Keypair.fromSecretKey(Uint8Array.from(Buffer.from(privateKey, 'base64')));
+      transaction.sign(keypair);
 
       const txid = await connection.sendRawTransaction(transaction.serialize());
       await connection.confirmTransaction(txid);

@@ -183,6 +183,10 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
   }
 
   async createMemory(memory: Memory, tableName: string): Promise<void> {
+    // Delete any existing memory with the same ID first
+    const deleteSql = `DELETE FROM memories WHERE id = ? AND type = ?`;
+    this.db.prepare(deleteSql).run(memory.id, tableName);
+
     let isUnique = true;
 
     if (memory.embedding) {
@@ -201,11 +205,10 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     }
 
     const content = JSON.stringify(memory.content);
-
     const createdAt = memory.createdAt ?? Date.now();
 
     // Insert the memory with the appropriate 'unique' value
-    const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT OR REPLACE INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     this.db
       .prepare(sql)
       .run(
@@ -218,7 +221,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         isUnique ? 1 : 0,
         createdAt,
       );
-  }
+}
 
   async searchMemories(params: {
     tableName: string;
