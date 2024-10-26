@@ -54,6 +54,8 @@ try {
 // Load character
 const characterPath = argv.character || argv.characters;
 
+console.log("characterPath", characterPath);
+
 const characterPaths = argv.characters?.split(",").map((path) => path.trim());
 
 console.log("characterPaths", characterPaths);
