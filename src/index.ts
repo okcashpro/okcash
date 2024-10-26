@@ -52,9 +52,11 @@ try {
 }
 
 // Load character
-const characterPath = argv.character;
+const characterPath = argv.character || argv.characters;
 
 const characterPaths = argv.characters?.split(",").map((path) => path.trim());
+
+console.log("characterPaths", characterPaths);
 
 const characters = [];
 
@@ -65,6 +67,7 @@ if (characterPaths?.length > 0) {
   for (const path of characterPaths) {
     try {
       const character = JSON.parse(fs.readFileSync(path, "utf8"));
+      console.log("character", character.name);
       characters.push(character);
     } catch (e) {
       console.log(`Error loading character from ${path}: ${e}`);
