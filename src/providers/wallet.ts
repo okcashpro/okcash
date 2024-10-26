@@ -61,8 +61,6 @@ class WalletProvider {
   private async fetchWithRetry(runtime, url: string, options: RequestInit = {}): Promise<any> {
     let lastError: Error;
 
-    console.log("runtime", runtime);
-
     for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
       try {
         console.log(`Attempt ${i + 1}: Fetching data from ${url}`);        

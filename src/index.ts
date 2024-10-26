@@ -77,15 +77,6 @@ if (characterPaths?.length > 0) {
   }
 }
 
-try {
-  if (characterPath) {
-    const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
-    characters.push(character);
-  }
-} catch (e) {
-  console.log(`Error loading character from ${characterPath}: ${e}`);
-}
-
 async function startAgent(character: Character) {
   console.log("Starting agent for character " + character.name);
   const db = new SqliteDatabaseAdapter(new Database("./db.sqlite"))

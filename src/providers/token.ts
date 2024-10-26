@@ -109,7 +109,6 @@ export class TokenProvider {
 
     for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
       try {
-        console.log(`Attempt ${i + 1}: Fetching data from ${url}`);
         const response = await fetch(url, {
           ...options,
           headers: {
@@ -120,8 +119,6 @@ export class TokenProvider {
           },
         });
 
-        console.log({ response });
-
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(
@@ -130,7 +127,6 @@ export class TokenProvider {
         }
 
         const data = await response.json();
-        console.log(`Attempt ${i + 1}: Data fetched successfully`, data);
         return data;
       } catch (error) {
         console.error(`Attempt ${i + 1} failed:`, error);
@@ -159,7 +155,6 @@ export class TokenProvider {
     }
     const url = `${PROVIDER_CONFIG.BIRDEYE_API}${PROVIDER_CONFIG.TOKEN_SECURITY_ENDPOINT}${this.tokenAddress}`;
     const data = await this.fetchWithRetry(url);
-    console.log({ data });
 
     if (!data?.success || !data?.data) {
       throw new Error("No token security data available");
@@ -201,8 +196,6 @@ export class TokenProvider {
     const data = await fetch(url, options)
       .then((res) => res.json())
       .catch((err) => console.error(err));
-
-    console.log({ data });
 
     if (!data?.success || !data?.data) {
       throw new Error("No token trade data available");

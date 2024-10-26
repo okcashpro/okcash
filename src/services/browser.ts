@@ -130,7 +130,7 @@ export class BrowserService {
 
     try {
       if (!this.context) {
-        throw new Error(
+        console.log(
           "Browser context not initialized. Call initialize() first.",
         );
       }
@@ -150,7 +150,7 @@ export class BrowserService {
       const response = await page.goto(url, { waitUntil: "networkidle" });
 
       if (!response) {
-        throw new Error("Failed to load the page");
+        console.log("Failed to load the page");
       }
 
       if (response.status() === 403 || response.status() === 404) {
@@ -173,7 +173,11 @@ export class BrowserService {
       return content;
     } catch (error) {
       console.error("Error:", error);
-      throw error;
+      return {
+        title: url,
+        description: "Error, could not fetch content",
+        bodyContent: "",
+      };
     } finally {
       if (page) {
         await page.close();
@@ -269,7 +273,12 @@ export class BrowserService {
       return await this.fetchPageContent(googleSearchUrl);
     } catch (error) {
       console.error("Error fetching from Google Search:", error);
-      throw new Error("Failed to fetch content from alternative sources");
+      console.error("Failed to fetch content from alternative sources");
+      return {
+        title: url,
+        description: "Error, could not fetch content from alternative sources",
+        bodyContent: "",
+      };
     }
   }
 }
