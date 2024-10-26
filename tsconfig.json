@@ -20,6 +20,6 @@
     "experimentalSpecifiers": true,
     "transpileOnly": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../data_scraper"],
   "exclude": ["node_modules", "dist"]
 }
