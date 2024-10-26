@@ -1,0 +1,18 @@
+{
+    bot: {
+        testEnv: false,
+    },
+    server: {
+        https: false,
+        port: 3000,
+        static: false,
+    },
+    gameServer: {
+        validateInitData: true,
+        inactivityTimeout: 300,
+        disconnectTimeout: 180,
+        fakeRoom: {
+            create: false,
+        },
+    },
+}
