@@ -12,6 +12,7 @@ import cors from "cors";
 import { messageCompletionFooter } from "../../core/parsing.ts";
 import multer, { File } from 'multer';
 import { Request as ExpressRequest } from 'express';
+import { generateCaption, generateImage } from "../../actions/image_gen_utils.ts";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -192,6 +193,33 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
       }
 
       res.json(response);
+    });
+
+    this.app.post("/:agentId/image", async (req: express.Request, res: express.Response) => {
+      const { prompt, width, height, steps, count } = req.body;
+      const agentId = req.params.agentId;
+      const agent = this.agents.get(agentId);
+      if (!agent) {
+        res.status(404).send("Agent not found");
+        return;
+      }
+
+      const togetherApiKey = agent.getSetting("TOGETHER_API_KEY");
+      const claudeApiKey = agent.getSetting("CLAUDE_API_KEY");
+      
+      const images = await generateImage({...req.body, apiKey: togetherApiKey });
+      const imagesRes: {image: string, caption: string}[] = [];
+      if (images.data.length > 0) {
+        for(let i = 0; i < images.data.length; i++) {
+          const caption = await generateCaption({apiKey: claudeApiKey, imageUrl: images.data[i].url});
+          if (caption.success) {
+            imagesRes.push({image: images.data[i].url, caption: caption.caption});
+          } else {
+            imagesRes.push({image: images.data[i].url, caption: "Uncaptioned image"});
+          }
+        }
+      }
+      res.json({images: imagesRes});
     });
   }
 
