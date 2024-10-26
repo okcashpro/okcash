@@ -105,4 +105,4 @@ ELEVENLABS_OUTPUT_FORMAT=pcm_16000
 ```
 
 # Discord Bot
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-applicat
+For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
