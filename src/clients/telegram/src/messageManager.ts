@@ -76,9 +76,9 @@ export class MessageManager {
       const content: Content = {
         text: message.text,
         source: "telegram",
-        inReplyTo: message.reply_to_message
-          ? stringToUuid(message.reply_to_message.message_id.toString())
-          : undefined,
+        // inReplyTo: message.reply_to_message
+        //   ? stringToUuid(message.reply_to_message.message_id.toString())
+        //   : undefined,
       };
 
       const memory: Memory = {
@@ -110,13 +110,13 @@ export class MessageManager {
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i];
         const sentMessage = await ctx.telegram.sendMessage(ctx.chat.id, chunk, {
-          reply_parameters:
-            i === 0
-              ? {
-                  message_id: message.message_id,
-                  chat_id: ctx.chat.id,
-                }
-              : undefined,
+          // reply_parameters:
+          //   i === 0
+          //     ? {
+          //         message_id: message.message_id,
+          //         chat_id: ctx.chat.id,
+          //       }
+          //     : undefined,
         });
 
         // Save bot's response as memory
@@ -128,7 +128,7 @@ export class MessageManager {
             content: {
               text: chunk,
               source: "telegram",
-              inReplyTo: messageId,
+              // inReplyTo: messageId,
               action:
                 chunks.length > 1 && i < chunks.length - 1
                   ? "CONTINUE"
@@ -188,7 +188,7 @@ export class MessageManager {
       context
     );
 
-    const response = await this.runtime.messageCompletion({
+    const body = {
       context,
       stop: ["<|eot|>"],
       temperature: 0.7,
@@ -198,7 +198,18 @@ export class MessageManager {
       model: this.runtime.getSetting("XAI_MODEL")
         ? this.runtime.getSetting("XAI_MODEL")
         : "gpt-4o-mini",
-    });
+    }
+
+    console.log("XAI_MODEL", body.model);
+
+    if (body.model.includes("llama")) {
+      (body as any).repetition_penalty = 1.6;
+    } else {
+      (body as any).frequency_penalty = 0.5;
+      (body as any).presence_penalty = 0.5;
+    }
+
+    const response = await this.runtime.messageCompletion(body);
 
     if (!response) {
       console.error("❌ No response from runtime.messageCompletion");

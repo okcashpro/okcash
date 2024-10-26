@@ -93,7 +93,7 @@ async function startAgent(character: Character) {
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
-    model: "gpt-4-turbo",
+    model: "gpt-4o",
     evaluators: [],
     character,
     providers: [timeProvider, boredomProvider],
@@ -113,7 +113,7 @@ async function startAgent(character: Character) {
       character.settings?.secrets?.OPENAI_API_KEY ??
       (settings.OPENAI_API_KEY as string),
     serverUrl: "https://api.openai.com/v1",
-    model: "gpt-4-turbo",
+    model: "gpt-4o-mini",
     evaluators: [],
     character,
     providers: [timeProvider, boredomProvider],
@@ -132,7 +132,7 @@ async function startAgent(character: Character) {
     
     const botToken =
       character.settings?.secrets?.TELEGRAM_BOT_TOKEN ??
-      process.env.TELEGRAM_BOT_TOKEN;
+      settings.TELEGRAM_BOT_TOKEN;
   
     if (!botToken) {
       console.error(

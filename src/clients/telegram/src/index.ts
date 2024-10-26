@@ -24,6 +24,11 @@ export class TelegramClient {
           await this.messageManager.handleMessage(ctx);
         } else {
           console.log("❌ Received non-text message");
+
+
+          // TODO: Handle non-text messages
+          
+
         }
       } catch (error) {
         console.error("❌ Error handling message:", error);
