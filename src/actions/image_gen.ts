@@ -1,5 +1,5 @@
-import { HandlerCallback, IAgentRuntime, Memory, State, Action } from "../core/types";
-import { generateCaption, generateImage } from "./image_gen_utils";
+import { HandlerCallback, IAgentRuntime, Memory, State, Action } from "../core/types.ts";
+import { generateCaption, generateImage } from "./image_gen_utils.ts";
 
 export default {
     name: "IMAGE_GEN",
@@ -30,18 +30,18 @@ export default {
             steps: 4,
             count: 1
         })
-        if (images.success) {
+        if (images.success && images.data && images.data.length > 0) {
             for(let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
                 const caption = await generateCaption({
                     apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
-                    imageUrl: image.image
+                    imageUrl: image
                 })
                 if (caption.success) {
-                    res.push({image: image.image, caption: caption.caption});
+                    res.push({image: image, caption: caption.caption});
                 } else {
-                    console.error("Failed to generate caption for image", image.image, caption.error);
-                    res.push({image: image.image, caption: "Uncaptioned image"});
+                    console.error("Failed to generate caption for image", image, caption.error);
+                    res.push({image: image, caption: "Uncaptioned image"});
                 }
             }
         }

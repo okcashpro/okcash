@@ -196,7 +196,6 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
     });
 
     this.app.post("/:agentId/image", async (req: express.Request, res: express.Response) => {
-      const { prompt, width, height, steps, count } = req.body;
       const agentId = req.params.agentId;
       const agent = this.agents.get(agentId);
       if (!agent) {
@@ -205,17 +204,17 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
       }
 
       const togetherApiKey = agent.getSetting("TOGETHER_API_KEY");
-      const claudeApiKey = agent.getSetting("CLAUDE_API_KEY");
+      const claudeApiKey = agent.getSetting("ANTHROPIC_API_KEY");
       
       const images = await generateImage({...req.body, apiKey: togetherApiKey });
       const imagesRes: {image: string, caption: string}[] = [];
-      if (images.data.length > 0) {
+      if (images.data && images.data.length > 0) {
         for(let i = 0; i < images.data.length; i++) {
-          const caption = await generateCaption({apiKey: claudeApiKey, imageUrl: images.data[i].url});
+          const caption = await generateCaption({apiKey: claudeApiKey, imageUrl: images.data[i]});
           if (caption.success) {
-            imagesRes.push({image: images.data[i].url, caption: caption.caption});
+            imagesRes.push({image: images.data[i], caption: caption.caption});
           } else {
-            imagesRes.push({image: images.data[i].url, caption: "Uncaptioned image"});
+            imagesRes.push({image: images.data[i], caption: "Uncaptioned image"});
           }
         }
       }
