@@ -17,10 +17,10 @@ import settings from "./core/settings.ts";
 import { Character, IAgentRuntime } from "./core/types.ts"; // Added IAgentRuntime
 import boredomProvider from "./providers/boredom.ts";
 import timeProvider from "./providers/time.ts";
-// import { wait } from "./clients/twitter/utils.ts";
-// import { TwitterSearchClient } from "./clients/twitter/search.ts";
-// import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
-// import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
+import { wait } from "./clients/twitter/utils.ts";
+import { TwitterSearchClient } from "./clients/twitter/search.ts";
+import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
+import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
 
 interface Arguments {
   character?: string;
@@ -160,22 +160,22 @@ async function startAgent(character: Character) {
     }
   }
 
-  // async function startTwitter(runtime) {
-  //  console.log("Starting search client");
-  //  const twitterSearchClient = new TwitterSearchClient(runtime);
-  //  await wait();
-  //  console.log("Starting interaction client");
-  //  const twitterInteractionClient = new TwitterInteractionClient(runtime);
-  //  await wait();
-  //  console.log("Starting generation client");
-  //  const twitterGenerationClient = new TwitterGenerationClient(runtime);
+  async function startTwitter(runtime) {
+   console.log("Starting search client");
+   const twitterSearchClient = new TwitterSearchClient(runtime);
+   await wait();
+   console.log("Starting interaction client");
+   const twitterInteractionClient = new TwitterInteractionClient(runtime);
+   await wait();
+   console.log("Starting generation client");
+   const twitterGenerationClient = new TwitterGenerationClient(runtime);
   
-  //  return {
-  //    twitterInteractionClient,
-  //    twitterSearchClient,
-  //    twitterGenerationClient,
-  //  };
-  // }
+   return {
+     twitterInteractionClient,
+     twitterSearchClient,
+     twitterGenerationClient,
+   };
+  }
 
   if (!character.clients) {
     return console.error("No clients found for character " + character.name);
@@ -202,16 +202,16 @@ async function startAgent(character: Character) {
     }
   }
 
-  // if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
-  //  const {
-  //    twitterInteractionClient,
-  //    twitterSearchClient,
-  //    twitterGenerationClient,
-  //  } = await startTwitter(runtime);
-  //  clients.push(
-  //    twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
-  //  );
-  // }
+  if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
+   const {
+     twitterInteractionClient,
+     twitterSearchClient,
+     twitterGenerationClient,
+   } = await startTwitter(runtime);
+   clients.push(
+     twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
+   );
+  }
 
   directClient.registerAgent(directRuntime);
 
