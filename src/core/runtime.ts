@@ -1186,7 +1186,7 @@ Text: ${attachment.text}
       const shuffledLore = [...this.character.lore].sort(
         () => Math.random() - 0.5,
       );
-      const selectedLore = shuffledLore.slice(0, 3);
+      const selectedLore = shuffledLore.slice(0, 10);
       lore = selectedLore.join("\n");
     }
 
