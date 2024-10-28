@@ -80,6 +80,11 @@ npx --no node-llama-cpp source download --gpu cuda
 
 Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
 
+## Running locally
+Add XAI_MODEL and set it to one of the above options from [Run with
+Llama](#run-with-llama) - you can leave X_SERVER_URL and XAI_API_KEY blank, it
+downloads the model from huggingface and queries it locally
+
 # Cloud Setup (with OpenAI)
 
 In addition to the environment variables above, you will need to add the following:
