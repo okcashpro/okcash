@@ -1,5 +1,3 @@
-// clients/telegram/src/index.ts
-
 import { Context, Telegraf } from "telegraf";
 
 import { IAgentRuntime } from "../../../core/types.ts";
@@ -19,21 +17,21 @@ export class TelegramClient {
     console.log("Setting up message handler...");
     this.bot.on("message", async (ctx) => {
       try {
-        if ("text" in ctx.message) {
-          console.log("📥 Received message:", ctx.message.text);
-          await this.messageManager.handleMessage(ctx);
-        } else {
-          console.log("❌ Received non-text message");
-
-
-          // TODO: Handle non-text messages
-          
-
-        }
+        console.log("📥 Received message:", ctx.message);
+        await this.messageManager.handleMessage(ctx);
       } catch (error) {
         console.error("❌ Error handling message:", error);
         await ctx.reply("An error occurred while processing your message.");
       }
+    });
+
+    // Handle specific message types for better logging
+    this.bot.on("photo", (ctx) => {
+      console.log("📸 Received photo message with caption:", ctx.message.caption);
+    });
+
+    this.bot.on("document", (ctx) => {
+      console.log("📎 Received document message:", ctx.message.document.file_name);
     });
 
     this.bot.catch((err, ctx) => {
