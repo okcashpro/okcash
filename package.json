@@ -134,6 +134,7 @@
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-capsolver": "^2.0.1",
     "sql.js": "^1.10.2",
+    "sqlite-vec": "^0.1.4-alpha.2",
     "sqlite-vss": "^0.1.2",
     "srt": "^0.0.3",
     "systeminformation": "^5.23.5",

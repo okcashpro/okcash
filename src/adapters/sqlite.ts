@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
-import { load } from "../adapters/sqlite/sqlite_vss.ts";
+// import { load } from "../adapters/sqlite/sqlite_vss.ts";
+import { load } from "../adapters/sqlite/sqlite_vec.ts";
 
 import { DatabaseAdapter } from "../core/database.ts";
 import {
@@ -43,10 +44,10 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
 
   async getParticipantUserState(
     roomId: UUID,
-    userId: UUID,
+    userId: UUID
   ): Promise<"FOLLOWED" | "MUTED" | null> {
     const stmt = this.db.prepare(
-      "SELECT userState FROM participants WHERE roomId = ? AND userId = ?",
+      "SELECT userState FROM participants WHERE roomId = ? AND userId = ?"
     );
     const res = stmt.get(roomId, userId) as
       | { userState: "FOLLOWED" | "MUTED" | null }
@@ -57,10 +58,10 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
   async setParticipantUserState(
     roomId: UUID,
     userId: UUID,
-    state: "FOLLOWED" | "MUTED" | null,
+    state: "FOLLOWED" | "MUTED" | null
   ): Promise<void> {
     const stmt = this.db.prepare(
-      "UPDATE participants SET userState = ? WHERE roomId = ? AND userId = ?",
+      "UPDATE participants SET userState = ? WHERE roomId = ? AND userId = ?"
     );
     stmt.run(state, roomId, userId);
   }
@@ -73,7 +74,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     // Check if the 'accounts' table exists as a representative table
     const tableExists = this.db
       .prepare(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'",
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'"
       )
       .get();
 
@@ -107,7 +108,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
           account.username,
           account.email,
           account.avatarUrl,
-          JSON.stringify(account.details),
+          JSON.stringify(account.details)
         );
       return true;
     } catch (error) {
@@ -198,7 +199,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
           roomId: memory.roomId,
           match_threshold: 0.95, // 5% similarity threshold
           count: 1,
-        },
+        }
       );
 
       isUnique = similarMemories.length === 0;
@@ -219,9 +220,9 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         memory.userId,
         memory.roomId,
         isUnique ? 1 : 0,
-        createdAt,
+        createdAt
       );
-}
+  }
 
   async searchMemories(params: {
     tableName: string;
@@ -272,7 +273,7 @@ AND roomId = ?`;
       roomId?: UUID;
       unique?: boolean;
       tableName: string;
-    },
+    }
   ): Promise<Memory[]> {
     const queryParams = [
       JSON.stringify(embedding),
@@ -339,7 +340,7 @@ AND roomId = ?`;
         opts.query_table_name,
         opts.query_input,
         opts.query_input,
-        opts.query_match_count,
+        opts.query_match_count
       ) as Memory[];
 
     return memories.map((memory) => ({
@@ -370,7 +371,7 @@ AND roomId = ?`;
         JSON.stringify(params.body),
         params.userId,
         params.roomId,
-        params.type,
+        params.type
       );
   }
 
@@ -444,7 +445,7 @@ AND roomId = ?`;
   async countMemories(
     roomId: UUID,
     unique = true,
-    tableName = "",
+    tableName = ""
   ): Promise<number> {
     if (!tableName) {
       throw new Error("tableName is required");
@@ -514,7 +515,7 @@ AND roomId = ?`;
         goal.userId,
         goal.name,
         goal.status,
-        JSON.stringify(goal.objectives),
+        JSON.stringify(goal.objectives)
       );
   }
 
@@ -610,7 +611,7 @@ AND roomId = ?`;
           params.userA,
           params.userB,
           params.userB,
-          params.userA,
+          params.userA
         ) as Relationship) || null
     );
   }
