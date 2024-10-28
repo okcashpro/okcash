@@ -10,8 +10,11 @@ import { File } from "formdata-node";
 import os from "os";
 import { IAgentRuntime } from "../core/types.ts";
 import settings from "../core/settings.ts";
+import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+// const __dirname = path.dirname(new URL(import.meta.url).pathname); #compatibility issues with windows
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const execAsync = promisify(exec);
 
@@ -78,7 +81,7 @@ export class TranscriptionService extends EventEmitter {
         settings.CUDA_PATH ||
           "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0",
         "bin",
-        "nvcc.exe",
+        "nvcc.exe"
       );
       if (fs.existsSync(cudaPath)) {
         this.isCudaAvailable = true;
@@ -88,7 +91,7 @@ export class TranscriptionService extends EventEmitter {
       }
     } else {
       console.log(
-        "CUDA not supported on this platform. Transcription will run on CPU.",
+        "CUDA not supported on this platform. Transcription will run on CPU."
       );
     }
   }
@@ -96,18 +99,18 @@ export class TranscriptionService extends EventEmitter {
   private async convertAudio(inputBuffer: ArrayBuffer): Promise<Buffer> {
     const inputPath = path.join(
       this.CONTENT_CACHE_DIR,
-      `input_${Date.now()}.wav`,
+      `input_${Date.now()}.wav`
     );
     const outputPath = path.join(
       this.CONTENT_CACHE_DIR,
-      `output_${Date.now()}.wav`,
+      `output_${Date.now()}.wav`
     );
 
     fs.writeFileSync(inputPath, Buffer.from(inputBuffer));
 
     try {
       const { stdout } = await execAsync(
-        `ffprobe -v error -show_entries stream=codec_name,sample_rate,channels -of json "${inputPath}"`,
+        `ffprobe -v error -show_entries stream=codec_name,sample_rate,channels -of json "${inputPath}"`
       );
       const probeResult = JSON.parse(stdout);
       const stream = probeResult.streams[0];
@@ -147,7 +150,7 @@ export class TranscriptionService extends EventEmitter {
   }
 
   public async transcribeAttachment(
-    audioBuffer: ArrayBuffer,
+    audioBuffer: ArrayBuffer
   ): Promise<string | null> {
     return await this.transcribe(audioBuffer);
   }
@@ -166,7 +169,7 @@ export class TranscriptionService extends EventEmitter {
   }
 
   public async transcribeAttachmentLocally(
-    audioBuffer: ArrayBuffer,
+    audioBuffer: ArrayBuffer
   ): Promise<string | null> {
     return this.transcribeLocally(audioBuffer);
   }
@@ -195,7 +198,7 @@ export class TranscriptionService extends EventEmitter {
   }
 
   private async transcribeWithOpenAI(
-    audioBuffer: ArrayBuffer,
+    audioBuffer: ArrayBuffer
   ): Promise<string | null> {
     console.log("Transcribing audio with OpenAI...");
 
@@ -237,7 +240,7 @@ export class TranscriptionService extends EventEmitter {
   }
 
   public async transcribeLocally(
-    audioBuffer: ArrayBuffer,
+    audioBuffer: ArrayBuffer
   ): Promise<string | null> {
     try {
       console.log("Transcribing audio locally...");
@@ -250,7 +253,7 @@ export class TranscriptionService extends EventEmitter {
 
       const tempWavFile = path.join(
         this.CONTENT_CACHE_DIR,
-        `temp_${Date.now()}.wav`,
+        `temp_${Date.now()}.wav`
       );
       fs.writeFileSync(tempWavFile, convertedBuffer);
 

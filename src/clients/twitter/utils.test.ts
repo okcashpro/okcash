@@ -7,8 +7,11 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import settings from "../../core/settings.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
 import { buildConversationThread } from "./utils.ts";
+import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(new URL(".", import.meta.url).pathname);
+// const __dirname = path.dirname(new URL(".", import.meta.url).pathname);
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe("buildConversationThread", () => {
   let runtime: AgentRuntime;
@@ -34,17 +37,17 @@ describe("buildConversationThread", () => {
       __dirname,
       "../../../tweetcache/" +
         runtime.getSetting("TWITTER_USERNAME") +
-        "_cookies.json",
+        "_cookies.json"
     );
     console.log("Cookies file path:", cookiesFilePath);
     if (fs.existsSync(cookiesFilePath)) {
       const cookiesArray = JSON.parse(
-        fs.readFileSync(cookiesFilePath, "utf-8"),
+        fs.readFileSync(cookiesFilePath, "utf-8")
       );
       client.setCookiesFromArray(cookiesArray);
     } else {
       throw new Error(
-        "Twitter credentials not found. Please provide valid cookies.json.",
+        "Twitter credentials not found. Please provide valid cookies.json."
       );
     }
   });
