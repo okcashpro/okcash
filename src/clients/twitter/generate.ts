@@ -35,9 +35,9 @@ export class TwitterGenerationClient extends ClientBase {
         (Math.floor(Math.random() * (45 - 15 + 1)) + 15) * 60 * 1000,
       ); // Random interval between 4-8 hours
     };
-    setTimeout(() => {
+    // setTimeout(() => {
       generateNewTweetLoop();
-    }, 5 * 60 * 1000); // Wait 5 minutes before starting the loop
+    // }, 5 * 60 * 1000); // Wait 5 minutes before starting the loop
   }
 
   constructor(runtime: IAgentRuntime) {

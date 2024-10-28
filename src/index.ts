@@ -8,7 +8,6 @@ import unfollow_room from "./actions/unfollow_room.ts";
 import unmute_room from "./actions/unmute_room.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
-//import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import DirectClient from "./clients/direct/index.ts";
 import { TelegramClient } from "./clients/telegram/src/index.ts"; // Added Telegram import
 import { defaultActions } from "./core/actions.ts";
@@ -18,10 +17,10 @@ import settings from "./core/settings.ts";
 import { Character, IAgentRuntime } from "./core/types.ts"; // Added IAgentRuntime
 import boredomProvider from "./providers/boredom.ts";
 import timeProvider from "./providers/time.ts";
-// import walletProvider from "./providers/wallet.ts";
-//import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
-//import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
-//import { wait } from "./clients/twitter/utils.ts";
+import { wait } from "./clients/twitter/utils.ts";
+import { TwitterSearchClient } from "./clients/twitter/search.ts";
+import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
+import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
 
 interface Arguments {
   character?: string;
@@ -86,12 +85,15 @@ if (characterPaths?.length > 0) {
 
 async function startAgent(character: Character) {
   console.log("Starting agent for character " + character.name);
+  const token = character.settings?.secrets?.OPENAI_API_KEY ||
+  (settings.OPENAI_API_KEY as string)
+
+  console.log("token", token);
   const db = new SqliteDatabaseAdapter(new Database("./db.sqlite"))
   const runtime = new AgentRuntime({
     databaseAdapter: db,
     token:
-      character.settings?.secrets?.OPENAI_API_KEY ??
-      (settings.OPENAI_API_KEY as string),
+      token,
     serverUrl: "https://api.openai.com/v1",
     model: "gpt-4o",
     evaluators: [],
@@ -158,22 +160,22 @@ async function startAgent(character: Character) {
     }
   }
 
-  //async function startTwitter(runtime) {
-  //  console.log("Starting search client");
-  //  const twitterSearchClient = new TwitterSearchClient(runtime);
-  //  await wait();
-  //  console.log("Starting interaction client");
-  //  const twitterInteractionClient = new TwitterInteractionClient(runtime);
-  //  await wait();
-  //  console.log("Starting generation client");
-  //  const twitterGenerationClient = new TwitterGenerationClient(runtime);
-  //
-  //  return {
-  //    twitterInteractionClient,
-  //    twitterSearchClient,
-  //    twitterGenerationClient,
-  //  };
-  //}
+  async function startTwitter(runtime) {
+   console.log("Starting search client");
+   const twitterSearchClient = new TwitterSearchClient(runtime);
+   await wait();
+   console.log("Starting interaction client");
+   const twitterInteractionClient = new TwitterInteractionClient(runtime);
+   await wait();
+   console.log("Starting generation client");
+   const twitterGenerationClient = new TwitterGenerationClient(runtime);
+  
+   return {
+     twitterInteractionClient,
+     twitterSearchClient,
+     twitterGenerationClient,
+   };
+  }
 
   if (!character.clients) {
     return console.error("No clients found for character " + character.name);
@@ -200,16 +202,16 @@ async function startAgent(character: Character) {
     }
   }
 
-  //if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
-  //  const {
-  //    twitterInteractionClient,
-  //    twitterSearchClient,
-  //    twitterGenerationClient,
-  //  } = await startTwitter(runtime);
-  //  clients.push(
-  //    twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
-  //  );
-  //}
+  if (character.clients.map((str) => str.toLowerCase()).includes("twitter")) {
+   const {
+     twitterInteractionClient,
+     twitterSearchClient,
+     twitterGenerationClient,
+   } = await startTwitter(runtime);
+   clients.push(
+     twitterInteractionClient, twitterSearchClient, twitterGenerationClient,
+   );
+  }
 
   directClient.registerAgent(directRuntime);
 

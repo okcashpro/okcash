@@ -75,7 +75,7 @@ TWITTER_COOKIES= # Account cookies
 If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
 ```
 npm install
-npx --no node-llama-cpp download --gpu cuda
+npx --no node-llama-cpp source download --gpu cuda
 ```
 
 Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
