@@ -10,14 +10,16 @@ import {
     ModelProvider
 } from "./types.ts";
 
+import { createGroq } from '@ai-sdk/groq';
+import { createOpenAI } from '@ai-sdk/openai';
 import {
     default as tiktoken,
-    default as TikToken,
-    TiktokenModel,
+    TiktokenModel
 } from "tiktoken";
-import { wordsToPunish } from "../services/wordsToPunish.ts";
 import models from "./models.ts";
 
+import { generateText as aiGenerateText } from 'ai';
+import { createAnthropicVertex } from 'anthropic-vertex-ai';
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -31,6 +33,7 @@ import models from "./models.ts";
  * @param opts.max_context_length The maximum length of the context to apply to the generateText.
  * @returns The completed message.
  */
+
 export async function generateText({
     runtime,
     context,
@@ -46,133 +49,92 @@ export async function generateText({
         console.error("generateText context is empty");
         return "";
     }
-    let retryLength = 1000; // exponential backoff
-    const model = models[runtime.modelProvider].model[modelClass];
-    const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
-    const max_response_length = models[runtime.modelProvider].settings.maxOutputTokens;
-    const _stop = stop || models[runtime.modelProvider].settings.stop;
-    const temperature = models[runtime.modelProvider].settings.temperature;
-    const frequency_penalty = models[runtime.modelProvider].settings.frequency_penalty;
-    const presence_penalty = models[runtime.modelProvider].settings.presence_penalty;
-    const serverUrl = models[runtime.modelProvider].endpoint;
-    const token = runtime.token;
 
-    for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
-        try {
-            context = await trimTokens(
-                context,
-                max_context_length,
-                "gpt-4o-mini",
-            );
-            if (model === ModelProvider.LLAMALOCAL) {
+    const provider = runtime.modelProvider;
+    const model = models[provider].model[modelClass];
+    const temperature = models[provider].settings.temperature;
+    const frequency_penalty = models[provider].settings.frequency_penalty;
+    const presence_penalty = models[provider].settings.presence_penalty;
+    const max_context_length = models[provider].settings.maxInputTokens;
+    const max_response_length = models[provider].settings.maxOutputTokens;
+
+    const apiKey = runtime.token;
+
+    try {
+        context = await trimTokens(context, max_context_length, model);
+
+        let response: string;
+
+        const _stop = stop || models[provider].settings.stop;
+
+        switch (provider) {
+            case ModelProvider.OPENAI:
+            case ModelProvider.LLAMACLOUD:
+                const openai = createOpenAI({ apiKey });
+
+                const { text: openaiResponse } = await aiGenerateText({
+                    model: openai.languageModel(model),
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = openaiResponse;
+                break;
+
+            case ModelProvider.ANTHROPIC:
+                const anthropicVertex = createAnthropicVertex();
+
+                const { text: anthropicResponse } = await aiGenerateText({
+                    model: anthropicVertex(model),
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = anthropicResponse;
+                break;
+
+            case ModelProvider.GROK:
+                const grok = createGroq({ apiKey });
+
+                const { text: grokResponse } = await aiGenerateText({
+                    model: grok.languageModel(model, { parallelToolCalls: false }),
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = grokResponse;
+                break;
+
+            case ModelProvider.LLAMALOCAL:
                 console.log("queueing text generateText");
-                const result = await runtime.llamaService.queueTextCompletion(
+                response = await runtime.llamaService.queueTextCompletion(
                     context,
                     temperature,
-                    stop,
+                    _stop,
                     frequency_penalty,
                     presence_penalty,
                     max_response_length,
                 );
-                return result;
-            } else {
-                // TODO: this needs to change based on model
-                const biasValue = -20.0;
-                const encoding = TikToken.encoding_for_model("gpt-4o-mini");
+                break;
 
-                const mappedWords = wordsToPunish.map(
-                    (word) => encoding.encode(word, [], "all")[0],
-                );
-
-                const tokenIds = [...new Set(mappedWords)];
-
-                const logit_bias = tokenIds.reduce((acc, tokenId) => {
-                    acc[tokenId] = biasValue;
-                    return acc;
-                }, {});
-
-                const requestOptions = {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: {
-                        stop: _stop,
-                        model,
-                        // frequency_penalty,
-                        // presence_penalty,
-                        temperature,
-                        max_tokens: max_response_length,
-                        // logit_bias,
-                        messages: [
-                            {
-                                role: "user",
-                                content: context,
-                            },
-                        ],
-                    },
-                };
-
-                // if the model includes llama, set reptition_penalty to frequency_penalty
-                if (model.includes("llama")) {
-                    (requestOptions.body as any).repetition_penalty = frequency_penalty ?? 1.4;
-                    // delete presence_penalty and frequency_penalty
-                    delete (requestOptions.body as any).presence_penalty;
-                    delete (requestOptions.body as any).logit_bias;
-                    delete (requestOptions.body as any).frequency_penalty;
-                } else {
-                    (requestOptions.body as any).frequency_penalty = frequency_penalty;
-                    (requestOptions.body as any).presence_penalty = presence_penalty;
-                    (requestOptions.body as any).logit_bias = logit_bias;
-                }
-
-                // stringify the body
-                (requestOptions as any).body = JSON.stringify(requestOptions.body);
-                console.log("requestOptions", requestOptions)
-                const response = await fetch(
-                    `${serverUrl}/chat/completions`,
-                    requestOptions as any,
-                );
-
-                if (!response.ok) {
-                    console.log("response is", response)
-                    throw new Error(
-                        "OpenAI API Error: " +
-                        response.status +
-                        " " +
-                        response.statusText,
-                    );
-                }
-
-                const body = await response.json();
-
-                interface OpenAIResponse {
-                    choices: Array<{ message: { content: string } }>;
-                }
-
-                console.log("context is", context)
-
-                const content = (body as OpenAIResponse).choices?.[0]?.message?.content
-
-                console.log("Message is", content)
-
-                if (!content) {
-                    throw new Error("No content in response");
-                }
-                return content;
-            }
-        } catch (error) {
-            console.error("ERROR:", error);
-            // wait for 2 seconds
-            retryLength *= 2;
-            await new Promise((resolve) => setTimeout(resolve, retryLength));
-            console.log("Retrying...");
+            default:
+                throw new Error(`Unsupported provider: ${provider}`);
         }
+
+        return response;
+    } catch (error) {
+        console.error('Error in generateText:', error);
+        throw error;
     }
-    throw new Error(
-        "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
-    );
 }
 
 /**
@@ -441,12 +403,6 @@ export async function generateMessageResponse({
     context: string,
     modelClass: string,
 }): Promise<Content> {
-    console.log("modelClass", modelClass)
-    console.log("runtime.modelProvider", runtime.modelProvider)
-    console.log("models", models)
-    console.log("models[runtime.modelProvider]", models[runtime.modelProvider])
-    const model = models[runtime.modelProvider].model[modelClass];
-    console.log("model is", model)
     const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
     context = trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff
@@ -457,10 +413,8 @@ export async function generateMessageResponse({
                 context,
                 modelClass,
             });
-            console.log("response is", response)
             // try parsing the response as JSON, if null then try again
             const parsedContent = parseJSONObjectFromText(response) as Content;
-            console.log("parsedContent is", parsedContent)
             if (!parsedContent) {
                 console.log("parsedContent is null, retrying")
                 continue;

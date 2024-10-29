@@ -2,7 +2,7 @@ import { Model, ModelProvider, ModelClass } from "./types.ts";
 
 type Models = {
     [ModelProvider.OPENAI]: Model;
-    [ModelProvider.CLAUDE]: Model;
+    [ModelProvider.ANTHROPIC]: Model;
     [ModelProvider.GROK]: Model;
     [ModelProvider.LLAMACLOUD]: Model;
     [ModelProvider.LLAMALOCAL]: Model;
@@ -29,7 +29,7 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "text-embedding-3-small"
         }
     },
-    [ModelProvider.CLAUDE]: {
+    [ModelProvider.ANTHROPIC]: {
         "settings": {
             "stop": [],
             "maxInputTokens": 200000,
@@ -59,7 +59,6 @@ const models: Models = {
             [ModelClass.SMALL]: "claude-3-haiku",
             [ModelClass.MEDIUM]: "claude-3-5-sonnet",
             [ModelClass.LARGE]: "claude-3-opus",
-            [ModelClass.EMBEDDING]: "grok-2-beta"
         },
     },
     [ModelProvider.GROK]: {
@@ -87,7 +86,7 @@ const models: Models = {
             "repetition_penalty": 0.0,
             "temperature": 0.3,
         },
-        "endpoint": "https://api.llamacloud.com/v1",
+        "endpoint": "https://api.together.ai/v1",
         "model": {
             [ModelClass.SMALL]: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
             [ModelClass.MEDIUM]: "meta-llama-3.1-8b-instruct",
