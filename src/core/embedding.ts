@@ -1,5 +1,5 @@
-import models from "./models";
-import { IAgentRuntime, ModelProvider } from "./types";
+import models from "./models.ts";
+import { IAgentRuntime, ModelProvider } from "./types.ts";
 
 /**
  * Send a message to the OpenAI API for embedding.
@@ -14,7 +14,8 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     if (model !== ModelProvider.OPENAI) {
         return await runtime.llamaService.getEmbeddingResponse(input);
     }
-    const embeddingModel = runtime.embeddingModel;
+
+    const embeddingModel = models[runtime.modelProvider].model.embedding;
 
     // Check if we already have the embedding in the lore
     const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);

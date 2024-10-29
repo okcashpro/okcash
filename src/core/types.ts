@@ -445,8 +445,7 @@ export interface IAgentRuntime {
   serverUrl: string;
   databaseAdapter: IDatabaseAdapter;
   token: string | null;
-  model: string;
-  embeddingModel: string;
+  modelProvider: ModelProvider;
   character: Character;
   providers: Provider[];
   actions: Action[];

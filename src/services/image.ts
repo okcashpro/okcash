@@ -14,8 +14,8 @@ import fs from "fs";
 import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
-import models from "../core/models";
-import { IAgentRuntime, ModelProvider } from "../core/types";
+import models from "../core/models.ts";
+import { IAgentRuntime, ModelProvider } from "../core/types.ts";
 
 class ImageDescriptionService {
   private static instance: ImageDescriptionService | null = null;

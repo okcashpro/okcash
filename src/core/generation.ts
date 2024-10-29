@@ -43,7 +43,9 @@ export async function generateText({
     stop?: string[]
 }): Promise<string> {
     let retryLength = 1000; // exponential backoff
-    const model = runtime.model[modelClass];
+    console.log("model class is", modelClass)
+    const model = models[modelClass];
+    console.log("model is", model)
     const max_context_length = model.settings.maxInputTokens;
     const max_response_length = model.settings.maxOutputTokens;
     const _stop = stop || model.settings.stop;
@@ -409,7 +411,9 @@ export async function generateMessageResponse({
     context = "",
     modelClass
 }): Promise<Content> {
-    const model = runtime.model[modelClass];
+    console.log("modelClass", modelClass)
+    const model = models[modelClass];
+    console.log("model is", model)
     const max_context_length = model.settings.maxInputTokens;
     context = runtime.trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff

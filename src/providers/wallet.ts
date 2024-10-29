@@ -1,6 +1,6 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import fetch from "cross-fetch";
-import { IAgentRuntime, Memory, Provider, State } from "../core/types";
+import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 import BigNumber from "bignumber.js";
 
 // Provider configuration

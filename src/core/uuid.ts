@@ -1,5 +1,5 @@
 import { sha1 } from "js-sha1";
-import { UUID } from "./types";
+import { UUID } from "./types.ts";
 
 export function stringToUuid(target: string): UUID {
   if (typeof target === "number") {

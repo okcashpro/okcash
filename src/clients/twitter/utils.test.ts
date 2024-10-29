@@ -8,6 +8,7 @@ import settings from "../../core/settings.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
 import { buildConversationThread } from "./utils.ts";
 import { fileURLToPath } from "url";
+import { ModelProvider } from "../../core/types.ts";
 
 // const __dirname = path.dirname(new URL(".", import.meta.url).pathname);
 
@@ -22,8 +23,8 @@ describe("buildConversationThread", () => {
     runtime = new AgentRuntime({
       databaseAdapter: new SqliteDatabaseAdapter(new Database(":memory:")),
       token: settings.OPENAI_API_KEY as string,
-      serverUrl: "https://api.openai.com/v1",
       evaluators: [],
+      modelProvider: ModelProvider.OPENAI,
       character: defaultCharacter,
       providers: [],
       actions: [],

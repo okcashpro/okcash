@@ -22,6 +22,7 @@ import {
   IPdfService,
   ITranscriptionService,
   IVideoService,
+  ModelProvider,
   Provider,
   State,
   type Action,
@@ -101,12 +102,7 @@ export class AgentRuntime implements IAgentRuntime {
   /**
    * The model to use for generateText.
    */
-  model = settings.XAI_MODEL || "gpt-4o-mini";
-
-  /**
-   * The model to use for embedding.
-   */
-  embeddingModel = "text-embedding-3-small";
+  modelProvider = ModelProvider.LLAMALOCAL;
 
   /**
    * Local Llama if no OpenAI key is present
@@ -192,8 +188,7 @@ export class AgentRuntime implements IAgentRuntime {
     actions?: Action[]; // Optional custom actions
     evaluators?: Evaluator[]; // Optional custom evaluators
     providers?: Provider[];
-    model?: string; // The model to use for generateText
-    embeddingModel?: string; // The model to use for embedding
+    modelProvider: ModelProvider;
     databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
     fetch?: typeof fetch | unknown;
     speechModelPath?: string;
@@ -241,11 +236,7 @@ export class AgentRuntime implements IAgentRuntime {
     });
 
     this.serverUrl = opts.serverUrl ?? this.serverUrl;
-    this.model = this.character.settings?.model ?? opts.model ?? this.model;
-    this.embeddingModel =
-      this.character.settings?.embeddingModel ??
-      opts.embeddingModel ??
-      this.embeddingModel;
+    this.modelProvider = this.character.modelProvider ?? opts.modelProvider ?? this.modelProvider;
     if (!this.serverUrl) {
       console.warn("No serverUrl provided, defaulting to localhost");
     }

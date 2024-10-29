@@ -1,20 +1,17 @@
-import { Connection, PublicKey, ParsedAccountData } from "@solana/web3.js";
 // import fetch from "cross-fetch";
-import { IAgentRuntime, Memory, Provider, State } from "../core/types";
-import settings from "../core/settings";
 import BigNumber from "bignumber.js";
-import { TOKEN_PROGRAM_ID, AccountLayout } from "@solana/spl-token";
+import * as fs from "fs";
+import NodeCache from "node-cache";
+import * as path from "path";
+import settings from "../core/settings";
+import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 import {
+  DexScreenerData,
+  HolderData,
   ProcessedTokenData,
   TokenSecurityData,
-  TokenTradeData,
-  DexScreenerData,
-  DexScreenerPair,
-  HolderData,
+  TokenTradeData
 } from "../types/token";
-import NodeCache from "node-cache";
-import * as fs from "fs";
-import * as path from "path";
 
 const PROVIDER_CONFIG = {
   BIRDEYE_API: "https://public-api.birdeye.so",

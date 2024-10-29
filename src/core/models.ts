@@ -10,7 +10,7 @@
 // - slow for things like creative writing and responses
 // - not all model providers provide embeddings
 
-import { Model, ModelProvider } from "./types";
+import { Model, ModelProvider } from "./types.ts";
 
 // TODO: add openrouter ;)
 type Models = {
