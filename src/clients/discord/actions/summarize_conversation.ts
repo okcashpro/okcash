@@ -1,4 +1,5 @@
 import { composeContext } from "../../../core/context.ts";
+import { completion, splitChunks, trimTokens } from "../../../core/generation.ts";
 import { log_to_file } from "../../../core/logger.ts";
 import { getActorDetails } from "../../../core/messages.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
@@ -55,8 +56,10 @@ const getDateRange = async (
   });
 
   for (let i = 0; i < 5; i++) {
-    const response = await runtime.completion({
+    const response = await completion({
+      runtime,
       context,
+      modelClass: "fast",
     });
     console.log("response", response);
     // try parsing to a json object
@@ -243,7 +246,8 @@ const summarizeAction = {
     let currentSummary = "";
     const chunkSize = runtime.getSetting("OPENAI_API_KEY") ? 100000 : 3500;
 
-    const chunks = await runtime.splitChunks(
+    const chunks = await splitChunks(
+      runtime,
       formattedMemories,
       chunkSize,
       0,
@@ -264,7 +268,7 @@ const summarizeAction = {
       const context = composeContext({
         state,
         // make sure it fits, we can pad the tokens a bit
-        template: runtime.trimTokens(
+        template: trimTokens(
           summarizationTemplate,
           chunkSize + 500,
           "gpt-4o-mini",
@@ -276,8 +280,10 @@ const summarizeAction = {
         context,
       );
 
-      const summary = await runtime.completion({
+      const summary = await completion({
+        runtime,
         context,
+        modelClass: "fast",
       });
 
       log_to_file(

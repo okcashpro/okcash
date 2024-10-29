@@ -71,6 +71,41 @@ export interface Goal {
   objectives: Objective[]; // A list of objectives that make up the goal.
 }
 
+export type Model = {
+  endpoint?: string;
+  settings: {
+    maxInputTokens: number;
+    maxOutputTokens: number;
+    frequency_penalty?: number;
+    presence_penalty?: number;
+    repetition_penalty?: number;
+    stop: string[];
+    temperature: number;
+  };
+  model: {
+      tiny: {
+          model: string;
+      };
+      fast: {
+          model: string;
+      };
+      slow: {
+          model: string;
+      };
+      embedding: string;
+  };
+};
+
+export enum ModelProvider {
+  OPENAI = "openai",
+  CLAUDE = "claude",
+  GROK = "grok",
+  LLAMACLOUD = "llamacloud",
+  LLAMALOCAL = "llamalocal",
+  GOOGLE = "google",
+  CLAUDE_VERTEX = "google_claude"
+}
+
 /**
  * Represents the state of the conversation or context in which the agent is operating, including information about users, messages, goals, and other relevant data.
  */
@@ -244,6 +279,9 @@ export type Media = {
 export type Character = {
   id?: UUID; // optional UUID which can be passed down to identify the character
   name: string;
+  system: string;
+  modelProvider: ModelProvider;
+  modelOverride?: string;
   bio: string | string[];
   lore: string[];
   messageExamples: MessageExample[][];
@@ -425,89 +463,10 @@ export interface IAgentRuntime {
   speechService: ISpeechService;
   pdfService: IPdfService;
 
-  trimTokens(text: string, maxTokens: number, model: string): string;
-  splitChunks(
-    content: string,
-    chunkSize: number,
-    bleed: number,
-    model: string,
-  ): Promise<string[]>;
   getSetting(key: string): string | null;
 
   // Methods
   getConversationLength(): number;
-  completion(opts: {
-    serverUrl?: string;
-    token?: string;
-    context?: string;
-    stop?: string[];
-    model?: string;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    temperature?: number;
-    max_context_length?: number;
-    max_response_length?: number;
-  }): Promise<string>;
-  stringArrayCompletion(opts: {
-    serverUrl?: string;
-    token?: string;
-    context?: string;
-    stop?: string[];
-    model?: string;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    temperature?: number;
-    max_context_length?: number;
-    max_response_length?: number;
-  }): Promise<string[]>;
-  shouldRespondCompletion(opts: {
-    serverUrl?: string;
-    token?: string;
-    context?: string;
-    stop?: string[];
-    model?: string;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    temperature?: number;
-    max_context_length?: number;
-    max_response_length?: number;
-  }): Promise<"RESPOND" | "IGNORE" | "STOP" | null>;
-  booleanCompletion(opts: {
-    serverUrl?: string;
-    token?: string;
-    context?: string;
-    stop?: string[];
-    model?: string;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    temperature?: number;
-    max_context_length?: number;
-    max_response_length?: number;
-  }): Promise<boolean>;
-  messageCompletion(opts: {
-    serverUrl?: string;
-    token?: string;
-    context?: string;
-    stop?: string[];
-    model?: string;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    temperature?: number;
-    max_context_length?: number;
-    max_response_length?: number;
-  }): Promise<Content>;
-  objectArrayCompletion(opts: {
-    serverUrl?: string;
-    token?: string;
-    context?: string;
-    stop?: string[];
-    model?: string;
-    frequency_penalty?: number;
-    presence_penalty?: number;
-    temperature?: number;
-    max_context_length?: number;
-  }): Promise<any[]>;
-  embed(input: string): Promise<number[]>;
   processActions(
     message: Memory,
     responses: Memory[],

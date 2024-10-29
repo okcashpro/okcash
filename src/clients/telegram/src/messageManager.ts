@@ -19,6 +19,7 @@ import {
   shouldRespondTemplate,
 } from "../../discord/templates.ts";
 import ImageDescriptionService from "../../../services/image.ts";
+import { messageCompletion, shouldRespondCompletion } from "../../../core/generation.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -104,10 +105,10 @@ export class MessageManager {
         template: shouldRespondTemplate,
       });
 
-      const response = await this.runtime.shouldRespondCompletion({
+      const response = await shouldRespondCompletion({
+        runtime: this.runtime,
         context: shouldRespondContext,
-        stop: ["\n"],
-        max_response_length: 5,
+        modelClass: "fast",
       });
 
       return response === "RESPOND";
@@ -173,20 +174,14 @@ export class MessageManager {
       context
     );
 
-    const response = await this.runtime.messageCompletion({
+    const response = await messageCompletion({
+      runtime: this.runtime,
       context,
-      stop: ["<|eot|>"],
-      temperature: 0.7,
-      serverUrl:
-        this.runtime.getSetting("X_SERVER_URL") ?? this.runtime.serverUrl,
-      token: this.runtime.getSetting("XAI_API_KEY") ?? this.runtime.token,
-      model: this.runtime.getSetting("XAI_MODEL")
-        ? this.runtime.getSetting("XAI_MODEL")
-        : "gpt-4o-mini",
+      modelClass: "slow"
     });
 
     if (!response) {
-      console.error("❌ No response from runtime.messageCompletion");
+      console.error("❌ No response from messageCompletion");
       return null;
     }
 

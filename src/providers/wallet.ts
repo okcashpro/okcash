@@ -1,11 +1,7 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import fetch from "cross-fetch";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types";
-import settings from "../core/settings.ts";
 import BigNumber from "bignumber.js";
-
-console.log("settings.BIRDEYE_API_KEY", settings.BIRDEYE_API_KEY);
-console.log("WALLET_PUBLIC_KEY", settings.WALLET_PUBLIC_KEY);
 
 // Provider configuration
 const PROVIDER_CONFIG = {
@@ -247,18 +243,18 @@ const walletProvider: Provider = {
   get: async (runtime: IAgentRuntime, _message: Memory, _state?: State): Promise<string> => {
     try {
       // Validate wallet configuration
-      if (!settings.WALLET_PUBLIC_KEY) {
+      if (!runtime.getSetting('WALLET_PUBLIC_KEY')) {
         throw new Error("Wallet public key is not configured in settings");
       }
 
       // Validate public key format before creating instance
-      if (typeof settings.WALLET_PUBLIC_KEY !== 'string' || settings.WALLET_PUBLIC_KEY.trim() === '') {
+      if (typeof runtime.getSetting('WALLET_PUBLIC_KEY') !== 'string' || runtime.getSetting('WALLET_PUBLIC_KEY').trim() === '') {
         throw new Error("Invalid wallet public key format");
       }
 
       let publicKey: PublicKey;
       try {
-        publicKey = new PublicKey(settings.WALLET_PUBLIC_KEY);
+        publicKey = new PublicKey(runtime.getSetting('WALLET_PUBLIC_KEY'));
       } catch (error) {
         console.error("Error creating PublicKey:", error);
         throw new Error("Invalid wallet public key format");

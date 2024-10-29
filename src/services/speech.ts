@@ -104,7 +104,7 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
   }
 }
 
-class SpeechService implements ISpeechService {
+export class SpeechService implements ISpeechService {
   static async generate(
     runtime: IAgentRuntime,
     text: string,
@@ -159,5 +159,3 @@ class SpeechService implements ISpeechService {
     return wavStream;
   }
 }
-
-export { SpeechService };

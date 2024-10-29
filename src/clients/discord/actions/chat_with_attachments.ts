@@ -1,4 +1,5 @@
 import { composeContext } from "../../../core/context.ts";
+import { completion, trimTokens } from "../../../core/generation.ts";
 import { log_to_file } from "../../../core/logger.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
 import {
@@ -50,8 +51,10 @@ const getAttachmentIds = async (
   });
 
   for (let i = 0; i < 5; i++) {
-    const response = await runtime.completion({
+    const response = await completion({
+      runtime,
       context,
+      modelClass: "fast",
     });
     console.log("response", response);
     // try parsing to a json object
@@ -181,10 +184,10 @@ const summarizeAction = {
     const context = composeContext({
       state,
       // make sure it fits, we can pad the tokens a bit
-      template: runtime.trimTokens(
+      template: trimTokens(
         summarizationTemplate,
         chunkSize + 500,
-        "gpt-4o-mini",
+        "gpt-4o-mini", // TODO: make this dynamic and generic
       ),
     });
 
@@ -193,8 +196,10 @@ const summarizeAction = {
       context,
     );
 
-    const summary = await runtime.completion({
+    const summary = await completion({
+      runtime,
       context,
+      modelClass: "fast",
     });
 
     log_to_file(

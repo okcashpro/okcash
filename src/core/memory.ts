@@ -1,3 +1,4 @@
+import { embed } from "./embedding.ts";
 import {
   IAgentRuntime,
   IMemoryManager,
@@ -49,7 +50,7 @@ export class MemoryManager implements IMemoryManager {
     const memoryText = memory.content.text;
     if (!memoryText) throw new Error("Memory content is empty");
     memory.embedding = memoryText
-      ? await this.runtime.embed(memoryText)
+      ? await embed(this.runtime, memoryText)
       : embeddingZeroVector.slice();
     return memory;
   }

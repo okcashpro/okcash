@@ -98,7 +98,7 @@ async function startAgent(character: Character) {
     model: "gpt-4o",
     evaluators: [],
     character,
-    providers: [timeProvider, boredomProvider],
+    providers: [timeProvider, boredomProvider, walletProvider],
     actions: [
       ...defaultActions,
       askClaude,
@@ -231,6 +231,7 @@ const startAgents = async () => {
 startAgents();
 
 import readline from 'readline';
+import walletProvider from "./providers/wallet.ts";
 
 const rl = readline.createInterface({
   input: process.stdin,

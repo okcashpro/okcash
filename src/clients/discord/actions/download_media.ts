@@ -11,6 +11,7 @@ import {
   State,
 } from "../../../core/types.ts";
 import { VideoService } from "../../../services/video.ts";
+import { completion } from "../../../core/generation.ts";
 
 export const mediaUrlTemplate = `# Messages we are searching for a media URL
 {{recentMessages}}
@@ -41,8 +42,10 @@ const getMediaUrl = async (
   });
 
   for (let i = 0; i < 5; i++) {
-    const response = await runtime.completion({
+    const response = await completion({
+      runtime,
       context,
+      modelClass: "fast",
     });
 
     const parsedResponse = parseJSONObjectFromText(response) as {

@@ -161,8 +161,10 @@ You should only respond with the name of the voice channel or none, no commentar
       // log context to file
       log_to_file(`${state.agentName}_${datestr}_joinvoice_context`, context);
 
-      const responseContent = await runtime.completion({
+      const responseContent = await completion({
+        runtime,
         context,
+        modelClass: "fast",
       });
 
       // log response to file

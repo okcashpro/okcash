@@ -71,7 +71,8 @@
 //             template,
 //         });
 
-//         const convictionResponse = await runtime.completion({
+//         const convictionResponse = await completion({
+//              runtime,
 //             context: context,
 //             model: "gpt-4o",
 //             temperature: 0.3,

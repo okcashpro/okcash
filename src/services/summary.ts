@@ -1,3 +1,4 @@
+import { completion, trimTokens } from "../core/generation.ts";
 import { parseJSONObjectFromText } from "../core/parsing.ts";
 import { IAgentRuntime } from "../core/types.ts";
 
@@ -6,7 +7,7 @@ export async function generateSummary(
   text: string,
 ): Promise<{ title: string; description: string }> {
   // make sure text is under 128k characters
-  text = runtime.trimTokens(text, 100000, "gpt-4o-mini");
+  text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
 
   const prompt = `Please generate a concise summary for the following text:
   
@@ -22,8 +23,10 @@ export async function generateSummary(
   }
   \`\`\``;
 
-  const response = await runtime.completion({
+  const response = await completion({
+    runtime,
     context: prompt,
+    modelClass: "fast"
   });
 
   const parsedResponse = parseJSONObjectFromText(response);

@@ -1,4 +1,5 @@
 import { composeContext } from "../core/context.ts";
+import { booleanCompletion } from "../core/generation.ts";
 import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
@@ -62,10 +63,10 @@ export default {
         template: shouldFollowTemplate, // Define this template separately
       });
 
-      const response = await runtime.booleanCompletion({
+      const response = await booleanCompletion({
+        runtime,
         context: shouldFollowContext,
-        stop: ["\n"],
-        max_response_length: 5,
+        modelClass: "fast"
       });
 
       return response;

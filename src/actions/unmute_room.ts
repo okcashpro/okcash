@@ -1,4 +1,5 @@
 import { composeContext } from "../core/context.ts";
+import { booleanCompletion } from "../core/generation.ts";
 import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
@@ -47,10 +48,10 @@ export default {
         template: shouldUnmuteTemplate, // Define this template separately
       });
 
-      const response = await runtime.booleanCompletion({
+      const response = booleanCompletion({
         context: shouldUnmuteContext,
-        stop: ["\n"],
-        max_response_length: 5,
+        runtime,
+        modelClass: "fast"
       });
 
       return response;

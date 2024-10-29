@@ -1,5 +1,6 @@
 import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import { composeContext } from "../core/context.ts";
+import { booleanCompletion, messageCompletion } from "../core/generation.ts";
 import { log_to_file } from "../core/logger.ts";
 import { booleanFooter } from "../core/parsing.ts";
 import {
@@ -82,10 +83,10 @@ export default {
         template: shouldContinueTemplate,
       });
 
-      let response = await runtime.booleanCompletion({
+      let response = await booleanCompletion({
         context: shouldRespondContext,
-        stop: ["\n"],
-        max_response_length: 5,
+        modelClass: "fast",
+        runtime
       });
 
       return response;
@@ -108,9 +109,10 @@ export default {
 
     const { userId, roomId } = message;
 
-    let response = await runtime.messageCompletion({
+    let response = await messageCompletion({
+      runtime,
       context,
-      stop: [],
+      modelClass: "fast"
     });
 
     response.inReplyTo = message.id;

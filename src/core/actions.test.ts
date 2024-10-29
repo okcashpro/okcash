@@ -15,6 +15,7 @@ import {
   type UUID,
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
+import { messageCompletion } from "./generation.ts";
 
 async function handleMessage(
   runtime: IAgentRuntime,
@@ -54,9 +55,10 @@ async function handleMessage(
   const { userId, roomId } = message;
 
   for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
-    const response = await runtime.messageCompletion({
+    const response = await messageCompletion({
       context,
-      stop: [],
+      runtime,
+      modelClass: "fast"
     });
 
     runtime.databaseAdapter.log({

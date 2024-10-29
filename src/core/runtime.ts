@@ -8,14 +8,10 @@ import {
 } from "./evaluators.ts";
 import { embeddingZeroVector, MemoryManager } from "./memory.ts";
 import {
-  parseBooleanFromText,
-  parseJsonArrayFromText,
-  parseJSONObjectFromText,
-  parseShouldRespondFromText,
+  parseJsonArrayFromText
 } from "./parsing.ts";
 import {
   Character,
-  Content,
   Goal,
   HandlerCallback,
   IAgentRuntime,
@@ -26,19 +22,13 @@ import {
   IPdfService,
   ITranscriptionService,
   IVideoService,
-  Media,
   Provider,
   State,
   type Action,
   type Evaluator,
-  type Memory,
+  type Memory
 } from "./types.ts";
 
-import {
-  default as tiktoken,
-  default as TikToken,
-  TiktokenModel,
-} from "tiktoken";
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
 import { BrowserService } from "../services/browser.ts";
@@ -48,13 +38,14 @@ import { PdfService } from "../services/pdf.ts";
 import { SpeechService } from "../services/speech.ts";
 import { TranscriptionService } from "../services/transcription.ts";
 import { VideoService } from "../services/video.ts";
-import { wordsToPunish } from "../services/wordsToPunish.ts";
 import {
   composeActionExamples,
   formatActionNames,
   formatActions,
 } from "./actions.ts";
 import defaultCharacter from "./defaultCharacter.ts";
+import { embed } from "./embedding.ts";
+import { completion, splitChunks } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { formatPosts } from "./posts.ts";
@@ -62,7 +53,6 @@ import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
-import { Keypair } from "@solana/web3.js";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -323,9 +313,9 @@ export class AgentRuntime implements IAgentRuntime {
             text: knowledgeItem,
           },
         });
-        const fragments = await this.splitChunks(knowledgeItem, 1200, 200);
+        const fragments = await splitChunks(this, knowledgeItem, 1200, 200, "fast");
         for (const fragment of fragments) {
-          const embedding = await this.embed(fragment);
+          const embedding = await embed(this, fragment);
           await this.fragmentsManager.createMemory({
             id: stringToUuid(fragment),
             roomId: this.agentId,
@@ -390,493 +380,6 @@ export class AgentRuntime implements IAgentRuntime {
    */
   registerContextProvider(provider: Provider) {
     this.providers.push(provider);
-  }
-
-  /**
-   * Send a message to the model for a text completion - receive a string back and parse how you'd like
-   * @param opts - The options for the completion request.
-   * @param opts.context The context of the message to be completed.
-   * @param opts.stop A list of strings to stop the completion at.
-   * @param opts.model The model to use for completion.
-   * @param opts.frequency_penalty The frequency penalty to apply to the completion.
-   * @param opts.presence_penalty The presence penalty to apply to the completion.
-   * @param opts.temperature The temperature to apply to the completion.
-   * @param opts.max_context_length The maximum length of the context to apply to the completion.
-   * @returns The completed message.
-   */
-  async completion({
-    context = "",
-    stop = [],
-    model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
-    temperature = 0.3,
-    token = this.token,
-    serverUrl = this.serverUrl,
-    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
-    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
-  }): Promise<string> {
-
-    let retryLength = 1000; // exponential backoff
-    for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
-      try {
-        context = await this.trimTokens(
-          context,
-          max_context_length,
-          "gpt-4o-mini",
-        );
-        if (!this.getSetting("OPENAI_API_KEY")) {
-          console.log("queueing text completion");
-          const result = await this.llamaService.queueTextCompletion(
-            context,
-            temperature,
-            stop,
-            frequency_penalty,
-            presence_penalty,
-            max_response_length,
-          );
-          return result;
-        } else {
-          const biasValue = -20.0;
-          const encoding = TikToken.encoding_for_model("gpt-4o-mini");
-
-          const mappedWords = wordsToPunish.map(
-            (word) => encoding.encode(word, [], "all")[0],
-          );
-
-          const tokenIds = [...new Set(mappedWords)];
-
-          const logit_bias = tokenIds.reduce((acc, tokenId) => {
-            acc[tokenId] = biasValue;
-            return acc;
-          }, {});
-
-          const requestOptions = {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: {
-              stop,
-              model,
-              // frequency_penalty,
-              // presence_penalty,
-              temperature,
-              max_tokens: max_response_length,
-              // logit_bias,
-              messages: [
-                {
-                  role: "user",
-                  content: context,
-                },
-              ],
-            },
-          };
-
-          // if the model includes llama, set reptition_penalty to frequency_penalty
-          if (model.includes("llama")) {
-            (requestOptions.body as any).repetition_penalty = frequency_penalty ?? 1.4;
-            // delete presence_penalty and frequency_penalty
-            delete (requestOptions.body as any).presence_penalty;
-            delete (requestOptions.body as any).logit_bias;
-            delete (requestOptions.body as any).frequency_penalty;
-          } else {
-            (requestOptions.body as any).frequency_penalty = frequency_penalty;
-            (requestOptions.body as any).presence_penalty = presence_penalty;
-            (requestOptions.body as any).logit_bias = logit_bias;
-          }
-
-          // stringify the body
-          (requestOptions as any).body = JSON.stringify(requestOptions.body);
-          console.log("requestOptions", requestOptions)
-          const response = await fetch(
-            `${serverUrl}/chat/completions`,
-            requestOptions as any,
-          );
-
-          if (!response.ok) {
-            console.log("response is", response)
-            throw new Error(
-              "OpenAI API Error: " +
-                response.status +
-                " " +
-                response.statusText,
-            );
-          }
-
-          const body = await response.json();
-
-          interface OpenAIResponse {
-            choices: Array<{ message: { content: string } }>;
-          }
-
-          console.log("context is", context)
-
-          const content = (body as OpenAIResponse).choices?.[0]?.message?.content
-
-          console.log("Message is", content)
-
-          if (!content) {
-            throw new Error("No content in response");
-          }
-          return content;
-        }
-      } catch (error) {
-        console.error("ERROR:", error);
-        // wait for 2 seconds
-        retryLength *= 2;
-        await new Promise((resolve) => setTimeout(resolve, retryLength));
-        console.log("Retrying...");
-      }
-    }
-    throw new Error(
-      "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
-    );
-  }
-
-  /**
-   * Truncate the context to the maximum length allowed by the model.
-   * @param model The model to use for completion.
-   * @param context The context of the message to be completed.
-   * @param max_context_length The maximum length of the context to apply to the completion.
-   * @returns
-   */
-  trimTokens(context, maxTokens, model = this.model) {
-    // Count tokens and truncate context if necessary
-    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
-    let tokens = encoding.encode(context);
-    const textDecoder = new TextDecoder();
-    if (tokens.length > maxTokens) {
-      tokens = tokens.reverse().slice(maxTokens).reverse();
-
-      context = textDecoder.decode(encoding.decode(tokens));
-    }
-    return context;
-  }
-
-  async shouldRespondCompletion({
-    context = "",
-    stop = [],
-    model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
-    temperature = 0.3,
-    serverUrl = this.serverUrl,
-    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
-    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
-  }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
-    let retryDelay = 1000;
-
-    while (true) {
-      try {
-        const response = await this.completion({
-          context,
-          stop,
-          model,
-          serverUrl,
-          frequency_penalty,
-          presence_penalty,
-          temperature,
-          max_context_length,
-          max_response_length,
-        });
-
-        const parsedResponse = parseShouldRespondFromText(response.trim());
-        if (parsedResponse) {
-          return parsedResponse;
-        } else {
-          console.log("shouldRespondCompletion no response");
-        }
-      } catch (error) {
-        console.error("Error in shouldRespondCompletion:", error);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      retryDelay *= 2;
-    }
-  }
-
-  async splitChunks(
-    content: string,
-    chunkSize: number,
-    bleed: number = 100,
-    model = this.model,
-  ): Promise<string[]> {
-    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
-    const tokens = encoding.encode(content);
-    const chunks: string[] = [];
-    const textDecoder = new TextDecoder();
-
-    for (let i = 0; i < tokens.length; i += chunkSize) {
-      const chunk = tokens.slice(i, i + chunkSize);
-      const decodedChunk = textDecoder.decode(encoding.decode(chunk));
-
-      // Append bleed characters from the previous chunk
-      const startBleed = i > 0 ? content.slice(i - bleed, i) : "";
-      // Append bleed characters from the next chunk
-      const endBleed =
-        i + chunkSize < tokens.length
-          ? content.slice(i + chunkSize, i + chunkSize + bleed)
-          : "";
-
-      chunks.push(startBleed + decodedChunk + endBleed);
-    }
-
-    return chunks;
-  }
-
-  async booleanCompletion({
-    context = "",
-    stop = [],
-    model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
-    temperature = 0.3,
-    serverUrl = this.serverUrl,
-    token = this.token,
-    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
-    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
-  }): Promise<boolean> {
-    let retryDelay = 1000;
-
-    while (true) {
-      try {
-        const response = await this.completion({
-          context,
-          stop,
-          model,
-          serverUrl,
-          token,
-          frequency_penalty,
-          presence_penalty,
-          temperature,
-          max_context_length,
-          max_response_length,
-        });
-
-        const parsedResponse = parseBooleanFromText(response.trim());
-        if (parsedResponse !== null) {
-          return parsedResponse;
-        }
-      } catch (error) {
-        console.error("Error in booleanCompletion:", error);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      retryDelay *= 2;
-    }
-  }
-
-  async stringArrayCompletion({
-    context = "",
-    stop = [],
-    model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
-    temperature = 0.3,
-    serverUrl = this.serverUrl,
-    token = this.token,
-    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
-    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
-  }): Promise<string[]> {
-    let retryDelay = 1000;
-
-    while (true) {
-      try {
-        const response = await this.completion({
-          context,
-          stop,
-          model,
-          serverUrl,
-          token,
-          frequency_penalty,
-          presence_penalty,
-          temperature,
-          max_context_length,
-          max_response_length,
-        });
-
-        const parsedResponse = parseJsonArrayFromText(response);
-        if (parsedResponse) {
-          return parsedResponse;
-        }
-      } catch (error) {
-        console.error("Error in stringArrayCompletion:", error);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      retryDelay *= 2;
-    }
-  }
-
-  async objectArrayCompletion({
-    context = "",
-    stop = [],
-    model = this.model,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
-    temperature = 0.3,
-    serverUrl = this.serverUrl,
-    token = this.token,
-    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
-    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
-  }): Promise<any[]> {
-    let retryDelay = 1000;
-
-    while (true) {
-      try {
-        const response = await this.completion({
-          context,
-          stop,
-          model,
-          serverUrl,
-          token,
-          frequency_penalty,
-          presence_penalty,
-          temperature,
-          max_context_length,
-          max_response_length,
-        });
-
-        const parsedResponse = parseJsonArrayFromText(response);
-        if (parsedResponse) {
-          return parsedResponse;
-        }
-      } catch (error) {
-        console.error("Error in stringArrayCompletion:", error);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      retryDelay *= 2;
-    }
-  }
-
-  /**
-   * Send a message to the model for completion.
-   * @param opts - The options for the completion request.
-   * @param opts.context The context of the message to be completed.
-   * @param opts.stop A list of strings to stop the completion at.
-   * @param opts.model The model to use for completion.
-   * @param opts.frequency_penalty The frequency penalty to apply to the completion.
-   * @param opts.presence_penalty The presence penalty to apply to the completion.
-   * @param opts.temperature The temperature to apply to the completion.
-   * @param opts.max_context_length The maximum length of the context to apply to the completion.
-   * @returns The completed message.
-   */
-  async messageCompletion({
-    context = "",
-    stop = [],
-    model = this.model,
-    frequency_penalty = 0.6,
-    presence_penalty = 0.6,
-    temperature = 0.3,
-    serverUrl = this.serverUrl,
-    token = this.token,
-    max_context_length = this.getSetting("OPENAI_API_KEY") ? 127000 : 8000,
-    max_response_length = this.getSetting("OPENAI_API_KEY") ? 8192 : 4096,
-  }): Promise<Content> {
-    console.log("messageCompletion serverUrl is", serverUrl)
-    context = this.trimTokens(context, max_context_length, "gpt-4o-mini");
-    let retryLength = 1000; // exponential backoff
-    while (true) {
-      try {
-        const response = await this.completion({
-          context,
-          serverUrl,
-          stop,
-          model,
-          token,
-          frequency_penalty,
-          presence_penalty,
-          temperature,
-          max_context_length,
-          max_response_length,
-        });
-        console.log("response is", response)
-        // try parsing the response as JSON, if null then try again
-        const parsedContent = parseJSONObjectFromText(response) as Content;
-        console.log("parsedContent is", parsedContent)
-        if (!parsedContent) {
-          console.log("parsedContent is null, retrying")
-          continue;
-        }
-
-        return parsedContent;
-      } catch (error) {
-        console.error("ERROR:", error);
-        // wait for 2 seconds
-        retryLength *= 2;
-        await new Promise((resolve) => setTimeout(resolve, retryLength));
-        console.log("Retrying...");
-      }
-    }
-    throw new Error(
-      "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
-    );
-  }
-
-  /**
-   * Send a message to the OpenAI API for embedding.
-   * @param input The input to be embedded.
-   * @returns The embedding of the input.
-   */
-  async embed(input: string) {
-    if (!this.getSetting("OPENAI_API_KEY")) {
-      return await this.llamaService.getEmbeddingResponse(input);
-    }
-    const embeddingModel = this.embeddingModel;
-
-    // Check if we already have the embedding in the lore
-    const cachedEmbedding = await this.retrieveCachedEmbedding(input);
-    if (cachedEmbedding) {
-      return cachedEmbedding;
-    }
-
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
-      },
-      body: JSON.stringify({
-        input,
-        model: embeddingModel,
-        length: 1536,
-      }),
-    };
-    try {
-      const response = await fetch(
-        `${this.serverUrl}/embeddings`,
-        requestOptions,
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "OpenAI API Error: " + response.status + " " + response.statusText,
-        );
-      }
-
-      interface OpenAIEmbeddingResponse {
-        data: Array<{ embedding: number[] }>;
-      }
-
-      const data: OpenAIEmbeddingResponse = await response.json();
-
-      return data?.data?.[0].embedding;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
-  }
-
-  async retrieveCachedEmbedding(input: string) {
-    const similaritySearchResult =
-      await this.messageManager.getCachedEmbeddings(input);
-    if (similaritySearchResult.length > 0) {
-      return similaritySearchResult[0].embedding;
-    }
-    return null;
   }
 
   /**
@@ -970,8 +473,10 @@ export class AgentRuntime implements IAgentRuntime {
       template: evaluationTemplate,
     });
 
-    const result = await this.completion({
+    const result = await completion({
+      runtime: this,
       context,
+      modelClass: "fast",
     });
 
     const parsedResult = parseJsonArrayFromText(result) as unknown as string[];

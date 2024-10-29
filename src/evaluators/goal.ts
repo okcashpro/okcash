@@ -1,4 +1,5 @@
 import { composeContext } from "../core/context.ts";
+import { completion } from "../core/generation.ts";
 import { getGoals } from "../core/goals.ts";
 import { parseJsonArrayFromText } from "../core/parsing.ts";
 import {
@@ -66,9 +67,10 @@ async function handler(
   });
 
   // Request completion from OpenAI to analyze conversation and suggest goal updates
-  const response = await runtime.completion({
+  const response = await completion({
+    runtime,
     context,
-    stop: [],
+    modelClass: "fast",
   });
 
   // Parse the JSON response to extract goal updates
