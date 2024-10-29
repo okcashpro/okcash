@@ -2,6 +2,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Buffer } from 'buffer';
 import Together from "together-ai";
+import { AgentRuntime } from "../core/runtime";
+import { IAgentRuntime } from "../core/types";
 
 export const generateImage = async (data: {
     apiKey: string, 
@@ -55,56 +57,13 @@ export const generateImage = async (data: {
   }
 };
 
-export const generateCaption = async (data: {apiKey: string, imageUrl: string}) => {
-    const { apiKey, imageUrl } = data;
-
+export const generateCaption = async (data: {imageUrl: string}, runtime: IAgentRuntime) => {
+    const { imageUrl } = data;
     try {
-        const anthropic = new Anthropic({
-            apiKey,
-        });
-
-        const base64Data = imageUrl.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, 'base64');
-        const imageType = detectImageType(buffer);
-        
-        if (!imageType) {
-            throw new Error("Invalid image data");
-        }
-
-        const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-20240620",
-            max_tokens: 8192,
-            temperature: 0,
-            messages: [
-              {
-                role: "user",
-                content: [
-                    {type: "text", text: "What do you see in this image? Generate a caption for it! Keep it short, max one phrase. Caption:"},
-                    //@ts-ignore
-                    {type: "image", source: {data: base64Data, media_type: `image/${imageType}`, type: "base64"}}
-                ]
-              },
-            ],
-            tools: [],
-          });
-
-          const responseContent = ((response.content[0] as any).text as string).replace("Caption:", "").trim();
-          return { success: true, caption: responseContent };
+        const resp = await runtime.imageDescriptionService.describeImage(imageUrl);
+        return { success: true, caption: resp.title.trim() };
     } catch (error) {
         console.error(error);
         return { success: false, error: error, caption: "" };
     }
-}
-
-function detectImageType(buffer: Buffer): string | null {
-    if (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF) {
-        return 'jpeg';
-    } else if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
-        return 'png';
-    } else if (buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46) {
-        return 'gif';
-    } else if (buffer[0] === 0x42 && buffer[1] === 0x4D) {
-        return 'bmp';
-    }
-    return null;
 }

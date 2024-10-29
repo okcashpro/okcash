@@ -34,9 +34,8 @@ export default {
             for(let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
                 const caption = await generateCaption({
-                    apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
                     imageUrl: image
-                })
+                }, runtime);
                 if (caption.success) {
                     res.push({image: image, caption: caption.caption});
                 } else {
