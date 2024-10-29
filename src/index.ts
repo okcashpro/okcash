@@ -6,6 +6,7 @@ import follow_room from "./actions/follow_room.ts";
 import mute_room from "./actions/mute_room.ts";
 import unfollow_room from "./actions/unfollow_room.ts";
 import unmute_room from "./actions/unmute_room.ts";
+import imageGeneration from "./actions/imageGeneration.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
 import DirectClient from "./clients/direct/index.ts";
@@ -108,6 +109,7 @@ async function startAgent(character: Character) {
       unfollow_room,
       unmute_room,
       mute_room,
+      imageGeneration,
     ],
   });
 
