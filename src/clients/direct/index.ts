@@ -205,8 +205,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
         return;
       }
 
-      const togetherApiKey = agent.getSetting("TOGETHER_API_KEY");
-      const images = await generateImage({...req.body, apiKey: togetherApiKey });
+      const images = await generateImage({...req.body }, agent);
       const imagesRes: {image: string, caption: string}[] = [];
       if (images.data && images.data.length > 0) {
         for(let i = 0; i < images.data.length; i++) {

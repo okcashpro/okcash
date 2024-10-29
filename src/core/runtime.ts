@@ -55,6 +55,7 @@ import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
+import { ImageGenModel } from "./imageGenModels.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -104,6 +105,11 @@ export class AgentRuntime implements IAgentRuntime {
    * The model to use for generateText.
    */
   modelProvider = ModelProvider.LLAMALOCAL;
+
+  /**
+   * The model to use for image generation.
+   */
+  imageGenModel: ImageGenModel = ImageGenModel.TogetherAI;
 
   /**
    * Local Llama if no OpenAI key is present
@@ -189,6 +195,7 @@ export class AgentRuntime implements IAgentRuntime {
     actions?: Action[]; // Optional custom actions
     evaluators?: Evaluator[]; // Optional custom evaluators
     providers?: Provider[];
+    imageGenModel?: ImageGenModel;
     modelProvider: ModelProvider;
     databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
     fetch?: typeof fetch | unknown;
@@ -241,6 +248,7 @@ export class AgentRuntime implements IAgentRuntime {
     if (!this.serverUrl) {
       console.warn("No serverUrl provided, defaulting to localhost");
     }
+    this.imageGenModel = this.character.imageGenModel ?? opts.imageGenModel ?? this.imageGenModel;
 
     this.token = opts.token;
 

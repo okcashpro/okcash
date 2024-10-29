@@ -23,13 +23,11 @@ export default {
         const imagePrompt = "";
         const res: { image: string, caption: string }[] = [];
         const images = await generateImage({
-            apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
             prompt: imagePrompt,
             width: 1024,
             height: 1024,
-            steps: 4,
             count: 1
-        })
+        }, runtime);
         if (images.success && images.data && images.data.length > 0) {
             for(let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];

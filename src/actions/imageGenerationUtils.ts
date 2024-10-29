@@ -1,39 +1,39 @@
 // TODO: Replace with the vercel ai sdk and support all providers
-import Anthropic from "@anthropic-ai/sdk";
 import { Buffer } from 'buffer';
 import Together from "together-ai";
-import { AgentRuntime } from "../core/runtime";
 import { IAgentRuntime } from "../core/types";
+import { getModel, ImageGenModel } from "../core/imageGenModels.ts";
+import OpenAI from "openai";
 
 export const generateImage = async (data: {
-    apiKey: string, 
     prompt: string, 
     width: number, 
     height: number, 
-    steps?: number, 
     count?: number
-}): Promise<{
+}, runtime: IAgentRuntime): Promise<{
     success: boolean,
     data?: string[],
     error?: any
 }> => {
-    const { apiKey, prompt, width, height } = data;
-    let { steps, count } = data;
-    if (!steps) {
-        steps = 4;
-    }
+    const { prompt, width, height } = data;
+    let { count } = data;
     if (!count) {
         count = 1;
     }
 
+    const imageGenModel = runtime.imageGenModel;
+    const model = getModel(imageGenModel);
+    const apiKey = imageGenModel === ImageGenModel.TogetherAI ? runtime.getSetting("TOGETHER_API_KEY") : runtime.getSetting("OPENAI_API_KEY");
+
     try {
+        if (imageGenModel === ImageGenModel.TogetherAI) {
         const together = new Together({ apiKey });
         const response = await together.images.create({
             model: "black-forest-labs/FLUX.1-schnell",
             prompt,
             width,
             height,
-            steps,
+            steps: model.steps,
             n: count,
         });
         const urls: string[] = [];
@@ -50,7 +50,23 @@ export const generateImage = async (data: {
             base64 = "data:image/jpeg;base64," + base64;
             return base64;
         }));
-        return { success: true, data: base64s };
+            return { success: true, data: base64s };
+        } else {
+            let targetSize = `${width}x${height}`;
+            if (targetSize !== "1024x1024" && targetSize !== "1792x1024" && targetSize !== "1024x1792") {
+                targetSize = "1024x1024";
+            }
+            const openai = new OpenAI({ apiKey });
+            const response = await openai.images.generate({
+                model: model.subModel,
+                prompt,
+                size: targetSize as "1024x1024" | "1792x1024" | "1024x1792",
+                n: count,
+                response_format: "b64_json",
+            });
+            const base64s = response.data.map((image) => `data:image/png;base64,${image.b64_json}`);
+            return { success: true, data: base64s };
+        }
   } catch (error) {
         console.error(error);
         return { success: false, error: error };
