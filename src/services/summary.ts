@@ -1,4 +1,4 @@
-import { completion, trimTokens } from "../core/generation.ts";
+import { generateText, trimTokens } from "../core/generation.ts";
 import { parseJSONObjectFromText } from "../core/parsing.ts";
 import { IAgentRuntime } from "../core/types.ts";
 
@@ -23,7 +23,7 @@ export async function generateSummary(
   }
   \`\`\``;
 
-  const response = await completion({
+  const response = await generateText({
     runtime,
     context: prompt,
     modelClass: "fast"

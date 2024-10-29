@@ -14,7 +14,8 @@ import fs from "fs";
 import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
-import { IAgentRuntime } from "../core/types";
+import models from "../core/models";
+import { IAgentRuntime, ModelProvider } from "../core/types";
 
 class ImageDescriptionService {
   private static instance: ImageDescriptionService | null = null;
@@ -49,10 +50,9 @@ class ImageDescriptionService {
       return;
     }
 
-    if (this.runtime.getSetting("OPENAI_API_KEY")) {
-      this.modelId = "gpt-4o-mini";
-      this.device = "cloud";
-    } else {
+    const model = models[this.runtime.character.settings.model];
+
+    if (model === ModelProvider.LLAMALOCAL) {
       this.modelId = modelId || "onnx-community/Florence-2-base-ft";
 
       env.allowLocalModels = false;
@@ -83,6 +83,11 @@ class ImageDescriptionService {
         this.modelId,
       )) as Florence2Processor;
       this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId);
+    }
+
+    else {
+      this.modelId = "gpt-4o-mini";
+      this.device = "cloud";
     }
 
     this.initialized = true;

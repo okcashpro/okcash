@@ -1,5 +1,5 @@
 import { composeContext } from "../core/context.ts";
-import { booleanCompletion } from "../core/generation.ts";
+import { generateTrueOrFalse } from "../core/generation.ts";
 import { booleanFooter } from "../core/parsing.ts";
 import {
   Action,
@@ -48,7 +48,7 @@ export default {
         template: shouldUnfollowTemplate, // Define this template separately
       });
 
-      const response = await booleanCompletion({
+      const response = await generateTrueOrFalse({
         runtime,
         context: shouldUnfollowContext,
         modelClass: "fast",

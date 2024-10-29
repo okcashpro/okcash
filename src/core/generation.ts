@@ -6,7 +6,8 @@ import {
 } from "./parsing.ts";
 import {
     Content,
-    IAgentRuntime
+    IAgentRuntime,
+    ModelProvider
 } from "./types.ts";
 
 import {
@@ -19,18 +20,18 @@ import models from "./models.ts";
 
 
 /**
- * Send a message to the model for a text completion - receive a string back and parse how you'd like
- * @param opts - The options for the completion request.
+ * Send a message to the model for a text generateText - receive a string back and parse how you'd like
+ * @param opts - The options for the generateText request.
  * @param opts.context The context of the message to be completed.
- * @param opts.stop A list of strings to stop the completion at.
- * @param opts.model The model to use for completion.
- * @param opts.frequency_penalty The frequency penalty to apply to the completion.
- * @param opts.presence_penalty The presence penalty to apply to the completion.
- * @param opts.temperature The temperature to apply to the completion.
- * @param opts.max_context_length The maximum length of the context to apply to the completion.
+ * @param opts.stop A list of strings to stop the generateText at.
+ * @param opts.model The model to use for generateText.
+ * @param opts.frequency_penalty The frequency penalty to apply to the generateText.
+ * @param opts.presence_penalty The presence penalty to apply to the generateText.
+ * @param opts.temperature The temperature to apply to the generateText.
+ * @param opts.max_context_length The maximum length of the context to apply to the generateText.
  * @returns The completed message.
  */
-export async function completion({
+export async function generateText({
     runtime,
     context = "",
     modelClass,
@@ -59,8 +60,8 @@ export async function completion({
                 max_context_length,
                 "gpt-4o-mini",
             );
-            if (!runtime.getSetting("OPENAI_API_KEY")) {
-                console.log("queueing text completion");
+            if (model === ModelProvider.LLAMALOCAL) {
+                console.log("queueing text generateText");
                 const result = await runtime.llamaService.queueTextCompletion(
                     context,
                     temperature,
@@ -71,6 +72,7 @@ export async function completion({
                 );
                 return result;
             } else {
+                // TODO: this needs to change based on model
                 const biasValue = -20.0;
                 const encoding = TikToken.encoding_for_model("gpt-4o-mini");
 
@@ -171,9 +173,9 @@ export async function completion({
 
 /**
  * Truncate the context to the maximum length allowed by the model.
- * @param model The model to use for completion.
+ * @param model The model to use for generateText.
  * @param context The context of the message to be completed.
- * @param max_context_length The maximum length of the context to apply to the completion.
+ * @param max_context_length The maximum length of the context to apply to the generateText.
  * @returns
  */
 export function trimTokens(context, maxTokens, model) {
@@ -190,10 +192,10 @@ export function trimTokens(context, maxTokens, model) {
 }
 /**
  * Sends a message to the model to determine if it should respond to the given context.
- * @param opts - The options for the completion request
+ * @param opts - The options for the generateText request
  * @param opts.context The context to evaluate for response
- * @param opts.stop A list of strings to stop the completion at
- * @param opts.model The model to use for completion
+ * @param opts.stop A list of strings to stop the generateText at
+ * @param opts.model The model to use for generateText
  * @param opts.frequency_penalty The frequency penalty to apply (0.0 to 2.0)
  * @param opts.presence_penalty The presence penalty to apply (0.0 to 2.0) 
  * @param opts.temperature The temperature to control randomness (0.0 to 2.0)
@@ -202,7 +204,7 @@ export function trimTokens(context, maxTokens, model) {
  * @param opts.max_response_length Maximum allowed response length in tokens
  * @returns Promise resolving to "RESPOND", "IGNORE", "STOP" or null
  */
-export async function shouldRespondCompletion({
+export async function generateShouldRespond({
     runtime,
     context = "",
     modelClass,
@@ -210,7 +212,7 @@ export async function shouldRespondCompletion({
     let retryDelay = 1000;
     while (true) {
         try {
-            const response = await completion({
+            const response = await generateText({
                 runtime,
                 context,
                 modelClass,
@@ -220,10 +222,10 @@ export async function shouldRespondCompletion({
             if (parsedResponse) {
                 return parsedResponse;
             } else {
-                console.log("shouldRespondCompletion no response");
+                console.log("generateShouldRespond no response");
             }
         } catch (error) {
-            console.error("Error in shouldRespondCompletion:", error);
+            console.error("Error in generateShouldRespond:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -272,10 +274,10 @@ export async function splitChunks(
 
 /**
  * Sends a message to the model and parses the response as a boolean value
- * @param opts - The options for the completion request
+ * @param opts - The options for the generateText request
  * @param opts.context The context to evaluate for the boolean response
- * @param opts.stop A list of strings to stop the completion at
- * @param opts.model The model to use for completion
+ * @param opts.stop A list of strings to stop the generateText at
+ * @param opts.model The model to use for generateText
  * @param opts.frequency_penalty The frequency penalty to apply (0.0 to 2.0)
  * @param opts.presence_penalty The presence penalty to apply (0.0 to 2.0)
  * @param opts.temperature The temperature to control randomness (0.0 to 2.0)
@@ -285,7 +287,7 @@ export async function splitChunks(
  * @param opts.max_response_length Maximum allowed response length in tokens
  * @returns Promise resolving to a boolean value parsed from the model's response
  */
-export async function booleanCompletion({
+export async function generateTrueOrFalse({
     runtime,
     context = "",
     modelClass,
@@ -299,7 +301,7 @@ export async function booleanCompletion({
 
     while (true) {
         try {
-            const response = await completion({
+            const response = await generateText({
                 stop,
                 runtime,
                 context,
@@ -311,7 +313,7 @@ export async function booleanCompletion({
                 return parsedResponse;
             }
         } catch (error) {
-            console.error("Error in booleanCompletion:", error);
+            console.error("Error in generateTrueOrFalse:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -321,7 +323,7 @@ export async function booleanCompletion({
 
 /**
  * Send a message to the model and parse the response as a string array
- * @param opts - The options for the completion request
+ * @param opts - The options for the generateText request
  * @param opts.context The context/prompt to send to the model
  * @param opts.stop Array of strings that will stop the model's generation if encountered
  * @param opts.model The language model to use
@@ -334,7 +336,7 @@ export async function booleanCompletion({
  * @param opts.max_response_length Maximum allowed response length in tokens
  * @returns Promise resolving to an array of strings parsed from the model's response
  */
-export async function stringArrayCompletion({
+export async function generateTextArray({
     runtime,
     context = "",
     modelClass, // "tiny", "fast", "slow"
@@ -343,7 +345,7 @@ export async function stringArrayCompletion({
 
     while (true) {
         try {
-            const response = await completion({
+            const response = await generateText({
                 runtime,
                 context,
                 modelClass,
@@ -354,7 +356,7 @@ export async function stringArrayCompletion({
                 return parsedResponse;
             }
         } catch (error) {
-            console.error("Error in stringArrayCompletion:", error);
+            console.error("Error in generateTextArray:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -362,7 +364,7 @@ export async function stringArrayCompletion({
     }
 }
 
-export async function objectArrayCompletion({
+export async function generateObjectArray({
     runtime,
     context = "",
     modelClass,
@@ -371,7 +373,7 @@ export async function objectArrayCompletion({
 
     while (true) {
         try {
-            const response = await completion({
+            const response = await generateText({
                 runtime,
                 context,
                 modelClass,
@@ -382,7 +384,7 @@ export async function objectArrayCompletion({
                 return parsedResponse;
             }
         } catch (error) {
-            console.error("Error in stringArrayCompletion:", error);
+            console.error("Error in generateTextArray:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -391,18 +393,18 @@ export async function objectArrayCompletion({
 }
 
 /**
- * Send a message to the model for completion.
- * @param opts - The options for the completion request.
+ * Send a message to the model for generateText.
+ * @param opts - The options for the generateText request.
  * @param opts.context The context of the message to be completed.
- * @param opts.stop A list of strings to stop the completion at.
- * @param opts.model The model to use for completion.
- * @param opts.frequency_penalty The frequency penalty to apply to the completion.
- * @param opts.presence_penalty The presence penalty to apply to the completion.
- * @param opts.temperature The temperature to apply to the completion.
- * @param opts.max_context_length The maximum length of the context to apply to the completion.
+ * @param opts.stop A list of strings to stop the generateText at.
+ * @param opts.model The model to use for generateText.
+ * @param opts.frequency_penalty The frequency penalty to apply to the generateText.
+ * @param opts.presence_penalty The presence penalty to apply to the generateText.
+ * @param opts.temperature The temperature to apply to the generateText.
+ * @param opts.max_context_length The maximum length of the context to apply to the generateText.
  * @returns The completed message.
  */
-export async function messageCompletion({
+export async function generateMessageResponse({
     runtime,
     context = "",
     modelClass
@@ -413,7 +415,7 @@ export async function messageCompletion({
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {
-            const response = await completion({
+            const response = await generateText({
                 runtime,
                 context,
                 modelClass,

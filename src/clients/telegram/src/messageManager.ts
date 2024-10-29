@@ -19,7 +19,7 @@ import {
   shouldRespondTemplate,
 } from "../../discord/templates.ts";
 import ImageDescriptionService from "../../../services/image.ts";
-import { messageCompletion, shouldRespondCompletion } from "../../../core/generation.ts";
+import { generateMessageResponse, generateShouldRespond } from "../../../core/generation.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -105,7 +105,7 @@ export class MessageManager {
         template: shouldRespondTemplate,
       });
 
-      const response = await shouldRespondCompletion({
+      const response = await generateShouldRespond({
         runtime: this.runtime,
         context: shouldRespondContext,
         modelClass: "fast",
@@ -174,14 +174,14 @@ export class MessageManager {
       context
     );
 
-    const response = await messageCompletion({
+    const response = await generateMessageResponse({
       runtime: this.runtime,
       context,
       modelClass: "slow"
     });
 
     if (!response) {
-      console.error("❌ No response from messageCompletion");
+      console.error("❌ No response from generateMessageResponse");
       return null;
     }
 

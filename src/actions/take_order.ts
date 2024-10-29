@@ -50,8 +50,8 @@
 
 //         // 1. create state object with runtime.composeState
 //         // 2. compose context with template and state
-//         // 3. get completion
-//         // 4. validate completion
+//         // 3. get generateText
+//         // 4. validate generateText
 
 //         // if ticker or contractAddress are empty, return a message asking for them 
 //         if (!ticker || !contractAddress) {
@@ -71,7 +71,7 @@
 //             template,
 //         });
 
-//         const convictionResponse = await completion({
+//         const convictionResponse = await generateText({
 //              runtime,
 //             context: context,
 //             model: "gpt-4o",

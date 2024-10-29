@@ -1,4 +1,5 @@
-import { IAgentRuntime } from "./types";
+import models from "./models";
+import { IAgentRuntime, ModelProvider } from "./types";
 
 /**
  * Send a message to the OpenAI API for embedding.
@@ -6,7 +7,11 @@ import { IAgentRuntime } from "./types";
  * @returns The embedding of the input.
  */
 export async function embed(runtime: IAgentRuntime, input: string) {
-    if (!runtime.getSetting("OPENAI_API_KEY")) {
+
+    // get the charcter, and handle by model type
+    const model = models[runtime.character.settings.model];
+
+    if (model !== ModelProvider.OPENAI) {
         return await runtime.llamaService.getEmbeddingResponse(input);
     }
     const embeddingModel = runtime.embeddingModel;

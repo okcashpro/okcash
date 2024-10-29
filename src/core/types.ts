@@ -279,7 +279,7 @@ export type Media = {
 export type Character = {
   id?: UUID; // optional UUID which can be passed down to identify the character
   name: string;
-  system: string;
+  system?: string;
   modelProvider: ModelProvider;
   modelOverride?: string;
   bio: string | string[];

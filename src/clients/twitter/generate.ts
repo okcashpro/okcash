@@ -6,7 +6,7 @@ import { embeddingZeroVector } from "../../core/memory.ts";
 import { IAgentRuntime } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import { completion } from "../../core/generation.ts";
+import { generateText } from "../../core/generation.ts";
 
 const newTweetPrompt = `{{timeline}}
 
@@ -105,7 +105,7 @@ export class TwitterGenerationClient extends ClientBase {
         context,
       );
 
-      const newTweetContent = await completion({
+      const newTweetContent = await generateText({
         runtime: this.runtime,
         context,
         modelClass: "slow",

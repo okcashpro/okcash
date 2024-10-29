@@ -132,9 +132,7 @@ async function startAgent(character: Character) {
   async function startTelegram(runtime: IAgentRuntime, character: Character) {
     console.log("🔍 Attempting to start Telegram bot...");
     
-    const botToken =
-      character.settings?.secrets?.TELEGRAM_BOT_TOKEN ??
-      settings.TELEGRAM_BOT_TOKEN;
+    const botToken = runtime.getSetting('TELEGRAM_BOT_TOKEN');
   
     if (!botToken) {
       console.error(

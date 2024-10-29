@@ -12,7 +12,7 @@ import cors from "cors";
 import { messageCompletionFooter } from "../../core/parsing.ts";
 import multer, { File } from 'multer';
 import { Request as ExpressRequest } from 'express';
-import { messageCompletion } from "../../core/generation.ts";
+import { generateMessageResponse } from "../../core/generation.ts";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -172,7 +172,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
         template: messageHandlerTemplate,
       });
 
-      let response = await messageCompletion({
+      let response = await generateMessageResponse({
         runtime: runtime,
         context,
         modelClass: "fast"
@@ -188,7 +188,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
       await runtime.messageManager.createMemory(responseMessage);
 
       if (!response) {
-        res.status(500).send("No response from messageCompletion");
+        res.status(500).send("No response from generateMessageResponse");
         return;
       }
 

@@ -21,7 +21,7 @@ import { runAiTest } from "../test_resources/runAiTest.ts";
 import { messageHandlerTemplate } from "../test_resources/templates.ts";
 import { type User } from "../test_resources/types.ts";
 import action from "./ignore.ts";
-import { messageCompletion } from "../core/generation.ts";
+import { generateMessageResponse } from "../core/generation.ts";
 
 async function handleMessage(
   runtime: IAgentRuntime,
@@ -57,7 +57,7 @@ async function handleMessage(
 
   const { userId, roomId } = message;
 
-  let response = await messageCompletion({
+  let response = await generateMessageResponse({
     context,
     runtime,
     modelClass: "fast"

@@ -174,7 +174,7 @@ export class TokenProvider {
     return security;
   }
 
-  async fetchTokenTradeData(): Promise<TokenTradeData> {
+  async fetchTokenTradeData(runtime: IAgentRuntime): Promise<TokenTradeData> {
     const cacheKey = `tokenTradeData_${this.tokenAddress}`;
     const cachedData = this.getCachedData<TokenTradeData>(cacheKey);
     if (cachedData) {
@@ -189,7 +189,7 @@ export class TokenProvider {
       method: "GET",
       headers: {
         accept: "application/json",
-        "X-API-KEY": settings.BIRDEYE_API_KEY || "",
+        "X-API-KEY": runtime.getSetting('BIRDEYE_API_KEY') || "",
       },
     };
 
@@ -613,13 +613,13 @@ export class TokenProvider {
     }
   }
 
-  async getProcessedTokenData(): Promise<ProcessedTokenData> {
+  async getProcessedTokenData(runtime: IAgentRuntime): Promise<ProcessedTokenData> {
     try {
       console.log(`Fetching security data for token: ${this.tokenAddress}`);
       const security = await this.fetchTokenSecurity();
 
       console.log(`Fetching trade data for token: ${this.tokenAddress}`);
-      const tradeData = await this.fetchTokenTradeData();
+      const tradeData = await this.fetchTokenTradeData(runtime);
 
       console.log(`Fetching DexScreener data for token: ${this.tokenAddress}`);
       const dexData = await this.fetchDexScreenerData();
@@ -736,10 +736,10 @@ export class TokenProvider {
     return output;
   }
 
-  async getFormattedTokenReport(): Promise<string> {
+  async getFormattedTokenReport(runtime: IAgentRuntime): Promise<string> {
     try {
       console.log("Generating formatted token report...");
-      const processedData = await this.getProcessedTokenData();
+      const processedData = await this.getProcessedTokenData(runtime);
       return this.formatTokenData(processedData);
     } catch (error) {
       console.error("Error generating token report:", error);
@@ -749,7 +749,6 @@ export class TokenProvider {
 }
 
 const tokenAddress = PROVIDER_CONFIG.TOKEN_ADDRESSES.Example;
-const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
 const tokenProvider: Provider = {
   get: async (
     runtime: IAgentRuntime,
@@ -757,8 +756,8 @@ const tokenProvider: Provider = {
     _state?: State
   ): Promise<string> => {
     try {
-      const provider = new TokenProvider(/*connection,*/ tokenAddress);
-      return provider.getFormattedTokenReport();
+      const provider = new TokenProvider(tokenAddress);
+      return provider.getFormattedTokenReport(runtime);
     } catch (error) {
       console.error("Error fetching token data:", error);
       return "Unable to fetch token information. Please try again later.";

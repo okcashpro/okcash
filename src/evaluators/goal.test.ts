@@ -99,7 +99,7 @@ describe("Goals Evaluator", () => {
 
         await populateMemories(runtime, user, roomId, [conversation]);
 
-        // Simulate a conversation indicating the completion of both objectives
+        // Simulate a conversation indicating the generateText of both objectives
         const message: Memory = {
           userId: user.id as UUID,
           content: {

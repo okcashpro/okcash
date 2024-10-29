@@ -220,7 +220,7 @@ class LlamaService {
     presence_penalty: number,
     max_tokens: number,
   ): Promise<any> {
-    console.log("Queueing message completion");
+    console.log("Queueing message generateText");
     return new Promise((resolve, reject) => {
       this.messageQueue.push({
         context,
@@ -245,7 +245,7 @@ class LlamaService {
     presence_penalty: number,
     max_tokens: number,
   ): Promise<string> {
-    console.log("Queueing text completion");
+    console.log("Queueing text generateText");
     return new Promise((resolve, reject) => {
       this.messageQueue.push({
         context,

@@ -16,7 +16,7 @@ import {
   sendTweetChunks,
   wait,
 } from "./utils.ts";
-import { completion, messageCompletion } from "../../core/generation.ts";
+import { generateText, generateMessageResponse } from "../../core/generation.ts";
 
 const messageHandlerTemplate =
   `{{relevantFacts}}
@@ -140,7 +140,7 @@ export class TwitterSearchClient extends ClientBase {
       const logName = `${this.runtime.character.name}_search_${datestr}`;
       log_to_file(logName, prompt);
 
-      const mostInterestingTweetResponse = await completion({
+      const mostInterestingTweetResponse = await generateText({
         runtime: this.runtime,
         context: prompt,
         modelClass: "slow"
@@ -270,7 +270,7 @@ export class TwitterSearchClient extends ClientBase {
         context,
       );
 
-      const responseContent = await messageCompletion({
+      const responseContent = await generateMessageResponse({
         runtime: this.runtime,
         context,
         modelClass: "slow"

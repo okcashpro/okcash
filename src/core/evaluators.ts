@@ -7,7 +7,7 @@ import { stringArrayFooter } from "./parsing.ts";
 export const defaultEvaluators: Evaluator[] = [fact /*, goal*/];
 
 /**
- * Template used for the evaluation completion.
+ * Template used for the evaluation generateText.
  */
 export const evaluationTemplate =
   `TASK: Based on the conversation and conditions, determine which evaluation functions are appropriate to call.

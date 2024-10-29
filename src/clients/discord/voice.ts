@@ -37,7 +37,7 @@ import { getWavHeader } from "../../services/audioUtils.ts";
 import { SpeechService } from "../../services/speech.ts";
 import { AudioMonitor } from "./audioMonitor.ts";
 import { voiceHandlerTemplate } from "./templates.ts";
-import { messageCompletion } from "../../core/generation.ts";
+import { generateMessageResponse } from "../../core/generation.ts";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -462,7 +462,7 @@ export class VoiceManager extends EventEmitter {
     // log context to file
     log_to_file(`${state.agentName}_${datestr}_discord_voice_context`, context);
 
-    const response = await messageCompletion({
+    const response = await generateMessageResponse({
       runtime: this.runtime,
       context,
       modelClass: "fast"
@@ -471,7 +471,7 @@ export class VoiceManager extends EventEmitter {
     response.source = "discord";
 
     if (!response) {
-      console.error("No response from messageCompletion");
+      console.error("No response from generateMessageResponse");
       return;
     }
 

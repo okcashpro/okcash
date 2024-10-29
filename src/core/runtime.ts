@@ -45,7 +45,7 @@ import {
 } from "./actions.ts";
 import defaultCharacter from "./defaultCharacter.ts";
 import { embed } from "./embedding.ts";
-import { completion, splitChunks } from "./generation.ts";
+import { generateText, splitChunks } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { formatPosts } from "./posts.ts";
@@ -99,7 +99,7 @@ export class AgentRuntime implements IAgentRuntime {
   providers: Provider[] = [];
 
   /**
-   * The model to use for completion.
+   * The model to use for generateText.
    */
   model = settings.XAI_MODEL || "gpt-4o-mini";
 
@@ -176,7 +176,7 @@ export class AgentRuntime implements IAgentRuntime {
    * @param opts.actions - Optional custom actions.
    * @param opts.evaluators - Optional custom evaluators.
    * @param opts.providers - Optional context providers.
-   * @param opts.model - The model to use for completion.
+   * @param opts.model - The model to use for generateText.
    * @param opts.embeddingModel - The model to use for embedding.
    * @param opts.agentId - Optional ID of the agent.
    * @param opts.databaseAdapter - The database adapter used for interacting with the database.
@@ -192,7 +192,7 @@ export class AgentRuntime implements IAgentRuntime {
     actions?: Action[]; // Optional custom actions
     evaluators?: Evaluator[]; // Optional custom evaluators
     providers?: Provider[];
-    model?: string; // The model to use for completion
+    model?: string; // The model to use for generateText
     embeddingModel?: string; // The model to use for embedding
     databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
     fetch?: typeof fetch | unknown;
@@ -473,7 +473,7 @@ export class AgentRuntime implements IAgentRuntime {
       template: evaluationTemplate,
     });
 
-    const result = await completion({
+    const result = await generateText({
       runtime: this,
       context,
       modelClass: "fast",

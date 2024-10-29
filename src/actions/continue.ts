@@ -1,6 +1,6 @@
 import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import { composeContext } from "../core/context.ts";
-import { booleanCompletion, messageCompletion } from "../core/generation.ts";
+import { generateTrueOrFalse, generateMessageResponse } from "../core/generation.ts";
 import { log_to_file } from "../core/logger.ts";
 import { booleanFooter } from "../core/parsing.ts";
 import {
@@ -77,13 +77,13 @@ export default {
     state = await runtime.updateRecentMessageState(state);
 
     async function _shouldContinue(state: State): Promise<boolean> {
-      // If none of the above conditions are met, use the completion to decide
+      // If none of the above conditions are met, use the generateText to decide
       const shouldRespondContext = composeContext({
         state,
         template: shouldContinueTemplate,
       });
 
-      let response = await booleanCompletion({
+      let response = await generateTrueOrFalse({
         context: shouldRespondContext,
         modelClass: "fast",
         runtime
@@ -109,7 +109,7 @@ export default {
 
     const { userId, roomId } = message;
 
-    let response = await messageCompletion({
+    let response = await generateMessageResponse({
       runtime,
       context,
       modelClass: "fast"

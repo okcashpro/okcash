@@ -16,7 +16,7 @@ import {
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
-import { messageCompletion, shouldRespondCompletion } from "../../core/generation.ts";
+import { generateMessageResponse, generateShouldRespond } from "../../core/generation.ts";
 
 export const messageHandlerTemplate =
   `{{relevantFacts}}
@@ -277,7 +277,7 @@ export class TwitterInteractionClient extends ClientBase {
       template: shouldRespondTemplate,
     });
 
-    const shouldRespond = await shouldRespondCompletion({
+    const shouldRespond = await generateShouldRespond({
       runtime: this.runtime,
       context: shouldRespondContext,
       modelClass: "fast"
@@ -301,7 +301,7 @@ export class TwitterInteractionClient extends ClientBase {
       context,
     );
 
-    const response = await messageCompletion({
+    const response = await generateMessageResponse({
       runtime: this.runtime,
       context,
       modelClass: "slow"

@@ -1,5 +1,5 @@
 import { composeContext } from "../../../core/context.ts";
-import { completion } from "../../../core/generation.ts";
+import { generateText } from "../../../core/generation.ts";
 import { log_to_file } from "../../../core/logger.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
 import {
@@ -44,7 +44,7 @@ const getMediaAttachmentId = async (
   });
 
   for (let i = 0; i < 5; i++) {
-    const response = await completion({
+    const response = await generateText({
       runtime,
       context,
       modelClass: "fast",

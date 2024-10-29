@@ -20,7 +20,7 @@ import { TextChannel } from "discord.js";
 import { stringToUuid } from "../../core/uuid.ts";
 import { SpeechService } from "../../services/speech.ts";
 import { VoiceManager } from "./voice.ts";
-import { messageCompletion, shouldRespondCompletion } from "../../core/generation.ts";
+import { generateMessageResponse, generateShouldRespond } from "../../core/generation.ts";
 
 const MAX_MESSAGE_LENGTH = 1900;
 
@@ -596,13 +596,13 @@ export class MessageManager {
       return true;
     }
 
-    // If none of the above conditions are met, use the completion to decide
+    // If none of the above conditions are met, use the generateText to decide
     const shouldRespondContext = composeContext({
       state,
       template: shouldRespondTemplate,
     });
 
-    const response = await shouldRespondCompletion({
+    const response = await generateShouldRespond({
       runtime: this.runtime,
       context: shouldRespondContext,
       modelClass: "fast"
@@ -616,7 +616,7 @@ export class MessageManager {
       delete this.interestChannels[message.channelId];
       return false;
     } else {
-      console.error("Invalid response from response completion:", response);
+      console.error("Invalid response from response generateText:", response);
       return false;
     }
   }
@@ -636,14 +636,14 @@ export class MessageManager {
       context,
     );
 
-    const response = await messageCompletion({
+    const response = await generateMessageResponse({
       runtime: this.runtime,
       context,
       modelClass: "slow"
     });
 
     if (!response) {
-      console.error("No response from messageCompletion");
+      console.error("No response from generateMessageResponse");
       return;
     }
 

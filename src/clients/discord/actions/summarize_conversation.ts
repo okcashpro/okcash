@@ -1,7 +1,8 @@
 import { composeContext } from "../../../core/context.ts";
-import { completion, splitChunks, trimTokens } from "../../../core/generation.ts";
+import { generateText, splitChunks, trimTokens } from "../../../core/generation.ts";
 import { log_to_file } from "../../../core/logger.ts";
 import { getActorDetails } from "../../../core/messages.ts";
+import models from "../../../core/models.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
 import {
   Action,
@@ -56,7 +57,7 @@ const getDateRange = async (
   });
 
   for (let i = 0; i < 5; i++) {
-    const response = await completion({
+    const response = await generateText({
       runtime,
       context,
       modelClass: "fast",
@@ -244,8 +245,10 @@ const summarizeAction = {
       .join("\n");
 
     let currentSummary = "";
-    const chunkSize = runtime.getSetting("OPENAI_API_KEY") ? 100000 : 3500;
 
+    const model = models[runtime.character.settings.model];
+    const chunkSize = model.settings.maxContextLength - 1000;
+    
     const chunks = await splitChunks(
       runtime,
       formattedMemories,
@@ -280,7 +283,7 @@ const summarizeAction = {
         context,
       );
 
-      const summary = await completion({
+      const summary = await generateText({
         runtime,
         context,
         modelClass: "fast",
