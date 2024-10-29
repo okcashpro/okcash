@@ -1,9 +1,8 @@
-import { Connection, PublicKey, ParsedAccountData } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types";
 import settings from "../core/settings";
 import BigNumber from "bignumber.js";
-import { TOKEN_PROGRAM_ID, AccountLayout } from "@solana/spl-token";
 import {
   ProcessedTokenData,
   TokenSecurityData,
@@ -757,7 +756,7 @@ const tokenProvider: Provider = {
     _state?: State
   ): Promise<string> => {
     try {
-      const provider = new TokenProvider(/*connection,*/ tokenAddress);
+      const provider = new TokenProvider(tokenAddress);
       return provider.getFormattedTokenReport();
     } catch (error) {
       console.error("Error fetching token data:", error);
