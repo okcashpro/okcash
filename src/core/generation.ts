@@ -33,7 +33,7 @@ import models from "./models.ts";
  */
 export async function generateText({
     runtime,
-    context = "",
+    context,
     modelClass,
     stop
 }: {
@@ -42,17 +42,21 @@ export async function generateText({
     modelClass: string
     stop?: string[]
 }): Promise<string> {
+    if (!context) {
+        console.error("generateText context is empty");
+        return "";
+    }
     let retryLength = 1000; // exponential backoff
     console.log("model class is", modelClass)
-    const model = models[modelClass];
+    const model = models[runtime.modelProvider].model[modelClass];
     console.log("model is", model)
-    const max_context_length = model.settings.maxInputTokens;
-    const max_response_length = model.settings.maxOutputTokens;
-    const _stop = stop || model.settings.stop;
-    const temperature = model.settings.temperature;
-    const frequency_penalty = model.settings.frequency_penalty;
-    const presence_penalty = model.settings.presence_penalty;
-    const serverUrl = model.endpoint;
+    const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
+    const max_response_length = models[runtime.modelProvider].settings.maxOutputTokens;
+    const _stop = stop || models[runtime.modelProvider].settings.stop;
+    const temperature = models[runtime.modelProvider].settings.temperature;
+    const frequency_penalty = models[runtime.modelProvider].settings.frequency_penalty;
+    const presence_penalty = models[runtime.modelProvider].settings.presence_penalty;
+    const serverUrl = models[runtime.modelProvider].endpoint;
     const token = runtime.token;
 
     for (let triesLeft = 5; triesLeft > 0; triesLeft--) {
@@ -208,8 +212,12 @@ export function trimTokens(context, maxTokens, model) {
  */
 export async function generateShouldRespond({
     runtime,
-    context = "",
+    context,
     modelClass,
+}: {
+    runtime: IAgentRuntime,
+    context: string,
+    modelClass: string,
 }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
     let retryDelay = 1000;
     while (true) {
@@ -293,6 +301,10 @@ export async function generateTrueOrFalse({
     runtime,
     context = "",
     modelClass,
+}: {
+    runtime: IAgentRuntime,
+    context: string,
+    modelClass: string,
 }): Promise<boolean> {
     let retryDelay = 1000;
 
@@ -340,9 +352,17 @@ export async function generateTrueOrFalse({
  */
 export async function generateTextArray({
     runtime,
-    context = "",
-    modelClass, // "tiny", "fast", "slow"
+    context,
+    modelClass,
+}: {
+    runtime: IAgentRuntime,
+    context: string,
+    modelClass: string,
 }): Promise<string[]> {
+    if (!context) {
+        console.error("generateTextArray context is empty");
+        return [];
+    }
     let retryDelay = 1000;
 
     while (true) {
@@ -368,9 +388,17 @@ export async function generateTextArray({
 
 export async function generateObjectArray({
     runtime,
-    context = "",
+    context,
     modelClass,
+}: {
+    runtime: IAgentRuntime,
+    context: string,
+    modelClass: string,
 }): Promise<any[]> {
+    if (!context) {
+        console.error("generateObjectArray context is empty");
+        return [];
+    }
     let retryDelay = 1000;
 
     while (true) {
@@ -408,14 +436,21 @@ export async function generateObjectArray({
  */
 export async function generateMessageResponse({
     runtime,
-    context = "",
+    context,
     modelClass
+}: {
+    runtime: IAgentRuntime,
+    context: string,
+    modelClass: string,
 }): Promise<Content> {
     console.log("modelClass", modelClass)
-    const model = models[modelClass];
+    console.log("runtime.modelProvider", runtime.modelProvider)
+    console.log("models", models)
+    console.log("models[runtime.modelProvider]", models[runtime.modelProvider])
+    const model = models[runtime.modelProvider].model[modelClass];
     console.log("model is", model)
-    const max_context_length = model.settings.maxInputTokens;
-    context = runtime.trimTokens(context, max_context_length, "gpt-4o-mini");
+    const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
+    context = trimTokens(context, max_context_length, "gpt-4o-mini");
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {

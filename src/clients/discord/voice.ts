@@ -29,6 +29,7 @@ import {
   HandlerCallback,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
   UUID,
 } from "../../core/types.ts";
@@ -465,7 +466,7 @@ export class VoiceManager extends EventEmitter {
     const response = await generateMessageResponse({
       runtime: this.runtime,
       context,
-      modelClass: "fast"
+      modelClass: ModelClass.SMALL,
     });
 
     response.source = "discord";

@@ -164,7 +164,7 @@ You should only respond with the name of the voice channel or none, no commentar
       const responseContent = await generateText({
         runtime,
         context,
-        modelClass: "fast",
+        modelClass: ModelClass.SMALL,
       });
 
       // log response to file

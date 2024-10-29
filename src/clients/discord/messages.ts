@@ -8,6 +8,7 @@ import {
   IAgentRuntime,
   Media,
   Memory,
+  ModelClass,
   State,
   UUID,
 } from "../../core/types.ts";
@@ -605,7 +606,7 @@ export class MessageManager {
     const response = await generateShouldRespond({
       runtime: this.runtime,
       context: shouldRespondContext,
-      modelClass: "fast"
+      modelClass: ModelClass.SMALL,
     });
 
     if (response === "RESPOND") {

@@ -1,6 +1,6 @@
 import { generateText, trimTokens } from "../core/generation.ts";
 import { parseJSONObjectFromText } from "../core/parsing.ts";
-import { IAgentRuntime } from "../core/types.ts";
+import { IAgentRuntime, ModelClass } from "../core/types.ts";
 
 export async function generateSummary(
   runtime: IAgentRuntime,
@@ -26,7 +26,7 @@ export async function generateSummary(
   const response = await generateText({
     runtime,
     context: prompt,
-    modelClass: "fast"
+    modelClass: ModelClass.SMALL,
   });
 
   const parsedResponse = parseJSONObjectFromText(response);

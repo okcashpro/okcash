@@ -10,6 +10,7 @@ import {
   HandlerCallback,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../core/types.ts";
 
@@ -85,7 +86,7 @@ export default {
 
       let response = await generateTrueOrFalse({
         context: shouldRespondContext,
-        modelClass: "fast",
+        modelClass: ModelClass.SMALL,
         runtime
       });
 
@@ -112,7 +113,7 @@ export default {
     let response = await generateMessageResponse({
       runtime,
       context,
-      modelClass: "fast"
+      modelClass: ModelClass.SMALL,
     });
 
     response.inReplyTo = message.id;

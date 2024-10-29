@@ -9,6 +9,7 @@ import {
   HandlerCallback,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../../../core/types.ts";
 import fs from "fs";
@@ -47,7 +48,7 @@ const getMediaAttachmentId = async (
     const response = await generateText({
       runtime,
       context,
-      modelClass: "fast",
+      modelClass: ModelClass.SMALL,
     });
     console.log("response", response);
 

@@ -6,6 +6,7 @@ import {
   ActionExample,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../core/types.ts";
 
@@ -51,7 +52,7 @@ export default {
       const response = generateTrueOrFalse({
         context: shouldUnmuteContext,
         runtime,
-        modelClass: "fast"
+        modelClass: ModelClass.SMALL,
       });
 
       return response;

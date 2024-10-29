@@ -12,6 +12,7 @@ import {
   State,
   UUID,
   HandlerCallback,
+  ModelClass,
 } from "../../../core/types.ts";
 import { stringToUuid } from "../../../core/uuid.ts";
 import {
@@ -108,7 +109,7 @@ export class MessageManager {
       const response = await generateShouldRespond({
         runtime: this.runtime,
         context: shouldRespondContext,
-        modelClass: "fast",
+        modelClass: ModelClass.SMALL,
       });
 
       return response === "RESPOND";

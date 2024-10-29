@@ -5,6 +5,7 @@ import { parseJsonArrayFromText } from "../core/parsing.ts";
 import {
   IAgentRuntime,
   Memory,
+  ModelClass,
   Objective,
   type Goal,
   type State,
@@ -70,7 +71,7 @@ async function handler(
   const response = await generateText({
     runtime,
     context,
-    modelClass: "fast",
+    modelClass: ModelClass.SMALL,
   });
 
   // Parse the JSON response to extract goal updates

@@ -5,6 +5,7 @@ import { AgentRuntime } from "../../core/runtime.ts";
 import {
   Content,
   Memory,
+  ModelClass,
   State
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
@@ -175,7 +176,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
       let response = await generateMessageResponse({
         runtime: runtime,
         context,
-        modelClass: "fast"
+        modelClass: ModelClass.SMALL,
       });
 
       // save response to memory

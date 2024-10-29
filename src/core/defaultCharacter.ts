@@ -3,7 +3,7 @@ import { Character, ModelProvider } from "./types.ts";
 const defaultCharacter: Character = {
   name: "Eliza",
   clients: [
-    "discord",
+    // "discord",
     // "twitter"
   ],
   modelProvider: ModelProvider.OPENAI,

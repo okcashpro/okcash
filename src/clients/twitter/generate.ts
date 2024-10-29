@@ -3,7 +3,7 @@ import fs from "fs";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { IAgentRuntime } from "../../core/types.ts";
+import { IAgentRuntime, ModelClass } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { generateText } from "../../core/generation.ts";
@@ -108,7 +108,7 @@ export class TwitterGenerationClient extends ClientBase {
       const newTweetContent = await generateText({
         runtime: this.runtime,
         context,
-        modelClass: "slow",
+        modelClass: ModelClass.LARGE,
       });
       console.log("New Tweet:", newTweetContent);
       log_to_file(

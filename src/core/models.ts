@@ -1,18 +1,5 @@
-// TODO:
-// get modelType from runtime, and init runtime with modeltype, maybe we can do a smort thing and check the available models by key
-// figure out embedding solution for claude... you're gonna need openai for embeddings lol
-// add openrouter? someone else can do that
+import { Model, ModelProvider, ModelClass } from "./types.ts";
 
-
-// 3 kinds of models
-// - tiny for things that happen every time we do something, like handleResponse
-// - fast for things like summarize, ethics
-// - slow for things like creative writing and responses
-// - not all model providers provide embeddings
-
-import { Model, ModelProvider } from "./types.ts";
-
-// TODO: add openrouter ;)
 type Models = {
     [ModelProvider.OPENAI]: Model;
     [ModelProvider.CLAUDE]: Model;
@@ -21,6 +8,7 @@ type Models = {
     [ModelProvider.LLAMALOCAL]: Model;
     [ModelProvider.GOOGLE]: Model;
     [ModelProvider.CLAUDE_VERTEX]: Model;
+    // TODO: add OpenRouter - feel free to do this :)
 };
 
 const models: Models = {
@@ -35,16 +23,10 @@ const models: Models = {
             "temperature": 0.3,
         },
         "model": {
-            "tiny": {
-                "model": "gpt-4o-mini",
-            },
-            "fast": {
-                "model": "gpt-4o-mini",
-            },
-            "slow": {
-                "model": "gpt-4o",
-            },
-            "embedding": "text-embedding-3-small"
+            [ModelClass.SMALL]: "gpt-4o-mini",
+            [ModelClass.MEDIUM]: "gpt-4o",
+            [ModelClass.LARGE]: "gpt-4-turbo",
+            [ModelClass.EMBEDDING]: "text-embedding-3-small"
         }
     },
     [ModelProvider.CLAUDE]: {
@@ -58,16 +40,9 @@ const models: Models = {
         },
         "endpoint": "https://api.anthropic.com/v1",
         "model": {
-            "tiny": {
-                "model": "claude-3-haiku",
-            },
-            "fast": {
-                "model": "claude-3-5-sonnet",
-            },
-            "slow": {
-                "model": "claude-3-opus",
-            },
-            "embedding": "grok-2-beta"
+            [ModelClass.SMALL]: "claude-3-haiku",
+            [ModelClass.MEDIUM]: "claude-3-5-sonnet",
+            [ModelClass.LARGE]: "claude-3-opus"
         },
     },
     [ModelProvider.CLAUDE_VERTEX]: {
@@ -81,16 +56,10 @@ const models: Models = {
         },
         "endpoint": "https://api.anthropic.com/v1", // TODO: check
         "model": {
-            "tiny": {
-                "model": "claude-3-haiku",
-            },
-            "fast": {
-                "model": "claude-3-5-sonnet",
-            },
-            "slow": {
-                "model": "claude-3-opus",
-            },
-            "embedding": "grok-2-beta"
+            [ModelClass.SMALL]: "claude-3-haiku",
+            [ModelClass.MEDIUM]: "claude-3-5-sonnet",
+            [ModelClass.LARGE]: "claude-3-opus",
+            [ModelClass.EMBEDDING]: "grok-2-beta"
         },
     },
     [ModelProvider.GROK]: {
@@ -104,16 +73,10 @@ const models: Models = {
         },
         "endpoint": "https://api.x.ai/v1",
         "model": {
-            "tiny": {
-                "model": "grok-2-beta",
-            },
-            "fast": {
-                "model": "grok-2-beta",
-            },
-            "slow": {
-                "model": "grok-2-beta",
-            },
-            "embedding": "grok-2-beta"
+            [ModelClass.SMALL]: "grok-2-beta",
+            [ModelClass.MEDIUM]: "grok-2-beta",
+            [ModelClass.LARGE]: "grok-2-beta",
+            [ModelClass.EMBEDDING]: "grok-2-beta" // not sure about this one
         },
     },
     [ModelProvider.LLAMACLOUD]: {
@@ -126,16 +89,10 @@ const models: Models = {
         },
         "endpoint": "https://api.llamacloud.com/v1",
         "model": {
-            "tiny": {
-                "model": "meta-llama/Llama-3.2-3B-Instruct-Turbo",
-            },
-            "fast": {
-                "model": "meta-llama-3.1-8b-instruct",
-            },
-            "slow": {
-                "model": "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
-            },
-            "embedding": "togethercomputer/m2-bert-80M-32k-retrieval"
+            [ModelClass.SMALL]: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+            [ModelClass.MEDIUM]: "meta-llama-3.1-8b-instruct",
+            [ModelClass.LARGE]: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
+            [ModelClass.EMBEDDING]: "togethercomputer/m2-bert-80M-32k-retrieval"
         },
     },
     [ModelProvider.LLAMALOCAL]: {
@@ -147,16 +104,10 @@ const models: Models = {
             "temperature": 0.3,
         },
         "model": {
-            "tiny": {
-                "model": "bartowski/Llama-3.2-3B-Instruct-GGUF",
-            },
-            "fast": {
-                "model": "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf", // TODO: ?download=true
-            },
-            "slow": {
-                "model": "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO: ?download=true - also pull a 70B
-            },
-            "embedding": "togethercomputer/m2-bert-80M-32k-retrieval"
+            [ModelClass.SMALL]: "bartowski/Llama-3.2-3B-Instruct-GGUF",
+            [ModelClass.MEDIUM]: "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf", // TODO: ?download=true
+            [ModelClass.LARGE]: "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO: ?download=true
+            [ModelClass.EMBEDDING]: "togethercomputer/m2-bert-80M-32k-retrieval"
         },
     },
     [ModelProvider.GOOGLE]: {
@@ -169,21 +120,15 @@ const models: Models = {
             "temperature": 0.3,
         },
         "model": {
-            "tiny": {
-                "model": "gemini-1.5-flash",
-            },
-            "fast": {
-                "model": "gemini-1.5-flash",
-            },
-            "slow": {
-                "model": "gemini-1.5-pro",
-            },
-            "embedding": "text-embedding-004",
+            [ModelClass.SMALL]: "gemini-1.5-flash",
+            [ModelClass.MEDIUM]: "gemini-1.5-flash",
+            [ModelClass.LARGE]: "gemini-1.5-pro",
+            [ModelClass.EMBEDDING]: "text-embedding-004"
         }
     }
 }
 
-export function getModel(provider: ModelProvider, type: "tiny" | "fast" | "slow" | "embedding") {
+export function getModel(provider: ModelProvider, type: ModelClass) {
     return models[provider].model[type];
 }
 

@@ -22,6 +22,7 @@ import {
   IPdfService,
   ITranscriptionService,
   IVideoService,
+  ModelClass,
   ModelProvider,
   Provider,
   State,
@@ -467,7 +468,7 @@ export class AgentRuntime implements IAgentRuntime {
     const result = await generateText({
       runtime: this,
       context,
-      modelClass: "fast",
+      modelClass: ModelClass.SMALL,
     });
 
     const parsedResult = parseJsonArrayFromText(result) as unknown as string[];

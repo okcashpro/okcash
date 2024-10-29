@@ -10,6 +10,7 @@ import {
   HandlerCallback,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../../../core/types.ts";
 import fs from "fs";
@@ -55,7 +56,7 @@ const getAttachmentIds = async (
     const response = await generateText({
       runtime,
       context,
-      modelClass: "fast",
+      modelClass: ModelClass.SMALL,
     });
     console.log("response", response);
     // try parsing to a json object
@@ -202,7 +203,7 @@ const summarizeAction = {
     const summary = await generateText({
       runtime,
       context,
-      modelClass: "fast",
+      modelClass: ModelClass.SMALL,
     });
 
     log_to_file(

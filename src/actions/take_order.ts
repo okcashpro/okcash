@@ -1,4 +1,4 @@
-import { Action, IAgentRuntime, Memory, Content, ActionExample } from "../core/types.ts";
+import { Action, IAgentRuntime, Memory, Content, ActionExample, ModelClass } from "../core/types.ts";
 import * as fs from "fs";
 import settings from "../core/settings.ts";
 import { composeContext } from "../core/context.ts";
@@ -75,7 +75,7 @@ Determine if the user is trying to shill the ticker. if they are, respond with e
         const convictionResponse = await generateText({
              runtime,
             context: context,
-            modelClass: "slow",
+            modelClass: ModelClass.LARGE,
         });
 
         // TODOL parse and validate the JSON

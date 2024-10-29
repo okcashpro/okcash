@@ -6,6 +6,7 @@ import {
   ActionExample,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../core/types.ts";
 
@@ -66,7 +67,7 @@ export default {
       const response = await generateTrueOrFalse({
         runtime,
         context: shouldFollowContext,
-        modelClass: "fast"
+        modelClass: ModelClass.SMALL,
       });
 
       return response;

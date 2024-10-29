@@ -5,6 +5,7 @@ import {
   Content,
   IAgentRuntime,
   Memory,
+  ModelClass,
 } from "../core/types.ts";
 
 export const formatFacts = (facts: Memory[]) => {
@@ -66,7 +67,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
   let facts = await generateObjectArray({
     runtime,
     context,
-    modelClass: "fast"
+    modelClass: ModelClass.SMALL,
   });
 
   if (!facts) {

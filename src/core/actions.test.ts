@@ -10,6 +10,7 @@ import { embeddingZeroVector } from "./memory.ts";
 import {
   Content,
   IAgentRuntime,
+  ModelClass,
   State,
   type Memory,
   type UUID,
@@ -58,7 +59,7 @@ async function handleMessage(
     const response = await generateMessageResponse({
       context,
       runtime,
-      modelClass: "fast"
+      modelClass: ModelClass.SMALL,
     });
 
     runtime.databaseAdapter.log({

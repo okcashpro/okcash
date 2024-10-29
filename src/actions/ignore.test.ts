@@ -6,6 +6,7 @@ import {
   Content,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
   type UUID,
 } from "../core/types.ts";
@@ -60,7 +61,7 @@ async function handleMessage(
   let response = await generateMessageResponse({
     context,
     runtime,
-    modelClass: "fast"
+    modelClass: ModelClass.SMALL,
   });
 
   await runtime.databaseAdapter.log({

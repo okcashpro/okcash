@@ -8,6 +8,7 @@ import {
   HandlerCallback,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../../../core/types.ts";
 import { VideoService } from "../../../services/video.ts";
@@ -45,7 +46,7 @@ const getMediaUrl = async (
     const response = await generateText({
       runtime,
       context,
-      modelClass: "fast",
+      modelClass: ModelClass.SMALL,
     });
 
     const parsedResponse = parseJSONObjectFromText(response) as {

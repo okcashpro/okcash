@@ -11,6 +11,7 @@ import {
   HandlerCallback,
   IAgentRuntime,
   Memory,
+  ModelClass,
   State,
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
@@ -280,7 +281,7 @@ export class TwitterInteractionClient extends ClientBase {
     const shouldRespond = await generateShouldRespond({
       runtime: this.runtime,
       context: shouldRespondContext,
-      modelClass: "fast"
+      modelClass: ModelClass.SMALL,
     });
 
     if (!shouldRespond) {
