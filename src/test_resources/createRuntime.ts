@@ -1,5 +1,4 @@
 import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
-// import { load } from "../adapters/sqlite/sqlite_vss.ts";
 import { load } from "../adapters/sqlite/sqlite_vec.ts";
 import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
 import { SupabaseDatabaseAdapter } from "../adapters/supabase.ts";

@@ -1,5 +1,3 @@
-// clients/telegram/messageManager.ts
-
 import { Message } from "@telegraf/types";
 import { Context } from "telegraf";
 import { Telegraf } from "telegraf";
@@ -13,146 +11,136 @@ import {
   Memory,
   State,
   UUID,
+  HandlerCallback,
 } from "../../../core/types.ts";
 import { stringToUuid } from "../../../core/uuid.ts";
-import { messageHandlerTemplate } from "../../discord/templates.ts";
+import {
+  messageHandlerTemplate,
+  shouldRespondTemplate,
+} from "../../discord/templates.ts";
+import ImageDescriptionService from "../../../services/image.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
 export class MessageManager {
   private bot: Telegraf<Context>;
   private runtime: IAgentRuntime;
+  private imageService: ImageDescriptionService;
 
   constructor(bot: Telegraf<Context>, runtime: IAgentRuntime) {
     this.bot = bot;
     this.runtime = runtime;
+    this.imageService = ImageDescriptionService.getInstance(this.runtime);
   }
 
-  public async handleMessage(ctx: Context): Promise<void> {
-    if (!ctx.message || !ctx.from) {
-      console.log("❌ Invalid message or sender");
-      return;
-    }
-
-    if (!("text" in ctx.message)) {
-      console.log("❌ Not a text message");
-      return;
-    }
-
-    const message = ctx.message as Message.TextMessage;
-    console.log("🔍 Processing message:", message.text);
+  // Process image messages and generate descriptions
+  private async processImage(
+    message: Message
+  ): Promise<{ description: string } | null> {
+    console.log("🖼️ Processing image message:", JSON.stringify(message, null, 2));
 
     try {
-      const userId = stringToUuid(ctx.from.id.toString()) as UUID;
-      const userName =
-        ctx.from.username || ctx.from.first_name || "Unknown User";
-      const chatId = stringToUuid(ctx.chat?.id.toString()) as UUID;
-      const agentId = this.runtime.agentId;
-      const roomId = chatId;
+      let imageUrl: string | null = null;
 
-      // Ensure users and room exist
-      await Promise.all([
-        this.runtime.ensureUserExists(
-          agentId,
-          this.bot.botInfo?.username || "Bot",
-          this.runtime.character.name,
-          "telegram"
-        ),
-        this.runtime.ensureUserExists(userId, userName, userName, "telegram"),
-        this.runtime.ensureRoomExists(roomId),
-        this.runtime.ensureParticipantInRoom(userId, roomId),
-        this.runtime.ensureParticipantInRoom(agentId, roomId),
-      ]);
-
-      const messageId = stringToUuid(message.message_id.toString()) as UUID;
-
-      // Check for duplicate message
-      const existingMessage =
-        await this.runtime.messageManager.getMemoryById(messageId);
-      if (existingMessage && existingMessage.content.text === message.text) {
-        return;
+      // Handle photo messages
+      if ("photo" in message && message.photo?.length > 0) {
+        const photo = message.photo[message.photo.length - 1];
+        const fileLink = await this.bot.telegram.getFileLink(photo.file_id);
+        imageUrl = fileLink.toString();
+      }
+      // Handle image documents
+      else if (
+        "document" in message &&
+        message.document?.mime_type?.startsWith("image/")
+      ) {
+        const doc = message.document;
+        const fileLink = await this.bot.telegram.getFileLink(doc.file_id);
+        imageUrl = fileLink.toString();
       }
 
-      const content: Content = {
-        text: message.text,
-        source: "telegram",
-        // inReplyTo: message.reply_to_message
-        //   ? stringToUuid(message.reply_to_message.message_id.toString())
-        //   : undefined,
-      };
-
-      const memory: Memory = {
-        id: messageId,
-        userId,
-        roomId,
-        content,
-        createdAt: message.date * 1000,
-        embedding: embeddingZeroVector,
-      };
-
-      await this.runtime.messageManager.createMemory(memory);
-
-      let state = await this.runtime.composeState(memory);
-      state = await this.runtime.updateRecentMessageState(state);
-
-      const responseContent = await this._generateResponse(memory, state);
-
-      if (!responseContent || !responseContent.text) {
-        console.log("❌ No response generated");
-        return;
+      if (imageUrl) {
+        const { title, description } = await this.imageService.describeImage(imageUrl);
+        const fullDescription = `[Image: ${title}\n${description}]`;
+        return { description: fullDescription };
       }
-
-      console.log("📤 Sending response:", responseContent.text);
-
-      // Split message if it's too long
-      const chunks = this.splitMessage(responseContent.text);
-
-      for (let i = 0; i < chunks.length; i++) {
-        const chunk = chunks[i];
-        const sentMessage = await ctx.telegram.sendMessage(ctx.chat.id, chunk, {
-          // reply_parameters:
-          //   i === 0
-          //     ? {
-          //         message_id: message.message_id,
-          //         chat_id: ctx.chat.id,
-          //       }
-          //     : undefined,
-        });
-
-        // Save bot's response as memory
-        if (sentMessage) {
-          const botMemory: Memory = {
-            id: stringToUuid(sentMessage.message_id.toString()) as UUID,
-            userId: agentId,
-            roomId,
-            content: {
-              text: chunk,
-              source: "telegram",
-              // inReplyTo: messageId,
-              action:
-                chunks.length > 1 && i < chunks.length - 1
-                  ? "CONTINUE"
-                  : undefined,
-            },
-            createdAt: Date.now(),
-            embedding: embeddingZeroVector,
-          };
-
-          await this.runtime.messageManager.createMemory(botMemory);
-        }
-      }
-
-      // Update state after response
-      state = await this.runtime.updateRecentMessageState(state);
-      await this.runtime.evaluate(memory, state);
     } catch (error) {
-      console.error("❌ Error handling message:", error);
-      await ctx.reply(
-        "Sorry, I encountered an error while processing your request."
-      );
+      console.error("❌ Error processing image:", error);
     }
+
+    return null; // No image found
   }
 
+  // Decide if the bot should respond to the message
+  private async _shouldRespond(
+    message: Message,
+    state: State
+  ): Promise<boolean> {
+    // Respond if bot is mentioned
+    if (
+      "text" in message &&
+      message.text?.includes(`@${this.bot.botInfo?.username}`)
+    ) {
+      return true;
+    }
+
+    // Respond to private chats
+    if (message.chat.type === "private") {
+      return true;
+    }
+
+    // Respond to images in group chats
+    if (
+      "photo" in message ||
+      ("document" in message &&
+        message.document?.mime_type?.startsWith("image/"))
+    ) {
+      return true;
+    }
+
+    // Use AI to decide for text or captions
+    if ("text" in message || ("caption" in message && message.caption)) {
+      const shouldRespondContext = composeContext({
+        state,
+        template: shouldRespondTemplate,
+      });
+
+      const response = await this.runtime.shouldRespondCompletion({
+        context: shouldRespondContext,
+        stop: ["\n"],
+        max_response_length: 5,
+      });
+
+      return response === "RESPOND";
+    }
+
+    return false; // No criteria met
+  }
+
+  // Send long messages in chunks
+  private async sendMessageInChunks(
+    ctx: Context,
+    content: string,
+    replyToMessageId?: number
+  ): Promise<Message.TextMessage[]> {
+    const chunks = this.splitMessage(content);
+    const sentMessages: Message.TextMessage[] = [];
+
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
+      const sentMessage = (await ctx.telegram.sendMessage(ctx.chat.id, chunk, {
+        reply_parameters:
+          i === 0 && replyToMessageId
+            ? { message_id: replyToMessageId }
+            : undefined,
+      })) as Message.TextMessage;
+
+      sentMessages.push(sentMessage);
+    }
+
+    return sentMessages;
+  }
+
+  // Split message into smaller parts
   private splitMessage(text: string): string[] {
     const chunks: string[] = [];
     let currentChunk = "";
@@ -171,24 +159,21 @@ export class MessageManager {
     return chunks;
   }
 
+  // Generate a response using AI
   private async _generateResponse(
     message: Memory,
-    state: State
+    state: State,
+    context: string
   ): Promise<Content> {
     const { userId, roomId } = message;
     const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-    const context = composeContext({
-      state,
-      template: messageHandlerTemplate,
-    });
 
     log_to_file(
       `${state.agentName}_${datestr}_telegram_message_context`,
       context
     );
 
-    const body = {
+    const response = await this.runtime.messageCompletion({
       context,
       stop: ["<|eot|>"],
       temperature: 0.7,
@@ -198,18 +183,7 @@ export class MessageManager {
       model: this.runtime.getSetting("XAI_MODEL")
         ? this.runtime.getSetting("XAI_MODEL")
         : "gpt-4o-mini",
-    }
-
-    console.log("XAI_MODEL", body.model);
-
-    if (body.model.includes("llama")) {
-      (body as any).repetition_penalty = 1.6;
-    } else {
-      (body as any).frequency_penalty = 0.5;
-      (body as any).presence_penalty = 0.5;
-    }
-
-    const response = await this.runtime.messageCompletion(body);
+    });
 
     if (!response) {
       console.error("❌ No response from runtime.messageCompletion");
@@ -229,5 +203,159 @@ export class MessageManager {
     });
 
     return response;
+  }
+
+  // Main handler for incoming messages
+  public async handleMessage(ctx: Context): Promise<void> {
+    if (!ctx.message || !ctx.from) {
+      return; // Exit if no message or sender info
+    }
+
+    const message = ctx.message;
+
+    try {
+      // Convert IDs to UUIDs
+      const userId = stringToUuid(ctx.from.id.toString()) as UUID;
+      const userName =
+        ctx.from.username || ctx.from.first_name || "Unknown User";
+      const chatId = stringToUuid(ctx.chat?.id.toString()) as UUID;
+      const agentId = this.runtime.agentId;
+      const roomId = chatId;
+
+      // Ensure user and room exist
+      await Promise.all([
+        this.runtime.ensureUserExists(
+          agentId,
+          this.bot.botInfo?.username || "Bot",
+          this.runtime.character.name,
+          "telegram"
+        ),
+        this.runtime.ensureUserExists(userId, userName, userName, "telegram"),
+        this.runtime.ensureRoomExists(roomId),
+        this.runtime.ensureParticipantInRoom(userId, roomId),
+        this.runtime.ensureParticipantInRoom(agentId, roomId),
+      ]);
+
+      const messageId = stringToUuid(message.message_id.toString()) as UUID;
+
+      // Handle images
+      const imageInfo = await this.processImage(message);
+
+      // Get text or caption
+      let messageText = "";
+      if ("text" in message) {
+        messageText = message.text;
+      } else if ("caption" in message && message.caption) {
+        messageText = message.caption;
+      }
+
+      // Combine text and image description
+      const fullText = imageInfo
+        ? `${messageText} ${imageInfo.description}`
+        : messageText;
+
+      if (!fullText) {
+        return; // Skip if no content
+      }
+
+      const content: Content = {
+        text: fullText,
+        source: "telegram",
+        inReplyTo:
+          "reply_to_message" in message && message.reply_to_message
+            ? stringToUuid(message.reply_to_message.message_id.toString())
+            : undefined,
+      };
+
+      // Create memory for the message
+      const memory: Memory = {
+        id: messageId,
+        userId,
+        roomId,
+        content,
+        createdAt: message.date * 1000,
+        embedding: embeddingZeroVector,
+      };
+
+      await this.runtime.messageManager.createMemory(memory);
+
+      // Update state with the new memory
+      let state = await this.runtime.composeState(memory);
+      state = await this.runtime.updateRecentMessageState(state);
+
+      // Decide whether to respond
+      const shouldRespond = await this._shouldRespond(message, state);
+      if (!shouldRespond) return;
+
+      // Generate response
+      const context = composeContext({
+        state,
+        template: messageHandlerTemplate,
+      });
+
+      const responseContent = await this._generateResponse(
+        memory,
+        state,
+        context
+      );
+
+      if (!responseContent || !responseContent.text) return;
+
+      // Send response in chunks
+      const callback: HandlerCallback = async (content: Content) => {
+        const sentMessages = await this.sendMessageInChunks(
+          ctx,
+          content.text,
+          message.message_id
+        );
+
+        const memories: Memory[] = [];
+
+        // Create memories for each sent message
+        for (let i = 0; i < sentMessages.length; i++) {
+          const sentMessage = sentMessages[i];
+          const isLastMessage = i === sentMessages.length - 1;
+
+          const memory: Memory = {
+            id: stringToUuid(sentMessage.message_id.toString()),
+            userId: agentId,
+            roomId,
+            content: {
+              ...content,
+              text: sentMessage.text,
+              action: !isLastMessage ? "CONTINUE" : undefined,
+              inReplyTo: messageId,
+            },
+            createdAt: sentMessage.date * 1000,
+            embedding: embeddingZeroVector,
+          };
+
+          await this.runtime.messageManager.createMemory(memory);
+          memories.push(memory);
+        }
+
+        return memories;
+      };
+
+      // Execute callback to send messages and log memories
+      const responseMessages = await callback(responseContent);
+
+      // Update state after response
+      state = await this.runtime.updateRecentMessageState(state);
+      await this.runtime.evaluate(memory, state);
+
+      // Handle any resulting actions
+      await this.runtime.processActions(
+        memory,
+        responseMessages,
+        state,
+        callback
+      );
+    } catch (error) {
+      console.error("❌ Error handling message:", error);
+      await ctx.reply(
+        "Sorry, I encountered an error while processing your request."
+      );
+    }
   }
 }
