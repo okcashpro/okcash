@@ -47,9 +47,7 @@ export async function generateText({
         return "";
     }
     let retryLength = 1000; // exponential backoff
-    console.log("model class is", modelClass)
     const model = models[runtime.modelProvider].model[modelClass];
-    console.log("model is", model)
     const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
     const max_response_length = models[runtime.modelProvider].settings.maxOutputTokens;
     const _stop = stop || models[runtime.modelProvider].settings.stop;
