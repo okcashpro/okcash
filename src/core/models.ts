@@ -141,7 +141,7 @@ const models: Models = {
     [ModelProvider.LLAMALOCAL]: {
         "settings": {
             "stop": ["<|eot_id|>","<|eom_id|>"],
-            "maxInputTokens": 200000,
+            "maxInputTokens": 32768,
             "maxOutputTokens": 8192,
             "repetition_penalty": 0.0,
             "temperature": 0.3,
@@ -154,7 +154,7 @@ const models: Models = {
                 "model": "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf", // TODO: ?download=true
             },
             "slow": {
-                "model": "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf", // TODO: ?download=true
+                "model": "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO: ?download=true - also pull a 70B
             },
             "embedding": "togethercomputer/m2-bert-80M-32k-retrieval"
         },
