@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node --loader ts-node/esm src/index.ts",
+    "start:arok": "node --loader ts-node/esm src/index.ts --characters=\"characters/arok.character.json\"",
     "start:service:ruby": "pm2 start npm --name=\"ruby\" --restart-delay=3000 --max-restarts=10 -- run start:ruby",
     "stop:service:ruby": "pm2 stop ruby",
     "start:ruby": "node --loader ts-node/esm src/index.ts --characters=\"characters/ruby.character.json\"",
@@ -127,6 +128,7 @@
     "onnxruntime-node": "1.19.2",
     "openai": "^4.56.0",
     "pdfjs-dist": "4.2.67",
+    "pg": "^8.13.1",
     "playwright": "1.47.0",
     "pm2": "5.4.2",
     "prism-media": "1.3.5",
