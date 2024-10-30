@@ -64,6 +64,31 @@ export interface RecommenderMetricsHistory {
   recordedAt: Date;
 }
 
+export interface TradePerformance {
+  token_address: string;
+  recommender_id: string;
+  buy_price: number;
+  sell_price: number;
+  buy_timeStamp: string;
+  sell_timeStamp: string;
+  buy_amount: number;
+  sell_amount: number;
+  buy_sol: number;
+  received_sol: number;
+  buy_value_usd: number;
+  sell_value_usd: number;
+  profit_usd: number;
+  profit_percent: number;
+  buy_market_cap: number;
+  sell_market_cap: number;
+  market_cap_change: number;
+  buy_liquidity: number;
+  sell_liquidity: number;
+  liquidity_change: number;
+  last_updated: string;
+  rapidDump: boolean;
+}
+
 interface RecommenderMetricsRow {
   recommender_id: string;
   overall_trust_score: number;
@@ -191,6 +216,67 @@ export class TrustScoreDatabase {
              FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
          );
      `);
+
+    // ----- Create TradePerformance Tables -----
+    this.db.exec(`
+        CREATE TABLE IF NOT EXISTS trade (
+            token_address TEXT NOT NULL,
+            recommender_id TEXT NOT NULL,
+            buy_price REAL NOT NULL,
+            sell_price REAL,
+            buy_timeStamp TEXT NOT NULL,
+            sell_timeStamp TEXT,
+            buy_amount REAL NOT NULL,
+            sell_amount REAL,
+            buy_sol REAL NOT NULL,
+            received_sol REAL,
+            buy_value_usd REAL NOT NULL,
+            sell_value_usd REAL,
+            profit_usd REAL,
+            profit_percent REAL,
+            buy_market_cap REAL NOT NULL,
+            sell_market_cap REAL,
+            market_cap_change REAL,
+            buy_liquidity REAL NOT NULL,
+            sell_liquidity REAL,
+            liquidity_change REAL,
+            last_updated TEXT DEFAULT (datetime('now')),
+            rapidDump BOOLEAN DEFAULT FALSE,
+            PRIMARY KEY (token_address, recommender_id, buy_timeStamp),
+            FOREIGN KEY (token_address) REFERENCES token_performance(token_address) ON DELETE CASCADE,
+            FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
+        );
+    `);
+    // create trade simulation table
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS simulation_trade (
+          token_address TEXT NOT NULL,
+          recommender_id TEXT NOT NULL,
+          buy_price REAL NOT NULL,
+          sell_price REAL,
+          buy_timeStamp TEXT NOT NULL,
+          sell_timeStamp TEXT,
+          buy_amount REAL NOT NULL,
+          sell_amount REAL,
+          buy_sol REAL NOT NULL,
+          received_sol REAL,
+          buy_value_usd REAL NOT NULL,
+          sell_value_usd REAL,
+          profit_usd REAL,
+          profit_percent REAL,
+          buy_market_cap REAL NOT NULL,
+          sell_market_cap REAL,
+          market_cap_change REAL,
+          buy_liquidity REAL NOT NULL,
+          sell_liquidity REAL,
+          liquidity_change REAL,
+          last_updated TEXT DEFAULT (datetime('now')),
+          rapidDump BOOLEAN DEFAULT FALSE,
+          PRIMARY KEY (token_address, recommender_id, buy_timeStamp),
+          FOREIGN KEY (token_address) REFERENCES token_performance(token_address) ON DELETE CASCADE,
+          FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
+      );
+  `);
   }
 
   /**
@@ -650,6 +736,219 @@ export class TrustScoreDatabase {
       consistencyScore: row.consistency_score,
       recordedAt: new Date(row.recorded_at),
     }));
+  }
+
+  /**
+   * Inserts a new trade performance into the specified table.
+   * @param trade The TradePerformance object containing trade details.
+   * @param isSimulation Whether the trade is a simulation. If true, inserts into simulation_trade; otherwise, into trade.
+   * @returns boolean indicating success.
+   */
+  addTradePerformance(trade: TradePerformance, isSimulation: boolean): boolean {
+    const tableName = isSimulation ? "simulation_trade" : "trade";
+    const sql = `
+      INSERT INTO ${tableName} (
+          token_address,
+          recommender_id,
+          buy_price,
+          sell_price,
+          buy_timeStamp,
+          sell_timeStamp,
+          buy_amount,
+          sell_amount,
+          buy_sol,
+          received_sol,
+          buy_value_usd,
+          sell_value_usd,
+          profit_usd,
+          profit_percent,
+          buy_market_cap,
+          sell_market_cap,
+          market_cap_change,
+          buy_liquidity,
+          sell_liquidity,
+          liquidity_change,
+          last_updated,
+          rapidDump
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  `;
+    try {
+      this.db
+        .prepare(sql)
+        .run(
+          trade.token_address,
+          trade.recommender_id,
+          trade.buy_price,
+          trade.sell_price || null,
+          trade.buy_timeStamp,
+          trade.sell_timeStamp || null,
+          trade.buy_amount,
+          trade.sell_amount || null,
+          trade.buy_sol,
+          trade.received_sol || null,
+          trade.buy_value_usd,
+          trade.sell_value_usd || null,
+          trade.profit_usd || null,
+          trade.profit_percent || null,
+          trade.buy_market_cap,
+          trade.sell_market_cap || null,
+          trade.market_cap_change || null,
+          trade.buy_liquidity,
+          trade.sell_liquidity || null,
+          trade.liquidity_change || null,
+          trade.last_updated || new Date().toISOString(),
+          trade.rapidDump ? 1 : 0
+        );
+      console.log(`Inserted trade into ${tableName}:`, trade);
+      return true;
+    } catch (error) {
+      console.error(`Error inserting trade into ${tableName}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Updates an existing trade with sell details.
+   * @param tokenAddress The address of the token.
+   * @param recommenderId The UUID of the recommender.
+   * @param buyTimeStamp The timestamp when the buy occurred.
+   * @param sellDetails An object containing sell-related details.
+   * @param isSimulation Whether the trade is a simulation. If true, updates in simulation_trade; otherwise, in trade.
+   * @returns boolean indicating success.
+   */
+
+  updateTradePerformanceOnSell(
+    tokenAddress: string,
+    recommenderId: string,
+    buyTimeStamp: string,
+    sellDetails: {
+      sell_price: number;
+      sell_timeStamp: string;
+      sell_amount: number;
+      received_sol: number;
+      sell_value_usd: number;
+      profit_usd: number;
+      profit_percent: number;
+      sell_market_cap: number;
+      market_cap_change: number;
+      sell_liquidity: number;
+      liquidity_change: number;
+      rapidDump: boolean;
+    },
+    isSimulation: boolean
+  ): boolean {
+    const tableName = isSimulation ? "simulation_trade" : "trade";
+    const sql = `
+        UPDATE ${tableName}
+        SET
+            sell_price = ?,
+            sell_timeStamp = ?,
+            sell_amount = ?,
+            received_sol = ?,
+            sell_value_usd = ?,
+            profit_usd = ?,
+            profit_percent = ?,
+            sell_market_cap = ?,
+            market_cap_change = ?,
+            sell_liquidity = ?,
+            liquidity_change = ?,
+            rapidDump = ?
+        WHERE
+            token_address = ?
+            AND recommender_id = ?
+            AND buy_timeStamp = ?;
+    `;
+    try {
+      const result = this.db
+        .prepare(sql)
+        .run(
+          sellDetails.sell_price,
+          sellDetails.sell_timeStamp,
+          sellDetails.sell_amount,
+          sellDetails.received_sol,
+          sellDetails.sell_value_usd,
+          sellDetails.profit_usd,
+          sellDetails.profit_percent,
+          sellDetails.sell_market_cap,
+          sellDetails.market_cap_change,
+          sellDetails.sell_liquidity,
+          sellDetails.liquidity_change,
+          sellDetails.rapidDump ? 1 : 0,
+          tokenAddress,
+          recommenderId,
+          buyTimeStamp
+        );
+
+      if (result.changes === 0) {
+        console.warn(
+          `No trade found to update in ${tableName} for token: ${tokenAddress}, recommender: ${recommenderId}, buyTimeStamp: ${buyTimeStamp}`
+        );
+        return false;
+      }
+
+      console.log(`Updated trade in ${tableName}:`, {
+        token_address: tokenAddress,
+        recommender_id: recommenderId,
+        buy_timeStamp: buyTimeStamp,
+        ...sellDetails,
+      });
+      return true;
+    } catch (error) {
+      console.error(`Error updating trade in ${tableName}:`, error);
+      return false;
+    }
+  }
+
+  //getTradePerformance
+
+  /**
+   * Retrieves trade performance metrics.
+   * @param tokenAddress Token's address
+   * @param recommenderId Recommender's UUID
+   * @param buyTimeStamp Timestamp when the buy occurred
+   * @param isSimulation Whether the trade is a simulation. If true, retrieves from simulation_trade; otherwise, from trade.
+   * @returns TradePerformance object or null
+   */
+
+  getTradePerformance(
+    tokenAddress: string,
+    recommenderId: string,
+    buyTimeStamp: string,
+    isSimulation: boolean
+  ): TradePerformance | null {
+    const tableName = isSimulation ? "simulation_trade" : "trade";
+    const sql = `SELECT * FROM ${tableName} WHERE token_address = ? AND recommender_id = ? AND buy_timeStamp = ?;`;
+    const row = this.db
+      .prepare(sql)
+      .get(tokenAddress, recommenderId, buyTimeStamp) as
+      | TradePerformance
+      | undefined;
+    if (!row) return null;
+
+    return {
+      token_address: row.token_address,
+      recommender_id: row.recommender_id,
+      buy_price: row.buy_price,
+      sell_price: row.sell_price,
+      buy_timeStamp: row.buy_timeStamp,
+      sell_timeStamp: row.sell_timeStamp,
+      buy_amount: row.buy_amount,
+      sell_amount: row.sell_amount,
+      buy_sol: row.buy_sol,
+      received_sol: row.received_sol,
+      buy_value_usd: row.buy_value_usd,
+      sell_value_usd: row.sell_value_usd,
+      profit_usd: row.profit_usd,
+      profit_percent: row.profit_percent,
+      buy_market_cap: row.buy_market_cap,
+      sell_market_cap: row.sell_market_cap,
+      market_cap_change: row.market_cap_change,
+      buy_liquidity: row.buy_liquidity,
+      sell_liquidity: row.sell_liquidity,
+      liquidity_change: row.liquidity_change,
+      last_updated: row.last_updated,
+      rapidDump: row.rapidDump,
+    };
   }
 
   /**
