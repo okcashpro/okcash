@@ -1,82 +1,84 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "packageRules": [
     {
       "groupName": "Discord.js ecosystem",
-      "matchPackagePatterns": [
-        "^@discordjs/",
-        "^discord.js"
+      "matchPackageNames": [
+        "/^@discordjs//",
+        "/^discord.js/"
       ]
     },
     {
       "groupName": "TypeScript and related",
-      "matchPackagePatterns": [
-        "^@typescript-eslint/",
-        "^typescript$",
-        "^ts-",
-        "^tslib$"
+      "matchPackageNames": [
+        "/^@typescript-eslint//",
+        "/^typescript$/",
+        "/^ts-/",
+        "/^tslib$/"
       ]
     },
     {
       "groupName": "Testing frameworks",
-      "matchPackagePatterns": [
-        "^jest$",
-        "^@types/jest$"
+      "matchPackageNames": [
+        "/^jest$/",
+        "/^@types/jest$/"
       ]
     },
     {
       "groupName": "Rollup and plugins",
-      "matchPackagePatterns": [
-        "^@rollup/",
-        "^rollup"
+      "matchPackageNames": [
+        "/^@rollup//",
+        "/^rollup/"
       ]
     },
     {
       "groupName": "ESLint and formatting",
-      "matchPackagePatterns": [
-        "^eslint",
-        "^prettier"
+      "matchPackageNames": [
+        "/^eslint/",
+        "/^prettier/"
       ]
     },
     {
       "groupName": "SQLite related",
-      "matchPackagePatterns": [
-        "sqlite",
-        "^@types/better-sqlite3",
-        "^@types/sql.js"
+      "matchPackageNames": [
+        "/sqlite/",
+        "/^@types/better-sqlite3/",
+        "/^@types/sql.js/"
       ]
     },
     {
       "groupName": "AI/ML packages",
-      "matchPackagePatterns": [
-        "^@anthropic-ai/",
-        "^@huggingface/",
-        "^openai$",
-        "^tiktoken$"
+      "matchPackageNames": [
+        "/^@anthropic-ai//",
+        "/^@huggingface//",
+        "/^openai$/",
+        "/^tiktoken$/"
       ]
     },
     {
       "groupName": "Audio processing",
-      "matchPackagePatterns": [
-        "^wav",
-        "^@discordjs/opus",
-        "^fluent-ffmpeg",
-        "^ffmpeg",
-        "^@types/wav"
+      "matchPackageNames": [
+        "/^wav/",
+        "/^@discordjs/opus/",
+        "/^fluent-ffmpeg/",
+        "/^ffmpeg/",
+        "/^@types/wav/"
       ]
     },
     {
       "groupName": "Solana packages",
-      "matchPackagePatterns": [
-        "^@solana/"
+      "matchPackageNames": [
+        "/^@solana//"
       ]
     }
   ],
   "timezone": "UTC",
-  "schedule": ["every weekend"],
+  "schedule": [
+    "every weekend"
+  ],
   "prHourlyLimit": 2,
   "prConcurrentLimit": 10,
   "rangeStrategy": "pin",
