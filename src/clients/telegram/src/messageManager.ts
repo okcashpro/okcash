@@ -207,6 +207,12 @@ export class MessageManager {
       return; // Exit if no message or sender info
     }
 
+    //@ts-ignore
+    if (ctx.message.text.startsWith("/")) {
+      //Handle commands?
+      return;
+    }
+
     const message = ctx.message;
 
     try {
