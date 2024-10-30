@@ -20,7 +20,7 @@ export default {
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
         
-        const imagePrompt = "";
+        const imagePrompt = message.content.text;
         const res: { image: string, caption: string }[] = [];
         const images = await generateImage({
             prompt: imagePrompt,
