@@ -34,18 +34,20 @@ export default {
                 const caption = await generateCaption({
                     imageUrl: image
                 }, runtime);
-                if (caption.success) {
-                    res.push({image: image, caption: caption.caption});
-                } else {
-                    console.error("Failed to generate caption for image", image, caption.error);
-                    res.push({image: image, caption: "Uncaptioned image"});
-                }
+                res.push({image: image, caption: caption.title})
+                callback({
+                    text: caption.description,
+                    attachments: [{
+                        id: crypto.randomUUID(),
+                        url: image,
+                        title: "Generated image",
+                        source: "imageGeneration",
+                        description: caption.title,
+                        text: caption.description
+                    }]
+                }, [])
             }
         }
-        callback(null, {
-            success: true,
-            data: res
-        });
     },
     examples: [
         [

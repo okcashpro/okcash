@@ -3,6 +3,7 @@ import { Character, ModelProvider } from "./types.ts";
 const defaultCharacter: Character = {
   name: "Eliza",
   clients: [
+    "telegram",
     // "discord",
     // "twitter"
   ],

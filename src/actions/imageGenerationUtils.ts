@@ -73,13 +73,14 @@ export const generateImage = async (data: {
   }
 };
 
-export const generateCaption = async (data: {imageUrl: string}, runtime: IAgentRuntime) => {
+export const generateCaption = async (data: {imageUrl: string}, runtime: IAgentRuntime): Promise<{
+    title: string,
+    description: string
+}> => {
     const { imageUrl } = data;
-    try {
-        const resp = await runtime.imageDescriptionService.describeImage(imageUrl);
-        return { success: true, caption: resp.title.trim() };
-    } catch (error) {
-        console.error(error);
-        return { success: false, error: error, caption: "" };
-    }
+    const resp = await runtime.imageDescriptionService.describeImage(imageUrl);
+    return {
+        title: resp.title.trim(),
+        description: resp.description.trim()
+    };
 }

@@ -210,11 +210,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
       if (images.data && images.data.length > 0) {
         for(let i = 0; i < images.data.length; i++) {
           const caption = await generateCaption({imageUrl: images.data[i]}, agent);
-          if (caption.success) {
-            imagesRes.push({image: images.data[i], caption: caption.caption});
-          } else {
-            imagesRes.push({image: images.data[i], caption: "Uncaptioned image"});
-          }
+          imagesRes.push({image: images.data[i], caption: caption.title});
         }
       }
       res.json({images: imagesRes});
