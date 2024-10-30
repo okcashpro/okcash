@@ -59,7 +59,6 @@ class WalletProvider {
 
     for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
       try {
-        console.log(`Attempt ${i + 1}: Fetching data from ${url}`);        
         const response = await fetch(url, {
           ...options,
           headers: {
@@ -76,14 +75,12 @@ class WalletProvider {
         }
 
         const data = await response.json();
-        console.log(`Attempt ${i + 1}: Data fetched successfully`, data);
         return data;
       } catch (error) {
         console.error(`Attempt ${i + 1} failed:`, error);
         lastError = error;
         if (i < PROVIDER_CONFIG.MAX_RETRIES - 1) {
           const delay = PROVIDER_CONFIG.RETRY_DELAY * Math.pow(2, i);
-          console.log(`Waiting ${delay}ms before retrying...`);
           await new Promise(resolve => 
             setTimeout(resolve, delay)
           );
@@ -98,7 +95,6 @@ class WalletProvider {
 
   async fetchPortfolioValue(runtime): Promise<WalletPortfolio> {
     try {
-      console.log(`Fetching portfolio value for wallet: ${this.walletPublicKey.toBase58()}`);
       const walletData = await this.fetchWithRetry(
         runtime,
         `${PROVIDER_CONFIG.BIRDEYE_API}/v1/wallet/token_list?wallet=${this.walletPublicKey.toBase58()}`
@@ -127,12 +123,6 @@ class WalletProvider {
 
       const totalSol = totalUsd.div(solPriceInUSD);
       
-      console.log("Fetched portfolio value:", {
-        totalUsd: totalUsd.toString(),
-        totalSol: totalSol.toFixed(6),
-        items: items.length
-      });
-      
       return {
         totalUsd: totalUsd.toString(),
         totalSol: totalSol.toFixed(6),
@@ -156,8 +146,6 @@ class WalletProvider {
         ethereum: { usd: "0" },
       };
       
-      console.log("Fetching prices for tokens:", tokens);
-
       for (const token of tokens) {
         const response = await this.fetchWithRetry(
           runtime,
@@ -171,14 +159,12 @@ class WalletProvider {
 
         if (response?.data?.value) {
           const price = response.data.value.toString();
-          console.log(`Fetched price for ${token}:`, price);
           prices[token === SOL ? "solana" : token === BTC ? "bitcoin" : "ethereum"].usd = price;
         } else {
           console.warn(`No price data available for token: ${token}`);
         }
       }
 
-      console.log("Fetched prices:", prices);
       return prices;
     } catch (error) {
       console.error("Error fetching prices:", error);
@@ -216,21 +202,16 @@ class WalletProvider {
     output += `BTC: $${new BigNumber(prices.bitcoin.usd).toFixed(2)}\n`;
     output += `ETH: $${new BigNumber(prices.ethereum.usd).toFixed(2)}\n`;
     
-    console.log("Formatted portfolio:", output);
-
     return output;
   }
 
   async getFormattedPortfolio(runtime): Promise<string> {
     try {
-      console.log("Generating formatted portfolio report...");
       const [portfolio, prices] = await Promise.all([
         this.fetchPortfolioValue(runtime),
         this.fetchPrices(runtime)
       ]);
       
-      console.log("Portfolio and prices fetched successfully");
-
       return this.formatPortfolio(runtime, portfolio, prices);
     } catch (error) {
       console.error("Error generating portfolio report:", error);
@@ -263,7 +244,8 @@ const walletProvider: Provider = {
       const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
       const provider = new WalletProvider(connection, publicKey);
 
-      return await provider.getFormattedPortfolio(runtime);
+      const porfolio = await provider.getFormattedPortfolio(runtime);
+      return porfolio;
     } catch (error) {
       console.error("Error in wallet provider:", error);
       return `Failed to fetch wallet information: ${error instanceof Error ? error.message : 'Unknown error'}`;

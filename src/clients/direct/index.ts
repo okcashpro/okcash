@@ -14,7 +14,7 @@ import { messageCompletionFooter } from "../../core/parsing.ts";
 import multer, { File } from 'multer';
 import { Request as ExpressRequest } from 'express';
 import { generateMessageResponse } from "../../core/generation.ts";
-import { generateCaption, generateImage } from "../actions/imageGenerationUtils.ts";
+import { generateCaption, generateImage } from "../../actions/imageGenerationUtils.ts";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -39,6 +39,8 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 {{messageDirections}}
 
 {{recentMessages}}
+
+{{actions}}
 
 # Instructions: Write the next message for {{agentName}}. Ignore "action".
 ` + messageCompletionFooter;

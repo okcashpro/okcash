@@ -61,7 +61,7 @@ export async function generateText({
     const apiKey = runtime.token;
 
     try {
-        context = await trimTokens(context, max_context_length, model);
+        context = await trimTokens(context, max_context_length, "gpt-4o");
 
         let response: string;
 
@@ -71,6 +71,8 @@ export async function generateText({
             case ModelProvider.OPENAI:
             case ModelProvider.LLAMACLOUD:
                 const openai = createOpenAI({ apiKey });
+
+                console.log("Context:\n", context);
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -82,6 +84,7 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
+                console.log("OpenAI Response:\n", response);
                 break;
 
             case ModelProvider.ANTHROPIC:
@@ -129,6 +132,8 @@ export async function generateText({
             default:
                 throw new Error(`Unsupported provider: ${provider}`);
         }
+
+        console.log(response)
 
         return response;
     } catch (error) {
@@ -404,7 +409,7 @@ export async function generateMessageResponse({
     modelClass: string,
 }): Promise<Content> {
     const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
-    context = trimTokens(context, max_context_length, "gpt-4o-mini");
+    context = trimTokens(context, max_context_length, "gpt-4o");
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {

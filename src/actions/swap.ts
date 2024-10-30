@@ -42,15 +42,15 @@ async function promptConfirmation(): Promise<boolean> {
 }
 
 export default {
-  name: "TOKEN_SWAP",
-  similes: ["SWAP_TOKENS", "TRADE_TOKENS", "EXCHANGE_TOKENS"],
+  name: "EXECUTE_SWAP",
+  similes: ["SWAP_TOKENS", "TOKEN_SWAP", "TRADE_TOKENS", "EXCHANGE_TOKENS"],
   validate: async (runtime: IAgentRuntime, message: Memory) => {
     // Check if the necessary parameters are provided in the message
-    const { inputTokenSymbol, outputTokenSymbol, amount } = message.content;
-    return inputTokenSymbol && outputTokenSymbol && amount;
+    console.log("Message:", message);
+    return true;
   },
   description:
-    "Perform a token swap using the Jupiter API. Requires input token symbol, output token symbol, and swap amount.",
+    "Perform a token swap.",
   handler: async (runtime: IAgentRuntime, message: Memory): Promise<boolean> => {
     const { inputTokenSymbol, outputTokenSymbol, amount } = message.content;
 

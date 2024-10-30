@@ -7,6 +7,7 @@ import mute_room from "./actions/mute_room.ts";
 import unfollow_room from "./actions/unfollow_room.ts";
 import unmute_room from "./actions/unmute_room.ts";
 import imageGeneration from "./actions/imageGeneration.ts";
+import swap from "./actions/swap.ts";
 import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
 import { DiscordClient } from "./clients/discord/index.ts";
 import DirectClient from "./clients/direct/index.ts";
@@ -22,6 +23,7 @@ import { wait } from "./clients/twitter/utils.ts";
 import { TwitterSearchClient } from "./clients/twitter/search.ts";
 import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
 import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
+import walletProvider from "./providers/wallet.ts";
 
 interface Arguments {
   character?: string;
@@ -110,6 +112,7 @@ async function startAgent(character: Character) {
       unmute_room,
       mute_room,
       imageGeneration,
+      swap,
     ],
   });
 
@@ -119,7 +122,7 @@ async function startAgent(character: Character) {
     modelProvider: character.modelProvider,
     evaluators: [],
     character,
-    providers: [timeProvider, boredomProvider],
+    providers: [timeProvider, boredomProvider, walletProvider, orderbook, tokenProvider],
     actions: [
       ...defaultActions,
     ],
@@ -230,7 +233,8 @@ const startAgents = async () => {
 startAgents();
 
 import readline from 'readline';
-import walletProvider from "./providers/wallet.ts";
+import orderbook from "./providers/order_book.ts";
+import tokenProvider from "./providers/token.ts";
 
 const rl = readline.createInterface({
   input: process.stdin,
