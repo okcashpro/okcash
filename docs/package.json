@@ -27,7 +27,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.5.2",
     "@docusaurus/types": "3.5.2",
-    "docusaurus-plugin-typedoc": "0.22.0",
+    "docusaurus-plugin-typedoc": "1.0.5",
     "typedoc": "0.26.10",
     "typedoc-plugin-markdown": "4.2.9"
   },
