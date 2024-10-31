@@ -72,7 +72,7 @@
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/rest": "2.4.0",
     "@discordjs/voice": "0.17.0",
-    "@echogarden/espeak-ng-emscripten": "0.1.2",
+    "@echogarden/espeak-ng-emscripten": "0.3.0",
     "@echogarden/kissfft-wasm": "0.2.0",
     "@echogarden/speex-resampler-wasm": "0.2.1",
     "@huggingface/transformers": "3.0.1",
