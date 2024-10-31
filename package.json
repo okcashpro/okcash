@@ -79,7 +79,7 @@
     "@opendocsg/pdf2md": "0.1.31",
     "@solana/spl-token": "0.4.9",
     "@solana/web3.js": "1.95.4",
-    "@supabase/supabase-js": "2.45.3",
+    "@supabase/supabase-js": "2.46.1",
     "@telegraf/types": "7.1.0",
     "@types/body-parser": "1.19.5",
     "@types/cors": "2.8.17",
