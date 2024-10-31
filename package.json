@@ -123,7 +123,7 @@
     "node-llama-cpp": "3.0.0-beta.44",
     "node-wav": "0.0.2",
     "nodejs-whisper": "0.1.18",
-    "nodemon": "3.1.4",
+    "nodemon": "3.1.7",
     "onnxruntime-node": "1.19.2",
     "openai": "4.58.1",
     "pdfjs-dist": "4.2.67",
