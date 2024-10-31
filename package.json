@@ -56,7 +56,7 @@
     "lint-staged": "15.2.10",
     "npm-run-all2": "5.0.2",
     "prettier": "3.3.3",
-    "rimraf": "5.0.10",
+    "rimraf": "6.0.1",
     "rollup": "2.79.2",
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "29.2.5",
