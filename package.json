@@ -74,7 +74,7 @@
     "@discordjs/voice": "0.17.0",
     "@echogarden/espeak-ng-emscripten": "0.1.2",
     "@echogarden/kissfft-wasm": "0.1.1",
-    "@echogarden/speex-resampler-wasm": "0.1.1",
+    "@echogarden/speex-resampler-wasm": "0.2.1",
     "@huggingface/transformers": "3.0.1",
     "@opendocsg/pdf2md": "0.1.31",
     "@solana/spl-token": "0.4.9",
