@@ -67,7 +67,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.30.1",
-    "@cliqz/adblocker-playwright": "1.33.2",
+    "@cliqz/adblocker-playwright": "1.34.0",
     "@diffusionstudio/vits-web": "1.0.3",
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/rest": "2.4.0",
