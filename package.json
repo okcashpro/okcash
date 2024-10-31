@@ -120,7 +120,7 @@
     "libsodium-wrappers": "0.7.15",
     "multer": "1.4.5-lts.1",
     "node-cache": "5.1.2",
-    "node-llama-cpp": "3.0.0-beta.44",
+    "node-llama-cpp": "3.1.1",
     "node-wav": "0.0.2",
     "nodejs-whisper": "0.1.18",
     "nodemon": "3.1.4",
