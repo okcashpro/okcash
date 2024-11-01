@@ -304,32 +304,14 @@ export class VoiceManager extends EventEmitter {
 
                         const roomId = stringToUuid(channelId);
                         const userIdUUID = stringToUuid(userId);
-                        await this.runtime.ensureUserExists(
-                            this.runtime.agentId,
-                            this.client.user.username,
-                            this.runtime.character.name,
+
+                        await this.runtime.ensureConnection(
+                            userIdUUID,
+                            roomId,
+                            userName,
+                            name,
                             "discord"
                         );
-                        await Promise.all([
-                            this.runtime.ensureUserExists(
-                                userIdUUID,
-                                userName,
-                                name,
-                                "discord"
-                            ),
-                            this.runtime.ensureRoomExists(roomId),
-                        ]);
-
-                        await Promise.all([
-                            this.runtime.ensureParticipantInRoom(
-                                userIdUUID,
-                                roomId
-                            ),
-                            this.runtime.ensureParticipantInRoom(
-                                this.runtime.agentId,
-                                roomId
-                            ),
-                        ]);
 
                         let state = await this.runtime.composeState(
                             {

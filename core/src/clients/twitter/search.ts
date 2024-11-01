@@ -180,31 +180,16 @@ export class TwitterSearchClient extends ClientBase {
 
             const conversationId = selectedTweet.conversationId;
             const roomId = stringToUuid(conversationId);
-            await this.runtime.ensureRoomExists(roomId);
 
             const userIdUUID = stringToUuid(selectedTweet.userId as string);
-            await Promise.all([
-                this.runtime.ensureUserExists(
-                    this.runtime.agentId,
-                    this.runtime.getSetting("TWITTER_USERNAME"),
-                    this.runtime.character.name,
-                    "twitter"
-                ),
-                this.runtime.ensureUserExists(
-                    userIdUUID,
-                    selectedTweet.username,
-                    selectedTweet.name,
-                    "twitter"
-                ),
-            ]);
 
-            await Promise.all([
-                this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
-                this.runtime.ensureParticipantInRoom(
-                    this.runtime.agentId,
-                    roomId
-                ),
-            ]);
+            await this.runtime.ensureConnection(
+                userIdUUID,
+                roomId,
+                selectedTweet.username,
+                selectedTweet.name,
+                "twitter"
+            );
 
             // crawl additional conversation tweets, if there are any
             await buildConversationThread(selectedTweet, this);

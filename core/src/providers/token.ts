@@ -1,18 +1,19 @@
+import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
-import BigNumber from "bignumber.js";
-import * as fs from "fs";
-import NodeCache from "node-cache";
-import * as path from "path";
-import settings from "../core/settings.ts";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
+import settings from "../core/settings.ts";
+import BigNumber from "bignumber.js";
 import {
-    DexScreenerData,
-    HolderData,
     ProcessedTokenData,
     TokenSecurityData,
     TokenTradeData,
+    DexScreenerData,
+    //   DexScreenerPair,
+    HolderData,
 } from "../types/token.ts";
-import { fileURLToPath } from "url";
+import NodeCache from "node-cache";
+import * as fs from "fs";
+import * as path from "path";
 
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -39,11 +40,7 @@ export class TokenProvider {
         private tokenAddress: string
     ) {
         this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
-        const __filename = fileURLToPath(import.meta.url);
-
-        const __dirname = path.dirname(__filename);
-
-        this.cacheDir = path.join(__dirname, "../../tokencache");
+        this.cacheDir = path.join(__dirname, "cache");
         if (!fs.existsSync(this.cacheDir)) {
             fs.mkdirSync(this.cacheDir);
         }
@@ -51,13 +48,20 @@ export class TokenProvider {
 
     private readCacheFromFile<T>(cacheKey: string): T | null {
         const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
+        console.log({ filePath });
         if (fs.existsSync(filePath)) {
             const fileContent = fs.readFileSync(filePath, "utf-8");
             const parsed = JSON.parse(fileContent);
             const now = Date.now();
             if (now < parsed.expiry) {
+                console.log(
+                    `Reading cached data from file for key: ${cacheKey}`
+                );
                 return parsed.data as T;
             } else {
+                console.log(
+                    `Cache expired for key: ${cacheKey}. Deleting file.`
+                );
                 fs.unlinkSync(filePath);
             }
         }
@@ -71,6 +75,7 @@ export class TokenProvider {
             expiry: Date.now() + 300000, // 5 minutes in milliseconds
         };
         fs.writeFileSync(filePath, JSON.stringify(cacheData), "utf-8");
+        console.log(`Cached data written to file for key: ${cacheKey}`);
     }
 
     private getCachedData<T>(cacheKey: string): T | null {
@@ -102,6 +107,7 @@ export class TokenProvider {
     private async fetchWithRetry(
         url: string,
         options: RequestInit = {}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ): Promise<any> {
         let lastError: Error;
 
@@ -127,9 +133,11 @@ export class TokenProvider {
                 const data = await response.json();
                 return data;
             } catch (error) {
+                console.error(`Attempt ${i + 1} failed:`, error);
                 lastError = error as Error;
                 if (i < PROVIDER_CONFIG.MAX_RETRIES - 1) {
                     const delay = PROVIDER_CONFIG.RETRY_DELAY * Math.pow(2, i);
+                    console.log(`Waiting ${delay}ms before retrying...`);
                     await new Promise((resolve) => setTimeout(resolve, delay));
                     continue;
                 }
@@ -147,6 +155,9 @@ export class TokenProvider {
         const cacheKey = `tokenSecurity_${this.tokenAddress}`;
         const cachedData = this.getCachedData<TokenSecurityData>(cacheKey);
         if (cachedData) {
+            console.log(
+                `Returning cached token security data for ${this.tokenAddress}.`
+            );
             return cachedData;
         }
         const url = `${PROVIDER_CONFIG.BIRDEYE_API}${PROVIDER_CONFIG.TOKEN_SECURITY_ENDPOINT}${this.tokenAddress}`;
@@ -165,14 +176,18 @@ export class TokenProvider {
             top10HolderPercent: data.data.top10HolderPercent,
         };
         this.setCachedData(cacheKey, security);
+        console.log(`Token security data cached for ${this.tokenAddress}.`);
 
         return security;
     }
 
-    async fetchTokenTradeData(runtime: IAgentRuntime): Promise<TokenTradeData> {
+    async fetchTokenTradeData(): Promise<TokenTradeData> {
         const cacheKey = `tokenTradeData_${this.tokenAddress}`;
         const cachedData = this.getCachedData<TokenTradeData>(cacheKey);
         if (cachedData) {
+            console.log(
+                `Returning cached token trade data for ${this.tokenAddress}.`
+            );
             return cachedData;
         }
 
@@ -181,7 +196,7 @@ export class TokenProvider {
             method: "GET",
             headers: {
                 accept: "application/json",
-                "X-API-KEY": runtime.getSetting("BIRDEYE_API_KEY") || "",
+                "X-API-KEY": settings.BIRDEYE_API_KEY || "",
             },
         };
 
@@ -405,11 +420,15 @@ export class TokenProvider {
         const cacheKey = `dexScreenerData_${this.tokenAddress}`;
         const cachedData = this.getCachedData<DexScreenerData>(cacheKey);
         if (cachedData) {
+            console.log("Returning cached DexScreener data.");
             return cachedData;
         }
 
         const url = `https://api.dexscreener.com/latest/dex/search?q=${this.tokenAddress}`;
         try {
+            console.log(
+                `Fetching DexScreener data for token: ${this.tokenAddress}`
+            );
             const data = await fetch(url)
                 .then((res) => res.json())
                 .catch((err) => {
@@ -488,6 +507,7 @@ export class TokenProvider {
         const cacheKey = `holderList_${this.tokenAddress}`;
         const cachedData = this.getCachedData<HolderData[]>(cacheKey);
         if (cachedData) {
+            console.log("Returning cached holder list.");
             return cachedData;
         }
 
@@ -497,8 +517,10 @@ export class TokenProvider {
         let cursor;
         //HELIOUS_API_KEY needs to be added
         const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIOUS_API_KEY || ""}`;
+        console.log({ url });
 
         try {
+            // eslint-disable-next-line no-constant-condition
             while (true) {
                 const params = {
                     limit: limit,
@@ -509,7 +531,7 @@ export class TokenProvider {
                 if (cursor != undefined) {
                     params.cursor = cursor;
                 }
-
+                console.log(`Fetching holders - Page ${page}`);
                 if (page > 2) {
                     break;
                 }
@@ -534,9 +556,17 @@ export class TokenProvider {
                     !data.result.token_accounts ||
                     data.result.token_accounts.length === 0
                 ) {
+                    console.log(
+                        `No more holders found. Total pages fetched: ${page - 1}`
+                    );
                     break;
                 }
 
+                console.log(
+                    `Processing ${data.result.token_accounts.length} holders from page ${page}`
+                );
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 data.result.token_accounts.forEach((account: any) => {
                     const owner = account.owner;
                     const balance = parseFloat(account.amount);
@@ -560,6 +590,8 @@ export class TokenProvider {
                 address,
                 balance: balance.toString(),
             }));
+
+            console.log(`Total unique holders fetched: ${holders.length}`);
 
             // Cache the result
             this.setCachedData(cacheKey, holders);
@@ -620,27 +652,47 @@ export class TokenProvider {
         }
     }
 
-    async getProcessedTokenData(
-        runtime: IAgentRuntime
-    ): Promise<ProcessedTokenData> {
+    async getProcessedTokenData(): Promise<ProcessedTokenData> {
         try {
+            console.log(
+                `Fetching security data for token: ${this.tokenAddress}`
+            );
             const security = await this.fetchTokenSecurity();
 
-            const tradeData = await this.fetchTokenTradeData(runtime);
+            console.log(`Fetching trade data for token: ${this.tokenAddress}`);
+            const tradeData = await this.fetchTokenTradeData();
 
+            console.log(
+                `Fetching DexScreener data for token: ${this.tokenAddress}`
+            );
             const dexData = await this.fetchDexScreenerData();
 
+            console.log(
+                `Analyzing holder distribution for token: ${this.tokenAddress}`
+            );
             const holderDistributionTrend =
                 await this.analyzeHolderDistribution(tradeData);
 
+            console.log(
+                `Filtering high-value holders for token: ${this.tokenAddress}`
+            );
             const highValueHolders =
                 await this.filterHighValueHolders(tradeData);
 
+            console.log(
+                `Checking recent trades for token: ${this.tokenAddress}`
+            );
             const recentTrades = await this.checkRecentTrades(tradeData);
 
+            console.log(
+                `Counting high-supply holders for token: ${this.tokenAddress}`
+            );
             const highSupplyHoldersCount =
                 await this.countHighSupplyHolders(security);
 
+            console.log(
+                `Determining DexScreener listing status for token: ${this.tokenAddress}`
+            );
             const isDexScreenerListed = dexData.pairs.length > 0;
             const isDexScreenerPaid = dexData.pairs.some(
                 (pair) => pair.boosts && pair.boosts.active > 0
@@ -658,6 +710,7 @@ export class TokenProvider {
                 isDexScreenerPaid,
             };
 
+            // console.log("Processed token data:", processedData);
             return processedData;
         } catch (error) {
             console.error("Error processing token data:", error);
@@ -725,12 +778,14 @@ export class TokenProvider {
         }
         output += `\n`;
 
+        console.log("Formatted token data:", output);
         return output;
     }
 
-    async getFormattedTokenReport(runtime: IAgentRuntime): Promise<string> {
+    async getFormattedTokenReport(): Promise<string> {
         try {
-            const processedData = await this.getProcessedTokenData(runtime);
+            console.log("Generating formatted token report...");
+            const processedData = await this.getProcessedTokenData();
             return this.formatTokenData(processedData);
         } catch (error) {
             console.error("Error generating token report:", error);
@@ -740,15 +795,18 @@ export class TokenProvider {
 }
 
 const tokenAddress = PROVIDER_CONFIG.TOKEN_ADDRESSES.Example;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
 const tokenProvider: Provider = {
     get: async (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         runtime: IAgentRuntime,
         _message: Memory,
         _state?: State
     ): Promise<string> => {
         try {
             const provider = new TokenProvider(tokenAddress);
-            return provider.getFormattedTokenReport(runtime);
+            return provider.getFormattedTokenReport();
         } catch (error) {
             console.error("Error fetching token data:", error);
             return "Unable to fetch token information. Please try again later.";

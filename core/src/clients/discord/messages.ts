@@ -146,28 +146,14 @@ export class MessageManager {
 
             const roomId = stringToUuid(channelId);
             const userIdUUID = stringToUuid(userId);
-            const agentId = this.runtime.agentId;
 
-            await Promise.all([
-                this.runtime.ensureUserExists(
-                    agentId,
-                    this.client.user.username,
-                    this.runtime.character.name,
-                    "discord"
-                ),
-                this.runtime.ensureUserExists(
-                    userIdUUID,
-                    userName,
-                    name,
-                    "discord"
-                ),
-                this.runtime.ensureRoomExists(roomId),
-            ]);
-
-            await Promise.all([
-                this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
-                this.runtime.ensureParticipantInRoom(agentId, roomId),
-            ]);
+            await this.runtime.ensureConnection(
+                userIdUUID,
+                roomId,
+                userName,
+                name,
+                "discord"
+            );
 
             const messageId = stringToUuid(message.id);
 

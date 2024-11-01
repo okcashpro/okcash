@@ -222,11 +222,10 @@ export class MessageManager {
             return; // Exit if no message or sender info
         }
 
-        //@ts-ignore
-        if (ctx.message.text.startsWith("/")) {
-            //Handle commands?
-            return;
-        }
+        // TODO: Handle commands?
+        // if (ctx.message.text?.startsWith("/")) {
+        //     return;
+        // }
 
         const message = ctx.message;
 
@@ -239,24 +238,13 @@ export class MessageManager {
             const agentId = this.runtime.agentId;
             const roomId = chatId;
 
-            // Ensure user and room exist
-            await Promise.all([
-                this.runtime.ensureUserExists(
-                    agentId,
-                    this.bot.botInfo?.username || "Bot",
-                    this.runtime.character.name,
-                    "telegram"
-                ),
-                this.runtime.ensureUserExists(
-                    userId,
-                    userName,
-                    userName,
-                    "telegram"
-                ),
-                this.runtime.ensureRoomExists(roomId),
-                this.runtime.ensureParticipantInRoom(userId, roomId),
-                this.runtime.ensureParticipantInRoom(agentId, roomId),
-            ]);
+            await this.runtime.ensureConnection(
+                userId,
+                roomId,
+                userName,
+                userName,
+                "telegram"
+            );
 
             const messageId = stringToUuid(
                 message.message_id.toString()
