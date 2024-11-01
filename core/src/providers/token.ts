@@ -815,4 +815,4 @@ const tokenProvider: Provider = {
     },
 };
 
-export default tokenProvider;
+export { tokenProvider };

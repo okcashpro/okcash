@@ -30,7 +30,7 @@ Based on the following conversation, should {{agentName}} continue? YES or NO
 
 Should {{agentName}} continue? ` + booleanFooter;
 
-export default {
+export const continueAction: Action = {
     name: "CONTINUE",
     similes: ["ELABORATE", "KEEP_TALKING"],
     description:

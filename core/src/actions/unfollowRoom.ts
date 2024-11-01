@@ -24,7 +24,7 @@ Respond with YES if:
 Otherwise, respond with NO.
 ` + booleanFooter;
 
-export default {
+export const unfollowRoom: Action = {
     name: "UNFOLLOW_ROOM",
     similes: [
         "UNFOLLOW_CHAT",

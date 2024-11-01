@@ -5,7 +5,7 @@ import {
     type Action,
 } from "../core/types.ts";
 
-export default {
+export const none: Action = {
     name: "NONE",
     similes: [
         "NO_ACTION",

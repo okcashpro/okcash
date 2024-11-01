@@ -1,6 +1,9 @@
 // TokenBalanceProvider.ts
 import { Connection, PublicKey } from "@solana/web3.js";
-import { getTokenBalances, getTokenPriceInSol } from "../services/tokenUtils";
+import {
+    getTokenBalances,
+    getTokenPriceInSol,
+} from "../services/tokenUtils.ts";
 import fetch from "cross-fetch";
 
 interface Item {

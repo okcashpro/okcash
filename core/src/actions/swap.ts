@@ -41,7 +41,7 @@ async function promptConfirmation(): Promise<boolean> {
     return confirmSwap;
 }
 
-export default {
+export const executeSwap: Action = {
     name: "EXECUTE_SWAP",
     similes: ["SWAP_TOKENS", "TOKEN_SWAP", "TRADE_TOKENS", "EXCHANGE_TOKENS"],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
