@@ -16,7 +16,7 @@ import {
     TokenPerformance,
     TradePerformance,
 } from "../adapters/trustScoreDatabase";
-import settings from "../core/settings";
+import settings from "../core/settings.ts";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
