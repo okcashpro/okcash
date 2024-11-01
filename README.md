@@ -1,6 +1,6 @@
 # Eliza
 
-<img src="./docs/eliza_banner.jpg" alt="Eliza Banner" width="100%">
+<img src="./docs/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
 
 *As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)*
 
@@ -20,6 +20,10 @@
 ## Install Node.js
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
+## Using pnpm
+We use pnpm to manage our dependencies. It is faster and more efficient than npm, and it supports workspaces.
+https://pnpm.io/installation
+
 ## Edit the .env file
 - Copy .env.example to .env and fill in the appropriate values
 - Edit the TWITTER environment variables to add your bot's username and password
@@ -27,12 +31,6 @@ https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 ## Edit the character file
 - Check out the file `src/core/defaultCharacter.ts` - you can modify this
 - You can also load characters with the `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` and run multiple bots at the same time.
-
-### Linux Installation
-You might need these
-```
-npm install --include=optional sharp
-```
 
 ### Run with Llama
 You can run Llama 70B or 405B models by setting the `XAI_MODEL` environment variable to `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` or `meta-llama/Meta-Llama-3.1-405B-Instruct`
@@ -49,7 +47,7 @@ If you are getting strange issues when starting up, make sure you're using Node 
 ## Additional Requirements
 You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
 ```
-npm install --include=optional sharp
+pnpm install --include=optional sharp
 ```
 
 # Environment Setup
@@ -74,7 +72,7 @@ TWITTER_COOKIES= # Account cookies
 
 If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
 ```
-npm install
+pnpm install
 npx --no node-llama-cpp source download --gpu cuda
 ```
 
