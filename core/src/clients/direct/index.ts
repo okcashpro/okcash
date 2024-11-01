@@ -144,26 +144,13 @@ class DirectClient {
                     return;
                 }
 
-                await Promise.all([
-                    runtime.ensureUserExists(
-                        runtime.agentId,
-                        runtime.character.name ?? "Agent",
-                        runtime.character.name ?? "Agent",
-                        "direct"
-                    ),
-                    runtime.ensureUserExists(
-                        userId,
-                        req.body.userName ?? "User",
-                        req.body.name ?? "User",
-                        "direct"
-                    ),
-                    runtime.ensureRoomExists(roomId),
-                ]);
-
-                await Promise.all([
-                    runtime.ensureParticipantInRoom(userId, roomId),
-                    runtime.ensureParticipantInRoom(runtime.agentId, roomId),
-                ]);
+                await runtime.ensureConnection(
+                    userId,
+                    roomId,
+                    req.body.userName,
+                    req.body.name,
+                    "direct"
+                );
 
                 const text = req.body.text;
                 const messageId = stringToUuid(Date.now().toString());

@@ -162,11 +162,13 @@ export class TwitterGenerationClient extends ClientBase {
                     const conversationId = tweet.conversationId;
                     const roomId = stringToUuid(conversationId);
 
+                    // make sure the agent is in the room
                     await this.runtime.ensureRoomExists(roomId);
                     await this.runtime.ensureParticipantInRoom(
                         this.runtime.agentId,
                         roomId
                     );
+
                     await this.cacheTweet(tweet);
 
                     await this.runtime.messageManager.createMemory({

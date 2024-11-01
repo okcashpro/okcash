@@ -17,7 +17,7 @@ import { embeddingZeroVector } from "../../core/memory.ts";
 import { MessageManager } from "./messages.ts";
 import { VoiceManager } from "./voice.ts";
 
-import { IAgentRuntime } from "../../core/types.ts";
+import { Character, IAgentRuntime } from "../../core/types.ts";
 import chat_with_attachments from "./actions/chat_with_attachments.ts";
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
@@ -31,7 +31,7 @@ export class DiscordClient extends EventEmitter {
     apiToken: string;
     private client: Client;
     private runtime: IAgentRuntime;
-    character: any;
+    character: Character;
     private messageManager: MessageManager;
     private voiceManager: VoiceManager;
 
@@ -182,29 +182,16 @@ export class DiscordClient extends EventEmitter {
             console.error("Invalid user id or room id");
             return;
         }
-        const agentId = this.runtime.agentId;
         const userName = reaction.message.author.username;
         const name = reaction.message.author.displayName;
-        await Promise.all([
-            this.runtime.ensureUserExists(
-                agentId,
-                this.client.user.username,
-                this.runtime.character.name,
-                "discord"
-            ),
-            this.runtime.ensureUserExists(
-                userIdUUID,
-                userName,
-                name,
-                "discord"
-            ),
-            this.runtime.ensureRoomExists(roomId),
-        ]);
 
-        await Promise.all([
-            this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
-            this.runtime.ensureParticipantInRoom(agentId, roomId),
-        ]);
+        await this.runtime.ensureConnection(
+            userIdUUID,
+            roomId,
+            userName,
+            name,
+            "discord"
+        );
 
         // Save the reaction as a message
         await this.runtime.messageManager.createMemory({
@@ -259,37 +246,16 @@ export class DiscordClient extends EventEmitter {
             `${reaction.message.id}-${user.id}-${emoji}-removed`
         );
 
-        const agentId = this.runtime.agentId;
         const userName = reaction.message.author.username;
         const name = reaction.message.author.displayName;
 
-        console.log("reactionUUID", reactionUUID);
-        console.log("userIdUUID", userIdUUID);
-        console.log("roomId", roomId);
-        console.log("agentId", agentId);
-        console.log("userName", userName);
-        console.log("name", name);
-
-        await Promise.all([
-            this.runtime.ensureUserExists(
-                agentId,
-                this.client.user.username,
-                this.runtime.character.name,
-                "discord"
-            ),
-            this.runtime.ensureUserExists(
-                userIdUUID,
-                userName,
-                name,
-                "discord"
-            ),
-            this.runtime.ensureRoomExists(roomId),
-        ]);
-
-        await Promise.all([
-            this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
-            this.runtime.ensureParticipantInRoom(agentId, roomId),
-        ]);
+        await this.runtime.ensureConnection(
+            userIdUUID,
+            roomId,
+            userName,
+            name,
+            "discord"
+        );
 
         try {
             // Save the reaction removal as a message

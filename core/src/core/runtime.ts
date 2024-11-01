@@ -588,6 +588,35 @@ export class AgentRuntime implements IAgentRuntime {
         }
     }
 
+    async ensureConnection(
+        userId: UUID,
+        roomId: UUID,
+        userName?: string,
+        userScreenName?: string,
+        source?: string
+    ) {
+        await Promise.all([
+            this.ensureUserExists(
+                this.agentId,
+                this.character.name ?? "Agent",
+                this.character.name ?? "Agent",
+                source
+            ),
+            this.ensureUserExists(
+                userId,
+                userName ?? "User" + userId,
+                userScreenName ?? "User" + userId,
+                source
+            ),
+            this.ensureRoomExists(roomId),
+        ]);
+
+        await Promise.all([
+            this.ensureParticipantInRoom(userId, roomId),
+            this.ensureParticipantInRoom(this.agentId, roomId),
+        ]);
+    }
+
     /**
      * Ensure the existence of a room between the agent and a user. If no room exists, a new room is created and the user
      * and agent are added as participants. The room ID is returned.

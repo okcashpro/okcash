@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
     QueryTweetsResponse,
     Scraper,
@@ -410,21 +408,12 @@ export class ClientBase extends EventEmitter {
                             ? this.runtime.agentId
                             : stringToUuid(tweet.userId);
 
-                    await this.runtime.ensureRoomExists(roomId);
-                    await this.runtime.ensureParticipantExists(
-                        this.runtime.agentId,
-                        roomId
-                    );
-
-                    await this.runtime.ensureUserExists(
+                    await this.runtime.ensureConnection(
                         tweetuserId,
+                        roomId,
                         tweet.username,
                         tweet.name,
                         "twitter"
-                    );
-                    await this.runtime.ensureParticipantExists(
-                        tweetuserId,
-                        roomId
                     );
 
                     const content = {
@@ -521,19 +510,13 @@ export class ClientBase extends EventEmitter {
                     ? this.runtime.agentId
                     : stringToUuid(tweet.userId);
 
-            await this.runtime.ensureRoomExists(roomId);
-            await this.runtime.ensureParticipantExists(
-                this.runtime.agentId,
-                roomId
-            );
-
-            await this.runtime.ensureUserExists(
+            await this.runtime.ensureConnection(
                 tweetuserId,
+                roomId,
                 tweet.username,
                 tweet.name,
                 "twitter"
             );
-            await this.runtime.ensureParticipantExists(tweetuserId, roomId);
 
             const content = {
                 text: tweet.text,

@@ -117,37 +117,19 @@ export class TwitterInteractionClient extends ClientBase {
                     !this.lastCheckedTweetId ||
                     parseInt(tweet.id) > this.lastCheckedTweetId
                 ) {
-                    console.log("Processing tweet", tweet.id);
                     const conversationId = tweet.conversationId;
 
                     const roomId = stringToUuid(conversationId);
-                    await this.runtime.ensureRoomExists(roomId);
 
                     const userIdUUID = stringToUuid(tweet.userId as string);
-                    const agentId = this.runtime.agentId;
 
-                    await Promise.all([
-                        this.runtime.ensureUserExists(
-                            agentId,
-                            this.runtime.getSetting("TWITTER_USERNAME"),
-                            this.runtime.character.name,
-                            "twitter"
-                        ),
-                        this.runtime.ensureUserExists(
-                            userIdUUID,
-                            tweet.username,
-                            tweet.name,
-                            "twitter"
-                        ),
-                    ]);
-
-                    await Promise.all([
-                        this.runtime.ensureParticipantInRoom(
-                            userIdUUID,
-                            roomId
-                        ),
-                        this.runtime.ensureParticipantInRoom(agentId, roomId),
-                    ]);
+                    await this.runtime.ensureConnection(
+                        userIdUUID,
+                        roomId,
+                        tweet.username,
+                        tweet.name,
+                        "twitter"
+                    );
 
                     await buildConversationThread(tweet, this);
 
