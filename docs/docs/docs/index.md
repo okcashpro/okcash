@@ -1,3 +1,11 @@
+---
+id: "index"
+title: "eliza"
+sidebar_label: "Readme"
+sidebar_position: 0
+custom_edit_url: null
+---
+
 # Eliza
 
 <img src="./docs/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
