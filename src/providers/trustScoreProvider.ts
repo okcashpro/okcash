@@ -25,6 +25,7 @@ interface TradeData {
 }
 interface sellDetails {
   sell_amount: number;
+  sell_recommender_id: string | null;
 }
 export class TrustScoreProvider {
   private tokenProvider: TokenProvider;
@@ -79,12 +80,13 @@ export class TrustScoreProvider {
       },
       recommenderMetrics: {
         recommenderId: recommenderId,
-        overallTrustScore: recommenderMetrics.overallTrustScore,
+        trustScore: recommenderMetrics.trustScore,
         totalRecommendations: recommenderMetrics.totalRecommendations,
         successfulRecs: recommenderMetrics.successfulRecs,
         avgTokenPerformance: recommenderMetrics.avgTokenPerformance,
         riskScore: recommenderMetrics.riskScore,
         consistencyScore: recommenderMetrics.consistencyScore,
+        virtualConfidence: recommenderMetrics.virtualConfidence,
         lastUpdated: new Date(),
       },
     };
@@ -121,16 +123,17 @@ export class TrustScoreProvider {
     );
     const newRecommenderMetrics: RecommenderMetrics = {
       recommenderId: recommenderId,
-      overallTrustScore: overallTrustScore,
+      trustScore: overallTrustScore,
       totalRecommendations: totalRecommendations,
       successfulRecs: successfulRecs,
       avgTokenPerformance: avgTokenPerformance,
       riskScore: riskScore,
       consistencyScore: consistencyScore,
+      virtualConfidence: recommenderMetrics.virtualConfidence,
       lastUpdated: new Date(),
     };
 
-    await this.trustScoreDb.updateRecommenderMetrics(recommenderMetrics);
+    await this.trustScoreDb.updateRecommenderMetrics(newRecommenderMetrics);
   }
 
   calculateTrustScore(
@@ -338,6 +341,7 @@ export class TrustScoreProvider {
       sell_liquidity: liquidity,
       liquidity_change: liquidity_change,
       rapidDump: isRapidDump,
+      sell_recommender_id: sellDetails.sell_recommender_id || null,
     };
     this.trustScoreDb.updateTradePerformanceOnSell(
       tokenAddress,

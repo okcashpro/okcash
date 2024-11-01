@@ -17,12 +17,13 @@ export interface Recommender {
 
 export interface RecommenderMetrics {
   recommenderId: string;
-  overallTrustScore: number;
+  trustScore: number;
   totalRecommendations: number;
   successfulRecs: number;
   avgTokenPerformance: number;
   riskScore: number;
   consistencyScore: number;
+  virtualConfidence: number;
   lastUpdated: Date;
 }
 
@@ -55,12 +56,13 @@ export interface TokenRecommendation {
 export interface RecommenderMetricsHistory {
   historyId: string; // UUID
   recommenderId: string;
-  overallTrustScore: number;
+  trustScore: number;
   totalRecommendations: number;
   successfulRecs: number;
   avgTokenPerformance: number;
   riskScore: number;
   consistencyScore: number;
+  virtualConfidence: number;
   recordedAt: Date;
 }
 
@@ -91,12 +93,13 @@ export interface TradePerformance {
 
 interface RecommenderMetricsRow {
   recommender_id: string;
-  overall_trust_score: number;
+  trust_score: number;
   total_recommendations: number;
   successful_recs: number;
   avg_token_performance: number;
   risk_score: number;
   consistency_score: number;
+  virtual_confidence: number;
   last_updated: string;
 }
 
@@ -155,12 +158,13 @@ export class TrustScoreDatabase {
     this.db.exec(`
             CREATE TABLE IF NOT EXISTS recommender_metrics (
                 recommender_id TEXT PRIMARY KEY,
-                overall_trust_score REAL DEFAULT 0,
+                trust_score REAL DEFAULT 0,
                 total_recommendations INTEGER DEFAULT 0,
                 successful_recs INTEGER DEFAULT 0,
                 avg_token_performance REAL DEFAULT 0,
                 risk_score REAL DEFAULT 0,
                 consistency_score REAL DEFAULT 0,
+                virtual_confidence REAL DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
             );
@@ -206,12 +210,13 @@ export class TrustScoreDatabase {
          CREATE TABLE IF NOT EXISTS recommender_metrics_history (
              history_id TEXT PRIMARY KEY,
              recommender_id TEXT NOT NULL,
-             overall_trust_score REAL,
+             trust_score REAL,
              total_recommendations INTEGER,
              successful_recs INTEGER,
              avg_token_performance REAL,
              risk_score REAL,
              consistency_score REAL,
+             virtual_confidence REAL DEFAULT 0,
              recorded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
              FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
          );
@@ -222,6 +227,7 @@ export class TrustScoreDatabase {
         CREATE TABLE IF NOT EXISTS trade (
             token_address TEXT NOT NULL,
             recommender_id TEXT NOT NULL,
+            sell_recommender_id TEXT,
             buy_price REAL NOT NULL,
             sell_price REAL,
             buy_timeStamp TEXT NOT NULL,
@@ -365,12 +371,13 @@ export class TrustScoreDatabase {
 
     return {
       recommenderId: row.recommender_id,
-      overallTrustScore: row.overall_trust_score,
+      trustScore: row.trust_score,
       totalRecommendations: row.total_recommendations,
       successfulRecs: row.successful_recs,
       avgTokenPerformance: row.avg_token_performance,
       riskScore: row.risk_score,
       consistencyScore: row.consistency_score,
+      virtualConfidence: row.virtual_confidence,
       lastUpdated: new Date(row.last_updated),
     };
   }
@@ -391,12 +398,13 @@ export class TrustScoreDatabase {
     const history: RecommenderMetricsHistory = {
       historyId: uuidv4(),
       recommenderId: currentMetrics.recommenderId,
-      overallTrustScore: currentMetrics.overallTrustScore,
+      trustScore: currentMetrics.trustScore,
       totalRecommendations: currentMetrics.totalRecommendations,
       successfulRecs: currentMetrics.successfulRecs,
       avgTokenPerformance: currentMetrics.avgTokenPerformance,
       riskScore: currentMetrics.riskScore,
       consistencyScore: currentMetrics.consistencyScore,
+      virtualConfidence: currentMetrics.virtualConfidence,
       recordedAt: new Date(), // Current timestamp
     };
 
@@ -405,7 +413,7 @@ export class TrustScoreDatabase {
             INSERT INTO recommender_metrics_history (
                 history_id,
                 recommender_id,
-                overall_trust_score,
+                trust_score,
                 total_recommendations,
                 successful_recs,
                 avg_token_performance,
@@ -420,7 +428,7 @@ export class TrustScoreDatabase {
         .run(
           history.historyId,
           history.recommenderId,
-          history.overallTrustScore,
+          history.trustScore,
           history.totalRecommendations,
           history.successfulRecs,
           history.avgTokenPerformance,
@@ -446,7 +454,7 @@ export class TrustScoreDatabase {
 
     const sql = `
             UPDATE recommender_metrics
-            SET overall_trust_score = ?,
+            SET trust_score = ?,
                 total_recommendations = ?,
                 successful_recs = ?,
                 avg_token_performance = ?,
@@ -459,7 +467,7 @@ export class TrustScoreDatabase {
       this.db
         .prepare(sql)
         .run(
-          metrics.overallTrustScore,
+          metrics.trustScore,
           metrics.totalRecommendations,
           metrics.successfulRecs,
           metrics.avgTokenPerformance,
@@ -716,24 +724,26 @@ export class TrustScoreDatabase {
     const rows = this.db.prepare(sql).all(recommenderId) as Array<{
       history_id: string;
       recommender_id: string;
-      overall_trust_score: number;
+      trust_score: number;
       total_recommendations: number;
       successful_recs: number;
       avg_token_performance: number;
       risk_score: number;
       consistency_score: number;
+      virtual_confidence: number;
       recorded_at: string;
     }>;
 
     return rows.map((row) => ({
       historyId: row.history_id,
       recommenderId: row.recommender_id,
-      overallTrustScore: row.overall_trust_score,
+      trustScore: row.trust_score,
       totalRecommendations: row.total_recommendations,
       successfulRecs: row.successful_recs,
       avgTokenPerformance: row.avg_token_performance,
       riskScore: row.risk_score,
       consistencyScore: row.consistency_score,
+      virtualConfidence: row.virtual_confidence,
       recordedAt: new Date(row.recorded_at),
     }));
   }
@@ -834,6 +844,7 @@ export class TrustScoreDatabase {
       sell_liquidity: number;
       liquidity_change: number;
       rapidDump: boolean;
+      sell_recommender_id: string | null;
     },
     isSimulation: boolean
   ): boolean {
@@ -853,6 +864,7 @@ export class TrustScoreDatabase {
             sell_liquidity = ?,
             liquidity_change = ?,
             rapidDump = ?
+            sell_recommender_id = ?
         WHERE
             token_address = ?
             AND recommender_id = ?
