@@ -14,14 +14,14 @@ Represents a message within the conversation, including its content and associat
 
 • **content**: [`Content`](Content.md)
 
-___
+---
 
-### room\_id
+### room_id
 
-• **room\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
-### user\_id
+### user_id
 
-• **user\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`

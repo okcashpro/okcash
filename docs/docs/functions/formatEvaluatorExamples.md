@@ -12,8 +12,8 @@ Formats evaluator examples into a readable string, replacing placeholders with g
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name         | Type                                        | Description                                                        |
+| :----------- | :------------------------------------------ | :----------------------------------------------------------------- |
 | `evaluators` | [`Evaluator`](../interfaces/Evaluator.md)[] | An array of evaluator objects, each containing examples to format. |
 
 #### Returns

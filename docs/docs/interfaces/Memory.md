@@ -14,32 +14,32 @@ Represents a memory record, which could be a message or any other piece of infor
 
 • **content**: [`Content`](Content.md)
 
-___
+---
 
-### created\_at
+### created_at
 
-• `Optional` **created\_at**: `string`
+• `Optional` **created_at**: `string`
 
-___
+---
 
 ### embedding
 
 • `Optional` **embedding**: `number`[]
 
-___
+---
 
 ### id
 
 • `Optional` **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
-### room\_id
+### room_id
 
-• **room\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
-### user\_id
+### user_id
 
-• **user\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`

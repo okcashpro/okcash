@@ -18,122 +18,122 @@ Represents the state of the conversation or context in which the agent is operat
 
 • `Optional` **actionExamples**: `string`
 
-___
+---
 
 ### actionNames
 
 • `Optional` **actionNames**: `string`
 
-___
+---
 
 ### actions
 
 • `Optional` **actions**: `string`
 
-___
+---
 
 ### actionsData
 
 • `Optional` **actionsData**: [`Action`](Action.md)[]
 
-___
+---
 
 ### actors
 
 • **actors**: `string`
 
-___
+---
 
 ### actorsData
 
 • `Optional` **actorsData**: [`Actor`](Actor.md)[]
 
-___
+---
 
 ### agentId
 
 • `Optional` **agentId**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### agentName
 
 • `Optional` **agentName**: `string`
 
-___
+---
 
 ### goals
 
 • `Optional` **goals**: `string`
 
-___
+---
 
 ### goalsData
 
 • `Optional` **goalsData**: [`Goal`](Goal.md)[]
 
-___
+---
 
 ### providers
 
 • `Optional` **providers**: `string`
 
-___
+---
 
 ### recentFacts
 
 • `Optional` **recentFacts**: `string`
 
-___
+---
 
 ### recentFactsData
 
 • `Optional` **recentFactsData**: [`Memory`](Memory.md)[]
 
-___
+---
 
 ### recentMessages
 
 • **recentMessages**: `string`
 
-___
+---
 
 ### recentMessagesData
 
 • **recentMessagesData**: [`Memory`](Memory.md)[]
 
-___
+---
 
 ### relevantFacts
 
 • `Optional` **relevantFacts**: `string`
 
-___
+---
 
 ### relevantFactsData
 
 • `Optional` **relevantFactsData**: [`Memory`](Memory.md)[]
 
-___
+---
 
 ### responseData
 
 • `Optional` **responseData**: [`Content`](Content.md)
 
-___
+---
 
-### room\_id
+### room_id
 
-• **room\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### senderName
 
 • `Optional` **senderName**: `string`
 
-___
+---
 
-### user\_id
+### user_id
 
-• `Optional` **user\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• `Optional` **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`

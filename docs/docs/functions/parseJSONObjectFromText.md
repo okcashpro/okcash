@@ -16,8 +16,8 @@ is an array, or returns null if parsing is unsuccessful or the result is neither
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name   | Type     | Description                                                     |
+| :----- | :------- | :-------------------------------------------------------------- |
 | `text` | `string` | The input text from which to extract and parse the JSON object. |
 
 #### Returns

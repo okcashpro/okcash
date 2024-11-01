@@ -4,22 +4,15 @@ import {
     parseJSONObjectFromText,
     parseShouldRespondFromText,
 } from "./parsing.ts";
-import {
-    Content,
-    IAgentRuntime,
-    ModelProvider
-} from "./types.ts";
+import { Content, IAgentRuntime, ModelProvider } from "./types.ts";
 
-import { createGroq } from '@ai-sdk/groq';
-import { createOpenAI } from '@ai-sdk/openai';
-import {
-    default as tiktoken,
-    TiktokenModel
-} from "tiktoken";
+import { createGroq } from "@ai-sdk/groq";
+import { createOpenAI } from "@ai-sdk/openai";
+import { default as tiktoken, TiktokenModel } from "tiktoken";
 import models from "./models.ts";
 
-import { generateText as aiGenerateText } from 'ai';
-import { createAnthropicVertex } from 'anthropic-vertex-ai';
+import { generateText as aiGenerateText } from "ai";
+import { createAnthropicVertex } from "anthropic-vertex-ai";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -38,12 +31,12 @@ export async function generateText({
     runtime,
     context,
     modelClass,
-    stop
+    stop,
 }: {
-    runtime: IAgentRuntime,
-    context: string,
-    modelClass: string
-    stop?: string[]
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
+    stop?: string[];
 }): Promise<string> {
     if (!context) {
         console.error("generateText context is empty");
@@ -103,7 +96,9 @@ export async function generateText({
                 const grok = createGroq({ apiKey });
 
                 const { text: grokResponse } = await aiGenerateText({
-                    model: grok.languageModel(model, { parallelToolCalls: false }),
+                    model: grok.languageModel(model, {
+                        parallelToolCalls: false,
+                    }),
                     prompt: context,
                     temperature: temperature,
                     maxTokens: max_response_length,
@@ -121,7 +116,7 @@ export async function generateText({
                     _stop,
                     frequency_penalty,
                     presence_penalty,
-                    max_response_length,
+                    max_response_length
                 );
                 break;
 
@@ -131,7 +126,7 @@ export async function generateText({
 
         return response;
     } catch (error) {
-        console.error('Error in generateText:', error);
+        console.error("Error in generateText:", error);
         throw error;
     }
 }
@@ -162,7 +157,7 @@ export function trimTokens(context, maxTokens, model) {
  * @param opts.stop A list of strings to stop the generateText at
  * @param opts.model The model to use for generateText
  * @param opts.frequency_penalty The frequency penalty to apply (0.0 to 2.0)
- * @param opts.presence_penalty The presence penalty to apply (0.0 to 2.0) 
+ * @param opts.presence_penalty The presence penalty to apply (0.0 to 2.0)
  * @param opts.temperature The temperature to control randomness (0.0 to 2.0)
  * @param opts.serverUrl The URL of the API server
  * @param opts.max_context_length Maximum allowed context length in tokens
@@ -174,9 +169,9 @@ export async function generateShouldRespond({
     context,
     modelClass,
 }: {
-    runtime: IAgentRuntime,
-    context: string,
-    modelClass: string,
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
 }): Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
     let retryDelay = 1000;
     while (true) {
@@ -215,10 +210,12 @@ export async function splitChunks(
     content: string,
     chunkSize: number,
     bleed: number = 100,
-    modelClass: string,
+    modelClass: string
 ): Promise<string[]> {
     const model = runtime.model[modelClass];
-    const encoding = tiktoken.encoding_for_model(model.model.embedding as TiktokenModel);
+    const encoding = tiktoken.encoding_for_model(
+        model.model.embedding as TiktokenModel
+    );
     const tokens = encoding.encode(content);
     const chunks: string[] = [];
     const textDecoder = new TextDecoder();
@@ -261,16 +258,15 @@ export async function generateTrueOrFalse({
     context = "",
     modelClass,
 }: {
-    runtime: IAgentRuntime,
-    context: string,
-    modelClass: string,
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
 }): Promise<boolean> {
     let retryDelay = 1000;
 
-    const stop = Array.from(new Set([
-        ... (models[modelClass].settings.stop || []),
-        ['\n']
-    ])) as string[];
+    const stop = Array.from(
+        new Set([...(models[modelClass].settings.stop || []), ["\n"]])
+    ) as string[];
 
     while (true) {
         try {
@@ -314,9 +310,9 @@ export async function generateTextArray({
     context,
     modelClass,
 }: {
-    runtime: IAgentRuntime,
-    context: string,
-    modelClass: string,
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
 }): Promise<string[]> {
     if (!context) {
         console.error("generateTextArray context is empty");
@@ -350,9 +346,9 @@ export async function generateObjectArray({
     context,
     modelClass,
 }: {
-    runtime: IAgentRuntime,
-    context: string,
-    modelClass: string,
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
 }): Promise<any[]> {
     if (!context) {
         console.error("generateObjectArray context is empty");
@@ -396,13 +392,14 @@ export async function generateObjectArray({
 export async function generateMessageResponse({
     runtime,
     context,
-    modelClass
+    modelClass,
 }: {
-    runtime: IAgentRuntime,
-    context: string,
-    modelClass: string,
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
 }): Promise<Content> {
-    const max_context_length = models[runtime.modelProvider].settings.maxInputTokens;
+    const max_context_length =
+        models[runtime.modelProvider].settings.maxInputTokens;
     context = trimTokens(context, max_context_length, "gpt-4o");
     let retryLength = 1000; // exponential backoff
     while (true) {
@@ -415,7 +412,7 @@ export async function generateMessageResponse({
             // try parsing the response as JSON, if null then try again
             const parsedContent = parseJSONObjectFromText(response) as Content;
             if (!parsedContent) {
-                console.log("parsedContent is null, retrying")
+                console.log("parsedContent is null, retrying");
                 continue;
             }
 
@@ -429,6 +426,6 @@ export async function generateMessageResponse({
         }
     }
     throw new Error(
-        "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue",
+        "Failed to complete message after 5 tries, probably a network connectivity, model or API key issue"
     );
 }

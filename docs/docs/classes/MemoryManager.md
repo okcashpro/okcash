@@ -18,11 +18,11 @@ Constructs a new MemoryManager instance.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `opts` | `Object` | Options for the manager. |
-| `opts.runtime` | [`BgentRuntime`](BgentRuntime.md) | The BgentRuntime instance associated with this manager. |
-| `opts.tableName` | `string` | The name of the table this manager will operate on. |
+| Name             | Type                              | Description                                             |
+| :--------------- | :-------------------------------- | :------------------------------------------------------ |
+| `opts`           | `Object`                          | Options for the manager.                                |
+| `opts.runtime`   | [`AgentRuntime`](AgentRuntime.md) | The AgentRuntime instance associated with this manager. |
+| `opts.tableName` | `string`                          | The name of the table this manager will operate on.     |
 
 #### Returns
 
@@ -32,11 +32,11 @@ Constructs a new MemoryManager instance.
 
 ### runtime
 
-• **runtime**: [`BgentRuntime`](BgentRuntime.md)
+• **runtime**: [`AgentRuntime`](AgentRuntime.md)
 
-The BgentRuntime instance associated with this manager.
+The AgentRuntime instance associated with this manager.
 
-___
+---
 
 ### tableName
 
@@ -54,8 +54,8 @@ Adds an embedding vector to a memory object. If the memory already has an embedd
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name     | Type                                | Description                               |
+| :------- | :---------------------------------- | :---------------------------------------- |
 | `memory` | [`Memory`](../interfaces/Memory.md) | The memory object to add an embedding to. |
 
 #### Returns
@@ -64,7 +64,7 @@ Adds an embedding vector to a memory object. If the memory already has an embedd
 
 A Promise resolving to the memory object, potentially updated with an embedding vector.
 
-___
+---
 
 ### countMemories
 
@@ -74,10 +74,10 @@ Counts the number of memories associated with a set of user IDs, with an option 
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined` | The room ID to count memories for. |
-| `unique` | `boolean` | `true` | Whether to count unique memories only. |
+| Name      | Type                                                       | Default value | Description                            |
+| :-------- | :--------------------------------------------------------- | :------------ | :------------------------------------- |
+| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined`   | The room ID to count memories for.     |
+| `unique`  | `boolean`                                                  | `true`        | Whether to count unique memories only. |
 
 #### Returns
 
@@ -85,7 +85,7 @@ Counts the number of memories associated with a set of user IDs, with an option 
 
 A Promise resolving to the count of memories.
 
-___
+---
 
 ### createMemory
 
@@ -95,10 +95,10 @@ Creates a new memory in the database, with an option to check for similarity bef
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `memory` | [`Memory`](../interfaces/Memory.md) | `undefined` | The memory object to create. |
-| `unique` | `boolean` | `false` | Whether to check for similarity before insertion. |
+| Name     | Type                                | Default value | Description                                       |
+| :------- | :---------------------------------- | :------------ | :------------------------------------------------ |
+| `memory` | [`Memory`](../interfaces/Memory.md) | `undefined`   | The memory object to create.                      |
+| `unique` | `boolean`                           | `false`       | Whether to check for similarity before insertion. |
 
 #### Returns
 
@@ -106,23 +106,23 @@ Creates a new memory in the database, with an option to check for similarity bef
 
 A Promise that resolves when the operation completes.
 
-___
+---
 
 ### getCachedEmbeddings
 
-▸ **getCachedEmbeddings**(`content`): `Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number`  }[]\>
+▸ **getCachedEmbeddings**(`content`): `Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type     |
+| :-------- | :------- |
 | `content` | `string` |
 
 #### Returns
 
-`Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number`  }[]\>
+`Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
 
-___
+---
 
 ### getMemories
 
@@ -132,12 +132,12 @@ Retrieves a list of memories by user IDs, with optional deduplication.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `opts` | `Object` | `undefined` | Options including user IDs, count, and uniqueness. |
-| `opts.count?` | `number` | `10` | The number of memories to retrieve. |
-| `opts.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined` | The room ID to retrieve memories for. |
-| `opts.unique?` | `boolean` | `true` | Whether to retrieve unique memories only. |
+| Name           | Type                                                       | Default value | Description                                        |
+| :------------- | :--------------------------------------------------------- | :------------ | :------------------------------------------------- |
+| `opts`         | `Object`                                                   | `undefined`   | Options including user IDs, count, and uniqueness. |
+| `opts.count?`  | `number`                                                   | `10`          | The number of memories to retrieve.                |
+| `opts.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined`   | The room ID to retrieve memories for.              |
+| `opts.unique?` | `boolean`                                                  | `true`        | Whether to retrieve unique memories only.          |
 
 #### Returns
 
@@ -145,7 +145,7 @@ Retrieves a list of memories by user IDs, with optional deduplication.
 
 A Promise resolving to an array of Memory objects.
 
-___
+---
 
 ### removeAllMemories
 
@@ -155,8 +155,8 @@ Removes all memories associated with a set of user IDs.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                         |
+| :-------- | :--------------------------------------------------------- | :---------------------------------- |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The room ID to remove memories for. |
 
 #### Returns
@@ -165,7 +165,7 @@ Removes all memories associated with a set of user IDs.
 
 A Promise that resolves when the operation completes.
 
-___
+---
 
 ### removeMemory
 
@@ -175,8 +175,8 @@ Removes a memory from the database by its ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type                                                       | Description                     |
+| :--------- | :--------------------------------------------------------- | :------------------------------ |
 | `memoryId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The ID of the memory to remove. |
 
 #### Returns
@@ -185,7 +185,7 @@ Removes a memory from the database by its ID.
 
 A Promise that resolves when the operation completes.
 
-___
+---
 
 ### searchMemoriesByEmbedding
 
@@ -195,14 +195,14 @@ Searches for memories similar to a given embedding vector.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `embedding` | `number`[] | The embedding vector to search with. |
-| `opts` | `Object` | Options including match threshold, count, user IDs, and uniqueness. |
-| `opts.count?` | `number` | The maximum number of memories to retrieve. |
-| `opts.match_threshold?` | `number` | The similarity threshold for matching memories. |
-| `opts.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The room ID to retrieve memories for. |
-| `opts.unique?` | `boolean` | Whether to retrieve unique memories only. |
+| Name                    | Type                                                       | Description                                                         |
+| :---------------------- | :--------------------------------------------------------- | :------------------------------------------------------------------ |
+| `embedding`             | `number`[]                                                 | The embedding vector to search with.                                |
+| `opts`                  | `Object`                                                   | Options including match threshold, count, user IDs, and uniqueness. |
+| `opts.count?`           | `number`                                                   | The maximum number of memories to retrieve.                         |
+| `opts.match_threshold?` | `number`                                                   | The similarity threshold for matching memories.                     |
+| `opts.room_id`          | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The room ID to retrieve memories for.                               |
+| `opts.unique?`          | `boolean`                                                  | Whether to retrieve unique memories only.                           |
 
 #### Returns
 

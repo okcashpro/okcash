@@ -10,16 +10,16 @@ custom_edit_url: null
 
 ### DONE
 
-• **DONE** = ``"DONE"``
+• **DONE** = `"DONE"`
 
-___
+---
 
 ### FAILED
 
-• **FAILED** = ``"FAILED"``
+• **FAILED** = `"FAILED"`
 
-___
+---
 
-### IN\_PROGRESS
+### IN_PROGRESS
 
-• **IN\_PROGRESS** = ``"IN_PROGRESS"``
+• **IN_PROGRESS** = `"IN_PROGRESS"`

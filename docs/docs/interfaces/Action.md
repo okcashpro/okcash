@@ -14,31 +14,31 @@ Represents an action that the agent can perform, including conditions for its us
 
 • **condition**: `string`
 
-___
+---
 
 ### description
 
 • **description**: `string`
 
-___
+---
 
 ### examples
 
 • **examples**: [`ActionExample`](ActionExample.md)[][]
 
-___
+---
 
 ### handler
 
 • **handler**: [`Handler`](../types/Handler.md)
 
-___
+---
 
 ### name
 
 • **name**: `string`
 
-___
+---
 
 ### validate
 

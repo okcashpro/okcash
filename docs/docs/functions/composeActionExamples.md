@@ -13,10 +13,10 @@ It randomly selects examples from the provided actions and formats them with gen
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name          | Type                                  | Description                                               |
+| :------------ | :------------------------------------ | :-------------------------------------------------------- |
 | `actionsData` | [`Action`](../interfaces/Action.md)[] | An array of `Action` objects from which to draw examples. |
-| `count` | `number` | The number of examples to generate. |
+| `count`       | `number`                              | The number of examples to generate.                       |
 
 #### Returns
 

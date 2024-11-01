@@ -10,11 +10,11 @@ custom_edit_url: null
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `goal` | [`Goal`](../interfaces/Goal.md) |
-| › `runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) |
+| Name             | Type                                         |
+| :--------------- | :------------------------------------------- |
+| `«destructured»` | `Object`                                     |
+| › `goal`         | [`Goal`](../interfaces/Goal.md)              |
+| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md) |
 
 #### Returns
 

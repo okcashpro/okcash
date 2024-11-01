@@ -10,7 +10,7 @@ custom_edit_url: null
 
 <img src="./docs/eliza_banner.jpg" alt="Eliza Banner" width="100%"></img>
 
-*As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)*
+_As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
 
 - Multi-agent simulation framework
 - Add as many unique characters as you want with [characterfile](https://github.com/lalalune/characterfile/)
@@ -26,36 +26,47 @@ custom_edit_url: null
 # Getting Started
 
 ## Install Node.js
+
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
 ## Edit the .env file
+
 - Copy .env.example to .env and fill in the appropriate values
 - Edit the TWITTER environment variables to add your bot's username and password
 
 ## Edit the character file
+
 - Check out the file `src/core/defaultCharacter.ts` - you can modify this
 - You can also load characters with the `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` and run multiple bots at the same time.
 
 ### Linux Installation
+
 You might need these
+
 ```
 npm install --include=optional sharp
 ```
 
 ### Run with Llama
+
 You can run Llama 70B or 405B models by setting the `XAI_MODEL` environment variable to `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` or `meta-llama/Meta-Llama-3.1-405B-Instruct`
 
 ### Run with Grok
+
 You can run Grok models by setting the `XAI_MODEL` environment variable to `grok-beta`
 
 ### Run with OpenAI
+
 You can run OpenAI models by setting the `XAI_MODEL` environment variable to `gpt-4o-mini` or `gpt-4o`
 
 # Requires Node 20+
+
 If you are getting strange issues when starting up, make sure you're using Node 20+. Some APIs are not compatible with previous versions. You can check your node version with `node -v`. If you need to install a new version of node, we recommend using [nvm](https://github.com/nvm-sh/nvm).
 
 ## Additional Requirements
+
 You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
+
 ```
 npm install --include=optional sharp
 ```
@@ -63,6 +74,7 @@ npm install --include=optional sharp
 # Environment Setup
 
 You will need to add environment variables to your .env file to connect to various platforms:
+
 ```
 # Required environment variables
 # Start Discord
@@ -81,6 +93,7 @@ TWITTER_COOKIES= # Account cookies
 ## CUDA Setup
 
 If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
+
 ```
 npm install
 npx --no node-llama-cpp source download --gpu cuda
@@ -89,6 +102,7 @@ npx --no node-llama-cpp source download --gpu cuda
 Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
 
 ## Running locally
+
 Add XAI_MODEL and set it to one of the above options from [Run with
 Llama](#run-with-llama) - you can leave X_SERVER_URL and XAI_API_KEY blank, it
 downloads the model from huggingface and queries it locally
@@ -96,6 +110,7 @@ downloads the model from huggingface and queries it locally
 # Cloud Setup (with OpenAI)
 
 In addition to the environment variables above, you will need to add the following:
+
 ```
 # OpenAI handles the bulk of the work with chat, TTS, image recognition, etc.
 OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
@@ -118,4 +133,5 @@ ELEVENLABS_OUTPUT_FORMAT=pcm_16000
 ```
 
 # Discord Bot
+
 For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html

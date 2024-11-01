@@ -14,7 +14,7 @@ Represents an example of a message, typically used for demonstrating or testing 
 
 • **content**: [`Content`](Content.md)
 
-___
+---
 
 ### user
 

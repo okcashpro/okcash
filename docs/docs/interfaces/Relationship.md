@@ -10,42 +10,42 @@ Represents a relationship between two users, including their IDs, the status of 
 
 ## Properties
 
-### created\_at
+### created_at
 
-• `Optional` **created\_at**: `string`
+• `Optional` **created_at**: `string`
 
-___
+---
 
 ### id
 
 • **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
-### room\_id
+### room_id
 
-• **room\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### status
 
 • **status**: `string`
 
-___
+---
 
-### user\_a
+### user_a
 
-• **user\_a**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_a**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
-### user\_b
+### user_b
 
-• **user\_b**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_b**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
-### user\_id
+### user_id
 
-• **user\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`

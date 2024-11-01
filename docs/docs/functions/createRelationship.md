@@ -10,12 +10,12 @@ custom_edit_url: null
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) |
-| › `userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
-| › `userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+| Name             | Type                                                       |
+| :--------------- | :--------------------------------------------------------- |
+| `«destructured»` | `Object`                                                   |
+| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
+| › `userA`        | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+| › `userB`        | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
 
 #### Returns
 

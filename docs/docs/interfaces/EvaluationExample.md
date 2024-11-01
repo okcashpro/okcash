@@ -14,13 +14,13 @@ Represents an example for evaluation, including the context, an array of message
 
 • **context**: `string`
 
-___
+---
 
 ### messages
 
 • **messages**: [`ActionExample`](ActionExample.md)[]
 
-___
+---
 
 ### outcome
 

@@ -14,13 +14,13 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 • **completed**: `boolean`
 
-___
+---
 
 ### description
 
 • **description**: `string`
 
-___
+---
 
 ### id
 

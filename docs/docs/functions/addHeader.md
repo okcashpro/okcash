@@ -15,10 +15,10 @@ If the body string is empty, the header is returned as is.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `header` | `string` | The header to add to the body. |
-| `body` | `string` | The body to which to add the header. |
+| Name     | Type     | Description                          |
+| :------- | :------- | :----------------------------------- |
+| `header` | `string` | The header to add to the body.       |
+| `body`   | `string` | The body to which to add the header. |
 
 #### Returns
 

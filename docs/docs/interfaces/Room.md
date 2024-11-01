@@ -14,7 +14,7 @@ Represents a room or conversation context, including its ID and a list of partic
 
 • **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### participants
 

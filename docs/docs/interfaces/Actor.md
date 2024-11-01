@@ -16,19 +16,19 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `quote` | `string` |
+| Name      | Type     |
+| :-------- | :------- |
+| `quote`   | `string` |
 | `summary` | `string` |
 | `tagline` | `string` |
 
-___
+---
 
 ### id
 
 • **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### name
 
