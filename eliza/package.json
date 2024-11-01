@@ -75,6 +75,7 @@
     "@ai-sdk/openai": "^0.0.70",
     "@anthropic-ai/sdk": "^0.30.1",
     "@cliqz/adblocker-playwright": "1.34.0",
+    "@coral-xyz/anchor": "^0.30.1",
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/rest": "2.4.0",
     "@discordjs/voice": "0.17.0",

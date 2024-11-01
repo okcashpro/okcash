@@ -1,15 +1,20 @@
 {
-  "name": "eliza",
-  "scripts": {
-      "build": "pnpm --dir eliza build",
-      "prettier-check": "npx prettier --check .",
-      "prettier": "npx prettier --write ."
-  },
-  "devDependencies": {
-      "husky": "^9.1.6",
-      "lerna": "^8.1.5",
-      "prettier": "^3.3.3",
-      "tsup": "^8.1.0",
-      "typedoc": "^0.26.7"
-  }
+    "name": "eliza",
+    "scripts": {
+        "build:eliza": "pnpm --dir eliza build",
+        "start:eliza": "pnpm --dir eliza start",
+        "prettier-check": "npx prettier --check .",
+        "prettier": "npx prettier --write .",
+        "clean": "bash ./scripts/clean.sh"
+    },
+    "devDependencies": {
+        "husky": "^9.1.6",
+        "lerna": "^8.1.5",
+        "prettier": "^3.3.3",
+        "tsup": "^8.1.0",
+        "typedoc": "^0.26.7"
+    },
+    "engines": {
+        "node": ">=20"
+    }
 }
