@@ -1,1 +1,11 @@
-{"data":{"ownerBalance":null,"creatorBalance":0,"ownerPercentage":null,"creatorPercentage":0,"top10HolderBalance":97984326430.19872,"top10HolderPercent":0.9922779616670393},"expiry":1730420206118}
+{
+    "data": {
+        "ownerBalance": null,
+        "creatorBalance": 0,
+        "ownerPercentage": null,
+        "creatorPercentage": 0,
+        "top10HolderBalance": 97984326430.19872,
+        "top10HolderPercent": 0.9922779616670393
+    },
+    "expiry": 1730420206118
+}

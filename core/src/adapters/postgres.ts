@@ -1,559 +1,568 @@
 import { v4 } from "uuid";
 import pg from "pg";
 import {
-  Account,
-  Actor,
-  GoalStatus,
-  type Goal,
-  type Memory,
-  type Relationship,
-  type UUID,
-  Participant
+    Account,
+    Actor,
+    GoalStatus,
+    type Goal,
+    type Memory,
+    type Relationship,
+    type UUID,
+    Participant,
 } from "../core/types.ts";
 import { DatabaseAdapter } from "../core/database.ts";
 const { Pool } = pg;
 
 export class PostgresDatabaseAdapter extends DatabaseAdapter {
-  private pool: typeof Pool;
+    private pool: typeof Pool;
 
-  constructor(connectionConfig: any) {
-    super();
+    constructor(connectionConfig: any) {
+        super();
 
-    this.pool = new Pool({
-      ...connectionConfig,
-      max: 20,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000
-    });
+        this.pool = new Pool({
+            ...connectionConfig,
+            max: 20,
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000,
+        });
 
-    // Register error handler for pool
-    this.pool.on("error", (err) => {
-      console.error("Unexpected error on idle client", err);
-    });
+        // Register error handler for pool
+        this.pool.on("error", (err) => {
+            console.error("Unexpected error on idle client", err);
+        });
 
-    this.testConnection();
-  }
-
-  async testConnection(): Promise<boolean> {
-    let client;
-    try {
-      // Attempt to get a client from the pool
-      client = await this.pool.connect();
-
-      // Test the connection with a simple query
-      const result = await client.query("SELECT NOW()");
-      console.log("Database connection test successful:", result.rows[0]);
-
-      return true;
-    } catch (error) {
-      console.error("Database connection test failed:", error);
-      throw new Error(`Failed to connect to database: ${error.message}`);
-    } finally {
-      // Make sure to release the client back to the pool
-      if (client) {
-        client.release();
-      }
+        this.testConnection();
     }
-  }
 
-  async getRoom(roomId: UUID): Promise<UUID | null> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        "SELECT id FROM rooms WHERE id = $1",
-        [roomId]
-      );
-      return rows.length > 0 ? (rows[0].id as UUID) : null;
-    } finally {
-      client.release();
+    async testConnection(): Promise<boolean> {
+        let client;
+        try {
+            // Attempt to get a client from the pool
+            client = await this.pool.connect();
+
+            // Test the connection with a simple query
+            const result = await client.query("SELECT NOW()");
+            console.log("Database connection test successful:", result.rows[0]);
+
+            return true;
+        } catch (error) {
+            console.error("Database connection test failed:", error);
+            throw new Error(`Failed to connect to database: ${error.message}`);
+        } finally {
+            // Make sure to release the client back to the pool
+            if (client) {
+                client.release();
+            }
+        }
     }
-  }
 
-  async getParticipantsForAccount(userId: UUID): Promise<Participant[]> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        `SELECT id, "userId", "roomId", last_message_read 
+    async getRoom(roomId: UUID): Promise<UUID | null> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                "SELECT id FROM rooms WHERE id = $1",
+                [roomId]
+            );
+            return rows.length > 0 ? (rows[0].id as UUID) : null;
+        } finally {
+            client.release();
+        }
+    }
+
+    async getParticipantsForAccount(userId: UUID): Promise<Participant[]> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                `SELECT id, "userId", "roomId", last_message_read 
          FROM participants 
          WHERE "userId" = $1`,
-        [userId]
-      );
-      return rows as Participant[];
-    } finally {
-      client.release();
+                [userId]
+            );
+            return rows as Participant[];
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getParticipantUserState(
-    roomId: UUID,
-    userId: UUID
-  ): Promise<"FOLLOWED" | "MUTED" | null> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        `SELECT userState FROM participants WHERE "roomId" = $1 AND userId = $2`,
-        [roomId, userId]
-      );
-      return rows.length > 0 ? rows[0].userState : null;
-    } finally {
-      client.release();
+    async getParticipantUserState(
+        roomId: UUID,
+        userId: UUID
+    ): Promise<"FOLLOWED" | "MUTED" | null> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                `SELECT userState FROM participants WHERE "roomId" = $1 AND userId = $2`,
+                [roomId, userId]
+            );
+            return rows.length > 0 ? rows[0].userState : null;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getMemoriesByRoomIds(params: {
-    roomIds: UUID[];
-    tableName: string;
-  }): Promise<Memory[]> {
-    const client = await this.pool.connect();
-    try {
-      const placeholders = params.roomIds.map((_, i) => `$${i + 2}`).join(", ");
-      const { rows } = await client.query(
-        `SELECT * FROM memories 
+    async getMemoriesByRoomIds(params: {
+        roomIds: UUID[];
+        tableName: string;
+    }): Promise<Memory[]> {
+        const client = await this.pool.connect();
+        try {
+            const placeholders = params.roomIds
+                .map((_, i) => `$${i + 2}`)
+                .join(", ");
+            const { rows } = await client.query(
+                `SELECT * FROM memories 
          WHERE type = $1 AND "roomId" IN (${placeholders})`,
-        [params.tableName, ...params.roomIds]
-      );
-      return rows.map((row) => ({
-        ...row,
-        content: JSON.parse(row.content)
-      }));
-    } finally {
-      client.release();
+                [params.tableName, ...params.roomIds]
+            );
+            return rows.map((row) => ({
+                ...row,
+                content: JSON.parse(row.content),
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async setParticipantUserState(
-    roomId: UUID,
-    userId: UUID,
-    state: "FOLLOWED" | "MUTED" | null
-  ): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        `UPDATE participants SET "userState" = $1 WHERE "roomId" = $2 AND "userId" = $3`,
-        [state, roomId, userId]
-      );
-    } finally {
-      client.release();
+    async setParticipantUserState(
+        roomId: UUID,
+        userId: UUID,
+        state: "FOLLOWED" | "MUTED" | null
+    ): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                `UPDATE participants SET "userState" = $1 WHERE "roomId" = $2 AND "userId" = $3`,
+                [state, roomId, userId]
+            );
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getParticipantsForRoom(roomId: UUID): Promise<UUID[]> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        'SELECT "userId" FROM participants WHERE "roomId" = $1',
-        [roomId]
-      );
-      return rows.map((row) => row.userId);
-    } finally {
-      client.release();
+    async getParticipantsForRoom(roomId: UUID): Promise<UUID[]> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                'SELECT "userId" FROM participants WHERE "roomId" = $1',
+                [roomId]
+            );
+            return rows.map((row) => row.userId);
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getAccountById(userId: UUID): Promise<Account | null> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        "SELECT * FROM accounts WHERE id = $1",
-        [userId]
-      );
-      if (rows.length === 0) return null;
+    async getAccountById(userId: UUID): Promise<Account | null> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                "SELECT * FROM accounts WHERE id = $1",
+                [userId]
+            );
+            if (rows.length === 0) return null;
 
-      const account = rows[0];
+            const account = rows[0];
 
-      console.log("account", account);
-      return {
-        ...account,
-        details:
-          typeof account.details === "string"
-            ? JSON.parse(account.details)
-            : account.details
-      };
-    } finally {
-      client.release();
+            console.log("account", account);
+            return {
+                ...account,
+                details:
+                    typeof account.details === "string"
+                        ? JSON.parse(account.details)
+                        : account.details,
+            };
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async createAccount(account: Account): Promise<boolean> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        `INSERT INTO accounts (id, name, username, email, "avatarUrl", details)
+    async createAccount(account: Account): Promise<boolean> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                `INSERT INTO accounts (id, name, username, email, "avatarUrl", details)
          VALUES ($1, $2, $3, $4, $5, $6)`,
-        [
-          account.id ?? v4(),
-          account.name,
-          account.username || "",
-          account.email || "",
-          account.avatarUrl || "",
-          JSON.stringify(account.details)
-        ]
-      );
-      return true;
-    } catch (error) {
-      console.log("Error creating account", error);
-      return false;
-    } finally {
-      client.release();
+                [
+                    account.id ?? v4(),
+                    account.name,
+                    account.username || "",
+                    account.email || "",
+                    account.avatarUrl || "",
+                    JSON.stringify(account.details),
+                ]
+            );
+            return true;
+        } catch (error) {
+            console.log("Error creating account", error);
+            return false;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getActorById(params: { roomId: UUID }): Promise<Actor[]> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        `SELECT a.id, a.name, a.username, a.details
+    async getActorById(params: { roomId: UUID }): Promise<Actor[]> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                `SELECT a.id, a.name, a.username, a.details
          FROM participants p
          LEFT JOIN accounts a ON p."userId" = a.id
          WHERE p."roomId" = $1`,
-        [params.roomId]
-      );
-      return rows.map((row) => ({
-        ...row,
-        details:
-          typeof row.details === "string"
-            ? JSON.parse(row.details)
-            : row.details
-      }));
-    } finally {
-      client.release();
+                [params.roomId]
+            );
+            return rows.map((row) => ({
+                ...row,
+                details:
+                    typeof row.details === "string"
+                        ? JSON.parse(row.details)
+                        : row.details,
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getMemoryById(id: UUID): Promise<Memory | null> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        "SELECT * FROM memories WHERE id = $1",
-        [id]
-      );
-      if (rows.length === 0) return null;
+    async getMemoryById(id: UUID): Promise<Memory | null> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                "SELECT * FROM memories WHERE id = $1",
+                [id]
+            );
+            if (rows.length === 0) return null;
 
-      return {
-        ...rows[0],
-        content:
-          typeof rows[0].content === "string"
-            ? JSON.parse(rows[0].content)
-            : rows[0].content
-      };
-    } finally {
-      client.release();
+            return {
+                ...rows[0],
+                content:
+                    typeof rows[0].content === "string"
+                        ? JSON.parse(rows[0].content)
+                        : rows[0].content,
+            };
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async createMemory(memory: Memory, tableName: string): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      let isUnique = true;
-      if (memory.embedding) {
-        const similarMemories = await this.searchMemoriesByEmbedding(
-          memory.embedding,
-          {
-            tableName,
-            roomId: memory.roomId,
-            match_threshold: 0.95,
-            count: 1
-          }
-        );
-        isUnique = similarMemories.length === 0;
-      }
+    async createMemory(memory: Memory, tableName: string): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            let isUnique = true;
+            if (memory.embedding) {
+                const similarMemories = await this.searchMemoriesByEmbedding(
+                    memory.embedding,
+                    {
+                        tableName,
+                        roomId: memory.roomId,
+                        match_threshold: 0.95,
+                        count: 1,
+                    }
+                );
+                isUnique = similarMemories.length === 0;
+            }
 
-      await client.query(
-        `INSERT INTO memories (
+            await client.query(
+                `INSERT INTO memories (
     id, type, content, embedding, "userId", "roomId", "unique", "createdAt"
   ) VALUES ($1, $2, $3, $4::vector, $5::uuid, $6::uuid, $7, to_timestamp($8/1000.0))`,
-        [
-          memory.id ?? v4(),
-          tableName,
-          JSON.stringify(memory.content),
-          `[${memory.embedding.join(",")}]`,
-          memory.userId,
-          memory.roomId,
-          memory.unique ?? true,
-          Date.now()
-        ]
-      );
-    } finally {
-      client.release();
+                [
+                    memory.id ?? v4(),
+                    tableName,
+                    JSON.stringify(memory.content),
+                    `[${memory.embedding.join(",")}]`,
+                    memory.userId,
+                    memory.roomId,
+                    memory.unique ?? true,
+                    Date.now(),
+                ]
+            );
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async searchMemories(params: {
-    tableName: string;
-    roomId: UUID;
-    embedding: number[];
-    match_threshold: number;
-    match_count: number;
-    unique: boolean;
-  }): Promise<Memory[]> {
-    const client = await this.pool.connect();
-    try {
-      let sql = `
+    async searchMemories(params: {
+        tableName: string;
+        roomId: UUID;
+        embedding: number[];
+        match_threshold: number;
+        match_count: number;
+        unique: boolean;
+    }): Promise<Memory[]> {
+        const client = await this.pool.connect();
+        try {
+            let sql = `
         SELECT *,
         1 - (embedding <-> $3) as similarity
         FROM memories
         WHERE type = $1 AND "roomId" = $2
       `;
 
-      if (params.unique) {
-        sql += " AND unique = true";
-      }
+            if (params.unique) {
+                sql += " AND unique = true";
+            }
 
-      sql += ` AND 1 - (embedding <-> $3) >= $4
+            sql += ` AND 1 - (embedding <-> $3) >= $4
                ORDER BY embedding <-> $3
                LIMIT $5`;
 
-      const { rows } = await client.query(sql, [
-        params.tableName,
-        params.roomId,
-        params.embedding,
-        params.match_threshold,
-        params.match_count
-      ]);
+            const { rows } = await client.query(sql, [
+                params.tableName,
+                params.roomId,
+                params.embedding,
+                params.match_threshold,
+                params.match_count,
+            ]);
 
-      return rows.map((row) => ({
-        ...row,
-        content: JSON.parse(row.content),
-        similarity: row.similarity
-      }));
-    } finally {
-      client.release();
+            return rows.map((row) => ({
+                ...row,
+                content: JSON.parse(row.content),
+                similarity: row.similarity,
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getMemories(params: {
-    roomId: UUID;
-    count?: number;
-    unique?: boolean;
-    tableName: string;
-    userIds?: UUID[];
-    start?: number;
-    end?: number;
-  }): Promise<Memory[]> {
-    if (!params.tableName) throw new Error("tableName is required");
-    if (!params.roomId) throw new Error("roomId is required");
+    async getMemories(params: {
+        roomId: UUID;
+        count?: number;
+        unique?: boolean;
+        tableName: string;
+        userIds?: UUID[];
+        start?: number;
+        end?: number;
+    }): Promise<Memory[]> {
+        if (!params.tableName) throw new Error("tableName is required");
+        if (!params.roomId) throw new Error("roomId is required");
 
-    const client = await this.pool.connect();
-    try {
-      let sql = `SELECT * FROM memories WHERE type = $1 AND "roomId" = $2`;
-      const values: any[] = [params.tableName, params.roomId];
-      let paramCount = 2;
+        const client = await this.pool.connect();
+        try {
+            let sql = `SELECT * FROM memories WHERE type = $1 AND "roomId" = $2`;
+            const values: any[] = [params.tableName, params.roomId];
+            let paramCount = 2;
 
-      if (params.start) {
-        paramCount++;
-        sql += ` AND "createdAt" >= to_timestamp($${paramCount / 1000})`;
-        values.push(params.start);
-      }
+            if (params.start) {
+                paramCount++;
+                sql += ` AND "createdAt" >= to_timestamp($${paramCount / 1000})`;
+                values.push(params.start);
+            }
 
-      if (params.end) {
-        paramCount++;
-        sql += ` AND "createdAt" <= to_timestamp($${paramCount / 1000})`;
-        values.push(params.end);
-      }
+            if (params.end) {
+                paramCount++;
+                sql += ` AND "createdAt" <= to_timestamp($${paramCount / 1000})`;
+                values.push(params.end);
+            }
 
-      if (params.unique) {
-        sql += " AND unique = true";
-      }
+            if (params.unique) {
+                sql += " AND unique = true";
+            }
 
-      if (params.userIds?.length) {
-        const userPlaceholders = params.userIds
-          .map((_, i) => `$${paramCount + 1 + i}`)
-          .join(",");
-        sql += ` AND "userId" IN (${userPlaceholders})`;
-        values.push(...params.userIds);
-        paramCount += params.userIds.length;
-      }
+            if (params.userIds?.length) {
+                const userPlaceholders = params.userIds
+                    .map((_, i) => `$${paramCount + 1 + i}`)
+                    .join(",");
+                sql += ` AND "userId" IN (${userPlaceholders})`;
+                values.push(...params.userIds);
+                paramCount += params.userIds.length;
+            }
 
-      sql += ' ORDER BY "createdAt" DESC';
+            sql += ' ORDER BY "createdAt" DESC';
 
-      if (params.count) {
-        paramCount++;
-        sql += ` LIMIT $${paramCount}`;
-        values.push(params.count);
-      }
+            if (params.count) {
+                paramCount++;
+                sql += ` LIMIT $${paramCount}`;
+                values.push(params.count);
+            }
 
-      console.log("sql", sql, values);
+            console.log("sql", sql, values);
 
-      const { rows } = await client.query(sql, values);
-      return rows.map((row) => ({
-        ...row,
-        content:
-          typeof rows.content === "string"
-            ? JSON.parse(rows.content)
-            : rows.content
-      }));
-    } finally {
-      client.release();
+            const { rows } = await client.query(sql, values);
+            return rows.map((row) => ({
+                ...row,
+                content:
+                    typeof rows.content === "string"
+                        ? JSON.parse(rows.content)
+                        : rows.content,
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getGoals(params: {
-    roomId: UUID;
-    userId?: UUID | null;
-    onlyInProgress?: boolean;
-    count?: number;
-  }): Promise<Goal[]> {
-    const client = await this.pool.connect();
-    try {
-      let sql = `SELECT * FROM goals WHERE "roomId" = $1`;
-      const values: any[] = [params.roomId];
-      let paramCount = 1;
+    async getGoals(params: {
+        roomId: UUID;
+        userId?: UUID | null;
+        onlyInProgress?: boolean;
+        count?: number;
+    }): Promise<Goal[]> {
+        const client = await this.pool.connect();
+        try {
+            let sql = `SELECT * FROM goals WHERE "roomId" = $1`;
+            const values: any[] = [params.roomId];
+            let paramCount = 1;
 
-      if (params.userId) {
-        paramCount++;
-        sql += ` AND "userId" = $${paramCount}`;
-        values.push(params.userId);
-      }
+            if (params.userId) {
+                paramCount++;
+                sql += ` AND "userId" = $${paramCount}`;
+                values.push(params.userId);
+            }
 
-      if (params.onlyInProgress) {
-        sql += " AND status = 'IN_PROGRESS'";
-      }
+            if (params.onlyInProgress) {
+                sql += " AND status = 'IN_PROGRESS'";
+            }
 
-      if (params.count) {
-        paramCount++;
-        sql += ` LIMIT $${paramCount}`;
-        values.push(params.count);
-      }
+            if (params.count) {
+                paramCount++;
+                sql += ` LIMIT $${paramCount}`;
+                values.push(params.count);
+            }
 
-      const { rows } = await client.query(sql, values);
-      return rows.map((row) => ({
-        ...row,
-        objectives:
-          typeof row.objectives === "string"
-            ? JSON.parse(row.objectives)
-            : row.objectives
-      }));
-    } finally {
-      client.release();
+            const { rows } = await client.query(sql, values);
+            return rows.map((row) => ({
+                ...row,
+                objectives:
+                    typeof row.objectives === "string"
+                        ? JSON.parse(row.objectives)
+                        : row.objectives,
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async updateGoal(goal: Goal): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        "UPDATE goals SET name = $1, status = $2, objectives = $3 WHERE id = $4",
-        [goal.name, goal.status, JSON.stringify(goal.objectives), goal.id]
-      );
-    } finally {
-      client.release();
+    async updateGoal(goal: Goal): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                "UPDATE goals SET name = $1, status = $2, objectives = $3 WHERE id = $4",
+                [
+                    goal.name,
+                    goal.status,
+                    JSON.stringify(goal.objectives),
+                    goal.id,
+                ]
+            );
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async createGoal(goal: Goal): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        `INSERT INTO goals (id, "roomId", "userId", name, status, objectives)
+    async createGoal(goal: Goal): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                `INSERT INTO goals (id, "roomId", "userId", name, status, objectives)
          VALUES ($1, $2, $3, $4, $5, $6)`,
-        [
-          goal.id ?? v4(),
-          goal.roomId,
-          goal.userId,
-          goal.name,
-          goal.status,
-          JSON.stringify(goal.objectives)
-        ]
-      );
-    } finally {
-      client.release();
-    }
-  }
-
-  async removeGoal(goalId: UUID): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query("DELETE FROM goals WHERE id = $1", [goalId]);
-    } finally {
-      client.release();
-    }
-  }
-
-  async createRoom(roomId?: UUID): Promise<UUID> {
-    const client = await this.pool.connect();
-    try {
-      const newRoomId = roomId || v4();
-      await client.query("INSERT INTO rooms (id) VALUES ($1)", [newRoomId]);
-      return newRoomId as UUID;
-    } finally {
-      client.release();
-    }
-  }
-
-  async removeRoom(roomId: UUID): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query("DELETE FROM rooms WHERE id = $1", [roomId]);
-    } finally {
-      client.release();
-    }
-  }
-
-  async createRelationship(params: {
-    userA: UUID;
-    userB: UUID;
-  }): Promise<boolean> {
-    if (!params.userA || !params.userB) {
-      throw new Error("userA and userB are required");
+                [
+                    goal.id ?? v4(),
+                    goal.roomId,
+                    goal.userId,
+                    goal.name,
+                    goal.status,
+                    JSON.stringify(goal.objectives),
+                ]
+            );
+        } finally {
+            client.release();
+        }
     }
 
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        `INSERT INTO relationships (id, "userA", "userB", "userId")
+    async removeGoal(goalId: UUID): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query("DELETE FROM goals WHERE id = $1", [goalId]);
+        } finally {
+            client.release();
+        }
+    }
+
+    async createRoom(roomId?: UUID): Promise<UUID> {
+        const client = await this.pool.connect();
+        try {
+            const newRoomId = roomId || v4();
+            await client.query("INSERT INTO rooms (id) VALUES ($1)", [
+                newRoomId,
+            ]);
+            return newRoomId as UUID;
+        } finally {
+            client.release();
+        }
+    }
+
+    async removeRoom(roomId: UUID): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query("DELETE FROM rooms WHERE id = $1", [roomId]);
+        } finally {
+            client.release();
+        }
+    }
+
+    async createRelationship(params: {
+        userA: UUID;
+        userB: UUID;
+    }): Promise<boolean> {
+        if (!params.userA || !params.userB) {
+            throw new Error("userA and userB are required");
+        }
+
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                `INSERT INTO relationships (id, "userA", "userB", "userId")
          VALUES ($1, $2, $3, $4)`,
-        [v4(), params.userA, params.userB, params.userA]
-      );
-      return true;
-    } catch (error) {
-      console.log("Error creating relationship", error);
-      return false;
-    } finally {
-      client.release();
+                [v4(), params.userA, params.userB, params.userA]
+            );
+            return true;
+        } catch (error) {
+            console.log("Error creating relationship", error);
+            return false;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getRelationship(params: {
-    userA: UUID;
-    userB: UUID;
-  }): Promise<Relationship | null> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        `SELECT * FROM relationships 
+    async getRelationship(params: {
+        userA: UUID;
+        userB: UUID;
+    }): Promise<Relationship | null> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                `SELECT * FROM relationships 
          WHERE ("userA" = $1 AND "userB" = $2) OR ("userA" = $2 AND "userB" = $1)`,
-        [params.userA, params.userB]
-      );
-      return rows.length > 0 ? rows[0] : null;
-    } finally {
-      client.release();
+                [params.userA, params.userB]
+            );
+            return rows.length > 0 ? rows[0] : null;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getRelationships(params: { userId: UUID }): Promise<Relationship[]> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        `SELECT * FROM relationships WHERE "userA" = $1 OR "userB" = $1`,
-        [params.userId]
-      );
-      return rows;
-    } finally {
-      client.release();
+    async getRelationships(params: { userId: UUID }): Promise<Relationship[]> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                `SELECT * FROM relationships WHERE "userA" = $1 OR "userB" = $1`,
+                [params.userId]
+            );
+            return rows;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getCachedEmbeddings(opts: {
-    query_table_name: string;
-    query_threshold: number;
-    query_input: string;
-    query_field_name: string;
-    query_field_sub_name: string;
-    query_match_count: number;
-  }): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
-    const client = await this.pool.connect();
-    try {
-      const sql = `
+    async getCachedEmbeddings(opts: {
+        query_table_name: string;
+        query_threshold: number;
+        query_input: string;
+        query_field_name: string;
+        query_field_sub_name: string;
+        query_match_count: number;
+    }): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+        const client = await this.pool.connect();
+        try {
+            const sql = `
         SELECT embedding,
         levenshtein($1, content->$2->$3) as levenshtein_score
         FROM memories 
@@ -562,232 +571,234 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         LIMIT $5
       `;
 
-      const { rows } = await client.query(sql, [
-        opts.query_input,
-        opts.query_field_name,
-        opts.query_field_sub_name,
-        opts.query_table_name,
-        opts.query_match_count
-      ]);
+            const { rows } = await client.query(sql, [
+                opts.query_input,
+                opts.query_field_name,
+                opts.query_field_sub_name,
+                opts.query_table_name,
+                opts.query_match_count,
+            ]);
 
-      return rows.map((row) => ({
-        embedding: row.embedding,
-        levenshtein_score: row.levenshtein_score
-      }));
-    } finally {
-      client.release();
+            return rows.map((row) => ({
+                embedding: row.embedding,
+                levenshtein_score: row.levenshtein_score,
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async log(params: {
-    body: { [key: string]: unknown };
-    userId: UUID;
-    roomId: UUID;
-    type: string;
-  }): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        'INSERT INTO logs (body, "userId", "roomId", type) VALUES ($1, $2, $3, $4)',
-        [params.body, params.userId, params.roomId, params.type]
-      );
-    } finally {
-      client.release();
+    async log(params: {
+        body: { [key: string]: unknown };
+        userId: UUID;
+        roomId: UUID;
+        type: string;
+    }): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                'INSERT INTO logs (body, "userId", "roomId", type) VALUES ($1, $2, $3, $4)',
+                [params.body, params.userId, params.roomId, params.type]
+            );
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async searchMemoriesByEmbedding(
-    embedding: number[],
-    params: {
-      match_threshold?: number;
-      count?: number;
-      roomId?: UUID;
-      unique?: boolean;
-      tableName: string;
-    }
-  ): Promise<Memory[]> {
-    const client = await this.pool.connect();
-    try {
-      // Format the embedding array as a proper vector string
-      const vectorStr = `[${embedding.join(",")}]`;
+    async searchMemoriesByEmbedding(
+        embedding: number[],
+        params: {
+            match_threshold?: number;
+            count?: number;
+            roomId?: UUID;
+            unique?: boolean;
+            tableName: string;
+        }
+    ): Promise<Memory[]> {
+        const client = await this.pool.connect();
+        try {
+            // Format the embedding array as a proper vector string
+            const vectorStr = `[${embedding.join(",")}]`;
 
-      let sql = `
+            let sql = `
         SELECT *,
         1 - (embedding <-> $1::vector) as similarity
         FROM memories
         WHERE type = $2
       `;
 
-      const values: any[] = [vectorStr, params.tableName];
-      let paramCount = 2;
+            const values: any[] = [vectorStr, params.tableName];
+            let paramCount = 2;
 
-      if (params.unique) {
-        sql += ` AND "unique" = true`;
-      }
+            if (params.unique) {
+                sql += ` AND "unique" = true`;
+            }
 
-      if (params.roomId) {
-        paramCount++;
-        sql += ` AND "roomId" = $${paramCount}::uuid`;
-        values.push(params.roomId);
-      }
+            if (params.roomId) {
+                paramCount++;
+                sql += ` AND "roomId" = $${paramCount}::uuid`;
+                values.push(params.roomId);
+            }
 
-      if (params.match_threshold) {
-        paramCount++;
-        sql += ` AND 1 - (embedding <-> $1::vector) >= $${paramCount}`;
-        values.push(params.match_threshold);
-      }
+            if (params.match_threshold) {
+                paramCount++;
+                sql += ` AND 1 - (embedding <-> $1::vector) >= $${paramCount}`;
+                values.push(params.match_threshold);
+            }
 
-      sql += ` ORDER BY embedding <-> $1::vector`;
+            sql += ` ORDER BY embedding <-> $1::vector`;
 
-      if (params.count) {
-        paramCount++;
-        sql += ` LIMIT $${paramCount}`;
-        values.push(params.count);
-      }
+            if (params.count) {
+                paramCount++;
+                sql += ` LIMIT $${paramCount}`;
+                values.push(params.count);
+            }
 
-      const { rows } = await client.query(sql, values);
-      return rows.map((row) => ({
-        ...row,
-        content:
-          typeof row.content === "string"
-            ? JSON.parse(row.content)
-            : row.content,
-        similarity: row.similarity
-      }));
-    } finally {
-      client.release();
+            const { rows } = await client.query(sql, values);
+            return rows.map((row) => ({
+                ...row,
+                content:
+                    typeof row.content === "string"
+                        ? JSON.parse(row.content)
+                        : row.content,
+                similarity: row.similarity,
+            }));
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async addParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        'INSERT INTO participants (id, "userId", "roomId") VALUES ($1, $2, $3)',
-        [v4(), userId, roomId]
-      );
-      return true;
-    } catch (error) {
-      console.log("Error adding participant", error);
-      return false;
-    } finally {
-      client.release();
+    async addParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                'INSERT INTO participants (id, "userId", "roomId") VALUES ($1, $2, $3)',
+                [v4(), userId, roomId]
+            );
+            return true;
+        } catch (error) {
+            console.log("Error adding participant", error);
+            return false;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async removeParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        'DELETE FROM participants WHERE "userId" = $1 AND "roomId" = $2',
-        [userId, roomId]
-      );
-      return true;
-    } catch (error) {
-      console.log("Error removing participant", error);
-      return false;
-    } finally {
-      client.release();
+    async removeParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                'DELETE FROM participants WHERE "userId" = $1 AND "roomId" = $2',
+                [userId, roomId]
+            );
+            return true;
+        } catch (error) {
+            console.log("Error removing participant", error);
+            return false;
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async updateGoalStatus(params: {
-    goalId: UUID;
-    status: GoalStatus;
-  }): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query("UPDATE goals SET status = $1 WHERE id = $2", [
-        params.status,
-        params.goalId
-      ]);
-    } finally {
-      client.release();
+    async updateGoalStatus(params: {
+        goalId: UUID;
+        status: GoalStatus;
+    }): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query("UPDATE goals SET status = $1 WHERE id = $2", [
+                params.status,
+                params.goalId,
+            ]);
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async removeMemory(memoryId: UUID, tableName: string): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query("DELETE FROM memories WHERE type = $1 AND id = $2", [
-        tableName,
-        memoryId
-      ]);
-    } finally {
-      client.release();
+    async removeMemory(memoryId: UUID, tableName: string): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                "DELETE FROM memories WHERE type = $1 AND id = $2",
+                [tableName, memoryId]
+            );
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async removeAllMemories(roomId: UUID, tableName: string): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(
-        "DELETE FROM memories WHERE type = $1 AND roomId = $2",
-        [tableName, roomId]
-      );
-    } finally {
-      client.release();
+    async removeAllMemories(roomId: UUID, tableName: string): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(
+                "DELETE FROM memories WHERE type = $1 AND roomId = $2",
+                [tableName, roomId]
+            );
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async countMemories(
-    roomId: UUID,
-    unique = true,
-    tableName = ""
-  ): Promise<number> {
-    if (!tableName) throw new Error("tableName is required");
+    async countMemories(
+        roomId: UUID,
+        unique = true,
+        tableName = ""
+    ): Promise<number> {
+        if (!tableName) throw new Error("tableName is required");
 
-    const client = await this.pool.connect();
-    try {
-      let sql = `SELECT COUNT(*) as count FROM memories WHERE type = $1 AND "roomId" = $2`;
-      if (unique) {
-        sql += " AND unique = true";
-      }
+        const client = await this.pool.connect();
+        try {
+            let sql = `SELECT COUNT(*) as count FROM memories WHERE type = $1 AND "roomId" = $2`;
+            if (unique) {
+                sql += " AND unique = true";
+            }
 
-      const { rows } = await client.query(sql, [tableName, roomId]);
-      return parseInt(rows[0].count);
-    } finally {
-      client.release();
+            const { rows } = await client.query(sql, [tableName, roomId]);
+            return parseInt(rows[0].count);
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async removeAllGoals(roomId: UUID): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query(`DELETE FROM goals WHERE "roomId" = $1`, [roomId]);
-    } finally {
-      client.release();
+    async removeAllGoals(roomId: UUID): Promise<void> {
+        const client = await this.pool.connect();
+        try {
+            await client.query(`DELETE FROM goals WHERE "roomId" = $1`, [
+                roomId,
+            ]);
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getRoomsForParticipant(userId: UUID): Promise<UUID[]> {
-    const client = await this.pool.connect();
-    try {
-      const { rows } = await client.query(
-        `SELECT "roomId" FROM participants WHERE "userId" = $1`,
-        [userId]
-      );
-      return rows.map((row) => row.roomId);
-    } finally {
-      client.release();
+    async getRoomsForParticipant(userId: UUID): Promise<UUID[]> {
+        const client = await this.pool.connect();
+        try {
+            const { rows } = await client.query(
+                `SELECT "roomId" FROM participants WHERE "userId" = $1`,
+                [userId]
+            );
+            return rows.map((row) => row.roomId);
+        } finally {
+            client.release();
+        }
     }
-  }
 
-  async getRoomsForParticipants(userIds: UUID[]): Promise<UUID[]> {
-    const client = await this.pool.connect();
-    try {
-      const placeholders = userIds.map((_, i) => `${i + 1}`).join(", ");
-      const { rows } = await client.query(
-        `SELECT DISTINCT "roomId" FROM participants WHERE "userId" IN (${placeholders})`,
-        userIds
-      );
-      return rows.map((row) => row.roomId);
-    } finally {
-      client.release();
+    async getRoomsForParticipants(userIds: UUID[]): Promise<UUID[]> {
+        const client = await this.pool.connect();
+        try {
+            const placeholders = userIds.map((_, i) => `${i + 1}`).join(", ");
+            const { rows } = await client.query(
+                `SELECT DISTINCT "roomId" FROM participants WHERE "userId" IN (${placeholders})`,
+                userIds
+            );
+            return rows.map((row) => row.roomId);
+        } finally {
+            client.release();
+        }
     }
-  }
-  async getActorDetails(params: { roomId: string }): Promise<Actor[]> {
-    const sql = `
+    async getActorDetails(params: { roomId: string }): Promise<Actor[]> {
+        const sql = `
     SELECT 
       a.id,
       a.name,
@@ -798,48 +809,50 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     WHERE p.roomId = $1
   `;
 
-    try {
-      const result = await this.pool.query<Actor>(sql, [params.roomId]);
+        try {
+            const result = await this.pool.query<Actor>(sql, [params.roomId]);
 
-      return result.rows.map((row) => ({
-        ...row,
-        details: row.details // PostgreSQL automatically handles JSON parsing
-      }));
-    } catch (error) {
-      console.error("Error fetching actor details:", error);
-      throw new Error("Failed to fetch actor details");
+            return result.rows.map((row) => ({
+                ...row,
+                details: row.details, // PostgreSQL automatically handles JSON parsing
+            }));
+        } catch (error) {
+            console.error("Error fetching actor details:", error);
+            throw new Error("Failed to fetch actor details");
+        }
     }
-  }
 }
 
 export function createLoggingDatabaseAdapter(
-  adapter: DatabaseAdapter
+    adapter: DatabaseAdapter
 ): DatabaseAdapter {
-  return new Proxy(adapter, {
-    get(target, prop, receiver) {
-      const value = Reflect.get(target, prop, receiver);
+    return new Proxy(adapter, {
+        get(target, prop, receiver) {
+            const value = Reflect.get(target, prop, receiver);
 
-      if (typeof value === "function") {
-        return async function (...args: any[]) {
-          const methodName = prop.toString();
-          console.log(`Calling method: ${methodName}`, {
-            arguments: args.map((arg) =>
-              typeof arg === "object" ? JSON.stringify(arg) : arg
-            )
-          });
+            if (typeof value === "function") {
+                return async function (...args: any[]) {
+                    const methodName = prop.toString();
+                    console.log(`Calling method: ${methodName}`, {
+                        arguments: args.map((arg) =>
+                            typeof arg === "object" ? JSON.stringify(arg) : arg
+                        ),
+                    });
 
-          try {
-            const result = await value.apply(this, args);
-            console.log(`Method ${methodName} completed successfully`);
-            return result;
-          } catch (error) {
-            console.error(`Method ${methodName} failed:`, error);
-            throw error;
-          }
-        };
-      }
+                    try {
+                        const result = await value.apply(this, args);
+                        console.log(
+                            `Method ${methodName} completed successfully`
+                        );
+                        return result;
+                    } catch (error) {
+                        console.error(`Method ${methodName} failed:`, error);
+                        throw error;
+                    }
+                };
+            }
 
-      return value;
-    }
-  });
+            return value;
+        },
+    });
 }

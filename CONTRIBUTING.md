@@ -13,9 +13,9 @@ By participating in this project, you are expected to uphold our Code of Conduct
 1. Ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/ai16z/eliza/issues).
 2. If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/ai16z/eliza/issues/new). Be sure to include
 
-- a title and clear description,
-- as much relevant information as possible, and
-- a code sample or an executable test case demonstrating the expected behavior that is not occurring.
+-   a title and clear description,
+-   as much relevant information as possible, and
+-   a code sample or an executable test case demonstrating the expected behavior that is not occurring.
 
 ### Suggesting Enhancements
 
@@ -36,22 +36,22 @@ By participating in this project, you are expected to uphold our Code of Conduct
 
 ### Git Commit Messages
 
-- Use the present tense ("Add feature" not "Added feature")
-- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Limit the first line to 72 characters or less
-- Reference issues and pull requests liberally after the first line
+-   Use the present tense ("Add feature" not "Added feature")
+-   Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+-   Limit the first line to 72 characters or less
+-   Reference issues and pull requests liberally after the first line
 
 ### JavaScript Styleguide
 
-- All JavaScript must adhere to [JavaScript Standard Style](https://standardjs.com/).
+-   All JavaScript must adhere to [JavaScript Standard Style](https://standardjs.com/).
 
 ### TypeScript Styleguide
 
-- All TypeScript must adhere to [TypeScript Standard Style](https://github.com/standard/ts-standard).
+-   All TypeScript must adhere to [TypeScript Standard Style](https://github.com/standard/ts-standard).
 
 ### Documentation Styleguide
 
-- Use [Markdown](https://daringfireball.net/projects/markdown/) for documentation.
+-   Use [Markdown](https://daringfireball.net/projects/markdown/) for documentation.
 
 ## Additional Notes
 
@@ -59,10 +59,10 @@ By participating in this project, you are expected to uphold our Code of Conduct
 
 This section lists the labels we use to help us track and manage issues and pull requests.
 
-- `bug` - Issues that are bugs.
-- `enhancement` - Issues that are feature requests.
-- `documentation` - Issues or pull requests related to documentation.
-- `good first issue` - Good for newcomers.
+-   `bug` - Issues that are bugs.
+-   `enhancement` - Issues that are feature requests.
+-   `documentation` - Issues or pull requests related to documentation.
+-   `good first issue` - Good for newcomers.
 
 ## Recognition
 

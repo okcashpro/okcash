@@ -3,13 +3,13 @@ import { parseJSONObjectFromText } from "../core/parsing.ts";
 import { IAgentRuntime, ModelClass } from "../core/types.ts";
 
 export async function generateSummary(
-  runtime: IAgentRuntime,
-  text: string,
+    runtime: IAgentRuntime,
+    text: string
 ): Promise<{ title: string; description: string }> {
-  // make sure text is under 128k characters
-  text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
+    // make sure text is under 128k characters
+    text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
 
-  const prompt = `Please generate a concise summary for the following text:
+    const prompt = `Please generate a concise summary for the following text:
   
   Text: """
   ${text}
@@ -23,23 +23,23 @@ export async function generateSummary(
   }
   \`\`\``;
 
-  const response = await generateText({
-    runtime,
-    context: prompt,
-    modelClass: ModelClass.SMALL,
-  });
+    const response = await generateText({
+        runtime,
+        context: prompt,
+        modelClass: ModelClass.SMALL,
+    });
 
-  const parsedResponse = parseJSONObjectFromText(response);
+    const parsedResponse = parseJSONObjectFromText(response);
 
-  if (parsedResponse) {
+    if (parsedResponse) {
+        return {
+            title: parsedResponse.title,
+            description: parsedResponse.summary,
+        };
+    }
+
     return {
-      title: parsedResponse.title,
-      description: parsedResponse.summary,
+        title: "",
+        description: "",
     };
-  }
-
-  return {
-    title: "",
-    description: "",
-  };
 }

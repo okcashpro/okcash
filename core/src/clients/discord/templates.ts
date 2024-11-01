@@ -1,11 +1,11 @@
 import {
-  messageCompletionFooter,
-  shouldRespondFooter,
+    messageCompletionFooter,
+    shouldRespondFooter,
 } from "../../core/parsing.ts";
 
 export const messageHandlerTemplate =
-  // {{goals}}
-  `# Action Examples
+    // {{goals}}
+    `# Action Examples
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
 
@@ -40,7 +40,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 ` + messageCompletionFooter;
 
 export const voiceHandlerTemplate =
-  `# Task: Generate conversational voice dialog for {{agentName}}.
+    `# Task: Generate conversational voice dialog for {{agentName}}.
 About {{agentName}}:
 {{bio}}
 
@@ -62,7 +62,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 ` + messageCompletionFooter;
 
 export const shouldRespondTemplate =
-  `# Task: Decide if {{agentName}} should respond.
+    `# Task: Decide if {{agentName}} should respond.
 About {{agentName}}:
 {{bio}}
 

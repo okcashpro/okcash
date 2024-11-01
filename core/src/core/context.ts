@@ -22,19 +22,18 @@ import { type State } from "./types.ts";
  * const context = composeContext({ state, template });
  */
 export const composeContext = ({
-  state,
-  template,
+    state,
+    template,
 }: {
-  state: State;
-  template: string;
+    state: State;
+    template: string;
 }) => {
-   
-  // @ts-expect-error match isn't working as expected
-  const out = template.replace(/{{\w+}}/g, (match) => {
-    const key = match.replace(/{{|}}/g, "");
-    return state[key] ?? "";
-  });
-  return out;
+    // @ts-expect-error match isn't working as expected
+    const out = template.replace(/{{\w+}}/g, (match) => {
+        const key = match.replace(/{{|}}/g, "");
+        return state[key] ?? "";
+    });
+    return out;
 };
 
 /**
@@ -57,5 +56,5 @@ export const composeContext = ({
  * const text = addHeader(header, body);
  */
 export const addHeader = (header: string, body: string) => {
-  return body.length > 0 ? `${header ? header + "\n" : header}${body}\n` : "";
+    return body.length > 0 ? `${header ? header + "\n" : header}${body}\n` : "";
 };
