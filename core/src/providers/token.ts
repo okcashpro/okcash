@@ -1,7 +1,7 @@
 import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
-import { IAgentRuntime, Memory, Provider, State } from "../core/types";
-import settings from "../core/settings";
+import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
+import settings from "../core/settings.ts";
 import BigNumber from "bignumber.js";
 import {
     ProcessedTokenData,
@@ -10,7 +10,7 @@ import {
     DexScreenerData,
     //   DexScreenerPair,
     HolderData,
-} from "../types/token";
+} from "../types/token.ts";
 import NodeCache from "node-cache";
 import * as fs from "fs";
 import * as path from "path";

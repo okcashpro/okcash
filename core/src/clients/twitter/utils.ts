@@ -48,18 +48,15 @@ export async function buildConversationThread(
             console.log("Creating memory for tweet", currentTweet.id);
             const roomId = stringToUuid(currentTweet.conversationId);
             const userId = stringToUuid(currentTweet.userId);
-            await client.runtime.ensureRoomExists(roomId);
-            await client.runtime.ensureUserExists(
+
+            await client.runtime.ensureConnection(
                 userId,
+                roomId,
                 currentTweet.username,
                 currentTweet.name,
                 "twitter"
             );
-            await client.runtime.ensureParticipantInRoom(userId, roomId);
-            await client.runtime.ensureParticipantInRoom(
-                client.runtime.agentId,
-                roomId
-            );
+
             client.runtime.messageManager.createMemory({
                 id: stringToUuid(currentTweet.id),
                 content: {

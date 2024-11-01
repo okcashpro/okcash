@@ -1,5 +1,5 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
-import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
+import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet.js";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import {
     CreateTokenMetadata,

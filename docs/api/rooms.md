@@ -22,4 +22,4 @@ A participant is an agent or user that is part of the room. Participants are ide
 
 Every memory needs to be associated with a room and a participant. On databases where foreign keys are available, we try to enforce this constraint.
 
-When handling messages, you can use the built-in `AgentRuntime.ensureRoomExists(user_id,  room_id)` and `AgentRuntime.ensureParticipantExists()` methods to ensure that the room and participant are correctly set up.
+When handling messages, you can use the built-in `AgentRuntime.ensureRoomExists(user_id,  room_id)` and `AgentRuntime.ensureParticipantExists()` methods to ensure that the room and participant are correctly set up. A wrapper function has also been added to the runtime to make this easier: `AgentRuntime.ensureConnection(user_id, room_id, user_name, user_screen_name, source)`.

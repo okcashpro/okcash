@@ -1,21 +1,19 @@
-import {
-    PublicKey,
-    Keypair,
-    Connection,
-    VersionedTransaction,
-    LAMPORTS_PER_SOL,
-    RpcResponseAndContext,
-    TokenAmount,
-    SimulatedTransactionResponse,
-    Blockhash,
-    BlockhashWithExpiryBlockHeight,
-} from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
-import settings from "../core/settings";
+import {
+    BlockhashWithExpiryBlockHeight,
+    Connection,
+    Keypair,
+    PublicKey,
+    RpcResponseAndContext,
+    SimulatedTransactionResponse,
+    TokenAmount,
+    VersionedTransaction
+} from "@solana/web3.js";
+import settings from "../core/settings.ts";
 
 const solAddress = settings.SOL_ADDRESS;
 const SLIPPAGE = settings.SLIPPAGE;
-const connection = new Connection(settings.RPC_URL!);
+const connection = new Connection(settings.RPC_URL || "https://api.mainnet-beta.solana.com");
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function delayedCall<T>(
