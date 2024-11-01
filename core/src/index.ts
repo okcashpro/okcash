@@ -1,3 +1,8 @@
+// Exports
+export * from "./actions/index.ts";
+export * from "./clients/index.ts";
+export * from "./adapters/index.ts";
+
 import Database from "better-sqlite3";
 import fs from "fs";
 import yargs from "yargs";
