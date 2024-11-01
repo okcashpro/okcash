@@ -13,9 +13,9 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
 export const TEST_EVALUATOR = {
   name: "TEST_EVALUATOR",
   validate: async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     _runtime: IAgentRuntime,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     _message: Memory,
   ): Promise<boolean> => {
     return await Promise.resolve(true);
@@ -42,9 +42,9 @@ export const TEST_EVALUATOR = {
 export const TEST_EVALUATOR_FAIL = {
   name: "TEST_EVALUATOR_FAIL",
   validate: async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     _runtime: IAgentRuntime,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     _message: Memory,
   ): Promise<boolean> => {
     return await Promise.resolve(false);

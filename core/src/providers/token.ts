@@ -474,7 +474,7 @@ export class TokenProvider {
 
     try {
       while (true) {
-        let params = {
+        const params = {
           limit: limit,
           displayOptions: {},
           mint: this.tokenAddress,

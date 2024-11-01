@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
-import { createRuntime } from "../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { runAiTest } from "../test_resources/runAiTest.ts";
-import { messageHandlerTemplate } from "../test_resources/templates.ts";
-import { TEST_ACTION, TEST_ACTION_FAIL } from "../test_resources/testAction.ts";
-import { type User } from "../test_resources/types.ts";
-import { composeContext } from "./context.ts";
-import { embeddingZeroVector } from "./memory.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";
+import { runAiTest } from "../src/test_resources/runAiTest.ts";
+import { messageHandlerTemplate } from "../src/test_resources/templates.ts";
+import { TEST_ACTION, TEST_ACTION_FAIL } from "../src/test_resources/testAction.ts";
+import { type User } from "../src/test_resources/types.ts";
+import { composeContext } from "../src/core/context.ts";
+import { embeddingZeroVector } from "../src/core/memory.ts";
 import {
   Content,
   IAgentRuntime,
@@ -14,9 +14,9 @@ import {
   State,
   type Memory,
   type UUID,
-} from "./types.ts";
-import { stringToUuid } from "./uuid.ts";
-import { generateMessageResponse } from "./generation.ts";
+} from "../src/core/types.ts";
+import { stringToUuid } from "../src/core/uuid.ts";
+import { generateMessageResponse } from "../src/core/generation.ts";
 
 async function handleMessage(
   runtime: IAgentRuntime,

@@ -49,7 +49,7 @@ export default {
     log_to_file(`${state.agentName}_${datestr}_claude_context`, context);
 
     let responseContent;
-    let callbackData: Content = {
+    const callbackData: Content = {
       text: undefined, // fill in later
       action: "CLAUDE_RESPONSE",
       source: "Claude",
@@ -62,7 +62,7 @@ export default {
       apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
     });
 
-    let attachments = [];
+    const attachments = [];
     for (let triesLeft = 3; triesLeft > 0; triesLeft--) {
       try {
         const response = await anthropic.messages.create({

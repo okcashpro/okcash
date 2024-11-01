@@ -252,7 +252,7 @@ export class MessageManager {
 
       console.log("Responding");
 
-      let context = composeContext({
+      const context = composeContext({
         state,
         template: messageHandlerTemplate,
       });
@@ -305,7 +305,7 @@ export class MessageManager {
             files,
           );
           let notFirstMessage = false;
-          let memories: Memory[] = [];
+          const memories: Memory[] = [];
           for (const m of messages) {
             let action = content.action;
             // If there's only one message or it's the last message, keep the original action

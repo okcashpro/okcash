@@ -1,18 +1,18 @@
 import dotenv from "dotenv";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import {
   IAgentRuntime,
   type Memory,
   type Provider,
   type State,
   type UUID,
-} from "./types.ts";
+} from "../src/core/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
 const TestProvider: Provider = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
     return "Hello Test";
   },

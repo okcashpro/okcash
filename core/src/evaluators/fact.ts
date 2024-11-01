@@ -64,7 +64,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     template,
   });
 
-  let facts = await generateObjectArray({
+  const facts = await generateObjectArray({
     runtime,
     context,
     modelClass: ModelClass.SMALL,
@@ -112,9 +112,9 @@ export default {
     "EXTRACT_INFORMATION",
   ],
   validate: async (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     runtime: IAgentRuntime,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     message: Memory,
   ): Promise<boolean> => {
     const messageCount = (await runtime.messageManager.countMemories(

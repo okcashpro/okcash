@@ -84,7 +84,7 @@ export default {
         template: shouldContinueTemplate,
       });
 
-      let response = await generateTrueOrFalse({
+      const response = await generateTrueOrFalse({
         context: shouldRespondContext,
         modelClass: ModelClass.SMALL,
         runtime
@@ -110,7 +110,7 @@ export default {
 
     const { userId, roomId } = message;
 
-    let response = await generateMessageResponse({
+    const response = await generateMessageResponse({
       runtime,
       context,
       modelClass: ModelClass.SMALL,

@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts"; // Adjust the import path as needed
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { type User } from "../test_resources/types.ts";
-import { createRelationship, getRelationships } from "./relationships.ts"; // Adjust the import path as needed
-import { IAgentRuntime, type UUID } from "./types.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts"; // Adjust the import path as needed
+import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";
+import { type User } from "../src/test_resources/types.ts";
+import { createRelationship, getRelationships } from "../src/core/relationships.ts"; // Adjust the import path as needed
+import { IAgentRuntime, type UUID } from "../src/core/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

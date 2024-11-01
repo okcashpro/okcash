@@ -2689,7 +2689,7 @@ function getNormalizedFragmentsForSpeech(words: string[], language: string) {
       symbolsPrecedingACurrency.includes(lowerCaseWord) &&
       numberPattern.test(nextWord)
     ) {
-      let currencyWord =
+      const currencyWord =
         symbolsPrecedingACurrencyAsWords[
           symbolsPrecedingACurrency.indexOf(lowerCaseWord)
         ];
@@ -3069,7 +3069,7 @@ function tryGetLexiconSubstitution(
   lexicon: Lexicon,
   languageCode: string,
 ) {
-  let word = sentenceWords[wordIndex];
+  const word = sentenceWords[wordIndex];
 
   if (!word) {
     return;
@@ -5191,7 +5191,7 @@ function formatLanguageCodeWithName(languageCode: string, styleId: 1 | 2 = 1) {
   }
 }
 
-let cancelCurrentTask = false;
+const cancelCurrentTask = false;
 
 function shouldCancelCurrentTask() {
   return cancelCurrentTask;
@@ -5289,7 +5289,7 @@ async function synthesizeSegments(
   if (!options.language && !options.voice) {
     logger.start("No language or voice specified. Detect language");
 
-    let segmentsPlainText = segments;
+    const segmentsPlainText = segments;
 
     const { detectedLanguage } = await detectTextLanguage(
       segmentsPlainText.join("\n\n"),
@@ -5748,7 +5748,7 @@ async function synthesizeSegment(text: string, options: SynthesisOptions) {
 
   let timeline: Timeline | undefined;
 
-  let shouldPostprocessSpeed = false;
+  const shouldPostprocessSpeed = false;
   let shouldPostprocessPitch = false;
 
   switch (engine) {
@@ -6465,7 +6465,7 @@ async function downloadFile(
     autoClose: true,
   });
 
-  let statusInterval = setInterval(() => {
+  const statusInterval = setInterval(() => {
     updateStatus();
   }, statusUpdateInterval);
 
@@ -7072,7 +7072,7 @@ async function align(
   function getDtwWindowGranularitiesAndDurations() {
     const sourceAudioDuration = getRawAudioDuration(sourceRawAudio);
 
-    let granularities: DtwGranularity[] = ["high"];
+    const granularities: DtwGranularity[] = ["high"];
     let windowDurations: number[];
 
     if (options.dtw!.windowDuration) {
@@ -7451,9 +7451,9 @@ function addWordTextOffsetsToTimeline(
       let endOffset: number | undefined;
 
       for (let i = 0; i < wordParts.length; i++) {
-        let wordPart = wordParts[i];
+        const wordPart = wordParts[i];
 
-        let wordPartOffset = text.indexOf(wordPart, currentOffset);
+        const wordPartOffset = text.indexOf(wordPart, currentOffset);
 
         if (wordPartOffset == -1) {
           continue;
@@ -7924,7 +7924,7 @@ async function normalizeIdentifierToLanguageCode(langIdentifier: string) {
   return result.Name;
 }
 
-let langInfoEntries: LangInfoEntry[] = [];
+const langInfoEntries: LangInfoEntry[] = [];
 
 interface LangInfoEntry {
   LCID: number;

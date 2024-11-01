@@ -106,13 +106,13 @@ const getDateRange = async (
         const endInteger = endIntegerString ? parseInt(endIntegerString) : 0;
 
         // multiply by multiplier
-        let startTime =
+        const startTime =
           startInteger *
           multipliers[startMultiplier as keyof typeof multipliers];
 
         console.log("startTime", startTime);
 
-        let endTime =
+        const endTime =
           endInteger * multipliers[endMultiplier as keyof typeof multipliers];
 
         console.log("endTime", endTime);
@@ -194,7 +194,7 @@ const summarizeAction = {
     state = (await runtime.composeState(message)) as State;
     const userId = runtime.agentId;
 
-    let callbackData: Content = {
+    const callbackData: Content = {
       text: "", // fill in later
       action: "SUMMARIZATION_RESPONSE",
       source: message.content.source,

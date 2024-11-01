@@ -1,17 +1,17 @@
 import dotenv from "dotenv";
-import fact from "../evaluators/fact.ts";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { runAiTest } from "../test_resources/runAiTest.ts";
+import fact from "../src/evaluators/fact.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";
+import { runAiTest } from "../src/test_resources/runAiTest.ts";
 import {
   TEST_EVALUATOR,
   TEST_EVALUATOR_FAIL,
-} from "../test_resources/testEvaluator.ts";
-import { type User } from "../test_resources/types.ts";
-import { composeContext } from "./context.ts";
-import { evaluationTemplate } from "./evaluators.ts";
-import { IAgentRuntime, Memory, UUID } from "./types.ts";
+} from "../src/test_resources/testEvaluator.ts";
+import { type User } from "../src/test_resources/types.ts";
+import { composeContext } from "../src/core/context.ts";
+import { evaluationTemplate } from "../src/core/evaluators.ts";
+import { IAgentRuntime, Memory, UUID } from "../src/core/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

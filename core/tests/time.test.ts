@@ -1,14 +1,14 @@
 import dotenv from "dotenv";
-import { composeContext } from "../core/context.ts";
+import { composeContext } from "../src/core/context.ts";
 import {
   IAgentRuntime,
   type Memory,
   type State,
   type UUID,
-} from "../core/types.ts";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts";
-import timeProvider from "./time.ts";
+} from "../src/core/types.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
+import timeProvider from "../src/providers/time.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

@@ -94,7 +94,7 @@ export const createAndBuyToken = async ({
   );
   if (createResults.success) {
     console.log("Success:", `https://pump.fun/${mint.publicKey.toBase58()}`);
-    let ata = getAssociatedTokenAddressSync(
+    const ata = getAssociatedTokenAddressSync(
       mint.publicKey,
       deployer.publicKey,
       allowOffCurve
@@ -139,7 +139,7 @@ export const buyToken = async ({
   );
   if (buyResults.success) {
     console.log("Success:", `https://pump.fun/${mint.toBase58()}`);
-    let ata = getAssociatedTokenAddressSync(
+    const ata = getAssociatedTokenAddressSync(
       mint,
       buyer.publicKey,
       allowOffCurve
@@ -184,7 +184,7 @@ export const sellToken = async ({
   );
   if (sellResults.success) {
     console.log("Success:", `https://pump.fun/${mint.toBase58()}`);
-    let ata = getAssociatedTokenAddressSync(
+    const ata = getAssociatedTokenAddressSync(
       mint,
       seller.publicKey,
       allowOffCurve

@@ -409,7 +409,7 @@ export class AgentRuntime implements IAgentRuntime {
 
     if (!action) {
       // each action has a .similes array, lets see if we can find a match
-      for (let _action of this.actions) {
+      for (const _action of this.actions) {
         const simileAction = _action.similes.find(
           (simile) =>
             simile.toLowerCase().replace("_", "").includes(normalizedAction) ||
@@ -698,7 +698,7 @@ Text: ${attachment.text}
     const formattedCharacterPostExamples = this.character.postExamples
       .sort(() => 0.5 - Math.random())
       .map((post) => {
-        let messageString = `${post}`;
+        const messageString = `${post}`;
         return messageString;
       })
       .slice(0, 50)

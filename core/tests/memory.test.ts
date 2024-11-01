@@ -2,14 +2,14 @@ import dotenv from "dotenv";
 import {
   getCachedEmbeddings,
   writeCachedEmbedding,
-} from "../test_resources/cache.ts";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts";
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { type User } from "../test_resources/types.ts";
-import { MemoryManager } from "./memory.ts";
-import { type Content, type Memory, type UUID } from "./types.ts";
-import { embed } from "./embedding.ts";
+} from "../src/test_resources/cache.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
+import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";
+import { type User } from "../src/test_resources/types.ts";
+import { MemoryManager } from "../src/core/memory.ts";
+import { type Content, type Memory, type UUID } from "../src/core/types.ts";
+import { embed } from "../src/core/embedding.ts";
 
 dotenv.config({ path: ".dev.vars" });
 describe("Memory", () => {

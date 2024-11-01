@@ -109,7 +109,7 @@ const transcribeMediaAction = {
   ) => {
     state = (await runtime.composeState(message)) as State;
 
-    let callbackData: Content = {
+    const callbackData: Content = {
       text: "", // fill in later
       action: "TRANSCRIBE_MEDIA_RESPONSE",
       source: message.content.source,

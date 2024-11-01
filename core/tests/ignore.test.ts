@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { composeContext } from "../core/context.ts";
-import { embeddingZeroVector } from "../core/memory.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { composeContext } from "../src/core/context.ts";
+import { embeddingZeroVector } from "../src/core/memory.ts";
 import {
   Content,
   IAgentRuntime,
@@ -9,20 +9,20 @@ import {
   ModelClass,
   State,
   type UUID,
-} from "../core/types.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts";
+} from "../src/core/types.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import {
   GetTellMeAboutYourselfConversationTroll1,
   GetTellMeAboutYourselfConversationTroll2,
   Goodbye1,
-} from "../test_resources/data.ts";
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { populateMemories } from "../test_resources/populateMemories.ts";
-import { runAiTest } from "../test_resources/runAiTest.ts";
-import { messageHandlerTemplate } from "../test_resources/templates.ts";
-import { type User } from "../test_resources/types.ts";
-import action from "./ignore.ts";
-import { generateMessageResponse } from "../core/generation.ts";
+} from "../src/test_resources/data.ts";
+import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../src/test_resources/populateMemories.ts";
+import { runAiTest } from "../src/test_resources/runAiTest.ts";
+import { messageHandlerTemplate } from "../src/test_resources/templates.ts";
+import { type User } from "../src/test_resources/types.ts";
+import action from "../src/actions/ignore.ts";
+import { generateMessageResponse } from "../src/core/generation.ts";
 
 async function handleMessage(
   runtime: IAgentRuntime,
@@ -58,7 +58,7 @@ async function handleMessage(
 
   const { userId, roomId } = message;
 
-  let response = await generateMessageResponse({
+  const response = await generateMessageResponse({
     context,
     runtime,
     modelClass: ModelClass.SMALL,

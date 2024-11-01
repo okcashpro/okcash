@@ -136,7 +136,7 @@ const summarizeAction = {
   ) => {
     state = (await runtime.composeState(message)) as State;
 
-    let callbackData: Content = {
+    const callbackData: Content = {
       text: "", // fill in later
       action: "CHAT_WITH_ATTACHMENTS_RESPONSE",
       source: message.content.source,

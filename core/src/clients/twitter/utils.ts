@@ -32,7 +32,7 @@ export async function buildConversationThread(
   tweet: Tweet,
   client: ClientBase,
 ): Promise<void> {
-  let thread: Tweet[] = [];
+  const thread: Tweet[] = [];
   const visited: Set<string> = new Set();
 
   async function processThread(currentTweet: Tweet) {

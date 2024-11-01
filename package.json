@@ -5,6 +5,7 @@
         "build": "pnpm --dir core build",
         "start": "pnpm --dir core start",
         "dev": "pnpm --dir core dev",
+        "lint": "pnpm --dir core lint",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "clean": "bash ./scripts/clean.sh"

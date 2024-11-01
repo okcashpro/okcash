@@ -353,14 +353,14 @@ export class VoiceManager extends EventEmitter {
 
           state = await this.runtime.updateRecentMessageState(state);
 
-          let shouldIgnore = await this._shouldIgnore(memory);
+          const shouldIgnore = await this._shouldIgnore(memory);
 
           if (shouldIgnore) {
             transcriptionText = ""; // Reset transcription text
             return { text: "", action: "IGNORE" };
           }
 
-          let context = composeContext({
+          const context = composeContext({
             state,
             template: voiceHandlerTemplate,
           });
@@ -390,7 +390,7 @@ export class VoiceManager extends EventEmitter {
             if (responseMemory.content.text?.trim()) {
               await this.runtime.messageManager.createMemory(responseMemory);
               state = await this.runtime.updateRecentMessageState(state);
-              let responseStream = await SpeechService.generate(
+              const responseStream = await SpeechService.generate(
                 this.runtime,
                 content.text,
               );

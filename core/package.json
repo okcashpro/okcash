@@ -7,6 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "lint": "eslint . --fix",
     "start": "node --loader ts-node/esm src/index.ts",
     "start:arok": "node --loader ts-node/esm src/index.ts --characters=\"characters/arok.character.json\"",
     "start:service:ruby": "pm2 start npm --name=\"ruby\" --restart-delay=3000 --max-restarts=10 -- run start:ruby",
@@ -25,7 +26,7 @@
     "stop:service:tate": "pm2 stop tate",
     "start:tate": "node --loader ts-node/esm src/index.ts --characters=\"characters/tate.character.json\"",
     "watch": "tsc --watch",
-    "dev": "nodemon",
+    "dev": "tsc && nodemon",
     "build:docs": "cd docs && npm run build",
     "postinstall": "npx playwright install-deps && npx playwright install",
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --runInBand --watch -f",
@@ -35,6 +36,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@rollup/plugin-commonjs": "25.0.8",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "15.3.0",

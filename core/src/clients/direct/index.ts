@@ -111,7 +111,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
 });
 
     this.app.post("/:agentId/message", async (req: express.Request, res: express.Response) => {
-      let agentId = req.params.agentId;
+      const agentId = req.params.agentId;
       const roomId = stringToUuid(req.body.roomId ?? ("default-room-" + agentId));
       const userId = stringToUuid(req.body.userId ?? "user");
       
@@ -176,7 +176,7 @@ this.app.post("/:agentId/whisper", upload.single('file'), async (req: CustomRequ
         template: messageHandlerTemplate,
       });
 
-      let response = await generateMessageResponse({
+      const response = await generateMessageResponse({
         runtime: runtime,
         context,
         modelClass: ModelClass.SMALL,

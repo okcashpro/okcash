@@ -1,5 +1,5 @@
-import { createRuntime } from "../test_resources/createRuntime";
-import { TokenProvider } from "./token";
+import { createRuntime } from "../src/test_resources/createRuntime";
+import { TokenProvider } from "../src/providers/token";
 import NodeCache from "node-cache";
 
 // Mock the dependencies

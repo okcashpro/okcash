@@ -81,7 +81,7 @@ export default {
     }
 
     // We normalize data in from voice channels
-    let discordMessage = (state.discordChannel ||
+    const discordMessage = (state.discordChannel ||
       state.discordMessage) as DiscordMessage;
 
     if (!discordMessage.content) {

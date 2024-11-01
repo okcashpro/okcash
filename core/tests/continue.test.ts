@@ -1,18 +1,18 @@
 import dotenv from "dotenv";
-import { Content, IAgentRuntime, Memory, type UUID } from "../core/types.ts";
-import { zeroUuid } from "../test_resources/constants.ts";
-import { createRuntime } from "../test_resources/createRuntime.ts";
-import { Goodbye1 } from "../test_resources/data.ts";
-import { getOrCreateRelationship } from "../test_resources/getOrCreateRelationship.ts";
-import { populateMemories } from "../test_resources/populateMemories.ts";
-import { runAiTest } from "../test_resources/runAiTest.ts";
-import { type User } from "../test_resources/types.ts";
-import action from "./continue.ts";
-import ignore from "./ignore.ts";
+import { Content, IAgentRuntime, Memory, type UUID } from "../src/core/types.ts";
+import { zeroUuid } from "../src/test_resources/constants.ts";
+import { createRuntime } from "../src/test_resources/createRuntime.ts";
+import { Goodbye1 } from "../src/test_resources/data.ts";
+import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";
+import { populateMemories } from "../src/test_resources/populateMemories.ts";
+import { runAiTest } from "../src/test_resources/runAiTest.ts";
+import { type User } from "../src/test_resources/types.ts";
+import action from "../src/actions/continue.ts";
+import ignore from "../src/actions/ignore.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 const GetContinueExample1 = (_userId: UUID) => [
   {
     userId: zeroUuid,
