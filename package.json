@@ -3,6 +3,7 @@
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "build": "pnpm --dir core build",
+        "build-docs": "pnpm --dir docs build",
         "start": "pnpm --dir core start",
         "dev": "pnpm --dir core dev",
         "lint": "pnpm --dir core lint",
