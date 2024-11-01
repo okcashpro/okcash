@@ -8,7 +8,7 @@
     "scripts": {
         "build": "tsc",
         "lint": "eslint . --fix",
-        "start": "node --loader ts-node/esm src/index.ts",
+        "start": "node --loader ts-node/esm src/index.ts  --characters=\"../characters/blobert.character.json\"",
         "start:arok": "node --loader ts-node/esm src/index.ts --characters=\"characters/arok.character.json\"",
         "start:service:ruby": "pm2 start npm --name=\"ruby\" --restart-delay=3000 --max-restarts=10 -- run start:ruby",
         "stop:service:ruby": "pm2 stop ruby",
