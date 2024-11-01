@@ -12,14 +12,14 @@ Retrieves lore from the lore database based on a search query. This function use
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `params` | `Object` | `undefined` | The parameters for retrieving lore. |
-| `params.count?` | `number` | `undefined` | The maximum number of lore entries to retrieve. |
-| `params.match_threshold?` | `number` | `undefined` | The similarity threshold for matching lore entries, lower values mean more strict matching. |
-| `params.message` | `string` | `undefined` | The search query message to find relevant lore. |
-| `params.room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `zeroUuid` | - |
-| `params.runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) | `undefined` | The runtime environment of the agent. |
+| Name                      | Type                                                       | Default value | Description                                                                                 |
+| :------------------------ | :--------------------------------------------------------- | :------------ | :------------------------------------------------------------------------------------------ |
+| `params`                  | `Object`                                                   | `undefined`   | The parameters for retrieving lore.                                                         |
+| `params.count?`           | `number`                                                   | `undefined`   | The maximum number of lore entries to retrieve.                                             |
+| `params.match_threshold?` | `number`                                                   | `undefined`   | The similarity threshold for matching lore entries, lower values mean more strict matching. |
+| `params.message`          | `string`                                                   | `undefined`   | The search query message to find relevant lore.                                             |
+| `params.room_id?`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `zeroUuid`    | -                                                                                           |
+| `params.runtime`          | [`AgentRuntime`](../classes/AgentRuntime.md)               | `undefined`   | The runtime environment of the agent.                                                       |
 
 #### Returns
 

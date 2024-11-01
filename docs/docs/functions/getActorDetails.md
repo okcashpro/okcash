@@ -12,11 +12,11 @@ Get details for a list of actors.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
-| › `runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) |
+| Name             | Type                                                       |
+| :--------------- | :--------------------------------------------------------- |
+| `«destructured»` | `Object`                                                   |
+| › `room_id`      | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
 
 #### Returns
 

@@ -10,24 +10,24 @@ export const shouldRespondFooter = `The available options are [RESPOND], [IGNORE
 Your response must include one of the options.`;
 
 export const parseShouldRespondFromText = (
-  text: string,
+    text: string
 ): "RESPOND" | "IGNORE" | "STOP" | null => {
-  const match = text
-    .trim()
-    .replace("[", "")
-    .toUpperCase()
-    .replace("]", "")
-    .match(/^(RESPOND|IGNORE|STOP)$/i);
-  return match
-    ? (match[0].toUpperCase() as "RESPOND" | "IGNORE" | "STOP")
-    : null;
+    const match = text
+        .trim()
+        .replace("[", "")
+        .toUpperCase()
+        .replace("]", "")
+        .match(/^(RESPOND|IGNORE|STOP)$/i);
+    return match
+        ? (match[0].toUpperCase() as "RESPOND" | "IGNORE" | "STOP")
+        : null;
 };
 
 export const booleanFooter = `Respond with a YES or a NO.`;
 
 export const parseBooleanFromText = (text: string) => {
-  const match = text.match(/^(YES|NO)$/i);
-  return match ? match[0].toUpperCase() === "YES" : null;
+    const match = text.match(/^(YES|NO)$/i);
+    return match ? match[0].toUpperCase() === "YES" : null;
 };
 
 export const stringArrayFooter = `Respond with a JSON array containing the values in a JSON block formatted for markdown with this structure:
@@ -50,34 +50,34 @@ Your response must include the JSON block.`;
  * @returns An array parsed from the JSON string if successful; otherwise, null.
  */
 export function parseJsonArrayFromText(text: string) {
-  let jsonData = null;
+    let jsonData = null;
 
-  const jsonBlockMatch = text.match(jsonBlockPattern);
+    const jsonBlockMatch = text.match(jsonBlockPattern);
 
-  if (jsonBlockMatch) {
-    try {
-      jsonData = JSON.parse(jsonBlockMatch[1]);
-    } catch (e) {
-      return null;
+    if (jsonBlockMatch) {
+        try {
+            jsonData = JSON.parse(jsonBlockMatch[1]);
+        } catch (e) {
+            return null;
+        }
+    } else {
+        const arrayPattern = /\[\s*{[\s\S]*?}\s*\]/;
+        const arrayMatch = text.match(arrayPattern);
+
+        if (arrayMatch) {
+            try {
+                jsonData = JSON.parse(arrayMatch[0]);
+            } catch (e) {
+                return null;
+            }
+        }
     }
-  } else {
-    const arrayPattern = /\[\s*{[\s\S]*?}\s*\]/;
-    const arrayMatch = text.match(arrayPattern);
 
-    if (arrayMatch) {
-      try {
-        jsonData = JSON.parse(arrayMatch[0]);
-      } catch (e) {
+    if (Array.isArray(jsonData)) {
+        return jsonData;
+    } else {
         return null;
-      }
     }
-  }
-
-  if (Array.isArray(jsonData)) {
-    return jsonData;
-  } else {
-    return null;
-  }
 }
 
 /**
@@ -91,40 +91,40 @@ export function parseJsonArrayFromText(text: string) {
  * @returns An object parsed from the JSON string if successful; otherwise, null or the result of parsing an array.
  */
 export function parseJSONObjectFromText(
-  text: string,
+    text: string
 ): Record<string, any> | null {
-  let jsonData = null;
+    let jsonData = null;
 
-  const jsonBlockMatch = text.match(jsonBlockPattern);
+    const jsonBlockMatch = text.match(jsonBlockPattern);
 
-  if (jsonBlockMatch) {
-    try {
-      jsonData = JSON.parse(jsonBlockMatch[1]);
-    } catch (e) {
-      return null;
+    if (jsonBlockMatch) {
+        try {
+            jsonData = JSON.parse(jsonBlockMatch[1]);
+        } catch (e) {
+            return null;
+        }
+    } else {
+        const objectPattern = /{[\s\S]*?}/;
+        const objectMatch = text.match(objectPattern);
+
+        if (objectMatch) {
+            try {
+                jsonData = JSON.parse(objectMatch[0]);
+            } catch (e) {
+                return null;
+            }
+        }
     }
-  } else {
-    const objectPattern = /{[\s\S]*?}/;
-    const objectMatch = text.match(objectPattern);
 
-    if (objectMatch) {
-      try {
-        jsonData = JSON.parse(objectMatch[0]);
-      } catch (e) {
+    if (
+        typeof jsonData === "object" &&
+        jsonData !== null &&
+        !Array.isArray(jsonData)
+    ) {
+        return jsonData;
+    } else if (typeof jsonData === "object" && Array.isArray(jsonData)) {
+        return parseJsonArrayFromText(text);
+    } else {
         return null;
-      }
     }
-  }
-
-  if (
-    typeof jsonData === "object" &&
-    jsonData !== null &&
-    !Array.isArray(jsonData)
-  ) {
-    return jsonData;
-  } else if (typeof jsonData === "object" && Array.isArray(jsonData)) {
-    return parseJsonArrayFromText(text);
-  } else {
-    return null;
-  }
 }

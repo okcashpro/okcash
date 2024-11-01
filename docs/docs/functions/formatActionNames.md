@@ -12,8 +12,8 @@ Formats the names of the provided actions into a comma-separated string.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                  | Description                                               |
+| :-------- | :------------------------------------ | :-------------------------------------------------------- |
 | `actions` | [`Action`](../interfaces/Action.md)[] | An array of `Action` objects from which to extract names. |
 
 #### Returns

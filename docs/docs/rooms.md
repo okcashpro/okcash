@@ -11,12 +11,15 @@ In the context of eliza, a room can be a physical space, such as a chat room, or
 ## Key Concepts
 
 ### Room
+
 A room contains a list of participants which can be agents or users, and can be added or removed from at any time. The room is keyed by the `room_id`.
 
 ### Participant
+
 A participant is an agent or user that is part of the room. Participants are identified by their 'user_id' which is keyed to the account of the user or agent.
 
 ### Ensuring that a Room and Participant Exists
+
 Every memory needs to be associated with a room and a participant. On databases where foreign keys are available, we try to enforce this constraint.
 
-When handling messages, you can use the built-in `BgentRuntime.ensureRoomExists(user_id,  room_id)` and `BgentRuntime.ensureParticipantExists()` methods to ensure that the room and participant are correctly set up.
+When handling messages, you can use the built-in `AgentRuntime.ensureRoomExists(user_id,  room_id)` and `AgentRuntime.ensureParticipantExists()` methods to ensure that the room and participant are correctly set up.

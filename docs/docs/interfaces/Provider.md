@@ -12,7 +12,7 @@ Represents a provider, which is used to retrieve information or perform actions 
 
 ### get
 
-• **get**: (`runtime`: [`BgentRuntime`](../classes/BgentRuntime.md), `message`: [`Message`](Message.md), `state?`: [`State`](State.md)) => `Promise`\<`unknown`\>
+• **get**: (`runtime`: [`AgentRuntime`](../classes/AgentRuntime.md), `message`: [`Message`](Message.md), `state?`: [`State`](State.md)) => `Promise`\<`unknown`\>
 
 #### Type declaration
 
@@ -20,11 +20,11 @@ Represents a provider, which is used to retrieve information or perform actions 
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) |
-| `message` | [`Message`](Message.md) |
-| `state?` | [`State`](State.md) |
+| Name      | Type                                         |
+| :-------- | :------------------------------------------- |
+| `runtime` | [`AgentRuntime`](../classes/AgentRuntime.md) |
+| `message` | [`Message`](Message.md)                      |
+| `state?`  | [`State`](State.md)                          |
 
 ##### Returns
 

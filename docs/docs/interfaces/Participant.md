@@ -14,7 +14,7 @@ Represents a participant in a room, including their ID and account details.
 
 • **account**: [`Account`](Account.md)
 
-___
+---
 
 ### id
 

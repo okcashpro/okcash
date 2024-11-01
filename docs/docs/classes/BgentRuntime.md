@@ -1,7 +1,7 @@
 ---
-id: "BgentRuntime"
-title: "Class: BgentRuntime"
-sidebar_label: "BgentRuntime"
+id: "AgentRuntime"
+title: "Class: AgentRuntime"
+sidebar_label: "AgentRuntime"
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -13,31 +13,31 @@ action registration, and interaction with external services like OpenAI and Supa
 
 ### constructor
 
-• **new BgentRuntime**(`opts`): [`BgentRuntime`](BgentRuntime.md)
+• **new AgentRuntime**(`opts`): [`AgentRuntime`](AgentRuntime.md)
 
-Creates an instance of BgentRuntime.
+Creates an instance of AgentRuntime.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `opts` | `Object` | The options for configuring the BgentRuntime. |
-| `opts.actions?` | [`Action`](../interfaces/Action.md)[] | Optional custom actions. |
-| `opts.agentId?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | Optional ID of the agent. |
-| `opts.conversationLength?` | `number` | The number of messages to hold in the recent message cache. |
-| `opts.databaseAdapter` | [`DatabaseAdapter`](DatabaseAdapter.md) | The database adapter used for interacting with the database. |
-| `opts.debugMode?` | `boolean` | If true, debug messages will be logged. |
-| `opts.embeddingModel?` | `string` | The model to use for embedding. |
-| `opts.evaluators?` | [`Evaluator`](../interfaces/Evaluator.md)[] | Optional custom evaluators. |
-| `opts.fetch?` | `unknown` | Custom fetch function to use for making requests. |
-| `opts.model?` | `string` | The model to use for completion. |
-| `opts.providers?` | [`Provider`](../interfaces/Provider.md)[] | Optional context providers. |
-| `opts.serverUrl?` | `string` | The URL of the worker. |
-| `opts.token` | `string` | The JWT token, can be a JWT token if outside worker, or an OpenAI token if inside worker. |
+| Name                       | Type                                                       | Description                                                                               |
+| :------------------------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| `opts`                     | `Object`                                                   | The options for configuring the AgentRuntime.                                             |
+| `opts.actions?`            | [`Action`](../interfaces/Action.md)[]                      | Optional custom actions.                                                                  |
+| `opts.agentId?`            | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | Optional ID of the agent.                                                                 |
+| `opts.conversationLength?` | `number`                                                   | The number of messages to hold in the recent message cache.                               |
+| `opts.databaseAdapter`     | [`DatabaseAdapter`](DatabaseAdapter.md)                    | The database adapter used for interacting with the database.                              |
+| `opts.debugMode?`          | `boolean`                                                  | If true, debug messages will be logged.                                                   |
+| `opts.embeddingModel?`     | `string`                                                   | The model to use for embedding.                                                           |
+| `opts.evaluators?`         | [`Evaluator`](../interfaces/Evaluator.md)[]                | Optional custom evaluators.                                                               |
+| `opts.fetch?`              | `unknown`                                                  | Custom fetch function to use for making requests.                                         |
+| `opts.model?`              | `string`                                                   | The model to use for completion.                                                          |
+| `opts.providers?`          | [`Provider`](../interfaces/Provider.md)[]                  | Optional context providers.                                                               |
+| `opts.serverUrl?`          | `string`                                                   | The URL of the worker.                                                                    |
+| `opts.token`               | `string`                                                   | The JWT token, can be a JWT token if outside worker, or an OpenAI token if inside worker. |
 
 #### Returns
 
-[`BgentRuntime`](BgentRuntime.md)
+[`AgentRuntime`](AgentRuntime.md)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Creates an instance of BgentRuntime.
 
 Custom actions that the agent can perform.
 
-___
+---
 
 ### agentId
 
@@ -55,7 +55,7 @@ ___
 
 The ID of the agent
 
-___
+---
 
 ### databaseAdapter
 
@@ -63,7 +63,7 @@ ___
 
 The database adapter used for interacting with the database.
 
-___
+---
 
 ### debugMode
 
@@ -71,7 +71,7 @@ ___
 
 Indicates if debug messages should be logged.
 
-___
+---
 
 ### descriptionManager
 
@@ -79,7 +79,7 @@ ___
 
 Store and recall descriptions of users based on conversations.
 
-___
+---
 
 ### embeddingModel
 
@@ -87,7 +87,7 @@ ___
 
 The model to use for embedding.
 
-___
+---
 
 ### evaluators
 
@@ -95,7 +95,7 @@ ___
 
 Evaluators used to assess and guide the agent's responses.
 
-___
+---
 
 ### factManager
 
@@ -103,7 +103,7 @@ ___
 
 Manage the fact and recall of facts.
 
-___
+---
 
 ### fetch
 
@@ -121,9 +121,9 @@ Some environments may not have access to the global fetch function and need a cu
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | `RequestInfo` \| `URL` |
+| Name    | Type                                         |
+| :------ | :------------------------------------------- |
+| `input` | `RequestInfo` \| `URL`                       |
 | `init?` | `RequestInit`\<`CfProperties`\<`unknown`\>\> |
 
 ##### Returns
@@ -137,9 +137,9 @@ Some environments may not have access to the global fetch function and need a cu
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | `RequestInfo` |
+| Name    | Type                                         |
+| :------ | :------------------------------------------- |
+| `input` | `RequestInfo`                                |
 | `init?` | `RequestInit`\<`CfProperties`\<`unknown`\>\> |
 
 ##### Returns
@@ -153,16 +153,16 @@ Some environments may not have access to the global fetch function and need a cu
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | `RequestInfo` |
+| Name    | Type                                       |
+| :------ | :----------------------------------------- |
+| `input` | `RequestInfo`                              |
 | `init?` | `RequestInit`\<`RequestInitCfProperties`\> |
 
 ##### Returns
 
 `Promise`\<`Response`\>
 
-___
+---
 
 ### loreManager
 
@@ -170,7 +170,7 @@ ___
 
 Manage the creation and recall of static information (documents, historical game lore, etc)
 
-___
+---
 
 ### messageManager
 
@@ -178,7 +178,7 @@ ___
 
 Store messages that are sent and received by the agent.
 
-___
+---
 
 ### model
 
@@ -186,7 +186,7 @@ ___
 
 The model to use for completion.
 
-___
+---
 
 ### providers
 
@@ -194,7 +194,7 @@ ___
 
 Context providers used to provide context for message generation.
 
-___
+---
 
 ### serverUrl
 
@@ -202,11 +202,11 @@ ___
 
 The base URL of the server where the agent's requests are processed.
 
-___
+---
 
 ### token
 
-• **token**: ``null`` \| `string`
+• **token**: `null` \| `string`
 
 Authentication token used for securing requests.
 
@@ -220,15 +220,15 @@ Send a message to the OpenAI API for completion.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `opts` | `Object` | `undefined` | The options for the completion request. |
-| `opts.context` | `undefined` \| `string` | `""` | The context of the message to be completed. |
-| `opts.frequency_penalty` | `undefined` \| `number` | `0.0` | The frequency penalty to apply to the completion. |
-| `opts.model` | `undefined` \| `string` | `undefined` | The model to use for completion. |
-| `opts.presence_penalty` | `undefined` \| `number` | `0.0` | The presence penalty to apply to the completion. |
-| `opts.stop` | `undefined` \| `never`[] | `[]` | A list of strings to stop the completion at. |
-| `opts.temperature` | `undefined` \| `number` | `0.7` | The temperature to apply to the completion. |
+| Name                     | Type                     | Default value | Description                                       |
+| :----------------------- | :----------------------- | :------------ | :------------------------------------------------ |
+| `opts`                   | `Object`                 | `undefined`   | The options for the completion request.           |
+| `opts.context`           | `undefined` \| `string`  | `""`          | The context of the message to be completed.       |
+| `opts.frequency_penalty` | `undefined` \| `number`  | `0.0`         | The frequency penalty to apply to the completion. |
+| `opts.model`             | `undefined` \| `string`  | `undefined`   | The model to use for completion.                  |
+| `opts.presence_penalty`  | `undefined` \| `number`  | `0.0`         | The presence penalty to apply to the completion.  |
+| `opts.stop`              | `undefined` \| `never`[] | `[]`          | A list of strings to stop the completion at.      |
+| `opts.temperature`       | `undefined` \| `number`  | `0.7`         | The temperature to apply to the completion.       |
 
 #### Returns
 
@@ -236,28 +236,28 @@ Send a message to the OpenAI API for completion.
 
 The completed message.
 
-___
+---
 
 ### composeState
 
-▸ **composeState**(`message`, `additionalKeys?`): `Promise`\<\{ `actionConditions`: `string` ; `actionExamples`: `string` ; `actionNames`: `string` ; `actions`: `string` ; `actors`: `string` ; `actorsData`: [`Actor`](../interfaces/Actor.md)[] ; `agentId`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `agentName`: `undefined` \| `string` ; `evaluatorConditions`: `string` ; `evaluatorExamples`: `string` ; `evaluatorNames`: `string` ; `evaluators`: `string` ; `evaluatorsData`: [`Evaluator`](../interfaces/Evaluator.md)[] ; `goals`: `string` ; `goalsData`: [`Goal`](../interfaces/Goal.md)[] ; `lore`: `string` ; `loreData`: [`Memory`](../interfaces/Memory.md)[] ; `providers`: `string` ; `recentFacts`: `string` ; `recentFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `recentMessages`: `string` ; `recentMessagesData`: [`Memory`](../interfaces/Memory.md)[] ; `relevantFacts`: `string` ; `relevantFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `room_id`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `senderName`: `undefined` \| `string`  }\>
+▸ **composeState**(`message`, `additionalKeys?`): `Promise`\<\{ `actionConditions`: `string` ; `actionExamples`: `string` ; `actionNames`: `string` ; `actions`: `string` ; `actors`: `string` ; `actorsData`: [`Actor`](../interfaces/Actor.md)[] ; `agentId`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `agentName`: `undefined` \| `string` ; `evaluatorConditions`: `string` ; `evaluatorExamples`: `string` ; `evaluatorNames`: `string` ; `evaluators`: `string` ; `evaluatorsData`: [`Evaluator`](../interfaces/Evaluator.md)[] ; `goals`: `string` ; `goalsData`: [`Goal`](../interfaces/Goal.md)[] ; `lore`: `string` ; `loreData`: [`Memory`](../interfaces/Memory.md)[] ; `providers`: `string` ; `recentFacts`: `string` ; `recentFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `recentMessages`: `string` ; `recentMessagesData`: [`Memory`](../interfaces/Memory.md)[] ; `relevantFacts`: `string` ; `relevantFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `room_id`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `senderName`: `undefined` \| `string` }\>
 
 Compose the state of the agent into an object that can be passed or used for response generation.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `message` | [`Message`](../interfaces/Message.md) | The message to compose the state from. |
-| `additionalKeys` | `Object` | - |
+| Name             | Type                                  | Description                            |
+| :--------------- | :------------------------------------ | :------------------------------------- |
+| `message`        | [`Message`](../interfaces/Message.md) | The message to compose the state from. |
+| `additionalKeys` | `Object`                              | -                                      |
 
 #### Returns
 
-`Promise`\<\{ `actionConditions`: `string` ; `actionExamples`: `string` ; `actionNames`: `string` ; `actions`: `string` ; `actors`: `string` ; `actorsData`: [`Actor`](../interfaces/Actor.md)[] ; `agentId`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `agentName`: `undefined` \| `string` ; `evaluatorConditions`: `string` ; `evaluatorExamples`: `string` ; `evaluatorNames`: `string` ; `evaluators`: `string` ; `evaluatorsData`: [`Evaluator`](../interfaces/Evaluator.md)[] ; `goals`: `string` ; `goalsData`: [`Goal`](../interfaces/Goal.md)[] ; `lore`: `string` ; `loreData`: [`Memory`](../interfaces/Memory.md)[] ; `providers`: `string` ; `recentFacts`: `string` ; `recentFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `recentMessages`: `string` ; `recentMessagesData`: [`Memory`](../interfaces/Memory.md)[] ; `relevantFacts`: `string` ; `relevantFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `room_id`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `senderName`: `undefined` \| `string`  }\>
+`Promise`\<\{ `actionConditions`: `string` ; `actionExamples`: `string` ; `actionNames`: `string` ; `actions`: `string` ; `actors`: `string` ; `actorsData`: [`Actor`](../interfaces/Actor.md)[] ; `agentId`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `agentName`: `undefined` \| `string` ; `evaluatorConditions`: `string` ; `evaluatorExamples`: `string` ; `evaluatorNames`: `string` ; `evaluators`: `string` ; `evaluatorsData`: [`Evaluator`](../interfaces/Evaluator.md)[] ; `goals`: `string` ; `goalsData`: [`Goal`](../interfaces/Goal.md)[] ; `lore`: `string` ; `loreData`: [`Memory`](../interfaces/Memory.md)[] ; `providers`: `string` ; `recentFacts`: `string` ; `recentFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `recentMessages`: `string` ; `recentMessagesData`: [`Memory`](../interfaces/Memory.md)[] ; `relevantFacts`: `string` ; `relevantFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `room_id`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `senderName`: `undefined` \| `string` }\>
 
 The state of the agent.
 
-___
+---
 
 ### embed
 
@@ -267,8 +267,8 @@ Send a message to the OpenAI API for embedding.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name    | Type     | Description               |
+| :------ | :------- | :------------------------ |
 | `input` | `string` | The input to be embedded. |
 
 #### Returns
@@ -277,7 +277,7 @@ Send a message to the OpenAI API for embedding.
 
 The embedding of the input.
 
-___
+---
 
 ### ensureParticipantExists
 
@@ -287,10 +287,10 @@ Ensure the existence of a participant in the room. If the participant does not e
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                             |
+| :-------- | :--------------------------------------------------------- | :-------------------------------------- |
 | `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The user ID to ensure the existence of. |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                       |
 
 #### Returns
 
@@ -300,7 +300,7 @@ Ensure the existence of a participant in the room. If the participant does not e
 
 An error if the participant cannot be added.
 
-___
+---
 
 ### ensureRoomExists
 
@@ -311,10 +311,10 @@ and agent are added as participants. The room ID is returned.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The user ID to create a room with. |
-| `room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name       | Type                                                       | Description                        |
+| :--------- | :--------------------------------------------------------- | :--------------------------------- |
+| `user_id`  | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The user ID to create a room with. |
+| `room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                  |
 
 #### Returns
 
@@ -326,7 +326,7 @@ The room ID of the room between the agent and the user.
 
 An error if the room cannot be created.
 
-___
+---
 
 ### evaluate
 
@@ -336,10 +336,10 @@ Evaluate the message and state using the registered evaluators.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                  | Description              |
+| :-------- | :------------------------------------ | :----------------------- |
 | `message` | [`Message`](../interfaces/Message.md) | The message to evaluate. |
-| `state?` | [`State`](../interfaces/State.md) | The state of the agent. |
+| `state?`  | [`State`](../interfaces/State.md)     | The state of the agent.  |
 
 #### Returns
 
@@ -347,7 +347,7 @@ Evaluate the message and state using the registered evaluators.
 
 The results of the evaluation.
 
-___
+---
 
 ### getConversationLength
 
@@ -361,7 +361,7 @@ Get the number of messages that are kept in the conversation buffer.
 
 The number of recent messages to be kept in memory.
 
-___
+---
 
 ### processActions
 
@@ -371,17 +371,17 @@ Process the actions of a message.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `message` | [`Message`](../interfaces/Message.md) | The message to process. |
+| Name      | Type                                  | Description                                         |
+| :-------- | :------------------------------------ | :-------------------------------------------------- |
+| `message` | [`Message`](../interfaces/Message.md) | The message to process.                             |
 | `content` | [`Content`](../interfaces/Content.md) | The content of the message to process actions from. |
-| `state?` | [`State`](../interfaces/State.md) | - |
+| `state?`  | [`State`](../interfaces/State.md)     | -                                                   |
 
 #### Returns
 
 `Promise`\<`unknown`\>
 
-___
+---
 
 ### registerAction
 
@@ -391,15 +391,15 @@ Register an action for the agent to perform.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name     | Type                                | Description             |
+| :------- | :---------------------------------- | :---------------------- |
 | `action` | [`Action`](../interfaces/Action.md) | The action to register. |
 
 #### Returns
 
 `void`
 
-___
+---
 
 ### registerContextProvider
 
@@ -409,15 +409,15 @@ Register a context provider to provide context for message generation.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type                                    | Description                       |
+| :--------- | :-------------------------------------- | :-------------------------------- |
 | `provider` | [`Provider`](../interfaces/Provider.md) | The context provider to register. |
 
 #### Returns
 
 `void`
 
-___
+---
 
 ### registerEvaluator
 
@@ -427,26 +427,26 @@ Register an evaluator to assess and guide the agent's responses.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name        | Type                                      | Description                |
+| :---------- | :---------------------------------------- | :------------------------- |
 | `evaluator` | [`Evaluator`](../interfaces/Evaluator.md) | The evaluator to register. |
 
 #### Returns
 
 `void`
 
-___
+---
 
 ### retrieveCachedEmbedding
 
-▸ **retrieveCachedEmbedding**(`input`): `Promise`\<``null`` \| `number`[]\>
+▸ **retrieveCachedEmbedding**(`input`): `Promise`\<`null` \| `number`[]\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type     |
+| :------ | :------- |
 | `input` | `string` |
 
 #### Returns
 
-`Promise`\<``null`` \| `number`[]\>
+`Promise`\<`null` \| `number`[]\>

@@ -16,11 +16,11 @@ If a matching key is not found in the state object for a given placeholder, the 
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | The parameters for composing the context. |
-| `params.state` | [`State`](../interfaces/State.md) | The state object containing values to replace the placeholders in the template. |
-| `params.template` | `string` | The template string containing placeholders to be replaced with state values. |
+| Name              | Type                              | Description                                                                     |
+| :---------------- | :-------------------------------- | :------------------------------------------------------------------------------ |
+| `params`          | `Object`                          | The parameters for composing the context.                                       |
+| `params.state`    | [`State`](../interfaces/State.md) | The state object containing values to replace the placeholders in the template. |
+| `params.template` | `string`                          | The template string containing placeholders to be replaced with state values.   |
 
 #### Returns
 

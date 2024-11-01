@@ -12,11 +12,11 @@ Formats provider outputs into a string which can be injected into the context.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) | The Eliza runtime object. |
-| `message` | [`Message`](../interfaces/Message.md) | The incoming message object. |
-| `state?` | [`State`](../interfaces/State.md) | The current state object. |
+| Name      | Type                                         | Description                  |
+| :-------- | :------------------------------------------- | :--------------------------- |
+| `runtime` | [`AgentRuntime`](../classes/AgentRuntime.md) | The Eliza runtime object.    |
+| `message` | [`Message`](../interfaces/Message.md)        | The incoming message object. |
+| `state?`  | [`State`](../interfaces/State.md)            | The current state object.    |
 
 #### Returns
 

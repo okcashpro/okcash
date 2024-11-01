@@ -10,10 +10,10 @@ custom_edit_url: null
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `goals` | [`Goal`](../interfaces/Goal.md)[] |
+| Name             | Type                              |
+| :--------------- | :-------------------------------- |
+| `«destructured»` | `Object`                          |
+| › `goals`        | [`Goal`](../interfaces/Goal.md)[] |
 
 #### Returns
 

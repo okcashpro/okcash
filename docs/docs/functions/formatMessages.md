@@ -12,11 +12,11 @@ Format messages into a string
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `actors` | [`Actor`](../interfaces/Actor.md)[] |
-| › `messages` | [`Memory`](../interfaces/Memory.md)[] |
+| Name             | Type                                  |
+| :--------------- | :------------------------------------ |
+| `«destructured»` | `Object`                              |
+| › `actors`       | [`Actor`](../interfaces/Actor.md)[]   |
+| › `messages`     | [`Memory`](../interfaces/Memory.md)[] |
 
 #### Returns
 

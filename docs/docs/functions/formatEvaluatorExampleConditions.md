@@ -12,8 +12,8 @@ Generates a string describing the conditions under which each evaluator example 
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name         | Type                                        | Description                                              |
+| :----------- | :------------------------------------------ | :------------------------------------------------------- |
 | `evaluators` | [`Evaluator`](../interfaces/Evaluator.md)[] | An array of evaluator objects, each containing examples. |
 
 #### Returns

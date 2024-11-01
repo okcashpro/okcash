@@ -12,8 +12,8 @@ Formats the conditions under which each evaluator is relevant into a readable st
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name         | Type                                        | Description                    |
+| :----------- | :------------------------------------------ | :----------------------------- |
 | `evaluators` | [`Evaluator`](../interfaces/Evaluator.md)[] | An array of evaluator objects. |
 
 #### Returns

@@ -14,8 +14,8 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 • **content**: [`Content`](Content.md)
 
-___
+---
 
-### user\_id
+### user_id
 
-• **user\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`

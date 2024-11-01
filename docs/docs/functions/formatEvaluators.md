@@ -12,8 +12,8 @@ Formats evaluator details into a string, including both the name and description
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name         | Type                                        | Description                    |
+| :----------- | :------------------------------------------ | :----------------------------- |
 | `evaluators` | [`Evaluator`](../interfaces/Evaluator.md)[] | An array of evaluator objects. |
 
 #### Returns

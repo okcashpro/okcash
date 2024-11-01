@@ -39,9 +39,9 @@ Adds a user as a participant to a specific room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user to add as a participant. |
+| Name      | Type                                                       | Description                                           |
+| :-------- | :--------------------------------------------------------- | :---------------------------------------------------- |
+| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user to add as a participant.         |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room to which the user will be added. |
 
 #### Returns
@@ -50,7 +50,7 @@ Adds a user as a participant to a specific room.
 
 A Promise that resolves to a boolean indicating success or failure.
 
-___
+---
 
 ### countMemories
 
@@ -60,11 +60,11 @@ Counts the number of memories in a specific room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room for which to count memories. |
-| `unique?` | `boolean` | Specifies whether to count only unique memories. |
-| `tableName?` | `string` | Optional table name to count memories from. |
+| Name         | Type                                                       | Description                                       |
+| :----------- | :--------------------------------------------------------- | :------------------------------------------------ |
+| `room_id`    | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room for which to count memories. |
+| `unique?`    | `boolean`                                                  | Specifies whether to count only unique memories.  |
+| `tableName?` | `string`                                                   | Optional table name to count memories from.       |
 
 #### Returns
 
@@ -72,7 +72,7 @@ Counts the number of memories in a specific room.
 
 A Promise that resolves to the number of memories.
 
-___
+---
 
 ### createAccount
 
@@ -82,8 +82,8 @@ Creates a new account in the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                  | Description                   |
+| :-------- | :------------------------------------ | :---------------------------- |
 | `account` | [`Account`](../interfaces/Account.md) | The account object to create. |
 
 #### Returns
@@ -92,7 +92,7 @@ Creates a new account in the database.
 
 A Promise that resolves when the account creation is complete.
 
-___
+---
 
 ### createGoal
 
@@ -102,8 +102,8 @@ Creates a new goal in the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name   | Type                            | Description                |
+| :----- | :------------------------------ | :------------------------- |
 | `goal` | [`Goal`](../interfaces/Goal.md) | The goal object to create. |
 
 #### Returns
@@ -112,7 +112,7 @@ Creates a new goal in the database.
 
 A Promise that resolves when the goal has been created.
 
-___
+---
 
 ### createMemory
 
@@ -122,11 +122,11 @@ Creates a new memory in the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `memory` | [`Memory`](../interfaces/Memory.md) | The memory object to create. |
-| `tableName` | `string` | The table where the memory should be stored. |
-| `unique?` | `boolean` | Indicates if the memory should be unique. |
+| Name        | Type                                | Description                                  |
+| :---------- | :---------------------------------- | :------------------------------------------- |
+| `memory`    | [`Memory`](../interfaces/Memory.md) | The memory object to create.                 |
+| `tableName` | `string`                            | The table where the memory should be stored. |
+| `unique?`   | `boolean`                           | Indicates if the memory should be unique.    |
 
 #### Returns
 
@@ -134,7 +134,7 @@ Creates a new memory in the database.
 
 A Promise that resolves when the memory has been created.
 
-___
+---
 
 ### createRelationship
 
@@ -144,11 +144,11 @@ Creates a new relationship between two users.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing the UUIDs of the two users (userA and userB). |
-| `params.userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name           | Type                                                       | Description                                                        |
+| :------------- | :--------------------------------------------------------- | :----------------------------------------------------------------- |
+| `params`       | `Object`                                                   | An object containing the UUIDs of the two users (userA and userB). |
+| `params.userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
+| `params.userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
 
 #### Returns
 
@@ -156,7 +156,7 @@ Creates a new relationship between two users.
 
 A Promise that resolves to a boolean indicating success or failure of the creation.
 
-___
+---
 
 ### createRoom
 
@@ -166,8 +166,8 @@ Creates a new room with an optional specified ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type                                                       | Description                              |
+| :--------- | :--------------------------------------------------------- | :--------------------------------------- |
 | `room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | Optional UUID to assign to the new room. |
 
 #### Returns
@@ -176,27 +176,27 @@ Creates a new room with an optional specified ID.
 
 A Promise that resolves to the UUID of the created room.
 
-___
+---
 
 ### getAccountById
 
-▸ **getAccountById**(`user_id`): `Promise`\<``null`` \| [`Account`](../interfaces/Account.md)\>
+▸ **getAccountById**(`user_id`): `Promise`\<`null` \| [`Account`](../interfaces/Account.md)\>
 
 Retrieves an account by its ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                               |
+| :-------- | :--------------------------------------------------------- | :---------------------------------------- |
 | `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user account to retrieve. |
 
 #### Returns
 
-`Promise`\<``null`` \| [`Account`](../interfaces/Account.md)\>
+`Promise`\<`null` \| [`Account`](../interfaces/Account.md)\>
 
 A Promise that resolves to the Account object or null if not found.
 
-___
+---
 
 ### getActorDetails
 
@@ -206,10 +206,10 @@ Retrieves details of actors in a given room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing the room_id to search for actors. |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name             | Type                                                       | Description                                            |
+| :--------------- | :--------------------------------------------------------- | :----------------------------------------------------- |
+| `params`         | `Object`                                                   | An object containing the room_id to search for actors. |
+| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                      |
 
 #### Returns
 
@@ -217,33 +217,33 @@ Retrieves details of actors in a given room.
 
 A Promise that resolves to an array of Actor objects.
 
-___
+---
 
 ### getCachedEmbeddings
 
-▸ **getCachedEmbeddings**(`params`): `Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number`  }[]\>
+▸ **getCachedEmbeddings**(`params`): `Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
 
 Retrieves cached embeddings based on the specified query parameters.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing parameters for the embedding retrieval. |
-| `params.query_field_name` | `string` | - |
-| `params.query_field_sub_name` | `string` | - |
-| `params.query_input` | `string` | - |
-| `params.query_match_count` | `number` | - |
-| `params.query_table_name` | `string` | - |
-| `params.query_threshold` | `number` | - |
+| Name                          | Type     | Description                                                  |
+| :---------------------------- | :------- | :----------------------------------------------------------- |
+| `params`                      | `Object` | An object containing parameters for the embedding retrieval. |
+| `params.query_field_name`     | `string` | -                                                            |
+| `params.query_field_sub_name` | `string` | -                                                            |
+| `params.query_input`          | `string` | -                                                            |
+| `params.query_match_count`    | `number` | -                                                            |
+| `params.query_table_name`     | `string` | -                                                            |
+| `params.query_threshold`      | `number` | -                                                            |
 
 #### Returns
 
-`Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number`  }[]\>
+`Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
 
 A Promise that resolves to an array of objects containing embeddings and levenshtein scores.
 
-___
+---
 
 ### getGoals
 
@@ -253,13 +253,13 @@ Retrieves goals based on specified parameters.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing parameters for goal retrieval. |
-| `params.count?` | `number` | - |
-| `params.onlyInProgress?` | `boolean` | - |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.user_id?` | ``null`` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name                     | Type                                                                 | Description                                         |
+| :----------------------- | :------------------------------------------------------------------- | :-------------------------------------------------- |
+| `params`                 | `Object`                                                             | An object containing parameters for goal retrieval. |
+| `params.count?`          | `number`                                                             | -                                                   |
+| `params.onlyInProgress?` | `boolean`                                                            | -                                                   |
+| `params.room_id`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`           | -                                                   |
+| `params.user_id?`        | `null` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                   |
 
 #### Returns
 
@@ -267,7 +267,7 @@ Retrieves goals based on specified parameters.
 
 A Promise that resolves to an array of Goal objects.
 
-___
+---
 
 ### getMemories
 
@@ -277,13 +277,13 @@ Retrieves memories based on the specified parameters.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing parameters for the memory retrieval. |
-| `params.count?` | `number` | - |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.tableName` | `string` | - |
-| `params.unique?` | `boolean` | - |
+| Name               | Type                                                       | Description                                               |
+| :----------------- | :--------------------------------------------------------- | :-------------------------------------------------------- |
+| `params`           | `Object`                                                   | An object containing parameters for the memory retrieval. |
+| `params.count?`    | `number`                                                   | -                                                         |
+| `params.room_id`   | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                         |
+| `params.tableName` | `string`                                                   | -                                                         |
+| `params.unique?`   | `boolean`                                                  | -                                                         |
 
 #### Returns
 
@@ -291,7 +291,7 @@ Retrieves memories based on the specified parameters.
 
 A Promise that resolves to an array of Memory objects.
 
-___
+---
 
 ### getParticipantsForAccount
 
@@ -301,8 +301,8 @@ Retrieves participants associated with a specific account.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description              |
+| :-------- | :--------------------------------------------------------- | :----------------------- |
 | `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the account. |
 
 #### Returns
@@ -317,8 +317,8 @@ Retrieves participants associated with a specific account.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description              |
+| :-------- | :--------------------------------------------------------- | :----------------------- |
 | `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the account. |
 
 #### Returns
@@ -327,7 +327,7 @@ Retrieves participants associated with a specific account.
 
 A Promise that resolves to an array of Participant objects.
 
-___
+---
 
 ### getParticipantsForRoom
 
@@ -337,8 +337,8 @@ Retrieves participants for a specific room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                                              |
+| :-------- | :--------------------------------------------------------- | :------------------------------------------------------- |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room for which to retrieve participants. |
 
 #### Returns
@@ -347,29 +347,29 @@ Retrieves participants for a specific room.
 
 A Promise that resolves to an array of UUIDs representing the participants.
 
-___
+---
 
 ### getRelationship
 
-▸ **getRelationship**(`params`): `Promise`\<``null`` \| [`Relationship`](../interfaces/Relationship.md)\>
+▸ **getRelationship**(`params`): `Promise`\<`null` \| [`Relationship`](../interfaces/Relationship.md)\>
 
 Retrieves a relationship between two users if it exists.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing the UUIDs of the two users (userA and userB). |
-| `params.userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name           | Type                                                       | Description                                                        |
+| :------------- | :--------------------------------------------------------- | :----------------------------------------------------------------- |
+| `params`       | `Object`                                                   | An object containing the UUIDs of the two users (userA and userB). |
+| `params.userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
+| `params.userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
 
 #### Returns
 
-`Promise`\<``null`` \| [`Relationship`](../interfaces/Relationship.md)\>
+`Promise`\<`null` \| [`Relationship`](../interfaces/Relationship.md)\>
 
 A Promise that resolves to the Relationship object or null if not found.
 
-___
+---
 
 ### getRelationships
 
@@ -379,10 +379,10 @@ Retrieves all relationships for a specific user.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing the UUID of the user. |
-| `params.user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name             | Type                                                       | Description                                |
+| :--------------- | :--------------------------------------------------------- | :----------------------------------------- |
+| `params`         | `Object`                                                   | An object containing the UUID of the user. |
+| `params.user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                          |
 
 #### Returns
 
@@ -390,27 +390,27 @@ Retrieves all relationships for a specific user.
 
 A Promise that resolves to an array of Relationship objects.
 
-___
+---
 
 ### getRoom
 
-▸ **getRoom**(`room_id`): `Promise`\<``null`` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+▸ **getRoom**(`room_id`): `Promise`\<`null` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
 
 Retrieves the room ID for a given room, if it exists.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                       |
+| :-------- | :--------------------------------------------------------- | :-------------------------------- |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room to retrieve. |
 
 #### Returns
 
-`Promise`\<``null`` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+`Promise`\<`null` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
 
 A Promise that resolves to the room ID or null if not found.
 
-___
+---
 
 ### getRoomsForParticipant
 
@@ -420,8 +420,8 @@ Retrieves room IDs for which a specific user is a participant.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description           |
+| :-------- | :--------------------------------------------------------- | :-------------------- |
 | `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user. |
 
 #### Returns
@@ -430,7 +430,7 @@ Retrieves room IDs for which a specific user is a participant.
 
 A Promise that resolves to an array of room IDs.
 
-___
+---
 
 ### getRoomsForParticipants
 
@@ -440,8 +440,8 @@ Retrieves room IDs for which specific users are participants.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                         | Description                     |
+| :-------- | :----------------------------------------------------------- | :------------------------------ |
 | `userIds` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[] | An array of UUIDs of the users. |
 
 #### Returns
@@ -450,7 +450,7 @@ Retrieves room IDs for which specific users are participants.
 
 A Promise that resolves to an array of room IDs.
 
-___
+---
 
 ### log
 
@@ -460,13 +460,13 @@ Logs an event or action with the specified details.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing parameters for the log entry. |
-| `params.body` | `Object` | - |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.type` | `string` | - |
-| `params.user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
+| Name             | Type                                                       | Description                                        |
+| :--------------- | :--------------------------------------------------------- | :------------------------------------------------- |
+| `params`         | `Object`                                                   | An object containing parameters for the log entry. |
+| `params.body`    | `Object`                                                   | -                                                  |
+| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                  |
+| `params.type`    | `string`                                                   | -                                                  |
+| `params.user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                  |
 
 #### Returns
 
@@ -474,7 +474,7 @@ Logs an event or action with the specified details.
 
 A Promise that resolves when the log entry has been saved.
 
-___
+---
 
 ### removeAllGoals
 
@@ -484,8 +484,8 @@ Removes all goals associated with a specific room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                                         |
+| :-------- | :--------------------------------------------------------- | :-------------------------------------------------- |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room whose goals should be removed. |
 
 #### Returns
@@ -494,7 +494,7 @@ Removes all goals associated with a specific room.
 
 A Promise that resolves when all goals have been removed.
 
-___
+---
 
 ### removeAllMemories
 
@@ -504,10 +504,10 @@ Removes all memories associated with a specific room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room whose memories should be removed. |
-| `tableName` | `string` | The table from which the memories should be removed. |
+| Name        | Type                                                       | Description                                            |
+| :---------- | :--------------------------------------------------------- | :----------------------------------------------------- |
+| `room_id`   | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room whose memories should be removed. |
+| `tableName` | `string`                                                   | The table from which the memories should be removed.   |
 
 #### Returns
 
@@ -515,7 +515,7 @@ Removes all memories associated with a specific room.
 
 A Promise that resolves when all memories have been removed.
 
-___
+---
 
 ### removeGoal
 
@@ -525,8 +525,8 @@ Removes a specific goal from the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name     | Type                                                       | Description                     |
+| :------- | :--------------------------------------------------------- | :------------------------------ |
 | `goalId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the goal to remove. |
 
 #### Returns
@@ -535,7 +535,7 @@ Removes a specific goal from the database.
 
 A Promise that resolves when the goal has been removed.
 
-___
+---
 
 ### removeMemory
 
@@ -545,10 +545,10 @@ Removes a specific memory from the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `memoryId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the memory to remove. |
-| `tableName` | `string` | The table from which the memory should be removed. |
+| Name        | Type                                                       | Description                                        |
+| :---------- | :--------------------------------------------------------- | :------------------------------------------------- |
+| `memoryId`  | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the memory to remove.                  |
+| `tableName` | `string`                                                   | The table from which the memory should be removed. |
 
 #### Returns
 
@@ -556,7 +556,7 @@ Removes a specific memory from the database.
 
 A Promise that resolves when the memory has been removed.
 
-___
+---
 
 ### removeParticipant
 
@@ -566,9 +566,9 @@ Removes a user as a participant from a specific room.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user to remove as a participant. |
+| Name      | Type                                                       | Description                                               |
+| :-------- | :--------------------------------------------------------- | :-------------------------------------------------------- |
+| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user to remove as a participant.          |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room from which the user will be removed. |
 
 #### Returns
@@ -577,7 +577,7 @@ Removes a user as a participant from a specific room.
 
 A Promise that resolves to a boolean indicating success or failure.
 
-___
+---
 
 ### removeRoom
 
@@ -587,8 +587,8 @@ Removes a specific room from the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                                       | Description                     |
+| :-------- | :--------------------------------------------------------- | :------------------------------ |
 | `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room to remove. |
 
 #### Returns
@@ -597,7 +597,7 @@ Removes a specific room from the database.
 
 A Promise that resolves when the room has been removed.
 
-___
+---
 
 ### searchMemories
 
@@ -607,15 +607,15 @@ Searches for memories based on embeddings and other specified parameters.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing parameters for the memory search. |
-| `params.embedding` | `number`[] | - |
-| `params.match_count` | `number` | - |
-| `params.match_threshold` | `number` | - |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.tableName` | `string` | - |
-| `params.unique` | `boolean` | - |
+| Name                     | Type                                                       | Description                                            |
+| :----------------------- | :--------------------------------------------------------- | :----------------------------------------------------- |
+| `params`                 | `Object`                                                   | An object containing parameters for the memory search. |
+| `params.embedding`       | `number`[]                                                 | -                                                      |
+| `params.match_count`     | `number`                                                   | -                                                      |
+| `params.match_threshold` | `number`                                                   | -                                                      |
+| `params.room_id`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                      |
+| `params.tableName`       | `string`                                                   | -                                                      |
+| `params.unique`          | `boolean`                                                  | -                                                      |
 
 #### Returns
 
@@ -623,7 +623,7 @@ Searches for memories based on embeddings and other specified parameters.
 
 A Promise that resolves to an array of Memory objects.
 
-___
+---
 
 ### searchMemoriesByEmbedding
 
@@ -633,15 +633,15 @@ Searches for memories by embedding and other specified parameters.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `embedding` | `number`[] | The embedding vector to search with. |
-| `params` | `Object` | Additional parameters for the search. |
-| `params.count?` | `number` | - |
-| `params.match_threshold?` | `number` | - |
-| `params.room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.tableName` | `string` | - |
-| `params.unique?` | `boolean` | - |
+| Name                      | Type                                                       | Description                           |
+| :------------------------ | :--------------------------------------------------------- | :------------------------------------ |
+| `embedding`               | `number`[]                                                 | The embedding vector to search with.  |
+| `params`                  | `Object`                                                   | Additional parameters for the search. |
+| `params.count?`           | `number`                                                   | -                                     |
+| `params.match_threshold?` | `number`                                                   | -                                     |
+| `params.room_id?`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                     |
+| `params.tableName`        | `string`                                                   | -                                     |
+| `params.unique?`          | `boolean`                                                  | -                                     |
 
 #### Returns
 
@@ -649,7 +649,7 @@ Searches for memories by embedding and other specified parameters.
 
 A Promise that resolves to an array of Memory objects.
 
-___
+---
 
 ### updateGoal
 
@@ -659,8 +659,8 @@ Updates a specific goal in the database.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name   | Type                            | Description                              |
+| :----- | :------------------------------ | :--------------------------------------- |
 | `goal` | [`Goal`](../interfaces/Goal.md) | The goal object with updated properties. |
 
 #### Returns
@@ -669,7 +669,7 @@ Updates a specific goal in the database.
 
 A Promise that resolves when the goal has been updated.
 
-___
+---
 
 ### updateGoalStatus
 
@@ -679,11 +679,11 @@ Updates the status of a specific goal.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params` | `Object` | An object containing the goalId and the new status. |
-| `params.goalId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | - |
-| `params.status` | [`GoalStatus`](../enums/GoalStatus.md) | - |
+| Name            | Type                                                       | Description                                         |
+| :-------------- | :--------------------------------------------------------- | :-------------------------------------------------- |
+| `params`        | `Object`                                                   | An object containing the goalId and the new status. |
+| `params.goalId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                   |
+| `params.status` | [`GoalStatus`](../enums/GoalStatus.md)                     | -                                                   |
 
 #### Returns
 

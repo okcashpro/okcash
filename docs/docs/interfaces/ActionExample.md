@@ -14,7 +14,7 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 • **content**: [`Content`](Content.md)
 
-___
+---
 
 ### user
 

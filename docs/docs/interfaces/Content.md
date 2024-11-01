@@ -18,13 +18,13 @@ Represents the content of a message, including its main text (`content`), any as
 
 • `Optional` **action**: `string`
 
-___
+---
 
 ### content
 
 • **content**: `string`
 
-___
+---
 
 ### source
 

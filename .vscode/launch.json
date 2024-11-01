@@ -9,13 +9,8 @@
             "request": "launch",
             "name": "Launch via npm",
             "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run",
-                "dev"
-            ],
-            "skipFiles": [
-                "<node_internals>/**"
-            ]
+            "runtimeArgs": ["run", "dev"],
+            "skipFiles": ["<node_internals>/**"]
         }
     ]
 }

@@ -12,10 +12,10 @@ Format actors into a string
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `actors` | `Object` | list of actors |
-| `actors.actors` | [`Actor`](../interfaces/Actor.md)[] | - |
+| Name            | Type                                | Description    |
+| :-------------- | :---------------------------------- | :------------- |
+| `actors`        | `Object`                            | list of actors |
+| `actors.actors` | [`Actor`](../interfaces/Actor.md)[] | -              |
 
 #### Returns
 

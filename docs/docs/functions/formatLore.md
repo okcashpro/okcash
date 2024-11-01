@@ -12,8 +12,8 @@ Formats an array of lore entries into a single string. Each entry is separated b
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name   | Type                                  | Description                         |
+| :----- | :------------------------------------ | :---------------------------------- |
 | `lore` | [`Memory`](../interfaces/Memory.md)[] | An array of lore entries to format. |
 
 #### Returns

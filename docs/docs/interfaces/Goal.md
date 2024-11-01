@@ -14,32 +14,32 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 • `Optional` **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### name
 
 • **name**: `string`
 
-___
+---
 
 ### objectives
 
 • **objectives**: [`Objective`](Objective.md)[]
 
-___
+---
 
-### room\_id
+### room_id
 
-• **room\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### status
 
 • **status**: [`GoalStatus`](../enums/GoalStatus.md)
 
-___
+---
 
-### user\_id
+### user_id
 
-• **user\_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`

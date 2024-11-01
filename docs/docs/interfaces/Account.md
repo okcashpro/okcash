@@ -10,11 +10,11 @@ Represents a user, including their name, details, and a unique identifier.
 
 ## Properties
 
-### avatar\_url
+### avatar_url
 
-• `Optional` **avatar\_url**: `string`
+• `Optional` **avatar_url**: `string`
 
-___
+---
 
 ### details
 
@@ -24,19 +24,19 @@ ___
 
 ▪ [key: `string`]: `unknown`
 
-___
+---
 
 ### email
 
 • `Optional` **email**: `string`
 
-___
+---
 
 ### id
 
 • **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
 
-___
+---
 
 ### name
 

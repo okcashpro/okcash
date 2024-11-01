@@ -12,8 +12,8 @@ Formats the provided actions into a string listing each action's name and descri
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                  | Description                             |
+| :-------- | :------------------------------------ | :-------------------------------------- |
 | `actions` | [`Action`](../interfaces/Action.md)[] | An array of `Action` objects to format. |
 
 #### Returns

@@ -6,7 +6,7 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-Ƭ **Validator**: (`runtime`: [`BgentRuntime`](../classes/BgentRuntime.md), `message`: [`Message`](../interfaces/Message.md), `state?`: [`State`](../interfaces/State.md)) => `Promise`\<`boolean`\>
+Ƭ **Validator**: (`runtime`: [`AgentRuntime`](../classes/AgentRuntime.md), `message`: [`Message`](../interfaces/Message.md), `state?`: [`State`](../interfaces/State.md)) => `Promise`\<`boolean`\>
 
 Represents the type of a validator function, which takes a runtime instance, a message, and an optional state, and returns a promise resolving to a boolean indicating whether the validation passed.
 
@@ -16,11 +16,11 @@ Represents the type of a validator function, which takes a runtime instance, a m
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `runtime` | [`BgentRuntime`](../classes/BgentRuntime.md) |
-| `message` | [`Message`](../interfaces/Message.md) |
-| `state?` | [`State`](../interfaces/State.md) |
+| Name      | Type                                         |
+| :-------- | :------------------------------------------- |
+| `runtime` | [`AgentRuntime`](../classes/AgentRuntime.md) |
+| `message` | [`Message`](../interfaces/Message.md)        |
+| `state?`  | [`State`](../interfaces/State.md)            |
 
 ##### Returns
 

@@ -12,8 +12,8 @@ Formats the conditions for each provided action into a string, listing each acti
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name      | Type                                  | Description                                                    |
+| :-------- | :------------------------------------ | :------------------------------------------------------------- |
 | `actions` | [`Action`](../interfaces/Action.md)[] | An array of `Action` objects from which to extract conditions. |
 
 #### Returns

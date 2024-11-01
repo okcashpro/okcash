@@ -14,31 +14,31 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 • **condition**: `string`
 
-___
+---
 
 ### description
 
 • **description**: `string`
 
-___
+---
 
 ### examples
 
 • **examples**: [`EvaluationExample`](EvaluationExample.md)[]
 
-___
+---
 
 ### handler
 
 • **handler**: [`Handler`](../types/Handler.md)
 
-___
+---
 
 ### name
 
 • **name**: `string`
 
-___
+---
 
 ### validate
 
