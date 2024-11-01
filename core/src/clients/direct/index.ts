@@ -267,4 +267,4 @@ class DirectClient {
     }
 }
 
-export default DirectClient;
+export { DirectClient };
