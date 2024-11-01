@@ -38,12 +38,12 @@ export class TokenProvider {
     //  private connection: Connection,
     private tokenAddress: string
   ) {
-    this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
+    this.cache = new NodeCache({ stdTTL: 300,  }); // 5 minutes cache
     const __filename = fileURLToPath(import.meta.url);
 
     const __dirname = path.dirname(__filename);
 
-    this.cacheDir = path.join(__dirname, "cache");
+    this.cacheDir = path.join(__dirname, "../../tokencache");
     if (!fs.existsSync(this.cacheDir)) {
       fs.mkdirSync(this.cacheDir);
     }
