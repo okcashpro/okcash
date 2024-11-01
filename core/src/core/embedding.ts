@@ -7,7 +7,6 @@ import { IAgentRuntime, ModelProvider } from "./types.ts";
  * @returns The embedding of the input.
  */
 export async function embed(runtime: IAgentRuntime, input: string) {
-
     // get the charcter, and handle by model type
     const model = models[runtime.character.settings.model];
 
@@ -38,12 +37,15 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     try {
         const response = await fetch(
             `${runtime.serverUrl}/embeddings`,
-            requestOptions,
+            requestOptions
         );
 
         if (!response.ok) {
             throw new Error(
-                "OpenAI API Error: " + response.status + " " + response.statusText,
+                "OpenAI API Error: " +
+                    response.status +
+                    " " +
+                    response.statusText
             );
         }
 
@@ -60,7 +62,10 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     }
 }
 
-export async function retrieveCachedEmbedding(runtime: IAgentRuntime, input: string) {
+export async function retrieveCachedEmbedding(
+    runtime: IAgentRuntime,
+    input: string
+) {
     const similaritySearchResult =
         await runtime.messageManager.getCachedEmbeddings(input);
     if (similaritySearchResult.length > 0) {

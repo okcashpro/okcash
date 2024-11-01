@@ -15,34 +15,34 @@ export const defaultActions: Action[] = [/* cont, */ ignore, none];
  * @returns A string containing formatted examples of conversations.
  */
 export const composeActionExamples = (actionsData: Action[], count: number) => {
-  const actionExamples: ActionExample[][] = actionsData
-    .sort(() => 0.5 - Math.random())
-    .map((action: Action) =>
-      action.examples.sort(() => 0.5 - Math.random()).slice(0, 5),
-    )
-    .flat()
-    .slice(0, count);
+    const actionExamples: ActionExample[][] = actionsData
+        .sort(() => 0.5 - Math.random())
+        .map((action: Action) =>
+            action.examples.sort(() => 0.5 - Math.random()).slice(0, 5)
+        )
+        .flat()
+        .slice(0, count);
 
-  const formattedExamples = actionExamples.map((example) => {
-    const exampleNames = Array.from({ length: 5 }, () =>
-      uniqueNamesGenerator({ dictionaries: [names] }),
-    );
+    const formattedExamples = actionExamples.map((example) => {
+        const exampleNames = Array.from({ length: 5 }, () =>
+            uniqueNamesGenerator({ dictionaries: [names] })
+        );
 
-    return `\n${example
-      .map((message) => {
-        let messageString = `${message.user}: ${message.content.text}${message.content.action ? ` (${message.content.action})` : ""}`;
-        for (let i = 0; i < exampleNames.length; i++) {
-          messageString = messageString.replaceAll(
-            `{{user${i + 1}}}`,
-            exampleNames[i],
-          );
-        }
-        return messageString;
-      })
-      .join("\n")}`;
-  });
+        return `\n${example
+            .map((message) => {
+                let messageString = `${message.user}: ${message.content.text}${message.content.action ? ` (${message.content.action})` : ""}`;
+                for (let i = 0; i < exampleNames.length; i++) {
+                    messageString = messageString.replaceAll(
+                        `{{user${i + 1}}}`,
+                        exampleNames[i]
+                    );
+                }
+                return messageString;
+            })
+            .join("\n")}`;
+    });
 
-  return formattedExamples.join("\n");
+    return formattedExamples.join("\n");
 };
 
 /**
@@ -51,10 +51,10 @@ export const composeActionExamples = (actionsData: Action[], count: number) => {
  * @returns A comma-separated string of action names.
  */
 export function formatActionNames(actions: Action[]) {
-  return actions
-    .sort(() => 0.5 - Math.random())
-    .map((action: Action) => `${action.name}`)
-    .join(", ");
+    return actions
+        .sort(() => 0.5 - Math.random())
+        .map((action: Action) => `${action.name}`)
+        .join(", ");
 }
 
 /**
@@ -63,8 +63,8 @@ export function formatActionNames(actions: Action[]) {
  * @returns A detailed string of actions, including names and descriptions.
  */
 export function formatActions(actions: Action[]) {
-  return actions
-    .sort(() => 0.5 - Math.random())
-    .map((action: Action) => `${action.name}: ${action.description}`)
-    .join(",\n");
+    return actions
+        .sort(() => 0.5 - Math.random())
+        .map((action: Action) => `${action.name}: ${action.description}`)
+        .join(",\n");
 }

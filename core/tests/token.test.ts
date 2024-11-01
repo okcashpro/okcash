@@ -8,70 +8,70 @@ jest.mock("fs");
 jest.mock("node-cache");
 
 describe("TokenProvider Tests", () => {
-  //   let connection: Connection;
-  let tokenProvider: TokenProvider;
+    //   let connection: Connection;
+    let tokenProvider: TokenProvider;
 
-  beforeEach(() => {
-    // Initialize the connection and token provider before each test
-    //  connection = new Connection("https://api.mainnet-beta.solana.com");
-    tokenProvider = new TokenProvider(
-      "2weMjPLLybRMMva1fM3U31goWWrCpF59CHWNhnCJ9Vyh"
-    );
-  });
-
-  test("should fetch token security data", async () => {
-
-    const { runtime } = await createRuntime({
-      conversationLength: 10,
+    beforeEach(() => {
+        // Initialize the connection and token provider before each test
+        //  connection = new Connection("https://api.mainnet-beta.solana.com");
+        tokenProvider = new TokenProvider(
+            "2weMjPLLybRMMva1fM3U31goWWrCpF59CHWNhnCJ9Vyh"
+        );
     });
 
-    // Mock the response for the fetchTokenSecurity call
-    const mockFetchResponse = {
-      success: true,
-      data: {
-        ownerBalance: "100",
-        creatorBalance: "50",
-        ownerPercentage: 10,
-        creatorPercentage: 5,
-        top10HolderBalance: "200",
-        top10HolderPercent: 20,
-      },
-    };
+    test("should fetch token security data", async () => {
+        const { runtime } = await createRuntime({
+            conversationLength: 10,
+        });
 
-    // Mock fetchWithRetry function
-    const fetchSpy = jest
-      .spyOn(tokenProvider as any, "fetchWithRetry")
-      .mockResolvedValue(mockFetchResponse);
+        // Mock the response for the fetchTokenSecurity call
+        const mockFetchResponse = {
+            success: true,
+            data: {
+                ownerBalance: "100",
+                creatorBalance: "50",
+                ownerPercentage: 10,
+                creatorPercentage: 5,
+                top10HolderBalance: "200",
+                top10HolderPercent: 20,
+            },
+        };
 
-    //  Run the fetchTokenSecurity method
-    //  const securityData = await tokenProvider.fetchTokenSecurity();
+        // Mock fetchWithRetry function
+        const fetchSpy = jest
+            .spyOn(tokenProvider as any, "fetchWithRetry")
+            .mockResolvedValue(mockFetchResponse);
 
-    // Check if the data returned is correct
-    //  expect(securityData).toEqual({
-    //    ownerBalance: "100",
-    //    creatorBalance: "50",
-    //    ownerPercentage: 10,
-    //    creatorPercentage: 5,
-    //    top10HolderBalance: "200",
-    //    top10HolderPercent: 20,
-    //  });
-    //console.log the securityData
-    //  console.log({ securityData });
+        //  Run the fetchTokenSecurity method
+        //  const securityData = await tokenProvider.fetchTokenSecurity();
 
-    //  const holderList = await tokenProvider.fetchHolderList();
+        // Check if the data returned is correct
+        //  expect(securityData).toEqual({
+        //    ownerBalance: "100",
+        //    creatorBalance: "50",
+        //    ownerPercentage: 10,
+        //    creatorPercentage: 5,
+        //    top10HolderBalance: "200",
+        //    top10HolderPercent: 20,
+        //  });
+        //console.log the securityData
+        //  console.log({ securityData });
 
-    //  console.log({ holderList });
+        //  const holderList = await tokenProvider.fetchHolderList();
 
-    //  const tradeData = await tokenProvider.fetchTokenTradeData();
-    //  console.log({ tradeData });
+        //  console.log({ holderList });
 
-    //  const dexScreenerData = await tokenProvider.fetchDexScreenerData();
-    //  console.log({ dexScreenerData });
+        //  const tradeData = await tokenProvider.fetchTokenTradeData();
+        //  console.log({ tradeData });
 
-    const tokenReport = await tokenProvider.getFormattedTokenReport(runtime);
-    console.log({ tokenReport });
+        //  const dexScreenerData = await tokenProvider.fetchDexScreenerData();
+        //  console.log({ dexScreenerData });
 
-    // Ensure the mock was called
-    expect(fetchSpy).toHaveBeenCalled();
-  });
+        const tokenReport =
+            await tokenProvider.getFormattedTokenReport(runtime);
+        console.log({ tokenReport });
+
+        // Ensure the mock was called
+        expect(fetchSpy).toHaveBeenCalled();
+    });
 });
