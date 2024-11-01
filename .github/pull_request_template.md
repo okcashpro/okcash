@@ -1,18 +1,23 @@
 <!-- Use this template by filling in information and copy and pasting relevant items out of the html comments. -->
 
 # Relates to:
+
 <!-- LINK TO ISSUE OR TICKET -->
 
 <!-- This risks section is to be filled out before final review and merge. -->
+
 # Risks
+
 <!--
 Low, medium, large. List what kind of risks, and what could be effected.
 -->
 
 # Background
+
 ## What does this PR do?
 
 ## What kind of change is this?
+
 <!--
 Bug fixes (non-breaking change which fixes an issue)
 Improvements (misc. changes to existing features)
@@ -26,6 +31,7 @@ Updates (new versions of included code)
 -->
 
 # Documentation changes needed?
+
 <!--
 My changes do not require a change to the project documentation.
 My changes require a change to the project documentation.
@@ -33,10 +39,13 @@ If a docs change is needed: I have updated the documentation accordingly.
 -->
 
 <!-- Please show how you tested the PR. This will really help if the PR needs to be retested, and probably help the PR get merged quicker. -->
+
 # Testing
+
 ## Where should a reviewer start?
 
 ## Detailed testing steps
+
 <!--
 None, automtated tests are fine.
 -->

@@ -9,21 +9,21 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-            
+
             - uses: pnpm/action-setup@v3
               with:
                   version: 9.4.0
-            
+
             - uses: actions/setup-node@v4
               with:
-                  node-version: '23'
-                  cache: 'pnpm'
-                  
+                  node-version: "23"
+                  cache: "pnpm"
+
             - name: Install dependencies
               run: pnpm i
-              
+
             - name: Run Prettier
               run: pnpm run prettier --check .
-              
+
             - name: Build packages
               run: pnpm run build
