@@ -10,7 +10,7 @@ export const defaultEvaluators: Evaluator[] = [fact /*, goal*/];
  * Template used for the evaluation generateText.
  */
 export const evaluationTemplate =
-  `TASK: Based on the conversation and conditions, determine which evaluation functions are appropriate to call.
+    `TASK: Based on the conversation and conditions, determine which evaluation functions are appropriate to call.
 Examples:
 {{evaluatorExamples}}
 
@@ -32,9 +32,9 @@ Available evaluator names to include are {{evaluatorNames}}
  * @returns A string that concatenates the names of all evaluators, each enclosed in single quotes and separated by commas.
  */
 export function formatEvaluatorNames(evaluators: Evaluator[]) {
-  return evaluators
-    .map((evaluator: Evaluator) => `'${evaluator.name}'`)
-    .join(",\n");
+    return evaluators
+        .map((evaluator: Evaluator) => `'${evaluator.name}'`)
+        .join(",\n");
 }
 
 /**
@@ -43,11 +43,12 @@ export function formatEvaluatorNames(evaluators: Evaluator[]) {
  * @returns A string that concatenates the name and description of each evaluator, separated by a colon and a newline character.
  */
 export function formatEvaluators(evaluators: Evaluator[]) {
-  return evaluators
-    .map(
-      (evaluator: Evaluator) => `'${evaluator.name}: ${evaluator.description}'`,
-    )
-    .join(",\n");
+    return evaluators
+        .map(
+            (evaluator: Evaluator) =>
+                `'${evaluator.name}: ${evaluator.description}'`
+        )
+        .join(",\n");
 }
 
 /**
@@ -56,42 +57,53 @@ export function formatEvaluators(evaluators: Evaluator[]) {
  * @returns A string that presents each evaluator example in a structured format, including context, messages, and outcomes, with placeholders replaced by generated names.
  */
 export function formatEvaluatorExamples(evaluators: Evaluator[]) {
-  return evaluators
-    .map((evaluator) => {
-      return evaluator.examples
-        .map((example) => {
-          const exampleNames = Array.from({ length: 5 }, () =>
-            uniqueNamesGenerator({ dictionaries: [names] }),
-          );
+    return evaluators
+        .map((evaluator) => {
+            return evaluator.examples
+                .map((example) => {
+                    const exampleNames = Array.from({ length: 5 }, () =>
+                        uniqueNamesGenerator({ dictionaries: [names] })
+                    );
 
-          let formattedContext = example.context;
-          let formattedOutcome = example.outcome;
+                    let formattedContext = example.context;
+                    let formattedOutcome = example.outcome;
 
-          exampleNames.forEach((name, index) => {
-            const placeholder = `{{user${index + 1}}}`;
-            formattedContext = formattedContext.replaceAll(placeholder, name);
-            formattedOutcome = formattedOutcome.replaceAll(placeholder, name);
-          });
+                    exampleNames.forEach((name, index) => {
+                        const placeholder = `{{user${index + 1}}}`;
+                        formattedContext = formattedContext.replaceAll(
+                            placeholder,
+                            name
+                        );
+                        formattedOutcome = formattedOutcome.replaceAll(
+                            placeholder,
+                            name
+                        );
+                    });
 
-          const formattedMessages = example.messages
-            .map((message: ActionExample) => {
-              let messageString = `${message.user}: ${message.content.text}`;
-              exampleNames.forEach((name, index) => {
-                const placeholder = `{{user${index + 1}}}`;
-                messageString = messageString.replaceAll(placeholder, name);
-              });
-              return (
-                messageString +
-                (message.content.action ? ` (${message.content.action})` : "")
-              );
-            })
-            .join("\n");
+                    const formattedMessages = example.messages
+                        .map((message: ActionExample) => {
+                            let messageString = `${message.user}: ${message.content.text}`;
+                            exampleNames.forEach((name, index) => {
+                                const placeholder = `{{user${index + 1}}}`;
+                                messageString = messageString.replaceAll(
+                                    placeholder,
+                                    name
+                                );
+                            });
+                            return (
+                                messageString +
+                                (message.content.action
+                                    ? ` (${message.content.action})`
+                                    : "")
+                            );
+                        })
+                        .join("\n");
 
-          return `Context:\n${formattedContext}\n\nMessages:\n${formattedMessages}\n\nOutcome:\n${formattedOutcome}`;
+                    return `Context:\n${formattedContext}\n\nMessages:\n${formattedMessages}\n\nOutcome:\n${formattedOutcome}`;
+                })
+                .join("\n\n");
         })
         .join("\n\n");
-    })
-    .join("\n\n");
 }
 
 /**
@@ -100,14 +112,14 @@ export function formatEvaluatorExamples(evaluators: Evaluator[]) {
  * @returns A string that summarizes the descriptions for each evaluator example, formatted with the evaluator name, example number, and description.
  */
 export function formatEvaluatorExampleDescriptions(evaluators: Evaluator[]) {
-  return evaluators
-    .map((evaluator) =>
-      evaluator.examples
-        .map(
-          (_example, index) =>
-            `${evaluator.name} Example ${index + 1}: ${evaluator.description}`,
+    return evaluators
+        .map((evaluator) =>
+            evaluator.examples
+                .map(
+                    (_example, index) =>
+                        `${evaluator.name} Example ${index + 1}: ${evaluator.description}`
+                )
+                .join("\n")
         )
-        .join("\n"),
-    )
-    .join("\n\n");
+        .join("\n\n");
 }

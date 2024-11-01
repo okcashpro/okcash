@@ -3,12 +3,12 @@ import { generateText } from "../core/generation.ts";
 import { getGoals } from "../core/goals.ts";
 import { parseJsonArrayFromText } from "../core/parsing.ts";
 import {
-  IAgentRuntime,
-  Memory,
-  ModelClass,
-  Objective,
-  type Goal,
-  type State,
+    IAgentRuntime,
+    Memory,
+    ModelClass,
+    Objective,
+    type Goal,
+    type State,
 } from "../core/types.ts";
 
 const template = `TASK: Update Goal
@@ -49,110 +49,114 @@ Response format should be:
 \`\`\``;
 
 async function handler(
-  runtime: IAgentRuntime,
-  message: Memory,
-  state: State | undefined,
-  options: { [key: string]: unknown } = { onlyInProgress: true },
+    runtime: IAgentRuntime,
+    message: Memory,
+    state: State | undefined,
+    options: { [key: string]: unknown } = { onlyInProgress: true }
 ): Promise<Goal[]> {
-  // get goals
-  let goalsData = await getGoals({
-    runtime,
-    roomId: message.roomId,
-    onlyInProgress: options.onlyInProgress as boolean,
-  });
+    // get goals
+    let goalsData = await getGoals({
+        runtime,
+        roomId: message.roomId,
+        onlyInProgress: options.onlyInProgress as boolean,
+    });
 
-  state = (await runtime.composeState(message)) as State;
-  const context = composeContext({
-    state,
-    template,
-  });
+    state = (await runtime.composeState(message)) as State;
+    const context = composeContext({
+        state,
+        template,
+    });
 
-  // Request generateText from OpenAI to analyze conversation and suggest goal updates
-  const response = await generateText({
-    runtime,
-    context,
-    modelClass: ModelClass.SMALL,
-  });
+    // Request generateText from OpenAI to analyze conversation and suggest goal updates
+    const response = await generateText({
+        runtime,
+        context,
+        modelClass: ModelClass.SMALL,
+    });
 
-  // Parse the JSON response to extract goal updates
-  const updates = parseJsonArrayFromText(response);
+    // Parse the JSON response to extract goal updates
+    const updates = parseJsonArrayFromText(response);
 
-  // get goals
-  goalsData = await getGoals({
-    runtime,
-    roomId: message.roomId,
-    onlyInProgress: true,
-  });
+    // get goals
+    goalsData = await getGoals({
+        runtime,
+        roomId: message.roomId,
+        onlyInProgress: true,
+    });
 
-  // Apply the updates to the goals
-  const updatedGoals = goalsData
-    .map((goal: Goal) => {
-      const update = updates?.find((u) => u.id === goal.id);
-      if (update) {
-        const objectives = goal.objectives;
+    // Apply the updates to the goals
+    const updatedGoals = goalsData
+        .map((goal: Goal) => {
+            const update = updates?.find((u) => u.id === goal.id);
+            if (update) {
+                const objectives = goal.objectives;
 
-        // for each objective in update.objectives, find the objective with the same description in 'objectives' and set the 'completed' value to the update.objectives value
-        if (update.objectives) {
-          for (const objective of objectives) {
-            const updatedObjective = update.objectives.find(
-              (o: Objective) => o.description === objective.description,
-            );
-            if (updatedObjective) {
-              objective.completed = updatedObjective.completed;
+                // for each objective in update.objectives, find the objective with the same description in 'objectives' and set the 'completed' value to the update.objectives value
+                if (update.objectives) {
+                    for (const objective of objectives) {
+                        const updatedObjective = update.objectives.find(
+                            (o: Objective) =>
+                                o.description === objective.description
+                        );
+                        if (updatedObjective) {
+                            objective.completed = updatedObjective.completed;
+                        }
+                    }
+                }
+
+                return {
+                    ...goal,
+                    ...update,
+                    objectives: [
+                        ...goal.objectives,
+                        ...(update?.objectives || []),
+                    ],
+                }; // Merging the update into the existing goal
+            } else {
+                console.warn("**** ID NOT FOUND");
             }
-          }
-        }
+            return null; // No update for this goal
+        })
+        .filter(Boolean);
 
-        return {
-          ...goal,
-          ...update,
-          objectives: [...goal.objectives, ...(update?.objectives || [])],
-        }; // Merging the update into the existing goal
-      } else {
-        console.warn("**** ID NOT FOUND");
-      }
-      return null; // No update for this goal
-    })
-    .filter(Boolean);
+    // Update goals in the database
+    for (const goal of updatedGoals) {
+        const id = goal.id;
+        // delete id from goal
+        if (goal.id) delete goal.id;
+        await runtime.databaseAdapter.updateGoal({ ...goal, id });
+    }
 
-  // Update goals in the database
-  for (const goal of updatedGoals) {
-    const id = goal.id;
-    // delete id from goal
-    if (goal.id) delete goal.id;
-    await runtime.databaseAdapter.updateGoal({ ...goal, id });
-  }
-
-  return updatedGoals; // Return updated goals for further processing or logging
+    return updatedGoals; // Return updated goals for further processing or logging
 }
 
 export default {
-  name: "UPDATE_GOAL",
-  similes: [
-    "UPDATE_GOALS",
-    "EDIT_GOAL",
-    "UPDATE_GOAL_STATUS",
-    "UPDATE_OBJECTIVES",
-  ],
-  validate: async (
-    runtime: IAgentRuntime,
-    message: Memory,
-  ): Promise<boolean> => {
-    // Check if there are active goals that could potentially be updated
-    const goals = await getGoals({
-      runtime,
-      count: 1,
-      onlyInProgress: true,
-      roomId: message.roomId,
-    });
-    return goals.length > 0;
-  },
-  description:
-    "Analyze the conversation and update the status of the goals based on the new information provided.",
-  handler,
-  examples: [
-    {
-      context: `Actors in the scene:
+    name: "UPDATE_GOAL",
+    similes: [
+        "UPDATE_GOALS",
+        "EDIT_GOAL",
+        "UPDATE_GOAL_STATUS",
+        "UPDATE_OBJECTIVES",
+    ],
+    validate: async (
+        runtime: IAgentRuntime,
+        message: Memory
+    ): Promise<boolean> => {
+        // Check if there are active goals that could potentially be updated
+        const goals = await getGoals({
+            runtime,
+            count: 1,
+            onlyInProgress: true,
+            roomId: message.roomId,
+        });
+        return goals.length > 0;
+    },
+    description:
+        "Analyze the conversation and update the status of the goals based on the new information provided.",
+    handler,
+    examples: [
+        {
+            context: `Actors in the scene:
   {{user1}}: An avid reader and member of a book club.
   {{user2}}: The organizer of the book club.
   
@@ -164,28 +168,28 @@ export default {
       - Read up to chapter 20 by the end of the month
       - Discuss the first part in the next meeting`,
 
-      messages: [
-        {
-          user: "{{user1}}",
-          content: {
-            text: "I've just finished chapter 20 of 'War and Peace'",
-          },
-        },
-        {
-          user: "{{user2}}",
-          content: {
-            text: "Were you able to grasp the complexities of the characters",
-          },
-        },
-        {
-          user: "{{user1}}",
-          content: {
-            text: "Yep. I've prepared some notes for our discussion",
-          },
-        },
-      ],
+            messages: [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "I've just finished chapter 20 of 'War and Peace'",
+                    },
+                },
+                {
+                    user: "{{user2}}",
+                    content: {
+                        text: "Were you able to grasp the complexities of the characters",
+                    },
+                },
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "Yep. I've prepared some notes for our discussion",
+                    },
+                },
+            ],
 
-      outcome: `[
+            outcome: `[
         {
           "id": "12345-67890-12345-67890",
           "status": "DONE",
@@ -195,10 +199,10 @@ export default {
           ]
         }
       ]`,
-    },
+        },
 
-    {
-      context: `Actors in the scene:
+        {
+            context: `Actors in the scene:
   {{user1}}: A fitness enthusiast working towards a marathon.
   {{user2}}: A personal trainer.
   
@@ -210,24 +214,26 @@ export default {
       - Increase running distance to 30 miles a week
       - Complete a half-marathon as practice`,
 
-      messages: [
-        {
-          user: "{{user1}}",
-          content: { text: "I managed to run 30 miles this week" },
-        },
-        {
-          user: "{{user2}}",
-          content: {
-            text: "Impressive progress! How do you feel about the half-marathon next month?",
-          },
-        },
-        {
-          user: "{{user1}}",
-          content: { text: "I feel confident. The training is paying off." },
-        },
-      ],
+            messages: [
+                {
+                    user: "{{user1}}",
+                    content: { text: "I managed to run 30 miles this week" },
+                },
+                {
+                    user: "{{user2}}",
+                    content: {
+                        text: "Impressive progress! How do you feel about the half-marathon next month?",
+                    },
+                },
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "I feel confident. The training is paying off.",
+                    },
+                },
+            ],
 
-      outcome: `[
+            outcome: `[
         {
           "id": "23456-78901-23456-78901",
           "objectives": [
@@ -236,10 +242,10 @@ export default {
           ]
         }
       ]`,
-    },
+        },
 
-    {
-      context: `Actors in the scene:
+        {
+            context: `Actors in the scene:
   {{user1}}: A student working on a final year project.
   {{user2}}: The project supervisor.
   
@@ -251,24 +257,28 @@ export default {
       - Submit the first draft of the thesis
       - Complete the project prototype`,
 
-      messages: [
-        {
-          user: "{{user1}}",
-          content: { text: "I've submitted the first draft of my thesis." },
-        },
-        {
-          user: "{{user2}}",
-          content: { text: "Well done. How is the prototype coming along?" },
-        },
-        {
-          user: "{{user1}}",
-          content: {
-            text: "It's almost done. I just need to finalize the testing phase.",
-          },
-        },
-      ],
+            messages: [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "I've submitted the first draft of my thesis.",
+                    },
+                },
+                {
+                    user: "{{user2}}",
+                    content: {
+                        text: "Well done. How is the prototype coming along?",
+                    },
+                },
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "It's almost done. I just need to finalize the testing phase.",
+                    },
+                },
+            ],
 
-      outcome: `[
+            outcome: `[
         {
           "id": "34567-89012-34567-89012",
           "objectives": [
@@ -277,10 +287,10 @@ export default {
           ]
         }
       ]`,
-    },
+        },
 
-    {
-      context: `Actors in the scene:
+        {
+            context: `Actors in the scene:
         {{user1}}: A project manager working on a software development project.
         {{user2}}: A software developer in the project team.
         
@@ -292,30 +302,32 @@ export default {
             - Complete the coding for the new features
             - Perform comprehensive testing of the software`,
 
-      messages: [
-        {
-          user: "{{user1}}",
-          content: { text: "How's the progress on the new features?" },
-        },
-        {
-          user: "{{user2}}",
-          content: {
-            text: "We've encountered some unexpected challenges and are currently troubleshooting.",
-          },
-        },
-        {
-          user: "{{user1}}",
-          content: {
-            text: "Let's move on and cancel the task.",
-          },
-        },
-      ],
+            messages: [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "How's the progress on the new features?",
+                    },
+                },
+                {
+                    user: "{{user2}}",
+                    content: {
+                        text: "We've encountered some unexpected challenges and are currently troubleshooting.",
+                    },
+                },
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "Let's move on and cancel the task.",
+                    },
+                },
+            ],
 
-      outcome: `[
+            outcome: `[
         {
           "id": "45678-90123-45678-90123",
           "status": "FAILED"
       ]`,
-    },
-  ],
+        },
+    ],
 };
