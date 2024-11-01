@@ -2,37 +2,26 @@
 export * from "./actions/index.ts";
 export * from "./clients/index.ts";
 export * from "./adapters/index.ts";
+export * from "./providers/index.ts";
+
+import * as Action from "./actions/index.ts";
+import * as Client from "./clients/index.ts";
+import * as Adapter from "./adapters/index.ts";
+import * as Provider from "./providers/index.ts";
 
 import Database from "better-sqlite3";
 import fs from "fs";
 import yargs from "yargs";
-import askClaude from "./actions/ask_claude.ts";
-import follow_room from "./actions/follow_room.ts";
-import imageGeneration from "./actions/imageGeneration.ts";
-import mute_room from "./actions/mute_room.ts";
-import swap from "./actions/swap.ts";
-import unfollow_room from "./actions/unfollow_room.ts";
-import unmute_room from "./actions/unmute_room.ts";
-import { PostgresDatabaseAdapter } from "./adapters/postgres.ts";
-import { SqliteDatabaseAdapter } from "./adapters/sqlite.ts";
-import DirectClient from "./clients/direct/index.ts";
-import { DiscordClient } from "./clients/discord/index.ts";
-import { TelegramClient } from "./clients/telegram/src/index.ts"; // Added Telegram import
-import { TwitterGenerationClient } from "./clients/twitter/generate.ts";
-import { TwitterInteractionClient } from "./clients/twitter/interactions.ts";
-import { TwitterSearchClient } from "./clients/twitter/search.ts";
+
 import { wait } from "./clients/twitter/utils.ts";
 import { defaultActions } from "./core/actions.ts";
 import defaultCharacter from "./core/defaultCharacter.ts";
 import { AgentRuntime } from "./core/runtime.ts";
 import settings from "./core/settings.ts";
 import { Character, IAgentRuntime, ModelProvider } from "./core/types.ts"; // Added IAgentRuntime
-import boredomProvider from "./providers/boredom.ts";
-import timeProvider from "./providers/time.ts";
-import walletProvider from "./providers/wallet.ts";
+
 import readline from "readline";
-import orderbook from "./providers/order_book.ts";
-import tokenProvider from "./providers/token.ts";
+
 interface Arguments {
     character?: string;
     characters?: string;
@@ -76,7 +65,7 @@ const characterPaths = argv.characters?.split(",").map((path) => path.trim());
 
 const characters = [];
 
-const directClient = new DirectClient();
+const directClient = new Client.DirectClient();
 directClient.start(3000);
 
 if (characterPaths?.length > 0) {
@@ -112,11 +101,11 @@ async function startAgent(character: Character) {
     let db;
     if (process.env.POSTGRES_URL) {
         // const db = new SqliteDatabaseAdapter(new Database("./db.sqlite"));
-        db = new PostgresDatabaseAdapter({
+        db = new Adapter.PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
         });
     } else {
-        db = new SqliteDatabaseAdapter(new Database("./db.sqlite"));
+        db = new Adapter.SqliteDatabaseAdapter(new Database("./db.sqlite"));
         // Debug adapter
         // const loggingDb = createLoggingDatabaseAdapter(db);
     }
@@ -127,16 +116,20 @@ async function startAgent(character: Character) {
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
-        providers: [timeProvider, boredomProvider, walletProvider],
+        providers: [
+            Provider.timeProvider,
+            Provider.boredomProvider,
+            Provider.walletProvider,
+        ],
         actions: [
             ...defaultActions,
-            askClaude,
-            follow_room,
-            unfollow_room,
-            unmute_room,
-            mute_room,
-            imageGeneration,
-            swap,
+            Action.askClaude,
+            Action.followRoom,
+            Action.unfollowRoom,
+            Action.unmuteRoom,
+            Action.muteRoom,
+            Action.imageGeneration,
+            Action.executeSwap,
         ],
     });
 
@@ -147,17 +140,17 @@ async function startAgent(character: Character) {
         evaluators: [],
         character,
         providers: [
-            timeProvider,
-            boredomProvider,
-            walletProvider,
-            orderbook,
-            tokenProvider,
+            Provider.timeProvider,
+            Provider.boredomProvider,
+            Provider.walletProvider,
+            Provider.orderBookProvider,
+            Provider.tokenProvider,
         ],
         actions: [...defaultActions],
     });
 
     function startDiscord(runtime: IAgentRuntime) {
-        const discordClient = new DiscordClient(runtime);
+        const discordClient = new Client.DiscordClient(runtime);
         return discordClient;
     }
 
@@ -177,7 +170,7 @@ async function startAgent(character: Character) {
 
         try {
             console.log("Creating new TelegramClient instance...");
-            const telegramClient = new TelegramClient(runtime, botToken);
+            const telegramClient = new Client.TelegramClient(runtime, botToken);
 
             console.log("Calling start() on TelegramClient...");
             await telegramClient.start();
@@ -197,13 +190,17 @@ async function startAgent(character: Character) {
 
     async function startTwitter(runtime) {
         console.log("Starting search client");
-        const twitterSearchClient = new TwitterSearchClient(runtime);
+        const twitterSearchClient = new Client.TwitterSearchClient(runtime);
         await wait();
         console.log("Starting interaction client");
-        const twitterInteractionClient = new TwitterInteractionClient(runtime);
+        const twitterInteractionClient = new Client.TwitterInteractionClient(
+            runtime
+        );
         await wait();
         console.log("Starting generation client");
-        const twitterGenerationClient = new TwitterGenerationClient(runtime);
+        const twitterGenerationClient = new Client.TwitterGenerationClient(
+            runtime
+        );
 
         return {
             twitterInteractionClient,

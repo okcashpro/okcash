@@ -7,7 +7,7 @@ import {
 } from "../core/types.ts";
 import { generateCaption, generateImage } from "./imageGenerationUtils.ts";
 
-export default {
+export const imageGeneration: Action = {
     name: "IMAGE_GEN",
     similes: ["GENERATE_IMAGE", "CREATE_IMAGE", "MAKE_PICTURE"],
     description: "Generate an image based on a prompt",
