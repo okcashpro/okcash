@@ -13,14 +13,14 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://docs.cojourney.app',
+  url: 'https://docs.ai16z.vc',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'JoinTheAlliance', // Usually your GitHub org/user name.
+  organizationName: 'ai16z', // Usually your GitHub org/user name.
   projectName: 'eliza', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -40,7 +40,7 @@ const config = {
 
       // Plugin / TypeDoc options
       {
-        entryPoints: ['../src/lib/index.ts'],
+        entryPoints: ['../src/index.ts'],
         tsconfig: '../tsconfig.json',
         out: ".",
       },
@@ -57,7 +57,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/JoinTheAlliance/eliza/tree/main/docs/'
+            'https://github.com/ai16z/eliza/tree/main/docs/'
         },
         theme: {
           customCss: './src/css/custom.css'
@@ -81,7 +81,7 @@ const config = {
             label: 'API Documentation'
           },
           {
-            href: 'https://github.com/JoinTheAlliance/eliza',
+            href: 'https://github.com/ai16z/eliza',
             label: 'GitHub',
             position: 'right'
           }
@@ -101,11 +101,11 @@ const config = {
             items: [
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/jointhealliance'
+                href: 'https://discord.gg/xe7HtWru'
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/WeWillBuildIt'
+                href: 'https://twitter.com/pmairca'
               }
             ]
           },
@@ -114,12 +114,12 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/JoinTheAlliance/eliza'
+                href: 'https://github.com/ai16z/eliza'
               }
             ]
           }
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} The Alliance`
+        copyright: `Copyright © ${new Date().getFullYear()} ai16z.vc`
       },
       prism: {
         theme: prismThemes.github,
