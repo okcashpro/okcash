@@ -11,7 +11,7 @@ import {
   ProcessedTokenData,
   TokenSecurityData,
   TokenTradeData
-} from "../types/token";
+} from "../types/token.ts";
 import { fileURLToPath } from "url";
 
 const PROVIDER_CONFIG = {

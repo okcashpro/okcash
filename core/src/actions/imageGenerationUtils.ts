@@ -1,7 +1,7 @@
 // TODO: Replace with the vercel ai sdk and support all providers
 import { Buffer } from 'buffer';
 import Together from "together-ai";
-import { IAgentRuntime } from "../core/types";
+import { IAgentRuntime } from "../core/types.ts";
 import { getModel, ImageGenModel } from "../core/imageGenModels.ts";
 import OpenAI from "openai";
 

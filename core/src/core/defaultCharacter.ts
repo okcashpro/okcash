@@ -9,12 +9,7 @@ const defaultCharacter: Character = {
   ],
   modelProvider: ModelProvider.OPENAI,
   settings: {
-    secrets: {
-      TWITTER_USERNAME: "eliza__v1",
-      ELEVENLABS_VOICE_STABILITY: "0.5",
-      ELEVENLABS_VOICE_SIMILARITY_BOOST: "0.9",
-      ELEVENLABS_VOICE_STYLE: "0.66",
-    },
+    secrets: {},
     voice: {
       model: "en_US-hfc_female-medium",
     },

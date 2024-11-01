@@ -13,7 +13,7 @@ import {
 } from "pumpdotfun-sdk";
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
-import settings from "../core/settings";
+import settings from "../core/settings.ts";
 
 import {
   ActionExample,

@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { load } from "../adapters/sqlite/sqlite_vec.ts";
+import { load } from "./sqlite/sqlite_vec.ts";
 
 import { DatabaseAdapter } from "../core/database.ts";
 import {
