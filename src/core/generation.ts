@@ -72,8 +72,6 @@ export async function generateText({
             case ModelProvider.LLAMACLOUD:
                 const openai = createOpenAI({ apiKey });
 
-                console.log("Context:\n", context);
-
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
@@ -84,7 +82,6 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                console.log("OpenAI Response:\n", response);
                 break;
 
             case ModelProvider.ANTHROPIC:
@@ -118,7 +115,6 @@ export async function generateText({
                 break;
 
             case ModelProvider.LLAMALOCAL:
-                console.log("queueing text generateText");
                 response = await runtime.llamaService.queueTextCompletion(
                     context,
                     temperature,
@@ -132,8 +128,6 @@ export async function generateText({
             default:
                 throw new Error(`Unsupported provider: ${provider}`);
         }
-
-        console.log(response)
 
         return response;
     } catch (error) {

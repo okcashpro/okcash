@@ -56,7 +56,7 @@ export interface Objective {
 export enum GoalStatus {
   DONE = "DONE",
   FAILED = "FAILED",
-  IN_PROGRESS = "IN_PROGRESS",
+  IN_PROGRESS = "IN_PROGRESS"
 }
 
 /**
@@ -151,6 +151,7 @@ export interface Memory {
   content: Content; // The content of the memory, which can be a structured object or a plain string.
   embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
   roomId: UUID; // The room or conversation ID associated with the memory.
+  unique?: boolean; // Whether the memory is unique or not
 }
 
 /**
@@ -169,13 +170,13 @@ export type Handler = (
   message: Memory,
   state?: State,
   options?: { [key: string]: unknown }, // additional options can be used for things like tests or state-passing on a chain
-  callback?: HandlerCallback,
+  callback?: HandlerCallback
 ) => Promise<unknown>;
 
 //
 export type HandlerCallback = (
   response: Content,
-  files?: any,
+  files?: any
 ) => Promise<Memory[]>;
 
 /**
@@ -184,7 +185,7 @@ export type HandlerCallback = (
 export type Validator = (
   runtime: IAgentRuntime,
   message: Memory,
-  state?: State,
+  state?: State
 ) => Promise<boolean>;
 
 /**
@@ -355,19 +356,19 @@ export interface IDatabaseAdapter {
       roomId?: UUID;
       unique?: boolean;
       tableName: string;
-    },
+    }
   ): Promise<Memory[]>;
   createMemory(
     memory: Memory,
     tableName: string,
-    unique?: boolean,
+    unique?: boolean
   ): Promise<void>;
   removeMemory(memoryId: UUID, tableName: string): Promise<void>;
   removeAllMemories(roomId: UUID, tableName: string): Promise<void>;
   countMemories(
     roomId: UUID,
     unique?: boolean,
-    tableName?: string,
+    tableName?: string
   ): Promise<number>;
   getGoals(params: {
     roomId: UUID;
@@ -390,12 +391,12 @@ export interface IDatabaseAdapter {
   getParticipantsForRoom(roomId: UUID): Promise<UUID[]>;
   getParticipantUserState(
     roomId: UUID,
-    userId: UUID,
+    userId: UUID
   ): Promise<"FOLLOWED" | "MUTED" | null>;
   setParticipantUserState(
     roomId: UUID,
     userId: UUID,
-    state: "FOLLOWED" | "MUTED" | null,
+    state: "FOLLOWED" | "MUTED" | null
   ): Promise<void>;
   createRelationship(params: { userA: UUID; userB: UUID }): Promise<boolean>;
   getRelationship(params: {
@@ -421,7 +422,7 @@ export interface IMemoryManager {
     end?: number;
   }): Promise<Memory[]>;
   getCachedEmbeddings(
-    content: string,
+    content: string
   ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
   getMemoryById(id: UUID): Promise<Memory | null>;
   getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
@@ -432,7 +433,7 @@ export interface IMemoryManager {
       count?: number;
       roomId: UUID;
       unique?: boolean;
-    },
+    }
   ): Promise<Memory[]>;
   createMemory(memory: Memory, unique?: boolean): Promise<void>;
   removeMemory(memoryId: UUID): Promise<void>;
@@ -471,7 +472,7 @@ export interface IAgentRuntime {
     message: Memory,
     responses: Memory[],
     state?: State,
-    callback?: HandlerCallback,
+    callback?: HandlerCallback
   ): Promise<void>;
   evaluate(message: Memory, state?: State): Promise<string[]>;
   ensureParticipantExists(userId: UUID, roomId: UUID): Promise<void>;
@@ -479,14 +480,14 @@ export interface IAgentRuntime {
     userId: UUID,
     userName: string | null,
     name: string | null,
-    source: string | null,
+    source: string | null
   ): Promise<void>;
   registerAction(action: Action): void;
   ensureParticipantInRoom(userId: UUID, roomId: UUID): Promise<void>;
   ensureRoomExists(roomId: UUID): Promise<void>;
   composeState(
     message: Memory,
-    additionalKeys?: { [key: string]: unknown },
+    additionalKeys?: { [key: string]: unknown }
   ): Promise<State>;
   updateRecentMessageState(state: State): Promise<State>;
 }
@@ -494,7 +495,7 @@ export interface IAgentRuntime {
 export interface IImageRecognitionService {
   initialize(modelId?: string | null, device?: string | null): Promise<void>;
   describeImage(
-    imageUrl: string,
+    imageUrl: string
   ): Promise<{ title: string; description: string }>;
 }
 
@@ -518,7 +519,7 @@ export interface ILlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-    max_tokens: number,
+    max_tokens: number
   ): Promise<any>;
   queueTextCompletion(
     context: string,
@@ -526,7 +527,7 @@ export interface ILlamaService {
     stop: string[],
     frequency_penalty: number,
     presence_penalty: number,
-    max_tokens: number,
+    max_tokens: number
   ): Promise<string>;
   getEmbeddingResponse(input: string): Promise<number[] | undefined>;
 }
@@ -535,7 +536,7 @@ export interface IBrowserService {
   initialize(): Promise<void>;
   closeBrowser(): Promise<void>;
   getPageContent(
-    url: string,
+    url: string
   ): Promise<{ title: string; description: string; bodyContent: string }>;
 }
 

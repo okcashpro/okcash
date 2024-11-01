@@ -247,7 +247,7 @@ const walletProvider: Provider = {
       const porfolio = await provider.getFormattedPortfolio(runtime);
       return porfolio;
     } catch (error) {
-      console.error("Error in wallet provider:", error);
+      console.error("Error in wallet provider:", error.message);
       return `Failed to fetch wallet information: ${error instanceof Error ? error.message : 'Unknown error'}`;
     }
   }

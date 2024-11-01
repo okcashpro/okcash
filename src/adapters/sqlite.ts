@@ -10,7 +10,7 @@ import {
   type Memory,
   type Relationship,
   type UUID,
-  Participant,
+  Participant
 } from "../core/types.ts";
 
 import { sqliteTables } from "./sqlite/sqliteTables.ts";
@@ -135,7 +135,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
           details:
             typeof row.details === "string"
               ? JSON.parse(row.details)
-              : row.details,
+              : row.details
         };
       })
       .filter((row): row is Actor => row !== null);
@@ -159,7 +159,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     rows.forEach((row) => {
       memories.push({
         ...row,
-        content: JSON.parse(row.content),
+        content: JSON.parse(row.content)
       });
     });
 
@@ -175,7 +175,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     if (memory) {
       return {
         ...memory,
-        content: JSON.parse(memory.content as unknown as string),
+        content: JSON.parse(memory.content as unknown as string)
       };
     }
 
@@ -197,7 +197,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
           tableName,
           roomId: memory.roomId,
           match_threshold: 0.95, // 5% similarity threshold
-          count: 1,
+          count: 1
         }
       );
 
@@ -233,7 +233,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       new Float32Array(params.embedding), // Ensure embedding is Float32Array
       params.tableName,
       params.roomId,
-      params.match_count,
+      params.match_count
     ];
 
     let sql = `
@@ -257,7 +257,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         typeof memory.createdAt === "string"
           ? Date.parse(memory.createdAt as string)
           : memory.createdAt,
-      content: JSON.parse(memory.content as unknown as string),
+      content: JSON.parse(memory.content as unknown as string)
     }));
   }
 
@@ -274,7 +274,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     const queryParams = [
       // JSON.stringify(embedding),
       new Float32Array(embedding),
-      params.tableName,
+      params.tableName
     ];
 
     let sql = `
@@ -305,7 +305,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         typeof memory.createdAt === "string"
           ? Date.parse(memory.createdAt as string)
           : memory.createdAt,
-      content: JSON.parse(memory.content as unknown as string),
+      content: JSON.parse(memory.content as unknown as string)
     }));
   }
 
@@ -341,7 +341,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       embedding: Array.from(
         new Float32Array(memory.embedding as unknown as Buffer)
       ), // Convert Buffer to number[]
-      levenshtein_score: 0,
+      levenshtein_score: 0
     }));
   }
 
@@ -424,7 +424,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         typeof memory.createdAt === "string"
           ? Date.parse(memory.createdAt as string)
           : memory.createdAt,
-      content: JSON.parse(memory.content as unknown as string),
+      content: JSON.parse(memory.content as unknown as string)
     }));
   }
 
@@ -488,7 +488,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       objectives:
         typeof goal.objectives === "string"
           ? JSON.parse(goal.objectives)
-          : goal.objectives,
+          : goal.objectives
     }));
   }
 

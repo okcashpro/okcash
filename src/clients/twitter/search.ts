@@ -7,14 +7,14 @@ import {
   Content,
   HandlerCallback,
   IAgentRuntime,
-  State,
+  State
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import {
   buildConversationThread,
   sendTweetChunks,
-  wait,
+  wait
 } from "./utils.ts";
 import { generateText, generateMessageResponse } from "../../core/generation.ts";
 
@@ -51,7 +51,7 @@ export class TwitterSearchClient extends ClientBase {
   constructor(runtime: IAgentRuntime) {
     // Initialize the client and pass an optional callback to be called when the client is ready
     super({
-      runtime,
+      runtime
     });
   }
 
@@ -63,7 +63,7 @@ export class TwitterSearchClient extends ClientBase {
     this.engageWithSearchTerms();
     setTimeout(
       () => this.engageWithSearchTermsLoop(),
-      (Math.floor(Math.random() * (120 - 60 + 1)) + 60) * 60 * 1000,
+      (Math.floor(Math.random() * (120 - 60 + 1)) + 60) * 60 * 1000
     );
   }
 
@@ -80,13 +80,17 @@ export class TwitterSearchClient extends ClientBase {
       console.log("Fetching search tweets");
       // TODO: we wait 5 seconds here to avoid getting rate limited on startup, but we should queue
       await new Promise((resolve) => setTimeout(resolve, 5000));
-      const recentTweets = await this.fetchSearchTweets(searchTerm, 20, SearchMode.Top);
+      const recentTweets = await this.fetchSearchTweets(
+        searchTerm,
+        20,
+        SearchMode.Top
+      );
       console.log("Search tweets fetched");
 
       const homeTimeline = await this.fetchHomeTimeline(50);
       fs.writeFileSync(
         "tweetcache/home_timeline.json",
-        JSON.stringify(homeTimeline, null, 2),
+        JSON.stringify(homeTimeline, null, 2)
       );
 
       const formattedHomeTimeline =
@@ -153,7 +157,7 @@ export class TwitterSearchClient extends ClientBase {
       const selectedTweet = slicedTweets.find(
         (tweet) =>
           tweet.id.toString().includes(tweetId) ||
-          tweetId.includes(tweet.id.toString()),
+          tweetId.includes(tweet.id.toString())
       );
 
       if (!selectedTweet) {
@@ -180,19 +184,19 @@ export class TwitterSearchClient extends ClientBase {
           this.runtime.agentId,
           this.runtime.getSetting("TWITTER_USERNAME"),
           this.runtime.character.name,
-          "twitter",
+          "twitter"
         ),
         this.runtime.ensureUserExists(
           userIdUUID,
           selectedTweet.username,
           selectedTweet.name,
-          "twitter",
-        ),
+          "twitter"
+        )
       ]);
 
       await Promise.all([
         this.runtime.ensureParticipantInRoom(userIdUUID, roomId),
-        this.runtime.ensureParticipantInRoom(this.runtime.agentId, roomId),
+        this.runtime.ensureParticipantInRoom(this.runtime.agentId, roomId)
       ]);
 
       // crawl additional conversation tweets, if there are any
@@ -205,12 +209,12 @@ export class TwitterSearchClient extends ClientBase {
           url: selectedTweet.permanentUrl,
           inReplyTo: selectedTweet.inReplyToStatusId
             ? stringToUuid(selectedTweet.inReplyToStatusId)
-            : undefined,
+            : undefined
         },
         userId: userIdUUID,
         roomId,
         // Timestamps are in seconds, but we need them in milliseconds
-        createdAt: selectedTweet.timestamp * 1000,
+        createdAt: selectedTweet.timestamp * 1000
       };
 
       if (!message.content.text) {
@@ -222,7 +226,7 @@ export class TwitterSearchClient extends ClientBase {
       const replyContext = replies
         .filter(
           (reply) =>
-            reply.username !== this.runtime.getSetting("TWITTER_USERNAME"),
+            reply.username !== this.runtime.getSetting("TWITTER_USERNAME")
         )
         .map((reply) => `@${reply.username}: ${reply.text}`)
         .join("\n");
@@ -230,7 +234,7 @@ export class TwitterSearchClient extends ClientBase {
       let tweetBackground = "";
       if (selectedTweet.isRetweet) {
         const originalTweet = await this.requestQueue.add(() =>
-          this.twitterClient.getTweet(selectedTweet.id),
+          this.twitterClient.getTweet(selectedTweet.id)
         );
         tweetBackground = `Retweeting @${originalTweet.username}: ${originalTweet.text}`;
       }
@@ -254,20 +258,20 @@ export class TwitterSearchClient extends ClientBase {
   ${selectedTweet.text}${replyContext.length > 0 && `\nReplies to original post:\n${replyContext}`}
   ${`Original post text: ${selectedTweet.text}`}
   ${selectedTweet.urls.length > 0 ? `URLs: ${selectedTweet.urls.join(", ")}\n` : ""}${imageDescriptions.length > 0 ? `\nImages in Post (Described): ${imageDescriptions.join(", ")}\n` : ""}
-  `,
+  `
       });
 
       await this.saveRequestMessage(message, state as State);
 
       const context = composeContext({
         state,
-        template: messageHandlerTemplate,
+        template: messageHandlerTemplate
       });
 
       // log context to file
       log_to_file(
         `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_context`,
-        context,
+        context
       );
 
       const responseContent = await generateMessageResponse({
@@ -280,7 +284,7 @@ export class TwitterSearchClient extends ClientBase {
 
       log_to_file(
         `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_response`,
-        JSON.stringify(responseContent),
+        JSON.stringify(responseContent)
       );
 
       const response = responseContent;
@@ -291,7 +295,7 @@ export class TwitterSearchClient extends ClientBase {
       }
 
       console.log(
-        `Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`,
+        `Bot would respond to tweet ${selectedTweet.id} with: ${response.text}`
       );
       try {
         const callback: HandlerCallback = async (response: Content) => {
