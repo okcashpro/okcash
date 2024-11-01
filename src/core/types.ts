@@ -1,4 +1,5 @@
 import { Keypair } from "@solana/web3.js";
+import { ImageGenModel } from "./imageGenModels";
 
 /**
  * Represents a UUID, which is a universally unique identifier conforming to the UUID standard.
@@ -283,6 +284,7 @@ export type Character = {
   name: string;
   system?: string;
   modelProvider: ModelProvider;
+  imageGenModel?: ImageGenModel;
   modelOverride?: string;
   bio: string | string[];
   lore: string[];
@@ -448,6 +450,7 @@ export interface IAgentRuntime {
   databaseAdapter: IDatabaseAdapter;
   token: string | null;
   modelProvider: ModelProvider;
+  imageGenModel: ImageGenModel;
   character: Character;
   providers: Provider[];
   actions: Action[];

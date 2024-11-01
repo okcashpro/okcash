@@ -20,35 +20,34 @@ export default {
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
         
-        const imagePrompt = "";
+        const imagePrompt = message.content.text;
         const res: { image: string, caption: string }[] = [];
         const images = await generateImage({
-            apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
             prompt: imagePrompt,
             width: 1024,
             height: 1024,
-            steps: 4,
             count: 1
-        })
+        }, runtime);
         if (images.success && images.data && images.data.length > 0) {
             for(let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
                 const caption = await generateCaption({
-                    apiKey: runtime.getSetting("ANTHROPIC_API_KEY"),
                     imageUrl: image
-                })
-                if (caption.success) {
-                    res.push({image: image, caption: caption.caption});
-                } else {
-                    console.error("Failed to generate caption for image", image, caption.error);
-                    res.push({image: image, caption: "Uncaptioned image"});
-                }
+                }, runtime);
+                res.push({image: image, caption: caption.title})
+                callback({
+                    text: caption.description,
+                    attachments: [{
+                        id: crypto.randomUUID(),
+                        url: image,
+                        title: "Generated image",
+                        source: "imageGeneration",
+                        description: caption.title,
+                        text: caption.description
+                    }]
+                }, [])
             }
         }
-        callback(null, {
-            success: true,
-            data: res
-        });
     },
     examples: [
         [
