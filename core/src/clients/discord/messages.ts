@@ -123,7 +123,6 @@ export class MessageManager {
                 this.client.user?.id /* || message.author?.bot*/
         )
             return;
-        console.log("handling message");
         const userId = message.author.id as UUID;
         const userName = message.author.username;
         const name = message.author.displayName;
@@ -210,8 +209,6 @@ export class MessageManager {
             if (!shouldIgnore) {
                 shouldIgnore = await this._shouldIgnore(message);
             }
-            console.log("Received a message from ", message.author.username);
-            console.log(message.content);
 
             if (shouldIgnore) {
                 return;
@@ -235,7 +232,6 @@ export class MessageManager {
             }
 
             if (agentUserState === "FOLLOWED") {
-                console.log("Always responding in followed room");
                 shouldRespond = true; // Always respond in followed rooms
             } else if (
                 (!shouldRespond && hasInterest) ||
@@ -262,8 +258,6 @@ export class MessageManager {
                 context
             );
 
-            console.log("Response\n", responseContent);
-
             responseContent.text = responseContent.text?.trim();
             responseContent.inReplyTo = stringToUuid(message.id);
 
@@ -278,9 +272,7 @@ export class MessageManager {
                 if (message.id && !content.inReplyTo) {
                     content.inReplyTo = stringToUuid(message.id);
                 }
-                console.log("received callback", message.channel.type);
                 if (message.channel.type === ChannelType.GuildVoice) {
-                    console.log("generating voice");
                     // For voice channels, use text-to-speech
                     const audioStream = await SpeechService.generate(
                         this.runtime,
@@ -572,7 +564,6 @@ export class MessageManager {
         ) {
             return true;
         }
-        console.log("Not ignoring message:", message.content);
         return false;
     }
 

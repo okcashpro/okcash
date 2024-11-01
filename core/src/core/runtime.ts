@@ -207,6 +207,9 @@ export class AgentRuntime implements IAgentRuntime {
             opts.character.id ??
             opts.agentId ??
             stringToUuid(opts.character.name);
+
+        console.log("Agent ID", this.agentId);
+        
         this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
         this.character = opts.character || defaultCharacter;
         if (!opts.databaseAdapter) {
