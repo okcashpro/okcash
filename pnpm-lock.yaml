@@ -231,8 +231,8 @@ importers:
         specifier: 3.1.7
         version: 3.1.7
       onnxruntime-node:
-        specifier: 1.20.0
-        version: 1.20.0
+        specifier: ^1.19.2
+        version: 1.19.2
       openai:
         specifier: 4.69.0
         version: 4.69.0(encoding@0.1.13)(zod@3.23.8)
@@ -7849,18 +7849,11 @@ packages:
   onnxruntime-common@1.19.2:
     resolution: {integrity: sha512-a4R7wYEVFbZBlp0BfhpbFWqe4opCor3KM+5Wm22Az3NGDcQMiU2hfG/0MfnBs+1ZrlSGmlgWeMcXQkDk1UFb8Q==}
 
-  onnxruntime-common@1.20.0:
-    resolution: {integrity: sha512-9ehS4ul5fBszIcHhfxuDgk45lO+Fqrxmrgwk1Pxb1JRvbQiCB/v9Royv95SRCWHktLMviqNjBsEd/biJhd39cg==}
-
   onnxruntime-common@1.20.0-dev.20241016-2b8fc5529b:
     resolution: {integrity: sha512-KZK8b6zCYGZFjd4ANze0pqBnqnFTS3GIVeclQpa2qseDpXrCQJfkWBixRcrZShNhm3LpFOZ8qJYFC5/qsJK9WQ==}
 
   onnxruntime-node@1.19.2:
     resolution: {integrity: sha512-9eHMP/HKbbeUcqte1JYzaaRC8JPn7ojWeCeoyShO86TOR97OCyIyAIOGX3V95ErjslVhJRXY8Em/caIUc0hm1Q==}
-    os: [win32, darwin, linux]
-
-  onnxruntime-node@1.20.0:
-    resolution: {integrity: sha512-mjLge++8WHfyCZ4IqZ1FbUbtFAfGht7BLCkOeBL1L9PFV27YHwluXkNt7m0Pgf6TR2P5pqVZsD3zqFbFP6QTMw==}
     os: [win32, darwin, linux]
 
   onnxruntime-web@1.21.0-dev.20241024-d9ca84ef96:
@@ -20465,18 +20458,11 @@ snapshots:
 
   onnxruntime-common@1.19.2: {}
 
-  onnxruntime-common@1.20.0: {}
-
   onnxruntime-common@1.20.0-dev.20241016-2b8fc5529b: {}
 
   onnxruntime-node@1.19.2:
     dependencies:
       onnxruntime-common: 1.19.2
-      tar: 7.4.3
-
-  onnxruntime-node@1.20.0:
-    dependencies:
-      onnxruntime-common: 1.20.0
       tar: 7.4.3
 
   onnxruntime-web@1.21.0-dev.20241024-d9ca84ef96:
