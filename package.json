@@ -20,8 +20,5 @@
     },
     "engines": {
         "node": ">=22.11.0"
-    },
-    "dependencies": {
-        "@types/node": "^22.8.6"
     }
 }
