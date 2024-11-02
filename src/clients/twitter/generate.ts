@@ -1,4 +1,5 @@
 import { Tweet } from "agent-twitter-client";
+
 import fs from "fs";
 import { composeContext } from "../../core/context.ts";
 import { log_to_file } from "../../core/logger.ts";
@@ -23,6 +24,7 @@ About {{agentName}} (@{{twitterUserName}}):
 {{characterPostExamples}}
 
 # Task: Generate a post in the voice and style of {{agentName}}, aka @{{twitterUserName}}
+Aim for 1-2 short sentences maximum. Be concise and direct.
 Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Try to write something totally different than previous posts. Do not add commentary or ackwowledge this request, just write the post.
 Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.`;
 
@@ -32,7 +34,8 @@ export class TwitterGenerationClient extends ClientBase {
       this.generateNewTweet();
       setTimeout(
         generateNewTweetLoop,
-        (Math.floor(Math.random() * (45 - 15 + 1)) + 15) * 60 * 1000,
+        //(Math.floor(Math.random() * (45 - 15 + 1)) + 15) * 60 * 1000,
+        (Math.floor(Math.random() * (20 - 2 + 1)) + 2) * 60 * 1000
       ); // Random interval between 4-8 hours
     };
     // setTimeout(() => {
