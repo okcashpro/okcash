@@ -24,7 +24,7 @@ Respond with YES if:
 Otherwise, respond with NO.
 ` + booleanFooter;
 
-export default {
+export const followRoom: Action = {
     name: "FOLLOW_ROOM",
     similes: [
         "FOLLOW_CHAT",

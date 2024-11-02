@@ -24,7 +24,7 @@ Respond with YES if:
 Otherwise, respond with NO.
 ` + booleanFooter;
 
-export default {
+export const unmuteRoom: Action = {
     name: "UNMUTE_ROOM",
     similes: [
         "UNMUTE_CHAT",

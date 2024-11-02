@@ -272,7 +272,7 @@ const negativeWords = [
     "fuck up",
 ];
 
-const boredom: Provider = {
+const boredomProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
         const agentId = runtime.agentId;
         const agentName = state?.agentName || "The agent";
@@ -340,4 +340,4 @@ const boredom: Provider = {
     },
 };
 
-export default boredom;
+export { boredomProvider };

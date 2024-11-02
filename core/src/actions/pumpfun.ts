@@ -1,5 +1,5 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
-import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet.js";
+import { Wallet } from "@coral-xyz/anchor";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import {
     CreateTokenMetadata,
@@ -247,7 +247,7 @@ export default {
         } = content;
 
         const privateKey = runtime.getSetting("WALLET_PRIVATE_KEY")!;
-        const wallet = new NodeWallet(
+        const wallet = new Wallet(
             Keypair.fromSecretKey(new Uint8Array(JSON.parse(privateKey)))
         );
         const connection = new Connection(settings.RPC_URL!);
