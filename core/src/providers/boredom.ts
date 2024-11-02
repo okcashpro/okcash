@@ -282,6 +282,7 @@ const boredomProvider: Provider = {
 
         const recentMessages = await runtime.messageManager.getMemories({
             roomId: message.roomId,
+            agentId: runtime.agentId,
             start: fifteenMinutesAgo,
             end: now,
             count: 20,

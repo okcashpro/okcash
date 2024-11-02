@@ -108,7 +108,7 @@ export class MessageManager {
             ("document" in message &&
                 message.document?.mime_type?.startsWith("image/"))
         ) {
-            return true;
+            return false;
         }
 
         // Use AI to decide for text or captions

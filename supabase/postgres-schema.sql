@@ -37,10 +37,12 @@ CREATE TABLE memories (
     "content" JSONB NOT NULL,
     "embedding" vector(1536),
     "userId" UUID REFERENCES accounts("id"),
+    "agentId" UUID REFERENCES accounts("id"),
     "roomId" UUID REFERENCES rooms("id"),
     "unique" BOOLEAN DEFAULT true NOT NULL,
     CONSTRAINT fk_room FOREIGN KEY ("roomId") REFERENCES rooms("id") ON DELETE CASCADE,
-    CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE
+    CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE,
+    CONSTRAINT fk_agent FOREIGN KEY ("agentId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
 CREATE TABLE goals (

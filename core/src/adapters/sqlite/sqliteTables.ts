@@ -22,9 +22,11 @@ CREATE TABLE IF NOT EXISTS "memories" (
     "embedding" BLOB NOT NULL, -- TODO: EMBEDDING ARRAY, CONVERT TO BEST FORMAT FOR SQLITE-VSS (JSON?)
     "userId" TEXT,
     "roomId" TEXT,
+    "agentId" TEXT,
     "unique" INTEGER DEFAULT 1 NOT NULL,
     FOREIGN KEY ("userId") REFERENCES "accounts"("id"),
-    FOREIGN KEY ("roomId") REFERENCES "rooms"("id")
+    FOREIGN KEY ("roomId") REFERENCES "rooms"("id"),
+    FOREIGN KEY ("agentId") REFERENCES "accounts"("id")
 );
 
 -- Table: goals
