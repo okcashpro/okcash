@@ -7,7 +7,7 @@ import {
     // HolderData,
 } from "../types/token";
 import { Connection, PublicKey } from "@solana/web3.js";
-
+import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { TokenProvider } from "./token";
 import WalletProvider from "./balances";
 import {
@@ -30,6 +30,8 @@ interface sellDetails {
 export class TrustScoreProvider {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
+    private connection: Connection = new Connection(process.env.RPC_URL!);
+    private baseMint: PublicKey = new PublicKey(process.env.BASE_MINT!);
 
     constructor(
         tokenProvider: TokenProvider,
@@ -38,6 +40,25 @@ export class TrustScoreProvider {
         this.tokenProvider = tokenProvider;
         this.trustScoreDb = trustScoreDb;
     }
+
+    //getRecommenederBalance
+    async getRecommenederBalance(recommenderWallet: string): Promise<number> {
+        try {
+            const tokenAta = await getAssociatedTokenAddress(
+                new PublicKey(recommenderWallet),
+                this.baseMint
+            );
+            const tokenBalInfo =
+                await this.connection.getTokenAccountBalance(tokenAta);
+            const tokenBalance = tokenBalInfo.value.amount;
+            const balance = parseFloat(tokenBalance);
+            return balance;
+        } catch (error) {
+            console.error("Error fetching balance", error);
+            return 0;
+        }
+    }
+
     /**
      * Generates and saves trust score based on processed token data and user recommendations.
      * @param tokenAddress The address of the token to analyze.
@@ -46,7 +67,8 @@ export class TrustScoreProvider {
      */
     async generateTrustScore(
         tokenAddress: string,
-        recommenderId: string
+        recommenderId: string,
+        recommenderWallet: string
     ): Promise<{
         tokenPerformance: TokenPerformance;
         recommenderMetrics: RecommenderMetrics;
@@ -61,6 +83,8 @@ export class TrustScoreProvider {
         const isRapidDump = await this.isRapidDump(tokenAddress);
         const sustainedGrowth = await this.sustainedGrowth(tokenAddress);
         const suspiciousVolume = await this.suspiciousVolume(tokenAddress);
+        const balance = await this.getRecommenederBalance(recommenderWallet);
+        const virtualConfidence = balance / 1000000; // TODO: create formula to calculate virtual confidence based on user balance
 
         return {
             tokenPerformance: {
@@ -93,7 +117,7 @@ export class TrustScoreProvider {
                 avgTokenPerformance: recommenderMetrics.avgTokenPerformance,
                 riskScore: recommenderMetrics.riskScore,
                 consistencyScore: recommenderMetrics.consistencyScore,
-                virtualConfidence: recommenderMetrics.virtualConfidence,
+                virtualConfidence: virtualConfidence,
                 lastUpdated: new Date(),
             },
         };
