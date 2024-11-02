@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@types/node':
-        specifier: ^22.8.6
-        version: 22.8.6
     devDependencies:
       husky:
         specifier: ^9.1.6
@@ -195,12 +191,18 @@ importers:
       import-meta-resolve:
         specifier: 4.1.0
         version: 4.1.0
+      install:
+        specifier: ^0.13.0
+        version: 0.13.0
       jieba-wasm:
         specifier: 2.2.0
         version: 2.2.0
       js-sha1:
         specifier: 0.7.0
         version: 0.7.0
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       json5:
         specifier: 2.2.3
         version: 2.2.3
@@ -312,19 +314,6 @@ importers:
       youtube-dl-exec:
         specifier: 3.0.10
         version: 3.0.10
-    optionalDependencies:
-      sharp:
-        specifier: 0.33.5
-        version: 0.33.5
-      sqlite-vss-darwin-arm64:
-        specifier: 0.1.2
-        version: 0.1.2
-      sqlite-vss-darwin-x64:
-        specifier: 0.1.2
-        version: 0.1.2
-      sqlite-vss-linux-x64:
-        specifier: 0.1.2
-        version: 0.1.2
     devDependencies:
       '@eslint/js':
         specifier: ^9.13.0
@@ -6231,6 +6220,10 @@ packages:
     resolution: {integrity: sha512-M1WuAmb7pn9zdFRtQYk26ZBoY043Sse0wVDdk4Bppr+JOXyQYybdtvK+l9wUibhtjdjvtoiNy8tk+EgsYIUqKg==}
     engines: {node: '>=12.0.0'}
 
+  install@0.13.0:
+    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
+    engines: {node: '>= 0.10'}
+
   interpret@1.4.0:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
     engines: {node: '>= 0.10'}
@@ -9553,21 +9546,6 @@ packages:
 
   sqlite-vec@0.1.4-alpha.2:
     resolution: {integrity: sha512-FAdsljvZHdSK4w5wWYiRoVOmnaatO0m2HHRNk1P0y4kl1Nb/MzWvMJriZwa/Kj8sEqFpIwHWg/+woRKB0X1jhg==}
-
-  sqlite-vss-darwin-arm64@0.1.2:
-    resolution: {integrity: sha512-zyDk9eg33nBABrUC4cqQ7el8KJaRPzsqp8Y/nGZ0CAt7o1PMqLoCOgREorill5MGiZEBmLqxdAgw0O2MFwq4mw==}
-    cpu: [arm64]
-    os: [darwin]
-
-  sqlite-vss-darwin-x64@0.1.2:
-    resolution: {integrity: sha512-w+ODOH2dNkyO6UaGclwC0jwNf/FBsKaE53XKJ7dFmpOvlvO0/9sA1stkWXygykRVWwa3UD8ow0qbQpRwdOFyqg==}
-    cpu: [x64]
-    os: [darwin]
-
-  sqlite-vss-linux-x64@0.1.2:
-    resolution: {integrity: sha512-y1qktcHAZcfN1nYMcF5os/cCRRyaisaNc2C9I3ceLKLPAqUWIocsOdD5nNK/dIeGPag/QeT2ZItJ6uYWciLiAg==}
-    cpu: [x64]
-    os: [linux]
 
   srcset@4.0.0:
     resolution: {integrity: sha512-wvLeHgcVHKO8Sc/H/5lkGreJQVeYMm9rlmt8PuR1xE31rIuXhuzznUUqAt8MqLhB3MqJdFzlNAfpcWnxiFUcPw==}
@@ -18189,6 +18167,8 @@ snapshots:
       through: 2.3.8
       wrap-ansi: 6.2.0
 
+  install@0.13.0: {}
+
   interpret@1.4.0: {}
 
   invariant@2.2.4:
@@ -22511,15 +22491,6 @@ snapshots:
       sqlite-vec-darwin-x64: 0.1.4-alpha.2
       sqlite-vec-linux-x64: 0.1.4-alpha.2
       sqlite-vec-windows-x64: 0.1.4-alpha.2
-
-  sqlite-vss-darwin-arm64@0.1.2:
-    optional: true
-
-  sqlite-vss-darwin-x64@0.1.2:
-    optional: true
-
-  sqlite-vss-linux-x64@0.1.2:
-    optional: true
 
   srcset@4.0.0: {}
 
