@@ -13,6 +13,7 @@ import Database from "better-sqlite3";
 import { AgentRuntime } from "../core/runtime.ts";
 import { defaultActions } from "../core/actions.ts";
 import { Arguments } from "../types/index.ts";
+import { loadActionConfigs, loadCustomActions } from "./config.ts";
 
 export async function initializeClients(
     character: Character,
@@ -113,11 +114,15 @@ export function initializeDatabase() {
     }
 }
 
-export function createAgentRuntime(
+export async function createAgentRuntime(
     character: Character,
     db: any,
-    token: string
+    token: string,
+    configPath: string = "./elizaConfig.yaml"
 ) {
+    const actionConfigs = loadActionConfigs(configPath);
+    const customActions = await loadCustomActions(actionConfigs);
+
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -126,13 +131,18 @@ export function createAgentRuntime(
         character,
         providers: [Provider.timeProvider, Provider.boredomProvider],
         actions: [
+            // Default actions
             ...defaultActions,
-            Action.askClaude,
+
+            // Custom actions
             Action.followRoom,
             Action.unfollowRoom,
             Action.unmuteRoom,
             Action.muteRoom,
             Action.imageGeneration,
+
+            // imported from elizaConfig.yaml
+            ...customActions,
         ],
     });
 }

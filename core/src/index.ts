@@ -33,7 +33,7 @@ async function startAgent(character: Character) {
     const token = getTokenForProvider(character.modelProvider, character);
     const db = initializeDatabase();
 
-    const runtime = createAgentRuntime(character, db, token);
+    const runtime = await createAgentRuntime(character, db, token);
     const directRuntime = createDirectRuntime(character, db, token);
 
     const clients = await initializeClients(character, runtime);
