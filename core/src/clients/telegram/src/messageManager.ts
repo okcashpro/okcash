@@ -89,6 +89,7 @@ export class MessageManager {
         state: State
     ): Promise<boolean> {
         // Respond if bot is mentioned
+
         if (
             "text" in message &&
             message.text?.includes(`@${this.bot.botInfo?.username}`)
