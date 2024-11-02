@@ -110,7 +110,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const placeholders = params.roomIds
                 .map((_, i) => `$${i + 2}`)
                 .join(", ");
-            
+
             let query = `SELECT * FROM memories WHERE type = $1 AND "roomId" IN (${placeholders})`;
             let queryParams = [params.tableName, ...params.roomIds];
 
@@ -635,7 +635,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             if (params.unique) {
                 sql += ` AND "unique" = true`;
-                }
+            }
 
             // TODO: Test this
             if (params.agentId) {
