@@ -152,32 +152,29 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         tableName: string;
         agentId?: UUID;
     }): Promise<Memory[]> {
+        console.log("getMemoriesByRoomIds", params);
         if (!params.tableName) {
             // default to messages
             params.tableName = "messages";
         }
         const placeholders = params.roomIds.map(() => "?").join(", ");
         let sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
-        const stmt = this.db.prepare(sql);
-        const queryParams = [params.tableName, ...params.roomIds];
+        let queryParams = [params.tableName, ...params.roomIds];
             
         if (params.agentId) {
             sql += ` AND userId = ?`;
             queryParams.push(params.agentId);
         }
 
-        const memories: Memory[] = [];
+        const stmt = this.db.prepare(sql);
         const rows = stmt.all(...queryParams) as (Memory & {
             content: string;
         })[];
-        rows.forEach((row) => {
-            memories.push({
-                ...row,
-                content: JSON.parse(row.content),
-            });
-        });
 
-        return memories;
+        return rows.map(row => ({
+            ...row,
+            content: JSON.parse(row.content)
+        }));
     }
 
     async getMemoryById(memoryId: UUID): Promise<Memory | null> {
