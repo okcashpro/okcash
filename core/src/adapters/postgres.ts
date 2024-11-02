@@ -107,6 +107,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     }): Promise<Memory[]> {
         const client = await this.pool.connect();
         try {
+            if (params.roomIds.length === 0) return [];
             const placeholders = params.roomIds
                 .map((_, i) => `$${i + 2}`)
                 .join(", ");
@@ -304,7 +305,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
       `;
 
             if (params.unique) {
-                sql += " AND unique = true";
+                sql += ` AND "unique" = true`;
             }
 
             sql += ` AND 1 - (embedding <-> $3) >= $4
@@ -360,7 +361,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             }
 
             if (params.unique) {
-                sql += " AND unique = true";
+                sql += ` AND "unique" = true`;
             }
 
             if (params.agentId) {
@@ -382,9 +383,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             return rows.map((row) => ({
                 ...row,
                 content:
-                    typeof rows.content === "string"
-                        ? JSON.parse(rows.content)
-                        : rows.content,
+                    typeof row.content === "string"
+                        ? JSON.parse(row.content)
+                        : row.content,
             }));
         } finally {
             client.release();
@@ -759,7 +760,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             let sql = `SELECT COUNT(*) as count FROM memories WHERE type = $1 AND "roomId" = $2`;
             if (unique) {
-                sql += " AND unique = true";
+                sql += ` AND "unique" = true`;
             }
 
             const { rows } = await client.query(sql, [tableName, roomId]);
@@ -796,7 +797,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     async getRoomsForParticipants(userIds: UUID[]): Promise<UUID[]> {
         const client = await this.pool.connect();
         try {
-            const placeholders = userIds.map((_, i) => `${i + 1}`).join(", ");
+            const placeholders = userIds.map((_, i) => `$${i + 1}`).join(", ");
             const { rows } = await client.query(
                 `SELECT DISTINCT "roomId" FROM participants WHERE "userId" IN (${placeholders})`,
                 userIds
