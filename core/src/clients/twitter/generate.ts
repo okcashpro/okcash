@@ -109,7 +109,7 @@ export class TwitterGenerationClient extends ClientBase {
             const newTweetContent = await generateText({
                 runtime: this.runtime,
                 context,
-                modelClass: ModelClass.LARGE,
+                modelClass: ModelClass.SMALL,
             });
             console.log("New Tweet:", newTweetContent);
             log_to_file(

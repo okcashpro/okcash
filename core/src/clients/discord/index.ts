@@ -37,7 +37,9 @@ export class DiscordClient extends EventEmitter {
 
     constructor(runtime: IAgentRuntime) {
         super();
-        this.apiToken = runtime.getSetting("DISCORD_API_TOKEN") as string;
+        this.apiToken = runtime.getSetting(
+            "DISCORD_API_TOKEN_" + runtime.character.name.toUpperCase()
+        ) as string;
         this.client = new Client({
             intents: [
                 GatewayIntentBits.Guilds,
@@ -120,7 +122,10 @@ export class DiscordClient extends EventEmitter {
             try {
                 await rest.put(
                     Routes.applicationCommands(
-                        this.runtime.getSetting("DISCORD_APPLICATION_ID")
+                        this.runtime.getSetting(
+                            "DISCORD_APPLICATION_ID_" +
+                                this.runtime.character.name.toUpperCase()
+                        )
                     ),
                     { body: commands }
                 );
