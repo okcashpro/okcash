@@ -168,7 +168,7 @@
         "youtube-dl-exec": "3.0.10"
     },
     "trustedDependencies": {
-        "onnxruntime-node": "1.19.0",
+        "onnxruntime-node": "1.20.0",
         "@discordjs/opus": "github:discordjs/opus",
         "sharp": "^0.33.5"
     }
