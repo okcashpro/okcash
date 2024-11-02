@@ -231,7 +231,7 @@ importers:
         specifier: 3.1.7
         version: 3.1.7
       onnxruntime-node:
-        specifier: 1.20.0
+        specifier: ^1.20.0
         version: 1.20.0
       openai:
         specifier: 4.69.0
