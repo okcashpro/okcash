@@ -69,57 +69,63 @@ export async function generateText({
         switch (provider) {
             case ModelProvider.OPENAI:
             case ModelProvider.LLAMACLOUD:
-                console.log("Initializing OpenAI model.");
-                const openai = createOpenAI({ apiKey });
+                {
+                    console.log("Initializing OpenAI model.");
+                    const openai = createOpenAI({ apiKey });
 
-                const { text: openaiResponse } = await aiGenerateText({
-                    model: openai.languageModel(model),
-                    prompt: context,
-                    temperature: temperature,
-                    maxTokens: max_response_length,
-                    frequencyPenalty: frequency_penalty,
-                    presencePenalty: presence_penalty,
-                });
+                    const { text: openaiResponse } = await aiGenerateText({
+                        model: openai.languageModel(model),
+                        prompt: context,
+                        temperature: temperature,
+                        maxTokens: max_response_length,
+                        frequencyPenalty: frequency_penalty,
+                        presencePenalty: presence_penalty,
+                    });
 
-                response = openaiResponse;
-                console.log("Received response from OpenAI model.");
-                break;
+                    response = openaiResponse;
+                    console.log("Received response from OpenAI model.");
+                    break;
+                }
 
             case ModelProvider.ANTHROPIC:
-                console.log("Initializing Anthropic model.");
-                const anthropicVertex = createAnthropicVertex();
+                {
+                    console.log("Initializing Anthropic model.");
+                    const anthropicVertex = createAnthropicVertex();
 
-                const { text: anthropicResponse } = await aiGenerateText({
-                    model: anthropicVertex(model),
-                    prompt: context,
-                    temperature: temperature,
-                    maxTokens: max_response_length,
-                    frequencyPenalty: frequency_penalty,
-                    presencePenalty: presence_penalty,
-                });
+                    const { text: anthropicResponse } = await aiGenerateText({
+                        model: anthropicVertex(model),
+                        prompt: context,
+                        temperature: temperature,
+                        maxTokens: max_response_length,
+                        frequencyPenalty: frequency_penalty,
+                        presencePenalty: presence_penalty,
+                    });
 
-                response = anthropicResponse;
-                console.log("Received response from Anthropic model.");
-                break;
+                    response = anthropicResponse;
+                    console.log("Received response from Anthropic model.");
+                    break;
+                }
 
             case ModelProvider.GROK:
-                console.log("Initializing Grok model.");
-                const grok = createGroq({ apiKey });
+                {
+                    console.log("Initializing Grok model.");
+                    const grok = createGroq({ apiKey });
 
-                const { text: grokResponse } = await aiGenerateText({
-                    model: grok.languageModel(model, {
-                        parallelToolCalls: false,
-                    }),
-                    prompt: context,
-                    temperature: temperature,
-                    maxTokens: max_response_length,
-                    frequencyPenalty: frequency_penalty,
-                    presencePenalty: presence_penalty,
-                });
+                    const { text: grokResponse } = await aiGenerateText({
+                        model: grok.languageModel(model, {
+                            parallelToolCalls: false,
+                        }),
+                        prompt: context,
+                        temperature: temperature,
+                        maxTokens: max_response_length,
+                        frequencyPenalty: frequency_penalty,
+                        presencePenalty: presence_penalty,
+                    });
 
-                response = grokResponse;
-                console.log("Received response from Grok model.");
-                break;
+                    response = grokResponse;
+                    console.log("Received response from Grok model.");
+                    break;
+                }
 
             case ModelProvider.LLAMALOCAL:
                 console.log("Using local Llama model for text completion.");
@@ -135,9 +141,11 @@ export async function generateText({
                 break;
 
             default:
-                const errorMessage = `Unsupported provider: ${provider}`;
-                console.error(errorMessage);
-                throw new Error(errorMessage);
+                {
+                    const errorMessage = `Unsupported provider: ${provider}`;
+                    console.error(errorMessage);
+                    throw new Error(errorMessage);
+                }
         }
 
         return response;
