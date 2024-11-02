@@ -69,6 +69,11 @@
         "typescript": "5.6.3",
         "wrangler": "3.84.0"
     },
+    "pnpm": {
+        "overrides": {
+            "onnxruntime-node": "^1.19.2"
+        }
+    },
     "dependencies": {
         "@ai-sdk/anthropic": "^0.0.53",
         "@ai-sdk/google": "^0.0.55",
@@ -138,7 +143,7 @@
         "node-wav": "0.0.2",
         "nodejs-whisper": "0.1.18",
         "nodemon": "3.1.7",
-        "onnxruntime-node": "^1.20.0",
+        "onnxruntime-node": "^1.19.2",
         "openai": "4.69.0",
         "pdfjs-dist": "4.7.76",
         "pg": "^8.13.1",
@@ -168,11 +173,11 @@
         "youtube-dl-exec": "3.0.10"
     },
     "trustedDependencies": {
-        "onnxruntime-node": "^1.20.0",
+        "onnxruntime-node": "^1.19.2",
         "@discordjs/opus": "github:discordjs/opus",
         "sharp": "^0.33.5"
     },
     "peerDependencies": {
-        "onnxruntime-node": "^1.20.0"
+        "onnxruntime-node": "^1.19.2"
     }
 }
