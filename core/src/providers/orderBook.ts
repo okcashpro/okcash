@@ -11,7 +11,7 @@ interface Order {
     price: number;
 }
 
-const orderbook: Provider = {
+const orderBookProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory, _state?: State) => {
         const userId = message.userId;
 
@@ -40,4 +40,4 @@ const orderbook: Provider = {
     },
 };
 
-export default orderbook;
+export { orderBookProvider };

@@ -92,7 +92,6 @@ class LlamaService {
     async initializeModel() {
         try {
             await this.checkModel();
-            console.log("Loading llama");
 
             const systemInfo = await si.graphics();
             const hasCUDA = systemInfo.controllers.some((controller) =>

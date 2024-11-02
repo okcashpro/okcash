@@ -285,4 +285,4 @@ const walletProvider: Provider = {
 };
 
 // Module exports
-export default walletProvider;
+export { walletProvider };

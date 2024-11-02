@@ -169,14 +169,5 @@
         "onnxruntime-node": "1.19.0",
         "@discordjs/opus": "github:discordjs/opus",
         "sharp": "^0.33.5"
-    },
-    "optionalDependencies": {
-        "sharp": "0.33.5",
-        "sqlite-vss-darwin-arm64": "0.1.2",
-        "sqlite-vss-darwin-x64": "0.1.2",
-        "sqlite-vss-linux-arm64": "^0.1.2",
-        "sqlite-vss-linux-x64": "0.1.2",
-        "sqlite-vss-win32-arm64": "^0.1.2",
-        "sqlite-vss-win32-x64": "^0.1.2"
     }
 }

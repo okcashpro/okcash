@@ -493,6 +493,13 @@ export interface IAgentRuntime {
         source: string | null
     ): Promise<void>;
     registerAction(action: Action): void;
+    ensureConnection(
+        userId: UUID,
+        roomId: UUID,
+        userName?: string,
+        userScreenName?: string,
+        source?: string
+    ): Promise<void>;
     ensureParticipantInRoom(userId: UUID, roomId: UUID): Promise<void>;
     ensureRoomExists(roomId: UUID): Promise<void>;
     composeState(
