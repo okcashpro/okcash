@@ -350,14 +350,14 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             if (params.start) {
                 paramCount++;
-                sql += ` AND "createdAt" >= to_timestamp($${paramCount / 1000})`;
-                values.push(params.start);
+                sql += ` AND "createdAt" >= to_timestamp($${paramCount})`;
+                values.push(params.start/1000);
             }
 
             if (params.end) {
                 paramCount++;
-                sql += ` AND "createdAt" <= to_timestamp($${paramCount / 1000})`;
-                values.push(params.end);
+                sql += ` AND "createdAt" <= to_timestamp($${paramCount})`;
+                values.push(params.end/1000);
             }
 
             if (params.unique) {
