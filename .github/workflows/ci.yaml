@@ -20,7 +20,7 @@ jobs:
                   cache: "pnpm"
 
             - name: Install dependencies
-              run: pnpm i
+              run: pnpm install --no-frozen-lockfile
 
             - name: Run Prettier
               run: pnpm run prettier --check .

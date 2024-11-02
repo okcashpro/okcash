@@ -150,15 +150,21 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     async getMemoriesByRoomIds(params: {
         roomIds: UUID[];
         tableName: string;
+        agentId?: UUID;
     }): Promise<Memory[]> {
         if (!params.tableName) {
             // default to messages
             params.tableName = "messages";
         }
         const placeholders = params.roomIds.map(() => "?").join(", ");
-        const sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
+        let sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
         const stmt = this.db.prepare(sql);
         const queryParams = [params.tableName, ...params.roomIds];
+            
+        if (params.agentId) {
+            sql += ` AND userId = ?`;
+            queryParams.push(params.agentId);
+        }
 
         const memories: Memory[] = [];
         const rows = stmt.all(...queryParams) as (Memory & {
@@ -275,6 +281,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             match_threshold?: number;
             count?: number;
             roomId?: UUID;
+            agentId?: UUID;
             unique?: boolean;
             tableName: string;
         }
@@ -293,6 +300,12 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         if (params.unique) {
             sql += " AND `unique` = 1";
         }
+        // TODO: Test this
+        if (params.agentId) {
+            sql += " AND userId = ?";
+            queryParams.push(params.agentId);
+        }
+
         if (params.roomId) {
             sql += " AND roomId = ?";
             queryParams.push(params.roomId);
@@ -384,7 +397,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        userIds?: UUID[];
+        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
@@ -402,9 +415,9 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             sql += " AND `unique` = 1";
         }
 
-        if (params.userIds && params.userIds.length > 0) {
-            sql += ` AND userId IN (${params.userIds.map(() => "?").join(",")})`;
-            queryParams.push(...params.userIds);
+        if (params.agentId) {
+            sql += " AND userId = ?";
+            queryParams.push(params.agentId);
         }
 
         if (params.start) {

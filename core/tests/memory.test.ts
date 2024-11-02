@@ -259,6 +259,7 @@ describe("Memory - Basic tests", () => {
 
         const createdMemories = await memoryManager.getMemories({
             roomId,
+            agentId: runtime.agentId,
             count: 100,
         });
 

@@ -379,6 +379,7 @@ export class ClientBase extends EventEmitter {
             // Get the existing memories from the database
             const existingMemories =
                 await this.runtime.messageManager.getMemoriesByRoomIds({
+                    agentId: this.runtime.agentId,
                     roomIds: cachedResults.map((tweet) =>
                         stringToUuid(tweet.conversationId)
                     ),
@@ -484,6 +485,7 @@ export class ClientBase extends EventEmitter {
         // Check the existing memories in the database
         const existingMemories =
             await this.runtime.messageManager.getMemoriesByRoomIds({
+                agentId: this.runtime.agentId,
                 roomIds: tweetUuids,
             });
 
@@ -560,6 +562,7 @@ export class ClientBase extends EventEmitter {
             const recentMessage = await this.runtime.messageManager.getMemories(
                 {
                     roomId: message.roomId,
+                    agentId: this.runtime.agentId,
                     count: 1,
                     unique: false,
                 }

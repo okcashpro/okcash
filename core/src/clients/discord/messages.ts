@@ -1,5 +1,9 @@
-import { ChannelType, Client, Message as DiscordMessage } from "discord.js";
+import { ChannelType, Client, Message as DiscordMessage, TextChannel } from "discord.js";
 import { composeContext } from "../../core/context.ts";
+import {
+    generateMessageResponse,
+    generateShouldRespond,
+} from "../../core/generation.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import {
@@ -12,19 +16,12 @@ import {
     State,
     UUID,
 } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
 import { InterestChannels } from "./types.ts";
-
-import { TextChannel } from "discord.js";
-import { stringToUuid } from "../../core/uuid.ts";
-import { SpeechService } from "../../services/speech.ts";
 import { VoiceManager } from "./voice.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "../../core/generation.ts";
 
 const MAX_MESSAGE_LENGTH = 1900;
 
@@ -274,7 +271,7 @@ export class MessageManager {
                 }
                 if (message.channel.type === ChannelType.GuildVoice) {
                     // For voice channels, use text-to-speech
-                    const audioStream = await SpeechService.generate(
+                    const audioStream = await this.runtime.speechService.generate(
                         this.runtime,
                         content.text
                     );
@@ -298,7 +295,7 @@ export class MessageManager {
                         message.id,
                         files
                     );
-                    let notFirstMessage = false;
+
                     const memories: Memory[] = [];
                     for (const m of messages) {
                         let action = content.action;
@@ -311,7 +308,6 @@ export class MessageManager {
                             action = "CONTINUE";
                         }
 
-                        notFirstMessage = true;
                         const memory: Memory = {
                             id: stringToUuid(m.id),
                             userId: this.runtime.agentId,
@@ -351,7 +347,7 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await SpeechService.generate(
+                const audioStream = await this.runtime.speechService.generate(
                     this.runtime,
                     errorMessage
                 );

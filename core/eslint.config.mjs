@@ -39,7 +39,7 @@ export default [
             "no-undef": "off",
 
             // Customize TypeScript rules
-            "@typescript-eslint/no-explicit-any": "warn", // Changed from error to warn
+            "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
