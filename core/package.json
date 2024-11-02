@@ -20,7 +20,7 @@
         "start:degen": "node --loader ts-node/esm src/index.ts --characters=\"../characters/degenspartan.json\"",
         "start:service:all": "pm2 start npm --name=\"all\" --restart-delay=3000 --max-restarts=10 -- run start:degen",
         "stop:service:all": "pm2 stop all",
-        "start:all": "node --loader ts-node/esm src/index.ts --characters=\"../characters/degenspartan.json\",\"../characters/ruby.character.json\"",
+        "start:all": "node --loader ts-node/esm src/index.ts --characters=\"../characters/degenspartan.json\",\"../characters/ruby.character.json\",\"../characters/pmairca.character.json\"",
         "start:trump": "node --loader ts-node/esm src/index.ts --characters=\"../characters/trump.character.json\"",
         "start:service:tate": "pm2 start npm --name=\"tate\" --restart-delay=3000 --max-restarts=10 -- run start:tate",
         "stop:service:tate": "pm2 stop tate",

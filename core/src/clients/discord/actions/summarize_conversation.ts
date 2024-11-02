@@ -145,7 +145,11 @@ const summarizeAction = {
         "CONVERSATION_SUMMARY",
     ],
     description: "Summarizes the conversation and attachments.",
-    validate: async (runtime: IAgentRuntime, message: Memory, _state: State) => {
+    validate: async (
+        runtime: IAgentRuntime,
+        message: Memory,
+        _state: State
+    ) => {
         if (message.content.source !== "discord") {
             return false;
         }

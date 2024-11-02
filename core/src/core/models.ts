@@ -25,7 +25,7 @@ const models: Models = {
         model: {
             [ModelClass.SMALL]: "gpt-4o-mini",
             [ModelClass.MEDIUM]: "gpt-4o",
-            [ModelClass.LARGE]: "gpt-4-turbo",
+            [ModelClass.LARGE]: "gpt-4o",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
