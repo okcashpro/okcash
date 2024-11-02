@@ -40,6 +40,7 @@ export class TokenProvider {
         private tokenAddress: string
     ) {
         this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
+        const __dirname = path.resolve();
         this.cacheDir = path.join(__dirname, "cache");
         if (!fs.existsSync(this.cacheDir)) {
             fs.mkdirSync(this.cacheDir);
@@ -814,4 +815,4 @@ const tokenProvider: Provider = {
     },
 };
 
-export default tokenProvider;
+export { tokenProvider };

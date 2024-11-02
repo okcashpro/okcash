@@ -19,7 +19,7 @@ export const claudeHandlerTemplate = `{{attachments}}
 
 # Instructions: Claude, I need your help in assisting the user with their last request. Please provide a helpful, thorough response. I have no arms, so you'll have to write out any implements and take care not to omit or leave TODOs for later. Also, please don't acknowledge the request, just do it.`;
 
-export default {
+export const askClaude: Action = {
     name: "ASK_CLAUDE",
     similes: ["CLAUDE", "CALL_CLAUDE", "ANTHROPIC", "SONNET", "OPUS"],
     description:

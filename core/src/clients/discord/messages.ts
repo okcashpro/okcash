@@ -1,5 +1,9 @@
-import { ChannelType, Client, Message as DiscordMessage } from "discord.js";
+import { ChannelType, Client, Message as DiscordMessage, TextChannel } from "discord.js";
 import { composeContext } from "../../core/context.ts";
+import {
+    generateMessageResponse,
+    generateShouldRespond,
+} from "../../core/generation.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import {
@@ -12,19 +16,12 @@ import {
     State,
     UUID,
 } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
 import { InterestChannels } from "./types.ts";
-
-import { TextChannel } from "discord.js";
-import { stringToUuid } from "../../core/uuid.ts";
-import { SpeechService } from "../../services/speech.ts";
 import { VoiceManager } from "./voice.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "../../core/generation.ts";
 
 const MAX_MESSAGE_LENGTH = 1900;
 
@@ -123,7 +120,6 @@ export class MessageManager {
                 this.client.user?.id /* || message.author?.bot*/
         )
             return;
-        console.log("handling message");
         const userId = message.author.id as UUID;
         const userName = message.author.username;
         const name = message.author.displayName;
@@ -210,8 +206,6 @@ export class MessageManager {
             if (!shouldIgnore) {
                 shouldIgnore = await this._shouldIgnore(message);
             }
-            console.log("Received a message from ", message.author.username);
-            console.log(message.content);
 
             if (shouldIgnore) {
                 return;
@@ -235,7 +229,6 @@ export class MessageManager {
             }
 
             if (agentUserState === "FOLLOWED") {
-                console.log("Always responding in followed room");
                 shouldRespond = true; // Always respond in followed rooms
             } else if (
                 (!shouldRespond && hasInterest) ||
@@ -262,8 +255,6 @@ export class MessageManager {
                 context
             );
 
-            console.log("Response\n", responseContent);
-
             responseContent.text = responseContent.text?.trim();
             responseContent.inReplyTo = stringToUuid(message.id);
 
@@ -278,11 +269,9 @@ export class MessageManager {
                 if (message.id && !content.inReplyTo) {
                     content.inReplyTo = stringToUuid(message.id);
                 }
-                console.log("received callback", message.channel.type);
                 if (message.channel.type === ChannelType.GuildVoice) {
-                    console.log("generating voice");
                     // For voice channels, use text-to-speech
-                    const audioStream = await SpeechService.generate(
+                    const audioStream = await this.runtime.speechService.generate(
                         this.runtime,
                         content.text
                     );
@@ -306,7 +295,7 @@ export class MessageManager {
                         message.id,
                         files
                     );
-                    let notFirstMessage = false;
+
                     const memories: Memory[] = [];
                     for (const m of messages) {
                         let action = content.action;
@@ -319,7 +308,6 @@ export class MessageManager {
                             action = "CONTINUE";
                         }
 
-                        notFirstMessage = true;
                         const memory: Memory = {
                             id: stringToUuid(m.id),
                             userId: this.runtime.agentId,
@@ -359,7 +347,7 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await SpeechService.generate(
+                const audioStream = await this.runtime.speechService.generate(
                     this.runtime,
                     errorMessage
                 );
@@ -572,7 +560,6 @@ export class MessageManager {
         ) {
             return true;
         }
-        console.log("Not ignoring message:", message.content);
         return false;
     }
 

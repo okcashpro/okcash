@@ -1,6 +1,6 @@
 import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 
-const time: Provider = {
+const timeProvider: Provider = {
     get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
         const currentDate = new Date();
         const currentTime = currentDate.toLocaleTimeString("en-US");
@@ -9,4 +9,4 @@ const time: Provider = {
     },
 };
 
-export default time;
+export { timeProvider };

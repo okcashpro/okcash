@@ -9,22 +9,22 @@
         "build": "tsc",
         "lint": "eslint . --fix",
         "start": "node --loader ts-node/esm src/index.ts",
-        "start:arok": "node --loader ts-node/esm src/index.ts --characters=\"characters/arok.character.json\"",
+        "start:arok": "node --loader ts-node/esm src/index.ts --characters=\"../characters/arok.character.json\"",
         "start:service:ruby": "pm2 start npm --name=\"ruby\" --restart-delay=3000 --max-restarts=10 -- run start:ruby",
         "stop:service:ruby": "pm2 stop ruby",
-        "start:ruby": "node --loader ts-node/esm src/index.ts --characters=\"characters/ruby.character.json\"",
+        "start:ruby": "node --loader ts-node/esm src/index.ts --characters=\"../characters/ruby.character.json\"",
         "start:service:trump": "pm2 start npm --name=\"trump\" --restart-delay=3000 --max-restarts=10 -- run start:trump",
         "stop:service:trump": "pm2 stop trump",
         "start:service:degen": "pm2 start npm --name=\"degen\" --restart-delay=3000 --max-restarts=10 -- run start:degen",
         "stop:service:degen": "pm2 stop degen",
-        "start:degen": "node --loader ts-node/esm src/index.ts --characters=\"characters/degenspartan.json\"",
+        "start:degen": "node --loader ts-node/esm src/index.ts --characters=\"../characters/degenspartan.json\"",
         "start:service:all": "pm2 start npm --name=\"all\" --restart-delay=3000 --max-restarts=10 -- run start:degen",
         "stop:service:all": "pm2 stop all",
-        "start:all": "node --loader ts-node/esm src/index.ts --characters=\"characters/degenspartan.json\",\"characters/ruby.character.json\"",
-        "start:trump": "node --loader ts-node/esm src/index.ts --characters=\"characters/trump.character.json\"",
+        "start:all": "node --loader ts-node/esm src/index.ts --characters=\"../characters/degenspartan.json\",\"../characters/ruby.character.json\"",
+        "start:trump": "node --loader ts-node/esm src/index.ts --characters=\"../characters/trump.character.json\"",
         "start:service:tate": "pm2 start npm --name=\"tate\" --restart-delay=3000 --max-restarts=10 -- run start:tate",
         "stop:service:tate": "pm2 stop tate",
-        "start:tate": "node --loader ts-node/esm src/index.ts --characters=\"characters/tate.character.json\"",
+        "start:tate": "node --loader ts-node/esm src/index.ts --characters=\"../characters/tate.character.json\"",
         "watch": "tsc --watch",
         "dev": "tsc && nodemon",
         "build:docs": "cd docs && npm run build",
@@ -69,6 +69,11 @@
         "typescript": "5.6.3",
         "wrangler": "3.84.0"
     },
+    "pnpm": {
+        "overrides": {
+            "onnxruntime-node": "^1.19.2"
+        }
+    },
     "dependencies": {
         "@ai-sdk/anthropic": "^0.0.53",
         "@ai-sdk/google": "^0.0.55",
@@ -93,6 +98,7 @@
         "@types/body-parser": "1.19.5",
         "@types/cors": "2.8.17",
         "@types/express": "5.0.0",
+        "@types/uuid": "^10.0.0",
         "agent-twitter-client": "0.0.13",
         "ai": "^3.4.23",
         "alawmulaw": "6.0.0",
@@ -124,8 +130,10 @@
         "html-escaper": "3.0.3",
         "html-to-text": "9.0.5",
         "import-meta-resolve": "4.1.0",
+        "install": "^0.13.0",
         "jieba-wasm": "2.2.0",
         "js-sha1": "0.7.0",
+        "js-yaml": "^4.1.0",
         "json5": "2.2.3",
         "kuromoji": "0.1.2",
         "libsodium-wrappers": "0.7.15",
@@ -135,7 +143,7 @@
         "node-wav": "0.0.2",
         "nodejs-whisper": "0.1.18",
         "nodemon": "3.1.7",
-        "onnxruntime-node": "1.20.0",
+        "onnxruntime-node": "^1.19.2",
         "openai": "4.69.0",
         "pdfjs-dist": "4.7.76",
         "pg": "^8.13.1",
@@ -156,7 +164,6 @@
         "together-ai": "^0.7.0",
         "unique-names-generator": "4.7.1",
         "uuid": "11.0.2",
-        "uuidv4": "6.2.13",
         "wav": "1.0.2",
         "wav-encoder": "1.3.0",
         "wavefile": "11.0.0",
@@ -166,17 +173,11 @@
         "youtube-dl-exec": "3.0.10"
     },
     "trustedDependencies": {
-        "onnxruntime-node": "1.19.0",
+        "onnxruntime-node": "^1.19.2",
         "@discordjs/opus": "github:discordjs/opus",
         "sharp": "^0.33.5"
     },
-    "optionalDependencies": {
-        "sharp": "0.33.5",
-        "sqlite-vss-darwin-arm64": "0.1.2",
-        "sqlite-vss-darwin-x64": "0.1.2",
-        "sqlite-vss-linux-arm64": "^0.1.2",
-        "sqlite-vss-linux-x64": "0.1.2",
-        "sqlite-vss-win32-arm64": "^0.1.2",
-        "sqlite-vss-win32-x64": "^0.1.2"
+    "peerDependencies": {
+        "onnxruntime-node": "^1.19.2"
     }
 }

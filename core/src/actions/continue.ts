@@ -30,7 +30,7 @@ Based on the following conversation, should {{agentName}} continue? YES or NO
 
 Should {{agentName}} continue? ` + booleanFooter;
 
-export default {
+export const continueAction: Action = {
     name: "CONTINUE",
     similes: ["ELABORATE", "KEEP_TALKING"],
     description:
@@ -38,6 +38,7 @@ export default {
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         const recentMessagesData = await runtime.messageManager.getMemories({
             roomId: message.roomId,
+            agentId: runtime.agentId,
             count: 10,
             unique: false,
         });

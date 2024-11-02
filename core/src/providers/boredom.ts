@@ -272,7 +272,7 @@ const negativeWords = [
     "fuck up",
 ];
 
-const boredom: Provider = {
+const boredomProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
         const agentId = runtime.agentId;
         const agentName = state?.agentName || "The agent";
@@ -282,6 +282,7 @@ const boredom: Provider = {
 
         const recentMessages = await runtime.messageManager.getMemories({
             roomId: message.roomId,
+            agentId: runtime.agentId,
             start: fifteenMinutesAgo,
             end: now,
             count: 20,
@@ -340,4 +341,4 @@ const boredom: Provider = {
     },
 };
 
-export default boredom;
+export { boredomProvider };
