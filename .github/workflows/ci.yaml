@@ -26,7 +26,9 @@ jobs:
               run: pnpm run prettier --check .
 
             - name: Create test env file
-              run: cp core/.env.test.example core/.env.test || cp core/.env.test core/.env.test
+              run: |
+                echo "TEST_DATABASE_CLIENT=sqlite" > core/.env.test
+                echo "NODE_ENV=test" >> core/.env.test
 
             - name: Run tests
               run: cd core && pnpm test
