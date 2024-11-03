@@ -24,6 +24,8 @@ export interface RecommenderMetrics {
     riskScore: number;
     consistencyScore: number;
     virtualConfidence: number;
+    lastActiveDate: Date;
+    trustDecay: number;
     lastUpdated: Date;
 }
 
@@ -41,6 +43,7 @@ export interface TokenPerformance {
     sustainedGrowth: boolean;
     rapidDump: boolean;
     suspiciousVolume: boolean;
+    validationTrust: number;
     lastUpdated: Date;
 }
 
@@ -63,6 +66,7 @@ export interface RecommenderMetricsHistory {
     riskScore: number;
     consistencyScore: number;
     virtualConfidence: number;
+    trustDecay: number;
     recordedAt: Date;
 }
 
@@ -100,6 +104,8 @@ interface RecommenderMetricsRow {
     risk_score: number;
     consistency_score: number;
     virtual_confidence: number;
+    last_active_date: Date;
+    trust_decay: number;
     last_updated: string;
 }
 
@@ -117,6 +123,7 @@ interface TokenPerformanceRow {
     sustained_growth: number;
     rapid_dump: number;
     suspicious_volume: number;
+    validation_trust: number;
     last_updated: string;
 }
 
@@ -165,6 +172,8 @@ export class TrustScoreDatabase {
                 risk_score REAL DEFAULT 0,
                 consistency_score REAL DEFAULT 0,
                 virtual_confidence REAL DEFAULT 0,
+                last_active_date DATETIME DEFAULT CURRENT_TIMESTAMP
+                trust_decay REAL DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
             );
@@ -186,6 +195,7 @@ export class TrustScoreDatabase {
                 sustained_growth BOOLEAN DEFAULT FALSE,
                 rapid_dump BOOLEAN DEFAULT FALSE,
                 suspicious_volume BOOLEAN DEFAULT FALSE,
+                validation_trust REAL DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -378,6 +388,8 @@ export class TrustScoreDatabase {
             riskScore: row.risk_score,
             consistencyScore: row.consistency_score,
             virtualConfidence: row.virtual_confidence,
+            lastActiveDate: row.last_active_date,
+            trustDecay: row.trust_decay,
             lastUpdated: new Date(row.last_updated),
         };
     }
@@ -407,6 +419,7 @@ export class TrustScoreDatabase {
             riskScore: currentMetrics.riskScore,
             consistencyScore: currentMetrics.consistencyScore,
             virtualConfidence: currentMetrics.virtualConfidence,
+            trustDecay: currentMetrics.trustDecay,
             recordedAt: new Date(), // Current timestamp
         };
 
@@ -492,6 +505,10 @@ export class TrustScoreDatabase {
      * @param performance TokenPerformance object
      */
     upsertTokenPerformance(performance: TokenPerformance): boolean {
+        const validationTrust = this.calculateValidationTrust(
+            performance.tokenAddress
+        );
+
         const sql = `
             INSERT INTO token_performance (
                 token_address,
@@ -507,6 +524,7 @@ export class TrustScoreDatabase {
                 sustained_growth,
                 rapid_dump,
                 suspicious_volume,
+                validation_trust,
                 last_updated
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             ON CONFLICT(token_address) DO UPDATE SET
@@ -522,6 +540,7 @@ export class TrustScoreDatabase {
                 sustained_growth = excluded.sustained_growth,
                 rapid_dump = excluded.rapid_dump,
                 suspicious_volume = excluded.suspicious_volume,
+                validation_trust = excluded.validation_trust,
                 last_updated = CURRENT_TIMESTAMP;
         `;
         try {
@@ -536,7 +555,8 @@ export class TrustScoreDatabase {
                 performance.marketCapChange24h,
                 performance.sustainedGrowth ? 1 : 0,
                 performance.rapidDump ? 1 : 0,
-                performance.suspiciousVolume ? 1 : 0
+                performance.suspiciousVolume ? 1 : 0,
+                validationTrust
             );
             console.log(
                 `Upserted token performance for ${performance.tokenAddress}`
@@ -574,11 +594,35 @@ export class TrustScoreDatabase {
             sustainedGrowth: row.sustained_growth === 1,
             rapidDump: row.rapid_dump === 1,
             suspiciousVolume: row.suspicious_volume === 1,
+            validationTrust: row.validation_trust,
             lastUpdated: new Date(row.last_updated),
         };
     }
 
     // ----- TokenRecommendations Methods -----
+
+    /**
+     * Calculates the average trust score of all recommenders who have recommended a specific token.
+     * @param tokenAddress The address of the token.
+     * @returns The average trust score (validationTrust).
+     */
+    calculateValidationTrust(tokenAddress: string): number {
+        const sql = `
+        SELECT rm.trust_score
+        FROM token_recommendations tr
+        JOIN recommender_metrics rm ON tr.recommender_id = rm.recommender_id
+        WHERE tr.token_address = ?;
+    `;
+        const rows = this.db.prepare(sql).all(tokenAddress) as Array<{
+            trust_score: number;
+        }>;
+
+        if (rows.length === 0) return 0; // No recommendations found
+
+        const totalTrust = rows.reduce((acc, row) => acc + row.trust_score, 0);
+        const averageTrust = totalTrust / rows.length;
+        return averageTrust;
+    }
 
     /**
      * Adds a new token recommendation.
@@ -735,6 +779,7 @@ export class TrustScoreDatabase {
             risk_score: number;
             consistency_score: number;
             virtual_confidence: number;
+            trust_decay: number;
             recorded_at: string;
         }>;
 
@@ -748,6 +793,7 @@ export class TrustScoreDatabase {
             riskScore: row.risk_score,
             consistencyScore: row.consistency_score,
             virtualConfidence: row.virtual_confidence,
+            trustDecay: row.trust_decay,
             recordedAt: new Date(row.recorded_at),
         }));
     }

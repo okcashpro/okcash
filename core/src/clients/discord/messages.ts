@@ -1,4 +1,9 @@
-import { ChannelType, Client, Message as DiscordMessage, TextChannel } from "discord.js";
+import {
+    ChannelType,
+    Client,
+    Message as DiscordMessage,
+    TextChannel,
+} from "discord.js";
 import { composeContext } from "../../core/context.ts";
 import {
     generateMessageResponse,
@@ -153,9 +158,6 @@ export class MessageManager {
 
             const messageId = stringToUuid(message.id);
 
-            // Check if the message already exists in the cache or database
-            const existingMessage =
-                await this.runtime.messageManager.getMemoryById(messageId);
             let shouldIgnore = false;
             let shouldRespond = true;
 
@@ -263,10 +265,11 @@ export class MessageManager {
                 }
                 if (message.channel.type === ChannelType.GuildVoice) {
                     // For voice channels, use text-to-speech
-                    const audioStream = await this.runtime.speechService.generate(
-                        this.runtime,
-                        content.text
-                    );
+                    const audioStream =
+                        await this.runtime.speechService.generate(
+                            this.runtime,
+                            content.text
+                        );
                     await this.voiceManager.playAudioStream(
                         userId,
                         audioStream
@@ -355,6 +358,8 @@ export class MessageManager {
 
     async cacheMessages(channel: TextChannel, count: number = 20) {
         const messages = await channel.messages.fetch({ limit: count });
+
+        // TODO: This is throwing an error but seems to work?
         for (const [_, message] of messages) {
             await this.handleMessage(message);
         }

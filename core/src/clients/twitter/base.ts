@@ -21,6 +21,7 @@ import ImageDescriptionService from "../../services/image.ts";
 import { glob } from "glob";
 
 import { stringToUuid } from "../../core/uuid.ts";
+import { prettyConsole } from "../../index.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -404,7 +405,8 @@ export class ClientBase extends EventEmitter {
                 // Save the missing tweets as memories
                 for (const tweet of tweetsToSave) {
                     const roomId = stringToUuid(
-                        tweet.conversationId ?? "default-room-" + this.runtime.agentId
+                        tweet.conversationId ??
+                            "default-room-" + this.runtime.agentId
                     );
                     const tweetuserId =
                         tweet.userId === this.twitterUserId
@@ -428,7 +430,7 @@ export class ClientBase extends EventEmitter {
                             : undefined,
                     } as Content;
 
-                    console.log("Creating memory for tweet", tweet.id);
+                    prettyConsole.log("Creating memory for tweet", tweet.id);
 
                     // check if it already exists
                     const memory =
@@ -436,7 +438,7 @@ export class ClientBase extends EventEmitter {
                             stringToUuid(tweet.id)
                         );
                     if (memory) {
-                        console.log(
+                        prettyConsole.log(
                             "Memory already exists, skipping timeline population"
                         );
                         break;
@@ -452,7 +454,7 @@ export class ClientBase extends EventEmitter {
                     });
                 }
 
-                console.log(
+                prettyConsole.log(
                     `Populated ${tweetsToSave.length} missing tweets from the cache.`
                 );
                 return;
@@ -508,7 +510,9 @@ export class ClientBase extends EventEmitter {
 
         // Save the new tweets as memories
         for (const tweet of tweetsToSave) {
-            const roomId = stringToUuid(tweet.conversationId ?? "default-room-" + this.runtime.agentId);
+            const roomId = stringToUuid(
+                tweet.conversationId ?? "default-room-" + this.runtime.agentId
+            );
             const tweetuserId =
                 tweet.userId === this.twitterUserId
                     ? this.runtime.agentId

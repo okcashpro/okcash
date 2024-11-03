@@ -25,7 +25,7 @@ const models: Models = {
         model: {
             [ModelClass.SMALL]: "gpt-4o-mini",
             [ModelClass.MEDIUM]: "gpt-4o",
-            [ModelClass.LARGE]: "gpt-4-turbo",
+            [ModelClass.LARGE]: "gpt-4o",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
@@ -40,9 +40,9 @@ const models: Models = {
         },
         endpoint: "https://api.anthropic.com/v1",
         model: {
-            [ModelClass.SMALL]: "claude-3-haiku",
-            [ModelClass.MEDIUM]: "claude-3-5-sonnet",
-            [ModelClass.LARGE]: "claude-3-opus",
+            [ModelClass.SMALL]: "claude-3-5-sonnet-20241022",
+            [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
+            [ModelClass.LARGE]: "claude-3-opus-20240229",
         },
     },
     [ModelProvider.CLAUDE_VERTEX]: {
@@ -56,9 +56,9 @@ const models: Models = {
         },
         endpoint: "https://api.anthropic.com/v1", // TODO: check
         model: {
-            [ModelClass.SMALL]: "claude-3-haiku",
-            [ModelClass.MEDIUM]: "claude-3-5-sonnet",
-            [ModelClass.LARGE]: "claude-3-opus",
+            [ModelClass.SMALL]: "claude-3-5-sonnet-20241022",
+            [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
+            [ModelClass.LARGE]: "claude-3-opus-20240229",
         },
     },
     [ModelProvider.GROK]: {
@@ -104,11 +104,13 @@ const models: Models = {
             temperature: 0.3,
         },
         model: {
-            [ModelClass.SMALL]: "bartowski/Llama-3.2-3B-Instruct-GGUF",
+            [ModelClass.SMALL]:
+                "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true",
             [ModelClass.MEDIUM]:
-                "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf", // TODO: ?download=true
+                "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true", // TODO: ?download=true
             [ModelClass.LARGE]:
-                "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO: ?download=true
+                "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true",
+            // "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO:
             [ModelClass.EMBEDDING]:
                 "togethercomputer/m2-bert-80M-32k-retrieval",
         },

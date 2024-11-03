@@ -25,5 +25,13 @@ jobs:
             - name: Run Prettier
               run: pnpm run prettier --check .
 
+            - name: Create test env file
+              run: |
+                echo "TEST_DATABASE_CLIENT=sqlite" > core/.env.test
+                echo "NODE_ENV=test" >> core/.env.test
+
+            - name: Run tests
+              run: cd core && pnpm test
+
             - name: Build packages
               run: pnpm run build

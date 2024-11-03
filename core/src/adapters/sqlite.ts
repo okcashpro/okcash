@@ -160,7 +160,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         const placeholders = params.roomIds.map(() => "?").join(", ");
         let sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
         let queryParams = [params.tableName, ...params.roomIds];
-            
+
         if (params.agentId) {
             sql += ` AND userId = ?`;
             queryParams.push(params.agentId);
@@ -171,9 +171,9 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             content: string;
         })[];
 
-        return rows.map(row => ({
+        return rows.map((row) => ({
             ...row,
-            content: JSON.parse(row.content)
+            content: JSON.parse(row.content),
         }));
     }
 
