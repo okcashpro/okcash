@@ -14,4 +14,4 @@ jobs:
           github_changelog_generator \
             -u ${{ github.repository_owner }} \
             -p ${{ github.event.repository.name }} \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
