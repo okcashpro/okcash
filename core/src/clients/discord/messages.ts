@@ -156,14 +156,6 @@ export class MessageManager {
             // Check if the message already exists in the cache or database
             const existingMessage =
                 await this.runtime.messageManager.getMemoryById(messageId);
-
-            if (existingMessage) {
-                // If the message content is the same, return early
-                if (existingMessage.content.text === message.content) {
-                    return;
-                }
-            }
-
             let shouldIgnore = false;
             let shouldRespond = true;
 
