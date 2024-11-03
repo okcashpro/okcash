@@ -2,9 +2,9 @@ import { Message } from "@telegraf/types";
 import { Context } from "telegraf";
 import { Telegraf } from "telegraf";
 
-import { composeContext } from "../../../core/context.ts";
-import { log_to_file } from "../../../core/logger.ts";
-import { embeddingZeroVector } from "../../../core/memory.ts";
+import { composeContext } from "@/core/context.ts";
+import { log_to_file } from "@/core/logger.ts";
+import { embeddingZeroVector } from "@/core/memory.ts";
 import {
     Content,
     IAgentRuntime,
@@ -13,17 +13,17 @@ import {
     UUID,
     HandlerCallback,
     ModelClass,
-} from "../../../core/types.ts";
-import { stringToUuid } from "../../../core/uuid.ts";
+} from "@/core/types.ts";
+import { stringToUuid } from "@/core/uuid.ts";
 import {
     messageHandlerTemplate,
     shouldRespondTemplate,
-} from "../../discord/templates.ts";
-import ImageDescriptionService from "../../../services/image.ts";
+} from "@/clients/discord/templates.ts";
+import ImageDescriptionService from "@/services/image.ts";
 import {
     generateMessageResponse,
     generateShouldRespond,
-} from "../../../core/generation.ts";
+} from "@/core/generation.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
