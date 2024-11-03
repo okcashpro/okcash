@@ -15,6 +15,8 @@ export const imageGeneration: Action = {
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
+
+        prettyConsole.log("Validating image generation settings...");
         return anthropicApiKeyOk && togetherApiKeyOk;
     },
     handler: async (

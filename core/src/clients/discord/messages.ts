@@ -249,6 +249,8 @@ export class MessageManager {
                 context
             );
 
+            console.log("Response content:", responseContent);
+
             responseContent.text = responseContent.text?.trim();
             responseContent.inReplyTo = stringToUuid(message.id);
 

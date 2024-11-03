@@ -436,12 +436,15 @@ export class AgentRuntime implements IAgentRuntime {
         callback?: HandlerCallback
     ): Promise<void> {
         if (!responses[0].content?.action) {
+            prettyConsole.warn("No action found in the response content.");
             return;
         }
 
         const normalizedAction = responses[0].content.action
             .toLowerCase()
             .replace("_", "");
+
+        prettyConsole.success(`Normalized action: ${normalizedAction}`);
 
         let action = this.actions.find(
             (a: { name: string }) =>
@@ -453,7 +456,7 @@ export class AgentRuntime implements IAgentRuntime {
         );
 
         if (!action) {
-            // each action has a .similes array, lets see if we can find a match
+            prettyConsole.info("Attempting to find action in similes.");
             for (const _action of this.actions) {
                 const simileAction = _action.similes.find(
                     (simile) =>
@@ -467,22 +470,28 @@ export class AgentRuntime implements IAgentRuntime {
                 );
                 if (simileAction) {
                     action = _action;
+                    prettyConsole.success(
+                        `Action found in similes: ${action.name}`
+                    );
                     break;
                 }
             }
         }
 
         if (!action) {
-            return console.warn(
+            prettyConsole.error(
                 "No action found for",
                 responses[0].content.action
             );
-        }
-
-        if (!action.handler) {
             return;
         }
 
+        if (!action.handler) {
+            prettyConsole.error(`Action ${action.name} has no handler.`);
+            return;
+        }
+
+        prettyConsole.success(`Executing handler for action: ${action.name}`);
         await action.handler(this, message, state, {}, callback);
     }
 
