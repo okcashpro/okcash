@@ -1,14 +1,15 @@
 import * as sqliteVec from "sqlite-vec";
 import { Database } from "better-sqlite3";
+import { prettyConsole } from "../../index.ts";
 
 // Loads the sqlite-vec extensions into the provided SQLite database
 export function loadVecExtensions(db: Database): void {
     try {
         // Load sqlite-vec extensions
         sqliteVec.load(db);
-        console.log("sqlite-vec extensions loaded successfully.");
+        prettyConsole.log("sqlite-vec extensions loaded successfully.");
     } catch (error) {
-        console.error("Failed to load sqlite-vec extensions:", error);
+        prettyConsole.error("Failed to load sqlite-vec extensions:", error);
         throw error;
     }
 }

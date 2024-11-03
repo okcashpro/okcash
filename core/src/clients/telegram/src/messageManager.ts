@@ -42,10 +42,10 @@ export class MessageManager {
     private async processImage(
         message: Message
     ): Promise<{ description: string } | null> {
-        console.log(
-            "🖼️ Processing image message:",
-            JSON.stringify(message, null, 2)
-        );
+        // console.log(
+        //     "🖼️ Processing image message:",
+        //     JSON.stringify(message, null, 2)
+        // );
 
         try {
             let imageUrl: string | null = null;
