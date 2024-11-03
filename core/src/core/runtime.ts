@@ -273,9 +273,12 @@ export class AgentRuntime implements IAgentRuntime {
             this.registerContextProvider(provider);
         });
 
-        if (!this.getSetting("OPENAI_API_KEY") && !this.llamaService) {
+        if (
+            this.modelProvider === ModelProvider.LLAMALOCAL &&
+            !this.llamaService
+        ) {
             console.log(
-                "No OpenAI key found, using LlamaLocal for agent",
+                "Initializing LlamaLocal service for agent",
                 this.agentId,
                 this.character.name
             );
