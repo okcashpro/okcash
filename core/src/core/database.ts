@@ -46,6 +46,7 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
     }): Promise<Memory[]>;
 
     abstract getMemoriesByRoomIds(params: {
+        agentId?: UUID;
         roomIds: UUID[];
         tableName: string;
     }): Promise<Memory[]>;
@@ -133,6 +134,7 @@ export abstract class DatabaseAdapter implements IDatabaseAdapter {
             match_threshold?: number;
             count?: number;
             roomId?: UUID;
+            agentId?: UUID;
             unique?: boolean;
             tableName: string;
         }

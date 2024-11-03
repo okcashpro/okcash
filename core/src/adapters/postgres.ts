@@ -102,6 +102,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
     async getMemoriesByRoomIds(params: {
         roomIds: UUID[];
+        agentId?: UUID;
         tableName: string;
     }): Promise<Memory[]> {
         const client = await this.pool.connect();
@@ -109,11 +110,16 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const placeholders = params.roomIds
                 .map((_, i) => `$${i + 2}`)
                 .join(", ");
-            const { rows } = await client.query(
-                `SELECT * FROM memories 
-         WHERE type = $1 AND "roomId" IN (${placeholders})`,
-                [params.tableName, ...params.roomIds]
-            );
+
+            let query = `SELECT * FROM memories WHERE type = $1 AND "roomId" IN (${placeholders})`;
+            let queryParams = [params.tableName, ...params.roomIds];
+
+            if (params.agentId) {
+                query += ` AND "userId" = $${params.roomIds.length + 2}`;
+                queryParams = [...queryParams, params.agentId];
+            }
+
+            const { rows } = await client.query(query, queryParams);
             return rows.map((row) => ({
                 ...row,
                 content: JSON.parse(row.content),
@@ -271,7 +277,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                     `[${memory.embedding.join(",")}]`,
                     memory.userId,
                     memory.roomId,
-                    memory.unique ?? true,
+                    memory.unique ?? isUnique,
                     Date.now(),
                 ]
             );
@@ -328,7 +334,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        userIds?: UUID[];
+        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
@@ -357,13 +363,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                 sql += " AND unique = true";
             }
 
-            if (params.userIds?.length) {
-                const userPlaceholders = params.userIds
-                    .map((_, i) => `$${paramCount + 1 + i}`)
-                    .join(",");
-                sql += ` AND "userId" IN (${userPlaceholders})`;
-                values.push(...params.userIds);
-                paramCount += params.userIds.length;
+            if (params.agentId) {
+                sql += " AND userId = $3";
+                values.push(params.agentId);
             }
 
             sql += ' ORDER BY "createdAt" DESC';
@@ -610,6 +612,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         params: {
             match_threshold?: number;
             count?: number;
+            agentId?: UUID;
             roomId?: UUID;
             unique?: boolean;
             tableName: string;
@@ -632,6 +635,12 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             if (params.unique) {
                 sql += ` AND "unique" = true`;
+            }
+
+            // TODO: Test this
+            if (params.agentId) {
+                sql += " AND userId = $3";
+                values.push(params.agentId);
             }
 
             if (params.roomId) {

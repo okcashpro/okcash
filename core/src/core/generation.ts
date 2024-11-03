@@ -68,7 +68,7 @@ export async function generateText({
 
         switch (provider) {
             case ModelProvider.OPENAI:
-            case ModelProvider.LLAMACLOUD:
+            case ModelProvider.LLAMACLOUD: {
                 console.log("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey });
 
@@ -84,8 +84,9 @@ export async function generateText({
                 response = openaiResponse;
                 console.log("Received response from OpenAI model.");
                 break;
+            }
 
-            case ModelProvider.ANTHROPIC:
+            case ModelProvider.ANTHROPIC: {
                 console.log("Initializing Anthropic model.");
                 const anthropicVertex = createAnthropicVertex();
 
@@ -101,8 +102,9 @@ export async function generateText({
                 response = anthropicResponse;
                 console.log("Received response from Anthropic model.");
                 break;
+            }
 
-            case ModelProvider.GROK:
+            case ModelProvider.GROK: {
                 console.log("Initializing Grok model.");
                 const grok = createGroq({ apiKey });
 
@@ -120,6 +122,7 @@ export async function generateText({
                 response = grokResponse;
                 console.log("Received response from Grok model.");
                 break;
+            }
 
             case ModelProvider.LLAMALOCAL:
                 console.log("Using local Llama model for text completion.");
@@ -134,10 +137,11 @@ export async function generateText({
                 console.log("Received response from local Llama model.");
                 break;
 
-            default:
+            default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
                 console.error(errorMessage);
                 throw new Error(errorMessage);
+            }
         }
 
         return response;

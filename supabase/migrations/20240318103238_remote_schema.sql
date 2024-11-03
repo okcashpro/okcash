@@ -344,57 +344,6 @@ $$;
 
 ALTER FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean DEFAULT false, "query_userIds" "uuid"[] DEFAULT NULL) 
-RETURNS TABLE("id" "uuid", "userId" "uuid", "content" "jsonb", "createdAt" timestamp with time zone, "roomId" "uuid", "embedding" "extensions"."vector")
-LANGUAGE "plpgsql"
-AS $_$
-DECLARE
-    query TEXT;
-BEGIN
-    query := format($fmt$
-        SELECT
-            id,
-            userId,
-            content,
-            createdAt,
-            roomId,
-            embedding
-        FROM memories
-        WHERE TRUE
-        AND type = %L
-        %s -- Additional condition for 'unique' column based on query_unique
-        %s -- Additional condition for roomId based on query_roomId
-        %s -- Additional condition for userId based on query_userIds
-        ORDER BY createdAt DESC
-        LIMIT %L
-        $fmt$,
-        query_table_name,
-        CASE WHEN query_unique THEN ' AND "unique" IS TRUE' ELSE '' END,
-        CASE WHEN query_roomId IS NOT NULL THEN format(' AND roomId = %L', query_roomId) ELSE '' END,
-        CASE WHEN query_userIds IS NOT NULL THEN format(' AND userId = ANY(ARRAY[%s])', array_to_string(query_userIds, ',')) ELSE '' END,
-        query_count
-    );
-
-    RETURN QUERY EXECUTE query;
-END;
-$_$;
-
-ALTER FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean, "query_userIds" "uuid"[]) OWNER TO "postgres";
-
-CREATE OR REPLACE FUNCTION "public"."get_message_count"("p_userId" "uuid") RETURNS TABLE("roomId" "uuid", "unread_messages_count" integer)
-    LANGUAGE "plpgsql"
-    AS $$BEGIN
-  RETURN QUERY
-  SELECT p.roomId, COALESCE(COUNT(m.id)::integer, 0) AS unread_messages_count
-  FROM participants p
-  LEFT JOIN memories m ON p.roomId = m.roomId AND m.type = "messages"
-  WHERE p.userId = p_userId
-  GROUP BY p.roomId;
-END;
-$$;
-
-ALTER FUNCTION "public"."get_message_count"("p_userId" "uuid") OWNER TO "postgres";
-
 CREATE TABLE IF NOT EXISTS "public"."relationships" (
     "createdAt" timestamp with time zone DEFAULT ("now"() AT TIME ZONE 'utc'::"text") NOT NULL,
     "userA" "uuid",
@@ -707,16 +656,6 @@ GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId"
 GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "service_role";
 GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "supabase_admin";
 GRANT ALL ON FUNCTION "public"."get_goals"("query_roomId" "uuid", "query_userId" "uuid", "only_in_progress" boolean, "row_count" integer) TO "supabase_auth_admin";
-
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "service_role";
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."get_memories"("query_table_name" "text", "query_roomId" "uuid", "query_count" integer, "query_unique" boolean) TO "supabase_auth_admin";
-
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "service_role";
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "supabase_admin";
-GRANT ALL ON FUNCTION "public"."get_message_count"("p_userId" "uuid") TO "supabase_auth_admin";
 
 GRANT ALL ON TABLE "public"."relationships" TO "authenticated";
 GRANT ALL ON TABLE "public"."relationships" TO "service_role";

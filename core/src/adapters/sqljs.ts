@@ -59,11 +59,16 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     async getMemoriesByRoomIds(params: {
         roomIds: UUID[];
         tableName: string;
+        agentId?: UUID;
     }): Promise<Memory[]> {
         const placeholders = params.roomIds.map(() => "?").join(", ");
-        const sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
+        let sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
         const stmt = this.db.prepare(sql);
         const queryParams = [params.tableName, ...params.roomIds];
+        if (params.agentId) {
+            sql += " AND userId = ?";
+            queryParams.push(params.agentId);
+        }
         stmt.bind(queryParams);
 
         const memories: Memory[] = [];
@@ -298,6 +303,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
             match_threshold?: number;
             count?: number;
             roomId?: UUID;
+            agentId?: UUID;
             unique?: boolean;
             tableName: string;
         }
@@ -314,6 +320,10 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         }
         if (params.roomId) {
             sql += " AND roomId = ?";
+        }
+        // TODO: Test this
+        if (params.agentId) {
+            sql += " AND userId = ?";
         }
         // TODO: Uncomment when we compile sql.js with vss
         // sql += ` ORDER BY similarity DESC`;
@@ -426,7 +436,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        userIds?: UUID[];
+        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
@@ -450,8 +460,8 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
             sql += " AND `unique` = 1";
         }
 
-        if (params.userIds && params.userIds.length > 0) {
-            sql += ` AND userId IN (${params.userIds.map(() => "?").join(",")})`;
+        if (params.agentId) {
+            sql += " AND userId = ?";
         }
 
         sql += " ORDER BY createdAt DESC";
@@ -466,7 +476,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
             params.roomId,
             ...(params.start ? [params.start] : []),
             ...(params.end ? [params.end] : []),
-            ...(params.userIds || []),
+            ...(params.agentId ? [params.agentId] : []),
             ...(params.count ? [params.count] : []),
         ]);
         const memories: Memory[] = [];

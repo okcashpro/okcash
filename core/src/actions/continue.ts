@@ -38,6 +38,7 @@ export const continueAction: Action = {
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         const recentMessagesData = await runtime.messageManager.getMemories({
             roomId: message.roomId,
+            agentId: runtime.agentId,
             count: 10,
             unique: false,
         });
