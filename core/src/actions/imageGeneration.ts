@@ -5,6 +5,7 @@ import {
     State,
     Action,
 } from "../core/types.ts";
+import { prettyConsole } from "../index.ts";
 import { generateCaption, generateImage } from "./imageGenerationUtils.ts";
 
 export const imageGeneration: Action = {
@@ -23,11 +24,16 @@ export const imageGeneration: Action = {
         options: any,
         callback: HandlerCallback
     ) => {
+        prettyConsole.log("Composing state for message:", message);
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
+        prettyConsole.log("User ID:", userId);
 
         const imagePrompt = message.content.text;
+        prettyConsole.log("Image prompt received:", imagePrompt);
         const res: { image: string; caption: string }[] = [];
+
+        prettyConsole.log("Generating image with prompt:", imagePrompt);
         const images = await generateImage(
             {
                 prompt: imagePrompt,
@@ -37,16 +43,29 @@ export const imageGeneration: Action = {
             },
             runtime
         );
+
         if (images.success && images.data && images.data.length > 0) {
+            prettyConsole.log(
+                "Image generation successful, number of images:",
+                images.data.length
+            );
             for (let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
+                prettyConsole.log(`Processing image ${i + 1}:`, image);
+
                 const caption = await generateCaption(
                     {
                         imageUrl: image,
                     },
                     runtime
                 );
+
+                prettyConsole.log(
+                    `Generated caption for image ${i + 1}:`,
+                    caption.title
+                );
                 res.push({ image: image, caption: caption.title });
+
                 callback(
                     {
                         text: caption.description,
@@ -64,6 +83,8 @@ export const imageGeneration: Action = {
                     []
                 );
             }
+        } else {
+            prettyConsole.error("Image generation failed or returned no data.");
         }
     },
     examples: [
