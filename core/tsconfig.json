@@ -20,11 +20,7 @@
         "noEmitOnError": false,
         "moduleDetection": "force",
         "allowArbitraryExtensions": true,
-        "typeRoots": ["./node_modules/@types", "./types"],
-        "baseUrl": "./src",
-        "paths": {
-            "@/*": ["*"]
-        }
+        "typeRoots": ["./node_modules/@types", "./types"]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist", "src/**/*.d.ts", "types/**/*.test.ts"]
