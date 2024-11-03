@@ -5,7 +5,7 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { prettyConsole } from "../../index.ts";
 
-const MAX_TWEET_LENGTH = 280;
+const MAX_TWEET_LENGTH = 240;
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -59,6 +59,7 @@ export async function buildConversationThread(
 
             client.runtime.messageManager.createMemory({
                 id: stringToUuid(currentTweet.id),
+                agentId: client.runtime.agentId,
                 content: {
                     text: currentTweet.text,
                     source: "twitter",
@@ -135,6 +136,7 @@ export async function sendTweetChunks(
 
     const memories: Memory[] = sentTweets.map((tweet) => ({
         id: stringToUuid(tweet.id),
+        agentId: client.runtime.agentId,
         userId: client.runtime.agentId,
         content: {
             text: tweet.text,

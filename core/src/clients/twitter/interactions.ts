@@ -135,6 +135,7 @@ export class TwitterInteractionClient extends ClientBase {
 
                     const message = {
                         content: { text: tweet.text },
+                        agentId: this.runtime.agentId,
                         userId: userIdUUID,
                         roomId,
                     };
@@ -248,6 +249,7 @@ export class TwitterInteractionClient extends ClientBase {
 
             const message = {
                 id: tweetId,
+                agentId: this.runtime.agentId,
                 content: {
                     text: tweet.text,
                     url: tweet.permanentUrl,

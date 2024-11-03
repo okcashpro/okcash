@@ -16,6 +16,7 @@ export async function populateMemories(
             const bakedMemory =
                 await runtime.messageManager.addEmbeddingToMemory({
                     userId: c.userId as UUID,
+                    agentId: runtime.agentId,
                     content: c.content,
                     roomId,
                     embedding: existingEmbedding,

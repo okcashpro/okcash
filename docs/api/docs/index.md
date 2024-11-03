@@ -44,7 +44,7 @@ https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 You might need these
 
 ```
-npm install --include=optional sharp
+pnpm install --include=optional sharp
 ```
 
 ### Run with Llama
@@ -68,7 +68,7 @@ If you are getting strange issues when starting up, make sure you're using Node 
 You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
 
 ```
-npm install --include=optional sharp
+pnpm install --include=optional sharp
 ```
 
 # Environment Setup
@@ -95,7 +95,7 @@ TWITTER_COOKIES= # Account cookies
 If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
 
 ```
-npm install
+pnpm install
 npx --no node-llama-cpp source download --gpu cuda
 ```
 

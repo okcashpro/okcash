@@ -314,6 +314,7 @@ export class VoiceManager extends EventEmitter {
 
                         let state = await this.runtime.composeState(
                             {
+                                agentId: this.runtime.agentId,
                                 content: { text: text, source: "Discord" },
                                 userId: userIdUUID,
                                 roomId,
@@ -334,6 +335,7 @@ export class VoiceManager extends EventEmitter {
                             id: stringToUuid(
                                 channelId + "-voice-message-" + Date.now()
                             ),
+                            agentId: this.runtime.agentId,
                             content: {
                                 text: text,
                                 source: "discord",
@@ -383,6 +385,7 @@ export class VoiceManager extends EventEmitter {
                                 id: stringToUuid(
                                     memory.id + "-voice-response-" + Date.now()
                                 ),
+                                agentId: this.runtime.agentId,
                                 userId: this.runtime.agentId,
                                 content: {
                                     ...content,

@@ -285,6 +285,7 @@ export class MessageManager {
             // Create memory for the message
             const memory: Memory = {
                 id: messageId,
+                agentId,
                 userId,
                 roomId,
                 content,
@@ -333,7 +334,8 @@ export class MessageManager {
 
                     const memory: Memory = {
                         id: stringToUuid(sentMessage.message_id.toString()),
-                        userId: agentId,
+                        agentId,
+                        userId,
                         roomId,
                         content: {
                             ...content,

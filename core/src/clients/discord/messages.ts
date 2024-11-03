@@ -171,7 +171,12 @@ export class MessageManager {
                     : undefined,
             };
 
-            const userMessage = { content, userId: userIdUUID, roomId };
+            const userMessage = {
+                content,
+                userId: userIdUUID,
+                agentId: this.runtime.agentId,
+                roomId,
+            };
 
             let state = (await this.runtime.composeState(userMessage, {
                 discordClient: this.client,
@@ -185,6 +190,7 @@ export class MessageManager {
                 id: stringToUuid(message.id),
                 ...userMessage,
                 userId: userIdUUID,
+                agentId: this.runtime.agentId,
                 roomId,
                 content,
                 createdAt: message.createdTimestamp,
@@ -279,6 +285,7 @@ export class MessageManager {
                     const memory: Memory = {
                         id: stringToUuid(message.id),
                         userId: this.runtime.agentId,
+                        agentId: this.runtime.agentId,
                         content,
                         roomId,
                         embedding: embeddingZeroVector,
@@ -308,6 +315,7 @@ export class MessageManager {
                         const memory: Memory = {
                             id: stringToUuid(m.id),
                             userId: this.runtime.agentId,
+                            agentId: this.runtime.agentId,
                             content: {
                                 ...content,
                                 action,
@@ -360,6 +368,8 @@ export class MessageManager {
 
     async cacheMessages(channel: TextChannel, count: number = 20) {
         const messages = await channel.messages.fetch({ limit: count });
+
+        // TODO: This is throwing an error but seems to work?
         for (const [_, message] of messages) {
             await this.handleMessage(message);
         }
