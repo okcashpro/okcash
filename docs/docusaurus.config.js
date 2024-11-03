@@ -6,12 +6,21 @@ const config = {
   title: "eliza",
   tagline: "The flexible, scalable AI agent for everyone",
   favicon: "img/favicon.ico",
-  url: "https://docs.ai16z.ai",
-  baseUrl: "/",
-  organizationName: "ai16z",
-  projectName: "eliza",
+ 
+  // GitHub Pages Configuration - Updated based on docs
+  url: "https://madjin.github.io", // Your GitHub Pages URL
+  baseUrl: "/eliza/", // Repository name with trailing slash
+  organizationName: "madjin", // GitHub username
+  projectName: "eliza", // Repository name
+  deploymentBranch: "gh-pages",
+  trailingSlash: true, // Recommended for GitHub Pages
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
+  
+  //url: "https://docs.ai16z.ai",
+  //baseUrl: "/",
+  //organizationName: "ai16z",
+  //projectName: "eliza",
 
   i18n: {
     defaultLocale: "en",
@@ -86,11 +95,51 @@ const config = {
             href: "https://github.com/ai16z/eliza",
             label: "GitHub",
             position: "right",
-          },
-        ],
+          }
+        ]
       },
-      // ... rest of themeConfig remains the same
-    }),
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Docs',
+            items: [
+            {  label: 'General',
+			   href: './'
+			},
+            ]
+          },
+
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Discord',
+                href: 'https://discord.gg/xe7HtWru'
+              },
+              {
+                label: 'Twitter',
+                href: 'https://twitter.com/pmairca'
+              }
+            ]
+          },
+          {
+            title: 'More',
+            items: [
+              {
+                label: 'GitHub',
+                href: 'https://github.com/ai16z/eliza'
+              }
+            ]
+          }
+        ],
+        copyright: `Copyright © ${new Date().getFullYear()} ai16z.ai`
+      },
+      prism: {
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula
+      }
+    })
 };
 
 export default config;
