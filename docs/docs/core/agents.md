@@ -120,5 +120,4 @@ Agents are the core components of the Eliza framework that handle autonomous int
 
 ## Related
 - [Character Files](../characterfile)
-- [Configuration Guide](../guides/configuration)
 - [API Reference](/api/classes/AgentRuntime)

@@ -276,7 +276,3 @@ const marketSentimentProvider: Provider = {
 
 ## Additional Resources
 
-- [Providers API Reference](../api/providers)
-- [Configuration Guide](../guides/configuration)
-- [Best Practices](../guides/best-practices)
-- [Error Handling](../guides/error-handling)

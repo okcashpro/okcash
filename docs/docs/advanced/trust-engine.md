@@ -283,8 +283,5 @@ const analyzeRecommenderHistory = (recommenderId: string) => {
 ## Additional Resources
 
 - [Database Schema Documentation](./infrastructure.md)
-- [API Reference](../api/index.md)
-- [Token Security Guide](./security.md)
-- [Risk Management Documentation](./risk-management.md)
 
 Remember to regularly monitor and adjust trust parameters based on market conditions and system performance.

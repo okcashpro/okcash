@@ -197,6 +197,3 @@ await runtime.factManager.createMemory(factMemory, true);
 ```
 
 ## Related
-- [Memory Management](./memory)
-- [Agent Runtime](./agent-runtime)
-- [Providers](./providers)

@@ -272,8 +272,6 @@ async analyzePortfolioPerformance(userId: string) {
 ## Additional Resources
 
 - [Trust Engine Documentation](./trust-engine.md)
-- [Token Security Guide](./security.md)
 - [Infrastructure Setup](./infrastructure.md)
-- [API Reference](../api/index.md)
 
 Remember to thoroughly test all trading strategies in a sandbox environment before deploying to production.
