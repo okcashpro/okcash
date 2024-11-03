@@ -26,7 +26,8 @@ const characters = loadCharacters(argv.characters);
 
 const directClient = new Client.DirectClient();
 
-directClient.start(3000);
+const serverPort = parseInt(process.env.SERVER_PORT || "3000");
+directClient.start(serverPort);
 
 async function startAgent(character: Character) {
     console.log(`Starting agent for character ${character.name}`);
