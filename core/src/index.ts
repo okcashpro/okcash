@@ -34,7 +34,8 @@ prettyConsole.closeByNewLine = true;
 prettyConsole.useIcons = true;
 
 // Start the direct client
-directClient.start(3000);
+const serverPort = parseInt(process.env.SERVER_PORT || "3000");
+directClient.start(serverPort);
 
 async function startAgent(character: Character) {
     prettyConsole.success(`Starting agent for character ${character.name}`);
