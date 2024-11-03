@@ -24,6 +24,7 @@ import { MessageManager } from "./messages.ts";
 import channelStateProvider from "./providers/channelState.ts";
 import voiceStateProvider from "./providers/voiceState.ts";
 import { VoiceManager } from "./voice.ts";
+import { prettyConsole } from "../../index.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
@@ -129,16 +130,16 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
-        console.log(`Logged in as ${readyClient.user?.tag}`);
-        console.log("Use this URL to add the bot to your server:");
-        console.log(
+        prettyConsole.success(`Logged in as ${readyClient.user?.tag}`);
+        prettyConsole.success("Use this URL to add the bot to your server:");
+        prettyConsole.success(
             `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=0&scope=bot%20applications.commands`
         );
         await this.onReady();
     }
 
     async handleReactionAdd(reaction: MessageReaction, user: User) {
-        console.log("Reaction added");
+        prettyConsole.log("Reaction added");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;

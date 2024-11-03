@@ -143,3 +143,28 @@ downloads the model from huggingface and queries it locally
 ## Discord Bot
 
 For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
+
+# Development
+
+## Testing
+
+To run the test suite:
+
+```bash
+pnpm test           # Run tests once
+pnpm test:watch    # Run tests in watch mode
+```
+
+For database-specific tests:
+```bash
+pnpm test:sqlite   # Run tests with SQLite
+pnpm test:sqljs    # Run tests with SQL.js
+```
+
+Tests are written using Jest and can be found in `src/**/*.test.ts` files. The test environment is configured to:
+- Load environment variables from `.env.test`
+- Use a 2-minute timeout for long-running tests
+- Support ESM modules
+- Run tests in sequence (--runInBand)
+
+To create new tests, add a `.test.ts` file adjacent to the code you're testing.
