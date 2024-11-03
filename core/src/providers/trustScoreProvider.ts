@@ -7,7 +7,7 @@ import {
     // HolderData,
 } from "../types/token";
 import { Connection, PublicKey } from "@solana/web3.js";
-
+import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { TokenProvider } from "./token";
 import WalletProvider from "./balances";
 import {
@@ -30,7 +30,10 @@ interface sellDetails {
 export class TrustScoreProvider {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
-
+    private connection: Connection = new Connection(process.env.RPC_URL!);
+    private baseMint: PublicKey = new PublicKey(process.env.BASE_MINT!);
+    private DECAY_RATE = 0.95;
+    private MAX_DECAY_DAYS = 30;
     constructor(
         tokenProvider: TokenProvider,
         trustScoreDb: TrustScoreDatabase
@@ -38,6 +41,25 @@ export class TrustScoreProvider {
         this.tokenProvider = tokenProvider;
         this.trustScoreDb = trustScoreDb;
     }
+
+    //getRecommenederBalance
+    async getRecommenederBalance(recommenderWallet: string): Promise<number> {
+        try {
+            const tokenAta = await getAssociatedTokenAddress(
+                new PublicKey(recommenderWallet),
+                this.baseMint
+            );
+            const tokenBalInfo =
+                await this.connection.getTokenAccountBalance(tokenAta);
+            const tokenBalance = tokenBalInfo.value.amount;
+            const balance = parseFloat(tokenBalance);
+            return balance;
+        } catch (error) {
+            console.error("Error fetching balance", error);
+            return 0;
+        }
+    }
+
     /**
      * Generates and saves trust score based on processed token data and user recommendations.
      * @param tokenAddress The address of the token to analyze.
@@ -46,7 +68,8 @@ export class TrustScoreProvider {
      */
     async generateTrustScore(
         tokenAddress: string,
-        recommenderId: string
+        recommenderId: string,
+        recommenderWallet: string
     ): Promise<{
         tokenPerformance: TokenPerformance;
         recommenderMetrics: RecommenderMetrics;
@@ -61,6 +84,20 @@ export class TrustScoreProvider {
         const isRapidDump = await this.isRapidDump(tokenAddress);
         const sustainedGrowth = await this.sustainedGrowth(tokenAddress);
         const suspiciousVolume = await this.suspiciousVolume(tokenAddress);
+        const balance = await this.getRecommenederBalance(recommenderWallet);
+        const virtualConfidence = balance / 1000000; // TODO: create formula to calculate virtual confidence based on user balance
+        const lastActive = recommenderMetrics.lastActiveDate;
+        const now = new Date();
+        const inactiveDays = Math.floor(
+            (now.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24)
+        );
+        const decayFactor = Math.pow(
+            this.DECAY_RATE,
+            Math.min(inactiveDays, this.MAX_DECAY_DAYS)
+        );
+        const decayedScore = recommenderMetrics.trustScore * decayFactor;
+        const validationTrustScore =
+            this.trustScoreDb.calculateValidationTrust(tokenAddress);
 
         return {
             tokenPerformance: {
@@ -83,6 +120,7 @@ export class TrustScoreProvider {
                 sustainedGrowth: sustainedGrowth,
                 rapidDump: isRapidDump,
                 suspiciousVolume: suspiciousVolume,
+                validationTrust: validationTrustScore,
                 lastUpdated: new Date(),
             },
             recommenderMetrics: {
@@ -93,7 +131,9 @@ export class TrustScoreProvider {
                 avgTokenPerformance: recommenderMetrics.avgTokenPerformance,
                 riskScore: recommenderMetrics.riskScore,
                 consistencyScore: recommenderMetrics.consistencyScore,
-                virtualConfidence: recommenderMetrics.virtualConfidence,
+                virtualConfidence: virtualConfidence,
+                lastActiveDate: now,
+                trustDecay: decayedScore,
                 lastUpdated: new Date(),
             },
         };
@@ -101,7 +141,8 @@ export class TrustScoreProvider {
 
     async updateRecommenderMetrics(
         recommenderId: string,
-        tokenPerformance: TokenPerformance
+        tokenPerformance: TokenPerformance,
+        recommenderWallet: string
     ): Promise<void> {
         const recommenderMetrics =
             await this.trustScoreDb.getRecommenderMetrics(recommenderId);
@@ -129,6 +170,20 @@ export class TrustScoreProvider {
             tokenPerformance,
             recommenderMetrics
         );
+
+        const balance = await this.getRecommenederBalance(recommenderWallet);
+        const virtualConfidence = balance / 1000000; // TODO: create formula to calculate virtual confidence based on user balance
+        const lastActive = recommenderMetrics.lastActiveDate;
+        const now = new Date();
+        const inactiveDays = Math.floor(
+            (now.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24)
+        );
+        const decayFactor = Math.pow(
+            this.DECAY_RATE,
+            Math.min(inactiveDays, this.MAX_DECAY_DAYS)
+        );
+        const decayedScore = recommenderMetrics.trustScore * decayFactor;
+
         const newRecommenderMetrics: RecommenderMetrics = {
             recommenderId: recommenderId,
             trustScore: overallTrustScore,
@@ -137,7 +192,9 @@ export class TrustScoreProvider {
             avgTokenPerformance: avgTokenPerformance,
             riskScore: riskScore,
             consistencyScore: consistencyScore,
-            virtualConfidence: recommenderMetrics.virtualConfidence,
+            virtualConfidence: virtualConfidence,
+            lastActiveDate: new Date(),
+            trustDecay: decayedScore,
             lastUpdated: new Date(),
         };
 
