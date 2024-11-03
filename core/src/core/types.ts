@@ -1,5 +1,5 @@
 import { Readable } from "stream";
-import { ImageGenModel } from "./imageGenModels";
+import { ImageGenModel } from "./imageGenModels.ts";
 
 /**
  * Represents a UUID, which is a universally unique identifier conforming to the UUID standard.

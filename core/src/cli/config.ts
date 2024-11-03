@@ -2,7 +2,7 @@ import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Action } from "../core/types";
+import { Action } from "../core/types.ts";
 
 const ROOT_DIR = path.resolve(fileURLToPath(import.meta.url), "../../../src");
 
