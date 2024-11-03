@@ -67,14 +67,14 @@ export class MemoryManager implements IMemoryManager {
         roomId,
         count = 10,
         unique = true,
-        userIds,
+        agentId,
         start,
         end,
     }: {
         roomId: UUID;
         count?: number;
         unique?: boolean;
-        userIds?: UUID[];
+        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
@@ -83,7 +83,7 @@ export class MemoryManager implements IMemoryManager {
             count,
             unique,
             tableName: this.tableName,
-            userIds,
+            agentId,
             start,
             end,
         });
@@ -121,6 +121,7 @@ export class MemoryManager implements IMemoryManager {
         embedding: number[],
         opts: {
             match_threshold?: number;
+            agentId?: UUID;
             count?: number;
             roomId: UUID;
             unique?: boolean;
@@ -168,8 +169,12 @@ export class MemoryManager implements IMemoryManager {
         );
     }
 
-    async getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]> {
+    async getMemoriesByRoomIds(params: {
+        agentId?: UUID;
+        roomIds: UUID[];
+    }): Promise<Memory[]> {
         const result = await this.runtime.databaseAdapter.getMemoriesByRoomIds({
+            agentId: params.agentId,
             roomIds: params.roomIds,
         });
         return result;

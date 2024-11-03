@@ -89,6 +89,7 @@ export class MessageManager {
         state: State
     ): Promise<boolean> {
         // Respond if bot is mentioned
+
         if (
             "text" in message &&
             message.text?.includes(`@${this.bot.botInfo?.username}`)
@@ -107,7 +108,7 @@ export class MessageManager {
             ("document" in message &&
                 message.document?.mime_type?.startsWith("image/"))
         ) {
-            return true;
+            return false;
         }
 
         // Use AI to decide for text or captions

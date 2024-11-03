@@ -1,4 +1,4 @@
-import { Keypair } from "@solana/web3.js";
+import { Readable } from "stream";
 import { ImageGenModel } from "./imageGenModels";
 
 /**
@@ -148,6 +148,7 @@ export interface State {
 export interface Memory {
     id?: UUID; // An optional unique identifier for the memory.
     userId: UUID; // The user ID associated with the memory.
+    agentId?: UUID; // The agent ID associated with the memory.
     createdAt?: number; // An optional timestamp indicating when the memory was created.
     content: Content; // The content of the memory, which can be a structured object or a plain string.
     embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
@@ -324,12 +325,15 @@ export interface IDatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        userIds?: UUID[];
+        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]>;
     getMemoryById(id: UUID): Promise<Memory | null>;
-    getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
+    getMemoriesByRoomIds(params: {
+        agentId?: UUID;
+        roomIds: UUID[];
+    }): Promise<Memory[]>;
     getCachedEmbeddings(params: {
         query_table_name: string;
         query_threshold: number;
@@ -363,6 +367,7 @@ export interface IDatabaseAdapter {
             match_threshold?: number;
             count?: number;
             roomId?: UUID;
+            agentId?: UUID;
             unique?: boolean;
             tableName: string;
         }
@@ -426,7 +431,7 @@ export interface IMemoryManager {
         roomId: UUID;
         count?: number;
         unique?: boolean;
-        userIds?: UUID[];
+        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]>;
@@ -434,7 +439,10 @@ export interface IMemoryManager {
         content: string
     ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
     getMemoryById(id: UUID): Promise<Memory | null>;
-    getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
+    getMemoriesByRoomIds(params: {
+        roomIds: UUID[];
+        agentId?: UUID;
+    }): Promise<Memory[]>;
     searchMemoriesByEmbedding(
         embedding: number[],
         opts: {
@@ -442,6 +450,7 @@ export interface IMemoryManager {
             count?: number;
             roomId: UUID;
             unique?: boolean;
+            agentId?: UUID;
         }
     ): Promise<Memory[]>;
     createMemory(memory: Memory, unique?: boolean): Promise<void>;
@@ -559,7 +568,9 @@ export interface IBrowserService {
     ): Promise<{ title: string; description: string; bodyContent: string }>;
 }
 
-export interface ISpeechService {}
+export interface ISpeechService {
+    generate(runtime: IAgentRuntime, text: string): Promise<Readable>;
+}
 
 export interface IPdfService {
     convertPdfToText(pdfBuffer: Buffer): Promise<string>;

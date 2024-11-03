@@ -18,6 +18,7 @@ import {
     IImageRecognitionService,
     IMemoryManager,
     IPdfService,
+    ISpeechService,
     ITranscriptionService,
     IVideoService,
     ModelClass,
@@ -115,7 +116,7 @@ export class AgentRuntime implements IAgentRuntime {
     llamaService: LlamaService | null = null;
 
     // services
-    speechService: typeof SpeechService;
+    speechService: ISpeechService;
 
     transcriptionService: ITranscriptionService;
 
@@ -207,6 +208,9 @@ export class AgentRuntime implements IAgentRuntime {
             opts.character.id ??
             opts.agentId ??
             stringToUuid(opts.character.name);
+
+        console.log("Agent ID", this.agentId);
+
         this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
         this.character = opts.character || defaultCharacter;
         if (!opts.databaseAdapter) {
@@ -269,9 +273,12 @@ export class AgentRuntime implements IAgentRuntime {
             this.registerContextProvider(provider);
         });
 
-        if (!this.getSetting("OPENAI_API_KEY") && !this.llamaService) {
+        if (
+            this.modelProvider === ModelProvider.LLAMALOCAL &&
+            !this.llamaService
+        ) {
             console.log(
-                "No OpenAI key found, using LlamaLocal for agent",
+                "Initializing LlamaLocal service for agent",
                 this.agentId,
                 this.character.name
             );
@@ -290,7 +297,7 @@ export class AgentRuntime implements IAgentRuntime {
         this.pdfService = new PdfService();
 
         // static class, no need to instantiate but we can access it like a class instance
-        this.speechService = SpeechService;
+        this.speechService = new SpeechService();
 
         if (
             opts.character &&
@@ -318,6 +325,7 @@ export class AgentRuntime implements IAgentRuntime {
         this.ensureParticipantExists(this.agentId, this.agentId);
 
         for (const knowledgeItem of knowledge) {
+            // TODO: Fix the knowledge???
             continue;
             const knowledgeId = stringToUuid(knowledgeItem);
             const existingDocument =
@@ -661,10 +669,12 @@ export class AgentRuntime implements IAgentRuntime {
             getActorDetails({ runtime: this, roomId }),
             this.messageManager.getMemories({
                 roomId,
+                agentId: this.agentId,
                 count: conversationLength,
                 unique: false,
             }),
             this.factManager.getMemories({
+                agentId: this.agentId,
                 roomId,
                 count: recentFactsCount,
             }),
@@ -686,6 +696,7 @@ export class AgentRuntime implements IAgentRuntime {
                     recentFactsData[0].embedding!,
                     {
                         roomId,
+                        agentId: this.agentId,
                         count: relevantFactsCount,
                     }
                 )
@@ -825,6 +836,7 @@ Text: ${attachment.text}
             // Check the existing memories in the database
             const existingMemories =
                 await this.messageManager.getMemoriesByRoomIds({
+                    agentId: this.agentId,
                     // filter out the current room id from rooms
                     roomIds: rooms.filter((room) => room !== roomId),
                 });
@@ -1115,6 +1127,7 @@ Text: ${attachment.text}
         const conversationLength = this.getConversationLength();
         const recentMessagesData = await this.messageManager.getMemories({
             roomId: state.roomId,
+            agentId: this.agentId,
             count: conversationLength,
             unique: false,
         });

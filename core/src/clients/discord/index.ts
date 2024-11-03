@@ -10,22 +10,20 @@ import {
     User,
 } from "discord.js";
 import { EventEmitter } from "events";
-import { stringToUuid } from "../../core/uuid.ts";
-import { commands } from "./commands.ts";
-
 import { embeddingZeroVector } from "../../core/memory.ts";
-import { MessageManager } from "./messages.ts";
-import { VoiceManager } from "./voice.ts";
-
 import { Character, IAgentRuntime } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 import chat_with_attachments from "./actions/chat_with_attachments.ts";
+import download_media from "./actions/download_media.ts";
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
 import summarize from "./actions/summarize_conversation.ts";
 import transcribe_media from "./actions/transcribe_media.ts";
-import download_media from "./actions/download_media.ts";
+import { commands } from "./commands.ts";
+import { MessageManager } from "./messages.ts";
 import channelStateProvider from "./providers/channelState.ts";
 import voiceStateProvider from "./providers/voiceState.ts";
+import { VoiceManager } from "./voice.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
