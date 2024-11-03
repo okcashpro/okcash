@@ -236,7 +236,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         }
 
         // Insert the memory with the appropriate 'unique' value
-        const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO memories (id, type, content, embedding, userId, roomId, agentId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const stmt = this.db.prepare(sql);
 
         const createdAt = memory.createdAt ?? Date.now();
@@ -248,6 +248,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
             JSON.stringify(memory.embedding),
             memory.userId,
             memory.roomId,
+            memory.agentId,
             isUnique ? 1 : 0,
             createdAt,
         ]);
@@ -461,7 +462,7 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         }
 
         if (params.agentId) {
-            sql += " AND userId = ?";
+            sql += " AND agentId = ?";
         }
 
         sql += " ORDER BY createdAt DESC";

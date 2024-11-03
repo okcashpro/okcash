@@ -74,6 +74,8 @@ export async function generateText({
                 prettyConsole.log("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey });
 
+                console.log('****** CONTEXT\n', context)
+
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
@@ -82,6 +84,8 @@ export async function generateText({
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
                 });
+
+                console.log("****** RESPONSE\n", openaiResponse);
 
                 response = openaiResponse;
                 prettyConsole.log("Received response from OpenAI model.");

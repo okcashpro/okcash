@@ -166,7 +166,6 @@ class DirectClient {
 
                 const memory: Memory = {
                     id: messageId,
-                    ...userMessage,
                     agentId: runtime.agentId,
                     userId,
                     roomId,
