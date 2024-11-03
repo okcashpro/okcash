@@ -17,7 +17,7 @@ const sidebars = {
       label: "Core Concepts",
       collapsed: false,
       items: [
-        "core/character-files",
+        "core/characterfile",
         "core/agents",
         "core/providers",
         "core/actions",
@@ -31,7 +31,6 @@ const sidebars = {
       items: [
         "guides/basic-usage",
         "guides/configuration",
-        "guides/characterfile",
         "guides/advanced",
         "guides/secrets-management",
         "guides/local-development",
