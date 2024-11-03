@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: Infrastructure Guide
+title: Infrastructure
 ---
 
-# Infrastructure Guide
+# Infrastructure
 
 ## Overview
 

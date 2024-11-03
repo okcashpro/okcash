@@ -1,4 +1,4 @@
-# Basic Usage Guide
+# Basic Usage
 
 ## Overview
 

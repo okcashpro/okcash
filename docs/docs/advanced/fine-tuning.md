@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: Fine-tuning Guide
+title: Fine-tuning
 ---
 
-# Model Selection and Fine-tuning Guide
+# Model Selection and Fine-tuning
 
 ## Overview
 
