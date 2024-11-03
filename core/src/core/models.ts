@@ -104,13 +104,15 @@ const models: Models = {
             temperature: 0.3,
         },
         model: {
-            [ModelClass.SMALL]: "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true",
+            [ModelClass.SMALL]:
+                "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true",
             [ModelClass.MEDIUM]:
                 "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true", // TODO: ?download=true
             [ModelClass.LARGE]:
-            "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true",
-                // "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO: 
-            [ModelClass.EMBEDDING]: "togethercomputer/m2-bert-80M-32k-retrieval"
+                "NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true",
+            // "RichardErkhov/NousResearch_-_Meta-Llama-3.1-70B-gguf", // TODO:
+            [ModelClass.EMBEDDING]:
+                "togethercomputer/m2-bert-80M-32k-retrieval",
         },
     },
     [ModelProvider.GOOGLE]: {
