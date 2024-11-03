@@ -196,6 +196,7 @@ export class DiscordClient extends EventEmitter {
         await this.runtime.messageManager.createMemory({
             id: reactionUUID, // This is the ID of the reaction message
             userId: userIdUUID,
+            agentId: this.runtime.agentId,
             content: {
                 text: reactionMessage,
                 source: "discord",
@@ -261,6 +262,7 @@ export class DiscordClient extends EventEmitter {
             await this.runtime.messageManager.createMemory({
                 id: reactionUUID, // This is the ID of the reaction removal message
                 userId: userIdUUID,
+                agentId: this.runtime.agentId,
                 content: {
                     text: reactionMessage,
                     source: "discord",

@@ -171,7 +171,12 @@ export class MessageManager {
                     : undefined,
             };
 
-            const userMessage = { content, userId: userIdUUID, roomId };
+            const userMessage = {
+                content,
+                userId: userIdUUID,
+                agentId: this.runtime.agentId,
+                roomId,
+            };
 
             let state = (await this.runtime.composeState(userMessage, {
                 discordClient: this.client,
@@ -185,6 +190,7 @@ export class MessageManager {
                 id: stringToUuid(message.id),
                 ...userMessage,
                 userId: userIdUUID,
+                agentId: this.runtime.agentId,
                 roomId,
                 content,
                 createdAt: message.createdTimestamp,
@@ -277,6 +283,7 @@ export class MessageManager {
                     const memory: Memory = {
                         id: stringToUuid(message.id),
                         userId: this.runtime.agentId,
+                        agentId: this.runtime.agentId,
                         content,
                         roomId,
                         embedding: embeddingZeroVector,
@@ -306,6 +313,7 @@ export class MessageManager {
                         const memory: Memory = {
                             id: stringToUuid(m.id),
                             userId: this.runtime.agentId,
+                            agentId: this.runtime.agentId,
                             content: {
                                 ...content,
                                 action,
