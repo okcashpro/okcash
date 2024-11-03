@@ -127,6 +127,7 @@ export const askClaude: Action = {
 
         const response = {
             userId,
+            agentId: runtime.agentId,
             content: callbackData,
             roomId,
             embedding: embeddingZeroVector,

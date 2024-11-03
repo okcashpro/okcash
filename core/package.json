@@ -6,7 +6,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "tsc",
+        "build": "tsc -p tsconfig.json",
         "lint": "eslint . --fix",
         "start": "node --loader ts-node/esm src/index.ts",
         "start:arok": "node --loader ts-node/esm src/index.ts --characters=\"../characters/arok.character.json\"",

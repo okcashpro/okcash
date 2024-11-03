@@ -136,6 +136,7 @@ export async function sendTweetChunks(
 
     const memories: Memory[] = sentTweets.map((tweet) => ({
         id: stringToUuid(tweet.id),
+        agentId: client.runtime.agentId,
         userId: client.runtime.agentId,
         content: {
             text: tweet.text,
