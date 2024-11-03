@@ -19,6 +19,7 @@ import {
     loadCharacters,
     parseArguments,
 } from "./cli/index.ts";
+import { PrettyConsole } from "./cli/colors.ts";
 
 let argv: Arguments = parseArguments();
 
@@ -26,10 +27,18 @@ const characters = loadCharacters(argv.characters);
 
 const directClient = new Client.DirectClient();
 
-directClient.start(3000);
+// Initialize the pretty console
+export const prettyConsole = new PrettyConsole();
+prettyConsole.clear();
+prettyConsole.closeByNewLine = true;
+prettyConsole.useIcons = true;
+
+// Start the direct client
+const serverPort = parseInt(process.env.SERVER_PORT || "3000");
+directClient.start(serverPort);
 
 async function startAgent(character: Character) {
-    console.log(`Starting agent for character ${character.name}`);
+    prettyConsole.success(`Starting agent for character ${character.name}`);
     const token = getTokenForProvider(character.modelProvider, character);
     const db = initializeDatabase();
 
@@ -37,7 +46,7 @@ async function startAgent(character: Character) {
     const directRuntime = createDirectRuntime(character, db, token);
 
     const clients = await initializeClients(character, runtime);
-    directClient.registerAgent(directRuntime);
+    directClient.registerAgent(await directRuntime);
 
     return clients;
 }

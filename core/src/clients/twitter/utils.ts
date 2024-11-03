@@ -3,6 +3,7 @@ import { embeddingZeroVector } from "../../core/memory.ts";
 import { Content, Memory, UUID } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
+import { prettyConsole } from "../../index.ts";
 
 const MAX_TWEET_LENGTH = 280;
 
@@ -36,7 +37,7 @@ export async function buildConversationThread(
 
     async function processThread(currentTweet: Tweet) {
         if (!currentTweet) {
-            console.log("No current tweet found");
+            prettyConsole.log("No current tweet found");
             return;
         }
         // check if the current tweet has already been saved
@@ -44,7 +45,7 @@ export async function buildConversationThread(
             stringToUuid(currentTweet.id)
         );
         if (!memory) {
-            console.log("Creating memory for tweet", currentTweet.id);
+            prettyConsole.log("Creating memory for tweet", currentTweet.id);
             const roomId = stringToUuid(currentTweet.conversationId);
             const userId = stringToUuid(currentTweet.userId);
 
@@ -108,9 +109,9 @@ export async function sendTweetChunks(
                     inReplyTo
                 )
         );
-        console.log("send tweet result:\n", result);
+        // console.log("send tweet result:\n", result);
         const body = await result.json();
-        console.log("send tweet body:\n", body);
+        console.log("send tweet body:\n", body.data.create_tweet.tweet_results);
         const tweetResult = body.data.create_tweet.tweet_results.result;
 
         const finalTweet = {
