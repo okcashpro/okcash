@@ -2,7 +2,7 @@ import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 import settings from "../core/settings.ts";
-import BigNumber from "bignumber.js";
+import { toBN, BN } from '../utils/bignumber.js';
 import {
     ProcessedTokenData,
     TokenSecurityData,
@@ -609,40 +609,38 @@ export class TokenProvider {
     ): Promise<Array<{ holderAddress: string; balanceUsd: string }>> {
         const holdersData = await this.fetchHolderList();
 
-        const tokenPriceUsd = new BigNumber(tradeData.price);
+        const tokenPriceUsd = toBN(tradeData.price);
 
         const highValueHolders = holdersData
             .filter((holder) => {
-                const balanceUsd = new BigNumber(holder.balance).multipliedBy(
+                const balanceUsd = toBN(holder.balance).multipliedBy(
                     tokenPriceUsd
                 );
                 return balanceUsd.isGreaterThan(5);
             })
             .map((holder) => ({
                 holderAddress: holder.address,
-                balanceUsd: new BigNumber(holder.balance)
-                    .multipliedBy(tokenPriceUsd)
-                    .toFixed(2),
+                balanceUsd: toBN(holder.balance).multipliedBy(tokenPriceUsd).toFixed(2),
             }));
 
         return highValueHolders;
     }
 
     async checkRecentTrades(tradeData: TokenTradeData): Promise<boolean> {
-        return new BigNumber(tradeData.volume_24h_usd).isGreaterThan(0);
+        return toBN(tradeData.volume_24h_usd).isGreaterThan(0);
     }
 
     async countHighSupplyHolders(
         securityData: TokenSecurityData
     ): Promise<number> {
         try {
-            const ownerBalance = new BigNumber(securityData.ownerBalance);
+            const ownerBalance = toBN(securityData.ownerBalance);
             const totalSupply = ownerBalance.plus(securityData.creatorBalance);
 
             const highSupplyHolders = await this.fetchHolderList();
             const highSupplyHoldersCount = highSupplyHolders.filter(
                 (holder) => {
-                    const balance = new BigNumber(holder.balance);
+                    const balance = toBN(holder.balance);
                     return balance.dividedBy(totalSupply).isGreaterThan(0.02);
                 }
             ).length;
@@ -738,8 +736,8 @@ export class TokenProvider {
         output += `- Unique Wallets (24h): ${data.tradeData.unique_wallet_24h}\n`;
         output += `- Price Change (24h): ${data.tradeData.price_change_24h_percent}%\n`;
         output += `- Price Change (12h): ${data.tradeData.price_change_12h_percent}%\n`;
-        output += `- Volume (24h USD): $${new BigNumber(data.tradeData.volume_24h_usd).toFixed(2)}\n`;
-        output += `- Current Price: $${new BigNumber(data.tradeData.price).toFixed(2)}\n\n`;
+        output += `- Volume (24h USD): $${toBN(data.tradeData.volume_24h_usd).toFixed(2)}\n`;
+        output += `- Current Price: $${toBN(data.tradeData.price).toFixed(2)}\n\n`;
 
         // Holder Distribution Trend
         output += `**Holder Distribution Trend:** ${data.holderDistributionTrend}\n\n`;
@@ -771,10 +769,10 @@ export class TokenProvider {
                 output += `\n**Pair ${index + 1}:**\n`;
                 output += `- DEX: ${pair.dexId}\n`;
                 output += `- URL: ${pair.url}\n`;
-                output += `- Price USD: $${new BigNumber(pair.priceUsd).toFixed(6)}\n`;
-                output += `- Volume (24h USD): $${new BigNumber(pair.volume.h24).toFixed(2)}\n`;
+                output += `- Price USD: $${toBN(pair.priceUsd).toFixed(6)}\n`;
+                output += `- Volume (24h USD): $${toBN(pair.volume.h24).toFixed(2)}\n`;
                 output += `- Boosts Active: ${pair.boosts && pair.boosts.active}\n`;
-                output += `- Liquidity USD: $${new BigNumber(pair.liquidity.usd).toFixed(2)}\n`;
+                output += `- Liquidity USD: $${toBN(pair.liquidity.usd).toFixed(2)}\n`;
             });
         }
         output += `\n`;
