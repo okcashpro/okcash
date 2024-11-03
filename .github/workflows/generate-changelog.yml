@@ -1,0 +1,17 @@
+name: Generate Changelog
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate Changelog
+        run: |
+          gem install github_changelog_generator
+          github_changelog_generator \
+            -u ${{ github.repository_owner }} \
+            -p ${{ github.event.repository.name }} \
+            --token ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
