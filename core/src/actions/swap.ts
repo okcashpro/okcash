@@ -22,6 +22,7 @@ import { getTokenDecimals } from "./swapUtils.ts";
 import settings from "../core/settings.ts";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
 import BigNumber from "bignumber.js";
+import { WalletProvider } from "../providers/wallet.ts";
 
 async function swapToken(
     connection: Connection,
@@ -141,6 +142,34 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 
 // if we get the token symbol but not the CA, check walet for matching token, and if we have, get the CA for it
 
+// get all the tokens in the wallet using the wallet provider
+async function getTokensInWallet(runtime: IAgentRuntime) {
+    const walletProvider = new WalletProvider(
+        new Connection("https://api.mainnet-beta.solana.com"),
+        new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
+    );
+    const walletInfo = await walletProvider.fetchPortfolioValue(runtime);
+    const items = walletInfo.items;
+    return items;
+}
+
+// check if the token symbol is in the wallet
+async function checkTokenInWallet(runtime: IAgentRuntime, tokenSymbol: string) {
+    try {
+        const items = await getTokensInWallet(runtime);
+        const token = items.find((item) => item.symbol === tokenSymbol);
+
+        if (token) {
+            return token.address;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error("Error checking token in wallet:", error);
+        return null;
+    }
+}
+
 // swapToken should took CA, not symbol
 
 export const executeSwap: Action = {
@@ -193,13 +222,46 @@ export const executeSwap: Action = {
 
         // if both contract addresses are set, lets execute the swap
         // TODO: try to resolve CA from symbol based on existing symbol in wallet
-        if (!response.inputTokenCA || !response.outputTokenCA) {
-            console.log("No contract addresses provided, skipping swap");
-            const responseMsg = {
-                text: "I need the contract addresses to perform the swap",
-            };
-            callback?.(responseMsg);
-            return true;
+        if (!response.inputTokenCA && response.inputTokenSymbol) {
+            console.log(
+                `Attempting to resolve CA for input token symbol: ${response.inputTokenSymbol}`
+            );
+            response.inputTokenCA = await checkTokenInWallet(
+                runtime,
+                response.inputTokenSymbol
+            );
+            if (response.inputTokenCA) {
+                console.log(`Resolved inputTokenCA: ${response.inputTokenCA}`);
+            } else {
+                console.log("No contract addresses provided, skipping swap");
+                const responseMsg = {
+                    text: "I need the contract addresses to perform the swap",
+                };
+                callback?.(responseMsg);
+                return true;
+            }
+        }
+
+        if (!response.outputTokenCA && response.outputTokenSymbol) {
+            console.log(
+                `Attempting to resolve CA for output token symbol: ${response.outputTokenSymbol}`
+            );
+            response.outputTokenCA = await checkTokenInWallet(
+                runtime,
+                response.outputTokenSymbol
+            );
+            if (response.outputTokenCA) {
+                console.log(
+                    `Resolved outputTokenCA: ${response.outputTokenCA}`
+                );
+            } else {
+                console.log("No contract addresses provided, skipping swap");
+                const responseMsg = {
+                    text: "I need the contract addresses to perform the swap",
+                };
+                callback?.(responseMsg);
+                return true;
+            }
         }
 
         if (!response.amount) {
