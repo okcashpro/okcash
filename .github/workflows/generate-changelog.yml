@@ -23,4 +23,4 @@ jobs:
           commit_message: "chore: update changelog"
           branch: ${{ github.head_ref }}
           file_pattern: "CHANGELOG.md"
-          add_author: true
+          commit_author: "GitHub Action <actions@github.com>"
