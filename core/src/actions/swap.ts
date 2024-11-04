@@ -148,6 +148,7 @@ async function getTokensInWallet(runtime: IAgentRuntime) {
         new Connection("https://api.mainnet-beta.solana.com"),
         new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
     );
+
     const walletInfo = await walletProvider.fetchPortfolioValue(runtime);
     const items = walletInfo.items;
     return items;
