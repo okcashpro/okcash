@@ -131,6 +131,24 @@ export async function generateText({
                 break;
             }
 
+            case ModelProvider.GROQ: {
+                console.log("Initializing Groq model.");
+                const groq = createGroq({ apiKey });
+    
+                const { text: groqResponse } = await aiGenerateText({
+                    model: groq.languageModel(model),
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+    
+                response = groqResponse;
+                console.log("Received response from Groq model.");
+                break;
+            }
+
             case ModelProvider.LLAMALOCAL:
                 prettyConsole.log(
                     "Using local Llama model for text completion."

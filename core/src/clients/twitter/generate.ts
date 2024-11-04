@@ -160,7 +160,7 @@ export class TwitterGenerationClient extends ClientBase {
                     } as Tweet;
 
                     const postId = tweet.id;
-                    const conversationId = tweet.conversationId;
+                    const conversationId = tweet.conversationId + "-" + this.runtime.agentId;
                     const roomId = stringToUuid(conversationId);
 
                     // make sure the agent is in the room
@@ -173,7 +173,7 @@ export class TwitterGenerationClient extends ClientBase {
                     await this.cacheTweet(tweet);
 
                     await this.runtime.messageManager.createMemory({
-                        id: stringToUuid(postId),
+                        id: stringToUuid(postId + "-" + this.runtime.agentId),
                         userId: this.runtime.agentId,
                         agentId: this.runtime.agentId,
                         content: {

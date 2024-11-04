@@ -182,7 +182,7 @@ export class TwitterSearchClient extends ClientBase {
             }
 
             const conversationId = selectedTweet.conversationId;
-            const roomId = stringToUuid(conversationId);
+            const roomId = stringToUuid(conversationId + "-" + this.runtime.agentId);
 
             const userIdUUID = stringToUuid(selectedTweet.userId as string);
 
@@ -198,13 +198,13 @@ export class TwitterSearchClient extends ClientBase {
             await buildConversationThread(selectedTweet, this);
 
             const message = {
-                id: stringToUuid(selectedTweet.id),
+                id: stringToUuid(selectedTweet.id + "-" + this.runtime.agentId),
                 agentId: this.runtime.agentId,
                 content: {
                     text: selectedTweet.text,
                     url: selectedTweet.permanentUrl,
                     inReplyTo: selectedTweet.inReplyToStatusId
-                        ? stringToUuid(selectedTweet.inReplyToStatusId)
+                        ? stringToUuid(selectedTweet.inReplyToStatusId + "-" + this.runtime.agentId)
                         : undefined,
                 },
                 userId: userIdUUID,

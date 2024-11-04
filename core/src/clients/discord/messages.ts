@@ -2,7 +2,9 @@ import {
     ChannelType,
     Client,
     Message as DiscordMessage,
+    PermissionsBitField,
     TextChannel,
+    ThreadChannel,
 } from "discord.js";
 import { composeContext } from "../../core/context.ts";
 import {
@@ -27,6 +29,7 @@ import { AttachmentManager } from "./attachments.ts";
 import { messageHandlerTemplate, shouldRespondTemplate } from "./templates.ts";
 import { InterestChannels } from "./types.ts";
 import { VoiceManager } from "./voice.ts";
+import { prettyConsole } from "../../index.ts";
 
 const MAX_MESSAGE_LENGTH = 1900;
 
@@ -36,34 +39,39 @@ export async function sendMessageInChunks(
     inReplyTo: string,
     files: any[]
 ): Promise<DiscordMessage[]> {
+
     const sentMessages: DiscordMessage[] = [];
     const messages = splitMessage(content);
+    try {
 
-    for (let i = 0; i < messages.length; i++) {
-        const message = messages[i];
-        if (
-            message.trim().length > 0 ||
-            (i === messages.length - 1 && files && files.length > 0)
-        ) {
-            const options: any = {
-                content: message.trim(),
-            };
+        for (let i = 0; i < messages.length; i++) {
+            const message = messages[i];
+            if (
+                message.trim().length > 0 ||
+                (i === messages.length - 1 && files && files.length > 0)
+            ) {
+                const options: any = {
+                    content: message.trim(),
+                };
 
-            // if (i === 0 && inReplyTo) {
-            //   // Reply to the specified message for the first chunk
-            //   options.reply = {
-            //     messageReference: inReplyTo,
-            //   };
-            // }
+                // if (i === 0 && inReplyTo) {
+                //   // Reply to the specified message for the first chunk
+                //   options.reply = {
+                //     messageReference: inReplyTo,
+                //   };
+                // }
 
-            if (i === messages.length - 1 && files && files.length > 0) {
-                // Attach files to the last message chunk
-                options.files = files;
+                if (i === messages.length - 1 && files && files.length > 0) {
+                    // Attach files to the last message chunk
+                    options.files = files;
+                }
+
+                const m = await channel.send(options);
+                sentMessages.push(m);
             }
-
-            const m = await channel.send(options);
-            sentMessages.push(m);
         }
+    } catch (error) {
+        prettyConsole.error("Error sending message:", error);
     }
 
     return sentMessages;
@@ -102,6 +110,52 @@ function splitMessage(content: string): string[] {
     return messages;
 }
 
+
+function canSendMessage(channel) {
+    // Get the bot member in the guild
+    const botMember = channel.guild?.members.cache.get(channel.client.user.id);
+
+    if (!botMember) {
+        return {
+            canSend: false,
+            reason: 'Not a guild channel or bot member not found'
+        };
+    }
+
+    // Required permissions for sending messages
+    const requiredPermissions = [
+        PermissionsBitField.Flags.ViewChannel,
+        PermissionsBitField.Flags.SendMessages,
+        PermissionsBitField.Flags.ReadMessageHistory
+    ];
+
+    // Add thread-specific permission if it's a thread
+    if (channel instanceof ThreadChannel) {
+        requiredPermissions.push(PermissionsBitField.Flags.SendMessagesInThreads);
+    }
+
+    // Check permissions
+    const permissions = channel.permissionsFor(botMember);
+
+    if (!permissions) {
+        return {
+            canSend: false,
+            reason: 'Could not retrieve permissions'
+        };
+    }
+
+    // Check each required permission
+    const missingPermissions = requiredPermissions.filter(perm => !permissions.has(perm));
+
+    return {
+        canSend: missingPermissions.length === 0,
+        missingPermissions: missingPermissions,
+        reason: missingPermissions.length > 0
+            ? `Missing permissions: ${missingPermissions.map(p => String(p)).join(', ')}`
+            : null
+    };
+}
+
 export class MessageManager {
     private client: Client;
     private runtime: IAgentRuntime;
@@ -122,7 +176,7 @@ export class MessageManager {
         if (
             message.interaction ||
             message.author.id ===
-                this.client.user?.id /* || message.author?.bot*/
+            this.client.user?.id /* || message.author?.bot*/
         )
             return;
         const userId = message.author.id as UUID;
@@ -145,7 +199,7 @@ export class MessageManager {
                 attachments.push(...processedAudioAttachments);
             }
 
-            const roomId = stringToUuid(channelId);
+            const roomId = stringToUuid(channelId + "-" + this.runtime.agentId);
             const userIdUUID = stringToUuid(userId);
 
             await this.runtime.ensureConnection(
@@ -156,7 +210,7 @@ export class MessageManager {
                 "discord"
             );
 
-            const messageId = stringToUuid(message.id);
+            const messageId = stringToUuid(message.id + "-" + this.runtime.agentId);
 
             let shouldIgnore = false;
             let shouldRespond = true;
@@ -167,7 +221,7 @@ export class MessageManager {
                 source: "discord",
                 url: message.url,
                 inReplyTo: message.reference?.messageId
-                    ? stringToUuid(message.reference.messageId)
+                    ? stringToUuid(message.reference.messageId + "-" + this.runtime.agentId)
                     : undefined,
             };
 
@@ -178,16 +232,8 @@ export class MessageManager {
                 roomId,
             };
 
-            let state = (await this.runtime.composeState(userMessage, {
-                discordClient: this.client,
-                discordMessage: message,
-                agentName:
-                    this.runtime.character.name ||
-                    this.client.user?.displayName,
-            })) as State;
-
             const memory: Memory = {
-                id: stringToUuid(message.id),
+                id: stringToUuid(message.id + "-" + this.runtime.agentId),
                 ...userMessage,
                 userId: userIdUUID,
                 agentId: this.runtime.agentId,
@@ -201,7 +247,18 @@ export class MessageManager {
                 await this.runtime.messageManager.createMemory(memory);
             }
 
-            state = await this.runtime.updateRecentMessageState(state);
+            let state = (await this.runtime.composeState(userMessage, {
+                discordClient: this.client,
+                discordMessage: message,
+                agentName:
+                    this.runtime.character.name ||
+                    this.client.user?.displayName,
+            })) as State;
+
+            if (!canSendMessage(message.channel).canSend) {
+                return prettyConsole.warn(`Cannot send message to channel ${message.channel}`, canSendMessage(message.channel));
+            }
+
 
             if (!shouldIgnore) {
                 shouldIgnore = await this._shouldIgnore(message);
@@ -258,7 +315,7 @@ export class MessageManager {
             console.log("Response content:", responseContent);
 
             responseContent.text = responseContent.text?.trim();
-            responseContent.inReplyTo = stringToUuid(message.id);
+            responseContent.inReplyTo = stringToUuid(message.id + "-" + this.runtime.agentId);
 
             if (!responseContent.text) {
                 return;
@@ -268,70 +325,75 @@ export class MessageManager {
                 content: Content,
                 files: any[]
             ) => {
-                if (message.id && !content.inReplyTo) {
-                    content.inReplyTo = stringToUuid(message.id);
-                }
-                if (message.channel.type === ChannelType.GuildVoice) {
-                    // For voice channels, use text-to-speech
-                    const audioStream =
-                        await this.runtime.speechService.generate(
-                            this.runtime,
-                            content.text
+                try {
+                    if (message.id && !content.inReplyTo) {
+                        content.inReplyTo = stringToUuid(message.id + "-" + this.runtime.agentId);
+                    }
+                    if (message.channel.type === ChannelType.GuildVoice) {
+                        // For voice channels, use text-to-speech
+                        const audioStream =
+                            await this.runtime.speechService.generate(
+                                this.runtime,
+                                content.text
+                            );
+                        await this.voiceManager.playAudioStream(
+                            userId,
+                            audioStream
                         );
-                    await this.voiceManager.playAudioStream(
-                        userId,
-                        audioStream
-                    );
-                    const memory: Memory = {
-                        id: stringToUuid(message.id),
-                        userId: this.runtime.agentId,
-                        agentId: this.runtime.agentId,
-                        content,
-                        roomId,
-                        embedding: embeddingZeroVector,
-                    };
-                    return [memory];
-                } else {
-                    // For text channels, send the message
-                    const messages = await sendMessageInChunks(
-                        message.channel as TextChannel,
-                        content.text,
-                        message.id,
-                        files
-                    );
-
-                    const memories: Memory[] = [];
-                    for (const m of messages) {
-                        let action = content.action;
-                        // If there's only one message or it's the last message, keep the original action
-                        // For multiple messages, set all but the last to 'CONTINUE'
-                        if (
-                            messages.length > 1 &&
-                            m !== messages[messages.length - 1]
-                        ) {
-                            action = "CONTINUE";
-                        }
-
                         const memory: Memory = {
-                            id: stringToUuid(m.id),
+                            id: stringToUuid(message.id + "-" + this.runtime.agentId),
                             userId: this.runtime.agentId,
                             agentId: this.runtime.agentId,
-                            content: {
-                                ...content,
-                                action,
-                                inReplyTo: messageId,
-                                url: m.url,
-                            },
+                            content,
                             roomId,
                             embedding: embeddingZeroVector,
-                            createdAt: m.createdTimestamp,
                         };
-                        memories.push(memory);
+                        return [memory];
+                    } else {
+                        // For text channels, send the message
+                        const messages = await sendMessageInChunks(
+                            message.channel as TextChannel,
+                            content.text,
+                            message.id,
+                            files
+                        );
+
+                        const memories: Memory[] = [];
+                        for (const m of messages) {
+                            let action = content.action;
+                            // If there's only one message or it's the last message, keep the original action
+                            // For multiple messages, set all but the last to 'CONTINUE'
+                            if (
+                                messages.length > 1 &&
+                                m !== messages[messages.length - 1]
+                            ) {
+                                action = "CONTINUE";
+                            }
+
+                            const memory: Memory = {
+                                id: stringToUuid(m.id + "-" + this.runtime.agentId),
+                                userId: this.runtime.agentId,
+                                agentId: this.runtime.agentId,
+                                content: {
+                                    ...content,
+                                    action,
+                                    inReplyTo: messageId,
+                                    url: m.url,
+                                },
+                                roomId,
+                                embedding: embeddingZeroVector,
+                                createdAt: m.createdTimestamp,
+                            };
+                            memories.push(memory);
+                        }
+                        for (const m of memories) {
+                            await this.runtime.messageManager.createMemory(m);
+                        }
+                        return memories;
                     }
-                    for (const m of memories) {
-                        await this.runtime.messageManager.createMemory(m);
-                    }
-                    return memories;
+                } catch (error) {
+                    console.error("Error sending message:", error);
+                    return [];
                 }
             };
 

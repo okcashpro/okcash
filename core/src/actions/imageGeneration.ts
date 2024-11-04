@@ -9,14 +9,15 @@ import { prettyConsole } from "../index.ts";
 import { generateCaption, generateImage } from "./imageGenerationUtils.ts";
 
 export const imageGeneration: Action = {
-    name: "IMAGE_GEN",
-    similes: ["GENERATE_IMAGE", "CREATE_IMAGE", "MAKE_PICTURE"],
-    description: "Generate an image based on a prompt",
+    name: "GENERATE_IMAGE",
+    similes: ["IMAGE_GENERATION", "IMAGE_GEN", "CREATE_IMAGE", "MAKE_PICTURE"],
+    description: "Generate an image to go along with the message.",
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
 
-        prettyConsole.log("Validating image generation settings...");
+        // TODO: Add openai DALL-E generation as well
+
         return anthropicApiKeyOk && togetherApiKeyOk;
     },
     handler: async (
@@ -33,6 +34,9 @@ export const imageGeneration: Action = {
 
         const imagePrompt = message.content.text;
         prettyConsole.log("Image prompt received:", imagePrompt);
+
+        // TODO: Generate a prompt for the image
+
         const res: { image: string; caption: string }[] = [];
 
         prettyConsole.log("Generating image with prompt:", imagePrompt);
@@ -90,10 +94,19 @@ export const imageGeneration: Action = {
         }
     },
     examples: [
+        // TODO: We want to generate images in more abstract ways, not just when asked to generate an image
+
         [
             {
                 user: "{{user1}}",
                 content: { text: "Generate an image of a cat" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Here's an image of a cat",
+                    action: "GENERATE_IMAGE",
+                },
             },
         ],
         [
@@ -101,11 +114,25 @@ export const imageGeneration: Action = {
                 user: "{{user1}}",
                 content: { text: "Generate an image of a dog" },
             },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Here's an image of a dog",
+                    action: "GENERATE_IMAGE",
+                },
+            },
         ],
         [
             {
                 user: "{{user1}}",
                 content: { text: "Create an image of a cat with a hat" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Here's an image of a cat with a hat",
+                    action: "GENERATE_IMAGE",
+                },
             },
         ],
         [
@@ -113,11 +140,25 @@ export const imageGeneration: Action = {
                 user: "{{user1}}",
                 content: { text: "Make an image of a dog with a hat" },
             },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Here's an image of a dog with a hat",
+                    action: "GENERATE_IMAGE",
+                },
+            },
         ],
         [
             {
                 user: "{{user1}}",
                 content: { text: "Paint an image of a cat with a hat" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Here's an image of a cat with a hat",
+                    action: "GENERATE_IMAGE",
+                },
             },
         ],
     ],

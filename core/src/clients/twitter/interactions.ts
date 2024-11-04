@@ -117,7 +117,7 @@ export class TwitterInteractionClient extends ClientBase {
                     !this.lastCheckedTweetId ||
                     parseInt(tweet.id) > this.lastCheckedTweetId
                 ) {
-                    const conversationId = tweet.conversationId;
+                    const conversationId = tweet.conversationId + "-" + this.runtime.agentId;
 
                     const roomId = stringToUuid(conversationId);
 
@@ -238,7 +238,7 @@ export class TwitterInteractionClient extends ClientBase {
         });
 
         // check if the tweet exists, save if it doesn't
-        const tweetId = stringToUuid(tweet.id);
+        const tweetId = stringToUuid(tweet.id + "-" + this.runtime.agentId);
         const tweetExists =
             await this.runtime.messageManager.getMemoryById(tweetId);
 
@@ -254,7 +254,7 @@ export class TwitterInteractionClient extends ClientBase {
                     text: tweet.text,
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
-                        ? stringToUuid(tweet.inReplyToStatusId)
+                        ? stringToUuid(tweet.inReplyToStatusId + "-" + this.runtime.agentId)
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -305,7 +305,7 @@ export class TwitterInteractionClient extends ClientBase {
 
         console.log("tweet is", tweet);
 
-        const stringId = stringToUuid(tweet.id);
+        const stringId = stringToUuid(tweet.id + "-" + this.runtime.agentId);
 
         console.log("stringId is", stringId, "while tweet.id is", tweet.id);
 
