@@ -2,85 +2,117 @@
 sidebar_position: 1
 ---
 
-# Introduction
+# Introduction to Eliza
 
 ![](/img/eliza_banner.jpg)
 
-_As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
+*As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)*
 
 ## What is Eliza?
 
-Eliza is a flexible, production-ready framework for building intelligent agents. It provides a comprehensive set of tools and abstractions that enable developers to create sophisticated AI agents tailored to their specific needs.
-
-As a batteries-included framework, Eliza comes with:
-- Built-in database integration through Supabase and SQLite
-- Production-ready deployment options via Cloudflare
-- Extensive content processing capabilities
-- Multi-platform deployment support
+Eliza is a powerful multi-agent simulation framework designed to create, deploy, and manage autonomous AI agents. Built with TypeScript, it provides a flexible and extensible platform for developing intelligent agents that can interact across multiple platforms while maintaining consistent personalities and knowledge.
 
 ## Key Features
 
-### 🤖 Multi-Agent Architecture
-- Create unlimited unique characters using [characterfile](https://github.com/lalalune/characterfile/)
-- Run multiple agents simultaneously with different personalities
-- Support for both stateful and stateless patterns
-- Extensible action and evaluator system
+### Core Capabilities
 
-### 🧠 Memory and Knowledge
-- Full conversational and document RAG memory
-- Process various content types:
-  - Link scraping and analysis
-  - PDF parsing and understanding
+- **Multi-Agent Architecture**: Deploy and manage multiple unique AI personalities simultaneously
+- **Character System**: Create diverse agents using the [characterfile](https://github.com/lalalune/characterfile/) framework
+- **Memory Management**: Advanced RAG (Retrieval Augmented Generation) system for long-term memory and context awareness
+- **Platform Integration**: Seamless connectivity with Discord, Twitter, and other platforms
+
+### Communication & Media
+
+- **Multi-Platform Support**:
+  - Full-featured Discord integration with voice channel support
+  - Twitter/X bot capabilities
+  - Telegram integration
+  - Direct API access
+
+- **Media Processing**:
+  - PDF document reading and analysis
+  - Link content extraction and summarization
   - Audio transcription
-  - Video content extraction
+  - Video content processing
+  - Image analysis and description
   - Conversation summarization
-- Built-in knowledge tools:
-  ```bash
-  npx folder2knowledge <path/to/folder>
-  npx knowledge2character <character-file> <knowledge-file>
-  npx tweets2character
-  ```
 
-### 🔌 Platform Integration
-- Discord integration with voice channel support
-- Twitter connector for social media interactions
-- Extensible client system for custom integrations
+### AI & Technical Features
 
-### 🛠 Model Support
-- Default: Nous Hermes Llama 3.1B for local inference
-- Cloud options:
-  - OpenAI models for scalable deployment
-  - Claude integration for complex queries
-- LocalAI compatibility for custom models
+- **Flexible Model Support**:
+  - Local inference with open-source models
+  - Cloud-based inference through OpenAI
+  - Default configuration with Nous Hermes Llama 3.1B
+  - Integration with Claude for complex queries
 
-### 💾 Database Support
-- SQLite for local development
-- Supabase for production deployment
-- Custom database adapter support
+- **Technical Foundation**:
+  - 100% TypeScript implementation
+  - Modular architecture
+  - Extensible action system
+  - Custom client support
+  - Comprehensive API
 
-## Core Concepts
+## Use Cases
 
-Eliza is built around several key concepts that enable flexible and powerful agent development:
+Eliza can be used to create:
 
-1. **Actions**: Define behaviors and responses
-2. **Evaluators**: Process and analyze interactions
-3. **State & Context**: Maintain coherent interactions
-4. **Memories**: Store and retrieve interaction data
-5. **Messages**: Handle core communication
-6. **Goals**: Track objectives and tasks
-7. **Relationships**: Manage entity connections
-8. **Database Adapters**: Handle data persistence
+1. **AI Assistants**
+   - Customer support agents
+   - Community moderators
+   - Personal assistants
 
-For details on these concepts, see the [Key Concepts](../api/concepts) guide.
+2. **Social Media Personas**
+   - Automated content creators
+   - Engagement bots
+   - Brand representatives
 
-## Ready to Start?
+3. **Knowledge Workers**
+   - Research assistants
+   - Content analysts
+   - Document processors
 
-1. [Quickstart Guide](./quickstart) - Get up and running quickly
-2. [Installation Guide](./installation) - Detailed setup instructions
-3. [Character Files](./guides/characterfile) - Learn to create AI personalities
+4. **Interactive Characters**
+   - Role-playing characters
+   - Educational tutors
+   - Entertainment bots
+
+## Getting Started
+
+Eliza is designed to be accessible while maintaining powerful capabilities:
+
+- **Quick Start**: Begin with basic configuration and default character
+- **Customization**: Extend functionality through custom actions and clients
+- **Scaling**: Deploy multiple agents with different personalities
+- **Integration**: Connect to various platforms and services
+
+Check out our [Quickstart Guide](./quickstart.md) to begin your journey with Eliza.
+
+## Architecture Overview
+
+```mermaid
+graph TD
+    A[Agent Runtime] --> B[Character System]
+    A --> C[Memory Manager]
+    A --> D[Action System]
+    B --> E[Model Provider]
+    C --> F[Database]
+    D --> G[Platform Clients]
+```
 
 ## Community and Support
 
-- [GitHub](https://github.com/ai16z/eliza) - Source code and issues
-- [Discord](https://discord.gg/ai16z) - Real-time discussion
-- [Twitter](https://x.com/ai16zdao) - Updates and announcements
+Eliza is backed by an active community of developers and users:
+
+- **Open Source**: Contribute to the project on [GitHub](https://github.com/ai16z/eliza)
+- **Documentation**: Comprehensive guides and API references
+- **Examples**: Ready-to-use character templates and implementations
+- **Support**: Active community for troubleshooting and discussion
+
+## Next Steps
+
+- [Install Eliza](./installation.md)
+- [Create Your First Agent](./quickstart.md)
+- [Understand Core Concepts](./core/agents.md)
+- [Explore Advanced Features](./guides/advanced.md)
+
+Join us in building the future of autonomous AI agents with Eliza!
