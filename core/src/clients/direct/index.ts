@@ -18,11 +18,11 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 export const messageHandlerTemplate =
     // {{goals}}
-    //   `# Action Examples
-    // {{actionExamples}}
-    // (Action examples are for reference only. Do not use the information from them in your response.)
+    `# Action Examples
+{{actionExamples}}
+(Action examples are for reference only. Do not use the information from them in your response.)
 
-    `# Task: Generate dialog and actions for the character {{agentName}}.
+# Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
 {{bio}}
 {{lore}}
@@ -205,8 +205,25 @@ class DirectClient {
                     );
                     return;
                 }
+                
+                let message = null as Content | null;
 
-                res.json(response);
+                const result = await runtime.processActions(
+                    memory,
+                    [responseMessage],
+                    state,
+                    async (newMessages) => {
+                        message = newMessages;
+                        return [memory];
+                    }
+                )
+
+                if (message) {
+                    res.json([message, response]);
+                } else {
+                    res.json([response]);
+                }
+
             }
         );
 

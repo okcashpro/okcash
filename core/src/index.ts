@@ -88,7 +88,9 @@ function chat() {
         );
 
         const data = await response.json();
-        console.log(`${characters[0].name}: ${data.text}`);
+        for (const message of data) {
+            console.log(`${characters[0].name}: ${message.text}`);
+        }
         chat();
     });
 }
