@@ -6,10 +6,13 @@ on:
 jobs:
   changelog:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
       - name: Generate Changelog
         run: |
           export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
