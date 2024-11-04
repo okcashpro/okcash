@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - name: Generate Changelog
         run: |
           export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
@@ -16,3 +18,9 @@ jobs:
             -u ${{ github.repository_owner }} \
             -p ${{ github.event.repository.name }} \
             --token ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update changelog"
+          branch: ${{ github.head_ref }}
+          file_pattern: "CHANGELOG.md"
+          add_author: true
