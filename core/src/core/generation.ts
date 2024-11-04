@@ -403,6 +403,42 @@ export async function generateTextArray({
     }
 }
 
+export async function generateObject({
+    runtime,
+    context,
+    modelClass,
+}: {
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
+}): Promise<any> {
+    if (!context) {
+        prettyConsole.error("generateObject context is empty");
+        return null;
+    }
+    let retryDelay = 1000;
+
+    while (true) {
+        try {
+            // this is slightly different than generateObjectArray, in that we parse object, not object array
+            const response = await generateText({
+        runtime,
+        context,
+        modelClass,
+    });
+    const parsedResponse = parseJSONObjectFromText(response);
+    if (parsedResponse) {
+                return parsedResponse;
+            }
+        } catch (error) {
+            prettyConsole.error("Error in generateObject:", error);
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        retryDelay *= 2;
+    }
+}
+
 export async function generateObjectArray({
     runtime,
     context,

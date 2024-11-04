@@ -517,7 +517,7 @@ export class TokenProvider {
         const limit = 1000;
         let cursor;
         //HELIOUS_API_KEY needs to be added
-        const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIOUS_API_KEY || ""}`;
+        const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIUS_API_KEY || ""}`;
         console.log({ url });
 
         try {
