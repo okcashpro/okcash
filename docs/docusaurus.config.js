@@ -23,8 +23,8 @@ const config = {
     [
       "docusaurus-plugin-typedoc",
       {
-        entryPoints: ["../src/index.ts"],
-        tsconfig: "../tsconfig.json",
+        entryPoints: ["../core/src/index.ts"],
+        tsconfig: "../core/tsconfig.json",
         out: "./api", // Changed to output directly to api folder
       },
     ],
