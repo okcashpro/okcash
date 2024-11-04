@@ -102,6 +102,7 @@ export enum ModelProvider {
     OPENAI = "openai",
     ANTHROPIC = "anthropic",
     GROK = "grok",
+    GROQ = "groq",
     LLAMACLOUD = "llama_cloud",
     LLAMALOCAL = "llama_local",
     GOOGLE = "google",
