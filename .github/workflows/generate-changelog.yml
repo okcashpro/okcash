@@ -18,9 +18,13 @@ jobs:
             -u ${{ github.repository_owner }} \
             -p ${{ github.event.repository.name }} \
             --token ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Checkout to branch
+        run: |
+          git checkout "${GITHUB_REF#refs/heads/}"
+      - name: Commit Changelog
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update changelog"
-          branch: ${{ github.head_ref }}
+          branch: ${{ github.head_ref || github.ref_name }}
           file_pattern: "CHANGELOG.md"
           commit_author: "GitHub Action <actions@github.com>"
