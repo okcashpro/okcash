@@ -39,34 +39,39 @@ export async function sendMessageInChunks(
     inReplyTo: string,
     files: any[]
 ): Promise<DiscordMessage[]> {
+
     const sentMessages: DiscordMessage[] = [];
     const messages = splitMessage(content);
+    try {
 
-    for (let i = 0; i < messages.length; i++) {
-        const message = messages[i];
-        if (
-            message.trim().length > 0 ||
-            (i === messages.length - 1 && files && files.length > 0)
-        ) {
-            const options: any = {
-                content: message.trim(),
-            };
+        for (let i = 0; i < messages.length; i++) {
+            const message = messages[i];
+            if (
+                message.trim().length > 0 ||
+                (i === messages.length - 1 && files && files.length > 0)
+            ) {
+                const options: any = {
+                    content: message.trim(),
+                };
 
-            // if (i === 0 && inReplyTo) {
-            //   // Reply to the specified message for the first chunk
-            //   options.reply = {
-            //     messageReference: inReplyTo,
-            //   };
-            // }
+                // if (i === 0 && inReplyTo) {
+                //   // Reply to the specified message for the first chunk
+                //   options.reply = {
+                //     messageReference: inReplyTo,
+                //   };
+                // }
 
-            if (i === messages.length - 1 && files && files.length > 0) {
-                // Attach files to the last message chunk
-                options.files = files;
+                if (i === messages.length - 1 && files && files.length > 0) {
+                    // Attach files to the last message chunk
+                    options.files = files;
+                }
+
+                const m = await channel.send(options);
+                sentMessages.push(m);
             }
-
-            const m = await channel.send(options);
-            sentMessages.push(m);
         }
+    } catch (error) {
+        prettyConsole.error("Error sending message:", error);
     }
 
     return sentMessages;
