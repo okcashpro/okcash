@@ -7,13 +7,40 @@ import {
     type Action,
 } from "../core/types.ts";
 
+async function getTokenDecimals(
+    connection: Connection,
+    mintAddress: string
+): Promise<number> {
+    const mintPublicKey = new PublicKey(mintAddress);
+    const tokenAccountInfo =
+        await connection.getParsedAccountInfo(mintPublicKey);
+
+    // Check if the data is parsed and contains the expected structure
+    if (
+        tokenAccountInfo.value &&
+        typeof tokenAccountInfo.value.data === "object" &&
+        "parsed" in tokenAccountInfo.value.data
+    ) {
+        const parsedInfo = tokenAccountInfo.value.data.parsed?.info;
+        if (parsedInfo && typeof parsedInfo.decimals === "number") {
+            return parsedInfo.decimals;
+        }
+    }
+
+    throw new Error("Unable to fetch token decimals");
+}
+
 async function getQuote(
+    connection: Connection,
     baseToken: string,
     outputToken: string,
     amount: number
 ): Promise<any> {
+    const decimals = await getTokenDecimals(connection, baseToken);
+    const adjustedAmount = amount * 10 ** decimals;
+
     const quoteResponse = await fetch(
-        `https://quote-api.jup.ag/v6/quote?inputMint=${baseToken}&outputMint=${outputToken}&amount=${amount * 10 ** 6}&slippageBps=50`
+        `https://quote-api.jup.ag/v6/quote?inputMint=${baseToken}&outputMint=${outputToken}&amount=${adjustedAmount}&slippageBps=50`
     );
     const swapTransaction = await quoteResponse.json();
     const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
@@ -100,6 +127,7 @@ export const executeSwap: Action = {
             );
 
             const quoteData = await getQuote(
+                connection as Connection,
                 inputToken as string,
                 outputToken as string,
                 amount as number
