@@ -1,4 +1,10 @@
-import { Connection, Keypair, PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js";
+import {
+    Connection,
+    Keypair,
+    PublicKey,
+    Transaction,
+    VersionedTransaction,
+} from "@solana/web3.js";
 import fetch from "cross-fetch";
 import {
     ActionExample,
@@ -7,7 +13,7 @@ import {
     type Action,
     State,
     ModelClass,
-    HandlerCallback
+    HandlerCallback,
 } from "../core/types.ts";
 import { walletProvider } from "../providers/wallet.ts";
 import { composeContext } from "../core/context.ts";
@@ -15,6 +21,7 @@ import { generateObject, generateObjectArray } from "../core/generation.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
 import settings from "../core/settings.ts";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
+import BigNumber from "bignumber.js";
 
 async function swapToken(
     connection: Connection,
@@ -25,17 +32,25 @@ async function swapToken(
 ): Promise<any> {
     try {
         // Get the decimals for the input token
-        const decimals = inputTokenCA === settings.SOL_ADDRESS ? 9 : 
-            await getTokenDecimals(connection, inputTokenCA);
+        const decimals =
+            inputTokenCA === settings.SOL_ADDRESS
+                ? new BigNumber(9)
+                : new BigNumber(
+                      await getTokenDecimals(connection, inputTokenCA)
+                  );
 
-        console.log("Decimals:", decimals);
-        
-        const adjustedAmount = amount * (10 ** decimals);
+        console.log("Decimals:", decimals.toString());
+
+        // Use BigNumber for adjustedAmount: amount * (10 ** decimals)
+        const amountBN = new BigNumber(amount);
+        const adjustedAmount = amountBN.multipliedBy(
+            new BigNumber(10).pow(decimals)
+        );
 
         console.log("Fetching quote with params:", {
             inputMint: inputTokenCA,
             outputMint: outputTokenCA,
-            amount: adjustedAmount
+            amount: adjustedAmount,
         });
 
         const quoteResponse = await fetch(
@@ -45,7 +60,9 @@ async function swapToken(
 
         if (!quoteData || quoteData.error) {
             console.error("Quote error:", quoteData);
-            throw new Error(`Failed to get quote: ${quoteData?.error || 'Unknown error'}`);
+            throw new Error(
+                `Failed to get quote: ${quoteData?.error || "Unknown error"}`
+            );
         }
 
         console.log("Quote received:", quoteData);
@@ -55,7 +72,7 @@ async function swapToken(
             userPublicKey: walletPublicKey.toString(),
             wrapAndUnwrapSol: true,
             computeUnitPriceMicroLamports: 1000,
-            dynamicComputeUnitLimit: true
+            dynamicComputeUnitLimit: true,
         };
 
         console.log("Requesting swap with body:", swapRequestBody);
@@ -65,25 +82,25 @@ async function swapToken(
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(swapRequestBody)
+            body: JSON.stringify(swapRequestBody),
         });
 
         const swapData = await swapResponse.json();
 
         if (!swapData || !swapData.swapTransaction) {
             console.error("Swap error:", swapData);
-            throw new Error(`Failed to get swap transaction: ${swapData?.error || 'No swap transaction returned'}`);
+            throw new Error(
+                `Failed to get swap transaction: ${swapData?.error || "No swap transaction returned"}`
+            );
         }
 
         console.log("Swap transaction received");
         return swapData;
-
     } catch (error) {
         console.error("Error in swapToken:", error);
         throw error;
     }
 }
-
 
 const swapTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
@@ -142,7 +159,6 @@ export const executeSwap: Action = {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        
         // composeState
         if (!state) {
             state = (await runtime.composeState(message)) as State;
@@ -168,10 +184,10 @@ export const executeSwap: Action = {
         console.log("Response:", response);
 
         // Add SOL handling logic
-        if (response.inputTokenSymbol?.toUpperCase() === 'SOL') {
+        if (response.inputTokenSymbol?.toUpperCase() === "SOL") {
             response.inputTokenCA = settings.SOL_ADDRESS;
         }
-        if (response.outputTokenSymbol?.toUpperCase() === 'SOL') {
+        if (response.outputTokenSymbol?.toUpperCase() === "SOL") {
             response.outputTokenCA = settings.SOL_ADDRESS;
         }
 
@@ -226,12 +242,16 @@ export const executeSwap: Action = {
             );
 
             console.log("Deserializing transaction...");
-            const transactionBuf = Buffer.from(swapResult.swapTransaction, "base64");
-            const transaction = VersionedTransaction.deserialize(transactionBuf);
-            
+            const transactionBuf = Buffer.from(
+                swapResult.swapTransaction,
+                "base64"
+            );
+            const transaction =
+                VersionedTransaction.deserialize(transactionBuf);
+
             console.log("Preparing to sign transaction...");
             const privateKeyString = runtime.getSetting("WALLET_PRIVATE_KEY");
-            
+
             // Handle different private key formats
             let secretKey: Uint8Array;
             try {
@@ -240,25 +260,31 @@ export const executeSwap: Action = {
             } catch (e) {
                 try {
                     // If that fails, try base64
-                    secretKey = Uint8Array.from(Buffer.from(privateKeyString, 'base64'));
+                    secretKey = Uint8Array.from(
+                        Buffer.from(privateKeyString, "base64")
+                    );
                 } catch (e2) {
-                    throw new Error('Invalid private key format');
+                    throw new Error("Invalid private key format");
                 }
             }
 
             // Verify the key length
             if (secretKey.length !== 64) {
                 console.error("Invalid key length:", secretKey.length);
-                throw new Error(`Invalid private key length: ${secretKey.length}. Expected 64 bytes.`);
+                throw new Error(
+                    `Invalid private key length: ${secretKey.length}. Expected 64 bytes.`
+                );
             }
 
             console.log("Creating keypair...");
             const keypair = Keypair.fromSecretKey(secretKey);
-            
+
             // Verify the public key matches what we expect
             const expectedPublicKey = runtime.getSetting("WALLET_PUBLIC_KEY");
             if (keypair.publicKey.toBase58() !== expectedPublicKey) {
-                throw new Error("Generated public key doesn't match expected public key");
+                throw new Error(
+                    "Generated public key doesn't match expected public key"
+                );
             }
 
             console.log("Signing transaction...");
@@ -271,24 +297,31 @@ export const executeSwap: Action = {
             const txid = await connection.sendTransaction(transaction, {
                 skipPreflight: false,
                 maxRetries: 3,
-                preflightCommitment: 'confirmed'
+                preflightCommitment: "confirmed",
             });
-            
+
             console.log("Transaction sent:", txid);
 
             // Confirm transaction using the blockhash
-            const confirmation = await connection.confirmTransaction({
-                signature: txid,
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-            }, 'confirmed');
+            const confirmation = await connection.confirmTransaction(
+                {
+                    signature: txid,
+                    blockhash: latestBlockhash.blockhash,
+                    lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+                },
+                "confirmed"
+            );
 
             if (confirmation.value.err) {
-                throw new Error(`Transaction failed: ${confirmation.value.err}`);
+                throw new Error(
+                    `Transaction failed: ${confirmation.value.err}`
+                );
             }
 
             if (confirmation.value.err) {
-                throw new Error(`Transaction failed: ${confirmation.value.err}`);
+                throw new Error(
+                    `Transaction failed: ${confirmation.value.err}`
+                );
             }
 
             console.log("Swap completed successfully!");
@@ -299,7 +332,7 @@ export const executeSwap: Action = {
             };
 
             callback?.(responseMsg);
-            
+
             return true;
         } catch (error) {
             console.error("Error during token swap:", error);
