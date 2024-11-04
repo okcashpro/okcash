@@ -227,6 +227,7 @@ export const fetchBuyTransaction = async (
 
         // deserialize the transaction
         const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
+        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'swapTransactionBuf' implicitly has an 'any' type.
         var transaction = VersionedTransaction.deserialize(swapTransactionBuf);
 
         // sign the transaction
@@ -273,6 +274,7 @@ export const fetchSellTransaction = async (
 
         // deserialize the transaction
         const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
+        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'swapTransactionBuf' implicitly has an 'any' type.
         var transaction = VersionedTransaction.deserialize(swapTransactionBuf);
 
         // sign the transaction

@@ -2,7 +2,7 @@ import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 import settings from "../core/settings.ts";
-import { toBN, BN } from '../utils/bignumber.js';
+import { toBN } from "../utils/bignumber.js";
 import {
     ProcessedTokenData,
     TokenSecurityData,
@@ -620,7 +620,9 @@ export class TokenProvider {
             })
             .map((holder) => ({
                 holderAddress: holder.address,
-                balanceUsd: toBN(holder.balance).multipliedBy(tokenPriceUsd).toFixed(2),
+                balanceUsd: toBN(holder.balance)
+                    .multipliedBy(tokenPriceUsd)
+                    .toFixed(2),
             }));
 
         return highValueHolders;
