@@ -19,13 +19,22 @@ const config = {
   },
 
   plugins: [
+    [
+      '@docusaurus/plugin-ideal-image',
+      {
+        disableInDev: false,
+        alias: {
+          events: 'events/',
+        },
+      },
+    ],
     // TypeDoc plugin for API documentation
     [
       "docusaurus-plugin-typedoc",
       {
         entryPoints: ["../core/src/index.ts"],
         tsconfig: "../core/tsconfig.json",
-        out: "./api", // Changed to output directly to api folder
+        out: "./docs/api", // Changed to output directly to api folder
       },
     ],
     // Search functionality
@@ -34,9 +43,9 @@ const config = {
     [
       "@docusaurus/plugin-content-docs",
       {
-        id: "api",
-        path: "api",
-        routeBasePath: "api",
+        id: "docs",
+        path: "docs/",
+        routeBasePath: "docs/",
         sidebarPath: "./sidebars.api.js",
       },
     ],
