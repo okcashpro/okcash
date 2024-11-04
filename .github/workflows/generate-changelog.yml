@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate Changelog
         run: |
+          export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
           gem install --user-install github_changelog_generator
           github_changelog_generator \
             -u ${{ github.repository_owner }} \
