@@ -134,7 +134,7 @@ export async function generateText({
             case ModelProvider.GROQ: {
                 console.log("Initializing Groq model.");
                 const groq = createGroq({ apiKey });
-    
+
                 const { text: groqResponse } = await aiGenerateText({
                     model: groq.languageModel(model),
                     prompt: context,
@@ -143,26 +143,51 @@ export async function generateText({
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
                 });
-    
+
                 response = groqResponse;
                 console.log("Received response from Groq model.");
                 break;
             }
 
-            case ModelProvider.LLAMALOCAL:
+            case ModelProvider.LLAMALOCAL: {
                 prettyConsole.log(
-                    "Using local Llama model for text completion."
+                  "Using local Llama model for text completion."
                 );
                 response = await runtime.llamaService.queueTextCompletion(
-                    context,
-                    temperature,
-                    _stop,
-                    frequency_penalty,
-                    presence_penalty,
-                    max_response_length
+                  context,
+                  temperature,
+                  _stop,
+                  frequency_penalty,
+                  presence_penalty,
+                  max_response_length
                 );
                 prettyConsole.log("Received response from local Llama model.");
                 break;
+            }
+
+            case ModelProvider.REDPILL: {
+                prettyConsole.log("Initializing RedPill model.");
+                const serverUrl = models[provider].endpoint;
+                const openai = createOpenAI({ apiKey, baseURL: serverUrl });
+
+                console.log('****** MODEL\n', model)
+                console.log('****** CONTEXT\n', context)
+
+                const { text: openaiResponse } = await aiGenerateText({
+                    model: openai.languageModel(model),
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                console.log("****** RESPONSE\n", openaiResponse);
+
+                response = openaiResponse;
+                prettyConsole.log("Received response from OpenAI model.");
+                break;
+            }
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
