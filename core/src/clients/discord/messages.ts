@@ -145,7 +145,7 @@ export class MessageManager {
                 attachments.push(...processedAudioAttachments);
             }
 
-            const roomId = stringToUuid(channelId);
+            const roomId = stringToUuid(channelId + "-" + this.runtime.agentId);
             const userIdUUID = stringToUuid(userId);
 
             await this.runtime.ensureConnection(
@@ -156,7 +156,7 @@ export class MessageManager {
                 "discord"
             );
 
-            const messageId = stringToUuid(message.id);
+            const messageId = stringToUuid(message.id + "-" + this.runtime.agentId);
 
             let shouldIgnore = false;
             let shouldRespond = true;
@@ -167,7 +167,7 @@ export class MessageManager {
                 source: "discord",
                 url: message.url,
                 inReplyTo: message.reference?.messageId
-                    ? stringToUuid(message.reference.messageId)
+                    ? stringToUuid(message.reference.messageId + "-" + this.runtime.agentId)
                     : undefined,
             };
 
@@ -187,7 +187,7 @@ export class MessageManager {
             })) as State;
 
             const memory: Memory = {
-                id: stringToUuid(message.id),
+                id: stringToUuid(message.id + "-" + this.runtime.agentId),
                 ...userMessage,
                 userId: userIdUUID,
                 agentId: this.runtime.agentId,
@@ -256,7 +256,7 @@ export class MessageManager {
             );
 
             responseContent.text = responseContent.text?.trim();
-            responseContent.inReplyTo = stringToUuid(message.id);
+            responseContent.inReplyTo = stringToUuid(message.id + "-" + this.runtime.agentId);
 
             if (!responseContent.text) {
                 return;
@@ -266,8 +266,9 @@ export class MessageManager {
                 content: Content,
                 files: any[]
             ) => {
+                try {
                 if (message.id && !content.inReplyTo) {
-                    content.inReplyTo = stringToUuid(message.id);
+                    content.inReplyTo = stringToUuid(message.id + "-" + this.runtime.agentId);
                 }
                 if (message.channel.type === ChannelType.GuildVoice) {
                     // For voice channels, use text-to-speech
@@ -281,7 +282,7 @@ export class MessageManager {
                         audioStream
                     );
                     const memory: Memory = {
-                        id: stringToUuid(message.id),
+                        id: stringToUuid(message.id + "-" + this.runtime.agentId),
                         userId: this.runtime.agentId,
                         agentId: this.runtime.agentId,
                         content,
@@ -311,7 +312,7 @@ export class MessageManager {
                         }
 
                         const memory: Memory = {
-                            id: stringToUuid(m.id),
+                            id: stringToUuid(m.id + "-" + this.runtime.agentId),
                             userId: this.runtime.agentId,
                             agentId: this.runtime.agentId,
                             content: {
@@ -330,6 +331,10 @@ export class MessageManager {
                         await this.runtime.messageManager.createMemory(m);
                     }
                     return memories;
+                    }
+                } catch (error) {
+                    console.error("Error sending message:", error);
+                    return [];
                 }
             };
 

@@ -249,9 +249,10 @@ const walletProvider: Provider = {
         try {
             // Validate wallet configuration
             if (!runtime.getSetting("WALLET_PUBLIC_KEY")) {
-                throw new Error(
+                console.error(
                     "Wallet public key is not configured in settings"
                 );
+                return "";
             }
 
             // Validate public key format before creating instance
@@ -259,7 +260,8 @@ const walletProvider: Provider = {
                 typeof runtime.getSetting("WALLET_PUBLIC_KEY") !== "string" ||
                 runtime.getSetting("WALLET_PUBLIC_KEY").trim() === ""
             ) {
-                throw new Error("Invalid wallet public key format");
+                console.error("Invalid wallet public key format");
+                return "";
             }
 
             let publicKey: PublicKey;
@@ -269,7 +271,7 @@ const walletProvider: Provider = {
                 );
             } catch (error) {
                 console.error("Error creating PublicKey:", error);
-                throw new Error("Invalid wallet public key format");
+                return "";
             }
 
             const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);

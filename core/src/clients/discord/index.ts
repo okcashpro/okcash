@@ -168,12 +168,12 @@ export class DiscordClient extends EventEmitter {
 
         const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
 
-        const roomId = stringToUuid(reaction.message.channel.id);
-        const userIdUUID = stringToUuid(user.id);
+        const roomId = stringToUuid(reaction.message.channel.id + "-" + this.runtime.agentId);
+        const userIdUUID = stringToUuid(user.id + "-" + this.runtime.agentId);
 
         // Generate a unique UUID for the reaction
         const reactionUUID = stringToUuid(
-            `${reaction.message.id}-${user.id}-${emoji}`
+            `${reaction.message.id}-${user.id}-${emoji}-${this.runtime.agentId}`
         );
 
         // ensure the user id and room id are valid
@@ -200,7 +200,7 @@ export class DiscordClient extends EventEmitter {
             content: {
                 text: reactionMessage,
                 source: "discord",
-                inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
+                inReplyTo: stringToUuid(reaction.message.id + "-" + this.runtime.agentId), // This is the ID of the original message
             },
             roomId,
             createdAt: Date.now(),
@@ -238,12 +238,12 @@ export class DiscordClient extends EventEmitter {
 
         const reactionMessage = `*Removed <${emoji} emoji> from: "${truncatedContent}"*`;
 
-        const roomId = stringToUuid(reaction.message.channel.id);
+        const roomId = stringToUuid(reaction.message.channel.id + "-" + this.runtime.agentId);
         const userIdUUID = stringToUuid(user.id);
 
         // Generate a unique UUID for the reaction removal
         const reactionUUID = stringToUuid(
-            `${reaction.message.id}-${user.id}-${emoji}-removed`
+            `${reaction.message.id}-${user.id}-${emoji}-removed-${this.runtime.agentId}`
         );
 
         const userName = reaction.message.author.username;
@@ -266,7 +266,7 @@ export class DiscordClient extends EventEmitter {
                 content: {
                     text: reactionMessage,
                     source: "discord",
-                    inReplyTo: stringToUuid(reaction.message.id), // This is the ID of the original message
+                    inReplyTo: stringToUuid(reaction.message.id + "-" + this.runtime.agentId), // This is the ID of the original message
                 },
                 roomId,
                 createdAt: Date.now(),
