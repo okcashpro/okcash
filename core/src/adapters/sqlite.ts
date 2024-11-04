@@ -162,7 +162,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         let queryParams = [params.tableName, ...params.roomIds];
 
         if (params.agentId) {
-            sql += ` AND userId = ?`;
+            sql += ` AND agentId = ?`;
             queryParams.push(params.agentId);
         }
 
@@ -219,7 +219,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         const createdAt = memory.createdAt ?? Date.now();
 
         // Insert the memory with the appropriate 'unique' value
-        const sql = `INSERT OR REPLACE INTO memories (id, type, content, embedding, userId, roomId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        const sql = `INSERT OR REPLACE INTO memories (id, type, content, embedding, userId, roomId, agentId, \`unique\`, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         this.db.prepare(sql).run(
             memory.id ?? v4(),
             tableName,
@@ -227,6 +227,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             new Float32Array(memory.embedding ?? embeddingZeroVector), // Store as Float32Array
             memory.userId,
             memory.roomId,
+            memory.agentId,
             isUnique ? 1 : 0,
             createdAt
         );
@@ -235,6 +236,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     async searchMemories(params: {
         tableName: string;
         roomId: UUID;
+        agentId?: UUID;
         embedding: number[];
         match_threshold: number;
         match_count: number;
@@ -254,6 +256,11 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
 
         if (params.unique) {
             sql += " AND `unique` = 1";
+        }
+
+        if (params.agentId) {
+            sql += " AND agentId = ?";
+            queryParams.push(params.agentId);
         }
 
         sql += ` ORDER BY similarity ASC LIMIT ?`; // ASC for lower distance
@@ -297,9 +304,8 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         if (params.unique) {
             sql += " AND `unique` = 1";
         }
-        // TODO: Test this
         if (params.agentId) {
-            sql += " AND userId = ?";
+            sql += " AND agentId = ?";
             queryParams.push(params.agentId);
         }
 
@@ -413,7 +419,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         }
 
         if (params.agentId) {
-            sql += " AND userId = ?";
+            sql += " AND agentId = ?";
             queryParams.push(params.agentId);
         }
 

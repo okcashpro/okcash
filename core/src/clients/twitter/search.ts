@@ -1,6 +1,10 @@
 import { SearchMode } from "agent-twitter-client";
 import fs from "fs";
-import { addHeader, composeContext } from "../../core/context.ts";
+import { composeContext } from "../../core/context.ts";
+import {
+    generateMessageResponse,
+    generateText,
+} from "../../core/generation.ts";
 import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
 import {
@@ -13,10 +17,6 @@ import {
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
-import {
-    generateText,
-    generateMessageResponse,
-} from "../../core/generation.ts";
 
 const messageHandlerTemplate =
     `{{relevantFacts}}
@@ -40,6 +40,9 @@ About {{agentName}} (@{{twitterUserName}}):
 
 # Task: Respond to the following post in the style and perspective of {{agentName}} (aka @{{twitterUserName}}). Write a {{adjective}} response for {{agentName}} to say directly in response to the post. don't generalize.
 {{currentPost}}
+
+IMPORTANT: Your response CANNOT be longer than 20 words.
+Aim for 1-2 short sentences maximum. Be concise and direct.
 
 Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.
 
@@ -179,7 +182,7 @@ export class TwitterSearchClient extends ClientBase {
             }
 
             const conversationId = selectedTweet.conversationId;
-            const roomId = stringToUuid(conversationId);
+            const roomId = stringToUuid(conversationId + "-" + this.runtime.agentId);
 
             const userIdUUID = stringToUuid(selectedTweet.userId as string);
 
@@ -195,12 +198,13 @@ export class TwitterSearchClient extends ClientBase {
             await buildConversationThread(selectedTweet, this);
 
             const message = {
-                id: stringToUuid(selectedTweet.id),
+                id: stringToUuid(selectedTweet.id + "-" + this.runtime.agentId),
+                agentId: this.runtime.agentId,
                 content: {
                     text: selectedTweet.text,
                     url: selectedTweet.permanentUrl,
                     inReplyTo: selectedTweet.inReplyToStatusId
-                        ? stringToUuid(selectedTweet.inReplyToStatusId)
+                        ? stringToUuid(selectedTweet.inReplyToStatusId + "-" + this.runtime.agentId)
                         : undefined,
                 },
                 userId: userIdUUID,

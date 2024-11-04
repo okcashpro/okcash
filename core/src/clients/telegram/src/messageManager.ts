@@ -235,7 +235,7 @@ export class MessageManager {
             const userId = stringToUuid(ctx.from.id.toString()) as UUID;
             const userName =
                 ctx.from.username || ctx.from.first_name || "Unknown User";
-            const chatId = stringToUuid(ctx.chat?.id.toString()) as UUID;
+            const chatId = stringToUuid(ctx.chat?.id.toString() + "-" + this.runtime.agentId) as UUID;
             const agentId = this.runtime.agentId;
             const roomId = chatId;
 
@@ -248,7 +248,7 @@ export class MessageManager {
             );
 
             const messageId = stringToUuid(
-                message.message_id.toString()
+                message.message_id.toString() + "-" + this.runtime.agentId
             ) as UUID;
 
             // Handle images
@@ -277,7 +277,7 @@ export class MessageManager {
                 inReplyTo:
                     "reply_to_message" in message && message.reply_to_message
                         ? stringToUuid(
-                              message.reply_to_message.message_id.toString()
+                              message.reply_to_message.message_id.toString() + "-" + this.runtime.agentId
                           )
                         : undefined,
             };
@@ -285,6 +285,7 @@ export class MessageManager {
             // Create memory for the message
             const memory: Memory = {
                 id: messageId,
+                agentId,
                 userId,
                 roomId,
                 content,
@@ -332,8 +333,9 @@ export class MessageManager {
                     const isLastMessage = i === sentMessages.length - 1;
 
                     const memory: Memory = {
-                        id: stringToUuid(sentMessage.message_id.toString()),
-                        userId: agentId,
+                        id: stringToUuid(sentMessage.message_id.toString() + "-" + this.runtime.agentId),
+                        agentId,
+                        userId,
                         roomId,
                         content: {
                             ...content,

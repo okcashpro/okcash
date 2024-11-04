@@ -102,6 +102,7 @@ export enum ModelProvider {
     OPENAI = "openai",
     ANTHROPIC = "anthropic",
     GROK = "grok",
+    GROQ = "groq",
     LLAMACLOUD = "llama_cloud",
     LLAMALOCAL = "llama_local",
     GOOGLE = "google",
@@ -148,7 +149,7 @@ export interface State {
 export interface Memory {
     id?: UUID; // An optional unique identifier for the memory.
     userId: UUID; // The user ID associated with the memory.
-    agentId?: UUID; // The agent ID associated with the memory.
+    agentId: UUID; // The agent ID associated with the memory.
     createdAt?: number; // An optional timestamp indicating when the memory was created.
     content: Content; // The content of the memory, which can be a structured object or a plain string.
     embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.

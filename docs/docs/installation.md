@@ -6,14 +6,14 @@ sidebar_position: 3
 
 Currently eliza is dependent on Supabase for local development. You can install it with the following command:
 
-`npm install eliza`
+`pnpm install eliza`
 
 ## Select your database adapter
 
 ```
-npm install sqlite-vss better-sqlite3 # for sqlite (simple, for local development)
+pnpm install sqlite-vss better-sqlite3 # for sqlite (simple, for local development)
 
-npm install @supabase/supabase-js # for supabase (more complicated but can be deployed at scale)
+pnpm install @supabase/supabase-js # for supabase (more complicated but can be deployed at scale)
 ```
 
 ### Set up environment variables
@@ -56,7 +56,7 @@ supabase init
 supabase start
 ```
 
-You can now start the eliza project with `npm run dev` and it will connect to the local Supabase instance by default.
+You can now start the eliza project with `pnpm run dev` and it will connect to the local Supabase instance by default.
 
 NOTE: You will need Docker installed for this to work. If that is an issue for you, use the Supabase Cloud Setup instructions instead below).
 
@@ -90,9 +90,9 @@ const runtime = new BgentRuntime({
 ### Development
 
 ```
-npm run dev # start the server
+pnpm run dev # start the server
 
-npm run shell # start the shell in another terminal to talk to the default agent
+pnpm run shell # start the shell in another terminal to talk to the default agent
 ```
 
 ### Usage

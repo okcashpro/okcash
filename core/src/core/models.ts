@@ -4,6 +4,7 @@ type Models = {
     [ModelProvider.OPENAI]: Model;
     [ModelProvider.ANTHROPIC]: Model;
     [ModelProvider.GROK]: Model;
+    [ModelProvider.GROQ]: Model;
     [ModelProvider.LLAMACLOUD]: Model;
     [ModelProvider.LLAMALOCAL]: Model;
     [ModelProvider.GOOGLE]: Model;
@@ -20,7 +21,7 @@ const models: Models = {
             maxOutputTokens: 8192,
             frequency_penalty: 0.0,
             presence_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.6,
         },
         model: {
             [ModelClass.SMALL]: "gpt-4o-mini",
@@ -76,6 +77,23 @@ const models: Models = {
             [ModelClass.MEDIUM]: "grok-2-beta",
             [ModelClass.LARGE]: "grok-2-beta",
             [ModelClass.EMBEDDING]: "grok-2-beta", // not sure about this one
+        },
+    },
+    [ModelProvider.GROQ]: {
+        endpoint: "https://api.groq.com/openai/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8000,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.3,
+        },
+        model: {
+            [ModelClass.SMALL]: "llama-3.1-8b-instant",
+            [ModelClass.MEDIUM]: "llama-3.1-70b-versatile",
+            [ModelClass.LARGE]: "llama-3.2-90b-text-preview",
+            [ModelClass.EMBEDDING]: "llama-3.1-8b-instant",
         },
     },
     [ModelProvider.LLAMACLOUD]: {

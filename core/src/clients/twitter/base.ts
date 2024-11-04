@@ -382,7 +382,7 @@ export class ClientBase extends EventEmitter {
                 await this.runtime.messageManager.getMemoriesByRoomIds({
                     agentId: this.runtime.agentId,
                     roomIds: cachedResults.map((tweet) =>
-                        stringToUuid(tweet.conversationId)
+                        stringToUuid(tweet.conversationId + "-" + this.runtime.agentId)
                     ),
                 });
 
@@ -426,7 +426,7 @@ export class ClientBase extends EventEmitter {
                         url: tweet.permanentUrl,
                         source: "twitter",
                         inReplyTo: tweet.inReplyToStatusId
-                            ? stringToUuid(tweet.inReplyToStatusId)
+                            ? stringToUuid(tweet.inReplyToStatusId + "-" + this.runtime.agentId)
                             : undefined,
                     } as Content;
 
@@ -435,7 +435,7 @@ export class ClientBase extends EventEmitter {
                     // check if it already exists
                     const memory =
                         await this.runtime.messageManager.getMemoryById(
-                            stringToUuid(tweet.id)
+                            stringToUuid(tweet.id + "-" + this.runtime.agentId)
                         );
                     if (memory) {
                         prettyConsole.log(
@@ -445,9 +445,10 @@ export class ClientBase extends EventEmitter {
                     }
 
                     await this.runtime.messageManager.createMemory({
-                        id: stringToUuid(tweet.id),
+                        id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
                         userId: tweetuserId,
                         content: content,
+                        agentId: this.runtime.agentId,
                         roomId,
                         embedding: embeddingZeroVector,
                         createdAt: tweet.timestamp * 1000,
@@ -481,7 +482,7 @@ export class ClientBase extends EventEmitter {
 
         // Convert the Set to an array of UUIDs
         const tweetUuids = Array.from(tweetIdsToCheck).map((id) =>
-            stringToUuid(id)
+            stringToUuid(id + "-" + this.runtime.agentId)
         );
 
         // Check the existing memories in the database
@@ -498,7 +499,7 @@ export class ClientBase extends EventEmitter {
 
         // Filter out the tweets that already exist in the database
         const tweetsToSave = allTweets.filter(
-            (tweet) => !existingMemoryIds.has(stringToUuid(tweet.id))
+            (tweet) => !existingMemoryIds.has(stringToUuid(tweet.id + "-" + this.runtime.agentId))
         );
 
         await this.runtime.ensureUserExists(
@@ -536,9 +537,10 @@ export class ClientBase extends EventEmitter {
             } as Content;
 
             await this.runtime.messageManager.createMemory({
-                id: stringToUuid(tweet.id),
+                id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
                 userId: tweetuserId,
                 content: content,
+                agentId: this.runtime.agentId,
                 roomId,
                 embedding: embeddingZeroVector,
                 createdAt: tweet.timestamp * 1000,

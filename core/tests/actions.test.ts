@@ -32,8 +32,11 @@ async function handleMessage(
         const _senderContent = (senderContent as Content).text?.trim();
         if (_senderContent) {
             await runtime.messageManager.createMemory({
-                id: stringToUuid(message.id),
+                id: stringToUuid(
+                    message.id ?? userId + runtime.agentId + Date.now()
+                ),
                 userId: userId!,
+                agentId: runtime.agentId,
                 content: {
                     text: _senderContent,
                     action: (message.content as Content)?.action ?? "null",
@@ -84,6 +87,7 @@ async function handleMessage(
     if (responseContent.text) {
         const response = {
             userId: runtime.agentId,
+            agentId: runtime.agentId,
             content: responseContent,
             roomId,
             embedding: embeddingZeroVector,
@@ -115,7 +119,7 @@ describe("Actions", () => {
         });
 
         user = session.user!;
-        runtime = _runtime;
+        runtime = _runtime as IAgentRuntime;
 
         // check if the user id exists in the 'accounts' table
         // if it doesn't, create it with the name 'Test User'
@@ -184,6 +188,7 @@ describe("Actions", () => {
         if (testAction && testAction.validate) {
             const isValid = await testAction.validate(runtime, {
                 userId: user.id as UUID,
+                agentId: runtime.agentId,
                 content: { text: "Test message" },
                 roomId: roomId,
             });
@@ -197,6 +202,7 @@ describe("Actions", () => {
 
     test("Test that actions are properly validated in state", async () => {
         const message: Memory = {
+            agentId: runtime.agentId,
             userId: user.id as UUID,
             content: {
                 text: "Please respond with the message 'ok' and the action TEST_ACTION",
@@ -214,6 +220,7 @@ describe("Actions", () => {
     test("Validate that TEST_ACTION is in the state", async () => {
         await runAiTest("Validate TEST_ACTION is in the state", async () => {
             const message: Memory = {
+                agentId: runtime.agentId,
                 userId: user.id as UUID,
                 content: {
                     text: "Please respond with the message 'ok' and the action TEST_ACTION",
@@ -241,6 +248,7 @@ describe("Actions", () => {
 
             const mockMessage: Memory = {
                 userId: user.id as UUID,
+                agentId: runtime.agentId,
                 content: {
                     text: "Test message for TEST action",
                 },

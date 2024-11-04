@@ -31,7 +31,7 @@ export class TwitterGenerationClient extends ClientBase {
             this.generateNewTweet();
             setTimeout(
                 generateNewTweetLoop,
-                (Math.floor(Math.random() * (45 - 15 + 1)) + 15) * 60 * 1000
+                (Math.floor(Math.random() * (20 - 2 + 1)) + 2) * 60 * 1000
             ); // Random interval between 4-8 hours
         };
         // setTimeout(() => {
@@ -84,6 +84,7 @@ export class TwitterGenerationClient extends ClientBase {
                 {
                     userId: this.runtime.agentId,
                     roomId: stringToUuid("twitter_generate_room"),
+                    agentId: this.runtime.agentId,
                     content: { text: "", action: "" },
                 },
                 {
@@ -159,7 +160,7 @@ export class TwitterGenerationClient extends ClientBase {
                     } as Tweet;
 
                     const postId = tweet.id;
-                    const conversationId = tweet.conversationId;
+                    const conversationId = tweet.conversationId + "-" + this.runtime.agentId;
                     const roomId = stringToUuid(conversationId);
 
                     // make sure the agent is in the room
@@ -172,8 +173,9 @@ export class TwitterGenerationClient extends ClientBase {
                     await this.cacheTweet(tweet);
 
                     await this.runtime.messageManager.createMemory({
-                        id: stringToUuid(postId),
+                        id: stringToUuid(postId + "-" + this.runtime.agentId),
                         userId: this.runtime.agentId,
+                        agentId: this.runtime.agentId,
                         content: {
                             text: newTweetContent.trim(),
                             url: tweet.permanentUrl,

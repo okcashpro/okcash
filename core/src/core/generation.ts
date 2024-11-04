@@ -74,6 +74,8 @@ export async function generateText({
                 prettyConsole.log("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey });
 
+                console.log('****** CONTEXT\n', context)
+
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
@@ -82,6 +84,8 @@ export async function generateText({
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
                 });
+
+                console.log("****** RESPONSE\n", openaiResponse);
 
                 response = openaiResponse;
                 prettyConsole.log("Received response from OpenAI model.");
@@ -124,6 +128,24 @@ export async function generateText({
 
                 response = grokResponse;
                 prettyConsole.log("Received response from Grok model.");
+                break;
+            }
+
+            case ModelProvider.GROQ: {
+                console.log("Initializing Groq model.");
+                const groq = createGroq({ apiKey });
+    
+                const { text: groqResponse } = await aiGenerateText({
+                    model: groq.languageModel(model),
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+    
+                response = groqResponse;
+                console.log("Received response from Groq model.");
                 break;
             }
 

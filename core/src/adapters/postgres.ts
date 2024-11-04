@@ -269,8 +269,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             await client.query(
                 `INSERT INTO memories (
-    id, type, content, embedding, "userId", "roomId", "unique", "createdAt"
-  ) VALUES ($1, $2, $3, $4::vector, $5::uuid, $6::uuid, $7, to_timestamp($8/1000.0))`,
+    id, type, content, embedding, "userId", "roomId", "agentId", "unique", "createdAt"
+  ) VALUES ($1, $2, $3, $4::vector, $5::uuid, $6::uuid, $7::uuid, $8, to_timestamp($9/1000.0))`,
                 [
                     memory.id ?? v4(),
                     tableName,
@@ -278,6 +278,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                     `[${memory.embedding.join(",")}]`,
                     memory.userId,
                     memory.roomId,
+                    memory.agentId,
                     memory.unique ?? isUnique,
                     Date.now(),
                 ]
@@ -365,7 +366,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             }
 
             if (params.agentId) {
-                sql += " AND userId = $3";
+                sql += " AND agentId = $3";
                 values.push(params.agentId);
             }
 
@@ -638,9 +639,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                 sql += ` AND "unique" = true`;
             }
 
-            // TODO: Test this
             if (params.agentId) {
-                sql += " AND userId = $3";
+                sql += " AND agentId = $3";
                 values.push(params.agentId);
             }
 

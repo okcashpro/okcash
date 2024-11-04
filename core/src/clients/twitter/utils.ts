@@ -5,7 +5,7 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { prettyConsole } from "../../index.ts";
 
-const MAX_TWEET_LENGTH = 280;
+const MAX_TWEET_LENGTH = 240;
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -42,11 +42,11 @@ export async function buildConversationThread(
         }
         // check if the current tweet has already been saved
         const memory = await client.runtime.messageManager.getMemoryById(
-            stringToUuid(currentTweet.id)
+            stringToUuid(currentTweet.id + "-" + client.runtime.agentId)
         );
         if (!memory) {
             prettyConsole.log("Creating memory for tweet", currentTweet.id);
-            const roomId = stringToUuid(currentTweet.conversationId);
+            const roomId = stringToUuid(currentTweet.conversationId + "-" + client.runtime.agentId);
             const userId = stringToUuid(currentTweet.userId);
 
             await client.runtime.ensureConnection(
@@ -58,13 +58,14 @@ export async function buildConversationThread(
             );
 
             client.runtime.messageManager.createMemory({
-                id: stringToUuid(currentTweet.id),
+                id: stringToUuid(currentTweet.id + "-" + client.runtime.agentId),
+                agentId: client.runtime.agentId,
                 content: {
                     text: currentTweet.text,
                     source: "twitter",
                     url: currentTweet.permanentUrl,
                     inReplyTo: currentTweet.inReplyToStatusId
-                        ? stringToUuid(currentTweet.inReplyToStatusId)
+                        ? stringToUuid(currentTweet.inReplyToStatusId + "-" + client.runtime.agentId)
                         : undefined,
                 },
                 createdAt: currentTweet.timestamp * 1000,
@@ -134,14 +135,15 @@ export async function sendTweetChunks(
     }
 
     const memories: Memory[] = sentTweets.map((tweet) => ({
-        id: stringToUuid(tweet.id),
+        id: stringToUuid(tweet.id + "-" + client.runtime.agentId),
+        agentId: client.runtime.agentId,
         userId: client.runtime.agentId,
         content: {
             text: tweet.text,
             source: "twitter",
             url: tweet.permanentUrl,
             inReplyTo: tweet.inReplyToStatusId
-                ? stringToUuid(tweet.inReplyToStatusId)
+                ? stringToUuid(tweet.inReplyToStatusId + "-" + client.runtime.agentId)
                 : undefined,
         },
         roomId,
