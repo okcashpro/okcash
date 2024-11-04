@@ -147,11 +147,18 @@ function canSendMessage(channel) {
     // Check each required permission
     const missingPermissions = requiredPermissions.filter(perm => !permissions.has(perm));
 
+    // Convert BigInts to strings to avoid serialization issues
+    const missingPermNames = missingPermissions.map(perm => {
+        // Find the flag name by its value
+        return Object.entries(PermissionsBitField.Flags)
+            .find(([_, val]) => val === perm)?.[0] || String(perm);
+    });
+
     return {
         canSend: missingPermissions.length === 0,
-        missingPermissions: missingPermissions,
+        missingPermissions: missingPermNames, // Now using string names instead of BigInts
         reason: missingPermissions.length > 0
-            ? `Missing permissions: ${missingPermissions.map(p => String(p)).join(', ')}`
+            ? `Missing permissions: ${missingPermNames.join(', ')}`
             : null
     };
 }
