@@ -1,32 +1,32 @@
 // @ts-check
 import { themes as prismThemes } from "prism-react-renderer";
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "eliza",
   tagline: "The flexible, scalable AI agent for everyone",
   favicon: "img/favicon.ico",
  
-  // GitHub Pages Configuration
-  url: "https://madjin.github.io",
-  baseUrl: "/eliza/",
-  organizationName: "madjin",
-  projectName: "eliza",
+  // GitHub Pages Configuration - Updated based on docs
+  url: "https://madjin.github.io", // Your GitHub Pages URL
+  baseUrl: "/eliza/", // Repository name with trailing slash
+  organizationName: "madjin", // GitHub username
+  projectName: "eliza", // Repository name
   deploymentBranch: "gh-pages",
-  trailingSlash: true,
+  trailingSlash: true, // Recommended for GitHub Pages
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   
+  //url: "https://docs.ai16z.ai",
+  //baseUrl: "/",
+  //organizationName: "ai16z",
+  //projectName: "eliza",
+
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
   },
-  markdown: {
-    mermaid: true,
-  },
-  themes: [
-    '@docusaurus/theme-mermaid',
-    // Any other themes...
-  ],
+
   plugins: [
     // TypeDoc plugin for API documentation
     [
@@ -34,8 +34,7 @@ const config = {
       {
         entryPoints: ["src/index.ts"],
         tsconfig: "../core/tsconfig.json",
-        out: "./api",
-	skipErrorChecking: true,
+        out: "./api", // Changed to output directly to api folder
       },
     ],
     // Search functionality
@@ -51,6 +50,7 @@ const config = {
       },
     ],
   ],
+
   presets: [
     [
       "classic",
@@ -67,22 +67,10 @@ const config = {
       }),
     ],
   ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Enable dark mode by default
-      colorMode: {
-        defaultMode: 'dark',
-        disableSwitch: false,
-        respectPrefersColorScheme: true,
-      },
-      // Add sidebar configuration
-      docs: {
-        sidebar: {
-          hideable: true,
-          autoCollapseCategories: true,
-        },
-      },
       navbar: {
         title: "eliza",
         logo: {
@@ -116,12 +104,12 @@ const config = {
           {
             title: 'Docs',
             items: [
-              { 
-                label: 'General',
-                href: './'
-              },
+            {  label: 'General',
+			   href: './'
+			},
             ]
           },
+
           {
             title: 'Community',
             items: [
@@ -151,6 +139,7 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula
       }
-    }),
+    })
 };
+
 export default config;
