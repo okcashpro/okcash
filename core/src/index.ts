@@ -22,8 +22,18 @@ import {
 import { PrettyConsole } from "./cli/colors.ts";
 
 let argv: Arguments = parseArguments();
+let basePath = "./";
+// if argv.isroot is true, then set the base path to "../"
+if (argv.isRoot) {
+    basePath = "../";
+}
 
-const characters = loadCharacters(argv.characters);
+// if the path doesnt start with a /, add the base path to the beginning of the path
+if (!argv.characters?.startsWith("/")) {
+    argv.characters = `${basePath}${argv.characters}`;
+}
+
+let characters = loadCharacters(argv.characters);
 
 const directClient = new Client.DirectClient();
 
