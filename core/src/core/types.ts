@@ -107,6 +107,7 @@ export enum ModelProvider {
     LLAMALOCAL = "llama_local",
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
+    REDPILL = "redpill"
 }
 
 /**
