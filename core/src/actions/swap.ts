@@ -23,6 +23,10 @@ import settings from "../core/settings.ts";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
 import BigNumber from "bignumber.js";
 import { WalletProvider } from "../providers/wallet.ts";
+import { TrustScoreProvider } from "../providers/trustScoreProvider";
+import { TokenProvider } from "../providers/token";
+import { TrustScoreDatabase } from "../adapters/trustScoreDatabase";
+import { v4 as uuidv4 } from "uuid";
 
 async function swapToken(
     connection: Connection,
@@ -155,7 +159,7 @@ async function getTokensInWallet(runtime: IAgentRuntime) {
 }
 
 // check if the token symbol is in the wallet
-async function checkTokenInWallet(runtime: IAgentRuntime, tokenSymbol: string) {
+async function getTokenFromWallet(runtime: IAgentRuntime, tokenSymbol: string) {
     try {
         const items = await getTokensInWallet(runtime);
         const token = items.find((item) => item.symbol === tokenSymbol);
@@ -212,6 +216,8 @@ export const executeSwap: Action = {
         });
 
         console.log("Response:", response);
+        const type =
+            response.inputTokenSymbol?.toUpperCase() === "SOL" ? "buy" : "sell";
 
         // Add SOL handling logic
         if (response.inputTokenSymbol?.toUpperCase() === "SOL") {
@@ -227,7 +233,7 @@ export const executeSwap: Action = {
             console.log(
                 `Attempting to resolve CA for input token symbol: ${response.inputTokenSymbol}`
             );
-            response.inputTokenCA = await checkTokenInWallet(
+            response.inputTokenCA = await getTokenFromWallet(
                 runtime,
                 response.inputTokenSymbol
             );
@@ -247,7 +253,7 @@ export const executeSwap: Action = {
             console.log(
                 `Attempting to resolve CA for output token symbol: ${response.outputTokenSymbol}`
             );
-            response.outputTokenCA = await checkTokenInWallet(
+            response.outputTokenCA = await getTokenFromWallet(
                 runtime,
                 response.outputTokenSymbol
             );
@@ -384,6 +390,69 @@ export const executeSwap: Action = {
             if (confirmation.value.err) {
                 throw new Error(
                     `Transaction failed: ${confirmation.value.err}`
+                );
+            }
+
+            if (type === "buy") {
+                const tokenProvider = new TokenProvider(response.outputTokenCA);
+                const module = await import("better-sqlite3");
+                const Database = module.default;
+                const trustScoreDb = new TrustScoreDatabase(
+                    new Database(":memory:")
+                );
+                // add or get recommender
+                const uuid = uuidv4();
+                const recommender = await trustScoreDb.getOrCreateRecommender({
+                    id: uuid,
+                    address: walletPublicKey.toString(),
+                    solanaPubkey: walletPublicKey.toString(),
+                });
+
+                const trustScoreDatabase = new TrustScoreProvider(
+                    tokenProvider,
+                    trustScoreDb
+                );
+                // save the trade
+                const tradeData = {
+                    buy_amount: response.amount,
+                    is_simulation: false,
+                };
+                await trustScoreDatabase.createTradePerformance(
+                    response.outputTokenCA,
+                    recommender.id,
+                    tradeData
+                );
+            } else if (type === "sell") {
+                const tokenProvider = new TokenProvider(response.inputTokenCA);
+                const module = await import("better-sqlite3");
+                const Database = module.default;
+                const trustScoreDb = new TrustScoreDatabase(
+                    new Database(":memory:")
+                );
+                // add or get recommender
+                const uuid = uuidv4();
+                const recommender = await trustScoreDb.getOrCreateRecommender({
+                    id: uuid,
+                    address: walletPublicKey.toString(),
+                    solanaPubkey: walletPublicKey.toString(),
+                });
+
+                const trustScoreDatabase = new TrustScoreProvider(
+                    tokenProvider,
+                    trustScoreDb
+                );
+                // save the trade
+                const sellDetails = {
+                    sell_amount: response.amount,
+                    sell_recommender_id: recommender.id,
+                };
+                const sellTimeStamp = new Date().getTime().toString();
+                await trustScoreDatabase.updateSellDetails(
+                    response.inputTokenCA,
+                    recommender.id,
+                    sellTimeStamp,
+                    sellDetails,
+                    false
                 );
             }
 

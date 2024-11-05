@@ -172,7 +172,7 @@ export class TrustScoreDatabase {
                 risk_score REAL DEFAULT 0,
                 consistency_score REAL DEFAULT 0,
                 virtual_confidence REAL DEFAULT 0,
-                last_active_date DATETIME DEFAULT CURRENT_TIMESTAMP
+                last_active_date DATETIME DEFAULT CURRENT_TIMESTAMP,
                 trust_decay REAL DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
@@ -347,6 +347,61 @@ export class TrustScoreDatabase {
                 identifier
             ) as Recommender | undefined;
         return recommender || null;
+    }
+
+    /**
+     * Retrieves an existing recommender or creates a new one if not found.
+     * Also initializes metrics for the recommender if they haven't been initialized yet.
+     * @param recommender Recommender object containing at least one identifier
+     * @returns Recommender object with all details, or null if failed
+     */
+    getOrCreateRecommender(recommender: Recommender): Recommender | null {
+        try {
+            // Begin a transaction
+            const transaction = this.db.transaction(() => {
+                // Attempt to retrieve the recommender
+                const existingRecommender = this.getRecommender(
+                    recommender.address
+                );
+                if (existingRecommender) {
+                    // Recommender exists, ensure metrics are initialized
+                    this.initializeRecommenderMetrics(existingRecommender.id!);
+                    return existingRecommender;
+                }
+
+                // Recommender does not exist, create a new one
+                const newRecommenderId = this.addRecommender(recommender);
+                if (!newRecommenderId) {
+                    throw new Error("Failed to add new recommender.");
+                }
+
+                // Initialize metrics for the new recommender
+                const metricsInitialized =
+                    this.initializeRecommenderMetrics(newRecommenderId);
+                if (!metricsInitialized) {
+                    throw new Error(
+                        "Failed to initialize recommender metrics."
+                    );
+                }
+
+                // Retrieve and return the newly created recommender
+                const newRecommender = this.getRecommender(newRecommenderId);
+                if (!newRecommender) {
+                    throw new Error(
+                        "Failed to retrieve the newly created recommender."
+                    );
+                }
+
+                return newRecommender;
+            });
+
+            // Execute the transaction and return the recommender
+            const recommenderResult = transaction();
+            return recommenderResult;
+        } catch (error) {
+            console.error("Error in getOrCreateRecommender:", error);
+            return null;
+        }
     }
 
     /**
@@ -548,6 +603,8 @@ export class TrustScoreDatabase {
                 performance.tokenAddress,
                 performance.priceChange24h,
                 performance.volumeChange24h,
+                performance.trade_24h_change,
+                performance.liquidity,
                 performance.liquidityChange24h,
                 performance.holderChange24h, // Ensure column name matches schema
                 performance.rugPull ? 1 : 0,
@@ -916,7 +973,7 @@ export class TrustScoreDatabase {
             market_cap_change = ?,
             sell_liquidity = ?,
             liquidity_change = ?,
-            rapidDump = ?
+            rapidDump = ?,
             sell_recommender_id = ?
         WHERE
             token_address = ?
@@ -986,6 +1043,56 @@ export class TrustScoreDatabase {
         const row = this.db
             .prepare(sql)
             .get(tokenAddress, recommenderId, buyTimeStamp) as
+            | TradePerformance
+            | undefined;
+        if (!row) return null;
+
+        return {
+            token_address: row.token_address,
+            recommender_id: row.recommender_id,
+            buy_price: row.buy_price,
+            sell_price: row.sell_price,
+            buy_timeStamp: row.buy_timeStamp,
+            sell_timeStamp: row.sell_timeStamp,
+            buy_amount: row.buy_amount,
+            sell_amount: row.sell_amount,
+            buy_sol: row.buy_sol,
+            received_sol: row.received_sol,
+            buy_value_usd: row.buy_value_usd,
+            sell_value_usd: row.sell_value_usd,
+            profit_usd: row.profit_usd,
+            profit_percent: row.profit_percent,
+            buy_market_cap: row.buy_market_cap,
+            sell_market_cap: row.sell_market_cap,
+            market_cap_change: row.market_cap_change,
+            buy_liquidity: row.buy_liquidity,
+            sell_liquidity: row.sell_liquidity,
+            liquidity_change: row.liquidity_change,
+            last_updated: row.last_updated,
+            rapidDump: row.rapidDump,
+        };
+    }
+
+    /**
+     * Retrieves the latest trade performance metrics without requiring buyTimeStamp.
+     * @param tokenAddress Token's address
+     * @param recommenderId Recommender's UUID
+     * @param isSimulation Whether the trade is a simulation. If true, retrieves from simulation_trade; otherwise, from trade.
+     * @returns TradePerformance object or null
+     */
+    getLatestTradePerformance(
+        tokenAddress: string,
+        recommenderId: string,
+        isSimulation: boolean
+    ): TradePerformance | null {
+        const tableName = isSimulation ? "simulation_trade" : "trade";
+        const sql = `
+        SELECT * FROM ${tableName}
+        WHERE token_address = ? AND recommender_id = ?
+        ORDER BY buy_timeStamp DESC
+        LIMIT 1;
+    `;
+        const row = this.db.prepare(sql).get(tokenAddress, recommenderId) as
             | TradePerformance
             | undefined;
         if (!row) return null;

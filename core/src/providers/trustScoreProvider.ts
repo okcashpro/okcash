@@ -363,8 +363,7 @@ export class TrustScoreProvider {
         recommenderId: string,
         sellTimeStamp: string,
         sellDetails: sellDetails,
-        isSimulation: boolean,
-        buyTimeStamp: string
+        isSimulation: boolean
     ) {
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
@@ -377,12 +376,12 @@ export class TrustScoreProvider {
         const sellSol = sellDetails.sell_amount / parseFloat(solPrice);
         const sell_value_usd =
             sellDetails.sell_amount * processedData.tradeData.price;
-        const trade = await this.trustScoreDb.getTradePerformance(
+        const trade = await this.trustScoreDb.getLatestTradePerformance(
             tokenAddress,
             recommenderId,
-            buyTimeStamp,
             isSimulation
         );
+        const buyTimeStamp = trade.buy_timeStamp;
         const marketCap =
             processedData.dexScreenerData.pairs[0]?.marketCap || 0;
         const liquidity =
