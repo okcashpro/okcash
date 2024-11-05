@@ -9,6 +9,7 @@ type Models = {
     [ModelProvider.LLAMALOCAL]: Model;
     [ModelProvider.GOOGLE]: Model;
     [ModelProvider.CLAUDE_VERTEX]: Model;
+    [ModelProvider.REDPILL]: Model;
     // TODO: add OpenRouter - feel free to do this :)
 };
 
@@ -147,6 +148,25 @@ const models: Models = {
             [ModelClass.MEDIUM]: "gemini-1.5-flash",
             [ModelClass.LARGE]: "gemini-1.5-pro",
             [ModelClass.EMBEDDING]: "text-embedding-004",
+        },
+    },
+    [ModelProvider.REDPILL]: {
+        endpoint: "https://api.red-pill.ai/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.6,
+        },
+        // Available models: https://docs.red-pill.ai/get-started/supported-models
+        // To test other models, change the models below
+        model: {
+            [ModelClass.SMALL]: "gpt-4o-mini", // [ModelClass.SMALL]: "claude-3-5-sonnet-20241022",
+            [ModelClass.MEDIUM]: "gpt-4o", // [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
+            [ModelClass.LARGE]: "gpt-4o", // [ModelClass.LARGE]: "claude-3-opus-20240229",
+            [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
 };

@@ -1,277 +1,229 @@
----
-sidebar_position: 6
----
-
 # Configuration
 
-This guide covers the configuration options available in Eliza.
+## Overview
 
-> **Note:** Requires Node.js 20+
+The framework provides multiple layers of configuration to customize agent behavior, system settings, and runtime environments. This guide covers all configuration aspects: character files, environment variables, action configuration, and runtime settings.
 
-## Initial Setup
-- Copy .env.example to .env and fill in the appropriate values
-- Edit the TWITTER environment variables to add your bot's username and password
+## Key Components
 
-### Linux Installation
+### 1. Environment Setup
 
-You might need these
+Create a `.env` file in your project root:
 
 ```bash
-pnpm install --include=optional sharp
+# Model API Keys
+OPENAI_API_KEY=your-key
+CLAUDE_API_KEY=your-key
+
+# Database Configuration
+DATABASE_URL=your-db-url
+POSTGRES_URL=your-postgres-url  # Optional, defaults to SQLite
+
+# Client-Specific Tokens
+DISCORD_API_TOKEN=your-token
+DISCORD_APPLICATION_ID=your-id
+TELEGRAM_BOT_TOKEN=your-token
+TWITTER_USERNAME=your-username
 ```
 
-## Environment Variables
+### 2. Character Configuration
 
-### Model Provider Tokens
-```bash
-# Required - At least one model provider
-OPENAI_API_KEY="sk-*"     # OpenAI API key
-ANTHROPIC_API_KEY="sk-*"  # Claude API key (optional)
-
-# Model Selection
-XAI_MODEL="gpt-4o-mini"   # Model selection
-# Available options:
-XAI_MODEL=gpt-4o                                        # OpenAI GPT-4 Turbo
-XAI_MODEL=gpt-4o-mini                                   # OpenAI GPT-4
-XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo # Llama 70B
-XAI_MODEL=meta-llama/Meta-Llama-3.1-405B-Instruct      # Llama 405B
-XAI_MODEL=grok-beta                                     # Grok
-
-### Platform Integration
-# Required for each enabled client
-DISCORD_TOKEN="your-discord-token"
-TELEGRAM_BOT_TOKEN="your-telegram-token"
-TWITTER_USERNAME="your-twitter-username"
-TWITTER_PASSWORD="your-twitter-password"
-
-### Optional Features
-# Voice Support
-ELEVENLABS_XI_API_KEY="your-elevenlabs-key"
-ELEVENLABS_MODEL_ID="eleven_multilingual_v2"
-ELEVENLABS_VOICE_ID="21m00Tcm4TlvDq8ikWAM"
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
-
-# Local AI Support
-LOCALAI_URL="http://localhost:8080"
-LOCALAI_TOKEN="your-token"
-```
-
-## Runtime Configuration
-
-Initialize a runtime with:
-
-```typescript
-import { createAgentRuntime, Database } from "eliza";
-import { initializeDatabase, ModelProvider } from "eliza";
-
-// Initialize database
-const db = initializeDatabase();  // Uses SQLite by default
-
-// Get token for model provider (supports character-specific keys)
-const token = getTokenForProvider(ModelProvider.OPENAI, character);
-
-// Create runtime with default configuration
-const runtime = await createAgentRuntime(
-    character,
-    db,
-    token,
-    "./elizaConfig.yaml"  // Optional, defaults to this path
-);
-```
-
-The runtime configuration includes:
-- Database adapter (SQLite/PostgreSQL/Supabase)
-- Model provider token
-- Character configuration
-- Built-in providers:
-  - timeProvider
-  - boredomProvider
-- Default actions:
-  - All default actions
-  - followRoom/unfollowRoom
-  - muteRoom/unmuteRoom
-  - imageGeneration
-- Custom actions from elizaConfig.yaml
-- Optional evaluators
-
-## Database Configuration
-
-Choose between SQLite (development) and PostgreSQL/Supabase (production).
-
-### Environment Variables
-```bash
-Optional - defaults to SQLite
-POSTGRES_URL="postgres://user:pass@host:5432/db"
-SUPABASE_URL="https://your-project.supabase.co"
-SUPABASE_SERVICE_API_KEY="your-service-key"
-```
-
-### Database Adapters
-```typescript
-// SQLite (default for development)
-import { initializeDatabase } from "eliza";
-const db = initializeDatabase();  // Creates ./db.sqlite
-
-// PostgreSQL
-const db = new PostgresDatabaseAdapter({
-    connectionString: process.env.POSTGRES_URL
-});
-// Supabase
-const db = new SupabaseDatabaseAdapter(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_API_KEY
-);
-```
-
-## Token Providers
-
-Configure model-specific tokens:
-
-```typescript
-const token = getTokenForProvider(ModelProvider.OPENAI, character);
-```
-
-Tokens can be set in environment variables or character-specific settings:
+Create character files in the `characters` directory:
 
 ```json
 {
+  "name": "AgentName",
+  "clients": ["discord", "twitter", "telegram"],
+  "modelProvider": "openai",
   "settings": {
     "secrets": {
-      "OPENAI_API_KEY": "character-specific-key",
-      "CLAUDE_API_KEY": "character-specific-key"
+      "OPENAI_API_KEY": "your-key"
+    },
+    "voice": {
+      "model": "en_US-male-medium"
     }
+  },
+  "bio": ["Biography elements..."],
+  "lore": ["Character background..."],
+  "knowledge": ["Factual information..."],
+  "topics": ["Relevant topics..."],
+  "style": {
+    "all": ["Style guidelines..."],
+    "chat": ["Chat-specific style..."],
+    "post": ["Post-specific style..."]
   }
 }
 ```
 
-## Working with Characters
+### 3. Custom Actions
 
-You can either:
-- Modify the default character in `src/core/defaultCharacter.ts`
-- Create a custom character file:
-```json
-{
-  "name": "character_name",
-  "settings": {
-    "secrets": {
-      "OPENAI_API_KEY": "optional-character-specific-key",
-      "CLAUDE_API_KEY": "optional-character-specific-key"
-    }
+Define custom actions in `elizaConfig.yaml`:
+
+```yaml
+actions:
+  - name: customAction
+    path: ./actions/customAction.ts
+  - name: anotherAction
+    path: ./custom_actions/anotherAction.ts
+```
+
+## Usage Guide
+
+### 1. Basic Setup
+
+```typescript
+import { createAgentRuntime } from '@your-org/agent-framework';
+import { SqliteDatabaseAdapter } from '@your-org/agent-framework/adapters';
+
+// Initialize runtime
+const runtime = await createAgentRuntime({
+  character: characterConfig,
+  configPath: "./elizaConfig.yaml",
+  databaseAdapter: new SqliteDatabaseAdapter("./db.sqlite")
+});
+```
+
+### 2. Running Multiple Characters
+
+```bash
+# Start with specific character file
+pnpm run dev --characters=./characters/agent1.json,./characters/agent2.json
+```
+
+### 3. Client Configuration
+
+```typescript
+// Discord client example
+const discordClient = new DiscordClient(runtime);
+await discordClient.start();
+
+// Telegram client example
+const telegramClient = new TelegramClient(runtime, botToken);
+await telegramClient.start();
+```
+
+## Configuration Options
+
+### 1. Model Providers
+
+```typescript
+const modelProviders = {
+  "openai": {
+    small: "gpt-3.5-turbo",
+    large: "gpt-4"
   },
-  "bio": [],
-  "lore": [],
-  "knowledge": [],
-  "messageExamples": [],
-  "postExamples": [],
-  "topics": [],
-  "style": {},
-  "adjectives": [],
-  "clients": ["discord", "telegram", "twitter"]
-}
+  "anthropic": {
+    small: "claude-3-haiku",
+    large: "claude-3-opus"
+  },
+  "llama-cloud": {
+    small: "llama-7b",
+    large: "llama-70b"
+  }
+};
 ```
 
-Load characters:
-```bash
-node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"
-```
-## Memory Management
-```typescript
-// Basic document processing
-await runtime.processDocument("path/to/document.pdf");
-await runtime.processUrl("https://example.com");
-await runtime.processText("Important information");
-```
-
-Use built-in knowledge tools:
-```bash
-npx folder2knowledge <path/to/folder>
-npx knowledge2character <character-file> <knowledge-file>
-```
-
-
-## Platform Integration
-
-Before initializing clients, ensure:
-1. The desired clients are configured in your character file's `clients` array
-2. Required environment variables are set for each platform:
-   - Discord: DISCORD_TOKEN
-   - Telegram: TELEGRAM_BOT_TOKEN
-   - Twitter: TWITTER_USERNAME and TWITTER_PASSWORD
-
-For help with setting up your Discord Bot, check out: https://discordjs.guide/preparations/setting-up-a-bot-application.html
-
-Initialize all configured clients:
-
+### 2. Database Options
 
 ```typescript
-import { initializeClients } from "eliza";
+// SQLite (default)
+const dbAdapter = new SqliteDatabaseAdapter("./db.sqlite");
 
+// PostgreSQL
+const dbAdapter = new PostgresDatabaseAdapter({
+  connectionString: process.env.POSTGRES_URL
+});
+```
+
+### 3. Custom Provider Configuration
+
+```typescript
+// Add custom provider
+runtime.providers.push({
+  name: "customProvider",
+  get: async (runtime, message, state) => {
+    // Provider implementation
+    return data;
+  }
+});
+```
+
+## Best Practices
+
+### 1. Security
+
+- Store sensitive credentials in `.env` file
+- Use character-specific secrets for per-agent credentials
+- Never commit secrets to version control
+- Rotate API keys regularly
+
+### 2. Character Configuration
+
+- Break bio and lore into smaller chunks for variety
+- Use RAG (knowledge array) for factual information
+- Keep message examples diverse and representative
+- Update knowledge regularly
+
+### 3. Performance
+
+```typescript
+// Optimize context length
+const settings = {
+  maxContextLength: 4000,  // Adjust based on model
+  maxTokens: 1000,        // Limit response length
+  temperature: 0.7        // Adjust response randomness
+};
+```
+
+### 4. Error Handling
+
+```typescript
 try {
-    const clients = await initializeClients(character, runtime);
-    prettyConsole.success(`✅ Clients successfully started for character ${character.name}`);
+  const runtime = await createAgentRuntime(config);
 } catch (error) {
-    prettyConsole.error(`❌ Error starting clients for ${character.name}: ${error}`);
+  if (error.code === 'CONFIG_NOT_FOUND') {
+    console.error('Configuration file missing');
+  } else if (error.code === 'INVALID_CHARACTER') {
+    console.error('Character file validation failed');
+  }
 }
 ```
 
-### Client-Specific Error Handling
+## Troubleshooting
 
-Each client has built-in error handling:
+### Common Issues
 
+1. **Missing Configuration**
 ```typescript
-// Telegram Example
-const botToken = runtime.getSetting("TELEGRAM_BOT_TOKEN");
-if (!botToken) {
-    prettyConsole.error(`❌ Telegram bot token is not set for character ${character.name}`);
-    return null;
-}
-try {
-    const telegramClient = new Client.TelegramClient(runtime, botToken);
-    await telegramClient.start();
-    prettyConsole.success(`✅ Telegram client successfully started for character ${character.name}`);
-    return telegramClient;
-} catch (error) {
-    prettyConsole.error(`❌ Error creating/starting Telegram client for ${character.name}:`, error);
-    return null;
+if (!fs.existsSync('./elizaConfig.yaml')) {
+  console.error('Missing elizaConfig.yaml - copy from example');
 }
 ```
 
-
-## Runtime Components
-
-The runtime includes these built-in components:
-
-### Actions
-- Default actions from defaultActions
-- followRoom/unfollowRoom
-- muteRoom/unmuteRoom
-- imageGeneration
-- Custom actions from elizaConfig.yaml
-
-### Providers
-- timeProvider
-- boredomProvider
-
-See [Advanced Features](./advanced) for adding custom actions and providers.
-
-## Validation
-```bash
-# Python
-python examples/validate.py
-# JavaScript
-node examples/validate.mjs
+2. **Invalid Character File**
+```typescript
+// Validate character file
+if (!character.name || !character.bio || !character.style) {
+  throw new Error('Invalid character configuration');
+}
 ```
 
-## Development Commands
-```bash
-pnpm run dev    # Start the server
-pnpm run shell  # Start interactive shell
+3. **Model Provider Issues**
+```typescript
+// Fallback to local model
+if (!process.env.OPENAI_API_KEY) {
+  console.log('Using local model fallback');
+  runtime.modelProvider = 'llama-local';
+}
 ```
 
 ## Next Steps
-See the [Advanced Features](./advanced) guide for customizing actions, providers, and more.
+
+After basic configuration:
+1. Configure custom actions
+2. Set up client integrations
+3. Customize character behavior
+4. Optimize model settings
+5. Implement error handling
+
+For more detailed information on specific components, refer to their respective documentation sections.

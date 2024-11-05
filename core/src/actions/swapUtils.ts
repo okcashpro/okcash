@@ -26,6 +26,46 @@ export async function delayedCall<T>(
     return method(...args);
 }
 
+export async function getTokenDecimals(
+    connection: Connection,
+    mintAddress: string
+): Promise<number> {
+    const mintPublicKey = new PublicKey(mintAddress);
+    const tokenAccountInfo =
+        await connection.getParsedAccountInfo(mintPublicKey);
+
+    // Check if the data is parsed and contains the expected structure
+    if (
+        tokenAccountInfo.value &&
+        typeof tokenAccountInfo.value.data === "object" &&
+        "parsed" in tokenAccountInfo.value.data
+    ) {
+        const parsedInfo = tokenAccountInfo.value.data.parsed?.info;
+        if (parsedInfo && typeof parsedInfo.decimals === "number") {
+            return parsedInfo.decimals;
+        }
+    }
+
+    throw new Error("Unable to fetch token decimals");
+}
+
+export async function getQuote(
+    connection: Connection,
+    baseToken: string,
+    outputToken: string,
+    amount: number
+): Promise<any> {
+    const decimals = await getTokenDecimals(connection, baseToken);
+    const adjustedAmount = amount * 10 ** decimals;
+
+    const quoteResponse = await fetch(
+        `https://quote-api.jup.ag/v6/quote?inputMint=${baseToken}&outputMint=${outputToken}&amount=${adjustedAmount}&slippageBps=50`
+    );
+    const swapTransaction = await quoteResponse.json();
+    const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
+    return new Uint8Array(swapTransactionBuf);
+}
+
 export const executeSwap = async (
     transaction: VersionedTransaction,
     type: "buy" | "sell"
@@ -227,7 +267,8 @@ export const fetchBuyTransaction = async (
 
         // deserialize the transaction
         const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
-        var transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+        const transaction =
+            VersionedTransaction.deserialize(swapTransactionBuf);
 
         // sign the transaction
         transaction.sign([wallet]);
@@ -273,7 +314,8 @@ export const fetchSellTransaction = async (
 
         // deserialize the transaction
         const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
-        var transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+        const transaction =
+            VersionedTransaction.deserialize(swapTransactionBuf);
 
         // sign the transaction
         transaction.sign([wallet]);

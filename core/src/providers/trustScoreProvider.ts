@@ -5,18 +5,19 @@ import {
     // DexScreenerData,
     // DexScreenerPair,
     // HolderData,
-} from "../types/token";
+} from "../types/token.ts";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
-import { TokenProvider } from "./token";
-import WalletProvider from "./balances";
+import { TokenProvider } from "./token.ts";
+import { WalletProvider } from "./wallet.ts";
 import {
     TrustScoreDatabase,
     RecommenderMetrics,
     TokenPerformance,
     TradePerformance,
-} from "../adapters/trustScoreDatabase";
+} from "../adapters/trustScoreDatabase.ts";
 import settings from "../core/settings.ts";
+import { IAgentRuntime } from "../core/types.ts";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
@@ -303,6 +304,7 @@ export class TrustScoreProvider {
      * @returns TradePerformance object.
      */
     async createTradePerformance(
+        runtime: IAgentRuntime,
         tokenAddress: string,
         recommenderId: string,
         data: TradeData
@@ -313,7 +315,7 @@ export class TrustScoreProvider {
             new Connection("https://api.mainnet-beta.solana.com"),
             new PublicKey(Wallet!)
         );
-        const prices = await wallet.fetchPrices();
+        const prices = await wallet.fetchPrices(runtime);
         const solPrice = prices.solana.usd;
         const buySol = data.buy_amount / parseFloat(solPrice);
         const buy_value_usd = data.buy_amount * processedData.tradeData.price;
@@ -359,12 +361,12 @@ export class TrustScoreProvider {
      */
 
     async updateSellDetails(
+        runtime: IAgentRuntime,
         tokenAddress: string,
         recommenderId: string,
         sellTimeStamp: string,
         sellDetails: sellDetails,
-        isSimulation: boolean,
-        buyTimeStamp: string
+        isSimulation: boolean
     ) {
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
@@ -372,17 +374,17 @@ export class TrustScoreProvider {
             new Connection("https://api.mainnet-beta.solana.com"),
             new PublicKey(Wallet!)
         );
-        const prices = await wallet.fetchPrices();
+        const prices = await wallet.fetchPrices(runtime);
         const solPrice = prices.solana.usd;
         const sellSol = sellDetails.sell_amount / parseFloat(solPrice);
         const sell_value_usd =
             sellDetails.sell_amount * processedData.tradeData.price;
-        const trade = await this.trustScoreDb.getTradePerformance(
+        const trade = await this.trustScoreDb.getLatestTradePerformance(
             tokenAddress,
             recommenderId,
-            buyTimeStamp,
             isSimulation
         );
+        const buyTimeStamp = trade.buy_timeStamp;
         const marketCap =
             processedData.dexScreenerData.pairs[0]?.marketCap || 0;
         const liquidity =

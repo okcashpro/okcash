@@ -66,7 +66,17 @@ export function parseArguments(): Arguments {
 }
 
 export function loadCharacters(charactersArg: string): Character[] {
-    const characterPaths = charactersArg?.split(",").map((path) => path.trim());
+    let characterPaths = charactersArg
+        ?.split(",")
+        .map((path) => path.trim())
+        .map((path) => {
+            if (path.startsWith("./characters")) {
+                return `../characters/${path}`;
+            }
+            return path;
+        });
+
+
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
@@ -102,6 +112,11 @@ export function getTokenForProvider(
             return (
                 character.settings?.secrets?.CLAUDE_API_KEY ||
                 settings.CLAUDE_API_KEY
+            );
+        case ModelProvider.REDPILL:
+            return (
+                character.settings?.secrets?.REDPILL_API_KEY ||
+                settings.REDPILL_API_KEY
             );
     }
 }
@@ -166,7 +181,12 @@ export async function createDirectRuntime(
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
-        providers: [Provider.timeProvider, Provider.boredomProvider],
+        providers: [
+            Provider.timeProvider,
+            Provider.boredomProvider,
+            character.settings?.secrets?.WALLET_PUBLIC_KEY &&
+                Provider.walletProvider,
+        ].filter(Boolean),
         actions: [
             ...defaultActions,
             // Custom actions

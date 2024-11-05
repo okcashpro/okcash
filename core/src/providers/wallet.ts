@@ -18,6 +18,7 @@ const PROVIDER_CONFIG = {
 
 interface Item {
     name: string;
+    address: string;
     symbol: string;
     decimals: number;
     balance: string;
@@ -48,7 +49,7 @@ interface Prices {
     ethereum: { usd: string };
 }
 
-class WalletProvider {
+export class WalletProvider {
     constructor(
         private connection: Connection,
         private walletPublicKey: PublicKey

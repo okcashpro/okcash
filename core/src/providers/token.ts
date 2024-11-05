@@ -2,7 +2,7 @@ import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
 import { IAgentRuntime, Memory, Provider, State } from "../core/types.ts";
 import settings from "../core/settings.ts";
-import { toBN, BN } from '../utils/bignumber.js';
+import { toBN } from "../utils/bignumber.js";
 import {
     ProcessedTokenData,
     TokenSecurityData,
@@ -517,7 +517,7 @@ export class TokenProvider {
         const limit = 1000;
         let cursor;
         //HELIOUS_API_KEY needs to be added
-        const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIOUS_API_KEY || ""}`;
+        const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIUS_API_KEY || ""}`;
         console.log({ url });
 
         try {
@@ -620,7 +620,9 @@ export class TokenProvider {
             })
             .map((holder) => ({
                 holderAddress: holder.address,
-                balanceUsd: toBN(holder.balance).multipliedBy(tokenPriceUsd).toFixed(2),
+                balanceUsd: toBN(holder.balance)
+                    .multipliedBy(tokenPriceUsd)
+                    .toFixed(2),
             }));
 
         return highValueHolders;

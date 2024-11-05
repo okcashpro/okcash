@@ -112,7 +112,14 @@ function splitMessage(content: string): string[] {
 
 
 function canSendMessage(channel) {
-    // Get the bot member in the guild
+    console.log("canSendMessage", channel);
+    // if it is a DM channel, we can always send messages
+    if (channel.type === ChannelType.DM) {
+        return {
+            canSend: true,
+            reason: null
+        };
+    }
     const botMember = channel.guild?.members.cache.get(channel.client.user.id);
 
     if (!botMember) {
@@ -147,18 +154,11 @@ function canSendMessage(channel) {
     // Check each required permission
     const missingPermissions = requiredPermissions.filter(perm => !permissions.has(perm));
 
-    // Convert BigInts to strings to avoid serialization issues
-    const missingPermNames = missingPermissions.map(perm => {
-        // Find the flag name by its value
-        return Object.entries(PermissionsBitField.Flags)
-            .find(([_, val]) => val === perm)?.[0] || String(perm);
-    });
-
     return {
         canSend: missingPermissions.length === 0,
-        missingPermissions: missingPermNames, // Now using string names instead of BigInts
+        missingPermissions: missingPermissions,
         reason: missingPermissions.length > 0
-            ? `Missing permissions: ${missingPermNames.join(', ')}`
+            ? `Missing permissions: ${missingPermissions.map(p => String(p)).join(', ')}`
             : null
     };
 }
