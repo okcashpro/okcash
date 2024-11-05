@@ -66,7 +66,17 @@ export function parseArguments(): Arguments {
 }
 
 export function loadCharacters(charactersArg: string): Character[] {
-    const characterPaths = charactersArg?.split(",").map((path) => path.trim());
+    let characterPaths = charactersArg
+        ?.split(",")
+        .map((path) => path.trim())
+        .map((path) => {
+            if (path.startsWith("./characters")) {
+                return `../characters/${path}`;
+            }
+            return path;
+        });
+
+
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {

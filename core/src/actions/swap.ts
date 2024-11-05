@@ -1,32 +1,30 @@
+import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
 import {
     Connection,
     Keypair,
     PublicKey,
-    Transaction,
-    VersionedTransaction,
+    VersionedTransaction
 } from "@solana/web3.js";
+import BigNumber from "bignumber.js";
 import fetch from "cross-fetch";
+import { v4 as uuidv4 } from "uuid";
+import { TrustScoreDatabase } from "../adapters/trustScoreDatabase.ts";
+import { composeContext } from "../core/context.ts";
+import { generateObject } from "../core/generation.ts";
+import settings from "../core/settings.ts";
 import {
     ActionExample,
+    HandlerCallback,
     IAgentRuntime,
     Memory,
-    type Action,
-    State,
     ModelClass,
-    HandlerCallback,
+    State,
+    type Action,
 } from "../core/types.ts";
-import { walletProvider } from "../providers/wallet.ts";
-import { composeContext } from "../core/context.ts";
-import { generateObject, generateObjectArray } from "../core/generation.ts";
+import { TokenProvider } from "../providers/token.ts";
+import { TrustScoreProvider } from "../providers/trustScoreProvider.ts";
+import { walletProvider, WalletProvider } from "../providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
-import settings from "../core/settings.ts";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
-import BigNumber from "bignumber.js";
-import { WalletProvider } from "../providers/wallet.ts";
-import { TrustScoreProvider } from "../providers/trustScoreProvider";
-import { TokenProvider } from "../providers/token";
-import { TrustScoreDatabase } from "../adapters/trustScoreDatabase";
-import { v4 as uuidv4 } from "uuid";
 
 async function swapToken(
     connection: Connection,
@@ -418,6 +416,7 @@ export const executeSwap: Action = {
                     is_simulation: false,
                 };
                 await trustScoreDatabase.createTradePerformance(
+                    runtime,
                     response.outputTokenCA,
                     recommender.id,
                     tradeData
@@ -448,6 +447,7 @@ export const executeSwap: Action = {
                 };
                 const sellTimeStamp = new Date().getTime().toString();
                 await trustScoreDatabase.updateSellDetails(
+                    runtime,
                     response.inputTokenCA,
                     recommender.id,
                     sellTimeStamp,
