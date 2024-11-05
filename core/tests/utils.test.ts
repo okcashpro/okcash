@@ -32,7 +32,7 @@ describe("buildConversationThread", () => {
             actions: [],
         });
 
-        // Create an instance of the TwitterGenerationClient
+        // Create an instance of the TwitterPostClient
         client = new TwitterInteractionClient(runtime);
 
         // Load cached Twitter credentials

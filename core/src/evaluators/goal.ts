@@ -11,7 +11,7 @@ import {
     type State,
 } from "../core/types.ts";
 
-const template = `TASK: Update Goal
+const goalsTemplate = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.
 
 # INSTRUCTIONS
@@ -64,7 +64,7 @@ async function handler(
     state = (await runtime.composeState(message)) as State;
     const context = composeContext({
         state,
-        template,
+        template: runtime.character.templates?.goalsTemplate || goalsTemplate,
     });
 
     // Request generateText from OpenAI to analyze conversation and suggest goal updates

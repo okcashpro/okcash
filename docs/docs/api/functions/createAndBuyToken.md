@@ -32,4 +32,4 @@
 
 ## Defined in
 
-[core/src/actions/pumpfun.ts:51](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/actions/pumpfun.ts#L51)
+[core/src/actions/pumpfun.ts:51](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/actions/pumpfun.ts#L51)

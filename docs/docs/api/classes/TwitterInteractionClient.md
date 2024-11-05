@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/interactions.ts:88](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/interactions.ts#L88)
+[core/src/clients/twitter/interactions.ts:88](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/interactions.ts#L88)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:151](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L151)
+[core/src/clients/twitter/base.ts:151](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L151)
 
 ***
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L89)
+[core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L89)
 
 ***
 
@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:94](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L94)
+[core/src/clients/twitter/base.ts:94](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L94)
 
 ***
 
@@ -88,7 +88,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L92)
+[core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L92)
 
 ***
 
@@ -102,7 +102,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L90)
+[core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L90)
 
 ***
 
@@ -116,7 +116,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L97)
+[core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L97)
 
 ***
 
@@ -130,7 +130,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L88)
+[core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L88)
 
 ***
 
@@ -144,7 +144,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L93)
+[core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L93)
 
 ***
 
@@ -158,7 +158,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L91)
+[core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L91)
 
 ***
 
@@ -172,7 +172,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L87)
+[core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L87)
 
 ***
 
@@ -186,7 +186,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:98](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L98)
+[core/src/clients/twitter/base.ts:98](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L98)
 
 ***
 
@@ -200,7 +200,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L86)
+[core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L86)
 
 ***
 
@@ -228,7 +228,7 @@ node\_modules/@types/node/events.d.ts:459
 
 ### captureRejectionSymbol
 
-> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](TwitterGenerationClient.md#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](TwitterPostClient.md#capturerejectionsymbol)
 
 Value: `Symbol.for('nodejs.rejection')`
 
@@ -304,7 +304,7 @@ node\_modules/@types/node/events.d.ts:498
 
 ### errorMonitor
 
-> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](TwitterGenerationClient.md#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](TwitterPostClient.md#errormonitor)
 
 This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
@@ -407,7 +407,7 @@ node\_modules/@types/node/events.d.ts:597
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:100](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L100)
+[core/src/clients/twitter/base.ts:100](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L100)
 
 ***
 
@@ -538,7 +538,7 @@ node\_modules/@types/node/events.d.ts:922
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:281](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L281)
+[core/src/clients/twitter/base.ts:281](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L281)
 
 ***
 
@@ -566,7 +566,7 @@ node\_modules/@types/node/events.d.ts:922
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:333](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L333)
+[core/src/clients/twitter/base.ts:333](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L333)
 
 ***
 
@@ -588,7 +588,7 @@ node\_modules/@types/node/events.d.ts:922
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:116](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L116)
+[core/src/clients/twitter/base.ts:116](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L116)
 
 ***
 
@@ -635,7 +635,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:138](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L138)
+[core/src/clients/twitter/base.ts:138](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L138)
 
 ***
 
@@ -649,7 +649,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/twitter/interactions.ts:94](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/interactions.ts#L94)
+[core/src/clients/twitter/interactions.ts:94](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/interactions.ts#L94)
 
 ***
 
@@ -905,7 +905,7 @@ node\_modules/@types/node/events.d.ts:659
 
 #### Defined in
 
-[core/src/clients/twitter/interactions.ts:77](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/interactions.ts#L77)
+[core/src/clients/twitter/interactions.ts:77](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/interactions.ts#L77)
 
 ***
 
@@ -1229,7 +1229,7 @@ node\_modules/@types/node/events.d.ts:742
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:566](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L566)
+[core/src/clients/twitter/base.ts:566](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L566)
 
 ***
 
@@ -1251,7 +1251,7 @@ node\_modules/@types/node/events.d.ts:742
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:554](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/twitter/base.ts#L554)
+[core/src/clients/twitter/base.ts:554](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/twitter/base.ts#L554)
 
 ***
 
@@ -1381,7 +1381,7 @@ import { getEventListeners, EventEmitter } from 'node:events';
 
 #### Parameters
 
-• **emitter**: `EventTarget` \| `EventEmitter`\<`DefaultEventMap`\>
+• **emitter**: `EventEmitter`\<`DefaultEventMap`\> \| `EventTarget`
 
 • **name**: `string` \| `symbol`
 
@@ -1435,7 +1435,7 @@ import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
 
 #### Parameters
 
-• **emitter**: `EventTarget` \| `EventEmitter`\<`DefaultEventMap`\>
+• **emitter**: `EventEmitter`\<`DefaultEventMap`\> \| `EventTarget`
 
 #### Returns
 
@@ -1790,7 +1790,7 @@ setMaxListeners(5, target, emitter);
 
 A non-negative number. The maximum number of listeners per `EventTarget` event.
 
-• ...**eventTargets?**: (`EventTarget` \| `EventEmitter`\<`DefaultEventMap`\>)[]
+• ...**eventTargets?**: (`EventEmitter`\<`DefaultEventMap`\> \| `EventTarget`)[]
 
 Zero or more {EventTarget} or {EventEmitter} instances. If none are specified, `n` is set as the default max for all newly created {EventTarget} and {EventEmitter}
 objects.

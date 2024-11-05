@@ -8,7 +8,7 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { generateText } from "../../core/generation.ts";
 
-const newTweetPrompt = `{{timeline}}
+const twitterPostTemplate = `{{timeline}}
 
 {{providers}}
 
@@ -25,7 +25,7 @@ About {{agentName}} (@{{twitterUserName}}):
 Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Try to write something totally different than previous posts. Do not add commentary or ackwowledge this request, just write the post.
 Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.`;
 
-export class TwitterGenerationClient extends ClientBase {
+export class TwitterPostClient extends ClientBase {
     onReady() {
         const generateNewTweetLoop = () => {
             this.generateNewTweet();
@@ -96,7 +96,7 @@ export class TwitterGenerationClient extends ClientBase {
             // Generate new tweet
             const context = composeContext({
                 state,
-                template: newTweetPrompt,
+                template: this.runtime.character.templates?.twitterPostTemplate || twitterPostTemplate,
             });
 
             const datestr = new Date().toUTCString().replace(/:/g, "-");

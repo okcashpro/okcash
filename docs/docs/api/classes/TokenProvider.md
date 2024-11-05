@@ -16,7 +16,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:38](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L38)
+[core/src/providers/token.ts:38](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L38)
 
 ## Methods
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:461](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L461)
+[core/src/providers/token.ts:461](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L461)
 
 ***
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:629](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L629)
+[core/src/providers/token.ts:631](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L631)
 
 ***
 
@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:633](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L633)
+[core/src/providers/token.ts:635](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L635)
 
 ***
 
@@ -84,7 +84,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:420](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L420)
+[core/src/providers/token.ts:420](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L420)
 
 ***
 
@@ -98,7 +98,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:507](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L507)
+[core/src/providers/token.ts:507](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L507)
 
 ***
 
@@ -112,7 +112,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:155](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L155)
+[core/src/providers/token.ts:155](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L155)
 
 ***
 
@@ -126,7 +126,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:185](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L185)
+[core/src/providers/token.ts:185](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L185)
 
 ***
 
@@ -144,7 +144,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:607](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L607)
+[core/src/providers/token.ts:607](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L607)
 
 ***
 
@@ -162,7 +162,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:720](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L720)
+[core/src/providers/token.ts:722](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L722)
 
 ***
 
@@ -176,7 +176,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:784](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L784)
+[core/src/providers/token.ts:786](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L786)
 
 ***
 
@@ -190,4 +190,4 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:654](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L654)
+[core/src/providers/token.ts:656](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/token.ts#L656)

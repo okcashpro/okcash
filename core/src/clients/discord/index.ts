@@ -1,4 +1,3 @@
-import { REST } from "@discordjs/rest";
 import {
     Client,
     Events,
@@ -6,25 +5,23 @@ import {
     Guild,
     MessageReaction,
     Partials,
-    Routes,
-    User,
+    User
 } from "discord.js";
 import { EventEmitter } from "events";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { Character, IAgentRuntime } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
+import { prettyConsole } from "../../index.ts";
 import chat_with_attachments from "./actions/chat_with_attachments.ts";
 import download_media from "./actions/download_media.ts";
 import joinvoice from "./actions/joinvoice.ts";
 import leavevoice from "./actions/leavevoice.ts";
 import summarize from "./actions/summarize_conversation.ts";
 import transcribe_media from "./actions/transcribe_media.ts";
-import { commands } from "./commands.ts";
 import { MessageManager } from "./messages.ts";
 import channelStateProvider from "./providers/channelState.ts";
 import voiceStateProvider from "./providers/voiceState.ts";
 import { VoiceManager } from "./voice.ts";
-import { prettyConsole } from "../../index.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
@@ -64,7 +61,6 @@ export class DiscordClient extends EventEmitter {
         this.client.login(this.apiToken);
 
         this.setupEventListeners();
-        this.setupCommands();
 
         this.runtime.registerAction(joinvoice);
         this.runtime.registerAction(leavevoice);
@@ -111,22 +107,6 @@ export class DiscordClient extends EventEmitter {
             Events.InteractionCreate,
             this.handleInteractionCreate.bind(this)
         );
-    }
-
-    private setupCommands() {
-        const rest = new REST({ version: "9" }).setToken(this.apiToken);
-        (async () => {
-            try {
-                await rest.put(
-                    Routes.applicationCommands(
-                        this.runtime.getSetting("DISCORD_APPLICATION_ID")
-                    ),
-                    { body: commands }
-                );
-            } catch (error) {
-                console.error(error);
-            }
-        })();
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {

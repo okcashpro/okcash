@@ -22,7 +22,7 @@ import {
     generateShouldRespond,
 } from "../../core/generation.ts";
 
-export const messageHandlerTemplate =
+export const twitterMessageHandlerTemplate =
     `{{relevantFacts}}
 {{recentFacts}}
 
@@ -50,7 +50,7 @@ Recent interactions between {{agentName}} and other users:
 
 ` + messageCompletionFooter;
 
-export const shouldRespondTemplate =
+export const twitterShouldRespondTemplate =
     `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
@@ -268,7 +268,7 @@ export class TwitterInteractionClient extends ClientBase {
 
         const shouldRespondContext = composeContext({
             state,
-            template: shouldRespondTemplate,
+            template: this.runtime.character.templates?.twitterShouldRespondTemplate || this.runtime.character?.templates?.shouldRespondTemplate || twitterShouldRespondTemplate,
         });
 
         const shouldRespond = await generateShouldRespond({
@@ -284,7 +284,7 @@ export class TwitterInteractionClient extends ClientBase {
 
         const context = composeContext({
             state,
-            template: messageHandlerTemplate,
+            template: this.runtime.character.templates?.twitterMessageHandlerTemplate || this.runtime.character?.templates?.messageHandlerTemplate || twitterMessageHandlerTemplate,
         });
 
         const datestr = new Date().toUTCString().replace(/:/g, "-");

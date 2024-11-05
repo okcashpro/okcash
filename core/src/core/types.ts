@@ -292,6 +292,9 @@ export type Character = {
     system?: string;
     modelProvider: ModelProvider;
     imageGenModel?: ImageGenModel;
+    templates?: {
+        [key: string]: string;
+    };
     modelOverride?: string;
     bio: string | string[];
     lore: string[];

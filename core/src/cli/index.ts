@@ -244,7 +244,7 @@ export async function startTwitter(runtime: IAgentRuntime) {
         runtime
     );
     await wait();
-    const twitterGenerationClient = new Client.TwitterGenerationClient(runtime);
+    const twitterGenerationClient = new Client.TwitterPostClient(runtime);
 
     return [
         twitterInteractionClient,

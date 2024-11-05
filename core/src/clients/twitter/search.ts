@@ -18,7 +18,7 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
 
-const messageHandlerTemplate =
+const twitterSearchTemplate =
     `{{relevantFacts}}
 {{recentFacts}}
 
@@ -264,7 +264,7 @@ export class TwitterSearchClient extends ClientBase {
 
             const context = composeContext({
                 state,
-                template: messageHandlerTemplate,
+                template: this.runtime.character.templates?.twitterSearchTemplate || twitterSearchTemplate,
             });
 
             // log context to file

@@ -8,9 +8,10 @@
 - [SqliteDatabaseAdapter](classes/SqliteDatabaseAdapter.md)
 - [TelegramClient](classes/TelegramClient.md)
 - [TokenProvider](classes/TokenProvider.md)
-- [TwitterGenerationClient](classes/TwitterGenerationClient.md)
 - [TwitterInteractionClient](classes/TwitterInteractionClient.md)
+- [TwitterPostClient](classes/TwitterPostClient.md)
 - [TwitterSearchClient](classes/TwitterSearchClient.md)
+- [WalletProvider](classes/WalletProvider.md)
 
 ## Interfaces
 
@@ -18,14 +19,13 @@
 
 ## Variables
 
-- [askClaude](variables/askClaude.md)
 - [boredomProvider](variables/boredomProvider.md)
-- [claudeHandlerTemplate](variables/claudeHandlerTemplate.md)
 - [continueAction](variables/continueAction.md)
 - [executeSwap](variables/executeSwap.md)
 - [followRoom](variables/followRoom.md)
 - [ignore](variables/ignore.md)
 - [imageGeneration](variables/imageGeneration.md)
+- [messageHandlerTemplate](variables/messageHandlerTemplate.md)
 - [muteRoom](variables/muteRoom.md)
 - [none](variables/none.md)
 - [orderBookProvider](variables/orderBookProvider.md)

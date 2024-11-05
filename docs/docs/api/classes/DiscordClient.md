@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:37](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/discord/index.ts#L37)
+[core/src/clients/discord/index.ts:34](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L34)
 
 ## Properties
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:30](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/discord/index.ts#L30)
+[core/src/clients/discord/index.ts:27](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L27)
 
 ***
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:33](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/discord/index.ts#L33)
+[core/src/clients/discord/index.ts:30](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L30)
 
 ***
 
@@ -72,7 +72,7 @@ node\_modules/@types/node/events.d.ts:459
 
 ### captureRejectionSymbol
 
-> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](TwitterGenerationClient.md#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](TwitterPostClient.md#capturerejectionsymbol)
 
 Value: `Symbol.for('nodejs.rejection')`
 
@@ -148,7 +148,7 @@ node\_modules/@types/node/events.d.ts:498
 
 ### errorMonitor
 
-> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](TwitterGenerationClient.md#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](TwitterPostClient.md#errormonitor)
 
 This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
@@ -383,7 +383,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:141](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/discord/index.ts#L141)
+[core/src/clients/discord/index.ts:121](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L121)
 
 ***
 
@@ -403,7 +403,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:211](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/discord/index.ts#L211)
+[core/src/clients/discord/index.ts:191](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L191)
 
 ***
 
@@ -1071,7 +1071,7 @@ import { getEventListeners, EventEmitter } from 'node:events';
 
 #### Parameters
 
-• **emitter**: `EventTarget` \| `EventEmitter`\<`DefaultEventMap`\>
+• **emitter**: `EventEmitter`\<`DefaultEventMap`\> \| `EventTarget`
 
 • **name**: `string` \| `symbol`
 
@@ -1125,7 +1125,7 @@ import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
 
 #### Parameters
 
-• **emitter**: `EventTarget` \| `EventEmitter`\<`DefaultEventMap`\>
+• **emitter**: `EventEmitter`\<`DefaultEventMap`\> \| `EventTarget`
 
 #### Returns
 
@@ -1480,7 +1480,7 @@ setMaxListeners(5, target, emitter);
 
 A non-negative number. The maximum number of listeners per `EventTarget` event.
 
-• ...**eventTargets?**: (`EventTarget` \| `EventEmitter`\<`DefaultEventMap`\>)[]
+• ...**eventTargets?**: (`EventEmitter`\<`DefaultEventMap`\> \| `EventTarget`)[]
 
 Zero or more {EventTarget} or {EventEmitter} instances. If none are specified, `n` is set as the default max for all newly created {EventTarget} and {EventEmitter}
 objects.
