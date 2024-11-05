@@ -166,7 +166,12 @@ export async function createDirectRuntime(
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
-        providers: [Provider.timeProvider, Provider.boredomProvider],
+        providers: [
+            Provider.timeProvider,
+            Provider.boredomProvider,
+            character.settings?.secrets?.WALLET_PUBLIC_KEY &&
+                Provider.walletProvider,
+        ].filter(Boolean),
         actions: [
             ...defaultActions,
             // Custom actions
