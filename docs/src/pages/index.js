@@ -29,7 +29,7 @@ export default function Home() {
           width: "100%",
           height: "100%",
           zIndex: -1,
-          backgroundImage: "url(/img/background.jpg)",
+          backgroundImage: "url(./img/background.jpg)",
           backgroundSize: "cover",
           opacity: 0.5,
         }}
