@@ -1,8 +1,9 @@
-import { Character, ModelProvider } from "./types.ts";
+import { Character, ModelProvider } from "@eliza/core";
+import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
 
 const defaultCharacter: Character = {
     name: "Eliza",
-    plugins: [],
+    plugins: [imageGenerationPlugin],
     clients: [
         // "telegram",
         // "discord",

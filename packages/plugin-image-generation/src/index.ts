@@ -3,12 +3,13 @@ import {
     IAgentRuntime,
     Memory,
     State,
+    Plugin,
     Action,
 } from "@eliza/core";
 import { elizaLog } from "@eliza/core";
 import { generateCaption, generateImage } from "./utils.ts";
 
-export const imageGeneration: Action = {
+const imageGeneration: Action = {
     name: "GENERATE_IMAGE",
     similes: ["IMAGE_GENERATION", "IMAGE_GEN", "CREATE_IMAGE", "MAKE_PICTURE"],
     description: "Generate an image to go along with the message.",
@@ -163,3 +164,11 @@ export const imageGeneration: Action = {
         ],
     ],
 } as Action;
+
+export const imageGenerationPlugin: Plugin = {
+    name: "imageGeneration",
+    description: "Generate images",
+    actions: [imageGeneration],
+    evaluators: [],
+    providers: [],
+};

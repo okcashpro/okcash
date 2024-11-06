@@ -1,3 +1,5 @@
+export * from "./config.ts";
+
 import defaultCharacter from "../core/defaultCharacter.ts";
 import settings from "../core/settings.ts";
 import { Character, IAgentRuntime, ModelProvider } from "../core/types.ts";

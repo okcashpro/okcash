@@ -1,63 +1,81 @@
 import {
+    AgentRuntime,
+    boredomProvider,
     Character,
-    createAgentRuntime,
-    createDirectRuntime,
+    defaultActions,
     DirectClient,
+    followRoom,
     getTokenForProvider,
     IAgentRuntime,
     initializeClients,
     initializeDatabase,
+    loadActionConfigs,
     loadCharacters,
+    loadCustomActions,
+    muteRoom,
     parseArguments,
+    timeProvider,
+    unfollowRoom,
+    unmuteRoom,
+    walletProvider,
 } from "@eliza/core";
 import { Arguments } from "@eliza/core/src/types";
 import readline from "readline";
+import defaultCharacter from "./character";
 
-let argv: Arguments = parseArguments();
-let basePath = "./";
-// if argv.isroot is true, then set the base path to "../"
-if (argv.isRoot) {
-    basePath = "../";
-}
-
-// if the path doesnt start with a /, add the base path to the beginning of the path
-if (!argv.characters?.startsWith("/")) {
-    argv.characters = `${basePath}${argv.characters}`;
-}
-
-let characters = loadCharacters(argv.characters);
-if (!characters || characters.length === 0) {
-    console.error("No characters loaded. Please check the characters file.");
-    process.exit(1);
-}
-
-characters.forEach((char, index) => {
-    if (!char.name || !char.modelProvider) {
-        console.error(
-            `Character at index ${index} is missing required fields.`
-        );
-        process.exit(1);
-    }
-});
+const characters = [defaultCharacter];
 
 const directClient = new DirectClient();
 
 const serverPort = parseInt(process.env.SERVER_PORT || "3000");
 directClient.start(serverPort);
 
+export async function createDirectRuntime(
+    character: Character,
+    db: any,
+    token: string,
+    configPath: string = "./elizaConfig.yaml"
+) {
+    console.log("Creating runtime for character", character.name);
+    return new AgentRuntime({
+        databaseAdapter: db,
+        token,
+        modelProvider: character.modelProvider,
+        evaluators: [],
+        character,
+        providers: [
+            timeProvider,
+            boredomProvider,
+            character.settings?.secrets?.WALLET_PUBLIC_KEY && walletProvider,
+        ].filter(Boolean),
+        actions: [
+            ...defaultActions,
+
+            // Custom actions
+            followRoom,
+            unfollowRoom,
+            unmuteRoom,
+            muteRoom,
+
+            // imported from elizaConfig.yaml
+            ...(await loadCustomActions(loadActionConfigs(configPath))),
+        ],
+    });
+}
+
 async function startAgent(character: Character) {
     try {
         const token = getTokenForProvider(character.modelProvider, character);
         const db = initializeDatabase();
 
-        const runtime = await createAgentRuntime(character, db, token);
-        const directRuntime = createDirectRuntime(character, db, token);
+        const runtime = await createDirectRuntime(character, db, token);
 
         const clients = await initializeClients(
             character,
             runtime as IAgentRuntime
         );
-        directClient.registerAgent(await directRuntime);
+
+        directClient.registerAgent(await runtime);
 
         return clients;
     } catch (error) {

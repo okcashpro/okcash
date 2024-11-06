@@ -1,8 +1,8 @@
 // TODO: Replace with the vercel ai sdk and support all providers
 import { Buffer } from "buffer";
 import Together from "together-ai";
-import { IAgentRuntime } from "eliza";
-import { getImageGenModel, ImageGenModel } from "eliza";
+import { IAgentRuntime } from "@eliza/core";
+import { getImageGenModel, ImageGenModel } from "@eliza/core";
 
 import OpenAI from "openai";
 

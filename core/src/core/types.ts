@@ -107,7 +107,7 @@ export enum ModelProvider {
     LLAMALOCAL = "llama_local",
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
-    REDPILL = "redpill"
+    REDPILL = "redpill",
 }
 
 /**
@@ -286,6 +286,14 @@ export type Media = {
     text: string;
 };
 
+export type Plugin = {
+    name: string;
+    description: string;
+    actions: Action[];
+    providers: Provider[];
+    evaluators: Evaluator[];
+};
+
 export type Character = {
     id?: UUID; // optional UUID which can be passed down to identify the character
     name: string;
@@ -302,6 +310,7 @@ export type Character = {
     adjectives: string[];
     knowledge?: string[];
     clients: string[]; // list of clients the character can interact with
+    plugins: Plugin[]; // list of plugins the character can use
     settings?: {
         secrets?: { [key: string]: string };
         voice?: {
