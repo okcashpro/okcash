@@ -2,7 +2,7 @@
 import { Buffer } from "buffer";
 import Together from "together-ai";
 import { IAgentRuntime } from "eliza";
-import { getModel, ImageGenModel } from "eliza";
+import { getImageGenModel, ImageGenModel } from "eliza";
 
 import OpenAI from "openai";
 
@@ -26,7 +26,7 @@ export const generateImage = async (
     }
 
     const imageGenModel = runtime.imageGenModel;
-    const model = getModel(imageGenModel);
+    const model = getImageGenModel(imageGenModel);
     const apiKey =
         imageGenModel === ImageGenModel.TogetherAI
             ? runtime.getSetting("TOGETHER_API_KEY")

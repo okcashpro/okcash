@@ -14,6 +14,6 @@ export const imageGenModels = {
     },
 };
 
-export function getModel(model: ImageGenModel) {
+export function getImageGenModel(model: ImageGenModel) {
     return imageGenModels[model];
 }
