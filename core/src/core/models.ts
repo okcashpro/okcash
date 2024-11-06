@@ -74,10 +74,10 @@ const models: Models = {
         },
         endpoint: "https://api.x.ai/v1",
         model: {
-            [ModelClass.SMALL]: "grok-2-beta",
-            [ModelClass.MEDIUM]: "grok-2-beta",
-            [ModelClass.LARGE]: "grok-2-beta",
-            [ModelClass.EMBEDDING]: "grok-2-beta", // not sure about this one
+            [ModelClass.SMALL]: "grok-beta",
+            [ModelClass.MEDIUM]: "grok-beta",
+            [ModelClass.LARGE]: "grok-beta",
+            [ModelClass.EMBEDDING]: "grok-beta", // not sure about this one
         },
     },
     [ModelProvider.GROQ]: {
