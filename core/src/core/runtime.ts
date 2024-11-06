@@ -55,7 +55,7 @@ import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
 import { ImageGenModel } from "./imageGenModels.ts";
-import { prettyConsole } from "../index.ts";
+import { elizaLog } from "../index.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -405,7 +405,7 @@ export class AgentRuntime implements IAgentRuntime {
      * @param action The action to register.
      */
     registerAction(action: Action) {
-        prettyConsole.success(`Registering action: ${action.name}`);
+        elizaLog.success(`Registering action: ${action.name}`);
         this.actions.push(action);
     }
 
@@ -437,7 +437,7 @@ export class AgentRuntime implements IAgentRuntime {
         callback?: HandlerCallback
     ): Promise<void> {
         if (!responses[0].content?.action) {
-            prettyConsole.warn("No action found in the response content.");
+            elizaLog.warn("No action found in the response content.");
             return;
         }
 
@@ -445,7 +445,7 @@ export class AgentRuntime implements IAgentRuntime {
             .toLowerCase()
             .replace("_", "");
 
-        prettyConsole.success(`Normalized action: ${normalizedAction}`);
+        elizaLog.success(`Normalized action: ${normalizedAction}`);
 
         let action = this.actions.find(
             (a: { name: string }) =>
@@ -457,7 +457,7 @@ export class AgentRuntime implements IAgentRuntime {
         );
 
         if (!action) {
-            prettyConsole.info("Attempting to find action in similes.");
+            elizaLog.info("Attempting to find action in similes.");
             for (const _action of this.actions) {
                 const simileAction = _action.similes.find(
                     (simile) =>
@@ -471,28 +471,23 @@ export class AgentRuntime implements IAgentRuntime {
                 );
                 if (simileAction) {
                     action = _action;
-                    prettyConsole.success(
-                        `Action found in similes: ${action.name}`
-                    );
+                    elizaLog.success(`Action found in similes: ${action.name}`);
                     break;
                 }
             }
         }
 
         if (!action) {
-            prettyConsole.error(
-                "No action found for",
-                responses[0].content.action
-            );
+            elizaLog.error("No action found for", responses[0].content.action);
             return;
         }
 
         if (!action.handler) {
-            prettyConsole.error(`Action ${action.name} has no handler.`);
+            elizaLog.error(`Action ${action.name} has no handler.`);
             return;
         }
 
-        prettyConsole.success(`Executing handler for action: ${action.name}`);
+        elizaLog.success(`Executing handler for action: ${action.name}`);
         await action.handler(this, message, state, {}, callback);
     }
 
@@ -598,7 +593,7 @@ export class AgentRuntime implements IAgentRuntime {
                 email: email || (userName || "Bot") + "@" + source || "Unknown", // Temporary
                 details: { summary: "" },
             });
-            prettyConsole.success(`User ${userName} created successfully.`);
+            elizaLog.success(`User ${userName} created successfully.`);
         }
     }
 
@@ -607,7 +602,7 @@ export class AgentRuntime implements IAgentRuntime {
             await this.databaseAdapter.getParticipantsForRoom(roomId);
         if (!participants.includes(userId)) {
             await this.databaseAdapter.addParticipant(userId, roomId);
-            prettyConsole.log(
+            elizaLog.log(
                 `User ${userId} linked to room ${roomId} successfully.`
             );
         }
@@ -653,7 +648,7 @@ export class AgentRuntime implements IAgentRuntime {
         const room = await this.databaseAdapter.getRoom(roomId);
         if (!room) {
             await this.databaseAdapter.createRoom(roomId);
-            prettyConsole.log(`Room ${roomId} created successfully.`);
+            elizaLog.log(`Room ${roomId} created successfully.`);
         }
     }
 

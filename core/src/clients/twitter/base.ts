@@ -21,7 +21,7 @@ import ImageDescriptionService from "../../services/image.ts";
 import { glob } from "glob";
 
 import { stringToUuid } from "../../core/uuid.ts";
-import { prettyConsole } from "../../index.ts";
+import { elizaLog } from "../../index.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -382,7 +382,9 @@ export class ClientBase extends EventEmitter {
                 await this.runtime.messageManager.getMemoriesByRoomIds({
                     agentId: this.runtime.agentId,
                     roomIds: cachedResults.map((tweet) =>
-                        stringToUuid(tweet.conversationId + "-" + this.runtime.agentId)
+                        stringToUuid(
+                            tweet.conversationId + "-" + this.runtime.agentId
+                        )
                     ),
                 });
 
@@ -426,11 +428,15 @@ export class ClientBase extends EventEmitter {
                         url: tweet.permanentUrl,
                         source: "twitter",
                         inReplyTo: tweet.inReplyToStatusId
-                            ? stringToUuid(tweet.inReplyToStatusId + "-" + this.runtime.agentId)
+                            ? stringToUuid(
+                                  tweet.inReplyToStatusId +
+                                      "-" +
+                                      this.runtime.agentId
+                              )
                             : undefined,
                     } as Content;
 
-                    prettyConsole.log("Creating memory for tweet", tweet.id);
+                    elizaLog.log("Creating memory for tweet", tweet.id);
 
                     // check if it already exists
                     const memory =
@@ -438,7 +444,7 @@ export class ClientBase extends EventEmitter {
                             stringToUuid(tweet.id + "-" + this.runtime.agentId)
                         );
                     if (memory) {
-                        prettyConsole.log(
+                        elizaLog.log(
                             "Memory already exists, skipping timeline population"
                         );
                         break;
@@ -455,7 +461,7 @@ export class ClientBase extends EventEmitter {
                     });
                 }
 
-                prettyConsole.log(
+                elizaLog.log(
                     `Populated ${tweetsToSave.length} missing tweets from the cache.`
                 );
                 return;
@@ -499,7 +505,10 @@ export class ClientBase extends EventEmitter {
 
         // Filter out the tweets that already exist in the database
         const tweetsToSave = allTweets.filter(
-            (tweet) => !existingMemoryIds.has(stringToUuid(tweet.id + "-" + this.runtime.agentId))
+            (tweet) =>
+                !existingMemoryIds.has(
+                    stringToUuid(tweet.id + "-" + this.runtime.agentId)
+                )
         );
 
         await this.runtime.ensureUserExists(

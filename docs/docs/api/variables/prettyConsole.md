@@ -1,6 +1,6 @@
-# Variable: prettyConsole
+# Variable: elizaLog
 
-> `const` **prettyConsole**: `PrettyConsole`
+> `const` **elizaLog**: `elizaLog`
 
 ## Defined in
 

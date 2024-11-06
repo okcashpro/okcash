@@ -24,7 +24,7 @@ import { MessageManager } from "./messages.ts";
 import channelStateProvider from "./providers/channelState.ts";
 import voiceStateProvider from "./providers/voiceState.ts";
 import { VoiceManager } from "./voice.ts";
-import { prettyConsole } from "../../index.ts";
+import { elizaLog } from "../../index.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
@@ -130,16 +130,16 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
-        prettyConsole.success(`Logged in as ${readyClient.user?.tag}`);
-        prettyConsole.success("Use this URL to add the bot to your server:");
-        prettyConsole.success(
+        elizaLog.success(`Logged in as ${readyClient.user?.tag}`);
+        elizaLog.success("Use this URL to add the bot to your server:");
+        elizaLog.success(
             `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=0&scope=bot%20applications.commands`
         );
         await this.onReady();
     }
 
     async handleReactionAdd(reaction: MessageReaction, user: User) {
-        prettyConsole.log("Reaction added");
+        elizaLog.log("Reaction added");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;
@@ -168,7 +168,9 @@ export class DiscordClient extends EventEmitter {
 
         const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
 
-        const roomId = stringToUuid(reaction.message.channel.id + "-" + this.runtime.agentId);
+        const roomId = stringToUuid(
+            reaction.message.channel.id + "-" + this.runtime.agentId
+        );
         const userIdUUID = stringToUuid(user.id + "-" + this.runtime.agentId);
 
         // Generate a unique UUID for the reaction
@@ -200,7 +202,9 @@ export class DiscordClient extends EventEmitter {
             content: {
                 text: reactionMessage,
                 source: "discord",
-                inReplyTo: stringToUuid(reaction.message.id + "-" + this.runtime.agentId), // This is the ID of the original message
+                inReplyTo: stringToUuid(
+                    reaction.message.id + "-" + this.runtime.agentId
+                ), // This is the ID of the original message
             },
             roomId,
             createdAt: Date.now(),
@@ -238,7 +242,9 @@ export class DiscordClient extends EventEmitter {
 
         const reactionMessage = `*Removed <${emoji} emoji> from: "${truncatedContent}"*`;
 
-        const roomId = stringToUuid(reaction.message.channel.id + "-" + this.runtime.agentId);
+        const roomId = stringToUuid(
+            reaction.message.channel.id + "-" + this.runtime.agentId
+        );
         const userIdUUID = stringToUuid(user.id);
 
         // Generate a unique UUID for the reaction removal
@@ -266,7 +272,9 @@ export class DiscordClient extends EventEmitter {
                 content: {
                     text: reactionMessage,
                     source: "discord",
-                    inReplyTo: stringToUuid(reaction.message.id + "-" + this.runtime.agentId), // This is the ID of the original message
+                    inReplyTo: stringToUuid(
+                        reaction.message.id + "-" + this.runtime.agentId
+                    ), // This is the ID of the original message
                 },
                 roomId,
                 createdAt: Date.now(),

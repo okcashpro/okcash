@@ -4,9 +4,9 @@ import {
     Memory,
     State,
     Action,
-} from "../core/types.ts";
-import { elizaLog } from "../index.ts";
-import { generateCaption, generateImage } from "./imageGenerationUtils.ts";
+} from "@eliza/core";
+import { elizaLog } from "@eliza/core";
+import { generateCaption, generateImage } from "./utils.ts";
 
 export const imageGeneration: Action = {
     name: "GENERATE_IMAGE",
