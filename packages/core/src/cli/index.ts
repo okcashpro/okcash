@@ -72,11 +72,14 @@ export function loadCharacters(charactersArg: string): Character[] {
         ?.split(",")
         .map((path) => path.trim())
         .map((path) => {
-            if (path.startsWith("./characters")) {
-                return `.${path}`;
+            if (path.startsWith("../characters")) {
+                return `../${path}`;
             }
             if (path.startsWith("characters")) {
-                return `../${path}`;
+                return `../../${path}`;
+            }
+            if (path.startsWith("./characters")) {
+                return `../.${path}`;
             }
             return path;
         });

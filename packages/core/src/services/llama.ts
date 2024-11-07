@@ -39,6 +39,7 @@ class LlamaService implements ILlamaService {
       presence_penalty: number,
       max_tokens: number
     ): Promise<any> {
+      console.log("queueMessageCompletion", context, temperature, stop, frequency_penalty, presence_penalty, max_tokens);
       return this.delegate.queueMessageCompletion(
         context, temperature, stop, frequency_penalty, presence_penalty, max_tokens
       );

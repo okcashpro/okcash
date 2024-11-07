@@ -462,8 +462,6 @@ export class AgentRuntime implements IAgentRuntime {
 
         elizaLogger.success(`Normalized action: ${normalizedAction}`);
 
-        console.log("Actions are: ", this.actions);
-
         let action = this.actions.find(
             (a: { name: string }) =>
                 a.name
