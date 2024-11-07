@@ -13,7 +13,7 @@ class LlamaService implements ILlamaService {
     private constructor() {
       const provider = process.env.LOCAL_LLAMA_PROVIDER;
       console.log("provider: ", provider)
-      if (true){//provider === ModelProvider.OLLAMA) {
+      if (provider === ModelProvider.OLLAMA) {
         console.log("running ollama")
         this.delegate = OllamaService.getInstance();
       } else {

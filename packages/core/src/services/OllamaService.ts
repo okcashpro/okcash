@@ -35,16 +35,21 @@ class OllamaService {
   private isProcessing: boolean = false;
 
   private constructor() {
-    debug('Constructing OllamaService');
-    dotenv.config();
-    this.modelName = process.env.OLLAMA_MODEL || 'llama3.2';
-    this.openai = new OpenAI({
-      baseURL: process.env.OLLAMA_SERVER_URL || 'http://localhost:11434/v1',
-      apiKey: 'ollama',
-      dangerouslyAllowBrowser: true
-    });
-    debug(`Using model: ${this.modelName}`);
-    debug('OpenAI client initialized');
+    try {
+      debug('Constructing OllamaService');
+      dotenv.config();
+      this.modelName = process.env.OLLAMA_MODEL || 'llama3.2';
+      this.openai = new OpenAI({
+        baseURL: process.env.OLLAMA_SERVER_URL || 'http://localhost:11434/v1',
+        apiKey: 'ollama',
+        dangerouslyAllowBrowser: true
+      });
+      debug(`Using model: ${this.modelName}`);
+      debug('OpenAI client initialized');
+    } catch (error) {
+      debug('Failed to initialize OllamaService:', error);
+      throw new Error(`Failed to initialize Ollama service: ${error}`);
+    }
   }
 
   public static getInstance(): OllamaService {
