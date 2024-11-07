@@ -108,7 +108,7 @@ export enum ModelProvider {
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
     REDPILL = "redpill",
-    GITHUB = "GITHUB",
+    OLLAMA = "ollama"
 }
 
 /**
