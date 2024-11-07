@@ -9,7 +9,7 @@ title: Notes
 
 #### Part 1
 
-Watch: https://www.youtube.com/watch?v=oqq5H0HRF_A
+Watch: [Youtube](https://www.youtube.com/watch?v=oqq5H0HRF_A)
 
 00:00:00 - Overview
 - Eliza is moving to a plugin architecture to enable developers to easily add integrations (e.g. Ethereum wallets, NFTs, Obsidian, etc.) without modifying core code
@@ -75,7 +75,7 @@ A: Use existing actions (like token swap) as a template. Actions don't have inpu
 
 ### Part 2
 
-Watch: https://www.youtube.com/watch?v=yE8Mzq3BnUc
+Watch: [Youtube](https://www.youtube.com/watch?v=yE8Mzq3BnUc)
 
 00:00:00 - Dealing with OpenAI rate limits for new accounts
 - New accounts have very low rate limits
@@ -121,7 +121,7 @@ A: Most memory systems are user-agent based, with no room concept. Eliza uses a 
 
 ### Part 3
 
-Watch: https://www.youtube.com/watch?v=7FiKJPyaMJI
+Watch: [Youtube](https://www.youtube.com/watch?v=7FiKJPyaMJI)
 
 00:00:00 - Managing large context sizes
 - State object can get very large, especially with long user posts
@@ -152,7 +152,7 @@ A:
 - `ModelProvider` class with `ModelClass` (small, medium, large, embedding)
 - Configured in `models.ts`
 - Example: OpenAI small = GPT-4-mini, medium = GPT-4
-- Approach: Check if model class can handle everything in <8k context
+- Approach: Check if model class can handle everything in less than 8k context
   - If yes (should_respond), default to free tier
   - Else, use big models
 
@@ -171,7 +171,7 @@ A:
 
 ### Part 4
 
-Watch: https://www.youtube.com/watch?v=ZlzZzDU1drM
+Watch: [Youtube](https://www.youtube.com/watch?v=ZlzZzDU1drM)
 
 00:00:00 - Setting up an autonomous agent loop
 Q: How to set up an agent to constantly loop and explore based on objectives/goals? 

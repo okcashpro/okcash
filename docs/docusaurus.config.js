@@ -32,9 +32,9 @@ const config = {
     [
       "docusaurus-plugin-typedoc",
       {
-        entryPoints: ["../core/src/index.ts"],
-        tsconfig: "../core/tsconfig.json",
-        out: "./docs/api",
+        entryPoints: ["src/index.ts"],
+        tsconfig: "../tsconfig.json",
+        out: "./api",
         skipErrorChecking: true,
       },
     ],
@@ -45,8 +45,8 @@ const config = {
       "@docusaurus/plugin-content-docs",
       {
         id: "api",
-        path: "docs/api",
-        routeBasePath: "docs/api",
+        path: "api",
+        routeBasePath: "api",
         sidebarPath: "./sidebars.api.js",
       },
     ],
