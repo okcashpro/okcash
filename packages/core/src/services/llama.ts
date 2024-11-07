@@ -11,11 +11,13 @@ class LlamaService implements ILlamaService {
     private delegate: ILlamaService;
   
     private constructor() {
-      const provider = settings.LOCAL_LLAMA_PROVIDER;
+      const provider = process.env.LOCAL_LLAMA_PROVIDER;
       console.log("provider: ", provider)
-      if (provider === ModelProvider.OLLAMA) {
+      if (true){//provider === ModelProvider.OLLAMA) {
+        console.log("running ollama")
         this.delegate = OllamaService.getInstance();
       } else {
+        console.log("running llama-cpp")
         this.delegate = LlamaCppService.getInstance();
       }
     }
