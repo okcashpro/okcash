@@ -90,8 +90,6 @@ export async function generateText({
                     presencePenalty: presence_penalty,
                 });
 
-                console.log("****** RESPONSE\n", openaiResponse);
-
                 response = openaiResponse;
                 prettyConsole.log("Received response from OpenAI model.");
                 break;
@@ -188,9 +186,6 @@ export async function generateText({
                 const serverUrl = models[provider].endpoint;
                 const openai = createOpenAI({ apiKey, baseURL: serverUrl });
 
-                console.log("****** MODEL\n", model);
-                console.log("****** CONTEXT\n", context);
-
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
@@ -203,8 +198,6 @@ export async function generateText({
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
                 });
-
-                console.log("****** RESPONSE\n", openaiResponse);
 
                 response = openaiResponse;
                 prettyConsole.log("Received response from OpenAI model.");
