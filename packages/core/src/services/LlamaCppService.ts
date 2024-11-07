@@ -73,7 +73,6 @@ class LlamaCppService {
         this.modelUrl =
             "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
         const modelName = "model.gguf";
-        console.log("modelName", modelName);
         this.modelPath = path.join(__dirname, modelName);
     }
 
@@ -87,6 +86,7 @@ class LlamaCppService {
     modelInitializing: boolean = false;
 
     async ensureInitialized() {
+        console.log("ensureInitialized", this.modelInitializing);
        while (this.modelInitializing) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }

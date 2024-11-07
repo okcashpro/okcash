@@ -1,7 +1,8 @@
 import * as dotenv from 'dotenv';
-import { ILlamaService } from '../core/types.ts'; ///ILlamaService';
+import { ILlamaService, ModelProvider } from '../core/types.ts'; ///ILlamaService';
 import OllamaService from './OllamaService.ts';
 import LlamaCppService from './LlamaCppService.ts';
+import settings from '../core/settings.ts';
 
 dotenv.config();
 
@@ -10,9 +11,9 @@ class LlamaService implements ILlamaService {
     private delegate: ILlamaService;
   
     private constructor() {
-      const provider = process.env.LOCAL_LLAMA_PROVIDER;
+      const provider = settings.LOCAL_LLAMA_PROVIDER;
       console.log("provider: ", provider)
-      if (provider === 'OLLAMA') {
+      if (provider === ModelProvider.OLLAMA) {
         this.delegate = OllamaService.getInstance();
       } else {
         this.delegate = LlamaCppService.getInstance();

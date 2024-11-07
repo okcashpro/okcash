@@ -1,18 +1,5 @@
-import { Model, ModelProvider, ModelClass } from "./types.ts";
-
-type Models = {
-    [ModelProvider.OPENAI]: Model;
-    [ModelProvider.ANTHROPIC]: Model;
-    [ModelProvider.GROK]: Model;
-    [ModelProvider.GROQ]: Model;
-    [ModelProvider.LLAMACLOUD]: Model;
-    [ModelProvider.LLAMALOCAL]: Model;
-    [ModelProvider.GOOGLE]: Model;
-    [ModelProvider.CLAUDE_VERTEX]: Model;
-    [ModelProvider.REDPILL]: Model;
-    [ModelProvider.OLLAMA]: Model;
-    // TODO: add OpenRouter - feel free to do this :)
-};
+import settings from "./settings.ts";
+import { Models, ModelProvider, ModelClass } from "./types.ts";
 
 const models: Models = {
     [ModelProvider.OPENAI]: {
@@ -179,12 +166,12 @@ const models: Models = {
             presence_penalty: 0.0,
             temperature: 0.3,
         },
-        endpoint: process.env.OLLAMA_SERVER_URL || "http://localhost:11434", 
+        endpoint: settings.OLLAMA_SERVER_URL || "http://localhost:11434", 
         model: {
-            [ModelClass.SMALL]: process.env.SMALL_OLLAMA_MODEL || process.env.OLLAMA_MODEL || "llama3.2",
-            [ModelClass.MEDIUM]: process.env.MEDIUM_OLLAMA_MODEL ||process.env.OLLAMA_MODEL || "hermes3",
-            [ModelClass.LARGE]: process.env.LARGE_OLLAMA_MODEL || process.env.OLLAMA_MODEL || "hermes3:70b",
-            [ModelClass.EMBEDDING]: process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
+            [ModelClass.SMALL]: settings.SMALL_OLLAMA_MODEL || settings.OLLAMA_MODEL || "llama3.2",
+            [ModelClass.MEDIUM]: settings.MEDIUM_OLLAMA_MODEL ||settings.OLLAMA_MODEL || "hermes3",
+            [ModelClass.LARGE]: settings.LARGE_OLLAMA_MODEL || settings.OLLAMA_MODEL || "hermes3:70b",
+            [ModelClass.EMBEDDING]: settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
         },
     },
 };
