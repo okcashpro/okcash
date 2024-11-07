@@ -10,5 +10,8 @@
     },
     "scripts": {
         "build": "tsup --format esm --dts"
+    },
+    "peerDependencies": {
+        "whatwg-url": "7.1.0"
     }
 }
