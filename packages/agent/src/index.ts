@@ -21,7 +21,7 @@ import {
     walletProvider,
 } from "@eliza/core";
 import readline from "readline";
-
+console.log("Program starting")
 const args = parseArguments();
 
 let charactersArg = args.characters || args.character;
