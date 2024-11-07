@@ -162,7 +162,12 @@ class DirectClient {
                     inReplyTo: undefined,
                 };
 
-                const userMessage = { content, userId, roomId, agentId: runtime.agentId };
+                const userMessage = {
+                    content,
+                    userId,
+                    roomId,
+                    agentId: runtime.agentId,
+                };
 
                 const memory: Memory = {
                     id: messageId,
@@ -205,7 +210,7 @@ class DirectClient {
                     );
                     return;
                 }
-                
+
                 let message = null as Content | null;
 
                 const result = await runtime.processActions(
@@ -216,14 +221,13 @@ class DirectClient {
                         message = newMessages;
                         return [memory];
                     }
-                )
+                );
 
                 if (message) {
                     res.json([message, response]);
                 } else {
                     res.json([response]);
                 }
-
             }
         );
 

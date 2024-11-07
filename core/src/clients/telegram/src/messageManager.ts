@@ -1,31 +1,137 @@
 import { Message } from "@telegraf/types";
-import { Context } from "telegraf";
-import { Telegraf } from "telegraf";
+import { Context, Telegraf } from "telegraf";
 
 import { composeContext } from "../../../core/context.ts";
-import { log_to_file } from "../../../core/logger.ts";
 import { embeddingZeroVector } from "../../../core/memory.ts";
 import {
     Content,
+    HandlerCallback,
     IAgentRuntime,
     Memory,
+    ModelClass,
     State,
     UUID,
-    HandlerCallback,
-    ModelClass,
 } from "../../../core/types.ts";
 import { stringToUuid } from "../../../core/uuid.ts";
-import {
-    messageHandlerTemplate,
-    shouldRespondTemplate,
-} from "../../discord/templates.ts";
-import ImageDescriptionService from "../../../services/image.ts";
+
 import {
     generateMessageResponse,
     generateShouldRespond,
 } from "../../../core/generation.ts";
+import {
+    messageCompletionFooter,
+    shouldRespondFooter,
+} from "../../../core/parsing.ts";
+import ImageDescriptionService from "../../../services/image.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
+
+const telegramShouldRespondTemplate =
+    `# Task: Decide if {{agentName}} should respond.
+About {{agentName}}:
+{{bio}}
+
+{{providers}}
+
+# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
+
+# RESPONSE EXAMPLES
+<user 1>: I just saw a really great movie
+<user 2>: Oh? Which movie?
+Result: [IGNORE]
+
+{{agentName}}: Oh, this is my favorite scene
+<user 1>: sick
+<user 2>: wait, why is it your favorite scene
+Result: [RESPOND]
+
+<user>: stfu bot
+Result: [STOP]
+
+<user>: Hey {{agent}}, can you help me with something
+Result: [RESPOND]
+
+<user>: {{agentName}} stfu plz
+Result: [STOP]
+
+<user>: i need help
+{{agentName}}: how can I help you?
+<user>: no. i need help from someone else
+Result: [IGNORE]
+
+<user>: Hey {{agent}}, can I ask you a question
+{{agentName}}: Sure, what is it
+<user>: can you ask claude to create a basic react module that demonstrates a counter
+Result: [RESPOND]
+
+<user>: {{agentName}} can you tell me a story
+<user>: {about a girl named elara
+{{agentName}}: Sure.
+{{agentName}}: Once upon a time, in a quaint little village, there was a curious girl named Elara.
+{{agentName}}: Elara was known for her adventurous spirit and her knack for finding beauty in the mundane.
+<user>: I'm loving it, keep going
+Result: [RESPOND]
+
+<user>: {{agentName}} stop responding plz
+Result: [STOP]
+
+<user>: okay, i want to test something. can you say marco?
+{{agentName}}: marco
+<user>: great. okay, now do it again
+Result: [RESPOND]
+
+Response options are [RESPOND], [IGNORE] and [STOP].
+
+{{agentName}} is in a room with other users and is very worried about being annoying and saying too much.
+Respond with [RESPOND] to messages that are directed at {{agentName}}, or participate in conversations that are interesting or relevant to their background.
+If a message is not interesting or relevant, respond with [IGNORE]
+Unless directly responding to a user, respond with [IGNORE] to messages that are very short or do not contain much information.
+If a user asks {{agentName}} to be quiet, respond with [STOP]
+If {{agentName}} concludes a conversation and isn't part of the conversation anymore, respond with [STOP]
+
+IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to respond with [IGNORE].
+If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
+
+{{recentMessages}}
+
+# INSTRUCTIONS: Choose the option that best describes {{agentName}}'s response to the last message. Ignore messages if they are addressed to someone else.
+` + shouldRespondFooter;
+
+const telegramMessageHandlerTemplate =
+    // {{goals}}
+    `# Action Examples
+{{actionExamples}}
+(Action examples are for reference only. Do not use the information from them in your response.)
+
+# Relevant facts that {{agentName}} knows:
+{{relevantFacts}}
+
+# Recent facts that {{agentName}} has learned:
+{{recentFacts}}
+
+# Task: Generate dialog and actions for the character {{agentName}}.
+About {{agentName}}:
+{{bio}}
+{{lore}}
+
+Examples of {{agentName}}'s dialog and actions:
+{{characterMessageExamples}}
+
+{{providers}}
+
+{{attachments}}
+
+{{actions}}
+
+# Capabilities
+Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
+
+{{messageDirections}}
+
+{{recentMessages}}
+
+# Instructions: Write the next message for {{agentName}}. Include an action, if appropriate. {{actionNames}}
+` + messageCompletionFooter;
 
 export class MessageManager {
     private bot: Telegraf<Context>;
@@ -115,7 +221,11 @@ export class MessageManager {
         if ("text" in message || ("caption" in message && message.caption)) {
             const shouldRespondContext = composeContext({
                 state,
-                template: shouldRespondTemplate,
+                template:
+                    this.runtime.character.templates
+                        ?.telegramShouldRespondTemplate ||
+                    this.runtime.character?.templates?.shouldRespondTemplate ||
+                    telegramShouldRespondTemplate,
             });
 
             const response = await generateShouldRespond({
@@ -184,12 +294,6 @@ export class MessageManager {
         context: string
     ): Promise<Content> {
         const { userId, roomId } = message;
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        log_to_file(
-            `${state.agentName}_${datestr}_telegram_message_context`,
-            context
-        );
 
         const response = await generateMessageResponse({
             runtime: this.runtime,
@@ -201,12 +305,6 @@ export class MessageManager {
             console.error("❌ No response from generateMessageResponse");
             return null;
         }
-
-        log_to_file(
-            `${state.agentName}_${datestr}_telegram_message_response`,
-            JSON.stringify(response)
-        );
-
         await this.runtime.databaseAdapter.log({
             body: { message, context, response },
             userId: userId,
@@ -235,7 +333,9 @@ export class MessageManager {
             const userId = stringToUuid(ctx.from.id.toString()) as UUID;
             const userName =
                 ctx.from.username || ctx.from.first_name || "Unknown User";
-            const chatId = stringToUuid(ctx.chat?.id.toString() + "-" + this.runtime.agentId) as UUID;
+            const chatId = stringToUuid(
+                ctx.chat?.id.toString() + "-" + this.runtime.agentId
+            ) as UUID;
             const agentId = this.runtime.agentId;
             const roomId = chatId;
 
@@ -277,7 +377,9 @@ export class MessageManager {
                 inReplyTo:
                     "reply_to_message" in message && message.reply_to_message
                         ? stringToUuid(
-                              message.reply_to_message.message_id.toString() + "-" + this.runtime.agentId
+                              message.reply_to_message.message_id.toString() +
+                                  "-" +
+                                  this.runtime.agentId
                           )
                         : undefined,
             };
@@ -306,7 +408,11 @@ export class MessageManager {
             // Generate response
             const context = composeContext({
                 state,
-                template: messageHandlerTemplate,
+                template:
+                    this.runtime.character.templates
+                        ?.telegramMessageHandlerTemplate ||
+                    this.runtime.character?.templates?.messageHandlerTemplate ||
+                    telegramMessageHandlerTemplate,
             });
 
             const responseContent = await this._generateResponse(
@@ -333,7 +439,11 @@ export class MessageManager {
                     const isLastMessage = i === sentMessages.length - 1;
 
                     const memory: Memory = {
-                        id: stringToUuid(sentMessage.message_id.toString() + "-" + this.runtime.agentId),
+                        id: stringToUuid(
+                            sentMessage.message_id.toString() +
+                                "-" +
+                                this.runtime.agentId
+                        ),
                         agentId,
                         userId,
                         roomId,

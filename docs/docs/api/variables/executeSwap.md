@@ -1,7 +1,7 @@
 # Variable: executeSwap
 
-> `const` **executeSwap**: `Action`
+> `const` **executeSwap**: [`Action`](../interfaces/Action.md)
 
 ## Defined in
 
-[core/src/actions/swap.ts:44](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/actions/swap.ts#L44)
+[core/src/actions/swap.ts:178](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/swap.ts#L178)

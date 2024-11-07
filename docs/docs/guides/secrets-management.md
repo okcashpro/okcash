@@ -66,6 +66,7 @@ Character files can include their own secrets, which override environment variab
 ### Precedence Order
 
 Secrets are resolved in the following order:
+
 1. Character-specific secrets (highest priority)
 2. Environment variables
 3. Default values (lowest priority)
@@ -117,13 +118,13 @@ When using character-specific secrets:
 ```typescript
 // Validate character file location
 const isSecurePath = (path: string): boolean => {
-  return !path.includes('../') && !path.startsWith('/');
+  return !path.includes("../") && !path.startsWith("/");
 };
 
 // Load character securely
 const loadCharacter = async (path: string) => {
   if (!isSecurePath(path)) {
-    throw new Error('Invalid character file path');
+    throw new Error("Invalid character file path");
   }
   // Load and validate character
 };
@@ -138,8 +139,8 @@ Implement proper access controls for secret management:
 ```typescript
 class SecretAccess {
   private static readonly ALLOWED_KEYS = [
-    'OPENAI_API_KEY',
-    'DISCORD_TOKEN',
+    "OPENAI_API_KEY",
+    "DISCORD_TOKEN",
     // ... other allowed keys
   ];
 
@@ -154,12 +155,12 @@ class SecretAccess {
 For stored secrets:
 
 ```typescript
-import { createCipheriv, createDecipheriv } from 'crypto';
+import { createCipheriv, createDecipheriv } from "crypto";
 
 class SecretEncryption {
   static async encrypt(value: string, key: Buffer): Promise<string> {
     const iv = crypto.randomBytes(16);
-    const cipher = createCipheriv('aes-256-gcm', key, iv);
+    const cipher = createCipheriv("aes-256-gcm", key, iv);
     // ... implementation
   }
 
@@ -175,11 +176,11 @@ Validate secrets before use:
 
 ```typescript
 async function validateSecrets(character: Character): Promise<void> {
-  const required = ['OPENAI_API_KEY'];
-  const missing = required.filter(key => !character.settings.secrets[key]);
-  
+  const required = ["OPENAI_API_KEY"];
+  const missing = required.filter((key) => !character.settings.secrets[key]);
+
   if (missing.length > 0) {
-    throw new Error(`Missing required secrets: ${missing.join(', ')}`);
+    throw new Error(`Missing required secrets: ${missing.join(", ")}`);
   }
 }
 ```
@@ -189,17 +190,21 @@ async function validateSecrets(character: Character): Promise<void> {
 ### Common Issues
 
 1. **Missing Secrets**
+
 ```typescript
 if (!process.env.OPENAI_API_KEY && !character.settings.secrets.OPENAI_API_KEY) {
-  throw new Error('OpenAI API key not found in environment or character settings');
+  throw new Error(
+    "OpenAI API key not found in environment or character settings",
+  );
 }
 ```
 
 2. **Invalid Secret Format**
+
 ```typescript
 function validateApiKey(key: string): boolean {
   // OpenAI keys start with 'sk-'
-  if (key.startsWith('sk-')) {
+  if (key.startsWith("sk-")) {
     return key.length > 20;
   }
   return false;
@@ -207,14 +212,15 @@ function validateApiKey(key: string): boolean {
 ```
 
 3. **Secret Loading Errors**
+
 ```typescript
 try {
   await loadSecrets();
 } catch (error) {
-  if (error.code === 'ENOENT') {
-    console.error('Environment file not found');
+  if (error.code === "ENOENT") {
+    console.error("Environment file not found");
   } else if (error instanceof ValidationError) {
-    console.error('Invalid secret format');
+    console.error("Invalid secret format");
   }
 }
 ```

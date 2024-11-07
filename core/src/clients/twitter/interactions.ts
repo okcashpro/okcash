@@ -1,7 +1,10 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
 import fs from "fs";
 import { composeContext } from "../../core/context.ts";
-import { log_to_file } from "../../core/logger.ts";
+import {
+    generateMessageResponse,
+    generateShouldRespond,
+} from "../../core/generation.ts";
 import {
     messageCompletionFooter,
     shouldRespondFooter,
@@ -17,12 +20,8 @@ import {
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "../../core/generation.ts";
 
-export const messageHandlerTemplate =
+export const twitterMessageHandlerTemplate =
     `{{relevantFacts}}
 {{recentFacts}}
 
@@ -50,7 +49,7 @@ Recent interactions between {{agentName}} and other users:
 
 ` + messageCompletionFooter;
 
-export const shouldRespondTemplate =
+export const twitterShouldRespondTemplate =
     `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
@@ -117,7 +116,8 @@ export class TwitterInteractionClient extends ClientBase {
                     !this.lastCheckedTweetId ||
                     parseInt(tweet.id) > this.lastCheckedTweetId
                 ) {
-                    const conversationId = tweet.conversationId + "-" + this.runtime.agentId;
+                    const conversationId =
+                        tweet.conversationId + "-" + this.runtime.agentId;
 
                     const roomId = stringToUuid(conversationId);
 
@@ -254,7 +254,11 @@ export class TwitterInteractionClient extends ClientBase {
                     text: tweet.text,
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
-                        ? stringToUuid(tweet.inReplyToStatusId + "-" + this.runtime.agentId)
+                        ? stringToUuid(
+                              tweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -268,7 +272,11 @@ export class TwitterInteractionClient extends ClientBase {
 
         const shouldRespondContext = composeContext({
             state,
-            template: shouldRespondTemplate,
+            template:
+                this.runtime.character.templates
+                    ?.twitterShouldRespondTemplate ||
+                this.runtime.character?.templates?.shouldRespondTemplate ||
+                twitterShouldRespondTemplate,
         });
 
         const shouldRespond = await generateShouldRespond({
@@ -284,16 +292,12 @@ export class TwitterInteractionClient extends ClientBase {
 
         const context = composeContext({
             state,
-            template: messageHandlerTemplate,
+            template:
+                this.runtime.character.templates
+                    ?.twitterMessageHandlerTemplate ||
+                this.runtime.character?.templates?.messageHandlerTemplate ||
+                twitterMessageHandlerTemplate,
         });
-
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(
-            `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_interactions_context`,
-            context
-        );
 
         const response = await generateMessageResponse({
             runtime: this.runtime,
@@ -301,61 +305,42 @@ export class TwitterInteractionClient extends ClientBase {
             modelClass: ModelClass.SMALL,
         });
 
-        console.log("response", response);
-
-        console.log("tweet is", tweet);
-
         const stringId = stringToUuid(tweet.id + "-" + this.runtime.agentId);
-
-        console.log("stringId is", stringId, "while tweet.id is", tweet.id);
 
         response.inReplyTo = stringId;
 
-        console.log("response is", response);
-
-        log_to_file(
-            `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_interactions_response`,
-            JSON.stringify(response)
-        );
-
         if (response.text) {
             try {
-                if (!this.dryRun) {
-                    const callback: HandlerCallback = async (
-                        response: Content
-                    ) => {
-                        const memories = await sendTweetChunks(
-                            this,
-                            response,
-                            message.roomId,
-                            this.runtime.getSetting("TWITTER_USERNAME"),
-                            tweet.id
-                        );
-                        return memories;
-                    };
-
-                    const responseMessages = await callback(response);
-
-                    state = (await this.runtime.updateRecentMessageState(
-                        state
-                    )) as State;
-
-                    for (const responseMessage of responseMessages) {
-                        await this.runtime.messageManager.createMemory(
-                            responseMessage
-                        );
-                    }
-
-                    await this.runtime.evaluate(message, state);
-
-                    await this.runtime.processActions(
-                        message,
-                        responseMessages,
-                        state
+                const callback: HandlerCallback = async (response: Content) => {
+                    const memories = await sendTweetChunks(
+                        this,
+                        response,
+                        message.roomId,
+                        this.runtime.getSetting("TWITTER_USERNAME"),
+                        tweet.id
                     );
-                } else {
-                    console.log("Dry run, not sending tweet:", response.text);
+                    return memories;
+                };
+
+                const responseMessages = await callback(response);
+
+                state = (await this.runtime.updateRecentMessageState(
+                    state
+                )) as State;
+
+                for (const responseMessage of responseMessages) {
+                    await this.runtime.messageManager.createMemory(
+                        responseMessage
+                    );
                 }
+
+                await this.runtime.evaluate(message, state);
+
+                await this.runtime.processActions(
+                    message,
+                    responseMessages,
+                    state
+                );
                 const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
                 // f tweets folder dont exist, create
                 if (!fs.existsSync("tweets")) {

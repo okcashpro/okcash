@@ -16,7 +16,7 @@ export const formatFacts = (facts: Memory[]) => {
     return finalMessageStrings;
 };
 
-const template =
+const factsTemplate =
     // {{actors}}
     `TASK: Extract Claims from the conversation as an array of claims in JSON format.
 
@@ -61,7 +61,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
 
     const context = composeContext({
         state,
-        template,
+        template: runtime.character.templates?.factsTemplate || factsTemplate,
     });
 
     const facts = await generateObjectArray({

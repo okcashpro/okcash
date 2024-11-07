@@ -18,12 +18,10 @@ import {
     VoiceState,
 } from "discord.js";
 import EventEmitter from "events";
-import path from "path";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { composeContext } from "../../core/context.ts";
 import { generateMessageResponse } from "../../core/generation.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import {
     Content,
@@ -36,14 +34,118 @@ import {
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { getWavHeader } from "../../services/audioUtils.ts";
-import { AudioMonitor } from "./audioMonitor.ts";
-import { voiceHandlerTemplate } from "./templates.ts";
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+import { messageCompletionFooter } from "../../core/parsing.ts";
+
+const discordVoiceHandlerTemplate =
+    `# Task: Generate conversational voice dialog for {{agentName}}.
+About {{agentName}}:
+{{bio}}
+
+# Attachments
+{{attachments}}
+
+{{providers}}
+
+# Capabilities
+Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
+
+{{actions}}
+
+{{messageDirections}}
+
+{{recentMessages}}
+
+# Instructions: Write the next message for {{agentName}}. Include an optional action if appropriate. {{actionNames}}
+` + messageCompletionFooter;
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
 const DECODE_SAMPLE_RATE = 16000;
+
+// Buffers all audio
+export class AudioMonitor {
+    private readable: Readable;
+    private buffers: Buffer[] = [];
+    private maxSize: number;
+    private lastFlagged: number = -1;
+    private ended: boolean = false;
+
+    constructor(
+        readable: Readable,
+        maxSize: number,
+        callback: (buffer: Buffer) => void
+    ) {
+        this.readable = readable;
+        this.maxSize = maxSize;
+        this.readable.on("data", (chunk: Buffer) => {
+            //console.log('AudioMonitor got data');
+            if (this.lastFlagged < 0) {
+                this.lastFlagged = this.buffers.length;
+            }
+            this.buffers.push(chunk);
+            const currentSize = this.buffers.reduce(
+                (acc, cur) => acc + cur.length,
+                0
+            );
+            while (currentSize > this.maxSize) {
+                this.buffers.shift();
+                this.lastFlagged--;
+            }
+        });
+        this.readable.on("end", () => {
+            console.log("AudioMonitor ended");
+            this.ended = true;
+            if (this.lastFlagged < 0) return;
+            callback(this.getBufferFromStart());
+            this.lastFlagged = -1;
+        });
+        this.readable.on("speakingStopped", () => {
+            if (this.ended) return;
+            console.log("Speaking stopped");
+            if (this.lastFlagged < 0) return;
+            callback(this.getBufferFromStart());
+        });
+        this.readable.on("speakingStarted", () => {
+            if (this.ended) return;
+            console.log("Speaking started");
+            this.reset();
+        });
+    }
+
+    stop() {
+        this.readable.removeAllListeners("data");
+        this.readable.removeAllListeners("end");
+        this.readable.removeAllListeners("speakingStopped");
+        this.readable.removeAllListeners("speakingStarted");
+    }
+
+    isFlagged() {
+        return this.lastFlagged >= 0;
+    }
+
+    getBufferFromFlag() {
+        if (this.lastFlagged < 0) {
+            return null;
+        }
+        const buffer = Buffer.concat(this.buffers.slice(this.lastFlagged));
+        return buffer;
+    }
+
+    getBufferFromStart() {
+        const buffer = Buffer.concat(this.buffers);
+        return buffer;
+    }
+
+    reset() {
+        this.buffers = [];
+        this.lastFlagged = -1;
+    }
+
+    isEnded() {
+        return this.ended;
+    }
+}
 
 export class VoiceManager extends EventEmitter {
     private client: Client;
@@ -301,7 +403,9 @@ export class VoiceManager extends EventEmitter {
                             return;
                         }
 
-                        const roomId = stringToUuid(channelId + "-" + this.runtime.agentId);
+                        const roomId = stringToUuid(
+                            channelId + "-" + this.runtime.agentId
+                        );
                         const userIdUUID = stringToUuid(userId);
 
                         await this.runtime.ensureConnection(
@@ -366,7 +470,12 @@ export class VoiceManager extends EventEmitter {
 
                         const context = composeContext({
                             state,
-                            template: voiceHandlerTemplate,
+                            template:
+                                this.runtime.character.templates
+                                    ?.discordVoiceHandlerTemplate ||
+                                this.runtime.character.templates
+                                    ?.messageHandlerTemplate ||
+                                discordVoiceHandlerTemplate,
                         });
 
                         const responseContent = await this._generateResponse(
@@ -484,14 +593,6 @@ export class VoiceManager extends EventEmitter {
     ): Promise<Content> {
         const { userId, roomId } = message;
 
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(
-            `${state.agentName}_${datestr}_discord_voice_context`,
-            context
-        );
-
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
@@ -504,11 +605,6 @@ export class VoiceManager extends EventEmitter {
             console.error("No response from generateMessageResponse");
             return;
         }
-
-        log_to_file(
-            `${state.agentName}_${datestr}_discord_voice_response`,
-            JSON.stringify(response)
-        );
 
         await this.runtime.databaseAdapter.log({
             body: { message, context, response },

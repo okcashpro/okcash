@@ -1,7 +1,7 @@
 # Variable: boredomProvider
 
-> `const` **boredomProvider**: `Provider`
+> `const` **boredomProvider**: [`Provider`](../interfaces/Provider.md)
 
 ## Defined in
 
-[core/src/providers/boredom.ts:275](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/boredom.ts#L275)
+[core/src/providers/boredom.ts:275](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/boredom.ts#L275)

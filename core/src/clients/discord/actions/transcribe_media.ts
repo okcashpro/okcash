@@ -1,6 +1,6 @@
+import fs from "fs";
 import { composeContext } from "../../../core/context.ts";
 import { generateText } from "../../../core/generation.ts";
-import { log_to_file } from "../../../core/logger.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
 import {
     Action,
@@ -12,7 +12,6 @@ import {
     ModelClass,
     State,
 } from "../../../core/types.ts";
-import fs from "fs";
 export const transcriptionTemplate = `# Transcription of media file
 {{mediaTranscript}}
 

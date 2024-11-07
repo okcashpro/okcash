@@ -1,6 +1,6 @@
+import fs from "fs";
 import { composeContext } from "../../../core/context.ts";
 import { generateText, trimTokens } from "../../../core/generation.ts";
-import { log_to_file } from "../../../core/logger.ts";
 import models from "../../../core/models.ts";
 import { parseJSONObjectFromText } from "../../../core/parsing.ts";
 import {
@@ -13,7 +13,6 @@ import {
     ModelClass,
     State,
 } from "../../../core/types.ts";
-import fs from "fs";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 
@@ -199,29 +198,13 @@ const summarizeAction = {
             ),
         });
 
-        log_to_file(
-            `${state.agentName}_${datestr}_chat_with_attachment_context`,
-            context
-        );
-
         const summary = await generateText({
             runtime,
             context,
             modelClass: ModelClass.SMALL,
         });
 
-        log_to_file(
-            `${state.agentName}_${datestr}_chat_with_attachment_response`,
-            summary
-        );
-
         currentSummary = currentSummary + "\n" + summary;
-
-        // log summary to file
-        log_to_file(
-            `${state.agentName}_${datestr}_chat_with_attachment_summary`,
-            currentSummary
-        );
 
         if (!currentSummary) {
             console.error("No summary found, that's not good!");

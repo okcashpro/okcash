@@ -6,7 +6,7 @@ import {
     Plugin,
     Action,
 } from "@eliza/core";
-import { elizaLog } from "@eliza/core";
+import { elizaLogger } from "@eliza/core";
 import { generateCaption, generateImage } from "./utils.ts";
 
 const imageGeneration: Action = {
@@ -28,19 +28,19 @@ const imageGeneration: Action = {
         options: any,
         callback: HandlerCallback
     ) => {
-        elizaLog.log("Composing state for message:", message);
+        elizaLogger.log("Composing state for message:", message);
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
-        elizaLog.log("User ID:", userId);
+        elizaLogger.log("User ID:", userId);
 
         const imagePrompt = message.content.text;
-        elizaLog.log("Image prompt received:", imagePrompt);
+        elizaLogger.log("Image prompt received:", imagePrompt);
 
         // TODO: Generate a prompt for the image
 
         const res: { image: string; caption: string }[] = [];
 
-        elizaLog.log("Generating image with prompt:", imagePrompt);
+        elizaLogger.log("Generating image with prompt:", imagePrompt);
         const images = await generateImage(
             {
                 prompt: imagePrompt,
@@ -52,13 +52,13 @@ const imageGeneration: Action = {
         );
 
         if (images.success && images.data && images.data.length > 0) {
-            elizaLog.log(
+            elizaLogger.log(
                 "Image generation successful, number of images:",
                 images.data.length
             );
             for (let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
-                elizaLog.log(`Processing image ${i + 1}:`, image);
+                elizaLogger.log(`Processing image ${i + 1}:`, image);
 
                 const caption = await generateCaption(
                     {
@@ -67,7 +67,7 @@ const imageGeneration: Action = {
                     runtime
                 );
 
-                elizaLog.log(
+                elizaLogger.log(
                     `Generated caption for image ${i + 1}:`,
                     caption.title
                 );
@@ -91,7 +91,7 @@ const imageGeneration: Action = {
                 );
             }
         } else {
-            elizaLog.error("Image generation failed or returned no data.");
+            elizaLogger.error("Image generation failed or returned no data.");
         }
     },
     examples: [

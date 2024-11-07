@@ -5,7 +5,5 @@
 # Paths are relative to the core/src directory
 
 actions:
-    - name: askClaude
-      path: ./actions/askClaude.ts
     - name: epicAction
       path: ./custom_actions/epicAction.ts

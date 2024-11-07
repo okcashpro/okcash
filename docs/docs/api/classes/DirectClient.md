@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:57](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/direct/index.ts#L57)
+[core/src/clients/direct/index.ts:57](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L57)
 
 ## Methods
 
@@ -22,7 +22,7 @@
 
 #### Parameters
 
-• **runtime**: `AgentRuntime`
+• **runtime**: [`AgentRuntime`](AgentRuntime.md)
 
 #### Returns
 
@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:242](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/direct/index.ts#L242)
+[core/src/clients/direct/index.ts:263](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L263)
 
-***
+---
 
 ### start()
 
@@ -48,9 +48,9 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:250](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/direct/index.ts#L250)
+[core/src/clients/direct/index.ts:271](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L271)
 
-***
+---
 
 ### unregisterAgent()
 
@@ -58,7 +58,7 @@
 
 #### Parameters
 
-• **runtime**: `AgentRuntime`
+• **runtime**: [`AgentRuntime`](AgentRuntime.md)
 
 #### Returns
 
@@ -66,4 +66,4 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:246](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/clients/direct/index.ts#L246)
+[core/src/clients/direct/index.ts:267](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L267)

@@ -1,7 +1,7 @@
 # Variable: tokenProvider
 
-> `const` **tokenProvider**: `Provider`
+> `const` **tokenProvider**: [`Provider`](../interfaces/Provider.md)
 
 ## Defined in
 
-[core/src/providers/token.ts:799](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/providers/token.ts#L799)
+[core/src/providers/token.ts:801](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L801)

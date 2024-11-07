@@ -104,8 +104,8 @@ actions:
 ### SQLite (Recommended for Development)
 
 ```typescript
-import { SqliteDatabaseAdapter } from '@your-org/agent-framework/adapters';
-import Database from 'better-sqlite3';
+import { SqliteDatabaseAdapter } from "@your-org/agent-framework/adapters";
+import Database from "better-sqlite3";
 
 const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
 ```
@@ -113,7 +113,7 @@ const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
 ### In-Memory Database (for Testing)
 
 ```typescript
-import { SqlJsDatabaseAdapter } from '@your-org/agent-framework/adapters';
+import { SqlJsDatabaseAdapter } from "@your-org/agent-framework/adapters";
 
 const db = new SqlJsDatabaseAdapter(new Database(":memory:"));
 ```
@@ -164,12 +164,14 @@ Create `.vscode/launch.json`:
 ### 3. Common Issues
 
 **Memory Issues:**
+
 ```bash
 # Increase Node.js memory limit if needed
 NODE_OPTIONS="--max-old-space-size=8192" pnpm run dev
 ```
 
 **Model Download Issues:**
+
 ```bash
 # Clear model cache
 rm -rf ./models/*
@@ -204,16 +206,19 @@ pnpm test:integration
 ## Development Best Practices
 
 1. **Version Control**
+
    - Create feature branches
    - Follow conventional commits
    - Keep PRs focused and manageable
 
 2. **Code Organization**
+
    - Place custom actions in `custom_actions/`
    - Keep character files in `characters/`
    - Store test data in `tests/fixtures/`
 
 3. **Performance**
+
    - Use SQLite for development
    - Enable GPU acceleration when possible
    - Monitor memory usage

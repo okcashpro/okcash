@@ -2,35 +2,41 @@
 
 <img src="_media/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
 
-_As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
+### [For Chinese Version: 中文说明](_media/README_CN.md)
 
--   Multi-agent simulation framework
--   Add as many unique characters as you want with [characterfile](https://github.com/lalalune/characterfile/)
--   Full-featured Discord and Twitter connectors, with Discord voice channel support
--   Full conversational and document RAG memory
--   Can read links and PDFs, transcribe audio and videos, summarize conversations, and more
--   Highly extensible - create your own actions and clients to extend Eliza's capabilities
--   Supports open source and local models (default configured with Nous Hermes Llama 3.1B)
--   Supports OpenAI for cloud inference on a light-weight device
--   "Ask Claude" mode for calling Claude on more complex queries
--   100% Typescript
+## Features
+
+- 🛠 Full-featured Discord, Twitter and Telegram connectors
+- 👥 Multi-agent and room support
+- 📚 Easily ingest and interact with your documents
+- 💾 Retrievable memory and document store
+- 🚀 Highly extensible - create your own actions and clients to extend capabilities
+- ☁️ Supports many models, including local Llama, OpenAI, Anthropic, Groq, and more
+- 📦 Just works!
+
+## What can I use it for?
+
+- 🤖 Chatbots
+- 🕵️ Autonomous Agents
+- 📈 Business process handling
+- 🎮 Video game NPCs
 
 # Getting Started
 
 **Prerequisites (MUST):**
 
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   [pnpm](https://pnpm.io/installation)
+- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [pnpm](https://pnpm.io/installation)
 
 ### Edit the .env file
 
--   Copy .env.example to .env and fill in the appropriate values
--   Edit the TWITTER environment variables to add your bot's username and password
+- Copy .env.example to .env and fill in the appropriate values
+- Edit the TWITTER environment variables to add your bot's username and password
 
 ### Edit the character file
 
--   Check out the file `src/core/defaultCharacter.ts` - you can modify this
--   You can also load characters with the `pnpm start --characters="path/to/your/character.json"` and run multiple bots at the same time.
+- Check out the file `src/core/defaultCharacter.ts` - you can modify this
+- You can also load characters with the `pnpm start --characters="path/to/your/character.json"` and run multiple bots at the same time.
 
 After setting up the .env file and character file, you can start the bot with the following command:
 
@@ -154,12 +160,14 @@ pnpm test:watch    # Run tests in watch mode
 ```
 
 For database-specific tests:
+
 ```bash
 pnpm test:sqlite   # Run tests with SQLite
 pnpm test:sqljs    # Run tests with SQL.js
 ```
 
 Tests are written using Jest and can be found in `src/**/*.test.ts` files. The test environment is configured to:
+
 - Load environment variables from `.env.test`
 - Use a 2-minute timeout for long-running tests
 - Support ESM modules

@@ -8,7 +8,7 @@
 
 • **data.imageUrl**: `string`
 
-• **runtime**: `IAgentRuntime`
+• **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 
@@ -24,4 +24,4 @@
 
 ## Defined in
 
-[core/src/actions/imageGenerationUtils.ts:90](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/actions/imageGenerationUtils.ts#L90)
+[core/src/actions/imageGenerationUtils.ts:90](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/imageGenerationUtils.ts#L90)

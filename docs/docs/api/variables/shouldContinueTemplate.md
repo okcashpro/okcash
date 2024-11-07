@@ -4,4 +4,4 @@
 
 ## Defined in
 
-[core/src/actions/continue.ts:22](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/actions/continue.ts#L22)
+[core/src/actions/continue.ts:47](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/continue.ts#L47)

@@ -5,7 +5,6 @@ import {
     generateMessageResponse,
     generateText,
 } from "../../core/generation.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
 import {
     Content,
@@ -18,7 +17,7 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
 
-const messageHandlerTemplate =
+const twitterSearchTemplate =
     `{{relevantFacts}}
 {{recentFacts}}
 
@@ -146,18 +145,11 @@ export class TwitterSearchClient extends ClientBase {
     - Respond to tweets where there is an easy exchange of ideas to have with the user
     - ONLY respond with the ID of the tweet`;
 
-            const datestr = new Date().toUTCString().replace(/:/g, "-");
-            const logName = `${this.runtime.character.name}_search_${datestr}`;
-            log_to_file(logName, prompt);
-
             const mostInterestingTweetResponse = await generateText({
                 runtime: this.runtime,
                 context: prompt,
                 modelClass: ModelClass.SMALL,
             });
-
-            const responseLogName = `${this.runtime.character.name}_search_${datestr}_result`;
-            log_to_file(responseLogName, mostInterestingTweetResponse);
 
             const tweetId = mostInterestingTweetResponse.trim();
             const selectedTweet = slicedTweets.find(
@@ -182,7 +174,9 @@ export class TwitterSearchClient extends ClientBase {
             }
 
             const conversationId = selectedTweet.conversationId;
-            const roomId = stringToUuid(conversationId + "-" + this.runtime.agentId);
+            const roomId = stringToUuid(
+                conversationId + "-" + this.runtime.agentId
+            );
 
             const userIdUUID = stringToUuid(selectedTweet.userId as string);
 
@@ -204,7 +198,11 @@ export class TwitterSearchClient extends ClientBase {
                     text: selectedTweet.text,
                     url: selectedTweet.permanentUrl,
                     inReplyTo: selectedTweet.inReplyToStatusId
-                        ? stringToUuid(selectedTweet.inReplyToStatusId + "-" + this.runtime.agentId)
+                        ? stringToUuid(
+                              selectedTweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -264,14 +262,10 @@ export class TwitterSearchClient extends ClientBase {
 
             const context = composeContext({
                 state,
-                template: messageHandlerTemplate,
+                template:
+                    this.runtime.character.templates?.twitterSearchTemplate ||
+                    twitterSearchTemplate,
             });
-
-            // log context to file
-            log_to_file(
-                `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_context`,
-                context
-            );
 
             const responseContent = await generateMessageResponse({
                 runtime: this.runtime,
@@ -280,11 +274,6 @@ export class TwitterSearchClient extends ClientBase {
             });
 
             responseContent.inReplyTo = message.id;
-
-            log_to_file(
-                `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_response`,
-                JSON.stringify(responseContent)
-            );
 
             const response = responseContent;
 

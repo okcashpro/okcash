@@ -5,7 +5,7 @@ const config = {
   title: "eliza",
   tagline: "The flexible, scalable AI agent for everyone",
   favicon: "img/favicon.ico",
- 
+
   // GitHub Pages Configuration
   url: "https://madjin.github.io",
   baseUrl: "/eliza/",
@@ -15,7 +15,7 @@ const config = {
   trailingSlash: true,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
-  
+
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -24,7 +24,7 @@ const config = {
     mermaid: true,
   },
   themes: [
-    '@docusaurus/theme-mermaid',
+    "@docusaurus/theme-mermaid",
     // Any other themes...
   ],
   plugins: [
@@ -32,10 +32,10 @@ const config = {
     [
       "docusaurus-plugin-typedoc",
       {
-        entryPoints: ["src/index.ts"],
+        entryPoints: ["../core/src/index.ts"],
         tsconfig: "../core/tsconfig.json",
-        out: "./api",
-	skipErrorChecking: true,
+        out: "./docs/api",
+        skipErrorChecking: true,
       },
     ],
     // Search functionality
@@ -45,8 +45,8 @@ const config = {
       "@docusaurus/plugin-content-docs",
       {
         id: "api",
-        path: "api",
-        routeBasePath: "api",
+        path: "docs/api",
+        routeBasePath: "docs/api",
         sidebarPath: "./sidebars.api.js",
       },
     ],
@@ -72,7 +72,7 @@ const config = {
     ({
       // Enable dark mode by default
       colorMode: {
-        defaultMode: 'dark',
+        defaultMode: "dark",
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
@@ -107,50 +107,50 @@ const config = {
             href: "https://github.com/ai16z/eliza",
             label: "GitHub",
             position: "right",
-          }
-        ]
+          },
+        ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
-              { 
-                label: 'General',
-                href: './'
+              {
+                label: "General",
+                href: "./",
               },
-            ]
+            ],
           },
           {
-            title: 'Community',
+            title: "Community",
             items: [
               {
-                label: 'Discord',
-                href: 'https://discord.gg/NQHKW7US'
+                label: "Discord",
+                href: "https://discord.gg/NQHKW7US",
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/pmairca'
-              }
-            ]
+                label: "Twitter",
+                href: "https://twitter.com/pmairca",
+              },
+            ],
           },
           {
-            title: 'More',
+            title: "More",
             items: [
               {
-                label: 'GitHub',
-                href: 'https://github.com/ai16z/eliza'
-              }
-            ]
-          }
+                label: "GitHub",
+                href: "https://github.com/ai16z/eliza",
+              },
+            ],
+          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ai16z.ai`
+        copyright: `Copyright © ${new Date().getFullYear()} ai16z.ai`,
       },
       prism: {
         theme: prismThemes.github,
-        darkTheme: prismThemes.dracula
-      }
+        darkTheme: prismThemes.dracula,
+      },
     }),
 };
 export default config;

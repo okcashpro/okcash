@@ -6,7 +6,7 @@ import {
     formatEvaluatorNames,
     formatEvaluators,
 } from "./evaluators.ts";
-import { embeddingZeroVector, MemoryManager } from "./memory.ts";
+import { MemoryManager } from "./memory.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import {
     Character,
@@ -32,6 +32,7 @@ import {
 
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
+import { elizaLogger } from "../index.ts";
 import { BrowserService } from "../services/browser.ts";
 import ImageDescriptionService from "../services/image.ts";
 import LlamaService from "../services/llama.ts";
@@ -44,18 +45,16 @@ import {
     formatActionNames,
     formatActions,
 } from "./actions.ts";
-import defaultCharacter from "./defaultCharacter.ts";
-import { embed } from "./embedding.ts";
-import { generateText, splitChunks } from "./generation.ts";
+import { defaultCharacter } from "./defaultCharacter.ts";
+import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
+import { ImageGenModel } from "./imageGenModels.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
-import { ImageGenModel } from "./imageGenModels.ts";
-import { elizaLog } from "../index.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -264,7 +263,6 @@ export class AgentRuntime implements IAgentRuntime {
         this.token = opts.token;
 
         (opts.character.plugins ?? []).forEach((plugin) => {
-            
             plugin.actions.forEach((action) => {
                 this.registerAction(action);
             });
@@ -417,7 +415,7 @@ export class AgentRuntime implements IAgentRuntime {
      * @param action The action to register.
      */
     registerAction(action: Action) {
-        elizaLog.success(`Registering action: ${action.name}`);
+        elizaLogger.success(`Registering action: ${action.name}`);
         this.actions.push(action);
     }
 
@@ -449,7 +447,7 @@ export class AgentRuntime implements IAgentRuntime {
         callback?: HandlerCallback
     ): Promise<void> {
         if (!responses[0].content?.action) {
-            elizaLog.warn("No action found in the response content.");
+            elizaLogger.warn("No action found in the response content.");
             return;
         }
 
@@ -457,7 +455,7 @@ export class AgentRuntime implements IAgentRuntime {
             .toLowerCase()
             .replace("_", "");
 
-        elizaLog.success(`Normalized action: ${normalizedAction}`);
+        elizaLogger.success(`Normalized action: ${normalizedAction}`);
 
         let action = this.actions.find(
             (a: { name: string }) =>
@@ -469,7 +467,7 @@ export class AgentRuntime implements IAgentRuntime {
         );
 
         if (!action) {
-            elizaLog.info("Attempting to find action in similes.");
+            elizaLogger.info("Attempting to find action in similes.");
             for (const _action of this.actions) {
                 const simileAction = _action.similes.find(
                     (simile) =>
@@ -483,23 +481,28 @@ export class AgentRuntime implements IAgentRuntime {
                 );
                 if (simileAction) {
                     action = _action;
-                    elizaLog.success(`Action found in similes: ${action.name}`);
+                    elizaLogger.success(
+                        `Action found in similes: ${action.name}`
+                    );
                     break;
                 }
             }
         }
 
         if (!action) {
-            elizaLog.error("No action found for", responses[0].content.action);
+            elizaLogger.error(
+                "No action found for",
+                responses[0].content.action
+            );
             return;
         }
 
         if (!action.handler) {
-            elizaLog.error(`Action ${action.name} has no handler.`);
+            elizaLogger.error(`Action ${action.name} has no handler.`);
             return;
         }
 
-        elizaLog.success(`Executing handler for action: ${action.name}`);
+        elizaLogger.success(`Executing handler for action: ${action.name}`);
         await action.handler(this, message, state, {}, callback);
     }
 
@@ -542,7 +545,9 @@ export class AgentRuntime implements IAgentRuntime {
                 evaluators,
                 evaluatorNames,
             } as State,
-            template: evaluationTemplate,
+            template:
+                this.character.templates?.evaluationTemplate ||
+                evaluationTemplate,
         });
 
         const result = await generateText({
@@ -605,7 +610,7 @@ export class AgentRuntime implements IAgentRuntime {
                 email: email || (userName || "Bot") + "@" + source || "Unknown", // Temporary
                 details: { summary: "" },
             });
-            elizaLog.success(`User ${userName} created successfully.`);
+            elizaLogger.success(`User ${userName} created successfully.`);
         }
     }
 
@@ -614,7 +619,7 @@ export class AgentRuntime implements IAgentRuntime {
             await this.databaseAdapter.getParticipantsForRoom(roomId);
         if (!participants.includes(userId)) {
             await this.databaseAdapter.addParticipant(userId, roomId);
-            elizaLog.log(
+            elizaLogger.log(
                 `User ${userId} linked to room ${roomId} successfully.`
             );
         }
@@ -660,7 +665,7 @@ export class AgentRuntime implements IAgentRuntime {
         const room = await this.databaseAdapter.getRoom(roomId);
         if (!room) {
             await this.databaseAdapter.createRoom(roomId);
-            elizaLog.log(`Room ${roomId} created successfully.`);
+            elizaLogger.log(`Room ${roomId} created successfully.`);
         }
     }
 

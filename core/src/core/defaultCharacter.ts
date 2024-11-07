@@ -1,13 +1,9 @@
 import { Character, ModelProvider } from "./types.ts";
 
-const defaultCharacter: Character = {
+export const defaultCharacter: Character = {
     name: "Eliza",
     plugins: [],
-    clients: [
-        // "telegram",
-        // "discord",
-        // "twitter"
-    ],
+    clients: [],
     modelProvider: ModelProvider.LLAMALOCAL,
     settings: {
         secrets: {},
@@ -403,5 +399,3 @@ const defaultCharacter: Character = {
         ],
     },
 };
-
-export default defaultCharacter;

@@ -1,8 +1,11 @@
 # Class: PostgresDatabaseAdapter
 
+An abstract class representing a database adapter for managing various entities
+like accounts, memories, actors, goals, and rooms.
+
 ## Extends
 
-- `DatabaseAdapter`
+- [`DatabaseAdapter`](DatabaseAdapter.md)
 
 ## Constructors
 
@@ -20,11 +23,11 @@
 
 #### Overrides
 
-`DatabaseAdapter.constructor`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`constructor`](DatabaseAdapter.md#constructors)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:19](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L19)
+[core/src/adapters/postgres.ts:19](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L19)
 
 ## Properties
 
@@ -36,11 +39,11 @@ The database instance.
 
 #### Inherited from
 
-`DatabaseAdapter.db`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`db`](DatabaseAdapter.md#db)
 
 #### Defined in
 
-[core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/core/database.ts#L21)
+[core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/database.ts#L21)
 
 ## Methods
 
@@ -68,13 +71,13 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Overrides
 
-`DatabaseAdapter.addParticipant`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`addParticipant`](DatabaseAdapter.md#addparticipant)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:681](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L681)
+[core/src/adapters/postgres.ts:681](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L681)
 
-***
+---
 
 ### countMemories()
 
@@ -104,13 +107,13 @@ A Promise that resolves to the number of memories.
 
 #### Overrides
 
-`DatabaseAdapter.countMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`countMemories`](DatabaseAdapter.md#countmemories)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:752](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L752)
+[core/src/adapters/postgres.ts:752](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L752)
 
-***
+---
 
 ### createAccount()
 
@@ -120,7 +123,7 @@ Creates a new account in the database.
 
 #### Parameters
 
-• **account**: `Account`
+• **account**: [`Account`](../interfaces/Account.md)
 
 The account object to create.
 
@@ -132,13 +135,13 @@ A Promise that resolves when the account creation is complete.
 
 #### Overrides
 
-`DatabaseAdapter.createAccount`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createAccount`](DatabaseAdapter.md#createaccount)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:186](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L186)
+[core/src/adapters/postgres.ts:186](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L186)
 
-***
+---
 
 ### createGoal()
 
@@ -148,7 +151,7 @@ Creates a new goal in the database.
 
 #### Parameters
 
-• **goal**: `Goal`
+• **goal**: [`Goal`](../interfaces/Goal.md)
 
 The goal object to create.
 
@@ -160,13 +163,13 @@ A Promise that resolves when the goal has been created.
 
 #### Overrides
 
-`DatabaseAdapter.createGoal`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createGoal`](DatabaseAdapter.md#creategoal)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:454](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L454)
+[core/src/adapters/postgres.ts:454](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L454)
 
-***
+---
 
 ### createMemory()
 
@@ -176,7 +179,7 @@ Creates a new memory in the database.
 
 #### Parameters
 
-• **memory**: `Memory`
+• **memory**: [`Memory`](../interfaces/Memory.md)
 
 The memory object to create.
 
@@ -192,13 +195,13 @@ A Promise that resolves when the memory has been created.
 
 #### Overrides
 
-`DatabaseAdapter.createMemory`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createMemory`](DatabaseAdapter.md#creatememory)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:253](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L253)
+[core/src/adapters/postgres.ts:253](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L253)
 
-***
+---
 
 ### createRelationship()
 
@@ -224,13 +227,13 @@ A Promise that resolves to a boolean indicating success or failure of the creati
 
 #### Overrides
 
-`DatabaseAdapter.createRelationship`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createRelationship`](DatabaseAdapter.md#createrelationship)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:505](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L505)
+[core/src/adapters/postgres.ts:505](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L505)
 
-***
+---
 
 ### createRoom()
 
@@ -252,17 +255,17 @@ A Promise that resolves to the UUID of the created room.
 
 #### Overrides
 
-`DatabaseAdapter.createRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createRoom`](DatabaseAdapter.md#createroom)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:483](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L483)
+[core/src/adapters/postgres.ts:483](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L483)
 
-***
+---
 
 ### getAccountById()
 
-> **getAccountById**(`userId`): `Promise`\<`Account`\>
+> **getAccountById**(`userId`): `Promise`\<[`Account`](../interfaces/Account.md)\>
 
 Retrieves an account by its ID.
 
@@ -274,23 +277,23 @@ The UUID of the user account to retrieve.
 
 #### Returns
 
-`Promise`\<`Account`\>
+`Promise`\<[`Account`](../interfaces/Account.md)\>
 
 A Promise that resolves to the Account object or null if not found.
 
 #### Overrides
 
-`DatabaseAdapter.getAccountById`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getAccountById`](DatabaseAdapter.md#getaccountbyid)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:162](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L162)
+[core/src/adapters/postgres.ts:162](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L162)
 
-***
+---
 
 ### getActorById()
 
-> **getActorById**(`params`): `Promise`\<`Actor`[]\>
+> **getActorById**(`params`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 #### Parameters
 
@@ -300,17 +303,17 @@ A Promise that resolves to the Account object or null if not found.
 
 #### Returns
 
-`Promise`\<`Actor`[]\>
+`Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:210](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L210)
+[core/src/adapters/postgres.ts:210](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L210)
 
-***
+---
 
 ### getActorDetails()
 
-> **getActorDetails**(`params`): `Promise`\<`Actor`[]\>
+> **getActorDetails**(`params`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 Retrieves details of actors in a given room.
 
@@ -324,19 +327,19 @@ An object containing the roomId to search for actors.
 
 #### Returns
 
-`Promise`\<`Actor`[]\>
+`Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 A Promise that resolves to an array of Actor objects.
 
 #### Overrides
 
-`DatabaseAdapter.getActorDetails`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getActorDetails`](DatabaseAdapter.md#getactordetails)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:810](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L810)
+[core/src/adapters/postgres.ts:810](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L810)
 
-***
+---
 
 ### getCachedEmbeddings()
 
@@ -348,17 +351,17 @@ Retrieves cached embeddings based on the specified query parameters.
 
 • **opts**
 
-• **opts.query\_field\_name**: `string`
+• **opts.query_field_name**: `string`
 
-• **opts.query\_field\_sub\_name**: `string`
+• **opts.query_field_sub_name**: `string`
 
-• **opts.query\_input**: `string`
+• **opts.query_input**: `string`
 
-• **opts.query\_match\_count**: `number`
+• **opts.query_match_count**: `number`
 
-• **opts.query\_table\_name**: `string`
+• **opts.query_table_name**: `string`
 
-• **opts.query\_threshold**: `number`
+• **opts.query_threshold**: `number`
 
 #### Returns
 
@@ -368,17 +371,17 @@ A Promise that resolves to an array of objects containing embeddings and levensh
 
 #### Overrides
 
-`DatabaseAdapter.getCachedEmbeddings`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getCachedEmbeddings`](DatabaseAdapter.md#getcachedembeddings)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:559](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L559)
+[core/src/adapters/postgres.ts:559](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L559)
 
-***
+---
 
 ### getGoals()
 
-> **getGoals**(`params`): `Promise`\<`Goal`[]\>
+> **getGoals**(`params`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
 
 Retrieves goals based on specified parameters.
 
@@ -398,23 +401,23 @@ An object containing parameters for goal retrieval.
 
 #### Returns
 
-`Promise`\<`Goal`[]\>
+`Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
 
 A Promise that resolves to an array of Goal objects.
 
 #### Overrides
 
-`DatabaseAdapter.getGoals`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getGoals`](DatabaseAdapter.md#getgoals)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:396](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L396)
+[core/src/adapters/postgres.ts:396](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L396)
 
-***
+---
 
 ### getMemories()
 
-> **getMemories**(`params`): `Promise`\<`Memory`[]\>
+> **getMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Retrieves memories based on the specified parameters.
 
@@ -440,23 +443,23 @@ An object containing parameters for the memory retrieval.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.getMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getMemories`](DatabaseAdapter.md#getmemories)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:334](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L334)
+[core/src/adapters/postgres.ts:334](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L334)
 
-***
+---
 
 ### getMemoriesByRoomIds()
 
-> **getMemoriesByRoomIds**(`params`): `Promise`\<`Memory`[]\>
+> **getMemoriesByRoomIds**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 #### Parameters
 
@@ -470,21 +473,21 @@ A Promise that resolves to an array of Memory objects.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 #### Overrides
 
-`DatabaseAdapter.getMemoriesByRoomIds`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getMemoriesByRoomIds`](DatabaseAdapter.md#getmemoriesbyroomids)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:103](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L103)
+[core/src/adapters/postgres.ts:103](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L103)
 
-***
+---
 
 ### getMemoryById()
 
-> **getMemoryById**(`id`): `Promise`\<`Memory`\>
+> **getMemoryById**(`id`): `Promise`\<[`Memory`](../interfaces/Memory.md)\>
 
 #### Parameters
 
@@ -492,21 +495,21 @@ A Promise that resolves to an array of Memory objects.
 
 #### Returns
 
-`Promise`\<`Memory`\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)\>
 
 #### Overrides
 
-`DatabaseAdapter.getMemoryById`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getMemoryById`](DatabaseAdapter.md#getmemorybyid)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:232](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L232)
+[core/src/adapters/postgres.ts:232](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L232)
 
-***
+---
 
 ### getParticipantsForAccount()
 
-> **getParticipantsForAccount**(`userId`): `Promise`\<`Participant`[]\>
+> **getParticipantsForAccount**(`userId`): `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 Retrieves participants associated with a specific account.
 
@@ -518,19 +521,19 @@ The UUID of the account.
 
 #### Returns
 
-`Promise`\<`Participant`[]\>
+`Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 A Promise that resolves to an array of Participant objects.
 
 #### Overrides
 
-`DatabaseAdapter.getParticipantsForAccount`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getParticipantsForAccount`](DatabaseAdapter.md#getparticipantsforaccount)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:72](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L72)
+[core/src/adapters/postgres.ts:72](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L72)
 
-***
+---
 
 ### getParticipantsForRoom()
 
@@ -552,13 +555,13 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Overrides
 
-`DatabaseAdapter.getParticipantsForRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getParticipantsForRoom`](DatabaseAdapter.md#getparticipantsforroom)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:149](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L149)
+[core/src/adapters/postgres.ts:149](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L149)
 
-***
+---
 
 ### getParticipantUserState()
 
@@ -576,17 +579,17 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Overrides
 
-`DatabaseAdapter.getParticipantUserState`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getParticipantUserState`](DatabaseAdapter.md#getparticipantuserstate)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:87](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L87)
+[core/src/adapters/postgres.ts:87](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L87)
 
-***
+---
 
 ### getRelationship()
 
-> **getRelationship**(`params`): `Promise`\<`Relationship`\>
+> **getRelationship**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
 Retrieves a relationship between two users if it exists.
 
@@ -602,23 +605,23 @@ An object containing the UUIDs of the two users (userA and userB).
 
 #### Returns
 
-`Promise`\<`Relationship`\>
+`Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
 A Promise that resolves to the Relationship object or null if not found.
 
 #### Overrides
 
-`DatabaseAdapter.getRelationship`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRelationship`](DatabaseAdapter.md#getrelationship)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:529](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L529)
+[core/src/adapters/postgres.ts:529](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L529)
 
-***
+---
 
 ### getRelationships()
 
-> **getRelationships**(`params`): `Promise`\<`Relationship`[]\>
+> **getRelationships**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
 Retrieves all relationships for a specific user.
 
@@ -632,19 +635,19 @@ An object containing the UUID of the user.
 
 #### Returns
 
-`Promise`\<`Relationship`[]\>
+`Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
 A Promise that resolves to an array of Relationship objects.
 
 #### Overrides
 
-`DatabaseAdapter.getRelationships`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRelationships`](DatabaseAdapter.md#getrelationships)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:546](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L546)
+[core/src/adapters/postgres.ts:546](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L546)
 
-***
+---
 
 ### getRoom()
 
@@ -666,13 +669,13 @@ A Promise that resolves to the room ID or null if not found.
 
 #### Overrides
 
-`DatabaseAdapter.getRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRoom`](DatabaseAdapter.md#getroom)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:59](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L59)
+[core/src/adapters/postgres.ts:59](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L59)
 
-***
+---
 
 ### getRoomsForParticipant()
 
@@ -694,13 +697,13 @@ A Promise that resolves to an array of room IDs.
 
 #### Overrides
 
-`DatabaseAdapter.getRoomsForParticipant`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRoomsForParticipant`](DatabaseAdapter.md#getroomsforparticipant)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:784](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L784)
+[core/src/adapters/postgres.ts:784](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L784)
 
-***
+---
 
 ### getRoomsForParticipants()
 
@@ -722,13 +725,13 @@ A Promise that resolves to an array of room IDs.
 
 #### Overrides
 
-`DatabaseAdapter.getRoomsForParticipants`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRoomsForParticipants`](DatabaseAdapter.md#getroomsforparticipants)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:797](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L797)
+[core/src/adapters/postgres.ts:797](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L797)
 
-***
+---
 
 ### log()
 
@@ -758,13 +761,13 @@ A Promise that resolves when the log entry has been saved.
 
 #### Overrides
 
-`DatabaseAdapter.log`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`log`](DatabaseAdapter.md#log)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:595](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L595)
+[core/src/adapters/postgres.ts:595](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L595)
 
-***
+---
 
 ### removeAllGoals()
 
@@ -786,13 +789,13 @@ A Promise that resolves when all goals have been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeAllGoals`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeAllGoals`](DatabaseAdapter.md#removeallgoals)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:773](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L773)
+[core/src/adapters/postgres.ts:773](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L773)
 
-***
+---
 
 ### removeAllMemories()
 
@@ -818,13 +821,13 @@ A Promise that resolves when all memories have been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeAllMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeAllMemories`](DatabaseAdapter.md#removeallmemories)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:740](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L740)
+[core/src/adapters/postgres.ts:740](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L740)
 
-***
+---
 
 ### removeGoal()
 
@@ -846,13 +849,13 @@ A Promise that resolves when the goal has been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeGoal`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeGoal`](DatabaseAdapter.md#removegoal)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:474](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L474)
+[core/src/adapters/postgres.ts:474](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L474)
 
-***
+---
 
 ### removeMemory()
 
@@ -878,13 +881,13 @@ A Promise that resolves when the memory has been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeMemory`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeMemory`](DatabaseAdapter.md#removememory)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:728](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L728)
+[core/src/adapters/postgres.ts:728](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L728)
 
-***
+---
 
 ### removeParticipant()
 
@@ -910,13 +913,13 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Overrides
 
-`DatabaseAdapter.removeParticipant`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeParticipant`](DatabaseAdapter.md#removeparticipant)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:697](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L697)
+[core/src/adapters/postgres.ts:697](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L697)
 
-***
+---
 
 ### removeRoom()
 
@@ -938,17 +941,17 @@ A Promise that resolves when the room has been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeRoom`](DatabaseAdapter.md#removeroom)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:496](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L496)
+[core/src/adapters/postgres.ts:496](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L496)
 
-***
+---
 
 ### searchMemories()
 
-> **searchMemories**(`params`): `Promise`\<`Memory`[]\>
+> **searchMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories based on embeddings and other specified parameters.
 
@@ -960,9 +963,9 @@ An object containing parameters for the memory search.
 
 • **params.embedding**: `number`[]
 
-• **params.match\_count**: `number`
+• **params.match_count**: `number`
 
-• **params.match\_threshold**: `number`
+• **params.match_threshold**: `number`
 
 • **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -972,23 +975,23 @@ An object containing parameters for the memory search.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.searchMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`searchMemories`](DatabaseAdapter.md#searchmemories)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:291](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L291)
+[core/src/adapters/postgres.ts:291](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L291)
 
-***
+---
 
 ### searchMemoriesByEmbedding()
 
-> **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<`Memory`[]\>
+> **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories by embedding and other specified parameters.
 
@@ -1006,7 +1009,7 @@ Additional parameters for the search.
 
 • **params.count?**: `number`
 
-• **params.match\_threshold?**: `number`
+• **params.match_threshold?**: `number`
 
 • **params.roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -1016,19 +1019,19 @@ Additional parameters for the search.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.searchMemoriesByEmbedding`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`searchMemoriesByEmbedding`](DatabaseAdapter.md#searchmemoriesbyembedding)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:612](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L612)
+[core/src/adapters/postgres.ts:612](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L612)
 
-***
+---
 
 ### setParticipantUserState()
 
@@ -1048,13 +1051,13 @@ A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.setParticipantUserState`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`setParticipantUserState`](DatabaseAdapter.md#setparticipantuserstate)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:133](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L133)
+[core/src/adapters/postgres.ts:133](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L133)
 
-***
+---
 
 ### testConnection()
 
@@ -1066,9 +1069,9 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:37](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L37)
+[core/src/adapters/postgres.ts:37](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L37)
 
-***
+---
 
 ### updateGoal()
 
@@ -1078,7 +1081,7 @@ Updates a specific goal in the database.
 
 #### Parameters
 
-• **goal**: `Goal`
+• **goal**: [`Goal`](../interfaces/Goal.md)
 
 The goal object with updated properties.
 
@@ -1090,13 +1093,13 @@ A Promise that resolves when the goal has been updated.
 
 #### Overrides
 
-`DatabaseAdapter.updateGoal`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`updateGoal`](DatabaseAdapter.md#updategoal)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:437](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L437)
+[core/src/adapters/postgres.ts:437](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L437)
 
-***
+---
 
 ### updateGoalStatus()
 
@@ -1112,7 +1115,7 @@ An object containing the goalId and the new status.
 
 • **params.goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-• **params.status**: `GoalStatus`
+• **params.status**: [`GoalStatus`](../enumerations/GoalStatus.md)
 
 #### Returns
 
@@ -1122,8 +1125,8 @@ A Promise that resolves when the goal status has been updated.
 
 #### Overrides
 
-`DatabaseAdapter.updateGoalStatus`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`updateGoalStatus`](DatabaseAdapter.md#updategoalstatus)
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:713](https://github.com/ai16z/eliza/blob/f44765cf90f453d2ecf80e9a2e5e7bb6d1533f70/core/src/adapters/postgres.ts#L713)
+[core/src/adapters/postgres.ts:713](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L713)

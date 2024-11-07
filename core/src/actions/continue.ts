@@ -1,11 +1,9 @@
-import { messageHandlerTemplate } from "../clients/discord/templates.ts";
 import { composeContext } from "../core/context.ts";
 import {
-    generateTrueOrFalse,
     generateMessageResponse,
+    generateTrueOrFalse,
 } from "../core/generation.ts";
-import { log_to_file } from "../core/logger.ts";
-import { booleanFooter } from "../core/parsing.ts";
+import { booleanFooter, messageCompletionFooter } from "../core/parsing.ts";
 import {
     Action,
     ActionExample,
@@ -18,6 +16,33 @@ import {
 } from "../core/types.ts";
 
 const maxContinuesInARow = 3;
+
+export const messageHandlerTemplate =
+    // {{goals}}
+    `# Action Examples
+{{actionExamples}}
+(Action examples are for reference only. Do not use the information from them in your response.)
+
+# Task: Generate dialog and actions for the character {{agentName}}.
+About {{agentName}}:
+{{bio}}
+{{lore}}
+
+{{providers}}
+
+{{attachments}}
+
+# Capabilities
+Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
+
+{{messageDirections}}
+
+{{recentMessages}}
+
+{{actions}}
+
+# Instructions: Write the next message for {{agentName}}. Ignore "action".
+` + messageCompletionFooter;
 
 export const shouldContinueTemplate =
     `# Task: Decide if {{agentName}} should continue, or wait for others in the conversation so speak.
@@ -106,13 +131,11 @@ export const continueAction: Action = {
 
         const context = composeContext({
             state,
-            template: messageHandlerTemplate,
+            template:
+                runtime.character.templates?.continueMessageHandlerTemplate ||
+                runtime.character.templates?.messageHandlerTemplate ||
+                messageHandlerTemplate,
         });
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(`${state.agentName}_${datestr}_continue_context`, context);
-
         const { userId, roomId } = message;
 
         const response = await generateMessageResponse({
@@ -122,12 +145,6 @@ export const continueAction: Action = {
         });
 
         response.inReplyTo = message.id;
-
-        // log response to file
-        log_to_file(
-            `${state.agentName}_${datestr}_continue_response`,
-            JSON.stringify(response)
-        );
 
         runtime.databaseAdapter.log({
             body: { message, context, response },

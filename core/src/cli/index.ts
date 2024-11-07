@@ -1,6 +1,6 @@
 export * from "./config.ts";
 
-import defaultCharacter from "../core/defaultCharacter.ts";
+import { defaultCharacter } from "../core/defaultCharacter.ts";
 import settings from "../core/settings.ts";
 import { Character, IAgentRuntime, ModelProvider } from "../core/types.ts";
 import * as Action from "../actions/index.ts";
@@ -16,7 +16,7 @@ import { AgentRuntime } from "../core/runtime.ts";
 import { defaultActions } from "../core/actions.ts";
 import { Arguments } from "../types/index.ts";
 import { loadActionConfigs, loadCustomActions } from "./config.ts";
-import { elizaLog } from "../index.ts";
+import { elizaLogger } from "../index.ts";
 
 export async function initializeClients(
     character: Character,
@@ -73,7 +73,10 @@ export function loadCharacters(charactersArg: string): Character[] {
         .map((path) => path.trim())
         .map((path) => {
             if (path.startsWith("./characters")) {
-                return `../characters/${path}`;
+                return `.${path}`;
+            }
+            if (path.startsWith("characters")) {
+                return `../${path}`;
             }
             return path;
         });
@@ -111,7 +114,9 @@ export function getTokenForProvider(
             );
         case ModelProvider.ANTHROPIC:
             return (
+                character.settings?.secrets?.ANTHROPIC_API_KEY ||
                 character.settings?.secrets?.CLAUDE_API_KEY ||
+                settings.ANTHROPIC_API_KEY ||
                 settings.CLAUDE_API_KEY
             );
         case ModelProvider.REDPILL:
@@ -211,11 +216,11 @@ export async function startTelegram(
     runtime: IAgentRuntime,
     character: Character
 ) {
-    elizaLog.log("🔍 Attempting to start Telegram bot...");
+    elizaLogger.log("🔍 Attempting to start Telegram bot...");
     const botToken = runtime.getSetting("TELEGRAM_BOT_TOKEN");
 
     if (!botToken) {
-        elizaLog.error(
+        elizaLogger.error(
             `❌ Telegram bot token is not set for character ${character.name}.`
         );
         return null;
@@ -224,12 +229,12 @@ export async function startTelegram(
     try {
         const telegramClient = new Client.TelegramClient(runtime, botToken);
         await telegramClient.start();
-        elizaLog.success(
+        elizaLogger.success(
             `✅ Telegram client successfully started for character ${character.name}`
         );
         return telegramClient;
     } catch (error) {
-        elizaLog.error(
+        elizaLogger.error(
             `❌ Error creating/starting Telegram client for ${character.name}:`,
             error
         );
@@ -238,14 +243,14 @@ export async function startTelegram(
 }
 
 export async function startTwitter(runtime: IAgentRuntime) {
-    elizaLog.log("Starting Twitter clients...");
+    elizaLogger.log("Starting Twitter clients...");
     const twitterSearchClient = new Client.TwitterSearchClient(runtime);
     await wait();
     const twitterInteractionClient = new Client.TwitterInteractionClient(
         runtime
     );
     await wait();
-    const twitterGenerationClient = new Client.TwitterGenerationClient(runtime);
+    const twitterGenerationClient = new Client.TwitterPostClient(runtime);
 
     return [
         twitterInteractionClient,

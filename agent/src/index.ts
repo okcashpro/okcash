@@ -3,6 +3,7 @@ import {
     boredomProvider,
     Character,
     defaultActions,
+    defaultCharacter,
     DirectClient,
     followRoom,
     getTokenForProvider,
@@ -10,17 +11,30 @@ import {
     initializeClients,
     initializeDatabase,
     loadActionConfigs,
+    loadCharacters,
     loadCustomActions,
     muteRoom,
+    parseArguments,
     timeProvider,
     unfollowRoom,
     unmuteRoom,
     walletProvider,
 } from "@eliza/core";
 import readline from "readline";
-import { defaultCharacter } from "./character.ts";
 
-const characters = [defaultCharacter];
+const args = parseArguments();
+
+console.log("Args are: ", args);
+
+let charactersArg = args.characters || args.character;
+
+let characters = [defaultCharacter];
+
+if (charactersArg) {
+    characters = loadCharacters(charactersArg);
+}
+
+console.log("Characters are: ", characters);
 
 const directClient = new DirectClient();
 

@@ -1,5 +1,5 @@
 export {
-    TwitterGenerationClient,
+    TwitterPostClient,
     TwitterInteractionClient,
     TwitterSearchClient,
 } from "./twitter/index.ts";
