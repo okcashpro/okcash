@@ -1,6 +1,6 @@
 {
     "name": "tate",
-    "clients": ["discord", "twitter", "telegram"],
+    "clients": [],
     "modelProvider": "anthropic",
     "settings": {
       "secrets": {},
