@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[core/src/providers/wallet.ts:53](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/wallet.ts#L53)
+[core/src/providers/wallet.ts:53](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L53)
 
 ## Methods
 
@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[core/src/providers/wallet.ts:105](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/wallet.ts#L105)
+[core/src/providers/wallet.ts:105](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L105)
 
 ***
 
@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[core/src/providers/wallet.ts:150](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/wallet.ts#L150)
+[core/src/providers/wallet.ts:150](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L150)
 
 ***
 
@@ -76,7 +76,7 @@
 
 #### Defined in
 
-[core/src/providers/wallet.ts:192](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/wallet.ts#L192)
+[core/src/providers/wallet.ts:192](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L192)
 
 ***
 
@@ -94,4 +94,4 @@
 
 #### Defined in
 
-[core/src/providers/wallet.ts:229](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/providers/wallet.ts#L229)
+[core/src/providers/wallet.ts:229](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L229)

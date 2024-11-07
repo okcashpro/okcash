@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:34](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L34)
+[core/src/clients/discord/index.ts:34](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/discord/index.ts#L34)
 
 ## Properties
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:27](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L27)
+[core/src/clients/discord/index.ts:27](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/discord/index.ts#L27)
 
 ***
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:30](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L30)
+[core/src/clients/discord/index.ts:30](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/discord/index.ts#L30)
 
 ***
 
@@ -383,7 +383,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:121](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L121)
+[core/src/clients/discord/index.ts:121](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/discord/index.ts#L121)
 
 ***
 
@@ -403,7 +403,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/discord/index.ts:191](https://github.com/ai16z/eliza/blob/ee5422db5e0eb83afc9385308b6f420315c50414/core/src/clients/discord/index.ts#L191)
+[core/src/clients/discord/index.ts:191](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/discord/index.ts#L191)
 
 ***
 
