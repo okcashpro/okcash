@@ -16,7 +16,7 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:38](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L38)
+[core/src/providers/token.ts:38](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L38)
 
 ## Methods
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:461](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L461)
+[core/src/providers/token.ts:461](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L461)
 
----
+***
 
 ### checkRecentTrades()
 
@@ -52,9 +52,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:631](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L631)
+[core/src/providers/token.ts:631](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L631)
 
----
+***
 
 ### countHighSupplyHolders()
 
@@ -70,9 +70,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:635](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L635)
+[core/src/providers/token.ts:635](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L635)
 
----
+***
 
 ### fetchDexScreenerData()
 
@@ -84,9 +84,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:420](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L420)
+[core/src/providers/token.ts:420](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L420)
 
----
+***
 
 ### fetchHolderList()
 
@@ -98,9 +98,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:507](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L507)
+[core/src/providers/token.ts:507](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L507)
 
----
+***
 
 ### fetchTokenSecurity()
 
@@ -112,9 +112,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:155](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L155)
+[core/src/providers/token.ts:155](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L155)
 
----
+***
 
 ### fetchTokenTradeData()
 
@@ -126,9 +126,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:185](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L185)
+[core/src/providers/token.ts:185](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L185)
 
----
+***
 
 ### filterHighValueHolders()
 
@@ -144,9 +144,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:607](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L607)
+[core/src/providers/token.ts:607](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L607)
 
----
+***
 
 ### formatTokenData()
 
@@ -162,9 +162,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:722](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L722)
+[core/src/providers/token.ts:722](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L722)
 
----
+***
 
 ### getFormattedTokenReport()
 
@@ -176,9 +176,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:786](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L786)
+[core/src/providers/token.ts:786](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L786)
 
----
+***
 
 ### getProcessedTokenData()
 
@@ -190,4 +190,4 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:656](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/token.ts#L656)
+[core/src/providers/token.ts:656](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/providers/token.ts#L656)

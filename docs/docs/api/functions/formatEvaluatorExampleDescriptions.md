@@ -1,0 +1,21 @@
+# Function: formatEvaluatorExampleDescriptions()
+
+> **formatEvaluatorExampleDescriptions**(`evaluators`): `string`
+
+Generates a string summarizing the descriptions of each evaluator example.
+
+## Parameters
+
+• **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
+
+An array of evaluator objects, each containing examples.
+
+## Returns
+
+`string`
+
+A string that summarizes the descriptions for each evaluator example, formatted with the evaluator name, example number, and description.
+
+## Defined in
+
+[core/src/core/evaluators.ts:114](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/evaluators.ts#L114)

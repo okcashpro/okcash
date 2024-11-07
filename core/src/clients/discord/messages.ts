@@ -28,7 +28,7 @@ import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 
 import { VoiceManager } from "./voice.ts";
-import { prettyConsole } from "../../index.ts";
+import { elizaLog } from "../../index.ts";
 
 import {
     messageCompletionFooter,
@@ -187,7 +187,7 @@ export async function sendMessageInChunks(
             }
         }
     } catch (error) {
-        prettyConsole.error("Error sending message:", error);
+        elizaLog.error("Error sending message:", error);
     }
 
     return sentMessages;
@@ -389,7 +389,7 @@ export class MessageManager {
             })) as State;
 
             if (!canSendMessage(message.channel).canSend) {
-                return prettyConsole.warn(
+                return elizaLog.warn(
                     `Cannot send message to channel ${message.channel}`,
                     canSendMessage(message.channel)
                 );
@@ -446,6 +446,8 @@ export class MessageManager {
                 state,
                 context
             );
+
+            console.log("Response content:", responseContent);
 
             responseContent.text = responseContent.text?.trim();
             responseContent.inReplyTo = stringToUuid(

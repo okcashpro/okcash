@@ -1,8 +1,10 @@
 # Interface: CreateAndBuyContent
 
+Represents the content of a message, including its main text (`content`), any associated action (`action`), and the source of the content (`source`), if applicable.
+
 ## Extends
 
-- `Content`
+- [`Content`](Content.md)
 
 ## Properties
 
@@ -12,13 +14,13 @@
 
 #### Inherited from
 
-`Content.action`
+[`Content`](Content.md).[`action`](Content.md#action)
 
 #### Defined in
 
-[core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L14)
+[core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L14)
 
----
+***
 
 ### allowOffCurve
 
@@ -26,23 +28,23 @@
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:30](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L30)
+[core/src/actions/pumpfun.ts:30](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/actions/pumpfun.ts#L30)
 
----
+***
 
 ### attachments?
 
-> `optional` **attachments**: `Media`[]
+> `optional` **attachments**: [`Media`](../type-aliases/Media.md)[]
 
 #### Inherited from
 
-`Content.attachments`
+[`Content`](Content.md).[`attachments`](Content.md#attachments)
 
 #### Defined in
 
-[core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L18)
+[core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L18)
 
----
+***
 
 ### buyAmountSol
 
@@ -50,9 +52,9 @@
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:25](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L25)
+[core/src/actions/pumpfun.ts:25](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/actions/pumpfun.ts#L25)
 
----
+***
 
 ### deployerPrivateKey
 
@@ -60,9 +62,9 @@
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:23](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L23)
+[core/src/actions/pumpfun.ts:23](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/actions/pumpfun.ts#L23)
 
----
+***
 
 ### inReplyTo?
 
@@ -70,13 +72,13 @@
 
 #### Inherited from
 
-`Content.inReplyTo`
+[`Content`](Content.md).[`inReplyTo`](Content.md#inreplyto)
 
 #### Defined in
 
-[core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L17)
+[core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L17)
 
----
+***
 
 ### priorityFee
 
@@ -92,9 +94,9 @@
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:26](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L26)
+[core/src/actions/pumpfun.ts:26](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/actions/pumpfun.ts#L26)
 
----
+***
 
 ### source?
 
@@ -102,13 +104,13 @@
 
 #### Inherited from
 
-`Content.source`
+[`Content`](Content.md).[`source`](Content.md#source)
 
 #### Defined in
 
-[core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L15)
+[core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L15)
 
----
+***
 
 ### text
 
@@ -116,13 +118,13 @@
 
 #### Inherited from
 
-`Content.text`
+[`Content`](Content.md).[`text`](Content.md#text)
 
 #### Defined in
 
-[core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L13)
+[core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L13)
 
----
+***
 
 ### tokenMetadata
 
@@ -130,9 +132,9 @@
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:24](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L24)
+[core/src/actions/pumpfun.ts:24](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/actions/pumpfun.ts#L24)
 
----
+***
 
 ### url?
 
@@ -140,8 +142,8 @@
 
 #### Inherited from
 
-`Content.url`
+[`Content`](Content.md).[`url`](Content.md#url)
 
 #### Defined in
 
-[core/src/core/types.ts:16](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L16)
+[core/src/core/types.ts:16](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L16)

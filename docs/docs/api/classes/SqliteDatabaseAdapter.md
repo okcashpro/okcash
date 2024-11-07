@@ -1,8 +1,11 @@
 # Class: SqliteDatabaseAdapter
 
+An abstract class representing a database adapter for managing various entities
+like accounts, memories, actors, goals, and rooms.
+
 ## Extends
 
-- `DatabaseAdapter`
+- [`DatabaseAdapter`](DatabaseAdapter.md)
 
 ## Constructors
 
@@ -20,11 +23,11 @@
 
 #### Overrides
 
-`DatabaseAdapter.constructor`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`constructor`](DatabaseAdapter.md#constructors)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:70](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L70)
+[core/src/adapters/sqlite.ts:70](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L70)
 
 ## Properties
 
@@ -36,11 +39,11 @@ The database instance.
 
 #### Inherited from
 
-`DatabaseAdapter.db`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`db`](DatabaseAdapter.md#db)
 
 #### Defined in
 
-[core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/database.ts#L21)
+[core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/database.ts#L21)
 
 ## Methods
 
@@ -68,13 +71,13 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Overrides
 
-`DatabaseAdapter.addParticipant`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`addParticipant`](DatabaseAdapter.md#addparticipant)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:592](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L592)
+[core/src/adapters/sqlite.ts:592](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L592)
 
----
+***
 
 ### countMemories()
 
@@ -104,13 +107,13 @@ A Promise that resolves to the number of memories.
 
 #### Overrides
 
-`DatabaseAdapter.countMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`countMemories`](DatabaseAdapter.md#countmemories)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:465](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L465)
+[core/src/adapters/sqlite.ts:465](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L465)
 
----
+***
 
 ### createAccount()
 
@@ -120,7 +123,7 @@ Creates a new account in the database.
 
 #### Parameters
 
-• **account**: `Account`
+• **account**: [`Account`](../interfaces/Account.md)
 
 The account object to create.
 
@@ -132,13 +135,13 @@ A Promise that resolves when the account creation is complete.
 
 #### Overrides
 
-`DatabaseAdapter.createAccount`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createAccount`](DatabaseAdapter.md#createaccount)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:102](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L102)
+[core/src/adapters/sqlite.ts:102](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L102)
 
----
+***
 
 ### createGoal()
 
@@ -148,7 +151,7 @@ Creates a new goal in the database.
 
 #### Parameters
 
-• **goal**: `Goal`
+• **goal**: [`Goal`](../interfaces/Goal.md)
 
 The goal object to create.
 
@@ -160,13 +163,13 @@ A Promise that resolves when the goal has been created.
 
 #### Overrides
 
-`DatabaseAdapter.createGoal`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createGoal`](DatabaseAdapter.md#creategoal)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:532](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L532)
+[core/src/adapters/sqlite.ts:532](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L532)
 
----
+***
 
 ### createMemory()
 
@@ -176,7 +179,7 @@ Creates a new memory in the database.
 
 #### Parameters
 
-• **memory**: `Memory`
+• **memory**: [`Memory`](../interfaces/Memory.md)
 
 The memory object to create.
 
@@ -192,13 +195,13 @@ A Promise that resolves when the memory has been created.
 
 #### Overrides
 
-`DatabaseAdapter.createMemory`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createMemory`](DatabaseAdapter.md#creatememory)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:196](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L196)
+[core/src/adapters/sqlite.ts:196](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L196)
 
----
+***
 
 ### createRelationship()
 
@@ -224,13 +227,13 @@ A Promise that resolves to a boolean indicating success or failure of the creati
 
 #### Overrides
 
-`DatabaseAdapter.createRelationship`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createRelationship`](DatabaseAdapter.md#createrelationship)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:616](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L616)
+[core/src/adapters/sqlite.ts:616](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L616)
 
----
+***
 
 ### createRoom()
 
@@ -252,17 +255,17 @@ A Promise that resolves to the UUID of the created room.
 
 #### Overrides
 
-`DatabaseAdapter.createRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`createRoom`](DatabaseAdapter.md#createroom)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:557](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L557)
+[core/src/adapters/sqlite.ts:557](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L557)
 
----
+***
 
 ### getAccountById()
 
-> **getAccountById**(`userId`): `Promise`\<`Account`\>
+> **getAccountById**(`userId`): `Promise`\<[`Account`](../interfaces/Account.md)\>
 
 Retrieves an account by its ID.
 
@@ -274,23 +277,23 @@ The UUID of the user account to retrieve.
 
 #### Returns
 
-`Promise`\<`Account`\>
+`Promise`\<[`Account`](../interfaces/Account.md)\>
 
 A Promise that resolves to the Account object or null if not found.
 
 #### Overrides
 
-`DatabaseAdapter.getAccountById`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getAccountById`](DatabaseAdapter.md#getaccountbyid)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:88](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L88)
+[core/src/adapters/sqlite.ts:88](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L88)
 
----
+***
 
 ### getActorDetails()
 
-> **getActorDetails**(`params`): `Promise`\<`Actor`[]\>
+> **getActorDetails**(`params`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 Retrieves details of actors in a given room.
 
@@ -304,19 +307,19 @@ An object containing the roomId to search for actors.
 
 #### Returns
 
-`Promise`\<`Actor`[]\>
+`Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 A Promise that resolves to an array of Actor objects.
 
 #### Overrides
 
-`DatabaseAdapter.getActorDetails`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getActorDetails`](DatabaseAdapter.md#getactordetails)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:123](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L123)
+[core/src/adapters/sqlite.ts:123](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L123)
 
----
+***
 
 ### getCachedEmbeddings()
 
@@ -328,17 +331,17 @@ Retrieves cached embeddings based on the specified query parameters.
 
 • **opts**
 
-• **opts.query_field_name**: `string`
+• **opts.query\_field\_name**: `string`
 
-• **opts.query_field_sub_name**: `string`
+• **opts.query\_field\_sub\_name**: `string`
 
-• **opts.query_input**: `string`
+• **opts.query\_input**: `string`
 
-• **opts.query_match_count**: `number`
+• **opts.query\_match\_count**: `number`
 
-• **opts.query_table_name**: `string`
+• **opts.query\_table\_name**: `string`
 
-• **opts.query_threshold**: `number`
+• **opts.query\_threshold**: `number`
 
 #### Returns
 
@@ -348,17 +351,17 @@ A Promise that resolves to an array of objects containing embeddings and levensh
 
 #### Overrides
 
-`DatabaseAdapter.getCachedEmbeddings`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getCachedEmbeddings`](DatabaseAdapter.md#getcachedembeddings)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:336](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L336)
+[core/src/adapters/sqlite.ts:336](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L336)
 
----
+***
 
 ### getGoals()
 
-> **getGoals**(`params`): `Promise`\<`Goal`[]\>
+> **getGoals**(`params`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
 
 Retrieves goals based on specified parameters.
 
@@ -378,23 +381,23 @@ An object containing parameters for goal retrieval.
 
 #### Returns
 
-`Promise`\<`Goal`[]\>
+`Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
 
 A Promise that resolves to an array of Goal objects.
 
 #### Overrides
 
-`DatabaseAdapter.getGoals`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getGoals`](DatabaseAdapter.md#getgoals)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:485](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L485)
+[core/src/adapters/sqlite.ts:485](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L485)
 
----
+***
 
 ### getMemories()
 
-> **getMemories**(`params`): `Promise`\<`Memory`[]\>
+> **getMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Retrieves memories based on the specified parameters.
 
@@ -420,23 +423,23 @@ An object containing parameters for the memory retrieval.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.getMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getMemories`](DatabaseAdapter.md#getmemories)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:398](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L398)
+[core/src/adapters/sqlite.ts:398](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L398)
 
----
+***
 
 ### getMemoriesByRoomIds()
 
-> **getMemoriesByRoomIds**(`params`): `Promise`\<`Memory`[]\>
+> **getMemoriesByRoomIds**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 #### Parameters
 
@@ -450,21 +453,21 @@ A Promise that resolves to an array of Memory objects.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 #### Overrides
 
-`DatabaseAdapter.getMemoriesByRoomIds`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getMemoriesByRoomIds`](DatabaseAdapter.md#getmemoriesbyroomids)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:150](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L150)
+[core/src/adapters/sqlite.ts:150](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L150)
 
----
+***
 
 ### getMemoryById()
 
-> **getMemoryById**(`memoryId`): `Promise`\<`Memory`\>
+> **getMemoryById**(`memoryId`): `Promise`\<[`Memory`](../interfaces/Memory.md)\>
 
 #### Parameters
 
@@ -472,21 +475,21 @@ A Promise that resolves to an array of Memory objects.
 
 #### Returns
 
-`Promise`\<`Memory`\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)\>
 
 #### Overrides
 
-`DatabaseAdapter.getMemoryById`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getMemoryById`](DatabaseAdapter.md#getmemorybyid)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:180](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L180)
+[core/src/adapters/sqlite.ts:180](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L180)
 
----
+***
 
 ### getParticipantsForAccount()
 
-> **getParticipantsForAccount**(`userId`): `Promise`\<`Participant`[]\>
+> **getParticipantsForAccount**(`userId`): `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 Retrieves participants associated with a specific account.
 
@@ -498,19 +501,19 @@ The UUID of the account.
 
 #### Returns
 
-`Promise`\<`Participant`[]\>
+`Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 A Promise that resolves to an array of Participant objects.
 
 #### Overrides
 
-`DatabaseAdapter.getParticipantsForAccount`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getParticipantsForAccount`](DatabaseAdapter.md#getparticipantsforaccount)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:30](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L30)
+[core/src/adapters/sqlite.ts:30](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L30)
 
----
+***
 
 ### getParticipantsForRoom()
 
@@ -532,13 +535,13 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Overrides
 
-`DatabaseAdapter.getParticipantsForRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getParticipantsForRoom`](DatabaseAdapter.md#getparticipantsforroom)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:40](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L40)
+[core/src/adapters/sqlite.ts:40](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L40)
 
----
+***
 
 ### getParticipantUserState()
 
@@ -556,17 +559,17 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Overrides
 
-`DatabaseAdapter.getParticipantUserState`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getParticipantUserState`](DatabaseAdapter.md#getparticipantuserstate)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:46](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L46)
+[core/src/adapters/sqlite.ts:46](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L46)
 
----
+***
 
 ### getRelationship()
 
-> **getRelationship**(`params`): `Promise`\<`Relationship`\>
+> **getRelationship**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
 Retrieves a relationship between two users if it exists.
 
@@ -582,23 +585,23 @@ An object containing the UUIDs of the two users (userA and userB).
 
 #### Returns
 
-`Promise`\<`Relationship`\>
+`Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
 A Promise that resolves to the Relationship object or null if not found.
 
 #### Overrides
 
-`DatabaseAdapter.getRelationship`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRelationship`](DatabaseAdapter.md#getrelationship)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:631](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L631)
+[core/src/adapters/sqlite.ts:631](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L631)
 
----
+***
 
 ### getRelationships()
 
-> **getRelationships**(`params`): `Promise`\<`Relationship`[]\>
+> **getRelationships**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
 Retrieves all relationships for a specific user.
 
@@ -612,19 +615,19 @@ An object containing the UUID of the user.
 
 #### Returns
 
-`Promise`\<`Relationship`[]\>
+`Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
 A Promise that resolves to an array of Relationship objects.
 
 #### Overrides
 
-`DatabaseAdapter.getRelationships`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRelationships`](DatabaseAdapter.md#getrelationships)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:649](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L649)
+[core/src/adapters/sqlite.ts:649](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L649)
 
----
+***
 
 ### getRoom()
 
@@ -646,13 +649,13 @@ A Promise that resolves to the room ID or null if not found.
 
 #### Overrides
 
-`DatabaseAdapter.getRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRoom`](DatabaseAdapter.md#getroom)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:22](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L22)
+[core/src/adapters/sqlite.ts:22](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L22)
 
----
+***
 
 ### getRoomsForParticipant()
 
@@ -674,13 +677,13 @@ A Promise that resolves to an array of room IDs.
 
 #### Overrides
 
-`DatabaseAdapter.getRoomsForParticipant`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRoomsForParticipant`](DatabaseAdapter.md#getroomsforparticipant)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:573](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L573)
+[core/src/adapters/sqlite.ts:573](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L573)
 
----
+***
 
 ### getRoomsForParticipants()
 
@@ -702,13 +705,13 @@ A Promise that resolves to an array of room IDs.
 
 #### Overrides
 
-`DatabaseAdapter.getRoomsForParticipants`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`getRoomsForParticipants`](DatabaseAdapter.md#getroomsforparticipants)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:579](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L579)
+[core/src/adapters/sqlite.ts:579](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L579)
 
----
+***
 
 ### log()
 
@@ -738,13 +741,13 @@ A Promise that resolves when the log entry has been saved.
 
 #### Overrides
 
-`DatabaseAdapter.log`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`log`](DatabaseAdapter.md#log)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:380](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L380)
+[core/src/adapters/sqlite.ts:380](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L380)
 
----
+***
 
 ### removeAllGoals()
 
@@ -766,13 +769,13 @@ A Promise that resolves when all goals have been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeAllGoals`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeAllGoals`](DatabaseAdapter.md#removeallgoals)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:552](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L552)
+[core/src/adapters/sqlite.ts:552](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L552)
 
----
+***
 
 ### removeAllMemories()
 
@@ -798,13 +801,13 @@ A Promise that resolves when all memories have been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeAllMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeAllMemories`](DatabaseAdapter.md#removeallmemories)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:460](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L460)
+[core/src/adapters/sqlite.ts:460](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L460)
 
----
+***
 
 ### removeGoal()
 
@@ -826,13 +829,13 @@ A Promise that resolves when the goal has been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeGoal`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeGoal`](DatabaseAdapter.md#removegoal)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:547](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L547)
+[core/src/adapters/sqlite.ts:547](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L547)
 
----
+***
 
 ### removeMemory()
 
@@ -858,13 +861,13 @@ A Promise that resolves when the memory has been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeMemory`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeMemory`](DatabaseAdapter.md#removememory)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:455](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L455)
+[core/src/adapters/sqlite.ts:455](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L455)
 
----
+***
 
 ### removeParticipant()
 
@@ -890,13 +893,13 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Overrides
 
-`DatabaseAdapter.removeParticipant`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeParticipant`](DatabaseAdapter.md#removeparticipant)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:604](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L604)
+[core/src/adapters/sqlite.ts:604](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L604)
 
----
+***
 
 ### removeRoom()
 
@@ -918,17 +921,17 @@ A Promise that resolves when the room has been removed.
 
 #### Overrides
 
-`DatabaseAdapter.removeRoom`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`removeRoom`](DatabaseAdapter.md#removeroom)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:568](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L568)
+[core/src/adapters/sqlite.ts:568](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L568)
 
----
+***
 
 ### searchMemories()
 
-> **searchMemories**(`params`): `Promise`\<`Memory`[]\>
+> **searchMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories based on embeddings and other specified parameters.
 
@@ -942,9 +945,9 @@ An object containing parameters for the memory search.
 
 • **params.embedding**: `number`[]
 
-• **params.match_count**: `number`
+• **params.match\_count**: `number`
 
-• **params.match_threshold**: `number`
+• **params.match\_threshold**: `number`
 
 • **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -954,23 +957,23 @@ An object containing parameters for the memory search.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.searchMemories`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`searchMemories`](DatabaseAdapter.md#searchmemories)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:236](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L236)
+[core/src/adapters/sqlite.ts:236](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L236)
 
----
+***
 
 ### searchMemoriesByEmbedding()
 
-> **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<`Memory`[]\>
+> **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories by embedding and other specified parameters.
 
@@ -988,7 +991,7 @@ Additional parameters for the search.
 
 • **params.count?**: `number`
 
-• **params.match_threshold?**: `number`
+• **params.match\_threshold?**: `number`
 
 • **params.roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -998,19 +1001,19 @@ Additional parameters for the search.
 
 #### Returns
 
-`Promise`\<`Memory`[]\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.searchMemoriesByEmbedding`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`searchMemoriesByEmbedding`](DatabaseAdapter.md#searchmemoriesbyembedding)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:282](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L282)
+[core/src/adapters/sqlite.ts:282](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L282)
 
----
+***
 
 ### setParticipantUserState()
 
@@ -1030,13 +1033,13 @@ A Promise that resolves to an array of Memory objects.
 
 #### Overrides
 
-`DatabaseAdapter.setParticipantUserState`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`setParticipantUserState`](DatabaseAdapter.md#setparticipantuserstate)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:59](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L59)
+[core/src/adapters/sqlite.ts:59](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L59)
 
----
+***
 
 ### updateGoal()
 
@@ -1046,7 +1049,7 @@ Updates a specific goal in the database.
 
 #### Parameters
 
-• **goal**: `Goal`
+• **goal**: [`Goal`](../interfaces/Goal.md)
 
 The goal object with updated properties.
 
@@ -1058,13 +1061,13 @@ A Promise that resolves when the goal has been updated.
 
 #### Overrides
 
-`DatabaseAdapter.updateGoal`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`updateGoal`](DatabaseAdapter.md#updategoal)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:519](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L519)
+[core/src/adapters/sqlite.ts:519](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L519)
 
----
+***
 
 ### updateGoalStatus()
 
@@ -1080,7 +1083,7 @@ An object containing the goalId and the new status.
 
 • **params.goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-• **params.status**: `GoalStatus`
+• **params.status**: [`GoalStatus`](../enumerations/GoalStatus.md)
 
 #### Returns
 
@@ -1090,8 +1093,8 @@ A Promise that resolves when the goal status has been updated.
 
 #### Overrides
 
-`DatabaseAdapter.updateGoalStatus`
+[`DatabaseAdapter`](DatabaseAdapter.md).[`updateGoalStatus`](DatabaseAdapter.md#updategoalstatus)
 
 #### Defined in
 
-[core/src/adapters/sqlite.ts:372](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/adapters/sqlite.ts#L372)
+[core/src/adapters/sqlite.ts:372](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/sqlite.ts#L372)

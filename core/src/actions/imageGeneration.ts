@@ -5,7 +5,7 @@ import {
     State,
     Action,
 } from "../core/types.ts";
-import { prettyConsole } from "../index.ts";
+import { elizaLog } from "../index.ts";
 import { generateCaption, generateImage } from "./imageGenerationUtils.ts";
 
 export const imageGeneration: Action = {
@@ -27,19 +27,19 @@ export const imageGeneration: Action = {
         options: any,
         callback: HandlerCallback
     ) => {
-        prettyConsole.log("Composing state for message:", message);
+        elizaLog.log("Composing state for message:", message);
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
-        prettyConsole.log("User ID:", userId);
+        elizaLog.log("User ID:", userId);
 
         const imagePrompt = message.content.text;
-        prettyConsole.log("Image prompt received:", imagePrompt);
+        elizaLog.log("Image prompt received:", imagePrompt);
 
         // TODO: Generate a prompt for the image
 
         const res: { image: string; caption: string }[] = [];
 
-        prettyConsole.log("Generating image with prompt:", imagePrompt);
+        elizaLog.log("Generating image with prompt:", imagePrompt);
         const images = await generateImage(
             {
                 prompt: imagePrompt,
@@ -51,13 +51,13 @@ export const imageGeneration: Action = {
         );
 
         if (images.success && images.data && images.data.length > 0) {
-            prettyConsole.log(
+            elizaLog.log(
                 "Image generation successful, number of images:",
                 images.data.length
             );
             for (let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
-                prettyConsole.log(`Processing image ${i + 1}:`, image);
+                elizaLog.log(`Processing image ${i + 1}:`, image);
 
                 const caption = await generateCaption(
                     {
@@ -66,7 +66,7 @@ export const imageGeneration: Action = {
                     runtime
                 );
 
-                prettyConsole.log(
+                elizaLog.log(
                     `Generated caption for image ${i + 1}:`,
                     caption.title
                 );
@@ -90,7 +90,7 @@ export const imageGeneration: Action = {
                 );
             }
         } else {
-            prettyConsole.error("Image generation failed or returned no data.");
+            elizaLog.error("Image generation failed or returned no data.");
         }
     },
     examples: [

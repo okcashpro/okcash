@@ -3,7 +3,7 @@ import { embeddingZeroVector } from "../../core/memory.ts";
 import { Content, Memory, UUID } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import { prettyConsole } from "../../index.ts";
+import { elizaLog } from "../../index.ts";
 
 const MAX_TWEET_LENGTH = 240;
 
@@ -37,7 +37,7 @@ export async function buildConversationThread(
 
     async function processThread(currentTweet: Tweet) {
         if (!currentTweet) {
-            prettyConsole.log("No current tweet found");
+            elizaLog.log("No current tweet found");
             return;
         }
         // check if the current tweet has already been saved
@@ -45,7 +45,7 @@ export async function buildConversationThread(
             stringToUuid(currentTweet.id + "-" + client.runtime.agentId)
         );
         if (!memory) {
-            prettyConsole.log("Creating memory for tweet", currentTweet.id);
+            elizaLog.log("Creating memory for tweet", currentTweet.id);
             const roomId = stringToUuid(
                 currentTweet.conversationId + "-" + client.runtime.agentId
             );

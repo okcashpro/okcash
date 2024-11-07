@@ -2,7 +2,7 @@
 import { Buffer } from "buffer";
 import Together from "together-ai";
 import { IAgentRuntime } from "../core/types.ts";
-import { getModel, ImageGenModel } from "../core/imageGenModels.ts";
+import { getImageGenModel, ImageGenModel } from "../core/imageGenModels.ts";
 import OpenAI from "openai";
 
 export const generateImage = async (
@@ -25,7 +25,7 @@ export const generateImage = async (
     }
 
     const imageGenModel = runtime.imageGenModel;
-    const model = getModel(imageGenModel);
+    const model = getImageGenModel(imageGenModel);
     const apiKey =
         imageGenModel === ImageGenModel.TogetherAI
             ? runtime.getSetting("TOGETHER_API_KEY")

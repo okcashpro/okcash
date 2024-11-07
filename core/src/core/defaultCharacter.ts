@@ -2,6 +2,7 @@ import { Character, ModelProvider } from "./types.ts";
 
 const defaultCharacter: Character = {
     name: "Eliza",
+    plugins: [],
     clients: [
         // "telegram",
         // "discord",

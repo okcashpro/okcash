@@ -21,7 +21,7 @@ import ImageDescriptionService from "../../services/image.ts";
 import { glob } from "glob";
 
 import { stringToUuid } from "../../core/uuid.ts";
-import { prettyConsole } from "../../index.ts";
+import { elizaLog } from "../../index.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -436,7 +436,7 @@ export class ClientBase extends EventEmitter {
                             : undefined,
                     } as Content;
 
-                    prettyConsole.log("Creating memory for tweet", tweet.id);
+                    elizaLog.log("Creating memory for tweet", tweet.id);
 
                     // check if it already exists
                     const memory =
@@ -444,7 +444,7 @@ export class ClientBase extends EventEmitter {
                             stringToUuid(tweet.id + "-" + this.runtime.agentId)
                         );
                     if (memory) {
-                        prettyConsole.log(
+                        elizaLog.log(
                             "Memory already exists, skipping timeline population"
                         );
                         break;
@@ -461,7 +461,7 @@ export class ClientBase extends EventEmitter {
                     });
                 }
 
-                prettyConsole.log(
+                elizaLog.log(
                     `Populated ${tweetsToSave.length} missing tweets from the cache.`
                 );
                 return;

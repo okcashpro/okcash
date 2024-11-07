@@ -1,8 +1,7 @@
 // getCachedEmbeddings
 // check cache.json for embedding where the key is a stringified version of the memory and the value is a number array
+import fs from "fs";
 export const getCachedEmbeddings = async (text: string) => {
-    const fs = await import("fs");
-
     if (!fs.existsSync("./embedding-cache.json")) {
         fs.writeFileSync("./embedding-cache.json", "{}");
     }
@@ -20,8 +19,6 @@ export const writeCachedEmbedding = async (
     text: string,
     embedding: number[]
 ) => {
-    const fs = await import("fs");
-
     // check if ./embedding-cache.json exists, if it doesn't, write {} to it
     if (!fs.existsSync("./embedding-cache.json")) {
         fs.writeFileSync("./embedding-cache.json", "{}");
