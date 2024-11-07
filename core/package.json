@@ -81,6 +81,7 @@
         "@ai-sdk/google-vertex": "^0.0.42",
         "@ai-sdk/groq": "^0.0.3",
         "@ai-sdk/openai": "^0.0.70",
+        "ollama-ai-provider": "^0.16.1",
         "@anthropic-ai/sdk": "^0.30.1",
         "@cliqz/adblocker-playwright": "1.34.0",
         "@coral-xyz/anchor": "^0.30.1",

@@ -10,6 +10,7 @@ type Models = {
     [ModelProvider.GOOGLE]: Model;
     [ModelProvider.CLAUDE_VERTEX]: Model;
     [ModelProvider.REDPILL]: Model;
+    [ModelProvider.OLLAMA]: Model;
     // TODO: add OpenRouter - feel free to do this :)
 };
 
@@ -167,6 +168,23 @@ const models: Models = {
             [ModelClass.MEDIUM]: "gpt-4o", // [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
             [ModelClass.LARGE]: "gpt-4o", // [ModelClass.LARGE]: "claude-3-opus-20240229",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
+        },
+    },
+    [ModelProvider.OLLAMA]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.3,
+        },
+        endpoint: process.env.OLLAMA_SERVER_URL || "http://localhost:11434", 
+        model: {
+            [ModelClass.SMALL]: process.env.SMALL_OLLAMA_MODEL || process.env.OLLAMA_MODEL || "llama3.2",
+            [ModelClass.MEDIUM]: process.env.MEDIUM_OLLAMA_MODEL ||process.env.OLLAMA_MODEL || "hermes3",
+            [ModelClass.LARGE]: process.env.LARGE_OLLAMA_MODEL || process.env.OLLAMA_MODEL || "hermes3:70b",
+            [ModelClass.EMBEDDING]: process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
         },
     },
 };

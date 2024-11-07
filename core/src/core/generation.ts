@@ -16,6 +16,8 @@ import { generateText as aiGenerateText } from "ai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { prettyConsole } from "../index.ts";
 
+import { createOllama } from 'ollama-ai-provider';
+
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
  * @param opts - The options for the generateText request.
@@ -189,6 +191,30 @@ export async function generateText({
                 prettyConsole.log("Received response from OpenAI model.");
                 break;
             }
+
+            case ModelProvider.OLLAMA: {
+                console.log("Initializing Ollama model.");
+                    
+                const ollamaProvider = createOllama({
+                    baseURL: models[provider].endpoint + "/api",
+                })
+                const ollama = ollamaProvider(model);
+                
+                console.log('****** MODEL\n', model)
+
+                const { text: ollamaResponse } = await aiGenerateText({
+                    model: ollama,
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = ollamaResponse;
+            }
+                console.log("Received response from Ollama model.");
+                break;
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
