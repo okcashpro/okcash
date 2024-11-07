@@ -36,7 +36,7 @@
 
 [core/src/providers/token.ts:461](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L461)
 
-***
+---
 
 ### checkRecentTrades()
 
@@ -54,7 +54,7 @@
 
 [core/src/providers/token.ts:631](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L631)
 
-***
+---
 
 ### countHighSupplyHolders()
 
@@ -72,7 +72,7 @@
 
 [core/src/providers/token.ts:635](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L635)
 
-***
+---
 
 ### fetchDexScreenerData()
 
@@ -86,7 +86,7 @@
 
 [core/src/providers/token.ts:420](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L420)
 
-***
+---
 
 ### fetchHolderList()
 
@@ -100,7 +100,7 @@
 
 [core/src/providers/token.ts:507](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L507)
 
-***
+---
 
 ### fetchTokenSecurity()
 
@@ -114,7 +114,7 @@
 
 [core/src/providers/token.ts:155](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L155)
 
-***
+---
 
 ### fetchTokenTradeData()
 
@@ -128,7 +128,7 @@
 
 [core/src/providers/token.ts:185](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L185)
 
-***
+---
 
 ### filterHighValueHolders()
 
@@ -146,7 +146,7 @@
 
 [core/src/providers/token.ts:607](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L607)
 
-***
+---
 
 ### formatTokenData()
 
@@ -164,7 +164,7 @@
 
 [core/src/providers/token.ts:722](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L722)
 
-***
+---
 
 ### getFormattedTokenReport()
 
@@ -178,7 +178,7 @@
 
 [core/src/providers/token.ts:786](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L786)
 
-***
+---
 
 ### getProcessedTokenData()
 

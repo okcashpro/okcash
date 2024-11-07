@@ -18,7 +18,7 @@
 
 [core/src/core/types.ts:582](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L582)
 
-***
+---
 
 ### initializeModel()
 
@@ -32,7 +32,7 @@
 
 [core/src/core/types.ts:565](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L565)
 
-***
+---
 
 ### queueMessageCompletion()
 
@@ -46,11 +46,11 @@
 
 • **stop**: `string`[]
 
-• **frequency\_penalty**: `number`
+• **frequency_penalty**: `number`
 
-• **presence\_penalty**: `number`
+• **presence_penalty**: `number`
 
-• **max\_tokens**: `number`
+• **max_tokens**: `number`
 
 #### Returns
 
@@ -60,7 +60,7 @@
 
 [core/src/core/types.ts:566](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L566)
 
-***
+---
 
 ### queueTextCompletion()
 
@@ -74,11 +74,11 @@
 
 • **stop**: `string`[]
 
-• **frequency\_penalty**: `number`
+• **frequency_penalty**: `number`
 
-• **presence\_penalty**: `number`
+• **presence_penalty**: `number`
 
-• **max\_tokens**: `number`
+• **max_tokens**: `number`
 
 #### Returns
 

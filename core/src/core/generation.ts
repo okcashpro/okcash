@@ -44,7 +44,8 @@ export async function generateText({
     }
 
     const provider = runtime.modelProvider;
-    const endpoint = runtime.character.modelEndpointOverride || models[provider].endpoint;
+    const endpoint =
+        runtime.character.modelEndpointOverride || models[provider].endpoint;
     const model = models[provider].model[modelClass];
     const temperature = models[provider].settings.temperature;
     const frequency_penalty = models[provider].settings.frequency_penalty;
@@ -161,9 +162,7 @@ export async function generateText({
             }
 
             case ModelProvider.LLAMALOCAL: {
-                elizaLogger.log(
-                    "Using local Llama model for text completion."
-                );
+                elizaLogger.log("Using local Llama model for text completion.");
                 response = await runtime.llamaService.queueTextCompletion(
                     context,
                     temperature,
@@ -258,7 +257,10 @@ export async function generateShouldRespond({
     let retryDelay = 1000;
     while (true) {
         try {
-            elizaLogger.log("Attempting to generate text with context:", context);
+            elizaLogger.log(
+                "Attempting to generate text with context:",
+                context
+            );
             const response = await generateText({
                 runtime,
                 context,

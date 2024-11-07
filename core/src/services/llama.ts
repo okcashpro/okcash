@@ -74,7 +74,6 @@ class LlamaService {
             "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
         const modelName = "model.gguf";
         this.modelPath = path.join(__dirname, modelName);
-
     }
     private async ensureInitialized() {
         if (!this.modelInitialized) {
@@ -116,7 +115,7 @@ class LlamaService {
             this.model = await this.llama.loadModel({
                 modelPath: this.modelPath,
             });
-            
+
             this.ctx = await this.model.createContext({ contextSize: 8192 });
             this.sequence = this.ctx.getSequence();
 
@@ -391,4 +390,3 @@ class LlamaService {
 }
 
 export default LlamaService;
-

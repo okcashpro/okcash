@@ -311,38 +311,36 @@ export class TwitterInteractionClient extends ClientBase {
 
         if (response.text) {
             try {
-                    const callback: HandlerCallback = async (
-                        response: Content
-                    ) => {
-                        const memories = await sendTweetChunks(
-                            this,
-                            response,
-                            message.roomId,
-                            this.runtime.getSetting("TWITTER_USERNAME"),
-                            tweet.id
-                        );
-                        return memories;
-                    };
-
-                    const responseMessages = await callback(response);
-
-                    state = (await this.runtime.updateRecentMessageState(
-                        state
-                    )) as State;
-
-                    for (const responseMessage of responseMessages) {
-                        await this.runtime.messageManager.createMemory(
-                            responseMessage
-                        );
-                    }
-
-                    await this.runtime.evaluate(message, state);
-
-                    await this.runtime.processActions(
-                        message,
-                        responseMessages,
-                        state
+                const callback: HandlerCallback = async (response: Content) => {
+                    const memories = await sendTweetChunks(
+                        this,
+                        response,
+                        message.roomId,
+                        this.runtime.getSetting("TWITTER_USERNAME"),
+                        tweet.id
                     );
+                    return memories;
+                };
+
+                const responseMessages = await callback(response);
+
+                state = (await this.runtime.updateRecentMessageState(
+                    state
+                )) as State;
+
+                for (const responseMessage of responseMessages) {
+                    await this.runtime.messageManager.createMemory(
+                        responseMessage
+                    );
+                }
+
+                await this.runtime.evaluate(message, state);
+
+                await this.runtime.processActions(
+                    message,
+                    responseMessages,
+                    state
+                );
                 const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
                 // f tweets folder dont exist, create
                 if (!fs.existsSync("tweets")) {

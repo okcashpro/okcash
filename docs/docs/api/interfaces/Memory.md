@@ -12,7 +12,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:154](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L154)
 
-***
+---
 
 ### content
 
@@ -22,7 +22,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:156](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L156)
 
-***
+---
 
 ### createdAt?
 
@@ -32,7 +32,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:155](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L155)
 
-***
+---
 
 ### embedding?
 
@@ -42,7 +42,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:157](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L157)
 
-***
+---
 
 ### id?
 
@@ -52,7 +52,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:152](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L152)
 
-***
+---
 
 ### roomId
 
@@ -62,7 +62,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:158](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L158)
 
-***
+---
 
 ### unique?
 
@@ -72,7 +72,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 [core/src/core/types.ts:159](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L159)
 
-***
+---
 
 ### userId
 

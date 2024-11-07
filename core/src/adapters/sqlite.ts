@@ -152,7 +152,6 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         tableName: string;
         agentId?: UUID;
     }): Promise<Memory[]> {
-
         if (!params.tableName) {
             // default to messages
             params.tableName = "messages";

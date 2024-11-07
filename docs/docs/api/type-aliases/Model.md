@@ -32,9 +32,9 @@
 
 > **settings**: `object`
 
-### settings.frequency\_penalty?
+### settings.frequency_penalty?
 
-> `optional` **frequency\_penalty**: `number`
+> `optional` **frequency_penalty**: `number`
 
 ### settings.maxInputTokens
 
@@ -44,13 +44,13 @@
 
 > **maxOutputTokens**: `number`
 
-### settings.presence\_penalty?
+### settings.presence_penalty?
 
-> `optional` **presence\_penalty**: `number`
+> `optional` **presence_penalty**: `number`
 
-### settings.repetition\_penalty?
+### settings.repetition_penalty?
 
-> `optional` **repetition\_penalty**: `number`
+> `optional` **repetition_penalty**: `number`
 
 ### settings.stop
 

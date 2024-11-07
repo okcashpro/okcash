@@ -14,7 +14,7 @@ export const imageGeneration: Action = {
     description: "Generate an image to go along with the message.",
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         // TODO: Abstract this to an image provider thing
-        
+
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
 

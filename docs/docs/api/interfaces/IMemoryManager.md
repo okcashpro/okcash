@@ -10,7 +10,7 @@
 
 [core/src/core/types.ts:449](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L449)
 
-***
+---
 
 ### runtime
 
@@ -20,7 +20,7 @@
 
 [core/src/core/types.ts:446](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L446)
 
-***
+---
 
 ### tableName
 
@@ -48,7 +48,7 @@
 
 [core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L451)
 
-***
+---
 
 ### countMemories()
 
@@ -68,7 +68,7 @@
 
 [core/src/core/types.ts:481](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L481)
 
-***
+---
 
 ### createMemory()
 
@@ -88,7 +88,7 @@
 
 [core/src/core/types.ts:478](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L478)
 
-***
+---
 
 ### getCachedEmbeddings()
 
@@ -106,7 +106,7 @@
 
 [core/src/core/types.ts:460](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L460)
 
-***
+---
 
 ### getMemories()
 
@@ -136,7 +136,7 @@
 
 [core/src/core/types.ts:452](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L452)
 
-***
+---
 
 ### getMemoriesByRoomIds()
 
@@ -158,7 +158,7 @@
 
 [core/src/core/types.ts:464](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L464)
 
-***
+---
 
 ### getMemoryById()
 
@@ -176,7 +176,7 @@
 
 [core/src/core/types.ts:463](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L463)
 
-***
+---
 
 ### removeAllMemories()
 
@@ -194,7 +194,7 @@
 
 [core/src/core/types.ts:480](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L480)
 
-***
+---
 
 ### removeMemory()
 
@@ -212,7 +212,7 @@
 
 [core/src/core/types.ts:479](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L479)
 
-***
+---
 
 ### searchMemoriesByEmbedding()
 
@@ -228,7 +228,7 @@
 
 • **opts.count?**: `number`
 
-• **opts.match\_threshold?**: `number`
+• **opts.match_threshold?**: `number`
 
 • **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 

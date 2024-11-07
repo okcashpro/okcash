@@ -263,7 +263,6 @@ export class AgentRuntime implements IAgentRuntime {
         this.token = opts.token;
 
         (opts.character.plugins ?? []).forEach((plugin) => {
-            
             plugin.actions.forEach((action) => {
                 this.registerAction(action);
             });
@@ -482,14 +481,19 @@ export class AgentRuntime implements IAgentRuntime {
                 );
                 if (simileAction) {
                     action = _action;
-                    elizaLogger.success(`Action found in similes: ${action.name}`);
+                    elizaLogger.success(
+                        `Action found in similes: ${action.name}`
+                    );
                     break;
                 }
             }
         }
 
         if (!action) {
-            elizaLogger.error("No action found for", responses[0].content.action);
+            elizaLogger.error(
+                "No action found for",
+                responses[0].content.action
+            );
             return;
         }
 

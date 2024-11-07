@@ -10,7 +10,7 @@
 
 [core/src/core/types.ts:58](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L58)
 
-***
+---
 
 ### FAILED
 
@@ -20,11 +20,11 @@
 
 [core/src/core/types.ts:59](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L59)
 
-***
+---
 
-### IN\_PROGRESS
+### IN_PROGRESS
 
-> **IN\_PROGRESS**: `"IN_PROGRESS"`
+> **IN_PROGRESS**: `"IN_PROGRESS"`
 
 #### Defined in
 

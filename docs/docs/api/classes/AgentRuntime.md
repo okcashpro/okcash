@@ -89,7 +89,7 @@ Custom actions that the agent can perform.
 
 [core/src/core/runtime.ts:91](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L91)
 
-***
+---
 
 ### agentId
 
@@ -105,7 +105,7 @@ The ID of the agent
 
 [core/src/core/runtime.ts:72](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L72)
 
-***
+---
 
 ### browserService
 
@@ -119,7 +119,7 @@ The ID of the agent
 
 [core/src/core/runtime.ts:125](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L125)
 
-***
+---
 
 ### character
 
@@ -135,7 +135,7 @@ The character to use for the agent
 
 [core/src/core/runtime.ts:140](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L140)
 
-***
+---
 
 ### databaseAdapter
 
@@ -151,7 +151,7 @@ The database adapter used for interacting with the database.
 
 [core/src/core/runtime.ts:81](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L81)
 
-***
+---
 
 ### descriptionManager
 
@@ -167,7 +167,7 @@ Store and recall descriptions of users based on conversations.
 
 [core/src/core/runtime.ts:150](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L150)
 
-***
+---
 
 ### documentsManager
 
@@ -179,7 +179,7 @@ Hold large documents that can be referenced
 
 [core/src/core/runtime.ts:165](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L165)
 
-***
+---
 
 ### evaluators
 
@@ -191,7 +191,7 @@ Evaluators used to assess and guide the agent's responses.
 
 [core/src/core/runtime.ts:96](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L96)
 
-***
+---
 
 ### factManager
 
@@ -207,7 +207,7 @@ Manage the fact and recall of facts.
 
 [core/src/core/runtime.ts:155](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L155)
 
-***
+---
 
 ### fetch()
 
@@ -242,7 +242,7 @@ Some environments may not have access to the global fetch function and need a cu
 
 [core/src/core/runtime.ts:135](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L135)
 
-***
+---
 
 ### fragmentsManager
 
@@ -254,7 +254,7 @@ Searchable document fragments
 
 [core/src/core/runtime.ts:170](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L170)
 
-***
+---
 
 ### imageDescriptionService
 
@@ -268,7 +268,7 @@ Searchable document fragments
 
 [core/src/core/runtime.ts:123](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L123)
 
-***
+---
 
 ### imageGenModel
 
@@ -284,7 +284,7 @@ The model to use for image generation.
 
 [core/src/core/runtime.ts:111](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L111)
 
-***
+---
 
 ### llamaService
 
@@ -300,7 +300,7 @@ Local Llama if no OpenAI key is present
 
 [core/src/core/runtime.ts:116](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L116)
 
-***
+---
 
 ### loreManager
 
@@ -316,7 +316,7 @@ Manage the creation and recall of static information (documents, historical game
 
 [core/src/core/runtime.ts:160](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L160)
 
-***
+---
 
 ### messageManager
 
@@ -332,7 +332,7 @@ Store messages that are sent and received by the agent.
 
 [core/src/core/runtime.ts:145](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L145)
 
-***
+---
 
 ### modelProvider
 
@@ -348,7 +348,7 @@ The model to use for generateText.
 
 [core/src/core/runtime.ts:106](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L106)
 
-***
+---
 
 ### pdfService
 
@@ -362,7 +362,7 @@ The model to use for generateText.
 
 [core/src/core/runtime.ts:129](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L129)
 
-***
+---
 
 ### providers
 
@@ -378,7 +378,7 @@ Context providers used to provide context for message generation.
 
 [core/src/core/runtime.ts:101](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L101)
 
-***
+---
 
 ### serverUrl
 
@@ -394,7 +394,7 @@ The base URL of the server where the agent's requests are processed.
 
 [core/src/core/runtime.ts:76](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L76)
 
-***
+---
 
 ### speechService
 
@@ -408,7 +408,7 @@ The base URL of the server where the agent's requests are processed.
 
 [core/src/core/runtime.ts:119](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L119)
 
-***
+---
 
 ### token
 
@@ -424,7 +424,7 @@ Authentication token used for securing requests.
 
 [core/src/core/runtime.ts:86](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L86)
 
-***
+---
 
 ### transcriptionService
 
@@ -438,7 +438,7 @@ Authentication token used for securing requests.
 
 [core/src/core/runtime.ts:121](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L121)
 
-***
+---
 
 ### videoService
 
@@ -482,7 +482,7 @@ The state of the agent.
 
 [core/src/core/runtime.ts:673](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L673)
 
-***
+---
 
 ### ensureConnection()
 
@@ -512,7 +512,7 @@ The state of the agent.
 
 [core/src/core/runtime.ts:624](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L624)
 
-***
+---
 
 ### ensureParticipantExists()
 
@@ -544,7 +544,7 @@ An error if the participant cannot be added.
 
 [core/src/core/runtime.ts:577](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L577)
 
-***
+---
 
 ### ensureParticipantInRoom()
 
@@ -568,7 +568,7 @@ An error if the participant cannot be added.
 
 [core/src/core/runtime.ts:613](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L613)
 
-***
+---
 
 ### ensureRoomExists()
 
@@ -599,7 +599,7 @@ An error if the room cannot be created.
 
 [core/src/core/runtime.ts:660](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L660)
 
-***
+---
 
 ### ensureUserExists()
 
@@ -635,7 +635,7 @@ The user name to ensure the existence of.
 
 [core/src/core/runtime.ts:593](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L593)
 
-***
+---
 
 ### evaluate()
 
@@ -667,7 +667,7 @@ The results of the evaluation.
 
 [core/src/core/runtime.ts:511](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L511)
 
-***
+---
 
 ### getConversationLength()
 
@@ -689,7 +689,7 @@ The number of recent messages to be kept in memory.
 
 [core/src/core/runtime.ts:410](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L410)
 
-***
+---
 
 ### getSetting()
 
@@ -711,7 +711,7 @@ The number of recent messages to be kept in memory.
 
 [core/src/core/runtime.ts:388](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L388)
 
-***
+---
 
 ### processActions()
 
@@ -743,7 +743,7 @@ The message to process.
 
 [core/src/core/runtime.ts:444](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L444)
 
-***
+---
 
 ### registerAction()
 
@@ -769,7 +769,7 @@ The action to register.
 
 [core/src/core/runtime.ts:418](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L418)
 
-***
+---
 
 ### registerContextProvider()
 
@@ -791,7 +791,7 @@ The context provider to register.
 
 [core/src/core/runtime.ts:435](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L435)
 
-***
+---
 
 ### registerEvaluator()
 
@@ -813,7 +813,7 @@ The evaluator to register.
 
 [core/src/core/runtime.ts:427](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/runtime.ts#L427)
 
-***
+---
 
 ### updateRecentMessageState()
 

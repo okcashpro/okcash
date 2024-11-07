@@ -113,7 +113,7 @@ export class TwitterPostClient extends ClientBase {
             let content = slice.slice(0, contentLength);
             // if its bigger than 280, delete the last line
             if (content.length > 280) {
-              content = content.slice(0, content.lastIndexOf("\n"));
+                content = content.slice(0, content.lastIndexOf("\n"));
             }
             if (content.length > contentLength) {
                 // slice at the last period
@@ -130,8 +130,7 @@ export class TwitterPostClient extends ClientBase {
                 );
                 // read the body of the response
                 const body = await result.json();
-                const tweetResult =
-                    body.data.create_tweet.tweet_results.result;
+                const tweetResult = body.data.create_tweet.tweet_results.result;
 
                 const tweet = {
                     id: tweetResult.rest_id,

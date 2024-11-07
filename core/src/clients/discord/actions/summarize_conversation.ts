@@ -288,7 +288,7 @@ const summarizeAction = {
                     "gpt-4o-mini"
                 ),
             });
-            
+
             const summary = await generateText({
                 runtime,
                 context,

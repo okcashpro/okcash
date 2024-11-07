@@ -30,7 +30,7 @@
 
 [core/src/core/types.ts:424](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L424)
 
-***
+---
 
 ### countMemories()
 
@@ -52,7 +52,7 @@
 
 [core/src/core/types.ts:404](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L404)
 
-***
+---
 
 ### createAccount()
 
@@ -70,7 +70,7 @@
 
 [core/src/core/types.ts:344](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L344)
 
-***
+---
 
 ### createGoal()
 
@@ -88,7 +88,7 @@
 
 [core/src/core/types.ts:416](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L416)
 
-***
+---
 
 ### createMemory()
 
@@ -110,7 +110,7 @@
 
 [core/src/core/types.ts:397](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L397)
 
-***
+---
 
 ### createRelationship()
 
@@ -132,7 +132,7 @@
 
 [core/src/core/types.ts:437](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L437)
 
-***
+---
 
 ### createRoom()
 
@@ -150,7 +150,7 @@
 
 [core/src/core/types.ts:420](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L420)
 
-***
+---
 
 ### getAccountById()
 
@@ -168,7 +168,7 @@
 
 [core/src/core/types.ts:343](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L343)
 
-***
+---
 
 ### getActorDetails()
 
@@ -188,7 +188,7 @@
 
 [core/src/core/types.ts:373](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L373)
 
-***
+---
 
 ### getCachedEmbeddings()
 
@@ -198,17 +198,17 @@
 
 • **params**
 
-• **params.query\_field\_name**: `string`
+• **params.query_field_name**: `string`
 
-• **params.query\_field\_sub\_name**: `string`
+• **params.query_field_sub_name**: `string`
 
-• **params.query\_input**: `string`
+• **params.query_input**: `string`
 
-• **params.query\_match\_count**: `number`
+• **params.query_match_count**: `number`
 
-• **params.query\_table\_name**: `string`
+• **params.query_table_name**: `string`
 
-• **params.query\_threshold**: `number`
+• **params.query_threshold**: `number`
 
 #### Returns
 
@@ -218,7 +218,7 @@
 
 [core/src/core/types.ts:359](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L359)
 
-***
+---
 
 ### getGoals()
 
@@ -244,7 +244,7 @@
 
 [core/src/core/types.ts:409](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L409)
 
-***
+---
 
 ### getMemories()
 
@@ -276,7 +276,7 @@
 
 [core/src/core/types.ts:345](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L345)
 
-***
+---
 
 ### getMemoriesByRoomIds()
 
@@ -298,7 +298,7 @@
 
 [core/src/core/types.ts:355](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L355)
 
-***
+---
 
 ### getMemoryById()
 
@@ -316,7 +316,7 @@
 
 [core/src/core/types.ts:354](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L354)
 
-***
+---
 
 ### getParticipantsForAccount()
 
@@ -334,7 +334,7 @@
 
 [core/src/core/types.ts:426](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L426)
 
-***
+---
 
 ### getParticipantsForRoom()
 
@@ -352,7 +352,7 @@
 
 [core/src/core/types.ts:427](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L427)
 
-***
+---
 
 ### getParticipantUserState()
 
@@ -372,7 +372,7 @@
 
 [core/src/core/types.ts:428](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L428)
 
-***
+---
 
 ### getRelationship()
 
@@ -394,7 +394,7 @@
 
 [core/src/core/types.ts:438](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L438)
 
-***
+---
 
 ### getRelationships()
 
@@ -414,7 +414,7 @@
 
 [core/src/core/types.ts:442](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L442)
 
-***
+---
 
 ### getRoom()
 
@@ -432,7 +432,7 @@
 
 [core/src/core/types.ts:419](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L419)
 
-***
+---
 
 ### getRoomsForParticipant()
 
@@ -450,7 +450,7 @@
 
 [core/src/core/types.ts:422](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L422)
 
-***
+---
 
 ### getRoomsForParticipants()
 
@@ -468,7 +468,7 @@
 
 [core/src/core/types.ts:423](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L423)
 
-***
+---
 
 ### log()
 
@@ -494,7 +494,7 @@
 
 [core/src/core/types.ts:367](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L367)
 
-***
+---
 
 ### removeAllGoals()
 
@@ -512,7 +512,7 @@
 
 [core/src/core/types.ts:418](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L418)
 
-***
+---
 
 ### removeAllMemories()
 
@@ -532,7 +532,7 @@
 
 [core/src/core/types.ts:403](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L403)
 
-***
+---
 
 ### removeGoal()
 
@@ -550,7 +550,7 @@
 
 [core/src/core/types.ts:417](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L417)
 
-***
+---
 
 ### removeMemory()
 
@@ -570,7 +570,7 @@
 
 [core/src/core/types.ts:402](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L402)
 
-***
+---
 
 ### removeParticipant()
 
@@ -590,7 +590,7 @@
 
 [core/src/core/types.ts:425](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L425)
 
-***
+---
 
 ### removeRoom()
 
@@ -608,7 +608,7 @@
 
 [core/src/core/types.ts:421](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L421)
 
-***
+---
 
 ### searchMemories()
 
@@ -620,9 +620,9 @@
 
 • **params.embedding**: `number`[]
 
-• **params.match\_count**: `number`
+• **params.match_count**: `number`
 
-• **params.match\_threshold**: `number`
+• **params.match_threshold**: `number`
 
 • **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -638,7 +638,7 @@
 
 [core/src/core/types.ts:374](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L374)
 
-***
+---
 
 ### searchMemoriesByEmbedding()
 
@@ -654,7 +654,7 @@
 
 • **params.count?**: `number`
 
-• **params.match\_threshold?**: `number`
+• **params.match_threshold?**: `number`
 
 • **params.roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -670,7 +670,7 @@
 
 [core/src/core/types.ts:386](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L386)
 
-***
+---
 
 ### setParticipantUserState()
 
@@ -692,7 +692,7 @@
 
 [core/src/core/types.ts:432](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L432)
 
-***
+---
 
 ### updateGoal()
 
@@ -710,7 +710,7 @@
 
 [core/src/core/types.ts:415](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L415)
 
-***
+---
 
 ### updateGoalStatus()
 
