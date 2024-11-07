@@ -3,8 +3,7 @@ import { Character, ModelProvider } from "./types.ts";
 export const defaultCharacter: Character = {
     name: "Eliza",
     plugins: [],
-    clients: [
-    ],
+    clients: [],
     modelProvider: ModelProvider.LLAMALOCAL,
     settings: {
         secrets: {},
