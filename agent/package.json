@@ -1,11 +1,11 @@
 {
     "name": "@eliza/agent",
     "version": "0.0.1",
-    "main": "index.ts",
+    "main": "src/index.ts",
     "type": "module",
     "scripts": {
         "build": "tsup --format esm --dts",
-        "start": "node --loader ts-node/esm index.ts --characters=\"../characters/blobert.character.json\""
+        "start": "node --loader ts-node/esm src/index.ts"
     },
     "dependencies": {
         "@eliza/core": "workspace:*",

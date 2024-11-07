@@ -10,20 +10,17 @@ import {
     initializeClients,
     initializeDatabase,
     loadActionConfigs,
-    loadCharacters,
     loadCustomActions,
     muteRoom,
-    parseArguments,
     timeProvider,
     unfollowRoom,
     unmuteRoom,
     walletProvider,
 } from "@eliza/core";
-import { Arguments } from "@eliza/core/src/types";
 import readline from "readline";
-import defaultCharacter from "./character";
+import { blobert } from "./blobert.ts";
 
-const characters = [defaultCharacter];
+const characters = [blobert];
 
 const directClient = new DirectClient();
 
@@ -107,21 +104,19 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-function chat() {
-    rl.question("You: ", async (input) => {
-        if (input.toLowerCase() === "exit") {
-            rl.close();
-            return;
-        }
+async function handleUserInput(input) {
+    if (input.toLowerCase() === "exit") {
+        rl.close();
+        return;
+    }
 
-        const agentId = characters[0].name.toLowerCase();
+    const agentId = characters[0].name.toLowerCase();
+    try {
         const response = await fetch(
             `http://localhost:3000/${agentId}/message`,
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     text: input,
                     userId: "user",
@@ -131,11 +126,18 @@ function chat() {
         );
 
         const data = await response.json();
-        for (const message of data) {
-            console.log(`${characters[0].name}: ${message.text}`);
-        }
-        chat();
-    });
+        data.forEach((message) =>
+            console.log(`${characters[0].name}: ${message.text}`)
+        );
+    } catch (error) {
+        console.error("Error fetching response:", error);
+    }
+
+    chat();
+}
+
+function chat() {
+    rl.question("You: ", handleUserInput);
 }
 
 console.log("Chat started. Type 'exit' to quit.");

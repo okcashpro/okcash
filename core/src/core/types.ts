@@ -294,6 +294,13 @@ export type Plugin = {
     evaluators: Evaluator[];
 };
 
+export enum Clients {
+    DISCORD = "discord",
+    DIRECT = "direct",
+    TWITTER = "twitter",
+    TELEGRAM = "telegram",
+}
+
 export type Character = {
     id?: UUID; // optional UUID which can be passed down to identify the character
     name: string;
@@ -309,7 +316,7 @@ export type Character = {
     topics: string[];
     adjectives: string[];
     knowledge?: string[];
-    clients: string[]; // list of clients the character can interact with
+    clients: Clients[]; // list of clients the character can interact with
     plugins: Plugin[]; // list of plugins the character can use
     settings?: {
         secrets?: { [key: string]: string };

@@ -1,13 +1,14 @@
-import { Character, ModelProvider } from "@eliza/core";
+import { Character, Clients, ModelProvider } from "@eliza/core";
 import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
 
 const defaultCharacter: Character = {
     name: "Eliza",
     plugins: [imageGenerationPlugin],
     clients: [
-        // "telegram",
-        // "discord",
-        // "twitter"
+        Clients.DISCORD,
+        Clients.DIRECT,
+        Clients.TWITTER,
+        Clients.TELEGRAM,
     ],
     modelProvider: ModelProvider.LLAMALOCAL,
     settings: {
