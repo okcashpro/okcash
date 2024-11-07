@@ -21,7 +21,7 @@ import {
     walletProvider,
 } from "@eliza/core";
 import readline from "readline";
-
+console.log("Program starting")
 const args = parseArguments();
 
 let charactersArg = args.characters || args.character;
@@ -115,15 +115,17 @@ const rl = readline.createInterface({
 });
 
 async function handleUserInput(input) {
+    console.log("input --> ", input)
     if (input.toLowerCase() === "exit") {
         rl.close();
         return;
     }
 
     const agentId = characters[0].name.toLowerCase();
+    console.log("agnetId --> ", agentId)
     try {
         const response = await fetch(
-            `http://localhost:3000/${agentId}/message`,
+            `http://localhost:${serverPort}/${agentId}/message`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

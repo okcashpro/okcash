@@ -9,7 +9,7 @@
         "start:service:all": "pnpm --dir packages/agent start:service:all --isRoot",
         "stop:service:all": "pnpm --dir packages/agent stop:service:all --isRoot",
         "start": "pnpm --dir packages/agent start --isRoot",
-        "dev": "concurrently \"pnpm --dir packages/core dev\" \"sleep 3 && pnpm --dir packages/agent dev\"",
+        "dev": "bash ./scripts/dev.sh",
         "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
@@ -31,5 +31,10 @@
     },
     "engines": {
         "node": ">=22"
+    },
+    "dependencies": {
+        "ollama-ai-provider": "^0.16.1",
+        "optional": "^0.1.4",
+        "sharp": "^0.33.5"
     }
 }

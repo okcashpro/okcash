@@ -2,6 +2,7 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText as aiGenerateText } from "ai";
+import { createOllama } from 'ollama-ai-provider';
 import { default as tiktoken, TiktokenModel } from "tiktoken";
 import { elizaLogger } from "../index.ts";
 import models from "./models.ts";
@@ -197,6 +198,30 @@ export async function generateText({
                 elizaLogger.log("Received response from OpenAI model.");
                 break;
             }
+
+            case ModelProvider.OLLAMA: {
+                console.log("Initializing Ollama model.");
+                    
+                const ollamaProvider = createOllama({
+                    baseURL: models[provider].endpoint + "/api",
+                })
+                const ollama = ollamaProvider(model);
+                
+                console.log('****** MODEL\n', model)
+
+                const { text: ollamaResponse } = await aiGenerateText({
+                    model: ollama,
+                    prompt: context,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = ollamaResponse;
+            }
+                console.log("Received response from Ollama model.");
+                break;
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
