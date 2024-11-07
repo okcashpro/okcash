@@ -10,11 +10,10 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      typescript:
-        specifier: 5.6.3
-        version: 5.6.3
     devDependencies:
+      concurrently:
+        specifier: ^9.1.0
+        version: 9.1.0
       husky:
         specifier: ^9.1.6
         version: 9.1.6
@@ -30,15 +29,76 @@ importers:
       typedoc:
         specifier: ^0.26.11
         version: 0.26.11(typescript@5.6.3)
+      typescript:
+        specifier: 5.6.3
+        version: 5.6.3
 
-  agent:
+  docs:
+    dependencies:
+      '@docusaurus/core':
+        specifier: ^3.6.0
+        version: 3.6.0(@docusaurus/types@3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@docusaurus/plugin-content-blog':
+        specifier: ^3.6.0
+        version: 3.6.0(@docusaurus/plugin-content-docs@3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@docusaurus/plugin-content-docs':
+        specifier: ^3.6.0
+        version: 3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@docusaurus/plugin-ideal-image':
+        specifier: ^3.6.0
+        version: 3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@docusaurus/preset-classic':
+        specifier: ^3.6.0
+        version: 3.6.0(@algolia/client-search@5.13.0)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@docusaurus/theme-mermaid':
+        specifier: ^3.6.0
+        version: 3.6.0(@docusaurus/plugin-content-docs@3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@mdx-js/react':
+        specifier: 3.0.1
+        version: 3.0.1(@types/react@18.3.12)(react@18.2.0)
+      clsx:
+        specifier: 2.1.0
+        version: 2.1.0
+      docusaurus-lunr-search:
+        specifier: ^3.5.0
+        version: 3.5.0(@docusaurus/core@3.6.0(@docusaurus/types@3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      prism-react-renderer:
+        specifier: 2.3.1
+        version: 2.3.1(react@18.2.0)
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-router-dom:
+        specifier: 6.22.1
+        version: 6.22.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+    devDependencies:
+      '@docusaurus/module-type-aliases':
+        specifier: 3.6.0
+        version: 3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@docusaurus/types':
+        specifier: 3.6.0
+        version: 3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      docusaurus-plugin-typedoc:
+        specifier: ^1.0.5
+        version: 1.0.5(typedoc-plugin-markdown@4.2.9(typedoc@0.26.11(typescript@5.6.3)))
+      typedoc:
+        specifier: ^0.26.11
+        version: 0.26.11(typescript@5.6.3)
+      typedoc-plugin-markdown:
+        specifier: 4.2.9
+        version: 4.2.9(typedoc@0.26.11(typescript@5.6.3))
+
+  packages/agent:
     dependencies:
       '@eliza/core':
         specifier: workspace:*
         version: link:../core
       '@eliza/plugin-image-generation':
         specifier: workspace:*
-        version: link:../packages/plugin-image-generation
+        version: link:../plugin-image-generation
       readline:
         specifier: ^1.3.0
         version: 1.3.0
@@ -50,7 +110,7 @@ importers:
         specifier: 10.9.2
         version: 10.9.2(@types/node@22.8.4)(typescript@5.6.3)
 
-  core:
+  packages/core:
     dependencies:
       '@ai-sdk/anthropic':
         specifier: ^0.0.53
@@ -441,69 +501,11 @@ importers:
         specifier: 3.84.0
         version: 3.84.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
 
-  docs:
-    dependencies:
-      '@docusaurus/core':
-        specifier: ^3.6.0
-        version: 3.6.0(@docusaurus/types@3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@docusaurus/plugin-content-blog':
-        specifier: ^3.6.0
-        version: 3.6.0(@docusaurus/plugin-content-docs@3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@docusaurus/plugin-content-docs':
-        specifier: ^3.6.0
-        version: 3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@docusaurus/plugin-ideal-image':
-        specifier: ^3.6.0
-        version: 3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@docusaurus/preset-classic':
-        specifier: ^3.6.0
-        version: 3.6.0(@algolia/client-search@5.13.0)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@docusaurus/theme-mermaid':
-        specifier: ^3.6.0
-        version: 3.6.0(@docusaurus/plugin-content-docs@3.6.0(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@mdx-js/react':
-        specifier: 3.0.1
-        version: 3.0.1(@types/react@18.3.12)(react@18.2.0)
-      clsx:
-        specifier: 2.1.0
-        version: 2.1.0
-      docusaurus-lunr-search:
-        specifier: ^3.5.0
-        version: 3.5.0(@docusaurus/core@3.6.0(@docusaurus/types@3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      prism-react-renderer:
-        specifier: 2.3.1
-        version: 2.3.1(react@18.2.0)
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      react-router-dom:
-        specifier: 6.22.1
-        version: 6.22.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-    devDependencies:
-      '@docusaurus/module-type-aliases':
-        specifier: 3.6.0
-        version: 3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@docusaurus/types':
-        specifier: 3.6.0
-        version: 3.6.0(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      docusaurus-plugin-typedoc:
-        specifier: ^1.0.5
-        version: 1.0.5(typedoc-plugin-markdown@4.2.9(typedoc@0.26.11(typescript@5.6.3)))
-      typedoc:
-        specifier: ^0.26.11
-        version: 0.26.11(typescript@5.6.3)
-      typedoc-plugin-markdown:
-        specifier: 4.2.9
-        version: 4.2.9(typedoc@0.26.11(typescript@5.6.3))
-
   packages/plugin-image-generation:
     dependencies:
       '@eliza/core':
         specifier: workspace:*
-        version: link:../../core
+        version: link:../core
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.6)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.6.0)
@@ -4592,8 +4594,8 @@ packages:
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
 
-  caniuse-lite@1.0.30001677:
-    resolution: {integrity: sha512-fmfjsOlJUpMWu+mAAtZZZHz7UEwsUxIIvu1TJfO1HqFQvB/B+ii0xr9B5HpbZY/mC4XZ8SvjHJqtAY6pDPQEog==}
+  caniuse-lite@1.0.30001678:
+    resolution: {integrity: sha512-RR+4U/05gNtps58PEBDZcPWTgEO2MBeoPZ96aQcjmfkBWRIDfN451fW2qyDA9/+HohLLIL5GqiMwA+IB1pWarw==}
 
   canvas@2.11.2:
     resolution: {integrity: sha512-ItanGBMrmRV7Py2Z+Xhs7cT+FNt5K0vPL4p9EZ/UX/Mu7hFbkxSjKF2KVtPwX7UYWp7dRKnrTvReflgrItJbdw==}
@@ -4914,6 +4916,11 @@ packages:
   concat-stream@2.0.0:
     resolution: {integrity: sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==}
     engines: {'0': node >= 6.0}
+
+  concurrently@9.1.0:
+    resolution: {integrity: sha512-VxkzwMAn4LP7WyMnJNbHN5mKV9L2IbyDjpzemKr99sXNR3GqRNMMHdm7prV1ws9wg7ETj6WUkNOigZVsptwbgg==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   confbox@0.1.8:
     resolution: {integrity: sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==}
@@ -16706,7 +16713,7 @@ snapshots:
   autoprefixer@10.4.20(postcss@8.4.47):
     dependencies:
       browserslist: 4.24.2
-      caniuse-lite: 1.0.30001677
+      caniuse-lite: 1.0.30001678
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
@@ -16997,7 +17004,7 @@ snapshots:
 
   browserslist@4.24.2:
     dependencies:
-      caniuse-lite: 1.0.30001677
+      caniuse-lite: 1.0.30001678
       electron-to-chromium: 1.5.52
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
@@ -17120,11 +17127,11 @@ snapshots:
   caniuse-api@3.0.0:
     dependencies:
       browserslist: 4.24.2
-      caniuse-lite: 1.0.30001677
+      caniuse-lite: 1.0.30001678
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-lite@1.0.30001677: {}
+  caniuse-lite@1.0.30001678: {}
 
   canvas@2.11.2(encoding@0.1.13):
     dependencies:
@@ -17457,6 +17464,16 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
       typedarray: 0.0.6
+
+  concurrently@9.1.0:
+    dependencies:
+      chalk: 4.1.2
+      lodash: 4.17.21
+      rxjs: 7.8.1
+      shell-quote: 1.8.1
+      supports-color: 8.1.1
+      tree-kill: 1.2.2
+      yargs: 17.7.2
 
   confbox@0.1.8: {}
 
@@ -18786,7 +18803,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.4
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:

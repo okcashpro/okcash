@@ -48,8 +48,6 @@ const discordShouldRespondTemplate =
 About {{agentName}}:
 {{bio}}
 
-{{providers}}
-
 # INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
 
 # RESPONSE EXAMPLES

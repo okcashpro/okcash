@@ -3,15 +3,6 @@
 # Navigate to the script's directory
 cd "$(dirname "$0")"/..
 
-# Build the core package first
-echo "Building core package"
-if pnpm --dir core build; then
-    echo "Successfully built core package"
-else
-    echo "Failed to build core package"
-    exit 1
-fi
-
 # Check if the packages directory exists
 if [ ! -d "packages" ]; then
     echo "Error: 'packages' directory not found."

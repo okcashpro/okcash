@@ -4,23 +4,25 @@
         "preinstall": "npx only-allow pnpm",
         "build": "bash ./scripts/build.sh",
         "build-docs": "pnpm --dir docs build",
-        "start:all": "pnpm --dir agent start:all --isRoot",
-        "stop:all": "pnpm --dir agent stop:all --isRoot",
-        "start:service:all": "pnpm --dir agent start:service:all --isRoot",
-        "stop:service:all": "pnpm --dir agent stop:service:all --isRoot",
-        "start": "pnpm --dir agent start --isRoot",
-        "dev": "pnpm --dir agent dev --isRoot",
-        "lint": "pnpm --dir core lint && pnpm --dir agent lint",
+        "start:all": "pnpm --dir packages/agent start:all --isRoot",
+        "stop:all": "pnpm --dir packages/agent stop:all --isRoot",
+        "start:service:all": "pnpm --dir packages/agent start:service:all --isRoot",
+        "stop:service:all": "pnpm --dir packages/agent stop:service:all --isRoot",
+        "start": "pnpm --dir packages/agent start --isRoot",
+        "dev": "concurrently \"pnpm --dir packages/core dev\" \"sleep 3 && pnpm --dir packages/agent dev\"",
+        "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "clean": "bash ./scripts/clean.sh"
     },
     "devDependencies": {
+        "concurrently": "^9.1.0",
         "husky": "^9.1.6",
         "lerna": "^8.1.5",
         "only-allow": "^1.2.1",
         "prettier": "^3.3.3",
-        "typedoc": "^0.26.11"
+        "typedoc": "^0.26.11",
+        "typescript": "5.6.3"
     },
     "pnpm": {
         "overrides": {
@@ -29,8 +31,5 @@
     },
     "engines": {
         "node": ">=22"
-    },
-    "dependencies": {
-        "typescript": "5.6.3"
     }
 }

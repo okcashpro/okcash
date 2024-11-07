@@ -45,8 +45,6 @@ About {{agentName}}:
 # Attachments
 {{attachments}}
 
-{{providers}}
-
 # Capabilities
 Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
 

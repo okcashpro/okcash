@@ -6,7 +6,7 @@
     "scripts": {
         "build": "tsup --format esm --dts",
         "start": "node --loader ts-node/esm src/index.ts",
-        "dev": "node --loader ts-node/esm src/index.ts"
+        "dev": "nodemon --watch src --watch ../core/dist --ext ts,json --exec 'node --loader ts-node/esm' src/index.ts"
     },
     "dependencies": {
         "@eliza/core": "workspace:*",

@@ -42,6 +42,7 @@ import { TranscriptionService } from "../services/transcription.ts";
 import { VideoService } from "../services/video.ts";
 import {
     composeActionExamples,
+    defaultActions,
     formatActionNames,
     formatActions,
 } from "./actions.ts";
@@ -262,6 +263,10 @@ export class AgentRuntime implements IAgentRuntime {
 
         this.token = opts.token;
 
+        (opts.actions ?? defaultActions).forEach((action) => {
+            this.registerAction(action);
+        });
+
         (opts.character.plugins ?? []).forEach((plugin) => {
             plugin.actions.forEach((action) => {
                 this.registerAction(action);
@@ -456,6 +461,8 @@ export class AgentRuntime implements IAgentRuntime {
             .replace("_", "");
 
         elizaLogger.success(`Normalized action: ${normalizedAction}`);
+
+        console.log("Actions are: ", this.actions);
 
         let action = this.actions.find(
             (a: { name: string }) =>

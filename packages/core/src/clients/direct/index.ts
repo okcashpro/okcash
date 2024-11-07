@@ -1,18 +1,17 @@
 import bodyParser from "body-parser";
-import express from "express";
-import { composeContext } from "../../core/context.ts";
-import { AgentRuntime } from "../../core/runtime.ts";
-import { Content, Memory, ModelClass, State } from "../../core/types.ts";
-import { stringToUuid } from "../../core/uuid.ts";
 import cors from "cors";
-import { messageCompletionFooter } from "../../core/parsing.ts";
+import express, { Request as ExpressRequest } from "express";
 import multer, { File } from "multer";
-import { Request as ExpressRequest } from "express";
-import { generateMessageResponse } from "../../core/generation.ts";
 import {
     generateCaption,
     generateImage,
 } from "../../actions/imageGenerationUtils.ts";
+import { composeContext } from "../../core/context.ts";
+import { generateMessageResponse } from "../../core/generation.ts";
+import { messageCompletionFooter } from "../../core/parsing.ts";
+import { AgentRuntime } from "../../core/runtime.ts";
+import { Content, Memory, ModelClass, State } from "../../core/types.ts";
+import { stringToUuid } from "../../core/uuid.ts";
 
 const upload = multer({ storage: multer.memoryStorage() });
 

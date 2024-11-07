@@ -24,8 +24,6 @@ import readline from "readline";
 
 const args = parseArguments();
 
-console.log("Args are: ", args);
-
 let charactersArg = args.characters || args.character;
 
 let characters = [defaultCharacter];
@@ -34,14 +32,12 @@ if (charactersArg) {
     characters = loadCharacters(charactersArg);
 }
 
-console.log("Characters are: ", characters);
-
 const directClient = new DirectClient();
 
 const serverPort = parseInt(process.env.SERVER_PORT || "3000");
 directClient.start(serverPort);
 
-export async function createDirectRuntime(
+export async function createAgent(
     character: Character,
     db: any,
     token: string,
@@ -79,7 +75,7 @@ async function startAgent(character: Character) {
         const token = getTokenForProvider(character.modelProvider, character);
         const db = initializeDatabase();
 
-        const runtime = await createDirectRuntime(character, db, token);
+        const runtime = await createAgent(character, db, token);
 
         const clients = await initializeClients(
             character,

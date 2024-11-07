@@ -70,10 +70,10 @@ export async function buildConversationThread(
                     url: currentTweet.permanentUrl,
                     inReplyTo: currentTweet.inReplyToStatusId
                         ? stringToUuid(
-                              currentTweet.inReplyToStatusId +
-                                  "-" +
-                                  client.runtime.agentId
-                          )
+                            currentTweet.inReplyToStatusId +
+                            "-" +
+                            client.runtime.agentId
+                        )
                         : undefined,
                 },
                 createdAt: currentTweet.timestamp * 1000,
@@ -152,8 +152,70 @@ export async function sendTweetChunks(
             url: tweet.permanentUrl,
             inReplyTo: tweet.inReplyToStatusId
                 ? stringToUuid(
-                      tweet.inReplyToStatusId + "-" + client.runtime.agentId
-                  )
+                    tweet.inReplyToStatusId + "-" + client.runtime.agentId
+                )
+                : undefined,
+        },
+        roomId,
+        embedding: embeddingZeroVector,
+        createdAt: tweet.timestamp * 1000,
+    }));
+
+    return memories;
+}
+
+export async function sendTweet(
+    client: ClientBase,
+    content: Content,
+    roomId: UUID,
+    twitterUsername: string,
+    inReplyTo: string
+): Promise<Memory[]> {
+    const chunk = truncateTweetContent(content.text);
+    const sentTweets: Tweet[] = [];
+
+    const result = await client.requestQueue.add(
+        async () =>
+            await client.twitterClient.sendTweet(
+                chunk.replaceAll(/\\n/g, "\n").trim(),
+                inReplyTo
+            )
+    );
+    // console.log("send tweet result:\n", result);
+    const body = await result.json();
+    console.log("send tweet body:\n", body.data.create_tweet.tweet_results);
+    const tweetResult = body.data.create_tweet.tweet_results.result;
+
+    const finalTweet = {
+        id: tweetResult.rest_id,
+        text: tweetResult.legacy.full_text,
+        conversationId: tweetResult.legacy.conversation_id_str,
+        createdAt: tweetResult.legacy.created_at,
+        userId: tweetResult.legacy.user_id_str,
+        inReplyToStatusId: tweetResult.legacy.in_reply_to_status_id_str,
+        permanentUrl: `https://twitter.com/${twitterUsername}/status/${tweetResult.rest_id}`,
+        hashtags: [],
+        mentions: [],
+        photos: [],
+        thread: [],
+        urls: [],
+        videos: [],
+    } as Tweet;
+
+    sentTweets.push(finalTweet);
+
+    const memories: Memory[] = sentTweets.map((tweet) => ({
+        id: stringToUuid(tweet.id + "-" + client.runtime.agentId),
+        agentId: client.runtime.agentId,
+        userId: client.runtime.agentId,
+        content: {
+            text: tweet.text,
+            source: "twitter",
+            url: tweet.permanentUrl,
+            inReplyTo: tweet.inReplyToStatusId
+                ? stringToUuid(
+                    tweet.inReplyToStatusId + "-" + client.runtime.agentId
+                )
                 : undefined,
         },
         roomId,
@@ -183,4 +245,29 @@ function splitTweetContent(content: string): string[] {
     }
 
     return tweetChunks;
+}
+
+export function truncateTweetContent(content: string): string {
+    // if its 240, delete the last line
+    if (content.length === MAX_TWEET_LENGTH) {
+        return content.slice(0, content.lastIndexOf("\n"));
+    }
+
+    // if its still bigger than 240, delete everything after the last period
+    if (content.length > MAX_TWEET_LENGTH) {
+        return content.slice(0, content.lastIndexOf("."));
+    }
+
+    // while its STILL bigger than 240, find the second to last exclamation point or period and delete everything after it
+    let iterations = 0;
+    while (content.length > MAX_TWEET_LENGTH && iterations < 10) {
+        iterations++;
+        // second to last index of period or exclamation point
+        const secondToLastIndexOfPeriod = content.lastIndexOf(".", content.length - 2);
+        const secondToLastIndexOfExclamation = content.lastIndexOf("!", content.length - 2);
+        const secondToLastIndex = Math.max(secondToLastIndexOfPeriod, secondToLastIndexOfExclamation);
+        content = content.slice(0, secondToLastIndex);
+    }
+
+    return content;
 }

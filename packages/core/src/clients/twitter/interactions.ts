@@ -19,7 +19,7 @@ import {
 } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
+import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 
 export const twitterMessageHandlerTemplate =
     `{{relevantFacts}}
@@ -312,7 +312,7 @@ export class TwitterInteractionClient extends ClientBase {
         if (response.text) {
             try {
                 const callback: HandlerCallback = async (response: Content) => {
-                    const memories = await sendTweetChunks(
+                    const memories = await sendTweet(
                         this,
                         response,
                         message.roomId,
