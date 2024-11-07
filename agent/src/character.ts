@@ -1,7 +1,7 @@
 import { Character, Clients, ModelProvider } from "@eliza/core";
 import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
 
-const defaultCharacter: Character = {
+export const defaultCharacter: Character = {
     name: "Eliza",
     plugins: [imageGenerationPlugin],
     clients: [
@@ -405,5 +405,3 @@ const defaultCharacter: Character = {
         ],
     },
 };
-
-export default defaultCharacter;

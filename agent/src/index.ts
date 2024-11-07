@@ -18,9 +18,9 @@ import {
     walletProvider,
 } from "@eliza/core";
 import readline from "readline";
-import { blobert } from "./blobert.ts";
+import { defaultCharacter } from "./character.ts";
 
-const characters = [blobert];
+const characters = [defaultCharacter];
 
 const directClient = new DirectClient();
 
