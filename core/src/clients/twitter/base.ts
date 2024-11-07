@@ -382,7 +382,9 @@ export class ClientBase extends EventEmitter {
                 await this.runtime.messageManager.getMemoriesByRoomIds({
                     agentId: this.runtime.agentId,
                     roomIds: cachedResults.map((tweet) =>
-                        stringToUuid(tweet.conversationId + "-" + this.runtime.agentId)
+                        stringToUuid(
+                            tweet.conversationId + "-" + this.runtime.agentId
+                        )
                     ),
                 });
 
@@ -426,7 +428,11 @@ export class ClientBase extends EventEmitter {
                         url: tweet.permanentUrl,
                         source: "twitter",
                         inReplyTo: tweet.inReplyToStatusId
-                            ? stringToUuid(tweet.inReplyToStatusId + "-" + this.runtime.agentId)
+                            ? stringToUuid(
+                                  tweet.inReplyToStatusId +
+                                      "-" +
+                                      this.runtime.agentId
+                              )
                             : undefined,
                     } as Content;
 
@@ -499,7 +505,10 @@ export class ClientBase extends EventEmitter {
 
         // Filter out the tweets that already exist in the database
         const tweetsToSave = allTweets.filter(
-            (tweet) => !existingMemoryIds.has(stringToUuid(tweet.id + "-" + this.runtime.agentId))
+            (tweet) =>
+                !existingMemoryIds.has(
+                    stringToUuid(tweet.id + "-" + this.runtime.agentId)
+                )
         );
 
         await this.runtime.ensureUserExists(

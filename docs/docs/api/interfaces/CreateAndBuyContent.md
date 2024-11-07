@@ -18,7 +18,7 @@
 
 [core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L14)
 
-***
+---
 
 ### allowOffCurve
 
@@ -28,7 +28,7 @@
 
 [core/src/actions/pumpfun.ts:30](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L30)
 
-***
+---
 
 ### attachments?
 
@@ -42,7 +42,7 @@
 
 [core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L18)
 
-***
+---
 
 ### buyAmountSol
 
@@ -52,7 +52,7 @@
 
 [core/src/actions/pumpfun.ts:25](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L25)
 
-***
+---
 
 ### deployerPrivateKey
 
@@ -62,7 +62,7 @@
 
 [core/src/actions/pumpfun.ts:23](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L23)
 
-***
+---
 
 ### inReplyTo?
 
@@ -76,7 +76,7 @@
 
 [core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L17)
 
-***
+---
 
 ### priorityFee
 
@@ -94,7 +94,7 @@
 
 [core/src/actions/pumpfun.ts:26](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L26)
 
-***
+---
 
 ### source?
 
@@ -108,7 +108,7 @@
 
 [core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L15)
 
-***
+---
 
 ### text
 
@@ -122,7 +122,7 @@
 
 [core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/core/types.ts#L13)
 
-***
+---
 
 ### tokenMetadata
 
@@ -132,7 +132,7 @@
 
 [core/src/actions/pumpfun.ts:24](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/actions/pumpfun.ts#L24)
 
-***
+---
 
 ### url?
 

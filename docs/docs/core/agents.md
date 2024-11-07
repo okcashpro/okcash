@@ -15,6 +15,7 @@ Agents are the core components of the Eliza framework that handle autonomous int
 ## Architecture
 
 ### Agent Runtime
+
 - Base environment for the agent
 - Message processing
 - Action handling
@@ -24,13 +25,15 @@ Agents are the core components of the Eliza framework that handle autonomous int
 ### Key Components
 
 #### 1. Clients
+
 - Discord
-- Telegram 
+- Telegram
 - Direct (REST API)
 - Available connectors
 - Client-specific features (e.g., voice, attachments)
 
 #### 2. Providers
+
 - Inject context into agent responses
 - Types of providers:
   - Time
@@ -39,6 +42,7 @@ Agents are the core components of the Eliza framework that handle autonomous int
 - How to use providers for extended functionality
 
 #### 3. Actions
+
 - Executable behaviors
 - Built-in actions:
   - Follow/unfollow rooms
@@ -48,6 +52,7 @@ Agents are the core components of the Eliza framework that handle autonomous int
 - Creating custom actions
 
 #### 4. Evaluators
+
 - Response assessment
 - Goal tracking
 - Fact extraction
@@ -57,12 +62,14 @@ Agents are the core components of the Eliza framework that handle autonomous int
 ### Memory System
 
 #### Types of Memory
+
 - Message history
 - Factual memory
 - Knowledge base
 - Relationship tracking
 
 #### RAG Integration
+
 - Vector search for relevant information
 - Knowledge embedding
 - Contextual recall
@@ -78,18 +85,21 @@ Agents are the core components of the Eliza framework that handle autonomous int
 ## Best Practices
 
 ### Performance
+
 - Model selection
 - Context management
 - Memory optimization
 - Client-specific considerations
 
 ### Development
+
 - Local development setup
 - Testing agents
 - Debugging tools
 - Monitoring and logging
 
 ### Scaling
+
 - Multiple agent management
 - Resource considerations
 - Infrastructure recommendations
@@ -97,16 +107,19 @@ Agents are the core components of the Eliza framework that handle autonomous int
 ## Examples
 
 ### Basic Agent Setup
+
 ```typescript
 // Example code for basic agent configuration
 ```
 
 ### Adding Custom Functionality
+
 ```typescript
 // Example of extending agent capabilities
 ```
 
 ### Client Integration
+
 ```typescript
 // Example of connecting to different platforms
 ```
@@ -119,5 +132,6 @@ Agents are the core components of the Eliza framework that handle autonomous int
 - Error handling
 
 ## Related
+
 - [Character Files](../characterfile)
 - [API Reference](/api/classes/AgentRuntime)

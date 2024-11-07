@@ -32,7 +32,7 @@
 
 [core/src/clients/direct/index.ts:259](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/direct/index.ts#L259)
 
-***
+---
 
 ### start()
 
@@ -50,7 +50,7 @@
 
 [core/src/clients/direct/index.ts:267](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/direct/index.ts#L267)
 
-***
+---
 
 ### unregisterAgent()
 

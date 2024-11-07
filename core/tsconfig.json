@@ -20,7 +20,11 @@
         "noEmitOnError": false,
         "moduleDetection": "force",
         "allowArbitraryExtensions": true,
-        "typeRoots": ["./node_modules/@types", "./types", "./node_modules/jest/types"]
+        "typeRoots": [
+            "./node_modules/@types",
+            "./types",
+            "./node_modules/jest/types"
+        ]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist", "src/**/*.d.ts", "types/**/*.test.ts"]

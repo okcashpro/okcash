@@ -96,7 +96,9 @@ export class TwitterPostClient extends ClientBase {
             // Generate new tweet
             const context = composeContext({
                 state,
-                template: this.runtime.character.templates?.twitterPostTemplate || twitterPostTemplate,
+                template:
+                    this.runtime.character.templates?.twitterPostTemplate ||
+                    twitterPostTemplate,
             });
 
             const datestr = new Date().toUTCString().replace(/:/g, "-");
@@ -160,7 +162,8 @@ export class TwitterPostClient extends ClientBase {
                     } as Tweet;
 
                     const postId = tweet.id;
-                    const conversationId = tweet.conversationId + "-" + this.runtime.agentId;
+                    const conversationId =
+                        tweet.conversationId + "-" + this.runtime.agentId;
                     const roomId = stringToUuid(conversationId);
 
                     // make sure the agent is in the room

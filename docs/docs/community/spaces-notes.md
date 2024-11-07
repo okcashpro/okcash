@@ -36,13 +36,15 @@ Space: https://x.com/weremeow/status/1851365658916708616
 Space: https://x.com/shawmakesmagic/status/1850609680558805422
 
 00:00:00 - Opening
+
 - Co-hosts: Shaw and Jin
 - Purpose: Structured FAQ session about AI16Z and DegenAI
 - Format: Pre-collected questions followed by audience Q&A
 
 00:06:40 - AI16Z vs DegenAI Relationship
 Q: What's the difference between AI16Z and DegenAI?
-A: 
+A:
+
 - ai16z: DAO-based investment vehicle, more PvE focused, community driven
 - DegenAI: Individual trading agent, PvP focused, more aggressive strategy
 - Both use same codebase but different personalities
@@ -54,6 +56,7 @@ A:
 00:10:45 - Trust Engine Mechanics
 Q: How does the trust engine work?
 A:
+
 - Users share contract addresses with confidence levels
 - System tracks recommendation performance
 - Low conviction recommendations = low penalty if wrong
@@ -61,9 +64,10 @@ A:
 - Historical performance tracked for trust calculation
 - Trust scores influence agent's future decision-making
 
-00:21:45 - Technical Infrastructure 
+00:21:45 - Technical Infrastructure
 Q: Where do the agents live?
 A:
+
 - Currently: Test servers and local development
 - Future: Trusted Execution Environment (TEE)
 - Partnership with TreasureDAO for infrastructure
@@ -73,10 +77,13 @@ A:
 00:34:20 - Trading Implementation
 Q: When will Mark start trading?
 A:
+
 - Three phase approach:
+
 1. Testing tech infrastructure
 2. Virtual order book/paper trading
 3. Live trading with real assets
+
 - Using Jupiter API for swaps
 - Initial focus on basic trades before complex strategies
 - Trading decisions based on community trust scores
@@ -84,6 +91,7 @@ A:
 00:54:15 - Development Status
 Q: Who's building this?
 A:
+
 - Open source project with multiple contributors
 - Key maintainers: Circuitry, Nate Martin
 - Community developers incentivized through token ownership
@@ -92,6 +100,7 @@ A:
 01:08:35 - AI Model Architecture
 Q: What models power the agents?
 A:
+
 - DegenAI: Llama 70B
 - Using Together.xyz for model marketplace
 - Continuous fine-tuning planned
@@ -101,6 +110,7 @@ A:
 01:21:35 - Ethics Framework
 Q: What ethical guidelines are being followed?
 A:
+
 - Rejecting traditional corporate AI ethics frameworks
 - Focus on community-driven standards
 - Emphasis on transparency and open source
@@ -108,6 +118,7 @@ A:
 - Priority on practical utility over theoretical ethics
 
 01:28:30 - Wrap-up
+
 - Discord: AI16z.vc
 - Future spaces planned with DAOs.fun team
 - Focus on responsible growth
@@ -125,7 +136,7 @@ The space emphasized technical implementation details while addressing community
 **Overview**
 
 - 00:00-30:00 Talks about Eliza framework. The bot is able to tweet, reply to tweets, search Twitter for topics, and generate new posts on its own every few hours. It works autonomously without human input (except to fix the occasional issues)
-- 30:00-45:00 Deep dive into creating the bots personality which is defined by character files containing bios, lore, example conversations, and specific directions. Some alpha for those 
+- 30:00-45:00 Deep dive into creating the bots personality which is defined by character files containing bios, lore, example conversations, and specific directions. Some alpha for those
 - 45:00-60:00 working on adding capabilities for the bot to make crypto token swaps and trades. This requires providing the bot wallet balances, token prices, market data, and a swap action. Some live coding for showing how new features can get implemented.
 - 60:00-75:00 Discussion around the symbiosis between the AI and crypto communities. AI developers are realizing they can monetize their work through tokens vs traditional VC funding route. Crypto people are learning about AI advancements.
 
@@ -142,4 +153,3 @@ The space emphasized technical implementation details while addressing community
 9. In the near future, AI Marc will be able to execute trades autonomously based on the information and recommendations gathered from the community. Human intervention will be minimized.
 10. They are working on getting AI Marc on-chain as soon as possible using trusted execution environments for him to take actions like approving trades.
 11. The plan is for AI Marc to eventually participate in a "futarchy" style governance market within the DAO, allowing humans to influence decisions but not fully control the AI.
-

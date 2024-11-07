@@ -76,7 +76,6 @@ export function loadCharacters(charactersArg: string): Character[] {
             return path;
         });
 
-
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {

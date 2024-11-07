@@ -75,12 +75,15 @@ export async function generateText({
                 prettyConsole.log("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey });
 
-                console.log('****** CONTEXT\n', context)
+                console.log("****** CONTEXT\n", context);
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
-                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -102,7 +105,10 @@ export async function generateText({
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: anthropic.languageModel(model),
                     prompt: context,
-                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -124,7 +130,10 @@ export async function generateText({
                         parallelToolCalls: false,
                     }),
                     prompt: context,
-                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -144,7 +153,10 @@ export async function generateText({
                     model: groq.languageModel(model),
                     prompt: context,
                     temperature: temperature,
-                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
@@ -157,15 +169,15 @@ export async function generateText({
 
             case ModelProvider.LLAMALOCAL: {
                 prettyConsole.log(
-                  "Using local Llama model for text completion."
+                    "Using local Llama model for text completion."
                 );
                 response = await runtime.llamaService.queueTextCompletion(
-                  context,
-                  temperature,
-                  _stop,
-                  frequency_penalty,
-                  presence_penalty,
-                  max_response_length
+                    context,
+                    temperature,
+                    _stop,
+                    frequency_penalty,
+                    presence_penalty,
+                    max_response_length
                 );
                 prettyConsole.log("Received response from local Llama model.");
                 break;
@@ -176,14 +188,17 @@ export async function generateText({
                 const serverUrl = models[provider].endpoint;
                 const openai = createOpenAI({ apiKey, baseURL: serverUrl });
 
-                console.log('****** MODEL\n', model)
-                console.log('****** CONTEXT\n', context)
+                console.log("****** MODEL\n", model);
+                console.log("****** CONTEXT\n", context);
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
                     temperature: temperature,
-                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
@@ -454,12 +469,12 @@ export async function generateObject({
         try {
             // this is slightly different than generateObjectArray, in that we parse object, not object array
             const response = await generateText({
-        runtime,
-        context,
-        modelClass,
-    });
-    const parsedResponse = parseJSONObjectFromText(response);
-    if (parsedResponse) {
+                runtime,
+                context,
+                modelClass,
+            });
+            const parsedResponse = parseJSONObjectFromText(response);
+            if (parsedResponse) {
                 return parsedResponse;
             }
         } catch (error) {

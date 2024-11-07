@@ -72,14 +72,14 @@ actions:
 ### 1. Basic Setup
 
 ```typescript
-import { createAgentRuntime } from '@your-org/agent-framework';
-import { SqliteDatabaseAdapter } from '@your-org/agent-framework/adapters';
+import { createAgentRuntime } from "@your-org/agent-framework";
+import { SqliteDatabaseAdapter } from "@your-org/agent-framework/adapters";
 
 // Initialize runtime
 const runtime = await createAgentRuntime({
   character: characterConfig,
   configPath: "./elizaConfig.yaml",
-  databaseAdapter: new SqliteDatabaseAdapter("./db.sqlite")
+  databaseAdapter: new SqliteDatabaseAdapter("./db.sqlite"),
 });
 ```
 
@@ -108,18 +108,18 @@ await telegramClient.start();
 
 ```typescript
 const modelProviders = {
-  "openai": {
+  openai: {
     small: "gpt-3.5-turbo",
-    large: "gpt-4"
+    large: "gpt-4",
   },
-  "anthropic": {
+  anthropic: {
     small: "claude-3-haiku",
-    large: "claude-3-opus"
+    large: "claude-3-opus",
   },
   "llama-cloud": {
     small: "llama-7b",
-    large: "llama-70b"
-  }
+    large: "llama-70b",
+  },
 };
 ```
 
@@ -131,7 +131,7 @@ const dbAdapter = new SqliteDatabaseAdapter("./db.sqlite");
 
 // PostgreSQL
 const dbAdapter = new PostgresDatabaseAdapter({
-  connectionString: process.env.POSTGRES_URL
+  connectionString: process.env.POSTGRES_URL,
 });
 ```
 
@@ -144,7 +144,7 @@ runtime.providers.push({
   get: async (runtime, message, state) => {
     // Provider implementation
     return data;
-  }
+  },
 });
 ```
 
@@ -169,9 +169,9 @@ runtime.providers.push({
 ```typescript
 // Optimize context length
 const settings = {
-  maxContextLength: 4000,  // Adjust based on model
-  maxTokens: 1000,        // Limit response length
-  temperature: 0.7        // Adjust response randomness
+  maxContextLength: 4000, // Adjust based on model
+  maxTokens: 1000, // Limit response length
+  temperature: 0.7, // Adjust response randomness
 };
 ```
 
@@ -181,10 +181,10 @@ const settings = {
 try {
   const runtime = await createAgentRuntime(config);
 } catch (error) {
-  if (error.code === 'CONFIG_NOT_FOUND') {
-    console.error('Configuration file missing');
-  } else if (error.code === 'INVALID_CHARACTER') {
-    console.error('Character file validation failed');
+  if (error.code === "CONFIG_NOT_FOUND") {
+    console.error("Configuration file missing");
+  } else if (error.code === "INVALID_CHARACTER") {
+    console.error("Character file validation failed");
   }
 }
 ```
@@ -194,32 +194,36 @@ try {
 ### Common Issues
 
 1. **Missing Configuration**
+
 ```typescript
-if (!fs.existsSync('./elizaConfig.yaml')) {
-  console.error('Missing elizaConfig.yaml - copy from example');
+if (!fs.existsSync("./elizaConfig.yaml")) {
+  console.error("Missing elizaConfig.yaml - copy from example");
 }
 ```
 
 2. **Invalid Character File**
+
 ```typescript
 // Validate character file
 if (!character.name || !character.bio || !character.style) {
-  throw new Error('Invalid character configuration');
+  throw new Error("Invalid character configuration");
 }
 ```
 
 3. **Model Provider Issues**
+
 ```typescript
 // Fallback to local model
 if (!process.env.OPENAI_API_KEY) {
-  console.log('Using local model fallback');
-  runtime.modelProvider = 'llama-local';
+  console.log("Using local model fallback");
+  runtime.modelProvider = "llama-local";
 }
 ```
 
 ## Next Steps
 
 After basic configuration:
+
 1. Configure custom actions
 2. Set up client integrations
 3. Customize character behavior

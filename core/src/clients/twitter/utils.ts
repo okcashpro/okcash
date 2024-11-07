@@ -46,7 +46,9 @@ export async function buildConversationThread(
         );
         if (!memory) {
             prettyConsole.log("Creating memory for tweet", currentTweet.id);
-            const roomId = stringToUuid(currentTweet.conversationId + "-" + client.runtime.agentId);
+            const roomId = stringToUuid(
+                currentTweet.conversationId + "-" + client.runtime.agentId
+            );
             const userId = stringToUuid(currentTweet.userId);
 
             await client.runtime.ensureConnection(
@@ -58,14 +60,20 @@ export async function buildConversationThread(
             );
 
             client.runtime.messageManager.createMemory({
-                id: stringToUuid(currentTweet.id + "-" + client.runtime.agentId),
+                id: stringToUuid(
+                    currentTweet.id + "-" + client.runtime.agentId
+                ),
                 agentId: client.runtime.agentId,
                 content: {
                     text: currentTweet.text,
                     source: "twitter",
                     url: currentTweet.permanentUrl,
                     inReplyTo: currentTweet.inReplyToStatusId
-                        ? stringToUuid(currentTweet.inReplyToStatusId + "-" + client.runtime.agentId)
+                        ? stringToUuid(
+                              currentTweet.inReplyToStatusId +
+                                  "-" +
+                                  client.runtime.agentId
+                          )
                         : undefined,
                 },
                 createdAt: currentTweet.timestamp * 1000,
@@ -143,7 +151,9 @@ export async function sendTweetChunks(
             source: "twitter",
             url: tweet.permanentUrl,
             inReplyTo: tweet.inReplyToStatusId
-                ? stringToUuid(tweet.inReplyToStatusId + "-" + client.runtime.agentId)
+                ? stringToUuid(
+                      tweet.inReplyToStatusId + "-" + client.runtime.agentId
+                  )
                 : undefined,
         },
         roomId,

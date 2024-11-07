@@ -38,7 +38,7 @@
 
 [core/src/providers/wallet.ts:105](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L105)
 
-***
+---
 
 ### fetchPrices()
 
@@ -56,7 +56,7 @@
 
 [core/src/providers/wallet.ts:150](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L150)
 
-***
+---
 
 ### formatPortfolio()
 
@@ -78,7 +78,7 @@
 
 [core/src/providers/wallet.ts:192](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/providers/wallet.ts#L192)
 
-***
+---
 
 ### getFormattedPortfolio()
 

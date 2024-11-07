@@ -117,7 +117,8 @@ export class TwitterInteractionClient extends ClientBase {
                     !this.lastCheckedTweetId ||
                     parseInt(tweet.id) > this.lastCheckedTweetId
                 ) {
-                    const conversationId = tweet.conversationId + "-" + this.runtime.agentId;
+                    const conversationId =
+                        tweet.conversationId + "-" + this.runtime.agentId;
 
                     const roomId = stringToUuid(conversationId);
 
@@ -254,7 +255,11 @@ export class TwitterInteractionClient extends ClientBase {
                     text: tweet.text,
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
-                        ? stringToUuid(tweet.inReplyToStatusId + "-" + this.runtime.agentId)
+                        ? stringToUuid(
+                              tweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -268,7 +273,11 @@ export class TwitterInteractionClient extends ClientBase {
 
         const shouldRespondContext = composeContext({
             state,
-            template: this.runtime.character.templates?.twitterShouldRespondTemplate || this.runtime.character?.templates?.shouldRespondTemplate || twitterShouldRespondTemplate,
+            template:
+                this.runtime.character.templates
+                    ?.twitterShouldRespondTemplate ||
+                this.runtime.character?.templates?.shouldRespondTemplate ||
+                twitterShouldRespondTemplate,
         });
 
         const shouldRespond = await generateShouldRespond({
@@ -284,7 +293,11 @@ export class TwitterInteractionClient extends ClientBase {
 
         const context = composeContext({
             state,
-            template: this.runtime.character.templates?.twitterMessageHandlerTemplate || this.runtime.character?.templates?.messageHandlerTemplate || twitterMessageHandlerTemplate,
+            template:
+                this.runtime.character.templates
+                    ?.twitterMessageHandlerTemplate ||
+                this.runtime.character?.templates?.messageHandlerTemplate ||
+                twitterMessageHandlerTemplate,
         });
 
         const datestr = new Date().toUTCString().replace(/:/g, "-");

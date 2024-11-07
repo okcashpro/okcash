@@ -182,7 +182,9 @@ export class TwitterSearchClient extends ClientBase {
             }
 
             const conversationId = selectedTweet.conversationId;
-            const roomId = stringToUuid(conversationId + "-" + this.runtime.agentId);
+            const roomId = stringToUuid(
+                conversationId + "-" + this.runtime.agentId
+            );
 
             const userIdUUID = stringToUuid(selectedTweet.userId as string);
 
@@ -204,7 +206,11 @@ export class TwitterSearchClient extends ClientBase {
                     text: selectedTweet.text,
                     url: selectedTweet.permanentUrl,
                     inReplyTo: selectedTweet.inReplyToStatusId
-                        ? stringToUuid(selectedTweet.inReplyToStatusId + "-" + this.runtime.agentId)
+                        ? stringToUuid(
+                              selectedTweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -264,7 +270,9 @@ export class TwitterSearchClient extends ClientBase {
 
             const context = composeContext({
                 state,
-                template: this.runtime.character.templates?.twitterSearchTemplate || twitterSearchTemplate,
+                template:
+                    this.runtime.character.templates?.twitterSearchTemplate ||
+                    twitterSearchTemplate,
             });
 
             // log context to file

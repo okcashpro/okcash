@@ -526,7 +526,9 @@ export class AgentRuntime implements IAgentRuntime {
                 evaluators,
                 evaluatorNames,
             } as State,
-            template: this.character.templates?.evaluationTemplate || evaluationTemplate,
+            template:
+                this.character.templates?.evaluationTemplate ||
+                evaluationTemplate,
         });
 
         const result = await generateText({

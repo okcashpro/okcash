@@ -16,23 +16,27 @@ Eliza provides a flexible model selection and configuration system that supports
 Eliza supports the following model providers:
 
 - **OpenAI**
+
   - Small: gpt-4o-mini
   - Medium: gpt-4o
   - Large: gpt-4o
   - Embeddings: text-embedding-3-small
 
 - **Anthropic**
+
   - Small: claude-3-haiku
   - Medium: claude-3.5-sonnet
   - Large: claude-3-opus
 
 - **Google (Gemini)**
+
   - Small: gemini-1.5-flash
   - Medium: gemini-1.5-flash
   - Large: gemini-1.5-pro
   - Embeddings: text-embedding-004
 
 - **LLaMA Cloud**
+
   - Small: meta-llama/Llama-3.2-3B-Instruct-Turbo
   - Medium: meta-llama-3.1-8b-instruct
   - Large: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
@@ -61,6 +65,7 @@ settings: {
 ### Model Classes
 
 Models are categorized into four classes:
+
 - `SMALL`: Optimized for speed and cost
 - `MEDIUM`: Balanced performance and capability
 - `LARGE`: Maximum capability for complex tasks
@@ -73,11 +78,13 @@ Models are categorized into four classes:
 Choose your model class based on your requirements:
 
 - **SMALL Models**
+
   - Best for: Quick responses, simple tasks, cost-effective deployment
   - Example use cases: Basic chat, simple classifications
   - Recommended: `claude-3-haiku` or `gemini-1.5-flash`
 
 - **MEDIUM Models**
+
   - Best for: General purpose applications, balanced performance
   - Example use cases: Content generation, complex analysis
   - Recommended: `claude-3.5-sonnet` or `meta-llama-3.1-8b-instruct`
@@ -92,21 +99,22 @@ Choose your model class based on your requirements:
 ```typescript
 // Example configuration for different use cases
 const chatConfig = {
-    temperature: 0.7,        // More creative responses
-    maxOutputTokens: 2048,   // Shorter, focused replies
-    presence_penalty: 0.6    // Encourage response variety
+  temperature: 0.7, // More creative responses
+  maxOutputTokens: 2048, // Shorter, focused replies
+  presence_penalty: 0.6, // Encourage response variety
 };
 
 const analysisConfig = {
-    temperature: 0.2,        // More deterministic responses
-    maxOutputTokens: 8192,   // Allow detailed analysis
-    presence_penalty: 0.0    // Maintain focused analysis
+  temperature: 0.2, // More deterministic responses
+  maxOutputTokens: 8192, // Allow detailed analysis
+  presence_penalty: 0.0, // Maintain focused analysis
 };
 ```
 
 ### 3. Embedding Configuration
 
 Eliza includes a sophisticated embedding system that supports:
+
 - Automatic caching of embeddings
 - Provider-specific optimizations
 - Fallback to LLaMA service when needed
@@ -119,16 +127,19 @@ const embedding = await runtime.llamaService.getEmbeddingResponse(input);
 ## Best Practices
 
 1. **Model Selection**
+
    - Start with SMALL models and upgrade as needed
    - Use MEDIUM models as your default for general tasks
    - Reserve LARGE models for specific, complex requirements
 
 2. **Parameter Tuning**
+
    - Keep temperature low (0.2-0.4) for consistent outputs
    - Increase temperature (0.6-0.8) for creative tasks
    - Adjust maxOutputTokens based on expected response length
 
 3. **Embedding Optimization**
+
    - Utilize the caching system for frequently used content
    - Choose provider-specific embedding models for best results
    - Monitor embedding performance and adjust as needed
@@ -141,18 +152,20 @@ const embedding = await runtime.llamaService.getEmbeddingResponse(input);
 ## Common Issues and Solutions
 
 1. **Token Length Errors**
+
    ```typescript
    // Solution: Implement chunking for long inputs
    const chunks = splitIntoChunks(input, model.settings.maxInputTokens);
    ```
 
 2. **Response Quality Issues**
+
    ```typescript
    // Solution: Adjust temperature and penalties
    const enhancedSettings = {
-       ...defaultSettings,
-       temperature: 0.4,
-       presence_penalty: 0.2
+     ...defaultSettings,
+     temperature: 0.4,
+     presence_penalty: 0.2,
    };
    ```
 
@@ -160,7 +173,10 @@ const embedding = await runtime.llamaService.getEmbeddingResponse(input);
    ```typescript
    // Solution: Implement broader similarity thresholds
    const similarityThreshold = 0.85;
-   const cachedEmbedding = await findSimilarEmbedding(input, similarityThreshold);
+   const cachedEmbedding = await findSimilarEmbedding(
+     input,
+     similarityThreshold,
+   );
    ```
 
 ## Advanced Configuration
@@ -170,19 +186,19 @@ For advanced use cases, you can extend the model configuration:
 ```typescript
 // Custom model configuration
 const customConfig = {
-    model: {
-        [ModelClass.SMALL]: "your-custom-model",
-        [ModelClass.MEDIUM]: "your-custom-model",
-        [ModelClass.LARGE]: "your-custom-model",
-        [ModelClass.EMBEDDING]: "your-custom-embedding-model",
-    },
-    settings: {
-        // Custom settings
-        maxInputTokens: 64000,
-        temperature: 0.5,
-        // Add custom parameters
-        custom_param: "value"
-    }
+  model: {
+    [ModelClass.SMALL]: "your-custom-model",
+    [ModelClass.MEDIUM]: "your-custom-model",
+    [ModelClass.LARGE]: "your-custom-model",
+    [ModelClass.EMBEDDING]: "your-custom-embedding-model",
+  },
+  settings: {
+    // Custom settings
+    maxInputTokens: 64000,
+    temperature: 0.5,
+    // Add custom parameters
+    custom_param: "value",
+  },
 };
 ```
 

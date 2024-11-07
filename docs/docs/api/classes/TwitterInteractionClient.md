@@ -48,7 +48,7 @@
 
 [core/src/clients/twitter/base.ts:151](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L151)
 
-***
+---
 
 ### directions
 
@@ -62,7 +62,7 @@
 
 [core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L89)
 
-***
+---
 
 ### dryRun
 
@@ -76,7 +76,7 @@
 
 [core/src/clients/twitter/base.ts:94](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L94)
 
-***
+---
 
 ### imageDescriptionService
 
@@ -90,7 +90,7 @@
 
 [core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L92)
 
-***
+---
 
 ### lastCheckedTweetId
 
@@ -104,7 +104,7 @@
 
 [core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L90)
 
-***
+---
 
 ### requestQueue
 
@@ -118,7 +118,7 @@
 
 [core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L97)
 
-***
+---
 
 ### runtime
 
@@ -132,7 +132,7 @@
 
 [core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L88)
 
-***
+---
 
 ### temperature
 
@@ -146,7 +146,7 @@
 
 [core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L93)
 
-***
+---
 
 ### tweetCacheFilePath
 
@@ -160,7 +160,7 @@
 
 [core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L91)
 
-***
+---
 
 ### twitterClient
 
@@ -174,7 +174,7 @@
 
 [core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L87)
 
-***
+---
 
 ### twitterUserId
 
@@ -188,7 +188,7 @@
 
 [core/src/clients/twitter/base.ts:98](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L98)
 
-***
+---
 
 ### \_twitterClient
 
@@ -202,7 +202,7 @@
 
 [core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L86)
 
-***
+---
 
 ### captureRejections
 
@@ -222,13 +222,13 @@ v13.4.0, v12.16.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:459
+node_modules/@types/node/events.d.ts:459
 
-***
+---
 
 ### captureRejectionSymbol
 
-> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](TwitterPostClient.md#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: _typeof_ [`captureRejectionSymbol`](TwitterPostClient.md#capturerejectionsymbol)
 
 Value: `Symbol.for('nodejs.rejection')`
 
@@ -244,9 +244,9 @@ v13.4.0, v12.16.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:452
+node_modules/@types/node/events.d.ts:452
 
-***
+---
 
 ### defaultMaxListeners
 
@@ -270,10 +270,10 @@ that a "possible EventEmitter memory leak" has been detected. For any single
 temporarily avoid this warning:
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 const emitter = new EventEmitter();
 emitter.setMaxListeners(emitter.getMaxListeners() + 1);
-emitter.once('event', () => {
+emitter.once("event", () => {
   // do stuff
   emitter.setMaxListeners(Math.max(emitter.getMaxListeners() - 1, 0));
 });
@@ -298,13 +298,13 @@ v0.11.2
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:498
+node_modules/@types/node/events.d.ts:498
 
-***
+---
 
 ### errorMonitor
 
-> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](TwitterPostClient.md#errormonitor)
+> `readonly` `static` **errorMonitor**: _typeof_ [`errorMonitor`](TwitterPostClient.md#errormonitor)
 
 This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
@@ -321,7 +321,7 @@ v13.6.0, v12.17.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:445
+node_modules/@types/node/events.d.ts:445
 
 ## Methods
 
@@ -351,9 +351,9 @@ node\_modules/@types/node/events.d.ts:445
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:136
+node_modules/@types/node/events.d.ts:136
 
-***
+---
 
 ### addListener()
 
@@ -385,9 +385,9 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:597
+node_modules/@types/node/events.d.ts:597
 
-***
+---
 
 ### cacheTweet()
 
@@ -409,7 +409,7 @@ node\_modules/@types/node/events.d.ts:597
 
 [core/src/clients/twitter/base.ts:100](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L100)
 
-***
+---
 
 ### emit()
 
@@ -421,26 +421,26 @@ to each.
 Returns `true` if the event had listeners, `false` otherwise.
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 const myEmitter = new EventEmitter();
 
 // First listener
-myEmitter.on('event', function firstListener() {
-  console.log('Helloooo! first listener');
+myEmitter.on("event", function firstListener() {
+  console.log("Helloooo! first listener");
 });
 // Second listener
-myEmitter.on('event', function secondListener(arg1, arg2) {
+myEmitter.on("event", function secondListener(arg1, arg2) {
   console.log(`event with parameters ${arg1}, ${arg2} in second listener`);
 });
 // Third listener
-myEmitter.on('event', function thirdListener(...args) {
-  const parameters = args.join(', ');
+myEmitter.on("event", function thirdListener(...args) {
+  const parameters = args.join(", ");
   console.log(`event with parameters ${parameters} in third listener`);
 });
 
-console.log(myEmitter.listeners('event'));
+console.log(myEmitter.listeners("event"));
 
-myEmitter.emit('event', 1, 2, 3, 4, 5);
+myEmitter.emit("event", 1, 2, 3, 4, 5);
 
 // Prints:
 // [
@@ -477,9 +477,9 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:859
+node_modules/@types/node/events.d.ts:859
 
-***
+---
 
 ### eventNames()
 
@@ -489,13 +489,13 @@ Returns an array listing the events for which the emitter has registered
 listeners. The values in the array are strings or `Symbol`s.
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 
 const myEE = new EventEmitter();
-myEE.on('foo', () => {});
-myEE.on('bar', () => {});
+myEE.on("foo", () => {});
+myEE.on("bar", () => {});
 
-const sym = Symbol('symbol');
+const sym = Symbol("symbol");
 myEE.on(sym, () => {});
 
 console.log(myEE.eventNames());
@@ -516,9 +516,9 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:922
+node_modules/@types/node/events.d.ts:922
 
-***
+---
 
 ### fetchHomeTimeline()
 
@@ -540,7 +540,7 @@ node\_modules/@types/node/events.d.ts:922
 
 [core/src/clients/twitter/base.ts:281](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L281)
 
-***
+---
 
 ### fetchSearchTweets()
 
@@ -568,7 +568,7 @@ node\_modules/@types/node/events.d.ts:922
 
 [core/src/clients/twitter/base.ts:333](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L333)
 
-***
+---
 
 ### getCachedTweet()
 
@@ -590,7 +590,7 @@ node\_modules/@types/node/events.d.ts:922
 
 [core/src/clients/twitter/base.ts:116](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L116)
 
-***
+---
 
 ### getMaxListeners()
 
@@ -613,9 +613,9 @@ v1.0.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:774
+node_modules/@types/node/events.d.ts:774
 
-***
+---
 
 ### getTweet()
 
@@ -637,7 +637,7 @@ node\_modules/@types/node/events.d.ts:774
 
 [core/src/clients/twitter/base.ts:138](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L138)
 
-***
+---
 
 ### handleTwitterInteractions()
 
@@ -651,7 +651,7 @@ node\_modules/@types/node/events.d.ts:774
 
 [core/src/clients/twitter/interactions.ts:94](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/interactions.ts#L94)
 
-***
+---
 
 ### listenerCount()
 
@@ -689,9 +689,9 @@ v3.2.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:868
+node_modules/@types/node/events.d.ts:868
 
-***
+---
 
 ### listeners()
 
@@ -700,10 +700,10 @@ node\_modules/@types/node/events.d.ts:868
 Returns a copy of the array of listeners for the event named `eventName`.
 
 ```js
-server.on('connection', (stream) => {
-  console.log('someone connected!');
+server.on("connection", (stream) => {
+  console.log("someone connected!");
 });
-console.log(util.inspect(server.listeners('connection')));
+console.log(util.inspect(server.listeners("connection")));
 // Prints: [ [Function] ]
 ```
 
@@ -729,9 +729,9 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:787
+node_modules/@types/node/events.d.ts:787
 
-***
+---
 
 ### off()
 
@@ -763,9 +763,9 @@ v10.0.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:747
+node_modules/@types/node/events.d.ts:747
 
-***
+---
 
 ### on()
 
@@ -777,8 +777,8 @@ been added. Multiple calls passing the same combination of `eventName` and
 `listener` will result in the `listener` being added, and called, multiple times.
 
 ```js
-server.on('connection', (stream) => {
-  console.log('someone connected!');
+server.on("connection", (stream) => {
+  console.log("someone connected!");
 });
 ```
 
@@ -788,11 +788,11 @@ By default, event listeners are invoked in the order they are added. The `emitte
 event listener to the beginning of the listeners array.
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 const myEE = new EventEmitter();
-myEE.on('foo', () => console.log('a'));
-myEE.prependListener('foo', () => console.log('b'));
-myEE.emit('foo');
+myEE.on("foo", () => console.log("a"));
+myEE.prependListener("foo", () => console.log("b"));
+myEE.emit("foo");
 // Prints:
 //   b
 //   a
@@ -826,9 +826,9 @@ v0.1.101
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:629
+node_modules/@types/node/events.d.ts:629
 
-***
+---
 
 ### once()
 
@@ -838,8 +838,8 @@ Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
 
 ```js
-server.once('connection', (stream) => {
-  console.log('Ah, we have our first user!');
+server.once("connection", (stream) => {
+  console.log("Ah, we have our first user!");
 });
 ```
 
@@ -849,11 +849,11 @@ By default, event listeners are invoked in the order they are added. The `emitte
 event listener to the beginning of the listeners array.
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 const myEE = new EventEmitter();
-myEE.once('foo', () => console.log('a'));
-myEE.prependOnceListener('foo', () => console.log('b'));
-myEE.emit('foo');
+myEE.once("foo", () => console.log("a"));
+myEE.prependOnceListener("foo", () => console.log("b"));
+myEE.emit("foo");
 // Prints:
 //   b
 //   a
@@ -887,9 +887,9 @@ v0.3.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:659
+node_modules/@types/node/events.d.ts:659
 
-***
+---
 
 ### onReady()
 
@@ -907,7 +907,7 @@ node\_modules/@types/node/events.d.ts:659
 
 [core/src/clients/twitter/interactions.ts:77](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/interactions.ts#L77)
 
-***
+---
 
 ### prependListener()
 
@@ -919,8 +919,8 @@ already been added. Multiple calls passing the same combination of `eventName`
 and `listener` will result in the `listener` being added, and called, multiple times.
 
 ```js
-server.prependListener('connection', (stream) => {
-  console.log('someone connected!');
+server.prependListener("connection", (stream) => {
+  console.log("someone connected!");
 });
 ```
 
@@ -954,9 +954,9 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:886
+node_modules/@types/node/events.d.ts:886
 
-***
+---
 
 ### prependOnceListener()
 
@@ -966,8 +966,8 @@ Adds a **one-time**`listener` function for the event named `eventName` to the _b
 listener is removed, and then invoked.
 
 ```js
-server.prependOnceListener('connection', (stream) => {
-  console.log('Ah, we have our first user!');
+server.prependOnceListener("connection", (stream) => {
+  console.log("Ah, we have our first user!");
 });
 ```
 
@@ -1001,9 +1001,9 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:902
+node_modules/@types/node/events.d.ts:902
 
-***
+---
 
 ### rawListeners()
 
@@ -1013,13 +1013,13 @@ Returns a copy of the array of listeners for the event named `eventName`,
 including any wrappers (such as those created by `.once()`).
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 const emitter = new EventEmitter();
-emitter.once('log', () => console.log('log once'));
+emitter.once("log", () => console.log("log once"));
 
 // Returns a new Array with a function `onceWrapper` which has a property
 // `listener` which contains the original listener bound above
-const listeners = emitter.rawListeners('log');
+const listeners = emitter.rawListeners("log");
 const logFnWrapper = listeners[0];
 
 // Logs "log once" to the console and does not unbind the `once` event
@@ -1028,13 +1028,13 @@ logFnWrapper.listener();
 // Logs "log once" to the console and removes the listener
 logFnWrapper();
 
-emitter.on('log', () => console.log('log persistently'));
+emitter.on("log", () => console.log("log persistently"));
 // Will return a new Array with a single function bound by `.on()` above
-const newListeners = emitter.rawListeners('log');
+const newListeners = emitter.rawListeners("log");
 
 // Logs "log persistently" twice
 newListeners[0]();
-emitter.emit('log');
+emitter.emit("log");
 ```
 
 #### Type Parameters
@@ -1059,9 +1059,9 @@ v9.4.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:818
+node_modules/@types/node/events.d.ts:818
 
-***
+---
 
 ### removeAllListeners()
 
@@ -1093,9 +1093,9 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:758
+node_modules/@types/node/events.d.ts:758
 
-***
+---
 
 ### removeListener()
 
@@ -1105,11 +1105,11 @@ Removes the specified `listener` from the listener array for the event named `ev
 
 ```js
 const callback = (stream) => {
-  console.log('someone connected!');
+  console.log("someone connected!");
 };
-server.on('connection', callback);
+server.on("connection", callback);
 // ...
-server.removeListener('connection', callback);
+server.removeListener("connection", callback);
 ```
 
 `removeListener()` will remove, at most, one instance of a listener from the
@@ -1122,33 +1122,33 @@ time of emitting are called in order. This implies that any `removeListener()` o
 will not remove them from`emit()` in progress. Subsequent events behave as expected.
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
 
 const callbackA = () => {
-  console.log('A');
-  myEmitter.removeListener('event', callbackB);
+  console.log("A");
+  myEmitter.removeListener("event", callbackB);
 };
 
 const callbackB = () => {
-  console.log('B');
+  console.log("B");
 };
 
-myEmitter.on('event', callbackA);
+myEmitter.on("event", callbackA);
 
-myEmitter.on('event', callbackB);
+myEmitter.on("event", callbackB);
 
 // callbackA removes listener callbackB but it will still be called.
 // Internal listener array at time of emit [callbackA, callbackB]
-myEmitter.emit('event');
+myEmitter.emit("event");
 // Prints:
 //   A
 //   B
 
 // callbackB is now removed.
 // Internal listener array [callbackA]
-myEmitter.emit('event');
+myEmitter.emit("event");
 // Prints:
 //   A
 ```
@@ -1164,19 +1164,19 @@ event (as in the example below), `removeListener()` will remove the most
 recently added instance. In the example the `once('ping')` listener is removed:
 
 ```js
-import { EventEmitter } from 'node:events';
+import { EventEmitter } from "node:events";
 const ee = new EventEmitter();
 
 function pong() {
-  console.log('pong');
+  console.log("pong");
 }
 
-ee.on('ping', pong);
-ee.once('ping', pong);
-ee.removeListener('ping', pong);
+ee.on("ping", pong);
+ee.once("ping", pong);
+ee.removeListener("ping", pong);
 
-ee.emit('ping');
-ee.emit('ping');
+ee.emit("ping");
+ee.emit("ping");
 ```
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
@@ -1205,9 +1205,9 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:742
+node_modules/@types/node/events.d.ts:742
 
-***
+---
 
 ### saveRequestMessage()
 
@@ -1231,7 +1231,7 @@ node\_modules/@types/node/events.d.ts:742
 
 [core/src/clients/twitter/base.ts:566](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L566)
 
-***
+---
 
 ### setCookiesFromArray()
 
@@ -1253,7 +1253,7 @@ node\_modules/@types/node/events.d.ts:742
 
 [core/src/clients/twitter/base.ts:554](https://github.com/ai16z/eliza/blob/d62ba1b3bd238d14ac669409dda20e8446e34da9/core/src/clients/twitter/base.ts#L554)
 
-***
+---
 
 ### setMaxListeners()
 
@@ -1284,9 +1284,9 @@ v0.3.5
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:768
+node_modules/@types/node/events.d.ts:768
 
-***
+---
 
 ### addAbortListener()
 
@@ -1309,12 +1309,12 @@ not prevent the listener from running.
 Returns a disposable so that it may be unsubscribed from more easily.
 
 ```js
-import { addAbortListener } from 'node:events';
+import { addAbortListener } from "node:events";
 
 function example(signal) {
   let disposable;
   try {
-    signal.addEventListener('abort', (e) => e.stopImmediatePropagation());
+    signal.addEventListener("abort", (e) => e.stopImmediatePropagation());
     disposable = addAbortListener(signal, (e) => {
       // Do something when signal is aborted.
     });
@@ -1346,9 +1346,9 @@ v20.5.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:437
+node_modules/@types/node/events.d.ts:437
 
-***
+---
 
 ### getEventListeners()
 
@@ -1363,19 +1363,19 @@ For `EventTarget`s this is the only way to get the event listeners for the
 event target. This is useful for debugging and diagnostic purposes.
 
 ```js
-import { getEventListeners, EventEmitter } from 'node:events';
+import { getEventListeners, EventEmitter } from "node:events";
 
 {
   const ee = new EventEmitter();
-  const listener = () => console.log('Events are fun');
-  ee.on('foo', listener);
-  console.log(getEventListeners(ee, 'foo')); // [ [Function: listener] ]
+  const listener = () => console.log("Events are fun");
+  ee.on("foo", listener);
+  console.log(getEventListeners(ee, "foo")); // [ [Function: listener] ]
 }
 {
   const et = new EventTarget();
-  const listener = () => console.log('Events are fun');
-  et.addEventListener('foo', listener);
-  console.log(getEventListeners(et, 'foo')); // [ [Function: listener] ]
+  const listener = () => console.log("Events are fun");
+  et.addEventListener("foo", listener);
+  console.log(getEventListeners(et, "foo")); // [ [Function: listener] ]
 }
 ```
 
@@ -1399,9 +1399,9 @@ v15.2.0, v14.17.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:358
+node_modules/@types/node/events.d.ts:358
 
-***
+---
 
 ### getMaxListeners()
 
@@ -1417,7 +1417,7 @@ event target. If the number of event handlers on a single EventTarget exceeds
 the max set, the EventTarget will print a warning.
 
 ```js
-import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
+import { getMaxListeners, setMaxListeners, EventEmitter } from "node:events";
 
 {
   const ee = new EventEmitter();
@@ -1451,9 +1451,9 @@ v19.9.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:387
+node_modules/@types/node/events.d.ts:387
 
-***
+---
 
 ### ~~listenerCount()~~
 
@@ -1462,12 +1462,12 @@ node\_modules/@types/node/events.d.ts:387
 A class method that returns the number of listeners for the given `eventName` registered on the given `emitter`.
 
 ```js
-import { EventEmitter, listenerCount } from 'node:events';
+import { EventEmitter, listenerCount } from "node:events";
 
 const myEmitter = new EventEmitter();
-myEmitter.on('event', () => {});
-myEmitter.on('event', () => {});
-console.log(listenerCount(myEmitter, 'event'));
+myEmitter.on("event", () => {});
+myEmitter.on("event", () => {});
+console.log(listenerCount(myEmitter, "event"));
 // Prints: 2
 ```
 
@@ -1499,9 +1499,9 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:330
+node_modules/@types/node/events.d.ts:330
 
-***
+---
 
 ### on()
 
@@ -1510,18 +1510,18 @@ node\_modules/@types/node/events.d.ts:330
 > `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterator`\<`any`[], `any`, `any`\>
 
 ```js
-import { on, EventEmitter } from 'node:events';
-import process from 'node:process';
+import { on, EventEmitter } from "node:events";
+import process from "node:process";
 
 const ee = new EventEmitter();
 
 // Emit later on
 process.nextTick(() => {
-  ee.emit('foo', 'bar');
-  ee.emit('foo', 42);
+  ee.emit("foo", "bar");
+  ee.emit("foo", 42);
 });
 
-for await (const event of on(ee, 'foo')) {
+for await (const event of on(ee, "foo")) {
   // The execution of this inner block is synchronous and it
   // processes one event at a time (even with await). Do not use
   // if concurrent execution is required.
@@ -1538,8 +1538,8 @@ composed of the emitted event arguments.
 An `AbortSignal` can be used to cancel waiting on events:
 
 ```js
-import { on, EventEmitter } from 'node:events';
-import process from 'node:process';
+import { on, EventEmitter } from "node:events";
+import process from "node:process";
 
 const ac = new AbortController();
 
@@ -1548,11 +1548,11 @@ const ac = new AbortController();
 
   // Emit later on
   process.nextTick(() => {
-    ee.emit('foo', 'bar');
-    ee.emit('foo', 42);
+    ee.emit("foo", "bar");
+    ee.emit("foo", 42);
   });
 
-  for await (const event of on(ee, 'foo', { signal: ac.signal })) {
+  for await (const event of on(ee, "foo", { signal: ac.signal })) {
     // The execution of this inner block is synchronous and it
     // processes one event at a time (even with await). Do not use
     // if concurrent execution is required.
@@ -1567,23 +1567,23 @@ process.nextTick(() => ac.abort());
 Use the `close` option to specify an array of event names that will end the iteration:
 
 ```js
-import { on, EventEmitter } from 'node:events';
-import process from 'node:process';
+import { on, EventEmitter } from "node:events";
+import process from "node:process";
 
 const ee = new EventEmitter();
 
 // Emit later on
 process.nextTick(() => {
-  ee.emit('foo', 'bar');
-  ee.emit('foo', 42);
-  ee.emit('close');
+  ee.emit("foo", "bar");
+  ee.emit("foo", 42);
+  ee.emit("close");
 });
 
-for await (const event of on(ee, 'foo', { close: ['close'] })) {
+for await (const event of on(ee, "foo", { close: ["close"] })) {
   console.log(event); // prints ['bar'] [42]
 }
 // the loop will exit after 'close' is emitted
-console.log('done'); // prints 'done'
+console.log("done"); // prints 'done'
 ```
 
 ##### Parameters
@@ -1610,7 +1610,7 @@ v13.6.0, v12.16.0
 
 ##### Defined in
 
-node\_modules/@types/node/events.d.ts:303
+node_modules/@types/node/events.d.ts:303
 
 #### on(emitter, eventName, options)
 
@@ -1634,9 +1634,9 @@ node\_modules/@types/node/events.d.ts:303
 
 ##### Defined in
 
-node\_modules/@types/node/events.d.ts:308
+node_modules/@types/node/events.d.ts:308
 
-***
+---
 
 ### once()
 
@@ -1653,27 +1653,27 @@ This method is intentionally generic and works with the web platform [EventTarge
 semantics and does not listen to the `'error'` event.
 
 ```js
-import { once, EventEmitter } from 'node:events';
-import process from 'node:process';
+import { once, EventEmitter } from "node:events";
+import process from "node:process";
 
 const ee = new EventEmitter();
 
 process.nextTick(() => {
-  ee.emit('myevent', 42);
+  ee.emit("myevent", 42);
 });
 
-const [value] = await once(ee, 'myevent');
+const [value] = await once(ee, "myevent");
 console.log(value);
 
-const err = new Error('kaboom');
+const err = new Error("kaboom");
 process.nextTick(() => {
-  ee.emit('error', err);
+  ee.emit("error", err);
 });
 
 try {
-  await once(ee, 'myevent');
+  await once(ee, "myevent");
 } catch (err) {
-  console.error('error happened', err);
+  console.error("error happened", err);
 }
 ```
 
@@ -1682,15 +1682,15 @@ The special handling of the `'error'` event is only used when `events.once()` is
 special handling:
 
 ```js
-import { EventEmitter, once } from 'node:events';
+import { EventEmitter, once } from "node:events";
 
 const ee = new EventEmitter();
 
-once(ee, 'error')
-  .then(([err]) => console.log('ok', err.message))
-  .catch((err) => console.error('error', err.message));
+once(ee, "error")
+  .then(([err]) => console.log("ok", err.message))
+  .catch((err) => console.error("error", err.message));
 
-ee.emit('error', new Error('boom'));
+ee.emit("error", new Error("boom"));
 
 // Prints: ok boom
 ```
@@ -1698,7 +1698,7 @@ ee.emit('error', new Error('boom'));
 An `AbortSignal` can be used to cancel waiting for the event:
 
 ```js
-import { EventEmitter, once } from 'node:events';
+import { EventEmitter, once } from "node:events";
 
 const ee = new EventEmitter();
 const ac = new AbortController();
@@ -1706,19 +1706,19 @@ const ac = new AbortController();
 async function foo(emitter, event, signal) {
   try {
     await once(emitter, event, { signal });
-    console.log('event emitted!');
+    console.log("event emitted!");
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.error('Waiting for the event was canceled!');
+    if (error.name === "AbortError") {
+      console.error("Waiting for the event was canceled!");
     } else {
-      console.error('There was an error', error.message);
+      console.error("There was an error", error.message);
     }
   }
 }
 
-foo(ee, 'foo', ac.signal);
+foo(ee, "foo", ac.signal);
 ac.abort(); // Abort waiting for the event
-ee.emit('foo'); // Prints: Waiting for the event was canceled!
+ee.emit("foo"); // Prints: Waiting for the event was canceled!
 ```
 
 ##### Parameters
@@ -1743,7 +1743,7 @@ v11.13.0, v10.16.0
 
 ##### Defined in
 
-node\_modules/@types/node/events.d.ts:217
+node_modules/@types/node/events.d.ts:217
 
 #### once(emitter, eventName, options)
 
@@ -1767,16 +1767,16 @@ node\_modules/@types/node/events.d.ts:217
 
 ##### Defined in
 
-node\_modules/@types/node/events.d.ts:222
+node_modules/@types/node/events.d.ts:222
 
-***
+---
 
 ### setMaxListeners()
 
 > `static` **setMaxListeners**(`n`?, ...`eventTargets`?): `void`
 
 ```js
-import { setMaxListeners, EventEmitter } from 'node:events';
+import { setMaxListeners, EventEmitter } from "node:events";
 
 const target = new EventTarget();
 const emitter = new EventEmitter();
@@ -1809,4 +1809,4 @@ v15.4.0
 
 #### Defined in
 
-node\_modules/@types/node/events.d.ts:402
+node_modules/@types/node/events.d.ts:402

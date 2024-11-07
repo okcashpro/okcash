@@ -404,7 +404,9 @@ export class VoiceManager extends EventEmitter {
                             return;
                         }
 
-                        const roomId = stringToUuid(channelId + "-" + this.runtime.agentId);
+                        const roomId = stringToUuid(
+                            channelId + "-" + this.runtime.agentId
+                        );
                         const userIdUUID = stringToUuid(userId);
 
                         await this.runtime.ensureConnection(
@@ -469,7 +471,12 @@ export class VoiceManager extends EventEmitter {
 
                         const context = composeContext({
                             state,
-                            template: this.runtime.character.templates?.discordVoiceHandlerTemplate || this.runtime.character.templates?.messageHandlerTemplate || discordVoiceHandlerTemplate,
+                            template:
+                                this.runtime.character.templates
+                                    ?.discordVoiceHandlerTemplate ||
+                                this.runtime.character.templates
+                                    ?.messageHandlerTemplate ||
+                                discordVoiceHandlerTemplate,
                         });
 
                         const responseContent = await this._generateResponse(

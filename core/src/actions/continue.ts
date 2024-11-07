@@ -132,7 +132,10 @@ export const continueAction: Action = {
 
         const context = composeContext({
             state,
-            template: runtime.character.templates?.continueMessageHandlerTemplate || runtime.character.templates?.messageHandlerTemplate || messageHandlerTemplate,
+            template:
+                runtime.character.templates?.continueMessageHandlerTemplate ||
+                runtime.character.templates?.messageHandlerTemplate ||
+                messageHandlerTemplate,
         });
         const datestr = new Date().toUTCString().replace(/:/g, "-");
 

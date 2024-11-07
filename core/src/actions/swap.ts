@@ -3,7 +3,7 @@ import {
     Connection,
     Keypair,
     PublicKey,
-    VersionedTransaction
+    VersionedTransaction,
 } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import fetch from "cross-fetch";

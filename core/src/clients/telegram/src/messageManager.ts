@@ -21,7 +21,10 @@ import {
     generateMessageResponse,
     generateShouldRespond,
 } from "../../../core/generation.ts";
-import { messageCompletionFooter, shouldRespondFooter } from "../../../core/parsing.ts";
+import {
+    messageCompletionFooter,
+    shouldRespondFooter,
+} from "../../../core/parsing.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -220,7 +223,11 @@ export class MessageManager {
         if ("text" in message || ("caption" in message && message.caption)) {
             const shouldRespondContext = composeContext({
                 state,
-                template: this.runtime.character.templates?.telegramShouldRespondTemplate || this.runtime.character?.templates?.shouldRespondTemplate || telegramShouldRespondTemplate,
+                template:
+                    this.runtime.character.templates
+                        ?.telegramShouldRespondTemplate ||
+                    this.runtime.character?.templates?.shouldRespondTemplate ||
+                    telegramShouldRespondTemplate,
             });
 
             const response = await generateShouldRespond({
@@ -340,7 +347,9 @@ export class MessageManager {
             const userId = stringToUuid(ctx.from.id.toString()) as UUID;
             const userName =
                 ctx.from.username || ctx.from.first_name || "Unknown User";
-            const chatId = stringToUuid(ctx.chat?.id.toString() + "-" + this.runtime.agentId) as UUID;
+            const chatId = stringToUuid(
+                ctx.chat?.id.toString() + "-" + this.runtime.agentId
+            ) as UUID;
             const agentId = this.runtime.agentId;
             const roomId = chatId;
 
@@ -382,7 +391,9 @@ export class MessageManager {
                 inReplyTo:
                     "reply_to_message" in message && message.reply_to_message
                         ? stringToUuid(
-                              message.reply_to_message.message_id.toString() + "-" + this.runtime.agentId
+                              message.reply_to_message.message_id.toString() +
+                                  "-" +
+                                  this.runtime.agentId
                           )
                         : undefined,
             };
@@ -411,7 +422,11 @@ export class MessageManager {
             // Generate response
             const context = composeContext({
                 state,
-                template: this.runtime.character.templates?.telegramMessageHandlerTemplate || this.runtime.character?.templates?.messageHandlerTemplate || telegramMessageHandlerTemplate,
+                template:
+                    this.runtime.character.templates
+                        ?.telegramMessageHandlerTemplate ||
+                    this.runtime.character?.templates?.messageHandlerTemplate ||
+                    telegramMessageHandlerTemplate,
             });
 
             const responseContent = await this._generateResponse(
@@ -438,7 +453,11 @@ export class MessageManager {
                     const isLastMessage = i === sentMessages.length - 1;
 
                     const memory: Memory = {
-                        id: stringToUuid(sentMessage.message_id.toString() + "-" + this.runtime.agentId),
+                        id: stringToUuid(
+                            sentMessage.message_id.toString() +
+                                "-" +
+                                this.runtime.agentId
+                        ),
                         agentId,
                         userId,
                         roomId,
