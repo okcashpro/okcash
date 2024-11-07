@@ -110,7 +110,9 @@ export function getTokenForProvider(
             );
         case ModelProvider.ANTHROPIC:
             return (
+                character.settings?.secrets?.ANTHROPIC_API_KEY ||
                 character.settings?.secrets?.CLAUDE_API_KEY ||
+                settings.ANTHROPIC_API_KEY ||
                 settings.CLAUDE_API_KEY
             );
         case ModelProvider.REDPILL:
