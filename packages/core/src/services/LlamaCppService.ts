@@ -143,16 +143,13 @@ class LlamaCppService {
                 error
             );
             await this.deleteModel();
-            await this.initializeModel();
+            await this.checkModel();
         }
         this.modelInitializing = false;
     }
 
     async checkModel() {
-        console.log("Checking model")
         if (!fs.existsSync(this.modelPath)) {
-            console.log("this.modelPath", this.modelPath);
-            console.log("Model not found. Downloading...");
             await new Promise<void>((resolve, reject) => {
                 const file = fs.createWriteStream(this.modelPath);
                 let downloadedSize = 0;
