@@ -3,6 +3,7 @@ import {
     boredomProvider,
     Character,
     defaultActions,
+    defaultCharacter,
     DirectClient,
     followRoom,
     getTokenForProvider,
@@ -18,7 +19,6 @@ import {
     walletProvider,
 } from "@eliza/core";
 import readline from "readline";
-import { defaultCharacter } from "./character.ts";
 
 const characters = [defaultCharacter];
 

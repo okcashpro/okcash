@@ -1,14 +1,14 @@
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
-import { SqliteDatabaseAdapter } from "../../adapters/sqlite.ts";
-import defaultCharacter from "../../core/defaultCharacter.ts";
-import { AgentRuntime } from "../../core/runtime.ts";
-import settings from "../../core/settings.ts";
-import { TwitterInteractionClient } from "./interactions.ts";
-import { buildConversationThread } from "./utils.ts";
 import { fileURLToPath } from "url";
-import { ModelProvider } from "../../core/types.ts";
+import { TwitterInteractionClient } from "../src/clients/twitter/interactions.ts";
+import { SqliteDatabaseAdapter } from "../src/adapters/sqlite.ts";
+import { defaultCharacter } from "../src/core/defaultCharacter.ts";
+import { buildConversationThread } from "../src/clients/twitter/utils.ts";
+import { AgentRuntime } from "../src/core/runtime.ts";
+import settings from "../src/core/settings.ts";
+import { ModelProvider } from "../src/core/types.ts";
 
 // const __dirname = path.dirname(new URL(".", import.meta.url).pathname);
 

@@ -4,13 +4,13 @@
         "preinstall": "npx only-allow pnpm",
         "build": "bash ./scripts/build.sh",
         "build-docs": "pnpm --dir docs build",
-        "start:all": "pnpm --dir core start:all --isRoot",
-        "stop:all": "pnpm --dir core stop:all --isRoot",
-        "start:service:all": "pnpm --dir core start:service:all --isRoot",
-        "stop:service:all": "pnpm --dir core stop:service:all --isRoot",
-        "start": "pnpm --dir core start --isRoot",
-        "dev": "pnpm --dir core dev --isRoot",
-        "lint": "pnpm --dir core lint",
+        "start:all": "pnpm --dir agent start:all --isRoot",
+        "stop:all": "pnpm --dir agent stop:all --isRoot",
+        "start:service:all": "pnpm --dir agent start:service:all --isRoot",
+        "stop:service:all": "pnpm --dir agent stop:service:all --isRoot",
+        "start": "pnpm --dir agent start --isRoot",
+        "dev": "pnpm --dir agent dev --isRoot",
+        "lint": "pnpm --dir core lint && pnpm --dir agent lint",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "clean": "bash ./scripts/clean.sh"
@@ -21,6 +21,11 @@
         "only-allow": "^1.2.1",
         "prettier": "^3.3.3",
         "typedoc": "^0.26.11"
+    },
+    "pnpm": {
+        "overrides": {
+            "onnxruntime-node": "^1.20.0"
+        }
     },
     "engines": {
         "node": ">=22"

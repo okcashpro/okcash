@@ -6,7 +6,7 @@ import {
     formatEvaluatorNames,
     formatEvaluators,
 } from "./evaluators.ts";
-import { embeddingZeroVector, MemoryManager } from "./memory.ts";
+import { MemoryManager } from "./memory.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import {
     Character,
@@ -32,6 +32,7 @@ import {
 
 import { names, uniqueNamesGenerator } from "unique-names-generator";
 import { formatFacts } from "../evaluators/fact.ts";
+import { elizaLog } from "../index.ts";
 import { BrowserService } from "../services/browser.ts";
 import ImageDescriptionService from "../services/image.ts";
 import LlamaService from "../services/llama.ts";
@@ -44,18 +45,16 @@ import {
     formatActionNames,
     formatActions,
 } from "./actions.ts";
-import defaultCharacter from "./defaultCharacter.ts";
-import { embed } from "./embedding.ts";
-import { generateText, splitChunks } from "./generation.ts";
+import { defaultCharacter } from "./defaultCharacter.ts";
+import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
+import { ImageGenModel } from "./imageGenModels.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { formatPosts } from "./posts.ts";
 import { defaultProviders, getProviders } from "./providers.ts";
 import settings from "./settings.ts";
 import { UUID, type Actor } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
-import { ImageGenModel } from "./imageGenModels.ts";
-import { elizaLog } from "../index.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,

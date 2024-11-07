@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "build": "tsup --format esm --dts",
-        "start": "node --loader ts-node/esm src/index.ts"
+        "start": "node --loader ts-node/esm src/index.ts",
+        "dev": "node --loader ts-node/esm src/index.ts"
     },
     "dependencies": {
         "@eliza/core": "workspace:*",
