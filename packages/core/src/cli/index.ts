@@ -130,9 +130,9 @@ export function getTokenForProvider(
     }
 }
 export function initializeDatabase() {
-    if (process.env.POSTGRES_URL) {
+    if (settings.POSTGRES_URL) {
         return new Adapter.PostgresDatabaseAdapter({
-            connectionString: process.env.POSTGRES_URL,
+            connectionString: settings.POSTGRES_URL,
         });
     } else {
         return new Adapter.SqliteDatabaseAdapter(new Database("./db.sqlite"));

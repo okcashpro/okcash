@@ -7,8 +7,5 @@
         "moduleResolution": "Bundler",
         "types": ["node"]
     },
-    "include": ["src"],
-    "references": [
-        { "path": "../core" }
-    ]
+    "include": ["src"]
 }

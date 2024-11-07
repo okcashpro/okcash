@@ -8,6 +8,7 @@ import {
     followRoom,
     getTokenForProvider,
     IAgentRuntime,
+    settings,
     initializeClients,
     initializeDatabase,
     loadActionConfigs,
@@ -21,7 +22,6 @@ import {
     walletProvider,
 } from "@eliza/core";
 import readline from "readline";
-console.log("Program starting")
 const args = parseArguments();
 
 let charactersArg = args.characters || args.character;
@@ -34,7 +34,7 @@ if (charactersArg) {
 
 const directClient = new DirectClient();
 
-const serverPort = parseInt(process.env.SERVER_PORT || "3000");
+const serverPort = parseInt(settings.SERVER_PORT || "3000");
 directClient.start(serverPort);
 
 export async function createAgent(
@@ -43,7 +43,6 @@ export async function createAgent(
     token: string,
     configPath: string = "./elizaConfig.yaml"
 ) {
-    console.log("Creating runtime for character", character.name);
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -53,7 +52,7 @@ export async function createAgent(
         providers: [
             timeProvider,
             boredomProvider,
-            character.settings?.secrets?.WALLET_PUBLIC_KEY && walletProvider,
+            (character.settings?.secrets?.WALLET_PUBLIC_KEY !== undefined) && walletProvider,
         ].filter(Boolean),
         actions: [
             ...defaultActions,
@@ -115,14 +114,12 @@ const rl = readline.createInterface({
 });
 
 async function handleUserInput(input) {
-    console.log("input --> ", input)
     if (input.toLowerCase() === "exit") {
         rl.close();
         return;
     }
 
     const agentId = characters[0].name.toLowerCase();
-    console.log("agnetId --> ", agentId)
     try {
         const response = await fetch(
             `http://localhost:${serverPort}/${agentId}/message`,
