@@ -15,6 +15,7 @@ import { generateText as aiGenerateText } from "ai";
 
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { prettyConsole } from "../index.ts";
+import settings from "./settings.ts";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -79,6 +80,7 @@ export async function generateText({
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
                     prompt: context,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -100,6 +102,7 @@ export async function generateText({
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: anthropic.languageModel(model),
                     prompt: context,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -121,6 +124,7 @@ export async function generateText({
                         parallelToolCalls: false,
                     }),
                     prompt: context,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -140,6 +144,7 @@ export async function generateText({
                     model: groq.languageModel(model),
                     prompt: context,
                     temperature: temperature,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
@@ -178,6 +183,7 @@ export async function generateText({
                     model: openai.languageModel(model),
                     prompt: context,
                     temperature: temperature,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
                     presencePenalty: presence_penalty,
