@@ -7,9 +7,9 @@ const config = {
   favicon: "img/favicon.ico",
 
   // GitHub Pages Configuration
-  url: "https://madjin.github.io",
+  url: "https://ai16z.github.io",
   baseUrl: "/eliza/",
-  organizationName: "madjin",
+  organizationName: "ai16z",
   projectName: "eliza",
   deploymentBranch: "gh-pages",
   trailingSlash: true,
