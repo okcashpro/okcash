@@ -1,5 +1,5 @@
 import settings from "./settings.ts";
-import { Models, ModelProvider, ModelClass } from "./types.ts";
+import { Models, ModelProvider, ModelClass, ImageGenModel } from "./types.ts";
 
 const models: Models = {
     [ModelProvider.OPENAI]: {
@@ -182,6 +182,21 @@ export function getModel(provider: ModelProvider, type: ModelClass) {
 
 export function getEndpoint(provider: ModelProvider) {
     return models[provider].endpoint;
+}
+
+export const imageGenModels = {
+    [ImageGenModel.TogetherAI]: {
+        steps: 4,
+        subModel: "black-forest-labs/FLUX.1-schnell",
+    },
+    [ImageGenModel.Dalle]: {
+        steps: 0,
+        subModel: "dall-e-3",
+    },
+};
+
+export function getImageGenModel(model: ImageGenModel) {
+    return imageGenModels[model];
 }
 
 export default models;

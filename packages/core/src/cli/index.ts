@@ -1,47 +1,23 @@
 export * from "./config.ts";
 
+import fs from "fs";
+import yargs from "yargs";
+import * as Action from "../actions/index.ts";
+import { defaultActions } from "../core/actions.ts";
 import { defaultCharacter } from "../core/defaultCharacter.ts";
+import { AgentRuntime } from "../core/runtime.ts";
 import settings from "../core/settings.ts";
 import { Character, IAgentRuntime, ModelProvider } from "../core/types.ts";
-import * as Action from "../actions/index.ts";
-import * as Client from "../clients/index.ts";
-import * as Adapter from "../adapters/index.ts";
+import { elizaLogger } from "../index.ts";
 import * as Provider from "../providers/index.ts";
-import yargs from "yargs";
-import { wait } from "../clients/twitter/utils.ts";
-
-import fs from "fs";
-import Database from "better-sqlite3";
-import { AgentRuntime } from "../core/runtime.ts";
-import { defaultActions } from "../core/actions.ts";
 import { Arguments } from "../types/index.ts";
 import { loadActionConfigs, loadCustomActions } from "./config.ts";
-import { elizaLogger } from "../index.ts";
 
-export async function initializeClients(
-    character: Character,
-    runtime: IAgentRuntime
-) {
-    const clients = [];
-    const clientTypes =
-        character.clients?.map((str) => str.toLowerCase()) || [];
-
-    if (clientTypes.includes("discord")) {
-        clients.push(startDiscord(runtime));
-    }
-
-    if (clientTypes.includes("telegram")) {
-        const telegramClient = await startTelegram(runtime, character);
-        if (telegramClient) clients.push(telegramClient);
-    }
-
-    if (clientTypes.includes("twitter")) {
-        const twitterClients = await startTwitter(runtime);
-        clients.push(...twitterClients);
-    }
-
-    return clients;
-}
+export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
+    const waitTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+    return new Promise((resolve) => setTimeout(resolve, waitTime));
+};
 
 export function parseArguments(): Arguments {
     try {
@@ -67,7 +43,7 @@ export function parseArguments(): Arguments {
     }
 }
 
-export function loadCharacters(charactersArg: string): Character[] {
+export async function loadCharacters(charactersArg: string): Promise<Character[]> {
     let characterPaths = charactersArg
         ?.split(",")
         .map((path) => path.trim())
@@ -90,6 +66,22 @@ export function loadCharacters(charactersArg: string): Character[] {
         for (const path of characterPaths) {
             try {
                 const character = JSON.parse(fs.readFileSync(path, "utf8"));
+
+                // is there a "plugins" field?
+                if (character.plugins) {
+                    console.log("Plugins are: ", character.plugins);
+
+                    const importedPlugins = await Promise.all(character.plugins.map(async (plugin) => {
+
+                        // if the plugin name doesnt start with @eliza, 
+
+                        const importedPlugin = await import(plugin)
+                        return importedPlugin
+                    }))
+
+                    character.plugins = importedPlugins
+                }
+
                 loadedCharacters.push(character);
             } catch (e) {
                 console.error(`Error loading character from ${path}: ${e}`);
@@ -129,15 +121,6 @@ export function getTokenForProvider(
             );
     }
 }
-export function initializeDatabase() {
-    if (process.env.POSTGRES_URL) {
-        return new Adapter.PostgresDatabaseAdapter({
-            connectionString: process.env.POSTGRES_URL,
-        });
-    } else {
-        return new Adapter.SqliteDatabaseAdapter(new Database("./db.sqlite"));
-    }
-}
 
 export async function createAgentRuntime(
     character: Character,
@@ -166,7 +149,6 @@ export async function createAgentRuntime(
             Action.unfollowRoom,
             Action.unmuteRoom,
             Action.muteRoom,
-            Action.imageGeneration,
 
             // imported from elizaConfig.yaml
             ...customActions,
@@ -193,8 +175,6 @@ export async function createDirectRuntime(
         providers: [
             Provider.timeProvider,
             Provider.boredomProvider,
-            character.settings?.secrets?.WALLET_PUBLIC_KEY &&
-                Provider.walletProvider,
         ].filter(Boolean),
         actions: [
             ...defaultActions,
@@ -203,16 +183,11 @@ export async function createDirectRuntime(
             Action.unfollowRoom,
             Action.unmuteRoom,
             Action.muteRoom,
-            Action.imageGeneration,
 
             // imported from elizaConfig.yaml
             ...customActions,
         ],
     });
-}
-
-export function startDiscord(runtime: IAgentRuntime) {
-    return new Client.DiscordClient(runtime);
 }
 
 export async function startTelegram(

@@ -1,4 +1,4 @@
-# @eliza/core
+# @ai16z/eliza
 
 ## Enumerations
 

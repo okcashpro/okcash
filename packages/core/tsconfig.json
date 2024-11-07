@@ -27,6 +27,6 @@
             "./node_modules/jest/types"
         ]
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "../plugin-image-generation/src/models.ts", "../plugin-solana/src/actions/pumpfun.ts", "../plugin-solana/src/actions/swap.ts", "../plugin-solana/src/actions/swapDao.ts", "../plugin-solana/src/actions/swapUtils.ts", "../plugin-solana/src/actions/takeOrder.ts", "../plugin-solana/src/providers/balances.ts", "../plugin-solana/src/providers/orderBook.ts", "../plugin-solana/src/providers/token.ts", "../plugin-solana/src/providers/trustScoreProvider.ts", "../plugin-solana/src/providers/wallet.ts", "../plugin-solana/src/adapters/trustScoreDatabase.ts", "../client-direct/src/direct", "../client-direct/src/index.ts", "../adapter-supabase/src/index.ts"],
     "exclude": ["node_modules", "dist", "src/**/*.d.ts", "types/**/*.test.ts"]
 }

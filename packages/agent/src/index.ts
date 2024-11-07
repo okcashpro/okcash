@@ -4,12 +4,10 @@ import {
     Character,
     defaultActions,
     defaultCharacter,
-    DirectClient,
     followRoom,
     getTokenForProvider,
     IAgentRuntime,
     initializeClients,
-    initializeDatabase,
     loadActionConfigs,
     loadCharacters,
     loadCustomActions,
@@ -19,23 +17,49 @@ import {
     unfollowRoom,
     unmuteRoom,
     walletProvider,
-} from "@eliza/core";
+} from "@ai16z/eliza";
+import * as Adapter from "@ai16z/eliza/adapters";
+import Database from "better-sqlite3";
 import readline from "readline";
+import { DirectClient, DirectClientInterface } from "@ai16z/eliza/client-direct";
+import { DiscordClientInterface } from "@ai16z/eliza/client-discord";
+import { TelegramClientInterface } from "@ai16z/eliza/client-telegram";
+import { TwitterClientInterface } from "@ai16z/eliza/client-twitter";
 
-const args = parseArguments();
-
-let charactersArg = args.characters || args.character;
-
-let characters = [defaultCharacter];
-
-if (charactersArg) {
-    characters = loadCharacters(charactersArg);
+function initializeDatabase() {
+    if (process.env.POSTGRES_URL) {
+        return new Adapter.PostgresDatabaseAdapter({
+            connectionString: process.env.POSTGRES_URL,
+        });
+    } else {
+        return new Adapter.SqliteDatabaseAdapter(new Database("./db.sqlite"));
+    }
 }
 
-const directClient = new DirectClient();
+export async function initializeClients(
+    character: Character,
+    runtime: IAgentRuntime
+) {
+    const clients = [];
+    const clientTypes =
+        character.clients?.map((str) => str.toLowerCase()) || [];
 
-const serverPort = parseInt(process.env.SERVER_PORT || "3000");
-directClient.start(serverPort);
+    if (clientTypes.includes("discord")) {
+        clients.push(await DiscordClientInterface.start(runtime));
+    }
+
+    if (clientTypes.includes("telegram")) {
+        const telegramClient = await TelegramClientInterface.start(runtime, character);
+        if (telegramClient) clients.push(telegramClient);
+    }
+
+    if (clientTypes.includes("twitter")) {
+        const twitterClients = await TwitterClientInterface.start(runtime);
+        clients.push(...twitterClients);
+    }
+
+    return clients;
+}
 
 export async function createAgent(
     character: Character,
@@ -70,7 +94,7 @@ export async function createAgent(
     });
 }
 
-async function startAgent(character: Character) {
+async function startAgent(character: Character, directClient: DirectClient) {
     try {
         const token = getTokenForProvider(character.modelProvider, character);
         const db = initializeDatabase();
@@ -95,13 +119,33 @@ async function startAgent(character: Character) {
 }
 
 const startAgents = async () => {
+    const directClient = await DirectClientInterface.start();
+    const args = parseArguments();
+
+    let charactersArg = args.characters || args.character;
+
+    let characters = [defaultCharacter];
+
+    if (charactersArg) {
+        characters = await loadCharacters(charactersArg);
+    }
+
+
     try {
         for (const character of characters) {
-            await startAgent(character);
+            await startAgent(character, directClient);
         }
     } catch (error) {
         console.error("Error starting agents:", error);
     }
+
+    function chat() {
+        const agentId = characters[0].name ?? "Agent";
+        rl.question("You: ", (input) => handleUserInput(input, agentId));
+    }
+    
+    console.log("Chat started. Type 'exit' to quit.");
+    chat();
 };
 
 startAgents().catch((error) => {
@@ -114,15 +158,12 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-async function handleUserInput(input) {
-    console.log("input --> ", input)
+async function handleUserInput(input, agentId) {
     if (input.toLowerCase() === "exit") {
         rl.close();
         return;
     }
 
-    const agentId = characters[0].name.toLowerCase();
-    console.log("agnetId --> ", agentId)
     try {
         const response = await fetch(
             `http://localhost:${serverPort}/${agentId}/message`,
@@ -148,9 +189,3 @@ async function handleUserInput(input) {
     chat();
 }
 
-function chat() {
-    rl.question("You: ", handleUserInput);
-}
-
-console.log("Chat started. Type 'exit' to quit.");
-chat();

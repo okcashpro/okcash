@@ -1,7 +1,7 @@
 import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
 import { load } from "../adapters/sqlite/sqlite_vec.ts";
 import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
-import { SupabaseDatabaseAdapter } from "../adapters/supabase.ts";
+import { SupabaseDatabaseAdapter } from "../../../adapter-supabase/src/index.ts";
 import { DatabaseAdapter } from "../core/database.ts";
 import { AgentRuntime } from "../core/runtime.ts";
 import { Action, Evaluator, ModelProvider, Provider } from "../core/types.ts";

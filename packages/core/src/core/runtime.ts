@@ -1,4 +1,21 @@
+import { names, uniqueNamesGenerator } from "unique-names-generator";
+import { formatFacts } from "../evaluators/fact.ts";
+import { elizaLogger } from "../index.ts";
+import { BrowserService } from "../services/browser.ts";
+import ImageDescriptionService from "../services/image.ts";
+import LlamaService from "../services/llama.ts";
+import { PdfService } from "../services/pdf.ts";
+import { SpeechService } from "../services/speech.ts";
+import { TranscriptionService } from "../services/transcription.ts";
+import { VideoService } from "../services/video.ts";
+import {
+    composeActionExamples,
+    defaultActions,
+    formatActionNames,
+    formatActions,
+} from "./actions.ts";
 import { addHeader, composeContext } from "./context.ts";
+import { defaultCharacter } from "./defaultCharacter.ts";
 import {
     defaultEvaluators,
     evaluationTemplate,
@@ -6,8 +23,15 @@ import {
     formatEvaluatorNames,
     formatEvaluators,
 } from "./evaluators.ts";
+import { generateText } from "./generation.ts";
+import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { MemoryManager } from "./memory.ts";
+import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
+import { ImageGenModel } from "./models.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
+import { formatPosts } from "./posts.ts";
+import { defaultProviders, getProviders } from "./providers.ts";
+import settings from "./settings.ts";
 import {
     Character,
     Goal,
@@ -25,36 +49,12 @@ import {
     ModelProvider,
     Provider,
     State,
+    UUID,
     type Action,
+    type Actor,
     type Evaluator,
     type Memory,
 } from "./types.ts";
-
-import { names, uniqueNamesGenerator } from "unique-names-generator";
-import { formatFacts } from "../evaluators/fact.ts";
-import { elizaLogger } from "../index.ts";
-import { BrowserService } from "../services/browser.ts";
-import ImageDescriptionService from "../services/image.ts";
-import LlamaService from "../services/llama.ts";
-import { PdfService } from "../services/pdf.ts";
-import { SpeechService } from "../services/speech.ts";
-import { TranscriptionService } from "../services/transcription.ts";
-import { VideoService } from "../services/video.ts";
-import {
-    composeActionExamples,
-    defaultActions,
-    formatActionNames,
-    formatActions,
-} from "./actions.ts";
-import { defaultCharacter } from "./defaultCharacter.ts";
-import { generateText } from "./generation.ts";
-import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { ImageGenModel } from "./imageGenModels.ts";
-import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
-import { formatPosts } from "./posts.ts";
-import { defaultProviders, getProviders } from "./providers.ts";
-import settings from "./settings.ts";
-import { UUID, type Actor } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
 
 /**
