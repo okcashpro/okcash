@@ -108,6 +108,7 @@ export enum ModelProvider {
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
     REDPILL = "redpill",
+    GITHUB = "GITHUB",
 }
 
 /**
@@ -306,11 +307,11 @@ export type Character = {
     name: string;
     system?: string;
     modelProvider: ModelProvider;
+    modelEndpointOverride?: string;
     imageGenModel?: ImageGenModel;
     templates?: {
         [key: string]: string;
     };
-    modelOverride?: string;
     bio: string | string[];
     lore: string[];
     messageExamples: MessageExample[][];

@@ -44,6 +44,7 @@ export async function generateText({
     }
 
     const provider = runtime.modelProvider;
+    const endpoint = runtime.character.modelEndpointOverride || models[provider].endpoint;
     const model = models[provider].model[modelClass];
     const temperature = models[provider].settings.temperature;
     const frequency_penalty = models[provider].settings.frequency_penalty;
@@ -70,9 +71,7 @@ export async function generateText({
             case ModelProvider.OPENAI:
             case ModelProvider.LLAMACLOUD: {
                 elizaLog.log("Initializing OpenAI model.");
-                const openai = createOpenAI({ apiKey });
-
-                console.log("****** CONTEXT\n", context);
+                const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -117,8 +116,7 @@ export async function generateText({
 
             case ModelProvider.GROK: {
                 elizaLog.log("Initializing Grok model.");
-                const serverUrl = models[provider].endpoint;
-                const grok = createOpenAI({ apiKey, baseURL: serverUrl });
+                const grok = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: grokResponse } = await aiGenerateText({
                     model: grok.languageModel(model, {
