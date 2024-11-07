@@ -31,8 +31,8 @@ interface sellDetails {
 export class TrustScoreProvider {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
-    private connection: Connection = new Connection(process.env.RPC_URL!);
-    private baseMint: PublicKey = new PublicKey(process.env.BASE_MINT!);
+    private connection: Connection = new Connection(settings.RPC_URL!);
+    private baseMint: PublicKey = new PublicKey(settings.BASE_MINT!);
     private DECAY_RATE = 0.95;
     private MAX_DECAY_DAYS = 30;
     constructor(

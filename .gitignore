@@ -8,6 +8,8 @@ embedding-cache.json
 .DS_Store
 
 dist/
+# Allow models directory but ignore model files
+models/*.gguf
 
 cookies.json
 
