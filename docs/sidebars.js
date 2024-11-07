@@ -52,7 +52,7 @@ const sidebars = {
       label: "Community",
       collapsed: false,
       items: [
-        "community/project-overview",
+        "community/creator-fund",
         "community/notes",
         "community/changelog",
 	"community/faq",
