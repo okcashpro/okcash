@@ -73,7 +73,8 @@ class LlamaCppService {
         this.modelUrl =
             "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
         const modelName = "model.gguf";
-        this.modelPath = path.join(__dirname, modelName);
+        // in packages/core/src/services/LlamaCppService.ts
+        this.modelPath = path.join(__dirname, '../models/model.gguf');
     }
 
     public static getInstance(): LlamaCppService {
@@ -148,11 +149,10 @@ class LlamaCppService {
     }
 
     async checkModel() {
-        console.log("Checking model");
+        console.log("Checking model")
         if (!fs.existsSync(this.modelPath)) {
             console.log("this.modelPath", this.modelPath);
             console.log("Model not found. Downloading...");
-
             await new Promise<void>((resolve, reject) => {
                 const file = fs.createWriteStream(this.modelPath);
                 let downloadedSize = 0;
