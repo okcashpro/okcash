@@ -264,11 +264,17 @@ export class AgentRuntime implements IAgentRuntime {
         this.token = opts.token;
 
         (opts.character.plugins ?? []).forEach((plugin) => {
+            
             plugin.actions.forEach((action) => {
                 this.registerAction(action);
             });
+
             plugin.evaluators.forEach((evaluator) => {
                 this.registerEvaluator(evaluator);
+            });
+
+            plugin.providers.forEach((provider) => {
+                this.registerContextProvider(provider);
             });
         });
 
