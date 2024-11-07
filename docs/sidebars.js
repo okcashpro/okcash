@@ -53,8 +53,9 @@ const sidebars = {
       collapsed: false,
       items: [
         "community/project-overview",
-        "community/spaces-notes",
-        "community/development-notes",
+        "community/notes",
+        "community/changelog",
+	"community/faq",
         "community/contributing",
       ],
     },
