@@ -22,7 +22,6 @@ import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { composeContext } from "../../core/context.ts";
 import { generateMessageResponse } from "../../core/generation.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import {
     Content,
@@ -594,14 +593,6 @@ export class VoiceManager extends EventEmitter {
     ): Promise<Content> {
         const { userId, roomId } = message;
 
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(
-            `${state.agentName}_${datestr}_discord_voice_context`,
-            context
-        );
-
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
@@ -614,11 +605,6 @@ export class VoiceManager extends EventEmitter {
             console.error("No response from generateMessageResponse");
             return;
         }
-
-        log_to_file(
-            `${state.agentName}_${datestr}_discord_voice_response`,
-            JSON.stringify(response)
-        );
 
         await this.runtime.databaseAdapter.log({
             body: { message, context, response },

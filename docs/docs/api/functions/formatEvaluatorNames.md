@@ -18,4 +18,4 @@ A string that concatenates the names of all evaluators, each enclosed in single 
 
 ## Defined in
 
-[core/src/core/evaluators.ts:34](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/evaluators.ts#L34)
+[core/src/core/evaluators.ts:34](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/evaluators.ts#L34)

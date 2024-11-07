@@ -4471,7 +4471,6 @@ class VitsTTS {
                         const id = phonemeMap.get(phonemeCharacter);
 
                         if (id == null) {
-                            //logger.log(`No id found for subphoneme '${char}'`)
                             continue;
                         }
 
@@ -4497,8 +4496,6 @@ class VitsTTS {
             ...phonemeCharacterSeparatorId,
             ...endId
         );
-
-        //logger.log(ids)
 
         const bigIntIds = new BigInt64Array(ids.map((id) => BigInt(id)));
         const idLengths = new BigInt64Array([BigInt(bigIntIds.length)]);

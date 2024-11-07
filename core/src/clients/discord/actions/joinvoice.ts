@@ -10,7 +10,6 @@ import {
     GuildMember,
 } from "discord.js";
 import { composeContext } from "../../../core/context.ts";
-import { log_to_file } from "../../../core/logger.ts";
 import {
     Action,
     ActionExample,
@@ -164,23 +163,11 @@ You should only respond with the name of the voice channel or none, no commentar
 
             const datestr = new Date().toUTCString().replace(/:/g, "-");
 
-            // log context to file
-            log_to_file(
-                `${state.agentName}_${datestr}_joinvoice_context`,
-                context
-            );
-
             const responseContent = await generateText({
                 runtime,
                 context,
                 modelClass: ModelClass.SMALL,
             });
-
-            // log response to file
-            log_to_file(
-                `${state.agentName}_${datestr}_joinvoice_response`,
-                responseContent
-            );
 
             runtime.databaseAdapter.log({
                 body: { message, context, response: responseContent },

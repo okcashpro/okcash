@@ -10,7 +10,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:200](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L200)
+[core/src/core/types.ts:201](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L201)
 
 ***
 
@@ -20,7 +20,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:201](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L201)
+[core/src/core/types.ts:202](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L202)
 
 ***
 
@@ -30,7 +30,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:202](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L202)
+[core/src/core/types.ts:203](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L203)
 
 ***
 
@@ -40,7 +40,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:203](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L203)
+[core/src/core/types.ts:204](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L204)
 
 ***
 
@@ -50,7 +50,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:199](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L199)
+[core/src/core/types.ts:200](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L200)
 
 ***
 
@@ -60,4 +60,4 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:204](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L204)
+[core/src/core/types.ts:205](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L205)

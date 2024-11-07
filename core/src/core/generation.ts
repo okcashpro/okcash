@@ -3,7 +3,7 @@ import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText as aiGenerateText } from "ai";
 import { default as tiktoken, TiktokenModel } from "tiktoken";
-import { elizaLog } from "../index.ts";
+import { elizaLogger } from "../index.ts";
 import models from "./models.ts";
 import {
     parseBooleanFromText,
@@ -55,7 +55,7 @@ export async function generateText({
     const apiKey = runtime.token;
 
     try {
-        elizaLog.log(
+        elizaLogger.log(
             `Trimming context to max length of ${max_context_length} tokens.`
         );
         context = await trimTokens(context, max_context_length, "gpt-4o");
@@ -63,14 +63,14 @@ export async function generateText({
         let response: string;
 
         const _stop = stop || models[provider].settings.stop;
-        elizaLog.log(
+        elizaLogger.log(
             `Using provider: ${provider}, model: ${model}, temperature: ${temperature}, max response length: ${max_response_length}`
         );
 
         switch (provider) {
             case ModelProvider.OPENAI:
             case ModelProvider.LLAMACLOUD: {
-                elizaLog.log("Initializing OpenAI model.");
+                elizaLogger.log("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: openaiResponse } = await aiGenerateText({
@@ -87,12 +87,12 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                elizaLog.log("Received response from OpenAI model.");
+                elizaLogger.log("Received response from OpenAI model.");
                 break;
             }
 
             case ModelProvider.ANTHROPIC: {
-                elizaLog.log("Initializing Anthropic model.");
+                elizaLogger.log("Initializing Anthropic model.");
 
                 const anthropic = createAnthropic({ apiKey });
 
@@ -110,12 +110,12 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                elizaLog.log("Received response from Anthropic model.");
+                elizaLogger.log("Received response from Anthropic model.");
                 break;
             }
 
             case ModelProvider.GROK: {
-                elizaLog.log("Initializing Grok model.");
+                elizaLogger.log("Initializing Grok model.");
                 const grok = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: grokResponse } = await aiGenerateText({
@@ -134,7 +134,7 @@ export async function generateText({
                 });
 
                 response = grokResponse;
-                elizaLog.log("Received response from Grok model.");
+                elizaLogger.log("Received response from Grok model.");
                 break;
             }
 
@@ -161,7 +161,7 @@ export async function generateText({
             }
 
             case ModelProvider.LLAMALOCAL: {
-                elizaLog.log(
+                elizaLogger.log(
                     "Using local Llama model for text completion."
                 );
                 response = await runtime.llamaService.queueTextCompletion(
@@ -172,12 +172,12 @@ export async function generateText({
                     presence_penalty,
                     max_response_length
                 );
-                elizaLog.log("Received response from local Llama model.");
+                elizaLogger.log("Received response from local Llama model.");
                 break;
             }
 
             case ModelProvider.REDPILL: {
-                elizaLog.log("Initializing RedPill model.");
+                elizaLogger.log("Initializing RedPill model.");
                 const serverUrl = models[provider].endpoint;
                 const openai = createOpenAI({ apiKey, baseURL: serverUrl });
 
@@ -195,20 +195,20 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                elizaLog.log("Received response from OpenAI model.");
+                elizaLogger.log("Received response from OpenAI model.");
                 break;
             }
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
-                elizaLog.error(errorMessage);
+                elizaLogger.error(errorMessage);
                 throw new Error(errorMessage);
             }
         }
 
         return response;
     } catch (error) {
-        elizaLog.error("Error in generateText:", error);
+        elizaLogger.error("Error in generateText:", error);
         throw error;
     }
 }
@@ -258,34 +258,34 @@ export async function generateShouldRespond({
     let retryDelay = 1000;
     while (true) {
         try {
-            elizaLog.log("Attempting to generate text with context:", context);
+            elizaLogger.log("Attempting to generate text with context:", context);
             const response = await generateText({
                 runtime,
                 context,
                 modelClass,
             });
 
-            elizaLog.log("Received response from generateText:", response);
+            elizaLogger.log("Received response from generateText:", response);
             const parsedResponse = parseShouldRespondFromText(response.trim());
             if (parsedResponse) {
-                elizaLog.log("Parsed response:", parsedResponse);
+                elizaLogger.log("Parsed response:", parsedResponse);
                 return parsedResponse;
             } else {
-                elizaLog.log("generateShouldRespond no response");
+                elizaLogger.log("generateShouldRespond no response");
             }
         } catch (error) {
-            elizaLog.error("Error in generateShouldRespond:", error);
+            elizaLogger.error("Error in generateShouldRespond:", error);
             if (
                 error instanceof TypeError &&
                 error.message.includes("queueTextCompletion")
             ) {
-                elizaLog.error(
+                elizaLogger.error(
                     "TypeError: Cannot read properties of null (reading 'queueTextCompletion')"
                 );
             }
         }
 
-        elizaLog.log(`Retrying in ${retryDelay}ms...`);
+        elizaLogger.log(`Retrying in ${retryDelay}ms...`);
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
         retryDelay *= 2;
     }
@@ -376,7 +376,7 @@ export async function generateTrueOrFalse({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLog.error("Error in generateTrueOrFalse:", error);
+            elizaLogger.error("Error in generateTrueOrFalse:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -409,7 +409,7 @@ export async function generateTextArray({
     modelClass: string;
 }): Promise<string[]> {
     if (!context) {
-        elizaLog.error("generateTextArray context is empty");
+        elizaLogger.error("generateTextArray context is empty");
         return [];
     }
     let retryDelay = 1000;
@@ -427,7 +427,7 @@ export async function generateTextArray({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLog.error("Error in generateTextArray:", error);
+            elizaLogger.error("Error in generateTextArray:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -445,7 +445,7 @@ export async function generateObject({
     modelClass: string;
 }): Promise<any> {
     if (!context) {
-        elizaLog.error("generateObject context is empty");
+        elizaLogger.error("generateObject context is empty");
         return null;
     }
     let retryDelay = 1000;
@@ -463,7 +463,7 @@ export async function generateObject({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLog.error("Error in generateObject:", error);
+            elizaLogger.error("Error in generateObject:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -481,7 +481,7 @@ export async function generateObjectArray({
     modelClass: string;
 }): Promise<any[]> {
     if (!context) {
-        elizaLog.error("generateObjectArray context is empty");
+        elizaLogger.error("generateObjectArray context is empty");
         return [];
     }
     let retryDelay = 1000;
@@ -499,7 +499,7 @@ export async function generateObjectArray({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLog.error("Error in generateTextArray:", error);
+            elizaLogger.error("Error in generateTextArray:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -542,17 +542,17 @@ export async function generateMessageResponse({
             // try parsing the response as JSON, if null then try again
             const parsedContent = parseJSONObjectFromText(response) as Content;
             if (!parsedContent) {
-                elizaLog.log("parsedContent is null, retrying");
+                elizaLogger.log("parsedContent is null, retrying");
                 continue;
             }
 
             return parsedContent;
         } catch (error) {
-            elizaLog.error("ERROR:", error);
+            elizaLogger.error("ERROR:", error);
             // wait for 2 seconds
             retryLength *= 2;
             await new Promise((resolve) => setTimeout(resolve, retryLength));
-            elizaLog.log("Retrying...");
+            elizaLogger.log("Retrying...");
         }
     }
 }

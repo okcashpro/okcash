@@ -14,7 +14,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:139](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L139)
+[core/src/core/types.ts:140](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L140)
 
 ***
 
@@ -24,7 +24,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:136](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L136)
+[core/src/core/types.ts:137](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L137)
 
 ***
 
@@ -34,7 +34,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:137](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L137)
+[core/src/core/types.ts:138](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L138)
 
 ***
 
@@ -44,7 +44,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:138](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L138)
+[core/src/core/types.ts:139](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L139)
 
 ***
 
@@ -54,7 +54,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:126](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L126)
+[core/src/core/types.ts:127](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L127)
 
 ***
 
@@ -64,7 +64,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:127](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L127)
+[core/src/core/types.ts:128](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L128)
 
 ***
 
@@ -74,7 +74,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:118](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L118)
+[core/src/core/types.ts:119](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L119)
 
 ***
 
@@ -84,7 +84,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:124](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L124)
+[core/src/core/types.ts:125](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L125)
 
 ***
 
@@ -94,7 +94,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:119](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L119)
+[core/src/core/types.ts:120](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L120)
 
 ***
 
@@ -104,7 +104,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:128](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L128)
+[core/src/core/types.ts:129](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L129)
 
 ***
 
@@ -114,7 +114,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:129](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L129)
+[core/src/core/types.ts:130](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L130)
 
 ***
 
@@ -124,7 +124,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:120](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L120)
+[core/src/core/types.ts:121](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L121)
 
 ***
 
@@ -134,7 +134,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:121](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L121)
+[core/src/core/types.ts:122](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L122)
 
 ***
 
@@ -144,7 +144,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:122](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L122)
+[core/src/core/types.ts:123](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L123)
 
 ***
 
@@ -154,7 +154,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:140](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L140)
+[core/src/core/types.ts:141](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L141)
 
 ***
 
@@ -164,7 +164,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:132](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L132)
+[core/src/core/types.ts:133](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L133)
 
 ***
 
@@ -174,7 +174,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:133](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L133)
+[core/src/core/types.ts:134](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L134)
 
 ***
 
@@ -184,7 +184,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:143](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L143)
+[core/src/core/types.ts:144](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L144)
 
 ***
 
@@ -194,7 +194,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:142](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L142)
+[core/src/core/types.ts:143](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L143)
 
 ***
 
@@ -204,7 +204,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:130](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L130)
+[core/src/core/types.ts:131](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L131)
 
 ***
 
@@ -214,7 +214,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:131](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L131)
+[core/src/core/types.ts:132](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L132)
 
 ***
 
@@ -224,7 +224,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:134](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L134)
+[core/src/core/types.ts:135](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L135)
 
 ***
 
@@ -234,7 +234,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:135](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L135)
+[core/src/core/types.ts:136](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L136)
 
 ***
 
@@ -244,7 +244,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:141](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L141)
+[core/src/core/types.ts:142](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L142)
 
 ***
 
@@ -254,7 +254,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:123](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L123)
+[core/src/core/types.ts:124](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L124)
 
 ***
 
@@ -264,7 +264,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:125](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L125)
+[core/src/core/types.ts:126](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L126)
 
 ***
 
@@ -274,4 +274,4 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[core/src/core/types.ts:117](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L117)
+[core/src/core/types.ts:118](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L118)

@@ -1,74 +1,268 @@
-import fs from "fs";
-import path from "path";
-class Logger {
-    frameChar = "*";
+export class elizaLogger {
+    closeByNewLine = true;
+    useIcons = true;
+    logsTitle = "LOGS";
+    warningsTitle = "WARNINGS";
+    errorsTitle = "ERRORS";
+    informationsTitle = "INFORMATIONS";
+    successesTitle = "SUCCESS";
+    debugsTitle = "DEBUG";
+    assertsTitle = "ASSERT";
+    #getColor(foregroundColor = "", backgroundColor = "") {
+        let fgc = "\x1b[37m";
+        switch (foregroundColor.trim().toLowerCase()) {
+            case "black":
+                fgc = "\x1b[30m";
+                break;
+            case "red":
+                fgc = "\x1b[31m";
+                break;
+            case "green":
+                fgc = "\x1b[32m";
+                break;
+            case "yellow":
+                fgc = "\x1b[33m";
+                break;
+            case "blue":
+                fgc = "\x1b[34m";
+                break;
+            case "magenta":
+                fgc = "\x1b[35m";
+                break;
+            case "cyan":
+                fgc = "\x1b[36m";
+                break;
+            case "white":
+                fgc = "\x1b[37m";
+                break;
+        }
 
-    async log(
-        message: string,
-        title: string = "",
-        color: string = "white"
-    ): Promise<void> {
-        const c = await import("ansi-colors");
-        const ansiColors = c.default;
-        console.log(ansiColors[color]("*** LOG: " + title + "\n" + message));
+        let bgc = "";
+        switch (backgroundColor.trim().toLowerCase()) {
+            case "black":
+                bgc = "\x1b[40m";
+                break;
+            case "red":
+                bgc = "\x1b[44m";
+                break;
+            case "green":
+                bgc = "\x1b[44m";
+                break;
+            case "yellow":
+                bgc = "\x1b[43m";
+                break;
+            case "blue":
+                bgc = "\x1b[44m";
+                break;
+            case "magenta":
+                bgc = "\x1b[45m";
+                break;
+            case "cyan":
+                bgc = "\x1b[46m";
+                break;
+            case "white":
+                bgc = "\x1b[47m";
+                break;
+        }
+
+        return `${fgc}${bgc}`;
     }
-
-    warn(message: string, options = {}) {
-        console.warn(message, { ...options });
+    #getColorReset() {
+        return "\x1b[0m";
     }
-
-    error(message: string, options = {}) {
-        console.error(message, { ...options });
+    clear() {
+        console.clear();
     }
-
-    frameMessage(message: string, title: string) {
-        const lines = message.split("\n");
-        const frameHorizontalLength = 30;
-        const topFrame =
-            this.frameChar.repeat(frameHorizontalLength + 4) +
-            " " +
-            this.frameChar +
-            " " +
-            (title ?? "log") +
-            " ".repeat(
-                frameHorizontalLength -
-                    ((title as string) ?? ("log" as string)).length +
-                    1
-            ) +
-            this.frameChar.repeat(frameHorizontalLength + 4);
-        const bottomFrame = this.frameChar.repeat(frameHorizontalLength + 4);
-        return [topFrame, ...lines, bottomFrame].join("\n");
+    print(foregroundColor = "white", backgroundColor = "black", ...strings) {
+        const c = this.#getColor(foregroundColor, backgroundColor);
+        // turns objects into printable strings
+        strings = strings.map((item) => {
+            if (typeof item === "object") item = JSON.stringify(item);
+            return item;
+        });
+        console.log(c, strings.join(""), this.#getColorReset());
+        if (this.closeByNewLine) console.log("");
+    }
+    log(...strings) {
+        const fg = "white";
+        const bg = "";
+        const icon = "\u25ce";
+        const groupTile = ` ${this.logsTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item, this.#getColorReset());
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
+    }
+    warn(...strings) {
+        const fg = "yellow";
+        const bg = "";
+        const icon = "\u26a0";
+        const groupTile = ` ${this.warningsTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item, this.#getColorReset());
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
+    }
+    error(...strings) {
+        const fg = "red";
+        const bg = "";
+        const icon = "\u26D4";
+        const groupTile = ` ${this.errorsTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item);
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
+    }
+    info(...strings) {
+        const fg = "blue";
+        const bg = "";
+        const icon = "\u2139";
+        const groupTile = ` ${this.informationsTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item);
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
+    }
+    success(...strings) {
+        const fg = "green";
+        const bg = "";
+        const icon = "\u2713";
+        const groupTile = ` ${this.successesTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item);
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
+    }
+    debug(...strings) {
+        const fg = "magenta";
+        const bg = "";
+        const icon = "\u1367";
+        const groupTile = ` ${this.debugsTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item);
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
+    }
+    assert(...strings) {
+        const fg = "cyan";
+        const bg = "";
+        const icon = "\u0021";
+        const groupTile = ` ${this.assertsTitle}`;
+        if (strings.length > 1) {
+            const c = this.#getColor(fg, bg);
+            console.group(c, (this.useIcons ? icon : "") + groupTile);
+            const nl = this.closeByNewLine;
+            this.closeByNewLine = false;
+            strings.forEach((item) => {
+                this.print(fg, bg, item);
+            });
+            this.closeByNewLine = nl;
+            console.groupEnd();
+            if (nl) console.log();
+        } else {
+            this.print(
+                fg,
+                bg,
+                strings.map((item) => {
+                    return `${this.useIcons ? `${icon} ` : ""}${item}`;
+                })
+            );
+        }
     }
 }
-
-const logger = new Logger();
-
-export function log_to_file(
-    filename: string,
-    message: string,
-    logDirectory: string = "./logs"
-): void {
-    // Ensure the log directory exists
-    if (!fs.existsSync(logDirectory)) {
-        fs.mkdirSync(logDirectory, { recursive: true });
-    }
-
-    let fullPath = path.join(logDirectory, filename);
-    const timestamp = new Date().toUTCString();
-    const logEntry = `[${timestamp}] ${message}\n`;
-
-    // if full path doesnt end in .log or .txt, append .log
-    if (!fullPath.endsWith(".log") && !fullPath.endsWith(".txt")) {
-        fullPath += ".log";
-    }
-
-    // Append the log entry to the file
-    fs.appendFileSync(fullPath, logEntry);
-
-    // Print a message to the console
-    const preview =
-        message.length > 200 ? message.substring(0, 200) + "..." : message;
-    logger.log(`Logged to ${filename}: ${preview}`, filename);
-}
-
-export default logger;

@@ -3,7 +3,7 @@ import yaml from "js-yaml";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Action } from "../core/types";
-import { elizaLog } from "../index.ts";
+import { elizaLogger } from "../index.ts";
 
 const ROOT_DIR = path.resolve(fileURLToPath(import.meta.url), "../../../src");
 
@@ -30,13 +30,13 @@ export async function loadCustomActions(
 
     for (const config of actionConfigs) {
         const resolvedPath = path.resolve(ROOT_DIR, config.path);
-        elizaLog.log(`Importing action from: ${resolvedPath}`); // Debugging log
+        elizaLogger.log(`Importing action from: ${resolvedPath}`); // Debugging log
 
         try {
             const actionModule = await import(resolvedPath);
             actions.push(actionModule[config.name]);
         } catch (error) {
-            elizaLog.error(
+            elizaLogger.error(
                 `Failed to import action from ${resolvedPath}:`,
                 error
             );

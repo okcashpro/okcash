@@ -11,7 +11,6 @@ import {
     generateMessageResponse,
     generateShouldRespond,
 } from "../../core/generation.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import {
     Content,
@@ -27,8 +26,8 @@ import { stringToUuid } from "../../core/uuid.ts";
 import { generateSummary } from "../../services/summary.ts";
 import { AttachmentManager } from "./attachments.ts";
 
+import { elizaLogger } from "../../index.ts";
 import { VoiceManager } from "./voice.ts";
-import { elizaLog } from "../../index.ts";
 
 import {
     messageCompletionFooter,
@@ -187,7 +186,7 @@ export async function sendMessageInChunks(
             }
         }
     } catch (error) {
-        elizaLog.error("Error sending message:", error);
+        elizaLogger.error("Error sending message:", error);
     }
 
     return sentMessages;
@@ -389,7 +388,7 @@ export class MessageManager {
             })) as State;
 
             if (!canSendMessage(message.channel).canSend) {
-                return elizaLog.warn(
+                return elizaLogger.warn(
                     `Cannot send message to channel ${message.channel}`,
                     canSendMessage(message.channel)
                 );
@@ -843,14 +842,6 @@ export class MessageManager {
     ): Promise<Content> {
         const { userId, roomId } = message;
 
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(
-            `${state.agentName}_${datestr}_discord_message_context`,
-            context
-        );
-
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
@@ -861,11 +852,6 @@ export class MessageManager {
             console.error("No response from generateMessageResponse");
             return;
         }
-
-        log_to_file(
-            `${state.agentName}_${datestr}_discord_message_response`,
-            JSON.stringify(response)
-        );
 
         await this.runtime.databaseAdapter.log({
             body: { message, context, response },

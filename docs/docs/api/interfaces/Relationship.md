@@ -10,7 +10,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:249](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L249)
+[core/src/core/types.ts:250](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L250)
 
 ***
 
@@ -20,7 +20,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:243](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L243)
+[core/src/core/types.ts:244](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L244)
 
 ***
 
@@ -30,7 +30,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:247](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L247)
+[core/src/core/types.ts:248](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L248)
 
 ***
 
@@ -40,7 +40,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:248](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L248)
+[core/src/core/types.ts:249](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L249)
 
 ***
 
@@ -50,7 +50,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:244](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L244)
+[core/src/core/types.ts:245](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L245)
 
 ***
 
@@ -60,7 +60,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:245](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L245)
+[core/src/core/types.ts:246](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L246)
 
 ***
 
@@ -70,4 +70,4 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[core/src/core/types.ts:246](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L246)
+[core/src/core/types.ts:247](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L247)

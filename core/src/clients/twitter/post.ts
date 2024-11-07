@@ -1,12 +1,11 @@
 import { Tweet } from "agent-twitter-client";
 import fs from "fs";
 import { composeContext } from "../../core/context.ts";
-import { log_to_file } from "../../core/logger.ts";
+import { generateText } from "../../core/generation.ts";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { IAgentRuntime, ModelClass } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
-import { generateText } from "../../core/generation.ts";
 
 const twitterPostTemplate = `{{timeline}}
 
@@ -101,98 +100,85 @@ export class TwitterPostClient extends ClientBase {
                     twitterPostTemplate,
             });
 
-            const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-            // log context to file
-            log_to_file(
-                `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_context`,
-                context
-            );
-
             const newTweetContent = await generateText({
                 runtime: this.runtime,
                 context,
                 modelClass: ModelClass.SMALL,
             });
-            console.log("New Tweet:", newTweetContent);
-            log_to_file(
-                `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_generate_response`,
-                JSON.stringify(newTweetContent)
-            );
 
             const slice = newTweetContent.replaceAll(/\\n/g, "\n").trim();
 
-            const content = slice;
-            // .slice(0, 280);
-            // // if its bigger than 280, delete the last line
-            // if (content.length > 280) {
-            //   content = content.slice(0, content.lastIndexOf("\n"));
-            // }
+            const contentLength = 240;
 
-            // if(content.length < 1) {
-            //   content = slice.slice(0, 280);
-            // }
+            let content = slice.slice(0, contentLength);
+            // if its bigger than 280, delete the last line
+            if (content.length > 280) {
+              content = content.slice(0, content.lastIndexOf("\n"));
+            }
+            if (content.length > contentLength) {
+                // slice at the last period
+                content = content.slice(0, content.lastIndexOf("."));
+            }
 
-            // Send the new tweet
-            if (!this.dryRun) {
-                try {
-                    const result = await this.requestQueue.add(
-                        async () => await this.twitterClient.sendTweet(content)
-                    );
-                    // read the body of the response
-                    const body = await result.json();
-                    const tweetResult =
-                        body.data.create_tweet.tweet_results.result;
+            // if it's still too long, get the period before the last period
+            if (content.length > contentLength) {
+                content = content.slice(0, content.lastIndexOf("."));
+            }
+            try {
+                const result = await this.requestQueue.add(
+                    async () => await this.twitterClient.sendTweet(content)
+                );
+                // read the body of the response
+                const body = await result.json();
+                const tweetResult =
+                    body.data.create_tweet.tweet_results.result;
 
-                    const tweet = {
-                        id: tweetResult.rest_id,
-                        text: tweetResult.legacy.full_text,
-                        conversationId: tweetResult.legacy.conversation_id_str,
-                        createdAt: tweetResult.legacy.created_at,
-                        userId: tweetResult.legacy.user_id_str,
-                        inReplyToStatusId:
-                            tweetResult.legacy.in_reply_to_status_id_str,
-                        permanentUrl: `https://twitter.com/${this.runtime.getSetting("TWITTER_USERNAME")}/status/${tweetResult.rest_id}`,
-                        hashtags: [],
-                        mentions: [],
-                        photos: [],
-                        thread: [],
-                        urls: [],
-                        videos: [],
-                    } as Tweet;
+                const tweet = {
+                    id: tweetResult.rest_id,
+                    text: tweetResult.legacy.full_text,
+                    conversationId: tweetResult.legacy.conversation_id_str,
+                    createdAt: tweetResult.legacy.created_at,
+                    userId: tweetResult.legacy.user_id_str,
+                    inReplyToStatusId:
+                        tweetResult.legacy.in_reply_to_status_id_str,
+                    permanentUrl: `https://twitter.com/${this.runtime.getSetting("TWITTER_USERNAME")}/status/${tweetResult.rest_id}`,
+                    hashtags: [],
+                    mentions: [],
+                    photos: [],
+                    thread: [],
+                    urls: [],
+                    videos: [],
+                } as Tweet;
 
-                    const postId = tweet.id;
-                    const conversationId =
-                        tweet.conversationId + "-" + this.runtime.agentId;
-                    const roomId = stringToUuid(conversationId);
+                const postId = tweet.id;
+                const conversationId =
+                    tweet.conversationId + "-" + this.runtime.agentId;
+                const roomId = stringToUuid(conversationId);
 
-                    // make sure the agent is in the room
-                    await this.runtime.ensureRoomExists(roomId);
-                    await this.runtime.ensureParticipantInRoom(
-                        this.runtime.agentId,
-                        roomId
-                    );
+                // make sure the agent is in the room
+                await this.runtime.ensureRoomExists(roomId);
+                await this.runtime.ensureParticipantInRoom(
+                    this.runtime.agentId,
+                    roomId
+                );
 
-                    await this.cacheTweet(tweet);
+                await this.cacheTweet(tweet);
 
-                    await this.runtime.messageManager.createMemory({
-                        id: stringToUuid(postId + "-" + this.runtime.agentId),
-                        userId: this.runtime.agentId,
-                        agentId: this.runtime.agentId,
-                        content: {
-                            text: newTweetContent.trim(),
-                            url: tweet.permanentUrl,
-                            source: "twitter",
-                        },
-                        roomId,
-                        embedding: embeddingZeroVector,
-                        createdAt: tweet.timestamp * 1000,
-                    });
-                } catch (error) {
-                    console.error("Error sending tweet:", error);
-                }
-            } else {
-                console.log("Dry run, not sending tweet:", newTweetContent);
+                await this.runtime.messageManager.createMemory({
+                    id: stringToUuid(postId + "-" + this.runtime.agentId),
+                    userId: this.runtime.agentId,
+                    agentId: this.runtime.agentId,
+                    content: {
+                        text: newTweetContent.trim(),
+                        url: tweet.permanentUrl,
+                        source: "twitter",
+                    },
+                    roomId,
+                    embedding: embeddingZeroVector,
+                    createdAt: tweet.timestamp * 1000,
+                });
+            } catch (error) {
+                console.error("Error sending tweet:", error);
             }
         } catch (error) {
             console.error("Error generating new tweet:", error);

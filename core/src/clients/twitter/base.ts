@@ -21,7 +21,7 @@ import ImageDescriptionService from "../../services/image.ts";
 import { glob } from "glob";
 
 import { stringToUuid } from "../../core/uuid.ts";
-import { elizaLog } from "../../index.ts";
+import { elizaLogger } from "../../index.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -91,7 +91,6 @@ export class ClientBase extends EventEmitter {
     tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
     imageDescriptionService: ImageDescriptionService;
     temperature: number = 0.5;
-    dryRun: boolean = false;
 
     private tweetCache: Map<string, Tweet> = new Map();
     requestQueue: RequestQueue = new RequestQueue();
@@ -165,9 +164,7 @@ export class ClientBase extends EventEmitter {
             this.twitterClient = new Scraper();
             ClientBase._twitterClient = this.twitterClient;
         }
-        this.dryRun =
-            this.runtime.getSetting("TWITTER_DRY_RUN")?.toLowerCase() ===
-            "true";
+
         this.directions =
             "- " +
             this.runtime.character.style.all.join("\n- ") +
@@ -436,7 +433,7 @@ export class ClientBase extends EventEmitter {
                             : undefined,
                     } as Content;
 
-                    elizaLog.log("Creating memory for tweet", tweet.id);
+                    elizaLogger.log("Creating memory for tweet", tweet.id);
 
                     // check if it already exists
                     const memory =
@@ -444,7 +441,7 @@ export class ClientBase extends EventEmitter {
                             stringToUuid(tweet.id + "-" + this.runtime.agentId)
                         );
                     if (memory) {
-                        elizaLog.log(
+                        elizaLogger.log(
                             "Memory already exists, skipping timeline population"
                         );
                         break;
@@ -461,7 +458,7 @@ export class ClientBase extends EventEmitter {
                     });
                 }
 
-                elizaLog.log(
+                elizaLogger.log(
                     `Populated ${tweetsToSave.length} missing tweets from the cache.`
                 );
                 return;

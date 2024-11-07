@@ -3,7 +3,6 @@ import {
     generateMessageResponse,
     generateTrueOrFalse,
 } from "../core/generation.ts";
-import { log_to_file } from "../core/logger.ts";
 import { booleanFooter, messageCompletionFooter } from "../core/parsing.ts";
 import {
     Action,
@@ -137,11 +136,6 @@ export const continueAction: Action = {
                 runtime.character.templates?.messageHandlerTemplate ||
                 messageHandlerTemplate,
         });
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(`${state.agentName}_${datestr}_continue_context`, context);
-
         const { userId, roomId } = message;
 
         const response = await generateMessageResponse({
@@ -151,12 +145,6 @@ export const continueAction: Action = {
         });
 
         response.inReplyTo = message.id;
-
-        // log response to file
-        log_to_file(
-            `${state.agentName}_${datestr}_continue_response`,
-            JSON.stringify(response)
-        );
 
         runtime.databaseAdapter.log({
             body: { message, context, response },

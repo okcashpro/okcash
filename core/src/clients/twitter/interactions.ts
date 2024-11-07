@@ -1,7 +1,10 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
 import fs from "fs";
 import { composeContext } from "../../core/context.ts";
-import { log_to_file } from "../../core/logger.ts";
+import {
+    generateMessageResponse,
+    generateShouldRespond,
+} from "../../core/generation.ts";
 import {
     messageCompletionFooter,
     shouldRespondFooter,
@@ -17,10 +20,6 @@ import {
 import { stringToUuid } from "../../core/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweetChunks, wait } from "./utils.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "../../core/generation.ts";
 
 export const twitterMessageHandlerTemplate =
     `{{relevantFacts}}
@@ -300,40 +299,18 @@ export class TwitterInteractionClient extends ClientBase {
                 twitterMessageHandlerTemplate,
         });
 
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        // log context to file
-        log_to_file(
-            `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_interactions_context`,
-            context
-        );
-
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
             modelClass: ModelClass.SMALL,
         });
 
-        console.log("response", response);
-
-        console.log("tweet is", tweet);
-
         const stringId = stringToUuid(tweet.id + "-" + this.runtime.agentId);
-
-        console.log("stringId is", stringId, "while tweet.id is", tweet.id);
 
         response.inReplyTo = stringId;
 
-        console.log("response is", response);
-
-        log_to_file(
-            `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_interactions_response`,
-            JSON.stringify(response)
-        );
-
         if (response.text) {
             try {
-                if (!this.dryRun) {
                     const callback: HandlerCallback = async (
                         response: Content
                     ) => {
@@ -366,9 +343,6 @@ export class TwitterInteractionClient extends ClientBase {
                         responseMessages,
                         state
                     );
-                } else {
-                    console.log("Dry run, not sending tweet:", response.text);
-                }
                 const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
                 // f tweets folder dont exist, create
                 if (!fs.existsSync("tweets")) {

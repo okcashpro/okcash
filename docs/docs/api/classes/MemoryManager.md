@@ -34,7 +34,7 @@ The name of the table this manager will operate on.
 
 #### Defined in
 
-[core/src/core/memory.ts:35](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L35)
+[core/src/core/memory.ts:35](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L35)
 
 ## Properties
 
@@ -50,7 +50,7 @@ The AgentRuntime instance associated with this manager.
 
 #### Defined in
 
-[core/src/core/memory.ts:22](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L22)
+[core/src/core/memory.ts:22](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L22)
 
 ***
 
@@ -66,7 +66,7 @@ The name of the database table this manager operates on.
 
 #### Defined in
 
-[core/src/core/memory.ts:27](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L27)
+[core/src/core/memory.ts:27](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L27)
 
 ## Methods
 
@@ -94,7 +94,7 @@ A Promise resolving to the memory object, potentially updated with an embedding 
 
 #### Defined in
 
-[core/src/core/memory.ts:45](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L45)
+[core/src/core/memory.ts:45](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L45)
 
 ***
 
@@ -126,7 +126,7 @@ A Promise resolving to the count of memories.
 
 #### Defined in
 
-[core/src/core/memory.ts:218](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L218)
+[core/src/core/memory.ts:218](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L218)
 
 ***
 
@@ -158,7 +158,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[core/src/core/memory.ts:158](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L158)
+[core/src/core/memory.ts:158](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L158)
 
 ***
 
@@ -180,7 +180,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[core/src/core/memory.ts:93](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L93)
+[core/src/core/memory.ts:93](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L93)
 
 ***
 
@@ -226,7 +226,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Defined in
 
-[core/src/core/memory.ts:66](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L66)
+[core/src/core/memory.ts:66](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L66)
 
 ***
 
@@ -252,7 +252,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Defined in
 
-[core/src/core/memory.ts:172](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L172)
+[core/src/core/memory.ts:172](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L172)
 
 ***
 
@@ -274,7 +274,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Defined in
 
-[core/src/core/memory.ts:183](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L183)
+[core/src/core/memory.ts:183](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L183)
 
 ***
 
@@ -302,7 +302,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[core/src/core/memory.ts:205](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L205)
+[core/src/core/memory.ts:205](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L205)
 
 ***
 
@@ -330,7 +330,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[core/src/core/memory.ts:193](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L193)
+[core/src/core/memory.ts:193](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L193)
 
 ***
 
@@ -380,4 +380,4 @@ A Promise resolving to an array of Memory objects that match the embedding.
 
 #### Defined in
 
-[core/src/core/memory.ts:120](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/memory.ts#L120)
+[core/src/core/memory.ts:120](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/memory.ts#L120)

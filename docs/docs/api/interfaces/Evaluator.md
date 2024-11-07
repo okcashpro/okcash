@@ -10,7 +10,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[core/src/core/types.ts:220](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L220)
+[core/src/core/types.ts:221](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L221)
 
 ***
 
@@ -20,7 +20,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[core/src/core/types.ts:222](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L222)
+[core/src/core/types.ts:223](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L223)
 
 ***
 
@@ -30,7 +30,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[core/src/core/types.ts:223](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L223)
+[core/src/core/types.ts:224](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L224)
 
 ***
 
@@ -40,7 +40,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[core/src/core/types.ts:224](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L224)
+[core/src/core/types.ts:225](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L225)
 
 ***
 
@@ -50,7 +50,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[core/src/core/types.ts:221](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L221)
+[core/src/core/types.ts:222](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L222)
 
 ***
 
@@ -60,4 +60,4 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[core/src/core/types.ts:225](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L225)
+[core/src/core/types.ts:226](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L226)

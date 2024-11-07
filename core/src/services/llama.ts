@@ -15,7 +15,7 @@ import fs from "fs";
 import https from "https";
 import si from "systeminformation";
 import { wordsToPunish } from "./wordsToPunish.ts";
-import { prettyConsole } from "../index.ts";
+import { elizaLogger } from "../index.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -195,7 +195,7 @@ class LlamaService {
                 });
             });
         } else {
-            prettyConsole.warn("Model already exists.");
+            elizaLogger.warn("Model already exists.");
         }
     }
 

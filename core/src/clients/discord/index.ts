@@ -11,7 +11,7 @@ import { EventEmitter } from "events";
 import { embeddingZeroVector } from "../../core/memory.ts";
 import { Character, IAgentRuntime } from "../../core/types.ts";
 import { stringToUuid } from "../../core/uuid.ts";
-import { elizaLog } from "../../index.ts";
+import { elizaLogger } from "../../index.ts";
 import chat_with_attachments from "./actions/chat_with_attachments.ts";
 import download_media from "./actions/download_media.ts";
 import joinvoice from "./actions/joinvoice.ts";
@@ -110,16 +110,16 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
-        elizaLog.success(`Logged in as ${readyClient.user?.tag}`);
-        elizaLog.success("Use this URL to add the bot to your server:");
-        elizaLog.success(
+        elizaLogger.success(`Logged in as ${readyClient.user?.tag}`);
+        elizaLogger.success("Use this URL to add the bot to your server:");
+        elizaLogger.success(
             `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=0&scope=bot%20applications.commands`
         );
         await this.onReady();
     }
 
     async handleReactionAdd(reaction: MessageReaction, user: User) {
-        elizaLog.log("Reaction added");
+        elizaLogger.log("Reaction added");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;

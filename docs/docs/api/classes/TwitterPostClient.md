@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/post.ts:42](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/post.ts#L42)
+[core/src/clients/twitter/post.ts:41](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/post.ts#L41)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:151](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L151)
+[core/src/clients/twitter/base.ts:150](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L150)
 
 ***
 
@@ -60,21 +60,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L89)
-
-***
-
-### dryRun
-
-> **dryRun**: `boolean` = `false`
-
-#### Inherited from
-
-`ClientBase.dryRun`
-
-#### Defined in
-
-[core/src/clients/twitter/base.ts:94](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L94)
+[core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L89)
 
 ***
 
@@ -88,7 +74,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L92)
+[core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L92)
 
 ***
 
@@ -102,7 +88,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L90)
+[core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L90)
 
 ***
 
@@ -116,7 +102,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L97)
+[core/src/clients/twitter/base.ts:96](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L96)
 
 ***
 
@@ -130,7 +116,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L88)
+[core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L88)
 
 ***
 
@@ -144,7 +130,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L93)
+[core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L93)
 
 ***
 
@@ -158,7 +144,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L91)
+[core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L91)
 
 ***
 
@@ -172,7 +158,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L87)
+[core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L87)
 
 ***
 
@@ -186,7 +172,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:98](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L98)
+[core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L97)
 
 ***
 
@@ -200,7 +186,7 @@
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L86)
+[core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L86)
 
 ***
 
@@ -407,7 +393,7 @@ node\_modules/@types/node/events.d.ts:597
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:100](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L100)
+[core/src/clients/twitter/base.ts:99](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L99)
 
 ***
 
@@ -538,7 +524,7 @@ node\_modules/@types/node/events.d.ts:922
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:281](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L281)
+[core/src/clients/twitter/base.ts:278](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L278)
 
 ***
 
@@ -566,7 +552,7 @@ node\_modules/@types/node/events.d.ts:922
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:333](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L333)
+[core/src/clients/twitter/base.ts:330](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L330)
 
 ***
 
@@ -588,7 +574,7 @@ node\_modules/@types/node/events.d.ts:922
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:116](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L116)
+[core/src/clients/twitter/base.ts:115](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L115)
 
 ***
 
@@ -635,7 +621,7 @@ node\_modules/@types/node/events.d.ts:774
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:138](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L138)
+[core/src/clients/twitter/base.ts:137](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L137)
 
 ***
 
@@ -891,7 +877,7 @@ node\_modules/@types/node/events.d.ts:659
 
 #### Defined in
 
-[core/src/clients/twitter/post.ts:29](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/post.ts#L29)
+[core/src/clients/twitter/post.ts:28](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/post.ts#L28)
 
 ***
 
@@ -1215,7 +1201,7 @@ node\_modules/@types/node/events.d.ts:742
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:575](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L575)
+[core/src/clients/twitter/base.ts:572](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L572)
 
 ***
 
@@ -1237,7 +1223,7 @@ node\_modules/@types/node/events.d.ts:742
 
 #### Defined in
 
-[core/src/clients/twitter/base.ts:563](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/clients/twitter/base.ts#L563)
+[core/src/clients/twitter/base.ts:560](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/twitter/base.ts#L560)
 
 ***
 

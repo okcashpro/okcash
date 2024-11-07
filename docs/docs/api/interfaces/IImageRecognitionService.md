@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:544](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L544)
+[core/src/core/types.ts:545](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L545)
 
 ***
 
@@ -44,4 +44,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:543](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L543)
+[core/src/core/types.ts:544](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L544)

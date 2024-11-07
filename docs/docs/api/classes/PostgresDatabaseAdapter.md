@@ -27,7 +27,7 @@ like accounts, memories, actors, goals, and rooms.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:19](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L19)
+[core/src/adapters/postgres.ts:19](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L19)
 
 ## Properties
 
@@ -43,7 +43,7 @@ The database instance.
 
 #### Defined in
 
-[core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/database.ts#L21)
+[core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/database.ts#L21)
 
 ## Methods
 
@@ -75,7 +75,7 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:681](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L681)
+[core/src/adapters/postgres.ts:681](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L681)
 
 ***
 
@@ -111,7 +111,7 @@ A Promise that resolves to the number of memories.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:752](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L752)
+[core/src/adapters/postgres.ts:752](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L752)
 
 ***
 
@@ -139,7 +139,7 @@ A Promise that resolves when the account creation is complete.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:186](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L186)
+[core/src/adapters/postgres.ts:186](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L186)
 
 ***
 
@@ -167,7 +167,7 @@ A Promise that resolves when the goal has been created.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:454](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L454)
+[core/src/adapters/postgres.ts:454](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L454)
 
 ***
 
@@ -199,7 +199,7 @@ A Promise that resolves when the memory has been created.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:253](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L253)
+[core/src/adapters/postgres.ts:253](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L253)
 
 ***
 
@@ -231,7 +231,7 @@ A Promise that resolves to a boolean indicating success or failure of the creati
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:505](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L505)
+[core/src/adapters/postgres.ts:505](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L505)
 
 ***
 
@@ -259,7 +259,7 @@ A Promise that resolves to the UUID of the created room.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:483](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L483)
+[core/src/adapters/postgres.ts:483](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L483)
 
 ***
 
@@ -287,7 +287,7 @@ A Promise that resolves to the Account object or null if not found.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:162](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L162)
+[core/src/adapters/postgres.ts:162](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L162)
 
 ***
 
@@ -307,7 +307,7 @@ A Promise that resolves to the Account object or null if not found.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:210](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L210)
+[core/src/adapters/postgres.ts:210](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L210)
 
 ***
 
@@ -337,7 +337,7 @@ A Promise that resolves to an array of Actor objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:810](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L810)
+[core/src/adapters/postgres.ts:810](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L810)
 
 ***
 
@@ -375,7 +375,7 @@ A Promise that resolves to an array of objects containing embeddings and levensh
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:559](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L559)
+[core/src/adapters/postgres.ts:559](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L559)
 
 ***
 
@@ -411,7 +411,7 @@ A Promise that resolves to an array of Goal objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:396](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L396)
+[core/src/adapters/postgres.ts:396](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L396)
 
 ***
 
@@ -453,7 +453,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:334](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L334)
+[core/src/adapters/postgres.ts:334](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L334)
 
 ***
 
@@ -481,7 +481,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:103](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L103)
+[core/src/adapters/postgres.ts:103](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L103)
 
 ***
 
@@ -503,7 +503,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:232](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L232)
+[core/src/adapters/postgres.ts:232](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L232)
 
 ***
 
@@ -531,7 +531,7 @@ A Promise that resolves to an array of Participant objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:72](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L72)
+[core/src/adapters/postgres.ts:72](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L72)
 
 ***
 
@@ -559,7 +559,7 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:149](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L149)
+[core/src/adapters/postgres.ts:149](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L149)
 
 ***
 
@@ -583,7 +583,7 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:87](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L87)
+[core/src/adapters/postgres.ts:87](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L87)
 
 ***
 
@@ -615,7 +615,7 @@ A Promise that resolves to the Relationship object or null if not found.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:529](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L529)
+[core/src/adapters/postgres.ts:529](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L529)
 
 ***
 
@@ -645,7 +645,7 @@ A Promise that resolves to an array of Relationship objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:546](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L546)
+[core/src/adapters/postgres.ts:546](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L546)
 
 ***
 
@@ -673,7 +673,7 @@ A Promise that resolves to the room ID or null if not found.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:59](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L59)
+[core/src/adapters/postgres.ts:59](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L59)
 
 ***
 
@@ -701,7 +701,7 @@ A Promise that resolves to an array of room IDs.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:784](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L784)
+[core/src/adapters/postgres.ts:784](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L784)
 
 ***
 
@@ -729,7 +729,7 @@ A Promise that resolves to an array of room IDs.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:797](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L797)
+[core/src/adapters/postgres.ts:797](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L797)
 
 ***
 
@@ -765,7 +765,7 @@ A Promise that resolves when the log entry has been saved.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:595](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L595)
+[core/src/adapters/postgres.ts:595](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L595)
 
 ***
 
@@ -793,7 +793,7 @@ A Promise that resolves when all goals have been removed.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:773](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L773)
+[core/src/adapters/postgres.ts:773](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L773)
 
 ***
 
@@ -825,7 +825,7 @@ A Promise that resolves when all memories have been removed.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:740](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L740)
+[core/src/adapters/postgres.ts:740](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L740)
 
 ***
 
@@ -853,7 +853,7 @@ A Promise that resolves when the goal has been removed.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:474](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L474)
+[core/src/adapters/postgres.ts:474](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L474)
 
 ***
 
@@ -885,7 +885,7 @@ A Promise that resolves when the memory has been removed.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:728](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L728)
+[core/src/adapters/postgres.ts:728](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L728)
 
 ***
 
@@ -917,7 +917,7 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:697](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L697)
+[core/src/adapters/postgres.ts:697](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L697)
 
 ***
 
@@ -945,7 +945,7 @@ A Promise that resolves when the room has been removed.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:496](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L496)
+[core/src/adapters/postgres.ts:496](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L496)
 
 ***
 
@@ -985,7 +985,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:291](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L291)
+[core/src/adapters/postgres.ts:291](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L291)
 
 ***
 
@@ -1029,7 +1029,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:612](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L612)
+[core/src/adapters/postgres.ts:612](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L612)
 
 ***
 
@@ -1055,7 +1055,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:133](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L133)
+[core/src/adapters/postgres.ts:133](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L133)
 
 ***
 
@@ -1069,7 +1069,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:37](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L37)
+[core/src/adapters/postgres.ts:37](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L37)
 
 ***
 
@@ -1097,7 +1097,7 @@ A Promise that resolves when the goal has been updated.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:437](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L437)
+[core/src/adapters/postgres.ts:437](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L437)
 
 ***
 
@@ -1129,4 +1129,4 @@ A Promise that resolves when the goal status has been updated.
 
 #### Defined in
 
-[core/src/adapters/postgres.ts:713](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/adapters/postgres.ts#L713)
+[core/src/adapters/postgres.ts:713](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/adapters/postgres.ts#L713)

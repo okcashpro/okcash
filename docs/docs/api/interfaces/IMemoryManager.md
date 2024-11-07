@@ -8,7 +8,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:448](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L448)
+[core/src/core/types.ts:449](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L449)
 
 ***
 
@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:445](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L445)
+[core/src/core/types.ts:446](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L446)
 
 ***
 
@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:446](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L446)
+[core/src/core/types.ts:447](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L447)
 
 ## Methods
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:450](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L450)
+[core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L451)
 
 ***
 
@@ -66,7 +66,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:480](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L480)
+[core/src/core/types.ts:481](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L481)
 
 ***
 
@@ -86,7 +86,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:477](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L477)
+[core/src/core/types.ts:478](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L478)
 
 ***
 
@@ -104,7 +104,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:459](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L459)
+[core/src/core/types.ts:460](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L460)
 
 ***
 
@@ -134,7 +134,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L451)
+[core/src/core/types.ts:452](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L452)
 
 ***
 
@@ -156,7 +156,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:463](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L463)
+[core/src/core/types.ts:464](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L464)
 
 ***
 
@@ -174,7 +174,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:462](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L462)
+[core/src/core/types.ts:463](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L463)
 
 ***
 
@@ -192,7 +192,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:479](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L479)
+[core/src/core/types.ts:480](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L480)
 
 ***
 
@@ -210,7 +210,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:478](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L478)
+[core/src/core/types.ts:479](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L479)
 
 ***
 
@@ -240,4 +240,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:467](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L467)
+[core/src/core/types.ts:468](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L468)

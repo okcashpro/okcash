@@ -22,7 +22,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[core/src/core/types.ts:44](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L44)
+[core/src/core/types.ts:44](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L44)
 
 ***
 
@@ -32,7 +32,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[core/src/core/types.ts:45](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L45)
+[core/src/core/types.ts:45](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L45)
 
 ***
 
@@ -42,7 +42,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[core/src/core/types.ts:42](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L42)
+[core/src/core/types.ts:42](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L42)
 
 ***
 
@@ -52,4 +52,4 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[core/src/core/types.ts:43](https://github.com/ai16z/eliza/blob/c537cb3e848b54fcb914d8ef84924fa5fdeaec66/core/src/core/types.ts#L43)
+[core/src/core/types.ts:43](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L43)

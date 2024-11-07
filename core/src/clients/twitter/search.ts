@@ -5,7 +5,6 @@ import {
     generateMessageResponse,
     generateText,
 } from "../../core/generation.ts";
-import { log_to_file } from "../../core/logger.ts";
 import { messageCompletionFooter } from "../../core/parsing.ts";
 import {
     Content,
@@ -146,18 +145,11 @@ export class TwitterSearchClient extends ClientBase {
     - Respond to tweets where there is an easy exchange of ideas to have with the user
     - ONLY respond with the ID of the tweet`;
 
-            const datestr = new Date().toUTCString().replace(/:/g, "-");
-            const logName = `${this.runtime.character.name}_search_${datestr}`;
-            log_to_file(logName, prompt);
-
             const mostInterestingTweetResponse = await generateText({
                 runtime: this.runtime,
                 context: prompt,
                 modelClass: ModelClass.SMALL,
             });
-
-            const responseLogName = `${this.runtime.character.name}_search_${datestr}_result`;
-            log_to_file(responseLogName, mostInterestingTweetResponse);
 
             const tweetId = mostInterestingTweetResponse.trim();
             const selectedTweet = slicedTweets.find(
@@ -275,12 +267,6 @@ export class TwitterSearchClient extends ClientBase {
                     twitterSearchTemplate,
             });
 
-            // log context to file
-            log_to_file(
-                `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_context`,
-                context
-            );
-
             const responseContent = await generateMessageResponse({
                 runtime: this.runtime,
                 context,
@@ -288,11 +274,6 @@ export class TwitterSearchClient extends ClientBase {
             });
 
             responseContent.inReplyTo = message.id;
-
-            log_to_file(
-                `${this.runtime.getSetting("TWITTER_USERNAME")}_${datestr}_search_response`,
-                JSON.stringify(responseContent)
-            );
 
             const response = responseContent;
 

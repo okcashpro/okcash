@@ -1,22 +1,19 @@
 import { Message } from "@telegraf/types";
-import { Context } from "telegraf";
-import { Telegraf } from "telegraf";
+import { Context, Telegraf } from "telegraf";
 
 import { composeContext } from "../../../core/context.ts";
-import { log_to_file } from "../../../core/logger.ts";
 import { embeddingZeroVector } from "../../../core/memory.ts";
 import {
     Content,
+    HandlerCallback,
     IAgentRuntime,
     Memory,
+    ModelClass,
     State,
     UUID,
-    HandlerCallback,
-    ModelClass,
 } from "../../../core/types.ts";
 import { stringToUuid } from "../../../core/uuid.ts";
 
-import ImageDescriptionService from "../../../services/image.ts";
 import {
     generateMessageResponse,
     generateShouldRespond,
@@ -25,6 +22,7 @@ import {
     messageCompletionFooter,
     shouldRespondFooter,
 } from "../../../core/parsing.ts";
+import ImageDescriptionService from "../../../services/image.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -296,12 +294,6 @@ export class MessageManager {
         context: string
     ): Promise<Content> {
         const { userId, roomId } = message;
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
-
-        log_to_file(
-            `${state.agentName}_${datestr}_telegram_message_context`,
-            context
-        );
 
         const response = await generateMessageResponse({
             runtime: this.runtime,
@@ -313,12 +305,6 @@ export class MessageManager {
             console.error("❌ No response from generateMessageResponse");
             return null;
         }
-
-        log_to_file(
-            `${state.agentName}_${datestr}_telegram_message_response`,
-            JSON.stringify(response)
-        );
-
         await this.runtime.databaseAdapter.log({
             body: { message, context, response },
             userId: userId,
