@@ -1,28 +1,32 @@
----
-id: "MemoryManager"
-title: "Class: MemoryManager"
-sidebar_label: "MemoryManager"
-sidebar_position: 0
-custom_edit_url: null
----
+# Class: MemoryManager
 
 Manage memories in the database.
 
+## Implements
+
+- `IMemoryManager`
+
 ## Constructors
 
-### constructor
+### new MemoryManager()
 
-• **new MemoryManager**(`opts`): [`MemoryManager`](MemoryManager.md)
+> **new MemoryManager**(`opts`): [`MemoryManager`](MemoryManager.md)
 
 Constructs a new MemoryManager instance.
 
 #### Parameters
 
-| Name             | Type                              | Description                                             |
-| :--------------- | :-------------------------------- | :------------------------------------------------------ |
-| `opts`           | `Object`                          | Options for the manager.                                |
-| `opts.runtime`   | [`AgentRuntime`](AgentRuntime.md) | The AgentRuntime instance associated with this manager. |
-| `opts.tableName` | `string`                          | The name of the table this manager will operate on.     |
+• **opts**
+
+Options for the manager.
+
+• **opts.runtime**: `IAgentRuntime`
+
+The AgentRuntime instance associated with this manager.
+
+• **opts.tableName**: `string`
+
+The name of the table this manager will operate on.
 
 #### Returns
 
@@ -32,31 +36,39 @@ Constructs a new MemoryManager instance.
 
 ### runtime
 
-• **runtime**: [`AgentRuntime`](AgentRuntime.md)
+> **runtime**: `IAgentRuntime`
 
 The AgentRuntime instance associated with this manager.
 
----
+#### Implementation of
+
+`IMemoryManager.runtime`
+
+***
 
 ### tableName
 
-• **tableName**: `string`
+> **tableName**: `string`
 
 The name of the database table this manager operates on.
 
+#### Implementation of
+
+`IMemoryManager.tableName`
+
 ## Methods
 
-### addEmbeddingToMemory
+### addEmbeddingToMemory()
 
-▸ **addEmbeddingToMemory**(`memory`): `Promise`\<[`Memory`](../interfaces/Memory.md)\>
+> **addEmbeddingToMemory**(`memory`): `Promise`\<[`Memory`](../interfaces/Memory.md)\>
 
 Adds an embedding vector to a memory object. If the memory already has an embedding, it is returned as is.
 
 #### Parameters
 
-| Name     | Type                                | Description                               |
-| :------- | :---------------------------------- | :---------------------------------------- |
-| `memory` | [`Memory`](../interfaces/Memory.md) | The memory object to add an embedding to. |
+• **memory**: [`Memory`](../interfaces/Memory.md)
+
+The memory object to add an embedding to.
 
 #### Returns
 
@@ -64,20 +76,27 @@ Adds an embedding vector to a memory object. If the memory already has an embedd
 
 A Promise resolving to the memory object, potentially updated with an embedding vector.
 
----
+#### Implementation of
 
-### countMemories
+`IMemoryManager.addEmbeddingToMemory`
 
-▸ **countMemories**(`room_id`, `unique?`): `Promise`\<`number`\>
+***
+
+### countMemories()
+
+> **countMemories**(`roomId`, `unique`): `Promise`\<`number`\>
 
 Counts the number of memories associated with a set of user IDs, with an option for uniqueness.
 
 #### Parameters
 
-| Name      | Type                                                       | Default value | Description                            |
-| :-------- | :--------------------------------------------------------- | :------------ | :------------------------------------- |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined`   | The room ID to count memories for.     |
-| `unique`  | `boolean`                                                  | `true`        | Whether to count unique memories only. |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The room ID to count memories for.
+
+• **unique**: `boolean` = `true`
+
+Whether to count unique memories only.
 
 #### Returns
 
@@ -85,20 +104,27 @@ Counts the number of memories associated with a set of user IDs, with an option 
 
 A Promise resolving to the count of memories.
 
----
+#### Implementation of
 
-### createMemory
+`IMemoryManager.countMemories`
 
-▸ **createMemory**(`memory`, `unique?`): `Promise`\<`void`\>
+***
+
+### createMemory()
+
+> **createMemory**(`memory`, `unique`): `Promise`\<`void`\>
 
 Creates a new memory in the database, with an option to check for similarity before insertion.
 
 #### Parameters
 
-| Name     | Type                                | Default value | Description                                       |
-| :------- | :---------------------------------- | :------------ | :------------------------------------------------ |
-| `memory` | [`Memory`](../interfaces/Memory.md) | `undefined`   | The memory object to create.                      |
-| `unique` | `boolean`                           | `false`       | Whether to check for similarity before insertion. |
+• **memory**: [`Memory`](../interfaces/Memory.md)
+
+The memory object to create.
+
+• **unique**: `boolean` = `false`
+
+Whether to check for similarity before insertion.
 
 #### Returns
 
@@ -106,38 +132,41 @@ Creates a new memory in the database, with an option to check for similarity bef
 
 A Promise that resolves when the operation completes.
 
----
+#### Implementation of
 
-### getCachedEmbeddings
+`IMemoryManager.createMemory`
 
-▸ **getCachedEmbeddings**(`content`): `Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
+***
 
-#### Parameters
+### getMemories()
 
-| Name      | Type     |
-| :-------- | :------- |
-| `content` | `string` |
-
-#### Returns
-
-`Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
-
----
-
-### getMemories
-
-▸ **getMemories**(`opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+> **getMemories**(`opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Retrieves a list of memories by user IDs, with optional deduplication.
 
 #### Parameters
 
-| Name           | Type                                                       | Default value | Description                                        |
-| :------------- | :--------------------------------------------------------- | :------------ | :------------------------------------------------- |
-| `opts`         | `Object`                                                   | `undefined`   | Options including user IDs, count, and uniqueness. |
-| `opts.count?`  | `number`                                                   | `10`          | The number of memories to retrieve.                |
-| `opts.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined`   | The room ID to retrieve memories for.              |
-| `opts.unique?` | `boolean`                                                  | `true`        | Whether to retrieve unique memories only.          |
+• **opts**
+
+Options including user IDs, count, and uniqueness.
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.count?**: `number` = `10`
+
+The number of memories to retrieve.
+
+• **opts.end?**: `number`
+
+• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The room ID to retrieve memories for.
+
+• **opts.start?**: `number`
+
+• **opts.unique?**: `boolean` = `true`
+
+Whether to retrieve unique memories only.
 
 #### Returns
 
@@ -145,19 +174,23 @@ Retrieves a list of memories by user IDs, with optional deduplication.
 
 A Promise resolving to an array of Memory objects.
 
----
+#### Implementation of
 
-### removeAllMemories
+`IMemoryManager.getMemories`
 
-▸ **removeAllMemories**(`room_id`): `Promise`\<`void`\>
+***
+
+### removeAllMemories()
+
+> **removeAllMemories**(`roomId`): `Promise`\<`void`\>
 
 Removes all memories associated with a set of user IDs.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                         |
-| :-------- | :--------------------------------------------------------- | :---------------------------------- |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The room ID to remove memories for. |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The room ID to remove memories for.
 
 #### Returns
 
@@ -165,19 +198,23 @@ Removes all memories associated with a set of user IDs.
 
 A Promise that resolves when the operation completes.
 
----
+#### Implementation of
 
-### removeMemory
+`IMemoryManager.removeAllMemories`
 
-▸ **removeMemory**(`memoryId`): `Promise`\<`void`\>
+***
+
+### removeMemory()
+
+> **removeMemory**(`memoryId`): `Promise`\<`void`\>
 
 Removes a memory from the database by its ID.
 
 #### Parameters
 
-| Name       | Type                                                       | Description                     |
-| :--------- | :--------------------------------------------------------- | :------------------------------ |
-| `memoryId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The ID of the memory to remove. |
+• **memoryId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The ID of the memory to remove.
 
 #### Returns
 
@@ -185,27 +222,52 @@ Removes a memory from the database by its ID.
 
 A Promise that resolves when the operation completes.
 
----
+#### Implementation of
 
-### searchMemoriesByEmbedding
+`IMemoryManager.removeMemory`
 
-▸ **searchMemoriesByEmbedding**(`embedding`, `opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+***
+
+### searchMemoriesByEmbedding()
+
+> **searchMemoriesByEmbedding**(`embedding`, `opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories similar to a given embedding vector.
 
 #### Parameters
 
-| Name                    | Type                                                       | Description                                                         |
-| :---------------------- | :--------------------------------------------------------- | :------------------------------------------------------------------ |
-| `embedding`             | `number`[]                                                 | The embedding vector to search with.                                |
-| `opts`                  | `Object`                                                   | Options including match threshold, count, user IDs, and uniqueness. |
-| `opts.count?`           | `number`                                                   | The maximum number of memories to retrieve.                         |
-| `opts.match_threshold?` | `number`                                                   | The similarity threshold for matching memories.                     |
-| `opts.room_id`          | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The room ID to retrieve memories for.                               |
-| `opts.unique?`          | `boolean`                                                  | Whether to retrieve unique memories only.                           |
+• **embedding**: `number`[]
+
+The embedding vector to search with.
+
+• **opts**
+
+Options including match threshold, count, user IDs, and uniqueness.
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.count?**: `number`
+
+The maximum number of memories to retrieve.
+
+• **opts.match\_threshold?**: `number`
+
+The similarity threshold for matching memories.
+
+• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The room ID to retrieve memories for.
+
+• **opts.unique?**: `boolean`
+
+Whether to retrieve unique memories only.
 
 #### Returns
 
 `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 A Promise resolving to an array of Memory objects that match the embedding.
+
+#### Implementation of
+
+`IMemoryManager.searchMemoriesByEmbedding`

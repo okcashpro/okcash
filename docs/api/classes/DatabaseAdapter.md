@@ -1,48 +1,41 @@
----
-id: "DatabaseAdapter"
-title: "Class: DatabaseAdapter"
-sidebar_label: "DatabaseAdapter"
-sidebar_position: 0
-custom_edit_url: null
----
+# Class: `abstract` DatabaseAdapter
 
 An abstract class representing a database adapter for managing various entities
 like accounts, memories, actors, goals, and rooms.
 
-## Hierarchy
+## Implements
 
-- **`DatabaseAdapter`**
+- `IDatabaseAdapter`
 
-  ↳ [`SupabaseDatabaseAdapter`](SupabaseDatabaseAdapter.md)
+## Properties
 
-  ↳ [`SqliteDatabaseAdapter`](SqliteDatabaseAdapter.md)
+### db
 
-  ↳ [`SqlJsDatabaseAdapter`](SqlJsDatabaseAdapter.md)
+> **db**: `any`
 
-## Constructors
+The database instance.
 
-### constructor
+#### Implementation of
 
-• **new DatabaseAdapter**(): [`DatabaseAdapter`](DatabaseAdapter.md)
-
-#### Returns
-
-[`DatabaseAdapter`](DatabaseAdapter.md)
+`IDatabaseAdapter.db`
 
 ## Methods
 
-### addParticipant
+### addParticipant()
 
-▸ **addParticipant**(`user_id`, `room_id`): `Promise`\<`boolean`\>
+> `abstract` **addParticipant**(`userId`, `roomId`): `Promise`\<`boolean`\>
 
 Adds a user as a participant to a specific room.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                                           |
-| :-------- | :--------------------------------------------------------- | :---------------------------------------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user to add as a participant.         |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room to which the user will be added. |
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the user to add as a participant.
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room to which the user will be added.
 
 #### Returns
 
@@ -50,21 +43,31 @@ Adds a user as a participant to a specific room.
 
 A Promise that resolves to a boolean indicating success or failure.
 
----
+#### Implementation of
 
-### countMemories
+`IDatabaseAdapter.addParticipant`
 
-▸ **countMemories**(`room_id`, `unique?`, `tableName?`): `Promise`\<`number`\>
+***
+
+### countMemories()
+
+> `abstract` **countMemories**(`roomId`, `unique`?, `tableName`?): `Promise`\<`number`\>
 
 Counts the number of memories in a specific room.
 
 #### Parameters
 
-| Name         | Type                                                       | Description                                       |
-| :----------- | :--------------------------------------------------------- | :------------------------------------------------ |
-| `room_id`    | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room for which to count memories. |
-| `unique?`    | `boolean`                                                  | Specifies whether to count only unique memories.  |
-| `tableName?` | `string`                                                   | Optional table name to count memories from.       |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room for which to count memories.
+
+• **unique?**: `boolean`
+
+Specifies whether to count only unique memories.
+
+• **tableName?**: `string`
+
+Optional table name to count memories from.
 
 #### Returns
 
@@ -72,19 +75,23 @@ Counts the number of memories in a specific room.
 
 A Promise that resolves to the number of memories.
 
----
+#### Implementation of
 
-### createAccount
+`IDatabaseAdapter.countMemories`
 
-▸ **createAccount**(`account`): `Promise`\<`boolean`\>
+***
+
+### createAccount()
+
+> `abstract` **createAccount**(`account`): `Promise`\<`boolean`\>
 
 Creates a new account in the database.
 
 #### Parameters
 
-| Name      | Type                                  | Description                   |
-| :-------- | :------------------------------------ | :---------------------------- |
-| `account` | [`Account`](../interfaces/Account.md) | The account object to create. |
+• **account**: [`Account`](../interfaces/Account.md)
+
+The account object to create.
 
 #### Returns
 
@@ -92,19 +99,23 @@ Creates a new account in the database.
 
 A Promise that resolves when the account creation is complete.
 
----
+#### Implementation of
 
-### createGoal
+`IDatabaseAdapter.createAccount`
 
-▸ **createGoal**(`goal`): `Promise`\<`void`\>
+***
+
+### createGoal()
+
+> `abstract` **createGoal**(`goal`): `Promise`\<`void`\>
 
 Creates a new goal in the database.
 
 #### Parameters
 
-| Name   | Type                            | Description                |
-| :----- | :------------------------------ | :------------------------- |
-| `goal` | [`Goal`](../interfaces/Goal.md) | The goal object to create. |
+• **goal**: [`Goal`](../interfaces/Goal.md)
+
+The goal object to create.
 
 #### Returns
 
@@ -112,21 +123,31 @@ Creates a new goal in the database.
 
 A Promise that resolves when the goal has been created.
 
----
+#### Implementation of
 
-### createMemory
+`IDatabaseAdapter.createGoal`
 
-▸ **createMemory**(`memory`, `tableName`, `unique?`): `Promise`\<`void`\>
+***
+
+### createMemory()
+
+> `abstract` **createMemory**(`memory`, `tableName`, `unique`?): `Promise`\<`void`\>
 
 Creates a new memory in the database.
 
 #### Parameters
 
-| Name        | Type                                | Description                                  |
-| :---------- | :---------------------------------- | :------------------------------------------- |
-| `memory`    | [`Memory`](../interfaces/Memory.md) | The memory object to create.                 |
-| `tableName` | `string`                            | The table where the memory should be stored. |
-| `unique?`   | `boolean`                           | Indicates if the memory should be unique.    |
+• **memory**: [`Memory`](../interfaces/Memory.md)
+
+The memory object to create.
+
+• **tableName**: `string`
+
+The table where the memory should be stored.
+
+• **unique?**: `boolean`
+
+Indicates if the memory should be unique.
 
 #### Returns
 
@@ -134,21 +155,27 @@ Creates a new memory in the database.
 
 A Promise that resolves when the memory has been created.
 
----
+#### Implementation of
 
-### createRelationship
+`IDatabaseAdapter.createMemory`
 
-▸ **createRelationship**(`params`): `Promise`\<`boolean`\>
+***
+
+### createRelationship()
+
+> `abstract` **createRelationship**(`params`): `Promise`\<`boolean`\>
 
 Creates a new relationship between two users.
 
 #### Parameters
 
-| Name           | Type                                                       | Description                                                        |
-| :------------- | :--------------------------------------------------------- | :----------------------------------------------------------------- |
-| `params`       | `Object`                                                   | An object containing the UUIDs of the two users (userA and userB). |
-| `params.userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
-| `params.userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
+• **params**
+
+An object containing the UUIDs of the two users (userA and userB).
+
+• **params.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
@@ -156,60 +183,73 @@ Creates a new relationship between two users.
 
 A Promise that resolves to a boolean indicating success or failure of the creation.
 
----
+#### Implementation of
 
-### createRoom
+`IDatabaseAdapter.createRelationship`
 
-▸ **createRoom**(`room_id?`): `Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+***
+
+### createRoom()
+
+> `abstract` **createRoom**(`roomId`?): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
 
 Creates a new room with an optional specified ID.
 
 #### Parameters
 
-| Name       | Type                                                       | Description                              |
-| :--------- | :--------------------------------------------------------- | :--------------------------------------- |
-| `room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | Optional UUID to assign to the new room. |
+• **roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Optional UUID to assign to the new room.
 
 #### Returns
 
-`Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
 
 A Promise that resolves to the UUID of the created room.
 
----
+#### Implementation of
 
-### getAccountById
+`IDatabaseAdapter.createRoom`
 
-▸ **getAccountById**(`user_id`): `Promise`\<`null` \| [`Account`](../interfaces/Account.md)\>
+***
+
+### getAccountById()
+
+> `abstract` **getAccountById**(`userId`): `Promise`\<[`Account`](../interfaces/Account.md)\>
 
 Retrieves an account by its ID.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                               |
-| :-------- | :--------------------------------------------------------- | :---------------------------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user account to retrieve. |
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the user account to retrieve.
 
 #### Returns
 
-`Promise`\<`null` \| [`Account`](../interfaces/Account.md)\>
+`Promise`\<[`Account`](../interfaces/Account.md)\>
 
 A Promise that resolves to the Account object or null if not found.
 
----
+#### Implementation of
 
-### getActorDetails
+`IDatabaseAdapter.getAccountById`
 
-▸ **getActorDetails**(`params`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
+***
+
+### getActorDetails()
+
+> `abstract` **getActorDetails**(`params`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 Retrieves details of actors in a given room.
 
 #### Parameters
 
-| Name             | Type                                                       | Description                                            |
-| :--------------- | :--------------------------------------------------------- | :----------------------------------------------------- |
-| `params`         | `Object`                                                   | An object containing the room_id to search for actors. |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                      |
+• **params**
+
+An object containing the roomId to search for actors.
+
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
@@ -217,49 +257,67 @@ Retrieves details of actors in a given room.
 
 A Promise that resolves to an array of Actor objects.
 
----
+#### Implementation of
 
-### getCachedEmbeddings
+`IDatabaseAdapter.getActorDetails`
 
-▸ **getCachedEmbeddings**(`params`): `Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
+***
+
+### getCachedEmbeddings()
+
+> `abstract` **getCachedEmbeddings**(`params`): `Promise`\<`object`[]\>
 
 Retrieves cached embeddings based on the specified query parameters.
 
 #### Parameters
 
-| Name                          | Type     | Description                                                  |
-| :---------------------------- | :------- | :----------------------------------------------------------- |
-| `params`                      | `Object` | An object containing parameters for the embedding retrieval. |
-| `params.query_field_name`     | `string` | -                                                            |
-| `params.query_field_sub_name` | `string` | -                                                            |
-| `params.query_input`          | `string` | -                                                            |
-| `params.query_match_count`    | `number` | -                                                            |
-| `params.query_table_name`     | `string` | -                                                            |
-| `params.query_threshold`      | `number` | -                                                            |
+• **params**
+
+An object containing parameters for the embedding retrieval.
+
+• **params.query\_field\_name**: `string`
+
+• **params.query\_field\_sub\_name**: `string`
+
+• **params.query\_input**: `string`
+
+• **params.query\_match\_count**: `number`
+
+• **params.query\_table\_name**: `string`
+
+• **params.query\_threshold**: `number`
 
 #### Returns
 
-`Promise`\<\{ `embedding`: `number`[] ; `levenshtein_score`: `number` }[]\>
+`Promise`\<`object`[]\>
 
 A Promise that resolves to an array of objects containing embeddings and levenshtein scores.
 
----
+#### Implementation of
 
-### getGoals
+`IDatabaseAdapter.getCachedEmbeddings`
 
-▸ **getGoals**(`params`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
+***
+
+### getGoals()
+
+> `abstract` **getGoals**(`params`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
 
 Retrieves goals based on specified parameters.
 
 #### Parameters
 
-| Name                     | Type                                                                 | Description                                         |
-| :----------------------- | :------------------------------------------------------------------- | :-------------------------------------------------- |
-| `params`                 | `Object`                                                             | An object containing parameters for goal retrieval. |
-| `params.count?`          | `number`                                                             | -                                                   |
-| `params.onlyInProgress?` | `boolean`                                                            | -                                                   |
-| `params.room_id`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`           | -                                                   |
-| `params.user_id?`        | `null` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                   |
+• **params**
+
+An object containing parameters for goal retrieval.
+
+• **params.count?**: `number`
+
+• **params.onlyInProgress?**: `boolean`
+
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.userId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
@@ -267,23 +325,31 @@ Retrieves goals based on specified parameters.
 
 A Promise that resolves to an array of Goal objects.
 
----
+#### Implementation of
 
-### getMemories
+`IDatabaseAdapter.getGoals`
 
-▸ **getMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+***
+
+### getMemories()
+
+> `abstract` **getMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Retrieves memories based on the specified parameters.
 
 #### Parameters
 
-| Name               | Type                                                       | Description                                               |
-| :----------------- | :--------------------------------------------------------- | :-------------------------------------------------------- |
-| `params`           | `Object`                                                   | An object containing parameters for the memory retrieval. |
-| `params.count?`    | `number`                                                   | -                                                         |
-| `params.room_id`   | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                         |
-| `params.tableName` | `string`                                                   | -                                                         |
-| `params.unique?`   | `boolean`                                                  | -                                                         |
+• **params**
+
+An object containing parameters for the memory retrieval.
+
+• **params.count?**: `number`
+
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.tableName**: `string`
+
+• **params.unique?**: `boolean`
 
 #### Returns
 
@@ -291,98 +357,125 @@ Retrieves memories based on the specified parameters.
 
 A Promise that resolves to an array of Memory objects.
 
----
+#### Implementation of
 
-### getParticipantsForAccount
+`IDatabaseAdapter.getMemories`
 
-▸ **getParticipantsForAccount**(`user_id`): `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
+***
+
+### getParticipantsForAccount()
+
+#### getParticipantsForAccount(userId)
+
+> `abstract` **getParticipantsForAccount**(`userId`): `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 Retrieves participants associated with a specific account.
 
-#### Parameters
+##### Parameters
 
-| Name      | Type                                                       | Description              |
-| :-------- | :--------------------------------------------------------- | :----------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the account. |
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-#### Returns
+The UUID of the account.
+
+##### Returns
 
 `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 A Promise that resolves to an array of Participant objects.
 
-▸ **getParticipantsForAccount**(`user_id`): `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
+##### Implementation of
+
+`IDatabaseAdapter.getParticipantsForAccount`
+
+#### getParticipantsForAccount(userId)
+
+> `abstract` **getParticipantsForAccount**(`userId`): `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 Retrieves participants associated with a specific account.
 
-#### Parameters
+##### Parameters
 
-| Name      | Type                                                       | Description              |
-| :-------- | :--------------------------------------------------------- | :----------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the account. |
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-#### Returns
+The UUID of the account.
+
+##### Returns
 
 `Promise`\<[`Participant`](../interfaces/Participant.md)[]\>
 
 A Promise that resolves to an array of Participant objects.
 
----
+##### Implementation of
 
-### getParticipantsForRoom
+`IDatabaseAdapter.getParticipantsForAccount`
 
-▸ **getParticipantsForRoom**(`room_id`): `Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+***
+
+### getParticipantsForRoom()
+
+> `abstract` **getParticipantsForRoom**(`roomId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
 Retrieves participants for a specific room.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                                              |
-| :-------- | :--------------------------------------------------------- | :------------------------------------------------------- |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room for which to retrieve participants. |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room for which to retrieve participants.
 
 #### Returns
 
-`Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
 A Promise that resolves to an array of UUIDs representing the participants.
 
----
+#### Implementation of
 
-### getRelationship
+`IDatabaseAdapter.getParticipantsForRoom`
 
-▸ **getRelationship**(`params`): `Promise`\<`null` \| [`Relationship`](../interfaces/Relationship.md)\>
+***
+
+### getRelationship()
+
+> `abstract` **getRelationship**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
 Retrieves a relationship between two users if it exists.
 
 #### Parameters
 
-| Name           | Type                                                       | Description                                                        |
-| :------------- | :--------------------------------------------------------- | :----------------------------------------------------------------- |
-| `params`       | `Object`                                                   | An object containing the UUIDs of the two users (userA and userB). |
-| `params.userA` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
-| `params.userB` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                                  |
+• **params**
+
+An object containing the UUIDs of the two users (userA and userB).
+
+• **params.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
-`Promise`\<`null` \| [`Relationship`](../interfaces/Relationship.md)\>
+`Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
 A Promise that resolves to the Relationship object or null if not found.
 
----
+#### Implementation of
 
-### getRelationships
+`IDatabaseAdapter.getRelationship`
 
-▸ **getRelationships**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
+***
+
+### getRelationships()
+
+> `abstract` **getRelationships**(`params`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
 Retrieves all relationships for a specific user.
 
 #### Parameters
 
-| Name             | Type                                                       | Description                                |
-| :--------------- | :--------------------------------------------------------- | :----------------------------------------- |
-| `params`         | `Object`                                                   | An object containing the UUID of the user. |
-| `params.user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                          |
+• **params**
+
+An object containing the UUID of the user.
+
+• **params.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
@@ -390,83 +483,103 @@ Retrieves all relationships for a specific user.
 
 A Promise that resolves to an array of Relationship objects.
 
----
+#### Implementation of
 
-### getRoom
+`IDatabaseAdapter.getRelationships`
 
-▸ **getRoom**(`room_id`): `Promise`\<`null` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+***
+
+### getRoom()
+
+> `abstract` **getRoom**(`roomId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
 
 Retrieves the room ID for a given room, if it exists.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                       |
-| :-------- | :--------------------------------------------------------- | :-------------------------------- |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room to retrieve. |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room to retrieve.
 
 #### Returns
 
-`Promise`\<`null` \| \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
 
 A Promise that resolves to the room ID or null if not found.
 
----
+#### Implementation of
 
-### getRoomsForParticipant
+`IDatabaseAdapter.getRoom`
 
-▸ **getRoomsForParticipant**(`user_id`): `Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+***
+
+### getRoomsForParticipant()
+
+> `abstract` **getRoomsForParticipant**(`userId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
 Retrieves room IDs for which a specific user is a participant.
 
 #### Parameters
 
-| Name      | Type                                                       | Description           |
-| :-------- | :--------------------------------------------------------- | :-------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user. |
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the user.
 
 #### Returns
 
-`Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
 A Promise that resolves to an array of room IDs.
 
----
+#### Implementation of
 
-### getRoomsForParticipants
+`IDatabaseAdapter.getRoomsForParticipant`
 
-▸ **getRoomsForParticipants**(`userIds`): `Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+***
+
+### getRoomsForParticipants()
+
+> `abstract` **getRoomsForParticipants**(`userIds`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
 Retrieves room IDs for which specific users are participants.
 
 #### Parameters
 
-| Name      | Type                                                         | Description                     |
-| :-------- | :----------------------------------------------------------- | :------------------------------ |
-| `userIds` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[] | An array of UUIDs of the users. |
+• **userIds**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]
+
+An array of UUIDs of the users.
 
 #### Returns
 
-`Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
 A Promise that resolves to an array of room IDs.
 
----
+#### Implementation of
 
-### log
+`IDatabaseAdapter.getRoomsForParticipants`
 
-▸ **log**(`params`): `Promise`\<`void`\>
+***
+
+### log()
+
+> `abstract` **log**(`params`): `Promise`\<`void`\>
 
 Logs an event or action with the specified details.
 
 #### Parameters
 
-| Name             | Type                                                       | Description                                        |
-| :--------------- | :--------------------------------------------------------- | :------------------------------------------------- |
-| `params`         | `Object`                                                   | An object containing parameters for the log entry. |
-| `params.body`    | `Object`                                                   | -                                                  |
-| `params.room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                  |
-| `params.type`    | `string`                                                   | -                                                  |
-| `params.user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                  |
+• **params**
+
+An object containing parameters for the log entry.
+
+• **params.body**
+
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.type**: `string`
+
+• **params.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
@@ -474,19 +587,23 @@ Logs an event or action with the specified details.
 
 A Promise that resolves when the log entry has been saved.
 
----
+#### Implementation of
 
-### removeAllGoals
+`IDatabaseAdapter.log`
 
-▸ **removeAllGoals**(`room_id`): `Promise`\<`void`\>
+***
+
+### removeAllGoals()
+
+> `abstract` **removeAllGoals**(`roomId`): `Promise`\<`void`\>
 
 Removes all goals associated with a specific room.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                                         |
-| :-------- | :--------------------------------------------------------- | :-------------------------------------------------- |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room whose goals should be removed. |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room whose goals should be removed.
 
 #### Returns
 
@@ -494,20 +611,27 @@ Removes all goals associated with a specific room.
 
 A Promise that resolves when all goals have been removed.
 
----
+#### Implementation of
 
-### removeAllMemories
+`IDatabaseAdapter.removeAllGoals`
 
-▸ **removeAllMemories**(`room_id`, `tableName`): `Promise`\<`void`\>
+***
+
+### removeAllMemories()
+
+> `abstract` **removeAllMemories**(`roomId`, `tableName`): `Promise`\<`void`\>
 
 Removes all memories associated with a specific room.
 
 #### Parameters
 
-| Name        | Type                                                       | Description                                            |
-| :---------- | :--------------------------------------------------------- | :----------------------------------------------------- |
-| `room_id`   | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room whose memories should be removed. |
-| `tableName` | `string`                                                   | The table from which the memories should be removed.   |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room whose memories should be removed.
+
+• **tableName**: `string`
+
+The table from which the memories should be removed.
 
 #### Returns
 
@@ -515,19 +639,23 @@ Removes all memories associated with a specific room.
 
 A Promise that resolves when all memories have been removed.
 
----
+#### Implementation of
 
-### removeGoal
+`IDatabaseAdapter.removeAllMemories`
 
-▸ **removeGoal**(`goalId`): `Promise`\<`void`\>
+***
+
+### removeGoal()
+
+> `abstract` **removeGoal**(`goalId`): `Promise`\<`void`\>
 
 Removes a specific goal from the database.
 
 #### Parameters
 
-| Name     | Type                                                       | Description                     |
-| :------- | :--------------------------------------------------------- | :------------------------------ |
-| `goalId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the goal to remove. |
+• **goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the goal to remove.
 
 #### Returns
 
@@ -535,20 +663,27 @@ Removes a specific goal from the database.
 
 A Promise that resolves when the goal has been removed.
 
----
+#### Implementation of
 
-### removeMemory
+`IDatabaseAdapter.removeGoal`
 
-▸ **removeMemory**(`memoryId`, `tableName`): `Promise`\<`void`\>
+***
+
+### removeMemory()
+
+> `abstract` **removeMemory**(`memoryId`, `tableName`): `Promise`\<`void`\>
 
 Removes a specific memory from the database.
 
 #### Parameters
 
-| Name        | Type                                                       | Description                                        |
-| :---------- | :--------------------------------------------------------- | :------------------------------------------------- |
-| `memoryId`  | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the memory to remove.                  |
-| `tableName` | `string`                                                   | The table from which the memory should be removed. |
+• **memoryId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the memory to remove.
+
+• **tableName**: `string`
+
+The table from which the memory should be removed.
 
 #### Returns
 
@@ -556,20 +691,27 @@ Removes a specific memory from the database.
 
 A Promise that resolves when the memory has been removed.
 
----
+#### Implementation of
 
-### removeParticipant
+`IDatabaseAdapter.removeMemory`
 
-▸ **removeParticipant**(`user_id`, `room_id`): `Promise`\<`boolean`\>
+***
+
+### removeParticipant()
+
+> `abstract` **removeParticipant**(`userId`, `roomId`): `Promise`\<`boolean`\>
 
 Removes a user as a participant from a specific room.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                                               |
-| :-------- | :--------------------------------------------------------- | :-------------------------------------------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the user to remove as a participant.          |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room from which the user will be removed. |
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the user to remove as a participant.
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room from which the user will be removed.
 
 #### Returns
 
@@ -577,19 +719,23 @@ Removes a user as a participant from a specific room.
 
 A Promise that resolves to a boolean indicating success or failure.
 
----
+#### Implementation of
 
-### removeRoom
+`IDatabaseAdapter.removeParticipant`
 
-▸ **removeRoom**(`room_id`): `Promise`\<`void`\>
+***
+
+### removeRoom()
+
+> `abstract` **removeRoom**(`roomId`): `Promise`\<`void`\>
 
 Removes a specific room from the database.
 
 #### Parameters
 
-| Name      | Type                                                       | Description                     |
-| :-------- | :--------------------------------------------------------- | :------------------------------ |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The UUID of the room to remove. |
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The UUID of the room to remove.
 
 #### Returns
 
@@ -597,25 +743,35 @@ Removes a specific room from the database.
 
 A Promise that resolves when the room has been removed.
 
----
+#### Implementation of
 
-### searchMemories
+`IDatabaseAdapter.removeRoom`
 
-▸ **searchMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+***
+
+### searchMemories()
+
+> `abstract` **searchMemories**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories based on embeddings and other specified parameters.
 
 #### Parameters
 
-| Name                     | Type                                                       | Description                                            |
-| :----------------------- | :--------------------------------------------------------- | :----------------------------------------------------- |
-| `params`                 | `Object`                                                   | An object containing parameters for the memory search. |
-| `params.embedding`       | `number`[]                                                 | -                                                      |
-| `params.match_count`     | `number`                                                   | -                                                      |
-| `params.match_threshold` | `number`                                                   | -                                                      |
-| `params.room_id`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                      |
-| `params.tableName`       | `string`                                                   | -                                                      |
-| `params.unique`          | `boolean`                                                  | -                                                      |
+• **params**
+
+An object containing parameters for the memory search.
+
+• **params.embedding**: `number`[]
+
+• **params.match\_count**: `number`
+
+• **params.match\_threshold**: `number`
+
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.tableName**: `string`
+
+• **params.unique**: `boolean`
 
 #### Returns
 
@@ -623,25 +779,39 @@ Searches for memories based on embeddings and other specified parameters.
 
 A Promise that resolves to an array of Memory objects.
 
----
+#### Implementation of
 
-### searchMemoriesByEmbedding
+`IDatabaseAdapter.searchMemories`
 
-▸ **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+***
+
+### searchMemoriesByEmbedding()
+
+> `abstract` **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
 Searches for memories by embedding and other specified parameters.
 
 #### Parameters
 
-| Name                      | Type                                                       | Description                           |
-| :------------------------ | :--------------------------------------------------------- | :------------------------------------ |
-| `embedding`               | `number`[]                                                 | The embedding vector to search with.  |
-| `params`                  | `Object`                                                   | Additional parameters for the search. |
-| `params.count?`           | `number`                                                   | -                                     |
-| `params.match_threshold?` | `number`                                                   | -                                     |
-| `params.room_id?`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                     |
-| `params.tableName`        | `string`                                                   | -                                     |
-| `params.unique?`          | `boolean`                                                  | -                                     |
+• **embedding**: `number`[]
+
+The embedding vector to search with.
+
+• **params**
+
+Additional parameters for the search.
+
+• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.count?**: `number`
+
+• **params.match\_threshold?**: `number`
+
+• **params.roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.tableName**: `string`
+
+• **params.unique?**: `boolean`
 
 #### Returns
 
@@ -649,19 +819,23 @@ Searches for memories by embedding and other specified parameters.
 
 A Promise that resolves to an array of Memory objects.
 
----
+#### Implementation of
 
-### updateGoal
+`IDatabaseAdapter.searchMemoriesByEmbedding`
 
-▸ **updateGoal**(`goal`): `Promise`\<`void`\>
+***
+
+### updateGoal()
+
+> `abstract` **updateGoal**(`goal`): `Promise`\<`void`\>
 
 Updates a specific goal in the database.
 
 #### Parameters
 
-| Name   | Type                            | Description                              |
-| :----- | :------------------------------ | :--------------------------------------- |
-| `goal` | [`Goal`](../interfaces/Goal.md) | The goal object with updated properties. |
+• **goal**: [`Goal`](../interfaces/Goal.md)
+
+The goal object with updated properties.
 
 #### Returns
 
@@ -669,24 +843,34 @@ Updates a specific goal in the database.
 
 A Promise that resolves when the goal has been updated.
 
----
+#### Implementation of
 
-### updateGoalStatus
+`IDatabaseAdapter.updateGoal`
 
-▸ **updateGoalStatus**(`params`): `Promise`\<`void`\>
+***
+
+### updateGoalStatus()
+
+> `abstract` **updateGoalStatus**(`params`): `Promise`\<`void`\>
 
 Updates the status of a specific goal.
 
 #### Parameters
 
-| Name            | Type                                                       | Description                                         |
-| :-------------- | :--------------------------------------------------------- | :-------------------------------------------------- |
-| `params`        | `Object`                                                   | An object containing the goalId and the new status. |
-| `params.goalId` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                                   |
-| `params.status` | [`GoalStatus`](../enums/GoalStatus.md)                     | -                                                   |
+• **params**
+
+An object containing the goalId and the new status.
+
+• **params.goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.status**: `GoalStatus`
 
 #### Returns
 
 `Promise`\<`void`\>
 
 A Promise that resolves when the goal status has been updated.
+
+#### Implementation of
+
+`IDatabaseAdapter.updateGoalStatus`

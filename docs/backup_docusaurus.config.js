@@ -13,7 +13,7 @@ const config = {
   projectName: "eliza",
   deploymentBranch: "gh-pages",
   trailingSlash: true,
-  onBrokenLinks: "ignore", // Changed to ignore
+  onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   
   i18n: {
@@ -25,36 +25,30 @@ const config = {
   },
   themes: [
     '@docusaurus/theme-mermaid',
+    // Any other themes...
   ],
   plugins: [
     [
       "docusaurus-plugin-typedoc",
       {
-        entryPoints: ["../packages/core/src/index.ts"], // Updated path
-        tsconfig: "../packages/core/tsconfig.json", // Updated path
+        entryPoints: ["../packages/core/src/index.ts"],
+        tsconfig: "../packages/core/src/tsconfig.json",
         out: "./api",
         skipErrorChecking: true,
         excludeExternals: true,
         excludeProtected: true,
         excludePrivate: true,
-        excludeNotDocumented: true,
+        stripInternal: true, // Add this
+        excludeNotDocumented: true, // Add this
         cleanOutputDir: true,
         hideGenerator: true,
-        exclude: [
-          "**/_media/**", 
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/*.test.ts",
-          "**/tests/**"
-        ],
+        exclude: ["**/_media/**", "**/node_modules/**"],
         excludeReferences: true,
-        disableSources: true,
-        excludeInternal: true,
-        watch: false,
-        preserveWatchOutput: false,
       },
     ],
+    // Search functionality
     require.resolve("docusaurus-lunr-search"),
+    // Separate API docs plugin instance
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -74,7 +68,6 @@ const config = {
           sidebarPath: "./sidebars.js",
           editUrl: "https://github.com/ai16z/eliza/tree/main/docs/",
           routeBasePath: "docs",
-          exclude: ["**/_media/**"],  // Add exclude pattern here too
         },
         theme: {
           customCss: "./src/css/custom.css",
@@ -85,12 +78,13 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Rest of themeConfig remains the same
+      // Enable dark mode by default
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
+      // Add sidebar configuration
       docs: {
         sidebar: {
           hideable: true,

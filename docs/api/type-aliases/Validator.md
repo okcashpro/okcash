@@ -6,7 +6,7 @@ Represents the type of a validator function, which takes a runtime instance, a m
 
 ## Parameters
 
-• **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+• **runtime**: `IAgentRuntime`
 
 • **message**: [`Memory`](../interfaces/Memory.md)
 
@@ -15,7 +15,3 @@ Represents the type of a validator function, which takes a runtime instance, a m
 ## Returns
 
 `Promise`\<`boolean`\>
-
-## Defined in
-
-[core/src/core/types.ts:190](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L190)

@@ -1,23 +1,17 @@
----
-id: "getActorDetails"
-title: "Function: getActorDetails"
-sidebar_label: "getActorDetails"
-sidebar_position: 0
-custom_edit_url: null
----
+# Function: getActorDetails()
 
-▸ **getActorDetails**(`«destructured»`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
+> **getActorDetails**(`__namedParameters`): `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
 
 Get details for a list of actors.
 
-#### Parameters
+## Parameters
 
-| Name             | Type                                                       |
-| :--------------- | :--------------------------------------------------------- |
-| `«destructured»` | `Object`                                                   |
-| › `room_id`      | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
-| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
+• **\_\_namedParameters**
 
-#### Returns
+• **\_\_namedParameters.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **\_\_namedParameters.runtime**: `IAgentRuntime`
+
+## Returns
 
 `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>

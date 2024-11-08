@@ -16,7 +16,7 @@ The context of the message to be completed.
 
 • **opts.modelClass**: `string`
 
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+• **opts.runtime**: `IAgentRuntime`
 
 • **opts.stop?**: `string`[]
 
@@ -27,7 +27,3 @@ A list of strings to stop the generateText at.
 `Promise`\<`string`\>
 
 The completed message.
-
-## Defined in
-
-[core/src/core/generation.ts:30](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/generation.ts#L30)

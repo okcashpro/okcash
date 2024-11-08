@@ -1,32 +1,29 @@
----
-id: "addHeader"
-title: "Function: addHeader"
-sidebar_label: "addHeader"
-sidebar_position: 0
-custom_edit_url: null
----
+# Function: addHeader()
 
-▸ **addHeader**(`header`, `body`): `string`
+> **addHeader**(`header`, `body`): `string`
 
 Adds a header to a body of text.
 
 This function takes a header string and a body string and returns a new string with the header prepended to the body.
 If the body string is empty, the header is returned as is.
 
-#### Parameters
+## Parameters
 
-| Name     | Type     | Description                          |
-| :------- | :------- | :----------------------------------- |
-| `header` | `string` | The header to add to the body.       |
-| `body`   | `string` | The body to which to add the header. |
+• **header**: `string`
 
-#### Returns
+The header to add to the body.
+
+• **body**: `string`
+
+The body to which to add the header.
+
+## Returns
 
 `string`
 
 The body with the header prepended.
 
-**`Example`**
+## Example
 
 ```ts
 // Given a header and a body

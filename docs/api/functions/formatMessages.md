@@ -1,24 +1,18 @@
----
-id: "formatMessages"
-title: "Function: formatMessages"
-sidebar_label: "formatMessages"
-sidebar_position: 0
-custom_edit_url: null
----
+# Function: formatMessages()
 
-▸ **formatMessages**(`«destructured»`): `string`
+> **formatMessages**(`__namedParameters`): `string`
 
 Format messages into a string
 
-#### Parameters
+## Parameters
 
-| Name             | Type                                  |
-| :--------------- | :------------------------------------ |
-| `«destructured»` | `Object`                              |
-| › `actors`       | [`Actor`](../interfaces/Actor.md)[]   |
-| › `messages`     | [`Memory`](../interfaces/Memory.md)[] |
+• **\_\_namedParameters**
 
-#### Returns
+• **\_\_namedParameters.actors**: [`Actor`](../interfaces/Actor.md)[]
+
+• **\_\_namedParameters.messages**: [`Memory`](../interfaces/Memory.md)[]
+
+## Returns
 
 `string`
 
