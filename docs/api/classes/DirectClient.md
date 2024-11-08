@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:57](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L57)
+[packages/core/src/clients/direct/index.ts:56](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L56)
 
 ## Methods
 
@@ -30,27 +30,9 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:263](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L263)
+[packages/core/src/clients/direct/index.ts:264](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L264)
 
----
-
-### start()
-
-> **start**(`port`): `void`
-
-#### Parameters
-
-• **port**: `number`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[core/src/clients/direct/index.ts:271](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L271)
-
----
+***
 
 ### unregisterAgent()
 
@@ -66,4 +48,22 @@
 
 #### Defined in
 
-[core/src/clients/direct/index.ts:267](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/clients/direct/index.ts#L267)
+[packages/core/src/clients/direct/index.ts:268](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L268)
+
+***
+
+### start()
+
+> **start**(`port`): `void`
+
+#### Parameters
+
+• **port**: `number`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/src/clients/direct/index.ts:272](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L272)

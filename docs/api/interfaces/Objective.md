@@ -1,27 +1,33 @@
----
-id: "Objective"
-title: "Interface: Objective"
-sidebar_label: "Objective"
-sidebar_position: 0
-custom_edit_url: null
----
+# Interface: Objective
 
 Represents an objective within a goal, detailing what needs to be achieved and whether it has been completed.
 
 ## Properties
 
-### completed
+### id?
 
-• **completed**: `boolean`
+> `optional` **id**: `string`
 
----
+#### Defined in
+
+[packages/core/src/core/types.ts:52](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L52)
+
+***
 
 ### description
 
-• **description**: `string`
+> **description**: `string`
 
----
+#### Defined in
 
-### id
+[packages/core/src/core/types.ts:53](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L53)
 
-• `Optional` **id**: `string`
+***
+
+### completed
+
+> **completed**: `boolean`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L54)

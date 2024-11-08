@@ -2,25 +2,15 @@
 
 ## Enumeration Members
 
-### EMBEDDING
+### SMALL
 
-> **EMBEDDING**: `"embedding"`
-
-#### Defined in
-
-[core/src/core/types.ts:79](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L79)
-
----
-
-### LARGE
-
-> **LARGE**: `"large"`
+> **SMALL**: `"small"`
 
 #### Defined in
 
-[core/src/core/types.ts:78](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L78)
+[packages/core/src/core/types.ts:76](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L76)
 
----
+***
 
 ### MEDIUM
 
@@ -28,14 +18,24 @@
 
 #### Defined in
 
-[core/src/core/types.ts:77](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L77)
+[packages/core/src/core/types.ts:77](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L77)
 
----
+***
 
-### SMALL
+### LARGE
 
-> **SMALL**: `"small"`
+> **LARGE**: `"large"`
 
 #### Defined in
 
-[core/src/core/types.ts:76](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L76)
+[packages/core/src/core/types.ts:78](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L78)
+
+***
+
+### EMBEDDING
+
+> **EMBEDDING**: `"embedding"`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L79)

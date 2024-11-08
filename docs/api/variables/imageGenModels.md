@@ -4,18 +4,6 @@
 
 ## Type declaration
 
-### Dalle
-
-> **Dalle**: `object`
-
-### Dalle.steps
-
-> **steps**: `number` = `0`
-
-### Dalle.subModel
-
-> **subModel**: `string` = `"dall-e-3"`
-
 ### TogetherAI
 
 > **TogetherAI**: `object`
@@ -28,6 +16,18 @@
 
 > **subModel**: `string` = `"black-forest-labs/FLUX.1-schnell"`
 
+### Dalle
+
+> **Dalle**: `object`
+
+### Dalle.steps
+
+> **steps**: `number` = `0`
+
+### Dalle.subModel
+
+> **subModel**: `string` = `"dall-e-3"`
+
 ## Defined in
 
-[core/src/core/imageGenModels.ts:6](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/imageGenModels.ts#L6)
+[packages/core/src/core/imageGenModels.ts:6](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/imageGenModels.ts#L6)

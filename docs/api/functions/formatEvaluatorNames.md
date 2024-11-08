@@ -1,23 +1,21 @@
----
-id: "formatEvaluatorNames"
-title: "Function: formatEvaluatorNames"
-sidebar_label: "formatEvaluatorNames"
-sidebar_position: 0
-custom_edit_url: null
----
+# Function: formatEvaluatorNames()
 
-▸ **formatEvaluatorNames**(`evaluators`): `string`
+> **formatEvaluatorNames**(`evaluators`): `string`
 
 Formats the names of evaluators into a comma-separated list, each enclosed in single quotes.
 
-#### Parameters
+## Parameters
 
-| Name         | Type                                        | Description                    |
-| :----------- | :------------------------------------------ | :----------------------------- |
-| `evaluators` | [`Evaluator`](../interfaces/Evaluator.md)[] | An array of evaluator objects. |
+• **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
 
-#### Returns
+An array of evaluator objects.
+
+## Returns
 
 `string`
 
 A string that concatenates the names of all evaluators, each enclosed in single quotes and separated by commas.
+
+## Defined in
+
+[packages/core/src/core/evaluators.ts:34](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/evaluators.ts#L34)

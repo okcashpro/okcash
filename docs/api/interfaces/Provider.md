@@ -1,31 +1,25 @@
----
-id: "Provider"
-title: "Interface: Provider"
-sidebar_label: "Provider"
-sidebar_position: 0
-custom_edit_url: null
----
+# Interface: Provider
 
 Represents a provider, which is used to retrieve information or perform actions on behalf of the agent, such as fetching data from an external API or service.
 
 ## Properties
 
-### get
+### get()
 
-• **get**: (`runtime`: [`AgentRuntime`](../classes/AgentRuntime.md), `message`: [`Message`](Message.md), `state?`: [`State`](State.md)) => `Promise`\<`unknown`\>
+> **get**: (`runtime`, `message`, `state`?) => `Promise`\<`any`\>
 
-#### Type declaration
+#### Parameters
 
-▸ (`runtime`, `message`, `state?`): `Promise`\<`unknown`\>
+• **runtime**: [`IAgentRuntime`](IAgentRuntime.md)
 
-##### Parameters
+• **message**: [`Memory`](Memory.md)
 
-| Name      | Type                                         |
-| :-------- | :------------------------------------------- |
-| `runtime` | [`AgentRuntime`](../classes/AgentRuntime.md) |
-| `message` | [`Message`](Message.md)                      |
-| `state?`  | [`State`](State.md)                          |
+• **state?**: [`State`](State.md)
 
-##### Returns
+#### Returns
 
-`Promise`\<`unknown`\>
+`Promise`\<`any`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:246](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L246)

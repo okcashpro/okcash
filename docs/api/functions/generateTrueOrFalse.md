@@ -10,13 +10,13 @@ Sends a message to the model and parses the response as a boolean value
 
 The options for the generateText request
 
+• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **opts.context**: `string` = `""`
 
 The context to evaluate for the boolean response
 
 • **opts.modelClass**: `string`
-
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 
@@ -26,4 +26,4 @@ Promise resolving to a boolean value parsed from the model's response
 
 ## Defined in
 
-[core/src/core/generation.ts:350](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/generation.ts#L350)
+[packages/core/src/core/generation.ts:377](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/generation.ts#L377)

@@ -6,19 +6,23 @@
 
 • **data**
 
-• **data.count?**: `number`
-
-• **data.height**: `number`
-
 • **data.prompt**: `string`
 
 • **data.width**: `number`
+
+• **data.height**: `number`
+
+• **data.count?**: `number`
 
 • **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 
 `Promise`\<`object`\>
+
+### success
+
+> **success**: `boolean`
 
 ### data?
 
@@ -28,10 +32,6 @@
 
 > `optional` **error**: `any`
 
-### success
-
-> **success**: `boolean`
-
 ## Defined in
 
-[core/src/actions/imageGenerationUtils.ts:8](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/imageGenerationUtils.ts#L8)
+[packages/core/src/actions/imageGenerationUtils.ts:8](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/imageGenerationUtils.ts#L8)

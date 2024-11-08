@@ -1,21 +1,23 @@
----
-id: "MessageExample"
-title: "Interface: MessageExample"
-sidebar_label: "MessageExample"
-sidebar_position: 0
-custom_edit_url: null
----
+# Interface: MessageExample
 
 Represents an example of a message, typically used for demonstrating or testing purposes, including optional content and action.
 
 ## Properties
 
-### content
-
-• **content**: [`Content`](Content.md)
-
----
-
 ### user
 
-• **user**: `string`
+> **user**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:179](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L179)
+
+***
+
+### content
+
+> **content**: [`Content`](Content.md)
+
+#### Defined in
+
+[packages/core/src/core/types.ts:180](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L180)

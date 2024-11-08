@@ -8,43 +8,25 @@ Represents the content of a message, including its main text (`content`), any as
 
 ## Properties
 
-### action?
+### deployerPrivateKey
 
-> `optional` **action**: `string`
-
-#### Inherited from
-
-[`Content`](Content.md).[`action`](Content.md#action)
+> **deployerPrivateKey**: `string`
 
 #### Defined in
 
-[core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L14)
+[packages/core/src/actions/pumpfun.ts:23](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/pumpfun.ts#L23)
 
----
+***
 
-### allowOffCurve
+### tokenMetadata
 
-> **allowOffCurve**: `boolean`
-
-#### Defined in
-
-[core/src/actions/pumpfun.ts:30](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/pumpfun.ts#L30)
-
----
-
-### attachments?
-
-> `optional` **attachments**: [`Media`](../type-aliases/Media.md)[]
-
-#### Inherited from
-
-[`Content`](Content.md).[`attachments`](Content.md#attachments)
+> **tokenMetadata**: `CreateTokenMetadata`
 
 #### Defined in
 
-[core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L18)
+[packages/core/src/actions/pumpfun.ts:24](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/pumpfun.ts#L24)
 
----
+***
 
 ### buyAmountSol
 
@@ -52,33 +34,9 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:25](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/pumpfun.ts#L25)
+[packages/core/src/actions/pumpfun.ts:25](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/pumpfun.ts#L25)
 
----
-
-### deployerPrivateKey
-
-> **deployerPrivateKey**: `string`
-
-#### Defined in
-
-[core/src/actions/pumpfun.ts:23](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/pumpfun.ts#L23)
-
----
-
-### inReplyTo?
-
-> `optional` **inReplyTo**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Inherited from
-
-[`Content`](Content.md).[`inReplyTo`](Content.md#inreplyto)
-
-#### Defined in
-
-[core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L17)
-
----
+***
 
 ### priorityFee
 
@@ -94,23 +52,19 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:26](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/pumpfun.ts#L26)
+[packages/core/src/actions/pumpfun.ts:26](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/pumpfun.ts#L26)
 
----
+***
 
-### source?
+### allowOffCurve
 
-> `optional` **source**: `string`
-
-#### Inherited from
-
-[`Content`](Content.md).[`source`](Content.md#source)
+> **allowOffCurve**: `boolean`
 
 #### Defined in
 
-[core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L15)
+[packages/core/src/actions/pumpfun.ts:30](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/pumpfun.ts#L30)
 
----
+***
 
 ### text
 
@@ -122,19 +76,37 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L13)
+[packages/core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L13)
 
----
+***
 
-### tokenMetadata
+### action?
 
-> **tokenMetadata**: `CreateTokenMetadata`
+> `optional` **action**: `string`
+
+#### Inherited from
+
+[`Content`](Content.md).[`action`](Content.md#action)
 
 #### Defined in
 
-[core/src/actions/pumpfun.ts:24](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/pumpfun.ts#L24)
+[packages/core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L14)
 
----
+***
+
+### source?
+
+> `optional` **source**: `string`
+
+#### Inherited from
+
+[`Content`](Content.md).[`source`](Content.md#source)
+
+#### Defined in
+
+[packages/core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L15)
+
+***
 
 ### url?
 
@@ -146,4 +118,32 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[core/src/core/types.ts:16](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L16)
+[packages/core/src/core/types.ts:16](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L16)
+
+***
+
+### inReplyTo?
+
+> `optional` **inReplyTo**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Inherited from
+
+[`Content`](Content.md).[`inReplyTo`](Content.md#inreplyto)
+
+#### Defined in
+
+[packages/core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L17)
+
+***
+
+### attachments?
+
+> `optional` **attachments**: [`Media`](../type-aliases/Media.md)[]
+
+#### Inherited from
+
+[`Content`](Content.md).[`attachments`](Content.md#attachments)
+
+#### Defined in
+
+[packages/core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L18)

@@ -1,9 +1,7 @@
----
-id: "embeddingZeroVector"
-title: "Variable: embeddingZeroVector"
-sidebar_label: "embeddingZeroVector"
-sidebar_position: 0
-custom_edit_url: null
----
+# Variable: embeddingZeroVector
 
-• `Const` **embeddingZeroVector**: `any`[]
+> `const` **embeddingZeroVector**: `any`[]
+
+## Defined in
+
+[packages/core/src/core/memory.ts:10](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L10)

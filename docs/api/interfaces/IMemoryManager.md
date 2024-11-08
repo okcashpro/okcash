@@ -2,25 +2,15 @@
 
 ## Properties
 
-### constructor
-
-> **constructor**: `Function`
-
-#### Defined in
-
-[core/src/core/types.ts:449](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L449)
-
----
-
 ### runtime
 
 > **runtime**: [`IAgentRuntime`](IAgentRuntime.md)
 
 #### Defined in
 
-[core/src/core/types.ts:446](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L446)
+[packages/core/src/core/types.ts:459](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L459)
 
----
+***
 
 ### tableName
 
@@ -28,7 +18,17 @@
 
 #### Defined in
 
-[core/src/core/types.ts:447](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L447)
+[packages/core/src/core/types.ts:460](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L460)
+
+***
+
+### constructor
+
+> **constructor**: `Function`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:462](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L462)
 
 ## Methods
 
@@ -46,29 +46,127 @@
 
 #### Defined in
 
-[core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L451)
+[packages/core/src/core/types.ts:464](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L464)
 
----
+***
 
-### countMemories()
+### getMemories()
 
-> **countMemories**(`roomId`, `unique`?): `Promise`\<`number`\>
+> **getMemories**(`opts`): `Promise`\<[`Memory`](Memory.md)[]\>
 
 #### Parameters
 
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **opts**
 
-• **unique?**: `boolean`
+• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.count?**: `number`
+
+• **opts.unique?**: `boolean`
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.start?**: `number`
+
+• **opts.end?**: `number`
 
 #### Returns
 
-`Promise`\<`number`\>
+`Promise`\<[`Memory`](Memory.md)[]\>
 
 #### Defined in
 
-[core/src/core/types.ts:481](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L481)
+[packages/core/src/core/types.ts:465](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L465)
 
----
+***
+
+### getCachedEmbeddings()
+
+> **getCachedEmbeddings**(`content`): `Promise`\<`object`[]\>
+
+#### Parameters
+
+• **content**: `string`
+
+#### Returns
+
+`Promise`\<`object`[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:473](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L473)
+
+***
+
+### getMemoryById()
+
+> **getMemoryById**(`id`): `Promise`\<[`Memory`](Memory.md)\>
+
+#### Parameters
+
+• **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Memory`](Memory.md)\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:476](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L476)
+
+***
+
+### getMemoriesByRoomIds()
+
+> **getMemoriesByRoomIds**(`params`): `Promise`\<[`Memory`](Memory.md)[]\>
+
+#### Parameters
+
+• **params**
+
+• **params.roomIds**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]
+
+• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Memory`](Memory.md)[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:477](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L477)
+
+***
+
+### searchMemoriesByEmbedding()
+
+> **searchMemoriesByEmbedding**(`embedding`, `opts`): `Promise`\<[`Memory`](Memory.md)[]\>
+
+#### Parameters
+
+• **embedding**: `number`[]
+
+• **opts**
+
+• **opts.match\_threshold?**: `number`
+
+• **opts.count?**: `number`
+
+• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.unique?**: `boolean`
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Memory`](Memory.md)[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:481](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L481)
+
+***
 
 ### createMemory()
 
@@ -86,115 +184,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:478](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L478)
+[packages/core/src/core/types.ts:491](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L491)
 
----
-
-### getCachedEmbeddings()
-
-> **getCachedEmbeddings**(`content`): `Promise`\<`object`[]\>
-
-#### Parameters
-
-• **content**: `string`
-
-#### Returns
-
-`Promise`\<`object`[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:460](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L460)
-
----
-
-### getMemories()
-
-> **getMemories**(`opts`): `Promise`\<[`Memory`](Memory.md)[]\>
-
-#### Parameters
-
-• **opts**
-
-• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **opts.count?**: `number`
-
-• **opts.end?**: `number`
-
-• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **opts.start?**: `number`
-
-• **opts.unique?**: `boolean`
-
-#### Returns
-
-`Promise`\<[`Memory`](Memory.md)[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:452](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L452)
-
----
-
-### getMemoriesByRoomIds()
-
-> **getMemoriesByRoomIds**(`params`): `Promise`\<[`Memory`](Memory.md)[]\>
-
-#### Parameters
-
-• **params**
-
-• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **params.roomIds**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]
-
-#### Returns
-
-`Promise`\<[`Memory`](Memory.md)[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:464](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L464)
-
----
-
-### getMemoryById()
-
-> **getMemoryById**(`id`): `Promise`\<[`Memory`](Memory.md)\>
-
-#### Parameters
-
-• **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<[`Memory`](Memory.md)\>
-
-#### Defined in
-
-[core/src/core/types.ts:463](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L463)
-
----
-
-### removeAllMemories()
-
-> **removeAllMemories**(`roomId`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:480](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L480)
-
----
+***
 
 ### removeMemory()
 
@@ -210,34 +202,42 @@
 
 #### Defined in
 
-[core/src/core/types.ts:479](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L479)
+[packages/core/src/core/types.ts:492](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L492)
 
----
+***
 
-### searchMemoriesByEmbedding()
+### removeAllMemories()
 
-> **searchMemoriesByEmbedding**(`embedding`, `opts`): `Promise`\<[`Memory`](Memory.md)[]\>
+> **removeAllMemories**(`roomId`): `Promise`\<`void`\>
 
 #### Parameters
 
-• **embedding**: `number`[]
-
-• **opts**
-
-• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **opts.count?**: `number`
-
-• **opts.match_threshold?**: `number`
-
-• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **opts.unique?**: `boolean`
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
-`Promise`\<[`Memory`](Memory.md)[]\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[core/src/core/types.ts:468](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L468)
+[packages/core/src/core/types.ts:493](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L493)
+
+***
+
+### countMemories()
+
+> **countMemories**(`roomId`, `unique`?): `Promise`\<`number`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **unique?**: `boolean`
+
+#### Returns
+
+`Promise`\<`number`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:494](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L494)

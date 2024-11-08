@@ -1,45 +1,63 @@
----
-id: "Goal"
-title: "Interface: Goal"
-sidebar_label: "Goal"
-sidebar_position: 0
-custom_edit_url: null
----
+# Interface: Goal
 
 Represents a goal, which is a higher-level aim composed of one or more objectives. Goals are tracked to measure progress or achievements within the conversation or system.
 
 ## Properties
 
-### id
+### id?
 
-• `Optional` **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
----
+#### Defined in
+
+[packages/core/src/core/types.ts:67](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L67)
+
+***
+
+### roomId
+
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:68](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L68)
+
+***
+
+### userId
+
+> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L69)
+
+***
 
 ### name
 
-• **name**: `string`
+> **name**: `string`
 
----
+#### Defined in
 
-### objectives
+[packages/core/src/core/types.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L70)
 
-• **objectives**: [`Objective`](Objective.md)[]
-
----
-
-### room_id
-
-• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
-
----
+***
 
 ### status
 
-• **status**: [`GoalStatus`](../enums/GoalStatus.md)
+> **status**: [`GoalStatus`](../enumerations/GoalStatus.md)
 
----
+#### Defined in
 
-### user_id
+[packages/core/src/core/types.ts:71](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L71)
 
-• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+***
+
+### objectives
+
+> **objectives**: [`Objective`](Objective.md)[]
+
+#### Defined in
+
+[packages/core/src/core/types.ts:72](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L72)

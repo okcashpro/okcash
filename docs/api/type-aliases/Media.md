@@ -4,30 +4,30 @@
 
 ## Type declaration
 
-### description
-
-> **description**: `string`
-
 ### id
 
 > **id**: `string`
-
-### source
-
-> **source**: `string`
-
-### text
-
-> **text**: `string`
-
-### title
-
-> **title**: `string`
 
 ### url
 
 > **url**: `string`
 
+### title
+
+> **title**: `string`
+
+### source
+
+> **source**: `string`
+
+### description
+
+> **description**: `string`
+
+### text
+
+> **text**: `string`
+
 ## Defined in
 
-[core/src/core/types.ts:281](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L281)
+[packages/core/src/core/types.ts:294](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L294)

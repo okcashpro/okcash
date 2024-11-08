@@ -1,9 +1,7 @@
----
-id: "embeddingDimension"
-title: "Variable: embeddingDimension"
-sidebar_label: "embeddingDimension"
-sidebar_position: 0
-custom_edit_url: null
----
+# Variable: embeddingDimension
 
-• `Const` **embeddingDimension**: `1536`
+> `const` **embeddingDimension**: `1536` = `1536`
+
+## Defined in
+
+[packages/core/src/core/memory.ts:9](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L9)

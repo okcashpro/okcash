@@ -1,9 +1,7 @@
----
-id: "defaultEvaluators"
-title: "Variable: defaultEvaluators"
-sidebar_label: "defaultEvaluators"
-sidebar_position: 0
-custom_edit_url: null
----
+# Variable: defaultEvaluators
 
-• `Const` **defaultEvaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
+> `const` **defaultEvaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
+
+## Defined in
+
+[packages/core/src/core/evaluators.ts:7](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/evaluators.ts#L7)

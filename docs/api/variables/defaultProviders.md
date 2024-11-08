@@ -1,9 +1,7 @@
----
-id: "defaultProviders"
-title: "Variable: defaultProviders"
-sidebar_label: "defaultProviders"
-sidebar_position: 0
-custom_edit_url: null
----
+# Variable: defaultProviders
 
-• `Const` **defaultProviders**: [`Provider`](../interfaces/Provider.md)[]
+> `const` **defaultProviders**: [`Provider`](../interfaces/Provider.md)[]
+
+## Defined in
+
+[packages/core/src/core/providers.ts:4](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/providers.ts#L4)

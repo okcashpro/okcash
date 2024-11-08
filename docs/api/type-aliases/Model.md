@@ -8,33 +8,9 @@
 
 > `optional` **endpoint**: `string`
 
-### model
-
-> **model**: `object`
-
-### model.embedding?
-
-> `optional` **embedding**: `string`
-
-### model.large
-
-> **large**: `string`
-
-### model.medium
-
-> **medium**: `string`
-
-### model.small
-
-> **small**: `string`
-
 ### settings
 
 > **settings**: `object`
-
-### settings.frequency_penalty?
-
-> `optional` **frequency_penalty**: `number`
 
 ### settings.maxInputTokens
 
@@ -44,13 +20,17 @@
 
 > **maxOutputTokens**: `number`
 
-### settings.presence_penalty?
+### settings.frequency\_penalty?
 
-> `optional` **presence_penalty**: `number`
+> `optional` **frequency\_penalty**: `number`
 
-### settings.repetition_penalty?
+### settings.presence\_penalty?
 
-> `optional` **repetition_penalty**: `number`
+> `optional` **presence\_penalty**: `number`
+
+### settings.repetition\_penalty?
+
+> `optional` **repetition\_penalty**: `number`
 
 ### settings.stop
 
@@ -60,6 +40,26 @@
 
 > **temperature**: `number`
 
+### model
+
+> **model**: `object`
+
+### model.small
+
+> **small**: `string`
+
+### model.medium
+
+> **medium**: `string`
+
+### model.large
+
+> **large**: `string`
+
+### model.embedding?
+
+> `optional` **embedding**: `string`
+
 ## Defined in
 
-[core/src/core/types.ts:82](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L82)
+[packages/core/src/core/types.ts:82](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L82)

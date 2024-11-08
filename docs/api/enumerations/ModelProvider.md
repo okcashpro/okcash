@@ -2,45 +2,25 @@
 
 ## Enumeration Members
 
+### OPENAI
+
+> **OPENAI**: `"openai"`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:115](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L115)
+
+***
+
 ### ANTHROPIC
 
 > **ANTHROPIC**: `"anthropic"`
 
 #### Defined in
 
-[core/src/core/types.ts:103](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L103)
+[packages/core/src/core/types.ts:116](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L116)
 
----
-
-### CLAUDE_VERTEX
-
-> **CLAUDE_VERTEX**: `"claude_vertex"`
-
-#### Defined in
-
-[core/src/core/types.ts:109](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L109)
-
----
-
-### GITHUB
-
-> **GITHUB**: `"GITHUB"`
-
-#### Defined in
-
-[core/src/core/types.ts:111](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L111)
-
----
-
-### GOOGLE
-
-> **GOOGLE**: `"google"`
-
-#### Defined in
-
-[core/src/core/types.ts:108](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L108)
-
----
+***
 
 ### GROK
 
@@ -48,9 +28,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:104](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L104)
+[packages/core/src/core/types.ts:117](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L117)
 
----
+***
 
 ### GROQ
 
@@ -58,9 +38,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:105](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L105)
+[packages/core/src/core/types.ts:118](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L118)
 
----
+***
 
 ### LLAMACLOUD
 
@@ -68,9 +48,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:106](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L106)
+[packages/core/src/core/types.ts:119](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L119)
 
----
+***
 
 ### LLAMALOCAL
 
@@ -78,19 +58,29 @@
 
 #### Defined in
 
-[core/src/core/types.ts:107](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L107)
+[packages/core/src/core/types.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L120)
 
----
+***
 
-### OPENAI
+### GOOGLE
 
-> **OPENAI**: `"openai"`
+> **GOOGLE**: `"google"`
 
 #### Defined in
 
-[core/src/core/types.ts:102](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L102)
+[packages/core/src/core/types.ts:121](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L121)
 
----
+***
+
+### CLAUDE\_VERTEX
+
+> **CLAUDE\_VERTEX**: `"claude_vertex"`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L122)
+
+***
 
 ### REDPILL
 
@@ -98,4 +88,14 @@
 
 #### Defined in
 
-[core/src/core/types.ts:110](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L110)
+[packages/core/src/core/types.ts:123](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L123)
+
+***
+
+### OLLAMA
+
+> **OLLAMA**: `"ollama"`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L124)

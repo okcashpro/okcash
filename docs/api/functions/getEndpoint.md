@@ -1,6 +1,6 @@
 # Function: getEndpoint()
 
-> **getEndpoint**(`provider`): `any`
+> **getEndpoint**(`provider`): `string`
 
 ## Parameters
 
@@ -8,8 +8,8 @@
 
 ## Returns
 
-`any`
+`string`
 
 ## Defined in
 
-[core/src/core/models.ts:178](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/models.ts#L178)
+[packages/core/src/core/models.ts:183](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/models.ts#L183)

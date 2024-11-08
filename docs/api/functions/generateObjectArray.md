@@ -6,11 +6,11 @@
 
 • **\_\_namedParameters**
 
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **\_\_namedParameters.context**: `string`
 
 • **\_\_namedParameters.modelClass**: `string`
-
-• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 
@@ -18,4 +18,4 @@
 
 ## Defined in
 
-[core/src/core/generation.ts:474](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/generation.ts#L474)
+[packages/core/src/core/generation.ts:501](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/generation.ts#L501)

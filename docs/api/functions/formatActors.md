@@ -1,24 +1,23 @@
----
-id: "formatActors"
-title: "Function: formatActors"
-sidebar_label: "formatActors"
-sidebar_position: 0
-custom_edit_url: null
----
+# Function: formatActors()
 
-▸ **formatActors**(`actors`): `string`
+> **formatActors**(`actors`): `string`
 
 Format actors into a string
 
-#### Parameters
+## Parameters
 
-| Name            | Type                                | Description    |
-| :-------------- | :---------------------------------- | :------------- |
-| `actors`        | `Object`                            | list of actors |
-| `actors.actors` | [`Actor`](../interfaces/Actor.md)[] | -              |
+• **actors**
 
-#### Returns
+list of actors
+
+• **actors.actors**: [`Actor`](../interfaces/Actor.md)[]
+
+## Returns
 
 `string`
 
 string
+
+## Defined in
+
+[packages/core/src/core/messages.ts:45](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/messages.ts#L45)

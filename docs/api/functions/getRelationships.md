@@ -1,21 +1,19 @@
----
-id: "getRelationships"
-title: "Function: getRelationships"
-sidebar_label: "getRelationships"
-sidebar_position: 0
-custom_edit_url: null
----
+# Function: getRelationships()
 
-▸ **getRelationships**(`«destructured»`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
+> **getRelationships**(`__namedParameters`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
-#### Parameters
+## Parameters
 
-| Name             | Type                                                       |
-| :--------------- | :--------------------------------------------------------- |
-| `«destructured»` | `Object`                                                   |
-| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
-| › `user_id`      | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+• **\_\_namedParameters**
 
-#### Returns
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+## Returns
 
 `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
+
+## Defined in
+
+[packages/core/src/core/relationships.ts:33](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/relationships.ts#L33)

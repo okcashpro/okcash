@@ -16,9 +16,51 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:38](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L38)
+[packages/core/src/providers/token.ts:38](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L38)
 
 ## Methods
+
+### fetchTokenSecurity()
+
+> **fetchTokenSecurity**(): `Promise`\<`TokenSecurityData`\>
+
+#### Returns
+
+`Promise`\<`TokenSecurityData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:166](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L166)
+
+***
+
+### fetchTokenTradeData()
+
+> **fetchTokenTradeData**(): `Promise`\<`TokenTradeData`\>
+
+#### Returns
+
+`Promise`\<`TokenTradeData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:196](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L196)
+
+***
+
+### fetchDexScreenerData()
+
+> **fetchDexScreenerData**(): `Promise`\<`DexScreenerData`\>
+
+#### Returns
+
+`Promise`\<`DexScreenerData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:431](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L431)
+
+***
 
 ### analyzeHolderDistribution()
 
@@ -34,59 +76,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:461](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L461)
+[packages/core/src/providers/token.ts:472](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L472)
 
----
-
-### checkRecentTrades()
-
-> **checkRecentTrades**(`tradeData`): `Promise`\<`boolean`\>
-
-#### Parameters
-
-• **tradeData**: `TokenTradeData`
-
-#### Returns
-
-`Promise`\<`boolean`\>
-
-#### Defined in
-
-[core/src/providers/token.ts:631](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L631)
-
----
-
-### countHighSupplyHolders()
-
-> **countHighSupplyHolders**(`securityData`): `Promise`\<`number`\>
-
-#### Parameters
-
-• **securityData**: `TokenSecurityData`
-
-#### Returns
-
-`Promise`\<`number`\>
-
-#### Defined in
-
-[core/src/providers/token.ts:635](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L635)
-
----
-
-### fetchDexScreenerData()
-
-> **fetchDexScreenerData**(): `Promise`\<`DexScreenerData`\>
-
-#### Returns
-
-`Promise`\<`DexScreenerData`\>
-
-#### Defined in
-
-[core/src/providers/token.ts:420](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L420)
-
----
+***
 
 ### fetchHolderList()
 
@@ -98,37 +90,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:507](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L507)
+[packages/core/src/providers/token.ts:518](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L518)
 
----
-
-### fetchTokenSecurity()
-
-> **fetchTokenSecurity**(): `Promise`\<`TokenSecurityData`\>
-
-#### Returns
-
-`Promise`\<`TokenSecurityData`\>
-
-#### Defined in
-
-[core/src/providers/token.ts:155](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L155)
-
----
-
-### fetchTokenTradeData()
-
-> **fetchTokenTradeData**(): `Promise`\<`TokenTradeData`\>
-
-#### Returns
-
-`Promise`\<`TokenTradeData`\>
-
-#### Defined in
-
-[core/src/providers/token.ts:185](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L185)
-
----
+***
 
 ### filterHighValueHolders()
 
@@ -144,9 +108,59 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:607](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L607)
+[packages/core/src/providers/token.ts:618](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L618)
 
----
+***
+
+### checkRecentTrades()
+
+> **checkRecentTrades**(`tradeData`): `Promise`\<`boolean`\>
+
+#### Parameters
+
+• **tradeData**: `TokenTradeData`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:642](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L642)
+
+***
+
+### countHighSupplyHolders()
+
+> **countHighSupplyHolders**(`securityData`): `Promise`\<`number`\>
+
+#### Parameters
+
+• **securityData**: `TokenSecurityData`
+
+#### Returns
+
+`Promise`\<`number`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:646](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L646)
+
+***
+
+### getProcessedTokenData()
+
+> **getProcessedTokenData**(): `Promise`\<`ProcessedTokenData`\>
+
+#### Returns
+
+`Promise`\<`ProcessedTokenData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:667](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L667)
+
+***
 
 ### formatTokenData()
 
@@ -162,9 +176,9 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:722](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L722)
+[packages/core/src/providers/token.ts:733](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L733)
 
----
+***
 
 ### getFormattedTokenReport()
 
@@ -176,18 +190,4 @@
 
 #### Defined in
 
-[core/src/providers/token.ts:786](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L786)
-
----
-
-### getProcessedTokenData()
-
-> **getProcessedTokenData**(): `Promise`\<`ProcessedTokenData`\>
-
-#### Returns
-
-`Promise`\<`ProcessedTokenData`\>
-
-#### Defined in
-
-[core/src/providers/token.ts:656](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/providers/token.ts#L656)
+[packages/core/src/providers/token.ts:797](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L797)

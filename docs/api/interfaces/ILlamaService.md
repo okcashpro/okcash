@@ -2,6 +2,76 @@
 
 ## Methods
 
+### initializeModel()
+
+> **initializeModel**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:578](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L578)
+
+***
+
+### queueMessageCompletion()
+
+> **queueMessageCompletion**(`context`, `temperature`, `stop`, `frequency_penalty`, `presence_penalty`, `max_tokens`): `Promise`\<`any`\>
+
+#### Parameters
+
+• **context**: `string`
+
+• **temperature**: `number`
+
+• **stop**: `string`[]
+
+• **frequency\_penalty**: `number`
+
+• **presence\_penalty**: `number`
+
+• **max\_tokens**: `number`
+
+#### Returns
+
+`Promise`\<`any`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:579](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L579)
+
+***
+
+### queueTextCompletion()
+
+> **queueTextCompletion**(`context`, `temperature`, `stop`, `frequency_penalty`, `presence_penalty`, `max_tokens`): `Promise`\<`string`\>
+
+#### Parameters
+
+• **context**: `string`
+
+• **temperature**: `number`
+
+• **stop**: `string`[]
+
+• **frequency\_penalty**: `number`
+
+• **presence\_penalty**: `number`
+
+• **max\_tokens**: `number`
+
+#### Returns
+
+`Promise`\<`string`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:587](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L587)
+
+***
+
 ### getEmbeddingResponse()
 
 > **getEmbeddingResponse**(`input`): `Promise`\<`number`[]\>
@@ -16,74 +86,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:582](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L582)
-
----
-
-### initializeModel()
-
-> **initializeModel**(): `Promise`\<`void`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:565](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L565)
-
----
-
-### queueMessageCompletion()
-
-> **queueMessageCompletion**(`context`, `temperature`, `stop`, `frequency_penalty`, `presence_penalty`, `max_tokens`): `Promise`\<`any`\>
-
-#### Parameters
-
-• **context**: `string`
-
-• **temperature**: `number`
-
-• **stop**: `string`[]
-
-• **frequency_penalty**: `number`
-
-• **presence_penalty**: `number`
-
-• **max_tokens**: `number`
-
-#### Returns
-
-`Promise`\<`any`\>
-
-#### Defined in
-
-[core/src/core/types.ts:566](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L566)
-
----
-
-### queueTextCompletion()
-
-> **queueTextCompletion**(`context`, `temperature`, `stop`, `frequency_penalty`, `presence_penalty`, `max_tokens`): `Promise`\<`string`\>
-
-#### Parameters
-
-• **context**: `string`
-
-• **temperature**: `number`
-
-• **stop**: `string`[]
-
-• **frequency_penalty**: `number`
-
-• **presence_penalty**: `number`
-
-• **max_tokens**: `number`
-
-#### Returns
-
-`Promise`\<`string`\>
-
-#### Defined in
-
-[core/src/core/types.ts:574](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L574)
+[packages/core/src/core/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L595)

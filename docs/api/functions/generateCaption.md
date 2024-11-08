@@ -14,14 +14,14 @@
 
 `Promise`\<`object`\>
 
-### description
-
-> **description**: `string`
-
 ### title
 
 > **title**: `string`
 
+### description
+
+> **description**: `string`
+
 ## Defined in
 
-[core/src/actions/imageGenerationUtils.ts:90](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/actions/imageGenerationUtils.ts#L90)
+[packages/core/src/actions/imageGenerationUtils.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/imageGenerationUtils.ts#L90)

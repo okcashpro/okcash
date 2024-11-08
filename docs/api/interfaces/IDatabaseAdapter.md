@@ -8,149 +8,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:342](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L342)
+[packages/core/src/core/types.ts:355](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L355)
 
 ## Methods
-
-### addParticipant()
-
-> **addParticipant**(`userId`, `roomId`): `Promise`\<`boolean`\>
-
-#### Parameters
-
-• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`boolean`\>
-
-#### Defined in
-
-[core/src/core/types.ts:424](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L424)
-
----
-
-### countMemories()
-
-> **countMemories**(`roomId`, `unique`?, `tableName`?): `Promise`\<`number`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **unique?**: `boolean`
-
-• **tableName?**: `string`
-
-#### Returns
-
-`Promise`\<`number`\>
-
-#### Defined in
-
-[core/src/core/types.ts:404](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L404)
-
----
-
-### createAccount()
-
-> **createAccount**(`account`): `Promise`\<`boolean`\>
-
-#### Parameters
-
-• **account**: [`Account`](Account.md)
-
-#### Returns
-
-`Promise`\<`boolean`\>
-
-#### Defined in
-
-[core/src/core/types.ts:344](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L344)
-
----
-
-### createGoal()
-
-> **createGoal**(`goal`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **goal**: [`Goal`](Goal.md)
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:416](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L416)
-
----
-
-### createMemory()
-
-> **createMemory**(`memory`, `tableName`, `unique`?): `Promise`\<`void`\>
-
-#### Parameters
-
-• **memory**: [`Memory`](Memory.md)
-
-• **tableName**: `string`
-
-• **unique?**: `boolean`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:397](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L397)
-
----
-
-### createRelationship()
-
-> **createRelationship**(`params`): `Promise`\<`boolean`\>
-
-#### Parameters
-
-• **params**
-
-• **params.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **params.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`boolean`\>
-
-#### Defined in
-
-[core/src/core/types.ts:437](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L437)
-
----
-
-### createRoom()
-
-> **createRoom**(`roomId`?): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
-
-#### Parameters
-
-• **roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
-
-#### Defined in
-
-[core/src/core/types.ts:420](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L420)
-
----
 
 ### getAccountById()
 
@@ -166,85 +26,27 @@
 
 #### Defined in
 
-[core/src/core/types.ts:343](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L343)
+[packages/core/src/core/types.ts:356](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L356)
 
----
+***
 
-### getActorDetails()
+### createAccount()
 
-> **getActorDetails**(`params`): `Promise`\<[`Actor`](Actor.md)[]\>
-
-#### Parameters
-
-• **params**
-
-• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<[`Actor`](Actor.md)[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:373](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L373)
-
----
-
-### getCachedEmbeddings()
-
-> **getCachedEmbeddings**(`params`): `Promise`\<`object`[]\>
+> **createAccount**(`account`): `Promise`\<`boolean`\>
 
 #### Parameters
 
-• **params**
-
-• **params.query_field_name**: `string`
-
-• **params.query_field_sub_name**: `string`
-
-• **params.query_input**: `string`
-
-• **params.query_match_count**: `number`
-
-• **params.query_table_name**: `string`
-
-• **params.query_threshold**: `number`
+• **account**: [`Account`](Account.md)
 
 #### Returns
 
-`Promise`\<`object`[]\>
+`Promise`\<`boolean`\>
 
 #### Defined in
 
-[core/src/core/types.ts:359](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L359)
+[packages/core/src/core/types.ts:357](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L357)
 
----
-
-### getGoals()
-
-> **getGoals**(`params`): `Promise`\<[`Goal`](Goal.md)[]\>
-
-#### Parameters
-
-• **params**
-
-• **params.count?**: `number`
-
-• **params.onlyInProgress?**: `boolean`
-
-• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **params.userId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<[`Goal`](Goal.md)[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:409](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L409)
-
----
+***
 
 ### getMemories()
 
@@ -254,19 +56,19 @@
 
 • **params**
 
-• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 • **params.count?**: `number`
 
-• **params.end?**: `number`
-
-• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **params.start?**: `number`
+• **params.unique?**: `boolean`
 
 • **params.tableName**: `string`
 
-• **params.unique?**: `boolean`
+• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.start?**: `number`
+
+• **params.end?**: `number`
 
 #### Returns
 
@@ -274,9 +76,27 @@
 
 #### Defined in
 
-[core/src/core/types.ts:345](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L345)
+[packages/core/src/core/types.ts:358](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L358)
 
----
+***
+
+### getMemoryById()
+
+> **getMemoryById**(`id`): `Promise`\<[`Memory`](Memory.md)\>
+
+#### Parameters
+
+• **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Memory`](Memory.md)\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:367](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L367)
+
+***
 
 ### getMemoriesByRoomIds()
 
@@ -296,179 +116,39 @@
 
 #### Defined in
 
-[core/src/core/types.ts:355](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L355)
+[packages/core/src/core/types.ts:368](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L368)
 
----
+***
 
-### getMemoryById()
+### getCachedEmbeddings()
 
-> **getMemoryById**(`id`): `Promise`\<[`Memory`](Memory.md)\>
-
-#### Parameters
-
-• **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<[`Memory`](Memory.md)\>
-
-#### Defined in
-
-[core/src/core/types.ts:354](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L354)
-
----
-
-### getParticipantsForAccount()
-
-> **getParticipantsForAccount**(`userId`): `Promise`\<[`Participant`](Participant.md)[]\>
-
-#### Parameters
-
-• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<[`Participant`](Participant.md)[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:426](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L426)
-
----
-
-### getParticipantsForRoom()
-
-> **getParticipantsForRoom**(`roomId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:427](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L427)
-
----
-
-### getParticipantUserState()
-
-> **getParticipantUserState**(`roomId`, `userId`): `Promise`\<`"FOLLOWED"` \| `"MUTED"`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`"FOLLOWED"` \| `"MUTED"`\>
-
-#### Defined in
-
-[core/src/core/types.ts:428](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L428)
-
----
-
-### getRelationship()
-
-> **getRelationship**(`params`): `Promise`\<[`Relationship`](Relationship.md)\>
+> **getCachedEmbeddings**(`params`): `Promise`\<`object`[]\>
 
 #### Parameters
 
 • **params**
 
-• **params.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **params.query\_table\_name**: `string`
 
-• **params.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **params.query\_threshold**: `number`
 
-#### Returns
+• **params.query\_input**: `string`
 
-`Promise`\<[`Relationship`](Relationship.md)\>
+• **params.query\_field\_name**: `string`
 
-#### Defined in
+• **params.query\_field\_sub\_name**: `string`
 
-[core/src/core/types.ts:438](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L438)
-
----
-
-### getRelationships()
-
-> **getRelationships**(`params`): `Promise`\<[`Relationship`](Relationship.md)[]\>
-
-#### Parameters
-
-• **params**
-
-• **params.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **params.query\_match\_count**: `number`
 
 #### Returns
 
-`Promise`\<[`Relationship`](Relationship.md)[]\>
+`Promise`\<`object`[]\>
 
 #### Defined in
 
-[core/src/core/types.ts:442](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L442)
+[packages/core/src/core/types.ts:372](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L372)
 
----
-
-### getRoom()
-
-> **getRoom**(`roomId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
-
-#### Defined in
-
-[core/src/core/types.ts:419](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L419)
-
----
-
-### getRoomsForParticipant()
-
-> **getRoomsForParticipant**(`userId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
-
-#### Parameters
-
-• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:422](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L422)
-
----
-
-### getRoomsForParticipants()
-
-> **getRoomsForParticipants**(`userIds`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
-
-#### Parameters
-
-• **userIds**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]
-
-#### Returns
-
-`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:423](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L423)
-
----
+***
 
 ### log()
 
@@ -480,135 +160,41 @@
 
 • **params.body**
 
+• **params.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
 • **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 • **params.type**: `string`
 
-• **params.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
 #### Returns
 
 `Promise`\<`void`\>
 
 #### Defined in
 
-[core/src/core/types.ts:367](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L367)
+[packages/core/src/core/types.ts:380](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L380)
 
----
+***
 
-### removeAllGoals()
+### getActorDetails()
 
-> **removeAllGoals**(`roomId`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:418](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L418)
-
----
-
-### removeAllMemories()
-
-> **removeAllMemories**(`roomId`, `tableName`): `Promise`\<`void`\>
+> **getActorDetails**(`params`): `Promise`\<[`Actor`](Actor.md)[]\>
 
 #### Parameters
 
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **params**
 
-• **tableName**: `string`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:403](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L403)
-
----
-
-### removeGoal()
-
-> **removeGoal**(`goalId`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<[`Actor`](Actor.md)[]\>
 
 #### Defined in
 
-[core/src/core/types.ts:417](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L417)
+[packages/core/src/core/types.ts:386](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L386)
 
----
-
-### removeMemory()
-
-> **removeMemory**(`memoryId`, `tableName`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **memoryId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **tableName**: `string`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:402](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L402)
-
----
-
-### removeParticipant()
-
-> **removeParticipant**(`userId`, `roomId`): `Promise`\<`boolean`\>
-
-#### Parameters
-
-• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`boolean`\>
-
-#### Defined in
-
-[core/src/core/types.ts:425](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L425)
-
----
-
-### removeRoom()
-
-> **removeRoom**(`roomId`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:421](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L421)
-
----
+***
 
 ### searchMemories()
 
@@ -618,15 +204,15 @@
 
 • **params**
 
-• **params.embedding**: `number`[]
-
-• **params.match_count**: `number`
-
-• **params.match_threshold**: `number`
+• **params.tableName**: `string`
 
 • **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-• **params.tableName**: `string`
+• **params.embedding**: `number`[]
+
+• **params.match\_threshold**: `number`
+
+• **params.match\_count**: `number`
 
 • **params.unique**: `boolean`
 
@@ -636,81 +222,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:374](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L374)
+[packages/core/src/core/types.ts:387](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L387)
 
----
-
-### searchMemoriesByEmbedding()
-
-> **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<[`Memory`](Memory.md)[]\>
-
-#### Parameters
-
-• **embedding**: `number`[]
-
-• **params**
-
-• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **params.count?**: `number`
-
-• **params.match_threshold?**: `number`
-
-• **params.roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **params.tableName**: `string`
-
-• **params.unique?**: `boolean`
-
-#### Returns
-
-`Promise`\<[`Memory`](Memory.md)[]\>
-
-#### Defined in
-
-[core/src/core/types.ts:386](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L386)
-
----
-
-### setParticipantUserState()
-
-> **setParticipantUserState**(`roomId`, `userId`, `state`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **state**: `"FOLLOWED"` \| `"MUTED"`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:432](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L432)
-
----
-
-### updateGoal()
-
-> **updateGoal**(`goal`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **goal**: [`Goal`](Goal.md)
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[core/src/core/types.ts:415](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L415)
-
----
+***
 
 ### updateGoalStatus()
 
@@ -730,4 +244,490 @@
 
 #### Defined in
 
-[core/src/core/types.ts:382](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L382)
+[packages/core/src/core/types.ts:395](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L395)
+
+***
+
+### searchMemoriesByEmbedding()
+
+> **searchMemoriesByEmbedding**(`embedding`, `params`): `Promise`\<[`Memory`](Memory.md)[]\>
+
+#### Parameters
+
+• **embedding**: `number`[]
+
+• **params**
+
+• **params.match\_threshold?**: `number`
+
+• **params.count?**: `number`
+
+• **params.roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.unique?**: `boolean`
+
+• **params.tableName**: `string`
+
+#### Returns
+
+`Promise`\<[`Memory`](Memory.md)[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:399](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L399)
+
+***
+
+### createMemory()
+
+> **createMemory**(`memory`, `tableName`, `unique`?): `Promise`\<`void`\>
+
+#### Parameters
+
+• **memory**: [`Memory`](Memory.md)
+
+• **tableName**: `string`
+
+• **unique?**: `boolean`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:410](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L410)
+
+***
+
+### removeMemory()
+
+> **removeMemory**(`memoryId`, `tableName`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **memoryId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **tableName**: `string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:415](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L415)
+
+***
+
+### removeAllMemories()
+
+> **removeAllMemories**(`roomId`, `tableName`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **tableName**: `string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:416](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L416)
+
+***
+
+### countMemories()
+
+> **countMemories**(`roomId`, `unique`?, `tableName`?): `Promise`\<`number`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **unique?**: `boolean`
+
+• **tableName?**: `string`
+
+#### Returns
+
+`Promise`\<`number`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:417](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L417)
+
+***
+
+### getGoals()
+
+> **getGoals**(`params`): `Promise`\<[`Goal`](Goal.md)[]\>
+
+#### Parameters
+
+• **params**
+
+• **params.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.userId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.onlyInProgress?**: `boolean`
+
+• **params.count?**: `number`
+
+#### Returns
+
+`Promise`\<[`Goal`](Goal.md)[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:422](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L422)
+
+***
+
+### updateGoal()
+
+> **updateGoal**(`goal`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **goal**: [`Goal`](Goal.md)
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:428](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L428)
+
+***
+
+### createGoal()
+
+> **createGoal**(`goal`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **goal**: [`Goal`](Goal.md)
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:429](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L429)
+
+***
+
+### removeGoal()
+
+> **removeGoal**(`goalId`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:430](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L430)
+
+***
+
+### removeAllGoals()
+
+> **removeAllGoals**(`roomId`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:431](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L431)
+
+***
+
+### getRoom()
+
+> **getRoom**(`roomId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:432](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L432)
+
+***
+
+### createRoom()
+
+> **createRoom**(`roomId`?): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
+
+#### Parameters
+
+• **roomId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:433](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L433)
+
+***
+
+### removeRoom()
+
+> **removeRoom**(`roomId`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:434](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L434)
+
+***
+
+### getRoomsForParticipant()
+
+> **getRoomsForParticipant**(`userId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:435](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L435)
+
+***
+
+### getRoomsForParticipants()
+
+> **getRoomsForParticipants**(`userIds`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+#### Parameters
+
+• **userIds**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]
+
+#### Returns
+
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:436](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L436)
+
+***
+
+### addParticipant()
+
+> **addParticipant**(`userId`, `roomId`): `Promise`\<`boolean`\>
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:437](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L437)
+
+***
+
+### removeParticipant()
+
+> **removeParticipant**(`userId`, `roomId`): `Promise`\<`boolean`\>
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:438](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L438)
+
+***
+
+### getParticipantsForAccount()
+
+> **getParticipantsForAccount**(`userId`): `Promise`\<[`Participant`](Participant.md)[]\>
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Participant`](Participant.md)[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:439](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L439)
+
+***
+
+### getParticipantsForRoom()
+
+> **getParticipantsForRoom**(`roomId`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:440](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L440)
+
+***
+
+### getParticipantUserState()
+
+> **getParticipantUserState**(`roomId`, `userId`): `Promise`\<`"FOLLOWED"` \| `"MUTED"`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`"FOLLOWED"` \| `"MUTED"`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:441](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L441)
+
+***
+
+### setParticipantUserState()
+
+> **setParticipantUserState**(`roomId`, `userId`, `state`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **state**: `"FOLLOWED"` \| `"MUTED"`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:445](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L445)
+
+***
+
+### createRelationship()
+
+> **createRelationship**(`params`): `Promise`\<`boolean`\>
+
+#### Parameters
+
+• **params**
+
+• **params.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:450](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L450)
+
+***
+
+### getRelationship()
+
+> **getRelationship**(`params`): `Promise`\<[`Relationship`](Relationship.md)\>
+
+#### Parameters
+
+• **params**
+
+• **params.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Relationship`](Relationship.md)\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L451)
+
+***
+
+### getRelationships()
+
+> **getRelationships**(`params`): `Promise`\<[`Relationship`](Relationship.md)[]\>
+
+#### Parameters
+
+• **params**
+
+• **params.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Relationship`](Relationship.md)[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:455](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L455)

@@ -2,24 +2,6 @@
 
 ## Methods
 
-### transcribe()
-
-> **transcribe**(`audioBuffer`): `Promise`\<`string`\>
-
-#### Parameters
-
-• **audioBuffer**: `ArrayBuffer`
-
-#### Returns
-
-`Promise`\<`string`\>
-
-#### Defined in
-
-[core/src/core/types.ts:555](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L555)
-
----
-
 ### transcribeAttachment()
 
 > **transcribeAttachment**(`audioBuffer`): `Promise`\<`string`\>
@@ -34,9 +16,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:551](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L551)
+[packages/core/src/core/types.ts:564](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L564)
 
----
+***
 
 ### transcribeAttachmentLocally()
 
@@ -52,9 +34,27 @@
 
 #### Defined in
 
-[core/src/core/types.ts:552](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L552)
+[packages/core/src/core/types.ts:565](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L565)
 
----
+***
+
+### transcribe()
+
+> **transcribe**(`audioBuffer`): `Promise`\<`string`\>
+
+#### Parameters
+
+• **audioBuffer**: `ArrayBuffer`
+
+#### Returns
+
+`Promise`\<`string`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:568](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L568)
+
+***
 
 ### transcribeLocally()
 
@@ -70,4 +70,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:556](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L556)
+[packages/core/src/core/types.ts:569](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L569)
