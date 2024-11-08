@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/discord/index.ts:34](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/discord/index.ts#L34)
+[packages/core/src/clients/discord/index.ts:34](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/discord/index.ts#L34)
 
 ## Properties
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/discord/index.ts:27](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/discord/index.ts#L27)
+[packages/core/src/clients/discord/index.ts:27](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/discord/index.ts#L27)
 
 ***
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/discord/index.ts:30](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/discord/index.ts#L30)
+[packages/core/src/clients/discord/index.ts:30](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/discord/index.ts#L30)
 
 ## Methods
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/discord/index.ts:121](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/discord/index.ts#L121)
+[packages/core/src/clients/discord/index.ts:121](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/discord/index.ts#L121)
 
 ***
 
@@ -84,4 +84,4 @@
 
 #### Defined in
 
-[packages/core/src/clients/discord/index.ts:195](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/discord/index.ts#L195)
+[packages/core/src/clients/discord/index.ts:195](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/discord/index.ts#L195)

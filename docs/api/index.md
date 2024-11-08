@@ -1,174 +1,158 @@
-# Eliza
+# @eliza/core
 
-<img src="_media/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+## Enumerations
 
-### [For Chinese Version: 中文说明](_media/README_CN.md)
+- [Clients](enumerations/Clients.md)
+- [GoalStatus](enumerations/GoalStatus.md)
+- [ImageGenModel](enumerations/ImageGenModel.md)
+- [ModelClass](enumerations/ModelClass.md)
+- [ModelProvider](enumerations/ModelProvider.md)
 
-## Features
+## Classes
 
--   🛠 Full-featured Discord, Twitter and Telegram connectors
--   👥 Multi-agent and room support
--   📚 Easily ingest and interact with your documents
--   💾 Retrievable memory and document store
--   🚀 Highly extensible - create your own actions and clients to extend capabilities
--   ☁️ Supports many models, including local Llama, OpenAI, Anthropic, Groq, and more
--   📦 Just works!
+- [AgentRuntime](classes/AgentRuntime.md)
+- [DatabaseAdapter](classes/DatabaseAdapter.md)
+- [DirectClient](classes/DirectClient.md)
+- [DiscordClient](classes/DiscordClient.md)
+- [MemoryManager](classes/MemoryManager.md)
+- [PostgresDatabaseAdapter](classes/PostgresDatabaseAdapter.md)
+- [SqliteDatabaseAdapter](classes/SqliteDatabaseAdapter.md)
+- [TelegramClient](classes/TelegramClient.md)
+- [TokenProvider](classes/TokenProvider.md)
+- [TwitterInteractionClient](classes/TwitterInteractionClient.md)
+- [TwitterPostClient](classes/TwitterPostClient.md)
+- [TwitterSearchClient](classes/TwitterSearchClient.md)
+- [WalletProvider](classes/WalletProvider.md)
 
-## What can I use it for?
+## Interfaces
 
--   🤖 Chatbots
--   🕵️ Autonomous Agents
--   📈 Business process handling
--   🎮 Video game NPCs
+- [Account](interfaces/Account.md)
+- [Action](interfaces/Action.md)
+- [ActionExample](interfaces/ActionExample.md)
+- [Actor](interfaces/Actor.md)
+- [Content](interfaces/Content.md)
+- [ConversationExample](interfaces/ConversationExample.md)
+- [CreateAndBuyContent](interfaces/CreateAndBuyContent.md)
+- [EvaluationExample](interfaces/EvaluationExample.md)
+- [Evaluator](interfaces/Evaluator.md)
+- [Goal](interfaces/Goal.md)
+- [IAgentRuntime](interfaces/IAgentRuntime.md)
+- [IBrowserService](interfaces/IBrowserService.md)
+- [IDatabaseAdapter](interfaces/IDatabaseAdapter.md)
+- [IImageRecognitionService](interfaces/IImageRecognitionService.md)
+- [ILlamaService](interfaces/ILlamaService.md)
+- [IMemoryManager](interfaces/IMemoryManager.md)
+- [IPdfService](interfaces/IPdfService.md)
+- [ISpeechService](interfaces/ISpeechService.md)
+- [ITranscriptionService](interfaces/ITranscriptionService.md)
+- [IVideoService](interfaces/IVideoService.md)
+- [Memory](interfaces/Memory.md)
+- [MessageExample](interfaces/MessageExample.md)
+- [Objective](interfaces/Objective.md)
+- [Participant](interfaces/Participant.md)
+- [Provider](interfaces/Provider.md)
+- [Relationship](interfaces/Relationship.md)
+- [Room](interfaces/Room.md)
+- [State](interfaces/State.md)
 
-# Getting Started
+## Type Aliases
 
-**Prerequisites (MUST):**
+- [Character](type-aliases/Character.md)
+- [Handler](type-aliases/Handler.md)
+- [HandlerCallback](type-aliases/HandlerCallback.md)
+- [Media](type-aliases/Media.md)
+- [Model](type-aliases/Model.md)
+- [Models](type-aliases/Models.md)
+- [Plugin](type-aliases/Plugin.md)
+- [UUID](type-aliases/UUID.md)
+- [Validator](type-aliases/Validator.md)
 
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   [pnpm](https://pnpm.io/installation)
+## Variables
 
-### Edit the .env file
+- [boredomProvider](variables/boredomProvider.md)
+- [continueAction](variables/continueAction.md)
+- [defaultActions](variables/defaultActions.md)
+- [defaultCharacter](variables/defaultCharacter.md)
+- [defaultEvaluators](variables/defaultEvaluators.md)
+- [defaultProviders](variables/defaultProviders.md)
+- [elizaLogger](variables/elizaLogger.md)
+- [embeddingDimension](variables/embeddingDimension.md)
+- [embeddingZeroVector](variables/embeddingZeroVector.md)
+- [evaluationTemplate](variables/evaluationTemplate.md)
+- [executeSwap](variables/executeSwap.md)
+- [followRoom](variables/followRoom.md)
+- [ignore](variables/ignore.md)
+- [imageGeneration](variables/imageGeneration.md)
+- [imageGenModels](variables/imageGenModels.md)
+- [messageHandlerTemplate](variables/messageHandlerTemplate.md)
+- [muteRoom](variables/muteRoom.md)
+- [none](variables/none.md)
+- [orderBookProvider](variables/orderBookProvider.md)
+- [settings](variables/settings.md)
+- [shouldContinueTemplate](variables/shouldContinueTemplate.md)
+- [shouldFollowTemplate](variables/shouldFollowTemplate.md)
+- [shouldMuteTemplate](variables/shouldMuteTemplate.md)
+- [shouldUnmuteTemplate](variables/shouldUnmuteTemplate.md)
+- [timeProvider](variables/timeProvider.md)
+- [tokenProvider](variables/tokenProvider.md)
+- [unfollowRoom](variables/unfollowRoom.md)
+- [unmuteRoom](variables/unmuteRoom.md)
+- [walletProvider](variables/walletProvider.md)
 
--   Copy .env.example to .env and fill in the appropriate values
--   Edit the TWITTER environment variables to add your bot's username and password
+## Functions
 
-### Edit the character file
-
--   Check out the file `src/core/defaultCharacter.ts` - you can modify this
--   You can also load characters with the `pnpm start --characters="path/to/your/character.json"` and run multiple bots at the same time.
-
-After setting up the .env file and character file, you can start the bot with the following command:
-
-```
-pnpm i
-pnpm start
-```
-
-# Customising Eliza
-
-### Adding custom actions
-
-To avoid git clashes in the core directory, we recommend adding custom actions to a `custom_actions` directory and then adding them to the `elizaConfig.yaml` file. See the `elizaConfig.example.yaml` file for an example.
-
-## Running with different models
-
-### Run with Llama
-
-You can run Llama 70B or 405B models by setting the `XAI_MODEL` environment variable to `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` or `meta-llama/Meta-Llama-3.1-405B-Instruct`
-
-### Run with Grok
-
-You can run Grok models by setting the `XAI_MODEL` environment variable to `grok-beta`
-
-### Run with OpenAI
-
-You can run OpenAI models by setting the `XAI_MODEL` environment variable to `gpt-4o-mini` or `gpt-4o`
-
-## Additional Requirements
-
-You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
-
-```
-pnpm install --include=optional sharp
-```
-
-# Environment Setup
-
-You will need to add environment variables to your .env file to connect to various platforms:
-
-```
-# Required environment variables
-DISCORD_APPLICATION_ID=
-DISCORD_API_TOKEN= # Bot token
-OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
-ELEVENLABS_XI_API_KEY= # API key from elevenlabs
-
-# ELEVENLABS SETTINGS
-ELEVENLABS_MODEL_ID=eleven_multilingual_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
-
-TWITTER_DRY_RUN=false
-TWITTER_USERNAME= # Account username
-TWITTER_PASSWORD= # Account password
-TWITTER_EMAIL= # Account email
-TWITTER_COOKIES= # Account cookies
-
-X_SERVER_URL=
-XAI_API_KEY=
-XAI_MODEL=
-
-# For asking Claude stuff
-ANTHROPIC_API_KEY=
-
-WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
-
-BIRDEYE_API_KEY=
-
-SOL_ADDRESS=So11111111111111111111111111111111111111112
-SLIPPAGE=1
-RPC_URL=https://api.mainnet-beta.solana.com
-HELIUS_API_KEY=
-
-## Telegram
-TELEGRAM_BOT_TOKEN=
-
-TOGETHER_API_KEY=
-```
-
-# Local Inference Setup
-
-### CUDA Setup
-
-If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
-
-```
-pnpm install
-npx --no node-llama-cpp source download --gpu cuda
-```
-
-Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
-
-### Running locally
-
-Add XAI_MODEL and set it to one of the above options from [Run with Llama](#run-with-llama) - you can leave X_SERVER_URL and XAI_API_KEY blank, it downloads the model from huggingface and queries it locally
-
-# Clients
-
-## Discord Bot
-
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
-
-# Development
-
-## Testing
-
-To run the test suite:
-
-```bash
-pnpm test           # Run tests once
-pnpm test:watch    # Run tests in watch mode
-```
-
-For database-specific tests:
-
-```bash
-pnpm test:sqlite   # Run tests with SQLite
-pnpm test:sqljs    # Run tests with SQL.js
-```
-
-Tests are written using Jest and can be found in `src/**/*.test.ts` files. The test environment is configured to:
-
--   Load environment variables from `.env.test`
--   Use a 2-minute timeout for long-running tests
--   Support ESM modules
--   Run tests in sequence (--runInBand)
-
-To create new tests, add a `.test.ts` file adjacent to the code you're testing.
+- [addHeader](functions/addHeader.md)
+- [buyToken](functions/buyToken.md)
+- [composeActionExamples](functions/composeActionExamples.md)
+- [composeContext](functions/composeContext.md)
+- [createAgentRuntime](functions/createAgentRuntime.md)
+- [createAndBuyToken](functions/createAndBuyToken.md)
+- [createDirectRuntime](functions/createDirectRuntime.md)
+- [createGoal](functions/createGoal.md)
+- [createRelationship](functions/createRelationship.md)
+- [embed](functions/embed.md)
+- [formatActionNames](functions/formatActionNames.md)
+- [formatActions](functions/formatActions.md)
+- [formatActors](functions/formatActors.md)
+- [formatEvaluatorExampleDescriptions](functions/formatEvaluatorExampleDescriptions.md)
+- [formatEvaluatorExamples](functions/formatEvaluatorExamples.md)
+- [formatEvaluatorNames](functions/formatEvaluatorNames.md)
+- [formatEvaluators](functions/formatEvaluators.md)
+- [formatGoalsAsString](functions/formatGoalsAsString.md)
+- [formatMessages](functions/formatMessages.md)
+- [formatPosts](functions/formatPosts.md)
+- [formatRelationships](functions/formatRelationships.md)
+- [formatTimestamp](functions/formatTimestamp.md)
+- [generateCaption](functions/generateCaption.md)
+- [generateImage](functions/generateImage.md)
+- [generateMessageResponse](functions/generateMessageResponse.md)
+- [generateObject](functions/generateObject.md)
+- [generateObjectArray](functions/generateObjectArray.md)
+- [generateShouldRespond](functions/generateShouldRespond.md)
+- [generateText](functions/generateText.md)
+- [generateTextArray](functions/generateTextArray.md)
+- [generateTrueOrFalse](functions/generateTrueOrFalse.md)
+- [getActorDetails](functions/getActorDetails.md)
+- [getEndpoint](functions/getEndpoint.md)
+- [getGoals](functions/getGoals.md)
+- [getImageGenModel](functions/getImageGenModel.md)
+- [getModel](functions/getModel.md)
+- [getProviders](functions/getProviders.md)
+- [getRelationship](functions/getRelationship.md)
+- [getRelationships](functions/getRelationships.md)
+- [getTokenForProvider](functions/getTokenForProvider.md)
+- [initializeClients](functions/initializeClients.md)
+- [initializeDatabase](functions/initializeDatabase.md)
+- [isCreateAndBuyContent](functions/isCreateAndBuyContent.md)
+- [loadActionConfigs](functions/loadActionConfigs.md)
+- [loadCharacters](functions/loadCharacters.md)
+- [loadCustomActions](functions/loadCustomActions.md)
+- [parseArguments](functions/parseArguments.md)
+- [retrieveCachedEmbedding](functions/retrieveCachedEmbedding.md)
+- [sellToken](functions/sellToken.md)
+- [splitChunks](functions/splitChunks.md)
+- [startDiscord](functions/startDiscord.md)
+- [startTelegram](functions/startTelegram.md)
+- [startTwitter](functions/startTwitter.md)
+- [trimTokens](functions/trimTokens.md)
+- [updateGoal](functions/updateGoal.md)

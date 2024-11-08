@@ -71,7 +71,7 @@ The JWT token, can be a JWT token if outside worker, or an OpenAI token if insid
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:189](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L189)
+[packages/core/src/core/runtime.ts:189](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L189)
 
 ## Properties
 
@@ -87,7 +87,7 @@ Custom actions that the agent can perform.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:92](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L92)
+[packages/core/src/core/runtime.ts:92](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L92)
 
 ***
 
@@ -103,7 +103,7 @@ The ID of the agent
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:73](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L73)
+[packages/core/src/core/runtime.ts:73](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L73)
 
 ***
 
@@ -117,7 +117,7 @@ The ID of the agent
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:126](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L126)
+[packages/core/src/core/runtime.ts:126](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L126)
 
 ***
 
@@ -133,7 +133,7 @@ The character to use for the agent
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:141](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L141)
+[packages/core/src/core/runtime.ts:141](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L141)
 
 ***
 
@@ -149,7 +149,7 @@ The database adapter used for interacting with the database.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:82](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L82)
+[packages/core/src/core/runtime.ts:82](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L82)
 
 ***
 
@@ -165,7 +165,7 @@ Store and recall descriptions of users based on conversations.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:151](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L151)
+[packages/core/src/core/runtime.ts:151](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L151)
 
 ***
 
@@ -177,7 +177,7 @@ Hold large documents that can be referenced
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:166](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L166)
+[packages/core/src/core/runtime.ts:166](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L166)
 
 ***
 
@@ -189,7 +189,7 @@ Evaluators used to assess and guide the agent's responses.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:97](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L97)
+[packages/core/src/core/runtime.ts:97](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L97)
 
 ***
 
@@ -205,7 +205,7 @@ Manage the fact and recall of facts.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:156](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L156)
+[packages/core/src/core/runtime.ts:156](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L156)
 
 ***
 
@@ -240,7 +240,7 @@ Some environments may not have access to the global fetch function and need a cu
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:136](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L136)
+[packages/core/src/core/runtime.ts:136](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L136)
 
 ***
 
@@ -252,7 +252,7 @@ Searchable document fragments
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:171](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L171)
+[packages/core/src/core/runtime.ts:171](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L171)
 
 ***
 
@@ -266,7 +266,7 @@ Searchable document fragments
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:124](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L124)
+[packages/core/src/core/runtime.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L124)
 
 ***
 
@@ -282,7 +282,7 @@ The model to use for image generation.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:112](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L112)
+[packages/core/src/core/runtime.ts:112](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L112)
 
 ***
 
@@ -298,7 +298,7 @@ Local Llama if no OpenAI key is present
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:117](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L117)
+[packages/core/src/core/runtime.ts:117](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L117)
 
 ***
 
@@ -314,7 +314,7 @@ Manage the creation and recall of static information (documents, historical game
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:161](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L161)
+[packages/core/src/core/runtime.ts:161](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L161)
 
 ***
 
@@ -330,7 +330,7 @@ Store messages that are sent and received by the agent.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:146](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L146)
+[packages/core/src/core/runtime.ts:146](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L146)
 
 ***
 
@@ -346,7 +346,7 @@ The model to use for generateText.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:107](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L107)
+[packages/core/src/core/runtime.ts:107](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L107)
 
 ***
 
@@ -360,7 +360,7 @@ The model to use for generateText.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:130](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L130)
+[packages/core/src/core/runtime.ts:130](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L130)
 
 ***
 
@@ -376,7 +376,7 @@ Context providers used to provide context for message generation.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:102](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L102)
+[packages/core/src/core/runtime.ts:102](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L102)
 
 ***
 
@@ -392,7 +392,7 @@ The base URL of the server where the agent's requests are processed.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:77](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L77)
+[packages/core/src/core/runtime.ts:77](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L77)
 
 ***
 
@@ -406,7 +406,7 @@ The base URL of the server where the agent's requests are processed.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:120](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L120)
+[packages/core/src/core/runtime.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L120)
 
 ***
 
@@ -422,7 +422,7 @@ Authentication token used for securing requests.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:87](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L87)
+[packages/core/src/core/runtime.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L87)
 
 ***
 
@@ -436,7 +436,7 @@ Authentication token used for securing requests.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:122](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L122)
+[packages/core/src/core/runtime.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L122)
 
 ***
 
@@ -450,7 +450,7 @@ Authentication token used for securing requests.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:128](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L128)
+[packages/core/src/core/runtime.ts:128](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L128)
 
 ## Methods
 
@@ -480,7 +480,7 @@ The state of the agent.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:682](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L682)
+[packages/core/src/core/runtime.ts:682](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L682)
 
 ***
 
@@ -510,7 +510,7 @@ The state of the agent.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:633](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L633)
+[packages/core/src/core/runtime.ts:633](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L633)
 
 ***
 
@@ -542,7 +542,7 @@ An error if the participant cannot be added.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:586](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L586)
+[packages/core/src/core/runtime.ts:586](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L586)
 
 ***
 
@@ -566,7 +566,7 @@ An error if the participant cannot be added.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:622](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L622)
+[packages/core/src/core/runtime.ts:622](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L622)
 
 ***
 
@@ -597,7 +597,7 @@ An error if the room cannot be created.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:669](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L669)
+[packages/core/src/core/runtime.ts:669](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L669)
 
 ***
 
@@ -633,7 +633,7 @@ The user name to ensure the existence of.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:602](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L602)
+[packages/core/src/core/runtime.ts:602](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L602)
 
 ***
 
@@ -665,7 +665,7 @@ The results of the evaluation.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:520](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L520)
+[packages/core/src/core/runtime.ts:520](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L520)
 
 ***
 
@@ -687,7 +687,7 @@ The number of recent messages to be kept in memory.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:414](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L414)
+[packages/core/src/core/runtime.ts:414](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L414)
 
 ***
 
@@ -709,7 +709,7 @@ The number of recent messages to be kept in memory.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:392](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L392)
+[packages/core/src/core/runtime.ts:392](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L392)
 
 ***
 
@@ -741,7 +741,7 @@ The message to process.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:448](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L448)
+[packages/core/src/core/runtime.ts:448](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L448)
 
 ***
 
@@ -767,7 +767,7 @@ The action to register.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:422](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L422)
+[packages/core/src/core/runtime.ts:422](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L422)
 
 ***
 
@@ -789,7 +789,7 @@ The context provider to register.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:439](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L439)
+[packages/core/src/core/runtime.ts:439](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L439)
 
 ***
 
@@ -811,7 +811,7 @@ The evaluator to register.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:431](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L431)
+[packages/core/src/core/runtime.ts:431](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L431)
 
 ***
 
@@ -833,4 +833,4 @@ The evaluator to register.
 
 #### Defined in
 
-[packages/core/src/core/runtime.ts:1155](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/runtime.ts#L1155)
+[packages/core/src/core/runtime.ts:1155](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/runtime.ts#L1155)

@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/search.ts:53](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/search.ts#L53)
+[packages/core/src/clients/twitter/search.ts:53](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/search.ts#L53)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:150](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L150)
+[packages/core/src/clients/twitter/base.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L150)
 
 ***
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L89)
+[packages/core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L89)
 
 ***
 
@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L92)
+[packages/core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L92)
 
 ***
 
@@ -88,7 +88,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L90)
+[packages/core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L90)
 
 ***
 
@@ -102,7 +102,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:96](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L96)
+[packages/core/src/clients/twitter/base.ts:96](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L96)
 
 ***
 
@@ -116,7 +116,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L88)
+[packages/core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L88)
 
 ***
 
@@ -130,7 +130,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L93)
+[packages/core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L93)
 
 ***
 
@@ -144,7 +144,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L91)
+[packages/core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L91)
 
 ***
 
@@ -158,7 +158,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L87)
+[packages/core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L87)
 
 ***
 
@@ -172,7 +172,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L97)
+[packages/core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L97)
 
 ***
 
@@ -186,7 +186,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L86)
+[packages/core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L86)
 
 ## Methods
 
@@ -208,7 +208,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:99](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L99)
+[packages/core/src/clients/twitter/base.ts:99](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L99)
 
 ***
 
@@ -230,7 +230,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:278](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L278)
+[packages/core/src/clients/twitter/base.ts:278](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L278)
 
 ***
 
@@ -258,7 +258,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:330](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L330)
+[packages/core/src/clients/twitter/base.ts:330](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L330)
 
 ***
 
@@ -280,7 +280,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:115](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L115)
+[packages/core/src/clients/twitter/base.ts:115](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L115)
 
 ***
 
@@ -302,7 +302,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:137](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L137)
+[packages/core/src/clients/twitter/base.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L137)
 
 ***
 
@@ -320,7 +320,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/search.ts:60](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/search.ts#L60)
+[packages/core/src/clients/twitter/search.ts:60](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/search.ts#L60)
 
 ***
 
@@ -344,7 +344,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:572](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L572)
+[packages/core/src/clients/twitter/base.ts:572](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L572)
 
 ***
 
@@ -366,4 +366,4 @@
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:560](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/twitter/base.ts#L560)
+[packages/core/src/clients/twitter/base.ts:560](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L560)

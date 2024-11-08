@@ -18,7 +18,7 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L14)
+[packages/core/src/core/types.ts:14](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L14)
 
 ***
 
@@ -28,7 +28,7 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L18)
+[packages/core/src/core/types.ts:18](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L18)
 
 ***
 
@@ -38,7 +38,7 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L17)
+[packages/core/src/core/types.ts:17](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L17)
 
 ***
 
@@ -48,7 +48,7 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L15)
+[packages/core/src/core/types.ts:15](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L15)
 
 ***
 
@@ -58,7 +58,7 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L13)
+[packages/core/src/core/types.ts:13](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L13)
 
 ***
 
@@ -68,4 +68,4 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/core/types.ts:16](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L16)
+[packages/core/src/core/types.ts:16](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L16)

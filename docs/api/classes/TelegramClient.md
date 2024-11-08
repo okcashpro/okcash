@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/telegram/src/index.ts:12](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/telegram/src/index.ts#L12)
+[packages/core/src/clients/telegram/src/index.ts:12](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/telegram/src/index.ts#L12)
 
 ## Methods
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/telegram/src/index.ts:54](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/telegram/src/index.ts#L54)
+[packages/core/src/clients/telegram/src/index.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/telegram/src/index.ts#L54)
 
 ***
 
@@ -46,4 +46,4 @@
 
 #### Defined in
 
-[packages/core/src/clients/telegram/src/index.ts:91](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/telegram/src/index.ts#L91)
+[packages/core/src/clients/telegram/src/index.ts:91](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/telegram/src/index.ts#L91)

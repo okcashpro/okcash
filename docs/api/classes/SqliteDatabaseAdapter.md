@@ -27,7 +27,7 @@ like accounts, memories, actors, goals, and rooms.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:70](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L70)
+[packages/core/src/adapters/sqlite.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L70)
 
 ## Properties
 
@@ -43,7 +43,7 @@ The database instance.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L21)
+[packages/core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L21)
 
 ## Methods
 
@@ -75,7 +75,7 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:591](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L591)
+[packages/core/src/adapters/sqlite.ts:591](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L591)
 
 ***
 
@@ -111,7 +111,7 @@ A Promise that resolves to the number of memories.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:464](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L464)
+[packages/core/src/adapters/sqlite.ts:464](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L464)
 
 ***
 
@@ -139,7 +139,7 @@ A Promise that resolves when the account creation is complete.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:102](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L102)
+[packages/core/src/adapters/sqlite.ts:102](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L102)
 
 ***
 
@@ -167,7 +167,7 @@ A Promise that resolves when the goal has been created.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:531](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L531)
+[packages/core/src/adapters/sqlite.ts:531](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L531)
 
 ***
 
@@ -199,7 +199,7 @@ A Promise that resolves when the memory has been created.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:195](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L195)
+[packages/core/src/adapters/sqlite.ts:195](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L195)
 
 ***
 
@@ -231,7 +231,7 @@ A Promise that resolves to a boolean indicating success or failure of the creati
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:615](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L615)
+[packages/core/src/adapters/sqlite.ts:615](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L615)
 
 ***
 
@@ -259,7 +259,7 @@ A Promise that resolves to the UUID of the created room.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:556](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L556)
+[packages/core/src/adapters/sqlite.ts:556](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L556)
 
 ***
 
@@ -287,7 +287,7 @@ A Promise that resolves to the Account object or null if not found.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:88](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L88)
+[packages/core/src/adapters/sqlite.ts:88](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L88)
 
 ***
 
@@ -317,7 +317,7 @@ A Promise that resolves to an array of Actor objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:123](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L123)
+[packages/core/src/adapters/sqlite.ts:123](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L123)
 
 ***
 
@@ -355,7 +355,7 @@ A Promise that resolves to an array of objects containing embeddings and levensh
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:335](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L335)
+[packages/core/src/adapters/sqlite.ts:335](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L335)
 
 ***
 
@@ -391,7 +391,7 @@ A Promise that resolves to an array of Goal objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:484](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L484)
+[packages/core/src/adapters/sqlite.ts:484](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L484)
 
 ***
 
@@ -433,7 +433,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:397](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L397)
+[packages/core/src/adapters/sqlite.ts:397](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L397)
 
 ***
 
@@ -461,7 +461,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:150](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L150)
+[packages/core/src/adapters/sqlite.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L150)
 
 ***
 
@@ -483,7 +483,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:179](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L179)
+[packages/core/src/adapters/sqlite.ts:179](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L179)
 
 ***
 
@@ -511,7 +511,7 @@ A Promise that resolves to an array of Participant objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:30](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L30)
+[packages/core/src/adapters/sqlite.ts:30](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L30)
 
 ***
 
@@ -539,7 +539,7 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:40](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L40)
+[packages/core/src/adapters/sqlite.ts:40](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L40)
 
 ***
 
@@ -563,7 +563,7 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:46](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L46)
+[packages/core/src/adapters/sqlite.ts:46](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L46)
 
 ***
 
@@ -595,7 +595,7 @@ A Promise that resolves to the Relationship object or null if not found.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:630](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L630)
+[packages/core/src/adapters/sqlite.ts:630](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L630)
 
 ***
 
@@ -625,7 +625,7 @@ A Promise that resolves to an array of Relationship objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:648](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L648)
+[packages/core/src/adapters/sqlite.ts:648](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L648)
 
 ***
 
@@ -653,7 +653,7 @@ A Promise that resolves to the room ID or null if not found.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:22](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L22)
+[packages/core/src/adapters/sqlite.ts:22](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L22)
 
 ***
 
@@ -681,7 +681,7 @@ A Promise that resolves to an array of room IDs.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:572](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L572)
+[packages/core/src/adapters/sqlite.ts:572](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L572)
 
 ***
 
@@ -709,7 +709,7 @@ A Promise that resolves to an array of room IDs.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:578](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L578)
+[packages/core/src/adapters/sqlite.ts:578](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L578)
 
 ***
 
@@ -745,7 +745,7 @@ A Promise that resolves when the log entry has been saved.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:379](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L379)
+[packages/core/src/adapters/sqlite.ts:379](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L379)
 
 ***
 
@@ -773,7 +773,7 @@ A Promise that resolves when all goals have been removed.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:551](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L551)
+[packages/core/src/adapters/sqlite.ts:551](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L551)
 
 ***
 
@@ -805,7 +805,7 @@ A Promise that resolves when all memories have been removed.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:459](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L459)
+[packages/core/src/adapters/sqlite.ts:459](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L459)
 
 ***
 
@@ -833,7 +833,7 @@ A Promise that resolves when the goal has been removed.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:546](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L546)
+[packages/core/src/adapters/sqlite.ts:546](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L546)
 
 ***
 
@@ -865,7 +865,7 @@ A Promise that resolves when the memory has been removed.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:454](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L454)
+[packages/core/src/adapters/sqlite.ts:454](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L454)
 
 ***
 
@@ -897,7 +897,7 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:603](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L603)
+[packages/core/src/adapters/sqlite.ts:603](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L603)
 
 ***
 
@@ -925,7 +925,7 @@ A Promise that resolves when the room has been removed.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:567](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L567)
+[packages/core/src/adapters/sqlite.ts:567](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L567)
 
 ***
 
@@ -967,7 +967,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:235](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L235)
+[packages/core/src/adapters/sqlite.ts:235](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L235)
 
 ***
 
@@ -1011,7 +1011,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:281](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L281)
+[packages/core/src/adapters/sqlite.ts:281](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L281)
 
 ***
 
@@ -1037,7 +1037,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:59](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L59)
+[packages/core/src/adapters/sqlite.ts:59](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L59)
 
 ***
 
@@ -1065,7 +1065,7 @@ A Promise that resolves when the goal has been updated.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:518](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L518)
+[packages/core/src/adapters/sqlite.ts:518](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L518)
 
 ***
 
@@ -1097,4 +1097,4 @@ A Promise that resolves when the goal status has been updated.
 
 #### Defined in
 
-[packages/core/src/adapters/sqlite.ts:371](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/adapters/sqlite.ts#L371)
+[packages/core/src/adapters/sqlite.ts:371](https://github.com/ai16z/eliza/blob/main/packages/core/src/adapters/sqlite.ts#L371)

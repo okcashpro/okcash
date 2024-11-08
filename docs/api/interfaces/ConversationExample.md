@@ -10,7 +10,7 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 #### Defined in
 
-[packages/core/src/core/types.ts:35](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L35)
+[packages/core/src/core/types.ts:35](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L35)
 
 ***
 
@@ -20,4 +20,4 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 #### Defined in
 
-[packages/core/src/core/types.ts:34](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L34)
+[packages/core/src/core/types.ts:34](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L34)

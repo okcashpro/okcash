@@ -10,7 +10,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/core/types.ts:67](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L67)
+[packages/core/src/core/types.ts:67](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L67)
 
 ***
 
@@ -20,7 +20,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/core/types.ts:70](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L70)
+[packages/core/src/core/types.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L70)
 
 ***
 
@@ -30,7 +30,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/core/types.ts:72](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L72)
+[packages/core/src/core/types.ts:72](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L72)
 
 ***
 
@@ -40,7 +40,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/core/types.ts:68](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L68)
+[packages/core/src/core/types.ts:68](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L68)
 
 ***
 
@@ -50,7 +50,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/core/types.ts:71](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L71)
+[packages/core/src/core/types.ts:71](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L71)
 
 ***
 
@@ -60,4 +60,4 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/core/types.ts:69](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L69)
+[packages/core/src/core/types.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L69)

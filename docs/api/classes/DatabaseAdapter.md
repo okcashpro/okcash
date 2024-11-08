@@ -36,7 +36,7 @@ The database instance.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L21)
+[packages/core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L21)
 
 ## Methods
 
@@ -68,7 +68,7 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:266](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L266)
+[packages/core/src/core/database.ts:266](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L266)
 
 ***
 
@@ -104,7 +104,7 @@ A Promise that resolves to the number of memories.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:179](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L179)
+[packages/core/src/core/database.ts:179](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L179)
 
 ***
 
@@ -132,7 +132,7 @@ A Promise that resolves when the account creation is complete.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:34](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L34)
+[packages/core/src/core/database.ts:34](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L34)
 
 ***
 
@@ -160,7 +160,7 @@ A Promise that resolves when the goal has been created.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:209](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L209)
+[packages/core/src/core/database.ts:209](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L209)
 
 ***
 
@@ -196,7 +196,7 @@ A Promise that resolves when the memory has been created.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:150](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L150)
+[packages/core/src/core/database.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L150)
 
 ***
 
@@ -228,7 +228,7 @@ A Promise that resolves to a boolean indicating success or failure of the creati
 
 #### Defined in
 
-[packages/core/src/core/database.ts:312](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L312)
+[packages/core/src/core/database.ts:312](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L312)
 
 ***
 
@@ -256,7 +256,7 @@ A Promise that resolves to the UUID of the created room.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:237](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L237)
+[packages/core/src/core/database.ts:237](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L237)
 
 ***
 
@@ -284,7 +284,7 @@ A Promise that resolves to the Account object or null if not found.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:27](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L27)
+[packages/core/src/core/database.ts:27](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L27)
 
 ***
 
@@ -314,7 +314,7 @@ A Promise that resolves to an array of Actor objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:99](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L99)
+[packages/core/src/core/database.ts:99](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L99)
 
 ***
 
@@ -354,7 +354,7 @@ A Promise that resolves to an array of objects containing embeddings and levensh
 
 #### Defined in
 
-[packages/core/src/core/database.ts:61](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L61)
+[packages/core/src/core/database.ts:61](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L61)
 
 ***
 
@@ -390,7 +390,7 @@ A Promise that resolves to an array of Goal objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:190](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L190)
+[packages/core/src/core/database.ts:190](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L190)
 
 ***
 
@@ -426,7 +426,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:41](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L41)
+[packages/core/src/core/database.ts:41](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L41)
 
 ***
 
@@ -454,7 +454,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:48](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L48)
+[packages/core/src/core/database.ts:48](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L48)
 
 ***
 
@@ -476,7 +476,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:54](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L54)
+[packages/core/src/core/database.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L54)
 
 ***
 
@@ -506,7 +506,7 @@ A Promise that resolves to an array of Participant objects.
 
 ##### Defined in
 
-[packages/core/src/core/database.ts:281](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L281)
+[packages/core/src/core/database.ts:281](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L281)
 
 #### getParticipantsForAccount(userId)
 
@@ -532,7 +532,7 @@ A Promise that resolves to an array of Participant objects.
 
 ##### Defined in
 
-[packages/core/src/core/database.ts:288](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L288)
+[packages/core/src/core/database.ts:288](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L288)
 
 ***
 
@@ -560,7 +560,7 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:295](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L295)
+[packages/core/src/core/database.ts:295](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L295)
 
 ***
 
@@ -584,7 +584,7 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:297](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L297)
+[packages/core/src/core/database.ts:297](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L297)
 
 ***
 
@@ -616,7 +616,7 @@ A Promise that resolves to the Relationship object or null if not found.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:322](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L322)
+[packages/core/src/core/database.ts:322](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L322)
 
 ***
 
@@ -646,7 +646,7 @@ A Promise that resolves to an array of Relationship objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:332](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L332)
+[packages/core/src/core/database.ts:332](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L332)
 
 ***
 
@@ -674,7 +674,7 @@ A Promise that resolves to the room ID or null if not found.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:230](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L230)
+[packages/core/src/core/database.ts:230](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L230)
 
 ***
 
@@ -702,7 +702,7 @@ A Promise that resolves to an array of room IDs.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:251](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L251)
+[packages/core/src/core/database.ts:251](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L251)
 
 ***
 
@@ -730,7 +730,7 @@ A Promise that resolves to an array of room IDs.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:258](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L258)
+[packages/core/src/core/database.ts:258](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L258)
 
 ***
 
@@ -766,7 +766,7 @@ A Promise that resolves when the log entry has been saved.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:87](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L87)
+[packages/core/src/core/database.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L87)
 
 ***
 
@@ -794,7 +794,7 @@ A Promise that resolves when all goals have been removed.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:223](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L223)
+[packages/core/src/core/database.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L223)
 
 ***
 
@@ -826,7 +826,7 @@ A Promise that resolves when all memories have been removed.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:170](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L170)
+[packages/core/src/core/database.ts:170](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L170)
 
 ***
 
@@ -854,7 +854,7 @@ A Promise that resolves when the goal has been removed.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:216](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L216)
+[packages/core/src/core/database.ts:216](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L216)
 
 ***
 
@@ -886,7 +886,7 @@ A Promise that resolves when the memory has been removed.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:162](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L162)
+[packages/core/src/core/database.ts:162](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L162)
 
 ***
 
@@ -918,7 +918,7 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:274](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L274)
+[packages/core/src/core/database.ts:274](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L274)
 
 ***
 
@@ -946,7 +946,7 @@ A Promise that resolves when the room has been removed.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:244](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L244)
+[packages/core/src/core/database.ts:244](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L244)
 
 ***
 
@@ -986,7 +986,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:106](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L106)
+[packages/core/src/core/database.ts:106](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L106)
 
 ***
 
@@ -1030,7 +1030,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:131](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L131)
+[packages/core/src/core/database.ts:131](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L131)
 
 ***
 
@@ -1056,7 +1056,7 @@ A Promise that resolves to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:301](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L301)
+[packages/core/src/core/database.ts:301](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L301)
 
 ***
 
@@ -1084,7 +1084,7 @@ A Promise that resolves when the goal has been updated.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:202](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L202)
+[packages/core/src/core/database.ts:202](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L202)
 
 ***
 
@@ -1116,4 +1116,4 @@ A Promise that resolves when the goal status has been updated.
 
 #### Defined in
 
-[packages/core/src/core/database.ts:120](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L120)
+[packages/core/src/core/database.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/database.ts#L120)

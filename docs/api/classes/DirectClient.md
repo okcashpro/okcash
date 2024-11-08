@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/direct/index.ts:56](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/direct/index.ts#L56)
+[packages/core/src/clients/direct/index.ts:56](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L56)
 
 ## Methods
 
@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/direct/index.ts:264](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/direct/index.ts#L264)
+[packages/core/src/clients/direct/index.ts:264](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L264)
 
 ***
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/core/src/clients/direct/index.ts:272](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/direct/index.ts#L272)
+[packages/core/src/clients/direct/index.ts:272](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L272)
 
 ***
 
@@ -66,4 +66,4 @@
 
 #### Defined in
 
-[packages/core/src/clients/direct/index.ts:268](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/clients/direct/index.ts#L268)
+[packages/core/src/clients/direct/index.ts:268](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L268)

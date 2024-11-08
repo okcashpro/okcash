@@ -13,7 +13,7 @@ const config = {
   projectName: "eliza",
   deploymentBranch: "gh-pages",
   trailingSlash: true,
-  onBrokenLinks: "ignore", // Changed to ignore
+  onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
   
   i18n: {
@@ -27,33 +27,41 @@ const config = {
     '@docusaurus/theme-mermaid',
   ],
   plugins: [
-    [
-      "docusaurus-plugin-typedoc",
-      {
-        entryPoints: ["../packages/core/src/index.ts"], // Updated path
-        tsconfig: "../packages/core/tsconfig.json", // Updated path
-        out: "./api",
-        skipErrorChecking: true,
-        excludeExternals: true,
-        excludeProtected: true,
-        excludePrivate: true,
-        excludeNotDocumented: true,
-        cleanOutputDir: true,
-        hideGenerator: true,
-        exclude: [
-          "**/_media/**", 
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/*.test.ts",
-          "**/tests/**"
-        ],
-        excludeReferences: true,
-        disableSources: true,
-        excludeInternal: true,
-        watch: false,
-        preserveWatchOutput: false,
+  [
+    "docusaurus-plugin-typedoc",
+    {
+      entryPoints: ["../packages/core/src/index.ts"],
+      tsconfig: "../packages/core/tsconfig.json",
+      out: "./api",
+      skipErrorChecking: true,
+      excludeExternals: false,
+      excludeProtected: false,
+      excludePrivate: true,
+      excludeNotDocumented: false,
+      cleanOutputDir: true,
+      hideGenerator: true,
+      exclude: [
+        "**/_media/**",
+        "**/node_modules/@types/node/events.d.ts",
+        "**/dist/**"
+      ],
+      plugin: ['typedoc-plugin-markdown'],
+      disableSources: false,
+      excludeInternal: false, // Instead of stripInternal
+      watch: false,
+      preserveWatchOutput: false,
+      validation: {
+        notExported: false,
+        invalidLink: false,
+        notDocumented: false
       },
-    ],
+      // Add these to handle markdown formatting
+      gitRevision: 'main',
+      readme: 'none',
+      treatWarningsAsErrors: false, // Add this to prevent warnings from failing build
+      treatValidationWarningsAsErrors: false, // Add this too
+    },
+  ],
     require.resolve("docusaurus-lunr-search"),
     [
       "@docusaurus/plugin-content-docs",

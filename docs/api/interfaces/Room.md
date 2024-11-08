@@ -10,7 +10,7 @@ Represents a room or conversation context, including its ID and a list of partic
 
 #### Defined in
 
-[packages/core/src/core/types.ts:290](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L290)
+[packages/core/src/core/types.ts:290](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L290)
 
 ***
 
@@ -20,4 +20,4 @@ Represents a room or conversation context, including its ID and a list of partic
 
 #### Defined in
 
-[packages/core/src/core/types.ts:291](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L291)
+[packages/core/src/core/types.ts:291](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L291)

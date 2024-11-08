@@ -8,7 +8,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:355](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L355)
+[packages/core/src/core/types.ts:355](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L355)
 
 ## Methods
 
@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:437](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L437)
+[packages/core/src/core/types.ts:437](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L437)
 
 ***
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:417](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L417)
+[packages/core/src/core/types.ts:417](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L417)
 
 ***
 
@@ -68,7 +68,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:357](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L357)
+[packages/core/src/core/types.ts:357](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L357)
 
 ***
 
@@ -86,7 +86,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:429](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L429)
+[packages/core/src/core/types.ts:429](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L429)
 
 ***
 
@@ -108,7 +108,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:410](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L410)
+[packages/core/src/core/types.ts:410](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L410)
 
 ***
 
@@ -130,7 +130,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:450](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L450)
+[packages/core/src/core/types.ts:450](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L450)
 
 ***
 
@@ -148,7 +148,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:433](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L433)
+[packages/core/src/core/types.ts:433](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L433)
 
 ***
 
@@ -166,7 +166,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:356](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L356)
+[packages/core/src/core/types.ts:356](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L356)
 
 ***
 
@@ -186,7 +186,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:386](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L386)
+[packages/core/src/core/types.ts:386](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L386)
 
 ***
 
@@ -216,7 +216,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:372](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L372)
+[packages/core/src/core/types.ts:372](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L372)
 
 ***
 
@@ -242,7 +242,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:422](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L422)
+[packages/core/src/core/types.ts:422](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L422)
 
 ***
 
@@ -274,7 +274,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:358](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L358)
+[packages/core/src/core/types.ts:358](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L358)
 
 ***
 
@@ -296,7 +296,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:368](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L368)
+[packages/core/src/core/types.ts:368](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L368)
 
 ***
 
@@ -314,7 +314,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:367](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L367)
+[packages/core/src/core/types.ts:367](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L367)
 
 ***
 
@@ -332,7 +332,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:439](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L439)
+[packages/core/src/core/types.ts:439](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L439)
 
 ***
 
@@ -350,7 +350,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:440](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L440)
+[packages/core/src/core/types.ts:440](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L440)
 
 ***
 
@@ -370,7 +370,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:441](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L441)
+[packages/core/src/core/types.ts:441](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L441)
 
 ***
 
@@ -392,7 +392,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L451)
+[packages/core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L451)
 
 ***
 
@@ -412,7 +412,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:455](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L455)
+[packages/core/src/core/types.ts:455](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L455)
 
 ***
 
@@ -430,7 +430,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:432](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L432)
+[packages/core/src/core/types.ts:432](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L432)
 
 ***
 
@@ -448,7 +448,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:435](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L435)
+[packages/core/src/core/types.ts:435](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L435)
 
 ***
 
@@ -466,7 +466,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:436](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L436)
+[packages/core/src/core/types.ts:436](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L436)
 
 ***
 
@@ -492,7 +492,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:380](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L380)
+[packages/core/src/core/types.ts:380](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L380)
 
 ***
 
@@ -510,7 +510,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:431](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L431)
+[packages/core/src/core/types.ts:431](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L431)
 
 ***
 
@@ -530,7 +530,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:416](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L416)
+[packages/core/src/core/types.ts:416](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L416)
 
 ***
 
@@ -548,7 +548,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:430](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L430)
+[packages/core/src/core/types.ts:430](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L430)
 
 ***
 
@@ -568,7 +568,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:415](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L415)
+[packages/core/src/core/types.ts:415](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L415)
 
 ***
 
@@ -588,7 +588,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:438](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L438)
+[packages/core/src/core/types.ts:438](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L438)
 
 ***
 
@@ -606,7 +606,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:434](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L434)
+[packages/core/src/core/types.ts:434](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L434)
 
 ***
 
@@ -636,7 +636,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:387](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L387)
+[packages/core/src/core/types.ts:387](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L387)
 
 ***
 
@@ -668,7 +668,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:399](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L399)
+[packages/core/src/core/types.ts:399](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L399)
 
 ***
 
@@ -690,7 +690,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:445](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L445)
+[packages/core/src/core/types.ts:445](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L445)
 
 ***
 
@@ -708,7 +708,7 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:428](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L428)
+[packages/core/src/core/types.ts:428](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L428)
 
 ***
 
@@ -730,4 +730,4 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:395](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L395)
+[packages/core/src/core/types.ts:395](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L395)
