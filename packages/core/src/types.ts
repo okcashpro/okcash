@@ -573,6 +573,7 @@ export interface IAgentRuntime {
 }
 
 export interface IImageDescriptionService extends Service {
+    getInstance(): IImageDescriptionService;
     initialize(modelId?: string | null, device?: string | null): Promise<void>;
     describeImage(
         imageUrl: string

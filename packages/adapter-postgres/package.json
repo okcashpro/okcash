@@ -6,8 +6,10 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "tsup": "^8.3.5",
         "pg": "^8.13.1"
+    },
+    "devDependencies": {
+        "tsup": "^8.3.5"
     },
     "scripts": {
         "build": "echo 'No build step required'",

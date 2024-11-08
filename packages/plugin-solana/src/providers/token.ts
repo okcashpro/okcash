@@ -1,23 +1,22 @@
-import { Connection } from "@solana/web3.js";
-// import fetch from "cross-fetch";
+import settings from "@ai16z/eliza/src/settings.ts";
 import {
     IAgentRuntime,
     Memory,
     Provider,
     State,
 } from "@ai16z/eliza/src/types.ts";
-import settings from "@ai16z/eliza/src/settings.ts";
-import { toBN } from "@ai16z/eliza/src/utils/bignumber.ts";
 import {
-    ProcessedTokenData,
-    TokenSecurityData,
-    TokenTradeData,
     DexScreenerData,
     //   DexScreenerPair,
     HolderData,
+    ProcessedTokenData,
+    TokenSecurityData,
+    TokenTradeData,
 } from "@ai16z/eliza/src/types/token.ts";
-import NodeCache from "node-cache";
+import { toBN } from "@ai16z/eliza/src/utils/bignumber.ts";
+import { Connection } from "@solana/web3.js";
 import * as fs from "fs";
+import NodeCache from "node-cache";
 import * as path from "path";
 
 const PROVIDER_CONFIG = {

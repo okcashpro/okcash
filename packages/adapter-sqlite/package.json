@@ -6,6 +6,11 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
+        "@types/better-sqlite3": "7.6.11",
+        "sqlite-vec": "0.1.4-alpha.2",
+        "better-sqlite3": "11.5.0"
+    },
+    "devDependencies": {
         "tsup": "^8.3.5"
     },
     "scripts": {

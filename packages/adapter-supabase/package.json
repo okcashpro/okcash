@@ -6,6 +6,9 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
+        "@supabase/supabase-js": "2.46.1"
+    },
+    "devDependencies": {
         "tsup": "^8.3.5"
     },
     "scripts": {

@@ -6,7 +6,6 @@ import {
     VersionedTransaction,
 } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
-import fetch from "cross-fetch";
 import { v4 as uuidv4 } from "uuid";
 import { TrustScoreDatabase } from "@ai16z/eliza/src/adapters/trustScoreDatabase.ts";
 import { composeContext } from "@ai16z/eliza/src/context.ts";

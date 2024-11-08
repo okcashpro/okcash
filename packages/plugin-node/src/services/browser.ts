@@ -10,7 +10,6 @@ import {
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { PlaywrightBlocker } from "@cliqz/adblocker-playwright";
 import CaptchaSolver from "capsolver-npm";
-import fetch from "cross-fetch";
 import fs from "fs";
 import path from "path";
 import { Browser, BrowserContext, chromium, Page } from "playwright";

@@ -1,11 +1,10 @@
-import { Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
-import fetch from "cross-fetch";
 import {
     ActionExample,
     IAgentRuntime,
     Memory,
     type Action,
 } from "@ai16z/eliza/src/types.ts";
+import { Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
 import { getQuote } from "./swapUtils.ts";
 
 async function invokeSwapDao(
