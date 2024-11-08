@@ -6,7 +6,7 @@ Represents the type of a handler function, which takes a runtime instance, a mes
 
 ## Parameters
 
-• **runtime**: `IAgentRuntime`
+• **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 • **message**: [`Memory`](../interfaces/Memory.md)
 
@@ -14,8 +14,12 @@ Represents the type of a handler function, which takes a runtime instance, a mes
 
 • **options?**
 
-• **callback?**: `HandlerCallback`
+• **callback?**: [`HandlerCallback`](HandlerCallback.md)
 
 ## Returns
 
 `Promise`\<`unknown`\>
+
+## Defined in
+
+[packages/core/src/core/types.ts:186](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/types.ts#L186)

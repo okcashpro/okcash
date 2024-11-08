@@ -39,3 +39,7 @@ const template = "Hello, {{userName}}! You are {{userAge}} years old";
 // "Hello, Alice! You are 30 years old."
 const context = composeContext({ state, template });
 ```
+
+## Defined in
+
+[packages/core/src/core/context.ts:24](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/context.ts#L24)

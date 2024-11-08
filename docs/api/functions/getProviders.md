@@ -6,7 +6,7 @@ Formats provider outputs into a string which can be injected into the context.
 
 ## Parameters
 
-• **runtime**: `IAgentRuntime`
+• **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 The AgentRuntime object.
 
@@ -23,3 +23,7 @@ The current state object.
 `Promise`\<`string`\>
 
 A string that concatenates the outputs of each provider.
+
+## Defined in
+
+[packages/core/src/core/providers.ts:13](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/providers.ts#L13)

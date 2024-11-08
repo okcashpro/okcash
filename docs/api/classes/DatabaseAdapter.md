@@ -3,9 +3,24 @@
 An abstract class representing a database adapter for managing various entities
 like accounts, memories, actors, goals, and rooms.
 
+## Extended by
+
+- [`PostgresDatabaseAdapter`](PostgresDatabaseAdapter.md)
+- [`SqliteDatabaseAdapter`](SqliteDatabaseAdapter.md)
+
 ## Implements
 
-- `IDatabaseAdapter`
+- [`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md)
+
+## Constructors
+
+### new DatabaseAdapter()
+
+> **new DatabaseAdapter**(): [`DatabaseAdapter`](DatabaseAdapter.md)
+
+#### Returns
+
+[`DatabaseAdapter`](DatabaseAdapter.md)
 
 ## Properties
 
@@ -17,7 +32,11 @@ The database instance.
 
 #### Implementation of
 
-`IDatabaseAdapter.db`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`db`](../interfaces/IDatabaseAdapter.md#db)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:21](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L21)
 
 ## Methods
 
@@ -45,7 +64,11 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Implementation of
 
-`IDatabaseAdapter.addParticipant`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`addParticipant`](../interfaces/IDatabaseAdapter.md#addparticipant)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:266](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L266)
 
 ***
 
@@ -77,7 +100,11 @@ A Promise that resolves to the number of memories.
 
 #### Implementation of
 
-`IDatabaseAdapter.countMemories`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`countMemories`](../interfaces/IDatabaseAdapter.md#countmemories)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:179](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L179)
 
 ***
 
@@ -101,7 +128,11 @@ A Promise that resolves when the account creation is complete.
 
 #### Implementation of
 
-`IDatabaseAdapter.createAccount`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`createAccount`](../interfaces/IDatabaseAdapter.md#createaccount)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:34](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L34)
 
 ***
 
@@ -125,7 +156,11 @@ A Promise that resolves when the goal has been created.
 
 #### Implementation of
 
-`IDatabaseAdapter.createGoal`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`createGoal`](../interfaces/IDatabaseAdapter.md#creategoal)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:209](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L209)
 
 ***
 
@@ -157,7 +192,11 @@ A Promise that resolves when the memory has been created.
 
 #### Implementation of
 
-`IDatabaseAdapter.createMemory`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`createMemory`](../interfaces/IDatabaseAdapter.md#creatememory)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:150](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L150)
 
 ***
 
@@ -185,7 +224,11 @@ A Promise that resolves to a boolean indicating success or failure of the creati
 
 #### Implementation of
 
-`IDatabaseAdapter.createRelationship`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`createRelationship`](../interfaces/IDatabaseAdapter.md#createrelationship)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:312](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L312)
 
 ***
 
@@ -209,7 +252,11 @@ A Promise that resolves to the UUID of the created room.
 
 #### Implementation of
 
-`IDatabaseAdapter.createRoom`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`createRoom`](../interfaces/IDatabaseAdapter.md#createroom)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:237](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L237)
 
 ***
 
@@ -233,7 +280,11 @@ A Promise that resolves to the Account object or null if not found.
 
 #### Implementation of
 
-`IDatabaseAdapter.getAccountById`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getAccountById`](../interfaces/IDatabaseAdapter.md#getaccountbyid)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:27](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L27)
 
 ***
 
@@ -259,7 +310,11 @@ A Promise that resolves to an array of Actor objects.
 
 #### Implementation of
 
-`IDatabaseAdapter.getActorDetails`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getActorDetails`](../interfaces/IDatabaseAdapter.md#getactordetails)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:99](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L99)
 
 ***
 
@@ -295,7 +350,11 @@ A Promise that resolves to an array of objects containing embeddings and levensh
 
 #### Implementation of
 
-`IDatabaseAdapter.getCachedEmbeddings`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getCachedEmbeddings`](../interfaces/IDatabaseAdapter.md#getcachedembeddings)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:61](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L61)
 
 ***
 
@@ -327,7 +386,11 @@ A Promise that resolves to an array of Goal objects.
 
 #### Implementation of
 
-`IDatabaseAdapter.getGoals`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getGoals`](../interfaces/IDatabaseAdapter.md#getgoals)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:190](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L190)
 
 ***
 
@@ -359,7 +422,61 @@ A Promise that resolves to an array of Memory objects.
 
 #### Implementation of
 
-`IDatabaseAdapter.getMemories`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getMemories`](../interfaces/IDatabaseAdapter.md#getmemories)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:41](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L41)
+
+***
+
+### getMemoriesByRoomIds()
+
+> `abstract` **getMemoriesByRoomIds**(`params`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+
+#### Parameters
+
+• **params**
+
+• **params.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **params.roomIds**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]
+
+• **params.tableName**: `string`
+
+#### Returns
+
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+
+#### Implementation of
+
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getMemoriesByRoomIds`](../interfaces/IDatabaseAdapter.md#getmemoriesbyroomids)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:48](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L48)
+
+***
+
+### getMemoryById()
+
+> `abstract` **getMemoryById**(`id`): `Promise`\<[`Memory`](../interfaces/Memory.md)\>
+
+#### Parameters
+
+• **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<[`Memory`](../interfaces/Memory.md)\>
+
+#### Implementation of
+
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getMemoryById`](../interfaces/IDatabaseAdapter.md#getmemorybyid)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:54](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L54)
 
 ***
 
@@ -385,7 +502,11 @@ A Promise that resolves to an array of Participant objects.
 
 ##### Implementation of
 
-`IDatabaseAdapter.getParticipantsForAccount`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getParticipantsForAccount`](../interfaces/IDatabaseAdapter.md#getparticipantsforaccount)
+
+##### Defined in
+
+[packages/core/src/core/database.ts:281](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L281)
 
 #### getParticipantsForAccount(userId)
 
@@ -409,6 +530,10 @@ A Promise that resolves to an array of Participant objects.
 
 `IDatabaseAdapter.getParticipantsForAccount`
 
+##### Defined in
+
+[packages/core/src/core/database.ts:288](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L288)
+
 ***
 
 ### getParticipantsForRoom()
@@ -431,7 +556,35 @@ A Promise that resolves to an array of UUIDs representing the participants.
 
 #### Implementation of
 
-`IDatabaseAdapter.getParticipantsForRoom`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getParticipantsForRoom`](../interfaces/IDatabaseAdapter.md#getparticipantsforroom)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:295](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L295)
+
+***
+
+### getParticipantUserState()
+
+> `abstract` **getParticipantUserState**(`roomId`, `userId`): `Promise`\<`"FOLLOWED"` \| `"MUTED"`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`"FOLLOWED"` \| `"MUTED"`\>
+
+#### Implementation of
+
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getParticipantUserState`](../interfaces/IDatabaseAdapter.md#getparticipantuserstate)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:297](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L297)
 
 ***
 
@@ -459,7 +612,11 @@ A Promise that resolves to the Relationship object or null if not found.
 
 #### Implementation of
 
-`IDatabaseAdapter.getRelationship`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getRelationship`](../interfaces/IDatabaseAdapter.md#getrelationship)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:322](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L322)
 
 ***
 
@@ -485,7 +642,11 @@ A Promise that resolves to an array of Relationship objects.
 
 #### Implementation of
 
-`IDatabaseAdapter.getRelationships`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getRelationships`](../interfaces/IDatabaseAdapter.md#getrelationships)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:332](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L332)
 
 ***
 
@@ -509,7 +670,11 @@ A Promise that resolves to the room ID or null if not found.
 
 #### Implementation of
 
-`IDatabaseAdapter.getRoom`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getRoom`](../interfaces/IDatabaseAdapter.md#getroom)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:230](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L230)
 
 ***
 
@@ -533,7 +698,11 @@ A Promise that resolves to an array of room IDs.
 
 #### Implementation of
 
-`IDatabaseAdapter.getRoomsForParticipant`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getRoomsForParticipant`](../interfaces/IDatabaseAdapter.md#getroomsforparticipant)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:251](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L251)
 
 ***
 
@@ -557,7 +726,11 @@ A Promise that resolves to an array of room IDs.
 
 #### Implementation of
 
-`IDatabaseAdapter.getRoomsForParticipants`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`getRoomsForParticipants`](../interfaces/IDatabaseAdapter.md#getroomsforparticipants)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:258](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L258)
 
 ***
 
@@ -589,7 +762,11 @@ A Promise that resolves when the log entry has been saved.
 
 #### Implementation of
 
-`IDatabaseAdapter.log`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`log`](../interfaces/IDatabaseAdapter.md#log)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:87](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L87)
 
 ***
 
@@ -613,7 +790,11 @@ A Promise that resolves when all goals have been removed.
 
 #### Implementation of
 
-`IDatabaseAdapter.removeAllGoals`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`removeAllGoals`](../interfaces/IDatabaseAdapter.md#removeallgoals)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:223](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L223)
 
 ***
 
@@ -641,7 +822,11 @@ A Promise that resolves when all memories have been removed.
 
 #### Implementation of
 
-`IDatabaseAdapter.removeAllMemories`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`removeAllMemories`](../interfaces/IDatabaseAdapter.md#removeallmemories)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:170](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L170)
 
 ***
 
@@ -665,7 +850,11 @@ A Promise that resolves when the goal has been removed.
 
 #### Implementation of
 
-`IDatabaseAdapter.removeGoal`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`removeGoal`](../interfaces/IDatabaseAdapter.md#removegoal)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:216](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L216)
 
 ***
 
@@ -693,7 +882,11 @@ A Promise that resolves when the memory has been removed.
 
 #### Implementation of
 
-`IDatabaseAdapter.removeMemory`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`removeMemory`](../interfaces/IDatabaseAdapter.md#removememory)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:162](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L162)
 
 ***
 
@@ -721,7 +914,11 @@ A Promise that resolves to a boolean indicating success or failure.
 
 #### Implementation of
 
-`IDatabaseAdapter.removeParticipant`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`removeParticipant`](../interfaces/IDatabaseAdapter.md#removeparticipant)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:274](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L274)
 
 ***
 
@@ -745,7 +942,11 @@ A Promise that resolves when the room has been removed.
 
 #### Implementation of
 
-`IDatabaseAdapter.removeRoom`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`removeRoom`](../interfaces/IDatabaseAdapter.md#removeroom)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:244](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L244)
 
 ***
 
@@ -781,7 +982,11 @@ A Promise that resolves to an array of Memory objects.
 
 #### Implementation of
 
-`IDatabaseAdapter.searchMemories`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`searchMemories`](../interfaces/IDatabaseAdapter.md#searchmemories)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:106](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L106)
 
 ***
 
@@ -821,7 +1026,37 @@ A Promise that resolves to an array of Memory objects.
 
 #### Implementation of
 
-`IDatabaseAdapter.searchMemoriesByEmbedding`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`searchMemoriesByEmbedding`](../interfaces/IDatabaseAdapter.md#searchmemoriesbyembedding)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:131](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L131)
+
+***
+
+### setParticipantUserState()
+
+> `abstract` **setParticipantUserState**(`roomId`, `userId`, `state`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **state**: `"FOLLOWED"` \| `"MUTED"`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`setParticipantUserState`](../interfaces/IDatabaseAdapter.md#setparticipantuserstate)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:301](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L301)
 
 ***
 
@@ -845,7 +1080,11 @@ A Promise that resolves when the goal has been updated.
 
 #### Implementation of
 
-`IDatabaseAdapter.updateGoal`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`updateGoal`](../interfaces/IDatabaseAdapter.md#updategoal)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:202](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L202)
 
 ***
 
@@ -863,7 +1102,7 @@ An object containing the goalId and the new status.
 
 • **params.goalId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-• **params.status**: `GoalStatus`
+• **params.status**: [`GoalStatus`](../enumerations/GoalStatus.md)
 
 #### Returns
 
@@ -873,4 +1112,8 @@ A Promise that resolves when the goal status has been updated.
 
 #### Implementation of
 
-`IDatabaseAdapter.updateGoalStatus`
+[`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md).[`updateGoalStatus`](../interfaces/IDatabaseAdapter.md#updategoalstatus)
+
+#### Defined in
+
+[packages/core/src/core/database.ts:120](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/database.ts#L120)

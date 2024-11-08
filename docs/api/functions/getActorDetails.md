@@ -10,8 +10,12 @@ Get details for a list of actors.
 
 • **\_\_namedParameters.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-• **\_\_namedParameters.runtime**: `IAgentRuntime`
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 
 `Promise`\<[`Actor`](../interfaces/Actor.md)[]\>
+
+## Defined in
+
+[packages/core/src/core/messages.ts:12](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/messages.ts#L12)

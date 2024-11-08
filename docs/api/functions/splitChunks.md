@@ -27,3 +27,7 @@ Number of characters to overlap between chunks (default: 100)
 `Promise`\<`string`[]\>
 
 Promise resolving to array of text chunks with bleed sections
+
+## Defined in
+
+[packages/core/src/core/generation.ts:329](https://github.com/ai16z/eliza/blob/d30d0a6e4929f1f9ad2fee78a425cc005922c069/packages/core/src/core/generation.ts#L329)
