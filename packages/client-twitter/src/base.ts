@@ -1,3 +1,12 @@
+import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
+import {
+    Content,
+    IAgentRuntime,
+    IImageDescriptionService,
+    Memory,
+    State,
+    UUID,
+} from "@ai16z/eliza/src/types.ts";
 import {
     QueryTweetsResponse,
     Scraper,
@@ -8,20 +17,11 @@ import { EventEmitter } from "events";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import {
-    Content,
-    IAgentRuntime,
-    Memory,
-    State,
-    UUID,
-} from "@ai16z/eliza/src/types.ts";
-import ImageDescriptionService from "../../services/image.ts";
 
 import { glob } from "glob";
 
+import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
-import { elizaLogger } from "../../index.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -89,7 +89,7 @@ export class ClientBase extends EventEmitter {
     directions: string;
     lastCheckedTweetId: number | null = null;
     tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
-    imageDescriptionService: ImageDescriptionService;
+    imageDescriptionService: IImageDescriptionService;
     temperature: number = 0.5;
 
     private tweetCache: Map<string, Tweet> = new Map();

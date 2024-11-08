@@ -1,7 +1,7 @@
 {
-    "name": "@ai16z/adapter-sqljs",
+    "name": "@ai16z/adapter-sqlite",
     "version": "0.0.1",
-    "main": "dist/index.js",
+    "main": "src/index.ts",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
@@ -9,7 +9,7 @@
         "tsup": "^8.3.5"
     },
     "scripts": {
-        "build": "tsup --format esm --dts"
+        "build": "echo 'No build step required'"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

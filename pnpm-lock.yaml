@@ -156,7 +156,7 @@ importers:
         version: link:../adapter-postgres
       '@ai16z/adapter-sqlite':
         specifier: workspace:*
-        version: link:../adapter-sqljs
+        version: link:../adapter-sqlite
       '@ai16z/client-direct':
         specifier: workspace:*
         version: link:../client-direct
@@ -200,6 +200,9 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
+      '@ai16z/plugin-image-generation':
+        specifier: workspace:*
+        version: link:../plugin-image-generation
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.6)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.6.0)
@@ -212,6 +215,9 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
+      '@ai16z/plugin-node':
+        specifier: workspace:*
+        version: link:../plugin-node
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.6)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.6.0)
@@ -224,6 +230,9 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
+      '@ai16z/plugin-node':
+        specifier: workspace:*
+        version: link:../plugin-node
       '@telegraf/types':
         specifier: 7.1.0
         version: 7.1.0
@@ -681,9 +690,24 @@ importers:
 
   packages/test:
     dependencies:
+      '@ai16z/adapter-sqlite':
+        specifier: workspace:*
+        version: link:../adapter-sqlite
+      '@ai16z/adapter-sqljs':
+        specifier: workspace:*
+        version: link:../adapter-sqljs
+      '@ai16z/adapter-supabase':
+        specifier: workspace:*
+        version: link:../adapter-supabase
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
+      '@ai16z/plugin-bootstrap':
+        specifier: workspace:*
+        version: link:../plugin-bootstrap
+      '@ai16z/plugin-node':
+        specifier: workspace:*
+        version: link:../plugin-node
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.6)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.6.0)

@@ -9,7 +9,7 @@
         "tsup": "^8.3.5"
     },
     "scripts": {
-        "build": "tsup --format esm --dts"
+        "build": "echo 'No build step required'"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

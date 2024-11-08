@@ -5,7 +5,7 @@ import multer, { File } from "multer";
 import {
     generateCaption,
     generateImage,
-} from "@ai16z/plugin-image-generation";
+} from "@ai16z/eliza/src/generation.ts";
 import { composeContext } from "@ai16z/eliza/src/context.ts";
 import { generateMessageResponse } from "@ai16z/eliza/src/generation.ts";
 import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";

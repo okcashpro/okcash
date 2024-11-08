@@ -6,6 +6,7 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-image-generation": "workspace:*",
         "tsup": "^8.3.5"
     },
     "scripts": {

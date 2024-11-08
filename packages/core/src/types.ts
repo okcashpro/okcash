@@ -306,8 +306,8 @@ export type Media = {
 };
 
 export type Client = {
-    start: (runtime: IAgentRuntime) => Promise<unknown>;
-    stop: (runtime: IAgentRuntime) => Promise<unknown>
+    start: (runtime?: IAgentRuntime) => Promise<unknown>;
+    stop: (runtime?: IAgentRuntime) => Promise<unknown>
 }
 
 export type Plugin = {

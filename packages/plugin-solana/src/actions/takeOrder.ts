@@ -5,11 +5,11 @@ import {
     Content,
     ActionExample,
     ModelClass,
-} from "@eliza/src/src/types.ts";
+} from "@ai16z/eliza/src/types.ts";
 import * as fs from "fs";
-import settings from "@eliza/src/src/settings.ts";
-import { composeContext } from "@eliza/src/src/context.ts";
-import { generateText } from "@eliza/src/src/generation.ts";
+import settings from "@ai16z/eliza/src/settings.ts";
+import { composeContext } from "@ai16z/eliza/src/context.ts";
+import { generateText } from "@ai16z/eliza/src/generation.ts";
 
 interface Order {
     userId: string;

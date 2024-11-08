@@ -832,37 +832,4 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         }
     }
 }
-
-export function createLoggingDatabaseAdapter(
-    adapter: DatabaseAdapter
-): DatabaseAdapter {
-    return new Proxy(adapter, {
-        get(target, prop, receiver) {
-            const value = Reflect.get(target, prop, receiver);
-
-            if (typeof value === "function") {
-                return async function (...args: any[]) {
-                    const methodName = prop.toString();
-                    console.log(`Calling method: ${methodName}`, {
-                        arguments: args.map((arg) =>
-                            typeof arg === "object" ? JSON.stringify(arg) : arg
-                        ),
-                    });
-
-                    try {
-                        const result = await value.apply(this, args);
-                        console.log(
-                            `Method ${methodName} completed successfully`
-                        );
-                        return result;
-                    } catch (error) {
-                        console.error(`Method ${methodName} failed:`, error);
-                        throw error;
-                    }
-                };
-            }
-
-            return value;
-        },
-    });
-}
+export default PostgresDatabaseAdapter;

@@ -2,7 +2,7 @@
 // We had some compatibility issues with the package, so we brought this code in directly
 // This code is licensed under the GPL license
 
-import AlawMulaw from "alawmulaw";
+import * as AlawMulaw from "alawmulaw";
 import { spawn } from "child_process";
 import * as CldrSegmentation from "cldr-segmentation";
 import commandExists from "command-exists";

@@ -22,7 +22,7 @@ import {
     messageCompletionFooter,
     shouldRespondFooter,
 } from "@ai16z/eliza/src/parsing.ts";
-import ImageDescriptionService from "@ai16z/plugin-node/services/image.ts";
+import ImageDescriptionService from "@ai16z/plugin-node/src/services/image.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 

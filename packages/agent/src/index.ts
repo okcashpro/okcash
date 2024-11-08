@@ -1,27 +1,22 @@
+import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres/src/index.ts";
+import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite/src/index.ts";
+import { DirectClient, DirectClientInterface } from "@ai16z/client-direct";
+import { DiscordClientInterface } from "@ai16z/client-discord";
+import { TelegramClientInterface } from "@ai16z/client-telegram";
+import { TwitterClientInterface } from "@ai16z/client-twitter";
+import { defaultCharacter } from "@ai16z/eliza/src/defaultCharacter.ts";
+import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
+import settings from "@ai16z/eliza/src/settings.ts";
 import {
-    AgentRuntime,
     Character,
-    defaultCharacter,
-    getTokenForProvider,
     IAgentRuntime,
-    initializeClients,
-    loadCharacters,
-    parseArguments
-} from "@ai16z/eliza";
-import * as Adapter from "@ai16z/eliza/adapters";
-import { DirectClient, DirectClientInterface } from "@ai16z/eliza/client-direct";
-import { DiscordClientInterface } from "@ai16z/eliza/client-discord";
-import { TelegramClientInterface } from "@ai16z/eliza/client-telegram";
-import { TwitterClientInterface } from "@ai16z/eliza/client-twitter";
+    IDatabaseAdapter, ModelProviderName,
+} from "@ai16z/eliza/src/types.ts";
 import { defaultPlugin } from "@ai16z/plugin-bootstrap";
 import { nodePlugin } from "@ai16z/plugin-node";
 import Database from "better-sqlite3";
-import readline from "readline";
-
-import { elizaLogger } from "@ai16z/eliza/src/index.ts";
-import settings from "@ai16z/eliza/src/settings.ts";
-import { IDatabaseAdapter, ModelProviderName } from "@ai16z/eliza/src/types.ts";
 import fs from "fs";
+import readline from "readline";
 import yargs from "yargs";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
@@ -151,44 +146,13 @@ export async function createDirectRuntime(
     });
 }
 
-export async function startTelegram(
-    runtime: IAgentRuntime,
-    character: Character
-) {
-    elizaLogger.log("🔍 Attempting to start Telegram bot...");
-    const botToken = runtime.getSetting("TELEGRAM_BOT_TOKEN");
-
-    if (!botToken) {
-        elizaLogger.error(
-            `❌ Telegram bot token is not set for character ${character.name}.`
-        );
-        return null;
-    }
-
-    try {
-        const telegramClient = await TelegramClientInterface.start(runtime, botToken);
-        return telegramClient;
-    } catch (error) {
-        elizaLogger.error(
-            `❌ Error creating/starting Telegram client for ${character.name}:`,
-            error
-        );
-        return null;
-    }
-}
-
-export async function startTwitter(runtime: IAgentRuntime) {
-    const twitterClient = await TwitterClientInterface.start(runtime);
-    return twitterClient;
-}
-
 function initializeDatabase() {
     if (process.env.POSTGRES_URL) {
-        return new Adapter.PostgresDatabaseAdapter({
+        return new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
         });
     } else {
-        return new Adapter.SqliteDatabaseAdapter(new Database("./db.sqlite"));
+        return new SqliteDatabaseAdapter(new Database("./db.sqlite"));
     }
 }
 
@@ -205,13 +169,13 @@ export async function initializeClients(
     }
 
     if (clientTypes.includes("telegram")) {
-        const telegramClient = await TelegramClientInterface.start(runtime, character);
+        const telegramClient = await TelegramClientInterface.start(runtime);
         if (telegramClient) clients.push(telegramClient);
     }
 
     if (clientTypes.includes("twitter")) {
         const twitterClients = await TwitterClientInterface.start(runtime);
-        clients.push(...twitterClients);
+        clients.push(twitterClients);
     }
 
     return clients;
@@ -260,7 +224,7 @@ async function startAgent(character: Character, directClient: DirectClient) {
 }
 
 const startAgents = async () => {
-    const directClient = await DirectClientInterface.start();
+    const directClient = (await DirectClientInterface.start()) as DirectClient;
     const args = parseArguments();
 
     let charactersArg = args.characters || args.character;
@@ -306,6 +270,8 @@ async function handleUserInput(input, agentId) {
     }
 
     try {
+        const serverPort = parseInt(settings.SERVER_PORT || "3000");
+
         const response = await fetch(
             `http://localhost:${serverPort}/${agentId}/message`,
             {

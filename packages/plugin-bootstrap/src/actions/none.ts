@@ -3,7 +3,7 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "@ai16z/elize/src/types.ts";
+} from "@ai16z/eliza/src/types.ts";
 
 export const noneAction: Action = {
     name: "NONE",

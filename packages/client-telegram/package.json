@@ -7,6 +7,7 @@
     "dependencies": {
         "@telegraf/types": "7.1.0",
         "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-node": "workspace:*",
         "telegraf": "4.16.3",
         "tsup": "^8.3.5"
     },
