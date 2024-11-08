@@ -280,7 +280,7 @@ export const DirectClientInterface: Client = {
     start: async (runtime: IAgentRuntime) => {
         console.log("DirectClientInterface start")
         const client = new DirectClient();
-        const serverPort = parseInt(settings.SERVER_PORT || "3001");
+        const serverPort = parseInt(settings.SERVER_PORT || "3000");
         client.start(serverPort);
         return client;
     

@@ -13,7 +13,7 @@ import {
     IAgentRuntime,
     IDatabaseAdapter, ModelProviderName,
 } from "@ai16z/eliza/src/types.ts";
-import { defaultPlugin } from "@ai16z/plugin-bootstrap/src/index.ts";
+import { bootstrapPlugin } from "@ai16z/plugin-bootstrap/src/index.ts";
 import { nodePlugin } from "@ai16z/plugin-node/src/index.ts";
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -165,14 +165,14 @@ export async function initializeClients(
     const clientTypes =
         character.clients?.map((str) => str.toLowerCase()) || [];
 
-    // if (clientTypes.includes("discord")) {
-    //     clients.push(await DiscordClientInterface.start(runtime));
-    // }
+    if (clientTypes.includes("discord")) {
+        clients.push(await DiscordClientInterface.start(runtime));
+    }
 
-    // if (clientTypes.includes("telegram")) {
-    //     const telegramClient = await TelegramClientInterface.start(runtime);
-    //     if (telegramClient) clients.push(telegramClient);
-    // }
+    if (clientTypes.includes("telegram")) {
+        const telegramClient = await TelegramClientInterface.start(runtime);
+        if (telegramClient) clients.push(telegramClient);
+    }
 
     if (clientTypes.includes("twitter")) {
         const twitterClients = await TwitterClientInterface.start(runtime);
@@ -194,7 +194,7 @@ export async function createAgent(
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
-        plugins: [defaultPlugin, nodePlugin],
+        plugins: [bootstrapPlugin, nodePlugin],
         providers: [],
         actions: [],
         services: [],

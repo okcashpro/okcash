@@ -7,7 +7,7 @@ import { formatFacts } from "../evaluators/fact.ts";
 const factsProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
 
-        const recentMessagesData = state?.recentMessagesData;
+        const recentMessagesData = state?.recentMessagesData?.slice(-10);
 
         const recentMessages = formatMessages({ messages: recentMessagesData, actors: state?.actorsData });
 
@@ -38,7 +38,7 @@ const factsProvider: Provider = {
 
         const formattedFacts = formatFacts(allFacts);
 
-        return "Important facts that {{agentName}} knows:\n{{formattedFacts}}".replace("{{agentName}}", runtime.character.name).replace("{{formattedFacts}}", formattedFacts);
+        return "Key facts that {{agentName}} knows:\n{{formattedFacts}}".replace("{{agentName}}", runtime.character.name).replace("{{formattedFacts}}", formattedFacts);
     },
 };
 

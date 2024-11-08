@@ -11,7 +11,8 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     const model = models[runtime.character.settings.model];
 
     if (model !== ModelProviderName.OPENAI && model !== ModelProviderName.OLLAMA) {
-        return await runtime.getService<ITextGenerationService>(ServiceType.TEXT_GENERATION).getEmbeddingResponse(input);
+        const service = runtime.getService<ITextGenerationService>(ServiceType.TEXT_GENERATION);
+        return await service.getInstance().getEmbeddingResponse(input);
     }
 
     const embeddingModel = models[runtime.modelProvider].model.embedding;
@@ -26,7 +27,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${runtime.token}`,
+            // TODO: make this not hardcoded
             ...(runtime.modelProvider !== ModelProviderName.OLLAMA && { Authorization: `Bearer ${runtime.token}` }),
         },
         body: JSON.stringify({
@@ -37,7 +38,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     };
     try {
         const response = await fetch(
-            //`${runtime.serverUrl}/embeddings`,
+            // TODO: make this not hardcoded
             `${runtime.serverUrl}${runtime.modelProvider === ModelProviderName.OLLAMA ? '/v1' : ''}/embeddings`,
             requestOptions
         );

@@ -7,8 +7,10 @@ import {
     Content,
     HandlerCallback,
     IAgentRuntime,
+    IVideoService,
     Memory,
     ModelClass,
+    ServiceType,
     State,
 } from "@ai16z/eliza/src/types.ts";
 import { VideoService } from "@ai16z/plugin-node/src/services/video.ts";
@@ -83,7 +85,7 @@ export default {
         options: any,
         callback: HandlerCallback
     ) => {
-        const videoService = VideoService.getInstance();
+        const videoService = runtime.getService<IVideoService>(ServiceType.VIDEO);
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         }
