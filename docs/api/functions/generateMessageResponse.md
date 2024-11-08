@@ -10,13 +10,13 @@ Send a message to the model for generateText.
 
 The options for the generateText request.
 
+• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **opts.context**: `string`
 
 The context of the message to be completed.
 
 • **opts.modelClass**: `string`
-
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 

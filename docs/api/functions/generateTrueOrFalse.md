@@ -10,13 +10,13 @@ Sends a message to the model and parses the response as a boolean value
 
 The options for the generateText request
 
+• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **opts.context**: `string` = `""`
 
 The context to evaluate for the boolean response
 
 • **opts.modelClass**: `string`
-
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 

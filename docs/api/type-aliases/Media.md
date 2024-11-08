@@ -4,29 +4,29 @@
 
 ## Type declaration
 
-### description
-
-> **description**: `string`
-
 ### id
 
 > **id**: `string`
 
-### source
+### url
 
-> **source**: `string`
-
-### text
-
-> **text**: `string`
+> **url**: `string`
 
 ### title
 
 > **title**: `string`
 
-### url
+### source
 
-> **url**: `string`
+> **source**: `string`
+
+### description
+
+> **description**: `string`
+
+### text
+
+> **text**: `string`
 
 ## Defined in
 

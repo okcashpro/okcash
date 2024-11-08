@@ -10,13 +10,13 @@ Sends a message to the model to determine if it should respond to the given cont
 
 The options for the generateText request
 
+• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **opts.context**: `string`
 
 The context to evaluate for response
 
 • **opts.modelClass**: `string`
-
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 

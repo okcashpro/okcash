@@ -14,13 +14,13 @@
 
 `Promise`\<`object`\>
 
-### description
-
-> **description**: `string`
-
 ### title
 
 > **title**: `string`
+
+### description
+
+> **description**: `string`
 
 ## Defined in
 

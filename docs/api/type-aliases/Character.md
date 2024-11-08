@@ -4,29 +4,41 @@
 
 ## Type declaration
 
-### adjectives
-
-> **adjectives**: `string`[]
-
-### bio
-
-> **bio**: `string` \| `string`[]
-
-### clients
-
-> **clients**: [`Clients`](../enumerations/Clients.md)[]
-
 ### id?
 
 > `optional` **id**: [`UUID`](UUID.md)
+
+### name
+
+> **name**: `string`
+
+### system?
+
+> `optional` **system**: `string`
+
+### modelProvider
+
+> **modelProvider**: [`ModelProvider`](../enumerations/ModelProvider.md)
+
+### modelEndpointOverride?
+
+> `optional` **modelEndpointOverride**: `string`
 
 ### imageGenModel?
 
 > `optional` **imageGenModel**: [`ImageGenModel`](../enumerations/ImageGenModel.md)
 
-### knowledge?
+### templates?
 
-> `optional` **knowledge**: `string`[]
+> `optional` **templates**: `object`
+
+#### Index Signature
+
+ \[`key`: `string`\]: `string`
+
+### bio
+
+> **bio**: `string` \| `string`[]
 
 ### lore
 
@@ -36,41 +48,37 @@
 
 > **messageExamples**: [`MessageExample`](../interfaces/MessageExample.md)[][]
 
-### modelEndpointOverride?
+### postExamples
 
-> `optional` **modelEndpointOverride**: `string`
-
-### modelProvider
-
-> **modelProvider**: [`ModelProvider`](../enumerations/ModelProvider.md)
-
-### name
-
-> **name**: `string`
+> **postExamples**: `string`[]
 
 ### people
 
 > **people**: `string`[]
 
+### topics
+
+> **topics**: `string`[]
+
+### adjectives
+
+> **adjectives**: `string`[]
+
+### knowledge?
+
+> `optional` **knowledge**: `string`[]
+
+### clients
+
+> **clients**: [`Clients`](../enumerations/Clients.md)[]
+
 ### plugins
 
 > **plugins**: [`Plugin`](Plugin.md)[]
 
-### postExamples
-
-> **postExamples**: `string`[]
-
 ### settings?
 
 > `optional` **settings**: `object`
-
-### settings.embeddingModel?
-
-> `optional` **embeddingModel**: `string`
-
-### settings.model?
-
-> `optional` **model**: `string`
 
 ### settings.secrets?
 
@@ -92,6 +100,14 @@
 
 > `optional` **url**: `string`
 
+### settings.model?
+
+> `optional` **model**: `string`
+
+### settings.embeddingModel?
+
+> `optional` **embeddingModel**: `string`
+
 ### style
 
 > **style**: `object`
@@ -107,22 +123,6 @@
 ### style.post
 
 > **post**: `string`[]
-
-### system?
-
-> `optional` **system**: `string`
-
-### templates?
-
-> `optional` **templates**: `object`
-
-#### Index Signature
-
- \[`key`: `string`\]: `string`
-
-### topics
-
-> **topics**: `string`[]
 
 ## Defined in
 

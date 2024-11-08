@@ -28,6 +28,146 @@
 
 ## Properties
 
+### \_twitterClient
+
+> `static` **\_twitterClient**: `Scraper`
+
+#### Inherited from
+
+`ClientBase._twitterClient`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L86)
+
+***
+
+### twitterClient
+
+> **twitterClient**: `Scraper`
+
+#### Inherited from
+
+`ClientBase.twitterClient`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L87)
+
+***
+
+### runtime
+
+> **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+#### Inherited from
+
+`ClientBase.runtime`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L88)
+
+***
+
+### directions
+
+> **directions**: `string`
+
+#### Inherited from
+
+`ClientBase.directions`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L89)
+
+***
+
+### lastCheckedTweetId
+
+> **lastCheckedTweetId**: `number` = `null`
+
+#### Inherited from
+
+`ClientBase.lastCheckedTweetId`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L90)
+
+***
+
+### tweetCacheFilePath
+
+> **tweetCacheFilePath**: `string` = `"tweetcache/latest_checked_tweet_id.txt"`
+
+#### Inherited from
+
+`ClientBase.tweetCacheFilePath`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L91)
+
+***
+
+### imageDescriptionService
+
+> **imageDescriptionService**: `ImageDescriptionService`
+
+#### Inherited from
+
+`ClientBase.imageDescriptionService`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L92)
+
+***
+
+### temperature
+
+> **temperature**: `number` = `0.5`
+
+#### Inherited from
+
+`ClientBase.temperature`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L93)
+
+***
+
+### requestQueue
+
+> **requestQueue**: `RequestQueue`
+
+#### Inherited from
+
+`ClientBase.requestQueue`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:96](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L96)
+
+***
+
+### twitterUserId
+
+> **twitterUserId**: `string`
+
+#### Inherited from
+
+`ClientBase.twitterUserId`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L97)
+
+***
+
 ### callback()
 
 > **callback**: (`self`) => `any` = `null`
@@ -47,146 +187,6 @@
 #### Defined in
 
 [packages/core/src/clients/twitter/base.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L150)
-
-***
-
-### directions
-
-> **directions**: `string`
-
-#### Inherited from
-
-`ClientBase.directions`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:89](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L89)
-
-***
-
-### imageDescriptionService
-
-> **imageDescriptionService**: `ImageDescriptionService`
-
-#### Inherited from
-
-`ClientBase.imageDescriptionService`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:92](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L92)
-
-***
-
-### lastCheckedTweetId
-
-> **lastCheckedTweetId**: `number` = `null`
-
-#### Inherited from
-
-`ClientBase.lastCheckedTweetId`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L90)
-
-***
-
-### requestQueue
-
-> **requestQueue**: `RequestQueue`
-
-#### Inherited from
-
-`ClientBase.requestQueue`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:96](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L96)
-
-***
-
-### runtime
-
-> **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
-
-#### Inherited from
-
-`ClientBase.runtime`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:88](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L88)
-
-***
-
-### temperature
-
-> **temperature**: `number` = `0.5`
-
-#### Inherited from
-
-`ClientBase.temperature`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L93)
-
-***
-
-### tweetCacheFilePath
-
-> **tweetCacheFilePath**: `string` = `"tweetcache/latest_checked_tweet_id.txt"`
-
-#### Inherited from
-
-`ClientBase.tweetCacheFilePath`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:91](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L91)
-
-***
-
-### twitterClient
-
-> **twitterClient**: `Scraper`
-
-#### Inherited from
-
-`ClientBase.twitterClient`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L87)
-
-***
-
-### twitterUserId
-
-> **twitterUserId**: `string`
-
-#### Inherited from
-
-`ClientBase.twitterUserId`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:97](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L97)
-
-***
-
-### \_twitterClient
-
-> `static` **\_twitterClient**: `Scraper`
-
-#### Inherited from
-
-`ClientBase._twitterClient`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:86](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L86)
 
 ## Methods
 
@@ -209,6 +209,50 @@
 #### Defined in
 
 [packages/core/src/clients/twitter/base.ts:99](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L99)
+
+***
+
+### getCachedTweet()
+
+> **getCachedTweet**(`tweetId`): `Promise`\<`Tweet`\>
+
+#### Parameters
+
+• **tweetId**: `string`
+
+#### Returns
+
+`Promise`\<`Tweet`\>
+
+#### Inherited from
+
+`ClientBase.getCachedTweet`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:115](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L115)
+
+***
+
+### getTweet()
+
+> **getTweet**(`tweetId`): `Promise`\<`Tweet`\>
+
+#### Parameters
+
+• **tweetId**: `string`
+
+#### Returns
+
+`Promise`\<`Tweet`\>
+
+#### Inherited from
+
+`ClientBase.getTweet`
+
+#### Defined in
+
+[packages/core/src/clients/twitter/base.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L137)
 
 ***
 
@@ -262,65 +306,25 @@
 
 ***
 
-### getCachedTweet()
+### setCookiesFromArray()
 
-> **getCachedTweet**(`tweetId`): `Promise`\<`Tweet`\>
-
-#### Parameters
-
-• **tweetId**: `string`
-
-#### Returns
-
-`Promise`\<`Tweet`\>
-
-#### Inherited from
-
-`ClientBase.getCachedTweet`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:115](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L115)
-
-***
-
-### getTweet()
-
-> **getTweet**(`tweetId`): `Promise`\<`Tweet`\>
+> **setCookiesFromArray**(`cookiesArray`): `Promise`\<`void`\>
 
 #### Parameters
 
-• **tweetId**: `string`
-
-#### Returns
-
-`Promise`\<`Tweet`\>
-
-#### Inherited from
-
-`ClientBase.getTweet`
-
-#### Defined in
-
-[packages/core/src/clients/twitter/base.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L137)
-
-***
-
-### onReady()
-
-> **onReady**(): `Promise`\<`void`\>
+• **cookiesArray**: `any`[]
 
 #### Returns
 
 `Promise`\<`void`\>
 
-#### Overrides
+#### Inherited from
 
-`ClientBase.onReady`
+`ClientBase.setCookiesFromArray`
 
 #### Defined in
 
-[packages/core/src/clients/twitter/search.ts:60](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/search.ts#L60)
+[packages/core/src/clients/twitter/base.ts:560](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L560)
 
 ***
 
@@ -348,22 +352,18 @@
 
 ***
 
-### setCookiesFromArray()
+### onReady()
 
-> **setCookiesFromArray**(`cookiesArray`): `Promise`\<`void`\>
-
-#### Parameters
-
-• **cookiesArray**: `any`[]
+> **onReady**(): `Promise`\<`void`\>
 
 #### Returns
 
 `Promise`\<`void`\>
 
-#### Inherited from
+#### Overrides
 
-`ClientBase.setCookiesFromArray`
+`ClientBase.onReady`
 
 #### Defined in
 
-[packages/core/src/clients/twitter/base.ts:560](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/base.ts#L560)
+[packages/core/src/clients/twitter/search.ts:60](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/twitter/search.ts#L60)

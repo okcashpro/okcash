@@ -2,6 +2,20 @@
 
 ## Methods
 
+### initialize()
+
+> **initialize**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L599)
+
+***
+
 ### closeBrowser()
 
 > **closeBrowser**(): `Promise`\<`void`\>
@@ -28,32 +42,18 @@
 
 `Promise`\<`object`\>
 
-##### bodyContent
+##### title
 
-> **bodyContent**: `string`
+> **title**: `string`
 
 ##### description
 
 > **description**: `string`
 
-##### title
+##### bodyContent
 
-> **title**: `string`
+> **bodyContent**: `string`
 
 #### Defined in
 
 [packages/core/src/core/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L601)
-
-***
-
-### initialize()
-
-> **initialize**(): `Promise`\<`void`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[packages/core/src/core/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L599)

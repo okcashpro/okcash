@@ -6,11 +6,11 @@
 
 • **\_\_namedParameters**
 
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **\_\_namedParameters.context**: `string`
 
 • **\_\_namedParameters.modelClass**: `string`
-
-• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 

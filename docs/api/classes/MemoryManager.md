@@ -20,13 +20,13 @@ Constructs a new MemoryManager instance.
 
 Options for the manager.
 
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
-
-The AgentRuntime instance associated with this manager.
-
 • **opts.tableName**: `string`
 
 The name of the table this manager will operate on.
+
+• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+The AgentRuntime instance associated with this manager.
 
 #### Returns
 
@@ -98,35 +98,121 @@ A Promise resolving to the memory object, potentially updated with an embedding 
 
 ***
 
-### countMemories()
+### getMemories()
 
-> **countMemories**(`roomId`, `unique`): `Promise`\<`number`\>
+> **getMemories**(`opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
-Counts the number of memories associated with a set of user IDs, with an option for uniqueness.
+Retrieves a list of memories by user IDs, with optional deduplication.
 
 #### Parameters
 
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+• **opts**
 
-The room ID to count memories for.
+Options including user IDs, count, and uniqueness.
 
-• **unique**: `boolean` = `true`
+• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-Whether to count unique memories only.
+The room ID to retrieve memories for.
+
+• **opts.count?**: `number` = `10`
+
+The number of memories to retrieve.
+
+• **opts.unique?**: `boolean` = `true`
+
+Whether to retrieve unique memories only.
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.start?**: `number`
+
+• **opts.end?**: `number`
 
 #### Returns
 
-`Promise`\<`number`\>
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
 
-A Promise resolving to the count of memories.
+A Promise resolving to an array of Memory objects.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`countMemories`](../interfaces/IMemoryManager.md#countmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemories`](../interfaces/IMemoryManager.md#getmemories)
 
 #### Defined in
 
-[packages/core/src/core/memory.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L218)
+[packages/core/src/core/memory.ts:66](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L66)
+
+***
+
+### getCachedEmbeddings()
+
+> **getCachedEmbeddings**(`content`): `Promise`\<`object`[]\>
+
+#### Parameters
+
+• **content**: `string`
+
+#### Returns
+
+`Promise`\<`object`[]\>
+
+#### Implementation of
+
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getCachedEmbeddings`](../interfaces/IMemoryManager.md#getcachedembeddings)
+
+#### Defined in
+
+[packages/core/src/core/memory.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L93)
+
+***
+
+### searchMemoriesByEmbedding()
+
+> **searchMemoriesByEmbedding**(`embedding`, `opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+
+Searches for memories similar to a given embedding vector.
+
+#### Parameters
+
+• **embedding**: `number`[]
+
+The embedding vector to search with.
+
+• **opts**
+
+Options including match threshold, count, user IDs, and uniqueness.
+
+• **opts.match\_threshold?**: `number`
+
+The similarity threshold for matching memories.
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **opts.count?**: `number`
+
+The maximum number of memories to retrieve.
+
+• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The room ID to retrieve memories for.
+
+• **opts.unique?**: `boolean`
+
+Whether to retrieve unique memories only.
+
+#### Returns
+
+`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+
+A Promise resolving to an array of Memory objects that match the embedding.
+
+#### Implementation of
+
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`searchMemoriesByEmbedding`](../interfaces/IMemoryManager.md#searchmemoriesbyembedding)
+
+#### Defined in
+
+[packages/core/src/core/memory.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L120)
 
 ***
 
@@ -159,74 +245,6 @@ A Promise that resolves when the operation completes.
 #### Defined in
 
 [packages/core/src/core/memory.ts:158](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L158)
-
-***
-
-### getCachedEmbeddings()
-
-> **getCachedEmbeddings**(`content`): `Promise`\<`object`[]\>
-
-#### Parameters
-
-• **content**: `string`
-
-#### Returns
-
-`Promise`\<`object`[]\>
-
-#### Implementation of
-
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getCachedEmbeddings`](../interfaces/IMemoryManager.md#getcachedembeddings)
-
-#### Defined in
-
-[packages/core/src/core/memory.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L93)
-
-***
-
-### getMemories()
-
-> **getMemories**(`opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
-
-Retrieves a list of memories by user IDs, with optional deduplication.
-
-#### Parameters
-
-• **opts**
-
-Options including user IDs, count, and uniqueness.
-
-• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **opts.count?**: `number` = `10`
-
-The number of memories to retrieve.
-
-• **opts.end?**: `number`
-
-• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-The room ID to retrieve memories for.
-
-• **opts.start?**: `number`
-
-• **opts.unique?**: `boolean` = `true`
-
-Whether to retrieve unique memories only.
-
-#### Returns
-
-`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
-
-A Promise resolving to an array of Memory objects.
-
-#### Implementation of
-
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemories`](../interfaces/IMemoryManager.md#getmemories)
-
-#### Defined in
-
-[packages/core/src/core/memory.ts:66](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L66)
 
 ***
 
@@ -278,34 +296,6 @@ A Promise resolving to an array of Memory objects.
 
 ***
 
-### removeAllMemories()
-
-> **removeAllMemories**(`roomId`): `Promise`\<`void`\>
-
-Removes all memories associated with a set of user IDs.
-
-#### Parameters
-
-• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-The room ID to remove memories for.
-
-#### Returns
-
-`Promise`\<`void`\>
-
-A Promise that resolves when the operation completes.
-
-#### Implementation of
-
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeAllMemories`](../interfaces/IMemoryManager.md#removeallmemories)
-
-#### Defined in
-
-[packages/core/src/core/memory.ts:205](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L205)
-
-***
-
 ### removeMemory()
 
 > **removeMemory**(`memoryId`): `Promise`\<`void`\>
@@ -334,50 +324,60 @@ A Promise that resolves when the operation completes.
 
 ***
 
-### searchMemoriesByEmbedding()
+### removeAllMemories()
 
-> **searchMemoriesByEmbedding**(`embedding`, `opts`): `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+> **removeAllMemories**(`roomId`): `Promise`\<`void`\>
 
-Searches for memories similar to a given embedding vector.
+Removes all memories associated with a set of user IDs.
 
 #### Parameters
 
-• **embedding**: `number`[]
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-The embedding vector to search with.
-
-• **opts**
-
-Options including match threshold, count, user IDs, and uniqueness.
-
-• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-• **opts.count?**: `number`
-
-The maximum number of memories to retrieve.
-
-• **opts.match\_threshold?**: `number`
-
-The similarity threshold for matching memories.
-
-• **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-The room ID to retrieve memories for.
-
-• **opts.unique?**: `boolean`
-
-Whether to retrieve unique memories only.
+The room ID to remove memories for.
 
 #### Returns
 
-`Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
+`Promise`\<`void`\>
 
-A Promise resolving to an array of Memory objects that match the embedding.
+A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`searchMemoriesByEmbedding`](../interfaces/IMemoryManager.md#searchmemoriesbyembedding)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeAllMemories`](../interfaces/IMemoryManager.md#removeallmemories)
 
 #### Defined in
 
-[packages/core/src/core/memory.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L120)
+[packages/core/src/core/memory.ts:205](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L205)
+
+***
+
+### countMemories()
+
+> **countMemories**(`roomId`, `unique`): `Promise`\<`number`\>
+
+Counts the number of memories associated with a set of user IDs, with an option for uniqueness.
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The room ID to count memories for.
+
+• **unique**: `boolean` = `true`
+
+Whether to count unique memories only.
+
+#### Returns
+
+`Promise`\<`number`\>
+
+A Promise resolving to the count of memories.
+
+#### Implementation of
+
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`countMemories`](../interfaces/IMemoryManager.md#countmemories)
+
+#### Defined in
+
+[packages/core/src/core/memory.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/memory.ts#L218)

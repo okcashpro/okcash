@@ -20,6 +20,48 @@
 
 ## Methods
 
+### fetchTokenSecurity()
+
+> **fetchTokenSecurity**(): `Promise`\<`TokenSecurityData`\>
+
+#### Returns
+
+`Promise`\<`TokenSecurityData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:166](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L166)
+
+***
+
+### fetchTokenTradeData()
+
+> **fetchTokenTradeData**(): `Promise`\<`TokenTradeData`\>
+
+#### Returns
+
+`Promise`\<`TokenTradeData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:196](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L196)
+
+***
+
+### fetchDexScreenerData()
+
+> **fetchDexScreenerData**(): `Promise`\<`DexScreenerData`\>
+
+#### Returns
+
+`Promise`\<`DexScreenerData`\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:431](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L431)
+
+***
+
 ### analyzeHolderDistribution()
 
 > **analyzeHolderDistribution**(`tradeData`): `Promise`\<`string`\>
@@ -35,6 +77,38 @@
 #### Defined in
 
 [packages/core/src/providers/token.ts:472](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L472)
+
+***
+
+### fetchHolderList()
+
+> **fetchHolderList**(): `Promise`\<`HolderData`[]\>
+
+#### Returns
+
+`Promise`\<`HolderData`[]\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:518](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L518)
+
+***
+
+### filterHighValueHolders()
+
+> **filterHighValueHolders**(`tradeData`): `Promise`\<`object`[]\>
+
+#### Parameters
+
+• **tradeData**: `TokenTradeData`
+
+#### Returns
+
+`Promise`\<`object`[]\>
+
+#### Defined in
+
+[packages/core/src/providers/token.ts:618](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L618)
 
 ***
 
@@ -74,77 +148,17 @@
 
 ***
 
-### fetchDexScreenerData()
+### getProcessedTokenData()
 
-> **fetchDexScreenerData**(): `Promise`\<`DexScreenerData`\>
-
-#### Returns
-
-`Promise`\<`DexScreenerData`\>
-
-#### Defined in
-
-[packages/core/src/providers/token.ts:431](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L431)
-
-***
-
-### fetchHolderList()
-
-> **fetchHolderList**(): `Promise`\<`HolderData`[]\>
+> **getProcessedTokenData**(): `Promise`\<`ProcessedTokenData`\>
 
 #### Returns
 
-`Promise`\<`HolderData`[]\>
+`Promise`\<`ProcessedTokenData`\>
 
 #### Defined in
 
-[packages/core/src/providers/token.ts:518](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L518)
-
-***
-
-### fetchTokenSecurity()
-
-> **fetchTokenSecurity**(): `Promise`\<`TokenSecurityData`\>
-
-#### Returns
-
-`Promise`\<`TokenSecurityData`\>
-
-#### Defined in
-
-[packages/core/src/providers/token.ts:166](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L166)
-
-***
-
-### fetchTokenTradeData()
-
-> **fetchTokenTradeData**(): `Promise`\<`TokenTradeData`\>
-
-#### Returns
-
-`Promise`\<`TokenTradeData`\>
-
-#### Defined in
-
-[packages/core/src/providers/token.ts:196](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L196)
-
-***
-
-### filterHighValueHolders()
-
-> **filterHighValueHolders**(`tradeData`): `Promise`\<`object`[]\>
-
-#### Parameters
-
-• **tradeData**: `TokenTradeData`
-
-#### Returns
-
-`Promise`\<`object`[]\>
-
-#### Defined in
-
-[packages/core/src/providers/token.ts:618](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L618)
+[packages/core/src/providers/token.ts:667](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L667)
 
 ***
 
@@ -177,17 +191,3 @@
 #### Defined in
 
 [packages/core/src/providers/token.ts:797](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L797)
-
-***
-
-### getProcessedTokenData()
-
-> **getProcessedTokenData**(): `Promise`\<`ProcessedTokenData`\>
-
-#### Returns
-
-`Promise`\<`ProcessedTokenData`\>
-
-#### Defined in
-
-[packages/core/src/providers/token.ts:667](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers/token.ts#L667)

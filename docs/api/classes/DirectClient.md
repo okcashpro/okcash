@@ -34,24 +34,6 @@
 
 ***
 
-### start()
-
-> **start**(`port`): `void`
-
-#### Parameters
-
-• **port**: `number`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/core/src/clients/direct/index.ts:272](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L272)
-
-***
-
 ### unregisterAgent()
 
 > **unregisterAgent**(`runtime`): `void`
@@ -67,3 +49,21 @@
 #### Defined in
 
 [packages/core/src/clients/direct/index.ts:268](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L268)
+
+***
+
+### start()
+
+> **start**(`port`): `void`
+
+#### Parameters
+
+• **port**: `number`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/src/clients/direct/index.ts:272](https://github.com/ai16z/eliza/blob/main/packages/core/src/clients/direct/index.ts#L272)

@@ -8,9 +8,9 @@ Format messages into a string
 
 • **\_\_namedParameters**
 
-• **\_\_namedParameters.actors**: [`Actor`](../interfaces/Actor.md)[]
-
 • **\_\_namedParameters.messages**: [`Memory`](../interfaces/Memory.md)[]
+
+• **\_\_namedParameters.actors**: [`Actor`](../interfaces/Actor.md)[]
 
 ## Returns
 

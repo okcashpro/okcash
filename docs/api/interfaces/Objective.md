@@ -4,13 +4,13 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 ## Properties
 
-### completed
+### id?
 
-> **completed**: `boolean`
+> `optional` **id**: `string`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L54)
+[packages/core/src/core/types.ts:52](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L52)
 
 ***
 
@@ -24,10 +24,10 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 ***
 
-### id?
+### completed
 
-> `optional` **id**: `string`
+> **completed**: `boolean`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:52](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L52)
+[packages/core/src/core/types.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L54)

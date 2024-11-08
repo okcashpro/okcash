@@ -14,6 +14,16 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 ***
 
+### similes
+
+> **similes**: `string`[]
+
+#### Defined in
+
+[packages/core/src/core/types.ts:235](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L235)
+
+***
+
 ### examples
 
 > **examples**: [`EvaluationExample`](EvaluationExample.md)[]
@@ -41,16 +51,6 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 #### Defined in
 
 [packages/core/src/core/types.ts:238](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L238)
-
-***
-
-### similes
-
-> **similes**: `string`[]
-
-#### Defined in
-
-[packages/core/src/core/types.ts:235](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L235)
 
 ***
 

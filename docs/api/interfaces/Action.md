@@ -4,6 +4,16 @@ Represents an action that the agent can perform, including conditions for its us
 
 ## Properties
 
+### similes
+
+> **similes**: `string`[]
+
+#### Defined in
+
+[packages/core/src/core/types.ts:213](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L213)
+
+***
+
 ### description
 
 > **description**: `string`
@@ -41,16 +51,6 @@ Represents an action that the agent can perform, including conditions for its us
 #### Defined in
 
 [packages/core/src/core/types.ts:217](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L217)
-
-***
-
-### similes
-
-> **similes**: `string`[]
-
-#### Defined in
-
-[packages/core/src/core/types.ts:213](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L213)
 
 ***
 

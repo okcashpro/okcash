@@ -4,6 +4,26 @@ Represents a memory record, which could be a message or any other piece of infor
 
 ## Properties
 
+### id?
+
+> `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:165](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L165)
+
+***
+
+### userId
+
+> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:166](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L166)
+
+***
+
 ### agentId
 
 > **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
@@ -11,16 +31,6 @@ Represents a memory record, which could be a message or any other piece of infor
 #### Defined in
 
 [packages/core/src/core/types.ts:167](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L167)
-
-***
-
-### content
-
-> **content**: [`Content`](Content.md)
-
-#### Defined in
-
-[packages/core/src/core/types.ts:169](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L169)
 
 ***
 
@@ -34,6 +44,16 @@ Represents a memory record, which could be a message or any other piece of infor
 
 ***
 
+### content
+
+> **content**: [`Content`](Content.md)
+
+#### Defined in
+
+[packages/core/src/core/types.ts:169](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L169)
+
+***
+
 ### embedding?
 
 > `optional` **embedding**: `number`[]
@@ -41,16 +61,6 @@ Represents a memory record, which could be a message or any other piece of infor
 #### Defined in
 
 [packages/core/src/core/types.ts:170](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L170)
-
-***
-
-### id?
-
-> `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:165](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L165)
 
 ***
 
@@ -71,13 +81,3 @@ Represents a memory record, which could be a message or any other piece of infor
 #### Defined in
 
 [packages/core/src/core/types.ts:172](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L172)
-
-***
-
-### userId
-
-> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:166](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L166)

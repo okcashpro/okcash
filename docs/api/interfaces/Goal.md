@@ -14,26 +14,6 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 ***
 
-### name
-
-> **name**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L70)
-
-***
-
-### objectives
-
-> **objectives**: [`Objective`](Objective.md)[]
-
-#### Defined in
-
-[packages/core/src/core/types.ts:72](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L72)
-
-***
-
 ### roomId
 
 > **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
@@ -41,6 +21,26 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 #### Defined in
 
 [packages/core/src/core/types.ts:68](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L68)
+
+***
+
+### userId
+
+> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L69)
+
+***
+
+### name
+
+> **name**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L70)
 
 ***
 
@@ -54,10 +54,10 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 ***
 
-### userId
+### objectives
 
-> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+> **objectives**: [`Objective`](Objective.md)[]
 
 #### Defined in
 
-[packages/core/src/core/types.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L69)
+[packages/core/src/core/types.ts:72](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L72)

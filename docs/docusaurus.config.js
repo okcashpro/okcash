@@ -27,41 +27,67 @@ const config = {
     '@docusaurus/theme-mermaid',
   ],
   plugins: [
-  [
-    "docusaurus-plugin-typedoc",
-    {
-      entryPoints: ["../packages/core/src/index.ts"],
-      tsconfig: "../packages/core/tsconfig.json",
-      out: "./api",
-      skipErrorChecking: true,
-      excludeExternals: false,
-      excludeProtected: false,
-      excludePrivate: true,
-      excludeNotDocumented: false,
-      cleanOutputDir: true,
-      hideGenerator: true,
-      exclude: [
-        "**/_media/**",
-        "**/node_modules/@types/node/events.d.ts",
-        "**/dist/**"
-      ],
-      plugin: ['typedoc-plugin-markdown'],
-      disableSources: false,
-      excludeInternal: false, // Instead of stripInternal
-      watch: false,
-      preserveWatchOutput: false,
-      validation: {
-        notExported: false,
-        invalidLink: false,
-        notDocumented: false
+    [
+      "docusaurus-plugin-typedoc",
+      {
+        entryPoints: ["../packages/core/src/index.ts"],
+        tsconfig: "../tsconfig.json",
+        out: "./api",
+        skipErrorChecking: true,
+        
+        // Documentation Enhancement Options
+        excludeExternals: false,
+        excludePrivate: true,
+        excludeProtected: false,
+        excludeInternal: false,
+        excludeNotDocumented: false,
+        
+        // Output Formatting
+        plugin: ['typedoc-plugin-markdown'],
+        //theme: 'markdown',
+        hideGenerator: true,
+        cleanOutputDir: true,
+        
+        // Enhanced Navigation
+        categoryOrder: [
+          "Classes",
+          "Interfaces",
+          "Enumerations", 
+          "Type Aliases",
+          "Variables",
+          "Functions"
+        ],
+        
+        // Documentation Features
+        includeVersion: true,
+        sort: ["source-order"],
+        gitRevision: 'main',
+        readme: 'none',
+
+        // Code Examples
+        preserveWatchOutput: true,
+        disableSources: false,
+        
+        // Validation Settings
+        validation: {
+          notExported: false,
+          invalidLink: false,
+          notDocumented: false
+        },
+
+        // File exclusions
+        exclude: [
+          "**/_media/**",
+          "**/node_modules/@types/node/events.d.ts",
+          "**/dist/**"
+        ],
+
+        // Build settings
+        watch: false,
+        treatWarningsAsErrors: false,
+        treatValidationWarningsAsErrors: false
       },
-      // Add these to handle markdown formatting
-      gitRevision: 'main',
-      readme: 'none',
-      treatWarningsAsErrors: false, // Add this to prevent warnings from failing build
-      treatValidationWarningsAsErrors: false, // Add this too
-    },
-  ],
+    ],
     require.resolve("docusaurus-lunr-search"),
     [
       "@docusaurus/plugin-content-docs",

@@ -4,25 +4,25 @@
 
 ## Type declaration
 
-### actions
+### name
 
-> **actions**: [`Action`](../interfaces/Action.md)[]
+> **name**: `string`
 
 ### description
 
 > **description**: `string`
 
-### evaluators
+### actions
 
-> **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
-
-### name
-
-> **name**: `string`
+> **actions**: [`Action`](../interfaces/Action.md)[]
 
 ### providers
 
 > **providers**: [`Provider`](../interfaces/Provider.md)[]
+
+### evaluators
+
+> **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
 
 ## Defined in
 

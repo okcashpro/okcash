@@ -6,21 +6,21 @@
 
 • **\_\_namedParameters**
 
-• **\_\_namedParameters.allowOffCurve**: `boolean`
-
-• **\_\_namedParameters.amount**: `bigint`
+• **\_\_namedParameters.sdk**: `PumpFunSDK`
 
 • **\_\_namedParameters.buyer**: `Keypair`
 
-• **\_\_namedParameters.connection**: `Connection`
-
 • **\_\_namedParameters.mint**: `PublicKey`
+
+• **\_\_namedParameters.amount**: `bigint`
 
 • **\_\_namedParameters.priorityFee**: `PriorityFee`
 
-• **\_\_namedParameters.sdk**: `PumpFunSDK`
+• **\_\_namedParameters.allowOffCurve**: `boolean`
 
 • **\_\_namedParameters.slippage**: `string`
+
+• **\_\_namedParameters.connection**: `Connection`
 
 ## Returns
 

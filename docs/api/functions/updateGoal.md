@@ -6,9 +6,9 @@
 
 • **\_\_namedParameters**
 
-• **\_\_namedParameters.goal**: [`Goal`](../interfaces/Goal.md)
-
 • **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.goal**: [`Goal`](../interfaces/Goal.md)
 
 ## Returns
 

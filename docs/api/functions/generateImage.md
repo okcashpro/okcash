@@ -6,19 +6,23 @@
 
 • **data**
 
-• **data.count?**: `number`
-
-• **data.height**: `number`
-
 • **data.prompt**: `string`
 
 • **data.width**: `number`
+
+• **data.height**: `number`
+
+• **data.count?**: `number`
 
 • **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 
 `Promise`\<`object`\>
+
+### success
+
+> **success**: `boolean`
 
 ### data?
 
@@ -27,10 +31,6 @@
 ### error?
 
 > `optional` **error**: `any`
-
-### success
-
-> **success**: `boolean`
 
 ## Defined in
 

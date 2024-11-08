@@ -8,33 +8,9 @@
 
 > `optional` **endpoint**: `string`
 
-### model
-
-> **model**: `object`
-
-### model.embedding?
-
-> `optional` **embedding**: `string`
-
-### model.large
-
-> **large**: `string`
-
-### model.medium
-
-> **medium**: `string`
-
-### model.small
-
-> **small**: `string`
-
 ### settings
 
 > **settings**: `object`
-
-### settings.frequency\_penalty?
-
-> `optional` **frequency\_penalty**: `number`
 
 ### settings.maxInputTokens
 
@@ -43,6 +19,10 @@
 ### settings.maxOutputTokens
 
 > **maxOutputTokens**: `number`
+
+### settings.frequency\_penalty?
+
+> `optional` **frequency\_penalty**: `number`
 
 ### settings.presence\_penalty?
 
@@ -59,6 +39,26 @@
 ### settings.temperature
 
 > **temperature**: `number`
+
+### model
+
+> **model**: `object`
+
+### model.small
+
+> **small**: `string`
+
+### model.medium
+
+> **medium**: `string`
+
+### model.large
+
+> **large**: `string`
+
+### model.embedding?
+
+> `optional` **embedding**: `string`
 
 ## Defined in
 

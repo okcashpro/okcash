@@ -4,17 +4,13 @@
 
 ## Type declaration
 
+### openai
+
+> **openai**: [`Model`](Model.md)
+
 ### anthropic
 
 > **anthropic**: [`Model`](Model.md)
-
-### claude\_vertex
-
-> **claude\_vertex**: [`Model`](Model.md)
-
-### google
-
-> **google**: [`Model`](Model.md)
 
 ### grok
 
@@ -32,17 +28,21 @@
 
 > **llama\_local**: [`Model`](Model.md)
 
-### ollama
+### google
 
-> **ollama**: [`Model`](Model.md)
+> **google**: [`Model`](Model.md)
 
-### openai
+### claude\_vertex
 
-> **openai**: [`Model`](Model.md)
+> **claude\_vertex**: [`Model`](Model.md)
 
 ### redpill
 
 > **redpill**: [`Model`](Model.md)
+
+### ollama
+
+> **ollama**: [`Model`](Model.md)
 
 ## Defined in
 

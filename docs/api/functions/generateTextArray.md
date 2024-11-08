@@ -10,13 +10,13 @@ Send a message to the model and parse the response as a string array
 
 The options for the generateText request
 
+• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 • **opts.context**: `string`
 
 The context/prompt to send to the model
 
 • **opts.modelClass**: `string`
-
-• **opts.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
 

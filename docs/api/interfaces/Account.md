@@ -4,40 +4,6 @@ Represents a user, including their name, details, and a unique identifier.
 
 ## Properties
 
-### avatarUrl?
-
-> `optional` **avatarUrl**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:275](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L275)
-
-***
-
-### details?
-
-> `optional` **details**: `object`
-
-#### Index Signature
-
- \[`key`: `string`\]: `any`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:273](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L273)
-
-***
-
-### email?
-
-> `optional` **email**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:274](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L274)
-
-***
-
 ### id
 
 > **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
@@ -65,3 +31,37 @@ Represents a user, including their name, details, and a unique identifier.
 #### Defined in
 
 [packages/core/src/core/types.ts:272](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L272)
+
+***
+
+### details?
+
+> `optional` **details**: `object`
+
+#### Index Signature
+
+ \[`key`: `string`\]: `any`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:273](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L273)
+
+***
+
+### email?
+
+> `optional` **email**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:274](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L274)
+
+***
+
+### avatarUrl?
+
+> `optional` **avatarUrl**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:275](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L275)

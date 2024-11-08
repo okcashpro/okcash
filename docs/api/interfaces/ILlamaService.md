@@ -2,24 +2,6 @@
 
 ## Methods
 
-### getEmbeddingResponse()
-
-> **getEmbeddingResponse**(`input`): `Promise`\<`number`[]\>
-
-#### Parameters
-
-• **input**: `string`
-
-#### Returns
-
-`Promise`\<`number`[]\>
-
-#### Defined in
-
-[packages/core/src/core/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L595)
-
-***
-
 ### initializeModel()
 
 > **initializeModel**(): `Promise`\<`void`\>
@@ -87,3 +69,21 @@
 #### Defined in
 
 [packages/core/src/core/types.ts:587](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L587)
+
+***
+
+### getEmbeddingResponse()
+
+> **getEmbeddingResponse**(`input`): `Promise`\<`number`[]\>
+
+#### Parameters
+
+• **input**: `string`
+
+#### Returns
+
+`Promise`\<`number`[]\>
+
+#### Defined in
+
+[packages/core/src/core/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L595)

@@ -6,11 +6,11 @@
 
 • **\_\_namedParameters**
 
+• **\_\_namedParameters.messages**: [`Memory`](../interfaces/Memory.md)[]
+
 • **\_\_namedParameters.actors**: [`Actor`](../interfaces/Actor.md)[]
 
 • **\_\_namedParameters.conversationHeader?**: `boolean` = `true`
-
-• **\_\_namedParameters.messages**: [`Memory`](../interfaces/Memory.md)[]
 
 ## Returns
 

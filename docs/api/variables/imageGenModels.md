@@ -4,18 +4,6 @@
 
 ## Type declaration
 
-### Dalle
-
-> **Dalle**: `object`
-
-### Dalle.steps
-
-> **steps**: `number` = `0`
-
-### Dalle.subModel
-
-> **subModel**: `string` = `"dall-e-3"`
-
 ### TogetherAI
 
 > **TogetherAI**: `object`
@@ -27,6 +15,18 @@
 ### TogetherAI.subModel
 
 > **subModel**: `string` = `"black-forest-labs/FLUX.1-schnell"`
+
+### Dalle
+
+> **Dalle**: `object`
+
+### Dalle.steps
+
+> **steps**: `number` = `0`
+
+### Dalle.subModel
+
+> **subModel**: `string` = `"dall-e-3"`
 
 ## Defined in
 

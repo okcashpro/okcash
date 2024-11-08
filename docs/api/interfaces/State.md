@@ -8,63 +8,13 @@ Represents the state of the conversation or context in which the agent is operat
 
 ## Properties
 
-### actionExamples?
+### userId?
 
-> `optional` **actionExamples**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:153](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L153)
-
-***
-
-### actionNames?
-
-> `optional` **actionNames**: `string`
+> `optional` **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L150)
-
-***
-
-### actions?
-
-> `optional` **actions**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:151](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L151)
-
-***
-
-### actionsData?
-
-> `optional` **actionsData**: [`Action`](Action.md)[]
-
-#### Defined in
-
-[packages/core/src/core/types.ts:152](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L152)
-
-***
-
-### actors
-
-> **actors**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:140](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L140)
-
-***
-
-### actorsData?
-
-> `optional` **actorsData**: [`Actor`](Actor.md)[]
-
-#### Defined in
-
-[packages/core/src/core/types.ts:141](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L141)
+[packages/core/src/core/types.ts:131](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L131)
 
 ***
 
@@ -78,16 +28,6 @@ Represents the state of the conversation or context in which the agent is operat
 
 ***
 
-### agentName?
-
-> `optional` **agentName**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:138](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L138)
-
-***
-
 ### bio
 
 > **bio**: `string`
@@ -95,26 +35,6 @@ Represents the state of the conversation or context in which the agent is operat
 #### Defined in
 
 [packages/core/src/core/types.ts:133](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L133)
-
-***
-
-### goals?
-
-> `optional` **goals**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:142](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L142)
-
-***
-
-### goalsData?
-
-> `optional` **goalsData**: [`Goal`](Goal.md)[]
-
-#### Defined in
-
-[packages/core/src/core/types.ts:143](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L143)
 
 ***
 
@@ -148,53 +68,73 @@ Represents the state of the conversation or context in which the agent is operat
 
 ***
 
-### providers?
+### roomId
 
-> `optional` **providers**: `string`
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:154](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L154)
+[packages/core/src/core/types.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L137)
 
 ***
 
-### recentFacts?
+### agentName?
 
-> `optional` **recentFacts**: `string`
+> `optional` **agentName**: `string`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:146](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L146)
+[packages/core/src/core/types.ts:138](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L138)
 
 ***
 
-### recentFactsData?
+### senderName?
 
-> `optional` **recentFactsData**: [`Memory`](Memory.md)[]
+> `optional` **senderName**: `string`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:147](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L147)
+[packages/core/src/core/types.ts:139](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L139)
 
 ***
 
-### recentInteractions?
+### actors
 
-> `optional` **recentInteractions**: `string`
+> **actors**: `string`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:157](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L157)
+[packages/core/src/core/types.ts:140](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L140)
 
 ***
 
-### recentInteractionsData?
+### actorsData?
 
-> `optional` **recentInteractionsData**: [`Memory`](Memory.md)[]
+> `optional` **actorsData**: [`Actor`](Actor.md)[]
 
 #### Defined in
 
-[packages/core/src/core/types.ts:156](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L156)
+[packages/core/src/core/types.ts:141](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L141)
+
+***
+
+### goals?
+
+> `optional` **goals**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:142](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L142)
+
+***
+
+### goalsData?
+
+> `optional` **goalsData**: [`Goal`](Goal.md)[]
+
+#### Defined in
+
+[packages/core/src/core/types.ts:143](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L143)
 
 ***
 
@@ -218,6 +158,26 @@ Represents the state of the conversation or context in which the agent is operat
 
 ***
 
+### recentFacts?
+
+> `optional` **recentFacts**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:146](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L146)
+
+***
+
+### recentFactsData?
+
+> `optional` **recentFactsData**: [`Memory`](Memory.md)[]
+
+#### Defined in
+
+[packages/core/src/core/types.ts:147](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L147)
+
+***
+
 ### relevantFacts?
 
 > `optional` **relevantFacts**: `string`
@@ -238,6 +198,56 @@ Represents the state of the conversation or context in which the agent is operat
 
 ***
 
+### actionNames?
+
+> `optional` **actionNames**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L150)
+
+***
+
+### actions?
+
+> `optional` **actions**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:151](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L151)
+
+***
+
+### actionsData?
+
+> `optional` **actionsData**: [`Action`](Action.md)[]
+
+#### Defined in
+
+[packages/core/src/core/types.ts:152](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L152)
+
+***
+
+### actionExamples?
+
+> `optional` **actionExamples**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:153](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L153)
+
+***
+
+### providers?
+
+> `optional` **providers**: `string`
+
+#### Defined in
+
+[packages/core/src/core/types.ts:154](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L154)
+
+***
+
 ### responseData?
 
 > `optional` **responseData**: [`Content`](Content.md)
@@ -248,30 +258,20 @@ Represents the state of the conversation or context in which the agent is operat
 
 ***
 
-### roomId
+### recentInteractionsData?
 
-> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+> `optional` **recentInteractionsData**: [`Memory`](Memory.md)[]
 
 #### Defined in
 
-[packages/core/src/core/types.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L137)
+[packages/core/src/core/types.ts:156](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L156)
 
 ***
 
-### senderName?
+### recentInteractions?
 
-> `optional` **senderName**: `string`
-
-#### Defined in
-
-[packages/core/src/core/types.ts:139](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L139)
-
-***
-
-### userId?
-
-> `optional` **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+> `optional` **recentInteractions**: `string`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:131](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L131)
+[packages/core/src/core/types.ts:157](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L157)
