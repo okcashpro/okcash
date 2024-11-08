@@ -20,19 +20,23 @@ const factsProvider: Provider = {
 
         const embedding = await embed(runtime, recentMessages);
 
+        console.log("embedding", embedding);
+
         const memoryManager = new MemoryManager({
             runtime,
             tableName: "facts",
         });
 
-        const relevantFacts = await memoryManager.searchMemoriesByEmbedding(
-            embedding,
-            {
-                roomId: message.roomId,
-                count: 10,
-                agentId: runtime.agentId,
-            }
-        );
+        const relevantFacts = []
+        
+        // await memoryManager.searchMemoriesByEmbedding(
+        //     embedding,
+        //     {
+        //         roomId: message.roomId,
+        //         count: 10,
+        //         agentId: runtime.agentId,
+        //     }
+        // );
 
         const recentFactsData = await memoryManager.getMemories({
             roomId: message.roomId,

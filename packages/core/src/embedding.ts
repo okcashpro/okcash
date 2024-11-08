@@ -13,25 +13,28 @@ import {
  */
 export async function embed(runtime: IAgentRuntime, input: string) {
     // get the charcter, and handle by model type
-    const model = models[runtime.character.settings.model];
+    const modelProvider = models[runtime.character.modelProvider];
+    const embeddingModel = modelProvider.model.embedding;
 
     if (
-        model !== ModelProviderName.OPENAI &&
-        model !== ModelProviderName.OLLAMA
+        runtime.character.modelProvider !== ModelProviderName.OPENAI &&
+        runtime.character.modelProvider !== ModelProviderName.OLLAMA
     ) {
         const service = runtime.getService<ITextGenerationService>(
             ServiceType.TEXT_GENERATION
         );
-        return await service.getInstance().getEmbeddingResponse(input);
+        
+        const instance = service?.getInstance();
+
+        if (instance) {
+            return await instance.getEmbeddingResponse(input);
+        }
     }
-
-    const embeddingModel = models[runtime.modelProvider].model.embedding;
-
     // Check if we already have the embedding in the lore
-    const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
-    if (cachedEmbedding) {
-        return cachedEmbedding;
-    }
+    // const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
+    // if (cachedEmbedding) {
+    //     return cachedEmbedding;
+    // }
 
     const requestOptions = {
         method: "POST",
@@ -51,7 +54,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     try {
         const response = await fetch(
             // TODO: make this not hardcoded
-            `${runtime.serverUrl}${runtime.modelProvider === ModelProviderName.OLLAMA ? "/v1" : ""}/embeddings`,
+            `${runtime.character.modelEndpointOverride || modelProvider.endpoint}${runtime.character.modelProvider === ModelProviderName.OLLAMA ? "/v1" : ""}/embeddings`,
             requestOptions
         );
 
@@ -81,6 +84,11 @@ export async function retrieveCachedEmbedding(
     runtime: IAgentRuntime,
     input: string
 ) {
+    if(!input) {
+        console.log("No input to retrieve cached embedding for");
+        return null;
+    }
+
     const similaritySearchResult =
         await runtime.messageManager.getCachedEmbeddings(input);
     if (similaritySearchResult.length > 0) {

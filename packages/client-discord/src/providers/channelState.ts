@@ -16,7 +16,6 @@ const channelStateProvider: Provider = {
             (state?.discordMessage as DiscordMessage) ||
             (state?.discordChannel as DiscordMessage);
         if (!discordMessage) {
-            console.log("discordMessage is null");
             return "";
         }
 

@@ -350,6 +350,8 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
       ORDER BY vec_distance_L2(${opts.query_field_name}, ?) ASC
       LIMIT ?
     `;
+    console.log("sql", sql)
+    console.log("opts.query_input", opts.query_input)
         const memories = this.db.prepare(sql).all(
             opts.query_table_name,
             new Float32Array(opts.query_input.split(",").map(Number)), // Convert string to Float32Array
