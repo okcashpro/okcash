@@ -186,7 +186,7 @@ export class ClientBase extends EventEmitter {
         }
         const cookiesFilePath = path.join(
             __dirname,
-            "@ai16z/eliza/tweetcache/" +
+            "tweetcache/" +
                 this.runtime.getSetting("TWITTER_USERNAME") +
                 "_cookies.json"
         );
