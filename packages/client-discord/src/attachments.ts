@@ -1,5 +1,5 @@
-import { generateText, trimTokens } from "@ai16z/eliza/src/generation";
-import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing";
+import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
+import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
 import { IAgentRuntime, IImageDescriptionService, IPdfService, ITranscriptionService, IVideoService, Media, ModelClass, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { Attachment, Collection } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";

@@ -8,9 +8,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:494](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L494)
+[packages/core/src/types.ts:516](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L516)
 
----
+***
 
 ### agentId
 
@@ -18,19 +18,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:486](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L486)
+[packages/core/src/types.ts:509](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L509)
 
----
-
-### browserService
-
-> **browserService**: [`IBrowserService`](IBrowserService.md)
-
-#### Defined in
-
-[core/src/core/types.ts:504](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L504)
-
----
+***
 
 ### character
 
@@ -38,9 +28,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:492](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L492)
+[packages/core/src/types.ts:514](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L514)
 
----
+***
 
 ### databaseAdapter
 
@@ -48,9 +38,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:488](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L488)
+[packages/core/src/types.ts:511](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L511)
 
----
+***
 
 ### descriptionManager
 
@@ -58,9 +48,19 @@
 
 #### Defined in
 
-[core/src/core/types.ts:497](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L497)
+[packages/core/src/types.ts:520](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L520)
 
----
+***
+
+### evaluators
+
+> **evaluators**: [`Evaluator`](Evaluator.md)[]
+
+#### Defined in
+
+[packages/core/src/types.ts:517](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L517)
+
+***
 
 ### factManager
 
@@ -68,39 +68,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:498](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L498)
+[packages/core/src/types.ts:522](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L522)
 
----
-
-### imageDescriptionService
-
-> **imageDescriptionService**: [`IImageRecognitionService`](IImageRecognitionService.md)
-
-#### Defined in
-
-[core/src/core/types.ts:500](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L500)
-
----
-
-### imageGenModel
-
-> **imageGenModel**: [`ImageGenModel`](../enumerations/ImageGenModel.md)
-
-#### Defined in
-
-[core/src/core/types.ts:491](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L491)
-
----
-
-### llamaService
-
-> **llamaService**: [`ILlamaService`](ILlamaService.md)
-
-#### Defined in
-
-[core/src/core/types.ts:503](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L503)
-
----
+***
 
 ### loreManager
 
@@ -108,9 +78,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:499](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L499)
+[packages/core/src/types.ts:521](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L521)
 
----
+***
 
 ### messageManager
 
@@ -118,29 +88,19 @@
 
 #### Defined in
 
-[core/src/core/types.ts:496](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L496)
+[packages/core/src/types.ts:519](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L519)
 
----
+***
 
 ### modelProvider
 
-> **modelProvider**: [`ModelProvider`](../enumerations/ModelProvider.md)
+> **modelProvider**: [`ModelProviderName`](../enumerations/ModelProviderName.md)
 
 #### Defined in
 
-[core/src/core/types.ts:490](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L490)
+[packages/core/src/types.ts:513](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L513)
 
----
-
-### pdfService
-
-> **pdfService**: [`IPdfService`](IPdfService.md)
-
-#### Defined in
-
-[core/src/core/types.ts:506](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L506)
-
----
+***
 
 ### providers
 
@@ -148,9 +108,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:493](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L493)
+[packages/core/src/types.ts:515](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L515)
 
----
+***
 
 ### serverUrl
 
@@ -158,19 +118,19 @@
 
 #### Defined in
 
-[core/src/core/types.ts:487](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L487)
+[packages/core/src/types.ts:510](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L510)
 
----
+***
 
-### speechService
+### services
 
-> **speechService**: [`ISpeechService`](ISpeechService.md)
+> **services**: `Map`\<[`ServiceType`](../enumerations/ServiceType.md), `Service`\>
 
 #### Defined in
 
-[core/src/core/types.ts:505](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L505)
+[packages/core/src/types.ts:525](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L525)
 
----
+***
 
 ### token
 
@@ -178,27 +138,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:489](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L489)
-
----
-
-### transcriptionService
-
-> **transcriptionService**: [`ITranscriptionService`](ITranscriptionService.md)
-
-#### Defined in
-
-[core/src/core/types.ts:501](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L501)
-
----
-
-### videoService
-
-> **videoService**: [`IVideoService`](IVideoService.md)
-
-#### Defined in
-
-[core/src/core/types.ts:502](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L502)
+[packages/core/src/types.ts:512](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L512)
 
 ## Methods
 
@@ -218,9 +158,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:536](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L536)
+[packages/core/src/types.ts:562](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L562)
 
----
+***
 
 ### ensureConnection()
 
@@ -244,9 +184,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:527](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L527)
+[packages/core/src/types.ts:553](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L553)
 
----
+***
 
 ### ensureParticipantExists()
 
@@ -264,9 +204,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:519](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L519)
+[packages/core/src/types.ts:545](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L545)
 
----
+***
 
 ### ensureParticipantInRoom()
 
@@ -284,9 +224,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:534](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L534)
+[packages/core/src/types.ts:560](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L560)
 
----
+***
 
 ### ensureRoomExists()
 
@@ -302,9 +242,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:535](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L535)
+[packages/core/src/types.ts:561](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L561)
 
----
+***
 
 ### ensureUserExists()
 
@@ -326,9 +266,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:520](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L520)
+[packages/core/src/types.ts:546](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L546)
 
----
+***
 
 ### evaluate()
 
@@ -346,9 +286,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:518](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L518)
+[packages/core/src/types.ts:544](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L544)
 
----
+***
 
 ### getConversationLength()
 
@@ -360,9 +300,49 @@
 
 #### Defined in
 
-[core/src/core/types.ts:511](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L511)
+[packages/core/src/types.ts:537](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L537)
 
----
+***
+
+### getMemoryManager()
+
+> **getMemoryManager**(`name`): [`IMemoryManager`](IMemoryManager.md)
+
+#### Parameters
+
+• **name**: `string`
+
+#### Returns
+
+[`IMemoryManager`](IMemoryManager.md)
+
+#### Defined in
+
+[packages/core/src/types.ts:528](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L528)
+
+***
+
+### getService()
+
+> **getService**\<`Service`\>(`service`): `Service`
+
+#### Type Parameters
+
+• **Service**
+
+#### Parameters
+
+• **service**: `string`
+
+#### Returns
+
+`Service`
+
+#### Defined in
+
+[packages/core/src/types.ts:530](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L530)
+
+***
 
 ### getSetting()
 
@@ -378,9 +358,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:508](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L508)
+[packages/core/src/types.ts:534](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L534)
 
----
+***
 
 ### processActions()
 
@@ -402,9 +382,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:512](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L512)
+[packages/core/src/types.ts:538](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L538)
 
----
+***
 
 ### registerAction()
 
@@ -420,9 +400,45 @@
 
 #### Defined in
 
-[core/src/core/types.ts:526](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L526)
+[packages/core/src/types.ts:552](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L552)
 
----
+***
+
+### registerMemoryManager()
+
+> **registerMemoryManager**(`manager`): `void`
+
+#### Parameters
+
+• **manager**: [`IMemoryManager`](IMemoryManager.md)
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/src/types.ts:526](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L526)
+
+***
+
+### registerService()
+
+> **registerService**(`service`): `void`
+
+#### Parameters
+
+• **service**: `Service`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/core/src/types.ts:532](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L532)
+
+***
 
 ### updateRecentMessageState()
 
@@ -438,4 +454,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:540](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L540)
+[packages/core/src/types.ts:566](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L566)

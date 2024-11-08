@@ -1,4 +1,8 @@
-# Interface: ILlamaService
+# Interface: ITextGenerationService
+
+## Extends
+
+- `Service`
 
 ## Methods
 
@@ -16,9 +20,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:582](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L582)
+[packages/core/src/types.ts:608](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L608)
 
----
+***
 
 ### initializeModel()
 
@@ -30,9 +34,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:565](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L565)
+[packages/core/src/types.ts:591](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L591)
 
----
+***
 
 ### queueMessageCompletion()
 
@@ -46,11 +50,11 @@
 
 • **stop**: `string`[]
 
-• **frequency_penalty**: `number`
+• **frequency\_penalty**: `number`
 
-• **presence_penalty**: `number`
+• **presence\_penalty**: `number`
 
-• **max_tokens**: `number`
+• **max\_tokens**: `number`
 
 #### Returns
 
@@ -58,9 +62,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:566](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L566)
+[packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L592)
 
----
+***
 
 ### queueTextCompletion()
 
@@ -74,11 +78,11 @@
 
 • **stop**: `string`[]
 
-• **frequency_penalty**: `number`
+• **frequency\_penalty**: `number`
 
-• **presence_penalty**: `number`
+• **presence\_penalty**: `number`
 
-• **max_tokens**: `number`
+• **max\_tokens**: `number`
 
 #### Returns
 
@@ -86,4 +90,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:574](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L574)
+[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L600)

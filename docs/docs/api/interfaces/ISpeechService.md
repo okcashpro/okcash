@@ -1,5 +1,9 @@
 # Interface: ISpeechService
 
+## Extends
+
+- `Service`
+
 ## Methods
 
 ### generate()
@@ -18,4 +22,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:594](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L594)
+[packages/core/src/types.ts:621](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L621)

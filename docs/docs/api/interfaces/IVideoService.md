@@ -1,5 +1,9 @@
 # Interface: IVideoService
 
+## Extends
+
+- `Service`
+
 ## Methods
 
 ### isVideoUrl()
@@ -16,9 +20,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:560](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L560)
+[packages/core/src/types.ts:586](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L586)
 
----
+***
 
 ### processVideo()
 
@@ -34,4 +38,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:561](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L561)
+[packages/core/src/types.ts:587](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L587)

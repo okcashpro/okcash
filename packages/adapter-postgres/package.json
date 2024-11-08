@@ -10,6 +10,7 @@
         "pg": "^8.13.1"
     },
     "scripts": {
-        "build": "echo 'No build step required'"
+        "build": "echo 'No build step required'",
+        "dev": "tsup --watch"
     }
 }

@@ -10,7 +10,9 @@ import {
     Content,
     HandlerCallback,
     IAgentRuntime,
+    IImageDescriptionService,
     ModelClass,
+    ServiceType,
     State,
 } from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";

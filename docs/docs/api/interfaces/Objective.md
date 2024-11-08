@@ -10,9 +10,9 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 #### Defined in
 
-[core/src/core/types.ts:54](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L54)
+[packages/core/src/types.ts:54](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L54)
 
----
+***
 
 ### description
 
@@ -20,9 +20,9 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 #### Defined in
 
-[core/src/core/types.ts:53](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L53)
+[packages/core/src/types.ts:53](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L53)
 
----
+***
 
 ### id?
 
@@ -30,4 +30,4 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 #### Defined in
 
-[core/src/core/types.ts:52](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L52)
+[packages/core/src/types.ts:52](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L52)

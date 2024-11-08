@@ -1,9 +1,8 @@
 {
     "name": "@ai16z/client-telegram",
     "version": "0.0.1",
-    "main": "dist/index.js",
+    "main": "src/index.ts",
     "type": "module",
-    "types": "dist/index.d.ts",
     "dependencies": {
         "@telegraf/types": "7.1.0",
         "@ai16z/eliza": "workspace:*",
@@ -12,6 +11,7 @@
         "tsup": "^8.3.5"
     },
     "scripts": {
-        "build": "tsup --format esm --dts"
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --watch"
     }
 }

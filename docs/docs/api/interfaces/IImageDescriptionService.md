@@ -1,4 +1,8 @@
-# Interface: IImageRecognitionService
+# Interface: IImageDescriptionService
+
+## Extends
+
+- `Service`
 
 ## Methods
 
@@ -24,9 +28,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:545](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L545)
+[packages/core/src/types.ts:571](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L571)
 
----
+***
 
 ### initialize()
 
@@ -44,4 +48,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:544](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L544)
+[packages/core/src/types.ts:570](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L570)

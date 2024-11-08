@@ -1,5 +1,9 @@
 # Interface: ITranscriptionService
 
+## Extends
+
+- `Service`
+
 ## Methods
 
 ### transcribe()
@@ -16,9 +20,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:555](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L555)
+[packages/core/src/types.ts:581](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L581)
 
----
+***
 
 ### transcribeAttachment()
 
@@ -34,9 +38,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:551](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L551)
+[packages/core/src/types.ts:577](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L577)
 
----
+***
 
 ### transcribeAttachmentLocally()
 
@@ -52,9 +56,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:552](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L552)
+[packages/core/src/types.ts:578](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L578)
 
----
+***
 
 ### transcribeLocally()
 
@@ -70,4 +74,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:556](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L556)
+[packages/core/src/types.ts:582](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L582)

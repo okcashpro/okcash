@@ -20,4 +20,4 @@ string
 
 ## Defined in
 
-[core/src/core/messages.ts:60](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/messages.ts#L60)
+[packages/core/src/messages.ts:60](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/messages.ts#L60)

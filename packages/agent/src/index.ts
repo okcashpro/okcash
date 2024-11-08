@@ -1,9 +1,10 @@
+console.log("ok")
 import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres/src/index.ts";
 import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite/src/index.ts";
-import { DirectClient, DirectClientInterface } from "@ai16z/client-direct";
-import { DiscordClientInterface } from "@ai16z/client-discord";
-import { TelegramClientInterface } from "@ai16z/client-telegram";
-import { TwitterClientInterface } from "@ai16z/client-twitter";
+import { DirectClientInterface } from "@ai16z/client-direct/src/index.ts";
+import { DiscordClientInterface } from "@ai16z/client-discord/src/index.ts";
+import { TelegramClientInterface } from "@ai16z/client-telegram/src/index.ts";
+import { TwitterClientInterface } from "@ai16z/client-twitter/src/index.ts";
 import { defaultCharacter } from "@ai16z/eliza/src/defaultCharacter.ts";
 import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
@@ -12,8 +13,8 @@ import {
     IAgentRuntime,
     IDatabaseAdapter, ModelProviderName,
 } from "@ai16z/eliza/src/types.ts";
-import { defaultPlugin } from "@ai16z/plugin-bootstrap";
-import { nodePlugin } from "@ai16z/plugin-node";
+import { defaultPlugin } from "@ai16z/plugin-bootstrap/src/index.ts";
+import { nodePlugin } from "@ai16z/plugin-node/src/index.ts";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
@@ -164,14 +165,14 @@ export async function initializeClients(
     const clientTypes =
         character.clients?.map((str) => str.toLowerCase()) || [];
 
-    if (clientTypes.includes("discord")) {
-        clients.push(await DiscordClientInterface.start(runtime));
-    }
+    // if (clientTypes.includes("discord")) {
+    //     clients.push(await DiscordClientInterface.start(runtime));
+    // }
 
-    if (clientTypes.includes("telegram")) {
-        const telegramClient = await TelegramClientInterface.start(runtime);
-        if (telegramClient) clients.push(telegramClient);
-    }
+    // if (clientTypes.includes("telegram")) {
+    //     const telegramClient = await TelegramClientInterface.start(runtime);
+    //     if (telegramClient) clients.push(telegramClient);
+    // }
 
     if (clientTypes.includes("twitter")) {
         const twitterClients = await TwitterClientInterface.start(runtime);
@@ -196,24 +197,27 @@ export async function createAgent(
         plugins: [defaultPlugin, nodePlugin],
         providers: [],
         actions: [],
+        services: [],
+        managers: [],
     });
 }
 
-async function startAgent(character: Character, directClient: DirectClient) {
+async function startAgent(character: Character, directClient: any) {
     try {
-        const token = getTokenForProvider(character.modelProvider, character);
-        const db = initializeDatabase();
+        // const token = getTokenForProvider(character.modelProvider, character);
+        // const db = initializeDatabase();
 
-        const runtime = await createAgent(character, db, token);
+        // const runtime = await createAgent(character, db, token);
 
-        const clients = await initializeClients(
-            character,
-            runtime as IAgentRuntime
-        );
+        // const clients = await initializeClients(
+        //     character,
+        //     runtime as IAgentRuntime
+        // );
 
-        directClient.registerAgent(await runtime);
+        // directClient.registerAgent(await runtime);
 
-        return clients;
+        // return clients;
+        return [];
     } catch (error) {
         console.error(
             `Error starting agent for character ${character.name}:`,
@@ -223,40 +227,40 @@ async function startAgent(character: Character, directClient: DirectClient) {
     }
 }
 
-const startAgents = async () => {
-    const directClient = (await DirectClientInterface.start()) as DirectClient;
-    const args = parseArguments();
+// const startAgents = async () => {
+//     const directClient = (await DirectClientInterface.start());
+//     const args = parseArguments();
 
-    let charactersArg = args.characters || args.character;
+//     let charactersArg = args.characters || args.character;
 
-    let characters = [defaultCharacter];
+//     let characters = [defaultCharacter];
 
-    if (charactersArg) {
-        characters = await loadCharacters(charactersArg);
-    }
+//     if (charactersArg) {
+//         characters = await loadCharacters(charactersArg);
+//     }
 
 
-    try {
-        for (const character of characters) {
-            await startAgent(character, directClient);
-        }
-    } catch (error) {
-        console.error("Error starting agents:", error);
-    }
+//     try {
+//         for (const character of characters) {
+//             await startAgent(character, directClient);
+//         }
+//     } catch (error) {
+//         console.error("Error starting agents:", error);
+//     }
 
-    function chat() {
-        const agentId = characters[0].name ?? "Agent";
-        rl.question("You: ", (input) => handleUserInput(input, agentId));
-    }
+//     function chat() {
+//         const agentId = characters[0].name ?? "Agent";
+//         // rl.question("You: ", (input) => handleUserInput(input, agentId));
+//     }
     
-    console.log("Chat started. Type 'exit' to quit.");
-    chat();
-};
+//     console.log("Chat started. Type 'exit' to quit.");
+//     chat();
+// };
 
-startAgents().catch((error) => {
-    console.error("Unhandled error in startAgents:", error);
-    process.exit(1); // Exit the process after logging
-});
+// startAgents().catch((error) => {
+//     console.error("Unhandled error in startAgents:", error);
+//     process.exit(1); // Exit the process after logging
+// });
 
 const rl = readline.createInterface({
     input: process.stdin,
