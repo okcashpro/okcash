@@ -5,7 +5,7 @@ import { getModel } from "./models.ts";
 import { IImageDescriptionService, ModelClass } from "./types.ts";
 import { generateText as aiGenerateText } from "ai";
 import { Buffer } from "buffer";
-import { createOllama } from 'ollama-ai-provider';
+import { createOllama } from "ollama-ai-provider";
 import OpenAI from "openai";
 import { default as tiktoken, TiktokenModel } from "tiktoken";
 import Together from "together-ai";
@@ -18,7 +18,13 @@ import {
     parseShouldRespondFromText,
 } from "./parsing.ts";
 import settings from "./settings.ts";
-import { Content, IAgentRuntime, ITextGenerationService, ModelProviderName, ServiceType } from "./types.ts";
+import {
+    Content,
+    IAgentRuntime,
+    ITextGenerationService,
+    ModelProviderName,
+    ServiceType,
+} from "./types.ts";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -169,14 +175,18 @@ export async function generateText({
 
             case ModelProviderName.LLAMALOCAL: {
                 elizaLogger.log("Using local Llama model for text completion.");
-                response = await runtime.getService<ITextGenerationService>(ServiceType.TEXT_GENERATION).queueTextCompletion(
-                    context,
-                    temperature,
-                    _stop,
-                    frequency_penalty,
-                    presence_penalty,
-                    max_response_length
-                );
+                response = await runtime
+                    .getService<ITextGenerationService>(
+                        ServiceType.TEXT_GENERATION
+                    )
+                    .queueTextCompletion(
+                        context,
+                        temperature,
+                        _stop,
+                        frequency_penalty,
+                        presence_penalty,
+                        max_response_length
+                    );
                 elizaLogger.log("Received response from local Llama model.");
                 break;
             }
@@ -204,27 +214,28 @@ export async function generateText({
                 break;
             }
 
-            case ModelProviderName.OLLAMA: {
-                console.log("Initializing Ollama model.");
-                    
-                const ollamaProvider = createOllama({
-                    baseURL: models[provider].endpoint + "/api",
-                })
-                const ollama = ollamaProvider(model);
-                
-                console.log('****** MODEL\n', model)
+            case ModelProviderName.OLLAMA:
+                {
+                    console.log("Initializing Ollama model.");
 
-                const { text: ollamaResponse } = await aiGenerateText({
-                    model: ollama,
-                    prompt: context,
-                    temperature: temperature,
-                    maxTokens: max_response_length,
-                    frequencyPenalty: frequency_penalty,
-                    presencePenalty: presence_penalty,
-                });
+                    const ollamaProvider = createOllama({
+                        baseURL: models[provider].endpoint + "/api",
+                    });
+                    const ollama = ollamaProvider(model);
 
-                response = ollamaResponse;
-            }
+                    console.log("****** MODEL\n", model);
+
+                    const { text: ollamaResponse } = await aiGenerateText({
+                        model: ollama,
+                        prompt: context,
+                        temperature: temperature,
+                        maxTokens: max_response_length,
+                        frequencyPenalty: frequency_penalty,
+                        presencePenalty: presence_penalty,
+                    });
+
+                    response = ollamaResponse;
+                }
                 console.log("Received response from Ollama model.");
                 break;
 
@@ -611,7 +622,10 @@ export const generateImage = async (
     const model = getModel(runtime.character.modelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.character.modelProvider].imageSettings;
     // some fallbacks for backwards compat, should remove in the future
-    const apiKey = runtime.token ?? runtime.getSetting("TOGETHER_API_KEY") ?? runtime.getSetting("OPENAI_API_KEY");
+    const apiKey =
+        runtime.token ??
+        runtime.getSetting("TOGETHER_API_KEY") ??
+        runtime.getSetting("OPENAI_API_KEY");
 
     try {
         if (runtime.character.modelProvider === ModelProviderName.LLAMACLOUD) {
@@ -678,7 +692,9 @@ export const generateCaption = async (
     description: string;
 }> => {
     const { imageUrl } = data;
-    const resp = await runtime.getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION).describeImage(imageUrl);
+    const resp = await runtime
+        .getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION)
+        .describeImage(imageUrl);
     return {
         title: resp.title.trim(),
         description: resp.description.trim(),

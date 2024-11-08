@@ -3,7 +3,10 @@ import {
     generateMessageResponse,
     generateTrueOrFalse,
 } from "@ai16z/eliza/src/generation.ts";
-import { booleanFooter, messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
+import {
+    booleanFooter,
+    messageCompletionFooter,
+} from "@ai16z/eliza/src/parsing.ts";
 import {
     Action,
     ActionExample,

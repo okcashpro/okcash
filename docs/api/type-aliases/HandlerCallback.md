@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:200](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L200)
+[packages/core/src/types.ts:195](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L195)

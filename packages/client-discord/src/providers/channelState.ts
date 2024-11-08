@@ -3,7 +3,12 @@ import {
     Message as DiscordMessage,
     TextChannel,
 } from "discord.js";
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza/src/types.ts";
+import {
+    IAgentRuntime,
+    Memory,
+    Provider,
+    State,
+} from "@ai16z/eliza/src/types.ts";
 
 const channelStateProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {

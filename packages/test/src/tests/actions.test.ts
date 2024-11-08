@@ -168,7 +168,7 @@ describe("Actions", () => {
             runtime,
             tableName: "facts",
         });
-        
+
         await factsManager.removeAllMemories(roomId);
         await runtime.messageManager.removeAllMemories(roomId);
     }

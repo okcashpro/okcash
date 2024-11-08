@@ -171,12 +171,22 @@ const models: Models = {
             presence_penalty: 0.0,
             temperature: 0.3,
         },
-        endpoint: settings.OLLAMA_SERVER_URL || "http://localhost:11434", 
+        endpoint: settings.OLLAMA_SERVER_URL || "http://localhost:11434",
         model: {
-            [ModelClass.SMALL]: settings.SMALL_OLLAMA_MODEL || settings.OLLAMA_MODEL || "llama3.2",
-            [ModelClass.MEDIUM]: settings.MEDIUM_OLLAMA_MODEL ||settings.OLLAMA_MODEL || "hermes3",
-            [ModelClass.LARGE]: settings.LARGE_OLLAMA_MODEL || settings.OLLAMA_MODEL || "hermes3:70b",
-            [ModelClass.EMBEDDING]: settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
+            [ModelClass.SMALL]:
+                settings.SMALL_OLLAMA_MODEL ||
+                settings.OLLAMA_MODEL ||
+                "llama3.2",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_OLLAMA_MODEL ||
+                settings.OLLAMA_MODEL ||
+                "hermes3",
+            [ModelClass.LARGE]:
+                settings.LARGE_OLLAMA_MODEL ||
+                settings.OLLAMA_MODEL ||
+                "hermes3:70b",
+            [ModelClass.EMBEDDING]:
+                settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large",
         },
     },
 };

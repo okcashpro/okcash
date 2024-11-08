@@ -5,7 +5,7 @@ const config = {
   title: "eliza",
   tagline: "The flexible, scalable AI agent for everyone",
   favicon: "img/favicon.ico",
- 
+
   // GitHub Pages Configuration
   url: "https://ai16z.github.io",
   baseUrl: "/eliza/",
@@ -15,7 +15,7 @@ const config = {
   trailingSlash: true,
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
-  
+
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -23,9 +23,7 @@ const config = {
   markdown: {
     mermaid: true,
   },
-  themes: [
-    '@docusaurus/theme-mermaid',
-  ],
+  themes: ["@docusaurus/theme-mermaid"],
   plugins: [
     [
       "docusaurus-plugin-typedoc",
@@ -34,58 +32,58 @@ const config = {
         tsconfig: "../tsconfig.json",
         out: "./api",
         skipErrorChecking: true,
-        
+
         // Documentation Enhancement Options
         excludeExternals: false,
         excludePrivate: true,
         excludeProtected: false,
         excludeInternal: false,
         excludeNotDocumented: false,
-        
+
         // Output Formatting
-        plugin: ['typedoc-plugin-markdown'],
+        plugin: ["typedoc-plugin-markdown"],
         //theme: 'markdown',
         hideGenerator: true,
         cleanOutputDir: true,
-        
+
         // Enhanced Navigation
         categoryOrder: [
           "Classes",
           "Interfaces",
-          "Enumerations", 
+          "Enumerations",
           "Type Aliases",
           "Variables",
-          "Functions"
+          "Functions",
         ],
-        
+
         // Documentation Features
         includeVersion: true,
         sort: ["source-order"],
-        gitRevision: 'main',
-        readme: 'none',
+        gitRevision: "main",
+        readme: "none",
 
         // Code Examples
         preserveWatchOutput: true,
         disableSources: false,
-        
+
         // Validation Settings
         validation: {
           notExported: false,
           invalidLink: false,
-          notDocumented: false
+          notDocumented: false,
         },
 
         // File exclusions
         exclude: [
           "**/_media/**",
           "**/node_modules/@types/node/events.d.ts",
-          "**/dist/**"
+          "**/dist/**",
         ],
 
         // Build settings
         watch: false,
         treatWarningsAsErrors: false,
-        treatValidationWarningsAsErrors: false
+        treatValidationWarningsAsErrors: false,
       },
     ],
     require.resolve("docusaurus-lunr-search"),
@@ -108,7 +106,7 @@ const config = {
           sidebarPath: "./sidebars.js",
           editUrl: "https://github.com/ai16z/eliza/tree/main/docs/",
           routeBasePath: "docs",
-          exclude: ["**/_media/**"],  // Add exclude pattern here too
+          exclude: ["**/_media/**"], // Add exclude pattern here too
         },
         theme: {
           customCss: "./src/css/custom.css",
@@ -121,7 +119,7 @@ const config = {
     ({
       // Rest of themeConfig remains the same
       colorMode: {
-        defaultMode: 'dark',
+        defaultMode: "dark",
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
@@ -155,50 +153,50 @@ const config = {
             href: "https://github.com/ai16z/eliza",
             label: "GitHub",
             position: "right",
-          }
-        ]
+          },
+        ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
-              { 
-                label: 'General',
-                href: './'
+              {
+                label: "General",
+                href: "./",
               },
-            ]
+            ],
           },
           {
-            title: 'Community',
+            title: "Community",
             items: [
               {
-                label: 'Discord',
-                href: 'https://discord.gg/NQHKW7US'
+                label: "Discord",
+                href: "https://discord.gg/NQHKW7US",
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/pmairca'
-              }
-            ]
+                label: "Twitter",
+                href: "https://twitter.com/pmairca",
+              },
+            ],
           },
           {
-            title: 'More',
+            title: "More",
             items: [
               {
-                label: 'GitHub',
-                href: 'https://github.com/ai16z/eliza'
-              }
-            ]
-          }
+                label: "GitHub",
+                href: "https://github.com/ai16z/eliza",
+              },
+            ],
+          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ai16z.ai`
+        copyright: `Copyright © ${new Date().getFullYear()} ai16z.ai`,
       },
       prism: {
         theme: prismThemes.github,
-        darkTheme: prismThemes.dracula
-      }
+        darkTheme: prismThemes.dracula,
+      },
     }),
 };
 export default config;

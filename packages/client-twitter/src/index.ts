@@ -2,7 +2,7 @@ import { TwitterPostClient } from "./post.ts";
 import { TwitterSearchClient } from "./search.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
 import { IAgentRuntime, Client } from "@ai16z/eliza/src/types.ts";
-        
+
 class TwitterAllClient {
     post: TwitterPostClient;
     search: TwitterSearchClient;
@@ -21,7 +21,7 @@ export const TwitterClientInterface: Client = {
     },
     async stop(runtime: IAgentRuntime) {
         console.warn("Twitter client does not support stopping yet");
-    }
-}
+    },
+};
 
 export default TwitterClientInterface;

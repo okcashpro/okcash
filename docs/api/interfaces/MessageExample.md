@@ -10,9 +10,9 @@ Represents an example of a message, typically used for demonstrating or testing 
 
 #### Defined in
 
-[packages/core/src/types.ts:184](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L184)
+[packages/core/src/types.ts:179](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L179)
 
-***
+---
 
 ### content
 
@@ -20,4 +20,4 @@ Represents an example of a message, typically used for demonstrating or testing 
 
 #### Defined in
 
-[packages/core/src/types.ts:185](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L185)
+[packages/core/src/types.ts:180](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L180)

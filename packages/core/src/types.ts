@@ -125,7 +125,7 @@ export enum ModelProviderName {
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
     REDPILL = "redpill",
-    OLLAMA = "ollama"
+    OLLAMA = "ollama",
 }
 
 /**
@@ -302,8 +302,8 @@ export type Media = {
 
 export type Client = {
     start: (runtime?: IAgentRuntime) => Promise<unknown>;
-    stop: (runtime?: IAgentRuntime) => Promise<unknown>
-}
+    stop: (runtime?: IAgentRuntime) => Promise<unknown>;
+};
 
 export type Plugin = {
     name: string;
@@ -532,7 +532,7 @@ export interface IAgentRuntime {
     registerMemoryManager(manager: IMemoryManager): void;
 
     getMemoryManager(name: string): IMemoryManager | null;
-    
+
     getService<Service>(service: string): Service | null;
 
     registerService(service: Service): void;

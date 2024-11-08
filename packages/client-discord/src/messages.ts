@@ -502,11 +502,11 @@ export class MessageManager {
                     }
                     if (message.channel.type === ChannelType.GuildVoice) {
                         // For voice channels, use text-to-speech
-                        const audioStream =
-                            await this.runtime.getService<ISpeechService>(ServiceType.SPEECH_GENERATION).generate(
-                                this.runtime,
-                                content.text
-                            );
+                        const audioStream = await this.runtime
+                            .getService<ISpeechService>(
+                                ServiceType.SPEECH_GENERATION
+                            )
+                            .generate(this.runtime, content.text);
                         await this.voiceManager.playAudioStream(
                             userId,
                             audioStream
@@ -589,10 +589,9 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await this.runtime.getService<ISpeechService>(ServiceType.SPEECH_GENERATION).generate(
-                    this.runtime,
-                    errorMessage
-                );
+                const audioStream = await this.runtime
+                    .getService<ISpeechService>(ServiceType.SPEECH_GENERATION)
+                    .generate(this.runtime, errorMessage);
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
                 // For text channels, send the error message
@@ -656,9 +655,14 @@ export class MessageManager {
         const urls = processedContent.match(urlRegex) || [];
 
         for (const url of urls) {
-            if (this.runtime.getService<IVideoService>(ServiceType.VIDEO).isVideoUrl(url)) {
-                const videoInfo =
-                    await this.runtime.getService<IVideoService>(ServiceType.VIDEO).processVideo(url);
+            if (
+                this.runtime
+                    .getService<IVideoService>(ServiceType.VIDEO)
+                    .isVideoUrl(url)
+            ) {
+                const videoInfo = await this.runtime
+                    .getService<IVideoService>(ServiceType.VIDEO)
+                    .processVideo(url);
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -668,8 +672,9 @@ export class MessageManager {
                     text: videoInfo.text,
                 });
             } else {
-                const { title, bodyContent } =
-                    await this.runtime.getService<IBrowserService>(ServiceType.BROWSER).getPageContent(url, this.runtime);
+                const { title, bodyContent } = await this.runtime
+                    .getService<IBrowserService>(ServiceType.BROWSER)
+                    .getPageContent(url, this.runtime);
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,
                     title + "\n" + bodyContent

@@ -2,7 +2,7 @@
 
 ## Extends
 
-- `Service`
+- [`Service`](../classes/Service.md)
 
 ## Methods
 
@@ -22,9 +22,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:570](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L570)
+[packages/core/src/types.ts:576](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L576)
 
-***
+---
 
 ### describeImage()
 
@@ -48,4 +48,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:571](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L571)
+[packages/core/src/types.ts:577](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L577)

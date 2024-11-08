@@ -13,7 +13,7 @@ export const TelegramClientInterface: Client = {
     },
     stop: async (runtime: IAgentRuntime) => {
         console.warn("Telegram client does not support stopping yet");
-    }
-}
+    },
+};
 
 export default TelegramClientInterface;

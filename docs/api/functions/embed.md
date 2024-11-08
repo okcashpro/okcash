@@ -20,4 +20,4 @@ The embedding of the input.
 
 ## Defined in
 
-[packages/core/src/embedding.ts:9](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L9)
+[packages/core/src/embedding.ts:14](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L14)

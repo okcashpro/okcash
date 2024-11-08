@@ -24,13 +24,6 @@ export const bootstrapPlugin: Plugin = {
         muteRoomAction,
         unmuteRoomAction,
     ],
-    evaluators: [
-        factEvaluator,
-        goalEvaluator,
-    ],
-    providers: [
-        boredomProvider,
-        timeProvider,
-        factsProvider,
-    ],
+    evaluators: [factEvaluator, goalEvaluator],
+    providers: [boredomProvider, timeProvider, factsProvider],
 };

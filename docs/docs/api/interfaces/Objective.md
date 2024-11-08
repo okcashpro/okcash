@@ -12,7 +12,7 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 [packages/core/src/types.ts:54](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L54)
 
-***
+---
 
 ### description
 
@@ -22,7 +22,7 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 [packages/core/src/types.ts:53](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L53)
 
-***
+---
 
 ### id?
 

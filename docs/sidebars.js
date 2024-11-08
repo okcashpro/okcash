@@ -55,7 +55,7 @@ const sidebars = {
         "community/creator-fund",
         "community/notes",
         "community/changelog",
-	"community/faq",
+        "community/faq",
         "community/contributing",
       ],
     },

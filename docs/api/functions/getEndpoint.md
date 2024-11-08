@@ -12,4 +12,4 @@
 
 ## Defined in
 
-[packages/core/src/models.ts:188](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L188)
+[packages/core/src/models.ts:198](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L198)

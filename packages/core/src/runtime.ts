@@ -43,7 +43,6 @@ import {
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
 
-
 /**
  * Represents the runtime environment for an agent, handling message processing,
  * action registration, and interaction with external services like OpenAI and Supabase.
@@ -134,11 +133,13 @@ export class AgentRuntime implements IAgentRuntime {
 
     registerMemoryManager(manager: IMemoryManager): void {
         if (!manager.tableName) {
-            throw new Error('Memory manager must have a tableName');
+            throw new Error("Memory manager must have a tableName");
         }
 
         if (this.memoryManagers.has(manager.tableName)) {
-            console.warn(`Memory manager ${manager.tableName} is already registered. Skipping registration.`);
+            console.warn(
+                `Memory manager ${manager.tableName} is already registered. Skipping registration.`
+            );
             return;
         }
 
@@ -148,7 +149,7 @@ export class AgentRuntime implements IAgentRuntime {
     getMemoryManager(tableName: string): IMemoryManager | null {
         return this.memoryManagers.get(tableName) || null;
     }
-    
+
     getService<T>(service: ServiceType): T | null {
         const serviceInstance = this.services.get(service);
         if (!serviceInstance) {
@@ -161,7 +162,9 @@ export class AgentRuntime implements IAgentRuntime {
         const serviceType = (service as typeof Service).serviceType;
         console.log("Registering service:", serviceType);
         if (this.services.has(serviceType)) {
-            console.warn(`Service ${serviceType} is already registered. Skipping registration.`);
+            console.warn(
+                `Service ${serviceType} is already registered. Skipping registration.`
+            );
             return;
         }
 
@@ -261,23 +264,25 @@ export class AgentRuntime implements IAgentRuntime {
 
         this.token = opts.token;
 
-        ([...(opts.character.plugins || []), ...(opts.plugins || [])]).forEach((plugin) => {
-            plugin.actions?.forEach((action) => {
-                this.registerAction(action);
-            });
+        [...(opts.character.plugins || []), ...(opts.plugins || [])].forEach(
+            (plugin) => {
+                plugin.actions?.forEach((action) => {
+                    this.registerAction(action);
+                });
 
-            plugin.evaluators?.forEach((evaluator) => {
-                this.registerEvaluator(evaluator);
-            });
+                plugin.evaluators?.forEach((evaluator) => {
+                    this.registerEvaluator(evaluator);
+                });
 
-            plugin.providers?.forEach((provider) => {
-                this.registerContextProvider(provider);
-            });
+                plugin.providers?.forEach((provider) => {
+                    this.registerContextProvider(provider);
+                });
 
-            plugin.services?.forEach((service) => {
-                this.registerService(service);
-            });
-        });
+                plugin.services?.forEach((service) => {
+                    this.registerService(service);
+                });
+            }
+        );
 
         (opts.actions ?? []).forEach((action) => {
             this.registerAction(action);
@@ -289,7 +294,7 @@ export class AgentRuntime implements IAgentRuntime {
 
         (opts.evaluators ?? []).forEach((evaluator: Evaluator) => {
             this.registerEvaluator(evaluator);
-        })
+        });
 
         if (
             opts.character &&
@@ -682,7 +687,6 @@ export class AgentRuntime implements IAgentRuntime {
         ]);
 
         const goals = formatGoalsAsString({ goals: goalsData });
-
 
         const actors = formatActors({ actors: actorsData ?? [] });
 

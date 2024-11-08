@@ -10,9 +10,9 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L262)
+[packages/core/src/types.ts:257](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L257)
 
-***
+---
 
 ### userA
 
@@ -20,9 +20,9 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L263)
+[packages/core/src/types.ts:258](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L258)
 
-***
+---
 
 ### userB
 
@@ -30,9 +30,9 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:264](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L264)
+[packages/core/src/types.ts:259](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L259)
 
-***
+---
 
 ### userId
 
@@ -40,9 +40,9 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:265](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L265)
+[packages/core/src/types.ts:260](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L260)
 
-***
+---
 
 ### roomId
 
@@ -50,9 +50,9 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:266](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L266)
+[packages/core/src/types.ts:261](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L261)
 
-***
+---
 
 ### status
 
@@ -60,9 +60,9 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:267](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L267)
+[packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L262)
 
-***
+---
 
 ### createdAt?
 
@@ -70,4 +70,4 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:268](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L268)
+[packages/core/src/types.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L263)

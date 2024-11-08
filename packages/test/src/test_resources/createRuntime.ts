@@ -4,7 +4,12 @@ import { SqlJsDatabaseAdapter } from "../../../adapter-sqljs/src/index.ts";
 import { SupabaseDatabaseAdapter } from "../../../adapter-supabase/src/index.ts";
 import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
 import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
-import { Action, Evaluator, ModelProviderName, Provider } from "@ai16z/eliza/src/types.ts";
+import {
+    Action,
+    Evaluator,
+    ModelProviderName,
+    Provider,
+} from "@ai16z/eliza/src/types.ts";
 import {
     SUPABASE_ANON_KEY,
     SUPABASE_URL,

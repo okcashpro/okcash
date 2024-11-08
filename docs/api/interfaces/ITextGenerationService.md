@@ -2,9 +2,23 @@
 
 ## Extends
 
-- `Service`
+- [`Service`](../classes/Service.md)
 
 ## Methods
+
+### getInstance()
+
+> **getInstance**(): [`ITextGenerationService`](ITextGenerationService.md)
+
+#### Returns
+
+[`ITextGenerationService`](ITextGenerationService.md)
+
+#### Defined in
+
+[packages/core/src/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L599)
+
+---
 
 ### initializeModel()
 
@@ -16,9 +30,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:591](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L591)
+[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L600)
 
-***
+---
 
 ### queueMessageCompletion()
 
@@ -32,11 +46,11 @@
 
 • **stop**: `string`[]
 
-• **frequency\_penalty**: `number`
+• **frequency_penalty**: `number`
 
-• **presence\_penalty**: `number`
+• **presence_penalty**: `number`
 
-• **max\_tokens**: `number`
+• **max_tokens**: `number`
 
 #### Returns
 
@@ -44,9 +58,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L592)
+[packages/core/src/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L601)
 
-***
+---
 
 ### queueTextCompletion()
 
@@ -60,11 +74,11 @@
 
 • **stop**: `string`[]
 
-• **frequency\_penalty**: `number`
+• **frequency_penalty**: `number`
 
-• **presence\_penalty**: `number`
+• **presence_penalty**: `number`
 
-• **max\_tokens**: `number`
+• **max_tokens**: `number`
 
 #### Returns
 
@@ -72,9 +86,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L600)
+[packages/core/src/types.ts:609](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L609)
 
-***
+---
 
 ### getEmbeddingResponse()
 
@@ -90,4 +104,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:608](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L608)
+[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)

@@ -2,15 +2,19 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Request as ExpressRequest } from "express";
 import multer, { File } from "multer";
-import {
-    generateCaption,
-    generateImage,
-} from "@ai16z/eliza/src/generation.ts";
+import { generateCaption, generateImage } from "@ai16z/eliza/src/generation.ts";
 import { composeContext } from "@ai16z/eliza/src/context.ts";
 import { generateMessageResponse } from "@ai16z/eliza/src/generation.ts";
 import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
 import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
-import { Content, Memory, ModelClass, State, Client, IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import {
+    Content,
+    Memory,
+    ModelClass,
+    State,
+    Client,
+    IAgentRuntime,
+} from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -54,7 +58,7 @@ export class DirectClient {
     private agents: Map<string, AgentRuntime>;
 
     constructor() {
-        console.log("DirectClient constructor")
+        console.log("DirectClient constructor");
         this.app = express();
         this.app.use(cors());
         this.agents = new Map();
@@ -122,7 +126,7 @@ export class DirectClient {
         this.app.post(
             "/:agentId/message",
             async (req: express.Request, res: express.Response) => {
-                console.log("DirectClient message")
+                console.log("DirectClient message");
                 const agentId = req.params.agentId;
                 const roomId = stringToUuid(
                     req.body.roomId ?? "default-room-" + agentId
@@ -278,16 +282,15 @@ export class DirectClient {
 
 export const DirectClientInterface: Client = {
     start: async (runtime: IAgentRuntime) => {
-        console.log("DirectClientInterface start")
+        console.log("DirectClientInterface start");
         const client = new DirectClient();
         const serverPort = parseInt(settings.SERVER_PORT || "3000");
         client.start(serverPort);
         return client;
-    
     },
     stop: async (runtime: IAgentRuntime) => {
         console.warn("Direct client does not support stopping yet");
-    }
-}
+    },
+};
 
 export default DirectClientInterface;

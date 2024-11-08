@@ -20,17 +20,17 @@
 
 > **maxOutputTokens**: `number`
 
-### settings.frequency\_penalty?
+### settings.frequency_penalty?
 
-> `optional` **frequency\_penalty**: `number`
+> `optional` **frequency_penalty**: `number`
 
-### settings.presence\_penalty?
+### settings.presence_penalty?
 
-> `optional` **presence\_penalty**: `number`
+> `optional` **presence_penalty**: `number`
 
-### settings.repetition\_penalty?
+### settings.repetition_penalty?
 
-> `optional` **repetition\_penalty**: `number`
+> `optional` **repetition_penalty**: `number`
 
 ### settings.stop
 
@@ -74,4 +74,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:83](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L83)
+[packages/core/src/types.ts:82](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L82)

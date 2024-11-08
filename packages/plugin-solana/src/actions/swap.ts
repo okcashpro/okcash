@@ -23,7 +23,10 @@ import {
 } from "@ai16z/eliza/src/types.ts";
 import { TokenProvider } from "@ai16z/eliza/src/providers/token.ts";
 import { TrustScoreProvider } from "@ai16z/eliza/src/providers/trustScoreProvider.ts";
-import { walletProvider, WalletProvider } from "@ai16z/eliza/src/providers/wallet.ts";
+import {
+    walletProvider,
+    WalletProvider,
+} from "@ai16z/eliza/src/providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
 
 async function swapToken(

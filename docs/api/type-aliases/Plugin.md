@@ -26,8 +26,8 @@
 
 ### services?
 
-> `optional` **services**: `Service`[]
+> `optional` **services**: [`Service`](../classes/Service.md)[]
 
 ## Defined in
 
-[packages/core/src/types.ts:313](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L313)
+[packages/core/src/types.ts:308](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L308)

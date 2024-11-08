@@ -8,9 +8,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L120)
+[packages/core/src/types.ts:119](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L119)
 
-***
+---
 
 ### ANTHROPIC
 
@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:121](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L121)
+[packages/core/src/types.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L120)
 
-***
+---
 
 ### GROK
 
@@ -28,9 +28,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L122)
+[packages/core/src/types.ts:121](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L121)
 
-***
+---
 
 ### GROQ
 
@@ -38,9 +38,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:123](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L123)
+[packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L122)
 
-***
+---
 
 ### LLAMACLOUD
 
@@ -48,9 +48,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L124)
+[packages/core/src/types.ts:123](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L123)
 
-***
+---
 
 ### LLAMALOCAL
 
@@ -58,9 +58,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L125)
+[packages/core/src/types.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L124)
 
-***
+---
 
 ### GOOGLE
 
@@ -68,19 +68,19 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:126](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L126)
+[packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L125)
 
-***
+---
 
-### CLAUDE\_VERTEX
+### CLAUDE_VERTEX
 
-> **CLAUDE\_VERTEX**: `"claude_vertex"`
+> **CLAUDE_VERTEX**: `"claude_vertex"`
 
 #### Defined in
 
-[packages/core/src/types.ts:127](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L127)
+[packages/core/src/types.ts:126](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L126)
 
-***
+---
 
 ### REDPILL
 
@@ -88,9 +88,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:128](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L128)
+[packages/core/src/types.ts:127](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L127)
 
-***
+---
 
 ### OLLAMA
 
@@ -98,4 +98,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:129](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L129)
+[packages/core/src/types.ts:128](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L128)

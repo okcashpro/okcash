@@ -6,8 +6,7 @@ export const defaultCharacter: Character = {
     clients: [],
     modelProvider: ModelProviderName.LLAMALOCAL,
     settings: {
-        secrets: {
-        },
+        secrets: {},
         voice: {
             model: "en_US-hfc_female-medium",
         },

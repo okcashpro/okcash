@@ -2,7 +2,7 @@
 
 ## Extends
 
-- `Service`
+- [`Service`](../classes/Service.md)
 
 ## Methods
 
@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:625](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L625)
+[packages/core/src/types.ts:634](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L634)

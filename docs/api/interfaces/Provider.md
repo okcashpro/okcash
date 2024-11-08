@@ -22,4 +22,4 @@ Represents a provider, which is used to retrieve information or perform actions 
 
 #### Defined in
 
-[packages/core/src/types.ts:251](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L251)
+[packages/core/src/types.ts:246](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L246)

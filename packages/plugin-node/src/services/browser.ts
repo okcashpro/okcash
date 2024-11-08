@@ -2,7 +2,11 @@ import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
 import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
 import { Service } from "@ai16z/eliza/src/types.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
-import { IAgentRuntime, ModelClass, ServiceType } from "@ai16z/eliza/src/types.ts";
+import {
+    IAgentRuntime,
+    ModelClass,
+    ServiceType,
+} from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { PlaywrightBlocker } from "@cliqz/adblocker-playwright";
 import CaptchaSolver from "capsolver-npm";
@@ -129,7 +133,10 @@ export class BrowserService extends Service {
                     setTimeout(checkQueue, 100);
                 } else {
                     try {
-                        const result = await this.fetchPageContent(url, runtime);
+                        const result = await this.fetchPageContent(
+                            url,
+                            runtime
+                        );
                         resolve(result);
                     } catch (error) {
                         reject(error);

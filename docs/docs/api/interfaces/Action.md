@@ -12,7 +12,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 [packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L219)
 
-***
+---
 
 ### examples
 
@@ -22,7 +22,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 [packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L220)
 
-***
+---
 
 ### handler
 
@@ -32,7 +32,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 [packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L221)
 
-***
+---
 
 ### name
 
@@ -42,7 +42,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 [packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L222)
 
-***
+---
 
 ### similes
 
@@ -52,7 +52,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 [packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L218)
 
-***
+---
 
 ### validate
 

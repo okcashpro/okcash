@@ -398,10 +398,11 @@ export class VoiceManager extends EventEmitter {
                             await this.convertOpusToWav(inputBuffer);
 
                         console.log("starting transcription");
-                        const text =
-                            await this.runtime.getService<ITranscriptionService>(ServiceType.TRANSCRIPTION).transcribe(
-                                wavBuffer
-                            );
+                        const text = await this.runtime
+                            .getService<ITranscriptionService>(
+                                ServiceType.TRANSCRIPTION
+                            )
+                            .transcribe(wavBuffer);
                         console.log("transcribed text: ", text);
                         transcriptionText += text;
                     } catch (error) {
@@ -539,11 +540,11 @@ export class VoiceManager extends EventEmitter {
                                     await this.runtime.updateRecentMessageState(
                                         state
                                     );
-                                const responseStream =
-                                    await this.runtime.getService<ISpeechService>(ServiceType.SPEECH_GENERATION).generate(
-                                        this.runtime,
-                                        content.text
-                                    );
+                                const responseStream = await this.runtime
+                                    .getService<ISpeechService>(
+                                        ServiceType.SPEECH_GENERATION
+                                    )
+                                    .generate(this.runtime, content.text);
 
                                 if (responseStream) {
                                     await this.playAudioStream(

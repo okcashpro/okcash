@@ -26,4 +26,4 @@ Promise resolving to "RESPOND", "IGNORE", "STOP" or null
 
 ## Defined in
 
-[packages/core/src/generation.ts:278](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L278)
+[packages/core/src/generation.ts:289](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L289)

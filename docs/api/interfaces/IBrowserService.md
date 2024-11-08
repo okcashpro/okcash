@@ -2,7 +2,7 @@
 
 ## Extends
 
-- `Service`
+- [`Service`](../classes/Service.md)
 
 ## Methods
 
@@ -16,9 +16,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:612](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L612)
+[packages/core/src/types.ts:621](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L621)
 
-***
+---
 
 ### closeBrowser()
 
@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:613](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L613)
+[packages/core/src/types.ts:622](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L622)
 
-***
+---
 
 ### getPageContent()
 
@@ -62,4 +62,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:614](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L614)
+[packages/core/src/types.ts:623](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L623)

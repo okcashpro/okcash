@@ -1,10 +1,5 @@
 import dotenv from "dotenv";
-import {
-    Content,
-    IAgentRuntime,
-    Memory,
-    type UUID,
-} from "../src/types.ts";
+import { Content, IAgentRuntime, Memory, type UUID } from "../src/types.ts";
 import { zeroUuid } from "../src/test_resources/constants.ts";
 import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import { Goodbye1 } from "../src/test_resources/data.ts";
@@ -79,7 +74,7 @@ describe("User Profile", () => {
             runtime,
             tableName: "facts",
         });
-        
+
         await factsManager.removeAllMemories(roomId);
         await runtime.messageManager.removeAllMemories(roomId);
     }

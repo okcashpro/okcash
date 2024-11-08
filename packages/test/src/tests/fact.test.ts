@@ -112,7 +112,7 @@ async function cleanup(runtime: IAgentRuntime, roomId: UUID) {
         runtime,
         tableName: "facts",
     });
-    
+
     await factsManager.removeAllMemories(roomId);
     await runtime.messageManager.removeAllMemories(roomId);
 }

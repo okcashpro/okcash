@@ -1,5 +1,10 @@
 import models from "./models.ts";
-import { IAgentRuntime, ITextGenerationService, ModelProviderName, ServiceType } from "./types.ts";
+import {
+    IAgentRuntime,
+    ITextGenerationService,
+    ModelProviderName,
+    ServiceType,
+} from "./types.ts";
 
 /**
  * Send a message to the OpenAI API for embedding.
@@ -10,8 +15,13 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     // get the charcter, and handle by model type
     const model = models[runtime.character.settings.model];
 
-    if (model !== ModelProviderName.OPENAI && model !== ModelProviderName.OLLAMA) {
-        const service = runtime.getService<ITextGenerationService>(ServiceType.TEXT_GENERATION);
+    if (
+        model !== ModelProviderName.OPENAI &&
+        model !== ModelProviderName.OLLAMA
+    ) {
+        const service = runtime.getService<ITextGenerationService>(
+            ServiceType.TEXT_GENERATION
+        );
         return await service.getInstance().getEmbeddingResponse(input);
     }
 
@@ -28,7 +38,9 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         headers: {
             "Content-Type": "application/json",
             // TODO: make this not hardcoded
-            ...(runtime.modelProvider !== ModelProviderName.OLLAMA && { Authorization: `Bearer ${runtime.token}` }),
+            ...(runtime.modelProvider !== ModelProviderName.OLLAMA && {
+                Authorization: `Bearer ${runtime.token}`,
+            }),
         },
         body: JSON.stringify({
             input,
@@ -39,7 +51,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     try {
         const response = await fetch(
             // TODO: make this not hardcoded
-            `${runtime.serverUrl}${runtime.modelProvider === ModelProviderName.OLLAMA ? '/v1' : ''}/embeddings`,
+            `${runtime.serverUrl}${runtime.modelProvider === ModelProviderName.OLLAMA ? "/v1" : ""}/embeddings`,
             requestOptions
         );
 

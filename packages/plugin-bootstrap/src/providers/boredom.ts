@@ -1,4 +1,9 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza/src/types.ts";
+import {
+    IAgentRuntime,
+    Memory,
+    Provider,
+    State,
+} from "@ai16z/eliza/src/types.ts";
 
 const boredomLevels = [
     {

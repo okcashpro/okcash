@@ -10,21 +10,21 @@ import path from "path";
  */
 function findNearestEnvFile(startDir = process.cwd()) {
     let currentDir = startDir;
-    
+
     // Continue searching until we reach the root directory
     while (currentDir !== path.parse(currentDir).root) {
-        const envPath = path.join(currentDir, '.env');
-        
+        const envPath = path.join(currentDir, ".env");
+
         if (fs.existsSync(envPath)) {
             return envPath;
         }
-        
+
         // Move up to parent directory
         currentDir = path.dirname(currentDir);
     }
-    
+
     // Check root directory as well
-    const rootEnvPath = path.join(path.parse(currentDir).root, '.env');
+    const rootEnvPath = path.join(path.parse(currentDir).root, ".env");
     return fs.existsSync(rootEnvPath) ? rootEnvPath : null;
 }
 
@@ -35,18 +35,18 @@ function findNearestEnvFile(startDir = process.cwd()) {
  */
 function loadEnvConfig() {
     const envPath = findNearestEnvFile();
-    
+
     if (!envPath) {
         throw new Error("No .env file found in current or parent directories.");
     }
-    
+
     // Load the .env file
     const result = config({ path: envPath });
-    
+
     if (result.error) {
         throw new Error(`Error loading .env file: ${result.error}`);
     }
-    
+
     console.log(`Loaded .env file from: ${envPath}`);
     return process.env;
 }

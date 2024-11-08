@@ -1,6 +1,4 @@
-import {
-    Plugin
-} from "@ai16z/eliza";
+import { Plugin } from "@ai16z/eliza";
 import { executeSwap } from "./actions/swap";
 // import take_order from "./actions/takeOrder";
 // import pumpfun from "./actions/pumpfun";
@@ -17,9 +15,7 @@ export const solanaPlugin: Plugin = {
         // take_order,
     ],
     evaluators: [],
-    providers: [
-        walletProvider
-    ],
+    providers: [walletProvider],
 };
 
 export default solanaPlugin;

@@ -1,5 +1,9 @@
 import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import { Character, Client as ElizaClient, IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import {
+    Character,
+    Client as ElizaClient,
+    IAgentRuntime,
+} from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import {

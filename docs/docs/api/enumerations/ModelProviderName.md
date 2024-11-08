@@ -10,17 +10,17 @@
 
 [packages/core/src/types.ts:121](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L121)
 
-***
+---
 
-### CLAUDE\_VERTEX
+### CLAUDE_VERTEX
 
-> **CLAUDE\_VERTEX**: `"claude_vertex"`
+> **CLAUDE_VERTEX**: `"claude_vertex"`
 
 #### Defined in
 
 [packages/core/src/types.ts:127](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L127)
 
-***
+---
 
 ### GOOGLE
 
@@ -30,7 +30,7 @@
 
 [packages/core/src/types.ts:126](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L126)
 
-***
+---
 
 ### GROK
 
@@ -40,7 +40,7 @@
 
 [packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L122)
 
-***
+---
 
 ### GROQ
 
@@ -50,7 +50,7 @@
 
 [packages/core/src/types.ts:123](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L123)
 
-***
+---
 
 ### LLAMACLOUD
 
@@ -60,7 +60,7 @@
 
 [packages/core/src/types.ts:124](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L124)
 
-***
+---
 
 ### LLAMALOCAL
 
@@ -70,7 +70,7 @@
 
 [packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L125)
 
-***
+---
 
 ### OLLAMA
 
@@ -80,7 +80,7 @@
 
 [packages/core/src/types.ts:129](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L129)
 
-***
+---
 
 ### OPENAI
 
@@ -90,7 +90,7 @@
 
 [packages/core/src/types.ts:120](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L120)
 
-***
+---
 
 ### REDPILL
 

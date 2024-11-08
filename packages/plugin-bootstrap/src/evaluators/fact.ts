@@ -99,7 +99,6 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
             createdAt: Date.now(),
         });
 
-
         await factsManager.createMemory(factMemory, true);
 
         await new Promise((resolve) => setTimeout(resolve, 250));

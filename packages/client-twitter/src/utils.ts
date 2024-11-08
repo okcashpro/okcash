@@ -70,10 +70,10 @@ export async function buildConversationThread(
                     url: currentTweet.permanentUrl,
                     inReplyTo: currentTweet.inReplyToStatusId
                         ? stringToUuid(
-                            currentTweet.inReplyToStatusId +
-                            "-" +
-                            client.runtime.agentId
-                        )
+                              currentTweet.inReplyToStatusId +
+                                  "-" +
+                                  client.runtime.agentId
+                          )
                         : undefined,
                 },
                 createdAt: currentTweet.timestamp * 1000,
@@ -152,8 +152,8 @@ export async function sendTweetChunks(
             url: tweet.permanentUrl,
             inReplyTo: tweet.inReplyToStatusId
                 ? stringToUuid(
-                    tweet.inReplyToStatusId + "-" + client.runtime.agentId
-                )
+                      tweet.inReplyToStatusId + "-" + client.runtime.agentId
+                  )
                 : undefined,
         },
         roomId,
@@ -214,8 +214,8 @@ export async function sendTweet(
             url: tweet.permanentUrl,
             inReplyTo: tweet.inReplyToStatusId
                 ? stringToUuid(
-                    tweet.inReplyToStatusId + "-" + client.runtime.agentId
-                )
+                      tweet.inReplyToStatusId + "-" + client.runtime.agentId
+                  )
                 : undefined,
         },
         roomId,
@@ -263,9 +263,18 @@ export function truncateTweetContent(content: string): string {
     while (content.length > MAX_TWEET_LENGTH && iterations < 10) {
         iterations++;
         // second to last index of period or exclamation point
-        const secondToLastIndexOfPeriod = content.lastIndexOf(".", content.length - 2);
-        const secondToLastIndexOfExclamation = content.lastIndexOf("!", content.length - 2);
-        const secondToLastIndex = Math.max(secondToLastIndexOfPeriod, secondToLastIndexOfExclamation);
+        const secondToLastIndexOfPeriod = content.lastIndexOf(
+            ".",
+            content.length - 2
+        );
+        const secondToLastIndexOfExclamation = content.lastIndexOf(
+            "!",
+            content.length - 2
+        );
+        const secondToLastIndex = Math.max(
+            secondToLastIndexOfPeriod,
+            secondToLastIndexOfExclamation
+        );
         content = content.slice(0, secondToLastIndex);
     }
 

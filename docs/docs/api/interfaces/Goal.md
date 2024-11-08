@@ -12,7 +12,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 [packages/core/src/types.ts:67](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L67)
 
-***
+---
 
 ### name
 
@@ -22,7 +22,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 [packages/core/src/types.ts:70](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L70)
 
-***
+---
 
 ### objectives
 
@@ -32,7 +32,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 [packages/core/src/types.ts:72](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L72)
 
-***
+---
 
 ### roomId
 
@@ -42,7 +42,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 [packages/core/src/types.ts:68](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L68)
 
-***
+---
 
 ### status
 
@@ -52,7 +52,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 [packages/core/src/types.ts:71](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L71)
 
-***
+---
 
 ### userId
 

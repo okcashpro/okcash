@@ -13,6 +13,7 @@
 - [DatabaseAdapter](classes/DatabaseAdapter.md)
 - [MemoryManager](classes/MemoryManager.md)
 - [AgentRuntime](classes/AgentRuntime.md)
+- [Service](classes/Service.md)
 
 ## Interfaces
 

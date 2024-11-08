@@ -12,7 +12,7 @@ import {
     Participant,
 } from "@ai16z/eliza/src/types.ts";
 import { sqliteTables } from "./sqliteTables.ts";
-import { Database } from "./types.ts"
+import { Database } from "./types.ts";
 
 export class SqlJsDatabaseAdapter extends DatabaseAdapter {
     async getRoom(roomId: UUID): Promise<UUID | null> {
