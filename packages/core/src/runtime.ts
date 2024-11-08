@@ -164,8 +164,7 @@ export class AgentRuntime implements IAgentRuntime {
         return serviceInstance as T;
     }
     registerService(service: Service): void {
-        console.log("Register service")
-        const serviceType = (service.constructor as typeof Service).serviceType;
+        const serviceType = (service as typeof Service).serviceType;
         if (this.services.has(serviceType)) {
             console.warn(`Service ${serviceType} is already registered. Skipping registration.`);
             return;
