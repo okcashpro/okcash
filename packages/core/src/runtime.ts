@@ -21,7 +21,6 @@ import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import { formatPosts } from "./posts.ts";
 import { getProviders } from "./providers.ts";
-import { Service } from "./services.ts";
 import settings from "./settings.ts";
 import {
     Character,
@@ -34,6 +33,7 @@ import {
     ModelProviderName,
     Plugin,
     Provider,
+    Service,
     ServiceType,
     State,
     UUID,

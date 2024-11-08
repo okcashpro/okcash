@@ -1,5 +1,4 @@
-import { IAgentRuntime, ServiceType } from "@ai16z/eliza/src";
-import { Service } from "@ai16z/eliza/src/types.ts";
+import { Service, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { getDocument, PDFDocumentProxy } from "pdfjs-dist";
 import { TextItem, TextMarkedContent } from "pdfjs-dist/types/src/display/api";
 

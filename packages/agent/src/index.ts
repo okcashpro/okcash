@@ -204,20 +204,19 @@ export async function createAgent(
 
 async function startAgent(character: Character, directClient: any) {
     try {
-        // const token = getTokenForProvider(character.modelProvider, character);
-        // const db = initializeDatabase();
+        const token = getTokenForProvider(character.modelProvider, character);
+        const db = initializeDatabase();
 
-        // const runtime = await createAgent(character, db, token);
+        const runtime = await createAgent(character, db, token);
 
-        // const clients = await initializeClients(
-        //     character,
-        //     runtime as IAgentRuntime
-        // );
+        const clients = await initializeClients(
+            character,
+            runtime as IAgentRuntime
+        );
 
-        // directClient.registerAgent(await runtime);
+        directClient.registerAgent(await runtime);
 
-        // return clients;
-        return [];
+        return clients;
     } catch (error) {
         console.error(
             `Error starting agent for character ${character.name}:`,
@@ -227,40 +226,40 @@ async function startAgent(character: Character, directClient: any) {
     }
 }
 
-// const startAgents = async () => {
-//     const directClient = (await DirectClientInterface.start());
-//     const args = parseArguments();
+const startAgents = async () => {
+    const directClient = (await DirectClientInterface.start());
+    const args = parseArguments();
 
-//     let charactersArg = args.characters || args.character;
+    let charactersArg = args.characters || args.character;
 
-//     let characters = [defaultCharacter];
+    let characters = [defaultCharacter];
 
-//     if (charactersArg) {
-//         characters = await loadCharacters(charactersArg);
-//     }
+    if (charactersArg) {
+        characters = await loadCharacters(charactersArg);
+    }
 
 
-//     try {
-//         for (const character of characters) {
-//             await startAgent(character, directClient);
-//         }
-//     } catch (error) {
-//         console.error("Error starting agents:", error);
-//     }
+    try {
+        for (const character of characters) {
+            await startAgent(character, directClient);
+        }
+    } catch (error) {
+        console.error("Error starting agents:", error);
+    }
 
-//     function chat() {
-//         const agentId = characters[0].name ?? "Agent";
-//         // rl.question("You: ", (input) => handleUserInput(input, agentId));
-//     }
+    function chat() {
+        const agentId = characters[0].name ?? "Agent";
+        rl.question("You: ", (input) => handleUserInput(input, agentId));
+    }
     
-//     console.log("Chat started. Type 'exit' to quit.");
-//     chat();
-// };
+    console.log("Chat started. Type 'exit' to quit.");
+    chat();
+};
 
-// startAgents().catch((error) => {
-//     console.error("Unhandled error in startAgents:", error);
-//     process.exit(1); // Exit the process after logging
-// });
+startAgents().catch((error) => {
+    console.error("Unhandled error in startAgents:", error);
+    process.exit(1); // Exit the process after logging
+});
 
 const rl = readline.createInterface({
     input: process.stdin,

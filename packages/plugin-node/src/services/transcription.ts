@@ -1,4 +1,4 @@
-import { settings } from "@ai16z/eliza/src";
+import { settings } from "@ai16z/eliza/src/settings.ts";
 import { Service, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { exec } from "child_process";
 import { File } from "formdata-node";
