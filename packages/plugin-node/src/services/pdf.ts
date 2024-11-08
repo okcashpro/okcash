@@ -1,13 +1,13 @@
 import { IAgentRuntime, ServiceType } from "@ai16z/eliza/src";
-import { Service } from "@ai16z/eliza/src/services";
+import { Service } from "@ai16z/eliza/src/types.ts";
 import { getDocument, PDFDocumentProxy } from "pdfjs-dist";
 import { TextItem, TextMarkedContent } from "pdfjs-dist/types/src/display/api";
 
 export class PdfService extends Service {
     static serviceType: ServiceType = ServiceType.PDF;
 
-    constructor(runtime: IAgentRuntime) {
-        super(runtime);
+    constructor() {
+        super();
     }
 
     async convertPdfToText(pdfBuffer: Buffer): Promise<string> {

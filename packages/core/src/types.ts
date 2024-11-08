@@ -1,5 +1,4 @@
 import { Readable } from "stream";
-import { Service } from "./services";
 
 /**
  * Represents a UUID, which is a universally unique identifier conforming to the UUID standard.
@@ -504,6 +503,19 @@ export interface IMemoryManager {
     countMemories(roomId: UUID, unique?: boolean): Promise<number>;
 }
 
+export abstract class Service {
+    private static instance: Service | null = null;
+    static serviceType: ServiceType;
+
+    public static getInstance<T extends Service>(): T {
+        if (!Service.instance) {
+            // Use this.prototype.constructor to instantiate the concrete class
+            Service.instance = new (this as any)();
+        }
+        return Service.instance as T;
+    }
+}
+
 export interface IAgentRuntime {
     // Properties
     agentId: UUID;
@@ -574,12 +586,13 @@ export interface IImageDescriptionService extends Service {
 }
 
 export interface ITranscriptionService extends Service {
-    transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null>;
+    transcribeAttachment(audioBuffer: ArrayBuffer, runtime: IAgentRuntime): Promise<string | null>;
     transcribeAttachmentLocally(
-        audioBuffer: ArrayBuffer
+        audioBuffer: ArrayBuffer,
+        runtime: IAgentRuntime
     ): Promise<string | null>;
-    transcribe(audioBuffer: ArrayBuffer): Promise<string | null>;
-    transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null>;
+    transcribe(audioBuffer: ArrayBuffer, runtime: IAgentRuntime): Promise<string | null>;
+    transcribeLocally(audioBuffer: ArrayBuffer, runtime: IAgentRuntime): Promise<string | null>;
 }
 
 export interface IVideoService extends Service {

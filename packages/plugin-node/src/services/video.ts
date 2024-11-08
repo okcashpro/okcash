@@ -1,4 +1,4 @@
-import { Service } from "@ai16z/eliza/src/services.ts";
+import { Service } from "@ai16z/eliza/src/types.ts";
 import { IAgentRuntime, ITranscriptionService, Media, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import ffmpeg from "fluent-ffmpeg";
@@ -12,8 +12,8 @@ export class VideoService extends Service {
     private queue: string[] = [];
     private processing: boolean = false;
 
-    constructor(runtime: IAgentRuntime) {
-        super(runtime);
+    constructor() {
+        super();
         this.ensureCacheDirectoryExists();
     }
 
@@ -76,9 +76,9 @@ export class VideoService extends Service {
         }
     }
 
-    public async processVideo(url: string): Promise<Media> {
+    public async processVideo(url: string, runtime: IAgentRuntime): Promise<Media> {
         this.queue.push(url);
-        this.processQueue();
+        this.processQueue(runtime);
 
         return new Promise((resolve, reject) => {
             const checkQueue = async () => {
@@ -87,7 +87,7 @@ export class VideoService extends Service {
                     setTimeout(checkQueue, 100);
                 } else {
                     try {
-                        const result = await this.processVideoFromUrl(url);
+                        const result = await this.processVideoFromUrl(url, runtime);
                         resolve(result);
                     } catch (error) {
                         reject(error);
@@ -98,7 +98,7 @@ export class VideoService extends Service {
         });
     }
 
-    private async processQueue(): Promise<void> {
+    private async processQueue(runtime): Promise<void> {
         if (this.processing || this.queue.length === 0) {
             return;
         }
@@ -107,13 +107,13 @@ export class VideoService extends Service {
 
         while (this.queue.length > 0) {
             const url = this.queue.shift()!;
-            await this.processVideoFromUrl(url);
+            await this.processVideoFromUrl(url, runtime);
         }
 
         this.processing = false;
     }
 
-    private async processVideoFromUrl(url: string): Promise<Media> {
+    private async processVideoFromUrl(url: string, runtime: IAgentRuntime): Promise<Media> {
         const videoId =
             url.match(
                 /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/
@@ -133,7 +133,7 @@ export class VideoService extends Service {
         console.log("Fetching video info");
         const videoInfo = await this.fetchVideoInfo(url);
         console.log("Getting transcript");
-        const transcript = await this.getTranscript(url, videoInfo);
+        const transcript = await this.getTranscript(url, videoInfo, runtime);
 
         const result: Media = {
             id: videoUuid,
@@ -190,7 +190,7 @@ export class VideoService extends Service {
         }
     }
 
-    private async getTranscript(url: string, videoInfo: any): Promise<string> {
+    private async getTranscript(url: string, videoInfo: any, runtime: IAgentRuntime): Promise<string> {
         console.log("Getting transcript");
         try {
             // Check for manual subtitles
@@ -226,7 +226,7 @@ export class VideoService extends Service {
             console.log(
                 "No captions found, falling back to audio transcription"
             );
-            return this.transcribeAudio(url);
+            return this.transcribeAudio(url, runtime);
         } catch (error) {
             console.error("Error in getTranscript:", error);
             throw error;
@@ -278,7 +278,7 @@ export class VideoService extends Service {
         return await response.text();
     }
 
-    async transcribeAudio(url: string): Promise<string> {
+    async transcribeAudio(url: string, runtime: IAgentRuntime): Promise<string> {
         console.log("Preparing audio for transcription...");
         const mp4FilePath = path.join(
             this.CONTENT_CACHE_DIR,
@@ -307,7 +307,7 @@ export class VideoService extends Service {
         console.log("Starting transcription...");
         const startTime = Date.now();
         const transcript =
-            await this.runtime.getService<ITranscriptionService>(ServiceType.TRANSCRIPTION).transcribe(audioBuffer);
+            await runtime.getService<ITranscriptionService>(ServiceType.TRANSCRIPTION).transcribe(audioBuffer, runtime);
         const endTime = Date.now();
         console.log(
             `Transcription completed in ${(endTime - startTime) / 1000} seconds`

@@ -1,6 +1,6 @@
 // Current image recognition service -- local recognition working, no openai recognition
 import models from "@ai16z/eliza/src/models.ts";
-import { Service } from "@ai16z/eliza/src/services";
+import { Service } from "@ai16z/eliza/src/types.ts";
 import { IAgentRuntime, ModelProviderName, ServiceType } from "@ai16z/eliza/src/types.ts";
 import {
     AutoProcessor,
@@ -31,23 +31,22 @@ export class ImageDescriptionService extends Service {
     private queue: string[] = [];
     private processing: boolean = false;
 
-    constructor(runtime: IAgentRuntime) {
-        super(runtime);
-        this.initialize();
+    constructor() {
+        super();
     }
 
     async initialize(
-        modelId: string | null = null,
-        device: string | null = null
+        device: string | null = null,
+        runtime: IAgentRuntime
     ): Promise<void> {
         if (this.initialized) {
             return;
         }
 
-        const model = models[this.runtime.character.settings.model];
+        const model = models[runtime.character.settings.model];
 
         if (model === ModelProviderName.LLAMALOCAL) {
-            this.modelId = modelId || "onnx-community/Florence-2-base-ft";
+            this.modelId = "onnx-community/Florence-2-base-ft";
 
             env.allowLocalModels = false;
             env.allowRemoteModels = true;
@@ -87,10 +86,14 @@ export class ImageDescriptionService extends Service {
     }
 
     async describeImage(
-        imageUrl: string
+        imageUrl: string,
+        device?: string,
+        runtime?: IAgentRuntime
     ): Promise<{ title: string; description: string }> {
+        this.initialize(device, runtime);
+
         if (this.device === "cloud") {
-            return this.recognizeWithOpenAI(imageUrl);
+            return this.recognizeWithOpenAI(imageUrl, runtime);
         } else {
             this.queue.push(imageUrl);
             this.processQueue();
@@ -110,7 +113,8 @@ export class ImageDescriptionService extends Service {
     }
 
     private async recognizeWithOpenAI(
-        imageUrl: string
+        imageUrl: string,
+        runtime
     ): Promise<{ title: string; description: string }> {
         const isGif = imageUrl.toLowerCase().endsWith(".gif");
         let imageData: Buffer | null = null;
@@ -142,7 +146,8 @@ export class ImageDescriptionService extends Service {
                 imageUrl,
                 imageData,
                 prompt,
-                isGif
+                isGif,
+                runtime
             );
             const title = text.split("\n")[0];
             const description = text.split("\n").slice(1).join("\n");
@@ -157,7 +162,8 @@ export class ImageDescriptionService extends Service {
         imageUrl: string,
         imageData: Buffer,
         prompt: string,
-        isGif: boolean
+        isGif: boolean,
+        runtime: IAgentRuntime
     ): Promise<string> {
         for (let retryAttempts = 0; retryAttempts < 3; retryAttempts++) {
             try {
@@ -207,7 +213,7 @@ export class ImageDescriptionService extends Service {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${this.runtime.getSetting("OPENAI_API_KEY")}`,
+                            Authorization: `Bearer ${runtime.getSetting("OPENAI_API_KEY")}`,
                         },
                         body: body,
                     }

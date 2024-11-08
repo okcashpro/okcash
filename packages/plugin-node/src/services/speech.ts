@@ -2,7 +2,7 @@ import { PassThrough, Readable } from "stream";
 import { IAgentRuntime, ISpeechService, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { getWavHeader } from "./audioUtils.ts";
 import { synthesize } from "../vendor/vits.ts";
-import { Service } from "@ai16z/eliza/src/services.ts";
+import { Service } from "@ai16z/eliza/src/types.ts";
 function prependWavHeader(
     readable: Readable,
     audioLength: number,

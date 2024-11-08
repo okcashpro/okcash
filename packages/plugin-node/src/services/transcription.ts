@@ -1,11 +1,10 @@
 import { settings } from "@ai16z/eliza/src";
-import { Service } from "@ai16z/eliza/src/services";
-import { IAgentRuntime, ServiceType } from "@ai16z/eliza/src/types.ts";
+import { Service, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { exec } from "child_process";
 import { File } from "formdata-node";
 import fs from "fs";
 import { nodewhisper } from "nodejs-whisper";
-import OpenAI from "openai";
+import OpenAI from "openai"; // todo, can probably move this to model provider or whateer
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -37,13 +36,13 @@ export class TranscriptionService extends Service {
         this.ensureDebugDirectoryExists();
         // TODO: It'd be nice to handle this more gracefully, but we can do local transcription for now
         // TODO: remove the runtime from here, use it when called
-        if (this.runtime.getSetting("OPENAI_API_KEY")) {
-            this.openai = new OpenAI({
-                apiKey: this.runtime.getSetting("OPENAI_API_KEY"),
-            });
-        } else {
-            this.detectCuda();
-        }
+        // if (runtime.getSetting("OPENAI_API_KEY")) {
+        //     this.openai = new OpenAI({
+        //         apiKey: runtime.getSetting("OPENAI_API_KEY"),
+        //     });
+        // } else {
+        //     this.detectCuda();
+        // }
     }
 
     private ensureCacheDirectoryExists() {

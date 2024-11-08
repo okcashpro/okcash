@@ -1,6 +1,6 @@
 import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
 import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
-import { Service } from "@ai16z/eliza/src/services";
+import { Service } from "@ai16z/eliza/src/types.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
 import { IAgentRuntime, ModelClass, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
@@ -70,7 +70,8 @@ export class BrowserService extends Service {
         return runtime;
     }
 
-    constructor(runtime: IAgentRuntime) {
+    constructor() {
+        super();
         this.browser = undefined;
         this.context = undefined;
         this.blocker = undefined;
@@ -128,7 +129,7 @@ export class BrowserService extends Service {
                     setTimeout(checkQueue, 100);
                 } else {
                     try {
-                        const result = await this.fetchPageContent(url);
+                        const result = await this.fetchPageContent(url, runtime);
                         resolve(result);
                     } catch (error) {
                         reject(error);
@@ -204,7 +205,7 @@ export class BrowserService extends Service {
             }
 
             if (response.status() === 403 || response.status() === 404) {
-                return await this.tryAlternativeSources(url);
+                return await this.tryAlternativeSources(url, runtime);
             }
 
             // Check for CAPTCHA
@@ -217,7 +218,7 @@ export class BrowserService extends Service {
                 () => document.body.innerText
             );
             const { description } = await generateSummary(
-                this.runtime,
+                runtime,
                 title + "\n" + bodyContent
             );
             const content = { title, description, bodyContent };
@@ -310,12 +311,13 @@ export class BrowserService extends Service {
     }
 
     private async tryAlternativeSources(
-        url: string
+        url: string,
+        runtime: IAgentRuntime
     ): Promise<{ title: string; description: string; bodyContent: string }> {
         // Try Internet Archive
         const archiveUrl = `https://web.archive.org/web/${url}`;
         try {
-            return await this.fetchPageContent(archiveUrl);
+            return await this.fetchPageContent(archiveUrl, runtime);
         } catch (error) {
             console.error("Error fetching from Internet Archive:", error);
         }
@@ -323,7 +325,7 @@ export class BrowserService extends Service {
         // Try Google Search as a last resort
         const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
         try {
-            return await this.fetchPageContent(googleSearchUrl);
+            return await this.fetchPageContent(googleSearchUrl, runtime);
         } catch (error) {
             console.error("Error fetching from Google Search:", error);
             console.error("Failed to fetch content from alternative sources");
