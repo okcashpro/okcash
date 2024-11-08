@@ -1,13 +1,13 @@
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/core/context.ts";
+import { composeContext } from "@ai16z/eliza/src/context.ts";
 import {
     generateText,
     splitChunks,
     trimTokens,
-} from "@ai16z/eliza/core/generation.ts";
-import { getActorDetails } from "@ai16z/eliza/core/messages.ts";
-import models from "@ai16z/eliza/core/models.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/core/parsing.ts";
+} from "@ai16z/eliza/src/generation.ts";
+import { getActorDetails } from "@ai16z/eliza/src/messages.ts";
+import models from "@ai16z/eliza/src/models.ts";
+import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
 import {
     Action,
     ActionExample,
@@ -18,7 +18,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza/core/types.ts";
+} from "@ai16z/eliza/src/types.ts";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 

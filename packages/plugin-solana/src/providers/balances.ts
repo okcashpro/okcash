@@ -3,7 +3,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import {
     getTokenBalances,
     getTokenPriceInSol,
-} from "@eliza/core/src/services/tokenUtils.ts";
+} from "./tokenUtils.ts";
 import fetch from "cross-fetch";
 
 interface Item {

@@ -1,28 +1,76 @@
+import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
+import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
+import { Service } from "@ai16z/eliza/src/services";
+import settings from "@ai16z/eliza/src/settings.ts";
+import { IAgentRuntime, ModelClass, ServiceType } from "@ai16z/eliza/src/types.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { PlaywrightBlocker } from "@cliqz/adblocker-playwright";
 import CaptchaSolver from "capsolver-npm";
 import fetch from "cross-fetch";
 import fs from "fs";
 import path from "path";
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { IAgentRuntime } from "../../../core/src/core/types.ts";
-import { stringToUuid } from "../../../core/src/core/uuid.ts";
-import { generateSummary } from "./summary.ts";
-import settings from "../../../core/src/core/settings.ts";
 
-export class BrowserService {
-    private static instance: BrowserService | null = null;
+async function generateSummary(
+    runtime: IAgentRuntime,
+    text: string
+): Promise<{ title: string; description: string }> {
+    // make sure text is under 128k characters
+    text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
+
+    const prompt = `Please generate a concise summary for the following text:
+  
+  Text: """
+  ${text}
+  """
+  
+  Respond with a JSON object in the following format:
+  \`\`\`json
+  {
+    "title": "Generated Title",
+    "summary": "Generated summary and/or description of the text"
+  }
+  \`\`\``;
+
+    const response = await generateText({
+        runtime,
+        context: prompt,
+        modelClass: ModelClass.SMALL,
+    });
+
+    const parsedResponse = parseJSONObjectFromText(response);
+
+    if (parsedResponse) {
+        return {
+            title: parsedResponse.title,
+            description: parsedResponse.summary,
+        };
+    }
+
+    return {
+        title: "",
+        description: "",
+    };
+}
+
+export class BrowserService extends Service {
     private browser: Browser | undefined;
     private context: BrowserContext | undefined;
     private blocker: PlaywrightBlocker | undefined;
     private captchaSolver: CaptchaSolver;
     private CONTENT_CACHE_DIR = "./content_cache";
-    private runtime: IAgentRuntime;
 
     private queue: string[] = [];
     private processing: boolean = false;
 
-    private constructor(runtime: IAgentRuntime) {
-        this.runtime = runtime;
+    static serviceType: ServiceType = ServiceType.BROWSER;
+
+    static register(runtime: IAgentRuntime): IAgentRuntime {
+        // since we are lazy loading, do nothing
+        return runtime;
+    }
+
+    constructor(runtime: IAgentRuntime) {
         this.browser = undefined;
         this.context = undefined;
         this.blocker = undefined;
@@ -30,13 +78,6 @@ export class BrowserService {
             settings.CAPSOLVER_API_KEY || ""
         );
         this.ensureCacheDirectoryExists();
-    }
-
-    public static getInstance(runtime: IAgentRuntime): BrowserService {
-        if (!BrowserService.instance) {
-            BrowserService.instance = new BrowserService(runtime);
-        }
-        return BrowserService.instance;
     }
 
     private ensureCacheDirectoryExists() {
@@ -73,11 +114,12 @@ export class BrowserService {
     }
 
     async getPageContent(
-        url: string
+        url: string,
+        runtime: IAgentRuntime
     ): Promise<{ title: string; description: string; bodyContent: string }> {
         await this.initialize();
         this.queue.push(url);
-        this.processQueue();
+        this.processQueue(runtime);
 
         return new Promise((resolve, reject) => {
             const checkQueue = async () => {
@@ -101,7 +143,7 @@ export class BrowserService {
         return stringToUuid(url);
     }
 
-    private async processQueue(): Promise<void> {
+    private async processQueue(runtime: IAgentRuntime): Promise<void> {
         if (this.processing || this.queue.length === 0) {
             return;
         }
@@ -110,14 +152,15 @@ export class BrowserService {
 
         while (this.queue.length > 0) {
             const url = this.queue.shift();
-            await this.fetchPageContent(url);
+            await this.fetchPageContent(url, runtime);
         }
 
         this.processing = false;
     }
 
     private async fetchPageContent(
-        url: string
+        url: string,
+        runtime: IAgentRuntime
     ): Promise<{ title: string; description: string; bodyContent: string }> {
         const cacheKey = this.getCacheKey(url);
         const cacheFilePath = path.join(

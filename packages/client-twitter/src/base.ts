@@ -8,19 +8,19 @@ import { EventEmitter } from "events";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { embeddingZeroVector } from "@ai16z/eliza/core/memory.ts";
+import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
 import {
     Content,
     IAgentRuntime,
     Memory,
     State,
     UUID,
-} from "@ai16z/eliza/core/types.ts";
+} from "@ai16z/eliza/src/types.ts";
 import ImageDescriptionService from "../../services/image.ts";
 
 import { glob } from "glob";
 
-import { stringToUuid } from "@ai16z/eliza/core/uuid.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { elizaLogger } from "../../index.ts";
 
 export function extractAnswer(text: string): string {

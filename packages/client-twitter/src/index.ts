@@ -1,7 +1,7 @@
 import { TwitterPostClient } from "./post.ts";
 import { TwitterSearchClient } from "./search.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
-import { IAgentRuntime, Client } from "@ai16z/eliza/core/types.ts";
+import { IAgentRuntime, Client } from "@ai16z/eliza/src/types.ts";
         
 class TwitterAllClient {
     post: TwitterPostClient;

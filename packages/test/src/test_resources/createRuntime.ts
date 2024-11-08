@@ -4,7 +4,7 @@ import { SqlJsDatabaseAdapter } from "../../../adapter-sqljs/src/sqljs.ts";
 import { SupabaseDatabaseAdapter } from "../../../adapter-supabase/src/index.ts";
 import { DatabaseAdapter } from "../core/database.ts";
 import { AgentRuntime } from "../core/runtime.ts";
-import { Action, Evaluator, ModelProvider, Provider } from "../core/types.ts";
+import { Action, Evaluator, ModelProviderName, Provider } from "../core/types.ts";
 import {
     SUPABASE_ANON_KEY,
     SUPABASE_URL,
@@ -131,7 +131,7 @@ export async function createRuntime({
         serverUrl: "https://api.openai.com/v1",
         conversationLength,
         token: env!.OPENAI_API_KEY!,
-        modelProvider: ModelProvider.OPENAI,
+        modelProvider: ModelProviderName.OPENAI,
         actions: actions ?? [],
         evaluators: evaluators ?? [],
         providers: providers ?? [],

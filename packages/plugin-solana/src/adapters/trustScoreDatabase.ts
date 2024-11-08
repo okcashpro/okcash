@@ -2,7 +2,7 @@
 
 import { Database } from "better-sqlite3";
 import { v4 as uuidv4 } from "uuid";
-import { load } from "@eliza/core/src/adapters/sqlite/sqlite_vec.ts";
+import { load } from "@eliza/src/src/adapters/sqlite/sqlite_vec.ts";
 
 // Define interfaces
 export interface Recommender {

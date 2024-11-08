@@ -1,4 +1,7 @@
 // Current image recognition service -- local recognition working, no openai recognition
+import models from "@ai16z/eliza/src/models.ts";
+import { Service } from "@ai16z/eliza/src/services";
+import { IAgentRuntime, ModelProviderName, ServiceType } from "@ai16z/eliza/src/types.ts";
 import {
     AutoProcessor,
     AutoTokenizer,
@@ -14,34 +17,23 @@ import fs from "fs";
 import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
-import models from "../../../core/src/core/models.ts";
-import { IAgentRuntime, ModelProvider } from "../../../core/src/core/types.ts";
 
-class ImageDescriptionService {
-    private static instance: ImageDescriptionService | null = null;
+export class ImageDescriptionService extends Service {
     private modelId: string = "onnx-community/Florence-2-base-ft";
     private device: string = "gpu";
     private model: PreTrainedModel | null = null;
     private processor: Florence2Processor | null = null;
     private tokenizer: PreTrainedTokenizer | null = null;
     private initialized: boolean = false;
-    runtime: IAgentRuntime;
+
+    static serviceType: ServiceType = ServiceType.IMAGE_DESCRIPTION;
 
     private queue: string[] = [];
     private processing: boolean = false;
 
-    private constructor(runtime: IAgentRuntime) {
-        this.runtime = runtime;
+    constructor(runtime: IAgentRuntime) {
+        super(runtime);
         this.initialize();
-    }
-
-    public static getInstance(runtime: IAgentRuntime): ImageDescriptionService {
-        if (!ImageDescriptionService.instance) {
-            ImageDescriptionService.instance = new ImageDescriptionService(
-                runtime
-            );
-        }
-        return ImageDescriptionService.instance;
     }
 
     async initialize(
@@ -54,7 +46,7 @@ class ImageDescriptionService {
 
         const model = models[this.runtime.character.settings.model];
 
-        if (model === ModelProvider.LLAMALOCAL) {
+        if (model === ModelProviderName.LLAMALOCAL) {
             this.modelId = modelId || "onnx-community/Florence-2-base-ft";
 
             env.allowLocalModels = false;

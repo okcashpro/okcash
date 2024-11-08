@@ -1,8 +1,8 @@
 import { Context, Telegraf } from "telegraf";
 
-import { IAgentRuntime } from "@ai16z/eliza/core/types.ts";
+import { IAgentRuntime } from "@ai16z/eliza/src/types.ts";
 import { MessageManager } from "./messageManager.ts";
-import { elizaLogger } from "@ai16z/eliza/core/logger.ts";
+import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 
 export class TelegramClient {
     private bot: Telegraf<Context>;

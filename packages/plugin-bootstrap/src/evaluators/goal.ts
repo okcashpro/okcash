@@ -1,7 +1,7 @@
-import { composeContext } from "../core/context.ts";
-import { generateText } from "../core/generation.ts";
-import { getGoals } from "../core/goals.ts";
-import { parseJsonArrayFromText } from "../core/parsing.ts";
+import { composeContext } from "@ai16z/elize/src/context.ts";
+import { generateText } from "@ai16z/elize/src/generation.ts";
+import { getGoals } from "@ai16z/elize/src/goals.ts";
+import { parseJsonArrayFromText } from "@ai16z/elize/src/parsing.ts";
 import {
     IAgentRuntime,
     Memory,
@@ -9,7 +9,8 @@ import {
     Objective,
     type Goal,
     type State,
-} from "../core/types.ts";
+    Evaluator,
+} from "@ai16z/elize/src/types.ts";
 
 const goalsTemplate = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.
@@ -130,7 +131,7 @@ async function handler(
     return updatedGoals; // Return updated goals for further processing or logging
 }
 
-export default {
+export const goalEvaluator: Evaluator = {
     name: "UPDATE_GOAL",
     similes: [
         "UPDATE_GOALS",

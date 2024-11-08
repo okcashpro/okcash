@@ -16,11 +16,4 @@ export * from "./relationships.ts";
 export * from "./runtime.ts";
 export * from "./settings.ts";
 export * from "./types.ts";
-
-import { elizaLogger as Logging } from "./logger.ts";
-
-// // Initialize the pretty console
-export const elizaLogger = new Logging();
-elizaLogger.clear();
-elizaLogger.closeByNewLine = true;
-elizaLogger.useIcons = true;
+export * from "./logger.ts";

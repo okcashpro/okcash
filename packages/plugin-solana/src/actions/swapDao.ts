@@ -5,7 +5,7 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "@eliza/core/src/core/types.ts";
+} from "@eliza/src/src/types.ts";
 import { getQuote } from "./swapUtils.ts";
 
 async function invokeSwapDao(

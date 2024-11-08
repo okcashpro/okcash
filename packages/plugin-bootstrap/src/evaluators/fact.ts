@@ -1,12 +1,13 @@
-import { composeContext } from "../core/context.ts";
-import { generateObjectArray } from "../core/generation.ts";
+import { composeContext } from "@ai16z/elize/src/context.ts";
+import { generateObjectArray } from "@ai16z/elize/src/generation.ts";
 import {
     ActionExample,
     Content,
     IAgentRuntime,
     Memory,
     ModelClass,
-} from "../core/types.ts";
+    Evaluator,
+} from "@ai16z/eliza/src/types.ts";
 
 export const formatFacts = (facts: Memory[]) => {
     const messageStrings = facts
@@ -103,7 +104,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     return filteredFacts;
 }
 
-export default {
+export const factEvaluator: Evaluator = {
     name: "GET_FACTS",
     similes: [
         "GET_CLAIMS",

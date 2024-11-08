@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 
-import { DatabaseAdapter } from "@ai16z/elizacore/src/core/database.ts";
+import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
 import {
     Account,
     Actor,
@@ -10,8 +10,8 @@ import {
     type Relationship,
     type UUID,
     Participant,
-} from "../../core/src/core/types.ts";
-import { sqliteTables } from "../../adapter-sqlite/src/sqliteTables.ts";
+} from "../../core/src/types.ts";
+import { sqliteTables } from "./sqliteTables.ts";
 import { Database } from "./types"
 
 export class SqlJsDatabaseAdapter extends DatabaseAdapter {

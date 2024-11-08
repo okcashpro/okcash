@@ -1,5 +1,7 @@
-import { fileURLToPath } from "url";
-import path from "path";
+import { elizaLogger, IAgentRuntime, ServiceType } from "@ai16z/eliza/src/index.ts";
+import { Service } from "@ai16z/eliza/src/services";
+import fs from "fs";
+import https from "https";
 import {
     GbnfJsonSchema,
     getLlama,
@@ -11,11 +13,112 @@ import {
     LlamaModel,
     Token,
 } from "node-llama-cpp";
-import fs from "fs";
-import https from "https";
+import path from "path";
 import si from "systeminformation";
-import { wordsToPunish } from "./wordsToPunish.ts";
-import { elizaLogger } from "../../../core/src/index.ts";
+import { fileURLToPath } from "url";
+
+const wordsToPunish = [
+    " please",
+    " feel",
+    " free",
+    "!",
+    "–",
+    "—",
+    "?",
+    ".",
+    ",",
+    "; ",
+    " cosmos",
+    " tapestry",
+    " tapestries",
+    " glitch",
+    " matrix",
+    " cyberspace",
+    " troll",
+    " questions",
+    " topics",
+    " discuss",
+    " basically",
+    " simulation",
+    " simulate",
+    " universe",
+    " like",
+    " debug",
+    " debugging",
+    " wild",
+    " existential",
+    " juicy",
+    " circuits",
+    " help",
+    " ask",
+    " happy",
+    " just",
+    " cosmic",
+    " cool",
+    " joke",
+    " punchline",
+    " fancy",
+    " glad",
+    " assist",
+    " algorithm",
+    " Indeed",
+    " Furthermore",
+    " However",
+    " Notably",
+    " Therefore",
+    " Additionally",
+    " conclusion",
+    " Significantly",
+    " Consequently",
+    " Thus",
+    " What",
+    " Otherwise",
+    " Moreover",
+    " Subsequently",
+    " Accordingly",
+    " Unlock",
+    " Unleash",
+    " buckle",
+    " pave",
+    " forefront",
+    " harness",
+    " harnessing",
+    " bridging",
+    " bridging",
+    " Spearhead",
+    " spearheading",
+    " Foster",
+    " foster",
+    " environmental",
+    " impact",
+    " Navigate",
+    " navigating",
+    " challenges",
+    " chaos",
+    " social",
+    " inclusion",
+    " inclusive",
+    " diversity",
+    " diverse",
+    " delve",
+    " noise",
+    " infinite",
+    " insanity",
+    " coffee",
+    " singularity",
+    " AI",
+    " digital",
+    " artificial",
+    " intelligence",
+    " consciousness",
+    " reality",
+    " metaverse",
+    " virtual",
+    " virtual reality",
+    " VR",
+    " Metaverse",
+    " humanity",
+];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,8 +156,7 @@ interface QueuedMessage {
     reject: (reason?: any) => void;
 }
 
-class LlamaService {
-    private static instance: LlamaService | null = null;
+export class LlamaService extends Service {
     private llama: Llama | undefined;
     private model: LlamaModel | undefined;
     private modelPath: string;
@@ -67,7 +169,10 @@ class LlamaService {
     private isProcessing: boolean = false;
     private modelInitialized: boolean = false;
 
-    private constructor() {
+    static serviceType: ServiceType = ServiceType.TEXT_GENERATION;
+
+    constructor() {
+        super();
         this.llama = undefined;
         this.model = undefined;
         this.modelUrl =
@@ -80,12 +185,7 @@ class LlamaService {
             await this.initializeModel();
         }
     }
-    public static getInstance(): LlamaService {
-        if (!LlamaService.instance) {
-            LlamaService.instance = new LlamaService();
-        }
-        return LlamaService.instance;
-    }
+
     async initializeModel() {
         try {
             await this.checkModel();

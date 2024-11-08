@@ -8,15 +8,15 @@ import {
     formatActors,
     formatMessages,
     getActorDetails,
-} from "../src/core/messages.ts";
-import { createRelationship } from "../src/core/relationships.ts";
+} from "../src/messages.ts";
+import { createRelationship } from "../src/relationships.ts";
 import {
     IAgentRuntime,
     type Actor,
     type Content,
     type Memory,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

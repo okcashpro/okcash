@@ -7,7 +7,7 @@ import {
     type Provider,
     type State,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

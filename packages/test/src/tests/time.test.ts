@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
-import { composeContext } from "../src/core/context.ts";
+import { composeContext } from "../src/context.ts";
 import {
     IAgentRuntime,
     type Memory,
     type State,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 import { zeroUuid } from "../src/test_resources/constants.ts";
 import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import timeProvider from "../src/providers/time.ts";

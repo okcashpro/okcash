@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { zeroUuid } from "../src/test_resources/constants.ts";
-import { composeContext } from "../src/core/context.ts";
-import { embeddingZeroVector } from "../src/core/memory.ts";
+import { composeContext } from "../src/context.ts";
+import { embeddingZeroVector } from "../src/memory.ts";
 import {
     Content,
     IAgentRuntime,
@@ -9,7 +9,7 @@ import {
     ModelClass,
     State,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import {
     GetTellMeAboutYourselfConversationTroll1,
@@ -22,7 +22,7 @@ import { runAiTest } from "../src/test_resources/runAiTest.ts";
 import { messageHandlerTemplate } from "../src/test_resources/templates.ts";
 import { type User } from "../src/test_resources/types.ts";
 import action from "../src/actions/ignore.ts";
-import { generateMessageResponse } from "../src/core/generation.ts";
+import { generateMessageResponse } from "../src/generation.ts";
 
 async function handleMessage(
     runtime: IAgentRuntime,

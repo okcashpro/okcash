@@ -6,8 +6,8 @@ import { type User } from "../src/test_resources/types.ts";
 import {
     createRelationship,
     getRelationships,
-} from "../src/core/relationships.ts"; // Adjust the import path as needed
-import { IAgentRuntime, type UUID } from "../src/core/types.ts";
+} from "../src/relationships.ts"; // Adjust the import path as needed
+import { IAgentRuntime, type UUID } from "../src/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

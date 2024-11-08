@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { Service } from "./services";
 
 /**
  * Represents a UUID, which is a universally unique identifier conforming to the UUID standard.
@@ -71,17 +72,12 @@ export interface Goal {
     objectives: Objective[]; // A list of objectives that make up the goal.
 }
 
-// TODO: Could be unified into modelclass
-export enum ImageGenModel {
-    TogetherAI = "TogetherAI",
-    Dalle = "Dalle",
-}
-
 export enum ModelClass {
     SMALL = "small",
     MEDIUM = "medium",
     LARGE = "large",
     EMBEDDING = "embedding",
+    IMAGE = "image",
 }
 
 export type Model = {
@@ -95,28 +91,32 @@ export type Model = {
         stop: string[];
         temperature: number;
     };
+    imageSettings?: {
+        steps?: number;
+    };
     model: {
         [ModelClass.SMALL]: string;
         [ModelClass.MEDIUM]: string;
         [ModelClass.LARGE]: string;
         [ModelClass.EMBEDDING]?: string;
+        [ModelClass.IMAGE]?: string;
     };
 };
 
 export type Models = {
-    [ModelProvider.OPENAI]: Model;
-    [ModelProvider.ANTHROPIC]: Model;
-    [ModelProvider.GROK]: Model;
-    [ModelProvider.GROQ]: Model;
-    [ModelProvider.LLAMACLOUD]: Model;
-    [ModelProvider.LLAMALOCAL]: Model;
-    [ModelProvider.GOOGLE]: Model;
-    [ModelProvider.CLAUDE_VERTEX]: Model;
-    [ModelProvider.REDPILL]: Model;
-    [ModelProvider.OLLAMA]: Model;
+    [ModelProviderName.OPENAI]: Model;
+    [ModelProviderName.ANTHROPIC]: Model;
+    [ModelProviderName.GROK]: Model;
+    [ModelProviderName.GROQ]: Model;
+    [ModelProviderName.LLAMACLOUD]: Model;
+    [ModelProviderName.LLAMALOCAL]: Model;
+    [ModelProviderName.GOOGLE]: Model;
+    [ModelProviderName.CLAUDE_VERTEX]: Model;
+    [ModelProviderName.REDPILL]: Model;
+    [ModelProviderName.OLLAMA]: Model;
 };
 
-export enum ModelProvider {
+export enum ModelProviderName {
     OPENAI = "openai",
     ANTHROPIC = "anthropic",
     GROK = "grok",
@@ -313,9 +313,10 @@ export type Client = {
 export type Plugin = {
     name: string;
     description: string;
-    actions: Action[];
-    providers: Provider[];
-    evaluators: Evaluator[];
+    actions?: Action[];
+    providers?: Provider[];
+    evaluators?: Evaluator[];
+    services?: Service[];
 };
 
 export enum Clients {
@@ -329,9 +330,8 @@ export type Character = {
     id?: UUID; // optional UUID which can be passed down to identify the character
     name: string;
     system?: string;
-    modelProvider: ModelProvider;
+    modelProvider: ModelProviderName;
     modelEndpointOverride?: string;
-    imageGenModel?: ImageGenModel;
     templates?: {
         [key: string]: string;
     };
@@ -510,23 +510,26 @@ export interface IAgentRuntime {
     serverUrl: string;
     databaseAdapter: IDatabaseAdapter;
     token: string | null;
-    modelProvider: ModelProvider;
-    imageGenModel: ImageGenModel;
+    modelProvider: ModelProviderName;
     character: Character;
     providers: Provider[];
     actions: Action[];
+    evaluators: Evaluator[];
 
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;
-    factManager: IMemoryManager;
     loreManager: IMemoryManager;
-    imageDescriptionService: IImageRecognitionService;
-    transcriptionService: ITranscriptionService;
-    videoService: IVideoService;
-    llamaService: ILlamaService;
-    browserService: IBrowserService;
-    speechService: ISpeechService;
-    pdfService: IPdfService;
+    factManager: IMemoryManager; // move me
+
+
+    services: Map<ServiceType, Service>;
+    registerMemoryManager(manager: IMemoryManager): void;
+
+    getMemoryManager(name: string): IMemoryManager | null;
+    
+    getService<Service>(service: string): Service | null;
+
+    registerService(service: Service): void;
 
     getSetting(key: string): string | null;
 
@@ -563,14 +566,14 @@ export interface IAgentRuntime {
     updateRecentMessageState(state: State): Promise<State>;
 }
 
-export interface IImageRecognitionService {
+export interface IImageDescriptionService extends Service {
     initialize(modelId?: string | null, device?: string | null): Promise<void>;
     describeImage(
         imageUrl: string
     ): Promise<{ title: string; description: string }>;
 }
 
-export interface ITranscriptionService {
+export interface ITranscriptionService extends Service {
     transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null>;
     transcribeAttachmentLocally(
         audioBuffer: ArrayBuffer
@@ -579,12 +582,12 @@ export interface ITranscriptionService {
     transcribeLocally(audioBuffer: ArrayBuffer): Promise<string | null>;
 }
 
-export interface IVideoService {
+export interface IVideoService extends Service {
     isVideoUrl(url: string): boolean;
     processVideo(url: string): Promise<Media>;
 }
 
-export interface ILlamaService {
+export interface ITextGenerationService extends Service {
     initializeModel(): Promise<void>;
     queueMessageCompletion(
         context: string,
@@ -605,18 +608,29 @@ export interface ILlamaService {
     getEmbeddingResponse(input: string): Promise<number[] | undefined>;
 }
 
-export interface IBrowserService {
+export interface IBrowserService extends Service {
     initialize(): Promise<void>;
     closeBrowser(): Promise<void>;
     getPageContent(
-        url: string
+        url: string,
+        runtime: IAgentRuntime
     ): Promise<{ title: string; description: string; bodyContent: string }>;
 }
 
-export interface ISpeechService {
+export interface ISpeechService extends Service {
     generate(runtime: IAgentRuntime, text: string): Promise<Readable>;
 }
 
-export interface IPdfService {
+export interface IPdfService extends Service {
     convertPdfToText(pdfBuffer: Buffer): Promise<string>;
+}
+
+export enum ServiceType {
+    IMAGE_DESCRIPTION = "image_description",
+    TRANSCRIPTION = "transcription",
+    VIDEO = "video",
+    TEXT_GENERATION = "text_generation",
+    BROWSER = "browser",
+    SPEECH_GENERATION = "speech_generation",
+    PDF = "pdf",
 }

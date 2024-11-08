@@ -1,7 +1,15 @@
+import { IAgentRuntime, ServiceType } from "@ai16z/eliza/src";
+import { Service } from "@ai16z/eliza/src/services";
 import { getDocument, PDFDocumentProxy } from "pdfjs-dist";
 import { TextItem, TextMarkedContent } from "pdfjs-dist/types/src/display/api";
 
-export class PdfService {
+export class PdfService extends Service {
+    static serviceType: ServiceType = ServiceType.PDF;
+
+    constructor(runtime: IAgentRuntime) {
+        super(runtime);
+    }
+
     async convertPdfToText(pdfBuffer: Buffer): Promise<string> {
         // Convert Buffer to Uint8Array
         const uint8Array = new Uint8Array(pdfBuffer);

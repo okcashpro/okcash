@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import { defaultActions } from "../src/core/actions.ts";
-import { IAgentRuntime, type Memory, type UUID } from "../src/core/types.ts";
+import { defaultActions } from "../src/actions.ts";
+import { IAgentRuntime, type Memory, type UUID } from "../src/types.ts";
 import {
     getCachedEmbeddings,
     writeCachedEmbedding,

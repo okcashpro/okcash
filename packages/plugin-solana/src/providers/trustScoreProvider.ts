@@ -5,7 +5,7 @@ import {
     // DexScreenerData,
     // DexScreenerPair,
     // HolderData,
-} from "@eliza/core/src/types/token.ts";
+} from "@eliza/src/src/types/token.ts";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { TokenProvider } from "./token.ts";
@@ -15,9 +15,9 @@ import {
     RecommenderMetrics,
     TokenPerformance,
     TradePerformance,
-} from "@eliza/core/src/adapters/trustScoreDatabase.ts";
-import settings from "@eliza/core/src/core/settings.ts";
-import { IAgentRuntime } from "@eliza/core/src/core/types.ts";
+} from "@eliza/src/src/adapters/trustScoreDatabase.ts";
+import settings from "@eliza/src/src/settings.ts";
+import { IAgentRuntime } from "@eliza/src/src/types.ts";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {

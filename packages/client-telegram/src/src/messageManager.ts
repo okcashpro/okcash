@@ -1,8 +1,8 @@
 import { Message } from "@telegraf/types";
 import { Context, Telegraf } from "telegraf";
 
-import { composeContext } from "@ai16z/eliza/core/context.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/core/memory.ts";
+import { composeContext } from "@ai16z/eliza/src/context.ts";
+import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
 import {
     Content,
     HandlerCallback,
@@ -11,18 +11,18 @@ import {
     ModelClass,
     State,
     UUID,
-} from "@ai16z/eliza/core/types.ts";
-import { stringToUuid } from "@ai16z/eliza/core/uuid.ts";
+} from "@ai16z/eliza/src/types.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 
 import {
     generateMessageResponse,
     generateShouldRespond,
-} from "@ai16z/eliza/core/generation.ts";
+} from "@ai16z/eliza/src/generation.ts";
 import {
     messageCompletionFooter,
     shouldRespondFooter,
-} from "@ai16z/eliza/core/parsing.ts";
-import ImageDescriptionService from "@ai16z/eliza/services/image.ts";
+} from "@ai16z/eliza/src/parsing.ts";
+import ImageDescriptionService from "@ai16z/plugin-node/services/image.ts";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -139,7 +139,7 @@ export class MessageManager {
     constructor(bot: Telegraf<Context>, runtime: IAgentRuntime) {
         this.bot = bot;
         this.runtime = runtime;
-        this.imageService = ImageDescriptionService.getInstance(this.runtime);
+        this.imageService = ImageDescriptionService.getInstance();
     }
 
     // Process image messages and generate descriptions

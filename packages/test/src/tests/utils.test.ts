@@ -4,11 +4,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { TwitterInteractionClient } from "../src/clients/twitter/interactions.ts";
 import { SqliteDatabaseAdapter } from "../src/adapters/sqlite.ts";
-import { defaultCharacter } from "../src/core/defaultCharacter.ts";
+import { defaultCharacter } from "../src/defaultCharacter.ts";
 import { buildConversationThread } from "../src/clients/twitter/utils.ts";
-import { AgentRuntime } from "../src/core/runtime.ts";
-import settings from "../src/core/settings.ts";
-import { ModelProvider } from "../src/core/types.ts";
+import { AgentRuntime } from "../src/runtime.ts";
+import settings from "../src/settings.ts";
+import { ModelProviderName } from "../src/types.ts";
 
 // const __dirname = path.dirname(new URL(".", import.meta.url).pathname);
 
@@ -26,7 +26,7 @@ describe("buildConversationThread", () => {
             ),
             token: settings.OPENAI_API_KEY as string,
             evaluators: [],
-            modelProvider: ModelProvider.OPENAI,
+            modelProvider: ModelProviderName.OPENAI,
             character: defaultCharacter,
             providers: [],
             actions: [],

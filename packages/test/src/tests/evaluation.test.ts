@@ -9,9 +9,9 @@ import {
     TEST_EVALUATOR_FAIL,
 } from "../src/test_resources/testEvaluator.ts";
 import { type User } from "../src/test_resources/types.ts";
-import { composeContext } from "../src/core/context.ts";
-import { evaluationTemplate } from "../src/core/evaluators.ts";
-import { IAgentRuntime, Memory, UUID } from "../src/core/types.ts";
+import { composeContext } from "../src/context.ts";
+import { evaluationTemplate } from "../src/evaluators.ts";
+import { IAgentRuntime, Memory, UUID } from "../src/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 

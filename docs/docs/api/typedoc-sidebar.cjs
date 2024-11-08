@@ -16,8 +16,8 @@ const typedocSidebar = {
         { type: "doc", id: "api/enumerations/ModelClass", label: "ModelClass" },
         {
           type: "doc",
-          id: "api/enumerations/ModelProvider",
-          label: "ModelProvider",
+          id: "api/enumerations/ModelProviderName",
+          label: "ModelProviderName",
         },
       ],
     },
@@ -131,13 +131,13 @@ const typedocSidebar = {
         },
         {
           type: "doc",
-          id: "api/interfaces/IImageRecognitionService",
-          label: "IImageRecognitionService",
+          id: "api/interfaces/IImageDescriptionService",
+          label: "IImageDescriptionService",
         },
         {
           type: "doc",
-          id: "api/interfaces/ILlamaService",
-          label: "ILlamaService",
+          id: "api/interfaces/ITextGenerationService",
+          label: "ITextGenerationService",
         },
         {
           type: "doc",

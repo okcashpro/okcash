@@ -9,7 +9,7 @@ import {
 } from "pumpdotfun-sdk";
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
-import settings from "@eliza/core/src/core/settings.ts";
+import settings from "@eliza/src/src/settings.ts";
 
 import {
     ActionExample,
@@ -17,7 +17,7 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "@eliza/core/src/core/types.ts";
+} from "@eliza/src/src/types.ts";
 
 export interface CreateAndBuyContent extends Content {
     deployerPrivateKey: string;

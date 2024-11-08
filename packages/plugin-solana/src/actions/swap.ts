@@ -8,10 +8,10 @@ import {
 import BigNumber from "bignumber.js";
 import fetch from "cross-fetch";
 import { v4 as uuidv4 } from "uuid";
-import { TrustScoreDatabase } from "@eliza/core/src/adapters/trustScoreDatabase.ts";
-import { composeContext } from "@eliza/core/src/core/context.ts";
-import { generateObject } from "@eliza/core/src/core/generation.ts";
-import settings from "@eliza/core/src/core/settings.ts";
+import { TrustScoreDatabase } from "@eliza/src/src/adapters/trustScoreDatabase.ts";
+import { composeContext } from "@eliza/src/src/context.ts";
+import { generateObject } from "@eliza/src/src/generation.ts";
+import settings from "@eliza/src/src/settings.ts";
 import {
     ActionExample,
     HandlerCallback,
@@ -20,10 +20,10 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@eliza/core/src/core/types.ts";
-import { TokenProvider } from "@eliza/core/src/providers/token.ts";
-import { TrustScoreProvider } from "@eliza/core/src/providers/trustScoreProvider.ts";
-import { walletProvider, WalletProvider } from "@eliza/core/src/providers/wallet.ts";
+} from "@eliza/src/src/types.ts";
+import { TokenProvider } from "@eliza/src/src/providers/token.ts";
+import { TrustScoreProvider } from "@eliza/src/src/providers/trustScoreProvider.ts";
+import { walletProvider, WalletProvider } from "@eliza/src/src/providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
 
 async function swapToken(

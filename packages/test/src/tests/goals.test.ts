@@ -2,13 +2,13 @@ import dotenv from "dotenv";
 import { zeroUuid } from "../src/test_resources/constants.ts";
 import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import { type User } from "../src/test_resources/types.ts";
-import { createGoal, getGoals, updateGoal } from "../src/core/goals.ts";
+import { createGoal, getGoals, updateGoal } from "../src/goals.ts";
 import {
     GoalStatus,
     IAgentRuntime,
     type Goal,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 
 dotenv.config({ path: ".dev.vars" });
 describe("Goals", () => {

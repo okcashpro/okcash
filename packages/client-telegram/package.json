@@ -5,13 +5,12 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
+        "@telegraf/types": "7.1.0",
         "@ai16z/eliza": "workspace:*",
+        "telegraf": "4.16.3",
         "tsup": "^8.3.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts"
-    },
-    "peerDependencies": {
-        "whatwg-url": "7.1.0"
     }
 }

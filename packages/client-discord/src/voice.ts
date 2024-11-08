@@ -20,9 +20,9 @@ import {
 import EventEmitter from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { composeContext } from "@ai16z/eliza/core/context.ts";
-import { generateMessageResponse } from "@ai16z/eliza/core/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/core/memory.ts";
+import { composeContext } from "@ai16z/eliza/src/context.ts";
+import { generateMessageResponse } from "@ai16z/eliza/src/generation.ts";
+import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
 import {
     Content,
     HandlerCallback,
@@ -31,11 +31,11 @@ import {
     ModelClass,
     State,
     UUID,
-} from "@ai16z/eliza/core/types.ts";
-import { stringToUuid } from "@ai16z/eliza/core/uuid.ts";
+} from "@ai16z/eliza/src/types.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { getWavHeader } from "../../services/audioUtils.ts";
 
-import { messageCompletionFooter } from "@ai16z/eliza/core/parsing.ts";
+import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
 
 const discordVoiceHandlerTemplate =
     `# Task: Generate conversational voice dialog for {{agentName}}.
@@ -371,7 +371,7 @@ export class VoiceManager extends EventEmitter {
 
                         console.log("starting transcription");
                         const text =
-                            await this.runtime.transcriptionService.transcribe(
+                            await this.runtime.getService<ITranscriptionService>(ServiceType.TRANSCRIPTION).transcribe(
                                 wavBuffer
                             );
                         console.log("transcribed text: ", text);
@@ -512,7 +512,7 @@ export class VoiceManager extends EventEmitter {
                                         state
                                     );
                                 const responseStream =
-                                    await this.runtime.speechService.generate(
+                                    await this.runtime.getService<ISpeechService>(ServiceType.SPEECH_GENERATION).generate(
                                         this.runtime,
                                         content.text
                                     );

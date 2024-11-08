@@ -8,8 +8,8 @@ import {
     TEST_ACTION_FAIL,
 } from "../src/test_resources/testAction.ts";
 import { type User } from "../src/test_resources/types.ts";
-import { composeContext } from "../src/core/context.ts";
-import { embeddingZeroVector } from "../src/core/memory.ts";
+import { composeContext } from "../src/context.ts";
+import { embeddingZeroVector } from "../src/memory.ts";
 import {
     Content,
     IAgentRuntime,
@@ -17,9 +17,9 @@ import {
     State,
     type Memory,
     type UUID,
-} from "../src/core/types.ts";
-import { stringToUuid } from "../src/core/uuid.ts";
-import { generateMessageResponse } from "../src/core/generation.ts";
+} from "../src/types.ts";
+import { stringToUuid } from "../src/uuid.ts";
+import { generateMessageResponse } from "../src/generation.ts";
 
 async function handleMessage(
     runtime: IAgentRuntime,

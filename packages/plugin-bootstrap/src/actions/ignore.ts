@@ -3,9 +3,9 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "../core/types.ts";
+} from "@ai16z/elize/src/types.ts";
 
-export const ignore: Action = {
+export const ignoreAction: Action = {
     name: "IGNORE",
     similes: ["STOP_TALKING", "STOP_CHATTING", "STOP_CONVERSATION"],
     validate: async (_runtime: IAgentRuntime, _message: Memory) => {

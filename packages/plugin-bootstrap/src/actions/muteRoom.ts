@@ -1,6 +1,6 @@
-import { composeContext } from "../core/context.ts";
-import { generateTrueOrFalse } from "../core/generation.ts";
-import { booleanFooter } from "../core/parsing.ts";
+import { composeContext } from "@ai16z/elize/src/context.ts";
+import { generateTrueOrFalse } from "@ai16z/elize/src/generation.ts";
+import { booleanFooter } from "@ai16z/elize/src/parsing.ts";
 import {
     Action,
     ActionExample,
@@ -8,7 +8,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "../core/types.ts";
+} from "@ai16z/elize/src/types.ts";
 
 export const shouldMuteTemplate =
     `Based on the conversation so far:
@@ -25,7 +25,7 @@ Respond with YES if:
 Otherwise, respond with NO.
 ` + booleanFooter;
 
-export const muteRoom: Action = {
+export const muteRoomAction: Action = {
     name: "MUTE_ROOM",
     similes: [
         "MUTE_CHAT",

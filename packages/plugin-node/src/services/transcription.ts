@@ -1,5 +1,7 @@
+import { settings } from "@ai16z/eliza/src";
+import { Service } from "@ai16z/eliza/src/services";
+import { IAgentRuntime, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { exec } from "child_process";
-import EventEmitter from "events";
 import { File } from "formdata-node";
 import fs from "fs";
 import { nodewhisper } from "nodejs-whisper";
@@ -8,7 +10,6 @@ import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 import { promisify } from "util";
-import { IAgentRuntime } from "../../../core/src/core/types.ts";
 
 // const __dirname = path.dirname(new URL(import.meta.url).pathname); #compatibility issues with windows
 const __filename = fileURLToPath(import.meta.url);
@@ -16,27 +17,26 @@ const __dirname = path.dirname(__filename);
 
 const execAsync = promisify(exec);
 
-export class TranscriptionService extends EventEmitter {
-    private static instance: TranscriptionService | null = null;
+export class TranscriptionService extends Service {
+    static serviceType: ServiceType = ServiceType.TRANSCRIPTION;
     private CONTENT_CACHE_DIR: string;
     private DEBUG_AUDIO_DIR: string;
     private TARGET_SAMPLE_RATE = 16000; // Common sample rate for speech recognition
     private isCudaAvailable: boolean = false;
     private openai: OpenAI | null = null;
-    private runtime: IAgentRuntime;
 
     private queue: { audioBuffer: ArrayBuffer; resolve: Function }[] = [];
     private processing: boolean = false;
 
-    private constructor(runtime: IAgentRuntime) {
+    constructor() {
         super();
-        this.runtime = runtime;
         const rootDir = path.resolve(__dirname, "../../");
         this.CONTENT_CACHE_DIR = path.join(rootDir, "content_cache");
         this.DEBUG_AUDIO_DIR = path.join(rootDir, "debug_audio");
         this.ensureCacheDirectoryExists();
         this.ensureDebugDirectoryExists();
         // TODO: It'd be nice to handle this more gracefully, but we can do local transcription for now
+        // TODO: remove the runtime from here, use it when called
         if (this.runtime.getSetting("OPENAI_API_KEY")) {
             this.openai = new OpenAI({
                 apiKey: this.runtime.getSetting("OPENAI_API_KEY"),
@@ -44,13 +44,6 @@ export class TranscriptionService extends EventEmitter {
         } else {
             this.detectCuda();
         }
-    }
-
-    public static getInstance(runtime: IAgentRuntime): TranscriptionService {
-        if (!TranscriptionService.instance) {
-            TranscriptionService.instance = new TranscriptionService(runtime);
-        }
-        return TranscriptionService.instance;
     }
 
     private ensureCacheDirectoryExists() {
@@ -81,7 +74,7 @@ export class TranscriptionService extends EventEmitter {
             }
         } else if (platform === "win32") {
             const cudaPath = path.join(
-                this.runtime.getSetting("CUDA_PATH") ||
+                settings.CUDA_PATH ||
                     "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0",
                 "bin",
                 "nvcc.exe"

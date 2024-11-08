@@ -1,8 +1,52 @@
+import { generateText, trimTokens } from "@ai16z/eliza/src/generation";
+import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing";
+import { IAgentRuntime, IImageDescriptionService, IPdfService, ITranscriptionService, IVideoService, Media, ModelClass, ServiceType } from "@ai16z/eliza/src/types.ts";
 import { Attachment, Collection } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
-import { IAgentRuntime, Media } from "@ai16z/eliza/core/types.ts";
-import { generateSummary } from "../../services/summary.ts";
+
+async function generateSummary(
+    runtime: IAgentRuntime,
+    text: string
+): Promise<{ title: string; description: string }> {
+    // make sure text is under 128k characters
+    text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
+
+    const prompt = `Please generate a concise summary for the following text:
+  
+  Text: """
+  ${text}
+  """
+  
+  Respond with a JSON object in the following format:
+  \`\`\`json
+  {
+    "title": "Generated Title",
+    "summary": "Generated summary and/or description of the text"
+  }
+  \`\`\``;
+
+    const response = await generateText({
+        runtime,
+        context: prompt,
+        modelClass: ModelClass.SMALL,
+    });
+
+    const parsedResponse = parseJSONObjectFromText(response);
+
+    if (parsedResponse) {
+        return {
+            title: parsedResponse.title,
+            description: parsedResponse.summary,
+        };
+    }
+
+    return {
+        title: "",
+        description: "",
+    };
+}
+
 export class AttachmentManager {
     private attachmentCache: Map<string, Media> = new Map();
     private runtime: IAgentRuntime;
@@ -49,7 +93,7 @@ export class AttachmentManager {
             media = await this.processImageAttachment(attachment);
         } else if (
             attachment.contentType?.startsWith("video/") ||
-            this.runtime.videoService.isVideoUrl(attachment.url)
+            this.runtime.getService<IVideoService>(ServiceType.VIDEO).isVideoUrl(attachment.url)
         ) {
             media = await this.processVideoAttachment(attachment);
         } else {
@@ -81,7 +125,7 @@ export class AttachmentManager {
             }
 
             const transcription =
-                await this.runtime.transcriptionService.transcribeAttachment(
+                await this.runtime.getService<ITranscriptionService>(ServiceType.TRANSCRIPTION).transcribeAttachment(
                     audioBuffer
                 );
             const { title, description } = await generateSummary(
@@ -162,7 +206,7 @@ export class AttachmentManager {
         try {
             const response = await fetch(attachment.url);
             const pdfBuffer = await response.arrayBuffer();
-            const text = await this.runtime.pdfService.convertPdfToText(
+            const text = await this.runtime.getService<IPdfService>(ServiceType.PDF).convertPdfToText(
                 Buffer.from(pdfBuffer)
             );
             const { title, description } = await generateSummary(
@@ -231,7 +275,7 @@ export class AttachmentManager {
     ): Promise<Media> {
         try {
             const { description, title } =
-                await this.runtime.imageDescriptionService.describeImage(
+                await this.runtime.getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION).describeImage(
                     attachment.url
                 );
             return {
@@ -264,8 +308,8 @@ export class AttachmentManager {
     private async processVideoAttachment(
         attachment: Attachment
     ): Promise<Media> {
-        if (this.runtime.videoService.isVideoUrl(attachment.url)) {
-            const videoInfo = await this.runtime.videoService.processVideo(
+        if (this.runtime.getService<IVideoService>(ServiceType.VIDEO).isVideoUrl(attachment.url)) {
+            const videoInfo = await this.runtime.getService<IVideoService>(ServiceType.VIDEO).processVideo(
                 attachment.url
             );
             return {

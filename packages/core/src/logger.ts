@@ -1,4 +1,4 @@
-export class elizaLogger {
+class ElizaLogger {
     closeByNewLine = true;
     useIcons = true;
     logsTitle = "LOGS";
@@ -266,3 +266,10 @@ export class elizaLogger {
         }
     }
 }
+
+export const elizaLogger = new ElizaLogger();
+elizaLogger.clear();
+elizaLogger.closeByNewLine = true;
+elizaLogger.useIcons = true;
+
+export default elizaLogger;

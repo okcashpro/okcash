@@ -1,28 +1,20 @@
+import { Service } from "@ai16z/eliza/src/services.ts";
+import { IAgentRuntime, ITranscriptionService, Media, ServiceType } from "@ai16z/eliza/src/types.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
 import youtubeDl from "youtube-dl-exec";
-import { IAgentRuntime, Media } from "../../../core/src/core/types.ts";
-import { stringToUuid } from "../../../core/src/core/uuid.ts";
-
-export class VideoService {
-    private static instance: VideoService | null = null;
+export class VideoService extends Service {
+    static serviceType: ServiceType = ServiceType.VIDEO;
     private CONTENT_CACHE_DIR = "./content_cache";
-    runtime: IAgentRuntime;
 
     private queue: string[] = [];
     private processing: boolean = false;
 
-    private constructor(runtime: IAgentRuntime) {
+    constructor(runtime: IAgentRuntime) {
+        super(runtime);
         this.ensureCacheDirectoryExists();
-        this.runtime = runtime;
-    }
-
-    public static getInstance(runtime: IAgentRuntime): VideoService {
-        if (!VideoService.instance) {
-            VideoService.instance = new VideoService(runtime);
-        }
-        return VideoService.instance;
     }
 
     private ensureCacheDirectoryExists() {
@@ -315,7 +307,7 @@ export class VideoService {
         console.log("Starting transcription...");
         const startTime = Date.now();
         const transcript =
-            await this.runtime.transcriptionService.transcribe(audioBuffer);
+            await this.runtime.getService<ITranscriptionService>(ServiceType.TRANSCRIPTION).transcribe(audioBuffer);
         const endTime = Date.now();
         console.log(
             `Transcription completed in ${(endTime - startTime) / 1000} seconds`

@@ -1,23 +1,13 @@
 import { names, uniqueNamesGenerator } from "unique-names-generator";
-import { formatFacts } from "../evaluators/fact.ts";
-import { elizaLogger } from "../index.ts";
-import { BrowserService } from "../../../plugin-node/src/services/browser.ts";
-import ImageDescriptionService from "../../../plugin-node/src/services/image.ts";
-import LlamaService from "../../../plugin-node/src/services/llama.ts";
-import { PdfService } from "../../../plugin-node/src/services/pdf.ts";
-import { SpeechService } from "../../../plugin-node/src/services/speech.ts";
-import { TranscriptionService } from "../../../plugin-node/src/services/transcription.ts";
-import { VideoService } from "../../../plugin-node/src/services/video.ts";
+// import { formatFacts } from "../evaluators/fact.ts";
 import {
     composeActionExamples,
-    defaultActions,
     formatActionNames,
     formatActions,
 } from "./actions.ts";
 import { addHeader, composeContext } from "./context.ts";
 import { defaultCharacter } from "./defaultCharacter.ts";
 import {
-    defaultEvaluators,
     evaluationTemplate,
     formatEvaluatorExamples,
     formatEvaluatorNames,
@@ -25,29 +15,26 @@ import {
 } from "./evaluators.ts";
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
+import { elizaLogger } from "./index.ts";
 import { MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
-import { ImageGenModel } from "./models.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import { formatPosts } from "./posts.ts";
-import { defaultProviders, getProviders } from "./providers.ts";
+import { getProviders } from "./providers.ts";
+import { Service } from "./services.ts";
 import settings from "./settings.ts";
 import {
     Character,
     Goal,
     HandlerCallback,
     IAgentRuntime,
-    IBrowserService,
     IDatabaseAdapter,
-    IImageRecognitionService,
     IMemoryManager,
-    IPdfService,
-    ISpeechService,
-    ITranscriptionService,
-    IVideoService,
     ModelClass,
-    ModelProvider,
+    ModelProviderName,
+    Plugin,
     Provider,
+    ServiceType,
     State,
     UUID,
     type Action,
@@ -56,6 +43,7 @@ import {
     type Memory,
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
+
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -104,30 +92,7 @@ export class AgentRuntime implements IAgentRuntime {
     /**
      * The model to use for generateText.
      */
-    modelProvider = ModelProvider.LLAMALOCAL;
-
-    /**
-     * The model to use for image generation.
-     */
-    imageGenModel: ImageGenModel = ImageGenModel.TogetherAI;
-
-    /**
-     * Local Llama if no OpenAI key is present
-     */
-    llamaService: LlamaService | null = null;
-
-    // services
-    speechService: ISpeechService;
-
-    transcriptionService: ITranscriptionService;
-
-    imageDescriptionService: IImageRecognitionService;
-
-    browserService: IBrowserService;
-
-    videoService: IVideoService;
-
-    pdfService: IPdfService;
+    modelProvider: ModelProviderName;
 
     /**
      * Fetch function to use
@@ -170,6 +135,45 @@ export class AgentRuntime implements IAgentRuntime {
      */
     fragmentsManager: IMemoryManager;
 
+    services: Map<ServiceType, Service> = new Map();
+    memoryManagers: Map<string, IMemoryManager> = new Map();
+
+    registerMemoryManager(manager: IMemoryManager): void {
+        if (!manager.tableName) {
+            throw new Error('Memory manager must have a tableName');
+        }
+
+        if (this.memoryManagers.has(manager.tableName)) {
+            console.warn(`Memory manager ${manager.tableName} is already registered. Skipping registration.`);
+            return;
+        }
+
+        this.memoryManagers.set(manager.tableName, manager);
+    }
+
+    getMemoryManager(tableName: string): IMemoryManager | null {
+        return this.memoryManagers.get(tableName) || null;
+    }
+    
+    getService<T>(service: ServiceType): T | null {
+        const serviceInstance = this.services.get(service);
+        if (!serviceInstance) {
+            console.error(`Service ${service} not found`);
+            return null;
+        }
+        return serviceInstance as T;
+    }
+    registerService(service: Service): void {
+        console.log("Register service")
+        const serviceType = (service.constructor as typeof Service).serviceType;
+        if (this.services.has(serviceType)) {
+            console.warn(`Service ${serviceType} is already registered. Skipping registration.`);
+            return;
+        }
+
+        this.services.set((service.constructor as typeof Service).serviceType, service);
+    }
+
     /**
      * Creates an instance of AgentRuntime.
      * @param opts - The options for configuring the AgentRuntime.
@@ -178,6 +182,8 @@ export class AgentRuntime implements IAgentRuntime {
      * @param opts.serverUrl - The URL of the worker.
      * @param opts.actions - Optional custom actions.
      * @param opts.evaluators - Optional custom evaluators.
+     * @param opts.services - Optional custom services.
+     * @param opts.memoryManagers - Optional custom memory managers.
      * @param opts.providers - Optional context providers.
      * @param opts.model - The model to use for generateText.
      * @param opts.embeddingModel - The model to use for embedding.
@@ -194,9 +200,12 @@ export class AgentRuntime implements IAgentRuntime {
         serverUrl?: string; // The URL of the worker
         actions?: Action[]; // Optional custom actions
         evaluators?: Evaluator[]; // Optional custom evaluators
+        plugins?: Plugin[];
         providers?: Provider[];
-        imageGenModel?: ImageGenModel;
-        modelProvider: ModelProvider;
+        modelProvider: ModelProviderName;
+
+        services?: Service[]; // Map of service name to service instance
+        managers?: IMemoryManager[]; // Map of table name to memory manager
         databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
         fetch?: typeof fetch | unknown;
         speechModelPath?: string;
@@ -228,10 +237,11 @@ export class AgentRuntime implements IAgentRuntime {
             tableName: "descriptions",
         });
 
-        this.factManager = new MemoryManager({
-            runtime: this,
-            tableName: "facts",
-        });
+        // TODO: register fact manager
+        // this.factManager = new MemoryManager({
+        //     runtime: this,
+        //     tableName: "facts",
+        // });
 
         this.loreManager = new MemoryManager({
             runtime: this,
@@ -248,6 +258,10 @@ export class AgentRuntime implements IAgentRuntime {
             tableName: "fragments",
         });
 
+        (opts.services ?? []).forEach((service: Service) => {
+            this.registerService(service);
+        });
+
         this.serverUrl = opts.serverUrl ?? this.serverUrl;
         this.modelProvider =
             this.character.modelProvider ??
@@ -256,64 +270,38 @@ export class AgentRuntime implements IAgentRuntime {
         if (!this.serverUrl) {
             console.warn("No serverUrl provided, defaulting to localhost");
         }
-        this.imageGenModel =
-            this.character.imageGenModel ??
-            opts.imageGenModel ??
-            this.imageGenModel;
 
         this.token = opts.token;
 
-        (opts.actions ?? defaultActions).forEach((action) => {
-            this.registerAction(action);
-        });
-
-        (opts.character.plugins ?? []).forEach((plugin) => {
-            plugin.actions.forEach((action) => {
+        ([...(opts.character.plugins || []), ...(opts.plugins || [])]).forEach((plugin) => {
+            plugin.actions?.forEach((action) => {
                 this.registerAction(action);
             });
 
-            plugin.evaluators.forEach((evaluator) => {
+            plugin.evaluators?.forEach((evaluator) => {
                 this.registerEvaluator(evaluator);
             });
 
-            plugin.providers.forEach((provider) => {
+            plugin.providers?.forEach((provider) => {
                 this.registerContextProvider(provider);
+            });
+
+            plugin.services?.forEach((service) => {
+                this.registerService(service);
             });
         });
 
-        (opts.evaluators ?? defaultEvaluators).forEach((evaluator) => {
-            this.registerEvaluator(evaluator);
+        (opts.actions ?? []).forEach((action) => {
+            this.registerAction(action);
         });
 
-        (opts.providers ?? defaultProviders).forEach((provider) => {
+        (opts.providers ?? []).forEach((provider) => {
             this.registerContextProvider(provider);
         });
 
-        if (
-            this.modelProvider === ModelProvider.LLAMALOCAL &&
-            !this.llamaService
-        ) {
-            console.log(
-                "Initializing LlamaLocal service for agent",
-                this.agentId,
-                this.character.name
-            );
-            this.llamaService = LlamaService.getInstance();
-        }
-
-        this.transcriptionService = TranscriptionService.getInstance(this);
-
-        this.imageDescriptionService =
-            ImageDescriptionService.getInstance(this);
-
-        this.browserService = BrowserService.getInstance(this);
-
-        this.videoService = VideoService.getInstance(this);
-
-        this.pdfService = new PdfService();
-
-        // static class, no need to instantiate but we can access it like a class instance
-        this.speechService = new SpeechService();
+        (opts.evaluators ?? []).forEach((evaluator: Evaluator) => {
+            this.registerEvaluator(evaluator);
+        })
 
         if (
             opts.character &&
@@ -330,64 +318,62 @@ export class AgentRuntime implements IAgentRuntime {
      * then chunks the content into fragments, embeds each fragment, and creates fragment memories.
      * @param knowledge An array of knowledge items containing id, path, and content.
      */
-    private async processCharacterKnowledge(knowledge: string[]) {
-        // ensure the room exists and the agent exists in the room
-        this.ensureRoomExists(this.agentId);
-        this.ensureUserExists(
-            this.agentId,
-            this.character.name,
-            this.character.name
-        );
-        this.ensureParticipantExists(this.agentId, this.agentId);
+    // private async processCharacterKnowledge(knowledge: string[]) {
+    //     // ensure the room exists and the agent exists in the room
+    //     this.ensureRoomExists(this.agentId);
+    //     this.ensureUserExists(
+    //         this.agentId,
+    //         this.character.name,
+    //         this.character.name
+    //     );
+    //     this.ensureParticipantExists(this.agentId, this.agentId);
 
-        for (const knowledgeItem of knowledge) {
-            // TODO: Fix the knowledge???
-            continue;
-            // const knowledgeId = stringToUuid(knowledgeItem);
-            // const existingDocument =
-            //     await this.documentsManager.getMemoryById(knowledgeId);
-            // if (!existingDocument) {
-            //     console.log(
-            //         "Processing knowledge for ",
-            //         this.character.name,
-            //         " - ",
-            //         knowledgeItem.slice(0, 100)
-            //     );
-            //     await this.documentsManager.createMemory({
-            //         embedding: embeddingZeroVector,
-            //         id: knowledgeId,
-            //         agentId: this.agentId,
-            //         roomId: this.agentId,
-            //         userId: this.agentId,
-            //         createdAt: Date.now(),
-            //         content: {
-            //             text: knowledgeItem,
-            //         },
-            //     });
-            //     const fragments = await splitChunks(
-            //         this,
-            //         knowledgeItem,
-            //         1200,
-            //         200,
-            //         "fast"
-            //     );
-            //     for (const fragment of fragments) {
-            //         const embedding = await embed(this, fragment);
-            //         await this.fragmentsManager.createMemory({
-            //             id: stringToUuid(fragment),
-            //             roomId: this.agentId,
-            //             userId: this.agentId,
-            //             createdAt: Date.now(),
-            //             content: {
-            //                 source: knowledgeId,
-            //                 text: fragment,
-            //             },
-            //             embedding,
-            //         });
-            //     }
-            // }
-        }
-    }
+    //     for (const knowledgeItem of knowledge) {
+    //         const knowledgeId = stringToUuid(knowledgeItem);
+    //         const existingDocument =
+    //             await this.documentsManager.getMemoryById(knowledgeId);
+    //         if (!existingDocument) {
+    //             console.log(
+    //                 "Processing knowledge for ",
+    //                 this.character.name,
+    //                 " - ",
+    //                 knowledgeItem.slice(0, 100)
+    //             );
+    //             await this.documentsManager.createMemory({
+    //                 embedding: embeddingZeroVector,
+    //                 id: knowledgeId,
+    //                 agentId: this.agentId,
+    //                 roomId: this.agentId,
+    //                 userId: this.agentId,
+    //                 createdAt: Date.now(),
+    //                 content: {
+    //                     text: knowledgeItem,
+    //                 },
+    //             });
+    //             const fragments = await splitChunks(
+    //                 this,
+    //                 knowledgeItem,
+    //                 1200,
+    //                 200,
+    //                 "fast"
+    //             );
+    //             for (const fragment of fragments) {
+    //                 const embedding = await embed(this, fragment);
+    //                 await this.fragmentsManager.createMemory({
+    //                     id: stringToUuid(fragment),
+    //                     roomId: this.agentId,
+    //                     userId: this.agentId,
+    //                     createdAt: Date.now(),
+    //                     content: {
+    //                         source: knowledgeId,
+    //                         text: fragment,
+    //                     },
+    //                     embedding,
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }
 
     getSetting(key: string) {
         // check if the key is in the character.settings.secrets object
@@ -686,13 +672,13 @@ export class AgentRuntime implements IAgentRuntime {
         const { userId, roomId } = message;
 
         const conversationLength = this.getConversationLength();
-        const recentFactsCount = Math.ceil(this.getConversationLength() / 2);
-        const relevantFactsCount = Math.ceil(this.getConversationLength() / 2);
+        // const recentFactsCount = Math.ceil(this.getConversationLength() / 2);
+        // const relevantFactsCount = Math.ceil(this.getConversationLength() / 2);
 
-        const [actorsData, recentMessagesData, recentFactsData, goalsData]: [
+        const [actorsData, recentMessagesData, /*recentFactsData,*/ goalsData]: [
             Actor[],
             Memory[],
-            Memory[],
+            /*Memory[],*/
             Goal[],
         ] = await Promise.all([
             getActorDetails({ runtime: this, roomId }),
@@ -702,11 +688,11 @@ export class AgentRuntime implements IAgentRuntime {
                 count: conversationLength,
                 unique: false,
             }),
-            this.factManager.getMemories({
-                agentId: this.agentId,
-                roomId,
-                count: recentFactsCount,
-            }),
+            // this.factManager.getMemories({
+            //     agentId: this.agentId,
+            //     roomId,
+            //     count: recentFactsCount,
+            // }),
             getGoals({
                 runtime: this,
                 count: 10,
@@ -717,24 +703,24 @@ export class AgentRuntime implements IAgentRuntime {
 
         const goals = formatGoalsAsString({ goals: goalsData });
 
-        let relevantFactsData: Memory[] = [];
+        // let relevantFactsData: Memory[] = [];
 
-        if (recentFactsData.length > recentFactsCount) {
-            relevantFactsData = (
-                await this.factManager.searchMemoriesByEmbedding(
-                    recentFactsData[0].embedding!,
-                    {
-                        roomId,
-                        agentId: this.agentId,
-                        count: relevantFactsCount,
-                    }
-                )
-            ).filter((fact: Memory) => {
-                return !recentFactsData.find(
-                    (recentFact: Memory) => recentFact.id === fact.id
-                );
-            });
-        }
+        // if (recentFactsData.length > recentFactsCount) {
+        //     relevantFactsData = (
+        //         await this.factManager.searchMemoriesByEmbedding(
+        //             recentFactsData[0].embedding!,
+        //             {
+        //                 roomId,
+        //                 agentId: this.agentId,
+        //                 count: relevantFactsCount,
+        //             }
+        //         )
+        //     ).filter((fact: Memory) => {
+        //         return !recentFactsData.find(
+        //             (recentFact: Memory) => recentFact.id === fact.id
+        //         );
+        //     });
+        // }
 
         const actors = formatActors({ actors: actorsData ?? [] });
 
@@ -749,8 +735,8 @@ export class AgentRuntime implements IAgentRuntime {
             conversationHeader: false,
         });
 
-        const recentFacts = formatFacts(recentFactsData);
-        const relevantFacts = formatFacts(relevantFactsData);
+        // const recentFacts = formatFacts(recentFactsData);
+        // const relevantFacts = formatFacts(relevantFactsData);
 
         // const lore = formatLore(loreData);
 
@@ -1064,16 +1050,16 @@ Text: ${attachment.text}
                     ? addHeader("# Posts in Thread", recentPosts)
                     : "",
             recentMessagesData,
-            recentFacts:
-                recentFacts && recentFacts.length > 0
-                    ? addHeader("# Recent Facts", recentFacts)
-                    : "",
-            recentFactsData,
-            relevantFacts:
-                relevantFacts && relevantFacts.length > 0
-                    ? addHeader("# Relevant Facts", relevantFacts)
-                    : "",
-            relevantFactsData,
+            // recentFacts:
+            //     recentFacts && recentFacts.length > 0
+            //         ? addHeader("# Recent Facts", recentFacts)
+            //         : "",
+            // recentFactsData,
+            // relevantFacts:
+            //     relevantFacts && relevantFacts.length > 0
+            //         ? addHeader("# Relevant Facts", relevantFacts)
+            //         : "",
+            // relevantFactsData,
             attachments:
                 formattedAttachments && formattedAttachments.length > 0
                     ? addHeader("# Attachments", formattedAttachments)

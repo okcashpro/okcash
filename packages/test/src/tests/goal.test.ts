@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import { defaultActions } from "../src/core/actions.ts";
-import { createGoal, getGoals } from "../src/core/goals.ts";
+import { defaultActions } from "../src/actions.ts";
+import { createGoal, getGoals } from "../src/goals.ts";
 import {
     Goal,
     GoalStatus,
@@ -9,7 +9,7 @@ import {
     State,
     type Memory,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 import { zeroUuid } from "../src/test_resources/constants.ts";
 import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import { getOrCreateRelationship } from "../src/test_resources/getOrCreateRelationship.ts";

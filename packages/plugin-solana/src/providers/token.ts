@@ -1,8 +1,8 @@
 import { Connection } from "@solana/web3.js";
 // import fetch from "cross-fetch";
-import { IAgentRuntime, Memory, Provider, State } from "@eliza/core/src/core/types.ts";
-import settings from "@eliza/core/src/core/settings.ts";
-import { toBN } from "@eliza/core/src/utils/bignumber.ts";
+import { IAgentRuntime, Memory, Provider, State } from "@eliza/src/src/types.ts";
+import settings from "@eliza/src/src/settings.ts";
+import { toBN } from "@eliza/src/src/utils/bignumber.ts";
 import {
     ProcessedTokenData,
     TokenSecurityData,
@@ -10,7 +10,7 @@ import {
     DexScreenerData,
     //   DexScreenerPair,
     HolderData,
-} from "@eliza/core/src/types/token.ts";
+} from "@eliza/src/src/types/token.ts";
 import NodeCache from "node-cache";
 import * as fs from "fs";
 import * as path from "path";

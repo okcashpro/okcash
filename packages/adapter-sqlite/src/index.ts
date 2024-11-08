@@ -1,22 +1,19 @@
-import { v4 } from "uuid";
-import { load } from "./sqlite_vec.ts";
-
-import { DatabaseAdapter } from "@ai16z/eliza/core/database.ts";
+import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
+import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
 import {
     Account,
     Actor,
     GoalStatus,
+    Participant,
     type Goal,
     type Memory,
     type Relationship,
     type UUID,
-    Participant,
-} from "@ai16z/eliza/core/types.ts";
-
-import { sqliteTables } from "./sqliteTables.ts";
-
+} from "@ai16z/eliza/src/types.ts";
 import { Database } from "better-sqlite3";
-import { embeddingZeroVector } from "@ai16z/eliza/core/memory.ts";
+import { v4 } from "uuid";
+import { load } from "./sqlite_vec.ts";
+import { sqliteTables } from "./sqliteTables.ts";
 
 export class SqliteDatabaseAdapter extends DatabaseAdapter {
     async getRoom(roomId: UUID): Promise<UUID | null> {

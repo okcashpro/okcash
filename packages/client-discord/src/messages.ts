@@ -1,3 +1,30 @@
+import { composeContext } from "@ai16z/eliza/src/context.ts";
+import {
+    generateMessageResponse,
+    generateShouldRespond,
+} from "@ai16z/eliza/src/generation.ts";
+import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
+import {
+    messageCompletionFooter,
+    shouldRespondFooter,
+} from "@ai16z/eliza/src/parsing.ts";
+import {
+    Content,
+    HandlerCallback,
+    IAgentRuntime,
+    IBrowserService,
+    ISpeechService,
+    IVideoService,
+    Media,
+    Memory,
+    ModelClass,
+    ServiceType,
+    State,
+    UUID,
+} from "@ai16z/eliza/src/types.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
+import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
 import {
     ChannelType,
     Client,
@@ -6,35 +33,52 @@ import {
     TextChannel,
     ThreadChannel,
 } from "discord.js";
-import { composeContext } from "@ai16z/eliza/core/context.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "@ai16z/eliza/core/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/core/memory.ts";
-import {
-    Content,
-    HandlerCallback,
-    IAgentRuntime,
-    Media,
-    Memory,
-    ModelClass,
-    State,
-    UUID,
-} from "@ai16z/eliza/core/types.ts";
-import { stringToUuid } from "@ai16z/eliza/core/uuid.ts";
-import { generateSummary } from "../../services/summary.ts";
+import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import { AttachmentManager } from "./attachments.ts";
-
-import { elizaLogger } from "../../index.ts";
 import { VoiceManager } from "./voice.ts";
 
-import {
-    messageCompletionFooter,
-    shouldRespondFooter,
-} from "@ai16z/eliza/core/parsing.ts";
-
 const MAX_MESSAGE_LENGTH = 1900;
+async function generateSummary(
+    runtime: IAgentRuntime,
+    text: string
+): Promise<{ title: string; description: string }> {
+    // make sure text is under 128k characters
+    text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
+
+    const prompt = `Please generate a concise summary for the following text:
+  
+  Text: """
+  ${text}
+  """
+  
+  Respond with a JSON object in the following format:
+  \`\`\`json
+  {
+    "title": "Generated Title",
+    "summary": "Generated summary and/or description of the text"
+  }
+  \`\`\``;
+
+    const response = await generateText({
+        runtime,
+        context: prompt,
+        modelClass: ModelClass.SMALL,
+    });
+
+    const parsedResponse = parseJSONObjectFromText(response);
+
+    if (parsedResponse) {
+        return {
+            title: parsedResponse.title,
+            description: parsedResponse.summary,
+        };
+    }
+
+    return {
+        title: "",
+        description: "",
+    };
+}
 
 export type InterestChannels = {
     [key: string]: {
@@ -465,7 +509,7 @@ export class MessageManager {
                     if (message.channel.type === ChannelType.GuildVoice) {
                         // For voice channels, use text-to-speech
                         const audioStream =
-                            await this.runtime.speechService.generate(
+                            await this.runtime.getService<ISpeechService>(ServiceType.SPEECH_GENERATION).generate(
                                 this.runtime,
                                 content.text
                             );
@@ -551,7 +595,7 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await this.runtime.speechService.generate(
+                const audioStream = await this.runtime.getService<ISpeechService>(ServiceType.SPEECH_GENERATION).generate(
                     this.runtime,
                     errorMessage
                 );
@@ -618,9 +662,9 @@ export class MessageManager {
         const urls = processedContent.match(urlRegex) || [];
 
         for (const url of urls) {
-            if (this.runtime.videoService.isVideoUrl(url)) {
+            if (this.runtime.getService<IVideoService>(ServiceType.VIDEO).isVideoUrl(url)) {
                 const videoInfo =
-                    await this.runtime.videoService.processVideo(url);
+                    await this.runtime.getService<IVideoService>(ServiceType.VIDEO).processVideo(url);
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -631,7 +675,7 @@ export class MessageManager {
                 });
             } else {
                 const { title, bodyContent } =
-                    await this.runtime.browserService.getPageContent(url);
+                    await this.runtime.getService<IBrowserService>(ServiceType.BROWSER).getPageContent(url, this.runtime);
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,
                     title + "\n" + bodyContent

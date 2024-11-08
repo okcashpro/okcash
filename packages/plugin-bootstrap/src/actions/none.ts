@@ -3,9 +3,9 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "../core/types.ts";
+} from "@ai16z/elize/src/types.ts";
 
-export const none: Action = {
+export const noneAction: Action = {
     name: "NONE",
     similes: [
         "NO_ACTION",

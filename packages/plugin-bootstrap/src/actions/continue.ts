@@ -1,9 +1,9 @@
-import { composeContext } from "../core/context.ts";
+import { composeContext } from "@ai16z/elize/src/context.ts";
 import {
     generateMessageResponse,
     generateTrueOrFalse,
-} from "../core/generation.ts";
-import { booleanFooter, messageCompletionFooter } from "../core/parsing.ts";
+} from "@ai16z/elize/src/generation.ts";
+import { booleanFooter, messageCompletionFooter } from "@ai16z/elize/src/parsing.ts";
 import {
     Action,
     ActionExample,
@@ -13,7 +13,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "../core/types.ts";
+} from "@ai16z/elize/src/types.ts";
 
 const maxContinuesInARow = 3;
 

@@ -1,7 +1,4 @@
-import { timeProvider } from "../providers/time.ts";
-import { IAgentRuntime, State, type Memory, type Provider } from "./types.ts";
-
-export const defaultProviders: Provider[] = [timeProvider];
+import { IAgentRuntime, State, type Memory } from "./types.ts";
 
 /**
  * Formats provider outputs into a string which can be injected into the context.

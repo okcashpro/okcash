@@ -1,10 +1,15 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
+import { getModel } from "./models.ts";
+import { IImageDescriptionService, ModelClass } from "./types.ts";
 import { generateText as aiGenerateText } from "ai";
+import { Buffer } from "buffer";
 import { createOllama } from 'ollama-ai-provider';
+import OpenAI from "openai";
 import { default as tiktoken, TiktokenModel } from "tiktoken";
-import { elizaLogger } from "../index.ts";
+import Together from "together-ai";
+import { elizaLogger } from "./index.ts";
 import models from "./models.ts";
 import {
     parseBooleanFromText,
@@ -13,7 +18,7 @@ import {
     parseShouldRespondFromText,
 } from "./parsing.ts";
 import settings from "./settings.ts";
-import { Content, IAgentRuntime, ModelProvider } from "./types.ts";
+import { Content, IAgentRuntime, ITextGenerationService, ModelProviderName, ServiceType } from "./types.ts";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -70,8 +75,8 @@ export async function generateText({
         );
 
         switch (provider) {
-            case ModelProvider.OPENAI:
-            case ModelProvider.LLAMACLOUD: {
+            case ModelProviderName.OPENAI:
+            case ModelProviderName.LLAMACLOUD: {
                 elizaLogger.log("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
@@ -93,7 +98,7 @@ export async function generateText({
                 break;
             }
 
-            case ModelProvider.ANTHROPIC: {
+            case ModelProviderName.ANTHROPIC: {
                 elizaLogger.log("Initializing Anthropic model.");
 
                 const anthropic = createAnthropic({ apiKey });
@@ -116,7 +121,7 @@ export async function generateText({
                 break;
             }
 
-            case ModelProvider.GROK: {
+            case ModelProviderName.GROK: {
                 elizaLogger.log("Initializing Grok model.");
                 const grok = createOpenAI({ apiKey, baseURL: endpoint });
 
@@ -140,7 +145,7 @@ export async function generateText({
                 break;
             }
 
-            case ModelProvider.GROQ: {
+            case ModelProviderName.GROQ: {
                 console.log("Initializing Groq model.");
                 const groq = createGroq({ apiKey });
 
@@ -162,9 +167,9 @@ export async function generateText({
                 break;
             }
 
-            case ModelProvider.LLAMALOCAL: {
+            case ModelProviderName.LLAMALOCAL: {
                 elizaLogger.log("Using local Llama model for text completion.");
-                response = await runtime.llamaService.queueTextCompletion(
+                response = await runtime.getService<ITextGenerationService>(ServiceType.TEXT_GENERATION).queueTextCompletion(
                     context,
                     temperature,
                     _stop,
@@ -176,7 +181,7 @@ export async function generateText({
                 break;
             }
 
-            case ModelProvider.REDPILL: {
+            case ModelProviderName.REDPILL: {
                 elizaLogger.log("Initializing RedPill model.");
                 const serverUrl = models[provider].endpoint;
                 const openai = createOpenAI({ apiKey, baseURL: serverUrl });
@@ -199,7 +204,7 @@ export async function generateText({
                 break;
             }
 
-            case ModelProvider.OLLAMA: {
+            case ModelProviderName.OLLAMA: {
                 console.log("Initializing Ollama model.");
                     
                 const ollamaProvider = createOllama({
@@ -583,3 +588,99 @@ export async function generateMessageResponse({
         }
     }
 }
+
+export const generateImage = async (
+    data: {
+        prompt: string;
+        width: number;
+        height: number;
+        count?: number;
+    },
+    runtime: IAgentRuntime
+): Promise<{
+    success: boolean;
+    data?: string[];
+    error?: any;
+}> => {
+    const { prompt, width, height } = data;
+    let { count } = data;
+    if (!count) {
+        count = 1;
+    }
+
+    const model = getModel(runtime.character.modelProvider, ModelClass.IMAGE);
+    const modelSettings = models[runtime.character.modelProvider].imageSettings;
+    // some fallbacks for backwards compat, should remove in the future
+    const apiKey = runtime.token ?? runtime.getSetting("TOGETHER_API_KEY") ?? runtime.getSetting("OPENAI_API_KEY");
+
+    try {
+        if (runtime.character.modelProvider === ModelProviderName.LLAMACLOUD) {
+            const together = new Together({ apiKey: apiKey as string });
+            const response = await together.images.create({
+                model: "black-forest-labs/FLUX.1-schnell",
+                prompt,
+                width,
+                height,
+                steps: modelSettings?.steps ?? 4,
+                n: count,
+            });
+            const urls: string[] = [];
+            for (let i = 0; i < response.data.length; i++) {
+                const json = response.data[i].b64_json;
+                // decode base64
+                const base64 = Buffer.from(json, "base64").toString("base64");
+                urls.push(base64);
+            }
+            const base64s = await Promise.all(
+                urls.map(async (url) => {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const buffer = await blob.arrayBuffer();
+                    let base64 = Buffer.from(buffer).toString("base64");
+                    base64 = "data:image/jpeg;base64," + base64;
+                    return base64;
+                })
+            );
+            return { success: true, data: base64s };
+        } else {
+            let targetSize = `${width}x${height}`;
+            if (
+                targetSize !== "1024x1024" &&
+                targetSize !== "1792x1024" &&
+                targetSize !== "1024x1792"
+            ) {
+                targetSize = "1024x1024";
+            }
+            const openai = new OpenAI({ apiKey: apiKey as string });
+            const response = await openai.images.generate({
+                model,
+                prompt,
+                size: targetSize as "1024x1024" | "1792x1024" | "1024x1792",
+                n: count,
+                response_format: "b64_json",
+            });
+            const base64s = response.data.map(
+                (image) => `data:image/png;base64,${image.b64_json}`
+            );
+            return { success: true, data: base64s };
+        }
+    } catch (error) {
+        console.error(error);
+        return { success: false, error: error };
+    }
+};
+
+export const generateCaption = async (
+    data: { imageUrl: string },
+    runtime: IAgentRuntime
+): Promise<{
+    title: string;
+    description: string;
+}> => {
+    const { imageUrl } = data;
+    const resp = await runtime.getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION).describeImage(imageUrl);
+    return {
+        title: resp.title.trim(),
+        description: resp.description.trim(),
+    };
+};

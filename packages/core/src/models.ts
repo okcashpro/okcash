@@ -1,8 +1,8 @@
 import settings from "./settings.ts";
-import { Models, ModelProvider, ModelClass, ImageGenModel } from "./types.ts";
+import { Models, ModelProviderName, ModelClass } from "./types.ts";
 
 const models: Models = {
-    [ModelProvider.OPENAI]: {
+    [ModelProviderName.OPENAI]: {
         endpoint: "https://api.openai.com/v1",
         settings: {
             stop: [],
@@ -17,9 +17,10 @@ const models: Models = {
             [ModelClass.MEDIUM]: "gpt-4o",
             [ModelClass.LARGE]: "gpt-4o",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
+            [ModelClass.IMAGE]: "dall-e-3",
         },
     },
-    [ModelProvider.ANTHROPIC]: {
+    [ModelProviderName.ANTHROPIC]: {
         settings: {
             stop: [],
             maxInputTokens: 200000,
@@ -35,7 +36,7 @@ const models: Models = {
             [ModelClass.LARGE]: "claude-3-opus-20240229",
         },
     },
-    [ModelProvider.CLAUDE_VERTEX]: {
+    [ModelProviderName.CLAUDE_VERTEX]: {
         settings: {
             stop: [],
             maxInputTokens: 200000,
@@ -51,7 +52,7 @@ const models: Models = {
             [ModelClass.LARGE]: "claude-3-opus-20240229",
         },
     },
-    [ModelProvider.GROK]: {
+    [ModelProviderName.GROK]: {
         settings: {
             stop: [],
             maxInputTokens: 128000,
@@ -68,7 +69,7 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "grok-beta", // not sure about this one
         },
     },
-    [ModelProvider.GROQ]: {
+    [ModelProviderName.GROQ]: {
         endpoint: "https://api.groq.com/openai/v1",
         settings: {
             stop: [],
@@ -85,13 +86,16 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "llama-3.1-8b-instant",
         },
     },
-    [ModelProvider.LLAMACLOUD]: {
+    [ModelProviderName.LLAMACLOUD]: {
         settings: {
             stop: [],
             maxInputTokens: 128000,
             maxOutputTokens: 8192,
             repetition_penalty: 0.0,
             temperature: 0.3,
+        },
+        imageSettings: {
+            steps: 4,
         },
         endpoint: "https://api.together.ai/v1",
         model: {
@@ -100,9 +104,10 @@ const models: Models = {
             [ModelClass.LARGE]: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
             [ModelClass.EMBEDDING]:
                 "togethercomputer/m2-bert-80M-32k-retrieval",
+            [ModelClass.IMAGE]: "black-forest-labs/FLUX.1-schnell",
         },
     },
-    [ModelProvider.LLAMALOCAL]: {
+    [ModelProviderName.LLAMALOCAL]: {
         settings: {
             stop: ["<|eot_id|>", "<|eom_id|>"],
             maxInputTokens: 32768,
@@ -122,7 +127,7 @@ const models: Models = {
                 "togethercomputer/m2-bert-80M-32k-retrieval",
         },
     },
-    [ModelProvider.GOOGLE]: {
+    [ModelProviderName.GOOGLE]: {
         settings: {
             stop: [],
             maxInputTokens: 128000,
@@ -138,7 +143,7 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "text-embedding-004",
         },
     },
-    [ModelProvider.REDPILL]: {
+    [ModelProviderName.REDPILL]: {
         endpoint: "https://api.red-pill.ai/v1",
         settings: {
             stop: [],
@@ -157,7 +162,7 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
-    [ModelProvider.OLLAMA]: {
+    [ModelProviderName.OLLAMA]: {
         settings: {
             stop: [],
             maxInputTokens: 128000,
@@ -176,27 +181,12 @@ const models: Models = {
     },
 };
 
-export function getModel(provider: ModelProvider, type: ModelClass) {
+export function getModel(provider: ModelProviderName, type: ModelClass) {
     return models[provider].model[type];
 }
 
-export function getEndpoint(provider: ModelProvider) {
+export function getEndpoint(provider: ModelProviderName) {
     return models[provider].endpoint;
-}
-
-export const imageGenModels = {
-    [ImageGenModel.TogetherAI]: {
-        steps: 4,
-        subModel: "black-forest-labs/FLUX.1-schnell",
-    },
-    [ImageGenModel.Dalle]: {
-        steps: 0,
-        subModel: "dall-e-3",
-    },
-};
-
-export function getImageGenModel(model: ImageGenModel) {
-    return imageGenModels[model];
 }
 
 export default models;

@@ -6,13 +6,13 @@ import {
     generateCaption,
     generateImage,
 } from "@ai16z/plugin-image-generation";
-import { composeContext } from "@ai16z/eliza/core/context.ts";
-import { generateMessageResponse } from "@ai16z/eliza/core/generation.ts";
-import { messageCompletionFooter } from "@ai16z/eliza/core/parsing.ts";
-import { AgentRuntime } from "@ai16z/eliza/core/runtime.ts";
-import { Content, Memory, ModelClass, State, Client, IAgentRuntime } from "@ai16z/eliza/core/types.ts";
-import { stringToUuid } from "@ai16z/eliza/core/uuid.ts";
-import settings from "@ai16z/eliza/settings.ts";
+import { composeContext } from "@ai16z/eliza/src/context.ts";
+import { generateMessageResponse } from "@ai16z/eliza/src/generation.ts";
+import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
+import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
+import { Content, Memory, ModelClass, State, Client, IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import settings from "@ai16z/eliza/src/settings.ts";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export const messageHandlerTemplate =

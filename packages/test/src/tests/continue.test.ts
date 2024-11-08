@@ -4,7 +4,7 @@ import {
     IAgentRuntime,
     Memory,
     type UUID,
-} from "../src/core/types.ts";
+} from "../src/types.ts";
 import { zeroUuid } from "../src/test_resources/constants.ts";
 import { createRuntime } from "../src/test_resources/createRuntime.ts";
 import { Goodbye1 } from "../src/test_resources/data.ts";

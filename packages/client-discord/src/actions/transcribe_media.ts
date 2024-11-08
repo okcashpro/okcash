@@ -1,7 +1,7 @@
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/core/context.ts";
-import { generateText } from "@ai16z/eliza/core/generation.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/core/parsing.ts";
+import { composeContext } from "@ai16z/eliza/src/context.ts";
+import { generateText } from "@ai16z/eliza/src/generation.ts";
+import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
 import {
     Action,
     ActionExample,
@@ -11,7 +11,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza/core/types.ts";
+} from "@ai16z/eliza/src/types.ts";
 export const transcriptionTemplate = `# Transcription of media file
 {{mediaTranscript}}
 
