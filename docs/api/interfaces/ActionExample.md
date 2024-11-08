@@ -1,0 +1,23 @@
+# Interface: ActionExample
+
+Represents an example of content, typically used for demonstrating or testing purposes. Includes user, content, optional action, and optional source.
+
+## Properties
+
+### user
+
+> **user**: `string`
+
+#### Defined in
+
+[packages/core/src/types.ts:26](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L26)
+
+***
+
+### content
+
+> **content**: [`Content`](Content.md)
+
+#### Defined in
+
+[packages/core/src/types.ts:27](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L27)

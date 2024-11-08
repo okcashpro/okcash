@@ -52,9 +52,10 @@ const sidebars = {
       label: "Community",
       collapsed: false,
       items: [
-        "community/project-overview",
-        "community/spaces-notes",
-        "community/development-notes",
+        "community/creator-fund",
+        "community/notes",
+        "community/changelog",
+	"community/faq",
         "community/contributing",
       ],
     },
