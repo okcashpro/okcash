@@ -18,6 +18,7 @@ import { populateMemories } from "../src/test_resources/populateMemories.ts";
 import { runAiTest } from "../src/test_resources/runAiTest.ts";
 import { type User } from "../src/test_resources/types.ts";
 import evaluator from "../src/evaluators/fact.ts";
+import { MemoryManager } from "@ai16z/eliza/src/memory.ts";
 
 dotenv.config({ path: ".dev.vars" });
 
@@ -107,7 +108,12 @@ describe("Facts Evaluator", () => {
 });
 
 async function cleanup(runtime: IAgentRuntime, roomId: UUID) {
-    await runtime.factManager.removeAllMemories(roomId);
+    const factsManager = new MemoryManager({
+        runtime,
+        tableName: "facts",
+    });
+    
+    await factsManager.removeAllMemories(roomId);
     await runtime.messageManager.removeAllMemories(roomId);
 }
 
@@ -119,13 +125,22 @@ async function addFacts(
 ) {
     for (const fact of facts) {
         const existingEmbedding = await getCachedEmbeddings(fact);
-        const bakedMemory = await runtime.factManager.addEmbeddingToMemory({
+
+        const factsManager = new MemoryManager({
+            runtime,
+            tableName: "facts",
+        });
+
+        const bakedMemory = await factsManager.addEmbeddingToMemory({
             userId: userId,
             content: { text: fact },
+            agentId: runtime.agentId,
             roomId: roomId,
             embedding: existingEmbedding,
         });
-        await runtime.factManager.createMemory(bakedMemory);
+
+        await factsManager.createMemory(bakedMemory);
+
         if (!existingEmbedding) {
             writeCachedEmbedding(fact, bakedMemory.embedding as number[]);
             // Ensure there's a slight delay for asynchronous operations to complete

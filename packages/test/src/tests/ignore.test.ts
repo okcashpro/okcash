@@ -23,6 +23,7 @@ import { messageHandlerTemplate } from "../src/test_resources/templates.ts";
 import { type User } from "../src/test_resources/types.ts";
 import action from "../src/actions/ignore.ts";
 import { generateMessageResponse } from "../src/generation.ts";
+import { MemoryManager } from "@ai16z/eliza/src/memory.ts";
 
 async function handleMessage(
     runtime: IAgentRuntime,
@@ -129,7 +130,11 @@ describe("Ignore action tests", () => {
     });
 
     async function cleanup() {
-        await runtime.factManager.removeAllMemories(roomId);
+        const factsManager = new MemoryManager({
+            runtime,
+            tableName: "facts",
+        });
+        await factsManager.removeAllMemories(roomId);
         await runtime.messageManager.removeAllMemories(roomId);
     }
 

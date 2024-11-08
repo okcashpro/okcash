@@ -162,12 +162,6 @@ export const discordMessageHandlerTemplate =
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
 
-# Relevant facts that {{agentName}} knows:
-{{relevantFacts}}
-
-# Recent facts that {{agentName}} has learned:
-{{recentFacts}}
-
 # Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
 {{bio}}

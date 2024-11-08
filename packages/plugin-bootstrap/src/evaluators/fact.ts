@@ -1,5 +1,6 @@
 import { composeContext } from "@ai16z/eliza/src/context.ts";
 import { generateObjectArray } from "@ai16z/eliza/src/generation.ts";
+import { MemoryManager } from "@ai16z/eliza/src/memory.ts";
 import {
     ActionExample,
     Content,
@@ -25,10 +26,6 @@ const factsTemplate =
 These are an examples of the expected output of this task:
 {{evaluationExamples}}
 # END OF EXAMPLES
-
-Known facts:
-{{recentFacts}}
-{{relevantFacts}}
 
 # INSTRUCTIONS
 
@@ -71,6 +68,11 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         modelClass: ModelClass.SMALL,
     });
 
+    const factsManager = new MemoryManager({
+        runtime,
+        tableName: "facts",
+    });
+
     if (!facts) {
         return [];
     }
@@ -89,7 +91,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         .map((fact) => fact.claim);
 
     for (const fact of filteredFacts) {
-        const factMemory = await runtime.factManager.addEmbeddingToMemory({
+        const factMemory = await factsManager.addEmbeddingToMemory({
             userId: agentId!,
             agentId,
             content: { text: fact },
@@ -97,7 +99,8 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
             createdAt: Date.now(),
         });
 
-        await runtime.factManager.createMemory(factMemory, true);
+
+        await factsManager.createMemory(factMemory, true);
 
         await new Promise((resolve) => setTimeout(resolve, 250));
     }

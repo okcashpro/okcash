@@ -10,6 +10,7 @@ import { factEvaluator } from "./evaluators/fact.ts";
 import { goalEvaluator } from "./evaluators/goal.ts";
 import { boredomProvider } from "./providers/boredom.ts";
 import { timeProvider } from "./providers/time.ts";
+import { factsProvider } from "./providers/facts.ts";
 
 export const defaultPlugin: Plugin = {
     name: "default",
@@ -29,6 +30,7 @@ export const defaultPlugin: Plugin = {
     ],
     providers: [
         boredomProvider,
-        timeProvider
+        timeProvider,
+        factsProvider,
     ],
 };

@@ -1,5 +1,4 @@
 import { names, uniqueNamesGenerator } from "unique-names-generator";
-// import { formatFacts } from "../evaluators/fact.ts";
 import {
     composeActionExamples,
     formatActionNames,
@@ -116,11 +115,6 @@ export class AgentRuntime implements IAgentRuntime {
     descriptionManager: IMemoryManager;
 
     /**
-     * Manage the fact and recall of facts.
-     */
-    factManager: IMemoryManager;
-
-    /**
      * Manage the creation and recall of static information (documents, historical game lore, etc)
      */
     loreManager: IMemoryManager;
@@ -235,12 +229,6 @@ export class AgentRuntime implements IAgentRuntime {
             runtime: this,
             tableName: "descriptions",
         });
-
-        // TODO: register fact manager
-        // this.factManager = new MemoryManager({
-        //     runtime: this,
-        //     tableName: "facts",
-        // });
 
         this.loreManager = new MemoryManager({
             runtime: this,
@@ -671,13 +659,10 @@ export class AgentRuntime implements IAgentRuntime {
         const { userId, roomId } = message;
 
         const conversationLength = this.getConversationLength();
-        // const recentFactsCount = Math.ceil(this.getConversationLength() / 2);
-        // const relevantFactsCount = Math.ceil(this.getConversationLength() / 2);
 
-        const [actorsData, recentMessagesData, /*recentFactsData,*/ goalsData]: [
+        const [actorsData, recentMessagesData, goalsData]: [
             Actor[],
             Memory[],
-            /*Memory[],*/
             Goal[],
         ] = await Promise.all([
             getActorDetails({ runtime: this, roomId }),
@@ -687,11 +672,6 @@ export class AgentRuntime implements IAgentRuntime {
                 count: conversationLength,
                 unique: false,
             }),
-            // this.factManager.getMemories({
-            //     agentId: this.agentId,
-            //     roomId,
-            //     count: recentFactsCount,
-            // }),
             getGoals({
                 runtime: this,
                 count: 10,
@@ -702,24 +682,6 @@ export class AgentRuntime implements IAgentRuntime {
 
         const goals = formatGoalsAsString({ goals: goalsData });
 
-        // let relevantFactsData: Memory[] = [];
-
-        // if (recentFactsData.length > recentFactsCount) {
-        //     relevantFactsData = (
-        //         await this.factManager.searchMemoriesByEmbedding(
-        //             recentFactsData[0].embedding!,
-        //             {
-        //                 roomId,
-        //                 agentId: this.agentId,
-        //                 count: relevantFactsCount,
-        //             }
-        //         )
-        //     ).filter((fact: Memory) => {
-        //         return !recentFactsData.find(
-        //             (recentFact: Memory) => recentFact.id === fact.id
-        //         );
-        //     });
-        // }
 
         const actors = formatActors({ actors: actorsData ?? [] });
 
@@ -733,9 +695,6 @@ export class AgentRuntime implements IAgentRuntime {
             actors: actorsData,
             conversationHeader: false,
         });
-
-        // const recentFacts = formatFacts(recentFactsData);
-        // const relevantFacts = formatFacts(relevantFactsData);
 
         // const lore = formatLore(loreData);
 
@@ -1049,16 +1008,6 @@ Text: ${attachment.text}
                     ? addHeader("# Posts in Thread", recentPosts)
                     : "",
             recentMessagesData,
-            // recentFacts:
-            //     recentFacts && recentFacts.length > 0
-            //         ? addHeader("# Recent Facts", recentFacts)
-            //         : "",
-            // recentFactsData,
-            // relevantFacts:
-            //     relevantFacts && relevantFacts.length > 0
-            //         ? addHeader("# Relevant Facts", relevantFacts)
-            //         : "",
-            // relevantFactsData,
             attachments:
                 formattedAttachments && formattedAttachments.length > 0
                     ? addHeader("# Attachments", formattedAttachments)

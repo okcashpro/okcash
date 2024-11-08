@@ -531,8 +531,6 @@ export interface IAgentRuntime {
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;
     loreManager: IMemoryManager;
-    factManager: IMemoryManager; // move me
-
 
     services: Map<ServiceType, Service>;
     registerMemoryManager(manager: IMemoryManager): void;

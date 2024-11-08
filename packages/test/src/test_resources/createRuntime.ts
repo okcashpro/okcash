@@ -2,9 +2,9 @@ import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
 import { load } from "../../../adapter-sqlite/src/sqlite_vec.ts";
 import { SqlJsDatabaseAdapter } from "../../../adapter-sqljs/src/index.ts";
 import { SupabaseDatabaseAdapter } from "../../../adapter-supabase/src/index.ts";
-import { DatabaseAdapter } from "../core/database.ts";
-import { AgentRuntime } from "../core/runtime.ts";
-import { Action, Evaluator, ModelProviderName, Provider } from "../core/types.ts";
+import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
+import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
+import { Action, Evaluator, ModelProviderName, Provider } from "@ai16z/eliza/src/types.ts";
 import {
     SUPABASE_ANON_KEY,
     SUPABASE_URL,

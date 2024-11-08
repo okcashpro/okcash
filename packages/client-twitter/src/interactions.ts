@@ -22,10 +22,7 @@ import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 
 export const twitterMessageHandlerTemplate =
-    `{{relevantFacts}}
-{{recentFacts}}
-
-{{timeline}}
+    `{{timeline}}
 
 {{providers}}
 

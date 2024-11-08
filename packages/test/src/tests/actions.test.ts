@@ -20,6 +20,7 @@ import {
 } from "../src/types.ts";
 import { stringToUuid } from "../src/uuid.ts";
 import { generateMessageResponse } from "../src/generation.ts";
+import { MemoryManager } from "@ai16z/eliza/src/index.ts";
 
 async function handleMessage(
     runtime: IAgentRuntime,
@@ -163,7 +164,12 @@ describe("Actions", () => {
     });
 
     async function cleanup() {
-        await runtime.factManager.removeAllMemories(roomId);
+        const factsManager = new MemoryManager({
+            runtime,
+            tableName: "facts",
+        });
+        
+        await factsManager.removeAllMemories(roomId);
         await runtime.messageManager.removeAllMemories(roomId);
     }
 

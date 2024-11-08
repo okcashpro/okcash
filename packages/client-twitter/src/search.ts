@@ -20,10 +20,7 @@ import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 
 const twitterSearchTemplate =
-    `{{relevantFacts}}
-{{recentFacts}}
-
-{{timeline}}
+    `{{timeline}}
 
 {{providers}}
 
