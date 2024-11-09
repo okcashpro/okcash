@@ -400,9 +400,10 @@ export async function generateTrueOrFalse({
     modelClass: string;
 }): Promise<boolean> {
     let retryDelay = 1000;
+    console.log("modelClass", modelClass)
 
     const stop = Array.from(
-        new Set([...(models[modelClass].settings.stop || []), ["\n"]])
+        new Set([...(models[runtime.modelProvider].settings.stop || []), ["\n"]])
     ) as string[];
 
     while (true) {

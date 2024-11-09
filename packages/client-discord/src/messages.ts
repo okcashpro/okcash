@@ -463,9 +463,7 @@ export class MessageManager {
                 shouldRespond = await this._shouldRespond(message, state);
             }
 
-            if (!shouldRespond) {
-                return;
-            }
+            if (shouldRespond) {
 
             const context = composeContext({
                 state,
@@ -576,14 +574,15 @@ export class MessageManager {
 
             state = await this.runtime.updateRecentMessageState(state);
 
-            await this.runtime.evaluate(memory, state);
-
             await this.runtime.processActions(
                 memory,
                 responseMessages,
                 state,
                 callback
             );
+        }
+            await this.runtime.evaluate(memory, state, shouldRespond);
+
         } catch (error) {
             console.error("Error handling message:", error);
             if (message.channel.type === ChannelType.GuildVoice) {

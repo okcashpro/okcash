@@ -5,7 +5,7 @@ import {
     // DexScreenerData,
     // DexScreenerPair,
     // HolderData,
-} from "@ai16z/eliza/src/types/token.ts";
+} from "../types/token.ts";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { TokenProvider } from "./token.ts";
@@ -15,9 +15,9 @@ import {
     RecommenderMetrics,
     TokenPerformance,
     TradePerformance,
-} from "@ai16z/eliza/src/adapters/trustScoreDatabase.ts";
+} from "../adapters/trustScoreDatabase.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
-import { IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza/src/types.ts";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
@@ -28,7 +28,7 @@ interface sellDetails {
     sell_amount: number;
     sell_recommender_id: string | null;
 }
-export class TrustScoreProvider {
+export class TrustScoreManager {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
     private connection: Connection = new Connection(settings.RPC_URL!);
@@ -423,3 +423,40 @@ export class TrustScoreProvider {
         return sellDetailsData;
     }
 }
+
+export const trustScoreProvider: Provider = {
+    async get(runtime: IAgentRuntime, message: Memory, state?: State): Promise<string> {
+        try {
+            const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
+
+            // Get the user ID from the message
+            const userId = message.userId;
+
+            if (!userId) {
+                console.error("User ID is missing from the message");
+                return "";
+            }
+
+            // Get the recommender metrics for the user
+            const recommenderMetrics = await trustScoreDb.getRecommenderMetrics(userId);
+
+            if (!recommenderMetrics) {
+                console.error("No recommender metrics found for user:", userId);
+                return "";
+            }
+
+            // Compute the trust score
+            const trustScore = recommenderMetrics.trustScore;
+
+            const user = await runtime.databaseAdapter.getAccountById(userId);
+
+            // Format the trust score string
+            const trustScoreString = `${user.name}'s trust score: ${trustScore.toFixed(2)}`;
+
+            return trustScoreString;
+        } catch (error) {
+            console.error("Error in trust score provider:", error.message);
+            return `Failed to fetch trust score: ${error instanceof Error ? error.message : "Unknown error"}`;
+        }
+    },
+};

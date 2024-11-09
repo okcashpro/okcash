@@ -20,7 +20,9 @@ const factsProvider: Provider = {
 
         const embedding = await embed(runtime, recentMessages);
 
-        console.log("embedding", embedding);
+        console.log('embedding', embedding);
+        console.log('embedding length', embedding.length);
+
 
         const memoryManager = new MemoryManager({
             runtime,
@@ -28,8 +30,7 @@ const factsProvider: Provider = {
         });
 
         const relevantFacts = []
-        
-        // await memoryManager.searchMemoriesByEmbedding(
+        //  await memoryManager.searchMemoriesByEmbedding(
         //     embedding,
         //     {
         //         roomId: message.roomId,

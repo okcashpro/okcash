@@ -231,6 +231,7 @@ export interface EvaluationExample {
  * Represents an evaluator, which is used to assess and guide the agent's responses based on the current context and state.
  */
 export interface Evaluator {
+    alwaysRun?: boolean;
     description: string; // A detailed description of what the evaluator assesses or guides.
     similes: string[]; // An array of strings representing the similies of the action.
     examples: EvaluationExample[]; // An array of evaluation examples demonstrating the evaluator.
@@ -547,7 +548,7 @@ export interface IAgentRuntime {
         state?: State,
         callback?: HandlerCallback
     ): Promise<void>;
-    evaluate(message: Memory, state?: State): Promise<string[]>;
+    evaluate(message: Memory, state?: State, didRespond?: boolean): Promise<string[]>;
     ensureParticipantExists(userId: UUID, roomId: UUID): Promise<void>;
     ensureUserExists(
         userId: UUID,
