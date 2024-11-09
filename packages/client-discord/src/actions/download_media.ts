@@ -133,10 +133,6 @@ export default {
                     console.error(
                         "Max retries reached. Failed to send message with attachment."
                     );
-                    await callback({
-                        ...response,
-                        text: "Sorry, I encountered an error while trying to send the video attachment. Please try again later.",
-                    });
                     break;
                 }
 

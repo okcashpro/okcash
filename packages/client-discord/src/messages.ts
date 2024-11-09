@@ -595,9 +595,7 @@ export class MessageManager {
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
                 // For text channels, send the error message
-                await message.reply(
-                    "Sorry, I encountered an error while processing your request."
-                );
+                console.error("Error sending message:", error);
             }
         }
     }

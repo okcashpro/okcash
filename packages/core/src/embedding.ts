@@ -1,3 +1,4 @@
+import path from "path";
 import models from "./models.ts";
 import {
     IAgentRuntime,
@@ -5,6 +6,8 @@ import {
     ModelProviderName,
     ServiceType,
 } from "./types.ts";
+import fs from "fs";
+import { EmbeddingModel, FlagEmbedding } from "fastembed";
 
 /**
  * Send a message to the OpenAI API for embedding.
@@ -20,21 +23,35 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
         runtime.character.modelProvider !== ModelProviderName.OLLAMA
     ) {
-        const service = runtime.getService<ITextGenerationService>(
-            ServiceType.TEXT_GENERATION
-        );
-        
-        const instance = service?.getInstance();
 
-        if (instance) {
-            return await instance.getEmbeddingResponse(input);
-        }
+        // make sure to trim tokens to 8192
+
+        const embeddingModel = await FlagEmbedding.init({
+            model: EmbeddingModel.BGEBaseEN
+        });
+        
+        const embedding: number[] = await embeddingModel.queryEmbed(input);
+        console.log("Embedding dimensions: ", embedding.length);
+        return embedding;
+
+        // commented out the text generation service that uses llama
+        // const service = runtime.getService<ITextGenerationService>(
+        //     ServiceType.TEXT_GENERATION
+        // );
+        
+        // const instance = service?.getInstance();
+
+        // if (instance) {
+        //     return await instance.getEmbeddingResponse(input);
+        // }
     }
+
+    // TODO: Fix retrieveCachedEmbedding
     // Check if we already have the embedding in the lore
-    // const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
-    // if (cachedEmbedding) {
-    //     return cachedEmbedding;
-    // }
+    const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
+    if (cachedEmbedding) {
+        return cachedEmbedding;
+    }
 
     const requestOptions = {
         method: "POST",
@@ -48,7 +65,8 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         body: JSON.stringify({
             input,
             model: embeddingModel,
-            length: 1536,
+            length: 768, // we are squashing dimensions to 768 for openai, even thought the model supports 1536
+            // -- this is ok for matryoshka embeddings but longterm, we might want to support 1536
         }),
     };
     try {

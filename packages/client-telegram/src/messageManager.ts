@@ -474,9 +474,7 @@ export class MessageManager {
             );
         } catch (error) {
             console.error("❌ Error handling message:", error);
-            await ctx.reply(
-                "Sorry, I encountered an error while processing your request."
-            );
+            console.error("Error sending message:", error);
         }
     }
 }
