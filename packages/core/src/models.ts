@@ -175,10 +175,20 @@ const models: Models = {
         // Available models: https://docs.red-pill.ai/get-started/supported-models
         // To test other models, change the models below
         model: {
-            [ModelClass.SMALL]: "nousresearch/hermes-3-llama-3.1-70b",
-            [ModelClass.MEDIUM]: "nousresearch/hermes-3-llama-3.1-405b", 
-            [ModelClass.LARGE]: "nousresearch/hermes-3-llama-3.1-405b",
-            [ModelClass.EMBEDDING]: "text-embedding-3-small",
+            [ModelClass.SMALL]:
+                settings.SMALL_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-70b",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
+            [ModelClass.LARGE]:
+                settings.LARGE_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
+            [ModelClass.EMBEDDING]: 
+                "text-embedding-3-small",
         },
     },
     [ModelProviderName.OLLAMA]: {
