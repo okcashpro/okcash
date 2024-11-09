@@ -11,6 +11,9 @@ import {
     Evaluator,
 } from "@ai16z/eliza/src/types.ts";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
+import { TokenProvider } from "../providers/token.ts";
+import { TrustScoreDatabase } from "../adapters/trustScoreDatabase.ts";
 
 const shouldProcessTemplate =
     `# Task: Decide if the recent messages should be processed for token recommendations.
@@ -135,14 +138,44 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
                 !rec.alreadyKnown &&
                 (rec.ticker || rec.contractAddress) &&
                 rec.recommender &&
+                rec.conviction &&
                 rec.recommender.trim() !== ""
             );
         })
 
     for (const rec of filteredRecommendations) {
-        console.log("Recommendation: ", rec);
+
+        // TODO: Check to make sure the contract address is valid, it's the right one, etc
+
+        if(!rec.contractAddress) {
+            console.warn("Not implemented: try to resolve CA from ticker")
+            continue;
+        }
+
+        // create the token provider and trust score manager
+        const tokenProvider = new TokenProvider(rec.contractAddress);
+        const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
+        const trustScoreManager = new TrustScoreManager(tokenProvider, trustScoreDb);
+
+        // get actors from the database
+        const participants = await runtime.databaseAdapter.getParticipantsForRoom(message.roomId)
+
+        // find the first user Id from a user with the username that we extracted
+        const user = participants.find(async (actor) => {
+            const user = await runtime.databaseAdapter.getAccountById(actor);
+            return user.name.toLowerCase().trim() === rec.recommender.toLowerCase().trim();
+        });
+
+        if(!user) {
+            console.warn("Could not find user: ", rec.recommender)
+            continue;
+        }
+
+        const account = await runtime.databaseAdapter.getAccountById(user);
+        const userId = account.id;
+
         const recMemory = {
-            userId: stringToUuid(rec.recommender),
+            userId,
             agentId,
             content: { text: JSON.stringify(rec) },
             roomId,
@@ -150,6 +183,48 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         };
 
         await recommendationsManager.createMemory(recMemory, true);
+
+        // buy, dont buy, sell, dont sell
+
+        const buyAmounts = {
+            none: 0,
+            low: 10,
+            medium: 40,
+            high: 100
+        }
+
+        let buyAmount = buyAmounts[rec.conviction.toLowerCase().trim()]
+        if(!buyAmount) {
+            // handle annoying cases
+            // for now just put in 10 sol
+            buyAmount = 10;
+        }
+
+        // TODO: scale this with market cap probably?
+
+
+        // TODO: is this is a buy, sell, dont buy, or dont sell?
+
+        switch(rec.type) {
+            case "buy":
+        // for now, lets just assume buy only, but we should implement
+        await trustScoreManager.createTradePerformance(
+            runtime,
+            rec.contractAddress,
+            userId,
+            {
+                buy_amount: rec.buyAmount,
+                is_simulation: true,
+            }
+            );
+            break;
+            case "sell":
+            case "dont_sell":
+            case "dont_buy":
+                console.warn("Not implemented")
+            break;
+        }
+
     }
 
     return filteredRecommendations;
