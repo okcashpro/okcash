@@ -8,7 +8,7 @@ import path from "path";
  * @param {string} [startDir=process.cwd()] - Starting directory for the search
  * @returns {string|null} Path to the nearest .env file or null if not found
  */
-function findNearestEnvFile(startDir = process.cwd()) {
+export function findNearestEnvFile(startDir = process.cwd()) {
     let currentDir = startDir;
 
     // Continue searching until we reach the root directory
@@ -33,7 +33,7 @@ function findNearestEnvFile(startDir = process.cwd()) {
  * @returns {Object} Environment variables object
  * @throws {Error} If no .env file is found
  */
-function loadEnvConfig() {
+export function loadEnvConfig() {
     const envPath = findNearestEnvFile();
 
     if (!envPath) {
