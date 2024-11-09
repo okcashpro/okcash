@@ -709,33 +709,6 @@ importers:
         specifier: 7.1.0
         version: 7.1.0
 
-  packages/test:
-    dependencies:
-      '@ai16z/adapter-sqlite':
-        specifier: workspace:*
-        version: link:../adapter-sqlite
-      '@ai16z/adapter-sqljs':
-        specifier: workspace:*
-        version: link:../adapter-sqljs
-      '@ai16z/adapter-supabase':
-        specifier: workspace:*
-        version: link:../adapter-supabase
-      '@ai16z/eliza':
-        specifier: workspace:*
-        version: link:../core
-      '@ai16z/plugin-bootstrap':
-        specifier: workspace:*
-        version: link:../plugin-bootstrap
-      '@ai16z/plugin-node':
-        specifier: workspace:*
-        version: link:../plugin-node
-      tsup:
-        specifier: ^8.3.5
-        version: 8.3.5(jiti@1.21.6)(postcss@8.4.47)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.6.0)
-      whatwg-url:
-        specifier: 7.1.0
-        version: 7.1.0
-
 packages:
 
   '@ai-sdk/anthropic@0.0.53':

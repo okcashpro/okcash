@@ -11,6 +11,7 @@ import { default as tiktoken, TiktokenModel } from "tiktoken";
 import Together from "together-ai";
 import { elizaLogger } from "./index.ts";
 import models from "./models.ts";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import {
     parseBooleanFromText,
     parseJsonArrayFromText,
@@ -64,6 +65,7 @@ export async function generateText({
     const presence_penalty = models[provider].settings.presence_penalty;
     const max_context_length = models[provider].settings.maxInputTokens;
     const max_response_length = models[provider].settings.maxOutputTokens;
+    const systemPrompt = runtime.systemPrompt;
 
     const apiKey = runtime.token;
 
@@ -103,6 +105,22 @@ export async function generateText({
                 elizaLogger.log("Received response from OpenAI model.");
                 break;
             }
+
+            case ModelProviderName.GOOGLE:
+                const google = createGoogleGenerativeAI();
+
+                const { text: anthropicResponse } = await aiGenerateText({
+                    model: google(model),
+                    prompt: context,
+                    ...(systemPrompt ? { system: systemPrompt } : {}),
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = anthropicResponse;
+                break;
 
             case ModelProviderName.ANTHROPIC: {
                 elizaLogger.log("Initializing Anthropic model.");
@@ -214,7 +232,6 @@ export async function generateText({
                 break;
             }
 
-
             case ModelProviderName.OPENROUTER: {
                 elizaLogger.log("Initializing OpenRouter model.");
                 const serverUrl = models[provider].endpoint;
@@ -237,7 +254,6 @@ export async function generateText({
                 elizaLogger.log("Received response from OpenRouter model.");
                 break;
             }
-
 
             case ModelProviderName.OLLAMA:
                 {
@@ -425,10 +441,13 @@ export async function generateTrueOrFalse({
     modelClass: string;
 }): Promise<boolean> {
     let retryDelay = 1000;
-    console.log("modelClass", modelClass)
+    console.log("modelClass", modelClass);
 
     const stop = Array.from(
-        new Set([...(models[runtime.modelProvider].settings.stop || []), ["\n"]])
+        new Set([
+            ...(models[runtime.modelProvider].settings.stop || []),
+            ["\n"],
+        ])
     ) as string[];
 
     while (true) {

@@ -93,6 +93,12 @@ export class AgentRuntime implements IAgentRuntime {
     modelProvider: ModelProviderName;
 
     /**
+     *
+     * The system prompt to use for the agent.
+     */
+    systemPrompt?: string;
+
+    /**
      * Fetch function to use
      * Some environments may not have access to the global fetch function and need a custom fetch override.
      */
@@ -207,6 +213,7 @@ export class AgentRuntime implements IAgentRuntime {
         fetch?: typeof fetch | unknown;
         speechModelPath?: string;
     }) {
+        this.systemPrompt = opts.character.system;
         this.#conversationLength =
             opts.conversationLength ?? this.#conversationLength;
         this.databaseAdapter = opts.databaseAdapter;
@@ -498,14 +505,14 @@ export class AgentRuntime implements IAgentRuntime {
      * @returns The results of the evaluation.
      */
     async evaluate(message: Memory, state?: State, didRespond?: boolean) {
-        console.log("Evaluate: ", didRespond)
+        console.log("Evaluate: ", didRespond);
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
-                console.log("Evaluating", evaluator.name)
+                console.log("Evaluating", evaluator.name);
                 if (!evaluator.handler) {
                     return null;
                 }
-                if(!didRespond && !evaluator.alwaysRun) {
+                if (!didRespond && !evaluator.alwaysRun) {
                     return null;
                 }
                 const result = await evaluator.validate(this, message, state);
