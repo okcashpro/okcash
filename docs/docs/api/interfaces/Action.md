@@ -10,7 +10,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:201](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L201)
+[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L219)
 
 ---
 
@@ -20,7 +20,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:202](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L202)
+[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L220)
 
 ---
 
@@ -30,7 +30,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:203](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L203)
+[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L221)
 
 ---
 
@@ -40,7 +40,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:204](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L204)
+[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L222)
 
 ---
 
@@ -50,7 +50,7 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:200](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L200)
+[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L218)
 
 ---
 
@@ -60,4 +60,4 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[core/src/core/types.ts:205](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L205)
+[packages/core/src/types.ts:223](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L223)

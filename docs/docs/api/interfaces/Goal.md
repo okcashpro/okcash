@@ -10,7 +10,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[core/src/core/types.ts:67](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L67)
+[packages/core/src/types.ts:67](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L67)
 
 ---
 
@@ -20,7 +20,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[core/src/core/types.ts:70](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L70)
+[packages/core/src/types.ts:70](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L70)
 
 ---
 
@@ -30,7 +30,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[core/src/core/types.ts:72](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L72)
+[packages/core/src/types.ts:72](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L72)
 
 ---
 
@@ -40,7 +40,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[core/src/core/types.ts:68](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L68)
+[packages/core/src/types.ts:68](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L68)
 
 ---
 
@@ -50,7 +50,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[core/src/core/types.ts:71](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L71)
+[packages/core/src/types.ts:71](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L71)
 
 ---
 
@@ -60,4 +60,4 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[core/src/core/types.ts:69](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L69)
+[packages/core/src/types.ts:69](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L69)

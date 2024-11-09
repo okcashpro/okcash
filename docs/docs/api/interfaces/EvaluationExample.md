@@ -10,7 +10,7 @@ Represents an example for evaluation, including the context, an array of message
 
 #### Defined in
 
-[core/src/core/types.ts:212](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L212)
+[packages/core/src/types.ts:230](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L230)
 
 ---
 
@@ -20,7 +20,7 @@ Represents an example for evaluation, including the context, an array of message
 
 #### Defined in
 
-[core/src/core/types.ts:213](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L213)
+[packages/core/src/types.ts:231](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L231)
 
 ---
 
@@ -30,4 +30,4 @@ Represents an example for evaluation, including the context, an array of message
 
 #### Defined in
 
-[core/src/core/types.ts:214](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L214)
+[packages/core/src/types.ts:232](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L232)

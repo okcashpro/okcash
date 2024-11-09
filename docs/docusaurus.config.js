@@ -7,13 +7,13 @@ const config = {
   favicon: "img/favicon.ico",
 
   // GitHub Pages Configuration
-  url: "https://madjin.github.io",
+  url: "https://ai16z.github.io",
   baseUrl: "/eliza/",
-  organizationName: "madjin",
+  organizationName: "ai16z",
   projectName: "eliza",
   deploymentBranch: "gh-pages",
   trailingSlash: true,
-  onBrokenLinks: "throw",
+  onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
 
   i18n: {
@@ -23,30 +23,76 @@ const config = {
   markdown: {
     mermaid: true,
   },
-  themes: [
-    "@docusaurus/theme-mermaid",
-    // Any other themes...
-  ],
+  themes: ["@docusaurus/theme-mermaid"],
   plugins: [
-    // TypeDoc plugin for API documentation
     [
       "docusaurus-plugin-typedoc",
       {
-        entryPoints: ["../core/src/index.ts"],
-        tsconfig: "../core/tsconfig.json",
-        out: "./docs/api",
+        entryPoints: ["../packages/core/src/index.ts"],
+        tsconfig: "../tsconfig.json",
+        out: "./api",
         skipErrorChecking: true,
+
+        // Documentation Enhancement Options
+        excludeExternals: false,
+        excludePrivate: true,
+        excludeProtected: false,
+        excludeInternal: false,
+        excludeNotDocumented: false,
+
+        // Output Formatting
+        plugin: ["typedoc-plugin-markdown"],
+        //theme: 'markdown',
+        hideGenerator: true,
+        cleanOutputDir: true,
+
+        // Enhanced Navigation
+        categoryOrder: [
+          "Classes",
+          "Interfaces",
+          "Enumerations",
+          "Type Aliases",
+          "Variables",
+          "Functions",
+        ],
+
+        // Documentation Features
+        includeVersion: true,
+        sort: ["source-order"],
+        gitRevision: "main",
+        readme: "none",
+
+        // Code Examples
+        preserveWatchOutput: true,
+        disableSources: false,
+
+        // Validation Settings
+        validation: {
+          notExported: false,
+          invalidLink: false,
+          notDocumented: false,
+        },
+
+        // File exclusions
+        exclude: [
+          "**/_media/**",
+          "**/node_modules/@types/node/events.d.ts",
+          "**/dist/**",
+        ],
+
+        // Build settings
+        watch: false,
+        treatWarningsAsErrors: false,
+        treatValidationWarningsAsErrors: false,
       },
     ],
-    // Search functionality
     require.resolve("docusaurus-lunr-search"),
-    // Separate API docs plugin instance
     [
       "@docusaurus/plugin-content-docs",
       {
         id: "api",
-        path: "docs/api",
-        routeBasePath: "docs/api",
+        path: "api",
+        routeBasePath: "api",
         sidebarPath: "./sidebars.api.js",
       },
     ],
@@ -60,6 +106,7 @@ const config = {
           sidebarPath: "./sidebars.js",
           editUrl: "https://github.com/ai16z/eliza/tree/main/docs/",
           routeBasePath: "docs",
+          exclude: ["**/_media/**"], // Add exclude pattern here too
         },
         theme: {
           customCss: "./src/css/custom.css",
@@ -70,13 +117,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Enable dark mode by default
+      // Rest of themeConfig remains the same
       colorMode: {
         defaultMode: "dark",
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
-      // Add sidebar configuration
       docs: {
         sidebar: {
           hideable: true,

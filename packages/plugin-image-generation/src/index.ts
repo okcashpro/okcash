@@ -1,13 +1,13 @@
+import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import {
+    Action,
     HandlerCallback,
     IAgentRuntime,
     Memory,
-    State,
     Plugin,
-    Action,
-} from "@eliza/core";
-import { elizaLogger } from "@eliza/core";
-import { generateCaption, generateImage } from "./utils.ts";
+    State,
+} from "@ai16z/eliza/src/types.ts";
+import { generateCaption, generateImage } from "@ai16z/eliza/src/generation.ts";
 
 const imageGeneration: Action = {
     name: "GENERATE_IMAGE",

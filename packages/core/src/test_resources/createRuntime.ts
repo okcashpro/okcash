@@ -1,10 +1,15 @@
 import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
-import { load } from "../adapters/sqlite/sqlite_vec.ts";
-import { SqlJsDatabaseAdapter } from "../adapters/sqljs.ts";
-import { SupabaseDatabaseAdapter } from "../adapters/supabase.ts";
-import { DatabaseAdapter } from "../core/database.ts";
-import { AgentRuntime } from "../core/runtime.ts";
-import { Action, Evaluator, ModelProvider, Provider } from "../core/types.ts";
+import { load } from "../../../adapter-sqlite/src/sqlite_vec.ts";
+import { SqlJsDatabaseAdapter } from "../../../adapter-sqljs/src/index.ts";
+import { SupabaseDatabaseAdapter } from "../../../adapter-supabase/src/index.ts";
+import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
+import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
+import {
+    Action,
+    Evaluator,
+    ModelProviderName,
+    Provider,
+} from "@ai16z/eliza/src/types.ts";
 import {
     SUPABASE_ANON_KEY,
     SUPABASE_URL,
@@ -131,7 +136,7 @@ export async function createRuntime({
         serverUrl: "https://api.openai.com/v1",
         conversationLength,
         token: env!.OPENAI_API_KEY!,
-        modelProvider: ModelProvider.OPENAI,
+        modelProvider: ModelProviderName.OPENAI,
         actions: actions ?? [],
         evaluators: evaluators ?? [],
         providers: providers ?? [],

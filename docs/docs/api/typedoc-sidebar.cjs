@@ -8,16 +8,16 @@ const typedocSidebar = {
       items: [
         { type: "doc", id: "api/enumerations/Clients", label: "Clients" },
         { type: "doc", id: "api/enumerations/GoalStatus", label: "GoalStatus" },
-        {
-          type: "doc",
-          id: "api/enumerations/ImageGenModel",
-          label: "ImageGenModel",
-        },
         { type: "doc", id: "api/enumerations/ModelClass", label: "ModelClass" },
         {
           type: "doc",
-          id: "api/enumerations/ModelProvider",
-          label: "ModelProvider",
+          id: "api/enumerations/ModelProviderName",
+          label: "ModelProviderName",
+        },
+        {
+          type: "doc",
+          id: "api/enumerations/ServiceType",
+          label: "ServiceType",
         },
       ],
     },
@@ -31,56 +31,10 @@ const typedocSidebar = {
           id: "api/classes/DatabaseAdapter",
           label: "DatabaseAdapter",
         },
-        { type: "doc", id: "api/classes/DirectClient", label: "DirectClient" },
-        {
-          type: "doc",
-          id: "api/classes/DiscordClient",
-          label: "DiscordClient",
-        },
         {
           type: "doc",
           id: "api/classes/MemoryManager",
           label: "MemoryManager",
-        },
-        {
-          type: "doc",
-          id: "api/classes/PostgresDatabaseAdapter",
-          label: "PostgresDatabaseAdapter",
-        },
-        {
-          type: "doc",
-          id: "api/classes/SqliteDatabaseAdapter",
-          label: "SqliteDatabaseAdapter",
-        },
-        {
-          type: "doc",
-          id: "api/classes/TelegramClient",
-          label: "TelegramClient",
-        },
-        {
-          type: "doc",
-          id: "api/classes/TokenProvider",
-          label: "TokenProvider",
-        },
-        {
-          type: "doc",
-          id: "api/classes/TwitterInteractionClient",
-          label: "TwitterInteractionClient",
-        },
-        {
-          type: "doc",
-          id: "api/classes/TwitterPostClient",
-          label: "TwitterPostClient",
-        },
-        {
-          type: "doc",
-          id: "api/classes/TwitterSearchClient",
-          label: "TwitterSearchClient",
-        },
-        {
-          type: "doc",
-          id: "api/classes/WalletProvider",
-          label: "WalletProvider",
         },
       ],
     },
@@ -101,11 +55,6 @@ const typedocSidebar = {
           type: "doc",
           id: "api/interfaces/ConversationExample",
           label: "ConversationExample",
-        },
-        {
-          type: "doc",
-          id: "api/interfaces/CreateAndBuyContent",
-          label: "CreateAndBuyContent",
         },
         {
           type: "doc",
@@ -131,13 +80,8 @@ const typedocSidebar = {
         },
         {
           type: "doc",
-          id: "api/interfaces/IImageRecognitionService",
-          label: "IImageRecognitionService",
-        },
-        {
-          type: "doc",
-          id: "api/interfaces/ILlamaService",
-          label: "ILlamaService",
+          id: "api/interfaces/IImageDescriptionService",
+          label: "IImageDescriptionService",
         },
         {
           type: "doc",
@@ -149,6 +93,11 @@ const typedocSidebar = {
           type: "doc",
           id: "api/interfaces/ISpeechService",
           label: "ISpeechService",
+        },
+        {
+          type: "doc",
+          id: "api/interfaces/ITextGenerationService",
+          label: "ITextGenerationService",
         },
         {
           type: "doc",
@@ -183,6 +132,7 @@ const typedocSidebar = {
       label: "Type Aliases",
       items: [
         { type: "doc", id: "api/type-aliases/Character", label: "Character" },
+        { type: "doc", id: "api/type-aliases/Client", label: "Client" },
         { type: "doc", id: "api/type-aliases/Handler", label: "Handler" },
         {
           type: "doc",
@@ -191,6 +141,7 @@ const typedocSidebar = {
         },
         { type: "doc", id: "api/type-aliases/Media", label: "Media" },
         { type: "doc", id: "api/type-aliases/Model", label: "Model" },
+        { type: "doc", id: "api/type-aliases/Models", label: "Models" },
         { type: "doc", id: "api/type-aliases/Plugin", label: "Plugin" },
         { type: "doc", id: "api/type-aliases/UUID", label: "UUID" },
         { type: "doc", id: "api/type-aliases/Validator", label: "Validator" },
@@ -202,33 +153,8 @@ const typedocSidebar = {
       items: [
         {
           type: "doc",
-          id: "api/variables/boredomProvider",
-          label: "boredomProvider",
-        },
-        {
-          type: "doc",
-          id: "api/variables/continueAction",
-          label: "continueAction",
-        },
-        {
-          type: "doc",
-          id: "api/variables/defaultActions",
-          label: "defaultActions",
-        },
-        {
-          type: "doc",
           id: "api/variables/defaultCharacter",
           label: "defaultCharacter",
-        },
-        {
-          type: "doc",
-          id: "api/variables/defaultEvaluators",
-          label: "defaultEvaluators",
-        },
-        {
-          type: "doc",
-          id: "api/variables/defaultProviders",
-          label: "defaultProviders",
         },
         { type: "doc", id: "api/variables/elizaLogger", label: "elizaLogger" },
         {
@@ -246,72 +172,7 @@ const typedocSidebar = {
           id: "api/variables/evaluationTemplate",
           label: "evaluationTemplate",
         },
-        { type: "doc", id: "api/variables/executeSwap", label: "executeSwap" },
-        { type: "doc", id: "api/variables/followRoom", label: "followRoom" },
-        { type: "doc", id: "api/variables/ignore", label: "ignore" },
-        {
-          type: "doc",
-          id: "api/variables/imageGeneration",
-          label: "imageGeneration",
-        },
-        {
-          type: "doc",
-          id: "api/variables/imageGenModels",
-          label: "imageGenModels",
-        },
-        {
-          type: "doc",
-          id: "api/variables/messageHandlerTemplate",
-          label: "messageHandlerTemplate",
-        },
-        { type: "doc", id: "api/variables/muteRoom", label: "muteRoom" },
-        { type: "doc", id: "api/variables/none", label: "none" },
-        {
-          type: "doc",
-          id: "api/variables/orderBookProvider",
-          label: "orderBookProvider",
-        },
-        {
-          type: "doc",
-          id: "api/variables/shouldContinueTemplate",
-          label: "shouldContinueTemplate",
-        },
-        {
-          type: "doc",
-          id: "api/variables/shouldFollowTemplate",
-          label: "shouldFollowTemplate",
-        },
-        {
-          type: "doc",
-          id: "api/variables/shouldMuteTemplate",
-          label: "shouldMuteTemplate",
-        },
-        {
-          type: "doc",
-          id: "api/variables/shouldUnmuteTemplate",
-          label: "shouldUnmuteTemplate",
-        },
-        {
-          type: "doc",
-          id: "api/variables/timeProvider",
-          label: "timeProvider",
-        },
-        {
-          type: "doc",
-          id: "api/variables/tokenProvider",
-          label: "tokenProvider",
-        },
-        {
-          type: "doc",
-          id: "api/variables/unfollowRoom",
-          label: "unfollowRoom",
-        },
-        { type: "doc", id: "api/variables/unmuteRoom", label: "unmuteRoom" },
-        {
-          type: "doc",
-          id: "api/variables/walletProvider",
-          label: "walletProvider",
-        },
+        { type: "doc", id: "api/variables/settings", label: "settings" },
       ],
     },
     {
@@ -319,7 +180,6 @@ const typedocSidebar = {
       label: "Functions",
       items: [
         { type: "doc", id: "api/functions/addHeader", label: "addHeader" },
-        { type: "doc", id: "api/functions/buyToken", label: "buyToken" },
         {
           type: "doc",
           id: "api/functions/composeActionExamples",
@@ -329,21 +189,6 @@ const typedocSidebar = {
           type: "doc",
           id: "api/functions/composeContext",
           label: "composeContext",
-        },
-        {
-          type: "doc",
-          id: "api/functions/createAgentRuntime",
-          label: "createAgentRuntime",
-        },
-        {
-          type: "doc",
-          id: "api/functions/createAndBuyToken",
-          label: "createAndBuyToken",
-        },
-        {
-          type: "doc",
-          id: "api/functions/createDirectRuntime",
-          label: "createDirectRuntime",
         },
         { type: "doc", id: "api/functions/createGoal", label: "createGoal" },
         {
@@ -460,11 +305,6 @@ const typedocSidebar = {
         },
         { type: "doc", id: "api/functions/getEndpoint", label: "getEndpoint" },
         { type: "doc", id: "api/functions/getGoals", label: "getGoals" },
-        {
-          type: "doc",
-          id: "api/functions/getImageGenModel",
-          label: "getImageGenModel",
-        },
         { type: "doc", id: "api/functions/getModel", label: "getModel" },
         {
           type: "doc",
@@ -483,66 +323,10 @@ const typedocSidebar = {
         },
         {
           type: "doc",
-          id: "api/functions/getTokenForProvider",
-          label: "getTokenForProvider",
-        },
-        {
-          type: "doc",
-          id: "api/functions/initializeClients",
-          label: "initializeClients",
-        },
-        {
-          type: "doc",
-          id: "api/functions/initializeDatabase",
-          label: "initializeDatabase",
-        },
-        {
-          type: "doc",
-          id: "api/functions/isCreateAndBuyContent",
-          label: "isCreateAndBuyContent",
-        },
-        {
-          type: "doc",
-          id: "api/functions/loadActionConfigs",
-          label: "loadActionConfigs",
-        },
-        {
-          type: "doc",
-          id: "api/functions/loadCharacters",
-          label: "loadCharacters",
-        },
-        {
-          type: "doc",
-          id: "api/functions/loadCustomActions",
-          label: "loadCustomActions",
-        },
-        {
-          type: "doc",
-          id: "api/functions/parseArguments",
-          label: "parseArguments",
-        },
-        {
-          type: "doc",
           id: "api/functions/retrieveCachedEmbedding",
           label: "retrieveCachedEmbedding",
         },
-        { type: "doc", id: "api/functions/sellToken", label: "sellToken" },
         { type: "doc", id: "api/functions/splitChunks", label: "splitChunks" },
-        {
-          type: "doc",
-          id: "api/functions/startDiscord",
-          label: "startDiscord",
-        },
-        {
-          type: "doc",
-          id: "api/functions/startTelegram",
-          label: "startTelegram",
-        },
-        {
-          type: "doc",
-          id: "api/functions/startTwitter",
-          label: "startTwitter",
-        },
         { type: "doc", id: "api/functions/trimTokens", label: "trimTokens" },
         { type: "doc", id: "api/functions/updateGoal", label: "updateGoal" },
       ],

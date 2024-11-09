@@ -1,4 +1,4 @@
-import { Content, IAgentRuntime, type UUID } from "../core/types.ts";
+import { Content, IAgentRuntime, type UUID } from "@ai16z/eliza/src/types.ts";
 import { getCachedEmbeddings, writeCachedEmbedding } from "./cache.ts";
 import { type User } from "./types.ts";
 
