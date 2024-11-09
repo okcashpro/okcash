@@ -28,12 +28,14 @@ class DatabaseAdapter {
 ### Supported Databases
 
 1. **PostgreSQL/Supabase** (`PostgresDatabaseAdapter`)
+
    - Full-featured cloud database with vector search capabilities
    - Supports real-time subscriptions
    - Built-in user authentication
    - Row-level security policies
 
 2. **SQLite** (`SqliteDatabaseAdapter`)
+
    - Local filesystem storage
    - Vector similarity search via SQLite extensions
    - Suitable for edge deployments
@@ -65,6 +67,7 @@ CREATE TABLE memories (
 ```
 
 Key features:
+
 - Vector embeddings for semantic search
 - Content deduplication via the `unique` flag
 - JSON storage for flexible content types
@@ -86,6 +89,7 @@ CREATE TABLE accounts (
 ```
 
 Features:
+
 - Flexible user details storage using JSONB
 - Agent/user differentiation
 - Integration with auth systems
@@ -104,6 +108,7 @@ CREATE TABLE relationships (
 ```
 
 Supports:
+
 - Bi-directional relationships
 - Relationship status tracking
 - Friend recommendations
@@ -116,13 +121,13 @@ PostgreSQL deployment includes comprehensive RLS policies:
 
 ```sql
 -- Example RLS policies
-CREATE POLICY "Enable read access for all users" 
-ON "public"."accounts" FOR SELECT 
+CREATE POLICY "Enable read access for all users"
+ON "public"."accounts" FOR SELECT
 USING (true);
 
-CREATE POLICY "Can select and update all data" 
-ON "public"."accounts" 
-USING (("auth"."uid"() = "id")) 
+CREATE POLICY "Can select and update all data"
+ON "public"."accounts"
+USING (("auth"."uid"() = "id"))
 WITH CHECK (("auth"."uid"() = "id"));
 ```
 
@@ -140,11 +145,12 @@ WITH CHECK (("auth"."uid"() = "id"));
 // Initialize cloud database
 const supabaseAdapter = new SupabaseDatabaseAdapter(
   "https://your-project.supabase.co",
-  "your-supabase-key"
+  "your-supabase-key",
 );
 ```
 
 Features:
+
 - Automated backups
 - Scalable vector operations
 - Real-time capabilities
@@ -155,11 +161,12 @@ Features:
 ```typescript
 // Initialize local database
 const sqliteAdapter = new SqliteDatabaseAdapter(
-  new Database("path/to/database.db")
+  new Database("path/to/database.db"),
 );
 ```
 
 Features:
+
 - File-based storage
 - Portable deployment
 - Low resource requirements
@@ -169,12 +176,11 @@ Features:
 
 ```typescript
 // Initialize in-memory database
-const sqljsAdapter = new SqlJsDatabaseAdapter(
-  new Database()
-);
+const sqljsAdapter = new SqlJsDatabaseAdapter(new Database());
 ```
 
 Features:
+
 - No persistence requirements
 - Fast operations
 - Perfect for testing
@@ -198,6 +204,7 @@ async searchMemoriesByEmbedding(
 ```
 
 ### Implementation Details:
+
 - PostgreSQL: Uses pgvector extension
 - SQLite: Uses sqlite-vss extension
 - SQL.js: Uses custom vector similarity functions
@@ -205,11 +212,13 @@ async searchMemoriesByEmbedding(
 ## Best Practices
 
 1. **Database Selection**
+
    - Use Supabase for production deployments
    - Use SQLite for edge computing/local deployments
    - Use SQL.js for testing and browser-based applications
 
 2. **Memory Management**
+
    ```typescript
    // Example of proper memory handling
    async function withConnection(fn: (client: PoolClient) => Promise<T>) {
@@ -223,6 +232,7 @@ async searchMemoriesByEmbedding(
    ```
 
 3. **Error Handling**
+
    ```typescript
    try {
      await adapter.createMemory(memory, tableName);
@@ -244,18 +254,20 @@ async searchMemoriesByEmbedding(
 ## Performance Optimization
 
 1. **Indexing Strategy**
+
    ```sql
    -- Essential indexes for performance
-   CREATE INDEX idx_memories_embedding ON memories 
+   CREATE INDEX idx_memories_embedding ON memories
    USING hnsw ("embedding" vector_cosine_ops);
    CREATE INDEX idx_memories_type_room ON memories("type", "roomId");
    ```
 
 2. **Query Optimization**
+
    ```typescript
    // Use parameterized queries
    const stmt = db.prepare(
-     "SELECT * FROM memories WHERE type = ? AND roomId = ?"
+     "SELECT * FROM memories WHERE type = ? AND roomId = ?",
    );
    ```
 
@@ -266,6 +278,7 @@ async searchMemoriesByEmbedding(
 ## Monitoring and Maintenance
 
 1. **Health Checks**
+
    ```typescript
    async testConnection(): Promise<boolean> {
      const result = await client.query("SELECT NOW()");

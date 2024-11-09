@@ -1,357 +1,482 @@
----
-id: "AgentRuntime"
-title: "Class: AgentRuntime"
-sidebar_label: "AgentRuntime"
-sidebar_position: 0
-custom_edit_url: null
----
+# Class: AgentRuntime
 
 Represents the runtime environment for an agent, handling message processing,
 action registration, and interaction with external services like OpenAI and Supabase.
 
+## Implements
+
+- [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
 ## Constructors
 
-### constructor
+### new AgentRuntime()
 
-• **new AgentRuntime**(`opts`): [`AgentRuntime`](AgentRuntime.md)
+> **new AgentRuntime**(`opts`): [`AgentRuntime`](AgentRuntime.md)
 
 Creates an instance of AgentRuntime.
 
 #### Parameters
 
-| Name                       | Type                                                       | Description                                                                               |
-| :------------------------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
-| `opts`                     | `Object`                                                   | The options for configuring the AgentRuntime.                                             |
-| `opts.actions?`            | [`Action`](../interfaces/Action.md)[]                      | Optional custom actions.                                                                  |
-| `opts.agentId?`            | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | Optional ID of the agent.                                                                 |
-| `opts.conversationLength?` | `number`                                                   | The number of messages to hold in the recent message cache.                               |
-| `opts.databaseAdapter`     | [`DatabaseAdapter`](DatabaseAdapter.md)                    | The database adapter used for interacting with the database.                              |
-| `opts.debugMode?`          | `boolean`                                                  | If true, debug messages will be logged.                                                   |
-| `opts.embeddingModel?`     | `string`                                                   | The model to use for embedding.                                                           |
-| `opts.evaluators?`         | [`Evaluator`](../interfaces/Evaluator.md)[]                | Optional custom evaluators.                                                               |
-| `opts.fetch?`              | `unknown`                                                  | Custom fetch function to use for making requests.                                         |
-| `opts.model?`              | `string`                                                   | The model to use for completion.                                                          |
-| `opts.providers?`          | [`Provider`](../interfaces/Provider.md)[]                  | Optional context providers.                                                               |
-| `opts.serverUrl?`          | `string`                                                   | The URL of the worker.                                                                    |
-| `opts.token`               | `string`                                                   | The JWT token, can be a JWT token if outside worker, or an OpenAI token if inside worker. |
+• **opts**
+
+The options for configuring the AgentRuntime.
+
+• **opts.conversationLength?**: `number`
+
+The number of messages to hold in the recent message cache.
+
+• **opts.agentId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Optional ID of the agent.
+
+• **opts.character?**: [`Character`](../type-aliases/Character.md)
+
+• **opts.token**: `string`
+
+The JWT token, can be a JWT token if outside worker, or an OpenAI token if inside worker.
+
+• **opts.serverUrl?**: `string`
+
+The URL of the worker.
+
+• **opts.actions?**: [`Action`](../interfaces/Action.md)[]
+
+Optional custom actions.
+
+• **opts.evaluators?**: [`Evaluator`](../interfaces/Evaluator.md)[]
+
+Optional custom evaluators.
+
+• **opts.plugins?**: [`Plugin`](../type-aliases/Plugin.md)[]
+
+• **opts.providers?**: [`Provider`](../interfaces/Provider.md)[]
+
+Optional context providers.
+
+• **opts.modelProvider**: [`ModelProviderName`](../enumerations/ModelProviderName.md)
+
+• **opts.services?**: [`Service`](Service.md)[]
+
+Optional custom services.
+
+• **opts.managers?**: [`IMemoryManager`](../interfaces/IMemoryManager.md)[]
+
+• **opts.databaseAdapter**: [`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md)
+
+The database adapter used for interacting with the database.
+
+• **opts.fetch?**: `unknown`
+
+Custom fetch function to use for making requests.
+
+• **opts.speechModelPath?**: `string`
 
 #### Returns
 
 [`AgentRuntime`](AgentRuntime.md)
 
+#### Defined in
+
+[packages/core/src/runtime.ts:192](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L192)
+
 ## Properties
-
-### actions
-
-• **actions**: [`Action`](../interfaces/Action.md)[] = `[]`
-
-Custom actions that the agent can perform.
-
----
 
 ### agentId
 
-• **agentId**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` = `zeroUuid`
+> **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
 The ID of the agent
 
----
+#### Implementation of
 
-### databaseAdapter
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`agentId`](../interfaces/IAgentRuntime.md#agentid)
 
-• **databaseAdapter**: [`DatabaseAdapter`](DatabaseAdapter.md)
+#### Defined in
 
-The database adapter used for interacting with the database.
-
----
-
-### debugMode
-
-• **debugMode**: `boolean`
-
-Indicates if debug messages should be logged.
-
----
-
-### descriptionManager
-
-• **descriptionManager**: [`MemoryManager`](MemoryManager.md)
-
-Store and recall descriptions of users based on conversations.
-
----
-
-### embeddingModel
-
-• **embeddingModel**: `string` = `"text-embedding-3-small"`
-
-The model to use for embedding.
-
----
-
-### evaluators
-
-• **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[] = `[]`
-
-Evaluators used to assess and guide the agent's responses.
-
----
-
-### factManager
-
-• **factManager**: [`MemoryManager`](MemoryManager.md)
-
-Manage the fact and recall of facts.
-
----
-
-### fetch
-
-• **fetch**: (`input`: `RequestInfo` \| `URL`, `init?`: `RequestInit`\<`CfProperties`\<`unknown`\>\>) => `Promise`\<`Response`\>(`input`: `RequestInfo`, `init?`: `RequestInit`\<`CfProperties`\<`unknown`\>\>) => `Promise`\<`Response`\>(`input`: `RequestInfo`, `init?`: `RequestInit`\<`RequestInitCfProperties`\>) => `Promise`\<`Response`\> = `fetch`
-
-Fetch function to use
-Some environments may not have access to the global fetch function and need a custom fetch override.
-
-#### Type declaration
-
-▸ (`input`, `init?`): `Promise`\<`Response`\>
-
-Fetch function to use
-Some environments may not have access to the global fetch function and need a custom fetch override.
-
-##### Parameters
-
-| Name    | Type                                         |
-| :------ | :------------------------------------------- |
-| `input` | `RequestInfo` \| `URL`                       |
-| `init?` | `RequestInit`\<`CfProperties`\<`unknown`\>\> |
-
-##### Returns
-
-`Promise`\<`Response`\>
-
-▸ (`input`, `init?`): `Promise`\<`Response`\>
-
-Fetch function to use
-Some environments may not have access to the global fetch function and need a custom fetch override.
-
-##### Parameters
-
-| Name    | Type                                         |
-| :------ | :------------------------------------------- |
-| `input` | `RequestInfo`                                |
-| `init?` | `RequestInit`\<`CfProperties`\<`unknown`\>\> |
-
-##### Returns
-
-`Promise`\<`Response`\>
-
-▸ (`input`, `init?`): `Promise`\<`Response`\>
-
-Fetch function to use
-Some environments may not have access to the global fetch function and need a custom fetch override.
-
-##### Parameters
-
-| Name    | Type                                       |
-| :------ | :----------------------------------------- |
-| `input` | `RequestInfo`                              |
-| `init?` | `RequestInit`\<`RequestInitCfProperties`\> |
-
-##### Returns
-
-`Promise`\<`Response`\>
-
----
-
-### loreManager
-
-• **loreManager**: [`MemoryManager`](MemoryManager.md)
-
-Manage the creation and recall of static information (documents, historical game lore, etc)
-
----
-
-### messageManager
-
-• **messageManager**: [`MemoryManager`](MemoryManager.md)
-
-Store messages that are sent and received by the agent.
-
----
-
-### model
-
-• **model**: `string` = `"gpt-3.5-turbo-0125"`
-
-The model to use for completion.
-
----
-
-### providers
-
-• **providers**: [`Provider`](../interfaces/Provider.md)[] = `[]`
-
-Context providers used to provide context for message generation.
+[packages/core/src/runtime.ts:59](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L59)
 
 ---
 
 ### serverUrl
 
-• **serverUrl**: `string` = `"http://localhost:7998"`
+> **serverUrl**: `string` = `"http://localhost:7998"`
 
 The base URL of the server where the agent's requests are processed.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`serverUrl`](../interfaces/IAgentRuntime.md#serverurl)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:63](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L63)
+
+---
+
+### databaseAdapter
+
+> **databaseAdapter**: [`IDatabaseAdapter`](../interfaces/IDatabaseAdapter.md)
+
+The database adapter used for interacting with the database.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`databaseAdapter`](../interfaces/IAgentRuntime.md#databaseadapter)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:68](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L68)
 
 ---
 
 ### token
 
-• **token**: `null` \| `string`
+> **token**: `string`
 
 Authentication token used for securing requests.
 
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`token`](../interfaces/IAgentRuntime.md#token)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:73](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L73)
+
+---
+
+### actions
+
+> **actions**: [`Action`](../interfaces/Action.md)[] = `[]`
+
+Custom actions that the agent can perform.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`actions`](../interfaces/IAgentRuntime.md#actions)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:78](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L78)
+
+---
+
+### evaluators
+
+> **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[] = `[]`
+
+Evaluators used to assess and guide the agent's responses.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`evaluators`](../interfaces/IAgentRuntime.md#evaluators)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:83](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L83)
+
+---
+
+### providers
+
+> **providers**: [`Provider`](../interfaces/Provider.md)[] = `[]`
+
+Context providers used to provide context for message generation.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`providers`](../interfaces/IAgentRuntime.md#providers)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:88](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L88)
+
+---
+
+### modelProvider
+
+> **modelProvider**: [`ModelProviderName`](../enumerations/ModelProviderName.md)
+
+The model to use for generateText.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`modelProvider`](../interfaces/IAgentRuntime.md#modelprovider)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L93)
+
+---
+
+### fetch()
+
+> **fetch**: (`input`, `init`?) => `Promise`\<`Response`\>(`input`, `init`?) => `Promise`\<`Response`\>
+
+Fetch function to use
+Some environments may not have access to the global fetch function and need a custom fetch override.
+
+[MDN Reference](https://developer.mozilla.org/docs/Web/API/fetch)
+
+#### Parameters
+
+• **input**: `RequestInfo` \| `URL`
+
+• **init?**: `RequestInit`
+
+#### Returns
+
+`Promise`\<`Response`\>
+
+#### Parameters
+
+• **input**: `string` \| `Request` \| `URL`
+
+• **init?**: `RequestInit`
+
+#### Returns
+
+`Promise`\<`Response`\>
+
+#### Defined in
+
+[packages/core/src/runtime.ts:99](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L99)
+
+---
+
+### character
+
+> **character**: [`Character`](../type-aliases/Character.md)
+
+The character to use for the agent
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`character`](../interfaces/IAgentRuntime.md#character)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:104](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L104)
+
+---
+
+### messageManager
+
+> **messageManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
+
+Store messages that are sent and received by the agent.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`messageManager`](../interfaces/IAgentRuntime.md#messagemanager)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:109](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L109)
+
+---
+
+### descriptionManager
+
+> **descriptionManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
+
+Store and recall descriptions of users based on conversations.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`descriptionManager`](../interfaces/IAgentRuntime.md#descriptionmanager)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:114](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L114)
+
+---
+
+### loreManager
+
+> **loreManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
+
+Manage the creation and recall of static information (documents, historical game lore, etc)
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`loreManager`](../interfaces/IAgentRuntime.md#loremanager)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:119](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L119)
+
+---
+
+### documentsManager
+
+> **documentsManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
+
+Hold large documents that can be referenced
+
+#### Defined in
+
+[packages/core/src/runtime.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L124)
+
+---
+
+### fragmentsManager
+
+> **fragmentsManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
+
+Searchable document fragments
+
+#### Defined in
+
+[packages/core/src/runtime.ts:129](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L129)
+
+---
+
+### services
+
+> **services**: `Map`\<[`ServiceType`](../enumerations/ServiceType.md), [`Service`](Service.md)\>
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`services`](../interfaces/IAgentRuntime.md#services)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:131](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L131)
+
+---
+
+### memoryManagers
+
+> **memoryManagers**: `Map`\<`string`, [`IMemoryManager`](../interfaces/IMemoryManager.md)\>
+
+#### Defined in
+
+[packages/core/src/runtime.ts:132](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L132)
+
 ## Methods
 
-### completion
+### registerMemoryManager()
 
-▸ **completion**(`opts`): `Promise`\<`string`\>
-
-Send a message to the OpenAI API for completion.
+> **registerMemoryManager**(`manager`): `void`
 
 #### Parameters
 
-| Name                     | Type                     | Default value | Description                                       |
-| :----------------------- | :----------------------- | :------------ | :------------------------------------------------ |
-| `opts`                   | `Object`                 | `undefined`   | The options for the completion request.           |
-| `opts.context`           | `undefined` \| `string`  | `""`          | The context of the message to be completed.       |
-| `opts.frequency_penalty` | `undefined` \| `number`  | `0.0`         | The frequency penalty to apply to the completion. |
-| `opts.model`             | `undefined` \| `string`  | `undefined`   | The model to use for completion.                  |
-| `opts.presence_penalty`  | `undefined` \| `number`  | `0.0`         | The presence penalty to apply to the completion.  |
-| `opts.stop`              | `undefined` \| `never`[] | `[]`          | A list of strings to stop the completion at.      |
-| `opts.temperature`       | `undefined` \| `number`  | `0.7`         | The temperature to apply to the completion.       |
+• **manager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
 
 #### Returns
 
-`Promise`\<`string`\>
+`void`
 
-The completed message.
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`registerMemoryManager`](../interfaces/IAgentRuntime.md#registermemorymanager)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:134](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L134)
 
 ---
 
-### composeState
+### getMemoryManager()
 
-▸ **composeState**(`message`, `additionalKeys?`): `Promise`\<\{ `actionConditions`: `string` ; `actionExamples`: `string` ; `actionNames`: `string` ; `actions`: `string` ; `actors`: `string` ; `actorsData`: [`Actor`](../interfaces/Actor.md)[] ; `agentId`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `agentName`: `undefined` \| `string` ; `evaluatorConditions`: `string` ; `evaluatorExamples`: `string` ; `evaluatorNames`: `string` ; `evaluators`: `string` ; `evaluatorsData`: [`Evaluator`](../interfaces/Evaluator.md)[] ; `goals`: `string` ; `goalsData`: [`Goal`](../interfaces/Goal.md)[] ; `lore`: `string` ; `loreData`: [`Memory`](../interfaces/Memory.md)[] ; `providers`: `string` ; `recentFacts`: `string` ; `recentFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `recentMessages`: `string` ; `recentMessagesData`: [`Memory`](../interfaces/Memory.md)[] ; `relevantFacts`: `string` ; `relevantFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `room_id`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `senderName`: `undefined` \| `string` }\>
-
-Compose the state of the agent into an object that can be passed or used for response generation.
+> **getMemoryManager**(`tableName`): [`IMemoryManager`](../interfaces/IMemoryManager.md)
 
 #### Parameters
 
-| Name             | Type                                  | Description                            |
-| :--------------- | :------------------------------------ | :------------------------------------- |
-| `message`        | [`Message`](../interfaces/Message.md) | The message to compose the state from. |
-| `additionalKeys` | `Object`                              | -                                      |
+• **tableName**: `string`
 
 #### Returns
 
-`Promise`\<\{ `actionConditions`: `string` ; `actionExamples`: `string` ; `actionNames`: `string` ; `actions`: `string` ; `actors`: `string` ; `actorsData`: [`Actor`](../interfaces/Actor.md)[] ; `agentId`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `agentName`: `undefined` \| `string` ; `evaluatorConditions`: `string` ; `evaluatorExamples`: `string` ; `evaluatorNames`: `string` ; `evaluators`: `string` ; `evaluatorsData`: [`Evaluator`](../interfaces/Evaluator.md)[] ; `goals`: `string` ; `goalsData`: [`Goal`](../interfaces/Goal.md)[] ; `lore`: `string` ; `loreData`: [`Memory`](../interfaces/Memory.md)[] ; `providers`: `string` ; `recentFacts`: `string` ; `recentFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `recentMessages`: `string` ; `recentMessagesData`: [`Memory`](../interfaces/Memory.md)[] ; `relevantFacts`: `string` ; `relevantFactsData`: [`Memory`](../interfaces/Memory.md)[] ; `room_id`: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` ; `senderName`: `undefined` \| `string` }\>
+[`IMemoryManager`](../interfaces/IMemoryManager.md)
 
-The state of the agent.
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`getMemoryManager`](../interfaces/IAgentRuntime.md#getmemorymanager)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:149](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L149)
 
 ---
 
-### embed
+### getService()
 
-▸ **embed**(`input`): `Promise`\<`number`[]\>
+> **getService**\<`T`\>(`service`): `T`
 
-Send a message to the OpenAI API for embedding.
+#### Type Parameters
+
+• **T**
 
 #### Parameters
 
-| Name    | Type     | Description               |
-| :------ | :------- | :------------------------ |
-| `input` | `string` | The input to be embedded. |
+• **service**: [`ServiceType`](../enumerations/ServiceType.md)
 
 #### Returns
 
-`Promise`\<`number`[]\>
+`T`
 
-The embedding of the input.
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`getService`](../interfaces/IAgentRuntime.md#getservice)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:153](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L153)
 
 ---
 
-### ensureParticipantExists
+### registerService()
 
-▸ **ensureParticipantExists**(`user_id`, `room_id`): `Promise`\<`void`\>
-
-Ensure the existence of a participant in the room. If the participant does not exist, they are added to the room.
+> **registerService**(`service`): `void`
 
 #### Parameters
 
-| Name      | Type                                                       | Description                             |
-| :-------- | :--------------------------------------------------------- | :-------------------------------------- |
-| `user_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The user ID to ensure the existence of. |
-| `room_id` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                       |
+• **service**: [`Service`](Service.md)
 
 #### Returns
 
-`Promise`\<`void`\>
+`void`
 
-**`Throws`**
+#### Implementation of
 
-An error if the participant cannot be added.
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`registerService`](../interfaces/IAgentRuntime.md#registerservice)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:161](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L161)
 
 ---
 
-### ensureRoomExists
+### getSetting()
 
-▸ **ensureRoomExists**(`user_id`, `room_id?`): `Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+> **getSetting**(`key`): `any`
 
-Ensure the existence of a room between the agent and a user. If no room exists, a new room is created and the user
-and agent are added as participants. The room ID is returned.
+Processes character knowledge by creating document memories and fragment memories.
+This function takes an array of knowledge items, creates a document memory for each item if it doesn't exist,
+then chunks the content into fragments, embeds each fragment, and creates fragment memories.
 
 #### Parameters
 
-| Name       | Type                                                       | Description                        |
-| :--------- | :--------------------------------------------------------- | :--------------------------------- |
-| `user_id`  | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | The user ID to create a room with. |
-| `room_id?` | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | -                                  |
+• **key**: `string`
 
 #### Returns
 
-`Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`\>
+`any`
 
-The room ID of the room between the agent and the user.
+#### Implementation of
 
-**`Throws`**
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`getSetting`](../interfaces/IAgentRuntime.md#getsetting)
 
-An error if the room cannot be created.
+#### Defined in
 
----
-
-### evaluate
-
-▸ **evaluate**(`message`, `state?`): `Promise`\<`string`[]\>
-
-Evaluate the message and state using the registered evaluators.
-
-#### Parameters
-
-| Name      | Type                                  | Description              |
-| :-------- | :------------------------------------ | :----------------------- |
-| `message` | [`Message`](../interfaces/Message.md) | The message to evaluate. |
-| `state?`  | [`State`](../interfaces/State.md)     | The state of the agent.  |
-
-#### Returns
-
-`Promise`\<`string`[]\>
-
-The results of the evaluation.
+[packages/core/src/runtime.ts:371](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L371)
 
 ---
 
-### getConversationLength
+### getConversationLength()
 
-▸ **getConversationLength**(): `number`
+> **getConversationLength**(): `number`
 
 Get the number of messages that are kept in the conversation buffer.
 
@@ -361,92 +486,349 @@ Get the number of messages that are kept in the conversation buffer.
 
 The number of recent messages to be kept in memory.
 
----
+#### Implementation of
 
-### processActions
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`getConversationLength`](../interfaces/IAgentRuntime.md#getconversationlength)
 
-▸ **processActions**(`message`, `content`, `state?`): `Promise`\<`unknown`\>
+#### Defined in
 
-Process the actions of a message.
-
-#### Parameters
-
-| Name      | Type                                  | Description                                         |
-| :-------- | :------------------------------------ | :-------------------------------------------------- |
-| `message` | [`Message`](../interfaces/Message.md) | The message to process.                             |
-| `content` | [`Content`](../interfaces/Content.md) | The content of the message to process actions from. |
-| `state?`  | [`State`](../interfaces/State.md)     | -                                                   |
-
-#### Returns
-
-`Promise`\<`unknown`\>
+[packages/core/src/runtime.ts:393](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L393)
 
 ---
 
-### registerAction
+### registerAction()
 
-▸ **registerAction**(`action`): `void`
+> **registerAction**(`action`): `void`
 
 Register an action for the agent to perform.
 
 #### Parameters
 
-| Name     | Type                                | Description             |
-| :------- | :---------------------------------- | :---------------------- |
-| `action` | [`Action`](../interfaces/Action.md) | The action to register. |
+• **action**: [`Action`](../interfaces/Action.md)
+
+The action to register.
 
 #### Returns
 
 `void`
 
----
+#### Implementation of
 
-### registerContextProvider
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`registerAction`](../interfaces/IAgentRuntime.md#registeraction)
 
-▸ **registerContextProvider**(`provider`): `void`
+#### Defined in
 
-Register a context provider to provide context for message generation.
-
-#### Parameters
-
-| Name       | Type                                    | Description                       |
-| :--------- | :-------------------------------------- | :-------------------------------- |
-| `provider` | [`Provider`](../interfaces/Provider.md) | The context provider to register. |
-
-#### Returns
-
-`void`
+[packages/core/src/runtime.ts:401](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L401)
 
 ---
 
-### registerEvaluator
+### registerEvaluator()
 
-▸ **registerEvaluator**(`evaluator`): `void`
+> **registerEvaluator**(`evaluator`): `void`
 
 Register an evaluator to assess and guide the agent's responses.
 
 #### Parameters
 
-| Name        | Type                                      | Description                |
-| :---------- | :---------------------------------------- | :------------------------- |
-| `evaluator` | [`Evaluator`](../interfaces/Evaluator.md) | The evaluator to register. |
+• **evaluator**: [`Evaluator`](../interfaces/Evaluator.md)
+
+The evaluator to register.
 
 #### Returns
 
 `void`
 
+#### Defined in
+
+[packages/core/src/runtime.ts:410](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L410)
+
 ---
 
-### retrieveCachedEmbedding
+### registerContextProvider()
 
-▸ **retrieveCachedEmbedding**(`input`): `Promise`\<`null` \| `number`[]\>
+> **registerContextProvider**(`provider`): `void`
+
+Register a context provider to provide context for message generation.
 
 #### Parameters
 
-| Name    | Type     |
-| :------ | :------- |
-| `input` | `string` |
+• **provider**: [`Provider`](../interfaces/Provider.md)
+
+The context provider to register.
 
 #### Returns
 
-`Promise`\<`null` \| `number`[]\>
+`void`
+
+#### Defined in
+
+[packages/core/src/runtime.ts:418](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L418)
+
+---
+
+### processActions()
+
+> **processActions**(`message`, `responses`, `state`?, `callback`?): `Promise`\<`void`\>
+
+Process the actions of a message.
+
+#### Parameters
+
+• **message**: [`Memory`](../interfaces/Memory.md)
+
+The message to process.
+
+• **responses**: [`Memory`](../interfaces/Memory.md)[]
+
+• **state?**: [`State`](../interfaces/State.md)
+
+• **callback?**: [`HandlerCallback`](../type-aliases/HandlerCallback.md)
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`processActions`](../interfaces/IAgentRuntime.md#processactions)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:427](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L427)
+
+---
+
+### evaluate()
+
+> **evaluate**(`message`, `state`?): `Promise`\<`string`[]\>
+
+Evaluate the message and state using the registered evaluators.
+
+#### Parameters
+
+• **message**: [`Memory`](../interfaces/Memory.md)
+
+The message to evaluate.
+
+• **state?**: [`State`](../interfaces/State.md)
+
+The state of the agent.
+
+#### Returns
+
+`Promise`\<`string`[]\>
+
+The results of the evaluation.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`evaluate`](../interfaces/IAgentRuntime.md#evaluate)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:499](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L499)
+
+---
+
+### ensureParticipantExists()
+
+> **ensureParticipantExists**(`userId`, `roomId`): `Promise`\<`void`\>
+
+Ensure the existence of a participant in the room. If the participant does not exist, they are added to the room.
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The user ID to ensure the existence of.
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Throws
+
+An error if the participant cannot be added.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`ensureParticipantExists`](../interfaces/IAgentRuntime.md#ensureparticipantexists)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:565](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L565)
+
+---
+
+### ensureUserExists()
+
+> **ensureUserExists**(`userId`, `userName`, `name`, `email`?, `source`?): `Promise`\<`void`\>
+
+Ensure the existence of a user in the database. If the user does not exist, they are added to the database.
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+The user ID to ensure the existence of.
+
+• **userName**: `string`
+
+The user name to ensure the existence of.
+
+• **name**: `string`
+
+• **email?**: `string`
+
+• **source?**: `string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`ensureUserExists`](../interfaces/IAgentRuntime.md#ensureuserexists)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:581](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L581)
+
+---
+
+### ensureParticipantInRoom()
+
+> **ensureParticipantInRoom**(`userId`, `roomId`): `Promise`\<`void`\>
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`ensureParticipantInRoom`](../interfaces/IAgentRuntime.md#ensureparticipantinroom)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L601)
+
+---
+
+### ensureConnection()
+
+> **ensureConnection**(`userId`, `roomId`, `userName`?, `userScreenName`?, `source`?): `Promise`\<`void`\>
+
+#### Parameters
+
+• **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **userName?**: `string`
+
+• **userScreenName?**: `string`
+
+• **source?**: `string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`ensureConnection`](../interfaces/IAgentRuntime.md#ensureconnection)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:612](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L612)
+
+---
+
+### ensureRoomExists()
+
+> **ensureRoomExists**(`roomId`): `Promise`\<`void`\>
+
+Ensure the existence of a room between the agent and a user. If no room exists, a new room is created and the user
+and agent are added as participants. The room ID is returned.
+
+#### Parameters
+
+• **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+The room ID of the room between the agent and the user.
+
+#### Throws
+
+An error if the room cannot be created.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`ensureRoomExists`](../interfaces/IAgentRuntime.md#ensureroomexists)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:648](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L648)
+
+---
+
+### composeState()
+
+> **composeState**(`message`, `additionalKeys`): `Promise`\<[`State`](../interfaces/State.md)\>
+
+Compose the state of the agent into an object that can be passed or used for response generation.
+
+#### Parameters
+
+• **message**: [`Memory`](../interfaces/Memory.md)
+
+The message to compose the state from.
+
+• **additionalKeys** = `{}`
+
+#### Returns
+
+`Promise`\<[`State`](../interfaces/State.md)\>
+
+The state of the agent.
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`composeState`](../interfaces/IAgentRuntime.md#composestate)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:661](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L661)
+
+---
+
+### updateRecentMessageState()
+
+> **updateRecentMessageState**(`state`): `Promise`\<[`State`](../interfaces/State.md)\>
+
+#### Parameters
+
+• **state**: [`State`](../interfaces/State.md)
+
+#### Returns
+
+`Promise`\<[`State`](../interfaces/State.md)\>
+
+#### Implementation of
+
+[`IAgentRuntime`](../interfaces/IAgentRuntime.md).[`updateRecentMessageState`](../interfaces/IAgentRuntime.md#updaterecentmessagestate)
+
+#### Defined in
+
+[packages/core/src/runtime.ts:1094](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L1094)

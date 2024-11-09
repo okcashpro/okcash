@@ -21,8 +21,8 @@ pnpm install @your-org/agent-framework
 Here's a minimal example to create and start an agent:
 
 ```typescript
-import { AgentRuntime, createAgentRuntime } from '@your-org/agent-framework';
-import { SqliteDatabaseAdapter } from '@your-org/agent-framework/adapters';
+import { AgentRuntime, createAgentRuntime } from "@your-org/agent-framework";
+import { SqliteDatabaseAdapter } from "@your-org/agent-framework/adapters";
 
 // Initialize database
 const db = new SqliteDatabaseAdapter(new Database("./db.sqlite"));
@@ -35,7 +35,7 @@ const runtime = await createAgentRuntime({
     // Add character details
   },
   db,
-  token: process.env.API_TOKEN
+  token: process.env.API_TOKEN,
 });
 ```
 
@@ -44,6 +44,7 @@ const runtime = await createAgentRuntime({
 ### Agents
 
 Agents are autonomous entities that can:
+
 - Process incoming messages
 - Generate contextual responses
 - Take actions based on input
@@ -53,6 +54,7 @@ Agents are autonomous entities that can:
 ### Clients
 
 The framework supports multiple client types:
+
 - Discord
 - Telegram
 - Twitter
@@ -70,7 +72,7 @@ const action = {
   description: "Summarize content or conversations",
   handler: async (runtime, message, state) => {
     // Action implementation
-  }
+  },
 };
 
 runtime.registerAction(action);
@@ -79,6 +81,7 @@ runtime.registerAction(action);
 ### Providers
 
 Providers supply contextual information to agents:
+
 - Time awareness
 - User relationships
 - System state
@@ -90,7 +93,7 @@ Providers supply contextual information to agents:
 
 ```typescript
 // Handle incoming chat message
-runtime.on('message', async (message) => {
+runtime.on("message", async (message) => {
   const response = await runtime.handleMessage(message);
   // Process response
 });
@@ -102,7 +105,7 @@ For platforms supporting voice (e.g., Discord):
 
 ```typescript
 // Handle voice channel join
-runtime.on('voiceStateUpdate', async (oldState, newState) => {
+runtime.on("voiceStateUpdate", async (oldState, newState) => {
   if (newState.channelId) {
     await runtime.joinVoiceChannel(newState.channelId);
   }
@@ -112,6 +115,7 @@ runtime.on('voiceStateUpdate', async (oldState, newState) => {
 ### Media Processing
 
 The framework can handle various media types:
+
 - Images (with description generation)
 - Audio (with transcription)
 - Documents (with text extraction)
@@ -121,7 +125,7 @@ The framework can handle various media types:
 // Process attachment
 const media = await runtime.processAttachment({
   type: "image",
-  url: "https://example.com/image.jpg"
+  url: "https://example.com/image.jpg",
 });
 ```
 
@@ -138,7 +142,7 @@ const character = {
   style: {
     tone: "professional",
     personality: "friendly",
-    language: "en"
+    language: "en",
   },
   topics: ["technology", "science", "general"],
   // Additional character settings
@@ -162,16 +166,19 @@ const settings = {
 ## Best Practices
 
 1. **Error Handling**
+
    - Implement proper error catching
    - Provide graceful fallbacks
    - Log errors for debugging
 
 2. **Resource Management**
+
    - Monitor memory usage
    - Implement rate limiting
    - Cache frequently accessed data
 
 3. **Security**
+
    - Validate input
    - Sanitize output
    - Implement proper authentication
@@ -186,8 +193,8 @@ const settings = {
 Here's a complete example bringing together the core concepts:
 
 ```typescript
-import { AgentRuntime, createAgentRuntime } from '@your-org/agent-framework';
-import { DiscordClient } from '@your-org/agent-framework/clients/discord';
+import { AgentRuntime, createAgentRuntime } from "@your-org/agent-framework";
+import { DiscordClient } from "@your-org/agent-framework/clients/discord";
 
 async function main() {
   // Initialize runtime
@@ -198,13 +205,13 @@ async function main() {
       modelProvider: "anthropic",
       style: {
         tone: "friendly",
-        personality: "helpful"
-      }
+        personality: "helpful",
+      },
     },
     settings: {
       maxContextLength: 2000,
-      temperature: 0.7
-    }
+      temperature: 0.7,
+    },
   });
 
   // Add custom action
@@ -214,14 +221,14 @@ async function main() {
     handler: async (runtime, message, state) => {
       return {
         text: "Here's how I can help...",
-        action: "HELP_RESPONSE"
+        action: "HELP_RESPONSE",
       };
-    }
+    },
   });
 
   // Initialize Discord client
   const discord = new DiscordClient(runtime);
-  
+
   // Start listening
   discord.start();
 }
@@ -234,11 +241,13 @@ main().catch(console.error);
 Common issues and solutions:
 
 1. **Connection Issues**
+
    - Verify API tokens
    - Check network connectivity
    - Confirm service status
 
 2. **Response Timeouts**
+
    - Adjust timeout settings
    - Check rate limits
    - Verify model availability
@@ -251,6 +260,7 @@ Common issues and solutions:
 ## Next Steps
 
 After mastering basic usage, explore:
+
 - Advanced configuration options
 - Custom action development
 - Integration with external services

@@ -5,6 +5,7 @@ This guide covers advanced usage patterns and features of Eliza, including worki
 ## Video and Media Processing
 
 ### Video Service
+
 Eliza provides robust video processing capabilities through the VideoService class. Key features include:
 
 - Downloading and processing videos from multiple sources (YouTube, Vimeo, direct MP4 links)
@@ -13,7 +14,7 @@ Eliza provides robust video processing capabilities through the VideoService cla
 - Support for both manual and automatic captions
 
 ```typescript
-import { VideoService } from './services/video';
+import { VideoService } from "./services/video";
 
 // Initialize the service
 const videoService = VideoService.getInstance(runtime);
@@ -23,6 +24,7 @@ const media = await videoService.processVideo(videoUrl);
 ```
 
 ### Image Processing
+
 The ImageService provides advanced image analysis capabilities:
 
 - Local and cloud-based image recognition
@@ -33,6 +35,7 @@ The ImageService provides advanced image analysis capabilities:
 ## Memory Management and Embeddings
 
 ### Advanced Memory Operations
+
 The system supports sophisticated memory operations through various database adapters:
 
 ```typescript
@@ -41,7 +44,7 @@ const similarMemories = await db.searchMemoriesByEmbedding(embedding, {
   match_threshold: 0.95,
   count: 5,
   roomId: currentRoom,
-  tableName: "long_term_memory"
+  tableName: "long_term_memory",
 });
 
 // Create unique memories with deduplication
@@ -49,6 +52,7 @@ await db.createMemory(memory, "episodic_memory", true);
 ```
 
 ### Custom Database Adapters
+
 You can implement custom database adapters by extending the DatabaseAdapter class:
 
 ```typescript
@@ -69,6 +73,7 @@ class CustomDatabaseAdapter extends DatabaseAdapter {
 ## Speech and Transcription
 
 ### Speech Service
+
 The system includes a comprehensive speech service with support for:
 
 - Text-to-speech conversion with multiple providers
@@ -82,6 +87,7 @@ const audioStream = await speechService.generate(runtime, text);
 ```
 
 ### Advanced Transcription
+
 The TranscriptionService provides:
 
 - Local and cloud-based transcription options
@@ -95,17 +101,18 @@ The system includes a sophisticated trust score management system:
 
 ```typescript
 interface RecommenderMetrics {
-    trustScore: number;
-    totalRecommendations: number;
-    successfulRecs: number;
-    avgTokenPerformance: number;
-    riskScore: number;
-    consistencyScore: number;
-    virtualConfidence: number;
+  trustScore: number;
+  totalRecommendations: number;
+  successfulRecs: number;
+  avgTokenPerformance: number;
+  riskScore: number;
+  consistencyScore: number;
+  virtualConfidence: number;
 }
 ```
 
 Key features include:
+
 - Historical metrics tracking
 - Performance analysis
 - Risk assessment
@@ -129,16 +136,19 @@ const content = await browserService.getPageContent(url);
 ## Best Practices
 
 ### Memory Management
+
 - Implement proper memory cleanup and garbage collection
 - Use the caching system effectively
 - Monitor memory usage in long-running processes
 
 ### Error Handling
+
 - Implement comprehensive error handling
 - Use the logging system effectively
 - Monitor system performance
 
 ### Performance Optimization
+
 - Use batch processing when possible
 - Implement proper caching strategies
 - Monitor and optimize database queries
@@ -146,6 +156,7 @@ const content = await browserService.getPageContent(url);
 ## Configuration Options
 
 ### Environment Variables
+
 Key configuration options include:
 
 ```bash
@@ -155,6 +166,7 @@ ELEVENLABS_API_KEY=...     # For voice synthesis
 ```
 
 ### Runtime Configuration
+
 The runtime can be configured with various options:
 
 ```typescript
@@ -163,8 +175,8 @@ const runtime = {
     settings: {
       model: "gpt-4",
       temperature: 0.7,
-      maxTokens: 2048
-    }
+      maxTokens: 2048,
+    },
   },
   // Additional configuration options
 };
@@ -173,6 +185,7 @@ const runtime = {
 ## Advanced Features
 
 ### Custom Actions
+
 Implement custom actions for specialized behavior:
 
 ```typescript
@@ -181,13 +194,14 @@ class CustomAction extends BaseAction {
     // Custom implementation
     return {
       success: true,
-      data: {}
+      data: {},
     };
   }
 }
 ```
 
 ### Custom Evaluators
+
 Create specialized evaluators for specific use cases:
 
 ```typescript
@@ -196,7 +210,7 @@ class CustomEvaluator extends BaseEvaluator {
     // Custom evaluation logic
     return {
       score: 0.95,
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 }
@@ -215,11 +229,13 @@ class CustomEvaluator extends BaseEvaluator {
 Common issues and solutions:
 
 1. Memory leaks
+
    - Monitor memory usage
    - Implement proper cleanup
    - Use garbage collection
 
 2. Performance issues
+
    - Optimize database queries
    - Implement proper caching
    - Use batch processing
