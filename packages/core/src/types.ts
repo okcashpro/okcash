@@ -526,7 +526,6 @@ export interface IAgentRuntime {
     providers: Provider[];
     actions: Action[];
     evaluators: Evaluator[];
-    systemPrompt?: string;
 
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;

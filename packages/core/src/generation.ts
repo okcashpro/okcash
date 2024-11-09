@@ -65,7 +65,6 @@ export async function generateText({
     const presence_penalty = models[provider].settings.presence_penalty;
     const max_context_length = models[provider].settings.maxInputTokens;
     const max_response_length = models[provider].settings.maxOutputTokens;
-    const systemPrompt = runtime.systemPrompt;
 
     const apiKey = runtime.token;
 
@@ -112,7 +111,10 @@ export async function generateText({
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: google(model),
                     prompt: context,
-                    ...(systemPrompt ? { system: systemPrompt } : {}),
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,

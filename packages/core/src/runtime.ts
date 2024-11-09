@@ -93,12 +93,6 @@ export class AgentRuntime implements IAgentRuntime {
     modelProvider: ModelProviderName;
 
     /**
-     *
-     * The system prompt to use for the agent.
-     */
-    systemPrompt?: string;
-
-    /**
      * Fetch function to use
      * Some environments may not have access to the global fetch function and need a custom fetch override.
      */
@@ -213,7 +207,6 @@ export class AgentRuntime implements IAgentRuntime {
         fetch?: typeof fetch | unknown;
         speechModelPath?: string;
     }) {
-        this.systemPrompt = opts.character.system;
         this.#conversationLength =
             opts.conversationLength ?? this.#conversationLength;
         this.databaseAdapter = opts.databaseAdapter;
