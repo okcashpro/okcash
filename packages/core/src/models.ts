@@ -162,6 +162,25 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
+    [ModelProviderName.OPENROUTER]: {
+        endpoint: "https://openrouter.ai/api/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.6,
+        },
+        // Available models: https://docs.red-pill.ai/get-started/supported-models
+        // To test other models, change the models below
+        model: {
+            [ModelClass.SMALL]: "nousresearch/hermes-3-llama-3.1-70b",
+            [ModelClass.MEDIUM]: "nousresearch/hermes-3-llama-3.1-405b", 
+            [ModelClass.LARGE]: "nousresearch/hermes-3-llama-3.1-405b",
+            [ModelClass.EMBEDDING]: "text-embedding-3-small",
+        },
+    },
     [ModelProviderName.OLLAMA]: {
         settings: {
             stop: [],
