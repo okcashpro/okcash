@@ -172,7 +172,7 @@ const models: Models = {
             presence_penalty: 0.0,
             temperature: 0.6,
         },
-        // Available models: https://docs.red-pill.ai/get-started/supported-models
+        // Available models: https://openrouter.ai/models
         // To test other models, change the models below
         model: {
             [ModelClass.SMALL]:
