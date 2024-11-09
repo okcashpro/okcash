@@ -112,6 +112,7 @@ export type Models = {
     [ModelProviderName.GOOGLE]: Model;
     [ModelProviderName.CLAUDE_VERTEX]: Model;
     [ModelProviderName.REDPILL]: Model;
+    [ModelProviderName.OPENROUTER]: Model;
     [ModelProviderName.OLLAMA]: Model;
 };
 
@@ -125,6 +126,7 @@ export enum ModelProviderName {
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
     REDPILL = "redpill",
+    OPENROUTER = "openrouter",
     OLLAMA = "ollama",
 }
 

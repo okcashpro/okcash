@@ -128,6 +128,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.REDPILL_API_KEY ||
                 settings.REDPILL_API_KEY
             );
+        case ModelProviderName.OPENROUTER:
+            return (
+                character.settings?.secrets?.OPENROUTER ||
+                settings.OPENROUTER_API_KEY
+            );
     }
 }
 
