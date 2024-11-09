@@ -88,7 +88,7 @@ export class ClientBase extends EventEmitter {
     runtime: IAgentRuntime;
     directions: string;
     lastCheckedTweetId: number | null = null;
-    tweetCacheFilePath = "tweetcache/latest_checked_tweet_id.txt";
+    tweetCacheFilePath = __dirname + "/tweetcache/latest_checked_tweet_id.txt";
     imageDescriptionService: IImageDescriptionService;
     temperature: number = 0.5;
 
@@ -103,7 +103,7 @@ export class ClientBase extends EventEmitter {
         }
         const cacheDir = path.join(
             __dirname,
-            "@ai16z/eliza/tweetcache",
+            "tweetcache",
             tweet.conversationId,
             `${tweet.id}.json`
         );
@@ -172,11 +172,14 @@ export class ClientBase extends EventEmitter {
             this.runtime.character.style.post.join();
 
         try {
+            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath)
             if (fs.existsSync(this.tweetCacheFilePath)) {
+                // make it?
                 const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
                 this.lastCheckedTweetId = parseInt(data.trim());
             } else {
                 console.warn("Tweet cache file not found.");
+                console.warn(this.tweetCacheFilePath)
             }
         } catch (error) {
             console.error(

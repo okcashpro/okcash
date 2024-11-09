@@ -1,13 +1,25 @@
+import { EmbeddingModel, FlagEmbedding } from "fastembed";
 import path from "path";
+import { fileURLToPath } from "url";
 import models from "./models.ts";
 import {
     IAgentRuntime,
-    ITextGenerationService,
-    ModelProviderName,
-    ServiceType,
+    ModelProviderName
 } from "./types.ts";
 import fs from "fs";
-import { EmbeddingModel, FlagEmbedding } from "fastembed";
+import { trimTokens } from "./generation.ts";
+
+function getRootPath() {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    const rootPath = path.resolve(__dirname, "..");
+    if (rootPath.includes("/eliza/")) {
+        return rootPath.split("/eliza/")[0] + "/eliza/";
+    }
+    
+    return path.resolve(__dirname, "..");
+}
 
 /**
  * Send a message to the OpenAI API for embedding.
@@ -25,12 +37,20 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     ) {
 
         // make sure to trim tokens to 8192
+        const cacheDir = getRootPath() + "/cache/";
+
+        // if the cache directory doesn't exist, create it
+        if (!fs.existsSync(cacheDir)) {
+            fs.mkdirSync(cacheDir, { recursive: true });
+        }
 
         const embeddingModel = await FlagEmbedding.init({
-            model: EmbeddingModel.BGEBaseEN
+            cacheDir: cacheDir
         });
+
+        const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
         
-        const embedding: number[] = await embeddingModel.queryEmbed(input);
+        const embedding: number[] = await embeddingModel.queryEmbed(trimmedInput);
         console.log("Embedding dimensions: ", embedding.length);
         return embedding;
 

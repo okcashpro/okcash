@@ -146,11 +146,14 @@ export class TwitterInteractionClient extends ClientBase {
                     this.lastCheckedTweetId = parseInt(tweet.id);
 
                     try {
-                        fs.writeFileSync(
-                            this.tweetCacheFilePath,
-                            this.lastCheckedTweetId.toString(),
-                            "utf-8"
-                        );
+                        if (this.lastCheckedTweetId) {
+
+                            fs.writeFileSync(
+                                this.tweetCacheFilePath,
+                                this.lastCheckedTweetId.toString(),
+                                "utf-8"
+                            );
+                        }
                     } catch (error) {
                         console.error(
                             "Error saving latest checked tweet ID to file:",
@@ -162,11 +165,13 @@ export class TwitterInteractionClient extends ClientBase {
 
             // Save the latest checked tweet ID to the file
             try {
-                fs.writeFileSync(
-                    this.tweetCacheFilePath,
-                    this.lastCheckedTweetId.toString(),
-                    "utf-8"
-                );
+                if (this.lastCheckedTweetId) {
+                    fs.writeFileSync(
+                        this.tweetCacheFilePath,
+                        this.lastCheckedTweetId.toString(),
+                        "utf-8"
+                    );
+                }
             } catch (error) {
                 console.error(
                     "Error saving latest checked tweet ID to file:",
@@ -252,10 +257,10 @@ export class TwitterInteractionClient extends ClientBase {
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
                         ? stringToUuid(
-                              tweet.inReplyToStatusId +
-                                  "-" +
-                                  this.runtime.agentId
-                          )
+                            tweet.inReplyToStatusId +
+                            "-" +
+                            this.runtime.agentId
+                        )
                         : undefined,
                 },
                 userId: userIdUUID,
