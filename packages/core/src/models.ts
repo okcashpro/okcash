@@ -137,9 +137,9 @@ const models: Models = {
             temperature: 0.3,
         },
         model: {
-            [ModelClass.SMALL]: "gemini-1.5-flash",
-            [ModelClass.MEDIUM]: "gemini-1.5-flash",
-            [ModelClass.LARGE]: "gemini-1.5-pro",
+            [ModelClass.SMALL]: "gemini-1.5-flash-latest",
+            [ModelClass.MEDIUM]: "gemini-1.5-flash-latest",
+            [ModelClass.LARGE]: "gemini-1.5-pro-latest",
             [ModelClass.EMBEDDING]: "text-embedding-004",
         },
     },
@@ -187,8 +187,7 @@ const models: Models = {
                 settings.LARGE_OPENROUTER_MODEL ||
                 settings.OPENROUTER_MODEL ||
                 "nousresearch/hermes-3-llama-3.1-405b",
-            [ModelClass.EMBEDDING]: 
-                "text-embedding-3-small",
+            [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
     [ModelProviderName.OLLAMA]: {

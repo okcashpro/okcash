@@ -550,7 +550,11 @@ export interface IAgentRuntime {
         state?: State,
         callback?: HandlerCallback
     ): Promise<void>;
-    evaluate(message: Memory, state?: State, didRespond?: boolean): Promise<string[]>;
+    evaluate(
+        message: Memory,
+        state?: State,
+        didRespond?: boolean
+    ): Promise<string[]>;
     ensureParticipantExists(userId: UUID, roomId: UUID): Promise<void>;
     ensureUserExists(
         userId: UUID,
