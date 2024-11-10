@@ -7,17 +7,20 @@ import {
 } from "@ai16z/eliza/src/types.ts";
 import {
     DexScreenerData,
-    //   DexScreenerPair,
+    DexScreenerPair,
     HolderData,
     ProcessedTokenData,
     TokenSecurityData,
     TokenTradeData,
+    CalculatedBuyAmounts,
+    Prices,
 } from "../types/token.ts";
-import { Connection } from "@solana/web3.js";
 import * as fs from "fs";
 import NodeCache from "node-cache";
 import * as path from "path";
 import { toBN } from "../bignumber.ts";
+import { WalletProvider, Item } from "./wallet.ts";
+import { Connection, PublicKey } from "@solana/web3.js";
 
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -33,6 +36,7 @@ const PROVIDER_CONFIG = {
     TOKEN_SECURITY_ENDPOINT: "/defi/token_security?address=",
     TOKEN_TRADE_DATA_ENDPOINT: "/defi/v3/token/trade-data/single?address=",
     DEX_SCREENER_API: "https://api.dexscreener.com/latest/dex/tokens/",
+    MAIN_WALLET: "",
 };
 
 export class TokenProvider {
@@ -41,7 +45,8 @@ export class TokenProvider {
 
     constructor(
         //  private connection: Connection,
-        private tokenAddress: string
+        private tokenAddress: string,
+        private walletProvider: WalletProvider
     ) {
         this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
         const __dirname = path.resolve();
@@ -164,6 +169,128 @@ export class TokenProvider {
             lastError
         );
         throw lastError;
+    }
+
+    async getTokensInWallet(runtime: IAgentRuntime): Promise<Item[]> {
+        const walletInfo =
+            await this.walletProvider.fetchPortfolioValue(runtime);
+        const items = walletInfo.items;
+        return items;
+    }
+
+    // check if the token symbol is in the wallet
+    async getTokenFromWallet(runtime: IAgentRuntime, tokenSymbol: string) {
+        try {
+            const items = await this.getTokensInWallet(runtime);
+            const token = items.find((item) => item.symbol === tokenSymbol);
+
+            if (token) {
+                return token.address;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error("Error checking token in wallet:", error);
+            return null;
+        }
+    }
+
+    async fetchPrices(): Promise<Prices> {
+        try {
+            const cacheKey = "prices";
+            const cachedData = this.getCachedData<Prices>(cacheKey);
+            if (cachedData) {
+                console.log("Returning cached prices.");
+                return cachedData;
+            }
+            const { SOL, BTC, ETH } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
+            const tokens = [SOL, BTC, ETH];
+            const prices: Prices = {
+                solana: { usd: "0" },
+                bitcoin: { usd: "0" },
+                ethereum: { usd: "0" },
+            };
+
+            for (const token of tokens) {
+                const response = await this.fetchWithRetry(
+                    `${PROVIDER_CONFIG.BIRDEYE_API}/defi/price?address=${token}`,
+                    {
+                        headers: {
+                            "x-chain": "solana",
+                        },
+                    }
+                );
+
+                if (response?.data?.value) {
+                    const price = response.data.value.toString();
+                    prices[
+                        token === SOL
+                            ? "solana"
+                            : token === BTC
+                              ? "bitcoin"
+                              : "ethereum"
+                    ].usd = price;
+                } else {
+                    console.warn(`No price data available for token: ${token}`);
+                }
+            }
+            this.setCachedData(cacheKey, prices);
+            return prices;
+        } catch (error) {
+            console.error("Error fetching prices:", error);
+            throw error;
+        }
+    }
+    async calculateBuyAmounts(): Promise<CalculatedBuyAmounts> {
+        const dexScreenerData = await this.fetchDexScreenerData();
+        const prices = await this.fetchPrices();
+        const solPrice = toBN(prices.solana.usd);
+
+        if (!dexScreenerData || dexScreenerData.pairs.length === 0) {
+            return { none: 0, low: 0, medium: 0, high: 0 };
+        }
+
+        // Get the first pair
+        const pair = dexScreenerData.pairs[0];
+        const { liquidity, marketCap } = pair;
+        if (!liquidity || !marketCap) {
+            return { none: 0, low: 0, medium: 0, high: 0 };
+        }
+
+        if (liquidity.usd === 0) {
+            return { none: 0, low: 0, medium: 0, high: 0 };
+        }
+        if (marketCap < 100000) {
+            return { none: 0, low: 0, medium: 0, high: 0 };
+        }
+
+        // impact percentages based on liquidity
+        const impactPercentages = {
+            LOW: 0.01, // 1% of liquidity
+            MEDIUM: 0.05, // 5% of liquidity
+            HIGH: 0.1, // 10% of liquidity
+        };
+
+        // Calculate buy amounts in USD
+        const lowBuyAmountUSD = liquidity.usd * impactPercentages.LOW;
+        const mediumBuyAmountUSD = liquidity.usd * impactPercentages.MEDIUM;
+        const highBuyAmountUSD = liquidity.usd * impactPercentages.HIGH;
+
+        // Convert each buy amount to SOL
+        const lowBuyAmountSOL = toBN(lowBuyAmountUSD).div(solPrice).toNumber();
+        const mediumBuyAmountSOL = toBN(mediumBuyAmountUSD)
+            .div(solPrice)
+            .toNumber();
+        const highBuyAmountSOL = toBN(highBuyAmountUSD)
+            .div(solPrice)
+            .toNumber();
+
+        return {
+            none: 0,
+            low: lowBuyAmountSOL,
+            medium: mediumBuyAmountSOL,
+            high: highBuyAmountSOL,
+        };
     }
 
     async fetchTokenSecurity(): Promise<TokenSecurityData> {
@@ -472,6 +599,68 @@ export class TokenProvider {
         }
     }
 
+    async searchDexScreenerData(
+        symbol: string
+    ): Promise<DexScreenerPair | null> {
+        const cacheKey = `dexScreenerData_search_${symbol}`;
+        const cachedData = this.getCachedData<DexScreenerData>(cacheKey);
+        if (cachedData) {
+            console.log("Returning cached search DexScreener data.");
+            return this.getHighestLiquidityPair(cachedData);
+        }
+
+        const url = `https://api.dexscreener.com/latest/dex/search?q=${symbol}`;
+        try {
+            console.log(`Fetching DexScreener data for symbol: ${symbol}`);
+            const data = await fetch(url)
+                .then((res) => res.json())
+                .catch((err) => {
+                    console.error(err);
+                    return null;
+                });
+
+            if (!data || !data.pairs || data.pairs.length === 0) {
+                throw new Error("No DexScreener data available");
+            }
+
+            const dexData: DexScreenerData = {
+                schemaVersion: data.schemaVersion,
+                pairs: data.pairs,
+            };
+
+            // Cache the result
+            this.setCachedData(cacheKey, dexData);
+
+            // Return the pair with the highest liquidity and market cap
+            return this.getHighestLiquidityPair(dexData);
+        } catch (error) {
+            console.error(`Error fetching DexScreener data:`, error);
+            return null;
+        }
+    }
+    getHighestLiquidityPair(dexData: DexScreenerData): DexScreenerPair | null {
+        if (dexData.pairs.length === 0) {
+            return null;
+        }
+
+        // Sort pairs by both liquidity and market cap to get the highest one
+        return dexData.pairs.reduce((highestPair, currentPair) => {
+            const currentLiquidity = currentPair.liquidity.usd;
+            const currentMarketCap = currentPair.marketCap;
+            const highestLiquidity = highestPair.liquidity.usd;
+            const highestMarketCap = highestPair.marketCap;
+
+            if (
+                currentLiquidity > highestLiquidity ||
+                (currentLiquidity === highestLiquidity &&
+                    currentMarketCap > highestMarketCap)
+            ) {
+                return currentPair;
+            }
+            return highestPair;
+        });
+    }
+
     async analyzeHolderDistribution(
         tradeData: TokenTradeData
     ): Promise<string> {
@@ -733,6 +922,63 @@ export class TokenProvider {
         }
     }
 
+    async shouldTradeToken(): Promise<boolean> {
+        try {
+            const tokenData = await this.getProcessedTokenData();
+            const { tradeData, security, dexScreenerData } = tokenData;
+            const { ownerBalance, creatorBalance } = security;
+            const { liquidity, marketCap } = dexScreenerData.pairs[0];
+            const liquidityUsd = toBN(liquidity.usd);
+            const marketCapUsd = toBN(marketCap);
+            const totalSupply = toBN(ownerBalance).plus(creatorBalance);
+            const ownerPercentage = toBN(ownerBalance).dividedBy(totalSupply);
+            const creatorPercentage =
+                toBN(creatorBalance).dividedBy(totalSupply);
+            const top10HolderPercent = toBN(tradeData.volume_24h_usd).dividedBy(
+                totalSupply
+            );
+            const priceChange24hPercent = toBN(
+                tradeData.price_change_24h_percent
+            );
+            const priceChange12hPercent = toBN(
+                tradeData.price_change_12h_percent
+            );
+            const uniqueWallet24h = tradeData.unique_wallet_24h;
+            const volume24hUsd = toBN(tradeData.volume_24h_usd);
+            const volume24hUsdThreshold = 1000;
+            const priceChange24hPercentThreshold = 10;
+            const priceChange12hPercentThreshold = 5;
+            const top10HolderPercentThreshold = 0.05;
+            const uniqueWallet24hThreshold = 100;
+            const isTop10Holder = top10HolderPercent.gte(
+                top10HolderPercentThreshold
+            );
+            const isVolume24h = volume24hUsd.gte(volume24hUsdThreshold);
+            const isPriceChange24h = priceChange24hPercent.gte(
+                priceChange24hPercentThreshold
+            );
+            const isPriceChange12h = priceChange12hPercent.gte(
+                priceChange12hPercentThreshold
+            );
+            const isUniqueWallet24h =
+                uniqueWallet24h >= uniqueWallet24hThreshold;
+            const isLiquidityTooLow = liquidityUsd.lt(1000);
+            const isMarketCapTooLow = marketCapUsd.lt(100000);
+            return (
+                isTop10Holder ||
+                isVolume24h ||
+                isPriceChange24h ||
+                isPriceChange12h ||
+                isUniqueWallet24h ||
+                isLiquidityTooLow ||
+                isMarketCapTooLow
+            );
+        } catch (error) {
+            console.error("Error processing token data:", error);
+            throw error;
+        }
+    }
+
     formatTokenData(data: ProcessedTokenData): string {
         let output = `**Token Security and Trade Report**\n`;
         output += `Token Address: ${this.tokenAddress}\n\n`;
@@ -820,7 +1066,11 @@ const tokenProvider: Provider = {
         _state?: State
     ): Promise<string> => {
         try {
-            const provider = new TokenProvider(tokenAddress);
+            const walletProvider = new WalletProvider(
+                connection,
+                new PublicKey(PROVIDER_CONFIG.MAIN_WALLET)
+            );
+            const provider = new TokenProvider(tokenAddress, walletProvider);
             return provider.getFormattedTokenReport();
         } catch (error) {
             console.error("Error fetching token data:", error);

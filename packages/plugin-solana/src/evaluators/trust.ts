@@ -1,5 +1,8 @@
 import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateObjectArray, generateTrueOrFalse } from "@ai16z/eliza/src/generation.ts";
+import {
+    generateObjectArray,
+    generateTrueOrFalse,
+} from "@ai16z/eliza/src/generation.ts";
 import { MemoryManager } from "@ai16z/eliza/src/memory.ts";
 import { booleanFooter } from "@ai16z/eliza/src/parsing.ts";
 import {
@@ -13,7 +16,9 @@ import {
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
+import { WalletProvider } from "../providers/wallet.ts";
 import { TrustScoreDatabase } from "../adapters/trustScoreDatabase.ts";
+import { Connection, PublicKey } from "@solana/web3.js";
 
 const shouldProcessTemplate =
     `# Task: Decide if the recent messages should be processed for token recommendations.
@@ -37,8 +42,7 @@ export const formatRecommendations = (recommendations: Memory[]) => {
     return finalMessageStrings;
 };
 
-const recommendationTemplate =
-    `TASK: Extract recommendations to buy or sell memecoins from the conversation as an array of objects in JSON format.
+const recommendationTemplate = `TASK: Extract recommendations to buy or sell memecoins from the conversation as an array of objects in JSON format.
 
     Memecoins usually have a ticker and a contract address. Additionally, recommenders may make recommendations with some amount of conviction. The amount of conviction in their recommendation can be none, low, medium, or high. Recommenders can make recommendations to buy, not buy, sell and not sell.
 
@@ -77,7 +81,7 @@ Response should be a JSON object array inside a JSON markdown block. Correct res
 \`\`\``;
 
 async function handler(runtime: IAgentRuntime, message: Memory) {
-    console.log("Evaluating for trust")
+    console.log("Evaluating for trust");
     const state = await runtime.composeState(message);
 
     const { agentId, roomId } = state;
@@ -95,10 +99,10 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     });
 
     if (!shouldProcess) {
-        console.log("Skipping process")
+        console.log("Skipping process");
         return [];
     }
-    
+
     // Get recent recommendations
     const recommendationsManager = new MemoryManager({
         runtime,
@@ -125,49 +129,83 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         modelClass: ModelClass.LARGE,
     });
 
-    console.log("recommendations", recommendations)
+    console.log("recommendations", recommendations);
 
     if (!recommendations) {
         return [];
     }
 
     // If the recommendation is already known or corrupted, remove it
-    const filteredRecommendations = recommendations
-        .filter((rec) => {
-            return (
-                !rec.alreadyKnown &&
-                (rec.ticker || rec.contractAddress) &&
-                rec.recommender &&
-                rec.conviction &&
-                rec.recommender.trim() !== ""
-            );
-        })
+    const filteredRecommendations = recommendations.filter((rec) => {
+        return (
+            !rec.alreadyKnown &&
+            (rec.ticker || rec.contractAddress) &&
+            rec.recommender &&
+            rec.conviction &&
+            rec.recommender.trim() !== ""
+        );
+    });
 
     for (const rec of filteredRecommendations) {
+        // create the wallet provider and token provider
+        const walletProvider = new WalletProvider(
+            new Connection("https://api.mainnet-beta.solana.com"),
+            new PublicKey("Main Wallet") // TODO: get the wallet public key from the runtime
+        );
+        const tokenProvider = new TokenProvider(
+            rec.contractAddress,
+            walletProvider
+        );
 
         // TODO: Check to make sure the contract address is valid, it's the right one, etc
 
-        if(!rec.contractAddress) {
-            console.warn("Not implemented: try to resolve CA from ticker")
-            continue;
+        //
+        if (!rec.contractAddress) {
+            const tokenAddress = await tokenProvider.getTokenFromWallet(
+                runtime,
+                rec.ticker
+            );
+            rec.contractAddress = tokenAddress;
+            if (!tokenAddress) {
+                // try to search for the symbol and return the contract address with they highest liquidity and market cap
+                const result = await tokenProvider.searchDexScreenerData(
+                    rec.ticker
+                );
+                const tokenAddress = result?.baseToken?.address;
+                rec.contractAddress = tokenAddress;
+                if (!tokenAddress) {
+                    console.warn("Could not find contract address for token");
+                    // ask the user to provide the contract address
+                    continue;
+                }
+            }
         }
 
-        // create the token provider and trust score manager
-        const tokenProvider = new TokenProvider(rec.contractAddress);
+        // create the trust score manager
+
         const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
-        const trustScoreManager = new TrustScoreManager(tokenProvider, trustScoreDb);
+        const trustScoreManager = new TrustScoreManager(
+            tokenProvider,
+            trustScoreDb
+        );
 
         // get actors from the database
-        const participants = await runtime.databaseAdapter.getParticipantsForRoom(message.roomId)
+        const participants =
+            await runtime.databaseAdapter.getParticipantsForRoom(
+                message.roomId
+            );
 
         // find the first user Id from a user with the username that we extracted
         const user = participants.find(async (actor) => {
             const user = await runtime.databaseAdapter.getAccountById(actor);
-            return user.name.toLowerCase().trim() === rec.recommender.toLowerCase().trim();
+            return (
+                user.name.toLowerCase().trim() ===
+                rec.recommender.toLowerCase().trim()
+            );
         });
 
-        if(!user) {
-            console.warn("Could not find user: ", rec.recommender)
+        if (!user) {
+            console.warn("Could not find user: ", rec.recommender);
             continue;
         }
 
@@ -186,45 +224,44 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
 
         // buy, dont buy, sell, dont sell
 
-        const buyAmounts = {
-            none: 0,
-            low: 10,
-            medium: 40,
-            high: 100
-        }
+        const buyAmounts = await this.tokenProvider.getBuyAmounts();
 
-        let buyAmount = buyAmounts[rec.conviction.toLowerCase().trim()]
-        if(!buyAmount) {
+        let buyAmount = buyAmounts[rec.conviction.toLowerCase().trim()];
+        if (!buyAmount) {
             // handle annoying cases
             // for now just put in 10 sol
             buyAmount = 10;
         }
 
-        // TODO: scale this with market cap probably?
-
-
         // TODO: is this is a buy, sell, dont buy, or dont sell?
+        const shouldTrade = await this.tokenProvider.shouldTrade();
 
-        switch(rec.type) {
-            case "buy":
-        // for now, lets just assume buy only, but we should implement
-        await trustScoreManager.createTradePerformance(
-            runtime,
-            rec.contractAddress,
-            userId,
-            {
-                buy_amount: rec.buyAmount,
-                is_simulation: true,
-            }
+        if (!shouldTrade) {
+            console.warn(
+                "There might be a problem with the token, not trading"
             );
-            break;
+            continue;
+        }
+
+        switch (rec.type) {
+            case "buy":
+                // for now, lets just assume buy only, but we should implement
+                await trustScoreManager.createTradePerformance(
+                    runtime,
+                    rec.contractAddress,
+                    userId,
+                    {
+                        buy_amount: rec.buyAmount,
+                        is_simulation: true,
+                    }
+                );
+                break;
             case "sell":
             case "dont_sell":
             case "dont_buy":
-                console.warn("Not implemented")
-            break;
+                console.warn("Not implemented");
+                break;
         }
-
     }
 
     return filteredRecommendations;
@@ -242,7 +279,7 @@ export const trustEvaluator: Evaluator = {
         runtime: IAgentRuntime,
         message: Memory
     ): Promise<boolean> => {
-        if(message.content.text.length < 5) {
+        if (message.content.text.length < 5) {
             return false;
         }
 
@@ -262,15 +299,21 @@ None`,
             messages: [
                 {
                     user: "{{user1}}",
-                    content: { text: "Yo, have you checked out $SOLARUG? Dope new yield aggregator on Solana." },
+                    content: {
+                        text: "Yo, have you checked out $SOLARUG? Dope new yield aggregator on Solana.",
+                    },
                 },
                 {
                     user: "{{user2}}",
-                    content: { text: "Nah, I'm still trying to wrap my head around how yield farming even works haha. Is it risky?" },
+                    content: {
+                        text: "Nah, I'm still trying to wrap my head around how yield farming even works haha. Is it risky?",
+                    },
                 },
                 {
                     user: "{{user1}}",
-                    content: { text: "I mean, there's always risk in DeFi, but the $SOLARUG devs seem legit. Threw a few sol into the FCweoTfJ128jGgNEXgdfTXdEZVk58Bz9trCemr6sXNx9 vault, farming's been smooth so far." },
+                    content: {
+                        text: "I mean, there's always risk in DeFi, but the $SOLARUG devs seem legit. Threw a few sol into the FCweoTfJ128jGgNEXgdfTXdEZVk58Bz9trCemr6sXNx9 vault, farming's been smooth so far.",
+                    },
                 },
             ] as ActionExample[],
             outcome: `\`\`\`json
@@ -303,7 +346,9 @@ Recommendations about the actors:
                 },
                 {
                     user: "{{user2}}",
-                    content: { text: "Idk man, feels like there's a new 'vault' or 'reserve' token every week on Sol. What happened to $COPETOKEN and $SOYLENT that you were shilling before?" },
+                    content: {
+                        text: "Idk man, feels like there's a new 'vault' or 'reserve' token every week on Sol. What happened to $COPETOKEN and $SOYLENT that you were shilling before?",
+                    },
                 },
                 {
                     user: "{{user1}}",
@@ -374,7 +419,7 @@ None`,
     "alreadyKnown": false    
   }
 ]  
-\`\`\``
+\`\`\``,
         },
 
         {
@@ -428,7 +473,7 @@ None
     "alreadyKnown": false
   }  
 ]
-\`\`\``
+\`\`\``,
         },
 
         {
@@ -483,7 +528,7 @@ None`,
     "alreadyKnown": false
   }  
 ]
-\`\`\``
-        }
+\`\`\``,
+        },
     ],
 };
