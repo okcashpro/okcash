@@ -8,6 +8,7 @@ import {
 } from "./types.ts";
 import fs from "fs";
 import { trimTokens } from "./generation.ts";
+import settings from "./settings.ts";
 
 function getRootPath() {
     const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +34,8 @@ export async function embed(runtime: IAgentRuntime, input: string) {
 
     if (
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
-        runtime.character.modelProvider !== ModelProviderName.OLLAMA
+        runtime.character.modelProvider !== ModelProviderName.OLLAMA &&
+        !settings.USE_OPENAI_EMBEDDING
     ) {
 
         // make sure to trim tokens to 8192
@@ -78,9 +80,10 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         headers: {
             "Content-Type": "application/json",
             // TODO: make this not hardcoded
-            ...(runtime.modelProvider !== ModelProviderName.OLLAMA && {
+            // TODO: make this not hardcoded
+            ...((runtime.modelProvider !== ModelProviderName.OLLAMA || settings.USE_OPENAI_EMBEDDING) ? {
                 Authorization: `Bearer ${runtime.token}`,
-            }),
+                } : {}),
         },
         body: JSON.stringify({
             input,
@@ -92,7 +95,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     try {
         const response = await fetch(
             // TODO: make this not hardcoded
-            `${runtime.character.modelEndpointOverride || modelProvider.endpoint}${runtime.character.modelProvider === ModelProviderName.OLLAMA ? "/v1" : ""}/embeddings`,
+            `${runtime.character.modelEndpointOverride || modelProvider.endpoint}${(runtime.character.modelProvider === ModelProviderName.OLLAMA && !settings.USE_OPENAI_EMBEDDING) ? "/v1" : ""}/embeddings`,
             requestOptions
         );
 
