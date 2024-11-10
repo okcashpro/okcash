@@ -1,4 +1,4 @@
-import { type UUID } from "../core/types.ts";
+import { type UUID } from "@ai16z/eliza/src/types.ts";
 
 export const SERVER_URL = "http://localhost:7998";
 export const SUPABASE_URL = "https://pronvzrzfwsptkojvudd.supabase.co";

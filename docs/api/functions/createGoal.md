@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/core/goals.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/goals.ts#L54)
+[packages/core/src/goals.ts:54](https://github.com/ai16z/eliza/blob/main/packages/core/src/goals.ts#L54)

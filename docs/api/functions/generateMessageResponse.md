@@ -26,4 +26,4 @@ The completed message.
 
 ## Defined in
 
-[packages/core/src/core/generation.ts:549](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/generation.ts#L549)
+[packages/core/src/generation.ts:565](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L565)

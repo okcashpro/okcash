@@ -18,15 +18,11 @@
 
 ### modelProvider
 
-> **modelProvider**: [`ModelProvider`](../enumerations/ModelProvider.md)
+> **modelProvider**: [`ModelProviderName`](../enumerations/ModelProviderName.md)
 
 ### modelEndpointOverride?
 
 > `optional` **modelEndpointOverride**: `string`
-
-### imageGenModel?
-
-> `optional` **imageGenModel**: [`ImageGenModel`](../enumerations/ImageGenModel.md)
 
 ### templates?
 
@@ -34,7 +30,7 @@
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### bio
 
@@ -86,7 +82,7 @@
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### settings.voice?
 
@@ -126,4 +122,4 @@
 
 ## Defined in
 
-[packages/core/src/core/types.ts:318](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L318)
+[packages/core/src/types.ts:324](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L324)

@@ -26,4 +26,4 @@ A string that concatenates the outputs of each provider.
 
 ## Defined in
 
-[packages/core/src/core/providers.ts:13](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/providers.ts#L13)
+[packages/core/src/providers.ts:10](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers.ts#L10)

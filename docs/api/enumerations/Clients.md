@@ -8,9 +8,9 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:312](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L312)
+[packages/core/src/types.ts:318](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L318)
 
-***
+---
 
 ### DIRECT
 
@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:313](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L313)
+[packages/core/src/types.ts:319](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L319)
 
-***
+---
 
 ### TWITTER
 
@@ -28,9 +28,9 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:314](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L314)
+[packages/core/src/types.ts:320](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L320)
 
-***
+---
 
 ### TELEGRAM
 
@@ -38,4 +38,4 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:315](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L315)
+[packages/core/src/types.ts:321](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L321)

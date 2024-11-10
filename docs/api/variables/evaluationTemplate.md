@@ -6,4 +6,4 @@ Template used for the evaluation generateText.
 
 ## Defined in
 
-[packages/core/src/core/evaluators.ts:12](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/evaluators.ts#L12)
+[packages/core/src/evaluators.ts:8](https://github.com/ai16z/eliza/blob/main/packages/core/src/evaluators.ts#L8)

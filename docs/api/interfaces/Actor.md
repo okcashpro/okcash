@@ -10,9 +10,9 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[packages/core/src/core/types.ts:42](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L42)
+[packages/core/src/types.ts:41](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L41)
 
-***
+---
 
 ### username
 
@@ -20,9 +20,9 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[packages/core/src/core/types.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L43)
+[packages/core/src/types.ts:42](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L42)
 
-***
+---
 
 ### details
 
@@ -42,9 +42,9 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[packages/core/src/core/types.ts:44](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L44)
+[packages/core/src/types.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L43)
 
-***
+---
 
 ### id
 
@@ -52,4 +52,4 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 #### Defined in
 
-[packages/core/src/core/types.ts:45](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L45)
+[packages/core/src/types.ts:44](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L44)

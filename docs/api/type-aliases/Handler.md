@@ -22,4 +22,4 @@ Represents the type of a handler function, which takes a runtime instance, a mes
 
 ## Defined in
 
-[packages/core/src/core/types.ts:186](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L186)
+[packages/core/src/types.ts:186](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L186)

@@ -22,4 +22,4 @@ The model to use for generateText.
 
 ## Defined in
 
-[packages/core/src/core/generation.ts:247](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/generation.ts#L247)
+[packages/core/src/generation.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L263)

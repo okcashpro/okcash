@@ -1,4 +1,4 @@
-import { messageCompletionFooter } from "../core/parsing.ts";
+import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
 
 export const messageHandlerTemplate =
     `{{actionExamples}}
@@ -14,8 +14,6 @@ export const messageHandlerTemplate =
 - Available actions are {{actionNames}}
 
 {{lore}}
-{{relevantFacts}}
-{{recentFacts}}
 {{goals}}
 {{actors}}
 {{actionNames}}

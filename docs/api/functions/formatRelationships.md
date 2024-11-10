@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/core/relationships.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/relationships.ts#L43)
+[packages/core/src/relationships.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/relationships.ts#L43)

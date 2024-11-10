@@ -1,0 +1,23 @@
+{
+    "name": "@ai16z/adapter-sqlite",
+    "version": "0.0.1",
+    "main": "src/index.ts",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@ai16z/eliza": "workspace:*",
+        "@types/better-sqlite3": "7.6.11",
+        "sqlite-vec": "0.1.4-alpha.2",
+        "better-sqlite3": "11.5.0"
+    },
+    "devDependencies": {
+        "tsup": "^8.3.5"
+    },
+    "scripts": {
+        "build": "echo 'No build step required'",
+        "dev": "tsup --watch"
+    },
+    "peerDependencies": {
+        "whatwg-url": "7.1.0"
+    }
+}

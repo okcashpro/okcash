@@ -10,9 +10,9 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/core/types.ts:234](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L234)
+[packages/core/src/types.ts:234](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L234)
 
-***
+---
 
 ### similes
 
@@ -20,9 +20,9 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/core/types.ts:235](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L235)
+[packages/core/src/types.ts:235](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L235)
 
-***
+---
 
 ### examples
 
@@ -30,9 +30,9 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/core/types.ts:236](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L236)
+[packages/core/src/types.ts:236](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L236)
 
-***
+---
 
 ### handler
 
@@ -40,9 +40,9 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/core/types.ts:237](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L237)
+[packages/core/src/types.ts:237](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L237)
 
-***
+---
 
 ### name
 
@@ -50,9 +50,9 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/core/types.ts:238](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L238)
+[packages/core/src/types.ts:238](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L238)
 
-***
+---
 
 ### validate
 
@@ -60,4 +60,4 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/core/types.ts:239](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L239)
+[packages/core/src/types.ts:239](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L239)

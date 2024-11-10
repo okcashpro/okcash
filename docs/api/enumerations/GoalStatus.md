@@ -8,9 +8,9 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:58](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L58)
+[packages/core/src/types.ts:57](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L57)
 
-***
+---
 
 ### FAILED
 
@@ -18,14 +18,14 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:59](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L59)
+[packages/core/src/types.ts:58](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L58)
 
-***
+---
 
-### IN\_PROGRESS
+### IN_PROGRESS
 
-> **IN\_PROGRESS**: `"IN_PROGRESS"`
+> **IN_PROGRESS**: `"IN_PROGRESS"`
 
 #### Defined in
 
-[packages/core/src/core/types.ts:60](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L60)
+[packages/core/src/types.ts:59](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L59)

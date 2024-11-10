@@ -24,4 +24,4 @@
 
 ## Defined in
 
-[packages/core/src/actions/imageGenerationUtils.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions/imageGenerationUtils.ts#L90)
+[packages/core/src/generation.ts:687](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L687)

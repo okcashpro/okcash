@@ -1,5 +1,9 @@
 # Interface: IBrowserService
 
+## Extends
+
+- [`Service`](../classes/Service.md)
+
 ## Methods
 
 ### initialize()
@@ -12,9 +16,9 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L599)
+[packages/core/src/types.ts:621](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L621)
 
-***
+---
 
 ### closeBrowser()
 
@@ -26,17 +30,19 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L600)
+[packages/core/src/types.ts:622](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L622)
 
-***
+---
 
 ### getPageContent()
 
-> **getPageContent**(`url`): `Promise`\<`object`\>
+> **getPageContent**(`url`, `runtime`): `Promise`\<`object`\>
 
 #### Parameters
 
 • **url**: `string`
+
+• **runtime**: [`IAgentRuntime`](IAgentRuntime.md)
 
 #### Returns
 
@@ -56,4 +62,4 @@
 
 #### Defined in
 
-[packages/core/src/core/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/types.ts#L601)
+[packages/core/src/types.ts:623](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L623)

@@ -1,7 +1,7 @@
 # Variable: elizaLogger
 
-> `const` **elizaLogger**: `elizaLogger`
+> `const` **elizaLogger**: `ElizaLogger`
 
 ## Defined in
 
-[packages/core/src/index.ts:12](https://github.com/ai16z/eliza/blob/main/packages/core/src/index.ts#L12)
+[packages/core/src/logger.ts:270](https://github.com/ai16z/eliza/blob/main/packages/core/src/logger.ts#L270)

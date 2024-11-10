@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/core/embedding.ts:68](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/embedding.ts#L68)
+[packages/core/src/embedding.ts:80](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L80)

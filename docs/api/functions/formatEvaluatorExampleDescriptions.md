@@ -18,4 +18,4 @@ A string that summarizes the descriptions for each evaluator example, formatted 
 
 ## Defined in
 
-[packages/core/src/core/evaluators.ts:114](https://github.com/ai16z/eliza/blob/main/packages/core/src/core/evaluators.ts#L114)
+[packages/core/src/evaluators.ts:110](https://github.com/ai16z/eliza/blob/main/packages/core/src/evaluators.ts#L110)
