@@ -85,7 +85,7 @@ Note: we're still finalizing details on the creator/dev fund that seeks to retro
 
 ## Getting Started
 
-1. Join the [Eliza Discord](https://discord.gg/P4uxZJFAdP) and make a short introduction.
+1. Join the [Eliza Discord](https://discord.gg/ai16z) and make a short introduction.
 2. Explore the [documentation](/docs/intro) to understand the project's architecture and capabilities. 
 3. Check out the [open issues](https://github.com/ai16z/eliza/issues) on GitHub to find ways to contribute.
 4. Share your ideas and initiatives with the community - we're excited to see what you'll build!

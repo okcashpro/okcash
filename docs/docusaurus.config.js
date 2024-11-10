@@ -175,11 +175,11 @@ const config = {
             items: [
               {
                 label: 'Discord',
-                href: 'https://discord.gg/NQHKW7US'
+                href: 'https://discord.gg/ai16z'
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/pmairca'
+                href: 'https://twitter.com/ai16zdao'
               }
             ]
           },
