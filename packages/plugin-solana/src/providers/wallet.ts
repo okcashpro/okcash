@@ -20,7 +20,7 @@ const PROVIDER_CONFIG = {
     },
 };
 
-interface Item {
+export interface Item {
     name: string;
     address: string;
     symbol: string;
