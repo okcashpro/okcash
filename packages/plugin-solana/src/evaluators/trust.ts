@@ -175,7 +175,6 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
                 rec.contractAddress = tokenAddress;
                 if (!tokenAddress) {
                     console.warn("Could not find contract address for token");
-                    // ask the user to provide the contract address
                     continue;
                 }
             }
