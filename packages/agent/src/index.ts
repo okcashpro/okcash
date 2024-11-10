@@ -1,4 +1,3 @@
-console.log("ok");
 import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres/src/index.ts";
 import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite/src/index.ts";
 import { DirectClientInterface } from "@ai16z/client-direct/src/index.ts";
@@ -15,6 +14,7 @@ import {
     ModelProviderName,
 } from "@ai16z/eliza/src/types.ts";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap/src/index.ts";
+import { solanaPlugin } from "@ai16z/plugin-solana/src/index.ts";
 import { nodePlugin } from "@ai16z/plugin-node/src/index.ts";
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -128,6 +128,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.REDPILL_API_KEY ||
                 settings.REDPILL_API_KEY
             );
+        case ModelProviderName.OPENROUTER:
+            return (
+                character.settings?.secrets?.OPENROUTER ||
+                settings.OPENROUTER_API_KEY
+            );
     }
 }
 
@@ -198,7 +203,13 @@ export async function createAgent(
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
-        plugins: [bootstrapPlugin, nodePlugin],
+        plugins: [
+            bootstrapPlugin,
+            nodePlugin,
+            character.settings.secrets.WALLET_PUBLIC_KEY
+                ? solanaPlugin
+                : null
+        ].filter(Boolean),
         providers: [],
         actions: [],
         services: [],

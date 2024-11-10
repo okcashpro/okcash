@@ -214,6 +214,31 @@ export async function generateText({
                 break;
             }
 
+
+            case ModelProviderName.OPENROUTER: {
+                elizaLogger.log("Initializing OpenRouter model.");
+                const serverUrl = models[provider].endpoint;
+                const openrouter = createOpenAI({ apiKey, baseURL: serverUrl });
+
+                const { text: openrouterResponse } = await aiGenerateText({
+                    model: openrouter.languageModel(model),
+                    prompt: context,
+                    temperature: temperature,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = openrouterResponse;
+                elizaLogger.log("Received response from OpenRouter model.");
+                break;
+            }
+
+
             case ModelProviderName.OLLAMA:
                 {
                     console.log("Initializing Ollama model.");
@@ -400,9 +425,10 @@ export async function generateTrueOrFalse({
     modelClass: string;
 }): Promise<boolean> {
     let retryDelay = 1000;
+    console.log("modelClass", modelClass)
 
     const stop = Array.from(
-        new Set([...(models[modelClass].settings.stop || []), ["\n"]])
+        new Set([...(models[runtime.modelProvider].settings.stop || []), ["\n"]])
     ) as string[];
 
     while (true) {

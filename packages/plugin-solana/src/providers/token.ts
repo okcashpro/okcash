@@ -12,12 +12,12 @@ import {
     ProcessedTokenData,
     TokenSecurityData,
     TokenTradeData,
-} from "@ai16z/eliza/src/types/token.ts";
-import { toBN } from "@ai16z/eliza/src/utils/bignumber.ts";
+} from "../types/token.ts";
 import { Connection } from "@solana/web3.js";
 import * as fs from "fs";
 import NodeCache from "node-cache";
 import * as path from "path";
+import { toBN } from "../bignumber.ts";
 
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",

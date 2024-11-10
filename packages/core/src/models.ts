@@ -162,6 +162,35 @@ const models: Models = {
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
+    [ModelProviderName.OPENROUTER]: {
+        endpoint: "https://openrouter.ai/api/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.6,
+        },
+        // Available models: https://openrouter.ai/models
+        // To test other models, change the models below
+        model: {
+            [ModelClass.SMALL]:
+                settings.SMALL_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-70b",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
+            [ModelClass.LARGE]:
+                settings.LARGE_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
+            [ModelClass.EMBEDDING]: 
+                "text-embedding-3-small",
+        },
+    },
     [ModelProviderName.OLLAMA]: {
         settings: {
             stop: [],

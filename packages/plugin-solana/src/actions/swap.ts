@@ -7,7 +7,7 @@ import {
 } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import { v4 as uuidv4 } from "uuid";
-import { TrustScoreDatabase } from "@ai16z/eliza/src/adapters/trustScoreDatabase.ts";
+import { TrustScoreDatabase } from "../adapters/trustScoreDatabase.ts";
 import { composeContext } from "@ai16z/eliza/src/context.ts";
 import { generateObject } from "@ai16z/eliza/src/generation.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
@@ -20,12 +20,12 @@ import {
     State,
     type Action,
 } from "@ai16z/eliza/src/types.ts";
-import { TokenProvider } from "@ai16z/eliza/src/providers/token.ts";
-import { TrustScoreProvider } from "@ai16z/eliza/src/providers/trustScoreProvider.ts";
+import { TokenProvider } from "../providers/token.ts";
+import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import {
     walletProvider,
     WalletProvider,
-} from "@ai16z/eliza/src/providers/wallet.ts";
+} from "../providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
 
 async function swapToken(
@@ -408,7 +408,7 @@ export const executeSwap: Action = {
                     solanaPubkey: walletPublicKey.toString(),
                 });
 
-                const trustScoreDatabase = new TrustScoreProvider(
+                const trustScoreDatabase = new TrustScoreManager(
                     tokenProvider,
                     trustScoreDb
                 );
@@ -438,7 +438,7 @@ export const executeSwap: Action = {
                     solanaPubkey: walletPublicKey.toString(),
                 });
 
-                const trustScoreDatabase = new TrustScoreProvider(
+                const trustScoreDatabase = new TrustScoreManager(
                     tokenProvider,
                     trustScoreDb
                 );

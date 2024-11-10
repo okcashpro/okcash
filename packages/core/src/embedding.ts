@@ -85,7 +85,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         body: JSON.stringify({
             input,
             model: embeddingModel,
-            length: 768, // we are squashing dimensions to 768 for openai, even thought the model supports 1536
+            length: 384, // we are squashing dimensions to 768 for openai, even thought the model supports 1536
             // -- this is ok for matryoshka embeddings but longterm, we might want to support 1536
         }),
     };
