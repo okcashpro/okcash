@@ -17,7 +17,12 @@ import {
     TradePerformance,
 } from "../adapters/trustScoreDatabase.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza/src/types.ts";
+import {
+    IAgentRuntime,
+    Memory,
+    Provider,
+    State,
+} from "@ai16z/eliza/src/types.ts";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
@@ -309,12 +314,17 @@ export class TrustScoreManager {
         recommenderId: string,
         data: TradeData
     ): Promise<TradePerformance> {
+        const recommender =
+            await this.trustScoreDb.getOrCreateRecommenderWithDiscordId(
+                recommenderId
+            );
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
         const wallet = new WalletProvider(
             new Connection("https://api.mainnet-beta.solana.com"),
             new PublicKey(Wallet!)
         );
+
         const prices = await wallet.fetchPrices(runtime);
         const solPrice = prices.solana.usd;
         const buySol = data.buy_amount / parseFloat(solPrice);
@@ -322,7 +332,7 @@ export class TrustScoreManager {
 
         const creationData = {
             token_address: tokenAddress,
-            recommender_id: recommenderId,
+            recommender_id: recommender.id,
             buy_price: processedData.tradeData.price,
             sell_price: 0,
             buy_timeStamp: new Date().toISOString(),
@@ -368,6 +378,10 @@ export class TrustScoreManager {
         sellDetails: sellDetails,
         isSimulation: boolean
     ) {
+        const recommender =
+            await this.trustScoreDb.getOrCreateRecommenderWithDiscordId(
+                recommenderId
+            );
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
         const wallet = new WalletProvider(
@@ -381,7 +395,7 @@ export class TrustScoreManager {
             sellDetails.sell_amount * processedData.tradeData.price;
         const trade = await this.trustScoreDb.getLatestTradePerformance(
             tokenAddress,
-            recommenderId,
+            recommender.id,
             isSimulation
         );
         const buyTimeStamp = trade.buy_timeStamp;
@@ -415,7 +429,7 @@ export class TrustScoreManager {
         };
         this.trustScoreDb.updateTradePerformanceOnSell(
             tokenAddress,
-            recommenderId,
+            recommender.id,
             buyTimeStamp,
             sellDetailsData,
             isSimulation
@@ -425,9 +439,15 @@ export class TrustScoreManager {
 }
 
 export const trustScoreProvider: Provider = {
-    async get(runtime: IAgentRuntime, message: Memory, state?: State): Promise<string> {
+    async get(
+        runtime: IAgentRuntime,
+        message: Memory,
+        state?: State
+    ): Promise<string> {
         try {
-            const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
+            const trustScoreDb = new TrustScoreDatabase(
+                runtime.databaseAdapter.db
+            );
 
             // Get the user ID from the message
             const userId = message.userId;
@@ -438,7 +458,8 @@ export const trustScoreProvider: Provider = {
             }
 
             // Get the recommender metrics for the user
-            const recommenderMetrics = await trustScoreDb.getRecommenderMetrics(userId);
+            const recommenderMetrics =
+                await trustScoreDb.getRecommenderMetrics(userId);
 
             if (!recommenderMetrics) {
                 console.error("No recommender metrics found for user:", userId);

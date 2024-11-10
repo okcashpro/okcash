@@ -397,8 +397,7 @@ export class MessageManager {
 
             // Decide whether to respond
             const shouldRespond = await this._shouldRespond(message, state);
-            if (!shouldRespond) return;
-
+            if (shouldRespond) {
             // Generate response
             const context = composeContext({
                 state,
@@ -463,7 +462,6 @@ export class MessageManager {
 
             // Update state after response
             state = await this.runtime.updateRecentMessageState(state);
-            await this.runtime.evaluate(memory, state);
 
             // Handle any resulting actions
             await this.runtime.processActions(
@@ -472,6 +470,9 @@ export class MessageManager {
                 state,
                 callback
             );
+        }
+
+            await this.runtime.evaluate(memory, state, shouldRespond);
         } catch (error) {
             console.error("❌ Error handling message:", error);
             console.error("Error sending message:", error);
