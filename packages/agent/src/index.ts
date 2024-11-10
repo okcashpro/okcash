@@ -2,6 +2,7 @@ import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres/src/index.ts";
 import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite/src/index.ts";
 import { DirectClientInterface } from "@ai16z/client-direct/src/index.ts";
 import { DiscordClientInterface } from "@ai16z/client-discord/src/index.ts";
+import { AutoClientInterface } from "@ai16z/client-auto/src/index.ts";
 import { TelegramClientInterface } from "@ai16z/client-telegram/src/index.ts";
 import { TwitterClientInterface } from "@ai16z/client-twitter/src/index.ts";
 import { defaultCharacter } from "@ai16z/eliza/src/defaultCharacter.ts";
@@ -173,6 +174,11 @@ export async function initializeClients(
     const clients = [];
     const clientTypes =
         character.clients?.map((str) => str.toLowerCase()) || [];
+
+    if (clientTypes.includes("auto")) {
+        const autoClient = await AutoClientInterface.start(runtime);
+        if (autoClient) clients.push(autoClient);
+    }
 
     if (clientTypes.includes("discord")) {
         clients.push(await DiscordClientInterface.start(runtime));
