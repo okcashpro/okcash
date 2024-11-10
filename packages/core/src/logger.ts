@@ -1,4 +1,8 @@
 class ElizaLogger {
+    constructor() {
+        this.verbose = process.env.verbose === "true" || false;
+    }
+
     verbose = false;
     closeByNewLine = true;
     useIcons = true;
