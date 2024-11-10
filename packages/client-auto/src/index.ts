@@ -3,17 +3,24 @@ import { TrustScoreManager } from "@ai16z/plugin-solana/src/providers/trustScore
 import { TokenProvider } from "@ai16z/plugin-solana/src/providers/token.ts";
 import { WalletProvider } from "@ai16z/plugin-solana/src/providers/wallet.ts";
 import { TrustScoreDatabase } from "@ai16z/plugin-solana/src/adapters/trustScoreDatabase.ts";
+import { Connection, PublicKey } from "@solana/web3.js";
 
 export class AutoClient {
     interval: NodeJS.Timeout;
     runtime: IAgentRuntime;
     trustScoreProvider: TrustScoreManager;
+    walletProvider: WalletProvider;
 
     constructor(runtime: IAgentRuntime) {
         this.runtime = runtime;
 
         const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
         this.trustScoreProvider = new TrustScoreManager(null, trustScoreDb);
+        this.walletProvider = new WalletProvider(
+            new Connection(runtime.getSetting("RPC_URL")),
+            new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
+        );
+
         // start a loop that runs every x seconds
         this.interval = setInterval(
             async () => {
@@ -41,6 +48,18 @@ export class AutoClient {
         );
 
         // get information for all tokens which were recommended
+        const tokenInfos = highTrustRecommendations.map(
+            async (highTrustRecommendation) => {
+                const tokenProvider = new TokenProvider(
+                    highTrustRecommendation.tokenAddress,
+                    this.walletProvider
+                );
+                const tokenInfo = await tokenProvider.getProcessedTokenData();
+                const shouldTrade = await tokenProvider.shouldTradeToken();
+                return { tokenInfo, shouldTrade };
+            }
+        );
+
         // get any additional information we might need
         // make sure we're looking at the right tokens and data
 
