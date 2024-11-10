@@ -123,8 +123,8 @@ export function getTokenForProvider(
                 settings.LLAMACLOUD_API_KEY ||
                 character.settings?.secrets?.TOGETHER_API_KEY ||
                 settings.TOGETHER_API_KEY ||
-                character.settings?.secrets?.X_API_KEY ||
-                settings.X_API_KEY ||
+                character.settings?.secrets?.XAI_API_KEY ||
+                settings.XAI_API_KEY ||
                 character.settings?.secrets?.OPENAI_API_KEY ||
                 settings.OPENAI_API_KEY
             );

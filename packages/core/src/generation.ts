@@ -106,7 +106,7 @@ export async function generateText({
             }
 
             case ModelProviderName.GOOGLE:
-                const google = createGoogleGenerativeAI();
+                { const google = createGoogleGenerativeAI();
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: google(model),
@@ -122,7 +122,7 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                break;
+                break; }
 
             case ModelProviderName.ANTHROPIC: {
                 elizaLogger.log("Initializing Anthropic model.");
