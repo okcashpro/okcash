@@ -498,14 +498,14 @@ export class AgentRuntime implements IAgentRuntime {
      * @returns The results of the evaluation.
      */
     async evaluate(message: Memory, state?: State, didRespond?: boolean) {
-        console.log("Evaluate: ", didRespond)
+        console.log("Evaluate: ", didRespond);
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
-                console.log("Evaluating", evaluator.name)
+                console.log("Evaluating", evaluator.name);
                 if (!evaluator.handler) {
                     return null;
                 }
-                if(!didRespond && !evaluator.alwaysRun) {
+                if (!didRespond && !evaluator.alwaysRun) {
                     return null;
                 }
                 const result = await evaluator.validate(this, message, state);
