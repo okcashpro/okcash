@@ -69,7 +69,7 @@ export async function generateText({
     const apiKey = runtime.token;
 
     try {
-        elizaLogger.log(
+        elizaLogger.debug(
             `Trimming context to max length of ${max_context_length} tokens.`
         );
         context = await trimTokens(context, max_context_length, "gpt-4o");
@@ -77,14 +77,14 @@ export async function generateText({
         let response: string;
 
         const _stop = stop || models[provider].settings.stop;
-        elizaLogger.log(
+        elizaLogger.debug(
             `Using provider: ${provider}, model: ${model}, temperature: ${temperature}, max response length: ${max_response_length}`
         );
 
         switch (provider) {
             case ModelProviderName.OPENAI:
             case ModelProviderName.LLAMACLOUD: {
-                elizaLogger.log("Initializing OpenAI model.");
+                elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: openaiResponse } = await aiGenerateText({
@@ -101,7 +101,7 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                elizaLogger.log("Received response from OpenAI model.");
+                elizaLogger.debug("Received response from OpenAI model.");
                 break;
             }
 
@@ -125,7 +125,7 @@ export async function generateText({
                 break;
 
             case ModelProviderName.ANTHROPIC: {
-                elizaLogger.log("Initializing Anthropic model.");
+                elizaLogger.debug("Initializing Anthropic model.");
 
                 const anthropic = createAnthropic({ apiKey });
 
@@ -143,12 +143,12 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                elizaLogger.log("Received response from Anthropic model.");
+                elizaLogger.debug("Received response from Anthropic model.");
                 break;
             }
 
             case ModelProviderName.GROK: {
-                elizaLogger.log("Initializing Grok model.");
+                elizaLogger.debug("Initializing Grok model.");
                 const grok = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: grokResponse } = await aiGenerateText({
@@ -167,7 +167,7 @@ export async function generateText({
                 });
 
                 response = grokResponse;
-                elizaLogger.log("Received response from Grok model.");
+                elizaLogger.debug("Received response from Grok model.");
                 break;
             }
 
@@ -194,7 +194,7 @@ export async function generateText({
             }
 
             case ModelProviderName.LLAMALOCAL: {
-                elizaLogger.log("Using local Llama model for text completion.");
+                elizaLogger.debug("Using local Llama model for text completion.");
                 response = await runtime
                     .getService<ITextGenerationService>(
                         ServiceType.TEXT_GENERATION
@@ -207,12 +207,12 @@ export async function generateText({
                         presence_penalty,
                         max_response_length
                     );
-                elizaLogger.log("Received response from local Llama model.");
+                elizaLogger.debug("Received response from local Llama model.");
                 break;
             }
 
             case ModelProviderName.REDPILL: {
-                elizaLogger.log("Initializing RedPill model.");
+                elizaLogger.debug("Initializing RedPill model.");
                 const serverUrl = models[provider].endpoint;
                 const openai = createOpenAI({ apiKey, baseURL: serverUrl });
 
@@ -230,12 +230,12 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                elizaLogger.log("Received response from OpenAI model.");
+                elizaLogger.debug("Received response from OpenAI model.");
                 break;
             }
 
             case ModelProviderName.OPENROUTER: {
-                elizaLogger.log("Initializing OpenRouter model.");
+                elizaLogger.debug("Initializing OpenRouter model.");
                 const serverUrl = models[provider].endpoint;
                 const openrouter = createOpenAI({ apiKey, baseURL: serverUrl });
 
@@ -253,20 +253,20 @@ export async function generateText({
                 });
 
                 response = openrouterResponse;
-                elizaLogger.log("Received response from OpenRouter model.");
+                elizaLogger.debug("Received response from OpenRouter model.");
                 break;
             }
 
             case ModelProviderName.OLLAMA:
                 {
-                    console.log("Initializing Ollama model.");
+                    console.debug("Initializing Ollama model.");
 
                     const ollamaProvider = createOllama({
                         baseURL: models[provider].endpoint + "/api",
                     });
                     const ollama = ollamaProvider(model);
 
-                    console.log("****** MODEL\n", model);
+                    console.debug("****** MODEL\n", model);
 
                     const { text: ollamaResponse } = await aiGenerateText({
                         model: ollama,
@@ -279,7 +279,7 @@ export async function generateText({
 
                     response = ollamaResponse;
                 }
-                console.log("Received response from Ollama model.");
+                console.debug("Received response from Ollama model.");
                 break;
 
             default: {
@@ -341,7 +341,7 @@ export async function generateShouldRespond({
     let retryDelay = 1000;
     while (true) {
         try {
-            elizaLogger.log(
+            elizaLogger.debug(
                 "Attempting to generate text with context:",
                 context
             );
@@ -351,13 +351,13 @@ export async function generateShouldRespond({
                 modelClass,
             });
 
-            elizaLogger.log("Received response from generateText:", response);
+            elizaLogger.debug("Received response from generateText:", response);
             const parsedResponse = parseShouldRespondFromText(response.trim());
             if (parsedResponse) {
-                elizaLogger.log("Parsed response:", parsedResponse);
+                elizaLogger.debug("Parsed response:", parsedResponse);
                 return parsedResponse;
             } else {
-                elizaLogger.log("generateShouldRespond no response");
+                elizaLogger.debug("generateShouldRespond no response");
             }
         } catch (error) {
             elizaLogger.error("Error in generateShouldRespond:", error);
@@ -632,7 +632,7 @@ export async function generateMessageResponse({
             // try parsing the response as JSON, if null then try again
             const parsedContent = parseJSONObjectFromText(response) as Content;
             if (!parsedContent) {
-                elizaLogger.log("parsedContent is null, retrying");
+                elizaLogger.debug("parsedContent is null, retrying");
                 continue;
             }
 
@@ -642,7 +642,7 @@ export async function generateMessageResponse({
             // wait for 2 seconds
             retryLength *= 2;
             await new Promise((resolve) => setTimeout(resolve, retryLength));
-            elizaLogger.log("Retrying...");
+            elizaLogger.debug("Retrying...");
         }
     }
 }
