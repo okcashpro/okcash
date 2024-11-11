@@ -39,7 +39,7 @@ async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Pro
     // Construct full URL
     const fullUrl = `${baseEndpoint}/embeddings`;
     
-    console.log("Calling embedding API at:", fullUrl); // Debug log
+    //console.log("Calling embedding API at:", fullUrl); // Debug log
 
     const requestOptions = {
         method: "POST",
@@ -129,7 +129,7 @@ async function getLocalEmbedding(input: string): Promise<number[]> {
 
     const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
     const embedding = await embeddingModel.queryEmbed(trimmedInput);
-    console.log("Embedding dimensions: ", embedding.length);
+    //console.log("Embedding dimensions: ", embedding.length);
     return embedding;
 }
 
