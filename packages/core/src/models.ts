@@ -31,7 +31,7 @@ const models: Models = {
         },
         endpoint: "https://api.anthropic.com/v1",
         model: {
-            [ModelClass.SMALL]: "claude-3-5-haiku",
+            [ModelClass.SMALL]: "claude-3-5-haiku-20241022",
             [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
             [ModelClass.LARGE]: "claude-3-opus-20240229",
         },
