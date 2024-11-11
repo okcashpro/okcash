@@ -31,6 +31,16 @@ interface EmbeddingOptions {
 }
 
 async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Promise<number[]> {
+    // Ensure endpoint ends with /v1 for OpenAI
+    const baseEndpoint = options.endpoint.endsWith('/v1') ? 
+        options.endpoint : 
+        `${options.endpoint}${options.isOllama ? '/v1' : ''}`;
+    
+    // Construct full URL
+    const fullUrl = `${baseEndpoint}/embeddings`;
+    
+    console.log("Calling embedding API at:", fullUrl); // Debug log
+
     const requestOptions = {
         method: "POST",
         headers: {
@@ -47,17 +57,12 @@ async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Pro
     };
 
     try {
-        const response = await fetch(
-            `${options.endpoint}${options.isOllama ? "/v1" : ""}/embeddings`,
-            requestOptions
-        );
+        const response = await fetch(fullUrl, requestOptions);
 
         if (!response.ok) {
+            console.error("API Response:", await response.text()); // Debug log
             throw new Error(
-                "Embedding API Error: " +
-                response.status +
-                " " +
-                response.statusText
+                `Embedding API Error: ${response.status} ${response.statusText}`
             );
         }
 
@@ -68,10 +73,11 @@ async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Pro
         const data: EmbeddingResponse = await response.json();
         return data?.data?.[0].embedding;
     } catch (e) {
-        console.error(e);
+        console.error("Full error details:", e);
         throw e;
     }
 }
+
 
 /**
  * Send a message to the OpenAI API for embedding.
@@ -80,6 +86,7 @@ async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Pro
  */
 export async function embed(runtime: IAgentRuntime, input: string) {
     const modelProvider = models[runtime.character.modelProvider];
+    //need to have env override for this to select what to use for embedding if provider doesnt provide or using openai
     const embeddingModel = modelProvider.model.embedding;
 
     // Try local embedding first
@@ -100,8 +107,12 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     // Get remote embedding
     return await getRemoteEmbedding(input, {
         model: embeddingModel,
-        endpoint: runtime.character.modelEndpointOverride || modelProvider.endpoint,
-        apiKey: runtime.token,
+        endpoint: settings.USE_OPENAI_EMBEDDING ? 
+            'https://api.openai.com/v1' : // Always use OpenAI endpoint when USE_OPENAI_EMBEDDING is true
+            (runtime.character.modelEndpointOverride || modelProvider.endpoint),
+            apiKey: settings.USE_OPENAI_EMBEDDING ? 
+            settings.OPENAI_API_KEY : // Use OpenAI key from settings when USE_OPENAI_EMBEDDING is true
+            runtime.token,            // Use runtime token for other providers
         isOllama: runtime.character.modelProvider === ModelProviderName.OLLAMA && !settings.USE_OPENAI_EMBEDDING
     });
 }
