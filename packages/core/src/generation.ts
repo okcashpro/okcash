@@ -392,7 +392,15 @@ export async function splitChunks(
     bleed: number = 100,
     modelClass: string
 ): Promise<string[]> {
-    const model = runtime.model[modelClass];
+    const model = models[runtime.modelProvider];
+    console.log("model", model);
+
+    console.log("model.model.embedding", model.model.embedding);
+    
+    if(!model.model.embedding) {
+        throw new Error("Model does not support embedding");
+    }
+
     const encoding = tiktoken.encoding_for_model(
         model.model.embedding as TiktokenModel
     );

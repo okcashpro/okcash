@@ -10,9 +10,9 @@ Represents a participant in a room, including their ID and account details.
 
 #### Defined in
 
-[packages/core/src/types.ts:282](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L282)
+[packages/core/src/types.ts:285](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L285)
 
----
+***
 
 ### account
 
@@ -20,4 +20,4 @@ Represents a participant in a room, including their ID and account details.
 
 #### Defined in
 
-[packages/core/src/types.ts:283](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L283)
+[packages/core/src/types.ts:286](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L286)
