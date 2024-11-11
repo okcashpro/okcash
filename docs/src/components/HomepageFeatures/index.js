@@ -37,12 +37,15 @@ function Feature({ title, description }) {
     <div className={clsx("col col--4")}>
       <div className="card margin--md" style={{
         height: "100%",
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        backgroundColor: "var(--ifm-card-background-color)",
         backdropFilter: "blur(10px)",
         borderRadius: "12px",
+        color: "var(--ifm-font-color-base)",
       }}>
         <div className="card__body text--center padding--md">
-          <Heading as="h3">{title}</Heading>
+          <Heading as="h3" style={{
+            color: "var(--ifm-heading-color)"
+          }}>{title}</Heading>
           <p>{description}</p>
         </div>
       </div>
