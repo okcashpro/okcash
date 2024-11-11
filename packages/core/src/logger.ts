@@ -1,4 +1,9 @@
 class ElizaLogger {
+    constructor() {
+        this.verbose = process.env.verbose === "true" || false;
+    }
+
+    verbose = false;
     closeByNewLine = true;
     useIcons = true;
     logsTitle = "LOGS";
@@ -222,6 +227,7 @@ class ElizaLogger {
         }
     }
     debug(...strings) {
+        if (!this.verbose) return;
         const fg = "magenta";
         const bg = "";
         const icon = "\u1367";
