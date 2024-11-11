@@ -142,8 +142,8 @@ export async function retrieveCachedEmbedding(
         return null;
     }
     
-    const similaritySearchResult =
-        await runtime.messageManager.getCachedEmbeddings(input);
+    const similaritySearchResult = [];
+        // await runtime.messageManager.getCachedEmbeddings(input);
     if (similaritySearchResult.length > 0) {
         return similaritySearchResult[0].embedding;
     }
