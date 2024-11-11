@@ -6,6 +6,20 @@
 
 ## Methods
 
+### getInstance()
+
+> **getInstance**(): [`IImageDescriptionService`](IImageDescriptionService.md)
+
+#### Returns
+
+[`IImageDescriptionService`](IImageDescriptionService.md)
+
+#### Defined in
+
+[packages/core/src/types.ts:583](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L583)
+
+***
+
 ### initialize()
 
 > **initialize**(`modelId`?, `device`?): `Promise`\<`void`\>
@@ -22,9 +36,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:576](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L576)
+[packages/core/src/types.ts:584](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L584)
 
----
+***
 
 ### describeImage()
 
@@ -48,4 +62,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:577](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L577)
+[packages/core/src/types.ts:585](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L585)

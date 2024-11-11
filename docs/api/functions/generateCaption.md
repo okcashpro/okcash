@@ -24,4 +24,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:687](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L687)
+[packages/core/src/generation.ts:734](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L734)

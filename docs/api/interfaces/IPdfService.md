@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:634](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L634)
+[packages/core/src/types.ts:642](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L642)
