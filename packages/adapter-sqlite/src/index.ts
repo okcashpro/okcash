@@ -336,34 +336,52 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         query_field_name: string;
         query_field_sub_name: string;
         query_match_count: number;
-    }): Promise<
-        {
-            embedding: number[];
-            levenshtein_score: number;
-        }[]
-    > {
+    }): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+        // First get content text and calculate Levenshtein distance
         const sql = `
-      SELECT *
-      FROM memories
-      WHERE type = ?
-      AND vec_distance_L2(${opts.query_field_name}, ?) <= ?
-      ORDER BY vec_distance_L2(${opts.query_field_name}, ?) ASC
-      LIMIT ?
-    `;
-    console.log("sql", sql)
-    console.log("opts.query_input", opts.query_input)
-        const memories = this.db.prepare(sql).all(
-            opts.query_table_name,
-            new Float32Array(opts.query_input.split(",").map(Number)), // Convert string to Float32Array
-            opts.query_input,
-            new Float32Array(opts.query_input.split(",").map(Number))
-        ) as Memory[];
+            WITH content_text AS (
+                SELECT 
+                    embedding,
+                    json_extract(
+                        json(content),
+                        '$.' || ? || '.' || ?
+                    ) as content_text
+                FROM memories 
+                WHERE type = ?
+                AND json_extract(
+                    json(content),
+                    '$.' || ? || '.' || ?
+                ) IS NOT NULL
+            )
+            SELECT 
+                embedding,
+                length(?) + length(content_text) - (
+                    length(?) + length(content_text) - (
+                        length(replace(lower(?), lower(content_text), '')) + 
+                        length(replace(lower(content_text), lower(?), ''))
+                    ) / 2
+                ) as levenshtein_score
+            FROM content_text
+            ORDER BY levenshtein_score ASC
+            LIMIT ?
+        `;
 
-        return memories.map((memory) => ({
-            embedding: Array.from(
-                new Float32Array(memory.embedding as unknown as Buffer)
-            ), // Convert Buffer to number[]
-            levenshtein_score: 0,
+        const rows = this.db.prepare(sql).all(
+            opts.query_field_name,
+            opts.query_field_sub_name,
+            opts.query_table_name,
+            opts.query_field_name,
+            opts.query_field_sub_name,
+            opts.query_input,
+            opts.query_input,
+            opts.query_input,
+            opts.query_input,
+            opts.query_match_count
+        ) as { embedding: Buffer; levenshtein_score: number }[];
+
+        return rows.map(row => ({
+            embedding: Array.from(new Float32Array(row.embedding as Buffer)),
+            levenshtein_score: row.levenshtein_score
         }));
     }
 
