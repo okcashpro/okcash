@@ -4,7 +4,8 @@ import { fileURLToPath } from "url";
 import models from "./models.ts";
 import {
     IAgentRuntime,
-    ModelProviderName
+    ModelProviderName,
+    ModelClass
 } from "./types.ts";
 import fs from "fs";
 import { trimTokens } from "./generation.ts";
@@ -18,7 +19,7 @@ function getRootPath() {
     if (rootPath.includes("/eliza/")) {
         return rootPath.split("/eliza/")[0] + "/eliza/";
     }
-    
+
     return path.resolve(__dirname, "..");
 }
 
@@ -32,13 +33,13 @@ interface EmbeddingOptions {
 
 async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Promise<number[]> {
     // Ensure endpoint ends with /v1 for OpenAI
-    const baseEndpoint = options.endpoint.endsWith('/v1') ? 
-        options.endpoint : 
+    const baseEndpoint = options.endpoint.endsWith('/v1') ?
+        options.endpoint :
         `${options.endpoint}${options.isOllama ? '/v1' : ''}`;
-    
+
     // Construct full URL
     const fullUrl = `${baseEndpoint}/embeddings`;
-    
+
     //console.log("Calling embedding API at:", fullUrl); // Debug log
 
     const requestOptions = {
@@ -87,7 +88,18 @@ async function getRemoteEmbedding(input: string, options: EmbeddingOptions): Pro
 export async function embed(runtime: IAgentRuntime, input: string) {
     const modelProvider = models[runtime.character.modelProvider];
     //need to have env override for this to select what to use for embedding if provider doesnt provide or using openai
-    const embeddingModel = modelProvider.model.embedding;
+    const embeddingModel = (
+        settings.USE_OPENAI_EMBEDDING ? "text-embedding-3-small" : // Use OpenAI if specified
+            modelProvider.model?.[ModelClass.EMBEDDING] || // Use provider's embedding model if available
+            models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING] // Fallback to OpenAI
+    );
+
+    if (!embeddingModel) {
+        throw new Error('No embedding model configured');
+    }
+
+    console.log("embeddingModel", embeddingModel);
+
 
     // Try local embedding first
     if (
@@ -107,15 +119,16 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     // Get remote embedding
     return await getRemoteEmbedding(input, {
         model: embeddingModel,
-        endpoint: settings.USE_OPENAI_EMBEDDING ? 
+        endpoint: settings.USE_OPENAI_EMBEDDING ?
             'https://api.openai.com/v1' : // Always use OpenAI endpoint when USE_OPENAI_EMBEDDING is true
             (runtime.character.modelEndpointOverride || modelProvider.endpoint),
-            apiKey: settings.USE_OPENAI_EMBEDDING ? 
+        apiKey: settings.USE_OPENAI_EMBEDDING ?
             settings.OPENAI_API_KEY : // Use OpenAI key from settings when USE_OPENAI_EMBEDDING is true
             runtime.token,            // Use runtime token for other providers
         isOllama: runtime.character.modelProvider === ModelProviderName.OLLAMA && !settings.USE_OPENAI_EMBEDDING
     });
 }
+
 
 async function getLocalEmbedding(input: string): Promise<number[]> {
     const cacheDir = getRootPath() + "/cache/";
@@ -137,13 +150,13 @@ export async function retrieveCachedEmbedding(
     runtime: IAgentRuntime,
     input: string
 ) {
-    if(!input) {
+    if (!input) {
         console.log("No input to retrieve cached embedding for");
         return null;
     }
-    
-    const similaritySearchResult = [];
-        // await runtime.messageManager.getCachedEmbeddings(input);
+
+    const similaritySearchResult =
+        await runtime.messageManager.getCachedEmbeddings(input);
     if (similaritySearchResult.length > 0) {
         return similaritySearchResult[0].embedding;
     }
