@@ -34,4 +34,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:603](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L603)
+[packages/core/src/generation.ts:650](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L650)

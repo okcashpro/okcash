@@ -1,24 +1,49 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "lib": ["ESNext", "dom"],
-        "moduleResolution": "Bundler",
-        "outDir": "./dist",
-        "rootDir": ".",
-        "strict": false,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": false,
-        "allowImportingTsExtensions": true,
-        "declaration": true,
-        "emitDeclarationOnly": true,
-        "resolveJsonModule": true,
-        "noImplicitAny": false,
-        "allowJs": true,
-        "checkJs": false,
-        "noEmitOnError": false,
-        "moduleDetection": "force",
-        "allowArbitraryExtensions": true
-    }
+  "plugins": [
+    [
+      "docusaurus-plugin-typedoc",
+      {
+        "entryPoints": ["../packages/core/src/index.ts"],
+        "tsconfig": "../tsconfig.json",
+        "out": "./api",
+        "skipErrorChecking": true,
+        "readme": "none",
+        "sidebar": {
+          "categoryLabel": "API Reference",
+          "position": 3,
+          "fullNames": true
+        },
+        "includeVersion": true,
+        "disableSources": false,
+        "searchInComments": true,
+        "navigationLinks": {
+          "GitHub": "https://github.com/ai16z/eliza",
+          "Documentation": "/docs/intro"
+        },
+        "categorizeByGroup": true,
+        "categoryOrder": [
+          "Core",
+          "Clients",
+          "Services",
+          "Database",
+          "Providers",
+          "Utils",
+          "*"
+        ],
+        "includeExample": true,
+        "validation": {
+          "invalidLink": true,
+          "notExported": true,
+          "notDocumented": true
+        },
+        "cleanOutputDir": true,
+        "hideGenerator": true,
+        "frontmatter": {
+          "pagination_prev": null,
+          "pagination_next": null
+        },
+        "watch": "process.env.TYPEDOC_WATCH"
+      }
+    ]
+  ]
 }
