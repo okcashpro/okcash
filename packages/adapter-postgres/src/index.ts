@@ -26,7 +26,6 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             connectionTimeoutMillis: 2000,
         });
 
-        // Register error handler for pool
         this.pool.on("error", (err) => {
             console.error("Unexpected error on idle client", err);
         });
@@ -37,22 +36,15 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     async testConnection(): Promise<boolean> {
         let client;
         try {
-            // Attempt to get a client from the pool
             client = await this.pool.connect();
-
-            // Test the connection with a simple query
             const result = await client.query("SELECT NOW()");
             console.log("Database connection test successful:", result.rows[0]);
-
             return true;
         } catch (error) {
             console.error("Database connection test failed:", error);
             throw new Error(`Failed to connect to database: ${error.message}`);
         } finally {
-            // Make sure to release the client back to the pool
-            if (client) {
-                client.release();
-            }
+            if (client) client.release();
         }
     }
 
@@ -73,9 +65,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             const { rows } = await client.query(
-                `SELECT id, "userId", "roomId", last_message_read 
-         FROM participants 
-         WHERE "userId" = $1`,
+                `SELECT id, "userId", "roomId", "last_message_read" 
+                FROM participants 
+                WHERE "userId" = $1`,
                 [userId]
             );
             return rows as Participant[];
@@ -91,7 +83,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             const { rows } = await client.query(
-                `SELECT userState FROM participants WHERE "roomId" = $1 AND userId = $2`,
+                `SELECT "userState" FROM participants WHERE "roomId" = $1 AND "userId" = $2`,
                 [roomId, userId]
             );
             return rows.length > 0 ? rows[0].userState : null;
@@ -116,14 +108,14 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             let queryParams = [params.tableName, ...params.roomIds];
 
             if (params.agentId) {
-                query += ` AND "userId" = $${params.roomIds.length + 2}`;
+                query += ` AND "agentId" = $${params.roomIds.length + 2}`;
                 queryParams = [...queryParams, params.agentId];
             }
 
             const { rows } = await client.query(query, queryParams);
             return rows.map((row) => ({
                 ...row,
-                content: JSON.parse(row.content),
+                content: typeof row.content === "string" ? JSON.parse(row.content) : row.content,
             }));
         } finally {
             client.release();
@@ -169,14 +161,12 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             if (rows.length === 0) return null;
 
             const account = rows[0];
-
             console.log("account", account);
             return {
                 ...account,
-                details:
-                    typeof account.details === "string"
-                        ? JSON.parse(account.details)
-                        : account.details,
+                details: typeof account.details === "string"
+                    ? JSON.parse(account.details)
+                    : account.details,
             };
         } finally {
             client.release();
@@ -188,7 +178,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             await client.query(
                 `INSERT INTO accounts (id, name, username, email, "avatarUrl", details)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+                VALUES ($1, $2, $3, $4, $5, $6)`,
                 [
                     account.id ?? v4(),
                     account.name,
@@ -212,17 +202,16 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             const { rows } = await client.query(
                 `SELECT a.id, a.name, a.username, a.details
-         FROM participants p
-         LEFT JOIN accounts a ON p."userId" = a.id
-         WHERE p."roomId" = $1`,
+                FROM participants p
+                LEFT JOIN accounts a ON p."userId" = a.id
+                WHERE p."roomId" = $1`,
                 [params.roomId]
             );
             return rows.map((row) => ({
                 ...row,
-                details:
-                    typeof row.details === "string"
-                        ? JSON.parse(row.details)
-                        : row.details,
+                details: typeof row.details === "string"
+                    ? JSON.parse(row.details)
+                    : row.details,
             }));
         } finally {
             client.release();
@@ -240,10 +229,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             return {
                 ...rows[0],
-                content:
-                    typeof rows[0].content === "string"
-                        ? JSON.parse(rows[0].content)
-                        : rows[0].content,
+                content: typeof rows[0].content === "string"
+                    ? JSON.parse(rows[0].content)
+                    : rows[0].content,
             };
         } finally {
             client.release();
@@ -269,13 +257,13 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             await client.query(
                 `INSERT INTO memories (
-    id, type, content, embedding, "userId", "roomId", "agentId", "unique", "createdAt"
-  ) VALUES ($1, $2, $3, $4::vector, $5::uuid, $6::uuid, $7::uuid, $8, to_timestamp($9/1000.0))`,
+                    id, type, content, embedding, "userId", "roomId", "agentId", "unique", "createdAt"
+                ) VALUES ($1, $2, $3, $4, $5::uuid, $6::uuid, $7::uuid, $8, to_timestamp($9/1000.0))`,
                 [
                     memory.id ?? v4(),
                     tableName,
                     JSON.stringify(memory.content),
-                    `[${memory.embedding.join(",")}]`,
+                    memory.embedding ? `[${memory.embedding.join(",")}]` : null,
                     memory.userId,
                     memory.roomId,
                     memory.agentId,
@@ -299,19 +287,19 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             let sql = `
-        SELECT *,
-        1 - (embedding <-> $3) as similarity
-        FROM memories
-        WHERE type = $1 AND "roomId" = $2
-      `;
+                SELECT *,
+                1 - (embedding <-> $3) as similarity
+                FROM memories
+                WHERE type = $1 AND "roomId" = $2
+            `;
 
             if (params.unique) {
                 sql += ` AND "unique" = true`;
             }
 
             sql += ` AND 1 - (embedding <-> $3) >= $4
-               ORDER BY embedding <-> $3
-               LIMIT $5`;
+                ORDER BY embedding <-> $3
+                LIMIT $5`;
 
             const { rows } = await client.query(sql, [
                 params.tableName,
@@ -323,7 +311,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             return rows.map((row) => ({
                 ...row,
-                content: JSON.parse(row.content),
+                content: typeof row.content === "string" ? JSON.parse(row.content) : row.content,
                 similarity: row.similarity,
             }));
         } finally {
@@ -366,7 +354,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             }
 
             if (params.agentId) {
-                sql += " AND agentId = $3";
+                paramCount++;
+                sql += ` AND "agentId" = $${paramCount}`;
                 values.push(params.agentId);
             }
 
@@ -383,10 +372,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
                 ...row,
-                content:
-                    typeof row.content === "string"
-                        ? JSON.parse(row.content)
-                        : row.content,
+                content: typeof row.content === "string"
+                    ? JSON.parse(row.content)
+                    : row.content,
             }));
         } finally {
             client.release();
@@ -424,10 +412,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
                 ...row,
-                objectives:
-                    typeof row.objectives === "string"
-                        ? JSON.parse(row.objectives)
-                        : row.objectives,
+                objectives: typeof row.objectives === "string"
+                    ? JSON.parse(row.objectives)
+                    : row.objectives,
             }));
         } finally {
             client.release();
@@ -438,13 +425,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             await client.query(
-                "UPDATE goals SET name = $1, status = $2, objectives = $3 WHERE id = $4",
-                [
-                    goal.name,
-                    goal.status,
-                    JSON.stringify(goal.objectives),
-                    goal.id,
-                ]
+                `UPDATE goals SET name = $1, status = $2, objectives = $3 WHERE id = $4`,
+                [goal.name, goal.status, JSON.stringify(goal.objectives), goal.id]
             );
         } finally {
             client.release();
@@ -456,7 +438,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             await client.query(
                 `INSERT INTO goals (id, "roomId", "userId", name, status, objectives)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+                VALUES ($1, $2, $3, $4, $5, $6)`,
                 [
                     goal.id ?? v4(),
                     goal.roomId,
@@ -484,9 +466,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             const newRoomId = roomId || v4();
-            await client.query("INSERT INTO rooms (id) VALUES ($1)", [
-                newRoomId,
-            ]);
+            await client.query("INSERT INTO rooms (id) VALUES ($1)", [newRoomId]);
             return newRoomId as UUID;
         } finally {
             client.release();
@@ -514,7 +494,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             await client.query(
                 `INSERT INTO relationships (id, "userA", "userB", "userId")
-         VALUES ($1, $2, $3, $4)`,
+                VALUES ($1, $2, $3, $4)`,
                 [v4(), params.userA, params.userB, params.userA]
             );
             return true;
@@ -534,7 +514,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             const { rows } = await client.query(
                 `SELECT * FROM relationships 
-         WHERE ("userA" = $1 AND "userB" = $2) OR ("userA" = $2 AND "userB" = $1)`,
+                WHERE ("userA" = $1 AND "userB" = $2) OR ("userA" = $2 AND "userB" = $1)`,
                 [params.userA, params.userB]
             );
             return rows.length > 0 ? rows[0] : null;
@@ -566,15 +546,30 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     }): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
         const client = await this.pool.connect();
         try {
+            // Get the JSON field content as text first
             const sql = `
-        SELECT embedding,
-        levenshtein($1, content->$2->$3) as levenshtein_score
-        FROM memories 
-        WHERE type = $4
-        ORDER BY levenshtein_score
-        LIMIT $5
-      `;
-
+                WITH content_text AS (
+                    SELECT 
+                        embedding,
+                        COALESCE(
+                            content->$2->>$3,
+                            ''
+                        ) as content_text
+                    FROM memories 
+                    WHERE type = $4
+                    AND content->$2->>$3 IS NOT NULL
+                )
+                SELECT 
+                    embedding,
+                    levenshtein(
+                        $1,
+                        content_text
+                    ) as levenshtein_score
+                FROM content_text
+                ORDER BY levenshtein_score
+                LIMIT $5
+            `;
+    
             const { rows } = await client.query(sql, [
                 opts.query_input,
                 opts.query_field_name,
@@ -582,11 +577,14 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                 opts.query_table_name,
                 opts.query_match_count,
             ]);
-
+    
             return rows.map((row) => ({
                 embedding: row.embedding,
                 levenshtein_score: row.levenshtein_score,
             }));
+        } catch (error) {
+            console.error('Error in getCachedEmbeddings:', error);
+            throw error;
         } finally {
             client.release();
         }
@@ -601,7 +599,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             await client.query(
-                'INSERT INTO logs (body, "userId", "roomId", type) VALUES ($1, $2, $3, $4)',
+                `INSERT INTO logs (body, "userId", "roomId", type) 
+                VALUES ($1, $2, $3, $4)`,
                 [params.body, params.userId, params.roomId, params.type]
             );
         } finally {
@@ -622,15 +621,14 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     ): Promise<Memory[]> {
         const client = await this.pool.connect();
         try {
-            // Format the embedding array as a proper vector string
             const vectorStr = `[${embedding.join(",")}]`;
 
             let sql = `
-        SELECT *,
-        1 - (embedding <-> $1::vector) as similarity
-        FROM memories
-        WHERE type = $2
-      `;
+                SELECT *,
+                1 - (embedding <-> $1::vector) as similarity
+                FROM memories
+                WHERE type = $2
+            `;
 
             const values: any[] = [vectorStr, params.tableName];
             let paramCount = 2;
@@ -640,7 +638,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             }
 
             if (params.agentId) {
-                sql += " AND agentId = $3";
+                paramCount++;
+                sql += ` AND "agentId" = $${paramCount}`;
                 values.push(params.agentId);
             }
 
@@ -667,10 +666,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
                 ...row,
-                content:
-                    typeof row.content === "string"
-                        ? JSON.parse(row.content)
-                        : row.content,
+                content: typeof row.content === "string"
+                    ? JSON.parse(row.content)
+                    : row.content,
                 similarity: row.similarity,
             }));
         } finally {
@@ -682,7 +680,8 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             await client.query(
-                'INSERT INTO participants (id, "userId", "roomId") VALUES ($1, $2, $3)',
+                `INSERT INTO participants (id, "userId", "roomId") 
+                VALUES ($1, $2, $3)`,
                 [v4(), userId, roomId]
             );
             return true;
@@ -698,7 +697,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             await client.query(
-                'DELETE FROM participants WHERE "userId" = $1 AND "roomId" = $2',
+                `DELETE FROM participants WHERE "userId" = $1 AND "roomId" = $2`,
                 [userId, roomId]
             );
             return true;
@@ -716,10 +715,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     }): Promise<void> {
         const client = await this.pool.connect();
         try {
-            await client.query("UPDATE goals SET status = $1 WHERE id = $2", [
-                params.status,
-                params.goalId,
-            ]);
+            await client.query(
+                "UPDATE goals SET status = $1 WHERE id = $2",
+                [params.status, params.goalId]
+            );
         } finally {
             client.release();
         }
@@ -741,7 +740,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             await client.query(
-                "DELETE FROM memories WHERE type = $1 AND roomId = $2",
+                `DELETE FROM memories WHERE type = $1 AND "roomId" = $2`,
                 [tableName, roomId]
             );
         } finally {
@@ -773,9 +772,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     async removeAllGoals(roomId: UUID): Promise<void> {
         const client = await this.pool.connect();
         try {
-            await client.query(`DELETE FROM goals WHERE "roomId" = $1`, [
-                roomId,
-            ]);
+            await client.query(
+                `DELETE FROM goals WHERE "roomId" = $1`,
+                [roomId]
+            );
         } finally {
             client.release();
         }
@@ -807,21 +807,21 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             client.release();
         }
     }
+
     async getActorDetails(params: { roomId: string }): Promise<Actor[]> {
         const sql = `
-    SELECT 
-      a.id,
-      a.name,
-      a.username,
-      COALESCE(a.details::jsonb, '{}'::jsonb) as details
-    FROM participants p
-    LEFT JOIN accounts a ON p.userId = a.id
-    WHERE p.roomId = $1
-  `;
+            SELECT 
+                a.id,
+                a.name,
+                a.username,
+                COALESCE(a.details::jsonb, '{}'::jsonb) as details
+            FROM participants p
+            LEFT JOIN accounts a ON p."userId" = a.id
+            WHERE p."roomId" = $1
+        `;
 
         try {
             const result = await this.pool.query<Actor>(sql, [params.roomId]);
-
             return result.rows.map((row) => ({
                 ...row,
                 details: row.details, // PostgreSQL automatically handles JSON parsing
@@ -832,4 +832,5 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         }
     }
 }
+
 export default PostgresDatabaseAdapter;

@@ -172,14 +172,14 @@ const config = {
             title: "Community",
             items: [
               {
-                label: "Discord",
-                href: "https://discord.gg/NQHKW7US",
+                label: 'Discord',
+                href: 'https://discord.gg/ai16z'
               },
               {
-                label: "Twitter",
-                href: "https://twitter.com/pmairca",
-              },
-            ],
+                label: 'Twitter',
+                href: 'https://twitter.com/ai16zdao'
+              }
+            ]
           },
           {
             title: "More",

@@ -14,8 +14,8 @@ import {
 } from "./evaluators.ts";
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { elizaLogger } from "./index.ts";
-import { MemoryManager } from "./memory.ts";
+import { elizaLogger, embed, splitChunks } from "./index.ts";
+import { embeddingZeroVector, MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import { formatPosts } from "./posts.ts";
@@ -301,7 +301,7 @@ export class AgentRuntime implements IAgentRuntime {
             opts.character.knowledge &&
             opts.character.knowledge.length > 0
         ) {
-            // this.processCharacterKnowledge(opts.character.knowledge);
+            this.processCharacterKnowledge(opts.character.knowledge);
         }
     }
 
@@ -311,62 +311,63 @@ export class AgentRuntime implements IAgentRuntime {
      * then chunks the content into fragments, embeds each fragment, and creates fragment memories.
      * @param knowledge An array of knowledge items containing id, path, and content.
      */
-    // private async processCharacterKnowledge(knowledge: string[]) {
-    //     // ensure the room exists and the agent exists in the room
-    //     this.ensureRoomExists(this.agentId);
-    //     this.ensureUserExists(
-    //         this.agentId,
-    //         this.character.name,
-    //         this.character.name
-    //     );
-    //     this.ensureParticipantExists(this.agentId, this.agentId);
+    private async processCharacterKnowledge(knowledge: string[]) {
+        // ensure the room exists and the agent exists in the room
+        this.ensureRoomExists(this.agentId);
+        this.ensureUserExists(
+            this.agentId,
+            this.character.name,
+            this.character.name
+        );
+        this.ensureParticipantExists(this.agentId, this.agentId);
 
-    //     for (const knowledgeItem of knowledge) {
-    //         const knowledgeId = stringToUuid(knowledgeItem);
-    //         const existingDocument =
-    //             await this.documentsManager.getMemoryById(knowledgeId);
-    //         if (!existingDocument) {
-    //             console.log(
-    //                 "Processing knowledge for ",
-    //                 this.character.name,
-    //                 " - ",
-    //                 knowledgeItem.slice(0, 100)
-    //             );
-    //             await this.documentsManager.createMemory({
-    //                 embedding: embeddingZeroVector,
-    //                 id: knowledgeId,
-    //                 agentId: this.agentId,
-    //                 roomId: this.agentId,
-    //                 userId: this.agentId,
-    //                 createdAt: Date.now(),
-    //                 content: {
-    //                     text: knowledgeItem,
-    //                 },
-    //             });
-    //             const fragments = await splitChunks(
-    //                 this,
-    //                 knowledgeItem,
-    //                 1200,
-    //                 200,
-    //                 "fast"
-    //             );
-    //             for (const fragment of fragments) {
-    //                 const embedding = await embed(this, fragment);
-    //                 await this.fragmentsManager.createMemory({
-    //                     id: stringToUuid(fragment),
-    //                     roomId: this.agentId,
-    //                     userId: this.agentId,
-    //                     createdAt: Date.now(),
-    //                     content: {
-    //                         source: knowledgeId,
-    //                         text: fragment,
-    //                     },
-    //                     embedding,
-    //                 });
-    //             }
-    //         }
-    //     }
-    // }
+        for (const knowledgeItem of knowledge) {
+            const knowledgeId = stringToUuid(knowledgeItem);
+            const existingDocument =
+                await this.documentsManager.getMemoryById(knowledgeId);
+            if (!existingDocument) {
+                console.log(
+                    "Processing knowledge for ",
+                    this.character.name,
+                    " - ",
+                    knowledgeItem.slice(0, 100)
+                );
+                await this.documentsManager.createMemory({
+                    embedding: embeddingZeroVector,
+                    id: knowledgeId,
+                    agentId: this.agentId,
+                    roomId: this.agentId,
+                    userId: this.agentId,
+                    createdAt: Date.now(),
+                    content: {
+                        text: knowledgeItem,
+                    },
+                });
+                const fragments = await splitChunks(
+                    this,
+                    knowledgeItem,
+                    1200,
+                    200,
+                    "fast"
+                );
+                for (const fragment of fragments) {
+                    const embedding = await embed(this, fragment);
+                    await this.fragmentsManager.createMemory({
+                        id: stringToUuid(fragment),
+                        roomId: this.agentId,
+                        agentId: this.agentId,
+                        userId: this.agentId,
+                        createdAt: Date.now(),
+                        content: {
+                            source: knowledgeId,
+                            text: fragment,
+                        },
+                        embedding,
+                    });
+                }
+            }
+        }
+    }
 
     getSetting(key: string) {
         // check if the key is in the character.settings.secrets object
@@ -498,14 +499,14 @@ export class AgentRuntime implements IAgentRuntime {
      * @returns The results of the evaluation.
      */
     async evaluate(message: Memory, state?: State, didRespond?: boolean) {
-        console.log("Evaluate: ", didRespond)
+        console.log("Evaluate: ", didRespond);
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
-                console.log("Evaluating", evaluator.name)
+                console.log("Evaluating", evaluator.name);
                 if (!evaluator.handler) {
                     return null;
                 }
-                if(!didRespond && !evaluator.alwaysRun) {
+                if (!didRespond && !evaluator.alwaysRun) {
                     return null;
                 }
                 const result = await evaluator.validate(this, message, state);

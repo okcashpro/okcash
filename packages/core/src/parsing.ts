@@ -14,6 +14,7 @@ export const parseShouldRespondFromText = (
     text: string
 ): "RESPOND" | "IGNORE" | "STOP" | null => {
     const match = text
+        .split('\n')[0]
         .trim()
         .replace("[", "")
         .toUpperCase()
@@ -21,7 +22,7 @@ export const parseShouldRespondFromText = (
         .match(/^(RESPOND|IGNORE|STOP)$/i);
     return match
         ? (match[0].toUpperCase() as "RESPOND" | "IGNORE" | "STOP")
-        : null;
+        : text.includes("RESPOND") ? "RESPOND" : text.includes("IGNORE") ? "IGNORE" : text.includes("STOP") ? "STOP" : null;
 };
 
 export const booleanFooter = `Respond with a YES or a NO.`;

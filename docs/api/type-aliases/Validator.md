@@ -18,4 +18,4 @@ Represents the type of a validator function, which takes a runtime instance, a m
 
 ## Defined in
 
-[packages/core/src/types.ts:203](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L203)
+[packages/core/src/types.ts:205](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L205)

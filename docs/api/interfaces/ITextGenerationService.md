@@ -16,9 +16,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L599)
+[packages/core/src/types.ts:607](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L607)
 
----
+***
 
 ### initializeModel()
 
@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L600)
+[packages/core/src/types.ts:608](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L608)
 
----
+***
 
 ### queueMessageCompletion()
 
@@ -46,11 +46,11 @@
 
 • **stop**: `string`[]
 
-• **frequency_penalty**: `number`
+• **frequency\_penalty**: `number`
 
-• **presence_penalty**: `number`
+• **presence\_penalty**: `number`
 
-• **max_tokens**: `number`
+• **max\_tokens**: `number`
 
 #### Returns
 
@@ -58,9 +58,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L601)
+[packages/core/src/types.ts:609](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L609)
 
----
+***
 
 ### queueTextCompletion()
 
@@ -74,11 +74,11 @@
 
 • **stop**: `string`[]
 
-• **frequency_penalty**: `number`
+• **frequency\_penalty**: `number`
 
-• **presence_penalty**: `number`
+• **presence\_penalty**: `number`
 
-• **max_tokens**: `number`
+• **max\_tokens**: `number`
 
 #### Returns
 
@@ -86,9 +86,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:609](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L609)
+[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)
 
----
+***
 
 ### getEmbeddingResponse()
 
@@ -104,4 +104,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)
+[packages/core/src/types.ts:625](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L625)

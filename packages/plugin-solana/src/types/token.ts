@@ -272,3 +272,16 @@ export interface DexScreenerData {
     schemaVersion: string;
     pairs: DexScreenerPair[];
 }
+
+export interface Prices {
+    solana: { usd: string };
+    bitcoin: { usd: string };
+    ethereum: { usd: string };
+}
+
+export interface CalculatedBuyAmounts {
+    none: 0;
+    low: number;
+    medium: number;
+    high: number;
+}
