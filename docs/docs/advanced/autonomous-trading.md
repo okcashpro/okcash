@@ -362,9 +362,3 @@ async function recoverFromError(
 }
 ```
 
-## Further Reading
-
-- [Trading Strategy Guide](../guides/trading-strategies.md)
-- [Risk Management](../guides/risk-management.md)
-- [Position Sizing](../guides/position-sizing.md)
-- [Market Analysis](../guides/market-analysis.md)

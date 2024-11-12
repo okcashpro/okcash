@@ -456,7 +456,7 @@ async function handleDbError(error: Error) {
 
 ## Related Resources
 
-- [Character Creation Guide](../guides/character-creation.md)
-- [Client Configuration](../guides/client-config.md)
-- [Plugin Development](../guides/plugin-dev.md)
-- [Multi-Agent Setup](../advanced/multi-agent.md)
+- [Character Creation Guide](#)
+- [Client Configuration](#)
+- [Plugin Development](#)
+- [Multi-Agent Setup](../packages/agents)

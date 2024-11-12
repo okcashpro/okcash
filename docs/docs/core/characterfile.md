@@ -8,7 +8,7 @@ Character files are JSON-formatted configurations that define an AI character's 
 
 ## Overview
 
-A `characterfile` implements the [Character](../api/type-aliases/Character.md) type and defines the character's:
+A `characterfile` implements the [Character](/api/type-aliases) type and defines the character's:
 
 - Core identity and behavior
 - Model provider configuration
@@ -85,10 +85,10 @@ A `characterfile` implements the [Character](../api/type-aliases/Character.md) t
 The character's display name for identification and in conversations.
 
 #### `modelProvider` (required)
-Specifies the AI model provider. Supported options from [ModelProviderName](../api/enumerations/ModelProviderName.md) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
+Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
 
 #### `clients` (required)
-Array of supported client types from [Clients](../api/enumerations/Clients.md) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
+Array of supported client types from [Clients](/api/enumerations) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
 
 #### `bio`
 Character background as a string or array of statements.
@@ -300,5 +300,5 @@ npx knowledge2character <character-file> <knowledge-file>
 ## Further Reading
 
 - [Agents Documentation](./agents.md)
-- [Model Providers](../advanced/model-providers.md)
-- [Client Integration](../guides/client-integration.md)
+- [Model Providers](../../advanced/fine-tuning)
+- [Client Integration](../../packages/clients)

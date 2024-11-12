@@ -317,6 +317,3 @@ FROM pg_stat_user_indexes;
 ## Further Reading
 
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-- [Vector Similarity Search Guide](../guides/vector-search.md)
-- [Database Security Best Practices](../guides/security.md)
-- [Performance Tuning](../guides/performance.md)

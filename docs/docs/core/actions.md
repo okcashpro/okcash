@@ -484,6 +484,5 @@ const documentAnalysisAction: Action = {
 ## Further Reading
 
 - [Provider System](./providers.md)
-- [Service Integration](../guides/service-integration.md)
-- [Memory Management](../guides/memory-management.md)
-- [Custom Actions Guide](../guides/custom-actions.md)
+- [Service Integration](#)
+- [Memory Management](../../packages/core)

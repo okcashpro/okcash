@@ -364,6 +364,6 @@ WITH (lists = 100);
 
 ## Related Resources
 
-- [Memory Manager Documentation](../core/memory.md)
-- [Vector Search Guide](../advanced/vector-search.md)
-- [Database Schema Reference](../api/database-schema.md)
+- [Memory Manager Documentation](../packages/core)
+- [Vector Search Guide](../packages/database-adapters)
+- [Database Schema Reference](/api)

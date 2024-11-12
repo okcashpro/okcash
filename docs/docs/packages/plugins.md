@@ -185,4 +185,4 @@ To contribute a new plugin:
 4. Submit a pull request
 5. Update the plugin registry
 
-For detailed API documentation and examples, see the [API Reference](../api/index.md).
+For detailed API documentation and examples, see the [API Reference](/api).

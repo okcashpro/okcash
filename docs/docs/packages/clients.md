@@ -504,7 +504,4 @@ async processMessage(message) {
 
 ## Related Resources
 
-- [Authentication Guide](../guides/authentication.md)
-- [Media Processing](../advanced/media-processing.md)
-- [API Rate Limits](../guides/rate-limits.md)
-- [Error Handling](../guides/error-handling.md)
+- [Error Handling](../../packages/core)

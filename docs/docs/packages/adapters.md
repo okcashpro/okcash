@@ -667,7 +667,5 @@ class CustomDatabaseAdapter extends DatabaseAdapter {
 
 ## Related Resources
 
-- [Database Schema Reference](../api/database-schema.md)
-- [Vector Search Guide](../advanced/vector-search.md)
-- [Performance Tuning](../guides/database-performance.md)
-- [Error Handling](../guides/error-handling.md)
+- [Database Schema Reference](/api)
+- [Error Handling](../../packages/core)

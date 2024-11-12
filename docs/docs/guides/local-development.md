@@ -422,5 +422,5 @@ npx knowledge2character <character-file> <knowledge-file>
 
 - [Configuration Guide](./configuration.md) for setup details
 - [Advanced Usage](./advanced.md) for complex features
-- [API Documentation](../api/index.md) for complete API reference
+- [API Documentation](/api) for complete API reference
 - [Contributing Guide](../community/contributing.md) for contribution guidelines

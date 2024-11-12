@@ -395,9 +395,3 @@ async function handleTradeFailure(
 }
 ```
 
-## Further Reading
-
-- [Trading System Integration](./autonomous-trading.md)
-- [Risk Management Guide](../guides/risk-management.md)
-- [Performance Monitoring](../guides/monitoring.md)
-- [Trust Score Calculation](../guides/trust-scoring.md)

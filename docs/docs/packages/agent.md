@@ -210,6 +210,4 @@ try {
 
 ## Related Resources
 
-- [Character Creation Guide](../guides/character-creation.md)
-- [Plugin System](../core/plugins.md)
-- [Database Configuration](../guides/database-config.md)
+- [Plugin System](../../packages/plugins)

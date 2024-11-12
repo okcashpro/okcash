@@ -10,7 +10,7 @@ Agents are the core components of the Eliza framework that handle autonomous int
 
 ## Overview
 
-The [AgentRuntime](../api/classes/AgentRuntime.md) class is the primary implementation of the [IAgentRuntime](../api/interfaces/IAgentRuntime.md) interface, which manages the agent's core functions, including:
+The [AgentRuntime](/api/classes/AgentRuntime) class is the primary implementation of the [IAgentRuntime](/api/interfaces) interface, which manages the agent's core functions, including:
 
 - **Message and Memory Processing**: Storing, retrieving, and managing conversation data and contextual memory.
 - **State Management**: Composing and updating the agent’s state for a coherent, ongoing interaction.
@@ -91,7 +91,7 @@ const runtime = new AgentRuntime({
 
 ## State Management
 
-This section should cover how agents manage and update state, with a focus on initial state composition and updating methods. The runtime maintains state through the [State](../api/interfaces/State.md) interface:
+This section should cover how agents manage and update state, with a focus on initial state composition and updating methods. The runtime maintains state through the [State](/api/interfaces) interface:
 
 ```typescript
 interface State {
@@ -150,7 +150,7 @@ The Eliza framework uses multiple types of memory to support an agent's long-ter
 - **RAG Integration**: Uses a vector search to perform contextual recall based on similarity matching. This enables the agent to retrieve relevant memory snippets or knowledge based on the content and intent of the current conversation, making its responses more contextually relevant.
 
 
-The runtime uses multiple specialized [IMemoryManager](../api/interfaces/IMemoryManager.md) instances:
+The runtime uses multiple specialized [IMemoryManager](/api/interfaces) instances:
 
 - `messageManager` - conversation messages and responses
 - `descriptionManager` - user descriptions and profiles
@@ -164,7 +164,7 @@ The runtime uses multiple specialized [IMemoryManager](../api/interfaces/IMemory
 
 ## Message Processing
 
-The runtime's message processing is handled through the [processActions](../api/classes/AgentRuntime.md#processactions) method:
+The runtime's message processing is handled through the [processActions](/api/classes/AgentRuntime#processactions) method:
 
 ```typescript
 // Process message with actions
@@ -184,7 +184,7 @@ await runtime.processActions(
 
 ## Services and Memory Management
 
-Services are managed through the [getService](../api/classes/AgentRuntime.md#getservice) and [registerService](../api/classes/AgentRuntime.md#registerservice) methods:
+Services are managed through the [getService](/api/classes/AgentRuntime#getservice) and [registerService](/api/classes/AgentRuntime#registerservice) methods:
 
 ```typescript
 // Register service
@@ -198,7 +198,7 @@ const service = runtime.getService<ITranscriptionService>(
 
 ### Memory Management
 
-Memory managers are accessed via [getMemoryManager](../api/classes/AgentRuntime.md#getmemorymanager):
+Memory managers are accessed via [getMemoryManager](/api/classes/AgentRuntime#getmemorymanager):
 
 ```typescript
 // Get memory manager
@@ -225,7 +225,7 @@ await memoryManager.createMemory({
 
 ## Evaluation System
 
-The runtime's [evaluate](../api/classes/AgentRuntime.md#evaluate) method processes evaluations:
+The runtime's [evaluate](/api/classes/AgentRuntime#evaluate) method processes evaluations:
 
 ```typescript
 // Evaluate message
@@ -265,5 +265,4 @@ await memoryManager.createMemory({ id: messageId, content: { text: "Message cont
 - [Actions Documentation](./actions.md)
 - [Evaluators Documentation](./evaluators.md)
 - [Providers Documentation](./providers.md)
-- [Memory System](../guides/memory-management.md)
-- [Full API Reference](../api/index.md)
+- [Full API Reference](/api)

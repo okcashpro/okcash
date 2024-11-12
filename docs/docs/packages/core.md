@@ -496,8 +496,4 @@ class StateManager {
 
 ## Related Documentation
 
-- [Memory System Guide](../advanced/memory-system.md)
-- [Action Development](../guides/action-development.md)
-- [Service Architecture](../advanced/services.md)
-- [State Management](../guides/state-management.md)
-- [API Reference](../api/classes/AgentRuntime.md)
+- [API Reference](/api/classes/AgentRuntime)

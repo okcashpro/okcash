@@ -1,6 +1,6 @@
 # 🔌 Providers
 
-[Providers](../api/interfaces/Provider.md) are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
+[Providers](/api/interfaces) are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
 
 
 ## Overview
@@ -226,7 +226,7 @@ async function fetchDataWithCache<T>(
 
 ## Integration with Runtime
 
-Providers are registered with the [AgentRuntime](../api/classes/AgentRuntime.md):
+Providers are registered with the [AgentRuntime](/api/classes/AgentRuntime):
 
 ```typescript
 // Register provider
@@ -325,6 +325,4 @@ ${facts.map(f => `- ${f.content.text}`).join('\n')}
 ## Further Reading
 
 - [Agent Runtime](./agents.md)
-- [Memory System](../guides/memory-management.md)
-- [Bootstrap Plugin](../guides/plugins.md#bootstrap)
-- [State Management](../guides/state-management.md)
+- [Memory System](../../packages/core)

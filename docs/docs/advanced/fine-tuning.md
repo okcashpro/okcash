@@ -371,10 +371,3 @@ async function benchmarkModel(
        }
    }
    ```
-
-## Further Reading
-
-- [Model Provider Documentation](../guides/model-providers.md)
-- [Embedding System Guide](../guides/embeddings.md)
-- [Performance Optimization](../guides/performance.md)
-- [Testing Guidelines](../guides/testing.md)
