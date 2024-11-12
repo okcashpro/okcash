@@ -90,7 +90,7 @@ TWITTER_COOKIES=  # Account cookies
 ```
 
 ### Telegram Bot
-1. Create a bot through [@BotFather](https://t.me/botfather)
+1. Create a bot
 2. Add your bot token to `.env`:
 ```bash
 TELEGRAM_BOT_TOKEN=your_token_here
