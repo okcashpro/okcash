@@ -147,7 +147,6 @@ export class TwitterInteractionClient extends ClientBase {
 
                     try {
                         if (this.lastCheckedTweetId) {
-
                             fs.writeFileSync(
                                 this.tweetCacheFilePath,
                                 this.lastCheckedTweetId.toString(),
@@ -257,10 +256,10 @@ export class TwitterInteractionClient extends ClientBase {
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
                         ? stringToUuid(
-                            tweet.inReplyToStatusId +
-                            "-" +
-                            this.runtime.agentId
-                        )
+                              tweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,

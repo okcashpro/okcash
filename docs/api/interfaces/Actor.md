@@ -12,7 +12,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 [packages/core/src/types.ts:41](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L41)
 
-***
+---
 
 ### username
 
@@ -22,7 +22,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 [packages/core/src/types.ts:42](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L42)
 
-***
+---
 
 ### details
 
@@ -44,7 +44,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 [packages/core/src/types.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L43)
 
-***
+---
 
 ### id
 

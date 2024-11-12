@@ -12,7 +12,7 @@ Represents an example for evaluation, including the context, an array of message
 
 [packages/core/src/types.ts:227](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L227)
 
-***
+---
 
 ### messages
 
@@ -22,7 +22,7 @@ Represents an example for evaluation, including the context, an array of message
 
 [packages/core/src/types.ts:228](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L228)
 
-***
+---
 
 ### outcome
 

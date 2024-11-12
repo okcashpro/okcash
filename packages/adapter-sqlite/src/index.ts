@@ -351,14 +351,14 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             opts.query_table_name,
             opts.query_field_name,
             opts.query_field_sub_name,
-            opts.query_match_count
+            opts.query_match_count,
         ];
 
         const rows = this.db.prepare(sql).all(...params);
 
         return rows.map((row) => ({
             embedding: row.embedding,
-            levenshtein_score: 0
+            levenshtein_score: 0,
         }));
     }
 

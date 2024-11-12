@@ -10,7 +10,7 @@
 
 [packages/core/src/types.ts:321](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L321)
 
-***
+---
 
 ### DIRECT
 
@@ -20,7 +20,7 @@
 
 [packages/core/src/types.ts:322](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L322)
 
-***
+---
 
 ### TWITTER
 
@@ -30,7 +30,7 @@
 
 [packages/core/src/types.ts:323](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L323)
 
-***
+---
 
 ### TELEGRAM
 
