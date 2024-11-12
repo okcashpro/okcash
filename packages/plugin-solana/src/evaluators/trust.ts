@@ -233,7 +233,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         }
 
         // TODO: is this is a buy, sell, dont buy, or dont sell?
-        const shouldTrade = await this.tokenProvider.shouldTrade();
+        const shouldTrade = await this.tokenProvider.shouldTradeToken();
 
         if (!shouldTrade) {
             console.warn(

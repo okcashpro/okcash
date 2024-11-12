@@ -280,7 +280,12 @@ const startAgents = async () => {
 
     function chat() {
         const agentId = characters[0].name ?? "Agent";
-        rl.question("You: ", (input) => handleUserInput(input, agentId));
+        rl.question("You: ", async (input) => {
+            await handleUserInput(input, agentId);
+            if (input.toLowerCase() !== "exit") {
+                chat(); // Loop back to ask another question
+            }
+        });
     }
 
     console.log("Chat started. Type 'exit' to quit.");
@@ -298,6 +303,7 @@ const rl = readline.createInterface({
 });
 
 async function handleUserInput(input, agentId) {
+    console.log("handleUserInput", input, agentId);
     if (input.toLowerCase() === "exit") {
         rl.close();
         return;
