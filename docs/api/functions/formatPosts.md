@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / formatPosts
+
 # Function: formatPosts()
 
 > **formatPosts**(`__namedParameters`): `string`

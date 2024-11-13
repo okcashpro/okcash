@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Room
+
 # Interface: Room
 
 Represents a room or conversation context, including its ID and a list of participants.

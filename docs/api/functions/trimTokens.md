@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / trimTokens
+
 # Function: trimTokens()
 
 > **trimTokens**(`context`, `maxTokens`, `model`): `any`

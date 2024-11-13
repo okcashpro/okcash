@@ -234,6 +234,9 @@ importers:
       '@ai16z/plugin-image-generation':
         specifier: workspace:*
         version: link:../plugin-image-generation
+      '@ai16z/plugin-solana':
+        specifier: workspace:*
+        version: link:../plugin-solana
       '@types/body-parser':
         specifier: 1.19.5
         version: 1.19.5

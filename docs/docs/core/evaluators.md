@@ -11,7 +11,6 @@ sidebar_position: 5
 - [Built-in Evaluators](#built-in-evaluators)
 - [Creating Custom Evaluators](#creating-custom-evaluators)
 - [Memory Integration](#memory-integration)
-- [Troubleshooting](#troubleshooting)
 
 ## Overview
 
