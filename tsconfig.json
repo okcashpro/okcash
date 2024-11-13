@@ -66,4 +66,5 @@
             "watch": "process.env.TYPEDOC_WATCH"
         }
     ]
+    }
 }
