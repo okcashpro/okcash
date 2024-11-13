@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / MemoryManager
+
 # Class: MemoryManager
 
 Manage memories in the database.
@@ -62,7 +64,7 @@ The name of the database table this manager operates on.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`tableName`](../interfaces/IMemoryManager.md#tablename)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`tableName`](../interfaces/IMemoryManager.md#tableName)
 
 #### Defined in
 
@@ -90,7 +92,7 @@ A Promise resolving to the memory object, potentially updated with an embedding 
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`addEmbeddingToMemory`](../interfaces/IMemoryManager.md#addembeddingtomemory)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`addEmbeddingToMemory`](../interfaces/IMemoryManager.md#addEmbeddingToMemory)
 
 #### Defined in
 
@@ -136,7 +138,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemories`](../interfaces/IMemoryManager.md#getmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemories`](../interfaces/IMemoryManager.md#getMemories)
 
 #### Defined in
 
@@ -158,7 +160,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getCachedEmbeddings`](../interfaces/IMemoryManager.md#getcachedembeddings)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getCachedEmbeddings`](../interfaces/IMemoryManager.md#getCachedEmbeddings)
 
 #### Defined in
 
@@ -208,7 +210,7 @@ A Promise resolving to an array of Memory objects that match the embedding.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`searchMemoriesByEmbedding`](../interfaces/IMemoryManager.md#searchmemoriesbyembedding)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`searchMemoriesByEmbedding`](../interfaces/IMemoryManager.md#searchMemoriesByEmbedding)
 
 #### Defined in
 
@@ -240,7 +242,7 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`createMemory`](../interfaces/IMemoryManager.md#creatememory)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`createMemory`](../interfaces/IMemoryManager.md#createMemory)
 
 #### Defined in
 
@@ -266,7 +268,7 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoriesByRoomIds`](../interfaces/IMemoryManager.md#getmemoriesbyroomids)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoriesByRoomIds`](../interfaces/IMemoryManager.md#getMemoriesByRoomIds)
 
 #### Defined in
 
@@ -288,7 +290,7 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoryById`](../interfaces/IMemoryManager.md#getmemorybyid)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoryById`](../interfaces/IMemoryManager.md#getMemoryById)
 
 #### Defined in
 
@@ -316,7 +318,7 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeMemory`](../interfaces/IMemoryManager.md#removememory)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeMemory`](../interfaces/IMemoryManager.md#removeMemory)
 
 #### Defined in
 
@@ -344,7 +346,7 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeAllMemories`](../interfaces/IMemoryManager.md#removeallmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeAllMemories`](../interfaces/IMemoryManager.md#removeAllMemories)
 
 #### Defined in
 
@@ -376,7 +378,7 @@ A Promise resolving to the count of memories.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`countMemories`](../interfaces/IMemoryManager.md#countmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`countMemories`](../interfaces/IMemoryManager.md#countMemories)
 
 #### Defined in
 

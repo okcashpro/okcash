@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / ActionExample
+
 # Interface: ActionExample
 
 Represents an example of content, typically used for demonstrating or testing purposes. Includes user, content, optional action, and optional source.

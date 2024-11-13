@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Handler
+
 # Type Alias: Handler()
 
 > **Handler**: (`runtime`, `message`, `state`?, `options`?, `callback`?) => `Promise`\<`unknown`\>

@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / State
+
 # Interface: State
 
 Represents the state of the conversation or context in which the agent is operating, including information about users, messages, goals, and other relevant data.
