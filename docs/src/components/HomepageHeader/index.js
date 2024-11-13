@@ -21,7 +21,7 @@ function HomepageHeader() {
             <div className={styles.buttonGroup}>
               <a
                 className="button button--primary button--lg"
-                href="/docs/intro"
+                href="./docs/intro/#"
               >
                 Get Started
               </a>
