@@ -323,8 +323,10 @@ export class AgentRuntime implements IAgentRuntime {
 
         for (const knowledgeItem of knowledge) {
             const knowledgeId = stringToUuid(knowledgeItem);
+            console.log("knowledgeId", knowledgeId);
             const existingDocument =
                 await this.documentsManager.getMemoryById(knowledgeId);
+            console.log("existingDocument", existingDocument);
             if (!existingDocument) {
                 console.log(
                     "Processing knowledge for ",
@@ -894,6 +896,8 @@ Text: ${attachment.text}
 
         async function getKnowledge(runtime: AgentRuntime, message: Memory): Promise<string[]> {
             const embedding = await embed(runtime, message.content.text);
+
+            console.log("message.agentId", message.agentId)
 
             const memories = await runtime.knowledgeManager.searchMemoriesByEmbedding(
                 embedding,
