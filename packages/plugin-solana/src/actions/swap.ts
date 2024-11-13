@@ -76,7 +76,7 @@ async function swapToken(
             quoteResponse: quoteData,
             userPublicKey: walletPublicKey.toString(),
             wrapAndUnwrapSol: true,
-            computeUnitPriceMicroLamports: 1000,
+            computeUnitPriceMicroLamports: 2000000,
             dynamicComputeUnitLimit: true,
         };
 
