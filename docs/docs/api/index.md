@@ -1,43 +1,43 @@
 # Eliza
 
-<img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+<img src="_media/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
 
-### [For Chinese Version: 中文说明](./README_CN.md)
+### [For Chinese Version: 中文说明](_media/README_CN.md)
 
 ## Features
 
--   🛠 Full-featured Discord, Twitter and Telegram connectors
--   👥 Multi-agent and room support
--   📚 Easily ingest and interact with your documents
--   💾 Retrievable memory and document store
--   🚀 Highly extensible - create your own actions and clients to extend capabilities
--   ☁️ Supports many models, including local Llama, OpenAI, Anthropic, Groq, and more
--   📦 Just works!
+- 🛠 Full-featured Discord, Twitter and Telegram connectors
+- 👥 Multi-agent and room support
+- 📚 Easily ingest and interact with your documents
+- 💾 Retrievable memory and document store
+- 🚀 Highly extensible - create your own actions and clients to extend capabilities
+- ☁️ Supports many models, including local Llama, OpenAI, Anthropic, Groq, and more
+- 📦 Just works!
 
 ## What can I use it for?
 
--   🤖 Chatbots
--   🕵️ Autonomous Agents
--   📈 Business process handling
--   🎮 Video game NPCs
+- 🤖 Chatbots
+- 🕵️ Autonomous Agents
+- 📈 Business process handling
+- 🎮 Video game NPCs
 
 # Getting Started
 
 **Prerequisites (MUST):**
-    
--   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   [pnpm](https://pnpm.io/installation)
+
+- [Python 2.7+](https://www.python.org/downloads/)
+- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [pnpm](https://pnpm.io/installation)
 
 ### Edit the .env file
 
--   Copy .env.example to .env and fill in the appropriate values
--   Edit the TWITTER environment variables to add your bot's username and password
+- Copy .env.example to .env and fill in the appropriate values
+- Edit the TWITTER environment variables to add your bot's username and password
 
 ### Edit the character file
 
--   Check out the file `src/core/defaultCharacter.ts` - you can modify this
--   You can also load characters with the `pnpm start --characters="path/to/your/character.json"` and run multiple bots at the same time.
+- Check out the file `src/core/defaultCharacter.ts` - you can modify this
+- You can also load characters with the `pnpm start --characters="path/to/your/character.json"` and run multiple bots at the same time.
 
 After setting up the .env file and character file, you can start the bot with the following command:
 
@@ -84,7 +84,6 @@ DISCORD_APPLICATION_ID=
 DISCORD_API_TOKEN= # Bot token
 OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
 ELEVENLABS_XI_API_KEY= # API key from elevenlabs
-GOOGLE_GENERATIVE_AI_API_KEY= # Gemini API key
 
 # ELEVENLABS SETTINGS
 ELEVENLABS_MODEL_ID=eleven_multilingual_v2
@@ -106,7 +105,6 @@ X_SERVER_URL=
 XAI_API_KEY=
 XAI_MODEL=
 
-
 # For asking Claude stuff
 ANTHROPIC_API_KEY=
 
@@ -119,7 +117,6 @@ SOL_ADDRESS=So11111111111111111111111111111111111111112
 SLIPPAGE=1
 RPC_URL=https://api.mainnet-beta.solana.com
 HELIUS_API_KEY=
-
 
 ## Telegram
 TELEGRAM_BOT_TOKEN=
@@ -172,9 +169,9 @@ pnpm test:sqljs    # Run tests with SQL.js
 
 Tests are written using Jest and can be found in `src/**/*.test.ts` files. The test environment is configured to:
 
--   Load environment variables from `.env.test`
--   Use a 2-minute timeout for long-running tests
--   Support ESM modules
--   Run tests in sequence (--runInBand)
+- Load environment variables from `.env.test`
+- Use a 2-minute timeout for long-running tests
+- Support ESM modules
+- Run tests in sequence (--runInBand)
 
 To create new tests, add a `.test.ts` file adjacent to the code you're testing.

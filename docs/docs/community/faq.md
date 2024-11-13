@@ -14,7 +14,7 @@ The Eliza project is led by the developers of ai16z, an AI-driven DAO founded by
 
 To begin building your own AI agents with Eliza, follow these steps:
 
-1.  **Install Node.js and pnpm**: Ensure you have the necessary software prerequisites installed on your system. We use node v23.
+1.  **Install Python, Node.js and pnpm**: Ensure you have the necessary software prerequisites installed on your system. We use node v23.
 2.  **Set up your environment**: Create a `.env` file and populate it with the required API keys, database configuration, and platform-specific tokens.
 3.  **Install Eliza**: Use the command `npm install eliza` or `pnpm install eliza` to install the Eliza package.
 4.  **Configure your database**: Eliza currently relies on Supabase for local development. Follow the instructions in the documentation to set up your Supabase project and database.

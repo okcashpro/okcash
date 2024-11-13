@@ -322,9 +322,9 @@ Hold large documents that can be referenced
 
 ***
 
-### fragmentsManager
+### knowledgeManager
 
-> **fragmentsManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
+> **knowledgeManager**: [`IMemoryManager`](../interfaces/IMemoryManager.md)
 
 Searchable document fragments
 
@@ -833,4 +833,4 @@ The state of the agent.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:1101](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L1101)
+[packages/core/src/runtime.ts:1126](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L1126)
