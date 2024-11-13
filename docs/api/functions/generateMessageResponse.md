@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / generateMessageResponse
+
 # Function: generateMessageResponse()
 
 > **generateMessageResponse**(`opts`): `Promise`\<[`Content`](../interfaces/Content.md)\>
@@ -26,4 +28,4 @@ The completed message.
 
 ## Defined in
 
-[packages/core/src/generation.ts:612](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L612)
+[packages/core/src/generation.ts:620](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L620)

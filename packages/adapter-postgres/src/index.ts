@@ -115,7 +115,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(query, queryParams);
             return rows.map((row) => ({
                 ...row,
-                content: typeof row.content === "string" ? JSON.parse(row.content) : row.content,
+                content:
+                    typeof row.content === "string"
+                        ? JSON.parse(row.content)
+                        : row.content,
             }));
         } finally {
             client.release();
@@ -164,9 +167,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             console.log("account", account);
             return {
                 ...account,
-                details: typeof account.details === "string"
-                    ? JSON.parse(account.details)
-                    : account.details,
+                details:
+                    typeof account.details === "string"
+                        ? JSON.parse(account.details)
+                        : account.details,
             };
         } finally {
             client.release();
@@ -209,9 +213,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             );
             return rows.map((row) => ({
                 ...row,
-                details: typeof row.details === "string"
-                    ? JSON.parse(row.details)
-                    : row.details,
+                details:
+                    typeof row.details === "string"
+                        ? JSON.parse(row.details)
+                        : row.details,
             }));
         } finally {
             client.release();
@@ -229,9 +234,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             return {
                 ...rows[0],
-                content: typeof rows[0].content === "string"
-                    ? JSON.parse(rows[0].content)
-                    : rows[0].content,
+                content:
+                    typeof rows[0].content === "string"
+                        ? JSON.parse(rows[0].content)
+                        : rows[0].content,
             };
         } finally {
             client.release();
@@ -311,7 +317,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
 
             return rows.map((row) => ({
                 ...row,
-                content: typeof row.content === "string" ? JSON.parse(row.content) : row.content,
+                content:
+                    typeof row.content === "string"
+                        ? JSON.parse(row.content)
+                        : row.content,
                 similarity: row.similarity,
             }));
         } finally {
@@ -372,9 +381,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
                 ...row,
-                content: typeof row.content === "string"
-                    ? JSON.parse(row.content)
-                    : row.content,
+                content:
+                    typeof row.content === "string"
+                        ? JSON.parse(row.content)
+                        : row.content,
             }));
         } finally {
             client.release();
@@ -412,9 +422,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
                 ...row,
-                objectives: typeof row.objectives === "string"
-                    ? JSON.parse(row.objectives)
-                    : row.objectives,
+                objectives:
+                    typeof row.objectives === "string"
+                        ? JSON.parse(row.objectives)
+                        : row.objectives,
             }));
         } finally {
             client.release();
@@ -426,7 +437,12 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         try {
             await client.query(
                 `UPDATE goals SET name = $1, status = $2, objectives = $3 WHERE id = $4`,
-                [goal.name, goal.status, JSON.stringify(goal.objectives), goal.id]
+                [
+                    goal.name,
+                    goal.status,
+                    JSON.stringify(goal.objectives),
+                    goal.id,
+                ]
             );
         } finally {
             client.release();
@@ -466,7 +482,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         const client = await this.pool.connect();
         try {
             const newRoomId = roomId || v4();
-            await client.query("INSERT INTO rooms (id) VALUES ($1)", [newRoomId]);
+            await client.query("INSERT INTO rooms (id) VALUES ($1)", [
+                newRoomId,
+            ]);
             return newRoomId as UUID;
         } finally {
             client.release();
@@ -569,7 +587,7 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                 ORDER BY levenshtein_score
                 LIMIT $5
             `;
-    
+
             const { rows } = await client.query(sql, [
                 opts.query_input,
                 opts.query_field_name,
@@ -577,13 +595,13 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
                 opts.query_table_name,
                 opts.query_match_count,
             ]);
-    
+
             return rows.map((row) => ({
                 embedding: row.embedding,
                 levenshtein_score: row.levenshtein_score,
             }));
         } catch (error) {
-            console.error('Error in getCachedEmbeddings:', error);
+            console.error("Error in getCachedEmbeddings:", error);
             throw error;
         } finally {
             client.release();
@@ -666,9 +684,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
                 ...row,
-                content: typeof row.content === "string"
-                    ? JSON.parse(row.content)
-                    : row.content,
+                content:
+                    typeof row.content === "string"
+                        ? JSON.parse(row.content)
+                        : row.content,
                 similarity: row.similarity,
             }));
         } finally {
@@ -715,10 +734,10 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     }): Promise<void> {
         const client = await this.pool.connect();
         try {
-            await client.query(
-                "UPDATE goals SET status = $1 WHERE id = $2",
-                [params.status, params.goalId]
-            );
+            await client.query("UPDATE goals SET status = $1 WHERE id = $2", [
+                params.status,
+                params.goalId,
+            ]);
         } finally {
             client.release();
         }
@@ -772,10 +791,9 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
     async removeAllGoals(roomId: UUID): Promise<void> {
         const client = await this.pool.connect();
         try {
-            await client.query(
-                `DELETE FROM goals WHERE "roomId" = $1`,
-                [roomId]
-            );
+            await client.query(`DELETE FROM goals WHERE "roomId" = $1`, [
+                roomId,
+            ]);
         } finally {
             client.release();
         }

@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / evaluationTemplate
+
 # Variable: evaluationTemplate
 
 > `const` **evaluationTemplate**: `string`

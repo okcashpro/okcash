@@ -238,17 +238,18 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         match_count: number;
         unique: boolean;
     }): Promise<Memory[]> {
+        // Build the query and parameters carefully
         const queryParams = [
             new Float32Array(params.embedding), // Ensure embedding is Float32Array
             params.tableName,
             params.roomId,
-            params.match_count,
         ];
 
         let sql = `
-      SELECT *, vec_distance_L2(embedding, ?) AS similarity
-      FROM memories
-      WHERE type = ?`;
+            SELECT *, vec_distance_L2(embedding, ?) AS similarity
+            FROM memories 
+            WHERE type = ? 
+            AND roomId = ?`;
 
         if (params.unique) {
             sql += " AND `unique` = 1";
@@ -258,13 +259,14 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             sql += " AND agentId = ?";
             queryParams.push(params.agentId);
         }
-
         sql += ` ORDER BY similarity ASC LIMIT ?`; // ASC for lower distance
-        // Updated queryParams order matches the placeholders
+        queryParams.push(params.match_count.toString()); // Convert number to string
 
+        // Execute the prepared statement with the correct number of parameters
         const memories = this.db.prepare(sql).all(...queryParams) as (Memory & {
             similarity: number;
         })[];
+
         return memories.map((memory) => ({
             ...memory,
             createdAt:
@@ -274,6 +276,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             content: JSON.parse(memory.content as unknown as string),
         }));
     }
+
 
     async searchMemoriesByEmbedding(
         embedding: number[],
@@ -337,28 +340,51 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         query_field_sub_name: string;
         query_match_count: number;
     }): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+        // First get content text and calculate Levenshtein distance
         const sql = `
+            WITH content_text AS (
+                SELECT 
+                    embedding,
+                    json_extract(
+                        json(content),
+                        '$.' || ? || '.' || ?
+                    ) as content_text
+                FROM memories 
+                WHERE type = ?
+                AND json_extract(
+                    json(content),
+                    '$.' || ? || '.' || ?
+                ) IS NOT NULL
+            )
             SELECT 
                 embedding,
-                0 as levenshtein_score  -- Using 0 as placeholder score
-            FROM memories 
-            WHERE type = ?
-            AND json_extract(content, '$.' || ? || '.' || ?) IS NOT NULL
+                length(?) + length(content_text) - (
+                    length(?) + length(content_text) - (
+                        length(replace(lower(?), lower(content_text), '')) + 
+                        length(replace(lower(content_text), lower(?), ''))
+                    ) / 2
+                ) as levenshtein_score
+            FROM content_text
+            ORDER BY levenshtein_score ASC
             LIMIT ?
         `;
 
-        const params = [
+        const rows = this.db.prepare(sql).all(
+            opts.query_field_name,
+            opts.query_field_sub_name,
             opts.query_table_name,
             opts.query_field_name,
             opts.query_field_sub_name,
+            opts.query_input,
+            opts.query_input,
+            opts.query_input,
+            opts.query_input,
             opts.query_match_count
-        ];
+        ) as { embedding: Buffer; levenshtein_score: number }[];
 
-        const rows = this.db.prepare(sql).all(...params);
-
-        return rows.map((row) => ({
-            embedding: row.embedding,
-            levenshtein_score: 0
+        return rows.map(row => ({
+            embedding: Array.from(new Float32Array(row.embedding as Buffer)),
+            levenshtein_score: row.levenshtein_score
         }));
     }
 

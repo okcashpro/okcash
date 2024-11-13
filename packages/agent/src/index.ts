@@ -223,7 +223,7 @@ export async function createAgent(
         plugins: [
             bootstrapPlugin,
             nodePlugin,
-            character.settings.secrets.WALLET_PUBLIC_KEY
+            character.settings.secrets?.WALLET_PUBLIC_KEY
                 ? solanaPlugin
                 : null
         ].filter(Boolean),

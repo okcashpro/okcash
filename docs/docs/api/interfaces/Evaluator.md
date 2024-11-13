@@ -10,7 +10,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:239](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L239)
+[core/src/core/types.ts:221](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L221)
 
 ---
 
@@ -20,7 +20,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:241](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L241)
+[core/src/core/types.ts:223](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L223)
 
 ---
 
@@ -30,7 +30,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:242](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L242)
+[core/src/core/types.ts:224](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L224)
 
 ---
 
@@ -40,7 +40,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:243](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L243)
+[core/src/core/types.ts:225](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L225)
 
 ---
 
@@ -50,7 +50,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:240](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L240)
+[core/src/core/types.ts:222](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L222)
 
 ---
 
@@ -60,4 +60,4 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:244](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L244)
+[core/src/core/types.ts:226](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L226)

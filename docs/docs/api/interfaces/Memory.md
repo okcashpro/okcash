@@ -10,7 +10,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:172](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L172)
+[core/src/core/types.ts:154](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L154)
 
 ---
 
@@ -20,7 +20,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:174](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L174)
+[core/src/core/types.ts:156](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L156)
 
 ---
 
@@ -30,7 +30,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:173](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L173)
+[core/src/core/types.ts:155](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L155)
 
 ---
 
@@ -40,7 +40,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:175](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L175)
+[core/src/core/types.ts:157](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L157)
 
 ---
 
@@ -50,7 +50,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:170](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L170)
+[core/src/core/types.ts:152](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L152)
 
 ---
 
@@ -60,7 +60,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:176](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L176)
+[core/src/core/types.ts:158](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L158)
 
 ---
 
@@ -70,7 +70,7 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:177](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L177)
+[core/src/core/types.ts:159](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L159)
 
 ---
 
@@ -80,4 +80,4 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:171](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L171)
+[core/src/core/types.ts:153](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L153)

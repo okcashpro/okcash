@@ -25,6 +25,9 @@ export const messageHandlerTemplate =
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
 
+# Knowledge
+{{knowledge}}
+
 # Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
 {{bio}}
@@ -43,7 +46,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 {{actions}}
 
-# Instructions: Write the next message for {{agentName}}. Ignore "action".
+# Instructions: Write the next message for {{agentName}}.
 ` + messageCompletionFooter;
 
 export interface SimliClientConfig {
