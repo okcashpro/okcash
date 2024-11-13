@@ -13,7 +13,7 @@ function HomepageHeader() {
             <h1 className={styles.heroTitle}>
               eliza is a simple, fast, and{" "}
               <span className={styles.headerTextGradient}>
-                lightweight chatbot
+                lightweight AI agent
               </span>{" "}
               framework
             </h1>
@@ -21,7 +21,7 @@ function HomepageHeader() {
             <div className={styles.buttonGroup}>
               <a
                 className="button button--primary button--lg"
-                href="/docs/introduction"
+                href="/docs/intro"
               >
                 Get Started
               </a>
