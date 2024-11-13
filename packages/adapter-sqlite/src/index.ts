@@ -1,5 +1,8 @@
-import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
+export * from "./sqliteTables.ts";
+export * from "./sqlite_vec.ts";
+
+import { DatabaseAdapter } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
 import {
     Account,
     Actor,
@@ -9,7 +12,7 @@ import {
     type Memory,
     type Relationship,
     type UUID,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { Database } from "better-sqlite3";
 import { v4 } from "uuid";
 import { load } from "./sqlite_vec.ts";
@@ -277,7 +280,6 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         }));
     }
 
-
     async searchMemoriesByEmbedding(
         embedding: number[],
         params: {
@@ -369,22 +371,24 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             LIMIT ?
         `;
 
-        const rows = this.db.prepare(sql).all(
-            opts.query_field_name,
-            opts.query_field_sub_name,
-            opts.query_table_name,
-            opts.query_field_name,
-            opts.query_field_sub_name,
-            opts.query_input,
-            opts.query_input,
-            opts.query_input,
-            opts.query_input,
-            opts.query_match_count
-        ) as { embedding: Buffer; levenshtein_score: number }[];
+        const rows = this.db
+            .prepare(sql)
+            .all(
+                opts.query_field_name,
+                opts.query_field_sub_name,
+                opts.query_table_name,
+                opts.query_field_name,
+                opts.query_field_sub_name,
+                opts.query_input,
+                opts.query_input,
+                opts.query_input,
+                opts.query_input,
+                opts.query_match_count
+            ) as { embedding: Buffer; levenshtein_score: number }[];
 
-        return rows.map(row => ({
+        return rows.map((row) => ({
             embedding: Array.from(new Float32Array(row.embedding as Buffer)),
-            levenshtein_score: row.levenshtein_score
+            levenshtein_score: row.levenshtein_score,
         }));
     }
 

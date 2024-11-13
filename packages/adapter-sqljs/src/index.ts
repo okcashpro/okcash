@@ -1,5 +1,7 @@
-import { v4 } from "uuid";
+export * from "./sqliteTables.ts";
+export * from "./types.ts";
 
+import { v4 } from "uuid";
 import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
 import {
     Account,
