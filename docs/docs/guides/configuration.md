@@ -1,289 +1,233 @@
----
-sidebar_position: 9
----
+# Configuration
 
-# ⚙️ Configuration Guide
+## Overview
 
-This guide covers how to configure Eliza for different use cases and environments. We'll walk through all available configuration options and best practices.
+The framework provides multiple layers of configuration to customize agent behavior, system settings, and runtime environments. This guide covers all configuration aspects: character files, environment variables, action configuration, and runtime settings.
 
-## Environment Configuration 
+## Key Components
 
-### Basic Setup
+### 1. Environment Setup
 
-The first step is creating your environment configuration file:
+Create a `.env` file in your project root:
 
 ```bash
-cp .env.example .env
+# Model API Keys
+OPENAI_API_KEY=your-key
+CLAUDE_API_KEY=your-key
+
+# Database Configuration
+DATABASE_URL=your-db-url
+POSTGRES_URL=your-postgres-url  # Optional, defaults to SQLite
+
+# Client-Specific Tokens
+DISCORD_API_TOKEN=your-token
+DISCORD_APPLICATION_ID=your-id
+TELEGRAM_BOT_TOKEN=your-token
+TWITTER_USERNAME=your-username
 ```
 
-### Core Environment Variables
+### 2. Character Configuration
 
-Here are the essential environment variables you need to configure:
-
-```bash
-# Core API Keys
-OPENAI_API_KEY=sk-your-key # Required for OpenAI features
-ANTHROPIC_API_KEY=your-key  # Required for Claude models
-TOGETHER_API_KEY=your-key   # Required for Together.ai models
-
-# Default Settings
-XAI_MODEL=gpt-4o-mini      # Default model to use
-X_SERVER_URL=              # Optional model API endpoint
-```
-
-### Client-Specific Configuration
-
-#### Discord Configuration
-```bash
-DISCORD_APPLICATION_ID=     # Your Discord app ID
-DISCORD_API_TOKEN=         # Discord bot token
-```
-
-#### Twitter Configuration
-```bash
-TWITTER_USERNAME=          # Bot Twitter username
-TWITTER_PASSWORD=          # Bot Twitter password 
-TWITTER_EMAIL=            # Twitter account email
-TWITTER_COOKIES=          # Twitter auth cookies
-TWITTER_DRY_RUN=false    # Test mode without posting
-```
-
-#### Telegram Configuration
-```bash
-TELEGRAM_BOT_TOKEN=       # Telegram bot token
-```
-
-### Model Provider Settings
-
-You can configure different AI model providers:
-
-```bash
-# OpenAI Settings
-OPENAI_API_KEY=sk-*
-
-# Anthropic Settings
-ANTHROPIC_API_KEY=
-
-# Together.ai Settings  
-TOGETHER_API_KEY=
-
-# Local Model Settings
-XAI_MODEL=meta-llama/Llama-3.1-7b-instruct
-```
-
-## Character Configuration
-
-### Character File Structure
-
-Character files define your agent's personality and behavior. Create them in the `characters/` directory:
+Create character files in the `characters` directory:
 
 ```json
 {
   "name": "AgentName",
-  "clients": ["discord", "twitter"],
+  "clients": ["discord", "twitter", "telegram"],
   "modelProvider": "openai",
   "settings": {
     "secrets": {
-      "OPENAI_API_KEY": "character-specific-key",
-      "DISCORD_TOKEN": "bot-specific-token"
+      "OPENAI_API_KEY": "your-key"
+    },
+    "voice": {
+      "model": "en_US-male-medium"
     }
+  },
+  "bio": ["Biography elements..."],
+  "lore": ["Character background..."],
+  "knowledge": ["Factual information..."],
+  "topics": ["Relevant topics..."],
+  "style": {
+    "all": ["Style guidelines..."],
+    "chat": ["Chat-specific style..."],
+    "post": ["Post-specific style..."]
   }
 }
 ```
 
-### Loading Characters
+### 3. Custom Actions
 
-You can load characters in several ways:
-
-```bash
-# Load default character
-pnpm start
-
-# Load specific character
-pnpm start --characters="characters/your-character.json"
-
-# Load multiple characters
-pnpm start --characters="characters/char1.json,characters/char2.json"
-```
-
-## Custom Actions
-
-### Adding Custom Actions
-
-1. Create a `custom_actions` directory
-2. Add your action files there
-3. Configure in `elizaConfig.yaml`:
+Define custom actions in `elizaConfig.yaml`:
 
 ```yaml
 actions:
-  - name: myCustomAction
-    path: ./custom_actions/myAction.ts
+  - name: customAction
+    path: ./actions/customAction.ts
+  - name: anotherAction
+    path: ./custom_actions/anotherAction.ts
 ```
 
-### Action Configuration Structure
+## Usage Guide
+
+### 1. Basic Setup
 
 ```typescript
-export const myAction: Action = {
-  name: "MY_ACTION",
-  similes: ["SIMILAR_ACTION", "ALTERNATE_NAME"],
-  validate: async (runtime: IAgentRuntime, message: Memory) => {
-    // Validation logic
-    return true;
-  },
-  description: "Action description",
-  handler: async (runtime: IAgentRuntime, message: Memory) => {
-    // Action logic
-    return true;
-  }
-};
-```
-
-## Provider Configuration
-
-### Database Providers
-
-Configure different database backends:
-
-```typescript
-// SQLite (Recommended for development)
+import { createAgentRuntime } from "@your-org/agent-framework";
 import { SqliteDatabaseAdapter } from "@your-org/agent-framework/adapters";
-const db = new SqliteDatabaseAdapter("./dev.db");
 
-// PostgreSQL (Production)
-import { PostgresDatabaseAdapter } from "@your-org/agent-framework/adapters";
-const db = new PostgresDatabaseAdapter({
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD
+// Initialize runtime
+const runtime = await createAgentRuntime({
+  character: characterConfig,
+  configPath: "./elizaConfig.yaml",
+  databaseAdapter: new SqliteDatabaseAdapter("./db.sqlite"),
 });
 ```
 
-### Model Providers 
+### 2. Running Multiple Characters
 
-Configure model providers in your character file:
-
-```json
-{
-  "modelProvider": "openai",
-  "settings": {
-    "model": "gpt-4o-mini",
-    "temperature": 0.7,
-    "maxTokens": 2000
-  }
-}
+```bash
+# Start with specific character file
+pnpm run dev --characters=./characters/agent1.json,./characters/agent2.json
 ```
 
-## Advanced Configuration
-
-### Runtime Settings
-
-Fine-tune runtime behavior:
+### 3. Client Configuration
 
 ```typescript
-const settings = {
-  // Logging
-  DEBUG: "eliza:*",
-  LOG_LEVEL: "info",
+// Discord client example
+const discordClient = new DiscordClient(runtime);
+await discordClient.start();
 
-  // Performance
-  MAX_CONCURRENT_REQUESTS: 5,
-  REQUEST_TIMEOUT: 30000,
-  
-  // Memory
-  MEMORY_TTL: 3600,
-  MAX_MEMORY_ITEMS: 1000
+// Telegram client example
+const telegramClient = new TelegramClient(runtime, botToken);
+await telegramClient.start();
+```
+
+## Configuration Options
+
+### 1. Model Providers
+
+```typescript
+const modelProviders = {
+  openai: {
+    small: "gpt-3.5-turbo",
+    large: "gpt-4",
+  },
+  anthropic: {
+    small: "claude-3-haiku",
+    large: "claude-3-opus",
+  },
+  "llama-cloud": {
+    small: "llama-7b",
+    large: "llama-70b",
+  },
 };
 ```
 
-### Plugin Configuration
+### 2. Database Options
 
-Enable and configure plugins in `elizaConfig.yaml`:
+```typescript
+// SQLite (default)
+const dbAdapter = new SqliteDatabaseAdapter("./db.sqlite");
 
-```yaml
-plugins:
-  - name: solana
-    enabled: true
-    settings:
-      network: mainnet-beta
-      endpoint: https://api.mainnet-beta.solana.com
-
-  - name: image-generation
-    enabled: true
-    settings:
-      provider: dalle
-      size: 1024x1024
+// PostgreSQL
+const dbAdapter = new PostgresDatabaseAdapter({
+  connectionString: process.env.POSTGRES_URL,
+});
 ```
 
-## Configuration Best Practices
+### 3. Custom Provider Configuration
 
-1. **Environment Segregation**
-   - Use different `.env` files for different environments
-   - Follow naming convention: `.env.development`, `.env.staging`, `.env.production`
+```typescript
+// Add custom provider
+runtime.providers.push({
+  name: "customProvider",
+  get: async (runtime, message, state) => {
+    // Provider implementation
+    return data;
+  },
+});
+```
 
-2. **Secret Management**
-   - Never commit secrets to version control
-   - Use secret management services in production
-   - Rotate API keys regularly
+## Best Practices
 
-3. **Character Configuration**
-   - Keep character files modular and focused
-   - Use inheritance for shared traits
-   - Document character behaviors
+### 1. Security
 
-4. **Plugin Management**
-   - Enable only needed plugins
-   - Configure plugin-specific settings in separate files
-   - Monitor plugin performance
+- Store sensitive credentials in `.env` file
+- Use character-specific secrets for per-agent credentials
+- Never commit secrets to version control
+- Rotate API keys regularly
 
-5. **Database Configuration**
-   - Use SQLite for development
-   - Configure connection pooling for production
-   - Set up proper indexes
+### 2. Character Configuration
+
+- Break bio and lore into smaller chunks for variety
+- Use RAG (knowledge array) for factual information
+- Keep message examples diverse and representative
+- Update knowledge regularly
+
+### 3. Performance
+
+```typescript
+// Optimize context length
+const settings = {
+  maxContextLength: 4000, // Adjust based on model
+  maxTokens: 1000, // Limit response length
+  temperature: 0.7, // Adjust response randomness
+};
+```
+
+### 4. Error Handling
+
+```typescript
+try {
+  const runtime = await createAgentRuntime(config);
+} catch (error) {
+  if (error.code === "CONFIG_NOT_FOUND") {
+    console.error("Configuration file missing");
+  } else if (error.code === "INVALID_CHARACTER") {
+    console.error("Character file validation failed");
+  }
+}
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Environment Variables Not Loading**
-   ```bash
-   # Check .env file location
-   node -e "console.log(require('path').resolve('.env'))"
-   
-   # Verify environment variables
-   node -e "console.log(process.env)"
-   ```
+1. **Missing Configuration**
 
-2. **Character Loading Failures**
-   ```bash
-   # Validate character file
-   npx ajv validate -s character-schema.json -d your-character.json
-   ```
-
-3. **Database Connection Issues**
-   ```bash
-   # Test database connection
-   npx ts-node scripts/test-db-connection.ts
-   ```
-
-### Configuration Validation
-
-Use the built-in config validator:
-
-```bash
-pnpm run validate-config
+```typescript
+if (!fs.existsSync("./elizaConfig.yaml")) {
+  console.error("Missing elizaConfig.yaml - copy from example");
+}
 ```
 
-This will check:
-- Environment variables
-- Character files
-- Database configuration
-- Plugin settings
+2. **Invalid Character File**
 
-## Further Resources
+```typescript
+// Validate character file
+if (!character.name || !character.bio || !character.style) {
+  throw new Error("Invalid character configuration");
+}
+```
 
-- [Quickstart Guide](../quickstart.md) for initial setup
-- [Secrets Management](./secrets-management.md) for secure configuration
-- [Local Development](./local-development.md) for development setup
-- [Advanced Usage](./advanced.md) for complex configurations
+3. **Model Provider Issues**
+
+```typescript
+// Fallback to local model
+if (!process.env.OPENAI_API_KEY) {
+  console.log("Using local model fallback");
+  runtime.modelProvider = "llama-local";
+}
+```
+
+## Next Steps
+
+After basic configuration:
+
+1. Configure custom actions
+2. Set up client integrations
+3. Customize character behavior
+4. Optimize model settings
+5. Implement error handling
+
+For more detailed information on specific components, refer to their respective documentation sections.

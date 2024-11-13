@@ -115,8 +115,9 @@ Eliza is backed by an active community of developers and users:
 
 ## Next Steps
 
-- [Create Your First Agent](../quickstart)
-- [Understand Core Concepts](../core/agents)
+- [Install Eliza](./installation.md)
+- [Create Your First Agent](./quickstart.md)
+- [Understand Core Concepts](./core/agents.md)
 - [Explore Advanced Features](./guides/advanced.md)
 
 Join us in building the future of autonomous AI agents with Eliza!

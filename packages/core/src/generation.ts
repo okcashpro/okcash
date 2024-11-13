@@ -105,8 +105,8 @@ export async function generateText({
                 break;
             }
 
-            case ModelProviderName.GOOGLE:
-                { const google = createGoogleGenerativeAI();
+            case ModelProviderName.GOOGLE: {
+                const google = createGoogleGenerativeAI();
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: google(model),
@@ -122,7 +122,8 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                break; }
+                break;
+            }
 
             case ModelProviderName.ANTHROPIC: {
                 elizaLogger.debug("Initializing Anthropic model.");
@@ -194,7 +195,9 @@ export async function generateText({
             }
 
             case ModelProviderName.LLAMALOCAL: {
-                elizaLogger.debug("Using local Llama model for text completion.");
+                elizaLogger.debug(
+                    "Using local Llama model for text completion."
+                );
                 response = await runtime
                     .getService<ITextGenerationService>(
                         ServiceType.TEXT_GENERATION
@@ -396,8 +399,8 @@ export async function splitChunks(
     console.log("model", model);
 
     console.log("model.model.embedding", model.model.embedding);
-    
-    if(!model.model.embedding) {
+
+    if (!model.model.embedding) {
         throw new Error("Model does not support embedding");
     }
 

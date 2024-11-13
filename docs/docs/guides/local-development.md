@@ -1,30 +1,18 @@
----
-sidebar_position: 12
----
-
-# 💻 Local Development Guide
-
-This guide covers setting up and working with Eliza in a development environment.
+# Local Development
 
 ## Prerequisites
 
-Before you begin, ensure you have:
+Before starting local development, ensure you have:
 
-```bash
-# Required
-Node.js 22+
-pnpm
-Git
-
-# Optional but recommended
-VS Code
-Docker (for database development)
-CUDA Toolkit (for GPU acceleration)
-```
+- Node.js 22 or higher installed
+- pnpm package manager installed
+- Git for version control
+- Code editor (VS Code recommended)
+- CUDA Toolkit (optional, for GPU acceleration)
 
 ## Initial Setup
 
-### 1. Repository Setup
+### 1. Clone and Install
 
 ```bash
 # Clone the repository
@@ -34,26 +22,26 @@ cd eliza
 # Install dependencies
 pnpm install
 
-# Install optional dependencies
+# Install optional Sharp package if needed
 pnpm install --include=optional sharp
 ```
 
 ### 2. Environment Configuration
 
-Create your development environment file:
+Copy the example environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Configure essential development variables:
+Configure essential variables for local development:
 
 ```bash
-# Minimum required for local development
+# Minimum required for local testing
 OPENAI_API_KEY=sk-*           # Optional, for OpenAI features
 X_SERVER_URL=                 # Leave blank for local inference
-XAI_API_KEY=                 # Leave blank for local inference
-XAI_MODEL=meta-llama/Llama-3.1-7b-instruct  # Local model
+XAI_API_KEY=                  # Leave blank for local inference
+XAI_MODEL=meta-llama/Llama-3.1-7b-instruct  # Choose your model
 ```
 
 ### 3. Local Model Setup
@@ -61,45 +49,62 @@ XAI_MODEL=meta-llama/Llama-3.1-7b-instruct  # Local model
 For local inference without API dependencies:
 
 ```bash
-# Install CUDA support for NVIDIA GPUs
+# Install CUDA support if you have an NVIDIA GPU
 npx --no node-llama-cpp source download --gpu cuda
 
-# The system will automatically download models from 
-# Hugging Face on first run
+# The system will automatically download the selected model
+# from Hugging Face on first run
 ```
 
 ## Development Workflow
 
-### Running the Development Server
+### 1. Running the Development Server
 
 ```bash
 # Start with default character
 pnpm run dev
 
-# Start with specific character
-pnpm run dev --characters="characters/my-character.json"
+# Start with specific character(s)
+pnpm run dev --characters="characters/your-character.json"
 
 # Start with multiple characters
 pnpm run dev --characters="characters/char1.json,characters/char2.json"
 ```
 
-### Development Commands
+### 2. Testing in Shell Mode
+
+Open a new terminal to interact with your agent:
 
 ```bash
-pnpm run build          # Build the project
-pnpm run clean         # Clean build artifacts
-pnpm run dev           # Start development server
-pnpm run test          # Run tests
-pnpm run test:watch    # Run tests in watch mode
-pnpm run lint          # Lint code
+pnpm run shell
 ```
 
-## Database Development
+### 3. Custom Actions Development
+
+Create custom actions without modifying core files:
+
+```bash
+# Create custom actions directory
+mkdir custom_actions
+
+# Create your action file
+touch custom_actions/myAction.ts
+```
+
+Register your action in `elizaConfig.yaml`:
+
+```yaml
+actions:
+  - name: myAction
+    path: ./custom_actions/myAction.ts
+```
+
+## Database Options
 
 ### SQLite (Recommended for Development)
 
 ```typescript
-import { SqliteDatabaseAdapter } from "@ai16z/eliza/adapters";
+import { SqliteDatabaseAdapter } from "@your-org/agent-framework/adapters";
 import Database from "better-sqlite3";
 
 const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
@@ -108,106 +113,32 @@ const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
 ### In-Memory Database (for Testing)
 
 ```typescript
-import { SqlJsDatabaseAdapter } from "@ai16z/eliza/adapters";
+import { SqlJsDatabaseAdapter } from "@your-org/agent-framework/adapters";
 
 const db = new SqlJsDatabaseAdapter(new Database(":memory:"));
 ```
 
-### Schema Management
+## GPU Acceleration
+
+For NVIDIA GPU users:
+
+1. Install CUDA Toolkit with cuDNN and cuBLAS
+2. Set environment variables:
 
 ```bash
-# Create new migration
-pnpm run migration:create
-
-# Run migrations
-pnpm run migration:up
-
-# Rollback migrations
-pnpm run migration:down
+CUDA_PATH=/usr/local/cuda  # Windows: typically C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0
 ```
 
-## Testing
+## Debugging Tips
 
-### Running Tests
+### 1. Enable Debug Logging
 
 ```bash
-# Run all tests
-pnpm test
-
-# Run specific test file
-pnpm test tests/specific.test.ts
-
-# Run tests with coverage
-pnpm test:coverage
-
-# Run database-specific tests
-pnpm test:sqlite
-pnpm test:sqljs
+# Add to your .env file
+DEBUG=eliza:*
 ```
 
-### Writing Tests
-
-```typescript
-import { runAiTest } from "@ai16z/eliza/test_resources";
-
-describe("Feature Test", () => {
-  beforeEach(async () => {
-    // Setup test environment
-  });
-
-  it("should perform expected behavior", async () => {
-    const result = await runAiTest({
-      messages: [
-        {
-          user: "user1",
-          content: { text: "test message" }
-        }
-      ],
-      expected: "expected response"
-    });
-    expect(result.success).toBe(true);
-  });
-});
-```
-
-## Plugin Development
-
-### Creating a New Plugin
-
-```typescript
-// plugins/my-plugin/src/index.ts
-import { Plugin } from "@ai16z/eliza/types";
-
-export const myPlugin: Plugin = {
-  name: "my-plugin",
-  description: "My custom plugin",
-  actions: [],
-  evaluators: [],
-  providers: []
-};
-```
-
-### Custom Action Development
-
-```typescript
-// plugins/my-plugin/src/actions/myAction.ts
-export const myAction: Action = {
-  name: "MY_ACTION",
-  similes: ["SIMILAR_ACTION"],
-  validate: async (runtime: IAgentRuntime, message: Memory) => {
-    return true;
-  },
-  handler: async (runtime: IAgentRuntime, message: Memory) => {
-    // Implementation
-    return true;
-  },
-  examples: []
-};
-```
-
-## Debugging
-
-### VS Code Configuration
+### 2. VS Code Launch Configuration
 
 Create `.vscode/launch.json`:
 
@@ -230,165 +161,72 @@ Create `.vscode/launch.json`:
 }
 ```
 
-### Debugging Tips
+### 3. Common Issues
 
-1. Enable Debug Logging
+**Memory Issues:**
+
 ```bash
-# Add to your .env file
-DEBUG=eliza:*
-```
-
-2. Use Debug Points
-```typescript
-const debug = require('debug')('eliza:dev');
-
-debug('Operation details: %O', {
-  operation: 'functionName',
-  params: parameters,
-  result: result
-});
-```
-
-3. Memory Debugging
-```bash
-# Increase Node.js memory for development
+# Increase Node.js memory limit if needed
 NODE_OPTIONS="--max-old-space-size=8192" pnpm run dev
 ```
 
-## Common Development Tasks
+**Model Download Issues:**
 
-### 1. Adding a New Character
-
-```json
-{
-  "name": "DevBot",
-  "description": "Development testing bot",
-  "modelProvider": "openai",
-  "settings": {
-    "debug": true,
-    "logLevel": "debug"
-  }
-}
-```
-
-### 2. Creating Custom Services
-
-```typescript
-class CustomService extends Service {
-  static serviceType = ServiceType.CUSTOM;
-
-  async initialize() {
-    // Setup code
-  }
-
-  async process(input: any): Promise<any> {
-    // Service logic
-  }
-}
-```
-
-### 3. Working with Models
-
-```typescript
-// Local model configuration
-const localModel = {
-  modelProvider: "llamalocal",
-  settings: {
-    modelPath: "./models/llama-7b.gguf",
-    contextSize: 8192
-  }
-};
-
-// Cloud model configuration
-const cloudModel = {
-  modelProvider: "openai",
-  settings: {
-    model: "gpt-4o-mini",
-    temperature: 0.7
-  }
-};
-```
-
-## Performance Optimization
-
-### CUDA Setup
-
-For NVIDIA GPU users:
-
-1. Install CUDA Toolkit with cuDNN and cuBLAS
-2. Set environment variables:
-
-```bash
-CUDA_PATH=/usr/local/cuda  # Windows: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0
-```
-
-### Memory Management
-
-```typescript
-class MemoryManager {
-  private cache = new Map();
-  private maxSize = 1000;
-
-  async cleanup() {
-    if (this.cache.size > this.maxSize) {
-      // Implement cleanup logic
-    }
-  }
-}
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. Model Loading Issues
 ```bash
 # Clear model cache
 rm -rf ./models/*
 # Restart with fresh download
 ```
 
-2. Database Connection Issues
-```bash
-# Test database connection
-pnpm run test:db-connection
-```
+## Testing
 
-3. Memory Issues
-```bash
-# Check memory usage
-node --trace-gc index.js
-```
-
-### Development Tools
+### Unit Tests
 
 ```bash
-# Generate TypeScript documentation
-pnpm run docs:generate
+# Run all tests
+pnpm test
 
-# Check for circular dependencies
-pnpm run madge
+# Run specific test file
+pnpm test tests/your-test.test.ts
 
-# Analyze bundle size
-pnpm run analyze
+# Run with coverage
+pnpm test:coverage
 ```
 
-## Best Practices
+### Integration Testing
 
-1. Code Organization
+```bash
+# Start test environment
+pnpm run dev:test
+
+# Run integration tests
+pnpm test:integration
+```
+
+## Development Best Practices
+
+1. **Version Control**
+
+   - Create feature branches
+   - Follow conventional commits
+   - Keep PRs focused and manageable
+
+2. **Code Organization**
+
    - Place custom actions in `custom_actions/`
    - Keep character files in `characters/`
    - Store test data in `tests/fixtures/`
 
-2. Testing Strategy
-   - Write unit tests for new features
-   - Use integration tests for plugins
-   - Test with multiple model providers
+3. **Performance**
 
-3. Git Workflow
-   - Create feature branches
-   - Follow conventional commits
-   - Keep PRs focused
+   - Use SQLite for development
+   - Enable GPU acceleration when possible
+   - Monitor memory usage
+
+4. **Testing**
+   - Write unit tests for new features
+   - Test with multiple model providers
+   - Verify character behavior in shell
 
 ## Additional Tools
 
@@ -405,22 +243,4 @@ npx folder2knowledge <path/to/folder>
 npx knowledge2character <character-file> <knowledge-file>
 ```
 
-### Development Scripts
-
-```bash
-# Analyze codebase
-./scripts/analyze-codebase.ts
-
-# Extract tweets for training
-./scripts/extracttweets.js
-
-# Clean build artifacts
-./scripts/clean.sh
-```
-
-## Further Resources
-
-- [Configuration Guide](./configuration.md) for setup details
-- [Advanced Usage](./advanced.md) for complex features
-- [API Documentation](/api) for complete API reference
-- [Contributing Guide](../community/contributing.md) for contribution guidelines
+Remember to regularly update dependencies and test your changes across different environments and configurations.

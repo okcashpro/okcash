@@ -172,14 +172,14 @@ export class ClientBase extends EventEmitter {
             this.runtime.character.style.post.join();
 
         try {
-            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath)
+            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
             if (fs.existsSync(this.tweetCacheFilePath)) {
                 // make it?
                 const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
                 this.lastCheckedTweetId = parseInt(data.trim());
             } else {
                 console.warn("Tweet cache file not found.");
-                console.warn(this.tweetCacheFilePath)
+                console.warn(this.tweetCacheFilePath);
             }
         } catch (error) {
             console.error(

@@ -2,247 +2,212 @@
 sidebar_position: 5
 ---
 
-# 📊 Evaluators
+# Evaluators
 
-## Table of Contents
-- [Overview](#overview)
-- [Quick Start](#quick-start)
-- [Best Practices](#best-practices)
-- [Built-in Evaluators](#built-in-evaluators)
-- [Creating Custom Evaluators](#creating-custom-evaluators)
-- [Memory Integration](#memory-integration)
+Evaluators are components that assess and extract information from conversations, helping agents build long-term memory and track goal progress. They analyze conversations to extract facts, update goals, and maintain agent state.
 
 ## Overview
 
-[Evaluators](/api/interfaces) are core components that assess and extract information from conversations. They integrate with the [AgentRuntime](/api/classes/AgentRuntime)'s evaluation system, enabling agents to:
+Evaluators help agents:
 
+- Extract useful information from conversations
+- Track progress toward goals
 - Build long-term memory
-- Track goal progress
-- Extract facts and insights
-- Maintain contextual awareness
-
-## Quick Start
-
-1. Import the necessary evaluator types:
-```typescript
-import { Evaluator, IAgentRuntime, Memory, State } from '@ai16z/eliza-core';
-```
-
-2. Choose or create an evaluator:
-
-```typescript
-const evaluator: Evaluator = {
-    name: "BASIC_EVALUATOR",
-    similes: ["SIMPLE_EVALUATOR"],
-    description: "Evaluates basic conversation elements",
-    validate: async (runtime: IAgentRuntime, message: Memory) => true,
-    handler: async (runtime: IAgentRuntime, message: Memory) => {
-        // Evaluation logic here
-        return result;
-    },
-    examples: []
-};
-```
+- Maintain context awareness
 
 ## Built-in Evaluators
 
-
 ### Fact Evaluator
 
-The fact evaluator extracts and stores factual information from conversations.
-
+The fact evaluator extracts factual information from conversations for long-term memory storage.
 
 ```typescript
 interface Fact {
-    claim: string;
-    type: "fact" | "opinion" | "status";
-    in_bio: boolean;
-    already_known: boolean;
+  claim: string;
+  type: "fact" | "opinion" | "status";
+  in_bio: boolean;
+  already_known: boolean;
 }
 ```
 
-Source: https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts
+#### Fact Types
 
-**Example Facts:**
+- `fact`: True statements about the world or character that don't change
+- `status`: Facts that are true but may change over time
+- `opinion`: Non-factual opinions, thoughts, feelings, or recommendations
+
+#### Example Facts:
 
 ```json
-{
-    "claim": "User completed marathon training",
+[
+  {
+    "claim": "User lives in Oakland",
     "type": "fact",
     "in_bio": false,
     "already_known": false
-}
+  },
+  {
+    "claim": "User completed marathon in 3 hours",
+    "type": "fact",
+    "in_bio": false,
+    "already_known": false
+  },
+  {
+    "claim": "User is proud of their achievement",
+    "type": "opinion",
+    "in_bio": false,
+    "already_known": false
+  }
+]
 ```
 
 ### Goal Evaluator
-From bootstrap plugin - tracks conversation goals:
+
+The goal evaluator tracks progress on agent goals and objectives.
 
 ```typescript
 interface Goal {
-    id: string;
-    name: string;
-    status: "IN_PROGRESS" | "DONE" | "FAILED";
-    objectives: Objective[];
+  id: string;
+  name: string;
+  status: "IN_PROGRESS" | "DONE" | "FAILED";
+  objectives: Objective[];
 }
 
 interface Objective {
-    description: string;
-    completed: boolean;
+  description: string;
+  completed: boolean;
 }
 ```
 
----
+#### Goal Updates
+
+- Monitors conversation for goal progress
+- Updates objective completion status
+- Marks goals as complete when all objectives are done
+- Marks goals as failed when they cannot be completed
+
+#### Example Goal:
+
+```json
+{
+  "id": "goal-123",
+  "name": "Complete Marathon Training",
+  "status": "IN_PROGRESS",
+  "objectives": [
+    {
+      "description": "Run 30 miles per week",
+      "completed": true
+    },
+    {
+      "description": "Complete practice half-marathon",
+      "completed": false
+    }
+  ]
+}
+```
+
+## Creating Custom Evaluators
+
+To create a custom evaluator, implement the Evaluator interface:
+
+```typescript
+interface Evaluator {
+  name: string;
+  similes: string[];
+  description: string;
+  validate: (runtime: IAgentRuntime, message: Memory) => Promise<boolean>;
+  handler: (
+    runtime: IAgentRuntime,
+    message: Memory,
+    state?: State,
+    options?: any,
+  ) => Promise<any>;
+  examples: EvaluatorExample[];
+}
+```
+
+Example custom evaluator:
+
+```typescript
+const customEvaluator: Evaluator = {
+  name: "CUSTOM_EVALUATOR",
+  similes: ["ALTERNATE_NAME"],
+  description: "Evaluates something in the conversation",
+  validate: async (runtime, message) => {
+    // Determine if evaluation should run
+    return true;
+  },
+  handler: async (runtime, message, state, options) => {
+    // Evaluation logic
+    return evaluationResult;
+  },
+  examples: [
+    // Example inputs and outputs
+  ],
+};
+```
 
 ## Best Practices
 
 ### Fact Extraction
-- Validate facts before storage
-- Avoid duplicate entries
-- Include relevant context
-- Properly categorize information types
+
+1. **Avoid Duplication**
+
+   - Check for existing facts
+   - Only store new information
+   - Mark duplicates as already_known
+
+2. **Proper Categorization**
+
+   - Distinguish between facts/opinions/status
+   - Check if fact exists in bio
+   - Include relevant context
+
+3. **Quality Control**
+   - Remove corrupted facts
+   - Validate fact format
+   - Ensure facts are meaningful
 
 ### Goal Tracking
-- Define clear, measurable objectives
-- Update only changed goals
-- Handle failures gracefully
-- Track partial progress
 
-### Validation
-- Keep validation logic efficient
-- Check prerequisites first
-- Consider message content and state
-- Use appropriate memory managers
+1. **Clear Objectives**
 
-### Handler Implementation
-- Use runtime services appropriately
-- Store results in correct memory manager
-- Handle errors gracefully
-- Maintain state consistency
+   - Break goals into measurable objectives
+   - Define completion criteria
+   - Track partial progress
 
-### Examples
-- Provide clear context descriptions
-- Show typical trigger messages
-- Document expected outcomes
-- Cover edge cases
+2. **Status Updates**
 
----
+   - Only update changed goals
+   - Include complete objectives list
+   - Preserve unchanged data
 
-## Creating Custom Evaluators
+3. **Failure Handling**
+   - Define failure conditions
+   - Record failure reasons
+   - Allow goal adaptation
 
-Implement the Evaluator interface:
+## Memory Integration
 
-```typescript
-interface Evaluator {
-    name: string;
-    similes: string[];
-    description: string;
-    validate: (runtime: IAgentRuntime, message: Memory) => Promise<boolean>;
-    handler: (
-        runtime: IAgentRuntime,
-        message: Memory,
-        state?: State,
-        options?: any
-    ) => Promise<any>;
-    examples: EvaluatorExample[];
-}
-```
+Evaluators work with the memory system to:
 
-Source: https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts
+1. Store extracted facts
+2. Update goal states
+3. Build long-term context
+4. Maintain conversation history
 
-### Memory Integration
-
-Example of storing evaluator results:
+Example memory integration:
 
 ```typescript
-try {
-    const memory = await runtime.memoryManager.addEmbeddingToMemory({
-        userId: user?.id,
-        content: { text: evaluationResult },
-        roomId: roomId,
-        embedding: await embed(runtime, evaluationResult)
-    });
-    
-    await runtime.memoryManager.createMemory(memory);
-} catch (error) {
-    console.error("Failed to store evaluation result:", error);
-}
+// Store new fact
+const factMemory = await runtime.factManager.addEmbeddingToMemory({
+  userId: agentId,
+  content: { text: fact },
+  roomId,
+  createdAt: Date.now(),
+});
+
+await runtime.factManager.createMemory(factMemory, true);
 ```
 
-Source: https://github.com/ai16z/eliza/blob/main/packages/core/src/tests/memory.test.ts
-
-
-### Memory Usage
-
-Evaluators should use runtime memory managers for storage:
-
-```typescript
-const memoryEvaluator: Evaluator = {
-  name: "MEMORY_EVAL",
-  handler: async (runtime: IAgentRuntime, message: Memory) => {
-    // Store in message memory
-    await runtime.messageManager.createMemory({
-      id: message.id,
-      content: message.content,
-      roomId: message.roomId,
-      userId: message.userId,
-      agentId: runtime.agentId
-    });
-    
-    // Store in description memory
-    await runtime.descriptionManager.createMemory({
-      id: message.id,
-      content: { text: "User description" },
-      roomId: message.roomId,
-      userId: message.userId,
-      agentId: runtime.agentId
-    });
-  }
-};
-```
-
-## Integration with Agent Runtime
-
-The [AgentRuntime](/api/classes/AgentRuntime) processes evaluators through its [evaluate](/api/classes/AgentRuntime#evaluate) method:
-
-```typescript
-// Register evaluator
-runtime.registerEvaluator(customEvaluator);
-
-// Process evaluations
-const results = await runtime.evaluate(message, state);
-```
-
-
-## Error Handling
-
-```typescript
-const robustEvaluator: Evaluator = {
-  name: "ROBUST_EVAL",
-  handler: async (runtime: IAgentRuntime, message: Memory) => {
-    try {
-      // Attempt evaluation
-      await runtime.messageManager.createMemory({
-        id: message.id,
-        content: message.content,
-        roomId: message.roomId,
-        userId: message.userId,
-        agentId: runtime.agentId
-      });
-    } catch (error) {
-      // Log error and handle gracefully
-      console.error("Evaluation failed:", error);
-      
-      // Store error state if needed
-      await runtime.messageManager.createMemory({
-        id: message.id,
-        content: { text: "Evaluation failed" },
-        roomId: message.roomId,
-        userId: message.userId,
-        agentId: runtime.agentId
-      });
-    }
-  }
-};
-```
-
-
+## Related

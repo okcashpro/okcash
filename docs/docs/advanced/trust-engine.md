@@ -1,397 +1,297 @@
 ---
-sidebar_position: 15
+sidebar_position: 1
+title: Trust Engine
 ---
 
-# 🤝 Trust Engine
+# Trust Engine System
 
 ## Overview
 
-The Trust Engine is a sophisticated system for evaluating, tracking, and managing trust scores for token recommendations and trading activity. It combines on-chain analysis, trader metrics, and historical performance to create a comprehensive trust framework.
+The Trust Engine is a sophisticated system for tracking, evaluating, and managing trust scores in decentralized recommendation networks. It provides a comprehensive framework for monitoring recommender performance, token metrics, and trading outcomes.
 
 ## Core Components
 
-### Trust Score Database
-
-The database schema manages various aspects of trust:
+### 1. Recommender Management
 
 ```typescript
-interface TrustScoreDatabase {
-    // Core data structures
-    recommenders: Recommender[];
-    metrics: RecommenderMetrics[];
-    tokenPerformance: TokenPerformance[];
-    recommendations: TokenRecommendation[];
-}
-
 interface Recommender {
-    id: string;
-    address: string;
-    solanaPubkey?: string;
-    telegramId?: string;
-    discordId?: string;
-    twitterId?: string;
-    ip?: string;
-}
-
-interface RecommenderMetrics {
-    recommenderId: string;
-    trustScore: number;
-    totalRecommendations: number;
-    successfulRecs: number;
-    avgTokenPerformance: number;
-    riskScore: number;
-    consistencyScore: number;
-    virtualConfidence: number;
-    lastActiveDate: Date;
+  id: string; // Unique identifier
+  address: string; // Blockchain address
+  solanaPubkey?: string;
+  telegramId?: string;
+  discordId?: string;
+  twitterId?: string;
+  ip?: string;
 }
 ```
 
-### Token Analysis
+The system tracks recommenders across multiple platforms and identifiers, enabling:
 
-The system tracks comprehensive token metrics:
+- Cross-platform identity verification
+- Multi-channel recommendation tracking
+- Unified reputation management
+
+### 2. Trust Metrics
+
+```typescript
+interface RecommenderMetrics {
+  recommenderId: string;
+  trustScore: number; // Overall trust rating
+  totalRecommendations: number;
+  successfulRecs: number;
+  avgTokenPerformance: number;
+  riskScore: number;
+  consistencyScore: number;
+  virtualConfidence: number;
+  lastUpdated: Date;
+}
+```
+
+Key metrics tracked:
+
+- Trust Score: Overall reliability rating
+- Success Rate: Ratio of successful recommendations
+- Risk Assessment: Evaluation of risk-taking behavior
+- Consistency: Pattern analysis of recommendations
+
+### 3. Token Performance Tracking
 
 ```typescript
 interface TokenPerformance {
-    tokenAddress: string;
-    priceChange24h: number;
-    volumeChange24h: number;
-    trade_24h_change: number;
-    liquidity: number;
-    liquidityChange24h: number;
-    holderChange24h: number;
-    rugPull: boolean;
-    isScam: boolean;
-    marketCapChange24h: number;
-    sustainedGrowth: boolean;
-    rapidDump: boolean;
-    suspiciousVolume: boolean;
-    validationTrust: number;
-    lastUpdated: Date;
+  tokenAddress: string;
+  priceChange24h: number;
+  volumeChange24h: number;
+  trade_24h_change: number;
+  liquidity: number;
+  liquidityChange24h: number;
+  holderChange24h: number;
+  rugPull: boolean;
+  isScam: boolean;
+  marketCapChange24h: number;
+  sustainedGrowth: boolean;
+  rapidDump: boolean;
+  suspiciousVolume: boolean;
+  lastUpdated: Date;
 }
 ```
 
-## Trust Scoring System
+## Usage Guide
 
-### Score Calculation
+### 1. Initializing Trust Tracking
 
 ```typescript
-async function calculateTrustScore(
-    recommenderId: string, 
-    metrics: RecommenderMetrics
-): Promise<number> {
-    const weights = {
-        successRate: 0.3,
-        avgPerformance: 0.2,
-        consistency: 0.2,
-        riskMetric: 0.15,
-        timeDecay: 0.15
-    };
+const trustDB = new TrustScoreDatabase(sqliteDb);
 
-    const successRate = metrics.successfulRecs / metrics.totalRecommendations;
-    const normalizedPerformance = normalizePerformance(metrics.avgTokenPerformance);
-    const timeDecayFactor = calculateTimeDecay(metrics.lastActiveDate);
+// Add a new recommender
+const recommender = {
+  id: "uuid",
+  address: "0x...",
+  telegramId: "@username",
+};
+trustDB.addRecommender(recommender);
 
-    return (
-        (successRate * weights.successRate) +
-        (normalizedPerformance * weights.avgPerformance) +
-        (metrics.consistencyScore * weights.consistency) +
-        ((1 - metrics.riskScore) * weights.riskMetric) +
-        (timeDecayFactor * weights.timeDecay)
-    ) * 100;
-}
+// Initialize metrics
+trustDB.initializeRecommenderMetrics(recommender.id);
 ```
 
-### Token Validation
+### 2. Tracking Recommendations
 
 ```typescript
-async function validateToken(
-    tokenAddress: string,
-    performance: TokenPerformance
-): Promise<boolean> {
-    // Minimum requirements
-    const requirements = {
-        minLiquidity: 1000,  // $1000 USD
-        minHolders: 100,
-        maxOwnership: 0.2,   // 20% max single holder
-        minVolume: 500       // $500 USD daily volume
-    };
-
-    // Red flags
-    if (
-        performance.rugPull ||
-        performance.isScam ||
-        performance.rapidDump ||
-        performance.suspiciousVolume
-    ) {
-        return false;
-    }
-
-    // Basic requirements
-    return (
-        performance.liquidity >= requirements.minLiquidity &&
-        !performance.rapidDump &&
-        performance.validationTrust > 0.5
-    );
-}
+// Record a new token recommendation
+const recommendation = {
+  id: "uuid",
+  recommenderId: recommender.id,
+  tokenAddress: "0x...",
+  timestamp: new Date(),
+  initialMarketCap: 1000000,
+  initialLiquidity: 500000,
+  initialPrice: 0.001,
+};
+trustDB.addTokenRecommendation(recommendation);
 ```
 
-## Trade Management
-
-### Trade Performance Tracking
+### 3. Performance Monitoring
 
 ```typescript
-interface TradePerformance {
-    token_address: string;
-    recommender_id: string;
-    buy_price: number;
-    sell_price: number;
-    buy_timeStamp: string;
-    sell_timeStamp: string;
-    profit_usd: number;
-    profit_percent: number;
-    market_cap_change: number;
-    liquidity_change: number;
-    rapidDump: boolean;
-}
-
-async function recordTradePerformance(
-    trade: TradePerformance,
-    isSimulation: boolean
-): Promise<void> {
-    const tableName = isSimulation ? 'simulation_trade' : 'trade';
-    await db.query(`
-        INSERT INTO ${tableName} (
-            token_address,
-            recommender_id,
-            buy_price,
-            sell_price,
-            buy_timeStamp,
-            sell_timeStamp,
-            profit_usd,
-            profit_percent,
-            market_cap_change,
-            liquidity_change,
-            rapidDump
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-    `, [/* parameters */]);
-}
+// Update token performance metrics
+const performance = {
+  tokenAddress: "0x...",
+  priceChange24h: 15.5,
+  volumeChange24h: 25.0,
+  liquidity: 1000000,
+  holderChange24h: 5.2,
+  rugPull: false,
+  isScam: false,
+  // ... other metrics
+};
+trustDB.upsertTokenPerformance(performance);
 ```
 
-### Risk Management
+### 4. Trade Tracking
 
 ```typescript
-async function assessTradeRisk(
-    token: TokenPerformance,
-    recommender: RecommenderMetrics
-): Promise<{
-    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH',
-    maxPositionSize: number
-}> {
-    const riskFactors = {
-        tokenTrust: token.validationTrust,
-        recommenderTrust: recommender.trustScore,
-        marketMetrics: {
-            liquidity: token.liquidity,
-            volume: token.volumeChange24h,
-            holders: token.holderChange24h
-        }
-    };
-
-    // Calculate composite risk score
-    const riskScore = calculateRiskScore(riskFactors);
-    
-    // Determine position sizing
-    const maxPosition = determinePositionSize(riskScore);
-
-    return {
-        riskLevel: getRiskLevel(riskScore),
-        maxPositionSize: maxPosition
-    };
-}
+// Record a trade based on recommendation
+const trade = {
+  token_address: "0x...",
+  recommender_id: "uuid",
+  buy_price: 0.001,
+  buy_timeStamp: new Date().toISOString(),
+  buy_amount: 1000,
+  buy_sol: 1.5,
+  buy_value_usd: 1500,
+  buy_market_cap: 1000000,
+  buy_liquidity: 500000,
+};
+trustDB.addTradePerformance(trade, false);
 ```
 
-## Recommendation Analysis
+## Trust Score Calculation
 
-### Pattern Detection
+The system calculates trust scores based on multiple factors:
+
+1. **Performance Metrics**
+
+   - Success rate of recommendations
+   - Average token performance
+   - Risk-adjusted returns
+
+2. **Risk Factors**
+
+   ```typescript
+   const riskFactors = {
+     rugPull: -1.0, // Maximum penalty
+     scam: -0.8, // Severe penalty
+     rapidDump: -0.4, // Moderate penalty
+     suspicious: -0.2, // Minor penalty
+   };
+   ```
+
+3. **Historical Analysis**
+   - Performance consistency
+   - Long-term success rate
+   - Risk pattern analysis
+
+## Best Practices
+
+### 1. Regular Updates
 
 ```typescript
-async function analyzeRecommendationPatterns(
-    recommenderId: string
-): Promise<RecommendationPattern> {
-    const history = await getRecommenderHistory(recommenderId);
-    
-    return {
-        timeOfDay: analyzeTimingPatterns(history),
-        tokenTypes: analyzeTokenPreferences(history),
-        successRateByType: calculateTypeSuccessRates(history),
-        riskProfile: assessRiskProfile(history)
-    };
+// Update metrics regularly
+function updateRecommenderMetrics(recommenderId: string) {
+  const metrics = calculateUpdatedMetrics(recommenderId);
+  trustDB.updateRecommenderMetrics(metrics);
+  trustDB.logRecommenderMetricsHistory(recommenderId);
 }
 ```
 
-### Performance Metrics
+### 2. Risk Management
+
+1. Monitor suspicious patterns:
+
+   ```typescript
+   const riskFlags = {
+     rapidPriceChange: price24h > 100,
+     lowLiquidity: liquidity < minLiquidityThreshold,
+     suspiciousVolume: volume24h > marketCap,
+   };
+   ```
+
+2. Implement automatic warnings:
+   ```typescript
+   if (metrics.riskScore > riskThreshold) {
+     triggerRiskAlert(recommenderId);
+   }
+   ```
+
+### 3. Performance Tracking
 
 ```typescript
-interface PerformanceMetrics {
-    profitability: number;
-    consistency: number;
-    riskAdjustedReturn: number;
-    maxDrawdown: number;
-    winRate: number;
-}
-
-async function calculatePerformanceMetrics(
-    recommendations: TokenRecommendation[]
-): Promise<PerformanceMetrics> {
-    const trades = await getTradesFromRecommendations(recommendations);
-    
-    return {
-        profitability: calculateProfitability(trades),
-        consistency: calculateConsistency(trades),
-        riskAdjustedReturn: calculateSharpeRatio(trades),
-        maxDrawdown: calculateMaxDrawdown(trades),
-        winRate: calculateWinRate(trades)
-    };
-}
+// Track historical performance
+const history = trustDB.getRecommenderMetricsHistory(recommenderId);
+const performanceTrend = analyzePerformanceTrend(history);
 ```
 
-## Integration with Trading System
+## Advanced Features
 
-### Trade Execution
+### 1. Simulation Support
 
 ```typescript
-async function executeTrade(
-    recommendation: TokenRecommendation,
-    trustScore: number
-): Promise<boolean> {
-    const riskAssessment = await assessTradeRisk(
-        recommendation.tokenAddress,
-        recommendation.recommenderId
-    );
-
-    // Calculate position size based on trust score
-    const positionSize = calculatePositionSize(
-        trustScore,
-        riskAssessment.maxPositionSize
-    );
-
-    if (positionSize > 0) {
-        await executeSwap({
-            inputToken: "SOL",
-            outputToken: recommendation.tokenAddress,
-            amount: positionSize
-        });
-        
-        await recordTradeEntry(recommendation, positionSize);
-        return true;
-    }
-
-    return false;
-}
+// Test strategies without affecting real metrics
+trustDB.addTradePerformance(trade, true); // Simulation mode
 ```
 
-### Position Management
+### 2. Cross-Platform Verification
 
 ```typescript
-async function managePosition(
-    position: TradePosition,
-    metrics: TokenPerformance
-): Promise<void> {
-    // Exit conditions
-    if (
-        metrics.rapidDump ||
-        metrics.suspiciousVolume ||
-        calculateDrawdown(position) > MAX_DRAWDOWN
-    ) {
-        await executeExit(position);
-        return;
-    }
-
-    // Position sizing adjustments
-    const newSize = recalculatePosition(position, metrics);
-    if (newSize !== position.size) {
-        await adjustPosition(position, newSize);
-    }
-}
+const verifyIdentity = async (recommender: Recommender) => {
+  const telegramVerified = await verifyTelegram(recommender.telegramId);
+  const walletVerified = await verifyWallet(recommender.address);
+  return telegramVerified && walletVerified;
+};
 ```
 
-## Monitoring and Alerts
-
-### Performance Monitoring
+### 3. Historical Analysis
 
 ```typescript
-async function monitorTrustMetrics(): Promise<void> {
-    // Monitor trust score changes
-    const scoreChanges = await getTrustScoreChanges();
-    for (const change of scoreChanges) {
-        if (Math.abs(change.delta) > TRUST_THRESHOLD) {
-            await notifyTrustChange(change);
-        }
-    }
+const analyzeRecommenderHistory = (recommenderId: string) => {
+  const recommendations =
+    trustDB.getRecommendationsByRecommender(recommenderId);
+  const metrics = trustDB.getRecommenderMetrics(recommenderId);
+  const history = trustDB.getRecommenderMetricsHistory(recommenderId);
 
-    // Monitor trading performance
-    const performanceMetrics = await getPerformanceMetrics();
-    for (const metric of performanceMetrics) {
-        if (metric.drawdown > MAX_DRAWDOWN) {
-            await notifyRiskAlert(metric);
-        }
-    }
-}
+  return {
+    successRate: metrics.successfulRecs / metrics.totalRecommendations,
+    averagePerformance: metrics.avgTokenPerformance,
+    riskProfile: calculateRiskProfile(history),
+    consistencyScore: metrics.consistencyScore,
+  };
+};
 ```
 
-### Alert System
+## Security Considerations
 
-```typescript
-interface TrustAlert {
-    type: 'SCORE_CHANGE' | 'RISK_LEVEL' | 'PERFORMANCE';
-    severity: 'LOW' | 'MEDIUM' | 'HIGH';
-    message: string;
-    data: any;
-}
+1. **Data Integrity**
 
-async function handleAlert(alert: TrustAlert): Promise<void> {
-    switch (alert.severity) {
-        case 'HIGH':
-            await sendImmediateNotification(alert);
-            await pauseTrading(alert.data);
-            break;
-        case 'MEDIUM':
-            await sendNotification(alert);
-            await adjustRiskLevels(alert.data);
-            break;
-        case 'LOW':
-            await logAlert(alert);
-            break;
-    }
-}
-```
+   - Use foreign key constraints
+   - Implement transaction management
+   - Regular backup of metrics history
 
-## Troubleshooting
+2. **Fraud Prevention**
 
-### Common Issues
+   ```typescript
+   // Implement rate limiting
+   const checkRateLimit = (recommenderId: string) => {
+     const recentRecs = getRecentRecommendations(recommenderId, timeWindow);
+     return recentRecs.length < maxRecommendations;
+   };
+   ```
 
-1. **Trust Score Anomalies**
-```typescript
-async function investigateTrustAnomaly(
-    recommenderId: string
-): Promise<AnomalyReport> {
-    const history = await getRecommenderHistory(recommenderId);
-    const metrics = await getRecommenderMetrics(recommenderId);
-    const trades = await getRecommenderTrades(recommenderId);
-    
-    return analyzeAnomalies(history, metrics, trades);
-}
-```
+3. **Identity Verification**
+   - Cross-reference multiple identifiers
+   - Implement progressive trust building
+   - Regular verification checks
 
-2. **Trade Execution Failures**
-```typescript
-async function handleTradeFailure(
-    error: Error,
-    trade: TradeAttempt
-): Promise<void> {
-    await logTradeError(error, trade);
-    await adjustTrustScore(trade.recommenderId, 'FAILURE');
-    await notifyTradeFailure(trade);
-}
-```
+## Future Enhancements
 
+1. **Machine Learning Integration**
+
+   - Pattern recognition for fraud detection
+   - Automated risk assessment
+   - Predictive analytics for recommendation quality
+
+2. **Decentralized Validation**
+
+   - Peer verification system
+   - Consensus-based trust scoring
+   - Distributed reputation management
+
+3. **Enhanced Metrics**
+   - Market sentiment analysis
+   - Social signal integration
+   - Network effect measurement
+
+## Additional Resources
+
+- [Database Schema Documentation](./infrastructure.md)
+
+Remember to regularly monitor and adjust trust parameters based on market conditions and system performance.
