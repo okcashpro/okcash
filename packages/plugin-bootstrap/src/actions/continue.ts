@@ -45,7 +45,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 {{actions}}
 
-# Instructions: Write the next message for {{agentName}}. Ignore "action".
+# Instructions: Write the next message for {{agentName}}.
 ` + messageCompletionFooter;
 
 export const shouldContinueTemplate =

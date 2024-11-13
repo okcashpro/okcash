@@ -344,11 +344,9 @@ export class AgentRuntime implements IAgentRuntime {
                     },
                 });
                 const fragments = await splitChunks(
-                    this,
                     knowledgeItem,
                     1200,
-                    200,
-                    "fast"
+                    200
                 );
                 for (const fragment of fragments) {
                     const embedding = await embed(this, fragment);
@@ -900,10 +898,9 @@ Text: ${attachment.text}
             const memories = await runtime.knowledgeManager.searchMemoriesByEmbedding(
                 embedding,
                 {
-                    roomId: message.roomId,
-                    agentId: runtime.agentId,
-                    match_threshold: 0.95,
-                    count: 1,
+                    roomId: message.agentId,
+                    agentId: message.agentId,
+                    count: 3,
                 }
             );
 

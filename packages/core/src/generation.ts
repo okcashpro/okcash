@@ -389,24 +389,14 @@ export async function generateShouldRespond({
  * @returns Promise resolving to array of text chunks with bleed sections
  */
 export async function splitChunks(
-    runtime,
     content: string,
     chunkSize: number,
     bleed: number = 100,
-    modelClass: string
 ): Promise<string[]> {
-    const model = models[runtime.modelProvider];
-    console.log("model", model);
-
-    console.log("model.model.embedding", model.model.embedding);
-
-    if (!model.model.embedding) {
-        throw new Error("Model does not support embedding");
-    }
-
     const encoding = tiktoken.encoding_for_model(
-        model.model.embedding as TiktokenModel
+        "gpt-4o-mini"
     );
+
     const tokens = encoding.encode(content);
     const chunks: string[] = [];
     const textDecoder = new TextDecoder();

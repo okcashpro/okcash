@@ -233,14 +233,10 @@ const summarizeAction = {
             unique: false,
         });
 
-        console.log("memories", memories);
-
         const actors = await getActorDetails({
             runtime: runtime as IAgentRuntime,
             roomId,
         });
-
-        console.log("actors", actors);
 
         const actorMap = new Map(actors.map((actor) => [actor.id, actor]));
 
@@ -261,21 +257,17 @@ const summarizeAction = {
         const chunkSize = model.settings.maxContextLength - 1000;
 
         const chunks = await splitChunks(
-            runtime,
             formattedMemories,
             chunkSize,
-            0,
-            "gpt-4o-mini"
+            0
         );
 
-        console.log("chunks ", chunks.length);
         const datestr = new Date().toUTCString().replace(/:/g, "-");
 
         state.memoriesWithAttachments = formattedMemories;
         state.objective = objective;
 
         for (let i = 0; i < chunks.length; i++) {
-            console.log("chunk", i);
             const chunk = chunks[i];
             state.currentSummary = currentSummary;
             state.currentChunk = chunk;
