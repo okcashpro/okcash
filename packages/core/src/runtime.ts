@@ -896,12 +896,14 @@ Text: ${attachment.text}
 
         async function getKnowledge(runtime: AgentRuntime, message: Memory): Promise<string[]> {
             const embedding = await embed(runtime, message.content.text);
+
             const memories = await runtime.knowledgeManager.searchMemoriesByEmbedding(
                 embedding,
                 {
-              count: 3,
                     roomId: message.roomId,
                     agentId: runtime.agentId,
+                    match_threshold: 0.95,
+                    count: 1,
                 }
             );
 

@@ -238,17 +238,18 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         match_count: number;
         unique: boolean;
     }): Promise<Memory[]> {
+        // Build the query and parameters carefully
         const queryParams = [
             new Float32Array(params.embedding), // Ensure embedding is Float32Array
             params.tableName,
             params.roomId,
-            params.match_count,
         ];
 
         let sql = `
-      SELECT *, vec_distance_L2(embedding, ?) AS similarity
-      FROM memories
-      WHERE type = ?`;
+            SELECT *, vec_distance_L2(embedding, ?) AS similarity
+            FROM memories 
+            WHERE type = ? 
+            AND roomId = ?`;
 
         if (params.unique) {
             sql += " AND `unique` = 1";
@@ -258,13 +259,14 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             sql += " AND agentId = ?";
             queryParams.push(params.agentId);
         }
-
         sql += ` ORDER BY similarity ASC LIMIT ?`; // ASC for lower distance
-        // Updated queryParams order matches the placeholders
+        queryParams.push(params.match_count.toString()); // Convert number to string
 
+        // Execute the prepared statement with the correct number of parameters
         const memories = this.db.prepare(sql).all(...queryParams) as (Memory & {
             similarity: number;
         })[];
+
         return memories.map((memory) => ({
             ...memory,
             createdAt:
@@ -274,6 +276,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             content: JSON.parse(memory.content as unknown as string),
         }));
     }
+
 
     async searchMemoriesByEmbedding(
         embedding: number[],
