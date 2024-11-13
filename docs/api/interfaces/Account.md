@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Account
+
 # Interface: Account
 
 Represents a user, including their name, details, and a unique identifier.

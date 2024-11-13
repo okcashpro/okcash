@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / getGoals
+
 # Function: getGoals()
 
 > **getGoals**(`__namedParameters`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>

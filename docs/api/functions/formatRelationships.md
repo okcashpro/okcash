@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / formatRelationships
+
 # Function: formatRelationships()
 
 > **formatRelationships**(`__namedParameters`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>

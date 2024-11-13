@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / formatTimestamp
+
 # Function: formatTimestamp()
 
 > **formatTimestamp**(`messageDate`): `string`

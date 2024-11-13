@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / IAgentRuntime
+
 # Interface: IAgentRuntime
 
 ## Properties
@@ -5,6 +7,8 @@
 ### agentId
 
 > **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Properties
 
 #### Defined in
 
@@ -229,6 +233,8 @@
 ### getConversationLength()
 
 > **getConversationLength**(): `number`
+
+Methods
 
 #### Returns
 

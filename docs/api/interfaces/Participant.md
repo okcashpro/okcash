@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Participant
+
 # Interface: Participant
 
 Represents a participant in a room, including their ID and account details.

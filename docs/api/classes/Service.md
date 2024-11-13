@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Service
+
 # Class: `abstract` Service
 
 ## Extended by

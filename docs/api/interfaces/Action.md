@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Action
+
 # Interface: Action
 
 Represents an action that the agent can perform, including conditions for its use, a description, examples, a handler function, and a validation function.
