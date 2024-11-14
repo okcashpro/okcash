@@ -150,13 +150,13 @@ export class AgentRuntime implements IAgentRuntime {
         return this.memoryManagers.get(tableName) || null;
     }
 
-    getService<T>(service: ServiceType): T | null {
+    getService(service: ServiceType): typeof Service | null {
         const serviceInstance = this.services.get(service);
         if (!serviceInstance) {
             console.error(`Service ${service} not found`);
             return null;
         }
-        return serviceInstance as T;
+        return serviceInstance as typeof Service;
     }
     registerService(service: Service): void {
         const serviceType = (service as typeof Service).serviceType;
@@ -499,7 +499,6 @@ export class AgentRuntime implements IAgentRuntime {
      * @returns The results of the evaluation.
      */
     async evaluate(message: Memory, state?: State, didRespond?: boolean) {
-        console.log("Evaluate: ", didRespond);
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
                 console.log("Evaluating", evaluator.name);
@@ -896,8 +895,6 @@ Text: ${attachment.text}
 
         async function getKnowledge(runtime: AgentRuntime, message: Memory): Promise<string[]> {
             const embedding = await embed(runtime, message.content.text);
-
-            console.log("message.agentId", message.agentId)
 
             const memories = await runtime.knowledgeManager.searchMemoriesByEmbedding(
                 embedding,

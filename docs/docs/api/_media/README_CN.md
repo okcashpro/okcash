@@ -4,39 +4,39 @@
 
 ## 功能
 
-- 🛠 支持discord/推特/telegram连接
-- 👥 支持多模态agent
-- 📚 简单的导入文档并与文档交互
-- 💾 可检索的内存和文档存储
-- 🚀 高可拓展性，你可以自定义客户端和行为来进行功能拓展
-- ☁️ 多模型支持，包括Llama、OpenAI、Grok、Anthropic等
-- 📦 简单好用
+-   🛠 支持discord/推特/telegram连接
+-   👥 支持多模态agent
+-   📚 简单的导入文档并与文档交互
+-   💾 可检索的内存和文档存储
+-   🚀 高可拓展性，你可以自定义客户端和行为来进行功能拓展
+-   ☁️ 多模型支持，包括Llama、OpenAI、Grok、Anthropic等
+-   📦 简单好用
 
 你可以用Eliza做什么？
 
-- 🤖 聊天机器人
-- 🕵️ 自主Agents
-- 📈 业务流程自动化处理
-- 🎮 游戏NPC
+-   🤖 聊天机器人
+-   🕵️ 自主Agents
+-   📈 业务流程自动化处理
+-   🎮 游戏NPC
 
 # 开始使用
 
 **前置要求（必须）:**
 
-- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- Nodejs安装
-- [pnpm](https://pnpm.io/installation)
-- 使用pnpm
+-   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   Nodejs安装
+-   [pnpm](https://pnpm.io/installation)
+-   使用pnpm
 
 ### 编辑.env文件
 
-- - 将 .env.example 复制为 .env 并填写适当的值
-- 编辑推特环境并输入你的推特账号和密码
+-   -   将 .env.example 复制为 .env 并填写适当的值
+-   编辑推特环境并输入你的推特账号和密码
 
 ### 编辑角色文件
 
-- 查看文件 `src/core/defaultCharacter.ts` - 您可以修改它
-- 您也可以使用 `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` 加载角色并同时运行多个机器人。
+-   查看文件 `src/core/defaultCharacter.ts` - 您可以修改它
+-   您也可以使用 `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` 加载角色并同时运行多个机器人。
 
 在完成账号和角色文件的配置后，输入以下命令行启动你的bot：
 
@@ -163,9 +163,9 @@ pnpm test:sqljs    # Run tests with SQL.js
 
 测试使用 Jest 编写，位于 src/\*_/_.test.ts 文件中。测试环境配置如下：
 
-- 从 .env.test 加载环境变量
-- 使用 2 分钟的超时时间来运行长时间运行的测试
-- 支持 ESM 模块
-- 按顺序运行测试 (--runInBand)
+-   从 .env.test 加载环境变量
+-   使用 2 分钟的超时时间来运行长时间运行的测试
+-   支持 ESM 模块
+-   按顺序运行测试 (--runInBand)
 
 要创建新测试，请在要测试的代码旁边添加一个 .test.ts 文件。

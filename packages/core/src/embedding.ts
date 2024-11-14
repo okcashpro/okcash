@@ -97,8 +97,6 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         throw new Error("No embedding model configured");
     }
 
-    console.log("embeddingModel", embeddingModel);
-
     // Try local embedding first
     if (
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
