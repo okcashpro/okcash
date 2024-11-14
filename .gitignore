@@ -38,5 +38,3 @@ characters/
 packages/core/src/providers/cache
 packages/core/src/providers/cache/*
 cache/*
-
-all_files_content.txt
