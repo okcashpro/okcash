@@ -26,6 +26,7 @@
         "@rollup/plugin-typescript": "11.1.6",
         "@types/fluent-ffmpeg": "2.1.27",
         "@types/jest": "29.5.14",
+        "@types/mocha": "^10.0.9",
         "@types/node": "22.8.4",
         "@types/pdfjs-dist": "^2.10.378",
         "@types/tar": "6.1.13",
