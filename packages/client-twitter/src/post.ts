@@ -9,12 +9,15 @@ import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `{{timeline}}
 
-{{providers}}
+# Knowledge
+{{knowledge}}
 
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
 {{postDirections}}
+
+{{providers}}
 
 {{recentPosts}}
 
@@ -30,8 +33,8 @@ export class TwitterPostClient extends ClientBase {
             this.generateNewTweet();
             setTimeout(
                 generateNewTweetLoop,
-                (Math.floor(Math.random() * (20 - 2 + 1)) + 2) * 60 * 1000
-            ); // Random interval between 4-8 hours
+                (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
+            ); // Random interval between 1 and 4 hours
         };
         // setTimeout(() => {
         generateNewTweetLoop();

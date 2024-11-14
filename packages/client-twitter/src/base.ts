@@ -172,14 +172,14 @@ export class ClientBase extends EventEmitter {
             this.runtime.character.style.post.join();
 
         try {
-            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath)
+            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
             if (fs.existsSync(this.tweetCacheFilePath)) {
                 // make it?
                 const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
                 this.lastCheckedTweetId = parseInt(data.trim());
             } else {
                 console.warn("Tweet cache file not found.");
-                console.warn(this.tweetCacheFilePath)
+                console.warn(this.tweetCacheFilePath);
             }
         } catch (error) {
             console.error(
@@ -218,7 +218,8 @@ export class ClientBase extends EventEmitter {
                     await this.twitterClient.login(
                         this.runtime.getSetting("TWITTER_USERNAME"),
                         this.runtime.getSetting("TWITTER_PASSWORD"),
-                        this.runtime.getSetting("TWITTER_EMAIL")
+                        this.runtime.getSetting("TWITTER_EMAIL"),
+                        this.runtime.getSetting("TWITTER_2FA_SECRET")
                     );
                     console.log("Logged in to Twitter");
                     const cookies = await this.twitterClient.getCookies();
@@ -240,7 +241,8 @@ export class ClientBase extends EventEmitter {
                     await this.twitterClient.login(
                         this.runtime.getSetting("TWITTER_USERNAME"),
                         this.runtime.getSetting("TWITTER_PASSWORD"),
-                        this.runtime.getSetting("TWITTER_EMAIL")
+                        this.runtime.getSetting("TWITTER_EMAIL"),
+                        this.runtime.getSetting("TWITTER_2FA_SECRET")
                     );
 
                     const cookies = await this.twitterClient.getCookies();
@@ -258,7 +260,7 @@ export class ClientBase extends EventEmitter {
                 await new Promise((resolve) => setTimeout(resolve, 10000));
                 try {
                     return await this.twitterClient.getUserIdByScreenName(
-                        this.runtime.getSetting("TWITTER_USERNAME")
+                        this.runtime.getSetting("TWITTER_USERNAME"),
                     );
                 } catch (error) {
                     console.error("Error getting user ID:", error);

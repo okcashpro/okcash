@@ -10,9 +10,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:172](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L172)
+[packages/core/src/types.ts:169](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L169)
 
----
+***
 
 ### content
 
@@ -20,9 +20,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:174](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L174)
+[packages/core/src/types.ts:171](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L171)
 
----
+***
 
 ### createdAt?
 
@@ -30,9 +30,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:173](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L173)
+[packages/core/src/types.ts:170](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L170)
 
----
+***
 
 ### embedding?
 
@@ -40,9 +40,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:175](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L175)
+[packages/core/src/types.ts:172](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L172)
 
----
+***
 
 ### id?
 
@@ -50,9 +50,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:170](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L170)
+[packages/core/src/types.ts:167](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L167)
 
----
+***
 
 ### roomId
 
@@ -60,9 +60,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:176](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L176)
+[packages/core/src/types.ts:173](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L173)
 
----
+***
 
 ### unique?
 
@@ -70,9 +70,9 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:177](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L177)
+[packages/core/src/types.ts:174](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L174)
 
----
+***
 
 ### userId
 
@@ -80,4 +80,4 @@ Represents a memory record, which could be a message or any other piece of infor
 
 #### Defined in
 
-[packages/core/src/types.ts:171](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L171)
+[packages/core/src/types.ts:168](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L168)

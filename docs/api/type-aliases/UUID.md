@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / UUID
+
 # Type Alias: UUID
 
 > **UUID**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`

@@ -25,6 +25,9 @@ export const messageHandlerTemplate =
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
 
+# Knowledge
+{{knowledge}}
+
 # Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
 {{bio}}
@@ -43,7 +46,7 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 {{actions}}
 
-# Instructions: Write the next message for {{agentName}}. Ignore "action".
+# Instructions: Write the next message for {{agentName}}.
 ` + messageCompletionFooter;
 
 export interface SimliClientConfig {
@@ -126,7 +129,6 @@ export class DirectClient {
         this.app.post(
             "/:agentId/message",
             async (req: express.Request, res: express.Response) => {
-                console.log("DirectClient message");
                 const agentId = req.params.agentId;
                 const roomId = stringToUuid(
                     req.body.roomId ?? "default-room-" + agentId

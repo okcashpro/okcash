@@ -15,39 +15,6 @@ export class TelegramClient {
         this.bot = new Telegraf(botToken);
         this.messageManager = new MessageManager(this.bot, this.runtime);
 
-        elizaLogger.log("Setting up message handler...");
-        this.bot.on("message", async (ctx) => {
-            try {
-                elizaLogger.log("📥 Received message:", ctx.message);
-                await this.messageManager.handleMessage(ctx);
-            } catch (error) {
-                elizaLogger.error("❌ Error handling message:", error);
-                await ctx.reply(
-                    "An error occurred while processing your message."
-                );
-            }
-        });
-
-        // Handle specific message types for better logging
-        this.bot.on("photo", (ctx) => {
-            elizaLogger.log(
-                "📸 Received photo message with caption:",
-                ctx.message.caption
-            );
-        });
-
-        this.bot.on("document", (ctx) => {
-            elizaLogger.log(
-                "📎 Received document message:",
-                ctx.message.document.file_name
-            );
-        });
-
-        this.bot.catch((err, ctx) => {
-            elizaLogger.error(`❌ Telegram Error for ${ctx.updateType}:`, err);
-            ctx.reply("An unexpected error occurred. Please try again later.");
-        });
-
         elizaLogger.log("✅ TelegramClient constructor completed");
     }
 
@@ -60,7 +27,51 @@ export class TelegramClient {
             elizaLogger.log(
                 "✨ Telegram bot successfully launched and is running!"
             );
-            elizaLogger.log(`Bot username: @${this.bot.botInfo?.username}`);
+
+            await this.bot.telegram.getMe().then((botInfo) => {
+                this.bot.botInfo = botInfo;
+            });
+
+            console.log(`Bot username: @${this.bot.botInfo?.username}`);
+            
+            this.messageManager.bot = this.bot;
+
+            // Include if you want to view message maanger bot info
+            // console.log(`Message Manager bot info: @${this.messageManager.bot}`);
+
+            elizaLogger.log("Setting up message handler...");
+
+            this.bot.on("message", async (ctx) => {
+                try {
+                    console.log("📥 Received message:", ctx.message);
+                    await this.messageManager.handleMessage(ctx);
+                } catch (error) {
+                    elizaLogger.error("❌ Error handling message:", error);
+                    await ctx.reply(
+                        "An error occurred while processing your message."
+                    );
+                }
+            });
+
+            // Handle specific message types for better logging
+            this.bot.on("photo", (ctx) => {
+                elizaLogger.log(
+                    "📸 Received photo message with caption:",
+                    ctx.message.caption
+                );
+            });
+
+            this.bot.on("document", (ctx) => {
+                elizaLogger.log(
+                    "📎 Received document message:",
+                    ctx.message.document.file_name
+                );
+            });
+
+            this.bot.catch((err, ctx) => {
+                elizaLogger.error(`❌ Telegram Error for ${ctx.updateType}:`, err);
+                ctx.reply("An unexpected error occurred. Please try again later.");
+        });
 
             // Graceful shutdown handlers
             const shutdownHandler = async (signal: string) => {

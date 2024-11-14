@@ -145,6 +145,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.OPENROUTER ||
                 settings.OPENROUTER_API_KEY
             );
+        case ModelProviderName.GROK:
+            return (
+                character.settings?.secrets?.GROK_API_KEY ||
+                settings.GROK_API_KEY
+            );
     }
 }
 
@@ -223,9 +228,7 @@ export async function createAgent(
         plugins: [
             bootstrapPlugin,
             nodePlugin,
-            character.settings.secrets.WALLET_PUBLIC_KEY
-                ? solanaPlugin
-                : null
+            character.settings.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -280,7 +283,12 @@ const startAgents = async () => {
 
     function chat() {
         const agentId = characters[0].name ?? "Agent";
-        rl.question("You: ", (input) => handleUserInput(input, agentId));
+        rl.question("You: ", async (input) => {
+            await handleUserInput(input, agentId);
+            if (input.toLowerCase() !== "exit") {
+                chat(); // Loop back to ask another question
+            }
+        });
     }
 
     console.log("Chat started. Type 'exit' to quit.");

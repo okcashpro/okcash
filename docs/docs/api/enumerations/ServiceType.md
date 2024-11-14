@@ -8,19 +8,19 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:633](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L633)
+[packages/core/src/types.ts:650](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L650)
 
----
+***
 
-### IMAGE_DESCRIPTION
+### IMAGE\_DESCRIPTION
 
-> **IMAGE_DESCRIPTION**: `"image_description"`
+> **IMAGE\_DESCRIPTION**: `"image_description"`
 
 #### Defined in
 
-[packages/core/src/types.ts:629](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L629)
+[packages/core/src/types.ts:646](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L646)
 
----
+***
 
 ### PDF
 
@@ -28,29 +28,29 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:635](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L635)
+[packages/core/src/types.ts:652](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L652)
 
----
+***
 
-### SPEECH_GENERATION
+### SPEECH\_GENERATION
 
-> **SPEECH_GENERATION**: `"speech_generation"`
-
-#### Defined in
-
-[packages/core/src/types.ts:634](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L634)
-
----
-
-### TEXT_GENERATION
-
-> **TEXT_GENERATION**: `"text_generation"`
+> **SPEECH\_GENERATION**: `"speech_generation"`
 
 #### Defined in
 
-[packages/core/src/types.ts:632](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L632)
+[packages/core/src/types.ts:651](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L651)
 
----
+***
+
+### TEXT\_GENERATION
+
+> **TEXT\_GENERATION**: `"text_generation"`
+
+#### Defined in
+
+[packages/core/src/types.ts:649](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L649)
+
+***
 
 ### TRANSCRIPTION
 
@@ -58,9 +58,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:630](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L630)
+[packages/core/src/types.ts:647](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L647)
 
----
+***
 
 ### VIDEO
 
@@ -68,4 +68,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:631](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L631)
+[packages/core/src/types.ts:648](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L648)

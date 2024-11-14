@@ -4,7 +4,7 @@ Represents the content of a message, including its main text (`content`), any as
 
 ## Indexable
 
-\[`key`: `string`\]: `unknown`
+ \[`key`: `string`\]: `unknown`
 
 ## Properties
 
@@ -14,9 +14,9 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/types.ts:14](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L14)
+[packages/core/src/types.ts:13](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L13)
 
----
+***
 
 ### attachments?
 
@@ -24,9 +24,9 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/types.ts:18](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L18)
+[packages/core/src/types.ts:17](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L17)
 
----
+***
 
 ### inReplyTo?
 
@@ -34,9 +34,9 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/types.ts:17](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L17)
+[packages/core/src/types.ts:16](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L16)
 
----
+***
 
 ### source?
 
@@ -44,9 +44,9 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/types.ts:15](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L15)
+[packages/core/src/types.ts:14](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L14)
 
----
+***
 
 ### text
 
@@ -54,9 +54,9 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/types.ts:13](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L13)
+[packages/core/src/types.ts:12](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L12)
 
----
+***
 
 ### url?
 
@@ -64,4 +64,4 @@ Represents the content of a message, including its main text (`content`), any as
 
 #### Defined in
 
-[packages/core/src/types.ts:16](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L16)
+[packages/core/src/types.ts:15](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L15)

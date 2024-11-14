@@ -2,7 +2,7 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
 import { getModel } from "./models.ts";
-import { IImageDescriptionService, ModelClass } from "./types.ts";
+import { IImageDescriptionService, ModelClass, Service } from "./types.ts";
 import { generateText as aiGenerateText } from "ai";
 import { Buffer } from "buffer";
 import { createOllama } from "ollama-ai-provider";
@@ -105,8 +105,8 @@ export async function generateText({
                 break;
             }
 
-            case ModelProviderName.GOOGLE:
-                { const google = createGoogleGenerativeAI();
+            case ModelProviderName.GOOGLE: {
+                const google = createGoogleGenerativeAI();
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: google(model),
@@ -122,7 +122,8 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                break; }
+                break;
+            }
 
             case ModelProviderName.ANTHROPIC: {
                 elizaLogger.debug("Initializing Anthropic model.");
@@ -194,11 +195,12 @@ export async function generateText({
             }
 
             case ModelProviderName.LLAMALOCAL: {
-                elizaLogger.debug("Using local Llama model for text completion.");
+                elizaLogger.debug(
+                    "Using local Llama model for text completion."
+                );
                 response = await runtime
-                    .getService<ITextGenerationService>(
-                        ServiceType.TEXT_GENERATION
-                    )
+                    .getService(ServiceType.TEXT_GENERATION)
+                    .getInstance<ITextGenerationService>()
                     .queueTextCompletion(
                         context,
                         temperature,
@@ -386,24 +388,14 @@ export async function generateShouldRespond({
  * @returns Promise resolving to array of text chunks with bleed sections
  */
 export async function splitChunks(
-    runtime,
     content: string,
     chunkSize: number,
     bleed: number = 100,
-    modelClass: string
 ): Promise<string[]> {
-    const model = models[runtime.modelProvider];
-    console.log("model", model);
-
-    console.log("model.model.embedding", model.model.embedding);
-    
-    if(!model.model.embedding) {
-        throw new Error("Model does not support embedding");
-    }
-
     const encoding = tiktoken.encoding_for_model(
-        model.model.embedding as TiktokenModel
+        "gpt-4o-mini"
     );
+
     const tokens = encoding.encode(content);
     const chunks: string[] = [];
     const textDecoder = new TextDecoder();
@@ -748,7 +740,8 @@ export const generateCaption = async (
 }> => {
     const { imageUrl } = data;
     const resp = await runtime
-        .getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION)
+        .getService(ServiceType.IMAGE_DESCRIPTION)
+        .getInstance<IImageDescriptionService>()
         .describeImage(imageUrl);
     return {
         title: resp.title.trim(),

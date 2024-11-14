@@ -36,6 +36,7 @@ import {
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
+import { Service } from "@ai16z/eliza";
 
 const MAX_MESSAGE_LENGTH = 1900;
 async function generateSummary(
@@ -161,6 +162,9 @@ export const discordMessageHandlerTemplate =
     `# Action Examples
 {{actionExamples}}
 (Action examples are for reference only. Do not use the information from them in your response.)
+
+# Knowledge
+{{knowledge}}
 
 # Task: Generate dialog and actions for the character {{agentName}}.
 About {{agentName}}:
@@ -337,7 +341,7 @@ export class MessageManager {
         if (
             message.interaction ||
             message.author.id ===
-                this.client.user?.id /* || message.author?.bot*/
+            this.client.user?.id /* || message.author?.bot*/
         )
             return;
         const userId = message.author.id as UUID;
@@ -385,10 +389,10 @@ export class MessageManager {
                 url: message.url,
                 inReplyTo: message.reference?.messageId
                     ? stringToUuid(
-                          message.reference.messageId +
-                              "-" +
-                              this.runtime.agentId
-                      )
+                        message.reference.messageId +
+                        "-" +
+                        this.runtime.agentId
+                    )
                     : undefined,
             };
 
@@ -464,132 +468,134 @@ export class MessageManager {
             }
 
             if (shouldRespond) {
+                const context = composeContext({
+                    state,
+                    template:
+                        this.runtime.character.templates
+                            ?.discordMessageHandlerTemplate ||
+                        discordMessageHandlerTemplate,
+                });
 
-            const context = composeContext({
-                state,
-                template:
-                    this.runtime.character.templates
-                        ?.discordMessageHandlerTemplate ||
-                    discordMessageHandlerTemplate,
-            });
+                const responseContent = await this._generateResponse(
+                    memory,
+                    state,
+                    context
+                );
 
-            const responseContent = await this._generateResponse(
-                memory,
-                state,
-                context
-            );
+                responseContent.text = responseContent.text?.trim();
+                responseContent.inReplyTo = stringToUuid(
+                    message.id + "-" + this.runtime.agentId
+                );
 
-            responseContent.text = responseContent.text?.trim();
-            responseContent.inReplyTo = stringToUuid(
-                message.id + "-" + this.runtime.agentId
-            );
+                if (!responseContent.text) {
+                    return;
+                }
 
-            if (!responseContent.text) {
-                return;
-            }
-
-            const callback: HandlerCallback = async (
-                content: Content,
-                files: any[]
-            ) => {
-                try {
-                    if (message.id && !content.inReplyTo) {
-                        content.inReplyTo = stringToUuid(
-                            message.id + "-" + this.runtime.agentId
-                        );
-                    }
-                    if (message.channel.type === ChannelType.GuildVoice) {
-                        // For voice channels, use text-to-speech
-                        const audioStream = await this.runtime
-                            .getService<ISpeechService>(
-                                ServiceType.SPEECH_GENERATION
-                            )
-                            .generate(this.runtime, content.text);
-                        await this.voiceManager.playAudioStream(
-                            userId,
-                            audioStream
-                        );
-                        const memory: Memory = {
-                            id: stringToUuid(
+                const callback: HandlerCallback = async (
+                    content: Content,
+                    files: any[]
+                ) => {
+                    try {
+                        if (message.id && !content.inReplyTo) {
+                            content.inReplyTo = stringToUuid(
                                 message.id + "-" + this.runtime.agentId
-                            ),
-                            userId: this.runtime.agentId,
-                            agentId: this.runtime.agentId,
-                            content,
-                            roomId,
-                            embedding: embeddingZeroVector,
-                        };
-                        return [memory];
-                    } else {
-                        // For text channels, send the message
-                        const messages = await sendMessageInChunks(
-                            message.channel as TextChannel,
-                            content.text,
-                            message.id,
-                            files
-                        );
-
-                        const memories: Memory[] = [];
-                        for (const m of messages) {
-                            let action = content.action;
-                            // If there's only one message or it's the last message, keep the original action
-                            // For multiple messages, set all but the last to 'CONTINUE'
-                            if (
-                                messages.length > 1 &&
-                                m !== messages[messages.length - 1]
-                            ) {
-                                action = "CONTINUE";
-                            }
-
+                            );
+                        }
+                        if (message.channel.type === ChannelType.GuildVoice) {
+                            // For voice channels, use text-to-speech
+                            const audioStream = await (
+                                this.runtime.getService(
+                                    ServiceType.SPEECH_GENERATION
+                                )
+                            ).getInstance<ISpeechService>()
+                                .generate(this.runtime, content.text);
+                            await this.voiceManager.playAudioStream(
+                                userId,
+                                audioStream
+                            );
                             const memory: Memory = {
                                 id: stringToUuid(
-                                    m.id + "-" + this.runtime.agentId
+                                    message.id + "-" + this.runtime.agentId
                                 ),
                                 userId: this.runtime.agentId,
                                 agentId: this.runtime.agentId,
-                                content: {
-                                    ...content,
-                                    action,
-                                    inReplyTo: messageId,
-                                    url: m.url,
-                                },
+                                content,
                                 roomId,
                                 embedding: embeddingZeroVector,
-                                createdAt: m.createdTimestamp,
                             };
-                            memories.push(memory);
+                            return [memory];
+                        } else {
+                            // For text channels, send the message
+                            const messages = await sendMessageInChunks(
+                                message.channel as TextChannel,
+                                content.text,
+                                message.id,
+                                files
+                            );
+
+                            const memories: Memory[] = [];
+                            for (const m of messages) {
+                                let action = content.action;
+                                // If there's only one message or it's the last message, keep the original action
+                                // For multiple messages, set all but the last to 'CONTINUE'
+                                if (
+                                    messages.length > 1 &&
+                                    m !== messages[messages.length - 1]
+                                ) {
+                                    action = "CONTINUE";
+                                }
+
+                                const memory: Memory = {
+                                    id: stringToUuid(
+                                        m.id + "-" + this.runtime.agentId
+                                    ),
+                                    userId: this.runtime.agentId,
+                                    agentId: this.runtime.agentId,
+                                    content: {
+                                        ...content,
+                                        action,
+                                        inReplyTo: messageId,
+                                        url: m.url,
+                                    },
+                                    roomId,
+                                    embedding: embeddingZeroVector,
+                                    createdAt: m.createdTimestamp,
+                                };
+                                memories.push(memory);
+                            }
+                            for (const m of memories) {
+                                await this.runtime.messageManager.createMemory(
+                                    m
+                                );
+                            }
+                            return memories;
                         }
-                        for (const m of memories) {
-                            await this.runtime.messageManager.createMemory(m);
-                        }
-                        return memories;
+                    } catch (error) {
+                        console.error("Error sending message:", error);
+                        return [];
                     }
-                } catch (error) {
-                    console.error("Error sending message:", error);
-                    return [];
-                }
-            };
+                };
 
-            const responseMessages = await callback(responseContent);
+                const responseMessages = await callback(responseContent);
 
-            state = await this.runtime.updateRecentMessageState(state);
+                state = await this.runtime.updateRecentMessageState(state);
 
-            await this.runtime.processActions(
-                memory,
-                responseMessages,
-                state,
-                callback
-            );
-        }
+                await this.runtime.processActions(
+                    memory,
+                    responseMessages,
+                    state,
+                    callback
+                );
+            }
             await this.runtime.evaluate(memory, state, shouldRespond);
-
         } catch (error) {
             console.error("Error handling message:", error);
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
                 const audioStream = await this.runtime
-                    .getService<ISpeechService>(ServiceType.SPEECH_GENERATION)
+                    .getService(ServiceType.SPEECH_GENERATION)
+                    .getInstance<ISpeechService>()
                     .generate(this.runtime, errorMessage);
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
@@ -653,13 +659,14 @@ export class MessageManager {
 
         for (const url of urls) {
             if (
-                this.runtime
-                    .getService<IVideoService>(ServiceType.VIDEO)
+                this.runtime.getService(ServiceType.VIDEO)
+                    .getInstance<IVideoService>()
                     .isVideoUrl(url)
             ) {
-                const videoInfo = await this.runtime
-                    .getService<IVideoService>(ServiceType.VIDEO)
-                    .processVideo(url);
+                const videoInfo = await (this.runtime
+                    .getService(ServiceType.VIDEO)
+                    .getInstance<IVideoService>()
+                    .processVideo(url));
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -670,7 +677,8 @@ export class MessageManager {
                 });
             } else {
                 const { title, bodyContent } = await this.runtime
-                    .getService<IBrowserService>(ServiceType.BROWSER)
+                    .getService(ServiceType.BROWSER)
+                    .getInstance<IBrowserService>()
                     .getPageContent(url, this.runtime);
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,
