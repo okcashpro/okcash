@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / IImageDescriptionService
+
 # Interface: IImageDescriptionService
 
 ## Extends
@@ -18,7 +20,7 @@
 
 [packages/core/src/types.ts:583](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L583)
 
-***
+---
 
 ### initialize()
 
@@ -38,7 +40,7 @@
 
 [packages/core/src/types.ts:584](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L584)
 
-***
+---
 
 ### describeImage()
 

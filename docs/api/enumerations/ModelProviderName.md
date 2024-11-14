@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / ModelProviderName
+
 # Enumeration: ModelProviderName
 
 ## Enumeration Members
@@ -10,7 +12,7 @@
 
 [packages/core/src/types.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L120)
 
-***
+---
 
 ### ANTHROPIC
 
@@ -20,7 +22,7 @@
 
 [packages/core/src/types.ts:121](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L121)
 
-***
+---
 
 ### GROK
 
@@ -30,7 +32,7 @@
 
 [packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L122)
 
-***
+---
 
 ### GROQ
 
@@ -40,7 +42,7 @@
 
 [packages/core/src/types.ts:123](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L123)
 
-***
+---
 
 ### LLAMACLOUD
 
@@ -50,7 +52,7 @@
 
 [packages/core/src/types.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L124)
 
-***
+---
 
 ### LLAMALOCAL
 
@@ -60,7 +62,7 @@
 
 [packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L125)
 
-***
+---
 
 ### GOOGLE
 
@@ -70,17 +72,17 @@
 
 [packages/core/src/types.ts:126](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L126)
 
-***
+---
 
-### CLAUDE\_VERTEX
+### CLAUDE_VERTEX
 
-> **CLAUDE\_VERTEX**: `"claude_vertex"`
+> **CLAUDE_VERTEX**: `"claude_vertex"`
 
 #### Defined in
 
 [packages/core/src/types.ts:127](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L127)
 
-***
+---
 
 ### REDPILL
 
@@ -90,7 +92,7 @@
 
 [packages/core/src/types.ts:128](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L128)
 
-***
+---
 
 ### OPENROUTER
 
@@ -100,7 +102,7 @@
 
 [packages/core/src/types.ts:129](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L129)
 
-***
+---
 
 ### OLLAMA
 

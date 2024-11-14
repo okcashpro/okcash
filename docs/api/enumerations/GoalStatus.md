@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / GoalStatus
+
 # Enumeration: GoalStatus
 
 ## Enumeration Members
@@ -10,7 +12,7 @@
 
 [packages/core/src/types.ts:57](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L57)
 
-***
+---
 
 ### FAILED
 
@@ -20,11 +22,11 @@
 
 [packages/core/src/types.ts:58](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L58)
 
-***
+---
 
-### IN\_PROGRESS
+### IN_PROGRESS
 
-> **IN\_PROGRESS**: `"IN_PROGRESS"`
+> **IN_PROGRESS**: `"IN_PROGRESS"`
 
 #### Defined in
 

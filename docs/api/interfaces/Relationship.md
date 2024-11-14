@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Relationship
+
 # Interface: Relationship
 
 Represents a relationship between two users, including their IDs, the status of the relationship, and the room ID in which the relationship is established.
@@ -12,7 +14,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:260](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L260)
 
-***
+---
 
 ### userA
 
@@ -22,7 +24,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:261](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L261)
 
-***
+---
 
 ### userB
 
@@ -32,7 +34,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L262)
 
-***
+---
 
 ### userId
 
@@ -42,7 +44,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L263)
 
-***
+---
 
 ### roomId
 
@@ -52,7 +54,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:264](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L264)
 
-***
+---
 
 ### status
 
@@ -62,7 +64,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:265](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L265)
 
-***
+---
 
 ### createdAt?
 

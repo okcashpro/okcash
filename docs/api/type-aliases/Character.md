@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Character
+
 # Type Alias: Character
 
 > **Character**: `object`
@@ -30,7 +32,7 @@
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### bio
 
@@ -82,7 +84,7 @@
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### settings.voice?
 
