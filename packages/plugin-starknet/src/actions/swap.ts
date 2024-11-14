@@ -1,10 +1,4 @@
 import {
-    fetchAvnuQuote,
-    buildAvnuCallData,
-    executeAvnuSwap,
-} from "../providers/avnu.ts";
-import { AvnuQuoteParams } from "../types/token";
-import {
     ActionExample,
     HandlerCallback,
     IAgentRuntime,
@@ -12,9 +6,15 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@ai16z/eliza/src/types.ts";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateObject } from "@ai16z/eliza/src/generation.ts";
+} from "@ai16z/eliza";
+import { composeContext } from "@ai16z/eliza";
+import { generateObject } from "@ai16z/eliza";
+import {
+    executeSwap as executeAvnuSwap,
+    fetchQuotes,
+    QuoteRequest,
+} from "@avnu/avnu-sdk";
+import { getStarknetAccount } from "../providers/wallet.ts";
 
 const swapTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
@@ -37,10 +37,26 @@ Extract the following information about the requested token swap:
 Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.`;
 
 export const executeSwap: Action = {
-    name: "EXECUTE_SWAP",
-    similes: ["SWAP_TOKENS", "TOKEN_SWAP", "TRADE_TOKENS", "EXCHANGE_TOKENS"],
+    name: "EXECUTE_STARKNET_SWAP",
+    similes: [
+        "STARKNET_SWAP_TOKENS",
+        "STARKNET_TOKEN_SWAP",
+        "STARKNET_TRADE_TOKENS",
+        "STARKNET_EXCHANGE_TOKENS",
+    ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        console.log("Message:", message);
+        const requiredSettings = [
+            "STARKNET_ADDRESS",
+            "STARKNET_PRIVATE_KEY",
+            "STARKNET_RPC_URL",
+        ];
+
+        for (const setting of requiredSettings) {
+            if (!runtime.getSetting(setting)) {
+                return false;
+            }
+        }
+
         return true;
     },
     description: "Perform a token swap using Avnu.",
@@ -72,25 +88,23 @@ export const executeSwap: Action = {
 
         try {
             // Get quote
-            const quoteParams: AvnuQuoteParams = {
+            const quoteParams: QuoteRequest = {
                 sellTokenAddress: response.sellTokenAddress,
                 buyTokenAddress: response.buyTokenAddress,
-                sellAmount: response.sellAmount,
+                sellAmount: BigInt(response.sellAmount),
             };
 
-            const quote = await fetchAvnuQuote(quoteParams);
-
-            // Build call data
-            const callData = await buildAvnuCallData({
-                quoteId: quote.quoteId,
-                slippage: 0.05, // 5% slippage
-            });
+            const quote = await fetchQuotes(quoteParams);
 
             // Execute swap
-            const swapResult = await executeAvnuSwap({
-                quoteId: quote.quoteId,
-                calldata: callData.calldata,
-            });
+            const swapResult = await executeAvnuSwap(
+                getStarknetAccount(runtime),
+                quote[0],
+                {
+                    slippage: 0.05, // 5% slippage
+                    executeApprove: true,
+                }
+            );
 
             console.log("Swap completed successfully!");
             callback?.({
