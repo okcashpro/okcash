@@ -34,7 +34,7 @@
         }
     },
     "engines": {
-        "node": ">=22"
+        "node": ">=23"
     },
     "dependencies": {
         "ollama-ai-provider": "^0.16.1",

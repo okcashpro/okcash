@@ -23,7 +23,7 @@
 
 **前置要求（必须）:**
 
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   Nodejs安装
 -   [pnpm](https://pnpm.io/installation)
 -   使用pnpm

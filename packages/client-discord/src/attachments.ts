@@ -8,6 +8,7 @@ import {
     IVideoService,
     Media,
     ModelClass,
+    Service,
     ServiceType,
 } from "@ai16z/eliza/src/types.ts";
 import { Attachment, Collection } from "discord.js";
@@ -102,8 +103,8 @@ export class AttachmentManager {
             media = await this.processImageAttachment(attachment);
         } else if (
             attachment.contentType?.startsWith("video/") ||
-            this.runtime
-                .getService<IVideoService>(ServiceType.VIDEO)
+            this.runtime.getService(ServiceType.VIDEO)
+                .getInstance<IVideoService>()
                 .isVideoUrl(attachment.url)
         ) {
             media = await this.processVideoAttachment(attachment);
@@ -136,7 +137,8 @@ export class AttachmentManager {
             }
 
             const transcription = await this.runtime
-                .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
+                .getService(ServiceType.TRANSCRIPTION)
+                .getInstance<ITranscriptionService>()
                 .transcribeAttachment(audioBuffer);
             const { title, description } = await generateSummary(
                 this.runtime,
@@ -217,7 +219,8 @@ export class AttachmentManager {
             const response = await fetch(attachment.url);
             const pdfBuffer = await response.arrayBuffer();
             const text = await this.runtime
-                .getService<IPdfService>(ServiceType.PDF)
+                .getService(ServiceType.PDF)
+                .getInstance<IPdfService>()
                 .convertPdfToText(Buffer.from(pdfBuffer));
             const { title, description } = await generateSummary(
                 this.runtime,
@@ -285,9 +288,8 @@ export class AttachmentManager {
     ): Promise<Media> {
         try {
             const { description, title } = await this.runtime
-                .getService<IImageDescriptionService>(
-                    ServiceType.IMAGE_DESCRIPTION
-                )
+                .getService(ServiceType.IMAGE_DESCRIPTION)
+                .getInstance<IImageDescriptionService>()
                 .describeImage(attachment.url);
             return {
                 id: attachment.id,
@@ -321,11 +323,13 @@ export class AttachmentManager {
     ): Promise<Media> {
         if (
             this.runtime
-                .getService<IVideoService>(ServiceType.VIDEO)
+                .getService(ServiceType.VIDEO)
+                .getInstance<IVideoService>()
                 .isVideoUrl(attachment.url)
         ) {
             const videoInfo = await this.runtime
-                .getService<IVideoService>(ServiceType.VIDEO)
+                .getService(ServiceType.VIDEO)
+                .getInstance<IVideoService>()
                 .processVideo(attachment.url);
             return {
                 id: attachment.id,

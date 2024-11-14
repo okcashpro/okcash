@@ -59,7 +59,7 @@ const models: Models = {
             maxOutputTokens: 8192,
             frequency_penalty: 0.0,
             presence_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.7,
         },
         endpoint: "https://api.x.ai/v1",
         model: {
@@ -77,7 +77,7 @@ const models: Models = {
             maxOutputTokens: 8000,
             frequency_penalty: 0.0,
             presence_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.7,
         },
         model: {
             [ModelClass.SMALL]: "llama-3.1-8b-instant",
@@ -92,7 +92,7 @@ const models: Models = {
             maxInputTokens: 128000,
             maxOutputTokens: 8192,
             repetition_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.7,
         },
         imageSettings: {
             steps: 4,
@@ -113,7 +113,7 @@ const models: Models = {
             maxInputTokens: 32768,
             maxOutputTokens: 8192,
             repetition_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.7,
         },
         model: {
             [ModelClass.SMALL]:
@@ -134,7 +134,7 @@ const models: Models = {
             maxOutputTokens: 8192,
             frequency_penalty: 0.0,
             presence_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.7,
         },
         model: {
             [ModelClass.SMALL]: "gemini-1.5-flash-latest",
@@ -197,7 +197,7 @@ const models: Models = {
             maxOutputTokens: 8192,
             frequency_penalty: 0.0,
             presence_penalty: 0.0,
-            temperature: 0.3,
+            temperature: 0.7,
         },
         endpoint: settings.OLLAMA_SERVER_URL || "http://localhost:11434",
         model: {

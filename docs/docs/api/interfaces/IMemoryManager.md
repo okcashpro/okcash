@@ -8,9 +8,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:449](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L449)
+[packages/core/src/types.ts:470](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L470)
 
----
+***
 
 ### runtime
 
@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:446](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L446)
+[packages/core/src/types.ts:467](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L467)
 
----
+***
 
 ### tableName
 
@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[core/src/core/types.ts:447](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L447)
+[packages/core/src/types.ts:468](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L468)
 
 ## Methods
 
@@ -46,9 +46,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:451](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L451)
+[packages/core/src/types.ts:472](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L472)
 
----
+***
 
 ### countMemories()
 
@@ -66,9 +66,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:481](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L481)
+[packages/core/src/types.ts:502](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L502)
 
----
+***
 
 ### createMemory()
 
@@ -86,9 +86,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:478](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L478)
+[packages/core/src/types.ts:499](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L499)
 
----
+***
 
 ### getCachedEmbeddings()
 
@@ -104,9 +104,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:460](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L460)
+[packages/core/src/types.ts:481](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L481)
 
----
+***
 
 ### getMemories()
 
@@ -134,9 +134,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:452](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L452)
+[packages/core/src/types.ts:473](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L473)
 
----
+***
 
 ### getMemoriesByRoomIds()
 
@@ -156,9 +156,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:464](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L464)
+[packages/core/src/types.ts:485](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L485)
 
----
+***
 
 ### getMemoryById()
 
@@ -174,9 +174,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:463](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L463)
+[packages/core/src/types.ts:484](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L484)
 
----
+***
 
 ### removeAllMemories()
 
@@ -192,9 +192,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:480](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L480)
+[packages/core/src/types.ts:501](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L501)
 
----
+***
 
 ### removeMemory()
 
@@ -210,9 +210,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:479](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L479)
+[packages/core/src/types.ts:500](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L500)
 
----
+***
 
 ### searchMemoriesByEmbedding()
 
@@ -228,7 +228,7 @@
 
 • **opts.count?**: `number`
 
-• **opts.match_threshold?**: `number`
+• **opts.match\_threshold?**: `number`
 
 • **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
@@ -240,4 +240,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:468](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L468)
+[packages/core/src/types.ts:489](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L489)

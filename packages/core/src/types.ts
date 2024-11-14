@@ -536,7 +536,7 @@ export interface IAgentRuntime {
 
     getMemoryManager(name: string): IMemoryManager | null;
 
-    getService<Service>(service: string): Service | null;
+    getService(service: string): typeof Service | null;
 
     registerService(service: Service): void;
 
