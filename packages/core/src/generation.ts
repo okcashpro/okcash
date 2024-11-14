@@ -2,12 +2,12 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
 import { getModel } from "./models.ts";
-import { IImageDescriptionService, ModelClass } from "./types.ts";
 import {
     generateText as aiGenerateText,
     generateObject as aiGenerateObject,
     GenerateObjectResult,
 } from "ai";
+import { IImageDescriptionService, ModelClass, Service } from "./types.ts";
 import { Buffer } from "buffer";
 import { createOllama } from "ollama-ai-provider";
 import OpenAI from "openai";
@@ -204,9 +204,8 @@ export async function generateText({
                     "Using local Llama model for text completion."
                 );
                 response = await runtime
-                    .getService<ITextGenerationService>(
-                        ServiceType.TEXT_GENERATION
-                    )
+                    .getService(ServiceType.TEXT_GENERATION)
+                    .getInstance<ITextGenerationService>()
                     .queueTextCompletion(
                         context,
                         temperature,
@@ -746,7 +745,8 @@ export const generateCaption = async (
 }> => {
     const { imageUrl } = data;
     const resp = await runtime
-        .getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION)
+        .getService(ServiceType.IMAGE_DESCRIPTION)
+        .getInstance<IImageDescriptionService>()
         .describeImage(imageUrl);
     return {
         title: resp.title.trim(),
