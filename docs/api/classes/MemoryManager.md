@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / MemoryManager
+
 # Class: MemoryManager
 
 Manage memories in the database.
@@ -52,7 +54,7 @@ The AgentRuntime instance associated with this manager.
 
 [packages/core/src/memory.ts:22](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L22)
 
-***
+---
 
 ### tableName
 
@@ -62,7 +64,7 @@ The name of the database table this manager operates on.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`tableName`](../interfaces/IMemoryManager.md#tablename)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`tableName`](../interfaces/IMemoryManager.md#tableName)
 
 #### Defined in
 
@@ -90,13 +92,13 @@ A Promise resolving to the memory object, potentially updated with an embedding 
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`addEmbeddingToMemory`](../interfaces/IMemoryManager.md#addembeddingtomemory)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`addEmbeddingToMemory`](../interfaces/IMemoryManager.md#addEmbeddingToMemory)
 
 #### Defined in
 
 [packages/core/src/memory.ts:45](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L45)
 
-***
+---
 
 ### getMemories()
 
@@ -136,13 +138,13 @@ A Promise resolving to an array of Memory objects.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemories`](../interfaces/IMemoryManager.md#getmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemories`](../interfaces/IMemoryManager.md#getMemories)
 
 #### Defined in
 
 [packages/core/src/memory.ts:66](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L66)
 
-***
+---
 
 ### getCachedEmbeddings()
 
@@ -158,13 +160,13 @@ A Promise resolving to an array of Memory objects.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getCachedEmbeddings`](../interfaces/IMemoryManager.md#getcachedembeddings)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getCachedEmbeddings`](../interfaces/IMemoryManager.md#getCachedEmbeddings)
 
 #### Defined in
 
 [packages/core/src/memory.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L93)
 
-***
+---
 
 ### searchMemoriesByEmbedding()
 
@@ -182,7 +184,7 @@ The embedding vector to search with.
 
 Options including match threshold, count, user IDs, and uniqueness.
 
-• **opts.match\_threshold?**: `number`
+• **opts.match_threshold?**: `number`
 
 The similarity threshold for matching memories.
 
@@ -208,13 +210,13 @@ A Promise resolving to an array of Memory objects that match the embedding.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`searchMemoriesByEmbedding`](../interfaces/IMemoryManager.md#searchmemoriesbyembedding)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`searchMemoriesByEmbedding`](../interfaces/IMemoryManager.md#searchMemoriesByEmbedding)
 
 #### Defined in
 
 [packages/core/src/memory.ts:120](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L120)
 
-***
+---
 
 ### createMemory()
 
@@ -240,13 +242,13 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`createMemory`](../interfaces/IMemoryManager.md#creatememory)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`createMemory`](../interfaces/IMemoryManager.md#createMemory)
 
 #### Defined in
 
 [packages/core/src/memory.ts:158](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L158)
 
-***
+---
 
 ### getMemoriesByRoomIds()
 
@@ -266,13 +268,13 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoriesByRoomIds`](../interfaces/IMemoryManager.md#getmemoriesbyroomids)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoriesByRoomIds`](../interfaces/IMemoryManager.md#getMemoriesByRoomIds)
 
 #### Defined in
 
 [packages/core/src/memory.ts:172](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L172)
 
-***
+---
 
 ### getMemoryById()
 
@@ -288,13 +290,13 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoryById`](../interfaces/IMemoryManager.md#getmemorybyid)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`getMemoryById`](../interfaces/IMemoryManager.md#getMemoryById)
 
 #### Defined in
 
 [packages/core/src/memory.ts:183](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L183)
 
-***
+---
 
 ### removeMemory()
 
@@ -316,13 +318,13 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeMemory`](../interfaces/IMemoryManager.md#removememory)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeMemory`](../interfaces/IMemoryManager.md#removeMemory)
 
 #### Defined in
 
 [packages/core/src/memory.ts:193](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L193)
 
-***
+---
 
 ### removeAllMemories()
 
@@ -344,13 +346,13 @@ A Promise that resolves when the operation completes.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeAllMemories`](../interfaces/IMemoryManager.md#removeallmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`removeAllMemories`](../interfaces/IMemoryManager.md#removeAllMemories)
 
 #### Defined in
 
 [packages/core/src/memory.ts:205](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L205)
 
-***
+---
 
 ### countMemories()
 
@@ -376,7 +378,7 @@ A Promise resolving to the count of memories.
 
 #### Implementation of
 
-[`IMemoryManager`](../interfaces/IMemoryManager.md).[`countMemories`](../interfaces/IMemoryManager.md#countmemories)
+[`IMemoryManager`](../interfaces/IMemoryManager.md).[`countMemories`](../interfaces/IMemoryManager.md#countMemories)
 
 #### Defined in
 

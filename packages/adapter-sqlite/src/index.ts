@@ -1,5 +1,8 @@
-import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
+export * from "./sqliteTables.ts";
+export * from "./sqlite_vec.ts";
+
+import { DatabaseAdapter } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
 import {
     Account,
     Actor,
@@ -9,7 +12,7 @@ import {
     type Memory,
     type Relationship,
     type UUID,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { Database } from "better-sqlite3";
 import { v4 } from "uuid";
 import { load } from "./sqlite_vec.ts";
@@ -238,17 +241,18 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         match_count: number;
         unique: boolean;
     }): Promise<Memory[]> {
+        // Build the query and parameters carefully
         const queryParams = [
             new Float32Array(params.embedding), // Ensure embedding is Float32Array
             params.tableName,
             params.roomId,
-            params.match_count,
         ];
 
         let sql = `
-      SELECT *, vec_distance_L2(embedding, ?) AS similarity
-      FROM memories
-      WHERE type = ?`;
+            SELECT *, vec_distance_L2(embedding, ?) AS similarity
+            FROM memories 
+            WHERE type = ? 
+            AND roomId = ?`;
 
         if (params.unique) {
             sql += " AND `unique` = 1";
@@ -258,13 +262,14 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             sql += " AND agentId = ?";
             queryParams.push(params.agentId);
         }
-
         sql += ` ORDER BY similarity ASC LIMIT ?`; // ASC for lower distance
-        // Updated queryParams order matches the placeholders
+        queryParams.push(params.match_count.toString()); // Convert number to string
 
+        // Execute the prepared statement with the correct number of parameters
         const memories = this.db.prepare(sql).all(...queryParams) as (Memory & {
             similarity: number;
         })[];
+
         return memories.map((memory) => ({
             ...memory,
             createdAt:
@@ -337,28 +342,53 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         query_field_sub_name: string;
         query_match_count: number;
     }): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+        // First get content text and calculate Levenshtein distance
         const sql = `
+            WITH content_text AS (
+                SELECT 
+                    embedding,
+                    json_extract(
+                        json(content),
+                        '$.' || ? || '.' || ?
+                    ) as content_text
+                FROM memories 
+                WHERE type = ?
+                AND json_extract(
+                    json(content),
+                    '$.' || ? || '.' || ?
+                ) IS NOT NULL
+            )
             SELECT 
                 embedding,
-                0 as levenshtein_score  -- Using 0 as placeholder score
-            FROM memories 
-            WHERE type = ?
-            AND json_extract(content, '$.' || ? || '.' || ?) IS NOT NULL
+                length(?) + length(content_text) - (
+                    length(?) + length(content_text) - (
+                        length(replace(lower(?), lower(content_text), '')) + 
+                        length(replace(lower(content_text), lower(?), ''))
+                    ) / 2
+                ) as levenshtein_score
+            FROM content_text
+            ORDER BY levenshtein_score ASC
             LIMIT ?
         `;
 
-        const params = [
-            opts.query_table_name,
-            opts.query_field_name,
-            opts.query_field_sub_name,
-            opts.query_match_count
-        ];
-
-        const rows = this.db.prepare(sql).all(...params);
+        const rows = this.db
+            .prepare(sql)
+            .all(
+                opts.query_field_name,
+                opts.query_field_sub_name,
+                opts.query_table_name,
+                opts.query_field_name,
+                opts.query_field_sub_name,
+                opts.query_input,
+                opts.query_input,
+                opts.query_input,
+                opts.query_input,
+                opts.query_match_count
+            ) as { embedding: Buffer; levenshtein_score: number }[];
 
         return rows.map((row) => ({
-            embedding: row.embedding,
-            levenshtein_score: 0
+            embedding: Array.from(new Float32Array(row.embedding as Buffer)),
+            levenshtein_score: row.levenshtein_score,
         }));
     }
 

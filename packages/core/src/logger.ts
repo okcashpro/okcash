@@ -84,10 +84,8 @@ class ElizaLogger {
         strings = strings.map((item) => {
             if (typeof item === "object") {
                 // Handle BigInt serialization
-                return JSON.stringify(item, (key, value) => 
-                    typeof value === 'bigint' 
-                        ? value.toString() 
-                        : value
+                return JSON.stringify(item, (key, value) =>
+                    typeof value === "bigint" ? value.toString() : value
                 );
             }
             return item;
@@ -95,7 +93,7 @@ class ElizaLogger {
         console.log(c, strings.join(""), this.#getColorReset());
         if (this.closeByNewLine) console.log("");
     }
-    
+
     log(...strings) {
         const fg = "white";
         const bg = "";

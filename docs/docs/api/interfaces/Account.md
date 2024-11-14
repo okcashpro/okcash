@@ -10,7 +10,7 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:280](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L280)
+[core/src/core/types.ts:262](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L262)
 
 ---
 
@@ -24,7 +24,7 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:278](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L278)
+[core/src/core/types.ts:260](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L260)
 
 ---
 
@@ -34,7 +34,7 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:279](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L279)
+[core/src/core/types.ts:261](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L261)
 
 ---
 
@@ -44,7 +44,7 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:275](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L275)
+[core/src/core/types.ts:257](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L257)
 
 ---
 
@@ -54,7 +54,7 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:276](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L276)
+[core/src/core/types.ts:258](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L258)
 
 ---
 
@@ -64,4 +64,4 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:277](https://github.com/ai16z/eliza/blob/8b230e97279ce98a641d3338cbfa78f13130c60e/packages/core/src/types.ts#L277)
+[core/src/core/types.ts:259](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L259)

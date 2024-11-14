@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / getProviders
+
 # Function: getProviders()
 
 > **getProviders**(`runtime`, `message`, `state`?): `Promise`\<`string`\>

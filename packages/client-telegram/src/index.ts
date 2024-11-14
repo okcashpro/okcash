@@ -7,7 +7,7 @@ export const TelegramClientInterface: Client = {
         const botToken = runtime.getSetting("TELEGRAM_BOT_TOKEN");
         const tg = new TelegramClient(runtime, botToken);
         await tg.start();
-        
+
         elizaLogger.success(
             `✅ Telegram client successfully started for character ${runtime.character.name}`
         );
