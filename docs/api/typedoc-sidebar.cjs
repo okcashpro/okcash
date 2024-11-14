@@ -286,6 +286,12 @@ const typedocSidebar = {
           id: "functions/formatRelationships",
           label: "formatRelationships",
         },
+        {
+          type: "doc",
+          id: "functions/findNearestEnvFile",
+          label: "findNearestEnvFile",
+        },
+        { type: "doc", id: "functions/loadEnvConfig", label: "loadEnvConfig" },
       ],
     },
   ],

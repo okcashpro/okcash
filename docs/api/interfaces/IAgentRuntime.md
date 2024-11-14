@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / IAgentRuntime
+
 # Interface: IAgentRuntime
 
 ## Properties
@@ -6,9 +8,11 @@
 
 > **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Properties
+
 #### Defined in
 
-[packages/core/src/types.ts:517](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L517)
+[packages/core/src/types.ts:520](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L520)
 
 ---
 
@@ -18,7 +22,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:518](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L518)
+[packages/core/src/types.ts:521](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L521)
 
 ---
 
@@ -28,7 +32,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:519](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L519)
+[packages/core/src/types.ts:522](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L522)
 
 ---
 
@@ -38,7 +42,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:520](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L520)
+[packages/core/src/types.ts:523](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L523)
 
 ---
 
@@ -48,7 +52,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:521](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L521)
+[packages/core/src/types.ts:524](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L524)
 
 ---
 
@@ -58,7 +62,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:522](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L522)
+[packages/core/src/types.ts:525](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L525)
 
 ---
 
@@ -68,7 +72,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:523](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L523)
+[packages/core/src/types.ts:526](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L526)
 
 ---
 
@@ -78,7 +82,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:524](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L524)
+[packages/core/src/types.ts:527](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L527)
 
 ---
 
@@ -88,7 +92,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:525](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L525)
+[packages/core/src/types.ts:528](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L528)
 
 ---
 
@@ -98,7 +102,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:527](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L527)
+[packages/core/src/types.ts:530](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L530)
 
 ---
 
@@ -108,7 +112,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:528](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L528)
+[packages/core/src/types.ts:531](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L531)
 
 ---
 
@@ -118,7 +122,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:529](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L529)
+[packages/core/src/types.ts:532](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L532)
 
 ---
 
@@ -128,7 +132,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:531](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L531)
+[packages/core/src/types.ts:534](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L534)
 
 ## Methods
 
@@ -146,7 +150,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:532](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L532)
+[packages/core/src/types.ts:535](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L535)
 
 ---
 
@@ -164,7 +168,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:534](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L534)
+[packages/core/src/types.ts:537](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L537)
 
 ---
 
@@ -186,7 +190,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:536](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L536)
+[packages/core/src/types.ts:539](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L539)
 
 ---
 
@@ -204,7 +208,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:538](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L538)
+[packages/core/src/types.ts:541](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L541)
 
 ---
 
@@ -222,7 +226,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:540](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L540)
+[packages/core/src/types.ts:543](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L543)
 
 ---
 
@@ -230,13 +234,15 @@
 
 > **getConversationLength**(): `number`
 
+Methods
+
 #### Returns
 
 `number`
 
 #### Defined in
 
-[packages/core/src/types.ts:543](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L543)
+[packages/core/src/types.ts:546](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L546)
 
 ---
 
@@ -260,13 +266,13 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:544](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L544)
+[packages/core/src/types.ts:547](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L547)
 
 ---
 
 ### evaluate()
 
-> **evaluate**(`message`, `state`?): `Promise`\<`string`[]\>
+> **evaluate**(`message`, `state`?, `didRespond`?): `Promise`\<`string`[]\>
 
 #### Parameters
 
@@ -274,13 +280,15 @@
 
 • **state?**: [`State`](State.md)
 
+• **didRespond?**: `boolean`
+
 #### Returns
 
 `Promise`\<`string`[]\>
 
 #### Defined in
 
-[packages/core/src/types.ts:550](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L550)
+[packages/core/src/types.ts:553](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L553)
 
 ---
 
@@ -300,7 +308,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:551](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L551)
+[packages/core/src/types.ts:558](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L558)
 
 ---
 
@@ -324,7 +332,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:552](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L552)
+[packages/core/src/types.ts:559](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L559)
 
 ---
 
@@ -342,7 +350,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:558](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L558)
+[packages/core/src/types.ts:565](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L565)
 
 ---
 
@@ -368,7 +376,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:559](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L559)
+[packages/core/src/types.ts:566](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L566)
 
 ---
 
@@ -388,7 +396,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:566](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L566)
+[packages/core/src/types.ts:573](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L573)
 
 ---
 
@@ -406,7 +414,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:567](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L567)
+[packages/core/src/types.ts:574](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L574)
 
 ---
 
@@ -426,7 +434,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:568](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L568)
+[packages/core/src/types.ts:575](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L575)
 
 ---
 
@@ -444,4 +452,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:572](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L572)
+[packages/core/src/types.ts:579](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L579)

@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / getModel
+
 # Function: getModel()
 
 > **getModel**(`provider`, `type`): `string`
@@ -14,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/models.ts:194](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L194)
+[packages/core/src/models.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L222)

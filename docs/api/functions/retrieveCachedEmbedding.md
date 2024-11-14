@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / retrieveCachedEmbedding
+
 # Function: retrieveCachedEmbedding()
 
 > **retrieveCachedEmbedding**(`runtime`, `input`): `Promise`\<`number`[]\>
@@ -14,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/embedding.ts:80](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L80)
+[packages/core/src/embedding.ts:149](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L149)

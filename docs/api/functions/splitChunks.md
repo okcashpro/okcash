@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / splitChunks
+
 # Function: splitChunks()
 
 > **splitChunks**(`runtime`, `content`, `chunkSize`, `bleed`, `modelClass`): `Promise`\<`string`[]\>
@@ -30,4 +32,4 @@ Promise resolving to array of text chunks with bleed sections
 
 ## Defined in
 
-[packages/core/src/generation.ts:345](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L345)
+[packages/core/src/generation.ts:388](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L388)

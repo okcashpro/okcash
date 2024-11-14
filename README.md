@@ -3,6 +3,7 @@
 <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
 
 ### [For Chinese Version: 中文说明](./README_CN.md)
+### [For Japanese Version: 日本語の説明](./README_JA.md)
 
 ## Features
 
@@ -24,7 +25,8 @@
 # Getting Started
 
 **Prerequisites (MUST):**
-
+    
+-   [Python 2.7+](https://www.python.org/downloads/)
 -   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 

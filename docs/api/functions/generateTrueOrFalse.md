@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / generateTrueOrFalse
+
 # Function: generateTrueOrFalse()
 
 > **generateTrueOrFalse**(`opts`): `Promise`\<`boolean`\>
@@ -26,4 +28,4 @@ Promise resolving to a boolean value parsed from the model's response
 
 ## Defined in
 
-[packages/core/src/generation.ts:393](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L393)
+[packages/core/src/generation.ts:444](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L444)

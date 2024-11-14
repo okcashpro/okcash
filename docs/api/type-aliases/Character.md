@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Character
+
 # Type Alias: Character
 
 > **Character**: `object`
@@ -122,4 +124,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:324](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L324)
+[packages/core/src/types.ts:327](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L327)

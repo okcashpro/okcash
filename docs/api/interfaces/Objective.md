@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Objective
+
 # Interface: Objective
 
 Represents an objective within a goal, detailing what needs to be achieved and whether it has been completed.

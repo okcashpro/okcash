@@ -24,13 +24,16 @@ import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 export const twitterMessageHandlerTemplate =
     `{{timeline}}
 
-{{providers}}
+# Knowledge
+{{knowledge}}
 
 # Task: Generate a post for the character {{agentName}}.
 About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
 {{topics}}
+
+{{providers}}
 
 {{characterPostExamples}}
 
@@ -147,7 +150,6 @@ export class TwitterInteractionClient extends ClientBase {
 
                     try {
                         if (this.lastCheckedTweetId) {
-
                             fs.writeFileSync(
                                 this.tweetCacheFilePath,
                                 this.lastCheckedTweetId.toString(),
@@ -257,10 +259,10 @@ export class TwitterInteractionClient extends ClientBase {
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
                         ? stringToUuid(
-                            tweet.inReplyToStatusId +
-                            "-" +
-                            this.runtime.agentId
-                        )
+                              tweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,

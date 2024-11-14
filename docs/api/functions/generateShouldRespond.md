@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / generateShouldRespond
+
 # Function: generateShouldRespond()
 
 > **generateShouldRespond**(`opts`): `Promise`\<`"RESPOND"` \| `"IGNORE"` \| `"STOP"` \| `null`\>
@@ -26,4 +28,4 @@ Promise resolving to "RESPOND", "IGNORE", "STOP" or null
 
 ## Defined in
 
-[packages/core/src/generation.ts:289](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L289)
+[packages/core/src/generation.ts:332](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L332)

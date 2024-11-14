@@ -107,3 +107,5 @@
 - [getRelationship](functions/getRelationship.md)
 - [getRelationships](functions/getRelationships.md)
 - [formatRelationships](functions/formatRelationships.md)
+- [findNearestEnvFile](functions/findNearestEnvFile.md)
+- [loadEnvConfig](functions/loadEnvConfig.md)

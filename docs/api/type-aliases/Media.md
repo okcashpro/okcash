@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Media
+
 # Type Alias: Media
 
 > **Media**: `object`
@@ -30,4 +32,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:294](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L294)
+[packages/core/src/types.ts:297](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L297)

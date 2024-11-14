@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Relationship
+
 # Interface: Relationship
 
 Represents a relationship between two users, including their IDs, the status of the relationship, and the room ID in which the relationship is established.
@@ -10,7 +12,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:257](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L257)
+[packages/core/src/types.ts:260](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L260)
 
 ---
 
@@ -20,7 +22,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:258](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L258)
+[packages/core/src/types.ts:261](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L261)
 
 ---
 
@@ -30,7 +32,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:259](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L259)
+[packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L262)
 
 ---
 
@@ -40,7 +42,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:260](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L260)
+[packages/core/src/types.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L263)
 
 ---
 
@@ -50,7 +52,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:261](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L261)
+[packages/core/src/types.ts:264](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L264)
 
 ---
 
@@ -60,7 +62,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L262)
+[packages/core/src/types.ts:265](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L265)
 
 ---
 
@@ -70,4 +72,4 @@ Represents a relationship between two users, including their IDs, the status of 
 
 #### Defined in
 
-[packages/core/src/types.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L263)
+[packages/core/src/types.ts:266](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L266)

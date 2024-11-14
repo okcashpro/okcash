@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / ITextGenerationService
+
 # Interface: ITextGenerationService
 
 ## Extends
@@ -16,7 +18,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L599)
+[packages/core/src/types.ts:607](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L607)
 
 ---
 
@@ -30,7 +32,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L600)
+[packages/core/src/types.ts:608](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L608)
 
 ---
 
@@ -58,7 +60,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L601)
+[packages/core/src/types.ts:609](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L609)
 
 ---
 
@@ -86,7 +88,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:609](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L609)
+[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)
 
 ---
 
@@ -104,4 +106,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)
+[packages/core/src/types.ts:625](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L625)

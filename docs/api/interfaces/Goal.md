@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Goal
+
 # Interface: Goal
 
 Represents a goal, which is a higher-level aim composed of one or more objectives. Goals are tracked to measure progress or achievements within the conversation or system.

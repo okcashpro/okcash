@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / Models
+
 # Type Alias: Models
 
 > **Models**: `object`
@@ -39,6 +41,10 @@
 ### redpill
 
 > **redpill**: [`Model`](Model.md)
+
+### openrouter
+
+> **openrouter**: [`Model`](Model.md)
 
 ### ollama
 

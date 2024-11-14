@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / trimTokens
+
 # Function: trimTokens()
 
 > **trimTokens**(`context`, `maxTokens`, `model`): `any`
@@ -22,4 +24,4 @@ The model to use for generateText.
 
 ## Defined in
 
-[packages/core/src/generation.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L263)
+[packages/core/src/generation.ts:306](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L306)

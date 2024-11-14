@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / IVideoService
+
 # Interface: IVideoService
 
 ## Extends
@@ -20,7 +22,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L592)
+[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L600)
 
 ---
 
@@ -38,7 +40,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:593](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L593)
+[packages/core/src/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L601)
 
 ---
 
@@ -56,7 +58,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:594](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L594)
+[packages/core/src/types.ts:602](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L602)
 
 ---
 
@@ -74,4 +76,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
+[packages/core/src/types.ts:603](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L603)

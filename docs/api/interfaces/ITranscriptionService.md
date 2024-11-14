@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / ITranscriptionService
+
 # Interface: ITranscriptionService
 
 ## Extends
@@ -20,7 +22,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:583](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L583)
+[packages/core/src/types.ts:591](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L591)
 
 ---
 
@@ -38,7 +40,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:584](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L584)
+[packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L592)
 
 ---
 
@@ -56,7 +58,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:587](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L587)
+[packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
 
 ---
 
@@ -74,4 +76,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:588](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L588)
+[packages/core/src/types.ts:596](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L596)

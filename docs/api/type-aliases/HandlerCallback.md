@@ -1,3 +1,5 @@
+[@ai16z/eliza v1.0.0](../index.md) / HandlerCallback
+
 # Type Alias: HandlerCallback()
 
 > **HandlerCallback**: (`response`, `files`?) => `Promise`\<[`Memory`](../interfaces/Memory.md)[]\>
@@ -14,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:195](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L195)
+[packages/core/src/types.ts:197](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L197)
