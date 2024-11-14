@@ -4,6 +4,8 @@
 
 ### [For Chinese Version: 中文说明](./README_CN.md)
 ### [For Japanese Version: 日本語の説明](./README_JA.md)
+### [For Korean Version: 한국어 설명](./README_KOR.md)
+### [For French Version: Instructions en français](./README_FR.md)
 
 ## Features
 
