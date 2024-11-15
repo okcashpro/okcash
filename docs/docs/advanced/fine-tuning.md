@@ -24,7 +24,7 @@ enum ModelProviderName {
     GOOGLE,
     REDPILL,
     OPENROUTER,
-    HEURIST,
+    HEURIST
 }
 ```
 
