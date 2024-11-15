@@ -4,74 +4,77 @@
 
 ## 기능
 
--   🛠 지지 discord 트위터/telegram 연결
--   👥 지지여 모드 agent
--   📚 간단 한 문서를 가져오기와 문서를 번갈아
--   💾 검색 할 수 있는 메모리와 문서 저장
--   🚀 확장 가능 성이 높은, 사용자 정의 클라이언트와 행위를 확장 기능
--   ☁ ️여 모형 지지 llama · openai grok anthropic 등
--   📦 간단 하기도 좋습니다.
+-   🛠 SNS 지원: 디스코드, 트위터, 텔레그램 모두 지원됩니다.
+-   👥 다중 지원: 다중 에이전트 및 채팅방이 지원됩니다.
+-   📚 높은 유연성: 개발자가 쉽게 데이터를 추가하고, 이를 활용해 다양한 기능을 만들 수 있습니다.
+-   💾 검색 지원: 당신의 데이터와 작업을 쉽게 찾아볼 수 있도록, 검색 기능을 지원합니다.
+-   🚀 높은 확장성: 자신의 동작과 클라이언트를 만들어 기능을 확장할 수 있습니다.
+-   ☁️  다양한 AI 모델 지원: local Llama, OpenAI, Anthropic, Groq 등 다양한 AI 모델을 지원합니다
+-   📦 즐겁게 개발해 봐요! 
 
-eliza로 뭘 할 수 있나요?
+## eliza로 어떤걸 만들 수 있을까요?
 
--   🤖 챗 봇
--   🕵 ️ 자주 agents
--   📈 업무 처리 과정을 자동화
--   🎮 게임 npc
+-   🤖 챗봇 개발
+-   🕵 ️AI가 자율적으로 결과를 만들어줘요! 
+-   📈 업무처리 자동화
+-   🎮 비디오 게임 NPC
 
 # 사용시작
 
-**전제 요구(필수):**
+**필수 요구사항:**
 
--   [Node.js 22 +](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   Nodejs 설치
+-   [Python 2.7+](https://www.python.org/downloads/)
+-   [Node.js 23.1+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
--   pnpm을사용한다
 
-## 편집.env 파일
+## .env 파일 편집
 
--   .env.example을.env로 복사하고 적절한 값을 입력한다
--   트위터 환경을 편집하고, 트위터 계정과 비밀번호를 입력한다
+-   .env.example을 복사해서 필요한 값들을 채워넣어 .env파일을 만드세요.
+-   트위터 환경변수 값을 채워, 봇의 트위터 사용자 이름과 비밀번호를 설정하세요.
 
-## 캐릭터 파일 편집
+## character file 편집
 
--   파일 `src/core/defaultcharacter.ts ` - 그것을 수정 할 수 있다
--   사용하셔도됩니다 `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` 여러 로봇을 동시에 실행하여 캐릭터를 불러옵니다.
+-   캐릭터 파일 경로: `src/core/defaultCharacter.ts ` - 캐릭터 파일을 필요에 맞게 수정하세요.
+-   동시 실행 지원: `pnpm start --characters="path/to/your/character.json"` - 다음의 명령어를 사용하면, 여러 캐릭터 파일을 한번에 불러와, 다양한 봇을 동시에 실행 시킬 수 있습니다.
 
-아이디와 캐릭터 파일 설정이 완료되었다면, 다음 명령줄을 입력하여 로봇을 실행시키십시오:
+모두 설정하셨으면, 아래의 커맨드를 입력하여 로봇을 실행시켜주세요:
 
 ```
 pnpm i
 pnpm start
 ```
 
-# 사용자 정의 Eliza
+# Eliza 커스텀하기
 
-### 일반 행동을 추가한다
+### 커스텀 기능 추가하기
 
-커널 디렉터리에서 git 충돌을 방지하기 위해 custom_actions 디렉터리에 사용자 정의 동작을 추가하고 elizaconfig.yaml 파일에서 동작을 설정할 것을 제안한다.elizaconfig.example.yaml 파일의 예제는 참조할 수 있다.
+메인 디렉토리의 git 충돌을 방지하기 위해 커스텀 동작은 `custom_actions` 디렉토리에 추가하신 후, 추가하신 내용을 `elizaConfig.yaml` 파일에 작성하세요. `elizaConfig.example.yaml` 파일에 예시가 있습니다.
 
-다른 대형 모델들을 배치한다
+### AI 모델 실행 방법
 
-### 프로필Llama
+### Run with Llama
 
-`XAI_MODEL`환경 변수를`meta-llama/meta-llam-3.1-70b-instruct-turbo`또는`meta-llama/meta-llam-3.1-405b-instruct`로 설정하여 실행할 수 있다라마 70b 405b 모델
+`XAI_MODEL`환경 변수를`meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` 또는 `meta-llama/Meta-Llama-3.1-405B-Instruct`로 설정하여 Llama 70B 혹은 405B 모델을 실행시킬 수 있습니다.
 
-## openai 설정
+### Run with Grok
 
-`XAI_MODEL`환경 변수를`gpt-4o-mini`또는`gpt-4o`로 설정하여 OpenAI 모델을 실행할 수 있다
+`XAI_MODEL` 환경변수를 `grok-beta`로 설정하여 Grok 모델을 실행시킬 수 있습니다.
+
+### Run with OpenAI
+
+`XAI_MODEL` 환경변수를 `gpt-4o-mini` 혹은 `gpt-4o` 로 설정하여, OpenAI model을 실행시킬 수 있습니다.
 
 ## 기타 요구 사항
 
-Sharp를 설치해야 할 수도 있습니다.시작시 오류가 발견되면 다음 명령으로 설치하십시오:
+시작시 오류가 발견되면, 아래의 명령어로 Sharp를 설치해보세요:  
 
 ```
-pnpm install-include=optional sharp
+pnpm install --include=optional sharp
 ```
 
-# 환경 설정
+# 환경 셋업
 
-다양한 플랫폼에 연결하기 위해서는.env 파일에서 환경 변수를 추가해야 합니다:
+다양한 플랫폼에 연결하기 위해 .env 파일에 다음의 환경 변수들을 채워 넣어야 합니다:
 
 ```
 # Required environment variables
@@ -79,6 +82,7 @@ DISCORD_APPLICATION_ID=
 DISCORD_API_TOKEN= # Bot token
 OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
 ELEVENLABS_XI_API_KEY= # API key from elevenlabs
+GOOGLE_GENERATIVE_AI_API_KEY= # Gemini API key
 
 # ELEVENLABS SETTINGS
 ELEVENLABS_MODEL_ID=eleven_multilingual_v2
@@ -121,51 +125,56 @@ TELEGRAM_BOT_TOKEN=
 TOGETHER_API_KEY=
 ```
 
-# 로컬 설정
+# 로컬 인터페이스 설정
 
-### cuda 설정
+### CUDA 셋업
 
-고성능 엔비디아 그래픽을 가지고 있다면 다음 명령줄에서 cuda를 사용하여 로컬 가속을 할 수 있다
+고성능 NVIDIA GPU를 가지고 있는 분들은, CUDA 를 설치하시면 당신의 로컬 인터페이스를 놀랍도록 가속 시킬 수 있습니다.
 
 ```
 pnpm install
 npx --no node-llama-cpp source download --gpu cuda
 ```
 
-cuDNN과 cuBLAS를 포함한 완전한 cuda 키트를 설치했는지 확인하세요
+설치 후에는 당신의 CUDA Toolkit에 cuDNN and cuBLAS 이 포함되었는지 다시 한번 확인하세요.
 
 ### 로컬 실행
 
-위의 [Llama로 실행](#run-with-llama) 옵션 중 하나로 XAI_MODEL을 추가한다
-X_SERVER_URL과 xai_api_key를 공백으로 두면 huggingface에서 모델을 다운로드하고 현지에서 쿼리한다
+다음 중 한가지 옵션을 선택하여 XAI_MODEL 을 추가하세요. [Run with
+Llama](#run-with-llama) - X_SERVER_URL 와 XAI_API_KEY 는 비워둬도 됩니다. 
+이 파일을 통해 huggingface 에서 모델이 다운로드 되며, 로컬로 쿼리 됩니다.
 
 # 클라이언트
 
-discord bot을 설정하는 방법에 대해 discord의 공식 문서를 볼 수 있습니까
+## Discord Bot
 
-# 개발
+디스코드 봇을 세팅하는 방법을 알고싶으면 아래의 링크를 통해 확인하세요:
+https://discordjs.guide/preparations/setting-up-a-bot-application.html
 
-## 테스트
+# 개발하기
 
-여러 테스트 방법을 위한 명령줄:
+## 테스트 방법
+
+일반 테스트에 적합한 커맨드:
 
 ```bash
 pnpm test           # Run tests once
 pnpm test:watch    # Run tests in watch mode
 ```
 
-데이터베이스에 특화된 테스트:
+데이터베이스에 특화된 테스트 커맨드:
 
 ```bash
 pnpm test:sqlite   # Run tests with SQLite
 pnpm test:sqljs    # Run tests with SQL.js
 ```
 
-테스트는 src/\*_/_.test.ts 파일에 있는 Jest로 작성된다.테스트 환경 설정은 다음과 같습니다:
+테스트 결과는 Jest를 통해 작성되며, `src/**/*.test.ts` 파일에서 확인할 수 있습니다. 
+테스트 환경 구성단계:
 
--   .env.test에서 환경 변수를 불러온다
--   장기 실행 테스트를 실행하기 위해 2분 제한 시간을 사용합니다
--   esm 모듈을 지원한다
--   테스트 실행 순서 (--runInBand)
+-   `.env.test` 에서 환경변수가 불러와집니다.
+-   테스트 타임아웃 시간은 2분으로 설정되어있습니다.
+-   ESM 모듈이 지원됩니다.
+-   순차적으로 테스트가 실행됩니다. (--runInBand)
 
-새 테스트를 만들려면, 테스트할 코드 옆에.test.ts 파일을 추가하세요.
+새 테스트를 만들려면, 테스트 중인 코드 옆에 `.test.ts` 파일을 추가하세요.
