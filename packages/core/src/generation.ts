@@ -154,6 +154,29 @@ export async function generateText({
                 break;
             }
 
+               case ModelProviderName.CLAUDE_VERTEX: {
+                elizaLogger.debug("Initializing Claude Vertex model.");
+
+                const anthropic = createAnthropic({ apiKey });
+
+                const { text: anthropicResponse } = await aiGenerateText({
+                    model: anthropic.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = anthropicResponse;
+                elizaLogger.debug("Received response from Claude Vertex model.");
+                break;
+            }
+
             case ModelProviderName.GROK: {
                 elizaLogger.debug("Initializing Grok model.");
                 const grok = createOpenAI({ apiKey, baseURL: endpoint });
