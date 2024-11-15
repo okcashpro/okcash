@@ -315,9 +315,7 @@ export async function generateText({
 
             case ModelProviderName.HEURIST: {
                 elizaLogger.debug("Initializing Heurist model.");
-                console.log("apiKey", apiKey);   
-                console.log("API_KEY", API_KEY);
-                const heurist = createOpenAI({ apiKey: API_KEY, baseURL: endpoint });
+                const heurist = createOpenAI({ apiKey: apiKey, baseURL: endpoint });
 
                 const { text: heuristResponse } = await aiGenerateText({
                     model: heurist.languageModel(model),
