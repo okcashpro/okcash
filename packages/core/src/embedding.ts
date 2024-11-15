@@ -1,4 +1,4 @@
-import { EmbeddingModel, FlagEmbedding } from "fastembed";
+import { FlagEmbedding } from "fastembed";
 import path from "path";
 import { fileURLToPath } from "url";
 import models from "./models.ts";
