@@ -6,6 +6,7 @@
 ### [For Japanese Version: 日本語の説明](./README_JA.md)
 ### [For Korean Version: 한국어 설명](./README_KOR.md)
 ### [For French Version: Instructions en français](./README_FR.md)
+### [For Portuguese Version: Instruções em português](./README_PTBR.md)
 
 ## Features
 
