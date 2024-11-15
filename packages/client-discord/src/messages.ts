@@ -36,6 +36,7 @@ import {
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
+import { Service } from "@ai16z/eliza";
 
 const MAX_MESSAGE_LENGTH = 1900;
 async function generateSummary(
@@ -340,7 +341,7 @@ export class MessageManager {
         if (
             message.interaction ||
             message.author.id ===
-                this.client.user?.id /* || message.author?.bot*/
+            this.client.user?.id /* || message.author?.bot*/
         )
             return;
         const userId = message.author.id as UUID;
@@ -388,10 +389,10 @@ export class MessageManager {
                 url: message.url,
                 inReplyTo: message.reference?.messageId
                     ? stringToUuid(
-                          message.reference.messageId +
-                              "-" +
-                              this.runtime.agentId
-                      )
+                        message.reference.messageId +
+                        "-" +
+                        this.runtime.agentId
+                    )
                     : undefined,
             };
 
@@ -502,10 +503,11 @@ export class MessageManager {
                         }
                         if (message.channel.type === ChannelType.GuildVoice) {
                             // For voice channels, use text-to-speech
-                            const audioStream = await this.runtime
-                                .getService<ISpeechService>(
+                            const audioStream = await (
+                                this.runtime.getService(
                                     ServiceType.SPEECH_GENERATION
                                 )
+                            ).getInstance<ISpeechService>()
                                 .generate(this.runtime, content.text);
                             await this.voiceManager.playAudioStream(
                                 userId,
@@ -592,7 +594,8 @@ export class MessageManager {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
                 const audioStream = await this.runtime
-                    .getService<ISpeechService>(ServiceType.SPEECH_GENERATION)
+                    .getService(ServiceType.SPEECH_GENERATION)
+                    .getInstance<ISpeechService>()
                     .generate(this.runtime, errorMessage);
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
@@ -656,13 +659,14 @@ export class MessageManager {
 
         for (const url of urls) {
             if (
-                this.runtime
-                    .getService<IVideoService>(ServiceType.VIDEO)
+                this.runtime.getService(ServiceType.VIDEO)
+                    .getInstance<IVideoService>()
                     .isVideoUrl(url)
             ) {
-                const videoInfo = await this.runtime
-                    .getService<IVideoService>(ServiceType.VIDEO)
-                    .processVideo(url);
+                const videoInfo = await (this.runtime
+                    .getService(ServiceType.VIDEO)
+                    .getInstance<IVideoService>()
+                    .processVideo(url));
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -673,7 +677,8 @@ export class MessageManager {
                 });
             } else {
                 const { title, bodyContent } = await this.runtime
-                    .getService<IBrowserService>(ServiceType.BROWSER)
+                    .getService(ServiceType.BROWSER)
+                    .getInstance<IBrowserService>()
                     .getPageContent(url, this.runtime);
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,

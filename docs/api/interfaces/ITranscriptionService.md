@@ -24,7 +24,7 @@
 
 [packages/core/src/types.ts:591](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L591)
 
----
+***
 
 ### transcribeAttachmentLocally()
 
@@ -42,7 +42,7 @@
 
 [packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L592)
 
----
+***
 
 ### transcribe()
 
@@ -60,7 +60,7 @@
 
 [packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
 
----
+***
 
 ### transcribeLocally()
 

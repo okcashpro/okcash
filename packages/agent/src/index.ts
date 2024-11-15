@@ -306,7 +306,6 @@ const rl = readline.createInterface({
 });
 
 async function handleUserInput(input, agentId) {
-    console.log("handleUserInput", input, agentId);
     if (input.toLowerCase() === "exit") {
         rl.close();
         return;

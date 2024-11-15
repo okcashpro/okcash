@@ -328,7 +328,8 @@ export class VideoService extends Service {
         console.log("Starting transcription...");
         const startTime = Date.now();
         const transcript = await runtime
-            .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
+            .getService(ServiceType.TRANSCRIPTION)
+            .getInstance<ITranscriptionService>()
             .transcribe(audioBuffer);
         const endTime = Date.now();
         console.log(

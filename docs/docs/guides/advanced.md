@@ -1,246 +1,397 @@
-# Advanced Usage
+---
+sidebar_position: 10
+---
 
-This guide covers advanced usage patterns and features of Eliza, including working with services, custom implementations, and advanced configuration options.
+# 🔧 Advanced Usage Guide
 
-## Video and Media Processing
+This guide covers advanced features and capabilities of Eliza, including complex integrations, custom services, and specialized plugins.
 
-### Video Service
+## Service Integration
 
-Eliza provides robust video processing capabilities through the VideoService class. Key features include:
+### Video Processing Service
 
-- Downloading and processing videos from multiple sources (YouTube, Vimeo, direct MP4 links)
-- Automatic transcription of video content
-- Caching mechanisms for efficient processing
-- Support for both manual and automatic captions
+Eliza supports advanced video processing capabilities through the `VideoService`:
 
 ```typescript
-import { VideoService } from "./services/video";
+import { VideoService } from '@ai16z/eliza/plugin-node';
 
-// Initialize the service
-const videoService = VideoService.getInstance(runtime);
+// Initialize service
+const videoService = new VideoService();
 
-// Process a video URL
-const media = await videoService.processVideo(videoUrl);
+// Process video content
+const result = await videoService.processVideo(url, runtime);
 ```
+
+Key features:
+- Automatic video downloading
+- Transcription support
+- Subtitle extraction
+- Cache management
+- Queue processing
 
 ### Image Processing
 
-The ImageService provides advanced image analysis capabilities:
-
-- Local and cloud-based image recognition
-- Support for GIF processing (first frame extraction)
-- Integration with multiple AI models for image analysis
-- Caching and batch processing capabilities
-
-## Memory Management and Embeddings
-
-### Advanced Memory Operations
-
-The system supports sophisticated memory operations through various database adapters:
+The `ImageDescriptionService` provides advanced image analysis:
 
 ```typescript
-// Search memories with embedding similarity
-const similarMemories = await db.searchMemoriesByEmbedding(embedding, {
-  match_threshold: 0.95,
-  count: 5,
-  roomId: currentRoom,
-  tableName: "long_term_memory",
-});
+import { ImageDescriptionService } from '@ai16z/eliza/plugin-node';
 
-// Create unique memories with deduplication
-await db.createMemory(memory, "episodic_memory", true);
+const imageService = new ImageDescriptionService();
+const description = await imageService.describeImage(imageUrl, 'gpu', runtime);
 ```
 
-### Custom Database Adapters
+Features:
+- Local and cloud processing options
+- CUDA acceleration support
+- Automatic format handling
+- GIF frame extraction
 
-You can implement custom database adapters by extending the DatabaseAdapter class:
+## Blockchain Integration
+
+### Solana Integration
+
+The Solana plugin provides comprehensive blockchain functionality:
 
 ```typescript
-class CustomDatabaseAdapter extends DatabaseAdapter {
-  async searchMemories(params: {
-    tableName: string;
-    roomId: UUID;
-    embedding: number[];
-    match_threshold: number;
-    match_count: number;
-    unique: boolean;
-  }): Promise<Memory[]> {
-    // Custom implementation
+import { solanaPlugin } from '@ai16z/eliza/plugin-solana';
+
+// Initialize plugin
+runtime.registerPlugin(solanaPlugin);
+```
+
+#### Token Operations
+
+```typescript
+// Buy tokens
+const swapResult = await swapToken(
+  connection,
+  walletPublicKey,
+  inputTokenCA,
+  outputTokenCA,
+  amount
+);
+
+// Sell tokens
+const sellResult = await sellToken({
+  sdk,
+  seller: walletKeypair,
+  mint: tokenMint,
+  amount: sellAmount,
+  priorityFee,
+  allowOffCurve: false,
+  slippage: "1",
+  connection
+});
+```
+
+#### Trust Score System
+
+```typescript
+const trustScoreManager = new TrustScoreManager(tokenProvider, trustScoreDb);
+
+// Generate trust scores
+const score = await trustScoreManager.generateTrustScore(
+  tokenAddress,
+  recommenderId,
+  recommenderWallet
+);
+
+// Monitor trade performance
+await trustScoreManager.createTradePerformance(runtime, tokenAddress, userId, {
+  buy_amount: amount,
+  is_simulation: false
+});
+```
+
+## Custom Services
+
+### Speech Generation
+
+Implement text-to-speech capabilities:
+
+```typescript
+class SpeechService extends Service implements ISpeechService {
+  async generate(runtime: IAgentRuntime, text: string): Promise<Readable> {
+    if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
+      return textToSpeech(runtime, text);
+    }
+    
+    const { audio } = await synthesize(text, {
+      engine: "vits",
+      voice: "en_US-hfc_female-medium"
+    });
+    
+    return Readable.from(audio);
   }
 }
 ```
 
-## Speech and Transcription
+### PDF Processing
 
-### Speech Service
-
-The system includes a comprehensive speech service with support for:
-
-- Text-to-speech conversion with multiple providers
-- Voice customization options
-- Streaming audio support
-- PCM and WAV format handling
+Handle PDF document analysis:
 
 ```typescript
-const speechService = new SpeechService();
-const audioStream = await speechService.generate(runtime, text);
-```
+class PdfService extends Service {
+  async convertPdfToText(pdfBuffer: Buffer): Promise<string> {
+    const pdf = await getDocument({ data: pdfBuffer }).promise;
+    const numPages = pdf.numPages;
+    const textPages = [];
 
-### Advanced Transcription
+    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .filter(isTextItem)
+        .map(item => item.str)
+        .join(" ");
+      textPages.push(pageText);
+    }
 
-The TranscriptionService provides:
-
-- Local and cloud-based transcription options
-- CUDA acceleration support
-- Audio format conversion and normalization
-- Debug logging and error handling
-
-## Trust Score System
-
-The system includes a sophisticated trust score management system:
-
-```typescript
-interface RecommenderMetrics {
-  trustScore: number;
-  totalRecommendations: number;
-  successfulRecs: number;
-  avgTokenPerformance: number;
-  riskScore: number;
-  consistencyScore: number;
-  virtualConfidence: number;
+    return textPages.join("\n");
+  }
 }
 ```
 
-Key features include:
+## Advanced Memory Management
 
-- Historical metrics tracking
-- Performance analysis
-- Risk assessment
-- Consistency evaluation
-
-## Browser Automation
-
-The BrowserService provides advanced web interaction capabilities:
-
-- CAPTCHA handling
-- Ad blocking
-- Content extraction
-- Proxy support
-- Cache management
+### Retrievable Memory System
 
 ```typescript
-const browserService = BrowserService.getInstance(runtime);
-const content = await browserService.getPageContent(url);
+class MemoryManager {
+  async getMemories({
+    agentId,
+    roomId,
+    count
+  }: {
+    agentId: string;
+    roomId: string;
+    count: number;
+  }): Promise<Memory[]> {
+    // Implement memory retrieval logic
+  }
+
+  async createMemory(memory: Memory, allowDuplicates: boolean = false): Promise<void> {
+    // Implement memory storage logic
+  }
+}
+```
+
+### Trust Score Database
+
+Implement advanced scoring systems:
+
+```typescript
+class TrustScoreDatabase {
+  async calculateValidationTrust(tokenAddress: string): number {
+    const sql = `
+      SELECT rm.trust_score
+      FROM token_recommendations tr
+      JOIN recommender_metrics rm ON tr.recommender_id = rm.recommender_id
+      WHERE tr.token_address = ?;
+    `;
+    
+    const rows = this.db.prepare(sql).all(tokenAddress);
+    if (rows.length === 0) return 0;
+    
+    const totalTrust = rows.reduce((acc, row) => acc + row.trust_score, 0);
+    return totalTrust / rows.length;
+  }
+}
+```
+
+## Plugin Development
+
+### Creating Custom Plugins
+
+```typescript
+const customPlugin: Plugin = {
+  name: "custom-plugin",
+  description: "Custom Plugin for Eliza",
+  actions: [
+    // Custom actions
+  ],
+  evaluators: [
+    // Custom evaluators
+  ],
+  providers: [
+    // Custom providers
+  ]
+};
+```
+
+### Advanced Action Development
+
+```typescript
+export const complexAction: Action = {
+  name: "COMPLEX_ACTION",
+  similes: ["ALTERNATIVE_NAME", "OTHER_NAME"],
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    // Implement validation logic
+    return true;
+  },
+  handler: async (
+    runtime: IAgentRuntime,
+    message: Memory,
+    state: State,
+    options: { [key: string]: unknown },
+    callback?: HandlerCallback
+  ): Promise<boolean> => {
+    // Implement complex handling logic
+    return true;
+  }
+};
+```
+
+## Advanced Configuration
+
+### Custom Runtime Configuration
+
+```typescript
+const customRuntime = new AgentRuntime({
+  databaseAdapter: new PostgresDatabaseAdapter(config),
+  modelProvider: new OpenAIProvider(apiKey),
+  plugins: [
+    solanaPlugin,
+    customPlugin
+  ],
+  services: [
+    new VideoService(),
+    new ImageDescriptionService(),
+    new SpeechService()
+  ]
+});
+```
+
+### Advanced Model Configuration
+
+```typescript
+const modelConfig = {
+  modelClass: ModelClass.LARGE,
+  temperature: 0.7,
+  maxTokens: 2000,
+  topP: 0.9,
+  frequencyPenalty: 0.5,
+  presencePenalty: 0.5
+};
+
+const response = await generateText({
+  runtime,
+  context: prompt,
+  ...modelConfig
+});
+```
+
+## Performance Optimization
+
+### Caching Strategy
+
+```typescript
+class CacheManager {
+  private cache: NodeCache;
+  private cacheDir: string;
+
+  constructor() {
+    this.cache = new NodeCache({ stdTTL: 300 });
+    this.cacheDir = path.join(__dirname, "cache");
+    this.ensureCacheDirectoryExists();
+  }
+
+  private async getCachedData<T>(key: string): Promise<T | null> {
+    // Implement tiered caching strategy
+  }
+}
+```
+
+### Queue Management
+
+```typescript
+class QueueManager {
+  private queue: string[] = [];
+  private processing: boolean = false;
+
+  async processQueue(): Promise<void> {
+    if (this.processing || this.queue.length === 0) {
+      return;
+    }
+
+    this.processing = true;
+    while (this.queue.length > 0) {
+      const item = this.queue.shift();
+      await this.processItem(item);
+    }
+    this.processing = false;
+  }
+}
 ```
 
 ## Best Practices
 
-### Memory Management
-
-- Implement proper memory cleanup and garbage collection
-- Use the caching system effectively
-- Monitor memory usage in long-running processes
-
 ### Error Handling
 
-- Implement comprehensive error handling
-- Use the logging system effectively
-- Monitor system performance
-
-### Performance Optimization
-
-- Use batch processing when possible
-- Implement proper caching strategies
-- Monitor and optimize database queries
-
-## Configuration Options
-
-### Environment Variables
-
-Key configuration options include:
-
-```bash
-CUDA_PATH=/usr/local/cuda  # For GPU acceleration
-OPENAI_API_KEY=sk-...      # For OpenAI integration
-ELEVENLABS_API_KEY=...     # For voice synthesis
-```
-
-### Runtime Configuration
-
-The runtime can be configured with various options:
-
 ```typescript
-const runtime = {
-  character: {
-    settings: {
-      model: "gpt-4",
-      temperature: 0.7,
-      maxTokens: 2048,
-    },
-  },
-  // Additional configuration options
-};
-```
-
-## Advanced Features
-
-### Custom Actions
-
-Implement custom actions for specialized behavior:
-
-```typescript
-class CustomAction extends BaseAction {
-  async execute(context: ActionContext): Promise<ActionResult> {
-    // Custom implementation
-    return {
-      success: true,
-      data: {},
-    };
+try {
+  const result = await complexOperation();
+  if (!result) {
+    throw new Error("Operation failed");
   }
+  return result;
+} catch (error) {
+  console.error("Error in operation:", error);
+  await errorReporting.log(error);
+  throw new OperationalError("Failed to complete operation", { cause: error });
 }
 ```
 
-### Custom Evaluators
-
-Create specialized evaluators for specific use cases:
+### Resource Management
 
 ```typescript
-class CustomEvaluator extends BaseEvaluator {
-  async evaluate(context: EvaluatorContext): Promise<EvaluationResult> {
-    // Custom evaluation logic
-    return {
-      score: 0.95,
-      confidence: 0.8,
-    };
+class ResourceManager {
+  private resources: Map<string, Resource> = new Map();
+  
+  async acquire(id: string): Promise<Resource> {
+    // Implement resource acquisition with timeout
+  }
+  
+  async release(id: string): Promise<void> {
+    // Implement resource cleanup
   }
 }
 ```
-
-## Security Considerations
-
-- Implement proper input validation
-- Use secure token management
-- Monitor system access
-- Implement rate limiting
-- Use proper encryption for sensitive data
 
 ## Troubleshooting
 
-Common issues and solutions:
+### Common Issues
 
-1. Memory leaks
-
+1. Memory Leaks
    - Monitor memory usage
    - Implement proper cleanup
-   - Use garbage collection
+   - Use WeakMap for caching
 
-2. Performance issues
+2. Performance Bottlenecks
+   - Profile slow operations
+   - Implement batching
+   - Use connection pooling
 
-   - Optimize database queries
-   - Implement proper caching
-   - Use batch processing
+3. Integration Issues
+   - Verify API credentials
+   - Check network connectivity
+   - Validate request formatting
 
-3. Integration issues
-   - Check API keys and permissions
-   - Verify network connectivity
-   - Monitor API rate limits
+### Debugging
+
+```typescript
+const debug = require('debug')('eliza:advanced');
+
+debug('Detailed operation info: %O', {
+  operation: 'complexOperation',
+  parameters: params,
+  result: result
+});
+```
+
+## Further Resources
+
+- [Infrastructure Guide](../advanced/infrastructure.md) for deployment
+- [Trust Engine Documentation](../advanced/trust-engine.md) for scoring system
+- [Autonomous Trading Guide](../advanced/autonomous-trading.md) for trading features
+- [Fine-tuning Guide](../advanced/fine-tuning.md) for model optimization
