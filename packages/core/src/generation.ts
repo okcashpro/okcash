@@ -72,7 +72,6 @@ export async function generateText({
     const max_response_length = models[provider].settings.maxOutputTokens;
 
     const apiKey = runtime.token;
-    console.log("runtime",runtime);
 
     try {
         elizaLogger.debug(
