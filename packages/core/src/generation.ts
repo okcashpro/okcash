@@ -312,6 +312,25 @@ export async function generateText({
                 console.debug("Received response from Ollama model.");
                 break;
 
+            case ModelProviderName.HEURIST: {
+                elizaLogger.debug("Initializing Heurist model.");
+                const heurist = createOpenAI({ apiKey: apiKey, baseURL: endpoint });
+
+                const { text: heuristResponse } = await aiGenerateText({
+                    model: heurist.languageModel(model),
+                    prompt: context,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = heuristResponse;
+                elizaLogger.debug("Received response from Heurist model.");
+                break;
+            }
+
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
                 elizaLogger.error(errorMessage);
@@ -681,6 +700,12 @@ export const generateImage = async (
         width: number;
         height: number;
         count?: number;
+        negativePrompt?: string;
+        numIterations?: number;
+        guidanceScale?: number;
+        seed?: number;
+        modelId?: string;
+        jobId?: string;
     },
     runtime: IAgentRuntime
 ): Promise<{
@@ -696,14 +721,40 @@ export const generateImage = async (
 
     const model = getModel(runtime.character.modelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.character.modelProvider].imageSettings;
-    // some fallbacks for backwards compat, should remove in the future
-    const apiKey =
-        runtime.token ??
-        runtime.getSetting("TOGETHER_API_KEY") ??
-        runtime.getSetting("OPENAI_API_KEY");
-
+    const apiKey = runtime.token ?? runtime.getSetting("HEURIST_API_KEY") ??  runtime.getSetting("TOGETHER_API_KEY") ?? runtime.getSetting("OPENAI_API_KEY");    
     try {
-        if (runtime.character.modelProvider === ModelProviderName.LLAMACLOUD) {
+        if (runtime.character.modelProvider === ModelProviderName.HEURIST) {
+            const response = await fetch('http://sequencer.heurist.xyz/submit_job', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    job_id: data.jobId || crypto.randomUUID(),
+                    model_input: {
+                        SD: {
+                            prompt: data.prompt,
+                            neg_prompt: data.negativePrompt,
+                            num_iterations: data.numIterations || 20,
+                            width: data.width || 512,
+                            height: data.height || 512,
+                            guidance_scale: data.guidanceScale,
+                            seed: data.seed || -1,
+                        }
+                    },
+                    model_id: data.modelId || 'PepeXL', // Default to SD 1.5 if not specified
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Heurist image generation failed: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            return { success: true, data: [result.url] };
+        }
+        else if (runtime.character.modelProvider === ModelProviderName.LLAMACLOUD) {
             const together = new Together({ apiKey: apiKey as string });
             const response = await together.images.create({
                 model: "black-forest-labs/FLUX.1-schnell",
