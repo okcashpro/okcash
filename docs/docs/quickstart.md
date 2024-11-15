@@ -2,112 +2,165 @@
 sidebar_position: 2
 ---
 
-# Quickstart
+# Quickstart Guide
 
-## Install Node.js
+## Prerequisites
 
-https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+Before getting started with Eliza, ensure you have:
 
-## Using pnpm
+- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [pnpm](https://pnpm.io/installation)
+- Git for version control
+- A code editor (VS Code recommended)
+- CUDA Toolkit (optional, for GPU acceleration)
 
-We use pnpm to manage our dependencies. It is faster and more efficient than npm, and it supports workspaces.
-https://pnpm.io/installation
+## Installation
 
-## Edit the .env file
+1. **Clone and Install**
 
-- Copy .env.example to .env and fill in the appropriate values
-- Edit the TWITTER environment variables to add your bot's username and password
+```bash
+# Clone the repository
+git clone https://github.com/ai16z/eliza.git
+cd eliza
 
-## Edit the character file
+# Install dependencies
+pnpm install
 
-- Check out the file `src/core/defaultCharacter.ts` - you can modify this
-- You can also load characters with the `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` and run multiple bots at the same time.
-
-### Run with Llama
-
-You can run Llama 70B or 405B models by setting the `XAI_MODEL` environment variable to `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` or `meta-llama/Meta-Llama-3.1-405B-Instruct`
-
-### Run with Grok
-
-You can run Grok models by setting the `XAI_MODEL` environment variable to `grok-beta`
-
-### Run with OpenAI
-
-You can run OpenAI models by setting the `XAI_MODEL` environment variable to `gpt-4o-mini` or `gpt-4o`
-
-# Requires Node 20+
-
-If you are getting strange issues when starting up, make sure you're using Node 20+. Some APIs are not compatible with previous versions. You can check your node version with `node -v`. If you need to install a new version of node, we recommend using [nvm](https://github.com/nvm-sh/nvm).
-
-## Additional Requirements
-
-You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
-
-```
+# Install optional Sharp package if needed
 pnpm install --include=optional sharp
 ```
 
-# Environment Setup
+2. **Configure Environment**
 
-You will need to add environment variables to your .env file to connect to various platforms:
-
+```bash
+# Copy example environment file
+cp .env.example .env
 ```
+
+Edit `.env` and add your values:
+
+```bash
 # Required environment variables
-# Start Discord
-DISCORD_APPLICATION_ID=
-DISCORD_API_TOKEN= # Bot token
-
-# Start Twitter
-TWITTER_USERNAME= # Account username
-TWITTER_PASSWORD= # Account password
-TWITTER_EMAIL= # Account email
-TWITTER_COOKIES= # Account cookies
+DISCORD_APPLICATION_ID=  # For Discord integration
+DISCORD_API_TOKEN=      # Bot token
+OPENAI_API_KEY=        # OpenAI API key (starting with sk-*)
+ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
 ```
 
-# Local Setup
+## Choose Your Model
 
-## CUDA Setup
+Eliza supports multiple AI models:
 
-If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
+- **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
+- **Grok**: Set `XAI_MODEL=grok-beta`
+- **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
 
+For local inference:
+
+1. Set `XAI_MODEL` to your chosen model
+2. Leave `X_SERVER_URL` and `XAI_API_KEY` blank
+3. The system will automatically download the model from Hugging Face
+
+## Create Your First Agent
+
+1. **Edit the Character File**
+   Check out `src/core/defaultCharacter.ts` to customize your agent's personality and behavior.
+
+You can also load custom characters:
+
+```bash
+pnpm start --characters="path/to/your/character.json"
 ```
-pnpm install
+
+2. **Start the Agent**
+
+```bash
+pnpm start
+```
+
+## Platform Integration
+
+### Discord Bot Setup
+
+1. Create a new application at [Discord Developer Portal](https://discord.com/developers/applications)
+2. Create a bot and get your token
+3. Add bot to your server using OAuth2 URL generator
+4. Set `DISCORD_API_TOKEN` and `DISCORD_APPLICATION_ID` in your `.env`
+
+### Twitter Integration
+
+Add to your `.env`:
+
+```bash
+TWITTER_USERNAME=  # Account username
+TWITTER_PASSWORD=  # Account password
+TWITTER_EMAIL=    # Account email
+TWITTER_COOKIES=  # Account cookies
+```
+
+### Telegram Bot
+1. Create a bot
+2. Add your bot token to `.env`:
+
+```bash
+TELEGRAM_BOT_TOKEN=your_token_here
+```
+
+## Optional: GPU Acceleration
+
+If you have an NVIDIA GPU:
+
+```bash
+# Install CUDA support
 npx --no node-llama-cpp source download --gpu cuda
+
+# Ensure CUDA Toolkit, cuDNN, and cuBLAS are installed
 ```
 
-Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
+## Basic Usage Examples
 
-## Running locally
+### Chat with Your Agent
 
-Add XAI_MODEL and set it to one of the above options from [Run with
-Llama](#run-with-llama) - you can leave X_SERVER_URL and XAI_API_KEY blank, it
-downloads the model from huggingface and queries it locally
-
-# Cloud Setup (with OpenAI)
-
-In addition to the environment variables above, you will need to add the following:
-
-```
-# OpenAI handles the bulk of the work with chat, TTS, image recognition, etc.
-OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
-
-# The agent can also ask Claude for help if you have an API key
-ANTHROPIC_API_KEY=
-
-# For Elevenlabs voice generation on Discord voice
-ELEVENLABS_XI_API_KEY= # API key from elevenlabs
-
-# ELEVENLABS SETTINGS
-ELEVENLABS_MODEL_ID=eleven_multilingual_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
+```bash
+# Start chat interface
+pnpm run shell
 ```
 
-# Discord Bot
+### Run Multiple Agents
 
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
+```bash
+pnpm start --characters="agent1.json,agent2.json"
+```
+
+## Common Issues & Solutions
+
+1. **Node.js Version**
+
+   - Ensure Node.js 22+ is installed
+   - Use `node -v` to check version
+   - Consider using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
+
+2. **Sharp Installation**
+   If you see Sharp-related errors:
+
+   ```bash
+   pnpm install --include=optional sharp
+   ```
+
+3. **CUDA Setup**
+   - Verify CUDA Toolkit installation
+   - Check GPU compatibility
+   - Ensure proper environment variables are set
+
+## Next Steps
+
+Once you have your agent running, explore:
+
+1. 🤖 [Understand Agents](./core/agents.md)
+2. 📝 [Create Custom Characters](./core/characterfile.md)
+3. ⚡ [Add Custom Actions](./core/actions.md)
+4. 🔧 [Advanced Configuration](./guides/configuration.md)
+
+For detailed API documentation, troubleshooting, and advanced features, check out our [full documentation](https://ai16z.github.io/eliza/).
+
+Join our [Discord community](https://discord.gg/ai16z) for support and updates!
