@@ -23,7 +23,8 @@ enum ModelProviderName {
     LLAMALOCAL,
     GOOGLE,
     REDPILL,
-    OPENROUTER
+    OPENROUTER,
+    HEURIST,
 }
 ```
 
