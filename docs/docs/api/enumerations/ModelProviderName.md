@@ -109,3 +109,14 @@
 #### Defined in
 
 [packages/core/src/types.ts:128](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L128)
+
+
+***
+
+### HEURIST
+
+> **HEURIST**: `"heurist"`
+
+#### Defined in
+
+[packages/core/src/types.ts:132](https://github.com/ai16z/eliza/blob/4d1e66cbf7deea87a8a67525670a963cd00108bc/packages/core/src/types.ts#L132)
