@@ -293,7 +293,6 @@ export async function generateText({
             case ModelProviderName.HEURIST: {
                 elizaLogger.debug("Initializing Heurist model.");
                 console.log("apiKey", apiKey);   
-                const API_KEY = "loadtesting#loadtesting-bot"
                 console.log("API_KEY", API_KEY);
                 const heurist = createOpenAI({ apiKey: API_KEY, baseURL: endpoint });
 
