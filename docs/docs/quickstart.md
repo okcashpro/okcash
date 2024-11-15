@@ -18,80 +18,95 @@ Before getting started with Eliza, ensure you have:
 
 1. **Clone and Install**
 
-Please be sure to check what the [latest available stable version tag](https://github.com/ai16z/eliza/tags) is.
+   Please be sure to check what the [latest available stable version tag](https://github.com/ai16z/eliza/tags) is.
 
-```bash
-# Clone the repository
-git clone https://github.com/ai16z/eliza.git
-# Enter directory
-cd eliza
-# Switch to tagged release
-git checkout v0.0.10
+   Clone the repository
+   ```bash
+   git clone https://github.com/ai16z/eliza.git
+   ```
 
-# Install dependencies
-pnpm install
-```
+   Enter directory
+   ```bash
+   cd eliza
+   ```
+
+   Switch to latest tagged release
+   ```bash
+   git checkout v0.0.10
+   ```
+
+   Install dependencies
+   ```bash
+   pnpm install
+   ```
 
 2. **Configure Environment**
 
-```bash
-# Copy example environment file
-cp .env.example .env
-```
+   Copy example environment file
+   ```bash
+   cp .env.example .env
+   ```
 
-Edit `.env` and add your values:
+   Edit `.env` and add your values:
 
-```bash
-# Required environment variables
-DISCORD_APPLICATION_ID=  # For Discord integration
-DISCORD_API_TOKEN=      # Bot token
-OPENAI_API_KEY=        # OpenAI API key (starting with sk-*)
-ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
-```
+   ```bash
+   # Suggested quickstart environment variables
+   DISCORD_APPLICATION_ID=  # For Discord integration
+   DISCORD_API_TOKEN=      # Bot token
+   OPENAI_API_KEY=        # OpenAI API key (starting with sk-*)
+   ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
+   ```
 
 ## Choose Your Model
 
-Eliza supports multiple AI models:
+  Eliza supports multiple AI models:
 
-- **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
-- **Grok**: Set `XAI_MODEL=grok-beta`
-- **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
+  - **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
+  - **Grok**: Set `XAI_MODEL=grok-beta`
+  - **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
 
-You set which model to use inside the character JSON file
+  You set which model to use inside the character JSON file
 
-### Local inference
+  ### Local inference
 
-#### For llama_local inference:
+    #### For llama_local inference:
 
-1. Set `XAI_MODEL` to your chosen model
-2. Leave `X_SERVER_URL` and `XAI_API_KEY` blank
-3. The system will automatically download the model from Hugging Face
-4. `LOCAL_LLAMA_PROVIDER` can be blank
+      1. Set `XAI_MODEL` to your chosen model
+      2. Leave `X_SERVER_URL` and `XAI_API_KEY` blank
+      3. The system will automatically download the model from Hugging Face
+      4. `LOCAL_LLAMA_PROVIDER` can be blank
 
-Note: llama_local requires a GPU, it currently will not work with CPU inference
+      Note: llama_local requires a GPU, it currently will not work with CPU inference
 
-#### For Ollama inference:
+    #### For Ollama inference:
 
-- If `OLLAMA_SERVER_URL` is left blank, it defaults to `localhost:11434`
-- If `OLLAMA_EMBEDDING_MODE` is left blank, it defaults to `mxbai-embed-large`
+      - If `OLLAMA_SERVER_URL` is left blank, it defaults to `localhost:11434`
+      - If `OLLAMA_EMBEDDING_MODE` is left blank, it defaults to `mxbai-embed-large`
 
 ## Create Your First Agent
 
 1. **Create a Character File**
+
    Check out `characters/trump.character.json` or `characters/tate.character.json` as a template you can use to copy and customize your agent's personality and behavior.
-   Additionally you can read `packages/core/src/defaultCharacter.ts`
+   Additionally you can read `core/src/core/defaultCharacter.ts` (in 0.0.10 but post-refactor will be in `packages/core/src/defaultCharacter.ts`)
 
-You can also load a specific characters only:
+   📝 [Character Documentation](./core/characterfile.md)
 
-```bash
-pnpm start --character="characters/trump.character.json"
-```
 
 2. **Start the Agent**
 
-```bash
-pnpm start
-```
+   Inform it which character you want to run:
+
+   ```bash
+   pnpm start --character="characters/trump.character.json"
+   ```
+
+   You can also load multiple characters with the characters option with a comma separated list:
+
+   ```bash
+   pnpm start --characters="characters/trump.character.json,characters/tate.character.json"
+   ```
+
 
 ## Platform Integration
 
@@ -164,15 +179,17 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
 
 3. **CUDA Setup**
    - Verify CUDA Toolkit installation
-   - Check GPU compatibility
+   - Check GPU compatibility with toolkit
    - Ensure proper environment variables are set
 
 4. **Exit Status 1**
    If you see
    ```
-   ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL @ai16z/agent@0.0.1 start: node --loader ts-node/esm src/index.ts "--isRoot"
-   Exit status 1
-   ELIFECYCLE Command failed with exit code 1.
+   triggerUncaughtException(
+   ^
+   [Object: null prototype] {
+   [Symbol(nodejs.util.inspect.custom)]: [Function: [nodejs.util.inspect.custom]]
+   }
    ```
 
    You can try these steps, which aim to add `@types/node` to various parts of the project
@@ -213,6 +230,18 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
 
    ```bash
    pnpm rebuild better-sqlite3
+   ```
+
+   If that doesn't work, try clearing your node_modules in the root folder
+
+   ```bash
+   rm -fr node_modules; rm pnpm-lock.yaml
+   ```
+
+   Then reinstall the requirements
+
+   ```bash
+   pnpm i
    ```
 
 ## Next Steps
