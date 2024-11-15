@@ -71,6 +71,37 @@ TOGETHER_API_KEY=
 XAI_MODEL=meta-llama/Llama-3.1-7b-instruct
 ```
 
+### Image Generation
+
+Configure image generation in your character file:
+
+```json
+{
+  "modelProvider": "HEURIST",
+  "settings": {
+    "imageSettings": {
+      "steps": 20,
+      "width": 512,
+      "height": 512
+    }
+  }
+}
+```
+
+Example usage:
+
+```typescript
+const result = await generateImage({
+    prompt: "a beautiful sunset",
+    width: 512,
+    height: 512,
+    numIterations: 20,     // optional
+    guidanceScale: 7.5,    // optional
+    seed: -1,             // optional
+    modelId: "PepeXL"     // optional
+}, runtime);
+```
+
 ## Character Configuration
 
 ### Character File Structure
