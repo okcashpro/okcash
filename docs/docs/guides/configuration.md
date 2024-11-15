@@ -92,11 +92,11 @@ Example usage:
 
 ```typescript
 const result = await generateImage({
-    prompt: "a beautiful sunset",
+    prompt: "pepe_frog, meme, web comic, cartoon, 3d render",
     width: 512,
     height: 512,
     numIterations: 20,     // optional
-    guidanceScale: 7.5,    // optional
+    guidanceScale: 3,    // optional
     seed: -1,             // optional
     modelId: "PepeXL"     // optional
 }, runtime);
