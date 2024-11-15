@@ -77,7 +77,7 @@ Note: llama_local requires a GPU, it currently will not work with CPU inference
 
 ## Create Your First Agent
 
-1. **Edit the Character File**
+1. **Create a Character File**
    Check out `characters/trump.character.json` or `characters/tate.character.json` as a template you can use to copy and customize your agent's personality and behavior.
    Additionally you can read `packages/core/src/defaultCharacter.ts`
 
