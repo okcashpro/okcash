@@ -8,26 +8,28 @@ sidebar_position: 2
 
 Before getting started with Eliza, ensure you have:
 
-- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Node.js 23.1.0](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
 - Git for version control
-- A code editor (VS Code recommended)
-- CUDA Toolkit (optional, for GPU acceleration)
+- A code editor ([VS Code](https://code.visualstudio.com/) or [VSCodium](https://vscodium.com) recommended)
+- [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (optional, for GPU acceleration)
 
 ## Installation
 
 1. **Clone and Install**
 
+Please be sure to check what the [latest available stable version tag](https://github.com/ai16z/eliza/tags) is.
+
 ```bash
 # Clone the repository
 git clone https://github.com/ai16z/eliza.git
+# Enter directory
 cd eliza
+# Switch to tagged release
+git checkout v0.0.10
 
 # Install dependencies
 pnpm install
-
-# Install optional Sharp package if needed
-pnpm install --include=optional sharp
 ```
 
 2. **Configure Environment**
@@ -55,21 +57,34 @@ Eliza supports multiple AI models:
 - **Grok**: Set `XAI_MODEL=grok-beta`
 - **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
 
-For local inference:
+You set which model to use inside the character JSON file
+
+### Local inference
+
+#### For llama_local inference:
 
 1. Set `XAI_MODEL` to your chosen model
 2. Leave `X_SERVER_URL` and `XAI_API_KEY` blank
 3. The system will automatically download the model from Hugging Face
+4. `LOCAL_LLAMA_PROVIDER` can be blank
+
+Note: llama_local requires a GPU, it currently will not work with CPU inference
+
+#### For Ollama inference:
+
+- If `OLLAMA_SERVER_URL` is left blank, it defaults to `localhost:11434`
+- If `OLLAMA_EMBEDDING_MODE` is left blank, it defaults to `mxbai-embed-large`
 
 ## Create Your First Agent
 
-1. **Edit the Character File**
-   Check out `src/core/defaultCharacter.ts` to customize your agent's personality and behavior.
+1. **Create a Character File**
+   Check out `characters/trump.character.json` or `characters/tate.character.json` as a template you can use to copy and customize your agent's personality and behavior.
+   Additionally you can read `packages/core/src/defaultCharacter.ts`
 
-You can also load custom characters:
+You can also load a specific characters only:
 
 ```bash
-pnpm start --characters="path/to/your/character.json"
+pnpm start --character="characters/trump.character.json"
 ```
 
 2. **Start the Agent**
@@ -95,7 +110,7 @@ Add to your `.env`:
 TWITTER_USERNAME=  # Account username
 TWITTER_PASSWORD=  # Account password
 TWITTER_EMAIL=    # Account email
-TWITTER_COOKIES=  # Account cookies
+TWITTER_COOKIES=  # Account cookies (auth_token and CT0)
 ```
 
 ### Telegram Bot
@@ -123,20 +138,20 @@ npx --no node-llama-cpp source download --gpu cuda
 
 ```bash
 # Start chat interface
-pnpm run shell
+pnpm start
 ```
 
 ### Run Multiple Agents
 
 ```bash
-pnpm start --characters="agent1.json,agent2.json"
+pnpm start --characters="characters/trump.character.json,characters/tate.character.json"
 ```
 
 ## Common Issues & Solutions
 
 1. **Node.js Version**
 
-   - Ensure Node.js 22+ is installed
+   - Ensure Node.js 23.1.0 is installed
    - Use `node -v` to check version
    - Consider using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
 
@@ -151,6 +166,54 @@ pnpm start --characters="agent1.json,agent2.json"
    - Verify CUDA Toolkit installation
    - Check GPU compatibility
    - Ensure proper environment variables are set
+
+4. **Exit Status 1**
+   If you see
+   ```
+   ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL @ai16z/agent@0.0.1 start: node --loader ts-node/esm src/index.ts "--isRoot"
+   Exit status 1
+   ELIFECYCLE Command failed with exit code 1.
+   ```
+
+   You can try these steps, which aim to add `@types/node` to various parts of the project
+
+    ```
+    # Add dependencies to workspace root
+    pnpm add -w -D ts-node typescript @types/node
+
+    # Add dependencies to the agent package specifically
+    pnpm add -D ts-node typescript @types/node --filter "@ai16z/agent"
+
+    # Also add to the core package since it's needed there too
+    pnpm add -D ts-node typescript @types/node --filter "@ai16z/eliza"
+
+    # First clean everything
+    pnpm clean
+
+    # Install all dependencies recursively
+    pnpm install -r
+
+    # Build the project
+    pnpm build
+
+    # Then try to start
+    pnpm start
+    ```
+5. **Better sqlite3 was compiled against a different Node.js version**
+   If you see
+
+   ```
+   Error starting agents: Error: The module '.../eliza-agents/dv/eliza/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+   was compiled against a different Node.js version using
+   NODE_MODULE_VERSION 131. This version of Node.js requires
+   NODE_MODULE_VERSION 127. Please try re-compiling or re-installing
+   ```
+
+   You can try this, which will attempt to rebuild better-sqlite3.
+
+   ```bash
+   pnpm rebuild better-sqlite3
+   ```
 
 ## Next Steps
 
