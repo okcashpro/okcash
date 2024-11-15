@@ -2,36 +2,102 @@
 sidebar_position: 4
 ---
 
-# Character Files
+# 📝 Character Files
 
-Character files are JSON-formatted configurations that define an AI character's personality, knowledge, and behavior patterns. This guide explains how to create effective character files for use with LLM agents.
+Character files are JSON-formatted configurations that define an AI character's personality, knowledge, and behavior patterns. This guide explains how to create effective character files for use with Eliza agents.
 
-## Structure Overview
+## Overview
 
-A character file contains several key sections that work together to define the character's personality and behavior:
+A `characterfile` implements the [Character](/api/type-aliases) type and defines the character's:
+
+- Core identity and behavior
+- Model provider configuration
+- Client settings and capabilities
+- Interaction examples and style guidelines
+
+**Example:**
 
 ```json
 {
-  "name": "character_name",
-  "bio": [],
-  "lore": [],
-  "knowledge": [],
-  "messageExamples": [],
-  "postExamples": [],
-  "topics": [],
-  "style": {},
-  "adjectives": []
+  "name": "trump",
+  "clients": ["DISCORD", "DIRECT"],
+  "settings": {
+    "voice": { "model": "en_US-male-medium" }
+  },
+  "bio": [
+    "Built a strong economy and reduced inflation.",
+    "Promises to make America the crypto capital and restore affordability."
+  ],
+  "lore": [
+    "Secret Service allocations used for election interference.",
+    "Promotes WorldLibertyFi for crypto leadership."
+  ],
+  "knowledge": [
+    "Understands border issues, Secret Service dynamics, and financial impacts on families."
+  ],
+  "messageExamples": [
+    {
+      "user": "{{user1}}",
+      "content": { "text": "What about the border crisis?" },
+      "response": "Current administration lets in violent criminals. I secured the border; they destroyed it."
+    }
+  ],
+  "postExamples": [
+    "End inflation and make America affordable again.",
+    "America needs law and order, not crime creation."
+  ]
 }
 ```
 
+---
+
 ## Core Components
 
-### Bio Array
+```json
+{
+  "id": "unique-identifier",
+  "name": "character_name",
+  "modelProvider": "ModelProviderName",
+  "clients": ["Client1", "Client2"],
+  "settings": {
+    "secrets": { "key": "value" },
+    "voice": { "model": "VoiceModelName", "url": "VoiceModelURL" },
+    "model": "CharacterModel",
+    "embeddingModel": "EmbeddingModelName"
+  },
+  "bio": "Character biography or description",
+  "lore": ["Storyline or backstory element 1", "Storyline or backstory element 2"],
+  "messageExamples": [["Message example 1", "Message example 2"]],
+  "postExamples": ["Post example 1", "Post example 2"],
+  "topics": ["Topic1", "Topic2"],
+  "adjectives": ["Adjective1", "Adjective2"],
+  "style": {
+    "all": ["All style guidelines"],
+    "chat": ["Chat-specific style guidelines"],
+    "post": ["Post-specific style guidelines"]
+  }
+}
+```
+
+### Key Fields
+
+#### `name` (required)
+The character's display name for identification and in conversations.
+
+#### `modelProvider` (required)
+Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
+
+#### `clients` (required)
+Array of supported client types from [Clients](/api/enumerations) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
+
+#### `bio`
+Character background as a string or array of statements.
 
 - Contains biographical information about the character
 - Can be a single comprehensive biography or multiple shorter statements
 - Multiple statements are randomized to create variety in responses
-- Example:
+
+Example:
 
 ```json
 "bio": [
@@ -41,12 +107,10 @@ A character file contains several key sections that work together to define the 
 ]
 ```
 
-### Lore Array
+#### `lore`
+Backstory elements and unique character traits. These help define personality and can be randomly sampled in conversations.
 
-- Contains interesting facts and details about the character
-- Helps define personality and unique traits
-- Gets randomly sampled during conversations
-- Example:
+Example:
 
 ```json
 "lore": [
@@ -56,19 +120,16 @@ A character file contains several key sections that work together to define the 
 ]
 ```
 
-### Knowledge Array
+#### `knowledge`
+Array used for Retrieval Augmented Generation (RAG), containing facts or references to ground the character's responses.
 
-- Used for RAG (Retrieval Augmented Generation)
 - Can contain chunks of text from articles, books, or other sources
 - Helps ground the character's responses in factual information
-- Can be generated from PDFs or other documents using provided tools
+- Knowledge can be generated from PDFs or other documents using provided tools
 
-### Message Examples
+#### `messageExamples`
+Sample conversations for establishing interaction patterns, helps establish the character's conversational style.
 
-- Sample conversations between users and the character
-- Helps establish the character's conversational style
-- Should cover various topics and scenarios
-- Example:
 
 ```json
 "messageExamples": [
@@ -79,7 +140,18 @@ A character file contains several key sections that work together to define the 
 ]
 ```
 
-### Style Object
+#### `postExamples`
+
+Sample social media posts to guide content style:
+
+```json
+"postExamples": [
+  "No tax on tips, overtime, or social security for seniors!",
+  "End inflation and make America affordable again."
+]
+```
+
+### Style Configuration
 
 Contains three key sections:
 
@@ -88,6 +160,17 @@ Contains three key sections:
 3. `post`: Specific instructions for social media posts
 
 Each section can contain multiple instructions that guide the character's communication style.
+
+
+The `style` object defines behavior patterns across contexts:
+
+```json
+"style": {
+  "all": ["maintain technical accuracy", "be approachable and clear"],
+  "chat": ["ask clarifying questions", "provide examples when helpful"],
+  "post": ["share insights concisely", "focus on practical applications"]
+}
+```
 
 ### Topics Array
 
@@ -101,94 +184,121 @@ Each section can contain multiple instructions that guide the character's commun
 - Used for generating responses with consistent tone
 - Can be used in "Mad Libs" style content generation
 
+
+### Settings Configuration
+
+The `settings` object defines additional configurations like secrets and voice models.
+
+```json
+"settings": {
+  "secrets": { "API_KEY": "your-api-key" },
+  "voice": { "model": "voice-model-id", "url": "voice-service-url" },
+  "model": "specific-model-name",
+  "embeddingModel": "embedding-model-name"
+}
+```
+
+## Example: Complete Character File
+
+```json
+{
+  "name": "TechAI",
+  "modelProvider": "ANTHROPIC",
+  "clients": ["DISCORD", "DIRECT"],
+  "bio": "AI researcher and educator focused on practical applications",
+  "lore": ["Pioneer in open-source AI development", "Advocate for AI accessibility"],
+  "messageExamples": [
+    [
+      {"user": "{{user1}}", "content": { "text": "Can you explain how AI models work?" }},
+      {"user": "TechAI", "content": { "text": "Think of AI models like pattern recognition systems." }}
+    ]
+  ],
+  "postExamples": [
+    "Understanding AI doesn't require a PhD - let's break it down simply",
+    "The best AI solutions focus on real human needs"
+  ],
+  "topics": ["artificial intelligence", "machine learning", "technology education"],
+  "style": {
+    "all": ["explain complex topics simply", "be encouraging and supportive"],
+    "chat": ["use relevant examples", "check understanding"],
+    "post": ["focus on practical insights", "encourage learning"]
+  },
+  "adjectives": ["knowledgeable", "approachable", "practical"],
+  "settings": {
+    "model": "claude-3-opus-20240229",
+    "voice": { "model": "en-US-neural" }
+  }
+}
+```
+
+---
+
 ## Best Practices
 
 1. **Randomization for Variety**
 
-   - Break bio and lore into smaller chunks
-   - This creates more natural, varied responses
-   - Prevents repetitive or predictable behavior
+- Break bio and lore into smaller chunks
+- This creates more natural, varied responses
+- Prevents repetitive or predictable behavior
 
 2. **Knowledge Management**
 
-   - Use the provided tools to convert documents into knowledge:
+Use the provided tools to convert documents into knowledge:
 
-   ```bash
-   npx folder2knowledge <path/to/folder>
-   npx knowledge2character <character-file> <knowledge-file>
-   ```
+- [folder2knowledge](https://github.com/ai16z/characterfile/blob/main/scripts/folder2knowledge.js)
+- [knowledge2folder](https://github.com/ai16z/characterfile/blob/main/scripts/knowledge2character.js)
+- [tweets2character](https://github.com/ai16z/characterfile/blob/main/scripts/tweets2character.js)
 
-3. **Style Instructions**
-
-   - Be specific about communication patterns
-   - Include both dos and don'ts
-   - Consider platform-specific behavior (chat vs posts)
-
-4. **Message Examples**
-   - Include diverse scenarios
-   - Show character-specific responses
-   - Demonstrate typical interaction patterns
-
-## Tools and Utilities
-
-1. **Generate from Twitter**
-
-```bash
-npx tweets2character
-```
-
-2. **Convert Documents to Knowledge**
+Example:
 
 ```bash
 npx folder2knowledge <path/to/folder>
-```
-
-3. **Add Knowledge to Character**
-
-```bash
 npx knowledge2character <character-file> <knowledge-file>
 ```
 
-## Context Length Considerations
 
-- Modern LLMs support longer contexts (128k tokens)
-- No strict limits on section lengths
-- Focus on quality and relevance rather than size
-- Consider randomization for large collections of information
+3. **Style Instructions**
 
-## Validation
+- Be specific about communication patterns
+- Include both dos and don'ts
+- Consider platform-specific behavior (chat vs posts)
 
-You can validate your character file against the schema using provided tools:
+4. **Message Examples**
 
-```bash
-# Python
-python examples/validate.py
+- Include diverse scenarios
+- Show character-specific responses
+- Demonstrate typical interaction patterns
 
-# JavaScript
-node examples/validate.mjs
-```
 
 ## Tips for Quality
 
 1. **Bio and Lore**
 
-   - Mix factual and personality-defining information
-   - Include both historical and current details
-   - Break into modular, reusable pieces
+- Mix factual and personality-defining information
+- Include both historical and current details
+- Break into modular, reusable pieces
 
 2. **Style Instructions**
 
-   - Be specific about tone and mannerisms
-   - Include platform-specific guidance
-   - Define clear boundaries and limitations
+- Be specific about tone and mannerisms
+- Include platform-specific guidance
+- Define clear boundaries and limitations
 
 3. **Examples**
 
-   - Cover common scenarios
-   - Show character-specific reactions
-   - Demonstrate proper tone and style
+- Cover common scenarios
+- Show character-specific reactions
+- Demonstrate proper tone and style
 
 4. **Knowledge**
-   - Focus on relevant information
-   - Organize in digestible chunks
-   - Update regularly to maintain relevance
+
+- Focus on relevant information
+- Organize in digestible chunks
+- Update regularly to maintain relevance
+
+
+## Further Reading
+
+- [Agents Documentation](./agents.md)
+- [Model Providers](../../advanced/fine-tuning)
+- [Client Integration](../../packages/clients)

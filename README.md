@@ -6,6 +6,7 @@
 ### [For Japanese Version: 日本語の説明](./README_JA.md)
 ### [For Korean Version: 한국어 설명](./README_KOR.md)
 ### [For French Version: Instructions en français](./README_FR.md)
+### [For Portuguese Version: Instruções em português](./README_PTBR.md)
 
 ## Features
 
@@ -181,3 +182,11 @@ Tests are written using Jest and can be found in `src/**/*.test.ts` files. The t
 -   Run tests in sequence (--runInBand)
 
 To create new tests, add a `.test.ts` file adjacent to the code you're testing.
+
+## Docker
+
+For development purposes, you can run the docker container with the following command:
+
+```
+pnpm docker
+```

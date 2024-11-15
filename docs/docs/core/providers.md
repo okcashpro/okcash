@@ -1,19 +1,35 @@
----
-sidebar_position: 3
-title: Providers
----
+# 🔌 Providers
 
-# Providers
+[Providers](/api/interfaces) are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
+
 
 ## Overview
 
-Providers are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
+A provider's primary purpose is to:
+- Supply dynamic contextual information
+- Integrate with the agent runtime
+- Format information for conversation templates
+- Maintain consistent data access
 
-## Core Provider Types
+### Core Structure
 
-### 1. Time Provider
+```typescript
+interface Provider {
+  get: (
+    runtime: IAgentRuntime, 
+    message: Memory, 
+    state?: State
+  ) => Promise<string>;
+}
+```
 
+---
+
+## Built-in Providers
+
+### Time Provider
 Provides temporal context for agent interactions:
+
 
 ```typescript
 const timeProvider: Provider = {
@@ -26,60 +42,58 @@ const timeProvider: Provider = {
 };
 ```
 
-### 2. Token Provider
-
-Provides comprehensive token analytics and market data:
-
-```typescript
-interface TokenAnalytics {
-  security: TokenSecurityData;
-  tradeData: TokenTradeData;
-  holderDistribution: string;
-  marketMetrics: {
-    price: number;
-    volume24h: number;
-    priceChange: number;
-  };
-}
-```
-
-Key features:
-
-- Real-time price and volume data
-- Security metrics and risk assessment
-- Holder distribution analysis
-- DexScreener integration
-- Smart caching system
-
-### 3. Wallet Provider
-
-Manages cryptocurrency wallet interactions:
+### Facts Provider
+From bootstrap plugin - maintains conversation facts:
 
 ```typescript
-interface WalletPortfolio {
-  totalUsd: string;
-  totalSol?: string;
-  items: Array<{
-    name: string;
-    symbol: string;
-    balance: string;
-    valueUsd: string;
-    valueSol?: string;
-  }>;
-}
+const factsProvider: Provider = {
+    get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
+        // Create embedding for recent messages and retrieve relevant facts
+        const recentMessages = formatMessages({
+            messages: state?.recentMessagesData?.slice(-10),
+            actors: state?.actorsData,
+        });
+        const embedding = await embed(runtime, recentMessages);
+        const memoryManager = new MemoryManager({ runtime, tableName: "facts" });
+        const recentFactsData = await memoryManager.getMemories({
+            roomId: message.roomId,
+            count: 10,
+            agentId: runtime.agentId,
+        });
+
+        // Combine and format facts
+        const allFacts = [...recentFactsData];  // Deduplication can be skipped if no overlap
+        const formattedFacts = formatFacts(allFacts);
+
+        return `Key facts that ${runtime.character.name} knows:\n${formattedFacts}`;
+    },
+};
+
+export { factsProvider };
 ```
 
-Capabilities:
+### Boredom Provider 
+From bootstrap plugin - manages conversation dynamics and engagement by calculating the boredom level of an agent based on recent messages in a chat room. 
 
-- Portfolio valuation
-- Token balances
-- Price tracking
-- Performance metrics
-- Multi-currency support
 
-### 4. Boredom Provider
+1. **Data Structures**:
+   - **boredomLevels**: An array of objects, each representing a boredom level with a minimum score and a set of status messages that reflect the agent's current engagement.
+   - **interestWords**, **cringeWords**, and **negativeWords**: Arrays of words that influence the boredom score based on their presence in messages.
 
-Manages conversation dynamics and engagement:
+2. **Boredom Calculation**:
+
+- The `boredomProvider` gets recent messages from the agent’s conversation over the last 15 minutes.
+- It calculates a **boredom score** by analyzing the text of these messages. The score is influenced by:
+  - **Interest words**: Decrease boredom (subtract 1 point).
+  - **Cringe words**: Increase boredom (add 1 point).
+  - **Negative words**: Increase boredom (add 1 point).
+  - **Exclamation marks**: Increase boredom (add 1 point).
+  - **Question marks**: Increase or decrease boredom depending on the sender.
+   
+3. **Boredom Level**:
+   - The boredom score is matched to a level from the `boredomLevels` array, which defines how engaged the agent feels.
+   - A random status message from the selected boredom level is chosen and the agent’s name is inserted into the message.
+
 
 ```typescript
 interface BoredomLevel {
@@ -87,6 +101,24 @@ interface BoredomLevel {
   statusMessages: string[];
 }
 ```
+The result is a message that reflects the agent's perceived level of engagement in the conversation, based on their recent interactions.
+
+
+```typescript
+const boredomProvider: Provider = {
+  get: async (runtime: IAgentRuntime, message: Memory) => {
+    const messages = await runtime.messageManager.getMemories({
+      roomId: message.roomId,
+      count: 10
+    });
+    
+    return messages.length > 0 ? 
+      "Actively engaged in conversation" :
+      "No recent interactions";
+  }
+};
+```
+
 
 Features:
 
@@ -96,90 +128,60 @@ Features:
 - Sentiment analysis
 - Response adaptation
 
+---
+
 ## Implementation
 
-### Provider Interface
+### Basic Provider Template
 
 ```typescript
-interface Provider {
-  get: (
-    runtime: IAgentRuntime,
-    message: Memory,
-    state?: State,
-  ) => Promise<string>;
-}
-```
+import { Provider, IAgentRuntime, Memory, State } from '@ai16z/eliza';
 
-### Data Caching System
-
-```typescript
-class CacheManager {
-  private cache: NodeCache;
-  private cacheDir: string;
-
-  constructor(ttl: number = 300) {
-    // 5 minutes default
-    this.cache = new NodeCache({ stdTTL: ttl });
-    this.cacheDir = path.join(__dirname, "cache");
+const customProvider: Provider = {
+  get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
+    // Get relevant data using runtime services
+    const memories = await runtime.messageManager.getMemories({
+      roomId: message.roomId,
+      count: 5
+    });
+    
+    // Format and return context
+    return formatContextString(memories);
   }
-
-  async getCachedData<T>(key: string): Promise<T | null> {
-    // Check memory cache
-    const memoryCache = this.cache.get<T>(key);
-    if (memoryCache) return memoryCache;
-
-    // Check file cache
-    return this.readFromFileCache<T>(key);
-  }
-}
-```
-
-### Error Handling
-
-```typescript
-async function withErrorHandling<T>(
-  operation: () => Promise<T>,
-  fallback: T,
-  retries: number = 3,
-): Promise<T> {
-  try {
-    return await operation();
-  } catch (error) {
-    console.error(`Provider error: ${error.message}`);
-    if (retries > 0) {
-      await delay(1000);
-      return withErrorHandling(operation, fallback, retries - 1);
-    }
-    return fallback;
-  }
-}
-```
-
-## Provider Configuration
-
-### Base Settings
-
-```typescript
-const PROVIDER_CONFIG = {
-  API_ENDPOINTS: {
-    BIRDEYE: "https://public-api.birdeye.so",
-    DEXSCREENER: "https://api.dexscreener.com/latest/dex",
-    HELIUS: "https://mainnet.helius-rpc.com",
-  },
-  CACHE_TTL: 300, // 5 minutes
-  MAX_RETRIES: 3,
-  RETRY_DELAY: 2000,
 };
 ```
 
-### Rate Limiting
+### Memory Integration
 
 ```typescript
-const rateLimiter = new RateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-});
+const memoryProvider: Provider = {
+  get: async (runtime: IAgentRuntime, message: Memory) => {
+    // Get recent messages
+    const messages = await runtime.messageManager.getMemories({
+      roomId: message.roomId,
+      count: 5,
+      unique: true
+    });
+    
+    // Get user descriptions
+    const descriptions = await runtime.descriptionManager.getMemories({
+      roomId: message.roomId,
+      userId: message.userId
+    });
+    
+    // Combine and format
+    return `
+Recent Activity:
+${formatMessages(messages)}
+
+User Context:
+${formatDescriptions(descriptions)}
+    `.trim();
+  }
+};
 ```
+
+---
 
 ## Best Practices
 
@@ -220,45 +222,75 @@ async function fetchDataWithCache<T>(
 - Implement rate limiting
 - Handle sensitive data appropriately
 
-## Integration Examples
+---
 
-### Combining Multiple Providers
+## Integration with Runtime
+
+Providers are registered with the [AgentRuntime](/api/classes/AgentRuntime):
 
 ```typescript
-async function getMarketContext(
-  runtime: IAgentRuntime,
-  message: Memory,
-): Promise<string> {
-  const [timeContext, walletInfo, tokenData] = await Promise.all([
-    timeProvider.get(runtime, message),
-    walletProvider.get(runtime, message),
-    tokenProvider.get(runtime, message),
-  ]);
+// Register provider
+runtime.registerContextProvider(customProvider);
 
-  return formatContext({
-    time: timeContext,
-    wallet: walletInfo,
-    token: tokenData,
-  });
-}
+// Providers are accessed through composeState
+const state = await runtime.composeState(message);
 ```
 
-### Custom Provider Implementation
+## Example: Complete Provider
 
 ```typescript
-const marketSentimentProvider: Provider = {
-  get: async (runtime: IAgentRuntime, message: Memory) => {
-    const sentiment = await analyzeSentiment(message.content);
-    const marketMetrics = await getMarketMetrics();
+import { 
+  Provider, 
+  IAgentRuntime, 
+  Memory, 
+  State 
+} from '@ai16z/eliza';
 
-    return formatSentimentResponse(sentiment, marketMetrics);
-  },
+const comprehensiveProvider: Provider = {
+  get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
+    try {
+      // Get recent messages
+      const messages = await runtime.messageManager.getMemories({
+        roomId: message.roomId,
+        count: 5
+      });
+      
+      // Get user context
+      const userContext = await runtime.descriptionManager.getMemories({
+        roomId: message.roomId,
+        userId: message.userId
+      });
+      
+      // Get relevant facts
+      const facts = await runtime.messageManager.getMemories({
+        roomId: message.roomId,
+        tableName: "facts",
+        count: 3
+      });
+      
+      // Format comprehensive context
+      return `
+# Conversation Context
+${messages.map(m => `- ${m.content.text}`).join('\n')}
+
+# User Information
+${userContext.map(c => c.content.text).join('\n')}
+
+# Related Facts
+${facts.map(f => `- ${f.content.text}`).join('\n')}
+      `.trim();
+      
+    } catch (error) {
+      console.error("Provider error:", error);
+      return "Context temporarily unavailable";
+    }
+  }
 };
 ```
 
-## Troubleshooting
+---
 
-### Common Issues and Solutions
+## Troubleshooting
 
 1. **Stale Data**
 
@@ -287,5 +319,10 @@ const marketSentimentProvider: Provider = {
      // Attempt alternative data sources
    };
    ```
+   
+---
 
-## Additional Resources
+## Further Reading
+
+- [Agent Runtime](./agents.md)
+- [Memory System](../../packages/core)

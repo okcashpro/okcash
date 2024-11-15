@@ -1,302 +1,319 @@
 ---
-sidebar_position: 1
-title: Infrastructure
+sidebar_position: 14
 ---
 
-# Infrastructure
+# 🏗️ Infrastructure Guide
 
 ## Overview
 
-Eliza uses a flexible, multi-database architecture that supports different storage backends through a unified adapter interface. The system supports PostgreSQL (with Supabase), SQLite, and SQL.js, allowing for both cloud and local deployments.
-
-## Database Architecture
-
-### Adapter Pattern
-
-Eliza implements a database adapter pattern that provides a consistent interface across different database backends:
-
-```typescript
-// Core adapter interface implemented by all database providers
-class DatabaseAdapter {
-  async getRoom(roomId: UUID): Promise<UUID | null>;
-  async getParticipantsForAccount(userId: UUID): Promise<Participant[]>;
-  async getMemories(params: {...}): Promise<Memory[]>;
-  // ... other interface methods
-}
-```
-
-### Supported Databases
-
-1. **PostgreSQL/Supabase** (`PostgresDatabaseAdapter`)
-
-   - Full-featured cloud database with vector search capabilities
-   - Supports real-time subscriptions
-   - Built-in user authentication
-   - Row-level security policies
-
-2. **SQLite** (`SqliteDatabaseAdapter`)
-
-   - Local filesystem storage
-   - Vector similarity search via SQLite extensions
-   - Suitable for edge deployments
-   - Embedded database operations
-
-3. **SQL.js** (`SqlJsDatabaseAdapter`)
-   - In-memory database operations
-   - Browser-compatible
-   - No filesystem dependencies
-   - Ideal for testing and development
+Eliza's infrastructure is built on a flexible database architecture that supports multiple adapters and efficient data storage mechanisms for AI agent interactions, memory management, and relationship tracking.
 
 ## Core Components
 
-### 1. Memory Storage System
+### Database Adapters
+Eliza supports multiple database backends through a pluggable adapter system:
 
-The memory system uses a sophisticated schema that supports:
+- **PostgreSQL** - Full-featured adapter with vector search capabilities 
+- **SQLite** - Lightweight local database option
+- **SQL.js** - In-memory database for testing and development
+- **Supabase** - Cloud-hosted PostgreSQL with additional features
+
+### Schema Structure
+
+The database schema includes several key tables:
 
 ```sql
-CREATE TABLE memories (
-    "id" UUID PRIMARY KEY,
-    "type" TEXT NOT NULL,
-    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "content" JSONB NOT NULL,
-    "embedding" vector(1536), -- Vector storage for embeddings
-    "userId" UUID,
-    "roomId" UUID,
-    "unique" BOOLEAN DEFAULT true
-);
+- accounts: User and agent identities
+- rooms: Conversation spaces
+- memories: Vector-indexed message storage
+- goals: Agent objectives and progress
+- participants: Room membership tracking
+- relationships: Inter-agent connections
 ```
 
-Key features:
+## Setting Up Infrastructure
 
-- Vector embeddings for semantic search
-- Content deduplication via the `unique` flag
-- JSON storage for flexible content types
-- Relationship tracking through foreign keys
+### PostgreSQL Setup
 
-### 2. User Management
-
+1. **Install PostgreSQL Extensions**
 ```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+```
+
+2. **Initialize Core Tables**
+```sql
+-- Create base tables
 CREATE TABLE accounts (
     "id" UUID PRIMARY KEY,
-    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT,
     "username" TEXT,
     "email" TEXT NOT NULL,
     "avatarUrl" TEXT,
-    "details" JSONB DEFAULT '{}',
-    "is_agent" BOOLEAN DEFAULT false
+    "details" JSONB DEFAULT '{}'::jsonb
 );
-```
 
-Features:
-
-- Flexible user details storage using JSONB
-- Agent/user differentiation
-- Integration with auth systems
-
-### 3. Relationship System
-
-```sql
-CREATE TABLE relationships (
+CREATE TABLE rooms (
     "id" UUID PRIMARY KEY,
-    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "userA" UUID NOT NULL,
-    "userB" UUID NOT NULL,
-    "status" TEXT,
-    "userId" UUID NOT NULL
+    "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE memories (
+    "id" UUID PRIMARY KEY,
+    "type" TEXT NOT NULL,
+    "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "content" JSONB NOT NULL,
+    "embedding" vector(1536),
+    "userId" UUID REFERENCES accounts("id"),
+    "agentId" UUID REFERENCES accounts("id"),
+    "roomId" UUID REFERENCES rooms("id"),
+    "unique" BOOLEAN DEFAULT true NOT NULL
 );
 ```
 
-Supports:
-
-- Bi-directional relationships
-- Relationship status tracking
-- Friend recommendations
-
-## Security Features
-
-### Row Level Security (RLS)
-
-PostgreSQL deployment includes comprehensive RLS policies:
-
+3. **Set Up Indexes**
 ```sql
--- Example RLS policies
-CREATE POLICY "Enable read access for all users"
-ON "public"."accounts" FOR SELECT
-USING (true);
-
-CREATE POLICY "Can select and update all data"
-ON "public"."accounts"
-USING (("auth"."uid"() = "id"))
-WITH CHECK (("auth"."uid"() = "id"));
+CREATE INDEX idx_memories_embedding ON memories 
+    USING hnsw ("embedding" vector_cosine_ops);
+CREATE INDEX idx_memories_type_room ON memories("type", "roomId");
+CREATE INDEX idx_participants_user ON participants("userId");
+CREATE INDEX idx_participants_room ON participants("roomId");
 ```
 
-### Authentication Integration
-
-- Built-in support for Supabase Auth
-- JWT validation
-- Role-based access control
-
-## Deployment Options
-
-### 1. Cloud Deployment (Supabase)
+### Connection Configuration
 
 ```typescript
-// Initialize cloud database
-const supabaseAdapter = new SupabaseDatabaseAdapter(
-  "https://your-project.supabase.co",
-  "your-supabase-key",
-);
+// PostgreSQL Configuration
+const postgresConfig = {
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+};
+
+// Supabase Configuration
+const supabaseConfig = {
+  supabaseUrl: process.env.SUPABASE_URL,
+  supabaseKey: process.env.SUPABASE_KEY
+};
 ```
 
-Features:
+## Memory Management
 
-- Automated backups
-- Scalable vector operations
-- Real-time capabilities
-- Built-in monitoring
+### Vector Storage
 
-### 2. Local Deployment (SQLite)
+The memory system uses vector embeddings for semantic search:
 
 ```typescript
-// Initialize local database
-const sqliteAdapter = new SqliteDatabaseAdapter(
-  new Database("path/to/database.db"),
-);
+async function storeMemory(runtime: IAgentRuntime, content: string) {
+    const embedding = await runtime.embed(content);
+    
+    await runtime.databaseAdapter.createMemory({
+        type: "message",
+        content: { text: content },
+        embedding,
+        roomId: roomId,
+        userId: userId
+    });
+}
 ```
 
-Features:
-
-- File-based storage
-- Portable deployment
-- Low resource requirements
-- Embedded vector operations
-
-### 3. In-Memory Deployment (SQL.js)
+### Memory Retrieval
 
 ```typescript
-// Initialize in-memory database
-const sqljsAdapter = new SqlJsDatabaseAdapter(new Database());
+async function searchMemories(runtime: IAgentRuntime, query: string) {
+    const embedding = await runtime.embed(query);
+    
+    return runtime.databaseAdapter.searchMemoriesByEmbedding(
+        embedding,
+        {
+            match_threshold: 0.8,
+            count: 10,
+            tableName: "memories"
+        }
+    );
+}
 ```
 
-Features:
+## Scaling Considerations
 
-- No persistence requirements
-- Fast operations
-- Perfect for testing
-- Browser compatibility
+### Database Optimization
 
-## Vector Search Capabilities
+1. **Index Management**
+   - Use HNSW indexes for vector similarity search
+   - Create appropriate indexes for frequent query patterns
+   - Regularly analyze and update index statistics
 
-All database adapters support vector operations for semantic search:
-
-```typescript
-async searchMemoriesByEmbedding(
-  embedding: number[],
-  params: {
-    match_threshold?: number;
-    count?: number;
-    roomId?: UUID;
-    unique?: boolean;
-    tableName: string;
-  }
-): Promise<Memory[]>
-```
-
-### Implementation Details:
-
-- PostgreSQL: Uses pgvector extension
-- SQLite: Uses sqlite-vss extension
-- SQL.js: Uses custom vector similarity functions
-
-## Best Practices
-
-1. **Database Selection**
-
-   - Use Supabase for production deployments
-   - Use SQLite for edge computing/local deployments
-   - Use SQL.js for testing and browser-based applications
-
-2. **Memory Management**
-
-   ```typescript
-   // Example of proper memory handling
-   async function withConnection(fn: (client: PoolClient) => Promise<T>) {
-     const client = await pool.connect();
-     try {
-       return await fn(client);
-     } finally {
-       client.release();
-     }
-   }
-   ```
-
-3. **Error Handling**
-
-   ```typescript
-   try {
-     await adapter.createMemory(memory, tableName);
-   } catch (error) {
-     console.error("Database error:", error);
-     // Implement proper error recovery
-   }
-   ```
-
-4. **Connection Pooling**
+2. **Connection Pooling**
    ```typescript
    const pool = new Pool({
-     max: 20,
-     idleTimeoutMillis: 30000,
-     connectionTimeoutMillis: 2000,
+       max: 20,               // Maximum pool size
+       idleTimeoutMillis: 30000,
+       connectionTimeoutMillis: 2000
    });
    ```
 
-## Performance Optimization
+3. **Query Optimization**
+   - Use prepared statements
+   - Implement efficient pagination
+   - Optimize vector similarity searches
 
-1. **Indexing Strategy**
+### High Availability
 
+1. **Database Replication**
+   - Set up read replicas for scaling read operations
+   - Configure streaming replication for failover
+   - Implement connection retry logic
+
+2. **Backup Strategy**
    ```sql
-   -- Essential indexes for performance
-   CREATE INDEX idx_memories_embedding ON memories
-   USING hnsw ("embedding" vector_cosine_ops);
-   CREATE INDEX idx_memories_type_room ON memories("type", "roomId");
+   -- Regular backups
+   pg_dump -Fc mydb > backup.dump
+   
+   -- Point-in-time recovery
+   pg_basebackup -D backup -Fp -Xs -P
    ```
 
-2. **Query Optimization**
+## Security
 
-   ```typescript
-   // Use parameterized queries
-   const stmt = db.prepare(
-     "SELECT * FROM memories WHERE type = ? AND roomId = ?",
-   );
-   ```
+### Access Control
 
-3. **Caching**
-   - Implement memory caching for frequently accessed data
-   - Use embedding caching for similar queries
+1. **Row Level Security**
+```sql
+ALTER TABLE memories ENABLE ROW LEVEL SECURITY;
 
-## Monitoring and Maintenance
+CREATE POLICY "memories_isolation" ON memories
+    USING (auth.uid() = "userId" OR auth.uid() = "agentId");
+```
 
-1. **Health Checks**
+2. **Role Management**
+```sql
+-- Create application role
+CREATE ROLE app_user;
 
-   ```typescript
-   async testConnection(): Promise<boolean> {
-     const result = await client.query("SELECT NOW()");
-     return !!result.rows[0];
-   }
-   ```
+-- Grant necessary permissions
+GRANT SELECT, INSERT ON memories TO app_user;
+GRANT USAGE ON SCHEMA public TO app_user;
+```
 
-2. **Logging**
-   ```typescript
-   // Implement comprehensive logging
-   const loggingAdapter = createLoggingDatabaseAdapter(baseAdapter);
-   ```
+### Data Protection
 
-## Additional Resources
+1. **Encryption**
+   - Use TLS for connections
+   - Encrypt sensitive data at rest
+   - Implement key rotation
+
+2. **Audit Logging**
+```sql
+CREATE TABLE logs (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "userId" UUID NOT NULL REFERENCES accounts("id"),
+    "body" JSONB NOT NULL,
+    "type" TEXT NOT NULL,
+    "roomId" UUID NOT NULL REFERENCES rooms("id")
+);
+```
+
+## Monitoring
+
+### Health Checks
+
+```typescript
+async function checkDatabaseHealth(): Promise<boolean> {
+    try {
+        await db.query('SELECT 1');
+        return true;
+    } catch (error) {
+        console.error('Database health check failed:', error);
+        return false;
+    }
+}
+```
+
+### Performance Metrics
+
+Track key metrics:
+- Query performance
+- Connection pool utilization
+- Memory usage
+- Vector search latency
+
+## Maintenance
+
+### Regular Tasks
+
+1. **Vacuum Operations**
+```sql
+-- Regular vacuum
+VACUUM ANALYZE memories;
+
+-- Analyze statistics
+ANALYZE memories;
+```
+
+2. **Index Maintenance**
+```sql
+-- Reindex vector similarity index
+REINDEX INDEX idx_memories_embedding;
+```
+
+### Data Lifecycle
+
+1. **Archival Strategy**
+   - Archive old conversations
+   - Compress inactive memories
+   - Implement data retention policies
+
+2. **Cleanup Jobs**
+```typescript
+async function cleanupOldMemories() {
+    const cutoffDate = new Date();
+    cutoffDate.setMonth(cutoffDate.getMonth() - 6);
+    
+    await db.query(`
+        DELETE FROM memories 
+        WHERE "createdAt" < $1
+    `, [cutoffDate]);
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Connection Problems**
+   - Check connection pool settings
+   - Verify network connectivity
+   - Review firewall rules
+
+2. **Performance Issues**
+   - Analyze query plans
+   - Check index usage
+   - Monitor resource utilization
+
+3. **Vector Search Problems**
+   - Verify embedding dimensions
+   - Check similarity thresholds
+   - Review index configuration
+
+### Diagnostic Queries
+
+```sql
+-- Check connection status
+SELECT * FROM pg_stat_activity;
+
+-- Analyze query performance
+EXPLAIN ANALYZE 
+SELECT * FROM memories 
+WHERE embedding <-> $1 < 0.3 
+LIMIT 10;
+
+-- Monitor index usage
+SELECT schemaname, tablename, indexname, idx_scan 
+FROM pg_stat_user_indexes;
+```
+
+## Further Reading
 
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-- [SQLite Documentation](https://www.sqlite.org/docs.html)
-- [Supabase Documentation](https://supabase.com/docs)
-- [Vector Search Guide](https://supabase.com/docs/guides/database/extensions/pgvector)
-
-For deployment-specific configurations and advanced setup options, refer to the respective database documentation.
