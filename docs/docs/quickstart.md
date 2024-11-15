@@ -167,6 +167,54 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    - Check GPU compatibility
    - Ensure proper environment variables are set
 
+4. **Exit Status 1**
+   If you see
+   ```
+   ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL @ai16z/agent@0.0.1 start: node --loader ts-node/esm src/index.ts "--isRoot"
+   Exit status 1
+   ELIFECYCLE Command failed with exit code 1.
+   ```
+
+   You can try these steps, which aim to add `@types/node` to various parts of the project
+
+    ```
+    # Add dependencies to workspace root
+    pnpm add -w -D ts-node typescript @types/node
+
+    # Add dependencies to the agent package specifically
+    pnpm add -D ts-node typescript @types/node --filter "@ai16z/agent"
+
+    # Also add to the core package since it's needed there too
+    pnpm add -D ts-node typescript @types/node --filter "@ai16z/eliza"
+
+    # First clean everything
+    pnpm clean
+
+    # Install all dependencies recursively
+    pnpm install -r
+
+    # Build the project
+    pnpm build
+
+    # Then try to start
+    pnpm start
+    ```
+5. **Better sqlite3 was compiled against a different Node.js version**
+   If you see
+
+   ```
+   Error starting agents: Error: The module '.../eliza-agents/dv/eliza/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+   was compiled against a different Node.js version using
+   NODE_MODULE_VERSION 131. This version of Node.js requires
+   NODE_MODULE_VERSION 127. Please try re-compiling or re-installing
+   ```
+
+   You can try this, which will attempt to rebuild better-sqlite3.
+
+   ```bash
+   pnpm rebuild better-sqlite3
+   ```
+
 ## Next Steps
 
 Once you have your agent running, explore:
