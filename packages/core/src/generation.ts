@@ -72,6 +72,7 @@ export async function generateText({
     const max_response_length = models[provider].settings.maxOutputTokens;
 
     const apiKey = runtime.token;
+    console.log("runtime",runtime);
 
     try {
         elizaLogger.debug(
@@ -288,6 +289,28 @@ export async function generateText({
                 }
                 console.debug("Received response from Ollama model.");
                 break;
+
+            case ModelProviderName.HEURIST: {
+                elizaLogger.debug("Initializing Heurist model.");
+                console.log("apiKey", apiKey);   
+                const API_KEY = "loadtesting#loadtesting-bot"
+                console.log("API_KEY", API_KEY);
+                const heurist = createOpenAI({ apiKey: API_KEY, baseURL: endpoint });
+
+                const { text: heuristResponse } = await aiGenerateText({
+                    model: heurist.languageModel(model),
+                    prompt: context,
+                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = heuristResponse;
+                elizaLogger.debug("Received response from Heurist model.");
+                break;
+            }
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
@@ -679,8 +702,7 @@ export const generateImage = async (
 
     const model = getModel(runtime.character.modelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.character.modelProvider].imageSettings;
-    const apiKey = runtime.token ?? runtime.getSetting("HEURIST_API_KEY") ??  runtime.getSetting("TOGETHER_API_KEY") ?? runtime.getSetting("OPENAI_API_KEY");
-
+    const apiKey = runtime.token ?? runtime.getSetting("HEURIST_API_KEY") ??  runtime.getSetting("TOGETHER_API_KEY") ?? runtime.getSetting("OPENAI_API_KEY");    
     try {
         if (runtime.character.modelProvider === ModelProviderName.HEURIST) {
             const response = await fetch('http://sequencer.heurist.xyz/submit_job', {

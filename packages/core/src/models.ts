@@ -230,7 +230,7 @@ const models: Models = {
         },
         endpoint: "https://llm-gateway.heurist.xyz",
         model: {
-            [ModelClass.SMALL]: "dolphin-2.9-llama3-8b",
+            [ModelClass.SMALL]: "meta-llama/llama-3-70b-instruct",
             [ModelClass.MEDIUM]: "meta-llama/llama-3-70b-instruct",
             [ModelClass.LARGE]: "meta-llama/llama-3.1-405b-instruct",
             [ModelClass.EMBEDDING]: "" , //Add later,

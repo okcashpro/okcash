@@ -4,7 +4,7 @@ export const defaultCharacter: Character = {
     name: "Eliza",
     plugins: [],
     clients: [],
-    modelProvider: ModelProviderName.OPENAI,
+    modelProvider: ModelProviderName.HEURIST,
     settings: {
         secrets: {},
         voice: {
