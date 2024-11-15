@@ -1,11 +1,11 @@
-import { Service } from "@ai16z/eliza/src/types.ts";
+import { Service } from "@ai16z/eliza";
 import {
     IAgentRuntime,
     ITranscriptionService,
     Media,
     ServiceType,
-} from "@ai16z/eliza/src/types.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+} from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";

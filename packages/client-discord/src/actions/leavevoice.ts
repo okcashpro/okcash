@@ -12,7 +12,7 @@ import {
     IAgentRuntime,
     Memory,
     State,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 
 export default {
     name: "LEAVE_VOICE",

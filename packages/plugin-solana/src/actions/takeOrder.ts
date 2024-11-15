@@ -5,7 +5,7 @@ import {
     Content,
     ActionExample,
     ModelClass,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import * as fs from "fs";
 import settings from "@ai16z/eliza/src/settings.ts";
 import { composeContext } from "@ai16z/eliza/src/context.ts";

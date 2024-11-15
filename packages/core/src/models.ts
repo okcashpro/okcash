@@ -1,7 +1,7 @@
 import settings from "./settings.ts";
 import { Models, ModelProviderName, ModelClass } from "./types.ts";
 
-const models: Models = {
+export const models: Models = {
     [ModelProviderName.OPENAI]: {
         endpoint: "https://api.openai.com/v1",
         settings: {
@@ -233,13 +233,11 @@ const models: Models = {
             [ModelClass.SMALL]: "meta-llama/llama-3-70b-instruct",
             [ModelClass.MEDIUM]: "meta-llama/llama-3-70b-instruct",
             [ModelClass.LARGE]: "meta-llama/llama-3.1-405b-instruct",
-            [ModelClass.EMBEDDING]: "" , //Add later,
+            [ModelClass.EMBEDDING]: "", //Add later,
             [ModelClass.IMAGE]: "PepeXL",
         },
-    }
+    },
 };
-
-
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
     return models[provider].model[type];
@@ -248,5 +246,3 @@ export function getModel(provider: ModelProviderName, type: ModelClass) {
 export function getEndpoint(provider: ModelProviderName) {
     return models[provider].endpoint;
 }
-
-export default models;
