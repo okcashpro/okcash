@@ -1,11 +1,7 @@
 // Current image recognition service -- local recognition working, no openai recognition
-import models from "@ai16z/eliza/src/models.ts";
-import { Service } from "@ai16z/eliza/src/types.ts";
-import {
-    IAgentRuntime,
-    ModelProviderName,
-    ServiceType,
-} from "@ai16z/eliza/src/types.ts";
+import { models } from "@ai16z/eliza";
+import { Service } from "@ai16z/eliza";
+import { IAgentRuntime, ModelProviderName, ServiceType } from "@ai16z/eliza";
 import {
     AutoProcessor,
     AutoTokenizer,

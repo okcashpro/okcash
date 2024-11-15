@@ -1,5 +1,5 @@
-import elizaLogger from "@ai16z/eliza/src/logger.ts";
-import { Client, IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import { elizaLogger } from "@ai16z/eliza";
+import { Client, IAgentRuntime } from "@ai16z/eliza";
 import { TelegramClient } from "./telegramClient.ts";
 
 export const TelegramClientInterface: Client = {

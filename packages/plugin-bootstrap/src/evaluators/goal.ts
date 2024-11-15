@@ -10,7 +10,7 @@ import {
     type Goal,
     type State,
     Evaluator,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 
 const goalsTemplate = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.

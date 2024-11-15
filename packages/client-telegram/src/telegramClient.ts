@@ -1,6 +1,6 @@
 import { Context, Telegraf } from "telegraf";
 
-import { IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime } from "@ai16z/eliza";
 import { MessageManager } from "./messageManager.ts";
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 
@@ -33,7 +33,7 @@ export class TelegramClient {
             });
 
             console.log(`Bot username: @${this.bot.botInfo?.username}`);
-            
+
             this.messageManager.bot = this.bot;
 
             // Include if you want to view message maanger bot info
@@ -69,9 +69,14 @@ export class TelegramClient {
             });
 
             this.bot.catch((err, ctx) => {
-                elizaLogger.error(`❌ Telegram Error for ${ctx.updateType}:`, err);
-                ctx.reply("An unexpected error occurred. Please try again later.");
-        });
+                elizaLogger.error(
+                    `❌ Telegram Error for ${ctx.updateType}:`,
+                    err
+                );
+                ctx.reply(
+                    "An unexpected error occurred. Please try again later."
+                );
+            });
 
             // Graceful shutdown handlers
             const shutdownHandler = async (signal: string) => {

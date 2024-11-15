@@ -1,13 +1,9 @@
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import {
-    generateText,
-    splitChunks,
-    trimTokens,
-} from "@ai16z/eliza/src/generation.ts";
-import { getActorDetails } from "@ai16z/eliza/src/messages.ts";
-import models from "@ai16z/eliza/src/models.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateText, splitChunks, trimTokens } from "@ai16z/eliza";
+import { getActorDetails } from "@ai16z/eliza";
+import { models } from "@ai16z/eliza";
+import { parseJSONObjectFromText } from "@ai16z/eliza";
 import {
     Action,
     ActionExample,
@@ -18,7 +14,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 
@@ -256,11 +252,7 @@ const summarizeAction = {
         const model = models[runtime.character.settings.model];
         const chunkSize = model.settings.maxContextLength - 1000;
 
-        const chunks = await splitChunks(
-            formattedMemories,
-            chunkSize,
-            0
-        );
+        const chunks = await splitChunks(formattedMemories, chunkSize, 0);
 
         const datestr = new Date().toUTCString().replace(/:/g, "-");
 

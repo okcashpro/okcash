@@ -2,7 +2,7 @@ export * from "./sqliteTables.ts";
 export * from "./types.ts";
 
 import { v4 } from "uuid";
-import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
+import { DatabaseAdapter } from "@ai16z/eliza";
 import {
     Account,
     Actor,
@@ -12,7 +12,7 @@ import {
     type Relationship,
     type UUID,
     Participant,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { sqliteTables } from "./sqliteTables.ts";
 import { Database } from "./types.ts";
 

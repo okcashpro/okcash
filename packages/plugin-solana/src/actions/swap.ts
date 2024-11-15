@@ -19,7 +19,7 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { TokenProvider } from "../providers/token.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { walletProvider, WalletProvider } from "../providers/wallet.ts";

@@ -24,7 +24,7 @@ export class WalletProvider {
         this.provider = getStarknetProvider(runtime);
     }
 
-    async getFormattedTokenBalances(): Promise<string> {\
+    async getFormattedTokenBalances(): Promise<string> {
         return "";
     }
 

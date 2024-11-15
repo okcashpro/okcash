@@ -3,7 +3,7 @@ import fs from "fs";
 import { composeContext } from "@ai16z/eliza/src/context.ts";
 import { generateText } from "@ai16z/eliza/src/generation.ts";
 import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import { IAgentRuntime, ModelClass } from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { ClientBase } from "./base.ts";
 

@@ -9,8 +9,8 @@ import {
     type UUID,
     Participant,
     Room,
-} from "@ai16z/eliza/src/types.ts";
-import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
+} from "@ai16z/eliza";
+import { DatabaseAdapter } from "@ai16z/eliza";
 import { v4 as uuid } from "uuid";
 export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     async getRoom(roomId: UUID): Promise<UUID | null> {

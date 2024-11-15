@@ -1,13 +1,7 @@
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "@ai16z/eliza/src/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import {
-    messageCompletionFooter,
-    shouldRespondFooter,
-} from "@ai16z/eliza/src/parsing.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateMessageResponse, generateShouldRespond } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
+import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
 import {
     Content,
     HandlerCallback,
@@ -21,10 +15,10 @@ import {
     ServiceType,
     State,
     UUID,
-} from "@ai16z/eliza/src/types.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
-import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
+} from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
+import { generateText, trimTokens } from "@ai16z/eliza";
+import { parseJSONObjectFromText } from "@ai16z/eliza";
 import {
     ChannelType,
     Client,
@@ -36,7 +30,6 @@ import {
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
-import { Service } from "@ai16z/eliza";
 
 const MAX_MESSAGE_LENGTH = 1900;
 async function generateSummary(

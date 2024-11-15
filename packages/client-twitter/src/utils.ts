@@ -2,7 +2,7 @@
 
 import { Tweet } from "agent-twitter-client";
 import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import { Content, Memory, UUID } from "@ai16z/eliza/src/types.ts";
+import { Content, Memory, UUID } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
@@ -129,7 +129,7 @@ export async function sendTweet(
             id: tweetResult.rest_id,
             text: tweetResult.legacy.full_text,
             conversationId: tweetResult.legacy.conversation_id_str,
-            //createdAt: 
+            //createdAt:
             timestamp: tweetResult.timestamp * 1000,
             userId: tweetResult.legacy.user_id_str,
             inReplyToStatusId: tweetResult.legacy.in_reply_to_status_id_str,
@@ -209,7 +209,9 @@ function splitTweetContent(content: string): string[] {
 }
 
 function splitParagraph(paragraph: string, maxLength: number): string[] {
-    const sentences = paragraph.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g) || [paragraph];
+    const sentences = paragraph.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g) || [
+        paragraph,
+    ];
     const chunks: string[] = [];
     let currentChunk = "";
 
@@ -231,7 +233,9 @@ function splitParagraph(paragraph: string, maxLength: number): string[] {
                 const words = sentence.split(" ");
                 currentChunk = "";
                 for (const word of words) {
-                    if ((currentChunk + " " + word).trim().length <= maxLength) {
+                    if (
+                        (currentChunk + " " + word).trim().length <= maxLength
+                    ) {
                         if (currentChunk) {
                             currentChunk += " " + word;
                         } else {

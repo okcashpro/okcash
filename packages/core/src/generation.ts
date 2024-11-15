@@ -14,7 +14,7 @@ import OpenAI from "openai";
 import { default as tiktoken, TiktokenModel } from "tiktoken";
 import Together from "together-ai";
 import { elizaLogger } from "./index.ts";
-import models from "./models.ts";
+import { models } from "./models.ts";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import {
     parseBooleanFromText,
@@ -153,7 +153,7 @@ export async function generateText({
                 break;
             }
 
-               case ModelProviderName.CLAUDE_VERTEX: {
+            case ModelProviderName.CLAUDE_VERTEX: {
                 elizaLogger.debug("Initializing Claude Vertex model.");
 
                 const anthropic = createAnthropic({ apiKey });
@@ -172,7 +172,9 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                elizaLogger.debug("Received response from Claude Vertex model.");
+                elizaLogger.debug(
+                    "Received response from Claude Vertex model."
+                );
                 break;
             }
 
@@ -314,12 +316,18 @@ export async function generateText({
 
             case ModelProviderName.HEURIST: {
                 elizaLogger.debug("Initializing Heurist model.");
-                const heurist = createOpenAI({ apiKey: apiKey, baseURL: endpoint });
+                const heurist = createOpenAI({
+                    apiKey: apiKey,
+                    baseURL: endpoint,
+                });
 
                 const { text: heuristResponse } = await aiGenerateText({
                     model: heurist.languageModel(model),
                     prompt: context,
-                    system: runtime.character.system ?? settings.SYSTEM_PROMPT ?? undefined,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
                     frequencyPenalty: frequency_penalty,
@@ -437,11 +445,9 @@ export async function generateShouldRespond({
 export async function splitChunks(
     content: string,
     chunkSize: number,
-    bleed: number = 100,
+    bleed: number = 100
 ): Promise<string[]> {
-    const encoding = tiktoken.encoding_for_model(
-        "gpt-4o-mini"
-    );
+    const encoding = tiktoken.encoding_for_model("gpt-4o-mini");
 
     const tokens = encoding.encode(content);
     const chunks: string[] = [];
@@ -721,40 +727,50 @@ export const generateImage = async (
 
     const model = getModel(runtime.character.modelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.character.modelProvider].imageSettings;
-    const apiKey = runtime.token ?? runtime.getSetting("HEURIST_API_KEY") ??  runtime.getSetting("TOGETHER_API_KEY") ?? runtime.getSetting("OPENAI_API_KEY");    
+    const apiKey =
+        runtime.token ??
+        runtime.getSetting("HEURIST_API_KEY") ??
+        runtime.getSetting("TOGETHER_API_KEY") ??
+        runtime.getSetting("OPENAI_API_KEY");
     try {
         if (runtime.character.modelProvider === ModelProviderName.HEURIST) {
-            const response = await fetch('http://sequencer.heurist.xyz/submit_job', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    job_id: data.jobId || crypto.randomUUID(),
-                    model_input: {
-                        SD: {
-                            prompt: data.prompt,
-                            neg_prompt: data.negativePrompt,
-                            num_iterations: data.numIterations || 20,
-                            width: data.width || 512,
-                            height: data.height || 512,
-                            guidance_scale: data.guidanceScale,
-                            seed: data.seed || -1,
-                        }
+            const response = await fetch(
+                "http://sequencer.heurist.xyz/submit_job",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`,
+                        "Content-Type": "application/json",
                     },
-                    model_id: data.modelId || 'PepeXL', // Default to SD 1.5 if not specified
-                })
-            });
+                    body: JSON.stringify({
+                        job_id: data.jobId || crypto.randomUUID(),
+                        model_input: {
+                            SD: {
+                                prompt: data.prompt,
+                                neg_prompt: data.negativePrompt,
+                                num_iterations: data.numIterations || 20,
+                                width: data.width || 512,
+                                height: data.height || 512,
+                                guidance_scale: data.guidanceScale,
+                                seed: data.seed || -1,
+                            },
+                        },
+                        model_id: data.modelId || "PepeXL", // Default to SD 1.5 if not specified
+                    }),
+                }
+            );
 
             if (!response.ok) {
-                throw new Error(`Heurist image generation failed: ${response.statusText}`);
+                throw new Error(
+                    `Heurist image generation failed: ${response.statusText}`
+                );
             }
 
             const result = await response.json();
             return { success: true, data: [result.url] };
-        }
-        else if (runtime.character.modelProvider === ModelProviderName.LLAMACLOUD) {
+        } else if (
+            runtime.character.modelProvider === ModelProviderName.LLAMACLOUD
+        ) {
             const together = new Together({ apiKey: apiKey as string });
             const response = await together.images.create({
                 model: "black-forest-labs/FLUX.1-schnell",

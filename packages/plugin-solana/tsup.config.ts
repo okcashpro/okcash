@@ -15,6 +15,9 @@ export default defineConfig({
         "https",
         "http",
         "agentkeepalive",
+        "bs58",
+        "buffer",
+        "@solana/buffer-layout",
         // Add other modules you want to externalize
     ],
 });
