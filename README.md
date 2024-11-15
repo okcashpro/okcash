@@ -182,3 +182,11 @@ Tests are written using Jest and can be found in `src/**/*.test.ts` files. The t
 -   Run tests in sequence (--runInBand)
 
 To create new tests, add a `.test.ts` file adjacent to the code you're testing.
+
+## Docker
+
+For development purposes, you can run the docker container with the following command:
+
+```
+pnpm docker
+```
