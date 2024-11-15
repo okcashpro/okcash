@@ -1,285 +1,364 @@
 ---
-sidebar_position: 1
-title: Autonomous Trading
+sidebar_position: 16
 ---
 
-# Autonomous Trading System
+# 📈 Autonomous Trading
 
 ## Overview
 
-Eliza's autonomous trading system provides a sophisticated framework for monitoring market conditions, analyzing tokens, and executing trades on Solana-based decentralized exchanges. The system combines real-time market data, technical analysis, and risk management to make informed trading decisions.
+Eliza's autonomous trading system enables automated token trading on the Solana blockchain. The system integrates with Jupiter aggregator for efficient swaps, implements smart order routing, and includes risk management features.
 
 ## Core Components
 
-### 1. Token Analysis Engine
-
-The system tracks multiple market indicators:
+### Token Provider
+Manages token information and market data:
 
 ```typescript
-interface TokenPerformance {
-  priceChange24h: number;
-  volumeChange24h: number;
-  trade_24h_change: number;
-  liquidity: number;
-  liquidityChange24h: number;
-  holderChange24h: number;
-  rugPull: boolean;
-  isScam: boolean;
-  marketCapChange24h: number;
-  sustainedGrowth: boolean;
-  rapidDump: boolean;
-  suspiciousVolume: boolean;
+class TokenProvider {
+    constructor(
+        private tokenAddress: string,
+        private walletProvider: WalletProvider
+    ) {
+        this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
+    }
+
+    async fetchPrices(): Promise<Prices> {
+        const { SOL, BTC, ETH } = TOKEN_ADDRESSES;
+        // Fetch current prices
+        return {
+            solana: { usd: "0" },
+            bitcoin: { usd: "0" },
+            ethereum: { usd: "0" }
+        };
+    }
+
+    async getProcessedTokenData(): Promise<ProcessedTokenData> {
+        return {
+            security: await this.fetchTokenSecurity(),
+            tradeData: await this.fetchTokenTradeData(),
+            holderDistributionTrend: await this.analyzeHolderDistribution(),
+            highValueHolders: await this.filterHighValueHolders(),
+            recentTrades: await this.checkRecentTrades(),
+            dexScreenerData: await this.fetchDexScreenerData()
+        };
+    }
 }
 ```
 
-### 2. Order Book Management
+### Swap Execution
+
+Implementation of token swaps using Jupiter:
+
+```typescript
+async function swapToken(
+    connection: Connection,
+    walletPublicKey: PublicKey,
+    inputTokenCA: string,
+    outputTokenCA: string,
+    amount: number
+): Promise<any> {
+    // Get token decimals
+    const decimals = await getTokenDecimals(connection, inputTokenCA);
+    const adjustedAmount = amount * (10 ** decimals);
+
+    // Fetch quote
+    const quoteResponse = await fetch(
+        `https://quote-api.jup.ag/v6/quote?inputMint=${inputTokenCA}` +
+        `&outputMint=${outputTokenCA}` +
+        `&amount=${adjustedAmount}` +
+        `&slippageBps=50`
+    );
+    
+    // Execute swap
+    const swapResponse = await fetch("https://quote-api.jup.ag/v6/swap", {
+        method: "POST",
+        body: JSON.stringify({
+            quoteResponse: await quoteResponse.json(),
+            userPublicKey: walletPublicKey.toString(),
+            wrapAndUnwrapSol: true
+        })
+    });
+
+    return swapResponse.json();
+}
+```
+
+## Position Management
+
+### Order Book System
 
 ```typescript
 interface Order {
-  userId: string;
-  ticker: string;
-  contractAddress: string;
-  timestamp: string;
-  buyAmount: number;
-  price: number;
+    userId: string;
+    ticker: string;
+    contractAddress: string;
+    timestamp: string;
+    buyAmount: number;
+    price: number;
+}
+
+class OrderBookProvider {
+    async addOrder(order: Order): Promise<void> {
+        let orderBook = await this.readOrderBook();
+        orderBook.push(order);
+        await this.writeOrderBook(orderBook);
+    }
+
+    async calculateProfitLoss(userId: string): Promise<number> {
+        const orders = await this.getUserOrders(userId);
+        return orders.reduce((total, order) => {
+            const currentPrice = this.getCurrentPrice(order.ticker);
+            const pl = (currentPrice - order.price) * order.buyAmount;
+            return total + pl;
+        }, 0);
+    }
 }
 ```
 
-### 3. Market Data Integration
-
-The system integrates with multiple data sources:
-
-- BirdEye API for real-time market data
-- DexScreener for liquidity analysis
-- Helius for on-chain data
-
-## Trading Features
-
-### 1. Real-Time Market Analysis
+### Position Sizing
 
 ```typescript
-const PROVIDER_CONFIG = {
-  BIRDEYE_API: "https://public-api.birdeye.so",
-  MAX_RETRIES: 3,
-  RETRY_DELAY: 2000,
-  TOKEN_SECURITY_ENDPOINT: "/defi/token_security?address=",
-  TOKEN_TRADE_DATA_ENDPOINT: "/defi/v3/token/trade-data/single?address=",
+async function calculatePositionSize(
+    tokenData: ProcessedTokenData,
+    riskLevel: "LOW" | "MEDIUM" | "HIGH"
+): Promise<CalculatedBuyAmounts> {
+    const { liquidity, marketCap } = tokenData.dexScreenerData.pairs[0];
+    
+    // Impact percentages based on liquidity
+    const impactPercentages = {
+        LOW: 0.01,    // 1% of liquidity
+        MEDIUM: 0.05, // 5% of liquidity
+        HIGH: 0.1     // 10% of liquidity
+    };
+
+    return {
+        none: 0,
+        low: liquidity.usd * impactPercentages.LOW,
+        medium: liquidity.usd * impactPercentages.MEDIUM,
+        high: liquidity.usd * impactPercentages.HIGH
+    };
+}
+```
+
+## Risk Management
+
+### Token Validation
+
+```typescript
+async function validateToken(token: TokenPerformance): Promise<boolean> {
+    const security = await fetchTokenSecurity(token.tokenAddress);
+    
+    // Red flags check
+    if (
+        security.rugPull ||
+        security.isScam ||
+        token.rapidDump ||
+        token.suspiciousVolume ||
+        token.liquidity.usd < 1000 ||  // Minimum $1000 liquidity
+        token.marketCap < 100000        // Minimum $100k market cap
+    ) {
+        return false;
+    }
+
+    // Holder distribution check
+    const holderData = await fetchHolderList(token.tokenAddress);
+    const topHolderPercent = calculateTopHolderPercentage(holderData);
+    if (topHolderPercent > 0.5) { // >50% held by top holders
+        return false;
+    }
+
+    return true;
+}
+```
+
+### Trade Management
+
+```typescript
+interface TradeManager {
+    async executeTrade(params: {
+        inputToken: string,
+        outputToken: string,
+        amount: number,
+        slippage: number
+    }): Promise<string>;
+
+    async monitorPosition(params: {
+        tokenAddress: string,
+        entryPrice: number,
+        stopLoss: number,
+        takeProfit: number
+    }): Promise<void>;
+
+    async closePosition(params: {
+        tokenAddress: string,
+        amount: number
+    }): Promise<string>;
+}
+```
+
+## Market Analysis
+
+### Price Data Collection
+
+```typescript
+async function collectMarketData(
+    tokenAddress: string
+): Promise<TokenTradeData> {
+    return {
+        price: await fetchCurrentPrice(tokenAddress),
+        volume_24h: await fetch24HourVolume(tokenAddress),
+        price_change_24h: await fetch24HourPriceChange(tokenAddress),
+        liquidity: await fetchLiquidity(tokenAddress),
+        holder_data: await fetchHolderData(tokenAddress),
+        trade_history: await fetchTradeHistory(tokenAddress)
+    };
+}
+```
+
+### Technical Analysis
+
+```typescript
+function analyzeMarketConditions(
+    tradeData: TokenTradeData
+): MarketAnalysis {
+    return {
+        trend: analyzePriceTrend(tradeData.price_history),
+        volume_profile: analyzeVolumeProfile(tradeData.volume_history),
+        liquidity_depth: analyzeLiquidityDepth(tradeData.liquidity),
+        holder_behavior: analyzeHolderBehavior(tradeData.holder_data)
+    };
+}
+```
+
+## Trade Execution
+
+### Swap Implementation
+
+```typescript
+async function executeSwap(
+    runtime: IAgentRuntime,
+    input: {
+        tokenIn: string,
+        tokenOut: string,
+        amountIn: number,
+        slippage: number
+    }
+): Promise<string> {
+    // Prepare transaction
+    const { swapTransaction } = await getSwapTransaction(input);
+    
+    // Sign transaction
+    const keypair = getKeypairFromPrivateKey(
+        runtime.getSetting("WALLET_PRIVATE_KEY")
+    );
+    transaction.sign([keypair]);
+    
+    // Execute swap
+    const signature = await connection.sendTransaction(transaction);
+    
+    // Confirm transaction
+    await connection.confirmTransaction({
+        signature,
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+    });
+
+    return signature;
+}
+```
+
+### DAO Integration
+
+```typescript
+async function executeSwapForDAO(
+    runtime: IAgentRuntime,
+    params: {
+        inputToken: string,
+        outputToken: string,
+        amount: number
+    }
+): Promise<string> {
+    const authority = getAuthorityKeypair(runtime);
+    const [statePDA, walletPDA] = await derivePDAs(authority);
+    
+    // Prepare instruction data
+    const instructionData = prepareSwapInstruction(params);
+    
+    // Execute swap through DAO
+    return invokeSwapDao(
+        connection,
+        authority,
+        statePDA,
+        walletPDA,
+        instructionData
+    );
+}
+```
+
+## Monitoring & Safety
+
+### Health Checks
+
+```typescript
+async function performHealthChecks(): Promise<HealthStatus> {
+    return {
+        connection: await checkConnectionStatus(),
+        wallet: await checkWalletBalance(),
+        orders: await checkOpenOrders(),
+        positions: await checkPositions()
+    };
+}
+```
+
+### Safety Limits
+
+```typescript
+const SAFETY_LIMITS = {
+    MAX_POSITION_SIZE: 0.1,    // 10% of portfolio
+    MAX_SLIPPAGE: 0.05,        // 5% slippage
+    MIN_LIQUIDITY: 1000,       // $1000 minimum liquidity
+    MAX_PRICE_IMPACT: 0.03,    // 3% price impact
+    STOP_LOSS: 0.15           // 15% stop loss
 };
 ```
 
-Key metrics monitored:
+## Error Handling
 
-- Price movements
-- Volume changes
-- Liquidity levels
-- Holder distribution
-- Trading patterns
-
-### 2. Risk Assessment System
-
-The system evaluates multiple risk factors:
+### Transaction Errors
 
 ```typescript
-async analyzeRisks(token: string) {
-    const risks = {
-        liquidityRisk: await checkLiquidity(),
-        holderConcentration: await analyzeHolderDistribution(),
-        priceVolatility: await calculateVolatility(),
-        marketManipulation: await detectManipulation()
-    };
-    return risks;
+async function handleTransactionError(
+    error: Error,
+    transaction: Transaction
+): Promise<void> {
+    if (error.message.includes('insufficient funds')) {
+        await handleInsufficientFunds();
+    } else if (error.message.includes('slippage tolerance exceeded')) {
+        await handleSlippageError(transaction);
+    } else {
+        await logTransactionError(error, transaction);
+    }
 }
 ```
 
-### 3. Trading Strategies
-
-#### Market Analysis
+### Recovery Procedures
 
 ```typescript
-async getProcessedTokenData(): Promise<ProcessedTokenData> {
-    const security = await this.fetchTokenSecurity();
-    const tradeData = await this.fetchTokenTradeData();
-    const dexData = await this.fetchDexScreenerData();
-    const holderDistributionTrend = await this.analyzeHolderDistribution(tradeData);
-    // ... additional analysis
+async function recoverFromError(
+    error: Error,
+    context: TradingContext
+): Promise<void> {
+    // Stop all active trades
+    await stopActiveTrades();
+    
+    // Close risky positions
+    await closeRiskyPositions();
+    
+    // Reset system state
+    await resetTradingState();
+    
+    // Notify administrators
+    await notifyAdministrators(error, context);
 }
 ```
 
-#### Trade Execution
-
-```typescript
-interface TradePerformance {
-  token_address: string;
-  buy_price: number;
-  sell_price: number;
-  buy_timeStamp: string;
-  sell_timeStamp: string;
-  profit_percent: number;
-  market_cap_change: number;
-  liquidity_change: number;
-}
-```
-
-## Configuration Options
-
-### 1. Trading Parameters
-
-```typescript
-const tradingConfig = {
-  minLiquidity: 50000, // Minimum liquidity in USD
-  maxSlippage: 0.02, // Maximum allowed slippage
-  positionSize: 0.01, // Position size as percentage of portfolio
-  stopLoss: 0.05, // Stop loss percentage
-  takeProfit: 0.15, // Take profit percentage
-};
-```
-
-### 2. Risk Management Settings
-
-```typescript
-const riskSettings = {
-  maxDrawdown: 0.2, // Maximum portfolio drawdown
-  maxPositionSize: 0.1, // Maximum single position size
-  minLiquidityRatio: 50, // Minimum liquidity to market cap ratio
-  maxHolderConcentration: 0.2, // Maximum single holder concentration
-};
-```
-
-## Implementation Guide
-
-### 1. Setting Up Market Monitoring
-
-```typescript
-async monitorMarket(token: string) {
-    const provider = new TokenProvider(token);
-    const marketData = await provider.getProcessedTokenData();
-
-    return {
-        price: marketData.tradeData.price,
-        volume: marketData.tradeData.volume_24h,
-        liquidity: marketData.tradeData.liquidity,
-        holderMetrics: marketData.security
-    };
-}
-```
-
-### 2. Implementing Trading Logic
-
-```typescript
-async evaluateTradeOpportunity(token: string) {
-    const analysis = await this.getProcessedTokenData();
-
-    const signals = {
-        priceSignal: analysis.tradeData.price_change_24h > 0,
-        volumeSignal: analysis.tradeData.volume_24h_change_percent > 20,
-        liquiditySignal: analysis.tradeData.liquidity > MIN_LIQUIDITY,
-        holderSignal: analysis.holderDistributionTrend === "increasing"
-    };
-
-    return signals.priceSignal && signals.volumeSignal &&
-           signals.liquiditySignal && signals.holderSignal;
-}
-```
-
-### 3. Risk Management Implementation
-
-```typescript
-async checkTradeRisks(token: string): Promise<boolean> {
-    const security = await this.fetchTokenSecurity();
-    const tradeData = await this.fetchTokenTradeData();
-
-    return {
-        isRugPull: security.ownerPercentage > 50,
-        isPumpAndDump: tradeData.price_change_24h > 100,
-        isLowLiquidity: tradeData.liquidity < MIN_LIQUIDITY,
-        isSuspiciousVolume: tradeData.suspiciousVolume
-    };
-}
-```
-
-## Performance Monitoring
-
-### 1. Trade Tracking
-
-```typescript
-async trackTradePerformance(trade: TradePerformance): Promise<void> {
-    const performance = {
-        entryPrice: trade.buy_price,
-        exitPrice: trade.sell_price,
-        profitLoss: trade.profit_percent,
-        holdingPeriod: calculateHoldingPeriod(
-            trade.buy_timeStamp,
-            trade.sell_timeStamp
-        ),
-        marketImpact: trade.market_cap_change
-    };
-
-    await this.logTradePerformance(performance);
-}
-```
-
-### 2. Portfolio Analytics
-
-```typescript
-async analyzePortfolioPerformance(userId: string) {
-    const trades = await this.getTradeHistory(userId);
-    return {
-        totalTrades: trades.length,
-        winRate: calculateWinRate(trades),
-        averageReturn: calculateAverageReturn(trades),
-        maxDrawdown: calculateMaxDrawdown(trades),
-        sharpeRatio: calculateSharpeRatio(trades)
-    };
-}
-```
-
-## Best Practices
-
-1. **Risk Management**
-
-   - Always implement stop-loss orders
-   - Diversify trading positions
-   - Monitor liquidity levels continuously
-   - Set maximum position sizes
-
-2. **Trade Execution**
-
-   - Use slippage protection
-   - Implement rate limiting
-   - Monitor gas costs
-   - Verify transaction success
-
-3. **Market Analysis**
-
-   - Cross-reference multiple data sources
-   - Implement data validation
-   - Monitor market manipulation indicators
-   - Track historical patterns
-
-4. **System Maintenance**
-   - Regular performance reviews
-   - Strategy backtesting
-   - Risk parameter adjustments
-   - System health monitoring
-
-## Security Considerations
-
-1. **Transaction Security**
-
-   - Implement transaction signing
-   - Verify contract addresses
-   - Monitor for malicious tokens
-   - Implement rate limiting
-
-2. **Data Validation**
-   - Verify data sources
-   - Implement error handling
-   - Monitor for anomalies
-   - Cross-validate market data
-
-## Additional Resources
-
-- [Trust Engine Documentation](./trust-engine.md)
-- [Infrastructure Setup](./infrastructure.md)
-
-Remember to thoroughly test all trading strategies in a sandbox environment before deploying to production.

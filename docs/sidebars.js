@@ -4,61 +4,219 @@ const sidebars = {
     {
       type: "doc",
       id: "intro",
-      label: "Introduction",
+      label: "🚀 Introduction",
     },
     {
       type: "category",
-      label: "Getting Started",
-      items: ["quickstart", "installation"],
+      label: "🏁 Getting Started",
+      items: [
+        {
+          type: "doc",
+          id: "quickstart",
+          label: "⭐ Quick Start"
+        }
+      ],
       collapsed: false,
     },
     {
       type: "category",
-      label: "Core Concepts",
+      label: "🧠 Core Concepts",
       collapsed: false,
       items: [
-        "core/characterfile",
-        "core/agents",
-        "core/providers",
-        "core/actions",
-        "core/evaluators",
+        {
+          type: "doc",
+          id: "core/characterfile",
+          label: "Character Files"
+        },
+        {
+          type: "doc",
+          id: "core/agents",
+          label: "Agents"
+        },
+        {
+          type: "doc",
+          id: "core/providers",
+          label: "Providers"
+        },
+        {
+          type: "doc",
+          id: "core/actions",
+          label: "Actions"
+        },
+        {
+          type: "doc",
+          id: "core/evaluators",
+          label: "Evaluators"
+        },
       ],
     },
     {
       type: "category",
-      label: "Guides",
+      label: "📘 Guides",
       collapsed: false,
       items: [
-        "guides/basic-usage",
-        "guides/configuration",
-        "guides/advanced",
-        "guides/secrets-management",
-        "guides/local-development",
+        {
+          type: "doc",
+          id: "guides/configuration",
+          label: "Configuration"
+        },
+        {
+          type: "doc",
+          id: "guides/advanced",
+          label: "Advanced Usage"
+        },
+        {
+          type: "doc",
+          id: "guides/secrets-management",
+          label: "Secrets Management"
+        },
+        {
+          type: "doc",
+          id: "guides/local-development",
+          label: "Local Development"
+        },
       ],
     },
     {
       type: "category",
-      label: "Advanced Topics",
+      label: "🎓 Advanced Topics",
       collapsed: false,
       items: [
-        "advanced/fine-tuning",
-        "advanced/infrastructure",
-        "advanced/trust-engine",
-        "advanced/autonomous-trading",
+        {
+          type: "doc",
+          id: "advanced/fine-tuning",
+          label: "Fine-tuning"
+        },
+        {
+          type: "doc",
+          id: "advanced/infrastructure",
+          label: "Infrastructure"
+        },
+        {
+          type: "doc",
+          id: "advanced/trust-engine",
+          label: "Trust Engine"
+        },
+        {
+          type: "doc",
+          id: "advanced/autonomous-trading",
+          label: "Autonomous Trading"
+        },
       ],
     },
     {
       type: "category",
-      label: "Community",
+      label: "📦 Packages",
       collapsed: false,
       items: [
-        "community/project-overview",
-        "community/spaces-notes",
-        "community/development-notes",
-        "community/contributing",
+        {
+          type: "doc",
+          id: "packages/packages",
+          label: "Overview"
+        },
+        {
+          type: "doc",
+          id: "packages/core",
+          label: "Core Package"
+        },
+        {
+          type: "doc",
+          id: "packages/adapters", 
+          label: "Database Adapters"
+        },
+        {
+          type: "doc",
+          id: "packages/clients",
+          label: "Client Packages"
+        },
+        {
+          type: "doc", 
+          id: "packages/agent",
+          label: "Agent Package"
+        },
+        {
+          type: "doc",
+          id: "packages/plugins",
+          label: "Plugin System"
+        }
       ],
     },
-  ],
+    {
+      type: "category",
+      label: "👥 Community",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          id: "community/creator-fund",
+          label: "💰 Creator Fund",
+        },
+        {
+          type: "category",
+          label: "📺 Stream Notes",
+          items: [
+            {
+              type: "doc",
+              id: "community/stream-notes",
+              label: "Overview"
+            },
+            {
+              type: "category",
+              label: "November 2024",
+              items: [
+                {
+                  type: "doc",
+                  id: "community/streams/2024-11-08",
+                  label: "X: Memes, AI Agents, and DAOs"
+                },
+                {
+                  type: "doc",
+                  id: "community/streams/2024-11-06",
+                  label: "Discord Development Stream"
+                }
+              ]
+            },
+            {
+              type: "category",
+              label: "October 2024",
+              items: [
+                {
+                  type: "doc",
+                  id: "community/streams/2024-10-29",
+                  label: "X: AI Agents & Crypto"
+                },
+                {
+                  type: "doc",
+                  id: "community/streams/2024-10-27",
+                  label: "X: Building Autonomous Agents"
+                },
+                {
+                  type: "doc",
+                  id: "community/streams/2024-10-25",
+                  label: "X: Eliza Framework"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          type: "doc",
+          id: "community/changelog",
+          label: "📝 Changelog",
+        },
+        {
+          type: "doc",
+          id: "community/faq",
+          label: "❓ FAQ",
+        },
+        {
+          type: "doc",
+          id: "community/contributing",
+          label: "🤝 Contributing"
+        }
+      ]
+    }
+  ]
 };
 
 export default sidebars;

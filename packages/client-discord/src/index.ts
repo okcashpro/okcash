@@ -73,6 +73,7 @@ export class DiscordClient extends EventEmitter {
         this.runtime.registerAction(transcribe_media);
         this.runtime.registerAction(download_media);
 
+
         this.runtime.providers.push(channelStateProvider);
         this.runtime.providers.push(voiceStateProvider);
     }

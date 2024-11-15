@@ -1,211 +1,373 @@
 ---
-sidebar_position: 1
-title: Fine-tuning
+sidebar_position: 13
 ---
 
-# Model Selection and Fine-tuning
+# 🎯 Fine-tuning Guide
 
 ## Overview
 
-Eliza provides a flexible model selection and configuration system that supports multiple AI providers including OpenAI, Anthropic, Google, and various LLaMA implementations. This guide explains how to configure and fine-tune models for optimal performance in your use case.
+Eliza supports multiple AI model providers and offers extensive configuration options for fine-tuning model behavior, embedding generation, and performance optimization.
 
-## Supported Models
+## Model Providers
 
-### Available Providers
-
-Eliza supports the following model providers:
-
-- **OpenAI**
-
-  - Small: gpt-4o-mini
-  - Medium: gpt-4o
-  - Large: gpt-4o
-  - Embeddings: text-embedding-3-small
-
-- **Anthropic**
-
-  - Small: claude-3-haiku
-  - Medium: claude-3.5-sonnet
-  - Large: claude-3-opus
-
-- **Google (Gemini)**
-
-  - Small: gemini-1.5-flash
-  - Medium: gemini-1.5-flash
-  - Large: gemini-1.5-pro
-  - Embeddings: text-embedding-004
-
-- **LLaMA Cloud**
-
-  - Small: meta-llama/Llama-3.2-3B-Instruct-Turbo
-  - Medium: meta-llama-3.1-8b-instruct
-  - Large: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
-  - Embeddings: togethercomputer/m2-bert-80M-32k-retrieval
-
-- **LLaMA Local**
-  - Various Hermes-3-Llama models optimized for local deployment
-
-## Configuration Options
-
-### Model Settings
-
-Each model provider can be configured with the following parameters:
+Eliza supports multiple model providers through a flexible configuration system:
 
 ```typescript
-settings: {
-    stop: [],                    // Stop sequences for text generation
-    maxInputTokens: 128000,      // Maximum input context length
-    maxOutputTokens: 8192,       // Maximum response length
-    frequency_penalty: 0.0,      // Penalize frequent tokens
-    presence_penalty: 0.0,       // Penalize repeated content
-    temperature: 0.3,            // Control randomness (0.0-1.0)
+enum ModelProviderName {
+    OPENAI,
+    ANTHROPIC,
+    CLAUDE_VERTEX,
+    GROK,
+    GROQ,
+    LLAMACLOUD,
+    LLAMALOCAL,
+    GOOGLE,
+    REDPILL,
+    OPENROUTER
 }
 ```
 
-### Model Classes
+### Provider Configuration
 
-Models are categorized into four classes:
-
-- `SMALL`: Optimized for speed and cost
-- `MEDIUM`: Balanced performance and capability
-- `LARGE`: Maximum capability for complex tasks
-- `EMBEDDING`: Specialized for text embeddings
-
-## Fine-tuning Guidelines
-
-### 1. Selecting the Right Model Size
-
-Choose your model class based on your requirements:
-
-- **SMALL Models**
-
-  - Best for: Quick responses, simple tasks, cost-effective deployment
-  - Example use cases: Basic chat, simple classifications
-  - Recommended: `claude-3-haiku` or `gemini-1.5-flash`
-
-- **MEDIUM Models**
-
-  - Best for: General purpose applications, balanced performance
-  - Example use cases: Content generation, complex analysis
-  - Recommended: `claude-3.5-sonnet` or `meta-llama-3.1-8b-instruct`
-
-- **LARGE Models**
-  - Best for: Complex reasoning, specialized tasks
-  - Example use cases: Code generation, detailed analysis
-  - Recommended: `claude-3-opus` or `Meta-Llama-3.1-405B`
-
-### 2. Optimizing Model Parameters
+Each provider has specific settings:
 
 ```typescript
-// Example configuration for different use cases
-const chatConfig = {
-  temperature: 0.7, // More creative responses
-  maxOutputTokens: 2048, // Shorter, focused replies
-  presence_penalty: 0.6, // Encourage response variety
-};
-
-const analysisConfig = {
-  temperature: 0.2, // More deterministic responses
-  maxOutputTokens: 8192, // Allow detailed analysis
-  presence_penalty: 0.0, // Maintain focused analysis
+const models = {
+    [ModelProviderName.ANTHROPIC]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 200000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.3,
+        },
+        endpoint: "https://api.anthropic.com/v1",
+        model: {
+            [ModelClass.SMALL]: "claude-3-5-haiku",
+            [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
+            [ModelClass.LARGE]: "claude-3-5-opus-20240229"
+        }
+    },
+    // ... other providers
 };
 ```
 
-### 3. Embedding Configuration
+## Model Classes
 
-Eliza includes a sophisticated embedding system that supports:
-
-- Automatic caching of embeddings
-- Provider-specific optimizations
-- Fallback to LLaMA service when needed
+Models are categorized into different classes based on their capabilities:
 
 ```typescript
-// Example embedding usage
-const embedding = await runtime.llamaService.getEmbeddingResponse(input);
+enum ModelClass {
+    SMALL,    // Fast, efficient for simple tasks
+    MEDIUM,   // Balanced performance and capability
+    LARGE,    // Most capable but slower/more expensive
+    EMBEDDING // Specialized for vector embeddings
+    IMAGE     // Image generation capabilities
+}
+```
+
+## Embedding System
+
+### Configuration
+
+```typescript
+const embeddingConfig = {
+    dimensions: 1536,
+    modelName: "text-embedding-3-small",
+    cacheEnabled: true
+};
+```
+
+### Implementation
+
+```typescript
+async function embed(runtime: IAgentRuntime, input: string): Promise<number[]> {
+    // Check cache first
+    const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
+    if (cachedEmbedding) return cachedEmbedding;
+
+    // Generate new embedding
+    const response = await runtime.fetch(
+        `${runtime.modelProvider.endpoint}/embeddings`,
+        {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${runtime.token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                input,
+                model: runtime.modelProvider.model.EMBEDDING,
+                dimensions: 1536
+            })
+        }
+    );
+
+    const data = await response.json();
+    return data?.data?.[0].embedding;
+}
+```
+
+## Fine-tuning Options
+
+### Temperature Control
+
+Configure model creativity vs. determinism:
+
+```typescript
+const temperatureSettings = {
+    creative: {
+        temperature: 0.8,
+        frequency_penalty: 0.7,
+        presence_penalty: 0.7
+    },
+    balanced: {
+        temperature: 0.5,
+        frequency_penalty: 0.3,
+        presence_penalty: 0.3
+    },
+    precise: {
+        temperature: 0.2,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0
+    }
+};
+```
+
+### Context Window
+
+Manage token limits:
+
+```typescript
+const contextSettings = {
+    OPENAI: {
+        maxInputTokens: 128000,
+        maxOutputTokens: 8192,
+    },
+    ANTHROPIC: {
+        maxInputTokens: 200000,
+        maxOutputTokens: 8192,
+    },
+    LLAMALOCAL: {
+        maxInputTokens: 32768,
+        maxOutputTokens: 8192,
+    }
+};
+```
+
+## Performance Optimization
+
+### Caching Strategy
+
+```typescript
+class EmbeddingCache {
+    private cache: NodeCache;
+    private cacheDir: string;
+
+    constructor() {
+        this.cache = new NodeCache({ stdTTL: 300 }); // 5 minute TTL
+        this.cacheDir = path.join(__dirname, "cache");
+    }
+
+    async get(key: string): Promise<number[] | null> {
+        // Check memory cache first
+        const cached = this.cache.get<number[]>(key);
+        if (cached) return cached;
+
+        // Check disk cache
+        return this.readFromDisk(key);
+    }
+
+    async set(key: string, embedding: number[]): Promise<void> {
+        this.cache.set(key, embedding);
+        await this.writeToDisk(key, embedding);
+    }
+}
+```
+
+### Model Selection
+
+```typescript
+async function selectOptimalModel(
+    task: string, 
+    requirements: ModelRequirements
+): Promise<ModelClass> {
+    if (requirements.speed === "fast") {
+        return ModelClass.SMALL;
+    } else if (requirements.complexity === "high") {
+        return ModelClass.LARGE;
+    }
+    return ModelClass.MEDIUM;
+}
+```
+
+## Provider-Specific Optimizations
+
+### OpenAI
+
+```typescript
+const openAISettings = {
+    endpoint: "https://api.openai.com/v1",
+    settings: {
+        stop: [],
+        maxInputTokens: 128000,
+        maxOutputTokens: 8192,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+        temperature: 0.6,
+    },
+    model: {
+        [ModelClass.SMALL]: "gpt-4o-mini",
+        [ModelClass.MEDIUM]: "gpt-4o",
+        [ModelClass.LARGE]: "gpt-4o",
+        [ModelClass.EMBEDDING]: "text-embedding-3-small",
+        [ModelClass.IMAGE]: "dall-e-3"
+    }
+};
+```
+
+### Anthropic
+
+```typescript
+const anthropicSettings = {
+    endpoint: "https://api.anthropic.com/v1",
+    settings: {
+        stop: [],
+        maxInputTokens: 200000,
+        maxOutputTokens: 8192,
+        temperature: 0.3,
+    },
+    model: {
+        [ModelClass.SMALL]: "claude-3-5-haiku",
+        [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
+        [ModelClass.LARGE]: "claude-3-5-opus-20240229"
+    }
+};
+```
+
+### Local LLM
+
+```typescript
+const llamaLocalSettings = {
+    settings: {
+        stop: ["<|eot_id|>", "<|eom_id|>"],
+        maxInputTokens: 32768,
+        maxOutputTokens: 8192,
+        repetition_penalty: 0.0,
+        temperature: 0.3,
+    },
+    model: {
+        [ModelClass.SMALL]: "NousResearch/Hermes-3-Llama-3.1-8B-GGUF",
+        [ModelClass.MEDIUM]: "NousResearch/Hermes-3-Llama-3.1-8B-GGUF",
+        [ModelClass.LARGE]: "NousResearch/Hermes-3-Llama-3.1-8B-GGUF",
+        [ModelClass.EMBEDDING]: "togethercomputer/m2-bert-80M-32k-retrieval"
+    }
+};
+```
+
+## Testing and Validation
+
+### Embedding Tests
+
+```typescript
+async function validateEmbedding(
+    embedding: number[], 
+    expectedDimensions: number = 1536
+): Promise<boolean> {
+    if (!Array.isArray(embedding)) return false;
+    if (embedding.length !== expectedDimensions) return false;
+    if (embedding.some(n => typeof n !== 'number')) return false;
+    return true;
+}
+```
+
+### Model Performance Testing
+
+```typescript
+async function benchmarkModel(
+    runtime: IAgentRuntime,
+    modelClass: ModelClass,
+    testCases: TestCase[]
+): Promise<BenchmarkResults> {
+    const results = {
+        latency: [],
+        tokenUsage: [],
+        accuracy: []
+    };
+
+    for (const test of testCases) {
+        const start = Date.now();
+        const response = await runtime.generateText({
+            context: test.input,
+            modelClass
+        });
+        results.latency.push(Date.now() - start);
+        // ... additional metrics
+    }
+
+    return results;
+}
 ```
 
 ## Best Practices
 
-1. **Model Selection**
+### Model Selection Guidelines
 
-   - Start with SMALL models and upgrade as needed
-   - Use MEDIUM models as your default for general tasks
-   - Reserve LARGE models for specific, complex requirements
+1. **Task Complexity**
+   - Use SMALL for simple, quick responses
+   - Use MEDIUM for balanced performance
+   - Use LARGE for complex reasoning
 
-2. **Parameter Tuning**
+2. **Context Management**
+   - Keep prompts concise and focused
+   - Use context windows efficiently
+   - Implement proper context truncation
 
-   - Keep temperature low (0.2-0.4) for consistent outputs
-   - Increase temperature (0.6-0.8) for creative tasks
-   - Adjust maxOutputTokens based on expected response length
+3. **Temperature Adjustment**
+   - Lower for factual responses
+   - Higher for creative tasks
+   - Balance based on use case
 
-3. **Embedding Optimization**
+### Performance Optimization
 
-   - Utilize the caching system for frequently used content
-   - Choose provider-specific embedding models for best results
-   - Monitor embedding performance and adjust as needed
+1. **Caching Strategy**
+   - Cache embeddings for frequently accessed content
+   - Implement tiered caching (memory/disk)
+   - Regular cache cleanup
 
-4. **Cost Optimization**
-   - Use SMALL models for development and testing
-   - Implement caching strategies for embeddings
-   - Monitor token usage across different model classes
+2. **Resource Management**
+   - Monitor token usage
+   - Implement rate limiting
+   - Optimize batch processing
 
-## Common Issues and Solutions
+## Troubleshooting
 
-1. **Token Length Errors**
+### Common Issues
 
+1. **Token Limits**
    ```typescript
-   // Solution: Implement chunking for long inputs
-   const chunks = splitIntoChunks(input, model.settings.maxInputTokens);
+   function handleTokenLimit(error: Error) {
+       if (error.message.includes('token limit')) {
+           return truncateAndRetry();
+       }
+   }
    ```
 
-2. **Response Quality Issues**
-
+2. **Embedding Errors**
    ```typescript
-   // Solution: Adjust temperature and penalties
-   const enhancedSettings = {
-     ...defaultSettings,
-     temperature: 0.4,
-     presence_penalty: 0.2,
-   };
+   function handleEmbeddingError(error: Error) {
+       if (error.message.includes('dimension mismatch')) {
+           return regenerateEmbedding();
+       }
+   }
    ```
 
-3. **Embedding Cache Misses**
+3. **Model Availability**
    ```typescript
-   // Solution: Implement broader similarity thresholds
-   const similarityThreshold = 0.85;
-   const cachedEmbedding = await findSimilarEmbedding(
-     input,
-     similarityThreshold,
-   );
+   async function handleModelFailover(error: Error) {
+       if (error.message.includes('model not available')) {
+           return switchToFallbackModel();
+       }
+   }
    ```
-
-## Advanced Configuration
-
-For advanced use cases, you can extend the model configuration:
-
-```typescript
-// Custom model configuration
-const customConfig = {
-  model: {
-    [ModelClass.SMALL]: "your-custom-model",
-    [ModelClass.MEDIUM]: "your-custom-model",
-    [ModelClass.LARGE]: "your-custom-model",
-    [ModelClass.EMBEDDING]: "your-custom-embedding-model",
-  },
-  settings: {
-    // Custom settings
-    maxInputTokens: 64000,
-    temperature: 0.5,
-    // Add custom parameters
-    custom_param: "value",
-  },
-};
-```
-
-## Additional Resources
-
-- Check the [Model Providers](/docs/core/providers) documentation for more details about specific providers
-- See [Configuration Guide](/docs/guides/configuration) for general configuration options
-- Visit [Advanced Usage](/docs/guides/advanced) for complex deployment scenarios
-
-Remember to monitor your model's performance and adjust these configurations based on your specific use case and requirements.

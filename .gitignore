@@ -2,6 +2,7 @@ node_modules
 /out
 
 .env
+.env.production
 concatenated-output.ts
 embedding-cache.json
 
@@ -38,4 +39,3 @@ characters/
 packages/core/src/providers/cache
 packages/core/src/providers/cache/*
 cache/*
-packages/core/cache/*

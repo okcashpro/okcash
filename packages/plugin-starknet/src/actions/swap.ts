@@ -125,14 +125,19 @@ export const executeSwap: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Swap 1 ETH for USDC",
+                    text: "Swap 1 ETH for USDC on Starknet",
+                },
+            },
+            {
+                user: "{{user2}}",
+                content: {
+                    text: "Buy LORDS on Starknet",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
                     text: "Executing swap...",
-                    action: "TOKEN_SWAP",
                 },
             },
         ],

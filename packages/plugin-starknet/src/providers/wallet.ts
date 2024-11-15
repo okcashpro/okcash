@@ -14,3 +14,21 @@ export const getStarknetAccount = (runtime: IAgentRuntime) => {
         runtime.getSetting("STARKNET_PRIVATE_KEY")
     );
 };
+
+export class WalletProvider {
+    private account: Account;
+    private provider: RpcProvider;
+
+    constructor(runtime: IAgentRuntime) {
+        this.account = getStarknetAccount(runtime);
+        this.provider = getStarknetProvider(runtime);
+    }
+
+    async getFormattedTokenBalances(): Promise<string> {\
+        return "";
+    }
+
+    async getPortfolioValue(): Promise<string> {
+        return "";
+    }
+}

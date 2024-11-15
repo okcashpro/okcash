@@ -61,6 +61,8 @@ export class TrustScoreManager {
     private baseMint: PublicKey = new PublicKey(settings.BASE_MINT!);
     private DECAY_RATE = 0.95;
     private MAX_DECAY_DAYS = 30;
+    private backend = settings.BACKEND_URL; // TODO add to .env
+    private backendToken = settings.BACKEND_TOKEN; // TODO add to .env
     constructor(
         tokenProvider: TokenProvider,
         trustScoreDb: TrustScoreDatabase
@@ -378,7 +380,54 @@ export class TrustScoreManager {
             rapidDump: false,
         };
         this.trustScoreDb.addTradePerformance(creationData, data.is_simulation);
+        // api call to update trade performance
+        this.createTradeInBe(tokenAddress, recommenderId, data);
         return creationData;
+    }
+
+    async delay(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async createTradeInBe(
+        tokenAddress: string,
+        recommenderId: string,
+        data: TradeData,
+        retries = 3,
+        delayMs = 2000
+    ) {
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                await fetch(
+                    `${this.backend}/api/updaters/createTradePerformance`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.backendToken}`,
+                        },
+                        body: JSON.stringify({
+                            tokenAddress: tokenAddress,
+                            tradeData: data,
+                            recommenderId: recommenderId,
+                        }),
+                    }
+                );
+                // If the request is successful, exit the loop
+                return;
+            } catch (error) {
+                console.error(
+                    `Attempt ${attempt} failed: Error creating trade in backend`,
+                    error
+                );
+                if (attempt < retries) {
+                    console.log(`Retrying in ${delayMs} ms...`);
+                    await this.delay(delayMs); // Wait for the specified delay before retrying
+                } else {
+                    console.error("All attempts failed.");
+                }
+            }
+        }
     }
 
     /**
