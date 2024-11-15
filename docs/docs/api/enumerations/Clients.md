@@ -8,9 +8,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:300](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L300)
+[packages/core/src/types.ts:322](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L322)
 
----
+***
 
 ### DISCORD
 
@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:299](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L299)
+[packages/core/src/types.ts:321](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L321)
 
----
+***
 
 ### TELEGRAM
 
@@ -28,9 +28,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:302](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L302)
+[packages/core/src/types.ts:324](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L324)
 
----
+***
 
 ### TWITTER
 
@@ -38,4 +38,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:301](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L301)
+[packages/core/src/types.ts:323](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L323)

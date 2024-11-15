@@ -8,9 +8,19 @@
 
 #### Defined in
 
-[core/src/core/types.ts:79](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L79)
+[packages/core/src/types.ts:78](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L78)
 
----
+***
+
+### IMAGE
+
+> **IMAGE**: `"image"`
+
+#### Defined in
+
+[packages/core/src/types.ts:79](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L79)
+
+***
 
 ### LARGE
 
@@ -18,9 +28,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:78](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L78)
+[packages/core/src/types.ts:77](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L77)
 
----
+***
 
 ### MEDIUM
 
@@ -28,9 +38,9 @@
 
 #### Defined in
 
-[core/src/core/types.ts:77](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L77)
+[packages/core/src/types.ts:76](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L76)
 
----
+***
 
 ### SMALL
 
@@ -38,4 +48,4 @@
 
 #### Defined in
 
-[core/src/core/types.ts:76](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L76)
+[packages/core/src/types.ts:75](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L75)

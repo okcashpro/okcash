@@ -6,4 +6,4 @@ Represents a UUID, which is a universally unique identifier conforming to the UU
 
 ## Defined in
 
-[core/src/core/types.ts:7](https://github.com/ai16z/eliza/blob/c96957e5a5d17e343b499dd4d46ce403856ac5bc/core/src/core/types.ts#L7)
+[packages/core/src/types.ts:6](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L6)

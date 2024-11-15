@@ -14,7 +14,7 @@ Represents a participant in a room, including their ID and account details.
 
 [packages/core/src/types.ts:285](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L285)
 
----
+***
 
 ### account
 

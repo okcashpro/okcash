@@ -4,6 +4,9 @@
 
 ### [For Chinese Version: 中文说明](./README_CN.md)
 ### [For Japanese Version: 日本語の説明](./README_JA.md)
+### [For Korean Version: 한국어 설명](./README_KOR.md)
+### [For French Version: Instructions en français](./README_FR.md)
+### [For Portuguese Version: Instruções em português](./README_PTBR.md)
 
 ## Features
 
@@ -27,7 +30,7 @@
 **Prerequisites (MUST):**
     
 -   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23.1+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
 ### Edit the .env file
