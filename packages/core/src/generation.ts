@@ -22,7 +22,7 @@ import {
     parseJSONObjectFromText,
     parseShouldRespondFromText,
 } from "./parsing.ts";
-import settings from "./settings.ts";
+import { settings } from "./settings.ts";
 import {
     Content,
     IAgentRuntime,

@@ -17,9 +17,12 @@ import {
     TradePerformance,
     TokenRecommendation,
 } from "../adapters/trustScoreDatabase.ts";
-import settings from "@ai16z/eliza/src/settings.ts";
+import { settings, loadEnvConfig } from "@ai16z/eliza/src/settings.ts";
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 
+loadEnvConfig();
+console.log("DEBUG - TrustScoreProvider settings loaded");
+console.log(settings);
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
     buy_amount: number;

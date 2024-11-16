@@ -11,8 +11,8 @@
         "watch": "tsc --watch",
         "dev": "tsup --format esm --dts --watch",
         "build:docs": "cd docs && pnpm run build",
-        "test": "vitest run",
-        "test:watch": "vitest"
+        "test": "NODE_ENV=test vitest run",
+        "test:watch": "NODE_ENV=test vitest"
     },
     "author": "",
     "license": "MIT",

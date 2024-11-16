@@ -1,4 +1,4 @@
-import settings from "./settings.ts";
+import { settings } from "./settings.ts";
 import { Models, ModelProviderName, ModelClass } from "./types.ts";
 
 export const models: Models = {

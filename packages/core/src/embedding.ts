@@ -5,7 +5,7 @@ import { models } from "./models.ts";
 import { IAgentRuntime, ModelProviderName, ModelClass } from "./types.ts";
 import fs from "fs";
 import { trimTokens } from "./generation.ts";
-import settings from "./settings.ts";
+import { settings } from "./settings.ts";
 
 function getRootPath() {
     const __filename = fileURLToPath(import.meta.url);
