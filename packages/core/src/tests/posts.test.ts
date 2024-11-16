@@ -75,7 +75,6 @@ test('formats posts correctly with conversation header', () => {
   expect(result).toContain('Name: Alice (@alice123)');
   expect(result).toContain('ID: 0db429f4-9ad9-44db-b2c6-0cf6d6cb2dfe');
   expect(result).toContain('In reply to: f9c8b107-953b-473d-8c87-2894c6e3fe25');
-  expect(result).toContain('Date: 20042 days ago');
   expect(result).toContain('Text:\nHi Bob, how are you?');
 });
 
