@@ -24,7 +24,7 @@
 
 [packages/core/src/types.ts:612](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L612)
 
----
+***
 
 ### processVideo()
 
@@ -42,7 +42,7 @@
 
 [packages/core/src/types.ts:613](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L613)
 
----
+***
 
 ### fetchVideoInfo()
 
@@ -60,7 +60,7 @@
 
 [packages/core/src/types.ts:614](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L614)
 
----
+***
 
 ### downloadVideo()
 

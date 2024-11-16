@@ -14,7 +14,7 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 [packages/core/src/types.ts:33](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L33)
 
----
+***
 
 ### content
 

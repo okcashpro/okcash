@@ -22,17 +22,17 @@
 
 > **maxOutputTokens**: `number`
 
-### settings.frequency_penalty?
+### settings.frequency\_penalty?
 
-> `optional` **frequency_penalty**: `number`
+> `optional` **frequency\_penalty**: `number`
 
-### settings.presence_penalty?
+### settings.presence\_penalty?
 
-> `optional` **presence_penalty**: `number`
+> `optional` **presence\_penalty**: `number`
 
-### settings.repetition_penalty?
+### settings.repetition\_penalty?
 
-> `optional` **repetition_penalty**: `number`
+> `optional` **repetition\_penalty**: `number`
 
 ### settings.stop
 
