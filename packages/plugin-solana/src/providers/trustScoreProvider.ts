@@ -347,7 +347,7 @@ export class TrustScoreManager {
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
         const wallet = new WalletProvider(
-            new Connection("https://api.mainnet-beta.solana.com"),
+            this.connection,
             new PublicKey(Wallet!)
         );
 
