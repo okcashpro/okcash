@@ -1,11 +1,6 @@
 import { getVoiceConnection } from "@discordjs/voice";
 import { ChannelType, Message as DiscordMessage } from "discord.js";
-import {
-    IAgentRuntime,
-    Memory,
-    Provider,
-    State,
-} from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 
 const voiceStateProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {

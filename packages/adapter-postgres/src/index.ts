@@ -9,8 +9,8 @@ import {
     type Relationship,
     type UUID,
     Participant,
-} from "@ai16z/eliza/src/types.ts";
-import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
+} from "@ai16z/eliza";
+import { DatabaseAdapter } from "@ai16z/eliza";
 const { Pool } = pg;
 
 export class PostgresDatabaseAdapter extends DatabaseAdapter {

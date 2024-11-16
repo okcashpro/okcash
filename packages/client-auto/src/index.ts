@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime } from "@ai16z/eliza/src/types.ts";
+import { Client, IAgentRuntime } from "@ai16z/eliza";
 import { TrustScoreManager } from "@ai16z/plugin-solana/src/providers/trustScoreProvider.ts";
 import { TokenProvider } from "@ai16z/plugin-solana/src/providers/token.ts";
 import { WalletProvider } from "@ai16z/plugin-solana/src/providers/wallet.ts";

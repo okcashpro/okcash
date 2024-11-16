@@ -12,7 +12,7 @@ import {
     Memory,
     ModelClass,
     Evaluator,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";

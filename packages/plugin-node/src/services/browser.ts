@@ -1,13 +1,9 @@
-import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
-import { Service } from "@ai16z/eliza/src/types.ts";
-import settings from "@ai16z/eliza/src/settings.ts";
-import {
-    IAgentRuntime,
-    ModelClass,
-    ServiceType,
-} from "@ai16z/eliza/src/types.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { generateText, trimTokens } from "@ai16z/eliza";
+import { parseJSONObjectFromText } from "@ai16z/eliza";
+import { Service } from "@ai16z/eliza";
+import { settings } from "@ai16z/eliza";
+import { IAgentRuntime, ModelClass, ServiceType } from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
 import { PlaywrightBlocker } from "@cliqz/adblocker-playwright";
 import CaptchaSolver from "capsolver-npm";
 import fs from "fs";
