@@ -52,18 +52,26 @@ interface TokenRecommendationSummary {
 export class TrustScoreManager {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
-    private connection: Connection = new Connection(settings.RPC_URL!);
-    private baseMint: PublicKey = new PublicKey(settings.BASE_MINT!);
+    private connection: Connection;
+    private baseMint: PublicKey;
     private DECAY_RATE = 0.95;
     private MAX_DECAY_DAYS = 30;
-    private backend = settings.BACKEND_URL; // TODO add to .env
-    private backendToken = settings.BACKEND_TOKEN; // TODO add to .env
+    private backend;
+    private backendToken;
     constructor(
+        runtime: IAgentRuntime,
         tokenProvider: TokenProvider,
         trustScoreDb: TrustScoreDatabase
     ) {
         this.tokenProvider = tokenProvider;
         this.trustScoreDb = trustScoreDb;
+        this.connection = new Connection(runtime.getSetting("RPC_URL"));
+        this.baseMint = new PublicKey(
+            runtime.getSetting("BASE_MINT") ||
+                "So11111111111111111111111111111111111111112"
+        );
+        this.backend = runtime.getSetting("BACKEND_URL");
+        this.backendToken = runtime.getSetting("BACKEND_TOKEN");
     }
 
     //getRecommenederBalance
@@ -339,7 +347,7 @@ export class TrustScoreManager {
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
         const wallet = new WalletProvider(
-            new Connection("https://api.mainnet-beta.solana.com"),
+            this.connection,
             new PublicKey(Wallet!)
         );
 

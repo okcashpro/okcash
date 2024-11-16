@@ -409,6 +409,7 @@ export const executeSwap: Action = {
                 });
 
                 const trustScoreDatabase = new TrustScoreManager(
+                    runtime,
                     tokenProvider,
                     trustScoreDb
                 );
@@ -442,6 +443,7 @@ export const executeSwap: Action = {
                 });
 
                 const trustScoreDatabase = new TrustScoreManager(
+                    runtime,
                     tokenProvider,
                     trustScoreDb
                 );
