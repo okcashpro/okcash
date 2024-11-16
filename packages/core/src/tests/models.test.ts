@@ -1,6 +1,10 @@
 import { getModel, getEndpoint } from '../models.ts';
 import { ModelProviderName, ModelClass } from '../types.ts';
 
+jest.mock('../settings', () => ({
+  loadEnv: jest.fn(), // Mock the loadEnv function
+}));
+
 describe('Model Provider Tests', () => {
   test('should retrieve the correct model for OpenAI SMALL', () => {
     const model = getModel(ModelProviderName.OPENAI, ModelClass.SMALL);
