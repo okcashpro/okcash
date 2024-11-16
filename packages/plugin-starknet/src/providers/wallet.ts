@@ -1,3 +1,6 @@
+// TODO: Implement this for Starknet.
+// It should return the formatted token balances and the portfolio value.
+
 import { IAgentRuntime, Memory, State } from "@ai16z/eliza";
 import { Account, RpcProvider } from "starknet";
 

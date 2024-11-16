@@ -1,3 +1,6 @@
+// TODO: Implement this for Starknet.
+// It should just transfer tokens from the agent's wallet to the recipient.
+
 import {
     settings,
     ActionExample,
@@ -55,11 +58,11 @@ Respond with a JSON markdown block containing only the extracted values.`;
 export default {
     name: "SEND_TOKEN",
     similes: [
-        "TRANSFER_TOKEN",
-        "TRANSFER_TOKENS",
-        "SEND_TOKENS",
-        "SEND_SOL",
-        "PAY",
+        "TRANSFER_TOKEN_ON_STARKNET",
+        "TRANSFER_TOKENS_ON_STARKNET",
+        "SEND_TOKENS_ON_STARKNET",
+        "SEND_ETH_ON_STARKNET",
+        "PAY_ON_STARKNET",
     ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         return validateSettings(runtime);
