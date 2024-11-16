@@ -21,6 +21,7 @@ fi
 # Define packages to build in order
 PACKAGES=(
     "core"
+    "plugin-trustdb"
     "plugin-solana"
     "plugin-starknet"
     "adapter-postgres"

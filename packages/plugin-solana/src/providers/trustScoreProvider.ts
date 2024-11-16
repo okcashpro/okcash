@@ -16,7 +16,7 @@ import {
     TokenPerformance,
     TradePerformance,
     TokenRecommendation,
-} from "../adapters/trustScoreDatabase.ts";
+} from "@ai16z/plugin-trustdb";
 import settings from "@ai16z/eliza/src/settings.ts";
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 

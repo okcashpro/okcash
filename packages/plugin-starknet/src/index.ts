@@ -1,16 +1,14 @@
 import { Plugin } from "@ai16z/eliza";
-import { executeSwap } from "./actions/swap";
-import {
-    getStarknetAccountProvider,
-    getStarknetRpcProvider,
-} from "./providers/avnu";
+import { avnuProvider } from "./providers/avnu.ts";
 
 export const starknetPlugin: Plugin = {
-    name: "Starknet",
-    description: "Starknet Swap Plugin for Eliza",
-    actions: [executeSwap],
+    name: "starknet",
+    description: "Starknet Plugin for Eliza",
+    actions: [
+        // TODO: Add actions like swap, etc.
+    ],
     evaluators: [],
-    providers: [getStarknetAccountProvider, getStarknetRpcProvider],
+    providers: [avnuProvider],
 };
 
 export default starknetPlugin;
