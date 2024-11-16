@@ -14,8 +14,8 @@ import {
     fetchQuotes,
     QuoteRequest,
 } from "@avnu/avnu-sdk";
-import { getStarknetAccount } from "../providers/wallet.ts";
-import { validateSettings } from "../utils/index.ts";
+
+import { getStarknetAccount, validateSettings } from "../utils/index.ts";
 
 const swapTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 

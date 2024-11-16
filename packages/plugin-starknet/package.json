@@ -6,6 +6,7 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-trustdb": "workspace:*",
         "@avnu/avnu-sdk": "^2.1.1",
         "starknet": "^6.11.0",
         "tsup": "^8.3.5",
