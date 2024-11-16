@@ -1,15 +1,15 @@
-import { SqliteDatabaseAdapter } from "../adapters/sqlite.ts";
+import { SqliteDatabaseAdapter } from "../../../adapter-sqlite/src/index.ts";
 import { load } from "../../../adapter-sqlite/src/sqlite_vec.ts";
 import { SqlJsDatabaseAdapter } from "../../../adapter-sqljs/src/index.ts";
 import { SupabaseDatabaseAdapter } from "../../../adapter-supabase/src/index.ts";
-import { DatabaseAdapter } from "@ai16z/eliza/src/database.ts";
-import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
+import { DatabaseAdapter } from "../database.ts";
+import { AgentRuntime } from "../runtime.ts";
 import {
     Action,
     Evaluator,
     ModelProviderName,
     Provider,
-} from "@ai16z/eliza/src/types.ts";
+} from "../types.ts";
 import {
     SUPABASE_ANON_KEY,
     SUPABASE_URL,
@@ -107,7 +107,8 @@ export async function createRuntime({
                 env?.SUPABASE_URL ?? SUPABASE_URL,
                 env?.SUPABASE_SERVICE_API_KEY ?? SUPABASE_ANON_KEY
             );
-        }
+        } break;
+        
         case "sqlite":
         default:
             {

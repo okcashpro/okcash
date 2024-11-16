@@ -1,5 +1,5 @@
-import { getRelationship } from "@ai16z/eliza/src/relationships.ts";
-import { IAgentRuntime, Relationship, UUID } from "@ai16z/eliza/src/types.ts";
+import { getRelationship } from "../relationships.ts";
+import { IAgentRuntime, Relationship, UUID } from "..//types.ts";
 
 export async function getOrCreateRelationship({
     runtime,
