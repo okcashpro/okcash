@@ -44,7 +44,6 @@ import {
 import { stringToUuid } from "./uuid.ts";
 import { v4 as uuidv4 } from 'uuid';
 
-
 /**
  * Represents the runtime environment for an agent, handling message processing,
  * action registration, and interaction with external services like OpenAI and Supabase.
