@@ -17,7 +17,7 @@ import {
     TEST_PASSWORD,
     zeroUuid,
 } from "./constants.ts";
-import { User } from "./types.ts";
+import { User } from "../types.ts";
 
 export async function createRuntime({
     env,
