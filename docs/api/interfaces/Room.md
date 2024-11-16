@@ -12,9 +12,9 @@ Represents a room or conversation context, including its ID and a list of partic
 
 #### Defined in
 
-[packages/core/src/types.ts:293](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L293)
+[packages/core/src/types.ts:295](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L295)
 
-***
+---
 
 ### participants
 
@@ -22,4 +22,4 @@ Represents a room or conversation context, including its ID and a list of partic
 
 #### Defined in
 
-[packages/core/src/types.ts:294](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L294)
+[packages/core/src/types.ts:296](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L296)

@@ -11,25 +11,25 @@ graph TD
     RT["Agent Runtime"]
     CI["Client Interface"]
     RT --> CI
-    
+
     %% Main Clients
     CI --> DC["Direct Client"]
     CI --> DSC["Discord Client"]
     CI --> TC["Telegram Client"]
     CI --> TWC["Twitter Client"]
     CI --> AC["Auto Client"]
-    
+
     %% Key Features - one per client for clarity
     DC --> |"REST API"| DC1["Messages & Images"]
     DSC --> |"Bot Integration"| DSC1["Voice & Messages"]
     TC --> |"Bot API"| TC1["Commands & Media"]
     TWC --> |"Social"| TWC1["Posts & Interactions"]
     AC --> |"Trading"| AC1["Analysis & Execution"]
-    
+
     %% Simple styling with better contrast and black text
     classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px,color:black
     classDef highlight fill:#e9e9e9,stroke:#333,stroke-width:2px,color:black
-    
+
     class RT,CI highlight
 ```
 
@@ -77,15 +77,15 @@ import { DiscordClientInterface } from "@eliza/client-discord";
 const client = await DiscordClientInterface.start(runtime);
 
 // Configuration in .env
-DISCORD_APPLICATION_ID=your_app_id
-DISCORD_API_TOKEN=your_bot_token
+DISCORD_APPLICATION_ID = your_app_id;
+DISCORD_API_TOKEN = your_bot_token;
 ```
 
 ### Features
 
 - Voice channel integration
 - Message attachments
-- Reactions handling 
+- Reactions handling
 - Media transcription
 - Room management
 
@@ -139,10 +139,10 @@ import { TwitterClientInterface } from "@eliza/client-twitter";
 const client = await TwitterClientInterface.start(runtime);
 
 // Configuration in .env
-TWITTER_USERNAME=your_username
-TWITTER_PASSWORD=your_password
-TWITTER_EMAIL=your_email
-TWITTER_COOKIES=your_cookies
+TWITTER_USERNAME = your_username;
+TWITTER_PASSWORD = your_password;
+TWITTER_EMAIL = your_email;
+TWITTER_COOKIES = your_cookies;
 ```
 
 ### Components
@@ -158,14 +158,14 @@ class TwitterPostClient {
   async createPost(content: string) {
     return await this.post({
       text: content,
-      media: await this.processMedia()
+      media: await this.processMedia(),
     });
   }
 
   async replyTo(tweetId: string, content: string) {
     return await this.post({
       text: content,
-      reply: { in_reply_to_tweet_id: tweetId }
+      reply: { in_reply_to_tweet_id: tweetId },
     });
   }
 }
@@ -180,8 +180,8 @@ class TwitterSearchClient {
       query,
       filters: {
         recency: "recent",
-        language: "en"
-      }
+        language: "en",
+      },
     });
   }
 }
@@ -200,7 +200,7 @@ import { TelegramClientInterface } from "@eliza/client-telegram";
 const client = await TelegramClientInterface.start(runtime);
 
 // Configuration in .env
-TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_BOT_TOKEN = your_bot_token;
 ```
 
 ### Message Management
@@ -239,17 +239,15 @@ const client = await DirectClientInterface.start(runtime);
 class DirectClient {
   constructor() {
     // Message endpoint
-    this.app.post("/:agentId/message", 
-      async (req, res) => {
-        const response = await this.handleMessage(req.body);
-        res.json(response);
+    this.app.post("/:agentId/message", async (req, res) => {
+      const response = await this.handleMessage(req.body);
+      res.json(response);
     });
 
     // Image generation endpoint
-    this.app.post("/:agentId/image", 
-      async (req, res) => {
-        const images = await this.generateImage(req.body);
-        res.json(images);
+    this.app.post("/:agentId/image", async (req, res) => {
+      const images = await this.generateImage(req.body);
+      res.json(images);
     });
   }
 }
@@ -274,20 +272,23 @@ const client = await AutoClientInterface.start(runtime);
 class AutoClient {
   constructor(runtime: IAgentRuntime) {
     this.runtime = runtime;
-    
+
     // Start trading loop
-    this.interval = setInterval(() => {
-      this.makeTrades();
-    }, 60 * 60 * 1000); // 1 hour interval
+    this.interval = setInterval(
+      () => {
+        this.makeTrades();
+      },
+      60 * 60 * 1000,
+    ); // 1 hour interval
   }
 
   async makeTrades() {
     // Get recommendations
     const recommendations = await this.getHighTrustRecommendations();
-    
+
     // Analyze tokens
     const analysis = await this.analyzeTokens(recommendations);
-    
+
     // Execute trades
     await this.executeTrades(analysis);
   }
@@ -324,7 +325,7 @@ interface MediaProcessor {
 class BaseClient {
   protected async handleError(error: Error) {
     console.error("Client error:", error);
-    
+
     if (error.code === "RATE_LIMIT") {
       await this.handleRateLimit(error);
     } else if (error.code === "AUTH_FAILED") {
@@ -339,16 +340,19 @@ class BaseClient {
 ## Best Practices
 
 1. **Authentication**
+
    - Store credentials securely in environment variables
    - Implement token refresh mechanisms
    - Handle authentication errors gracefully
 
 2. **Rate Limiting**
+
    - Implement exponential backoff
    - Track API usage
    - Queue messages during rate limits
 
 3. **Error Handling**
+
    - Log errors with context
    - Implement retry logic
    - Handle platform-specific errors
@@ -370,13 +374,13 @@ class BaseClient {
     } else if (error.code === "NETWORK_ERROR") {
       await this.reconnect();
     }
-    
+
     // Log error
     console.error("Client error:", {
       type: error.name,
       message: error.message,
       code: error.code,
-      stack: error.stack
+      stack: error.stack,
     });
   }
 }
@@ -388,15 +392,13 @@ class BaseClient {
 class ClientManager {
   private async cleanup() {
     // Close connections
-    await Promise.all(
-      this.connections.map(conn => conn.close())
-    );
-    
+    await Promise.all(this.connections.map((conn) => conn.close()));
+
     // Clear caches
     this.cache.clear();
-    
+
     // Cancel timers
-    this.timers.forEach(timer => clearInterval(timer));
+    this.timers.forEach((timer) => clearInterval(timer));
   }
 
   private async reconnect() {
@@ -418,10 +420,7 @@ class RateLimiter {
   }
 
   private calculateBackoff(error: RateLimitError): number {
-    return Math.min(
-      this.baseDelay * Math.pow(2, this.attempts),
-      this.maxDelay
-    );
+    return Math.min(this.baseDelay * Math.pow(2, this.attempts), this.maxDelay);
   }
 }
 ```
@@ -458,6 +457,7 @@ class MessageQueue {
 ### Common Issues
 
 1. **Authentication Failures**
+
 ```typescript
 // Implement token refresh
 async refreshAuth() {
@@ -467,6 +467,7 @@ async refreshAuth() {
 ```
 
 2. **Rate Limits**
+
 ```typescript
 // Handle rate limiting
 async handleRateLimit(error) {
@@ -477,6 +478,7 @@ async handleRateLimit(error) {
 ```
 
 3. **Connection Issues**
+
 ```typescript
 // Implement reconnection logic
 async handleDisconnect() {

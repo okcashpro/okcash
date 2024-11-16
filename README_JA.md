@@ -4,37 +4,37 @@
 
 ## 機能
 
-- 🛠 Discord、Twitter、Telegramのフル機能コネクタ
-- 👥 マルチエージェントおよびルームサポート
-- 📚 ドキュメントの簡単な取り込みと対話
-- 💾 検索可能なメモリおよびドキュメントストア
-- 🚀 高い拡張性 - 機能を拡張するための独自のアクションとクライアントを作成可能
-- ☁️ Llama、OpenAI、Anthropic、Groqなど、多くのモデルをサポート
-- 📦 すぐに使える！
+-   🛠 Discord、Twitter、Telegramのフル機能コネクタ
+-   👥 マルチエージェントおよびルームサポート
+-   📚 ドキュメントの簡単な取り込みと対話
+-   💾 検索可能なメモリおよびドキュメントストア
+-   🚀 高い拡張性 - 機能を拡張するための独自のアクションとクライアントを作成可能
+-   ☁️ Llama、OpenAI、Anthropic、Groqなど、多くのモデルをサポート
+-   📦 すぐに使える！
 
 ## 何に使えるのか？
 
-- 🤖 チャットボット
-- 🕵️ 自律エージェント
-- 📈 ビジネスプロセスの処理
-- 🎮 ビデオゲームのNPC
+-   🤖 チャットボット
+-   🕵️ 自律エージェント
+-   📈 ビジネスプロセスの処理
+-   🎮 ビデオゲームのNPC
 
 # 始め方
 
 **必須条件:**
 
-- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [pnpm](https://pnpm.io/installation)
+-   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [pnpm](https://pnpm.io/installation)
 
 ### .envファイルの編集
 
-- .env.exampleを.envにコピーし、適切な値を入力
-- TWITTER環境変数を編集して、ボットのユーザー名とパスワードを追加
+-   .env.exampleを.envにコピーし、適切な値を入力
+-   TWITTER環境変数を編集して、ボットのユーザー名とパスワードを追加
 
 ### キャラクターファイルの編集
 
-- `src/core/defaultCharacter.ts`ファイルを確認 - これを変更可能
-- `pnpm start --characters="path/to/your/character.json"`を使用してキャラクターをロードし、複数のボットを同時に実行可能
+-   `src/core/defaultCharacter.ts`ファイルを確認 - これを変更可能
+-   `pnpm start --characters="path/to/your/character.json"`を使用してキャラクターをロードし、複数のボットを同時に実行可能
 
 .envファイルとキャラクターファイルを設定した後、以下のコマンドでボットを起動可能:
 
@@ -166,9 +166,9 @@ pnpm test:sqljs    # SQL.jsでテストを実行
 
 テストはJestを使用して記述されており、`src/**/*.test.ts`ファイルにあります。テスト環境は次のように構成されています:
 
-- `.env.test`から環境変数をロード
-- 長時間実行されるテストのために2分のタイムアウトを使用
-- ESMモジュールをサポート
-- テストを順番に実行 (--runInBand)
+-   `.env.test`から環境変数をロード
+-   長時間実行されるテストのために2分のタイムアウトを使用
+-   ESMモジュールをサポート
+-   テストを順番に実行 (--runInBand)
 
 新しいテストを作成するには、テストするコードの隣に`.test.ts`ファイルを追加します。

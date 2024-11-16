@@ -18,7 +18,7 @@
 
 [packages/core/src/types.ts:630](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L630)
 
-***
+---
 
 ### getPageContent()
 
@@ -50,7 +50,7 @@
 
 [packages/core/src/types.ts:631](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L631)
 
-***
+---
 
 ### initialize()
 

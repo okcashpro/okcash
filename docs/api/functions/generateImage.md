@@ -16,6 +16,18 @@
 
 • **data.count?**: `number`
 
+• **data.negativePrompt?**: `string`
+
+• **data.numIterations?**: `number`
+
+• **data.guidanceScale?**: `number`
+
+• **data.seed?**: `number`
+
+• **data.modelId?**: `string`
+
+• **data.jobId?**: `string`
+
 • **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
 ## Returns
@@ -36,4 +48,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:650](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L650)
+[packages/core/src/generation.ts:719](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L719)

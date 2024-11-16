@@ -31,7 +31,7 @@ await startAgents();
 export async function createAgent(
   character: Character,
   db: IDatabaseAdapter,
-  token: string
+  token: string,
 ): Promise<AgentRuntime> {
   return new AgentRuntime({
     databaseAdapter: db,
@@ -42,14 +42,12 @@ export async function createAgent(
       bootstrapPlugin,
       nodePlugin,
       // Conditional plugins
-      character.settings.secrets.WALLET_PUBLIC_KEY 
-        ? solanaPlugin 
-        : null
+      character.settings.secrets.WALLET_PUBLIC_KEY ? solanaPlugin : null,
     ].filter(Boolean),
     providers: [],
     actions: [],
     services: [],
-    managers: []
+    managers: [],
   });
 }
 ```
@@ -58,35 +56,29 @@ export async function createAgent(
 
 ```typescript
 export async function loadCharacters(
-  charactersArg: string
+  charactersArg: string,
 ): Promise<Character[]> {
   // Parse character paths
   let characterPaths = charactersArg
     ?.split(",")
-    .map(path => path.trim())
-    .map(path => normalizePath(path));
+    .map((path) => path.trim())
+    .map((path) => normalizePath(path));
 
   const loadedCharacters = [];
 
   // Load each character file
   for (const path of characterPaths) {
     try {
-      const character = JSON.parse(
-        fs.readFileSync(path, "utf8")
-      );
+      const character = JSON.parse(fs.readFileSync(path, "utf8"));
 
       // Load plugins if specified
       if (character.plugins) {
-        character.plugins = await loadPlugins(
-          character.plugins
-        );
+        character.plugins = await loadPlugins(character.plugins);
       }
 
       loadedCharacters.push(character);
     } catch (error) {
-      console.error(
-        `Error loading character from ${path}: ${error}`
-      );
+      console.error(`Error loading character from ${path}: ${error}`);
     }
   }
 
@@ -104,36 +96,26 @@ export async function loadCharacters(
 ```typescript
 export async function initializeClients(
   character: Character,
-  runtime: IAgentRuntime
+  runtime: IAgentRuntime,
 ) {
   const clients = [];
-  const clientTypes = character.clients?.map(
-    str => str.toLowerCase()
-  ) || [];
+  const clientTypes = character.clients?.map((str) => str.toLowerCase()) || [];
 
   // Initialize requested clients
   if (clientTypes.includes("discord")) {
-    clients.push(
-      await DiscordClientInterface.start(runtime)
-    );
+    clients.push(await DiscordClientInterface.start(runtime));
   }
 
   if (clientTypes.includes("telegram")) {
-    clients.push(
-      await TelegramClientInterface.start(runtime)
-    );
+    clients.push(await TelegramClientInterface.start(runtime));
   }
 
   if (clientTypes.includes("twitter")) {
-    clients.push(
-      await TwitterClientInterface.start(runtime)
-    );
+    clients.push(await TwitterClientInterface.start(runtime));
   }
 
   if (clientTypes.includes("auto")) {
-    clients.push(
-      await AutoClientInterface.start(runtime)
-    );
+    clients.push(await AutoClientInterface.start(runtime));
   }
 
   return clients;
@@ -147,14 +129,12 @@ function initializeDatabase(): IDatabaseAdapter {
   // Use PostgreSQL if URL provided
   if (process.env.POSTGRES_URL) {
     return new PostgresDatabaseAdapter({
-      connectionString: process.env.POSTGRES_URL
+      connectionString: process.env.POSTGRES_URL,
     });
   }
-  
+
   // Fall back to SQLite
-  return new SqliteDatabaseAdapter(
-    new Database("./db.sqlite")
-  );
+  return new SqliteDatabaseAdapter(new Database("./db.sqlite"));
 }
 ```
 
@@ -163,22 +143,21 @@ function initializeDatabase(): IDatabaseAdapter {
 ```typescript
 export function getTokenForProvider(
   provider: ModelProviderName,
-  character: Character
+  character: Character,
 ) {
   switch (provider) {
     case ModelProviderName.OPENAI:
       return (
-        character.settings?.secrets?.OPENAI_API_KEY ||
-        settings.OPENAI_API_KEY
+        character.settings?.secrets?.OPENAI_API_KEY || settings.OPENAI_API_KEY
       );
-      
+
     case ModelProviderName.ANTHROPIC:
       return (
         character.settings?.secrets?.ANTHROPIC_API_KEY ||
         character.settings?.secrets?.CLAUDE_API_KEY ||
         settings.ANTHROPIC_API_KEY
       );
-      
+
     // Handle other providers...
   }
 }
@@ -189,32 +168,19 @@ export function getTokenForProvider(
 ### Starting Agents
 
 ```typescript
-async function startAgent(
-  character: Character, 
-  directClient: any
-) {
+async function startAgent(character: Character, directClient: any) {
   try {
     // Get provider token
-    const token = getTokenForProvider(
-      character.modelProvider,
-      character
-    );
+    const token = getTokenForProvider(character.modelProvider, character);
 
     // Initialize database
     const db = initializeDatabase();
 
     // Create runtime
-    const runtime = await createAgent(
-      character,
-      db, 
-      token
-    );
+    const runtime = await createAgent(character, db, token);
 
     // Initialize clients
-    const clients = await initializeClients(
-      character,
-      runtime
-    );
+    const clients = await initializeClients(character, runtime);
 
     // Register with direct client
     directClient.registerAgent(runtime);
@@ -223,7 +189,7 @@ async function startAgent(
   } catch (error) {
     console.error(
       `Error starting agent for character ${character.name}:`,
-      error
+      error,
     );
     throw error;
   }
@@ -235,7 +201,7 @@ async function startAgent(
 ```typescript
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 async function handleUserInput(input, agentId) {
@@ -249,21 +215,19 @@ async function handleUserInput(input, agentId) {
       `http://localhost:${serverPort}/${agentId}/message`,
       {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json" 
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           text: input,
           userId: "user",
-          userName: "User"
-        })
-      }
+          userName: "User",
+        }),
+      },
     );
 
     const data = await response.json();
-    data.forEach(message => 
-      console.log(`Agent: ${message.text}`)
-    );
+    data.forEach((message) => console.log(`Agent: ${message.text}`));
   } catch (error) {
     console.error("Error:", error);
   }
@@ -277,10 +241,10 @@ async function handleUserInput(input, agentId) {
 ```typescript
 async function loadPlugins(pluginPaths: string[]) {
   return await Promise.all(
-    pluginPaths.map(async plugin => {
+    pluginPaths.map(async (plugin) => {
       const importedPlugin = await import(plugin);
       return importedPlugin;
-    })
+    }),
   );
 }
 ```
@@ -288,18 +252,13 @@ async function loadPlugins(pluginPaths: string[]) {
 ### Character Hot Reloading
 
 ```typescript
-async function reloadCharacter(
-  runtime: IAgentRuntime,
-  characterPath: string
-) {
+async function reloadCharacter(runtime: IAgentRuntime, characterPath: string) {
   // Load new character
-  const character = JSON.parse(
-    fs.readFileSync(characterPath, "utf8")
-  );
+  const character = JSON.parse(fs.readFileSync(characterPath, "utf8"));
 
   // Update runtime
   runtime.character = character;
-  
+
   // Reload plugins
   if (character.plugins) {
     const plugins = await loadPlugins(character.plugins);
@@ -316,23 +275,18 @@ class AgentCoordinator {
 
   async broadcast(message: Memory) {
     const responses = await Promise.all(
-      Array.from(this.agents.values()).map(agent =>
-        agent.processMessage(message)
-      )
+      Array.from(this.agents.values()).map((agent) =>
+        agent.processMessage(message),
+      ),
     );
     return responses;
   }
 
   async coordinate(agents: string[], task: Task) {
     // Coordinate multiple agents on a task
-    const selectedAgents = agents.map(id => 
-      this.agents.get(id)
-    );
-    
-    return await this.executeCoordinatedTask(
-      selectedAgents,
-      task
-    );
+    const selectedAgents = agents.map((id) => this.agents.get(id));
+
+    return await this.executeCoordinatedTask(selectedAgents, task);
   }
 }
 ```
@@ -347,7 +301,7 @@ function validateCharacter(character: Character) {
   if (!character.name) {
     throw new Error("Character must have a name");
   }
-  
+
   if (!character.modelProvider) {
     throw new Error("Model provider must be specified");
   }
@@ -364,15 +318,9 @@ const character = {
 ### Error Handling
 
 ```typescript
-async function handleAgentError(
-  error: Error,
-  character: Character
-) {
+async function handleAgentError(error: Error, character: Character) {
   // Log error with context
-  console.error(
-    `Agent ${character.name} error:`,
-    error
-  );
+  console.error(`Agent ${character.name} error:`, error);
 
   // Attempt recovery
   if (error.code === "TOKEN_EXPIRED") {
@@ -383,7 +331,7 @@ async function handleAgentError(
   await notify({
     level: "error",
     character: character.name,
-    error
+    error,
   });
 }
 ```
@@ -395,12 +343,10 @@ class ResourceManager {
   async cleanup() {
     // Close database connections
     await this.db.close();
-    
+
     // Shutdown clients
-    await Promise.all(
-      this.clients.map(client => client.stop())
-    );
-    
+    await Promise.all(this.clients.map((client) => client.stop()));
+
     // Clear caches
     this.cache.clear();
   }
@@ -420,6 +366,7 @@ class ResourceManager {
 ### Common Issues
 
 1. **Character Loading Failures**
+
 ```typescript
 try {
   await loadCharacters(charactersArg);
@@ -433,6 +380,7 @@ try {
 ```
 
 2. **Client Initialization Errors**
+
 ```typescript
 async function handleClientError(error: Error) {
   if (error.message.includes("rate limit")) {
@@ -444,6 +392,7 @@ async function handleClientError(error: Error) {
 ```
 
 3. **Database Connection Issues**
+
 ```typescript
 async function handleDbError(error: Error) {
   if (error.message.includes("connection")) {

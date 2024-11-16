@@ -22,7 +22,7 @@
 
 [packages/core/src/types.ts:603](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L603)
 
-***
+---
 
 ### fetchVideoInfo()
 
@@ -40,7 +40,7 @@
 
 [packages/core/src/types.ts:602](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L602)
 
-***
+---
 
 ### isVideoUrl()
 
@@ -58,7 +58,7 @@
 
 [packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L600)
 
-***
+---
 
 ### processVideo()
 

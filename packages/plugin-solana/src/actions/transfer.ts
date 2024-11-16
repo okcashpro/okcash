@@ -1,12 +1,9 @@
-import { AnchorProvider } from "@coral-xyz/anchor";
-import { Wallet } from "@coral-xyz/anchor";
-
 import {
     getAssociatedTokenAddressSync,
     createTransferInstruction,
 } from "@solana/spl-token";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
-import settings from "@ai16z/eliza/src/settings.ts";
+import bs58 from "bs58";
+import { settings } from "@ai16z/eliza";
 
 import {
     Connection,
@@ -26,8 +23,8 @@ import {
     State,
     type Action,
 } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateObject } from "@ai16z/eliza/src/generation.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateObject } from "@ai16z/eliza";
 
 export interface TransferContent extends Content {
     tokenAddress: string;

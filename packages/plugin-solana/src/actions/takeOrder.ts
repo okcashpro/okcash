@@ -7,9 +7,9 @@ import {
     ModelClass,
 } from "@ai16z/eliza";
 import * as fs from "fs";
-import settings from "@ai16z/eliza/src/settings.ts";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateText } from "@ai16z/eliza/src/generation.ts";
+import { settings } from "@ai16z/eliza";
+import { composeContext } from "@ai16z/eliza";
+import { generateText } from "@ai16z/eliza";
 
 interface Order {
     userId: string;

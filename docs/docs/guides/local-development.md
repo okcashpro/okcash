@@ -64,7 +64,7 @@ For local inference without API dependencies:
 # Install CUDA support for NVIDIA GPUs
 npx --no node-llama-cpp source download --gpu cuda
 
-# The system will automatically download models from 
+# The system will automatically download models from
 # Hugging Face on first run
 ```
 
@@ -160,10 +160,10 @@ describe("Feature Test", () => {
       messages: [
         {
           user: "user1",
-          content: { text: "test message" }
-        }
+          content: { text: "test message" },
+        },
       ],
-      expected: "expected response"
+      expected: "expected response",
     });
     expect(result.success).toBe(true);
   });
@@ -183,7 +183,7 @@ export const myPlugin: Plugin = {
   description: "My custom plugin",
   actions: [],
   evaluators: [],
-  providers: []
+  providers: [],
 };
 ```
 
@@ -201,7 +201,7 @@ export const myAction: Action = {
     // Implementation
     return true;
   },
-  examples: []
+  examples: [],
 };
 ```
 
@@ -233,23 +233,26 @@ Create `.vscode/launch.json`:
 ### Debugging Tips
 
 1. Enable Debug Logging
+
 ```bash
 # Add to your .env file
 DEBUG=eliza:*
 ```
 
 2. Use Debug Points
-```typescript
-const debug = require('debug')('eliza:dev');
 
-debug('Operation details: %O', {
-  operation: 'functionName',
+```typescript
+const debug = require("debug")("eliza:dev");
+
+debug("Operation details: %O", {
+  operation: "functionName",
   params: parameters,
-  result: result
+  result: result,
 });
 ```
 
 3. Memory Debugging
+
 ```bash
 # Increase Node.js memory for development
 NODE_OPTIONS="--max-old-space-size=8192" pnpm run dev
@@ -295,8 +298,8 @@ const localModel = {
   modelProvider: "llamalocal",
   settings: {
     modelPath: "./models/llama-7b.gguf",
-    contextSize: 8192
-  }
+    contextSize: 8192,
+  },
 };
 
 // Cloud model configuration
@@ -304,8 +307,8 @@ const cloudModel = {
   modelProvider: "openai",
   settings: {
     model: "gpt-4o-mini",
-    temperature: 0.7
-  }
+    temperature: 0.7,
+  },
 };
 ```
 
@@ -342,6 +345,7 @@ class MemoryManager {
 ### Common Issues
 
 1. Model Loading Issues
+
 ```bash
 # Clear model cache
 rm -rf ./models/*
@@ -349,12 +353,14 @@ rm -rf ./models/*
 ```
 
 2. Database Connection Issues
+
 ```bash
 # Test database connection
 pnpm run test:db-connection
 ```
 
 3. Memory Issues
+
 ```bash
 # Check memory usage
 node --trace-gc index.js
@@ -376,11 +382,13 @@ pnpm run analyze
 ## Best Practices
 
 1. Code Organization
+
    - Place custom actions in `custom_actions/`
    - Keep character files in `characters/`
    - Store test data in `tests/fixtures/`
 
 2. Testing Strategy
+
    - Write unit tests for new features
    - Use integration tests for plugins
    - Test with multiple model providers

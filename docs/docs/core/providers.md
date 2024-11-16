@@ -2,10 +2,10 @@
 
 [Providers](/api/interfaces) are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
 
-
 ## Overview
 
 A provider's primary purpose is to:
+
 - Supply dynamic contextual information
 - Integrate with the agent runtime
 - Format information for conversation templates
@@ -16,9 +16,9 @@ A provider's primary purpose is to:
 ```typescript
 interface Provider {
   get: (
-    runtime: IAgentRuntime, 
-    message: Memory, 
-    state?: State
+    runtime: IAgentRuntime,
+    message: Memory,
+    state?: State,
   ) => Promise<string>;
 }
 ```
@@ -28,8 +28,8 @@ interface Provider {
 ## Built-in Providers
 
 ### Time Provider
-Provides temporal context for agent interactions:
 
+Provides temporal context for agent interactions:
 
 ```typescript
 const timeProvider: Provider = {
@@ -43,40 +43,42 @@ const timeProvider: Provider = {
 ```
 
 ### Facts Provider
+
 From bootstrap plugin - maintains conversation facts:
 
 ```typescript
 const factsProvider: Provider = {
-    get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
-        // Create embedding for recent messages and retrieve relevant facts
-        const recentMessages = formatMessages({
-            messages: state?.recentMessagesData?.slice(-10),
-            actors: state?.actorsData,
-        });
-        const embedding = await embed(runtime, recentMessages);
-        const memoryManager = new MemoryManager({ runtime, tableName: "facts" });
-        const recentFactsData = await memoryManager.getMemories({
-            roomId: message.roomId,
-            count: 10,
-            agentId: runtime.agentId,
-        });
+  get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
+    // Create embedding for recent messages and retrieve relevant facts
+    const recentMessages = formatMessages({
+      messages: state?.recentMessagesData?.slice(-10),
+      actors: state?.actorsData,
+    });
+    const embedding = await embed(runtime, recentMessages);
+    const memoryManager = new MemoryManager({ runtime, tableName: "facts" });
+    const recentFactsData = await memoryManager.getMemories({
+      roomId: message.roomId,
+      count: 10,
+      agentId: runtime.agentId,
+    });
 
-        // Combine and format facts
-        const allFacts = [...recentFactsData];  // Deduplication can be skipped if no overlap
-        const formattedFacts = formatFacts(allFacts);
+    // Combine and format facts
+    const allFacts = [...recentFactsData]; // Deduplication can be skipped if no overlap
+    const formattedFacts = formatFacts(allFacts);
 
-        return `Key facts that ${runtime.character.name} knows:\n${formattedFacts}`;
-    },
+    return `Key facts that ${runtime.character.name} knows:\n${formattedFacts}`;
+  },
 };
 
 export { factsProvider };
 ```
 
-### Boredom Provider 
-From bootstrap plugin - manages conversation dynamics and engagement by calculating the boredom level of an agent based on recent messages in a chat room. 
+### Boredom Provider
 
+From bootstrap plugin - manages conversation dynamics and engagement by calculating the boredom level of an agent based on recent messages in a chat room.
 
 1. **Data Structures**:
+
    - **boredomLevels**: An array of objects, each representing a boredom level with a minimum score and a set of status messages that reflect the agent's current engagement.
    - **interestWords**, **cringeWords**, and **negativeWords**: Arrays of words that influence the boredom score based on their presence in messages.
 
@@ -89,11 +91,10 @@ From bootstrap plugin - manages conversation dynamics and engagement by calculat
   - **Negative words**: Increase boredom (add 1 point).
   - **Exclamation marks**: Increase boredom (add 1 point).
   - **Question marks**: Increase or decrease boredom depending on the sender.
-   
+
 3. **Boredom Level**:
    - The boredom score is matched to a level from the `boredomLevels` array, which defines how engaged the agent feels.
    - A random status message from the selected boredom level is chosen and the agent’s name is inserted into the message.
-
 
 ```typescript
 interface BoredomLevel {
@@ -101,24 +102,23 @@ interface BoredomLevel {
   statusMessages: string[];
 }
 ```
-The result is a message that reflects the agent's perceived level of engagement in the conversation, based on their recent interactions.
 
+The result is a message that reflects the agent's perceived level of engagement in the conversation, based on their recent interactions.
 
 ```typescript
 const boredomProvider: Provider = {
   get: async (runtime: IAgentRuntime, message: Memory) => {
     const messages = await runtime.messageManager.getMemories({
       roomId: message.roomId,
-      count: 10
+      count: 10,
     });
-    
-    return messages.length > 0 ? 
-      "Actively engaged in conversation" :
-      "No recent interactions";
-  }
+
+    return messages.length > 0
+      ? "Actively engaged in conversation"
+      : "No recent interactions";
+  },
 };
 ```
-
 
 Features:
 
@@ -135,19 +135,19 @@ Features:
 ### Basic Provider Template
 
 ```typescript
-import { Provider, IAgentRuntime, Memory, State } from '@ai16z/eliza';
+import { Provider, IAgentRuntime, Memory, State } from "@ai16z/eliza";
 
 const customProvider: Provider = {
   get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
     // Get relevant data using runtime services
     const memories = await runtime.messageManager.getMemories({
       roomId: message.roomId,
-      count: 5
+      count: 5,
     });
-    
+
     // Format and return context
     return formatContextString(memories);
-  }
+  },
 };
 ```
 
@@ -160,15 +160,15 @@ const memoryProvider: Provider = {
     const messages = await runtime.messageManager.getMemories({
       roomId: message.roomId,
       count: 5,
-      unique: true
+      unique: true,
     });
-    
+
     // Get user descriptions
     const descriptions = await runtime.descriptionManager.getMemories({
       roomId: message.roomId,
-      userId: message.userId
+      userId: message.userId,
     });
-    
+
     // Combine and format
     return `
 Recent Activity:
@@ -177,7 +177,7 @@ ${formatMessages(messages)}
 User Context:
 ${formatDescriptions(descriptions)}
     `.trim();
-  }
+  },
 };
 ```
 
@@ -239,12 +239,7 @@ const state = await runtime.composeState(message);
 ## Example: Complete Provider
 
 ```typescript
-import { 
-  Provider, 
-  IAgentRuntime, 
-  Memory, 
-  State 
-} from '@ai16z/eliza';
+import { Provider, IAgentRuntime, Memory, State } from "@ai16z/eliza";
 
 const comprehensiveProvider: Provider = {
   get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
@@ -252,39 +247,38 @@ const comprehensiveProvider: Provider = {
       // Get recent messages
       const messages = await runtime.messageManager.getMemories({
         roomId: message.roomId,
-        count: 5
+        count: 5,
       });
-      
+
       // Get user context
       const userContext = await runtime.descriptionManager.getMemories({
         roomId: message.roomId,
-        userId: message.userId
+        userId: message.userId,
       });
-      
+
       // Get relevant facts
       const facts = await runtime.messageManager.getMemories({
         roomId: message.roomId,
         tableName: "facts",
-        count: 3
+        count: 3,
       });
-      
+
       // Format comprehensive context
       return `
 # Conversation Context
-${messages.map(m => `- ${m.content.text}`).join('\n')}
+${messages.map((m) => `- ${m.content.text}`).join("\n")}
 
 # User Information
-${userContext.map(c => c.content.text).join('\n')}
+${userContext.map((c) => c.content.text).join("\n")}
 
 # Related Facts
-${facts.map(f => `- ${f.content.text}`).join('\n')}
+${facts.map((f) => `- ${f.content.text}`).join("\n")}
       `.trim();
-      
     } catch (error) {
       console.error("Provider error:", error);
       return "Context temporarily unavailable";
     }
-  }
+  },
 };
 ```
 
@@ -319,7 +313,7 @@ ${facts.map(f => `- ${f.content.text}`).join('\n')}
      // Attempt alternative data sources
    };
    ```
-   
+
 ---
 
 ## Further Reading

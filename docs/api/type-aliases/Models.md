@@ -22,21 +22,21 @@
 
 > **groq**: [`Model`](Model.md)
 
-### llama\_cloud
+### llama_cloud
 
-> **llama\_cloud**: [`Model`](Model.md)
+> **llama_cloud**: [`Model`](Model.md)
 
-### llama\_local
+### llama_local
 
-> **llama\_local**: [`Model`](Model.md)
+> **llama_local**: [`Model`](Model.md)
 
 ### google
 
 > **google**: [`Model`](Model.md)
 
-### claude\_vertex
+### claude_vertex
 
-> **claude\_vertex**: [`Model`](Model.md)
+> **claude_vertex**: [`Model`](Model.md)
 
 ### redpill
 
@@ -49,6 +49,10 @@
 ### ollama
 
 > **ollama**: [`Model`](Model.md)
+
+### heurist
+
+> **heurist**: [`Model`](Model.md)
 
 ## Defined in
 
