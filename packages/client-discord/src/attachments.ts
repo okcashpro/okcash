@@ -1,5 +1,5 @@
-import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
+import { generateText, trimTokens } from "@ai16z/eliza";
+import { parseJSONObjectFromText } from "@ai16z/eliza";
 import {
     IAgentRuntime,
     IImageDescriptionService,
@@ -10,7 +10,7 @@ import {
     ModelClass,
     Service,
     ServiceType,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { Attachment, Collection } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
@@ -103,7 +103,8 @@ export class AttachmentManager {
             media = await this.processImageAttachment(attachment);
         } else if (
             attachment.contentType?.startsWith("video/") ||
-            this.runtime.getService(ServiceType.VIDEO)
+            this.runtime
+                .getService(ServiceType.VIDEO)
                 .getInstance<IVideoService>()
                 .isVideoUrl(attachment.url)
         ) {

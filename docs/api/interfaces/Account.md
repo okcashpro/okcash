@@ -12,9 +12,9 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:273](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L273)
+[packages/core/src/types.ts:275](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L275)
 
-***
+---
 
 ### name
 
@@ -22,9 +22,9 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:274](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L274)
+[packages/core/src/types.ts:276](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L276)
 
-***
+---
 
 ### username
 
@@ -32,9 +32,9 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:275](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L275)
+[packages/core/src/types.ts:277](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L277)
 
-***
+---
 
 ### details?
 
@@ -42,13 +42,13 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Index Signature
 
- \[`key`: `string`\]: `any`
+\[`key`: `string`\]: `any`
 
 #### Defined in
 
-[packages/core/src/types.ts:276](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L276)
+[packages/core/src/types.ts:278](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L278)
 
-***
+---
 
 ### email?
 
@@ -56,9 +56,9 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:277](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L277)
+[packages/core/src/types.ts:279](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L279)
 
-***
+---
 
 ### avatarUrl?
 
@@ -66,4 +66,4 @@ Represents a user, including their name, details, and a unique identifier.
 
 #### Defined in
 
-[packages/core/src/types.ts:278](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L278)
+[packages/core/src/types.ts:280](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L280)

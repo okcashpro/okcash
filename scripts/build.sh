@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check Node.js version
-REQUIRED_NODE_VERSION=23
+REQUIRED_NODE_VERSION=22
 CURRENT_NODE_VERSION=$(node -v | cut -d'.' -f1 | sed 's/v//')
 
 if (( CURRENT_NODE_VERSION < REQUIRED_NODE_VERSION )); then
@@ -18,55 +18,49 @@ if [ ! -d "packages" ]; then
     exit 1
 fi
 
-# Define the core package path
-CORE_PACKAGE="packages/core"
-EXCLUDED_PACKAGE="packages/agent"
+# Define packages to build in order
+PACKAGES=(
+    "core"
+    "plugin-solana"
+    "plugin-starknet"
+    "adapter-postgres"
+    "adapter-sqlite"
+    "adapter-sqljs"
+    "adapter-supabase"
+    "client-auto"
+    "client-direct"
+    "client-discord"
+    "client-telegram"
+    "client-twitter"
+    "plugin-node"
+    "plugin-bootstrap"
+    "plugin-image-generation"
+)
 
-# Build the core package first
-if [ -d "$CORE_PACKAGE" ]; then
-    echo -e "\033[1mBuilding core package: core\033[0m"
-    cd "$CORE_PACKAGE" || exit
+# Build packages in specified order
+for package in "${PACKAGES[@]}"; do
+    package_path="packages/$package"
+    
+    if [ ! -d "$package_path" ]; then
+        echo -e "\033[1mPackage directory '$package' not found, skipping...\033[0m"
+        continue
+    fi
 
-    # Check if a package.json file exists
+    echo -e "\033[1mBuilding package: $package\033[0m"
+    cd "$package_path" || continue
+
     if [ -f "package.json" ]; then
         if npm run build; then
-            echo -e "\033[1;32mSuccessfully built core package\033[0m\n"
+            echo -e "\033[1;32mSuccessfully built $package\033[0m\n"
         else
-            echo -e "\033[1mFailed to build core package\033[0m"
+            echo -e "\033[1;31mFailed to build $package\033[0m"
             exit 1
         fi
     else
-        echo "No package.json found in core package, skipping..."
+        echo "No package.json found in $package, skipping..."
     fi
 
-    # Return to the root directory
     cd - > /dev/null || exit
-else
-    echo "Core package directory 'core' not found, skipping core build..."
-fi
-
-# Build other packages, excluding the "agent" package
-for package in packages/*; do
-    if [ "$package" != "$CORE_PACKAGE" ] && [ "$package" != "$EXCLUDED_PACKAGE" ] && [ -d "$package" ]; then
-        echo -e "\033[1mBuilding package: $(basename "$package")\033[0m"
-        cd "$package" || continue
-
-        # Check if a package.json file exists
-        if [ -f "package.json" ]; then
-            if npm run build; then
-                echo -e "\033[1;32mSuccessfully built $(basename "$package")\033[0m\n"
-            else
-                echo "Failed to build $(basename "$package")"
-            fi
-        else
-            echo "No package.json found in $(basename "$package"), skipping..."
-        fi
-
-        # Return to the root directory
-        cd - > /dev/null || exit
-    elif [ "$package" == "$EXCLUDED_PACKAGE" ]; then
-        echo -e "\033[1mSkipping package: agent\033[0m\n"
-    fi
 done
 
 echo -e "\033[1mBuild process completed.😎\033[0m"

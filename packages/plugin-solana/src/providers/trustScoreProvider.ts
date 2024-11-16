@@ -18,12 +18,7 @@ import {
     TokenRecommendation,
 } from "../adapters/trustScoreDatabase.ts";
 import settings from "@ai16z/eliza/src/settings.ts";
-import {
-    IAgentRuntime,
-    Memory,
-    Provider,
-    State,
-} from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
@@ -338,7 +333,7 @@ export class TrustScoreManager {
         data: TradeData
     ): Promise<TradePerformance> {
         const recommender =
-            await this.trustScoreDb.getOrCreateRecommenderWithDiscordId(
+            await this.trustScoreDb.getOrCreateRecommenderWithTelegramId(
                 recommenderId
             );
         const processedData: ProcessedTokenData =
@@ -449,7 +444,7 @@ export class TrustScoreManager {
         isSimulation: boolean
     ) {
         const recommender =
-            await this.trustScoreDb.getOrCreateRecommenderWithDiscordId(
+            await this.trustScoreDb.getOrCreateRecommenderWithTelegramId(
                 recommenderId
             );
         const processedData: ProcessedTokenData =

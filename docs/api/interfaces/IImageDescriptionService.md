@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:583](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L583)
+[packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
 
-***
+---
 
 ### initialize()
 
@@ -38,9 +38,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:584](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L584)
+[packages/core/src/types.ts:596](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L596)
 
-***
+---
 
 ### describeImage()
 
@@ -64,4 +64,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:585](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L585)
+[packages/core/src/types.ts:597](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L597)

@@ -28,7 +28,7 @@ pnpm add @ai16z/core
 The AgentRuntime class serves as the central nervous system of Eliza, orchestrating all major components:
 
 ```typescript
-import { AgentRuntime } from '@ai16z/core';
+import { AgentRuntime } from "@ai16z/core";
 
 const runtime = new AgentRuntime({
   // Core configuration
@@ -36,22 +36,23 @@ const runtime = new AgentRuntime({
   token,
   modelProvider: ModelProviderName.OPENAI,
   character,
-  
+
   // Extension points
   plugins: [bootstrapPlugin, nodePlugin],
   providers: [],
   actions: [],
   services: [],
   managers: [],
-  
+
   // Optional settings
   conversationLength: 32,
   agentId: customId,
-  fetch: customFetch
+  fetch: customFetch,
 });
 ```
 
 Key capabilities:
+
 - State composition and management
 - Plugin and service registration
 - Memory and relationship management
@@ -70,16 +71,13 @@ class MemoryManager implements IMemoryManager {
   // Create new memories with embeddings
   async createMemory(memory: Memory, unique = false): Promise<void> {
     if (!memory.embedding) {
-      memory.embedding = await embed(
-        this.runtime,
-        memory.content.text
-      );
+      memory.embedding = await embed(this.runtime, memory.content.text);
     }
 
     await this.runtime.databaseAdapter.createMemory(
       memory,
       this.tableName,
-      unique
+      unique,
     );
   }
 
@@ -91,7 +89,7 @@ class MemoryManager implements IMemoryManager {
       count?: number;
       roomId: UUID;
       unique?: boolean;
-    }
+    },
   ): Promise<Memory[]> {
     return this.runtime.databaseAdapter.searchMemories({
       tableName: this.tableName,
@@ -99,13 +97,13 @@ class MemoryManager implements IMemoryManager {
       embedding,
       match_threshold: opts.match_threshold ?? 0.8,
       match_count: opts.count ?? 10,
-      unique: opts.unique ?? false
+      unique: opts.unique ?? false,
     });
   }
 }
 ```
 
-### Context System 
+### Context System
 
 The context system manages state composition and template handling:
 
@@ -126,9 +124,7 @@ export const composeContext = ({
 
 // Header handling
 export const addHeader = (header: string, body: string): string => {
-  return body.length > 0 
-    ? `${header ? header + "\n" : header}${body}\n` 
-    : "";
+  return body.length > 0 ? `${header ? header + "\n" : header}${body}\n` : "";
 };
 ```
 
@@ -142,19 +138,19 @@ interface Action {
   similes: string[];
   description: string;
   examples: MessageExample[][];
-  
+
   validate: (
     runtime: IAgentRuntime,
     message: Memory,
-    state?: State
+    state?: State,
   ) => Promise<boolean>;
-  
+
   handler: (
     runtime: IAgentRuntime,
     message: Memory,
     state?: State,
     options?: any,
-    callback?: HandlerCallback
+    callback?: HandlerCallback,
   ) => Promise<void>;
 }
 
@@ -163,34 +159,37 @@ const generateImageAction: Action = {
   name: "GENERATE_IMAGE",
   similes: ["CREATE_IMAGE", "MAKE_PICTURE"],
   description: "Generate an AI image from text",
-  
+
   validate: async (runtime, message) => {
-    return !!runtime.getSetting("ANTHROPIC_API_KEY") &&
-           !!runtime.getSetting("TOGETHER_API_KEY");
+    return (
+      !!runtime.getSetting("ANTHROPIC_API_KEY") &&
+      !!runtime.getSetting("TOGETHER_API_KEY")
+    );
   },
-  
+
   handler: async (runtime, message, state, options, callback) => {
     const images = await generateImage(
       { prompt: message.content.text },
-      runtime
+      runtime,
     );
-    
+
     const captions = await Promise.all(
-      images.data.map(image => 
-        generateCaption({ imageUrl: image }, runtime)
-      )
+      images.data.map((image) => generateCaption({ imageUrl: image }, runtime)),
     );
-    
-    callback?.({
-      text: "Generated images",
-      attachments: images.data.map((image, i) => ({
-        id: crypto.randomUUID(),
-        url: image,
-        title: "Generated image",
-        description: captions[i].title
-      }))
-    }, []);
-  }
+
+    callback?.(
+      {
+        text: "Generated images",
+        attachments: images.data.map((image, i) => ({
+          id: crypto.randomUUID(),
+          url: image,
+          title: "Generated image",
+          description: captions[i].title,
+        })),
+      },
+      [],
+    );
+  },
 };
 ```
 
@@ -203,17 +202,14 @@ interface Evaluator {
   name: string;
   similes: string[];
   alwaysRun?: boolean;
-  
+
   validate: (
     runtime: IAgentRuntime,
     message: Memory,
-    state?: State
+    state?: State,
   ) => Promise<boolean>;
-  
-  handler: (
-    runtime: IAgentRuntime,
-    message: Memory
-  ) => Promise<void>;
+
+  handler: (runtime: IAgentRuntime, message: Memory) => Promise<void>;
 }
 
 // Example evaluator
@@ -229,19 +225,19 @@ const factEvaluator: Evaluator = {
   handler: async (runtime, message) => {
     const facts = await runtime.loreManager.searchMemories({
       text: message.content.text,
-      threshold: 0.8
+      threshold: 0.8,
     });
-    
+
     if (facts.length > 0) {
       await runtime.messageManager.createMemory({
-        content: { 
-          text: `Verified fact: ${facts[0].content.text}`
+        content: {
+          text: `Verified fact: ${facts[0].content.text}`,
         },
         roomId: message.roomId,
-        userId: runtime.agentId
+        userId: runtime.agentId,
       });
     }
-  }
+  },
 };
 ```
 
@@ -258,23 +254,23 @@ interface State {
   lore: string;
   adjective?: string;
 
-  // Conversation context  
+  // Conversation context
   senderName?: string;
   actors: string;
   actorsData: Actor[];
   recentMessages: string;
   recentMessagesData: Memory[];
-  
+
   // Objectives
   goals: string;
   goalsData: Goal[];
-  
+
   // Behavioral guidance
   actions: string;
   actionNames: string;
   evaluators: string;
   evaluatorNames: string;
-  
+
   // Additional context
   providers: string;
   attachments: string;
@@ -291,17 +287,17 @@ The core implements a service-based architecture:
 // Service base class
 class Service {
   static serviceType: ServiceType;
-  
+
   async initialize(
-    device: string | null, 
-    runtime: IAgentRuntime
+    device: string | null,
+    runtime: IAgentRuntime,
   ): Promise<void>;
 }
 
 // Service registry
 class ServiceRegistry {
   private services = new Map<ServiceType, Service>();
-  
+
   registerService(service: Service): void {
     const type = (service as typeof Service).serviceType;
     if (this.services.has(type)) {
@@ -310,9 +306,9 @@ class ServiceRegistry {
     }
     this.services.set(type, service);
   }
-  
+
   getService<T>(type: ServiceType): T | null {
-    return this.services.get(type) as T || null;
+    return (this.services.get(type) as T) || null;
   }
 }
 ```
@@ -326,19 +322,13 @@ class ServiceRegistry {
 await memoryManager.createMemory(memory, true);
 
 // Search with appropriate thresholds
-const similar = await memoryManager.searchMemoriesByEmbedding(
-  embedding,
-  { 
-    match_threshold: 0.8,
-    count: 10 
-  }
-);
+const similar = await memoryManager.searchMemoriesByEmbedding(embedding, {
+  match_threshold: 0.8,
+  count: 10,
+});
 
 // Clean up old memories periodically
-await memoryManager.removeAllMemories(
-  roomId,
-  tableName
-);
+await memoryManager.removeAllMemories(roomId, tableName);
 ```
 
 ### State Composition
@@ -346,7 +336,7 @@ await memoryManager.removeAllMemories(
 ```typescript
 // Compose full state
 const state = await runtime.composeState(message, {
-  additionalContext: "Custom context"
+  additionalContext: "Custom context",
 });
 
 // Update with recent messages
@@ -355,9 +345,7 @@ const updatedState = await runtime.updateRecentMessageState(state);
 // Add custom providers
 state.providers = addHeader(
   "# Additional Information",
-  await Promise.all(
-    providers.map(p => p.get(runtime, message))
-  ).join("\n")
+  await Promise.all(providers.map((p) => p.get(runtime, message))).join("\n"),
 );
 ```
 
@@ -367,13 +355,13 @@ state.providers = addHeader(
 // Service initialization
 class CustomService extends Service {
   static serviceType = ServiceType.CUSTOM;
-  
+
   async initialize(device: string | null, runtime: IAgentRuntime) {
     await this.setupDependencies();
     await this.validateConfig();
     await this.connect();
   }
-  
+
   async cleanup() {
     await this.disconnect();
     await this.clearResources();
@@ -384,9 +372,7 @@ class CustomService extends Service {
 runtime.registerService(new CustomService());
 
 // Service usage
-const service = runtime.getService<CustomService>(
-  ServiceType.CUSTOM
-);
+const service = runtime.getService<CustomService>(ServiceType.CUSTOM);
 ```
 
 ## Error Handling
@@ -416,23 +402,23 @@ try {
 // Create specialized memory managers
 class DocumentMemoryManager extends MemoryManager {
   constructor(runtime: IAgentRuntime) {
-    super({ 
+    super({
       runtime,
       tableName: "documents",
-      useCache: true
+      useCache: true,
     });
   }
-  
+
   async processDocument(doc: Document): Promise<void> {
     const chunks = await splitChunks(doc.content);
-    
+
     for (const chunk of chunks) {
       await this.createMemory({
         content: { text: chunk },
-        metadata: { 
+        metadata: {
           documentId: doc.id,
-          section: chunk.section 
-        }
+          section: chunk.section,
+        },
       });
     }
   }
@@ -449,19 +435,19 @@ async function enhancedEmbed(
   opts: {
     model?: string;
     dimensions?: number;
-    pooling?: 'mean' | 'max';
-  }
+    pooling?: "mean" | "max";
+  },
 ): Promise<number[]> {
   // Get cached embedding if available
   const cached = await runtime.databaseAdapter.getCachedEmbeddings({
     query_input: text,
-    query_threshold: 0.95
+    query_threshold: 0.95,
   });
-  
+
   if (cached.length > 0) {
     return cached[0].embedding;
   }
-  
+
   // Generate new embedding
   return embed(runtime, text, opts);
 }
@@ -472,23 +458,26 @@ async function enhancedEmbed(
 ```typescript
 class StateManager {
   async saveState(state: State): Promise<void> {
-    await this.runtime.databaseAdapter.createMemory({
-      content: { 
-        type: 'state',
-        data: state 
+    await this.runtime.databaseAdapter.createMemory(
+      {
+        content: {
+          type: "state",
+          data: state,
+        },
+        roomId: state.roomId,
+        userId: state.agentId,
       },
-      roomId: state.roomId,
-      userId: state.agentId
-    }, 'states');
+      "states",
+    );
   }
-  
+
   async loadState(roomId: UUID): Promise<State | null> {
     const states = await this.runtime.databaseAdapter.getMemories({
       roomId,
-      tableName: 'states',
-      count: 1
+      tableName: "states",
+      count: 1,
     });
-    
+
     return states[0]?.content.data || null;
   }
 }

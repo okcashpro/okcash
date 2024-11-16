@@ -3,9 +3,13 @@
 <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
 
 ### [For Chinese Version: 中文说明](./README_CN.md)
+
 ### [For Japanese Version: 日本語の説明](./README_JA.md)
+
 ### [For Korean Version: 한국어 설명](./README_KOR.md)
+
 ### [For French Version: Instructions en français](./README_FR.md)
+
 ### [For Portuguese Version: Instruções em português](./README_PTBR.md)
 
 ## Features
@@ -28,7 +32,7 @@
 # Getting Started
 
 **Prerequisites (MUST):**
-    
+
 -   [Python 2.7+](https://www.python.org/downloads/)
 -   [Node.js 23.1+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
@@ -160,7 +164,7 @@ For help with setting up your Discord Bot, check out here: https://discordjs.gui
 
 ## Testing
 
-To run the test suite:
+To run the test suite, you must got into each package:
 
 ```bash
 pnpm test           # Run tests once
@@ -190,3 +194,7 @@ For development purposes, you can run the docker container with the following co
 ```
 pnpm docker
 ```
+
+This will drop you into a shell inside the docker container where you can continue to configure the instance
+
+and then you can start it with `pnpm start`

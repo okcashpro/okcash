@@ -3,7 +3,7 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 
 export const ignoreAction: Action = {
     name: "IGNORE",

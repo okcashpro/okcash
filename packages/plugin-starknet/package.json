@@ -1,0 +1,21 @@
+{
+    "name": "@ai16z/plugin-starknet",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@ai16z/eliza": "workspace:*",
+        "@avnu/avnu-sdk": "^2.1.1",
+        "starknet": "^6.11.0",
+        "tsup": "^8.3.5",
+        "vitest": "^2.1.4"
+    },
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "test": "vitest"
+    },
+    "peerDependencies": {
+        "whatwg-url": "7.1.0"
+    }
+}

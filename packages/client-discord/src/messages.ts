@@ -1,13 +1,7 @@
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "@ai16z/eliza/src/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import {
-    messageCompletionFooter,
-    shouldRespondFooter,
-} from "@ai16z/eliza/src/parsing.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateMessageResponse, generateShouldRespond } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
+import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
 import {
     Content,
     HandlerCallback,
@@ -21,10 +15,10 @@ import {
     ServiceType,
     State,
     UUID,
-} from "@ai16z/eliza/src/types.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
-import { generateText, trimTokens } from "@ai16z/eliza/src/generation.ts";
-import { parseJSONObjectFromText } from "@ai16z/eliza/src/parsing.ts";
+} from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
+import { generateText, trimTokens } from "@ai16z/eliza";
+import { parseJSONObjectFromText } from "@ai16z/eliza";
 import {
     ChannelType,
     Client,
@@ -36,7 +30,6 @@ import {
 import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
-import { Service } from "@ai16z/eliza";
 
 const MAX_MESSAGE_LENGTH = 1900;
 async function generateSummary(
@@ -341,9 +334,26 @@ export class MessageManager {
         if (
             message.interaction ||
             message.author.id ===
-            this.client.user?.id /* || message.author?.bot*/
+                this.client.user?.id /* || message.author?.bot*/
         )
             return;
+
+        if (
+            this.runtime.character.clientConfig?.discord
+                ?.shouldIgnoreBotMessages &&
+            message.author?.bot
+        ) {
+            return;
+        }
+
+        if (
+            this.runtime.character.clientConfig?.discord
+                ?.shouldIgnoreDirectMessages &&
+            message.channel.type === ChannelType.DM
+        ) {
+            return;
+        }
+
         const userId = message.author.id as UUID;
         const userName = message.author.username;
         const name = message.author.displayName;
@@ -389,10 +399,10 @@ export class MessageManager {
                 url: message.url,
                 inReplyTo: message.reference?.messageId
                     ? stringToUuid(
-                        message.reference.messageId +
-                        "-" +
-                        this.runtime.agentId
-                    )
+                          message.reference.messageId +
+                              "-" +
+                              this.runtime.agentId
+                      )
                     : undefined,
             };
 
@@ -503,11 +513,9 @@ export class MessageManager {
                         }
                         if (message.channel.type === ChannelType.GuildVoice) {
                             // For voice channels, use text-to-speech
-                            const audioStream = await (
-                                this.runtime.getService(
-                                    ServiceType.SPEECH_GENERATION
-                                )
-                            ).getInstance<ISpeechService>()
+                            const audioStream = await this.runtime
+                                .getService(ServiceType.SPEECH_GENERATION)
+                                .getInstance<ISpeechService>()
                                 .generate(this.runtime, content.text);
                             await this.voiceManager.playAudioStream(
                                 userId,
@@ -659,14 +667,15 @@ export class MessageManager {
 
         for (const url of urls) {
             if (
-                this.runtime.getService(ServiceType.VIDEO)
+                this.runtime
+                    .getService(ServiceType.VIDEO)
                     .getInstance<IVideoService>()
                     .isVideoUrl(url)
             ) {
-                const videoInfo = await (this.runtime
+                const videoInfo = await this.runtime
                     .getService(ServiceType.VIDEO)
                     .getInstance<IVideoService>()
-                    .processVideo(url));
+                    .processVideo(url);
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,

@@ -10,7 +10,7 @@
 
 [packages/core/src/types.ts:470](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L470)
 
-***
+---
 
 ### runtime
 
@@ -20,7 +20,7 @@
 
 [packages/core/src/types.ts:467](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L467)
 
-***
+---
 
 ### tableName
 
@@ -48,7 +48,7 @@
 
 [packages/core/src/types.ts:472](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L472)
 
-***
+---
 
 ### countMemories()
 
@@ -68,7 +68,7 @@
 
 [packages/core/src/types.ts:502](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L502)
 
-***
+---
 
 ### createMemory()
 
@@ -88,7 +88,7 @@
 
 [packages/core/src/types.ts:499](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L499)
 
-***
+---
 
 ### getCachedEmbeddings()
 
@@ -106,7 +106,7 @@
 
 [packages/core/src/types.ts:481](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L481)
 
-***
+---
 
 ### getMemories()
 
@@ -136,7 +136,7 @@
 
 [packages/core/src/types.ts:473](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L473)
 
-***
+---
 
 ### getMemoriesByRoomIds()
 
@@ -158,7 +158,7 @@
 
 [packages/core/src/types.ts:485](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L485)
 
-***
+---
 
 ### getMemoryById()
 
@@ -176,7 +176,7 @@
 
 [packages/core/src/types.ts:484](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L484)
 
-***
+---
 
 ### removeAllMemories()
 
@@ -194,7 +194,7 @@
 
 [packages/core/src/types.ts:501](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L501)
 
-***
+---
 
 ### removeMemory()
 
@@ -212,7 +212,7 @@
 
 [packages/core/src/types.ts:500](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L500)
 
-***
+---
 
 ### searchMemoriesByEmbedding()
 
@@ -228,7 +228,7 @@
 
 • **opts.count?**: `number`
 
-• **opts.match\_threshold?**: `number`
+• **opts.match_threshold?**: `number`
 
 • **opts.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 

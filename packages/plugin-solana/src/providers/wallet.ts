@@ -1,9 +1,4 @@
-import {
-    IAgentRuntime,
-    Memory,
-    Provider,
-    State,
-} from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 

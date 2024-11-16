@@ -11,9 +11,10 @@ Eliza's infrastructure is built on a flexible database architecture that support
 ## Core Components
 
 ### Database Adapters
+
 Eliza supports multiple database backends through a pluggable adapter system:
 
-- **PostgreSQL** - Full-featured adapter with vector search capabilities 
+- **PostgreSQL** - Full-featured adapter with vector search capabilities
 - **SQLite** - Lightweight local database option
 - **SQL.js** - In-memory database for testing and development
 - **Supabase** - Cloud-hosted PostgreSQL with additional features
@@ -36,12 +37,14 @@ The database schema includes several key tables:
 ### PostgreSQL Setup
 
 1. **Install PostgreSQL Extensions**
+
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
 ```
 
 2. **Initialize Core Tables**
+
 ```sql
 -- Create base tables
 CREATE TABLE accounts (
@@ -73,8 +76,9 @@ CREATE TABLE memories (
 ```
 
 3. **Set Up Indexes**
+
 ```sql
-CREATE INDEX idx_memories_embedding ON memories 
+CREATE INDEX idx_memories_embedding ON memories
     USING hnsw ("embedding" vector_cosine_ops);
 CREATE INDEX idx_memories_type_room ON memories("type", "roomId");
 CREATE INDEX idx_participants_user ON participants("userId");
@@ -94,7 +98,7 @@ const postgresConfig = {
 // Supabase Configuration
 const supabaseConfig = {
   supabaseUrl: process.env.SUPABASE_URL,
-  supabaseKey: process.env.SUPABASE_KEY
+  supabaseKey: process.env.SUPABASE_KEY,
 };
 ```
 
@@ -106,15 +110,15 @@ The memory system uses vector embeddings for semantic search:
 
 ```typescript
 async function storeMemory(runtime: IAgentRuntime, content: string) {
-    const embedding = await runtime.embed(content);
-    
-    await runtime.databaseAdapter.createMemory({
-        type: "message",
-        content: { text: content },
-        embedding,
-        roomId: roomId,
-        userId: userId
-    });
+  const embedding = await runtime.embed(content);
+
+  await runtime.databaseAdapter.createMemory({
+    type: "message",
+    content: { text: content },
+    embedding,
+    roomId: roomId,
+    userId: userId,
+  });
 }
 ```
 
@@ -122,16 +126,13 @@ async function storeMemory(runtime: IAgentRuntime, content: string) {
 
 ```typescript
 async function searchMemories(runtime: IAgentRuntime, query: string) {
-    const embedding = await runtime.embed(query);
-    
-    return runtime.databaseAdapter.searchMemoriesByEmbedding(
-        embedding,
-        {
-            match_threshold: 0.8,
-            count: 10,
-            tableName: "memories"
-        }
-    );
+  const embedding = await runtime.embed(query);
+
+  return runtime.databaseAdapter.searchMemoriesByEmbedding(embedding, {
+    match_threshold: 0.8,
+    count: 10,
+    tableName: "memories",
+  });
 }
 ```
 
@@ -140,16 +141,18 @@ async function searchMemories(runtime: IAgentRuntime, query: string) {
 ### Database Optimization
 
 1. **Index Management**
+
    - Use HNSW indexes for vector similarity search
    - Create appropriate indexes for frequent query patterns
    - Regularly analyze and update index statistics
 
 2. **Connection Pooling**
+
    ```typescript
    const pool = new Pool({
-       max: 20,               // Maximum pool size
-       idleTimeoutMillis: 30000,
-       connectionTimeoutMillis: 2000
+     max: 20, // Maximum pool size
+     idleTimeoutMillis: 30000,
+     connectionTimeoutMillis: 2000,
    });
    ```
 
@@ -161,15 +164,17 @@ async function searchMemories(runtime: IAgentRuntime, query: string) {
 ### High Availability
 
 1. **Database Replication**
+
    - Set up read replicas for scaling read operations
    - Configure streaming replication for failover
    - Implement connection retry logic
 
 2. **Backup Strategy**
+
    ```sql
    -- Regular backups
    pg_dump -Fc mydb > backup.dump
-   
+
    -- Point-in-time recovery
    pg_basebackup -D backup -Fp -Xs -P
    ```
@@ -179,6 +184,7 @@ async function searchMemories(runtime: IAgentRuntime, query: string) {
 ### Access Control
 
 1. **Row Level Security**
+
 ```sql
 ALTER TABLE memories ENABLE ROW LEVEL SECURITY;
 
@@ -187,6 +193,7 @@ CREATE POLICY "memories_isolation" ON memories
 ```
 
 2. **Role Management**
+
 ```sql
 -- Create application role
 CREATE ROLE app_user;
@@ -199,11 +206,13 @@ GRANT USAGE ON SCHEMA public TO app_user;
 ### Data Protection
 
 1. **Encryption**
+
    - Use TLS for connections
    - Encrypt sensitive data at rest
    - Implement key rotation
 
 2. **Audit Logging**
+
 ```sql
 CREATE TABLE logs (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -221,19 +230,20 @@ CREATE TABLE logs (
 
 ```typescript
 async function checkDatabaseHealth(): Promise<boolean> {
-    try {
-        await db.query('SELECT 1');
-        return true;
-    } catch (error) {
-        console.error('Database health check failed:', error);
-        return false;
-    }
+  try {
+    await db.query("SELECT 1");
+    return true;
+  } catch (error) {
+    console.error("Database health check failed:", error);
+    return false;
+  }
 }
 ```
 
 ### Performance Metrics
 
 Track key metrics:
+
 - Query performance
 - Connection pool utilization
 - Memory usage
@@ -244,6 +254,7 @@ Track key metrics:
 ### Regular Tasks
 
 1. **Vacuum Operations**
+
 ```sql
 -- Regular vacuum
 VACUUM ANALYZE memories;
@@ -253,6 +264,7 @@ ANALYZE memories;
 ```
 
 2. **Index Maintenance**
+
 ```sql
 -- Reindex vector similarity index
 REINDEX INDEX idx_memories_embedding;
@@ -261,20 +273,25 @@ REINDEX INDEX idx_memories_embedding;
 ### Data Lifecycle
 
 1. **Archival Strategy**
+
    - Archive old conversations
    - Compress inactive memories
    - Implement data retention policies
 
 2. **Cleanup Jobs**
+
 ```typescript
 async function cleanupOldMemories() {
-    const cutoffDate = new Date();
-    cutoffDate.setMonth(cutoffDate.getMonth() - 6);
-    
-    await db.query(`
+  const cutoffDate = new Date();
+  cutoffDate.setMonth(cutoffDate.getMonth() - 6);
+
+  await db.query(
+    `
         DELETE FROM memories 
         WHERE "createdAt" < $1
-    `, [cutoffDate]);
+    `,
+    [cutoffDate],
+  );
 }
 ```
 
@@ -283,11 +300,13 @@ async function cleanupOldMemories() {
 ### Common Issues
 
 1. **Connection Problems**
+
    - Check connection pool settings
    - Verify network connectivity
    - Review firewall rules
 
 2. **Performance Issues**
+
    - Analyze query plans
    - Check index usage
    - Monitor resource utilization
@@ -304,13 +323,13 @@ async function cleanupOldMemories() {
 SELECT * FROM pg_stat_activity;
 
 -- Analyze query performance
-EXPLAIN ANALYZE 
-SELECT * FROM memories 
-WHERE embedding <-> $1 < 0.3 
+EXPLAIN ANALYZE
+SELECT * FROM memories
+WHERE embedding <-> $1 < 0.3
 LIMIT 10;
 
 -- Monitor index usage
-SELECT schemaname, tablename, indexname, idx_scan 
+SELECT schemaname, tablename, indexname, idx_scan
 FROM pg_stat_user_indexes;
 ```
 
