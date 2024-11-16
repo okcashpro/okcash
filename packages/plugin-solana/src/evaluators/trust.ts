@@ -222,12 +222,11 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
 
         console.log("recommendationsManager", rec);
 
-
         // - from here we just need to make sure code is right
 
         // buy, dont buy, sell, dont sell
 
-        const buyAmounts = await tokenProvider.getBuyAmounts();
+        const buyAmounts = await tokenProvider.calculateBuyAmounts();
 
         let buyAmount = buyAmounts[rec.conviction.toLowerCase().trim()];
         if (!buyAmount) {

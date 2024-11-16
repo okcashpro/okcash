@@ -66,7 +66,10 @@ export class TrustScoreManager {
         this.tokenProvider = tokenProvider;
         this.trustScoreDb = trustScoreDb;
         this.connection = new Connection(runtime.getSetting("RPC_URL"));
-        this.baseMint = new PublicKey(runtime.getSetting("BASE_MINT") || "So11111111111111111111111111111111111111112");
+        this.baseMint = new PublicKey(
+            runtime.getSetting("BASE_MINT") ||
+                "So11111111111111111111111111111111111111112"
+        );
         this.backend = runtime.getSetting("BACKEND_URL");
         this.backendToken = runtime.getSetting("BACKEND_TOKEN");
     }
