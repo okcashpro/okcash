@@ -224,6 +224,7 @@ export async function createAgent(
     token: string
 ) {
     console.log("Creating runtime for character", character.name);
+    console.log("character.settings.secrets?.WALLET_PUBLIC_KEY", character.settings.secrets?.WALLET_PUBLIC_KEY)
     return new AgentRuntime({
         databaseAdapter: db,
         token,

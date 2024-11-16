@@ -15,7 +15,7 @@ export class AutoClient {
         this.runtime = runtime;
 
         const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
-        this.trustScoreProvider = new TrustScoreManager(null, trustScoreDb);
+        this.trustScoreProvider = new TrustScoreManager(runtime, null, trustScoreDb);
         this.walletProvider = new WalletProvider(
             new Connection(runtime.getSetting("RPC_URL")),
             new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
