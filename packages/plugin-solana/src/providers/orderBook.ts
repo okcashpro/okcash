@@ -1,6 +1,6 @@
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import * as fs from "fs";
-import {settings} from "@ai16z/eliza/src/settings.ts";
+import settings from "@ai16z/eliza/src/settings.ts";
 
 interface Order {
     userId: string;
