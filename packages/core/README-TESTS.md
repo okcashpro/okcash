@@ -9,7 +9,7 @@ This package contains a test suite for evaluating functionalities using **Jest**
    npm install -g pnpm
    ```
 
-2. **Environment Variables**: Set up a `.env` file in the project root (eliza) with the necessary environment variables. Copy .env.example file and add required variables.
+2. **Environment Variables - NOT REQUIRED** : Set up a `.env` file in the project root (eliza) with the necessary environment variables. Copy .env.example file and add required variables.
 
 ## Setup
 
