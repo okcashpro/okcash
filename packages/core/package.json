@@ -11,8 +11,8 @@
         "watch": "tsc --watch",
         "dev": "tsup --format esm --dts --watch",
         "build:docs": "cd docs && pnpm run build",
-        "test": "jest --runInBand",
-        "test:watch": "jest --runInBand --watch"
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "author": "",
     "license": "MIT",

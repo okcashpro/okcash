@@ -22,5 +22,8 @@ export default {
     moduleNameMapper: {
         "^(\\.{1,2}/.*)\\.js$": "$1",
     },
+    transformIgnorePatterns: [
+        "node_modules/(?!sqlite-vec|@ai16z/adapter-sqlite|@ai16z/eliza)"
+    ],
     extensionsToTreatAsEsm: [".ts"],
 };

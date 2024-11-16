@@ -19,5 +19,9 @@
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"
+    },
+    "exports": {
+        ".": "./dist/index.js",
+        "./sqlite_vec": "./dist/sqlite_vec.js"
     }
 }

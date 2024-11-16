@@ -42,6 +42,12 @@ importers:
       typescript:
         specifier: 5.6.3
         version: 5.6.3
+      vite:
+        specifier: ^5.4.11
+        version: 5.4.11(@types/node@22.8.4)(terser@5.36.0)
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.8.4)(terser@5.36.0)
 
   docs:
     dependencies:
@@ -8094,6 +8100,9 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
+  loupe@3.1.2:
+    resolution: {integrity: sha512-23I4pFZHmAemUnz8WZXbYRSKYj801VDaNv9ETuMh7IrMc7VuVVSo+Z9iLE3ni30+U48iDWfi30d3twAXBYmnCg==}
+
   lossless-json@4.0.2:
     resolution: {integrity: sha512-+z0EaLi2UcWi8MZRxA5iTb6m4Ys4E80uftGY+yG5KNFJb5EceQXOhdW/pWJZ8m97s26u7yZZAYMcKWNztSZssA==}
 
@@ -10760,6 +10769,9 @@ packages:
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
+
+  stackback@0.0.2:
+    resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
@@ -21491,6 +21503,8 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
+  loupe@3.1.2: {}
+
   lossless-json@4.0.2: {}
 
   loupe@3.1.2: {}
@@ -24913,6 +24927,8 @@ snapshots:
   stack-utils@2.0.6:
     dependencies:
       escape-string-regexp: 2.0.0
+
+  stackback@0.0.2: {}
 
   stackback@0.0.2: {}
 

@@ -26,7 +26,9 @@
         "only-allow": "^1.2.1",
         "prettier": "^3.3.3",
         "typedoc": "^0.26.11",
-        "typescript": "5.6.3"
+        "typescript": "5.6.3",
+        "vite": "^5.4.11",
+        "vitest": "^2.1.5"
     },
     "pnpm": {
         "overrides": {
