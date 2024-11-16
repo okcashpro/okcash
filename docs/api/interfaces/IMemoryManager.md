@@ -12,7 +12,7 @@
 
 [packages/core/src/types.ts:479](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L479)
 
----
+***
 
 ### tableName
 
@@ -22,7 +22,7 @@
 
 [packages/core/src/types.ts:480](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L480)
 
----
+***
 
 ### constructor
 
@@ -50,7 +50,7 @@
 
 [packages/core/src/types.ts:484](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L484)
 
----
+***
 
 ### getMemories()
 
@@ -80,7 +80,7 @@
 
 [packages/core/src/types.ts:485](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L485)
 
----
+***
 
 ### getCachedEmbeddings()
 
@@ -98,7 +98,7 @@
 
 [packages/core/src/types.ts:493](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L493)
 
----
+***
 
 ### getMemoryById()
 
@@ -116,7 +116,7 @@
 
 [packages/core/src/types.ts:496](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L496)
 
----
+***
 
 ### getMemoriesByRoomIds()
 
@@ -138,7 +138,7 @@
 
 [packages/core/src/types.ts:497](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L497)
 
----
+***
 
 ### searchMemoriesByEmbedding()
 
@@ -150,7 +150,7 @@
 
 • **opts**
 
-• **opts.match_threshold?**: `number`
+• **opts.match\_threshold?**: `number`
 
 • **opts.count?**: `number`
 
@@ -168,7 +168,7 @@
 
 [packages/core/src/types.ts:501](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L501)
 
----
+***
 
 ### createMemory()
 
@@ -188,7 +188,7 @@
 
 [packages/core/src/types.ts:511](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L511)
 
----
+***
 
 ### removeMemory()
 
@@ -206,7 +206,7 @@
 
 [packages/core/src/types.ts:512](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L512)
 
----
+***
 
 ### removeAllMemories()
 
@@ -224,7 +224,7 @@
 
 [packages/core/src/types.ts:513](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L513)
 
----
+***
 
 ### countMemories()
 

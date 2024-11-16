@@ -2,7 +2,7 @@ import { Client, IAgentRuntime } from "@ai16z/eliza";
 import { TrustScoreManager } from "@ai16z/plugin-solana";
 import { TokenProvider } from "@ai16z/plugin-solana";
 import { WalletProvider } from "@ai16z/plugin-solana";
-import { TrustScoreDatabase } from "@ai16z/plugin-solana";
+import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 
 export class AutoClient {
@@ -15,7 +15,7 @@ export class AutoClient {
         this.runtime = runtime;
 
         const trustScoreDb = new TrustScoreDatabase(runtime.databaseAdapter.db);
-        this.trustScoreProvider = new TrustScoreManager(null, trustScoreDb);
+        this.trustScoreProvider = new TrustScoreManager(runtime, null, trustScoreDb);
         this.walletProvider = new WalletProvider(
             new Connection(runtime.getSetting("RPC_URL")),
             new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))

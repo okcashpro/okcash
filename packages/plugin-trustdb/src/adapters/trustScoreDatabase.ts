@@ -1,9 +1,6 @@
-// src/adapters/sqlite/trustScoreDatabase.ts
-
 import { Database } from "better-sqlite3";
 import { v4 as uuidv4 } from "uuid";
 
-// Define interfaces
 export interface Recommender {
     id: string; // UUID
     address: string;

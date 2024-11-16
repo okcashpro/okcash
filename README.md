@@ -198,3 +198,20 @@ pnpm docker
 This will drop you into a shell inside the docker container where you can continue to configure the instance
 
 and then you can start it with `pnpm start`
+
+
+## Community & contact 
+
+* [GitHub Issues](https://github.com/ai16z/eliza/issues). Best for: bugs you encounter using Eliza, and feature proposals.
+* [Discord](https://discord.gg/ai16z). Best for: sharing your applications and hanging out with the community.
+
+
+**Contributors**
+
+<a href="https://github.com/ai16z/eliza/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+</a>
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)

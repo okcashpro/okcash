@@ -2,7 +2,6 @@ export * from "./providers/token.ts";
 export * from "./providers/wallet.ts";
 export * from "./providers/trustScoreProvider.ts";
 export * from "./evaluators/trust.ts";
-export * from "./adapters/trustScoreDatabase.ts";
 
 import { Plugin } from "@ai16z/eliza";
 //import { executeSwap } from "./actions/swap.ts";
