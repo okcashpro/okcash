@@ -16,7 +16,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L137)
+[packages/core/src/types.ts:139](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L139)
 
 ***
 
@@ -26,7 +26,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:138](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L138)
+[packages/core/src/types.ts:140](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L140)
 
 ***
 
@@ -36,7 +36,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:139](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L139)
+[packages/core/src/types.ts:141](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L141)
 
 ***
 
@@ -46,7 +46,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:140](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L140)
+[packages/core/src/types.ts:142](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L142)
 
 ***
 
@@ -56,7 +56,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:141](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L141)
+[packages/core/src/types.ts:143](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L143)
 
 ***
 
@@ -66,7 +66,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:142](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L142)
+[packages/core/src/types.ts:144](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L144)
 
 ***
 
@@ -76,7 +76,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:143](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L143)
+[packages/core/src/types.ts:145](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L145)
 
 ***
 
@@ -86,7 +86,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:144](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L144)
+[packages/core/src/types.ts:146](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L146)
 
 ***
 
@@ -96,7 +96,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:145](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L145)
+[packages/core/src/types.ts:147](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L147)
 
 ***
 
@@ -106,7 +106,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:146](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L146)
+[packages/core/src/types.ts:148](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L148)
 
 ***
 
@@ -116,7 +116,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:147](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L147)
+[packages/core/src/types.ts:149](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L149)
 
 ***
 
@@ -126,7 +126,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:148](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L148)
+[packages/core/src/types.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L150)
 
 ***
 
@@ -136,7 +136,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:149](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L149)
+[packages/core/src/types.ts:151](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L151)
 
 ***
 
@@ -146,7 +146,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L150)
+[packages/core/src/types.ts:152](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L152)
 
 ***
 
@@ -156,7 +156,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:151](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L151)
+[packages/core/src/types.ts:153](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L153)
 
 ***
 
@@ -166,7 +166,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:152](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L152)
+[packages/core/src/types.ts:154](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L154)
 
 ***
 
@@ -176,7 +176,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:153](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L153)
+[packages/core/src/types.ts:155](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L155)
 
 ***
 
@@ -186,7 +186,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:154](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L154)
+[packages/core/src/types.ts:156](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L156)
 
 ***
 
@@ -196,7 +196,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:155](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L155)
+[packages/core/src/types.ts:157](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L157)
 
 ***
 
@@ -206,7 +206,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:156](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L156)
+[packages/core/src/types.ts:158](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L158)
 
 ***
 
@@ -216,7 +216,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:157](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L157)
+[packages/core/src/types.ts:159](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L159)
 
 ***
 
@@ -226,7 +226,7 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:158](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L158)
+[packages/core/src/types.ts:160](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L160)
 
 ***
 
@@ -236,4 +236,4 @@ Represents the state of the conversation or context in which the agent is operat
 
 #### Defined in
 
-[packages/core/src/types.ts:159](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L159)
+[packages/core/src/types.ts:161](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L161)

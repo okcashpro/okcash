@@ -21,21 +21,25 @@ Before getting started with Eliza, ensure you have:
    Please be sure to check what the [latest available stable version tag](https://github.com/ai16z/eliza/tags) is.
 
    Clone the repository
+
    ```bash
    git clone https://github.com/ai16z/eliza.git
    ```
 
    Enter directory
+
    ```bash
    cd eliza
    ```
 
    Switch to latest tagged release
+
    ```bash
    git checkout v0.0.10
    ```
 
    Install dependencies
+
    ```bash
    pnpm install
    ```
@@ -43,6 +47,7 @@ Before getting started with Eliza, ensure you have:
 2. **Configure Environment**
 
    Copy example environment file
+
    ```bash
    cp .env.example .env
    ```
@@ -53,21 +58,25 @@ Before getting started with Eliza, ensure you have:
    # Suggested quickstart environment variables
    DISCORD_APPLICATION_ID=  # For Discord integration
    DISCORD_API_TOKEN=      # Bot token
-   OPENAI_API_KEY=        # OpenAI API key (starting with sk-*)
+   HEURIST_API_KEY=       # Heurist API key for LLM and image generation
+   OPENAI_API_KEY=        # OpenAI API key
    ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
    ```
 
 ## Choose Your Model
 
-  Eliza supports multiple AI models:
+Eliza supports multiple AI models:
 
-  - **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
-  - **Grok**: Set `XAI_MODEL=grok-beta`
-  - **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
+- **Heurist**: Set `modelProvider: "heurist"` in your character file. Most models are uncensored.
+  - LLM: Select available LLMs [here](https://docs.heurist.ai/dev-guide/supported-models#large-language-models-llms) and configure `SMALL_HEURIST_LANGUAGE_MODEL`,`MEDIUM_HEURIST_LANGUAGE_MODEL`,`LARGE_HEURIST_LANGUAGE_MODEL`
+  - Image Generation: Select available Stable Diffusion or Flux models [here](https://docs.heurist.ai/dev-guide/supported-models#image-generation-models) and configure `HEURIST_IMAGE_MODEL` (default is FLUX.1-dev)
+- **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
+- **Grok**: Set `XAI_MODEL=grok-beta`
+- **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
 
-  You set which model to use inside the character JSON file
+You set which model to use inside the character JSON file
 
-  ### Local inference
+### Local inference
 
     #### For llama_local inference:
 
@@ -92,7 +101,6 @@ Before getting started with Eliza, ensure you have:
 
    📝 [Character Documentation](./core/characterfile.md)
 
-
 2. **Start the Agent**
 
    Inform it which character you want to run:
@@ -106,7 +114,6 @@ Before getting started with Eliza, ensure you have:
    ```bash
    pnpm start --characters="characters/trump.character.json,characters/tate.character.json"
    ```
-
 
 ## Platform Integration
 
@@ -129,6 +136,7 @@ TWITTER_COOKIES=  # Account cookies (auth_token and CT0)
 ```
 
 ### Telegram Bot
+
 1. Create a bot
 2. Add your bot token to `.env`:
 
@@ -178,12 +186,14 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    ```
 
 3. **CUDA Setup**
+
    - Verify CUDA Toolkit installation
    - Check GPU compatibility with toolkit
    - Ensure proper environment variables are set
 
 4. **Exit Status 1**
    If you see
+
    ```
    triggerUncaughtException(
    ^
@@ -194,28 +204,29 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
 
    You can try these steps, which aim to add `@types/node` to various parts of the project
 
-    ```
-    # Add dependencies to workspace root
-    pnpm add -w -D ts-node typescript @types/node
+   ```
+   # Add dependencies to workspace root
+   pnpm add -w -D ts-node typescript @types/node
 
-    # Add dependencies to the agent package specifically
-    pnpm add -D ts-node typescript @types/node --filter "@ai16z/agent"
+   # Add dependencies to the agent package specifically
+   pnpm add -D ts-node typescript @types/node --filter "@ai16z/agent"
 
-    # Also add to the core package since it's needed there too
-    pnpm add -D ts-node typescript @types/node --filter "@ai16z/eliza"
+   # Also add to the core package since it's needed there too
+   pnpm add -D ts-node typescript @types/node --filter "@ai16z/eliza"
 
-    # First clean everything
-    pnpm clean
+   # First clean everything
+   pnpm clean
 
-    # Install all dependencies recursively
-    pnpm install -r
+   # Install all dependencies recursively
+   pnpm install -r
 
-    # Build the project
-    pnpm build
+   # Build the project
+   pnpm build
 
-    # Then try to start
-    pnpm start
-    ```
+   # Then try to start
+   pnpm start
+   ```
+
 5. **Better sqlite3 was compiled against a different Node.js version**
    If you see
 

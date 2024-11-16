@@ -6,7 +6,7 @@ import {
     Memory,
     State,
     UUID,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import {
     QueryTweetsResponse,
     Scraper,
@@ -260,7 +260,7 @@ export class ClientBase extends EventEmitter {
                 await new Promise((resolve) => setTimeout(resolve, 10000));
                 try {
                     return await this.twitterClient.getUserIdByScreenName(
-                        this.runtime.getSetting("TWITTER_USERNAME"),
+                        this.runtime.getSetting("TWITTER_USERNAME")
                     );
                 } catch (error) {
                     console.error("Error getting user ID:", error);

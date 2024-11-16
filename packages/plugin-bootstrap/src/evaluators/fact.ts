@@ -8,7 +8,7 @@ import {
     Memory,
     ModelClass,
     Evaluator,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 
 export const formatFacts = (facts: Memory[]) => {
     const messageStrings = facts

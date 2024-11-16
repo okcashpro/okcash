@@ -13,7 +13,7 @@ This guide covers advanced features and capabilities of Eliza, including complex
 Eliza supports advanced video processing capabilities through the `VideoService`:
 
 ```typescript
-import { VideoService } from '@ai16z/eliza/plugin-node';
+import { VideoService } from "@ai16z/eliza/plugin-node";
 
 // Initialize service
 const videoService = new VideoService();
@@ -23,6 +23,7 @@ const result = await videoService.processVideo(url, runtime);
 ```
 
 Key features:
+
 - Automatic video downloading
 - Transcription support
 - Subtitle extraction
@@ -34,13 +35,14 @@ Key features:
 The `ImageDescriptionService` provides advanced image analysis:
 
 ```typescript
-import { ImageDescriptionService } from '@ai16z/eliza/plugin-node';
+import { ImageDescriptionService } from "@ai16z/eliza/plugin-node";
 
 const imageService = new ImageDescriptionService();
-const description = await imageService.describeImage(imageUrl, 'gpu', runtime);
+const description = await imageService.describeImage(imageUrl, "gpu", runtime);
 ```
 
 Features:
+
 - Local and cloud processing options
 - CUDA acceleration support
 - Automatic format handling
@@ -53,7 +55,7 @@ Features:
 The Solana plugin provides comprehensive blockchain functionality:
 
 ```typescript
-import { solanaPlugin } from '@ai16z/eliza/plugin-solana';
+import { solanaPlugin } from "@ai16z/eliza/plugin-solana";
 
 // Initialize plugin
 runtime.registerPlugin(solanaPlugin);
@@ -68,7 +70,7 @@ const swapResult = await swapToken(
   walletPublicKey,
   inputTokenCA,
   outputTokenCA,
-  amount
+  amount,
 );
 
 // Sell tokens
@@ -80,7 +82,7 @@ const sellResult = await sellToken({
   priorityFee,
   allowOffCurve: false,
   slippage: "1",
-  connection
+  connection,
 });
 ```
 
@@ -93,13 +95,13 @@ const trustScoreManager = new TrustScoreManager(tokenProvider, trustScoreDb);
 const score = await trustScoreManager.generateTrustScore(
   tokenAddress,
   recommenderId,
-  recommenderWallet
+  recommenderWallet,
 );
 
 // Monitor trade performance
 await trustScoreManager.createTradePerformance(runtime, tokenAddress, userId, {
   buy_amount: amount,
-  is_simulation: false
+  is_simulation: false,
 });
 ```
 
@@ -115,12 +117,12 @@ class SpeechService extends Service implements ISpeechService {
     if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
       return textToSpeech(runtime, text);
     }
-    
+
     const { audio } = await synthesize(text, {
       engine: "vits",
-      voice: "en_US-hfc_female-medium"
+      voice: "en_US-hfc_female-medium",
     });
-    
+
     return Readable.from(audio);
   }
 }
@@ -142,7 +144,7 @@ class PdfService extends Service {
       const textContent = await page.getTextContent();
       const pageText = textContent.items
         .filter(isTextItem)
-        .map(item => item.str)
+        .map((item) => item.str)
         .join(" ");
       textPages.push(pageText);
     }
@@ -161,7 +163,7 @@ class MemoryManager {
   async getMemories({
     agentId,
     roomId,
-    count
+    count,
   }: {
     agentId: string;
     roomId: string;
@@ -170,7 +172,10 @@ class MemoryManager {
     // Implement memory retrieval logic
   }
 
-  async createMemory(memory: Memory, allowDuplicates: boolean = false): Promise<void> {
+  async createMemory(
+    memory: Memory,
+    allowDuplicates: boolean = false,
+  ): Promise<void> {
     // Implement memory storage logic
   }
 }
@@ -189,10 +194,10 @@ class TrustScoreDatabase {
       JOIN recommender_metrics rm ON tr.recommender_id = rm.recommender_id
       WHERE tr.token_address = ?;
     `;
-    
+
     const rows = this.db.prepare(sql).all(tokenAddress);
     if (rows.length === 0) return 0;
-    
+
     const totalTrust = rows.reduce((acc, row) => acc + row.trust_score, 0);
     return totalTrust / rows.length;
   }
@@ -215,7 +220,7 @@ const customPlugin: Plugin = {
   ],
   providers: [
     // Custom providers
-  ]
+  ],
 };
 ```
 
@@ -234,11 +239,11 @@ export const complexAction: Action = {
     message: Memory,
     state: State,
     options: { [key: string]: unknown },
-    callback?: HandlerCallback
+    callback?: HandlerCallback,
   ): Promise<boolean> => {
     // Implement complex handling logic
     return true;
-  }
+  },
 };
 ```
 
@@ -250,15 +255,12 @@ export const complexAction: Action = {
 const customRuntime = new AgentRuntime({
   databaseAdapter: new PostgresDatabaseAdapter(config),
   modelProvider: new OpenAIProvider(apiKey),
-  plugins: [
-    solanaPlugin,
-    customPlugin
-  ],
+  plugins: [solanaPlugin, customPlugin],
   services: [
     new VideoService(),
     new ImageDescriptionService(),
-    new SpeechService()
-  ]
+    new SpeechService(),
+  ],
 });
 ```
 
@@ -271,13 +273,13 @@ const modelConfig = {
   maxTokens: 2000,
   topP: 0.9,
   frequencyPenalty: 0.5,
-  presencePenalty: 0.5
+  presencePenalty: 0.5,
 };
 
 const response = await generateText({
   runtime,
   context: prompt,
-  ...modelConfig
+  ...modelConfig,
 });
 ```
 
@@ -347,11 +349,11 @@ try {
 ```typescript
 class ResourceManager {
   private resources: Map<string, Resource> = new Map();
-  
+
   async acquire(id: string): Promise<Resource> {
     // Implement resource acquisition with timeout
   }
-  
+
   async release(id: string): Promise<void> {
     // Implement resource cleanup
   }
@@ -363,11 +365,13 @@ class ResourceManager {
 ### Common Issues
 
 1. Memory Leaks
+
    - Monitor memory usage
    - Implement proper cleanup
    - Use WeakMap for caching
 
 2. Performance Bottlenecks
+
    - Profile slow operations
    - Implement batching
    - Use connection pooling
@@ -380,12 +384,12 @@ class ResourceManager {
 ### Debugging
 
 ```typescript
-const debug = require('debug')('eliza:advanced');
+const debug = require("debug")("eliza:advanced");
 
-debug('Detailed operation info: %O', {
-  operation: 'complexOperation',
+debug("Detailed operation info: %O", {
+  operation: "complexOperation",
   parameters: params,
-  result: result
+  result: result,
 });
 ```
 

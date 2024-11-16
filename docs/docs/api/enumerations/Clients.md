@@ -10,7 +10,7 @@
 
 [packages/core/src/types.ts:322](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L322)
 
-***
+---
 
 ### DISCORD
 
@@ -20,7 +20,7 @@
 
 [packages/core/src/types.ts:321](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L321)
 
-***
+---
 
 ### TELEGRAM
 
@@ -30,7 +30,7 @@
 
 [packages/core/src/types.ts:324](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L324)
 
-***
+---
 
 ### TWITTER
 

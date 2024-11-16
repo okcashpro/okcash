@@ -1,12 +1,7 @@
-import {
-    IAgentRuntime,
-    Memory,
-    Provider,
-    State,
-} from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
-
+import NodeCache from "node-cache";
 // Provider configuration
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -54,10 +49,14 @@ interface Prices {
 }
 
 export class WalletProvider {
+    private cache: NodeCache;
+
     constructor(
         private connection: Connection,
         private walletPublicKey: PublicKey
-    ) {}
+    ) {
+        this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
+    }
 
     private async fetchWithRetry(
         runtime,
@@ -108,6 +107,15 @@ export class WalletProvider {
 
     async fetchPortfolioValue(runtime): Promise<WalletPortfolio> {
         try {
+            const cacheKey = `portfolio-${this.walletPublicKey.toBase58()}`;
+            const cachedValue = this.cache.get<WalletPortfolio>(cacheKey);
+
+            if (cachedValue) {
+                console.log("Cache hit for fetchPortfolioValue");
+                return cachedValue;
+            }
+            console.log("Cache miss for fetchPortfolioValue");
+
             const walletData = await this.fetchWithRetry(
                 runtime,
                 `${PROVIDER_CONFIG.BIRDEYE_API}/v1/wallet/token_list?wallet=${this.walletPublicKey.toBase58()}`
@@ -135,8 +143,7 @@ export class WalletProvider {
             }));
 
             const totalSol = totalUsd.div(solPriceInUSD);
-
-            return {
+            const portfolio = {
                 totalUsd: totalUsd.toString(),
                 totalSol: totalSol.toFixed(6),
                 items: items.sort((a, b) =>
@@ -145,6 +152,8 @@ export class WalletProvider {
                         .toNumber()
                 ),
             };
+            this.cache.set(cacheKey, portfolio);
+            return portfolio;
         } catch (error) {
             console.error("Error fetching portfolio:", error);
             throw error;
@@ -153,6 +162,15 @@ export class WalletProvider {
 
     async fetchPrices(runtime): Promise<Prices> {
         try {
+            const cacheKey = "prices";
+            const cachedValue = this.cache.get<Prices>(cacheKey);
+
+            if (cachedValue) {
+                console.log("Cache hit for fetchPrices");
+                return cachedValue;
+            }
+            console.log("Cache miss for fetchPrices");
+
             const { SOL, BTC, ETH } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
             const tokens = [SOL, BTC, ETH];
             const prices: Prices = {
@@ -186,6 +204,7 @@ export class WalletProvider {
                 }
             }
 
+            this.cache.set(cacheKey, prices);
             return prices;
         } catch (error) {
             console.error("Error fetching prices:", error);

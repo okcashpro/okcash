@@ -1,9 +1,6 @@
-// src/adapters/sqlite/trustScoreDatabase.ts
-
 import { Database } from "better-sqlite3";
 import { v4 as uuidv4 } from "uuid";
 
-// Define interfaces
 export interface Recommender {
     id: string; // UUID
     address: string;
@@ -403,8 +400,6 @@ export class TrustScoreDatabase {
         }
     }
 
-    // get Or Create Recommender with discord id
-
     /**
      * Retrieves an existing recommender or creates a new one if not found.
      * Also initializes metrics for the recommender if they haven't been initialized yet.
@@ -463,6 +458,70 @@ export class TrustScoreDatabase {
         } catch (error) {
             console.error(
                 "Error in getOrCreateRecommenderWithDiscordId:",
+                error
+            );
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves an existing recommender or creates a new one if not found.
+     * Also initializes metrics for the recommender if they haven't been initialized yet.
+     * @param telegramId Telegram ID of the recommender
+     * @returns Recommender object with all details, or null if failed
+     */
+
+    async getOrCreateRecommenderWithTelegramId(
+        telegramId: string
+    ): Promise<Recommender | null> {
+        try {
+            // Begin a transaction
+            const transaction = this.db.transaction(() => {
+                // Attempt to retrieve the recommender
+                const existingRecommender = this.getRecommender(telegramId);
+                if (existingRecommender) {
+                    // Recommender exists, ensure metrics are initialized
+                    this.initializeRecommenderMetrics(existingRecommender.id!);
+                    return existingRecommender;
+                }
+
+                // Recommender does not exist, create a new one
+                const newRecommender = {
+                    id: uuidv4(),
+                    address: telegramId,
+                    telegramId: telegramId,
+                };
+                const newRecommenderId = this.addRecommender(newRecommender);
+                if (!newRecommenderId) {
+                    throw new Error("Failed to add new recommender.");
+                }
+
+                // Initialize metrics for the new recommender
+                const metricsInitialized =
+                    this.initializeRecommenderMetrics(newRecommenderId);
+                if (!metricsInitialized) {
+                    throw new Error(
+                        "Failed to initialize recommender metrics."
+                    );
+                }
+
+                // Retrieve and return the newly created recommender
+                const recommender = this.getRecommender(newRecommenderId);
+                if (!recommender) {
+                    throw new Error(
+                        "Failed to retrieve the newly created recommender."
+                    );
+                }
+
+                return recommender;
+            });
+
+            // Execute the transaction and return the recommender
+            const recommenderResult = transaction();
+            return recommenderResult;
+        } catch (error) {
+            console.error(
+                "Error in getOrCreateRecommenderWithTelegramId:",
                 error
             );
             return null;

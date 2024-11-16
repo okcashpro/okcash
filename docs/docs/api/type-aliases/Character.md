@@ -74,7 +74,7 @@
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### settings.voice?
 
@@ -114,7 +114,7 @@
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### topics
 

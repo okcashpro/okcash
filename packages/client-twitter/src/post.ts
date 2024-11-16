@@ -3,7 +3,7 @@ import fs from "fs";
 import { composeContext } from "@ai16z/eliza/src/context.ts";
 import { generateText } from "@ai16z/eliza/src/generation.ts";
 import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import { IAgentRuntime, ModelClass } from "@ai16z/eliza/src/types.ts";
+import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { ClientBase } from "./base.ts";
 
@@ -33,8 +33,8 @@ export class TwitterPostClient extends ClientBase {
             this.generateNewTweet();
             setTimeout(
                 generateNewTweetLoop,
-                (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
-            ); // Random interval between 1 and 4 hours
+                (Math.floor(Math.random() * (180 - 90 + 1)) + 90) * 60 * 1000
+            ); // Random interval: min 90min/max 180min (1.5-3h), Results in min 8/max 16 posts per day
         };
         // setTimeout(() => {
         generateNewTweetLoop();

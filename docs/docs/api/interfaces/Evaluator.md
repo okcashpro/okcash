@@ -12,7 +12,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 [packages/core/src/types.ts:236](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L236)
 
-***
+---
 
 ### description
 
@@ -22,7 +22,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 [packages/core/src/types.ts:237](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L237)
 
-***
+---
 
 ### examples
 
@@ -32,7 +32,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 [packages/core/src/types.ts:239](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L239)
 
-***
+---
 
 ### handler
 
@@ -42,7 +42,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 [packages/core/src/types.ts:240](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L240)
 
-***
+---
 
 ### name
 
@@ -52,7 +52,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 [packages/core/src/types.ts:241](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L241)
 
-***
+---
 
 ### similes
 
@@ -62,7 +62,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 [packages/core/src/types.ts:238](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L238)
 
-***
+---
 
 ### validate
 

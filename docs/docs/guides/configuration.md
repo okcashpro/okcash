@@ -6,7 +6,7 @@ sidebar_position: 9
 
 This guide covers how to configure Eliza for different use cases and environments. We'll walk through all available configuration options and best practices.
 
-## Environment Configuration 
+## Environment Configuration
 
 ### Basic Setup
 
@@ -34,21 +34,24 @@ X_SERVER_URL=              # Optional model API endpoint
 ### Client-Specific Configuration
 
 #### Discord Configuration
+
 ```bash
 DISCORD_APPLICATION_ID=     # Your Discord app ID
 DISCORD_API_TOKEN=         # Discord bot token
 ```
 
 #### Twitter Configuration
+
 ```bash
 TWITTER_USERNAME=          # Bot Twitter username
-TWITTER_PASSWORD=          # Bot Twitter password 
+TWITTER_PASSWORD=          # Bot Twitter password
 TWITTER_EMAIL=            # Twitter account email
 TWITTER_COOKIES=          # Twitter auth cookies
 TWITTER_DRY_RUN=false    # Test mode without posting
 ```
 
 #### Telegram Configuration
+
 ```bash
 TELEGRAM_BOT_TOKEN=       # Telegram bot token
 ```
@@ -64,11 +67,48 @@ OPENAI_API_KEY=sk-*
 # Anthropic Settings
 ANTHROPIC_API_KEY=
 
-# Together.ai Settings  
+# Together.ai Settings
 TOGETHER_API_KEY=
+
+# Heurist Settings
+HEURIST_API_KEY=
 
 # Local Model Settings
 XAI_MODEL=meta-llama/Llama-3.1-7b-instruct
+```
+
+### Image Generation
+
+Configure image generation in your character file:
+
+```json
+{
+  "modelProvider": "heurist",
+  "settings": {
+    "imageSettings": {
+      "steps": 20,
+      "width": 1024,
+      "height": 1024
+    }
+  }
+}
+```
+
+Example usage:
+
+```typescript
+const result = await generateImage(
+  {
+    prompt: "A cute anime girl with big breasts and straight long black hair wearing orange T-shirt. The T-shirt has \"ai16z\" texts in the front. The girl is looking at the viewer",
+    width: 1024,
+    height: 1024,
+    numIterations: 20, // optional
+    guidanceScale: 3, // optional
+    seed: -1, // optional
+    modelId: "FLUX.1-dev", // optional
+  },
+  runtime,
+);
 ```
 
 ## Character Configuration
@@ -134,7 +174,7 @@ export const myAction: Action = {
   handler: async (runtime: IAgentRuntime, message: Memory) => {
     // Action logic
     return true;
-  }
+  },
 };
 ```
 
@@ -156,11 +196,11 @@ const db = new PostgresDatabaseAdapter({
   port: parseInt(process.env.DB_PORT),
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD
+  password: process.env.DB_PASSWORD,
 });
 ```
 
-### Model Providers 
+### Model Providers
 
 Configure model providers in your character file:
 
@@ -190,10 +230,10 @@ const settings = {
   // Performance
   MAX_CONCURRENT_REQUESTS: 5,
   REQUEST_TIMEOUT: 30000,
-  
+
   // Memory
   MEMORY_TTL: 3600,
-  MAX_MEMORY_ITEMS: 1000
+  MAX_MEMORY_ITEMS: 1000,
 };
 ```
 
@@ -219,20 +259,24 @@ plugins:
 ## Configuration Best Practices
 
 1. **Environment Segregation**
+
    - Use different `.env` files for different environments
    - Follow naming convention: `.env.development`, `.env.staging`, `.env.production`
 
 2. **Secret Management**
+
    - Never commit secrets to version control
    - Use secret management services in production
    - Rotate API keys regularly
 
 3. **Character Configuration**
+
    - Keep character files modular and focused
    - Use inheritance for shared traits
    - Document character behaviors
 
 4. **Plugin Management**
+
    - Enable only needed plugins
    - Configure plugin-specific settings in separate files
    - Monitor plugin performance
@@ -247,15 +291,17 @@ plugins:
 ### Common Issues
 
 1. **Environment Variables Not Loading**
+
    ```bash
    # Check .env file location
    node -e "console.log(require('path').resolve('.env'))"
-   
+
    # Verify environment variables
    node -e "console.log(process.env)"
    ```
 
 2. **Character Loading Failures**
+
    ```bash
    # Validate character file
    npx ajv validate -s character-schema.json -d your-character.json
@@ -276,6 +322,7 @@ pnpm run validate-config
 ```
 
 This will check:
+
 - Environment variables
 - Character files
 - Database configuration

@@ -12,7 +12,9 @@ Welcome to our collection of stream notes! This section contains detailed summar
 ### November 2024
 
 #### X Space: Memes, AI Agents, and DAOs (November 8, 2024)
+
 A comprehensive discussion bringing together key figures in the AI and crypto space to explore:
+
 - Multi-agent systems and scalability
 - Community building and trust mechanisms
 - Meme culture and narrative creation
@@ -20,7 +22,9 @@ A comprehensive discussion bringing together key figures in the AI and crypto sp
 - [Read more →](../streams/2024-11-08)
 
 #### Discord Development Stream (November 6, 2024)
+
 A four-part technical deep dive into Eliza's architecture covering:
+
 - Plugin architecture and core abstractions
 - OpenAI integration and rate limits
 - Memory management and context handling
@@ -30,21 +34,25 @@ A four-part technical deep dive into Eliza's architecture covering:
 ### October 2024
 
 #### X Spaces Series
+
 Three important discussions about the future of AI agents:
 
 **AI Agents & Crypto (October 29)**
+
 - Discussion on AI agent growth
 - Consumer AI incubators
 - Balancing chaos and order in AI systems
 - [Read more →](../streams/2024-10-29)
 
 **Building Autonomous Agents (October 27)**
+
 - Technical infrastructure deep dive
 - Trust engine mechanics
 - Development status updates
 - [Read more →](../streams/2024-10-27)
 
 **Eliza Framework Deep Dive (October 25)**
+
 - Framework capabilities overview
 - Bot personality development
 - Token swap integration
@@ -56,24 +64,28 @@ Three important discussions about the future of AI agents:
 Our streams typically fall into these categories:
 
 ### Technical Development
+
 - Architecture deep dives
 - Implementation details
 - Code walkthroughs
 - Performance optimization
 
 ### Community Discussions
+
 - Project direction
 - Ecosystem building
 - Governance proposals
 - Feature requests
 
 ### X Spaces
+
 - Public discussions
 - Industry trends
 - Community engagement
 - Project updates
 
 ### Tutorial Sessions
+
 - Getting started guides
 - Feature demonstrations
 - Best practices

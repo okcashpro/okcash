@@ -16,7 +16,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza/src/types.ts";
+} from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";

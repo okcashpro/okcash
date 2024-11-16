@@ -2,11 +2,11 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Request as ExpressRequest } from "express";
 import multer, { File } from "multer";
-import { generateCaption, generateImage } from "@ai16z/eliza/src/generation.ts";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateMessageResponse } from "@ai16z/eliza/src/generation.ts";
-import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
-import { AgentRuntime } from "@ai16z/eliza/src/runtime.ts";
+import { generateCaption, generateImage } from "@ai16z/eliza";
+import { composeContext } from "@ai16z/eliza";
+import { generateMessageResponse } from "@ai16z/eliza";
+import { messageCompletionFooter } from "@ai16z/eliza";
+import { AgentRuntime } from "@ai16z/eliza";
 import {
     Content,
     Memory,
@@ -14,9 +14,9 @@ import {
     State,
     Client,
     IAgentRuntime,
-} from "@ai16z/eliza/src/types.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
-import settings from "@ai16z/eliza/src/settings.ts";
+} from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
+import { settings } from "@ai16z/eliza";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export const messageHandlerTemplate =
@@ -187,9 +187,9 @@ export class DirectClient {
 
                 await runtime.messageManager.createMemory(memory);
 
-                const state = (await runtime.composeState(userMessage, {
+                const state = await runtime.composeState(userMessage, {
                     agentName: runtime.character.name,
-                })) as State;
+                });
 
                 const context = composeContext({
                     state,

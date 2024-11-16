@@ -12,7 +12,7 @@ Represents an example of a message, typically used for demonstrating or testing 
 
 #### Defined in
 
-[packages/core/src/types.ts:181](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L181)
+[packages/core/src/types.ts:183](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L183)
 
 ***
 
@@ -22,4 +22,4 @@ Represents an example of a message, typically used for demonstrating or testing 
 
 #### Defined in
 
-[packages/core/src/types.ts:182](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L182)
+[packages/core/src/types.ts:184](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L184)

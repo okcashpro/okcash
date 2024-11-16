@@ -1,7 +1,7 @@
 import { FlagEmbedding } from "fastembed";
 import path from "path";
 import { fileURLToPath } from "url";
-import models from "./models.ts";
+import { models } from "./models.ts";
 import { IAgentRuntime, ModelProviderName, ModelClass } from "./types.ts";
 import fs from "fs";
 import { trimTokens } from "./generation.ts";
