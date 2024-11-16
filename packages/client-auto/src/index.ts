@@ -2,7 +2,7 @@ import { Client, IAgentRuntime } from "@ai16z/eliza";
 import { TrustScoreManager } from "@ai16z/plugin-solana";
 import { TokenProvider } from "@ai16z/plugin-solana";
 import { WalletProvider } from "@ai16z/plugin-solana";
-import { TrustScoreDatabase } from "@ai16z/plugin-solana";
+import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 
 export class AutoClient {
