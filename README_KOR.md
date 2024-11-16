@@ -9,13 +9,13 @@
 -   📚 높은 유연성: 개발자가 쉽게 데이터를 추가하고, 이를 활용해 다양한 기능을 만들 수 있습니다.
 -   💾 검색 지원: 당신의 데이터와 작업을 쉽게 찾아볼 수 있도록, 검색 기능을 지원합니다.
 -   🚀 높은 확장성: 자신의 동작과 클라이언트를 만들어 기능을 확장할 수 있습니다.
--   ☁️  다양한 AI 모델 지원: local Llama, OpenAI, Anthropic, Groq 등 다양한 AI 모델을 지원합니다
--   📦 즐겁게 개발해 봐요! 
+-   ☁️ 다양한 AI 모델 지원: local Llama, OpenAI, Anthropic, Groq 등 다양한 AI 모델을 지원합니다
+-   📦 즐겁게 개발해 봐요!
 
 ## eliza로 어떤걸 만들 수 있을까요?
 
 -   🤖 챗봇 개발
--   🕵 ️AI가 자율적으로 결과를 만들어줘요! 
+-   🕵 ️AI가 자율적으로 결과를 만들어줘요!
 -   📈 업무처리 자동화
 -   🎮 비디오 게임 NPC
 
@@ -66,7 +66,7 @@ pnpm start
 
 ## 기타 요구 사항
 
-시작시 오류가 발견되면, 아래의 명령어로 Sharp를 설치해보세요:  
+시작시 오류가 발견되면, 아래의 명령어로 Sharp를 설치해보세요:
 
 ```
 pnpm install --include=optional sharp
@@ -141,7 +141,7 @@ npx --no node-llama-cpp source download --gpu cuda
 ### 로컬 실행
 
 다음 중 한가지 옵션을 선택하여 XAI_MODEL 을 추가하세요. [Run with
-Llama](#run-with-llama) - X_SERVER_URL 와 XAI_API_KEY 는 비워둬도 됩니다. 
+Llama](#run-with-llama) - X_SERVER_URL 와 XAI_API_KEY 는 비워둬도 됩니다.
 이 파일을 통해 huggingface 에서 모델이 다운로드 되며, 로컬로 쿼리 됩니다.
 
 # 클라이언트
@@ -169,7 +169,7 @@ pnpm test:sqlite   # Run tests with SQLite
 pnpm test:sqljs    # Run tests with SQL.js
 ```
 
-테스트 결과는 Jest를 통해 작성되며, `src/**/*.test.ts` 파일에서 확인할 수 있습니다. 
+테스트 결과는 Jest를 통해 작성되며, `src/**/*.test.ts` 파일에서 확인할 수 있습니다.
 테스트 환경 구성단계:
 
 -   `.env.test` 에서 환경변수가 불러와집니다.

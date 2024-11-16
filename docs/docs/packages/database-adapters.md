@@ -50,7 +50,7 @@ const db = new PostgresDatabaseAdapter({
   // Optional connection pool settings
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000
+  connectionTimeoutMillis: 2000,
 });
 ```
 
@@ -61,7 +61,7 @@ import { SupabaseDatabaseAdapter } from "@eliza/adapter-supabase";
 
 const db = new SupabaseDatabaseAdapter(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_API_KEY
+  process.env.SUPABASE_SERVICE_API_KEY,
 );
 ```
 
@@ -119,27 +119,30 @@ interface Goal {
 
 ```typescript
 // Create a memory
-await db.createMemory({
-  id: uuid(),
-  content: { text: "Hello world" },
-  userId: user.id,
-  roomId: room.id,
-  agentId: agent.id,
-  createdAt: Date.now()
-}, "messages");
+await db.createMemory(
+  {
+    id: uuid(),
+    content: { text: "Hello world" },
+    userId: user.id,
+    roomId: room.id,
+    agentId: agent.id,
+    createdAt: Date.now(),
+  },
+  "messages",
+);
 
 // Search memories by embedding
 const similar = await db.searchMemoriesByEmbedding(embedding, {
   match_threshold: 0.8,
   count: 10,
-  roomId: room.id
+  roomId: room.id,
 });
 
 // Get recent memories
 const recent = await db.getMemories({
   roomId: room.id,
   count: 10,
-  unique: true
+  unique: true,
 });
 ```
 
@@ -149,12 +152,12 @@ const recent = await db.getMemories({
 // Create relationship
 await db.createRelationship({
   userA: user1.id,
-  userB: user2.id
+  userB: user2.id,
 });
 
 // Get relationships for user
 const relationships = await db.getRelationships({
-  userId: user.id
+  userId: user.id,
 });
 ```
 
@@ -168,13 +171,13 @@ await db.createGoal({
   userId: user.id,
   name: "Complete task",
   status: "IN_PROGRESS",
-  objectives: []
+  objectives: [],
 });
 
 // Get active goals
 const goals = await db.getGoals({
   roomId: room.id,
-  onlyInProgress: true
+  onlyInProgress: true,
 });
 ```
 
@@ -213,18 +216,20 @@ const db = new PostgresDatabaseAdapter({
   connectionString: process.env.DATABASE_URL,
   max: 20, // Maximum pool size
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000
+  connectionTimeoutMillis: 2000,
 });
 ```
 
 ### Memory Usage (SQLite)
 
 ```typescript
-const db = new SqliteDatabaseAdapter(new Database("./dev.db", {
-  memory: true, // In-memory database
-  readonly: false,
-  fileMustExist: false
-}));
+const db = new SqliteDatabaseAdapter(
+  new Database("./dev.db", {
+    memory: true, // In-memory database
+    readonly: false,
+    fileMustExist: false,
+  }),
+);
 ```
 
 ### Caching (All Adapters)
@@ -235,7 +240,7 @@ const memory = new MemoryManager({
   runtime,
   tableName: "messages",
   cacheSize: 1000,
-  cacheTTL: 3600
+  cacheTTL: 3600,
 });
 ```
 
@@ -282,9 +287,9 @@ CREATE TABLE IF NOT EXISTS memories (
 try {
   await db.createMemory(memory);
 } catch (error) {
-  if (error.code === 'SQLITE_CONSTRAINT') {
+  if (error.code === "SQLITE_CONSTRAINT") {
     // Handle unique constraint violation
-  } else if (error.code === '23505') {
+  } else if (error.code === "23505") {
     // Handle Postgres unique violation
   } else {
     // Handle other errors
@@ -317,16 +322,19 @@ class CustomDatabaseAdapter extends DatabaseAdapter {
 ## Best Practices
 
 1. **Connection Management**
+
    - Use connection pooling for PostgreSQL
    - Close connections properly when using SQLite
    - Handle connection errors gracefully
 
 2. **Vector Search**
+
    - Set appropriate match thresholds based on your use case
    - Index embedding columns for better performance
    - Cache frequently accessed embeddings
 
 3. **Memory Management**
+
    - Implement cleanup strategies for old memories
    - Use unique flags to prevent duplicates
    - Consider partitioning large tables
@@ -341,23 +349,26 @@ class CustomDatabaseAdapter extends DatabaseAdapter {
 ### Common Issues
 
 1. **Connection Timeouts**
+
 ```typescript
 // Increase connection timeout
 const db = new PostgresDatabaseAdapter({
-  connectionTimeoutMillis: 5000
+  connectionTimeoutMillis: 5000,
 });
 ```
 
 2. **Memory Leaks**
+
 ```typescript
 // Clean up old memories periodically
 await db.removeAllMemories(roomId, tableName);
 ```
 
 3. **Vector Search Performance**
+
 ```typescript
 // Create appropriate indexes
-CREATE INDEX embedding_idx ON memories 
+CREATE INDEX embedding_idx ON memories
 USING ivfflat (embedding vector_cosine_ops)
 WITH (lists = 100);
 ```

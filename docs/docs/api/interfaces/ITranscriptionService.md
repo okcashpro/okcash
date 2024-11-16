@@ -22,7 +22,7 @@
 
 [packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L595)
 
-***
+---
 
 ### transcribeAttachment()
 
@@ -40,7 +40,7 @@
 
 [packages/core/src/types.ts:591](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L591)
 
-***
+---
 
 ### transcribeAttachmentLocally()
 
@@ -58,7 +58,7 @@
 
 [packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L592)
 
-***
+---
 
 ### transcribeLocally()
 
