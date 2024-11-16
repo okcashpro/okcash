@@ -1,4 +1,4 @@
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
+import bs58 from "bs58";
 import {
     Connection,
     Keypair,
@@ -8,9 +8,9 @@ import {
 import BigNumber from "bignumber.js";
 import { v4 as uuidv4 } from "uuid";
 import { TrustScoreDatabase } from "../adapters/trustScoreDatabase.ts";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateObject } from "@ai16z/eliza/src/generation.ts";
-import settings from "@ai16z/eliza/src/settings.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateObject } from "@ai16z/eliza";
+import { settings } from "@ai16z/eliza";
 import {
     ActionExample,
     HandlerCallback,
@@ -391,7 +391,10 @@ export const executeSwap: Action = {
             }
 
             if (type === "buy") {
-                const tokenProvider = new TokenProvider(response.outputTokenCA);
+                const tokenProvider = new TokenProvider(
+                    response.outputTokenCA,
+                    await walletProvider.get(runtime, message, state)
+                );
                 const module = await import("better-sqlite3");
                 const Database = module.default;
                 const trustScoreDb = new TrustScoreDatabase(
@@ -421,7 +424,10 @@ export const executeSwap: Action = {
                     tradeData
                 );
             } else if (type === "sell") {
-                const tokenProvider = new TokenProvider(response.inputTokenCA);
+                const tokenProvider = new TokenProvider(
+                    response.inputTokenCA,
+                    await walletProvider.get(runtime, message, state)
+                );
                 const module = await import("better-sqlite3");
                 const Database = module.default;
                 const trustScoreDb = new TrustScoreDatabase(

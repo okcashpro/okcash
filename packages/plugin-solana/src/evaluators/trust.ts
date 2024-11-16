@@ -1,10 +1,7 @@
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import {
-    generateObjectArray,
-    generateTrueOrFalse,
-} from "@ai16z/eliza/src/generation.ts";
-import { MemoryManager } from "@ai16z/eliza/src/memory.ts";
-import { booleanFooter } from "@ai16z/eliza/src/parsing.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateObjectArray, generateTrueOrFalse } from "@ai16z/eliza";
+import { MemoryManager } from "@ai16z/eliza";
+import { booleanFooter } from "@ai16z/eliza";
 import {
     ActionExample,
     Content,
@@ -13,7 +10,6 @@ import {
     ModelClass,
     Evaluator,
 } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
 import { WalletProvider } from "../providers/wallet.ts";

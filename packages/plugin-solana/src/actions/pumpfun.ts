@@ -1,6 +1,6 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { Wallet } from "@coral-xyz/anchor";
-import { generateImage } from "@ai16z/eliza/src/generation.ts";
+import { generateImage } from "@ai16z/eliza";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import {
     CreateTokenMetadata,
@@ -10,9 +10,9 @@ import {
 } from "pumpdotfun-sdk";
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
-import settings from "@ai16z/eliza/src/settings.ts";
-
+import bs58 from "bs58";
 import {
+    settings,
     ActionExample,
     Content,
     HandlerCallback,
@@ -20,17 +20,15 @@ import {
     Memory,
     ModelClass,
     State,
+    generateObject,
+    composeContext,
     type Action,
 } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateObject } from "@ai16z/eliza/src/generation.ts";
 
 import {
     walletProvider,
     //WalletProvider,
 } from "../providers/wallet.ts";
-
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
 
 export interface CreateAndBuyContent extends Content {
     tokenMetadata: {
