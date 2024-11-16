@@ -1,5 +1,4 @@
 import { Plugin } from "@ai16z/eliza";
-import { avnuProvider } from "./providers/avnu.ts";
 
 export const starknetPlugin: Plugin = {
     name: "starknet",
@@ -8,7 +7,7 @@ export const starknetPlugin: Plugin = {
         // TODO: Add actions like swap, etc.
     ],
     evaluators: [],
-    providers: [avnuProvider],
+    providers: [],
 };
 
 export default starknetPlugin;
