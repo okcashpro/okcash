@@ -1,8 +1,9 @@
-import { composeContext } from "@ai16z/eliza";
-import { generateObjectArray, generateTrueOrFalse } from "@ai16z/eliza";
-import { MemoryManager } from "@ai16z/eliza";
-import { booleanFooter } from "@ai16z/eliza";
 import {
+    composeContext,
+    generateObjectArray,
+    generateTrueOrFalse,
+    MemoryManager,
+    booleanFooter,
     ActionExample,
     Content,
     IAgentRuntime,
