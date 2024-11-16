@@ -20,7 +20,7 @@ import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import { formatPosts } from "./posts.ts";
 import { getProviders } from "./providers.ts";
-import { settings } from "./settings.ts";
+import settings from "./settings.ts";
 import {
     Character,
     Goal,

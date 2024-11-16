@@ -11,6 +11,24 @@
             "runtimeExecutable": "pnpm",
             "runtimeArgs": ["run", "dev"],
             "skipFiles": ["<node_internals>/**"]
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Vitest",
+            "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+            "args": [
+              "run",
+              "--",
+              "${relativeFile}" // Ensures the currently open test file is passed
+            ],
+            "cwd": "${workspaceFolder}",
+            "env": {
+              "NODE_ENV": "test" // Ensure test environment is set
+            },
+            "autoAttachChildProcesses": true,
+            "smartStep": true,
+            "skipFiles": ["<node_internals>/**"]
+          }
     ]
 }

@@ -17,7 +17,8 @@
         "docker:run": "bash ./scripts/docker.sh run",
         "docker:bash": "bash ./scripts/docker.sh bash",
         "docker:start": "bash ./scripts/docker.sh start",
-        "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash"
+        "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
+        "tests": "pnpm --dir packages/core test"
     },
     "devDependencies": {
         "concurrently": "^9.1.0",
