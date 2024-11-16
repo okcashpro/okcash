@@ -771,7 +771,7 @@ export const generateImage = async (
                                 seed: data.seed || -1,
                             },
                         },
-                        model_id: data.modelId || "PepeXL", // Default to SD 1.5 if not specified
+                        model_id: data.modelId || "FLUX.1-dev",
                     }),
                 }
             );
