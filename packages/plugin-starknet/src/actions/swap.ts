@@ -15,6 +15,7 @@ import {
     QuoteRequest,
 } from "@avnu/avnu-sdk";
 import { getStarknetAccount } from "../providers/wallet.ts";
+import { validateSettings } from "../utils/index.ts";
 
 const swapTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
@@ -45,19 +46,7 @@ export const executeSwap: Action = {
         "STARKNET_EXCHANGE_TOKENS",
     ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        const requiredSettings = [
-            "STARKNET_ADDRESS",
-            "STARKNET_PRIVATE_KEY",
-            "STARKNET_RPC_URL",
-        ];
-
-        for (const setting of requiredSettings) {
-            if (!runtime.getSetting(setting)) {
-                return false;
-            }
-        }
-
-        return true;
+        return validateSettings(runtime);
     },
     description: "Perform a token swap using Avnu.",
     handler: async (
