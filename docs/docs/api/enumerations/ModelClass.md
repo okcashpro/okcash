@@ -10,7 +10,7 @@
 
 [packages/core/src/types.ts:78](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L78)
 
-***
+---
 
 ### IMAGE
 
@@ -20,7 +20,7 @@
 
 [packages/core/src/types.ts:79](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L79)
 
-***
+---
 
 ### LARGE
 
@@ -30,7 +30,7 @@
 
 [packages/core/src/types.ts:77](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L77)
 
-***
+---
 
 ### MEDIUM
 
@@ -40,7 +40,7 @@
 
 [packages/core/src/types.ts:76](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L76)
 
-***
+---
 
 ### SMALL
 

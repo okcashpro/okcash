@@ -12,7 +12,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:266](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L266)
 
-***
+---
 
 ### id
 
@@ -22,7 +22,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:260](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L260)
 
-***
+---
 
 ### roomId
 
@@ -32,7 +32,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:264](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L264)
 
-***
+---
 
 ### status
 
@@ -42,7 +42,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:265](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L265)
 
-***
+---
 
 ### userA
 
@@ -52,7 +52,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:261](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L261)
 
-***
+---
 
 ### userB
 
@@ -62,7 +62,7 @@ Represents a relationship between two users, including their IDs, the status of 
 
 [packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L262)
 
-***
+---
 
 ### userId
 

@@ -333,7 +333,7 @@ export class TrustScoreManager {
         data: TradeData
     ): Promise<TradePerformance> {
         const recommender =
-            await this.trustScoreDb.getOrCreateRecommenderWithDiscordId(
+            await this.trustScoreDb.getOrCreateRecommenderWithTelegramId(
                 recommenderId
             );
         const processedData: ProcessedTokenData =
@@ -444,7 +444,7 @@ export class TrustScoreManager {
         isSimulation: boolean
     ) {
         const recommender =
-            await this.trustScoreDb.getOrCreateRecommenderWithDiscordId(
+            await this.trustScoreDb.getOrCreateRecommenderWithTelegramId(
                 recommenderId
             );
         const processedData: ProcessedTokenData =

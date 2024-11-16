@@ -13,23 +13,26 @@ Database Adapters provide Eliza's persistence layer, enabling storage and retrie
 Each adapter is optimized for different use cases:
 
 - **PostgreSQL** (`@ai16z/adapter-postgres`)
+
   - Production-ready with vector search
   - Connection pooling and high performance
   - JSONB and pgvector support
 
 - **SQLite** (`@ai16z/adapter-sqlite`)
+
   - Lightweight local development
   - No external dependencies
   - Full-text search capabilities
 
 - **Supabase** (`@ai16z/adapter-supabase`)
+
   - Cloud-native PostgreSQL
   - Real-time subscriptions
   - Built-in RPC functions
 
 - **SQL.js** (`@ai16z/adapter-sqljs`)
   - In-memory SQLite for testing
-  - Browser compatibility 
+  - Browser compatibility
   - Zero configuration
 
 ### Architecture Overview
@@ -124,6 +127,7 @@ classDiagram
 ```
 
 Key components:
+
 - **DatabaseAdapter**: Abstract base class defining the interface
 - **Concrete Adapters**: PostgreSQL, SQLite, Supabase, and SQL.js implementations
 - **Memory Management**: Integration with MemoryManager for data operations
@@ -160,7 +164,7 @@ const db = new PostgresDatabaseAdapter({
   connectionString: process.env.DATABASE_URL,
   max: 20, // Connection pool size
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000
+  connectionTimeoutMillis: 2000,
 });
 
 // Test connection
@@ -178,8 +182,8 @@ const db = new SqliteDatabaseAdapter(
     // SQLite options
     memory: false,
     readonly: false,
-    fileMustExist: false
-  })
+    fileMustExist: false,
+  }),
 );
 ```
 
@@ -190,7 +194,7 @@ import { SupabaseDatabaseAdapter } from "@ai16z/adapter-supabase";
 
 const db = new SupabaseDatabaseAdapter(
   process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
+  process.env.SUPABASE_ANON_KEY!,
 );
 ```
 
@@ -207,14 +211,14 @@ await db.createMemory({
   type: "messages",
   content: {
     text: "Hello world",
-    attachments: []
+    attachments: [],
   },
   embedding: new Float32Array(1536), // Embedding vector
   userId,
   roomId,
   agentId,
   createdAt: Date.now(),
-  unique: true
+  unique: true,
 });
 
 // Search by embedding
@@ -224,7 +228,7 @@ const memories = await db.searchMemories({
   embedding: vectorData,
   match_threshold: 0.8,
   match_count: 10,
-  unique: true
+  unique: true,
 });
 
 // Get recent memories
@@ -234,7 +238,7 @@ const recent = await db.getMemories({
   unique: true,
   tableName: "messages",
   start: startTime,
-  end: endTime
+  end: endTime,
 });
 ```
 
@@ -244,18 +248,18 @@ const recent = await db.getMemories({
 // Create relationship
 await db.createRelationship({
   userA: user1Id,
-  userB: user2Id
+  userB: user2Id,
 });
 
 // Get relationship
 const relationship = await db.getRelationship({
   userA: user1Id,
-  userB: user2Id
+  userB: user2Id,
 });
 
 // Get all relationships
 const relationships = await db.getRelationships({
-  userId: user1Id
+  userId: user1Id,
 });
 ```
 
@@ -271,14 +275,14 @@ await db.createGoal({
   status: GoalStatus.IN_PROGRESS,
   objectives: [
     { text: "Step 1", completed: false },
-    { text: "Step 2", completed: false }
-  ]
+    { text: "Step 2", completed: false },
+  ],
 });
 
 // Update goal status
 await db.updateGoalStatus({
   goalId,
-  status: GoalStatus.COMPLETED
+  status: GoalStatus.COMPLETED,
 });
 
 // Get active goals
@@ -286,7 +290,7 @@ const goals = await db.getGoals({
   roomId,
   userId,
   onlyInProgress: true,
-  count: 10
+  count: 10,
 });
 ```
 
@@ -337,23 +341,23 @@ async searchMemoriesByEmbedding(
       `[${embedding.join(",")}]`,
       params.tableName
     ];
-    
+
     if (params.unique) {
       sql += ` AND "unique" = true`;
     }
-    
+
     if (params.roomId) {
       sql += ` AND "roomId" = $3::uuid`;
       values.push(params.roomId);
     }
-    
+
     if (params.match_threshold) {
       sql += ` AND 1 - (embedding <-> $1::vector) >= $4`;
       values.push(params.match_threshold);
     }
-    
+
     sql += ` ORDER BY embedding <-> $1::vector`;
-    
+
     if (params.count) {
       sql += ` LIMIT $5`;
       values.push(params.count);
@@ -405,7 +409,7 @@ async searchMemories(params: {
   sql += ` ORDER BY similarity ASC LIMIT ?`;
 
   const memories = this.db.prepare(sql).all(...queryParams);
-  
+
   return memories.map(memory => ({
     ...memory,
     content: JSON.parse(memory.content),
@@ -436,7 +440,7 @@ CREATE TABLE memories (
   "createdAt" TIMESTAMP NOT NULL
 );
 
-CREATE INDEX memory_embedding_idx ON 
+CREATE INDEX memory_embedding_idx ON
   memories USING ivfflat (embedding vector_cosine_ops)
   WITH (lists = 100);
 
@@ -506,7 +510,7 @@ constructor(connectionConfig: any) {
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000
   });
-  
+
   this.pool.on("error", (err) => {
     console.error("Unexpected error on idle client", err);
   });
@@ -519,7 +523,7 @@ constructor(connectionConfig: any) {
 // SQLite prepared statements
 class SqliteDatabaseAdapter extends DatabaseAdapter {
   private statements = new Map<string, Statement>();
-  
+
   prepareStatement(sql: string): Statement {
     let stmt = this.statements.get(sql);
     if (!stmt) {
@@ -528,17 +532,17 @@ class SqliteDatabaseAdapter extends DatabaseAdapter {
     }
     return stmt;
   }
-  
+
   // Use prepared statements
   async getMemoryById(id: UUID): Promise<Memory | null> {
-    const stmt = this.prepareStatement(
-      "SELECT * FROM memories WHERE id = ?"
-    );
+    const stmt = this.prepareStatement("SELECT * FROM memories WHERE id = ?");
     const memory = stmt.get(id);
-    return memory ? {
-      ...memory,
-      content: JSON.parse(memory.content)
-    } : null;
+    return memory
+      ? {
+          ...memory,
+          content: JSON.parse(memory.content),
+        }
+      : null;
   }
 }
 ```
@@ -551,14 +555,14 @@ async createMemories(memories: Memory[], tableName: string) {
   const client = await this.pool.connect();
   try {
     await client.query('BEGIN');
-    
+
     const stmt = await client.prepare(
       `INSERT INTO memories (
-        id, type, content, embedding, "userId", 
+        id, type, content, embedding, "userId",
         "roomId", "agentId", "unique", "createdAt"
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
     );
-    
+
     for (const memory of memories) {
       await stmt.execute([
         memory.id,
@@ -572,7 +576,7 @@ async createMemories(memories: Memory[], tableName: string) {
         memory.createdAt
       ]);
     }
-    
+
     await client.query('COMMIT');
   } catch (error) {
     await client.query('ROLLBACK');
@@ -590,19 +594,19 @@ async createMemories(memories: Memory[], tableName: string) {
 ```typescript
 class DatabaseAdapter {
   protected async withTransaction<T>(
-    callback: (client: PoolClient) => Promise<T>
+    callback: (client: PoolClient) => Promise<T>,
   ): Promise<T> {
     const client = await this.pool.connect();
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
       const result = await callback(client);
-      await client.query('COMMIT');
+      await client.query("COMMIT");
       return result;
     } catch (error) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       if (error instanceof DatabaseError) {
         // Handle specific database errors
-        if (error.code === '23505') {
+        if (error.code === "23505") {
           throw new UniqueViolationError(error);
         }
       }
@@ -629,11 +633,11 @@ class CustomDatabaseAdapter extends DatabaseAdapter {
   async createMemory(memory: Memory, tableName: string): Promise<void> {
     // Custom implementation
   }
-  
+
   async searchMemories(params: SearchParams): Promise<Memory[]> {
     // Custom implementation
   }
-  
+
   // Add custom functionality
   async customOperation(): Promise<void> {
     // Custom database operation
@@ -646,16 +650,19 @@ class CustomDatabaseAdapter extends DatabaseAdapter {
 ## Best Practices
 
 1. **Connection Management**
+
    - Use connection pooling for PostgreSQL
    - Handle connection failures gracefully
    - Implement proper cleanup
 
 2. **Transaction Handling**
+
    - Use transactions for atomic operations
    - Implement proper rollback handling
    - Manage nested transactions
 
 3. **Error Handling**
+
    - Implement specific error types
    - Handle constraint violations
    - Provide meaningful error messages

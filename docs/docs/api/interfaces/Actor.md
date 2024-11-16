@@ -24,7 +24,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 [packages/core/src/types.ts:43](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L43)
 
-***
+---
 
 ### id
 
@@ -34,7 +34,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 [packages/core/src/types.ts:44](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L44)
 
-***
+---
 
 ### name
 
@@ -44,7 +44,7 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 [packages/core/src/types.ts:41](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L41)
 
-***
+---
 
 ### username
 

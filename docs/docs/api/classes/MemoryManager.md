@@ -52,7 +52,7 @@ The AgentRuntime instance associated with this manager.
 
 [packages/core/src/memory.ts:22](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L22)
 
-***
+---
 
 ### tableName
 
@@ -96,7 +96,7 @@ A Promise resolving to the memory object, potentially updated with an embedding 
 
 [packages/core/src/memory.ts:45](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L45)
 
-***
+---
 
 ### countMemories()
 
@@ -128,7 +128,7 @@ A Promise resolving to the count of memories.
 
 [packages/core/src/memory.ts:219](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L219)
 
-***
+---
 
 ### createMemory()
 
@@ -160,7 +160,7 @@ A Promise that resolves when the operation completes.
 
 [packages/core/src/memory.ts:158](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L158)
 
-***
+---
 
 ### getCachedEmbeddings()
 
@@ -182,7 +182,7 @@ A Promise that resolves when the operation completes.
 
 [packages/core/src/memory.ts:93](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L93)
 
-***
+---
 
 ### getMemories()
 
@@ -228,7 +228,7 @@ A Promise resolving to an array of Memory objects.
 
 [packages/core/src/memory.ts:66](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L66)
 
-***
+---
 
 ### getMemoriesByRoomIds()
 
@@ -254,7 +254,7 @@ A Promise resolving to an array of Memory objects.
 
 [packages/core/src/memory.ts:173](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L173)
 
-***
+---
 
 ### getMemoryById()
 
@@ -276,7 +276,7 @@ A Promise resolving to an array of Memory objects.
 
 [packages/core/src/memory.ts:184](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L184)
 
-***
+---
 
 ### removeAllMemories()
 
@@ -304,7 +304,7 @@ A Promise that resolves when the operation completes.
 
 [packages/core/src/memory.ts:206](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L206)
 
-***
+---
 
 ### removeMemory()
 
@@ -332,7 +332,7 @@ A Promise that resolves when the operation completes.
 
 [packages/core/src/memory.ts:194](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/memory.ts#L194)
 
-***
+---
 
 ### searchMemoriesByEmbedding()
 
@@ -356,7 +356,7 @@ Options including match threshold, count, user IDs, and uniqueness.
 
 The maximum number of memories to retrieve.
 
-• **opts.match\_threshold?**: `number`
+• **opts.match_threshold?**: `number`
 
 The similarity threshold for matching memories.
 

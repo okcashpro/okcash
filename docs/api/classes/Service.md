@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:507](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L507)
+[packages/core/src/types.ts:519](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L519)
 
 ## Methods
 
@@ -40,7 +40,7 @@
 
 #### Type Parameters
 
-• **T** *extends* [`Service`](Service.md)
+• **T** _extends_ [`Service`](Service.md)
 
 #### Returns
 
@@ -48,4 +48,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:509](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L509)
+[packages/core/src/types.ts:521](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L521)

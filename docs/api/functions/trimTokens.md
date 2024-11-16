@@ -24,4 +24,4 @@ The model to use for generateText.
 
 ## Defined in
 
-[packages/core/src/generation.ts:308](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L308)
+[packages/core/src/generation.ts:379](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L379)

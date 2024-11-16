@@ -51,22 +51,22 @@ const config = {
         validation: {
           notExported: true,
           invalidLink: true,
-          notDocumented: false
+          notDocumented: false,
         },
         exclude: [
           "**/_media/**",
           "**/node_modules/**",
           "**/dist/**",
-          "**/*.test.ts", 
-          "**/*.spec.ts" 
+          "**/*.test.ts",
+          "**/*.spec.ts",
         ],
         watch: false,
         treatWarningsAsErrors: true,
         treatValidationWarningsAsErrors: true,
         searchInComments: true,
         navigationLinks: {
-          "GitHub": "https://github.com/ai16z/eliza",
-          "Documentation": "/docs/intro"
+          GitHub: "https://github.com/ai16z/eliza",
+          Documentation: "/docs/intro",
         },
       },
     ],
@@ -151,14 +151,14 @@ const config = {
           title: "Community",
           items: [
             {
-              label: 'Discord',
-              href: 'https://discord.gg/ai16z'
+              label: "Discord",
+              href: "https://discord.gg/ai16z",
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/ai16zdao'
-            }
-          ]
+              label: "Twitter",
+              href: "https://twitter.com/ai16zdao",
+            },
+          ],
         },
         {
           title: "More",

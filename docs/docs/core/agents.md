@@ -70,7 +70,7 @@ Each element in the runtime interface plays a crucial role:
 This section demonstrates setting up an agent with basic and optional configurations. It provides a working example and sample code that helps users quickly start building:
 
 ```typescript
-import { AgentRuntime, ModelProviderName } from '@ai16z/eliza';
+import { AgentRuntime, ModelProviderName } from "@ai16z/eliza";
 
 // Configuration example
 const runtime = new AgentRuntime({
@@ -82,10 +82,9 @@ const runtime = new AgentRuntime({
   serverUrl: "http://localhost:7998",
   actions: customActions,
   evaluators: customEvaluators,
-  providers: customProviders
+  providers: customProviders,
 });
 ```
-
 
 ---
 
@@ -119,7 +118,7 @@ State composition and updates are handled through dedicated methods:
 ```typescript
 // Compose initial state
 const state = await runtime.composeState(message, {
-  additionalContext: "custom-context"
+  additionalContext: "custom-context",
 });
 
 // Update message state
@@ -149,16 +148,11 @@ The Eliza framework uses multiple types of memory to support an agent's long-ter
 
 - **RAG Integration**: Uses a vector search to perform contextual recall based on similarity matching. This enables the agent to retrieve relevant memory snippets or knowledge based on the content and intent of the current conversation, making its responses more contextually relevant.
 
-
 The runtime uses multiple specialized [IMemoryManager](/api/interfaces) instances:
 
 - `messageManager` - conversation messages and responses
 - `descriptionManager` - user descriptions and profiles
 - `loreManager` - static character knowledge
-
-
-
-
 
 ---
 
@@ -168,17 +162,11 @@ The runtime's message processing is handled through the [processActions](/api/cl
 
 ```typescript
 // Process message with actions
-await runtime.processActions(
-  message,
-  responses,
-  state,
-  async (newMessages) => {
-    // Handle new messages
-    return [message];
-  }
-);
+await runtime.processActions(message, responses, state, async (newMessages) => {
+  // Handle new messages
+  return [message];
+});
 ```
-
 
 ---
 
@@ -192,7 +180,7 @@ runtime.registerService(new TranscriptionService());
 
 // Get service
 const service = runtime.getService<ITranscriptionService>(
-  ServiceType.TRANSCRIPTION
+  ServiceType.TRANSCRIPTION,
 );
 ```
 
@@ -209,7 +197,7 @@ await memoryManager.createMemory({
   id: messageId,
   content: { text: "Message content" },
   userId: userId,
-  roomId: roomId
+  roomId: roomId,
 });
 ```
 
@@ -222,19 +210,15 @@ await memoryManager.createMemory({
 - Use immutability in state management.
 - Log errors and maintain stability during service failures.
 
-
 ## Evaluation System
 
 The runtime's [evaluate](/api/classes/AgentRuntime#evaluate) method processes evaluations:
 
 ```typescript
 // Evaluate message
-const evaluationResults = await runtime.evaluate(
-  message,
-  state,
-  didRespond
-);
+const evaluationResults = await runtime.evaluate(message, state, didRespond);
 ```
+
 ---
 
 ## Usage Examples
@@ -243,21 +227,28 @@ const evaluationResults = await runtime.evaluate(
 
 ```typescript
 await runtime.processActions(message, responses, state, (newMessages) => {
- return [message];
+  return [message];
 });
 ```
 
 2. **State Management**:
 
 ```typescript
-const state = await runtime.composeState(message, { additionalContext: "custom-context" });
+const state = await runtime.composeState(message, {
+  additionalContext: "custom-context",
+});
 ```
 
 3. **Memory Management**:
 
 ```typescript
 const memoryManager = runtime.getMemoryManager("messages");
-await memoryManager.createMemory({ id: messageId, content: { text: "Message content" }, userId, roomId });
+await memoryManager.createMemory({
+  id: messageId,
+  content: { text: "Message content" },
+  userId,
+  roomId,
+});
 ```
 
 ## Further Reading

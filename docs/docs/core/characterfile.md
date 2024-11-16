@@ -66,7 +66,10 @@ A `characterfile` implements the [Character](/api/type-aliases) type and defines
     "embeddingModel": "EmbeddingModelName"
   },
   "bio": "Character biography or description",
-  "lore": ["Storyline or backstory element 1", "Storyline or backstory element 2"],
+  "lore": [
+    "Storyline or backstory element 1",
+    "Storyline or backstory element 2"
+  ],
   "messageExamples": [["Message example 1", "Message example 2"]],
   "postExamples": ["Post example 1", "Post example 2"],
   "topics": ["Topic1", "Topic2"],
@@ -82,15 +85,19 @@ A `characterfile` implements the [Character](/api/type-aliases) type and defines
 ### Key Fields
 
 #### `name` (required)
+
 The character's display name for identification and in conversations.
 
 #### `modelProvider` (required)
+
 Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
 
 #### `clients` (required)
+
 Array of supported client types from [Clients](/api/enumerations) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
 
 #### `bio`
+
 Character background as a string or array of statements.
 
 - Contains biographical information about the character
@@ -108,6 +115,7 @@ Example:
 ```
 
 #### `lore`
+
 Backstory elements and unique character traits. These help define personality and can be randomly sampled in conversations.
 
 Example:
@@ -121,6 +129,7 @@ Example:
 ```
 
 #### `knowledge`
+
 Array used for Retrieval Augmented Generation (RAG), containing facts or references to ground the character's responses.
 
 - Can contain chunks of text from articles, books, or other sources
@@ -128,8 +137,8 @@ Array used for Retrieval Augmented Generation (RAG), containing facts or referen
 - Knowledge can be generated from PDFs or other documents using provided tools
 
 #### `messageExamples`
-Sample conversations for establishing interaction patterns, helps establish the character's conversational style.
 
+Sample conversations for establishing interaction patterns, helps establish the character's conversational style.
 
 ```json
 "messageExamples": [
@@ -161,7 +170,6 @@ Contains three key sections:
 
 Each section can contain multiple instructions that guide the character's communication style.
 
-
 The `style` object defines behavior patterns across contexts:
 
 ```json
@@ -184,7 +192,6 @@ The `style` object defines behavior patterns across contexts:
 - Used for generating responses with consistent tone
 - Can be used in "Mad Libs" style content generation
 
-
 ### Settings Configuration
 
 The `settings` object defines additional configurations like secrets and voice models.
@@ -206,18 +213,33 @@ The `settings` object defines additional configurations like secrets and voice m
   "modelProvider": "ANTHROPIC",
   "clients": ["DISCORD", "DIRECT"],
   "bio": "AI researcher and educator focused on practical applications",
-  "lore": ["Pioneer in open-source AI development", "Advocate for AI accessibility"],
+  "lore": [
+    "Pioneer in open-source AI development",
+    "Advocate for AI accessibility"
+  ],
   "messageExamples": [
     [
-      {"user": "{{user1}}", "content": { "text": "Can you explain how AI models work?" }},
-      {"user": "TechAI", "content": { "text": "Think of AI models like pattern recognition systems." }}
+      {
+        "user": "{{user1}}",
+        "content": { "text": "Can you explain how AI models work?" }
+      },
+      {
+        "user": "TechAI",
+        "content": {
+          "text": "Think of AI models like pattern recognition systems."
+        }
+      }
     ]
   ],
   "postExamples": [
     "Understanding AI doesn't require a PhD - let's break it down simply",
     "The best AI solutions focus on real human needs"
   ],
-  "topics": ["artificial intelligence", "machine learning", "technology education"],
+  "topics": [
+    "artificial intelligence",
+    "machine learning",
+    "technology education"
+  ],
   "style": {
     "all": ["explain complex topics simply", "be encouraging and supportive"],
     "chat": ["use relevant examples", "check understanding"],
@@ -256,7 +278,6 @@ npx folder2knowledge <path/to/folder>
 npx knowledge2character <character-file> <knowledge-file>
 ```
 
-
 3. **Style Instructions**
 
 - Be specific about communication patterns
@@ -268,7 +289,6 @@ npx knowledge2character <character-file> <knowledge-file>
 - Include diverse scenarios
 - Show character-specific responses
 - Demonstrate typical interaction patterns
-
 
 ## Tips for Quality
 
@@ -295,7 +315,6 @@ npx knowledge2character <character-file> <knowledge-file>
 - Focus on relevant information
 - Organize in digestible chunks
 - Update regularly to maintain relevance
-
 
 ## Further Reading
 
