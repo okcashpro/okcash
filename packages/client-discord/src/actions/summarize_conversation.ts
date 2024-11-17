@@ -1,4 +1,3 @@
-import fs from "fs";
 import { composeContext } from "@ai16z/eliza";
 import { generateText, splitChunks, trimTokens } from "@ai16z/eliza";
 import { getActorDetails } from "@ai16z/eliza";
@@ -300,9 +299,9 @@ ${currentSummary.trim()}
 `;
             await callback(callbackData);
         } else if (currentSummary.trim()) {
-            const summaryFilename = `content_cache/conversation_summary_${Date.now()}.txt`;
+            const summaryFilename = `content/conversation_summary_${Date.now()}.txt`;
+            await runtime.cacheManager.set(summaryFilename, currentSummary);
             // save the summary to a file
-            fs.writeFileSync(summaryFilename, currentSummary);
             await callback(
                 {
                     ...callbackData,

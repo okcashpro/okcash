@@ -52,7 +52,8 @@ export class AutoClient {
             async (highTrustRecommendation) => {
                 const tokenProvider = new TokenProvider(
                     highTrustRecommendation.tokenAddress,
-                    this.walletProvider
+                    this.walletProvider,
+                    this.runtime.cacheManager
                 );
                 const tokenInfo = await tokenProvider.getProcessedTokenData();
                 const shouldTrade = await tokenProvider.shouldTradeToken();

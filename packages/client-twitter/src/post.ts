@@ -1,10 +1,12 @@
 import { Tweet } from "agent-twitter-client";
-import fs from "fs";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateText } from "@ai16z/eliza/src/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import {
+    composeContext,
+    generateText,
+    embeddingZeroVector,
+    IAgentRuntime,
+    ModelClass,
+    stringToUuid,
+} from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `{{timeline}}
@@ -60,18 +62,13 @@ export class TwitterPostClient extends ClientBase {
 
             let homeTimeline = [];
 
-            if (!fs.existsSync("tweetcache")) fs.mkdirSync("tweetcache");
-            // read the file if it exists
-            if (fs.existsSync("tweetcache/home_timeline.json")) {
-                homeTimeline = JSON.parse(
-                    fs.readFileSync("tweetcache/home_timeline.json", "utf-8")
-                );
+            const cachedTimeline = await this.getCachedTimeline();
+
+            if (cachedTimeline) {
+                homeTimeline = cachedTimeline;
             } else {
                 homeTimeline = await this.fetchHomeTimeline(50);
-                fs.writeFileSync(
-                    "tweetcache/home_timeline.json",
-                    JSON.stringify(homeTimeline, null, 2)
-                );
+                this.cacheTimeline(homeTimeline);
             }
 
             const formattedHomeTimeline =
@@ -127,6 +124,7 @@ export class TwitterPostClient extends ClientBase {
             if (content.length > contentLength) {
                 content = content.slice(0, content.lastIndexOf("."));
             }
+
             try {
                 const result = await this.requestQueue.add(
                     async () => await this.twitterClient.sendTweet(content)

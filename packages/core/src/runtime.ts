@@ -26,6 +26,7 @@ import {
     Goal,
     HandlerCallback,
     IAgentRuntime,
+    ICacheManager,
     IDatabaseAdapter,
     IMemoryManager,
     ModelClass,
@@ -130,6 +131,7 @@ export class AgentRuntime implements IAgentRuntime {
 
     services: Map<ServiceType, Service> = new Map();
     memoryManagers: Map<string, IMemoryManager> = new Map();
+    cacheManager: ICacheManager;
 
     registerMemoryManager(manager: IMemoryManager): void {
         if (!manager.tableName) {
@@ -206,6 +208,7 @@ export class AgentRuntime implements IAgentRuntime {
         databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
         fetch?: typeof fetch | unknown;
         speechModelPath?: string;
+        cacheManager: ICacheManager;
     }) {
         this.#conversationLength =
             opts.conversationLength ?? this.#conversationLength;
@@ -223,6 +226,8 @@ export class AgentRuntime implements IAgentRuntime {
         if (!opts.databaseAdapter) {
             throw new Error("No database adapter provided");
         }
+
+        this.cacheManager = opts.cacheManager;
 
         this.messageManager = new MemoryManager({
             runtime: this,
