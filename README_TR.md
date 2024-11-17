@@ -29,20 +29,6 @@
 -   🎮 Video Oyun NPC'leri (Oyuncu Olmayan Karakter)
 -   🧠 Alım Satım
 
-## 🌍 Çeviriler
-
-<details>
-<summary>Mevcut Diller</summary>
-
--   [中文说明](./README_CN.md)
--   [日本語の説明](./README_JA.md)
--   [한국어 설명](./README_KOR.md)
--   [Instructions en français](./README_FR.md)
--   [Instruções em português](./README_PTBR.md)
--   [Türkçe dökümantasyon](./README_TR.md)
-
-</details>
-
 ## 🚀 Hızlı Başlangıç
 
 ### Gereksinimler
