@@ -273,7 +273,7 @@ const llamaLocalSettings = {
 const heuristSettings = {
   settings: {
     stop: [],
-    maxInputTokens: 128000,
+    maxInputTokens: 32768,
     maxOutputTokens: 8192,
     repetition_penalty: 0.0,
     temperature: 0.7,
@@ -283,11 +283,11 @@ const heuristSettings = {
   },
   endpoint: "https://llm-gateway.heurist.xyz",
   model: {
-    [ModelClass.SMALL]: "meta-llama/llama-3-70b-instruct",
-    [ModelClass.MEDIUM]: "meta-llama/llama-3-70b-instruct",
-    [ModelClass.LARGE]: "meta-llama/llama-3.1-405b-instruct",
+    [ModelClass.SMALL]: "hermes-3-llama3.1-8b",
+    [ModelClass.MEDIUM]: "mistralai/mixtral-8x7b-instruct",
+    [ModelClass.LARGE]: "nvidia/llama-3.1-nemotron-70b-instruct",
     [ModelClass.EMBEDDING]: "", // Add later
-    [ModelClass.IMAGE]: "PepeXL",
+    [ModelClass.IMAGE]: "FLUX.1-dev",
   },
 };
 ```

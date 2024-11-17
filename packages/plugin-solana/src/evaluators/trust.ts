@@ -1,8 +1,9 @@
-import { composeContext } from "@ai16z/eliza";
-import { generateObjectArray, generateTrueOrFalse } from "@ai16z/eliza";
-import { MemoryManager } from "@ai16z/eliza";
-import { booleanFooter } from "@ai16z/eliza";
 import {
+    composeContext,
+    generateObjectArray,
+    generateTrueOrFalse,
+    MemoryManager,
+    booleanFooter,
     ActionExample,
     Content,
     IAgentRuntime,
@@ -13,7 +14,7 @@ import {
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
 import { WalletProvider } from "../providers/wallet.ts";
-import { TrustScoreDatabase } from "../adapters/trustScoreDatabase.ts";
+import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 
 const shouldProcessTemplate =

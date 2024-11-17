@@ -33,8 +33,8 @@ export class TwitterPostClient extends ClientBase {
             this.generateNewTweet();
             setTimeout(
                 generateNewTweetLoop,
-                (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
-            ); // Random interval between 1 and 4 hours
+                (Math.floor(Math.random() * (180 - 90 + 1)) + 90) * 60 * 1000
+            ); // Random interval: min 90min/max 180min (1.5-3h), Results in min 8/max 16 posts per day
         };
         // setTimeout(() => {
         generateNewTweetLoop();

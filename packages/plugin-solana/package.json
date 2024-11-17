@@ -6,6 +6,7 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-trustdb": "workspace:*",
         "@coral-xyz/anchor": "^0.30.1",
         "@solana/spl-token": "0.4.9",
         "@solana/web3.js": "1.95.4",

@@ -14,7 +14,7 @@ Represents a room or conversation context, including its ID and a list of partic
 
 [packages/core/src/types.ts:295](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L295)
 
----
+***
 
 ### participants
 
