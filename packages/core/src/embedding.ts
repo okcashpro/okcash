@@ -1,10 +1,10 @@
-import { EmbeddingModel, FlagEmbedding } from "fastembed";
-import path from "path";
+// import { EmbeddingModel, FlagEmbedding } from "fastembed";
+import path from "node:path";
 import { fileURLToPath } from "url";
 import { models } from "./models.ts";
 import { IAgentRuntime, ModelProviderName, ModelClass } from "./types.ts";
-import fs from "fs";
-import { trimTokens } from "./generation.ts";
+// import fs from "fs";
+// import { trimTokens } from "./generation.ts";
 import settings from "./settings.ts";
 
 function getRootPath() {
@@ -97,14 +97,14 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         throw new Error("No embedding model configured");
     }
 
-    // Try local embedding first
-    if (
-        runtime.character.modelProvider !== ModelProviderName.OPENAI &&
-        runtime.character.modelProvider !== ModelProviderName.OLLAMA &&
-        !settings.USE_OPENAI_EMBEDDING
-    ) {
-        return await getLocalEmbedding(input);
-    }
+    // // Try local embedding first
+    // if (
+    //     runtime.character.modelProvider !== ModelProviderName.OPENAI &&
+    //     runtime.character.modelProvider !== ModelProviderName.OLLAMA &&
+    //     !settings.USE_OPENAI_EMBEDDING
+    // ) {
+    //     return await getLocalEmbedding(input);
+    // }
 
     // Check cache
     const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
@@ -127,21 +127,22 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     });
 }
 
-async function getLocalEmbedding(input: string): Promise<number[]> {
-    const cacheDir = getRootPath() + "/cache/";
-    if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir, { recursive: true });
-    }
+//  TODO: Add back in when it can work in browser and locally
+// async function getLocalEmbedding(input: string): Promise<number[]> {
+//     const cacheDir = getRootPath() + "/cache/";
+//     if (!fs.existsSync(cacheDir)) {
+//         fs.mkdirSync(cacheDir, { recursive: true });
+//     }
 
-    const embeddingModel = await FlagEmbedding.init({
-        cacheDir: cacheDir,
-    });
+//     const embeddingModel = await FlagEmbedding.init({
+//         cacheDir: cacheDir,
+//     });
 
-    const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
-    const embedding = await embeddingModel.queryEmbed(trimmedInput);
-    //console.log("Embedding dimensions: ", embedding.length);
-    return embedding;
-}
+//     const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
+//     const embedding = await embeddingModel.queryEmbed(trimmedInput);
+//     //console.log("Embedding dimensions: ", embedding.length);
+//     return embedding;
+// }
 
 export async function retrieveCachedEmbedding(
     runtime: IAgentRuntime,

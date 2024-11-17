@@ -21,6 +21,7 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
 import yargs from "yargs";
+import { character } from "./character.ts";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -224,7 +225,10 @@ export async function createAgent(
     token: string
 ) {
     console.log("Creating runtime for character", character.name);
-    console.log("character.settings.secrets?.WALLET_PUBLIC_KEY", character.settings.secrets?.WALLET_PUBLIC_KEY)
+    console.log(
+        "character.settings.secrets?.WALLET_PUBLIC_KEY",
+        character.settings.secrets?.WALLET_PUBLIC_KEY
+    );
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -273,7 +277,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [defaultCharacter];
+    let characters = [character];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);

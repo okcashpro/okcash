@@ -11,7 +11,7 @@ import { IImageDescriptionService, ModelClass, Service } from "./types.ts";
 import { Buffer } from "buffer";
 import { createOllama } from "ollama-ai-provider";
 import OpenAI from "openai";
-import { default as tiktoken, TiktokenModel } from "tiktoken";
+import { TiktokenModel, get_encoding, encoding_for_model } from "tiktoken";
 import Together from "together-ai";
 import { elizaLogger } from "./index.ts";
 import { models } from "./models.ts";
@@ -378,7 +378,7 @@ export async function generateText({
  */
 export function trimTokens(context, maxTokens, model) {
     // Count tokens and truncate context if necessary
-    const encoding = tiktoken.encoding_for_model(model as TiktokenModel);
+    const encoding = encoding_for_model(model as TiktokenModel);
     let tokens = encoding.encode(context);
     const textDecoder = new TextDecoder();
     if (tokens.length > maxTokens) {
@@ -463,7 +463,7 @@ export async function splitChunks(
     chunkSize: number,
     bleed: number = 100
 ): Promise<string[]> {
-    const encoding = tiktoken.encoding_for_model("gpt-4o-mini");
+    const encoding = encoding_for_model("gpt-4o-mini");
 
     const tokens = encoding.encode(content);
     const chunks: string[] = [];

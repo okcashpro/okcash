@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import "./App.css";
+import { stringToUuid } from "@ai16z/eliza";
 
 type TextResponse = {
     text: string;
@@ -18,20 +19,17 @@ function App() {
         setLoading(true);
 
         try {
-            const res = await fetch(
-                "/api/b850bc30-45f8-0041-a00a-83df46d8555d/message",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        text: input,
-                        userId: "user",
-                        roomId: "default-room-b850bc30-45f8-0041-a00a-83df46d8555d",
-                    }),
-                }
-            );
+            const res = await fetch(`/api/${stringToUuid("Eliza")}/message`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    text: input,
+                    userId: "user",
+                    roomId: `default-room-${stringToUuid("Eliza")}`,
+                }),
+            });
 
             const data: TextResponse[] = await res.json();
 
