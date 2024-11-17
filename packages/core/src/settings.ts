@@ -46,6 +46,8 @@ export function loadEnvConfig() {
     if (result.error) {
         throw new Error(`Error loading .env file: ${result.error}`);
     }
+
+    console.log(`Loaded .env file from: ${envPath}`);
     return process.env;
 }
 

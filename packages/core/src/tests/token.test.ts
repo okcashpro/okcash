@@ -1,8 +1,3 @@
-import { loadEnvConfig } from '../settings';
-
-// Load the environment variables
-loadEnvConfig();
-
 // Now import other modules
 import { createRuntime } from "../test_resources/createRuntime";
 import { TokenProvider, WalletProvider, Connection, PublicKey } from "@ai16z/plugin-solana";
@@ -70,7 +65,6 @@ describe("TokenProvider Tests", () => {
             top10HolderPercent: 20,
         });
 
-        console.log({ securityData });
         // Ensure the mock was called
         expect(fetchSpy).toHaveBeenCalled();
 
