@@ -32,8 +32,8 @@ export class TwitterPostClient extends ClientBase {
 
     onReady(postImmediately: boolean = true) { 
         const generateNewTweetLoop = () => {
-            const minMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 5;
-            const maxMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 15;
+            const minMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
+            const maxMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
             const randomMinutes = Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) + minMinutes;
             const delay = randomMinutes * 60 * 1000;
             
