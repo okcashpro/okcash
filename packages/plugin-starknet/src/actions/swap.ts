@@ -70,7 +70,7 @@ export const executeSwap: Action = {
         const response = await generateObject({
             runtime,
             context: swapContext,
-            modelClass: ModelClass.LARGE,
+            modelClass: ModelClass.MEDIUM,
         });
 
         console.log("Response:", response);

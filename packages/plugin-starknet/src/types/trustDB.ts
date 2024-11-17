@@ -276,7 +276,7 @@ export interface DexScreenerData {
 }
 
 export interface Prices {
-    solana: { usd: string };
+    starknet: { usd: string };
     bitcoin: { usd: string };
     ethereum: { usd: string };
 }

@@ -1,4 +1,4 @@
-import { IAgentRuntime } from "@ai16z/eliza";
+import { Content, IAgentRuntime } from "@ai16z/eliza";
 
 import { Account, Contract, RpcProvider } from "starknet";
 
@@ -49,3 +49,32 @@ export const getStarknetAccount = (runtime: IAgentRuntime) => {
         runtime.getSetting("STARKNET_PRIVATE_KEY")
     );
 };
+
+export interface TransferContent extends Content {
+    tokenAddress: string;
+    recipient: string;
+    amount: string | number;
+}
+
+export function isTransferContent(
+    content: TransferContent
+): content is TransferContent {
+    // Validate types
+    const validTypes =
+        typeof content.tokenAddress === "string" &&
+        typeof content.recipient === "string" &&
+        (typeof content.amount === "string" ||
+            typeof content.amount === "number");
+    if (!validTypes) {
+        return false;
+    }
+
+    // Validate addresses (must be 32-bytes long with 0x prefix)
+    const validAddresses =
+        content.tokenAddress.startsWith("0x") &&
+        content.tokenAddress.length === 66 &&
+        content.recipient.startsWith("0x") &&
+        content.recipient.length === 66;
+
+    return validAddresses;
+}

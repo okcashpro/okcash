@@ -14,45 +14,19 @@ import {
     composeContext,
     generateObject,
 } from "@ai16z/eliza";
-import { getStarknetAccount, validateSettings } from "../utils";
-import { Account, RpcProvider } from "starknet";
-import { PROVIDER_CONFIG } from "..";
-import path from "path";
-import fs from "fs";
+import {
+    getStarknetAccount,
+    isTransferContent,
+    validateSettings,
+} from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 
-export interface TransferContent extends Content {
-    tokenAddress: string;
-    recipient: string;
-    amount: string | number;
-}
-
-function isTransferContent(
-    runtime: IAgentRuntime,
-    content: TransferContent
-): content is TransferContent {
-    console.log("Content for transfer", content);
-    const validTypes = (
-        typeof content.tokenAddress === "string" &&
-        typeof content.recipient === "string" &&
-        (typeof content.amount === "string" ||
-            typeof content.amount === "number")
-    );
-    if (!validTypes) {
-        return false;
-    }
-
-    // Addresses must be 32-bytes long with a 0x prefix
-    const validAddresses = (
-        content.tokenAddress.startsWith("0x") &&
-        content.tokenAddress.length === 66 &&
-        content.recipient.startsWith("0x") &&
-        content.recipient.length === 66
-    );
-    return validTypes && validAddresses;
-}
-
 const transferTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
+
+these are known addresses, if you get asked about them, use these:
+- BTC/btc: 0x03fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac
+- ETH/eth: 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7
+- STRK/strk: 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d
 
 Example response:
 \`\`\`json
@@ -111,15 +85,17 @@ export default {
         const content = await generateObject({
             runtime,
             context: transferContext,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.MEDIUM,
         });
 
+        console.log("Transfer content:", content);
+
         // Validate transfer content
-        if (!isTransferContent(runtime, content)) {
+        if (!isTransferContent(content)) {
             console.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
-                    text: "Unable to process transfer request. Invalid content provided.",
+                    text: "Not enough information to transfer tokens. Please respond with token address, recipient, and amount.",
                     content: { error: "Invalid transfer content" },
                 });
             }
@@ -131,16 +107,30 @@ export default {
             const erc20Token = new ERC20Token(content.tokenAddress, account);
             const decimals = await erc20Token.decimals();
             const amountWei = BigInt(content.amount) * 10n ** BigInt(decimals);
-            const transferCall = erc20Token.transferCall(content.recipient, amountWei);
+            const transferCall = erc20Token.transferCall(
+                content.recipient,
+                amountWei
+            );
 
-            console.log("Transferring", amountWei, "of", content.tokenAddress, "to", content.recipient);
+            console.log(
+                "Transferring",
+                amountWei,
+                "of",
+                content.tokenAddress,
+                "to",
+                content.recipient
+            );
 
             const tx = await account.execute(transferCall);
 
-            console.log("Transfer completed successfully! tx: " + tx.transaction_hash);
+            console.log(
+                "Transfer completed successfully! tx: " + tx.transaction_hash
+            );
             if (callback) {
                 callback({
-                    text: "Transfer completed successfully! tx: " + tx.transaction_hash,
+                    text:
+                        "Transfer completed successfully! tx: " +
+                        tx.transaction_hash,
                     content: {},
                 });
             }

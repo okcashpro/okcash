@@ -106,10 +106,10 @@ export class TokenProvider {
                 return cachedData;
             }
 
-            const { SOL, BTC, ETH, STRK } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
-            const tokens = [SOL, BTC, ETH, STRK];
+            const { BTC, ETH, STRK } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
+            const tokens = [BTC, ETH, STRK];
             const prices: Prices = {
-                solana: { usd: "0" },
+                starknet: { usd: "0" },
                 bitcoin: { usd: "0" },
                 ethereum: { usd: "0" },
             };
@@ -133,8 +133,8 @@ export class TokenProvider {
 
                 const token = tokens[index];
                 const priceKey =
-                    token === SOL
-                        ? "solana"
+                    token === STRK
+                        ? "starknet"
                         : token === BTC
                           ? "bitcoin"
                           : "ethereum";
@@ -153,7 +153,7 @@ export class TokenProvider {
     async calculateBuyAmounts(): Promise<CalculatedBuyAmounts> {
         const dexScreenerData = await this.fetchDexScreenerData();
         const prices = await this.fetchPrices();
-        const solPrice = num.toBigInt(prices.solana.usd);
+        const starknetPrice = num.toBigInt(prices.starknet.usd);
 
         if (!dexScreenerData || dexScreenerData.pairs.length === 0) {
             return { none: 0, low: 0, medium: 0, high: 0 };
@@ -185,16 +185,18 @@ export class TokenProvider {
         const mediumBuyAmountUSD = liquidity.usd * impactPercentages.MEDIUM;
         const highBuyAmountUSD = liquidity.usd * impactPercentages.HIGH;
 
-        // Convert each buy amount to SOL
-        const lowBuyAmountSOL = num.toBigInt(lowBuyAmountUSD) / solPrice;
-        const mediumBuyAmountSOL = num.toBigInt(mediumBuyAmountUSD) / solPrice;
-        const highBuyAmountSOL = num.toBigInt(highBuyAmountUSD) / solPrice;
+        // Convert each buy amount to STRK
+        const lowBuyAmountSTRK = num.toBigInt(lowBuyAmountUSD) / starknetPrice;
+        const mediumBuyAmountSTRK =
+            num.toBigInt(mediumBuyAmountUSD) / starknetPrice;
+        const highBuyAmountSTRK =
+            num.toBigInt(highBuyAmountUSD) / starknetPrice;
 
         return {
             none: 0,
-            low: Number(lowBuyAmountSOL),
-            medium: Number(mediumBuyAmountSOL),
-            high: Number(highBuyAmountSOL),
+            low: Number(lowBuyAmountSTRK),
+            medium: Number(mediumBuyAmountSTRK),
+            high: Number(highBuyAmountSTRK),
         };
     }
 

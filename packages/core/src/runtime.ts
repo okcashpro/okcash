@@ -323,10 +323,8 @@ export class AgentRuntime implements IAgentRuntime {
 
         for (const knowledgeItem of knowledge) {
             const knowledgeId = stringToUuid(knowledgeItem);
-            console.log("knowledgeId", knowledgeId);
             const existingDocument =
                 await this.documentsManager.getMemoryById(knowledgeId);
-            console.log("existingDocument", existingDocument);
             if (!existingDocument) {
                 console.log(
                     "Processing knowledge for ",
