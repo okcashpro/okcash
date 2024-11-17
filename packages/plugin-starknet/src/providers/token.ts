@@ -10,9 +10,6 @@ import {
     CalculatedBuyAmounts,
     Prices,
 } from "../types/trustDB.ts";
-import * as fs from "fs";
-import NodeCache from "node-cache";
-import * as path from "path";
 import { WalletProvider, Item } from "./walletProvider.ts";
 import { num } from "starknet";
 import {
@@ -20,108 +17,17 @@ import {
     evaluateTokenTrading,
     TokenMetrics,
 } from "./utils.ts";
-// import { Connection, PublicKey } from "@solana/web3.js";
-
-const PROVIDER_CONFIG = {
-    BIRDEYE_API: "https://public-api.birdeye.so",
-    MAX_RETRIES: 3,
-    RETRY_DELAY: 2000,
-    DEFAULT_RPC: "https://api.mainnet-beta.solana.com",
-    TOKEN_ADDRESSES: {
-        SOL: "So11111111111111111111111111111111111111112",
-        BTC: "qfnqNqs3nCAHjnyCgLRDbBtq4p2MtHZxw8YjSyYhPoL",
-        ETH: "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
-        Example: "2weMjPLLybRMMva1fM3U31goWWrCpF59CHWNhnCJ9Vyh",
-    },
-    TOKEN_SECURITY_ENDPOINT: "/defi/token_security?address=",
-    TOKEN_TRADE_DATA_ENDPOINT: "/defi/v3/token/trade-data/single?address=",
-    DEX_SCREENER_API: "https://api.dexscreener.com/latest/dex/tokens/",
-    MAIN_WALLET: "",
-};
+import { PROVIDER_CONFIG } from "../index.ts";
+import { Cache } from "../utils/cache.ts";
 
 export class TokenProvider {
-    private cache: NodeCache;
-    private cacheDir: string;
+    private cache: Cache;
 
     constructor(
-        //  private connection: Connection,
         private tokenAddress: string,
         private walletProvider: WalletProvider
     ) {
-        this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
-        const __dirname = path.resolve();
-
-        // Find the 'eliza' folder in the filepath and adjust the cache directory path
-        const elizaIndex = __dirname.indexOf("eliza");
-        if (elizaIndex !== -1) {
-            const pathToEliza = __dirname.slice(0, elizaIndex + 5); // include 'eliza'
-            this.cacheDir = path.join(pathToEliza, "cache");
-        } else {
-            this.cacheDir = path.join(__dirname, "cache");
-        }
-
-        this.cacheDir = path.join(__dirname, "cache");
-        if (!fs.existsSync(this.cacheDir)) {
-            fs.mkdirSync(this.cacheDir);
-        }
-    }
-
-    private readCacheFromFile<T>(cacheKey: string): T | null {
-        const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        console.log({ filePath });
-        if (fs.existsSync(filePath)) {
-            const fileContent = fs.readFileSync(filePath, "utf-8");
-            const parsed = JSON.parse(fileContent);
-            const now = Date.now();
-            if (now < parsed.expiry) {
-                console.log(
-                    `Reading cached data from file for key: ${cacheKey}`
-                );
-                return parsed.data as T;
-            } else {
-                console.log(
-                    `Cache expired for key: ${cacheKey}. Deleting file.`
-                );
-                fs.unlinkSync(filePath);
-            }
-        }
-        return null;
-    }
-
-    private writeCacheToFile<T>(cacheKey: string, data: T): void {
-        const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        const cacheData = {
-            data: data,
-            expiry: Date.now() + 300000, // 5 minutes in milliseconds
-        };
-        fs.writeFileSync(filePath, JSON.stringify(cacheData), "utf-8");
-        console.log(`Cached data written to file for key: ${cacheKey}`);
-    }
-
-    private getCachedData<T>(cacheKey: string): T | null {
-        // Check in-memory cache first
-        const cachedData = this.cache.get<T>(cacheKey);
-        if (cachedData) {
-            return cachedData;
-        }
-
-        // Check file-based cache
-        const fileCachedData = this.readCacheFromFile<T>(cacheKey);
-        if (fileCachedData) {
-            // Populate in-memory cache
-            this.cache.set(cacheKey, fileCachedData);
-            return fileCachedData;
-        }
-
-        return null;
-    }
-
-    private setCachedData<T>(cacheKey: string, data: T): void {
-        // Set in-memory cache
-        this.cache.set(cacheKey, data);
-
-        // Write to file-based cache
-        this.writeCacheToFile(cacheKey, data);
+        this.cache = new Cache();
     }
 
     // TODO: remove this
@@ -201,7 +107,7 @@ export class TokenProvider {
     async fetchPrices(): Promise<Prices> {
         try {
             const cacheKey = "prices";
-            const cachedData = this.getCachedData<Prices>(cacheKey);
+            const cachedData = this.cache.getCachedData<Prices>(cacheKey);
             if (cachedData) {
                 console.log("Returning cached prices.");
                 return cachedData;
@@ -237,7 +143,7 @@ export class TokenProvider {
                     console.warn(`No price data available for token: ${token}`);
                 }
             }
-            this.setCachedData(cacheKey, prices);
+            this.cache.setCachedData(cacheKey, prices);
             return prices;
         } catch (error) {
             console.error("Error fetching prices:", error);
@@ -297,7 +203,8 @@ export class TokenProvider {
     // TODO: Update to Starknet
     async fetchTokenSecurity(): Promise<TokenSecurityData> {
         const cacheKey = `tokenSecurity_${this.tokenAddress}`;
-        const cachedData = this.getCachedData<TokenSecurityData>(cacheKey);
+        const cachedData =
+            this.cache.getCachedData<TokenSecurityData>(cacheKey);
         if (cachedData) {
             console.log(
                 `Returning cached token security data for ${this.tokenAddress}.`
@@ -319,7 +226,7 @@ export class TokenProvider {
             top10HolderBalance: data.data.top10HolderBalance,
             top10HolderPercent: data.data.top10HolderPercent,
         };
-        this.setCachedData(cacheKey, security);
+        this.cache.setCachedData(cacheKey, security);
         console.log(`Token security data cached for ${this.tokenAddress}.`);
 
         return security;
@@ -328,7 +235,7 @@ export class TokenProvider {
     // TODO: Update to Starknet
     async fetchTokenTradeData(): Promise<TokenTradeData> {
         const cacheKey = `tokenTradeData_${this.tokenAddress}`;
-        const cachedData = this.getCachedData<TokenTradeData>(cacheKey);
+        const cachedData = this.cache.getCachedData<TokenTradeData>(cacheKey);
         if (cachedData) {
             console.log(
                 `Returning cached token trade data for ${this.tokenAddress}.`
@@ -557,13 +464,13 @@ export class TokenProvider {
             volume_sell_24h_change_percent:
                 data.data.volume_sell_24h_change_percent,
         };
-        this.setCachedData(cacheKey, tradeData);
+        this.cache.setCachedData(cacheKey, tradeData);
         return tradeData;
     }
 
     async fetchDexScreenerData(): Promise<DexScreenerData> {
         const cacheKey = `dexScreenerData_${this.tokenAddress}`;
-        const cachedData = this.getCachedData<DexScreenerData>(cacheKey);
+        const cachedData = this.cache.getCachedData<DexScreenerData>(cacheKey);
         if (cachedData) {
             console.log("Returning cached DexScreener data.");
             return cachedData;
@@ -590,7 +497,7 @@ export class TokenProvider {
             };
 
             // Cache the result
-            this.setCachedData(cacheKey, dexData);
+            this.cache.setCachedData(cacheKey, dexData);
 
             return dexData;
         } catch (error) {
@@ -606,7 +513,7 @@ export class TokenProvider {
         symbol: string
     ): Promise<DexScreenerPair | null> {
         const cacheKey = `dexScreenerData_search_${symbol}`;
-        const cachedData = this.getCachedData<DexScreenerData>(cacheKey);
+        const cachedData = this.cache.getCachedData<DexScreenerData>(cacheKey);
         if (cachedData) {
             console.log("Returning cached search DexScreener data.");
             return this.getHighestLiquidityPair(cachedData);
@@ -632,7 +539,7 @@ export class TokenProvider {
             };
 
             // Cache the result
-            this.setCachedData(cacheKey, dexData);
+            this.cache.setCachedData(cacheKey, dexData);
 
             // Return the pair with the highest liquidity and market cap
             return this.getHighestLiquidityPair(dexData);
@@ -641,6 +548,7 @@ export class TokenProvider {
             return null;
         }
     }
+
     getHighestLiquidityPair(dexData: DexScreenerData): DexScreenerPair | null {
         if (dexData.pairs.length === 0) {
             return null;
@@ -713,7 +621,7 @@ export class TokenProvider {
     // TODO: Update to Starknet
     async fetchHolderList(): Promise<HolderData[]> {
         const cacheKey = `holderList_${this.tokenAddress}`;
-        const cachedData = this.getCachedData<HolderData[]>(cacheKey);
+        const cachedData = this.cache.getCachedData<HolderData[]>(cacheKey);
         if (cachedData) {
             console.log("Returning cached holder list.");
             return cachedData;
@@ -802,7 +710,7 @@ export class TokenProvider {
             console.log(`Total unique holders fetched: ${holders.length}`);
 
             // Cache the result
-            this.setCachedData(cacheKey, holders);
+            this.cache.setCachedData(cacheKey, holders);
 
             return holders;
         } catch (error) {
