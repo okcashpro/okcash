@@ -131,13 +131,15 @@ export class AgentRuntime implements IAgentRuntime {
     services: Map<ServiceType, Service> = new Map();
     memoryManagers: Map<string, IMemoryManager> = new Map();
 
+    logging: boolean = false;
+
     registerMemoryManager(manager: IMemoryManager): void {
         if (!manager.tableName) {
             throw new Error("Memory manager must have a tableName");
         }
 
         if (this.memoryManagers.has(manager.tableName)) {
-            console.warn(
+            elizaLogger.warn(
                 `Memory manager ${manager.tableName} is already registered. Skipping registration.`
             );
             return;
@@ -153,16 +155,16 @@ export class AgentRuntime implements IAgentRuntime {
     getService(service: ServiceType): typeof Service | null {
         const serviceInstance = this.services.get(service);
         if (!serviceInstance) {
-            console.error(`Service ${service} not found`);
+            elizaLogger.error(`Service ${service} not found`);
             return null;
         }
         return serviceInstance as typeof Service;
     }
     registerService(service: Service): void {
         const serviceType = (service as typeof Service).serviceType;
-        console.log("Registering service:", serviceType);
+        elizaLogger.log("Registering service:", serviceType);
         if (this.services.has(serviceType)) {
-            console.warn(
+            elizaLogger.warn(
                 `Service ${serviceType} is already registered. Skipping registration.`
             );
             return;
@@ -206,6 +208,7 @@ export class AgentRuntime implements IAgentRuntime {
         databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
         fetch?: typeof fetch | unknown;
         speechModelPath?: string;
+        logging?: boolean;
     }) {
         this.#conversationLength =
             opts.conversationLength ?? this.#conversationLength;
@@ -216,7 +219,7 @@ export class AgentRuntime implements IAgentRuntime {
             opts.agentId ??
             stringToUuid(opts.character.name);
 
-        console.log("Agent ID", this.agentId);
+        elizaLogger.success("Agent ID", this.agentId);
 
         this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
         this.character = opts.character || defaultCharacter;
@@ -259,7 +262,7 @@ export class AgentRuntime implements IAgentRuntime {
             opts.modelProvider ??
             this.modelProvider;
         if (!this.serverUrl) {
-            console.warn("No serverUrl provided, defaulting to localhost");
+            elizaLogger.warn("No serverUrl provided, defaulting to localhost");
         }
 
         this.token = opts.token;
