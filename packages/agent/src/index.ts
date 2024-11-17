@@ -215,6 +215,14 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
+    if (character.plugins.length > 0) {
+        character.plugins.forEach(async (plugin) => {
+            plugin.clients.forEach(async (client) => {
+                clients.push(await client.start(runtime));
+            });
+        });
+    }
+
     return clients;
 }
 
@@ -224,7 +232,10 @@ export async function createAgent(
     token: string
 ) {
     console.log("Creating runtime for character", character.name);
-    console.log("character.settings.secrets?.WALLET_PUBLIC_KEY", character.settings.secrets?.WALLET_PUBLIC_KEY)
+    console.log(
+        "character.settings.secrets?.WALLET_PUBLIC_KEY",
+        character.settings.secrets?.WALLET_PUBLIC_KEY
+    );
     return new AgentRuntime({
         databaseAdapter: db,
         token,
