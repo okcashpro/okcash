@@ -1,3 +1,5 @@
+import { TokenInfo } from "./token";
+
 export interface TokenSecurityData {
     ownerBalance: string;
     creatorBalance: string;
@@ -201,7 +203,7 @@ export interface HolderData {
 
 export interface ProcessedTokenData {
     security: TokenSecurityData;
-    tradeData: TokenTradeData;
+    tradeData: TokenInfo;
     holderDistributionTrend: string; // 'increasing' | 'decreasing' | 'stable'
     highValueHolders: Array<{
         holderAddress: string;

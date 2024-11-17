@@ -1,3 +1,6 @@
+// THIS IS INCOMPLETE
+// Look for the TODOs to see what needs to be updated
+
 import { settings } from "@ai16z/eliza";
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import {
@@ -206,20 +209,21 @@ export class TokenProvider {
             );
             return cachedData;
         }
-        const url = `${PROVIDER_CONFIG.BIRDEYE_API}${PROVIDER_CONFIG.TOKEN_SECURITY_ENDPOINT}${this.tokenAddress}`;
-        const data = await this.fetchWithRetry(url);
+        // const url = `${PROVIDER_CONFIG.AVNU_API}${PROVIDER_CONFIG.TOKEN_SECURITY_ENDPOINT}${this.tokenAddress}`;
+        // const data = await this.fetchWithRetry(url);
 
-        if (!data?.success || !data?.data) {
-            throw new Error("No token security data available");
-        }
+        // if (!data?.success || !data?.data) {
+        //     throw new Error("No token security data available");
+        // }
 
+        // TODO: Update to Starknet
         const security: TokenSecurityData = {
-            ownerBalance: data.data.ownerBalance,
-            creatorBalance: data.data.creatorBalance,
-            ownerPercentage: data.data.ownerPercentage,
-            creatorPercentage: data.data.creatorPercentage,
-            top10HolderBalance: data.data.top10HolderBalance,
-            top10HolderPercent: data.data.top10HolderPercent,
+            ownerBalance: "0",
+            creatorBalance: "0",
+            ownerPercentage: 0,
+            creatorPercentage: 0,
+            top10HolderBalance: "0",
+            top10HolderPercent: 0,
         };
         this.cache.setCachedData(cacheKey, security);
         console.log(`Token security data cached for ${this.tokenAddress}.`);
@@ -400,18 +404,20 @@ export class TokenProvider {
     // TODO:
     async analyzeHolderDistribution(tradeData: TokenInfo): Promise<string> {
         // Define the time intervals to consider (e.g., 30m, 1h, 2h)
+
+        // TODO: Update to Starknet
         const intervals = [
             {
                 period: "30m",
-                change: tradeData.unique_wallet_30m_change_percent,
+                change: 0,
             },
-            { period: "1h", change: tradeData.unique_wallet_1h_change_percent },
-            { period: "2h", change: tradeData.unique_wallet_2h_change_percent },
-            { period: "4h", change: tradeData.unique_wallet_4h_change_percent },
-            { period: "8h", change: tradeData.unique_wallet_8h_change_percent },
+            { period: "1h", change: 0 },
+            { period: "2h", change: 0 },
+            { period: "4h", change: 0 },
+            { period: "8h", change: 0 },
             {
                 period: "24h",
-                change: tradeData.unique_wallet_24h_change_percent,
+                change: 0,
             },
         ];
 
@@ -544,11 +550,11 @@ export class TokenProvider {
     }
 
     async filterHighValueHolders(
-        tradeData: TokenTradeData
+        tradeData: TokenInfo
     ): Promise<Array<{ holderAddress: string; balanceUsd: string }>> {
         const holdersData = await this.fetchHolderList();
 
-        const tokenPriceUsd = num.toBigInt(tradeData.price);
+        const tokenPriceUsd = num.toBigInt(tradeData.market.currentPrice);
 
         const highValueHolders = holdersData
             .filter((holder) => {
@@ -618,7 +624,7 @@ export class TokenProvider {
                 `Checking recent trades for token: ${this.tokenAddress}`
             );
             const recentTrades = await this.checkRecentTrades(
-                num.toBigInt(tradeData.volume_24h_usd)
+                num.toBigInt(tradeData.market.starknetTradingVolume24h)
             );
 
             console.log(
@@ -674,16 +680,21 @@ export class TokenProvider {
                 creatorPercentage:
                     Number(num.toBigInt(creatorBalance)) / Number(totalSupply),
                 top10HolderPercent:
-                    Number(num.toBigInt(tradeData.volume_24h_usd)) /
-                    Number(totalSupply),
+                    Number(
+                        num.toBigInt(tradeData.market.starknetTradingVolume24h)
+                    ) / Number(totalSupply),
                 priceChange24hPercent: Number(
-                    num.toBigInt(tradeData.price_change_24h_percent)
+                    num.toBigInt(tradeData.market.priceChange24h)
                 ),
+                // TODO: Update to Starknet
                 priceChange12hPercent: Number(
-                    num.toBigInt(tradeData.price_change_12h_percent)
+                    num.toBigInt(tradeData.market.priceChange24h)
                 ),
-                uniqueWallet24h: tradeData.unique_wallet_24h,
-                volume24hUsd: num.toBigInt(tradeData.volume_24h_usd),
+                // TODO: Update to Starknet
+                uniqueWallet24h: 0,
+                volume24hUsd: num.toBigInt(
+                    tradeData.market.starknetTradingVolume24h
+                ),
             };
 
             const { shouldTrade } = evaluateTokenTrading(metrics);
@@ -709,14 +720,16 @@ export class TokenProvider {
 
         // Trade Data
         output += `**Trade Data:**\n`;
-        output += `- Holders: ${data.tradeData.holder}\n`;
-        output += `- Unique Wallets (24h): ${data.tradeData.unique_wallet_24h}\n`;
-        output += `- Price Change (24h): ${data.tradeData.price_change_24h_percent}%\n`;
-        output += `- Price Change (12h): ${data.tradeData.price_change_12h_percent}%\n`;
+        // output += `- Holders: ${data.tradeData.holder}\n`;
+        // output += `- Unique Wallets (24h): ${data.tradeData.holders}\n`;
+        output += `- Price Change (24h): ${data.tradeData.market.priceChange24h}%\n`;
+        // output += `- Price Change (12h): ${data.tradeData.market.priceChange12h}%\n`;
         output += `- Volume (24h USD): $${num
-            .toBigInt(data.tradeData.volume_24h_usd)
+            .toBigInt(data.tradeData.market.starknetTradingVolume24h)
             .toString()}\n`;
-        output += `- Current Price: $${num.toBigInt(data.tradeData.price).toString()}\n\n`;
+        output += `- Current Price: $${num
+            .toBigInt(data.tradeData.market.currentPrice)
+            .toString()}\n\n`;
 
         // Holder Distribution Trend
         output += `**Holder Distribution Trend:** ${data.holderDistributionTrend}\n\n`;
