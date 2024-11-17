@@ -838,10 +838,10 @@ Text: ${attachment.text}
             recentInteractionsData: Memory[]
         ): Promise<string> => {
             // Format the recent messages
-            const formattedInteractions = await recentInteractionsData
-                .map(async (message) => {
+            const formattedInteractions = await Promise.all(
+                recentInteractionsData.map(async (message) => {
                     const isSelf = message.userId === this.agentId;
-                    let sender;
+                    let sender: string;
                     if (isSelf) {
                         sender = this.character.name;
                     } else {
@@ -853,9 +853,9 @@ Text: ${attachment.text}
                     }
                     return `${sender}: ${message.content.text}`;
                 })
-                .join("\n");
+            );
 
-            return formattedInteractions;
+            return formattedInteractions.join("\n");
         };
 
         const formattedMessageInteractions =

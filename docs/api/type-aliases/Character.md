@@ -32,7 +32,7 @@
 
 #### Index Signature
 
-\[`key`: `string`\]: `string`
+ \[`key`: `string`\]: `string`
 
 ### bio
 
@@ -84,7 +84,7 @@
 
 #### Index Signature
 
-\[`key`: `string`\]: `string`
+ \[`key`: `string`\]: `string`
 
 ### settings.voice?
 

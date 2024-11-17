@@ -369,6 +369,12 @@ export type Character = {
         chat: string[];
         post: string[];
     };
+    twitterProfile?: {
+        username: string;
+        screenName: string;
+        bio: string;
+        nicknames?: string[];
+    };
 };
 
 export interface IDatabaseAdapter {
