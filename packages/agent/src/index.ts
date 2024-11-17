@@ -6,10 +6,10 @@ import { AutoClientInterface } from "@ai16z/client-auto";
 import { TelegramClientInterface } from "@ai16z/client-telegram";
 import { TwitterClientInterface } from "@ai16z/client-twitter";
 import {
-    DatabaseAdapter,
     DbCacheAdapter,
     defaultCharacter,
     FsCacheAdapter,
+    ICacheManager,
     IDatabaseCacheAdapter,
     stringToUuid,
 } from "@ai16z/eliza";
@@ -173,12 +173,10 @@ export function getTokenForProvider(
 export async function createDirectRuntime(
     character: Character,
     db: IDatabaseAdapter,
-    token: string,
-    dataDir: string
+    cache: ICacheManager,
+    token: string
 ) {
     console.log("Creating runtime for character", character.name);
-
-    character.id ??= stringToUuid(character.name);
 
     return new AgentRuntime({
         databaseAdapter: db,
@@ -191,7 +189,7 @@ export async function createDirectRuntime(
         actions: [],
         services: [],
         managers: [],
-        cacheManager: intializeFsCache(dataDir, character),
+        cacheManager: cache,
     });
 }
 
@@ -238,8 +236,8 @@ export async function initializeClients(
 
 export function createAgent(
     character: Character,
-    db: DatabaseAdapter,
-    cache: CacheManager,
+    db: IDatabaseAdapter,
+    cache: ICacheManager,
     token: string
 ) {
     console.log("Creating runtime for character", character.name);

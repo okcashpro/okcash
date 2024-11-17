@@ -294,6 +294,8 @@ export const executeSwap: Action = {
                 runtime.getSetting("WALLET_PUBLIC_KEY")
             );
 
+            const provider = new WalletProvider(connection, walletPublicKey);
+
             console.log("Wallet Public Key:", walletPublicKey);
             console.log("inputTokenSymbol:", response.inputTokenCA);
             console.log("outputTokenSymbol:", response.outputTokenCA);
@@ -393,7 +395,7 @@ export const executeSwap: Action = {
             if (type === "buy") {
                 const tokenProvider = new TokenProvider(
                     response.outputTokenCA,
-                    await walletProvider.get(runtime, message, state),
+                    provider,
                     runtime.cacheManager
                 );
                 const module = await import("better-sqlite3");
@@ -428,7 +430,7 @@ export const executeSwap: Action = {
             } else if (type === "sell") {
                 const tokenProvider = new TokenProvider(
                     response.inputTokenCA,
-                    await walletProvider.get(runtime, message, state),
+                    provider,
                     runtime.cacheManager
                 );
                 const module = await import("better-sqlite3");

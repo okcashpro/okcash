@@ -21,23 +21,20 @@ export function extractAnswer(text: string): string {
     return text.slice(startIndex, endIndex);
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 class RequestQueue {
     private queue: (() => Promise<any>)[] = [];
     private processing: boolean = false;
 
     async add<T>(request: () => Promise<T>): Promise<T> {
         return new Promise((resolve, reject) => {
-        this.queue.push(async () => {
-            try {
+            this.queue.push(async () => {
+                try {
                     const result = await request();
                     resolve(result);
-            } catch (error) {
+                } catch (error) {
                     reject(error);
-            }
-        });
+                }
+            });
             this.processQueue();
         });
     }
@@ -567,17 +564,18 @@ export class ClientBase extends EventEmitter {
 
     async loadCachedLatestCheckedTweetId(): Promise<void> {
         const latestCheckedTweetId = await this.runtime.cacheManager.get(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id`
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id.txt`
         );
 
         if (latestCheckedTweetId) {
             this.lastCheckedTweetId = parseInt(latestCheckedTweetId);
         }
     }
+
     async cacheLatestCheckedTweetId() {
         if (this.lastCheckedTweetId) {
             await this.runtime.cacheManager.set(
-                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id`,
+                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id.txt`,
                 this.lastCheckedTweetId.toString()
             );
         }
@@ -585,7 +583,7 @@ export class ClientBase extends EventEmitter {
 
     async getCachedTimeline(): Promise<Tweet[] | undefined> {
         const cached = await this.runtime.cacheManager.get(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline`
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline.json`
         );
 
         if (cached) {
@@ -597,7 +595,7 @@ export class ClientBase extends EventEmitter {
 
     async cacheTimeline(timeline: Tweet[]) {
         await this.runtime.cacheManager.set(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline`,
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline.json`,
             JSON.stringify(timeline)
         );
     }
@@ -605,13 +603,13 @@ export class ClientBase extends EventEmitter {
     async getCachedCookies() {
         // Cache
         return await this.runtime.cacheManager.get(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies.json`
         );
     }
     async cacheCookies(cookies: any[]) {
         // Cache
         return await this.runtime.cacheManager.set(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`,
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies.json`,
             JSON.stringify(cookies)
         );
     }

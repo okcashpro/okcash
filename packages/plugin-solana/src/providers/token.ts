@@ -61,22 +61,19 @@ export class TokenProvider {
                 console.log(
                     `Cache expired for key: ${cacheKey}. Deleting file.`
                 );
-                this.cacheManager.del(cacheKey);
+                await this.cacheManager.del(cacheKey);
             }
         }
         return null;
     }
 
-    private async writeCacheToFile<T>(
-        cacheKey: string,
-        data: T
-    ): Promise<void> {
+    private async writeToCache<T>(cacheKey: string, data: T): Promise<void> {
         const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
         const cacheData = {
             data: data,
             expiry: Date.now() + 300000, // 5 minutes in milliseconds
         };
-        this.cacheManager.set(filePath, JSON.stringify(cacheData));
+        await this.cacheManager.set(filePath, JSON.stringify(cacheData));
         console.log(`Cached data written to key: ${cacheKey}`);
     }
 
@@ -103,7 +100,7 @@ export class TokenProvider {
         this.cache.set(cacheKey, data);
 
         // Write to file-based cache
-        await this.writeCacheToFile(cacheKey, data);
+        await this.writeToCache(cacheKey, data);
     }
 
     private async fetchWithRetry(

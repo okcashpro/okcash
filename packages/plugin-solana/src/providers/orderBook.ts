@@ -13,8 +13,11 @@ const orderBookProvider: Provider = {
         const userId = message.userId;
 
         // Read the order book from the JSON file
-        const orderBookPath = runtime.getSetting("orderBookPath");
+        const orderBookPath =
+            runtime.getSetting("orderBookPath") ?? "solana/orderBook.json";
+
         let orderBook: Order[] = [];
+
         const cachedOrderBook = await runtime.cacheManager.get(orderBookPath);
 
         if (cachedOrderBook) {
