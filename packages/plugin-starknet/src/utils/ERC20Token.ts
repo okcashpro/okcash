@@ -1,7 +1,5 @@
-import { fileURLToPath } from "url";
-import path from "path";
-import fs from "fs";
 import { Account, Call, CallData, Calldata, Contract, cairo } from "starknet";
+import erc20Abi from "./erc20.json";
 
 export type ApproveCall = {
     contractAddress: string;
@@ -20,9 +18,6 @@ export class ERC20Token {
     contract: Contract;
     calldata: CallData;
     constructor(token: string, account?: Account) {
-        const __dirname = path.dirname(fileURLToPath(import.meta.url));
-        const erc20AbiPath = path.join(__dirname, "../utils/erc20.json");
-        const erc20Abi = JSON.parse(fs.readFileSync(erc20AbiPath, "utf8"));
         this.contract = new Contract(erc20Abi, token, account);
         this.calldata = new CallData(this.contract.abi);
     }

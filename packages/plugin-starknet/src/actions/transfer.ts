@@ -58,7 +58,8 @@ export default {
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         return validateSettings(runtime);
     },
-    description: "Transfer tokens from the agent's wallet to another address",
+    description:
+        "This allows the agent to transfer tokens on starknet from one wallet to another. Use this to transfer.",
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,
@@ -106,7 +107,11 @@ export default {
             const account = getStarknetAccount(runtime);
             const erc20Token = new ERC20Token(content.tokenAddress, account);
             const decimals = await erc20Token.decimals();
-            const amountWei = BigInt(content.amount) * 10n ** BigInt(decimals);
+            // Convert decimal amount to integer before converting to BigInt
+            const amountInteger = Math.floor(
+                Number(content.amount) * Math.pow(10, Number(decimals))
+            );
+            const amountWei = BigInt(amountInteger.toString());
             const transferCall = erc20Token.transferCall(
                 content.recipient,
                 amountWei
