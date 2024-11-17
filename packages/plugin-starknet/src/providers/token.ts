@@ -19,6 +19,7 @@ import {
 } from "./utils.ts";
 import { PROVIDER_CONFIG } from "../index.ts";
 import { Cache } from "../utils/cache.ts";
+import { TokenInfo } from "../types/token.ts";
 
 export class TokenProvider {
     private cache: Cache;
@@ -31,11 +32,10 @@ export class TokenProvider {
     }
 
     // TODO: remove this
-    private async fetchWithRetry(
+    private async fetchWithRetry<T>(
         url: string,
         options: RequestInit = {}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ): Promise<any> {
+    ): Promise<T> {
         let lastError: Error;
 
         for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
@@ -43,38 +43,29 @@ export class TokenProvider {
                 const response = await fetch(url, {
                     ...options,
                     headers: {
-                        Accept: "application/json",
-                        "x-chain": "solana",
-                        "X-API-KEY": settings.BIRDEYE_API_KEY || "",
+                        "Content-Type": "application/json",
                         ...options.headers,
                     },
                 });
 
                 if (!response.ok) {
-                    const errorText = await response.text();
                     throw new Error(
-                        `HTTP error! status: ${response.status}, message: ${errorText}`
+                        `HTTP error! status: ${response.status}, message: ${await response.text()}`
                     );
                 }
 
-                const data = await response.json();
-                return data;
+                return await response.json();
             } catch (error) {
-                console.error(`Attempt ${i + 1} failed:`, error);
+                console.error(`Request attempt ${i + 1} failed:`, error);
                 lastError = error as Error;
+
                 if (i < PROVIDER_CONFIG.MAX_RETRIES - 1) {
                     const delay = PROVIDER_CONFIG.RETRY_DELAY * Math.pow(2, i);
-                    console.log(`Waiting ${delay}ms before retrying...`);
                     await new Promise((resolve) => setTimeout(resolve, delay));
-                    continue;
                 }
             }
         }
 
-        console.error(
-            "All attempts failed. Throwing the last error:",
-            lastError
-        );
         throw lastError;
     }
 
@@ -103,7 +94,6 @@ export class TokenProvider {
         }
     }
 
-    // TODO: Update to Starknet
     async fetchPrices(): Promise<Prices> {
         try {
             const cacheKey = "prices";
@@ -112,37 +102,43 @@ export class TokenProvider {
                 console.log("Returning cached prices.");
                 return cachedData;
             }
-            const { SOL, BTC, ETH } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
-            const tokens = [SOL, BTC, ETH];
+
+            const { SOL, BTC, ETH, STRK } = PROVIDER_CONFIG.TOKEN_ADDRESSES;
+            const tokens = [SOL, BTC, ETH, STRK];
             const prices: Prices = {
                 solana: { usd: "0" },
                 bitcoin: { usd: "0" },
                 ethereum: { usd: "0" },
             };
 
-            for (const token of tokens) {
-                const response = await this.fetchWithRetry(
-                    `${PROVIDER_CONFIG.BIRDEYE_API}/defi/price?address=${token}`,
-                    {
-                        headers: {
-                            "x-chain": "solana",
-                        },
-                    }
-                );
+            const tokenResponses = await Promise.all(
+                tokens.map((token) =>
+                    fetch(`${PROVIDER_CONFIG.AVNU_API}/tokens/${token}`, {
+                        method: "GET",
+                        headers: {},
+                    }).then((res) => res.json())
+                )
+            );
 
-                if (response?.data?.value) {
-                    const price = response.data.value.toString();
-                    prices[
-                        token === SOL
-                            ? "solana"
-                            : token === BTC
-                              ? "bitcoin"
-                              : "ethereum"
-                    ].usd = price;
-                } else {
-                    console.warn(`No price data available for token: ${token}`);
+            tokenResponses.forEach((tokenInfo: TokenInfo, index) => {
+                if (!tokenInfo.market) {
+                    console.warn(
+                        `No price data available for token: ${tokens[index]}`
+                    );
+                    return;
                 }
-            }
+
+                const token = tokens[index];
+                const priceKey =
+                    token === SOL
+                        ? "solana"
+                        : token === BTC
+                          ? "bitcoin"
+                          : "ethereum";
+
+                prices[priceKey].usd = tokenInfo.market.currentPrice.toString();
+            });
+
             this.cache.setCachedData(cacheKey, prices);
             return prices;
         } catch (error) {
@@ -151,7 +147,6 @@ export class TokenProvider {
         }
     }
 
-    // TODO: change to starknet
     async calculateBuyAmounts(): Promise<CalculatedBuyAmounts> {
         const dexScreenerData = await this.fetchDexScreenerData();
         const prices = await this.fetchPrices();
@@ -233,9 +228,9 @@ export class TokenProvider {
     }
 
     // TODO: Update to Starknet
-    async fetchTokenTradeData(): Promise<TokenTradeData> {
+    async fetchTokenTradeData(): Promise<TokenInfo> {
         const cacheKey = `tokenTradeData_${this.tokenAddress}`;
-        const cachedData = this.cache.getCachedData<TokenTradeData>(cacheKey);
+        const cachedData = this.cache.getCachedData<TokenInfo>(cacheKey);
         if (cachedData) {
             console.log(
                 `Returning cached token trade data for ${this.tokenAddress}.`
@@ -243,229 +238,59 @@ export class TokenProvider {
             return cachedData;
         }
 
-        const url = `${PROVIDER_CONFIG.BIRDEYE_API}${PROVIDER_CONFIG.TOKEN_TRADE_DATA_ENDPOINT}${this.tokenAddress}`;
-        const options = {
-            method: "GET",
-            headers: {
-                accept: "application/json",
-                "X-API-KEY": settings.BIRDEYE_API_KEY || "",
-            },
-        };
+        try {
+            const response = await fetch(
+                `${PROVIDER_CONFIG.AVNU_API}/tokens/${this.tokenAddress}`,
+                {
+                    method: "GET",
+                    headers: {},
+                }
+            );
 
-        const data = await fetch(url, options)
-            .then((res) => res.json())
-            .catch((err) => console.error(err));
+            const data = await response.json();
 
-        if (!data?.success || !data?.data) {
-            throw new Error("No token trade data available");
+            if (!data?.success || !data?.data) {
+                throw new Error("No token trade data available");
+            }
+
+            const tradeData: TokenInfo = {
+                name: data.data.name,
+                symbol: data.data.symbol,
+                address: data.data.address,
+                logoUri: data.data.logoUri,
+                coingeckoId: data.data.coingeckoId,
+                verified: data.data.verified,
+                market: {
+                    currentPrice: data.data.market.currentPrice,
+                    marketCap: data.data.market.marketCap,
+                    fullyDilutedValuation:
+                        data.data.market.fullyDilutedValuation,
+                    starknetTvl: data.data.market.starknetTvl,
+                    priceChange1h: data.data.market.priceChange1h,
+                    priceChangePercentage1h:
+                        data.data.market.priceChangePercentage1h,
+                    priceChange24h: data.data.market.priceChange24h,
+                    priceChangePercentage24h:
+                        data.data.market.priceChangePercentage24h,
+                    priceChange7d: data.data.market.priceChange7d,
+                    priceChangePercentage7d:
+                        data.data.market.priceChangePercentage7d,
+                    marketCapChange24h: data.data.market.marketCapChange24h,
+                    marketCapChangePercentage24h:
+                        data.data.market.marketCapChangePercentage24h,
+                    starknetVolume24h: data.data.market.starknetVolume24h,
+                    starknetTradingVolume24h:
+                        data.data.market.starknetTradingVolume24h,
+                },
+                tags: data.data.tags,
+            };
+
+            this.cache.setCachedData(cacheKey, tradeData);
+            return tradeData;
+        } catch (error) {
+            console.error("Error fetching token trade data:", error);
+            throw error;
         }
-
-        const tradeData: TokenTradeData = {
-            address: data.data.address,
-            holder: data.data.holder,
-            market: data.data.market,
-            last_trade_unix_time: data.data.last_trade_unix_time,
-            last_trade_human_time: data.data.last_trade_human_time,
-            price: data.data.price,
-            history_30m_price: data.data.history_30m_price,
-            price_change_30m_percent: data.data.price_change_30m_percent,
-            history_1h_price: data.data.history_1h_price,
-            price_change_1h_percent: data.data.price_change_1h_percent,
-            history_2h_price: data.data.history_2h_price,
-            price_change_2h_percent: data.data.price_change_2h_percent,
-            history_4h_price: data.data.history_4h_price,
-            price_change_4h_percent: data.data.price_change_4h_percent,
-            history_6h_price: data.data.history_6h_price,
-            price_change_6h_percent: data.data.price_change_6h_percent,
-            history_8h_price: data.data.history_8h_price,
-            price_change_8h_percent: data.data.price_change_8h_percent,
-            history_12h_price: data.data.history_12h_price,
-            price_change_12h_percent: data.data.price_change_12h_percent,
-            history_24h_price: data.data.history_24h_price,
-            price_change_24h_percent: data.data.price_change_24h_percent,
-            unique_wallet_30m: data.data.unique_wallet_30m,
-            unique_wallet_history_30m: data.data.unique_wallet_history_30m,
-            unique_wallet_30m_change_percent:
-                data.data.unique_wallet_30m_change_percent,
-            unique_wallet_1h: data.data.unique_wallet_1h,
-            unique_wallet_history_1h: data.data.unique_wallet_history_1h,
-            unique_wallet_1h_change_percent:
-                data.data.unique_wallet_1h_change_percent,
-            unique_wallet_2h: data.data.unique_wallet_2h,
-            unique_wallet_history_2h: data.data.unique_wallet_history_2h,
-            unique_wallet_2h_change_percent:
-                data.data.unique_wallet_2h_change_percent,
-            unique_wallet_4h: data.data.unique_wallet_4h,
-            unique_wallet_history_4h: data.data.unique_wallet_history_4h,
-            unique_wallet_4h_change_percent:
-                data.data.unique_wallet_4h_change_percent,
-            unique_wallet_8h: data.data.unique_wallet_8h,
-            unique_wallet_history_8h: data.data.unique_wallet_history_8h,
-            unique_wallet_8h_change_percent:
-                data.data.unique_wallet_8h_change_percent,
-            unique_wallet_24h: data.data.unique_wallet_24h,
-            unique_wallet_history_24h: data.data.unique_wallet_history_24h,
-            unique_wallet_24h_change_percent:
-                data.data.unique_wallet_24h_change_percent,
-            trade_30m: data.data.trade_30m,
-            trade_history_30m: data.data.trade_history_30m,
-            trade_30m_change_percent: data.data.trade_30m_change_percent,
-            sell_30m: data.data.sell_30m,
-            sell_history_30m: data.data.sell_history_30m,
-            sell_30m_change_percent: data.data.sell_30m_change_percent,
-            buy_30m: data.data.buy_30m,
-            buy_history_30m: data.data.buy_history_30m,
-            buy_30m_change_percent: data.data.buy_30m_change_percent,
-            volume_30m: data.data.volume_30m,
-            volume_30m_usd: data.data.volume_30m_usd,
-            volume_history_30m: data.data.volume_history_30m,
-            volume_history_30m_usd: data.data.volume_history_30m_usd,
-            volume_30m_change_percent: data.data.volume_30m_change_percent,
-            volume_buy_30m: data.data.volume_buy_30m,
-            volume_buy_30m_usd: data.data.volume_buy_30m_usd,
-            volume_buy_history_30m: data.data.volume_buy_history_30m,
-            volume_buy_history_30m_usd: data.data.volume_buy_history_30m_usd,
-            volume_buy_30m_change_percent:
-                data.data.volume_buy_30m_change_percent,
-            volume_sell_30m: data.data.volume_sell_30m,
-            volume_sell_30m_usd: data.data.volume_sell_30m_usd,
-            volume_sell_history_30m: data.data.volume_sell_history_30m,
-            volume_sell_history_30m_usd: data.data.volume_sell_history_30m_usd,
-            volume_sell_30m_change_percent:
-                data.data.volume_sell_30m_change_percent,
-            trade_1h: data.data.trade_1h,
-            trade_history_1h: data.data.trade_history_1h,
-            trade_1h_change_percent: data.data.trade_1h_change_percent,
-            sell_1h: data.data.sell_1h,
-            sell_history_1h: data.data.sell_history_1h,
-            sell_1h_change_percent: data.data.sell_1h_change_percent,
-            buy_1h: data.data.buy_1h,
-            buy_history_1h: data.data.buy_history_1h,
-            buy_1h_change_percent: data.data.buy_1h_change_percent,
-            volume_1h: data.data.volume_1h,
-            volume_1h_usd: data.data.volume_1h_usd,
-            volume_history_1h: data.data.volume_history_1h,
-            volume_history_1h_usd: data.data.volume_history_1h_usd,
-            volume_1h_change_percent: data.data.volume_1h_change_percent,
-            volume_buy_1h: data.data.volume_buy_1h,
-            volume_buy_1h_usd: data.data.volume_buy_1h_usd,
-            volume_buy_history_1h: data.data.volume_buy_history_1h,
-            volume_buy_history_1h_usd: data.data.volume_buy_history_1h_usd,
-            volume_buy_1h_change_percent:
-                data.data.volume_buy_1h_change_percent,
-            volume_sell_1h: data.data.volume_sell_1h,
-            volume_sell_1h_usd: data.data.volume_sell_1h_usd,
-            volume_sell_history_1h: data.data.volume_sell_history_1h,
-            volume_sell_history_1h_usd: data.data.volume_sell_history_1h_usd,
-            volume_sell_1h_change_percent:
-                data.data.volume_sell_1h_change_percent,
-            trade_2h: data.data.trade_2h,
-            trade_history_2h: data.data.trade_history_2h,
-            trade_2h_change_percent: data.data.trade_2h_change_percent,
-            sell_2h: data.data.sell_2h,
-            sell_history_2h: data.data.sell_history_2h,
-            sell_2h_change_percent: data.data.sell_2h_change_percent,
-            buy_2h: data.data.buy_2h,
-            buy_history_2h: data.data.buy_history_2h,
-            buy_2h_change_percent: data.data.buy_2h_change_percent,
-            volume_2h: data.data.volume_2h,
-            volume_2h_usd: data.data.volume_2h_usd,
-            volume_history_2h: data.data.volume_history_2h,
-            volume_history_2h_usd: data.data.volume_history_2h_usd,
-            volume_2h_change_percent: data.data.volume_2h_change_percent,
-            volume_buy_2h: data.data.volume_buy_2h,
-            volume_buy_2h_usd: data.data.volume_buy_2h_usd,
-            volume_buy_history_2h: data.data.volume_buy_history_2h,
-            volume_buy_history_2h_usd: data.data.volume_buy_history_2h_usd,
-            volume_buy_2h_change_percent:
-                data.data.volume_buy_2h_change_percent,
-            volume_sell_2h: data.data.volume_sell_2h,
-            volume_sell_2h_usd: data.data.volume_sell_2h_usd,
-            volume_sell_history_2h: data.data.volume_sell_history_2h,
-            volume_sell_history_2h_usd: data.data.volume_sell_history_2h_usd,
-            volume_sell_2h_change_percent:
-                data.data.volume_sell_2h_change_percent,
-            trade_4h: data.data.trade_4h,
-            trade_history_4h: data.data.trade_history_4h,
-            trade_4h_change_percent: data.data.trade_4h_change_percent,
-            sell_4h: data.data.sell_4h,
-            sell_history_4h: data.data.sell_history_4h,
-            sell_4h_change_percent: data.data.sell_4h_change_percent,
-            buy_4h: data.data.buy_4h,
-            buy_history_4h: data.data.buy_history_4h,
-            buy_4h_change_percent: data.data.buy_4h_change_percent,
-            volume_4h: data.data.volume_4h,
-            volume_4h_usd: data.data.volume_4h_usd,
-            volume_history_4h: data.data.volume_history_4h,
-            volume_history_4h_usd: data.data.volume_history_4h_usd,
-            volume_4h_change_percent: data.data.volume_4h_change_percent,
-            volume_buy_4h: data.data.volume_buy_4h,
-            volume_buy_4h_usd: data.data.volume_buy_4h_usd,
-            volume_buy_history_4h: data.data.volume_buy_history_4h,
-            volume_buy_history_4h_usd: data.data.volume_buy_history_4h_usd,
-            volume_buy_4h_change_percent:
-                data.data.volume_buy_4h_change_percent,
-            volume_sell_4h: data.data.volume_sell_4h,
-            volume_sell_4h_usd: data.data.volume_sell_4h_usd,
-            volume_sell_history_4h: data.data.volume_sell_history_4h,
-            volume_sell_history_4h_usd: data.data.volume_sell_history_4h_usd,
-            volume_sell_4h_change_percent:
-                data.data.volume_sell_4h_change_percent,
-            trade_8h: data.data.trade_8h,
-            trade_history_8h: data.data.trade_history_8h,
-            trade_8h_change_percent: data.data.trade_8h_change_percent,
-            sell_8h: data.data.sell_8h,
-            sell_history_8h: data.data.sell_history_8h,
-            sell_8h_change_percent: data.data.sell_8h_change_percent,
-            buy_8h: data.data.buy_8h,
-            buy_history_8h: data.data.buy_history_8h,
-            buy_8h_change_percent: data.data.buy_8h_change_percent,
-            volume_8h: data.data.volume_8h,
-            volume_8h_usd: data.data.volume_8h_usd,
-            volume_history_8h: data.data.volume_history_8h,
-            volume_history_8h_usd: data.data.volume_history_8h_usd,
-            volume_8h_change_percent: data.data.volume_8h_change_percent,
-            volume_buy_8h: data.data.volume_buy_8h,
-            volume_buy_8h_usd: data.data.volume_buy_8h_usd,
-            volume_buy_history_8h: data.data.volume_buy_history_8h,
-            volume_buy_history_8h_usd: data.data.volume_buy_history_8h_usd,
-            volume_buy_8h_change_percent:
-                data.data.volume_buy_8h_change_percent,
-            volume_sell_8h: data.data.volume_sell_8h,
-            volume_sell_8h_usd: data.data.volume_sell_8h_usd,
-            volume_sell_history_8h: data.data.volume_sell_history_8h,
-            volume_sell_history_8h_usd: data.data.volume_sell_history_8h_usd,
-            volume_sell_8h_change_percent:
-                data.data.volume_sell_8h_change_percent,
-            trade_24h: data.data.trade_24h,
-            trade_history_24h: data.data.trade_history_24h,
-            trade_24h_change_percent: data.data.trade_24h_change_percent,
-            sell_24h: data.data.sell_24h,
-            sell_history_24h: data.data.sell_history_24h,
-            sell_24h_change_percent: data.data.sell_24h_change_percent,
-            buy_24h: data.data.buy_24h,
-            buy_history_24h: data.data.buy_history_24h,
-            buy_24h_change_percent: data.data.buy_24h_change_percent,
-            volume_24h: data.data.volume_24h,
-            volume_24h_usd: data.data.volume_24h_usd,
-            volume_history_24h: data.data.volume_history_24h,
-            volume_history_24h_usd: data.data.volume_history_24h_usd,
-            volume_24h_change_percent: data.data.volume_24h_change_percent,
-            volume_buy_24h: data.data.volume_buy_24h,
-            volume_buy_24h_usd: data.data.volume_buy_24h_usd,
-            volume_buy_history_24h: data.data.volume_buy_history_24h,
-            volume_buy_history_24h_usd: data.data.volume_buy_history_24h_usd,
-            volume_buy_24h_change_percent:
-                data.data.volume_buy_24h_change_percent,
-            volume_sell_24h: data.data.volume_sell_24h,
-            volume_sell_24h_usd: data.data.volume_sell_24h_usd,
-            volume_sell_history_24h: data.data.volume_sell_history_24h,
-            volume_sell_history_24h_usd: data.data.volume_sell_history_24h_usd,
-            volume_sell_24h_change_percent:
-                data.data.volume_sell_24h_change_percent,
-        };
-        this.cache.setCachedData(cacheKey, tradeData);
-        return tradeData;
     }
 
     async fetchDexScreenerData(): Promise<DexScreenerData> {

@@ -58,54 +58,6 @@ export class WalletProvider {
         this.runtime = runtime;
     }
 
-    //  This should be ETH/STK/BTC
-    private async fetchWithRetry(
-        url: string,
-        options: RequestInit = {}
-    ): Promise<any> {
-        let lastError: Error;
-
-        for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
-            try {
-                const response = await fetch(url, {
-                    ...options,
-                    headers: {
-                        Accept: "application/json",
-                        "x-chain": "solana",
-                        "X-API-KEY":
-                            //  TODO: change to starknet
-                            this.runtime.getSetting("BIRDEYE_API_KEY") || "",
-                        ...options.headers,
-                    },
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(
-                        `HTTP error! status: ${response.status}, message: ${errorText}`
-                    );
-                }
-
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error(`Attempt ${i + 1} failed:`, error);
-                lastError = error;
-                if (i < PROVIDER_CONFIG.MAX_RETRIES - 1) {
-                    const delay = PROVIDER_CONFIG.RETRY_DELAY * Math.pow(2, i);
-                    await new Promise((resolve) => setTimeout(resolve, delay));
-                    continue;
-                }
-            }
-        }
-
-        console.error(
-            "All attempts failed. Throwing the last error:",
-            lastError
-        );
-        throw lastError;
-    }
-
     async fetchPortfolioValue(runtime): Promise<WalletPortfolio> {
         try {
             const cacheKey = `portfolio-${this.runtime.getSetting("STARKNET_WALLET_ADDRESS")}`;
