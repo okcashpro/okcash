@@ -397,9 +397,8 @@ export class TokenProvider {
         });
     }
 
-    async analyzeHolderDistribution(
-        tradeData: TokenTradeData
-    ): Promise<string> {
+    // TODO:
+    async analyzeHolderDistribution(tradeData: TokenInfo): Promise<string> {
         // Define the time intervals to consider (e.g., 30m, 1h, 2h)
         const intervals = [
             {
