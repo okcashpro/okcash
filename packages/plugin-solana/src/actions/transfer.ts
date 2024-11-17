@@ -80,9 +80,9 @@ export default {
         /*
             const adminIds = runtime.getSetting("ADMIN_USER_IDS")?.split(",") || [];
             //console.log("Admin IDs from settings:", adminIds);
-            
+
             const isAdmin = adminIds.includes(message.userId);
-            
+
             if (isAdmin) {
                 //console.log(`Authorized transfer from user: ${message.userId}`);
                 return true;
