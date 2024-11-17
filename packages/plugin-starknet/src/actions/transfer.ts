@@ -14,7 +14,12 @@ import {
     composeContext,
     generateObject,
 } from "@ai16z/eliza";
-import { validateSettings } from "../utils";
+import { getStarknetAccount, validateSettings } from "../utils";
+import { Account, RpcProvider } from "starknet";
+import { PROVIDER_CONFIG } from "..";
+import path from "path";
+import fs from "fs";
+import { ERC20Token } from "../utils/ERC20Token";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
@@ -27,12 +32,24 @@ function isTransferContent(
     content: TransferContent
 ): content is TransferContent {
     console.log("Content for transfer", content);
-    return (
+    const validTypes = (
         typeof content.tokenAddress === "string" &&
         typeof content.recipient === "string" &&
         (typeof content.amount === "string" ||
             typeof content.amount === "number")
     );
+    if (!validTypes) {
+        return false;
+    }
+
+    // Addresses must be 32-bytes long with a 0x prefix
+    const validAddresses = (
+        content.tokenAddress.startsWith("0x") &&
+        content.tokenAddress.length === 66 &&
+        content.recipient.startsWith("0x") &&
+        content.recipient.length === 66
+    );
+    return validTypes && validAddresses;
 }
 
 const transferTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
@@ -40,9 +57,9 @@ const transferTemplate = `Respond with a JSON markdown block containing only the
 Example response:
 \`\`\`json
 {
-    "tokenAddress": "BieefG47jAHCGZBxi2q87RDuHyGZyYC3vAzxpyu8pump",
-    "recipient": "9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
-    "amount": "1000"
+    "tokenAddress": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+    "recipient": "0x1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+    "amount": "0.001"
 }
 \`\`\`
 
@@ -110,9 +127,20 @@ export default {
         }
 
         try {
+            const account = getStarknetAccount(runtime);
+            const erc20Token = new ERC20Token(content.tokenAddress, account);
+            const decimals = await erc20Token.decimals();
+            const amountWei = BigInt(content.amount) * 10n ** BigInt(decimals);
+            const transferCall = erc20Token.transferCall(content.recipient, amountWei);
+
+            console.log("Transferring", amountWei, "of", content.tokenAddress, "to", content.recipient);
+
+            const tx = await account.execute(transferCall);
+
+            console.log("Transfer completed successfully! tx: " + tx.transaction_hash);
             if (callback) {
                 callback({
-                    text: `Successfully`,
+                    text: "Transfer completed successfully! tx: " + tx.transaction_hash,
                     content: {},
                 });
             }
@@ -135,7 +163,13 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 69 STRK to 0x1234567890123456789012345678901234567890",
+                    text: "Send 69 STRK to 0x1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+                },
+            },
+            {
+                user: "{{user2}}",
+                content: {
+                    text: "Transfer to 0x1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF 0.01 ETH",
                 },
             },
         ],
