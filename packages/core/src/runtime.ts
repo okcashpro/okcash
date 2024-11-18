@@ -428,6 +428,7 @@ export class AgentRuntime implements IAgentRuntime {
         state?: State,
         callback?: HandlerCallback
     ): Promise<void> {
+        console.log("Processing actions", responses);
         if (!responses[0].content?.action) {
             elizaLogger.warn("No action found in the response content.");
             return;

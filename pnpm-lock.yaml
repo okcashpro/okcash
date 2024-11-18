@@ -59,7 +59,7 @@ importers:
         version: 3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/preset-classic':
         specifier: ^3.6.0
-        version: 3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        version: 3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.3)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/theme-mermaid':
         specifier: ^3.6.0
         version: 3.6.1(@docusaurus/plugin-content-docs@3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -10441,8 +10441,8 @@ packages:
     resolution: {integrity: sha512-L0jRsrPpjdckP3oPug3/VxNKt2trR8TcabrM6FOAAlvC/9Phcmm+cuAgTlxBqdBR1WJx7Naj9WHw+aOmheSVbw==}
     engines: {node: '>= 12.13.0'}
 
-  search-insights@2.17.2:
-    resolution: {integrity: sha512-zFNpOpUO+tY2D85KrxJ+aqwnIfdEGi06UH2+xEb+Bp9Mwznmauqc9djbnBibJO5mpfUPPa8st6Sx65+vbeO45g==}
+  search-insights@2.17.3:
+    resolution: {integrity: sha512-RQPdCYTa8A68uM2jwxoY842xDhvx3E5LFL1LxvxCNMev4o5mLuokczhzjAgGwUZBAmOKZknArSxLKmXtIi2AxQ==}
 
   section-matter@1.0.0:
     resolution: {integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==}
@@ -12186,19 +12186,19 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@algolia/autocomplete-core@1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.2)':
+  '@algolia/autocomplete-core@1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.3)':
     dependencies:
-      '@algolia/autocomplete-plugin-algolia-insights': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.2)
+      '@algolia/autocomplete-plugin-algolia-insights': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.3)
       '@algolia/autocomplete-shared': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)
     transitivePeerDependencies:
       - '@algolia/client-search'
       - algoliasearch
       - search-insights
 
-  '@algolia/autocomplete-plugin-algolia-insights@1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.2)':
+  '@algolia/autocomplete-plugin-algolia-insights@1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.3)':
     dependencies:
       '@algolia/autocomplete-shared': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)
-      search-insights: 2.17.2
+      search-insights: 2.17.3
     transitivePeerDependencies:
       - '@algolia/client-search'
       - algoliasearch
@@ -13419,9 +13419,9 @@ snapshots:
 
   '@docsearch/css@3.8.0': {}
 
-  '@docsearch/react@3.8.0(@algolia/client-search@5.14.2)(@types/react@18.3.12)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)':
+  '@docsearch/react@3.8.0(@algolia/client-search@5.14.2)(@types/react@18.3.12)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.3)':
     dependencies:
-      '@algolia/autocomplete-core': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.2)
+      '@algolia/autocomplete-core': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)(search-insights@2.17.3)
       '@algolia/autocomplete-preset-algolia': 1.17.7(@algolia/client-search@5.14.2)(algoliasearch@5.14.2)
       '@docsearch/css': 3.8.0
       algoliasearch: 5.14.2
@@ -13429,7 +13429,7 @@ snapshots:
       '@types/react': 18.3.12
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      search-insights: 2.17.2
+      search-insights: 2.17.3
     transitivePeerDependencies:
       - '@algolia/client-search'
 
@@ -13980,7 +13980,7 @@ snapshots:
       - vue-template-compiler
       - webpack-cli
 
-  '@docusaurus/preset-classic@3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@docusaurus/preset-classic@3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.3)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@docusaurus/core': 3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/plugin-content-blog': 3.6.1(@docusaurus/plugin-content-docs@3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -13993,7 +13993,7 @@ snapshots:
       '@docusaurus/plugin-sitemap': 3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/theme-classic': 3.6.1(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/theme-common': 3.6.1(@docusaurus/plugin-content-docs@3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)
-      '@docusaurus/theme-search-algolia': 3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@docusaurus/theme-search-algolia': 3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.3)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/types': 3.6.1(acorn@8.14.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -14142,9 +14142,9 @@ snapshots:
       - vue-template-compiler
       - webpack-cli
 
-  '@docusaurus/theme-search-algolia@3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@docusaurus/theme-search-algolia@3.6.1(@algolia/client-search@5.14.2)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.3)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@docsearch/react': 3.8.0(@algolia/client-search@5.14.2)(@types/react@18.3.12)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.2)
+      '@docsearch/react': 3.8.0(@algolia/client-search@5.14.2)(@types/react@18.3.12)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.17.3)
       '@docusaurus/core': 3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/logger': 3.6.1
       '@docusaurus/plugin-content-docs': 3.6.1(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.2.0))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@1.21.6))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -24490,7 +24490,7 @@ snapshots:
       ajv-formats: 2.1.1(ajv@8.17.1)
       ajv-keywords: 5.1.0(ajv@8.17.1)
 
-  search-insights@2.17.2: {}
+  search-insights@2.17.3: {}
 
   section-matter@1.0.0:
     dependencies:
