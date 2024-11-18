@@ -20,23 +20,7 @@ interface Order {
     price: number;
 }
 
-const take_order: Action = {
-    name: "TAKE_STARKNET_ORDER",
-    similes: ["BUY_STARKNET_ORDER", "PLACE_STARKNET_ORDER"],
-    description:
-        "Records a starknet buy order based on the user's conviction level.",
-    examples: [],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
-        const text = (message.content as Content).text;
-        // Check if the message contains a ticker symbol
-        const tickerRegex = /\b[A-Z]{1,5}\b/g;
-        return tickerRegex.test(text);
-    },
-    handler: async (runtime: IAgentRuntime, message: Memory) => {
-        const text = (message.content as Content).text;
-        const userId = message.userId;
-
-        const template = `
+const template = `
 
 // CLAUDE TODO: Put the usual conversation context here
 
@@ -51,6 +35,21 @@ Determine if the user is trying to shill the ticker. if they are, respond with e
 // - ticker: string (extract from CA so we have context)
 // - contractAddress: string
 `;
+
+const take_order: Action = {
+    name: "TAKE_STARKNET_ORDER",
+    similes: ["BUY_STARKNET_ORDER", "PLACE_STARKNET_ORDER"],
+    description:
+        "Records a starknet buy order based on the user's conviction level.",
+    validate: async (runtime: IAgentRuntime, message: Memory) => {
+        const text = (message.content as Content).text;
+        // Check if the message contains a ticker symbol
+        const tickerRegex = /\b[A-Z]{1,5}\b/g;
+        return tickerRegex.test(text);
+    },
+    handler: async (runtime: IAgentRuntime, message: Memory) => {
+        const text = (message.content as Content).text;
+        const userId = message.userId;
 
         let ticker, contractAddress;
 
@@ -130,6 +129,7 @@ Determine if the user is trying to shill the ticker. if they are, respond with e
             text: `Recorded a ${conviction} conviction buy order for ${ticker} (${contractAddress}) with an amount of ${buyAmount} at the price of ${currentPrice}.`,
         };
     },
-};
+    examples: [] as ActionExample[][],
+} as Action;
 
 export default take_order;

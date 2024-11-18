@@ -207,7 +207,7 @@ export class ClientBase extends EventEmitter {
                 );
                 await this.setCookiesFromArray(cookiesArray);
             } else {
-                console.log("Cookies file path:", cookiesFilePath);
+                elizaLogger.debug("Cookies file path:", cookiesFilePath);
                 if (fs.existsSync(cookiesFilePath)) {
                     const cookiesArray = JSON.parse(
                         fs.readFileSync(cookiesFilePath, "utf-8")

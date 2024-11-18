@@ -40,6 +40,10 @@ if ! pnpm start; then
     exit 1
 fi
 
+# Start client
+echo -e "\033[1mStarting client...\033[0m"
+pnpm start:client
+
 # Open webpage
 echo -e "\033[1mOpening webpage...\033[0m"
 if command -v xdg-open &> /dev/null; then

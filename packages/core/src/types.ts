@@ -670,3 +670,9 @@ export enum ServiceType {
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
 }
+
+export enum LoggingLevel {
+    DEBUG = "debug",
+    VERBOSE = "verbose",
+    NONE = "none",
+}

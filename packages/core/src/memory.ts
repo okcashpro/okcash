@@ -1,4 +1,5 @@
 import { embed } from "./embedding.ts";
+import elizaLogger from "./logger.ts";
 import {
     IAgentRuntime,
     IMemoryManager,
@@ -160,7 +161,7 @@ export class MemoryManager implements IMemoryManager {
             await this.runtime.databaseAdapter.getMemoryById(memory.id);
 
         if (existingMessage) {
-            // console.log("Memory already exists, skipping");
+            elizaLogger.debug("Memory already exists, skipping");
             return;
         }
         await this.runtime.databaseAdapter.createMemory(
