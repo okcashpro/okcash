@@ -1,28 +1,38 @@
 # Contributing to Eliza
 
-First off, thank you for considering contributing to Eliza! It's people like you that make Eliza such a great tool. We welcome contributions from everyone, regardless of their experience level.
+First off, thank you for considering contributing to Eliza! We welcome contributions from everyone, regardless of experience level.
 
-## Code of Conduct
+## Contribution License Agreement
 
-By participating in this project, you are expected to uphold our Code of Conduct. Please report unacceptable behavior.
+By contributing to Eliza, you agree that your contributions will be licensed under the MIT License. This means:
 
-## How Can I Contribute?
+1. You grant us (and everyone else) a perpetual, worldwide, non-exclusive, royalty-free license to use your contributions.
+2. Your contributions are and will be available as Free and Open Source Software (FOSS).
+3. You have the right to submit the work under this license.
+4. You understand that your contributions are public and that a record of the contribution is maintained indefinitely.
 
-### Reporting Bugs
+## The OODA Loop: A Framework for Contribution
 
-1. Ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/ai16z/eliza/issues).
-2. If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/ai16z/eliza/issues/new). Be sure to include
+We believe in the power of the OODA Loop - a decision-making framework that emphasizes speed and adaptability. OODA stands for:
 
--   a title and clear description,
--   as much relevant information as possible, and
--   a code sample or an executable test case demonstrating the expected behavior that is not occurring.
+- **Observe**: Gather information and insights about the project, the community, and the broader AI ecosystem.
+- **Orient**: Analyze your observations to identify opportunities for contribution and improvement.
+- **Decide**: Choose a course of action based on your analysis. This could be proposing a new feature, fixing a bug, or creating content.
+- **Act**: Execute your decision and share your work with the community.
 
-### Suggesting Enhancements
+## How to Contribute
 
-1. Open a new issue with a clear title and detailed description of the suggested enhancement.
-2. Include any relevant examples or mock-ups if applicable.
+### For Developers
 
-### Pull Requests
+1. **Extend Eliza's Capabilities**
+   - Develop new actions, evaluators, and providers
+   - Improve existing components and modules
+
+2. **Enhance Infrastructure**
+   - Review open issues and submit PRs
+   - Test and update documentation
+   - Optimize performance
+   - Improve deployment solutions
 
 1. Fork the repo and create your branch from `main`.
     1. The name of the branch should start with the issue number and be descriptive of the changes you are making.
@@ -64,12 +74,17 @@ This section lists the labels we use to help us track and manage issues and pull
 -   `documentation` - Issues or pull requests related to documentation.
 -   `good first issue` - Good for newcomers.
 
-## Recognition
 
-We value every contribution. Contributors will be recognized in our README.md file. Significant contributions may be acknowledged with special roles or responsibilities within the project.
+## Getting Help
 
-## Questions?
+- Join [Discord](https://discord.gg/ai16z)
+- Check [FAQ](docs/community/faq.md)
+- Create GitHub issues
 
-If you have any questions, please feel free to contact the project maintainers with an issue or in discord.
+## Additional Resources
 
-Thank you for your interest in contributing to Eliza!
+- [Local Development Guide](docs/guides/local-development.md)
+- [Configuration Guide](docs/guides/configuration.md)
+- [API Documentation](docs/api)
+
+Thank you for contributing to Eliza and helping build the future of autonomous AI agents! 🎉
