@@ -99,7 +99,7 @@ export class TwitterInteractionClient extends ClientBase {
     }
 
     async handleTwitterInteractions() {
-        console.log("Checking Twitter interactions");
+        elizaLogger.log("Checking Twitter interactions");
         try {
             // Check for mentions
             const tweetCandidates = (
@@ -167,7 +167,7 @@ export class TwitterInteractionClient extends ClientBase {
                             );
                         }
                     } catch (error) {
-                        console.error(
+                        elizaLogger.error(
                             "Error saving latest checked tweet ID to file:",
                             error
                         );
@@ -185,15 +185,15 @@ export class TwitterInteractionClient extends ClientBase {
                     );
                 }
             } catch (error) {
-                console.error(
+                elizaLogger.error(
                     "Error saving latest checked tweet ID to file:",
                     error
                 );
             }
 
-            console.log("Finished checking Twitter interactions");
+            elizaLogger.log("Finished checking Twitter interactions");
         } catch (error) {
-            console.error("Error handling Twitter interactions:", error);
+            elizaLogger.error("Error handling Twitter interactions:", error);
         }
     }
 
@@ -213,7 +213,7 @@ export class TwitterInteractionClient extends ClientBase {
         }
 
         if (!message.content.text) {
-            console.log("skipping tweet with no text", tweet.id);
+            elizaLogger.log("skipping tweet with no text", tweet.id);
             return { text: "", action: "IGNORE" };
         }
         elizaLogger.log("handling tweet", tweet.id);
@@ -277,7 +277,7 @@ export class TwitterInteractionClient extends ClientBase {
             await this.runtime.messageManager.getMemoryById(tweetId);
 
         if (!tweetExists) {
-            console.log("tweet does not exist, saving");
+            elizaLogger.log("tweet does not exist, saving");
             const userIdUUID = stringToUuid(tweet.userId as string);
             const roomId = stringToUuid(tweet.conversationId);
 
@@ -321,7 +321,7 @@ export class TwitterInteractionClient extends ClientBase {
 
         // Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
         if (shouldRespond !== "RESPOND") {
-            console.log("Not responding to message");
+            elizaLogger.log("Not responding to message");
             return { text: "Response Decision:", action: shouldRespond };
         }
 
@@ -398,7 +398,7 @@ export class TwitterInteractionClient extends ClientBase {
                 fs.writeFileSync(debugFileName, responseInfo);
                 await wait();
             } catch (error) {
-                console.error(`Error sending response tweet: ${error}`);
+                elizaLogger.error(`Error sending response tweet: ${error}`);
             }
         }
     }

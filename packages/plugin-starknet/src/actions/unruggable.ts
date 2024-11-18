@@ -1,3 +1,5 @@
+// TODO: add unruggable
+
 import {
     ActionExample,
     elizaLogger,
@@ -71,7 +73,7 @@ Extract the following information about the requested token swap:
 
 Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.`;
 
-export const executeSwap: Action = {
+export const deployToken: Action = {
     name: "EXECUTE_STARKNET_SWAP",
     similes: [
         "STARKNET_SWAP_TOKENS",
@@ -109,8 +111,6 @@ export const executeSwap: Action = {
             modelClass: ModelClass.MEDIUM,
         });
 
-        elizaLogger.debug("Response:", response);
-
         if (!isSwapContent(response)) {
             callback?.({ text: "Invalid swap content, please try again." });
             return false;
@@ -137,7 +137,7 @@ export const executeSwap: Action = {
             );
 
             elizaLogger.log(
-                "Swap completed successfully! tx: " + swapResult.transactionHash
+                "Swap completed successfully!" + swapResult.transactionHash
             );
             callback?.({
                 text:

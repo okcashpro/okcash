@@ -3,7 +3,7 @@ import {
     createTransferInstruction,
 } from "@solana/spl-token";
 import bs58 from "bs58";
-import { settings } from "@ai16z/eliza";
+import { elizaLogger, settings } from "@ai16z/eliza";
 
 import {
     Connection,
@@ -103,7 +103,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        console.log("Starting TRANSFER_TOKEN handler...");
+        elizaLogger.log("Starting SEND_TOKEN handler...");
 
         // Initialize or update state
         if (!state) {
