@@ -21,7 +21,8 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
 import yargs from "yargs";
-import { character } from "./character.ts";
+import { blobert } from "./blobert.ts";
+// import { character } from "./character.ts";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -196,12 +197,14 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
-    if (character.plugins.length > 0) {
-        character.plugins.forEach(async (plugin) => {
-            plugin.clients.forEach(async (client) => {
-                clients.push(await client.start(runtime));
-            });
-        });
+    if (character.plugins?.length > 0) {
+        for (const plugin of character.plugins) {
+            if (plugin.clients) {
+                for (const client of plugin.clients) {
+                    clients.push(await client.start(runtime));
+                }
+            }
+        }
     }
 
     return clients;
@@ -261,7 +264,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [character];
+    let characters = [blobert];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
