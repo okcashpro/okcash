@@ -138,7 +138,7 @@ export class AgentRuntime implements IAgentRuntime {
         }
 
         if (this.memoryManagers.has(manager.tableName)) {
-            console.warn(
+            elizaLogger.warn(
                 `Memory manager ${manager.tableName} is already registered. Skipping registration.`
             );
             return;
@@ -154,16 +154,16 @@ export class AgentRuntime implements IAgentRuntime {
     getService(service: ServiceType): typeof Service | null {
         const serviceInstance = this.services.get(service);
         if (!serviceInstance) {
-            console.error(`Service ${service} not found`);
+            elizaLogger.error(`Service ${service} not found`);
             return null;
         }
         return serviceInstance as typeof Service;
     }
     registerService(service: Service): void {
         const serviceType = (service as typeof Service).serviceType;
-        console.log("Registering service:", serviceType);
+        elizaLogger.log("Registering service:", serviceType);
         if (this.services.has(serviceType)) {
-            console.warn(
+            elizaLogger.warn(
                 `Service ${serviceType} is already registered. Skipping registration.`
             );
             return;
@@ -207,6 +207,7 @@ export class AgentRuntime implements IAgentRuntime {
         databaseAdapter: IDatabaseAdapter; // The database adapter used for interacting with the database
         fetch?: typeof fetch | unknown;
         speechModelPath?: string;
+        logging?: boolean;
     }) {
         this.#conversationLength =
             opts.conversationLength ?? this.#conversationLength;
@@ -217,7 +218,7 @@ export class AgentRuntime implements IAgentRuntime {
             opts?.agentId ??
             stringToUuid(opts.character?.name ?? uuidv4());
 
-        console.log("Agent ID", this.agentId);
+        elizaLogger.success("Agent ID", this.agentId);
 
         this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
         this.character = opts.character || defaultCharacter;
@@ -250,6 +251,10 @@ export class AgentRuntime implements IAgentRuntime {
             tableName: "fragments",
         });
 
+        (opts.managers ?? []).forEach((manager: IMemoryManager) => {
+            this.registerMemoryManager(manager);
+        });
+
         (opts.services ?? []).forEach((service: Service) => {
             this.registerService(service);
         });
@@ -260,7 +265,7 @@ export class AgentRuntime implements IAgentRuntime {
             opts.modelProvider ??
             this.modelProvider;
         if (!this.serverUrl) {
-            console.warn("No serverUrl provided, defaulting to localhost");
+            elizaLogger.warn("No serverUrl provided, defaulting to localhost");
         }
 
         this.token = opts.token;
@@ -324,10 +329,8 @@ export class AgentRuntime implements IAgentRuntime {
 
         for (const knowledgeItem of knowledge) {
             const knowledgeId = stringToUuid(knowledgeItem);
-            console.log("knowledgeId", knowledgeId);
             const existingDocument =
                 await this.documentsManager.getMemoryById(knowledgeId);
-            console.log("existingDocument", existingDocument);
             if (!existingDocument) {
                 console.log(
                     "Processing knowledge for ",
@@ -498,7 +501,7 @@ export class AgentRuntime implements IAgentRuntime {
     async evaluate(message: Memory, state?: State, didRespond?: boolean) {
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
-                console.log("Evaluating", evaluator.name);
+                elizaLogger.log("Evaluating", evaluator.name);
                 if (!evaluator.handler) {
                     return null;
                 }
@@ -839,10 +842,10 @@ Text: ${attachment.text}
             recentInteractionsData: Memory[]
         ): Promise<string> => {
             // Format the recent messages
-            const formattedInteractions = await recentInteractionsData
-                .map(async (message) => {
+            const formattedInteractions = await Promise.all(
+                recentInteractionsData.map(async (message) => {
                     const isSelf = message.userId === this.agentId;
-                    let sender;
+                    let sender: string;
                     if (isSelf) {
                         sender = this.character.name;
                     } else {
@@ -854,9 +857,9 @@ Text: ${attachment.text}
                     }
                     return `${sender}: ${message.content.text}`;
                 })
-                .join("\n");
+            );
 
-            return formattedInteractions;
+            return formattedInteractions.join("\n");
         };
 
         const formattedMessageInteractions =
