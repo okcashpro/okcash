@@ -141,7 +141,6 @@ export class TwitterInteractionClient extends ClientBase {
                     );
 
                     const thread = await buildConversationThread(tweet, this);
-                    console.log("thread", thread);
 
                     const message = {
                         content: { text: tweet.text },
@@ -317,7 +316,7 @@ export class TwitterInteractionClient extends ClientBase {
         const shouldRespond = await generateShouldRespond({
             runtime: this.runtime,
             context: shouldRespondContext,
-            modelClass: ModelClass.LARGE,
+            modelClass: ModelClass.MEDIUM,
         });
 
         // Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
@@ -474,14 +473,14 @@ export class TwitterInteractionClient extends ClientBase {
             }
 
             if (visited.has(currentTweet.id)) {
-                console.log("Already visited tweet:", currentTweet.id);
+                elizaLogger.log("Already visited tweet:", currentTweet.id);
                 return;
             }
 
             visited.add(currentTweet.id);
             thread.unshift(currentTweet);
 
-            console.log("Current thread state:", {
+            elizaLogger.debug("Current thread state:", {
                 length: thread.length,
                 currentDepth: depth,
                 tweetId: currentTweet.id,
@@ -523,7 +522,7 @@ export class TwitterInteractionClient extends ClientBase {
         // Need to bind this context for the inner function
         await processThread.bind(this)(tweet, 0);
 
-        console.log("Final thread built:", {
+        elizaLogger.debug("Final thread built:", {
             totalTweets: thread.length,
             tweetIds: thread.map((t) => ({
                 id: t.id,

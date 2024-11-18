@@ -33,7 +33,7 @@ export const models: Models = {
         model: {
             [ModelClass.SMALL]: "claude-3-5-haiku-20241022",
             [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
-            [ModelClass.LARGE]: "claude-3-opus-20240229",
+            [ModelClass.LARGE]: "claude-3-5-sonnet-20241022",
         },
     },
     [ModelProviderName.CLAUDE_VERTEX]: {
