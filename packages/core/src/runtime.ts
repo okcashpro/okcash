@@ -12,9 +12,9 @@ import {
     formatEvaluatorNames,
     formatEvaluators,
 } from "./evaluators.ts";
-import { generateText } from "./generation.ts";
+import { generateText, splitChunks } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { elizaLogger, embed, splitChunks } from "./index.ts";
+import { elizaLogger, embed } from "./utils.ts";
 import { embeddingZeroVector, MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";

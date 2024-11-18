@@ -16,6 +16,7 @@ import {
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
+import { evmPlugin } from "@ai16z/plugin-evm";
 import { nodePlugin } from "@ai16z/plugin-node";
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -218,36 +219,37 @@ export async function initializeClients(
 
     if (character.plugins.length > 0) {
         character.plugins.forEach(async (plugin) => {
-            plugin.clients.forEach(async (client) => {
-                clients.push(await client.start(runtime));
-            });
+            if (plugin.clients) {
+                plugin.clients.forEach(async (client) => {
+                    clients.push(await client.start(runtime));
+                });
+            }
         });
     }
 
     return clients;
 }
 
-export async function createAgent(
-    character: Character,
-    db: any,
-    token: string
-) {
+export async function createAgent(character: Character, db: any, token: string) {
     console.log("Creating runtime for character", character.name);
-    console.log(
-        "character.settings.secrets?.WALLET_PUBLIC_KEY",
-        character.settings.secrets?.WALLET_PUBLIC_KEY
-    );
+    
+    const plugins = [bootstrapPlugin, nodePlugin];
+
+    if (character.settings.secrets?.SOLANA_PUBLIC_KEY) {
+        plugins.push(solanaPlugin);
+    }
+
+    if (character.settings.secrets?.EVM_PRIVATE_KEY) {
+        plugins.push(evmPlugin);
+    }
+
     return new AgentRuntime({
         databaseAdapter: db,
         token,
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
-        plugins: [
-            bootstrapPlugin,
-            nodePlugin,
-            character.settings.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,
-        ].filter(Boolean),
+        plugins: plugins.filter(Boolean),
         providers: [],
         actions: [],
         services: [],

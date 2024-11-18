@@ -9,7 +9,7 @@
         "stop:service:all": "pnpm --filter \"@ai16z/agent\" stop:service:all",
         "start": "pnpm --filter \"@ai16z/agent\" start --isRoot",
         "dev": "bash ./scripts/dev.sh",
-        "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint",
+        "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint && pnpm --dir packages/plugin-evm lint",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "clean": "bash ./scripts/clean.sh",

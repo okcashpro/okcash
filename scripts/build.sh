@@ -35,6 +35,7 @@ PACKAGES=(
     "client-twitter"
     "plugin-node"
     "plugin-bootstrap"
+    "plugin-evm"
     "plugin-image-generation"
 )
 
