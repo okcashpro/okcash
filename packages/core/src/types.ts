@@ -318,6 +318,7 @@ export type Plugin = {
     providers?: Provider[];
     evaluators?: Evaluator[];
     services?: Service[];
+    clients?: Client[];
 };
 
 export enum Clients {

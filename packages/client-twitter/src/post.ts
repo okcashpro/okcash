@@ -1,10 +1,10 @@
 import { Tweet } from "agent-twitter-client";
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateText } from "@ai16z/eliza/src/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateText } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
 import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `{{timeline}}
@@ -28,32 +28,31 @@ Write a single sentence post that is {{adjective}} about {{topic}} (without ment
 Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.`;
 
 export class TwitterPostClient extends ClientBase {
-
-
-    onReady(postImmediately: boolean = true) { 
+    onReady(postImmediately: boolean = true) {
         const generateNewTweetLoop = () => {
-            const minMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
-            const maxMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
-            const randomMinutes = Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) + minMinutes;
+            const minMinutes =
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
+            const maxMinutes =
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
+            const randomMinutes =
+                Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) +
+                minMinutes;
             const delay = randomMinutes * 60 * 1000;
-            
-            setTimeout(
-                () => {
-                    this.generateNewTweet();
-                    generateNewTweetLoop(); // Set up next iteration
-                },
-                delay
-            );
-            
+
+            setTimeout(() => {
+                this.generateNewTweet();
+                generateNewTweetLoop(); // Set up next iteration
+            }, delay);
+
             console.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-    
+
         if (postImmediately) {
             this.generateNewTweet();
         }
         generateNewTweetLoop();
     }
-    
+
     constructor(runtime: IAgentRuntime) {
         // Initialize the client and pass an optional callback to be called when the client is ready
         super({

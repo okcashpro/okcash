@@ -1,14 +1,8 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import {
-    generateMessageResponse,
-    generateShouldRespond,
-} from "@ai16z/eliza/src/generation.ts";
-import {
-    messageCompletionFooter,
-    shouldRespondFooter,
-} from "@ai16z/eliza/src/parsing.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateMessageResponse, generateShouldRespond } from "@ai16z/eliza";
+import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
 import {
     Content,
     HandlerCallback,
@@ -17,7 +11,7 @@ import {
     ModelClass,
     State,
 } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
@@ -45,6 +39,7 @@ Recent interactions between {{agentName}} and other users:
 
 {{recentPosts}}
 
+
 # Task: Generate a post/reply in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}) while using the thread of tweets as additional context:
 Current Post:
 {{currentPost}}
@@ -52,12 +47,16 @@ Thread of Tweets You Are Replying To:
 
 {{formattedConversation}}
 
+{{actions}}
+
+# Task: Generate a post in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}). Include an action, if appropriate. {{actionNames}}:
+{{currentPost}}
 ` + messageCompletionFooter;
 
 export const twitterShouldRespondTemplate =
     `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
-Response options are RESPOND, IGNORE and STOP.
+Response options are RESPOND, IGNORE and STOP .
 
 {{agentName}} should respond to messages that are directed at them, or participate in conversations that are interesting or relevant to their background, IGNORE messages that are irrelevant to them, and should STOP if the conversation is concluded.
 
@@ -211,7 +210,7 @@ export class TwitterInteractionClient extends ClientBase {
         thread: Tweet[];
     }) {
         if (tweet.username === this.runtime.getSetting("TWITTER_USERNAME")) {
-            console.log("skipping tweet from bot itself", tweet.id);
+            // console.log("skipping tweet from bot itself", tweet.id);
             // Skip processing if the tweet is from the bot itself
             return;
         }
@@ -371,6 +370,14 @@ export class TwitterInteractionClient extends ClientBase {
                 )) as State;
 
                 for (const responseMessage of responseMessages) {
+                    if (
+                        responseMessage ===
+                        responseMessages[responseMessages.length - 1]
+                    ) {
+                        responseMessage.content.action = response.action;
+                    } else {
+                        responseMessage.content.action = "CONTINUE";
+                    }
                     await this.runtime.messageManager.createMemory(
                         responseMessage
                     );
