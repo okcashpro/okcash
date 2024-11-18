@@ -6,6 +6,8 @@ sidebar_position: 6
 
 Actions are core building blocks in Eliza that define how agents respond to and interact with messages. They allow agents to interact with external systems, modify their behavior, and perform tasks beyond simple message responses.
 
+---
+
 ## Overview
 
 Each Action consists of:
@@ -16,6 +18,8 @@ Each Action consists of:
 - `validate`: Function that checks if action is appropriate
 - `handler`: Implementation of the action's behavior
 - `examples`: Array of example usage patterns
+
+---
 
 ## Implementation
 
@@ -35,6 +39,8 @@ Source: https://github.com/ai16z/eliza/packages/core/src/types.ts
 ---
 
 # Built-in Actions
+
+---
 
 ## Conversation Flow
 
@@ -56,6 +62,8 @@ Source: https://github.com/ai16z/eliza/packages/core/src/types.ts
 
 - Default response action
 - Used for standard conversational replies
+
+---
 
 ## External Integrations
 
@@ -80,6 +88,8 @@ const take_order: Action = {
 ```
 
 Source: https://github.com/ai16z/eliza/packages/plugin-solana/src/actions/takeOrder.ts
+
+---
 
 ## Creating Custom Actions
 
@@ -123,6 +133,8 @@ test("Validate action behavior", async () => {
 });
 ```
 
+---
+
 ## Core Concepts
 
 ### Action Structure
@@ -150,6 +162,8 @@ interface Action {
 - **validate**: Determines if the action can be executed
 - **handler**: Implements the action's behavior
 - **examples**: Demonstrates proper usage patterns
+
+---
 
 ## Built-in Actions
 
@@ -204,6 +218,8 @@ const followRoomAction: Action = {
   },
 };
 ```
+
+---
 
 ## Creating Custom Actions
 
@@ -273,6 +289,8 @@ const complexAction: Action = {
 };
 ```
 
+---
+
 ## Implementation Patterns
 
 ### State-Based Actions
@@ -309,6 +327,8 @@ const serviceAction: Action = {
   },
 };
 ```
+
+---
 
 ## Best Practices
 
@@ -368,6 +388,8 @@ examples: [
 ];
 ```
 
+---
+
 ## Troubleshooting
 
 ### Common Issues
@@ -424,6 +446,8 @@ const chainedAction: Action = {
   },
 };
 ```
+
+---
 
 ## Example: Complete Action Implementation
 
@@ -498,6 +522,8 @@ const documentAnalysisAction: Action = {
 };
 ```
 
+---
+
 # Best Practices
 
 1. **Validation**
@@ -516,6 +542,8 @@ const documentAnalysisAction: Action = {
    - Include clear usage examples
    - Document expected inputs/outputs
    - Explain error scenarios
+
+---
 
 ## Further Reading
 
