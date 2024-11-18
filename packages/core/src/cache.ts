@@ -7,13 +7,13 @@ import type {
     UUID,
 } from "./types";
 
-export interface CacheAdapter {
+export interface ICacheAdapter {
     get(key: string): Promise<string | undefined>;
     set(key: string, value: string): Promise<void>;
     delete(key: string): Promise<void>;
 }
 
-export class MemoryCacheAdapter implements CacheAdapter {
+export class MemoryCacheAdapter implements ICacheAdapter {
     data: Map<string, string>;
 
     constructor(initalData?: Map<string, string>) {
@@ -33,7 +33,7 @@ export class MemoryCacheAdapter implements CacheAdapter {
     }
 }
 
-export class FsCacheAdapter implements CacheAdapter {
+export class FsCacheAdapter implements ICacheAdapter {
     constructor(private dataDir: string) {}
 
     async get(key: string): Promise<string | undefined> {
@@ -66,7 +66,7 @@ export class FsCacheAdapter implements CacheAdapter {
     }
 }
 
-export class DbCacheAdapter implements CacheAdapter {
+export class DbCacheAdapter implements ICacheAdapter {
     constructor(
         private db: IDatabaseCacheAdapter,
         private agentId: UUID
@@ -85,7 +85,9 @@ export class DbCacheAdapter implements CacheAdapter {
     }
 }
 
-export class CacheManager implements ICacheManager {
+export class CacheManager<CacheAdapter extends ICacheAdapter = ICacheAdapter>
+    implements ICacheManager
+{
     adapter: CacheAdapter;
 
     constructor(adapter: CacheAdapter) {

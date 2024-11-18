@@ -161,7 +161,7 @@ ${mediaTranscript.trim()}
         }
         // if text is big, let's send as an attachment
         else if (callbackData.text) {
-            const transcriptFilename = `content/transcript_${Date.now()}.txt`;
+            const transcriptFilename = `content/transcript_${Date.now()}`;
 
             // save the transcript to a file
             await runtime.cacheManager.set(

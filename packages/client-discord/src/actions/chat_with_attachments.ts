@@ -223,7 +223,7 @@ ${currentSummary.trim()}
 `;
             await callback(callbackData);
         } else if (currentSummary.trim()) {
-            const summaryFilename = `content/summary_${Date.now()}.txt`;
+            const summaryFilename = `content/summary_${Date.now()}`;
             await runtime.cacheManager.set(summaryFilename, currentSummary);
             // save the summary to a file
             await callback(
