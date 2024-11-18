@@ -1,10 +1,10 @@
 import { Tweet } from "agent-twitter-client";
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateText } from "@ai16z/eliza/src/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateText } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
 import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `{{timeline}}
@@ -24,38 +24,68 @@ About {{agentName}} (@{{twitterUserName}}):
 {{characterPostExamples}}
 
 # Task: Generate a post in the voice and style of {{agentName}}, aka @{{twitterUserName}}
-Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Try to write something totally different than previous posts. Do not add commentary or ackwowledge this request, just write the post.
+Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Try to write something totally different than previous posts. Do not add commentary or acknowledge this request, just write the post.
 Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.`;
 
+const MAX_TWEET_LENGTH = 280;
+
+/**
+ * Truncate text to fit within the Twitter character limit, ensuring it ends at a complete sentence.
+ */
+function truncateToCompleteSentence(text: string): string {
+    if (text.length <= MAX_TWEET_LENGTH) {
+        return text;
+    }
+
+    // Attempt to truncate at the last period within the limit
+    const truncatedAtPeriod = text.slice(
+        0,
+        text.lastIndexOf(".", MAX_TWEET_LENGTH) + 1
+    );
+    if (truncatedAtPeriod.trim().length > 0) {
+        return truncatedAtPeriod.trim();
+    }
+
+    // If no period is found, truncate to the nearest whitespace
+    const truncatedAtSpace = text.slice(
+        0,
+        text.lastIndexOf(" ", MAX_TWEET_LENGTH)
+    );
+    if (truncatedAtSpace.trim().length > 0) {
+        return truncatedAtSpace.trim() + "...";
+    }
+
+    // Fallback: Hard truncate and add ellipsis
+    return text.slice(0, MAX_TWEET_LENGTH - 3).trim() + "...";
+}
+
 export class TwitterPostClient extends ClientBase {
-
-
-    onReady(postImmediately: boolean = true) { 
+    onReady(postImmediately: boolean = true) {
         const generateNewTweetLoop = () => {
-            const minMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
-            const maxMinutes = parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
-            const randomMinutes = Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) + minMinutes;
+            const minMinutes =
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
+            const maxMinutes =
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
+            const randomMinutes =
+                Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) +
+                minMinutes;
             const delay = randomMinutes * 60 * 1000;
-            
-            setTimeout(
-                () => {
-                    this.generateNewTweet();
-                    generateNewTweetLoop(); // Set up next iteration
-                },
-                delay
-            );
-            
+
+            setTimeout(() => {
+                this.generateNewTweet();
+                generateNewTweetLoop(); // Set up next iteration
+            }, delay);
+
             console.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-    
+
         if (postImmediately) {
             this.generateNewTweet();
         }
         generateNewTweetLoop();
     }
-    
+
     constructor(runtime: IAgentRuntime) {
-        // Initialize the client and pass an optional callback to be called when the client is ready
         super({
             runtime,
         });
@@ -74,7 +104,6 @@ export class TwitterPostClient extends ClientBase {
             let homeTimeline = [];
 
             if (!fs.existsSync("tweetcache")) fs.mkdirSync("tweetcache");
-            // read the file if it exists
             if (fs.existsSync("tweetcache/home_timeline.json")) {
                 homeTimeline = JSON.parse(
                     fs.readFileSync("tweetcache/home_timeline.json", "utf-8")
@@ -108,7 +137,7 @@ export class TwitterPostClient extends ClientBase {
                     timeline: formattedHomeTimeline,
                 }
             );
-            // Generate new tweet
+
             const context = composeContext({
                 state,
                 template:
@@ -122,29 +151,18 @@ export class TwitterPostClient extends ClientBase {
                 modelClass: ModelClass.SMALL,
             });
 
-            const slice = newTweetContent.replaceAll(/\\n/g, "\n").trim();
+            // Replace \n with proper line breaks and trim excess spaces
+            const formattedTweet = newTweetContent
+                .replaceAll(/\\n/g, "\n")
+                .trim();
 
-            const contentLength = 240;
+            // Use the helper function to truncate to complete sentence
+            const content = truncateToCompleteSentence(formattedTweet);
 
-            let content = slice.slice(0, contentLength);
-            // if its bigger than 280, delete the last line
-            if (content.length > 280) {
-                content = content.slice(0, content.lastIndexOf("\n"));
-            }
-            if (content.length > contentLength) {
-                // slice at the last period
-                content = content.slice(0, content.lastIndexOf("."));
-            }
-
-            // if it's still too long, get the period before the last period
-            if (content.length > contentLength) {
-                content = content.slice(0, content.lastIndexOf("."));
-            }
             try {
                 const result = await this.requestQueue.add(
                     async () => await this.twitterClient.sendTweet(content)
                 );
-                // read the body of the response
                 const body = await result.json();
                 const tweetResult = body.data.create_tweet.tweet_results.result;
 
@@ -170,7 +188,6 @@ export class TwitterPostClient extends ClientBase {
                     tweet.conversationId + "-" + this.runtime.agentId;
                 const roomId = stringToUuid(conversationId);
 
-                // make sure the agent is in the room
                 await this.runtime.ensureRoomExists(roomId);
                 await this.runtime.ensureParticipantInRoom(
                     this.runtime.agentId,

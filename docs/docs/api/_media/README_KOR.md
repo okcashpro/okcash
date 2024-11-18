@@ -4,39 +4,39 @@
 
 ## 기능
 
--   🛠 지지 discord 트위터/telegram 연결
--   👥 지지여 모드 agent
--   📚 간단 한 문서를 가져오기와 문서를 번갈아
--   💾 검색 할 수 있는 메모리와 문서 저장
--   🚀 확장 가능 성이 높은, 사용자 정의 클라이언트와 행위를 확장 기능
--   ☁ ️여 모형 지지 llama · openai grok anthropic 등
--   📦 간단 하기도 좋습니다.
+- 🛠 지지 discord 트위터/telegram 연결
+- 👥 지지여 모드 agent
+- 📚 간단 한 문서를 가져오기와 문서를 번갈아
+- 💾 검색 할 수 있는 메모리와 문서 저장
+- 🚀 확장 가능 성이 높은, 사용자 정의 클라이언트와 행위를 확장 기능
+- ☁ ️여 모형 지지 llama · openai grok anthropic 등
+- 📦 간단 하기도 좋습니다.
 
 eliza로 뭘 할 수 있나요?
 
--   🤖 챗 봇
--   🕵 ️ 자주 agents
--   📈 업무 처리 과정을 자동화
--   🎮 게임 npc
+- 🤖 챗 봇
+- 🕵 ️ 자주 agents
+- 📈 업무 처리 과정을 자동화
+- 🎮 게임 npc
 
 # 사용시작
 
 **전제 요구(필수):**
 
--   [Node.js 22 +](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   Nodejs 설치
--   [pnpm](https://pnpm.io/installation)
--   pnpm을사용한다
+- [Node.js 22 +](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- Nodejs 설치
+- [pnpm](https://pnpm.io/installation)
+- pnpm을사용한다
 
 ## 편집.env 파일
 
--   .env.example을.env로 복사하고 적절한 값을 입력한다
--   트위터 환경을 편집하고, 트위터 계정과 비밀번호를 입력한다
+- .env.example을.env로 복사하고 적절한 값을 입력한다
+- 트위터 환경을 편집하고, 트위터 계정과 비밀번호를 입력한다
 
 ## 캐릭터 파일 편집
 
--   파일 `src/core/defaultcharacter.ts ` - 그것을 수정 할 수 있다
--   사용하셔도됩니다 `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` 여러 로봇을 동시에 실행하여 캐릭터를 불러옵니다.
+- 파일 `src/core/defaultcharacter.ts ` - 그것을 수정 할 수 있다
+- 사용하셔도됩니다 `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` 여러 로봇을 동시에 실행하여 캐릭터를 불러옵니다.
 
 아이디와 캐릭터 파일 설정이 완료되었다면, 다음 명령줄을 입력하여 로봇을 실행시키십시오:
 
@@ -163,9 +163,9 @@ pnpm test:sqljs    # Run tests with SQL.js
 
 테스트는 src/\*_/_.test.ts 파일에 있는 Jest로 작성된다.테스트 환경 설정은 다음과 같습니다:
 
--   .env.test에서 환경 변수를 불러온다
--   장기 실행 테스트를 실행하기 위해 2분 제한 시간을 사용합니다
--   esm 모듈을 지원한다
--   테스트 실행 순서 (--runInBand)
+- .env.test에서 환경 변수를 불러온다
+- 장기 실행 테스트를 실행하기 위해 2분 제한 시간을 사용합니다
+- esm 모듈을 지원한다
+- 테스트 실행 순서 (--runInBand)
 
 새 테스트를 만들려면, 테스트할 코드 옆에.test.ts 파일을 추가하세요.

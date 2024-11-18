@@ -20,7 +20,7 @@
 
 [packages/core/src/types.ts:641](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L641)
 
-***
+---
 
 ### closeBrowser()
 
@@ -34,7 +34,7 @@
 
 [packages/core/src/types.ts:642](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L642)
 
-***
+---
 
 ### getPageContent()
 
