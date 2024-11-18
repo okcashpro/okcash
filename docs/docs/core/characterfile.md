@@ -6,6 +6,8 @@ sidebar_position: 4
 
 Character files are JSON-formatted configurations that define an AI character's personality, knowledge, and behavior patterns. This guide explains how to create effective character files for use with Eliza agents.
 
+---
+
 ## Overview
 
 A `characterfile` implements the [Character](/api/type-aliases/character) type and defines the character's:
@@ -205,6 +207,8 @@ The `settings` object defines additional configurations like secrets and voice m
 }
 ```
 
+---
+
 ## Example: Complete Character File
 
 ```json
@@ -290,6 +294,8 @@ npx knowledge2character <character-file> <knowledge-file>
 - Show character-specific responses
 - Demonstrate typical interaction patterns
 
+---
+
 ## Tips for Quality
 
 1. **Bio and Lore**
@@ -315,6 +321,8 @@ npx knowledge2character <character-file> <knowledge-file>
 - Focus on relevant information
 - Organize in digestible chunks
 - Update regularly to maintain relevance
+
+---
 
 ## Further Reading
 
