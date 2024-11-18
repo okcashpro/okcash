@@ -1,10 +1,12 @@
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
 import {
     Content,
     IAgentRuntime,
     IImageDescriptionService,
+    embeddingZeroVector,
     Memory,
     State,
+    elizaLogger,
+    stringToUuid,
     UUID,
 } from "@ai16z/eliza";
 import {
@@ -19,9 +21,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { glob } from "glob";
-
-import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -172,14 +171,14 @@ export class ClientBase extends EventEmitter {
             this.runtime.character.style.post.join();
 
         try {
-            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
+            // console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
             if (fs.existsSync(this.tweetCacheFilePath)) {
                 // make it?
                 const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
                 this.lastCheckedTweetId = parseInt(data.trim());
             } else {
-                console.warn("Tweet cache file not found.");
-                console.warn(this.tweetCacheFilePath);
+                // console.warn("Tweet cache file not found.");
+                // console.warn(this.tweetCacheFilePath);
             }
         } catch (error) {
             console.error(
@@ -274,24 +273,23 @@ export class ClientBase extends EventEmitter {
             console.log("Twitter user ID:", userId);
             this.twitterUserId = userId;
 
-             // Initialize Twitter profile
-             const profile = await this.initializeProfile();
-             if (profile) {
-                 console.log("Twitter profile initialized:", profile);
- 
-                 // Store profile info for use in responses
-                 this.runtime.character = {
-                     ...this.runtime.character,
-                     twitterProfile: {
-                         username: profile.username,
-                         screenName: profile.screenName,
-                         bio: profile.bio,
-                         nicknames: profile.nicknames
-                     }
-                 };
-             }
- 
- 
+            // Initialize Twitter profile
+            const profile = await this.initializeProfile();
+            if (profile) {
+                // console.log("Twitter profile initialized:", profile);
+
+                // Store profile info for use in responses
+                this.runtime.character = {
+                    ...this.runtime.character,
+                    twitterProfile: {
+                        username: profile.username,
+                        screenName: profile.screenName,
+                        bio: profile.bio,
+                        nicknames: profile.nicknames,
+                    },
+                };
+            }
+
             await this.populateTimeline();
 
             this.onReady();
@@ -635,8 +633,15 @@ export class ClientBase extends EventEmitter {
                 return {
                     username,
                     screenName: profile.name || this.runtime.character.name,
-                    bio: profile.biography || typeof this.runtime.character.bio === 'string' ? this.runtime.character.bio as string : this.runtime.character.bio.length > 0 ? this.runtime.character.bio[0] : "",
-                    nicknames: this.runtime.character.twitterProfile?.nicknames || []
+                    bio:
+                        profile.biography ||
+                        typeof this.runtime.character.bio === "string"
+                            ? (this.runtime.character.bio as string)
+                            : this.runtime.character.bio.length > 0
+                              ? this.runtime.character.bio[0]
+                              : "",
+                    nicknames:
+                        this.runtime.character.twitterProfile?.nicknames || [],
                 };
             });
 
@@ -646,8 +651,14 @@ export class ClientBase extends EventEmitter {
             return {
                 username: this.runtime.character.name,
                 screenName: username,
-                bio: typeof this.runtime.character.bio === 'string' ? this.runtime.character.bio as string : this.runtime.character.bio.length > 0 ? this.runtime.character.bio[0] : "",
-                nicknames: this.runtime.character.twitterProfile?.nicknames || []
+                bio:
+                    typeof this.runtime.character.bio === "string"
+                        ? (this.runtime.character.bio as string)
+                        : this.runtime.character.bio.length > 0
+                          ? this.runtime.character.bio[0]
+                          : "",
+                nicknames:
+                    this.runtime.character.twitterProfile?.nicknames || [],
             };
         }
     }
