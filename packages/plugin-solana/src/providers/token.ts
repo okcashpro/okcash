@@ -35,7 +35,7 @@ const PROVIDER_CONFIG = {
 
 export class TokenProvider {
     private cache: NodeCache;
-    private cacheDir: string = "solana/tokens";
+    private cacheKey: string = "solana/tokens";
 
     constructor(
         //  private connection: Connection,
@@ -46,34 +46,31 @@ export class TokenProvider {
         this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
     }
 
-    private async readFromCache<T>(cacheKey: string): Promise<T | null> {
-        const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        const cached = await this.cacheManager.get<T>(filePath);
+    private async readFromCache<T>(key: string): Promise<T | null> {
+        const cached = await this.cacheManager.get<T>(
+            path.join(this.cacheKey, key)
+        );
         return cached;
     }
 
-    private async writeToCache<T>(cacheKey: string, data: T): Promise<void> {
-        const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-
-        await this.cacheManager.set(filePath, data, {
+    private async writeToCache<T>(key: string, data: T): Promise<void> {
+        await this.cacheManager.set(path.join(this.cacheKey, key), data, {
             expires: Date.now() + 5 * 60 * 1000,
         });
-
-        console.log(`Cached data written to key: ${cacheKey}`);
     }
 
-    private async getCachedData<T>(cacheKey: string): Promise<T | null> {
+    private async getCachedData<T>(key: string): Promise<T | null> {
         // Check in-memory cache first
-        const cachedData = this.cache.get<T>(cacheKey);
+        const cachedData = this.cache.get<T>(key);
         if (cachedData) {
             return cachedData;
         }
 
         // Check file-based cache
-        const fileCachedData = await this.readFromCache<T>(cacheKey);
+        const fileCachedData = await this.readFromCache<T>(key);
         if (fileCachedData) {
             // Populate in-memory cache
-            this.cache.set(cacheKey, fileCachedData);
+            this.cache.set(key, fileCachedData);
             return fileCachedData;
         }
 

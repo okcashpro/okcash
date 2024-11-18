@@ -14,7 +14,7 @@ import youtubeDl from "youtube-dl-exec";
 
 export class VideoService extends Service {
     static serviceType: ServiceType = ServiceType.VIDEO;
-    private cacheKey = "video";
+    private cacheKey = "content/video";
     private dataDir = "./content_cache";
 
     private queue: string[] = [];

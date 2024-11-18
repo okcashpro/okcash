@@ -14,14 +14,15 @@ const orderBookProvider: Provider = {
 
         // Read the order book from the JSON file
         const orderBookPath =
-            runtime.getSetting("orderBookPath") ?? "solana/orderBook.json";
+            runtime.getSetting("orderBookPath") ?? "solana/orderBook";
 
-        let orderBook: Order[] = [];
+        const orderBook: Order[] = [];
 
-        const cachedOrderBook = await runtime.cacheManager.get(orderBookPath);
+        const cachedOrderBook =
+            await runtime.cacheManager.get<Order[]>(orderBookPath);
 
         if (cachedOrderBook) {
-            orderBook = JSON.parse(cachedOrderBook) as Order[];
+            orderBook.push(...cachedOrderBook);
         }
 
         // Filter the orders for the current user

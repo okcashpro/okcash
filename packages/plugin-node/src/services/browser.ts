@@ -61,7 +61,7 @@ export class BrowserService extends Service {
     private context: BrowserContext | undefined;
     private blocker: PlaywrightBlocker | undefined;
     private captchaSolver: CaptchaSolver;
-    private CONTENT_CACHE_DIR = "content/browser";
+    private cacheKey = "content/browser";
 
     private queue: string[] = [];
     private processing: boolean = false;
@@ -166,7 +166,7 @@ export class BrowserService extends Service {
         const cached = await runtime.cacheManager.get<{
             url: string;
             content: PageContent;
-        }>(`${this.CONTENT_CACHE_DIR}/${cacheKey}`);
+        }>(`${this.cacheKey}/${cacheKey}`);
 
         if (cached) {
             return cached.content;
@@ -217,10 +217,10 @@ export class BrowserService extends Service {
                 title + "\n" + bodyContent
             );
             const content = { title, description, bodyContent };
-            await runtime.cacheManager.set(
-                `${this.CONTENT_CACHE_DIR}/${cacheKey}`,
-                { url, content }
-            );
+            await runtime.cacheManager.set(`${this.cacheKey}/${cacheKey}`, {
+                url,
+                content,
+            });
             return content;
         } catch (error) {
             console.error("Error:", error);
