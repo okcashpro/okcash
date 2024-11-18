@@ -2,9 +2,7 @@
 // It should just transfer tokens from the agent's wallet to the recipient.
 
 import {
-    settings,
     ActionExample,
-    Content,
     HandlerCallback,
     IAgentRuntime,
     Memory,
@@ -13,6 +11,7 @@ import {
     type Action,
     composeContext,
     generateObject,
+    elizaLogger,
 } from "@ai16z/eliza";
 import {
     getStarknetAccount,
@@ -70,7 +69,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        console.log("Starting TRANSFER_TOKEN handler...");
+        elizaLogger.log("Starting SEND_TOKEN handler...");
 
         // Initialize or update state
         if (!state) {
@@ -92,11 +91,11 @@ export default {
             modelClass: ModelClass.MEDIUM,
         });
 
-        console.log("Transfer content:", content);
+        elizaLogger.debug("Transfer content:", content);
 
         // Validate transfer content
         if (!isTransferContent(content)) {
-            console.error("Invalid content for TRANSFER_TOKEN action.");
+            elizaLogger.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
                     text: "Not enough information to transfer tokens. Please respond with token address, recipient, and amount.",
@@ -120,7 +119,7 @@ export default {
                 amountWei
             );
 
-            console.log(
+            elizaLogger.success(
                 "Transferring",
                 amountWei,
                 "of",
@@ -131,7 +130,7 @@ export default {
 
             const tx = await account.execute(transferCall);
 
-            console.log(
+            elizaLogger.success(
                 "Transfer completed successfully! tx: " + tx.transaction_hash
             );
             if (callback) {
@@ -145,7 +144,7 @@ export default {
 
             return true;
         } catch (error) {
-            console.error("Error during token transfer:", error);
+            elizaLogger.error("Error during token transfer:", error);
             if (callback) {
                 callback({
                     text: `Error transferring tokens: ${error.message}`,

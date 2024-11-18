@@ -1,5 +1,6 @@
 import {
     ActionExample,
+    elizaLogger,
     HandlerCallback,
     IAgentRuntime,
     Memory,
@@ -90,6 +91,7 @@ export const deployToken: Action = {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
+        elizaLogger.log("Starting EXECUTE_STARKNET_SWAP handler...");
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         } else {
@@ -106,8 +108,6 @@ export const deployToken: Action = {
             context: swapContext,
             modelClass: ModelClass.MEDIUM,
         });
-
-        console.log("Response:", response);
 
         if (!isSwapContent(response)) {
             callback?.({ text: "Invalid swap content, please try again." });
@@ -134,7 +134,9 @@ export const deployToken: Action = {
                 }
             );
 
-            console.log("Swap completed successfully!");
+            elizaLogger.log(
+                "Swap completed successfully!" + swapResult.transactionHash
+            );
             callback?.({
                 text:
                     "Swap completed successfully! tx: " +
@@ -143,7 +145,7 @@ export const deployToken: Action = {
 
             return true;
         } catch (error) {
-            console.error("Error during token swap:", error);
+            elizaLogger.error("Error during token swap:", error);
             callback?.({ text: `Error during swap:` });
             return false;
         }
