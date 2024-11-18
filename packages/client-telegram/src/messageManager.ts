@@ -89,6 +89,10 @@ The goal is to decide whether {{agentName}} should respond to the last message.
 
 {{recentMessages}}
 
+Thread of Tweets You Are Replying To:
+
+{{formattedConversation}}
+
 # INSTRUCTIONS: Choose the option that best describes {{agentName}}'s response to the last message. Ignore messages if they are addressed to someone else.
 ` + shouldRespondFooter;
 
@@ -122,7 +126,12 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 {{recentMessages}}
 
-# Instructions: Write the next message for {{agentName}}. Include an action, if appropriate. {{actionNames}}
+# Task: Generate a post/reply in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}) while using the thread of tweets as additional context:
+Current Post:
+{{currentPost}}
+Thread of Tweets You Are Replying To:
+
+{{formattedConversation}}
 ` + messageCompletionFooter;
 
 export class MessageManager {

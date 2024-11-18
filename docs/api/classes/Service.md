@@ -40,7 +40,7 @@
 
 #### Type Parameters
 
-• **T** *extends* [`Service`](Service.md)
+• **T** _extends_ [`Service`](Service.md)
 
 #### Returns
 

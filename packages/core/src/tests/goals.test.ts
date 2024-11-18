@@ -1,5 +1,22 @@
-import { getGoals, formatGoalsAsString, updateGoal, createGoal } from "../goals";
-import { type Goal, type IAgentRuntime, type UUID, Action, GoalStatus, HandlerCallback, IMemoryManager, Memory, ModelProviderName, Service, State } from "../types";
+import {
+    getGoals,
+    formatGoalsAsString,
+    updateGoal,
+    createGoal,
+} from "../goals";
+import {
+    type Goal,
+    type IAgentRuntime,
+    type UUID,
+    Action,
+    GoalStatus,
+    HandlerCallback,
+    IMemoryManager,
+    Memory,
+    ModelProviderName,
+    Service,
+    State,
+} from "../types";
 
 // Mock the database adapter
 const mockDatabaseAdapter = {
@@ -36,26 +53,26 @@ const mockRuntime: IAgentRuntime = {
             secrets: {},
             voice: {
                 model: "",
-                url: ""
+                url: "",
             },
             model: "",
-            embeddingModel: ""
+            embeddingModel: "",
         },
         clientConfig: {
             discord: {
                 shouldIgnoreBotMessages: false,
-                shouldIgnoreDirectMessages: false
+                shouldIgnoreDirectMessages: false,
             },
             telegram: {
                 shouldIgnoreBotMessages: false,
-                shouldIgnoreDirectMessages: false
-            }
+                shouldIgnoreDirectMessages: false,
+            },
         },
         style: {
             all: [],
             chat: [],
-            post: []
-        }
+            post: [],
+        },
     },
     providers: [],
     actions: [],
@@ -79,31 +96,60 @@ const mockRuntime: IAgentRuntime = {
     getConversationLength: function (): number {
         throw new Error("Function not implemented.");
     },
-    processActions: function (_message: Memory, _responses: Memory[], _state?: State, _callback?: HandlerCallback): Promise<void> {
+    processActions: function (
+        _message: Memory,
+        _responses: Memory[],
+        _state?: State,
+        _callback?: HandlerCallback
+    ): Promise<void> {
         throw new Error("Function not implemented.");
     },
-    evaluate: function (_message: Memory, _state?: State, _didRespond?: boolean): Promise<string[]> {
+    evaluate: function (
+        _message: Memory,
+        _state?: State,
+        _didRespond?: boolean
+    ): Promise<string[]> {
         throw new Error("Function not implemented.");
     },
-    ensureParticipantExists: function (_userId: UUID, _roomId: UUID): Promise<void> {
+    ensureParticipantExists: function (
+        _userId: UUID,
+        _roomId: UUID
+    ): Promise<void> {
         throw new Error("Function not implemented.");
     },
-    ensureUserExists: function (_userId: UUID, _userName: string | null, _name: string | null, _source: string | null): Promise<void> {
+    ensureUserExists: function (
+        _userId: UUID,
+        _userName: string | null,
+        _name: string | null,
+        _source: string | null
+    ): Promise<void> {
         throw new Error("Function not implemented.");
     },
     registerAction: function (_action: Action): void {
         throw new Error("Function not implemented.");
     },
-    ensureConnection: function (_userId: UUID, _roomId: UUID, _userName?: string, _userScreenName?: string, _source?: string): Promise<void> {
+    ensureConnection: function (
+        _userId: UUID,
+        _roomId: UUID,
+        _userName?: string,
+        _userScreenName?: string,
+        _source?: string
+    ): Promise<void> {
         throw new Error("Function not implemented.");
     },
-    ensureParticipantInRoom: function (_userId: UUID, _roomId: UUID): Promise<void> {
+    ensureParticipantInRoom: function (
+        _userId: UUID,
+        _roomId: UUID
+    ): Promise<void> {
         throw new Error("Function not implemented.");
     },
     ensureRoomExists: function (_roomId: UUID): Promise<void> {
         throw new Error("Function not implemented.");
     },
-    composeState: function (_message: Memory, _additionalKeys?: { [key: string]: unknown; }): Promise<State> {
+    composeState: function (
+        _message: Memory,
+        _additionalKeys?: { [key: string]: unknown }
+    ): Promise<State> {
         throw new Error("Function not implemented.");
     },
     updateRecentMessageState: function (_state: State): Promise<State> {
@@ -111,7 +157,7 @@ const mockRuntime: IAgentRuntime = {
     },
     getService: function (_service: string): typeof Service | null {
         throw new Error("Function not implemented.");
-    }
+    },
 };
 
 // Sample data
@@ -129,7 +175,9 @@ const sampleGoal: Goal = {
 
 describe("getGoals", () => {
     it("retrieves goals successfully", async () => {
-        (mockDatabaseAdapter.getGoals as jest.Mock).mockResolvedValue([sampleGoal]);
+        (mockDatabaseAdapter.getGoals as jest.Mock).mockResolvedValue([
+            sampleGoal,
+        ]);
 
         const result = await getGoals({
             runtime: mockRuntime,
@@ -172,9 +220,13 @@ describe("formatGoalsAsString", () => {
 
 describe("updateGoal", () => {
     it("updates a goal successfully", async () => {
-        (mockDatabaseAdapter.updateGoal as jest.Mock).mockResolvedValue(undefined);
+        (mockDatabaseAdapter.updateGoal as jest.Mock).mockResolvedValue(
+            undefined
+        );
 
-        await expect(updateGoal({ runtime: mockRuntime, goal: sampleGoal })).resolves.toBeUndefined();
+        await expect(
+            updateGoal({ runtime: mockRuntime, goal: sampleGoal })
+        ).resolves.toBeUndefined();
         expect(mockDatabaseAdapter.updateGoal).toHaveBeenCalledWith(sampleGoal);
     });
 
@@ -183,17 +235,21 @@ describe("updateGoal", () => {
             new Error("Failed to update goal")
         );
 
-        await expect(updateGoal({ runtime: mockRuntime, goal: sampleGoal })).rejects.toThrow(
-            "Failed to update goal"
-        );
+        await expect(
+            updateGoal({ runtime: mockRuntime, goal: sampleGoal })
+        ).rejects.toThrow("Failed to update goal");
     });
 });
 
 describe("createGoal", () => {
     it("creates a goal successfully", async () => {
-        (mockDatabaseAdapter.createGoal as jest.Mock).mockResolvedValue(undefined);
+        (mockDatabaseAdapter.createGoal as jest.Mock).mockResolvedValue(
+            undefined
+        );
 
-        await expect(createGoal({ runtime: mockRuntime, goal: sampleGoal })).resolves.toBeUndefined();
+        await expect(
+            createGoal({ runtime: mockRuntime, goal: sampleGoal })
+        ).resolves.toBeUndefined();
         expect(mockDatabaseAdapter.createGoal).toHaveBeenCalledWith(sampleGoal);
     });
 
@@ -202,8 +258,8 @@ describe("createGoal", () => {
             new Error("Failed to create goal")
         );
 
-        await expect(createGoal({ runtime: mockRuntime, goal: sampleGoal })).rejects.toThrow(
-            "Failed to create goal"
-        );
+        await expect(
+            createGoal({ runtime: mockRuntime, goal: sampleGoal })
+        ).rejects.toThrow("Failed to create goal");
     });
 });
