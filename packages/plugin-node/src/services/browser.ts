@@ -50,6 +50,12 @@ async function generateSummary(
     };
 }
 
+type PageContent = {
+    title: string;
+    description: string;
+    bodyContent: string;
+};
+
 export class BrowserService extends Service {
     private browser: Browser | undefined;
     private context: BrowserContext | undefined;
@@ -107,7 +113,7 @@ export class BrowserService extends Service {
     async getPageContent(
         url: string,
         runtime: IAgentRuntime
-    ): Promise<{ title: string; description: string; bodyContent: string }> {
+    ): Promise<PageContent> {
         await this.initialize();
         this.queue.push(url);
         this.processQueue(runtime);
@@ -155,14 +161,15 @@ export class BrowserService extends Service {
     private async fetchPageContent(
         url: string,
         runtime: IAgentRuntime
-    ): Promise<{ title: string; description: string; bodyContent: string }> {
+    ): Promise<PageContent> {
         const cacheKey = this.getCacheKey(url);
-        const cached = await runtime.cacheManager.get(
-            `${this.CONTENT_CACHE_DIR}/${cacheKey}`
-        );
+        const cached = await runtime.cacheManager.get<{
+            url: string;
+            content: PageContent;
+        }>(`${this.CONTENT_CACHE_DIR}/${cacheKey}`);
 
         if (cached) {
-            return JSON.parse(cached).content;
+            return cached.content;
         }
 
         let page: Page | undefined;
@@ -212,7 +219,7 @@ export class BrowserService extends Service {
             const content = { title, description, bodyContent };
             await runtime.cacheManager.set(
                 `${this.CONTENT_CACHE_DIR}/${cacheKey}`,
-                JSON.stringify({ url, content })
+                { url, content }
             );
             return content;
         } catch (error) {

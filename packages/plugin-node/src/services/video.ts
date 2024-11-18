@@ -9,22 +9,25 @@ import { stringToUuid } from "@ai16z/eliza";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
+import { tmpdir } from "os";
 import youtubeDl from "youtube-dl-exec";
+
 export class VideoService extends Service {
     static serviceType: ServiceType = ServiceType.VIDEO;
-    private CONTENT_CACHE_DIR = "./content_cache";
+    private cacheKey = "video";
+    private dataDir = "./content_cache";
 
     private queue: string[] = [];
     private processing: boolean = false;
 
     constructor() {
         super();
-        this.ensureCacheDirectoryExists();
+        this.ensureDataDirectoryExists();
     }
 
-    private ensureCacheDirectoryExists() {
-        if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
-            fs.mkdirSync(this.CONTENT_CACHE_DIR);
+    private ensureDataDirectoryExists() {
+        if (!fs.existsSync(this.dataDir)) {
+            fs.mkdirSync(this.dataDir);
         }
     }
 
@@ -38,7 +41,7 @@ export class VideoService extends Service {
 
     public async downloadMedia(url: string): Promise<string> {
         const videoId = this.getVideoId(url);
-        const outputFile = path.join(this.CONTENT_CACHE_DIR, `${videoId}.mp4`);
+        const outputFile = path.join(this.dataDir, `${videoId}.mp4`);
 
         // if it already exists, return it
         if (fs.existsSync(outputFile)) {
@@ -60,7 +63,7 @@ export class VideoService extends Service {
 
     public async downloadVideo(videoInfo: any): Promise<string> {
         const videoId = this.getVideoId(videoInfo.webpage_url);
-        const outputFile = path.join(this.CONTENT_CACHE_DIR, `${videoId}.mp4`);
+        const outputFile = path.join(this.dataDir, `${videoId}.mp4`);
 
         // if it already exists, return it
         if (fs.existsSync(outputFile)) {
@@ -133,13 +136,13 @@ export class VideoService extends Service {
                 /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/
             )?.[1] || "";
         const videoUuid = this.getVideoId(videoId);
-        const cacheKey = `${this.CONTENT_CACHE_DIR}/${videoUuid}`;
+        const cacheKey = `${this.cacheKey}/${videoUuid}`;
 
-        const cached = await runtime.cacheManager.get(cacheKey);
+        const cached = await runtime.cacheManager.get<Media>(cacheKey);
 
         if (cached) {
             console.log("Returning cached video file");
-            return JSON.parse(cached) as Media;
+            return cached;
         }
 
         console.log("Cache miss, processing video");
@@ -157,7 +160,7 @@ export class VideoService extends Service {
             text: transcript,
         };
 
-        await runtime.cacheManager.set(cacheKey, JSON.stringify(result));
+        await runtime.cacheManager.set(cacheKey, result);
 
         return result;
     }
@@ -302,11 +305,12 @@ export class VideoService extends Service {
     ): Promise<string> {
         console.log("Preparing audio for transcription...");
         const mp4FilePath = path.join(
-            this.CONTENT_CACHE_DIR,
+            this.dataDir,
             `${this.getVideoId(url)}.mp4`
         );
+
         const mp3FilePath = path.join(
-            this.CONTENT_CACHE_DIR,
+            this.dataDir,
             `${this.getVideoId(url)}.mp3`
         );
 
@@ -368,7 +372,7 @@ export class VideoService extends Service {
         console.log("Downloading audio");
         outputFile =
             outputFile ??
-            path.join(this.CONTENT_CACHE_DIR, `${this.getVideoId(url)}.mp3`);
+            path.join(this.dataDir, `${this.getVideoId(url)}.mp3`);
 
         try {
             if (url.endsWith(".mp4") || url.includes(".mp4?")) {
@@ -376,7 +380,7 @@ export class VideoService extends Service {
                     "Direct MP4 file detected, downloading and converting to MP3"
                 );
                 const tempMp4File = path.join(
-                    this.CONTENT_CACHE_DIR,
+                    tmpdir(),
                     `${this.getVideoId(url)}.mp4`
                 );
                 const response = await fetch(url);

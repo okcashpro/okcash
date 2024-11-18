@@ -486,7 +486,7 @@ export interface IDatabaseCacheAdapter {
         value: string;
     }): Promise<boolean>;
 
-    delCached(params: { agentId: UUID; key: string }): Promise<boolean>;
+    deleteCached(params: { agentId: UUID; key: string }): Promise<boolean>;
 }
 
 export interface IMemoryManager {
@@ -528,12 +528,15 @@ export interface IMemoryManager {
     countMemories(roomId: UUID, unique?: boolean): Promise<number>;
 }
 
-export interface ICacheManager {
-    get(key: string): Promise<string | undefined>;
-    set(key: string, value: string): Promise<void>;
-    del(key: string): Promise<void>;
-}
+export type CacheOptions = {
+    expires?: number;
+};
 
+export interface ICacheManager {
+    get<T = unknown>(key: string): Promise<T | undefined>;
+    set<T>(key: string, value: T, options?: CacheOptions): Promise<void>;
+    delete(key: string): Promise<void>;
+}
 
 export abstract class Service {
     private static instance: Service | null = null;

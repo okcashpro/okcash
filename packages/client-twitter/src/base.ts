@@ -80,7 +80,6 @@ export class ClientBase extends EventEmitter {
     imageDescriptionService: IImageDescriptionService;
     temperature: number = 0.5;
 
-    private tweetCache: Map<string, Tweet> = new Map();
     requestQueue: RequestQueue = new RequestQueue();
     twitterUserId: string;
 
@@ -90,32 +89,20 @@ export class ClientBase extends EventEmitter {
             return;
         }
 
-        this.runtime.cacheManager.set(
-            `twitter/tweets/${tweet.id}`,
-            JSON.stringify(tweet)
-        );
-
-        this.tweetCache.set(tweet.id, tweet);
+        this.runtime.cacheManager.set(`twitter/tweets/${tweet.id}`, tweet);
     }
 
     async getCachedTweet(tweetId: string): Promise<Tweet | undefined> {
-        if (this.tweetCache.has(tweetId)) {
-            return this.tweetCache.get(tweetId);
-        }
-
-        const cached = await this.runtime.cacheManager.get(
+        const cached = await this.runtime.cacheManager.get<Tweet>(
             `twitter/tweets/${tweetId}`
         );
 
-        if (cached) {
-            return JSON.parse(cached) as Tweet;
-        }
-
-        return undefined;
+        return cached;
     }
 
     async getTweet(tweetId: string): Promise<Tweet> {
         const cachedTweet = await this.getCachedTweet(tweetId);
+
         if (cachedTweet) {
             return cachedTweet;
         }
@@ -145,23 +132,6 @@ export class ClientBase extends EventEmitter {
             ClientBase._twitterClient = this.twitterClient;
         }
 
-        // this.tweetCacheFilePath = path.join(
-        //     this.runtime.dataDir,
-        //     "/tweetcache/latest_checked_tweet_id.txt"
-        // );
-
-        // const cookiesFilePath = path.join(
-        //     this.runtime.dataDir,
-        //     "tweetcache/" +
-        //         this.runtime.getSetting("TWITTER_USERNAME") +
-        //         "_cookies.json"
-        // );
-
-        // const dir = path.dirname(cookiesFilePath);
-        // if (!fs.existsSync(dir)) {
-        //     fs.mkdirSync(dir, { recursive: true });
-        // }
-
         this.directions =
             "- " +
             this.runtime.character.style.all.join("\n- ") +
@@ -177,13 +147,12 @@ export class ClientBase extends EventEmitter {
                 const cookiesArray = JSON.parse(
                     this.runtime.getSetting("TWITTER_COOKIES")
                 );
+
                 await this.setCookiesFromArray(cookiesArray);
             } else {
                 const cachedCookies = await this.getCachedCookies();
-
                 if (cachedCookies) {
-                    const cookiesArray = JSON.parse(cachedCookies);
-                    await this.setCookiesFromArray(cookiesArray);
+                    await this.setCookiesFromArray(cachedCookies);
                 } else {
                     await this.twitterClient.login(
                         this.runtime.getSetting("TWITTER_USERNAME"),
@@ -563,54 +532,47 @@ export class ClientBase extends EventEmitter {
     }
 
     async loadCachedLatestCheckedTweetId(): Promise<void> {
-        const latestCheckedTweetId = await this.runtime.cacheManager.get(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id.txt`
-        );
+        const latestCheckedTweetId =
+            await this.runtime.cacheManager.get<number>(
+                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id`
+            );
 
         if (latestCheckedTweetId) {
-            this.lastCheckedTweetId = parseInt(latestCheckedTweetId);
+            this.lastCheckedTweetId = latestCheckedTweetId;
         }
     }
 
     async cacheLatestCheckedTweetId() {
         if (this.lastCheckedTweetId) {
             await this.runtime.cacheManager.set(
-                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id.txt`,
-                this.lastCheckedTweetId.toString()
+                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id`,
+                this.lastCheckedTweetId
             );
         }
     }
 
     async getCachedTimeline(): Promise<Tweet[] | undefined> {
-        const cached = await this.runtime.cacheManager.get(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline.json`
+        return await this.runtime.cacheManager.get<Tweet[]>(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline`
         );
-
-        if (cached) {
-            return JSON.parse(cached) as Tweet[];
-        }
-
-        return undefined;
     }
 
     async cacheTimeline(timeline: Tweet[]) {
         await this.runtime.cacheManager.set(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline.json`,
-            JSON.stringify(timeline)
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline`,
+            timeline
         );
     }
 
     async getCachedCookies() {
-        // Cache
-        return await this.runtime.cacheManager.get(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies.json`
+        return await this.runtime.cacheManager.get<any[]>(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`
         );
     }
     async cacheCookies(cookies: any[]) {
-        // Cache
-        return await this.runtime.cacheManager.set(
-            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies.json`,
-            JSON.stringify(cookies)
+        await this.runtime.cacheManager.set(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`,
+            cookies
         );
     }
 }

@@ -48,32 +48,17 @@ export class TokenProvider {
 
     private async readFromCache<T>(cacheKey: string): Promise<T | null> {
         const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        const cached = await this.cacheManager.get(filePath);
-        if (cached) {
-            const parsed = JSON.parse(cached);
-            const now = Date.now();
-            if (now < parsed.expiry) {
-                console.log(
-                    `Reading cached data from file for key: ${cacheKey}`
-                );
-                return parsed.data as T;
-            } else {
-                console.log(
-                    `Cache expired for key: ${cacheKey}. Deleting file.`
-                );
-                await this.cacheManager.del(cacheKey);
-            }
-        }
-        return null;
+        const cached = await this.cacheManager.get<T>(filePath);
+        return cached;
     }
 
     private async writeToCache<T>(cacheKey: string, data: T): Promise<void> {
         const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        const cacheData = {
-            data: data,
-            expiry: Date.now() + 300000, // 5 minutes in milliseconds
-        };
-        await this.cacheManager.set(filePath, JSON.stringify(cacheData));
+
+        await this.cacheManager.set(filePath, data, {
+            expires: Date.now() + 5 * 60 * 1000,
+        });
+
         console.log(`Cached data written to key: ${cacheKey}`);
     }
 

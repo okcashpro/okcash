@@ -1,11 +1,36 @@
 import path from "path";
 import fs from "fs/promises";
-import type { ICacheManager, IDatabaseCacheAdapter, UUID } from "./types";
+import type {
+    CacheOptions,
+    ICacheManager,
+    IDatabaseCacheAdapter,
+    UUID,
+} from "./types";
 
 export interface CacheAdapter {
     get(key: string): Promise<string | undefined>;
     set(key: string, value: string): Promise<void>;
-    del(key: string): Promise<void>;
+    delete(key: string): Promise<void>;
+}
+
+export class MemoryCacheAdapter implements CacheAdapter {
+    data: Map<string, string>;
+
+    constructor(initalData?: Map<string, string>) {
+        this.data = initalData ?? new Map<string, string>();
+    }
+
+    async get(key: string): Promise<string | undefined> {
+        return this.data.get(key);
+    }
+
+    async set(key: string, value: string): Promise<void> {
+        this.data.set(key, value);
+    }
+
+    async delete(key: string): Promise<void> {
+        this.data.delete(key);
+    }
 }
 
 export class FsCacheAdapter implements CacheAdapter {
@@ -31,7 +56,7 @@ export class FsCacheAdapter implements CacheAdapter {
         }
     }
 
-    async del(key: string): Promise<void> {
+    async delete(key: string): Promise<void> {
         try {
             const filePath = path.join(this.dataDir, key);
             await fs.unlink(filePath);
@@ -55,8 +80,8 @@ export class DbCacheAdapter implements CacheAdapter {
         await this.db.setCached({ agentId: this.agentId, key, value });
     }
 
-    async del(key: string): Promise<void> {
-        await this.db.delCached({ agentId: this.agentId, key });
+    async delete(key: string): Promise<void> {
+        await this.db.deleteCached({ agentId: this.agentId, key });
     }
 }
 
@@ -67,15 +92,33 @@ export class CacheManager implements ICacheManager {
         this.adapter = adapter;
     }
 
-    async get(key: string): Promise<string | undefined> {
-        return this.adapter.get(key);
+    async get<T = unknown>(key: string): Promise<T | undefined> {
+        const data = await this.adapter.get(key);
+
+        if (data) {
+            const { value, expires } = JSON.parse(data) as {
+                value: T;
+                expires: number;
+            };
+
+            if (!expires || expires > Date.now()) {
+                return value;
+            }
+
+            this.adapter.delete(key).catch(() => {});
+        }
+
+        return undefined;
     }
 
-    async del(key: string): Promise<void> {
-        return this.adapter.del(key);
+    async set<T>(key: string, value: T, opts?: CacheOptions): Promise<void> {
+        return this.adapter.set(
+            key,
+            JSON.stringify({ value, expires: opts?.expires ?? 0 })
+        );
     }
 
-    async set(key: string, value: string): Promise<void> {
-        return this.adapter.set(key, value);
+    async delete(key: string): Promise<void> {
+        return this.adapter.delete(key);
     }
 }
