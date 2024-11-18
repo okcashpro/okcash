@@ -1,4 +1,4 @@
-import type { CastId, FarcasterNetwork, Signer } from "@farcaster/hub-nodejs";
+import { CastId, FarcasterNetwork, Signer } from "@farcaster/hub-nodejs";
 import { CastType, makeCastAdd, makeCastAddData } from "@farcaster/hub-nodejs";
 import type { FarcasterClient } from "./client";
 import type { Content, IAgentRuntime, Memory, UUID } from "@ai16z/eliza";
@@ -13,7 +13,6 @@ export async function sendCast({
     roomId,
     inReplyTo,
     signer,
-    network,
     profile,
 }: {
     profile: Profile;
@@ -22,7 +21,6 @@ export async function sendCast({
     content: Content;
     roomId: UUID;
     signer: Signer;
-    network: FarcasterNetwork;
     inReplyTo?: CastId;
 }): Promise<{ memory: Memory; cast: Cast }[]> {
     const chunks = splitPostContent(content.text);
@@ -42,7 +40,7 @@ export async function sendCast({
             },
             {
                 fid: profile.fid,
-                network,
+                network: FarcasterNetwork.MAINNET,
             },
             signer
         );

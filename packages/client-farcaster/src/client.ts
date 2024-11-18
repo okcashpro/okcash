@@ -9,9 +9,17 @@ import {
     isUserDataAddMessage,
     Message,
     MessagesResponse,
+    ViemLocalEip712Signer,
+    gateway
+    Signer,
 } from "@farcaster/hub-nodejs";
 import { Cast, Profile } from "./types";
 import { toHex } from "viem";
+import {
+    generatePrivateKey,
+    privateKeyToAccount,
+    toAccount,
+} from "viem/accounts";
 
 export class FarcasterClient {
     runtime: IAgentRuntime;
@@ -24,6 +32,18 @@ export class FarcasterClient {
         this.farcaster = opts.ssl
             ? getSSLHubRpcClient(opts.url)
             : getInsecureHubRpcClient(opts.url);
+    }
+
+    async register() {
+        const account = privateKeyToAccount(generatePrivateKey());
+        const eip712Signer = new ViemLocalEip712Signer(account);
+
+        const signature = await eip712Signer.signRegister({
+            to: account.address,
+            recovery: "0x00000000FcB080a4D6c39a9354dA9EB9bC104cd7",
+            nonce,
+            deadline,
+        });
     }
 
     async submitMessage(cast: Message, retryTimes?: number): Promise<void> {
