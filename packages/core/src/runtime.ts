@@ -250,6 +250,10 @@ export class AgentRuntime implements IAgentRuntime {
             tableName: "fragments",
         });
 
+        (opts.managers ?? []).forEach((manager: IMemoryManager) => {
+            this.registerMemoryManager(manager);
+        });
+
         (opts.services ?? []).forEach((service: Service) => {
             this.registerService(service);
         });
