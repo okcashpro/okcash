@@ -6,6 +6,7 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
+        "@farcaster/hub-nodejs": "^0.12.7",
         "viem": "^2.21.47"
     },
     "devDependencies": {
