@@ -1,6 +1,6 @@
 import { SearchMode, Tweet } from "agent-twitter-client";
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza";
+import { composeContext, elizaLogger } from "@ai16z/eliza";
 import { generateMessageResponse, generateShouldRespond } from "@ai16z/eliza";
 import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
 import {
@@ -199,7 +199,7 @@ export class TwitterInteractionClient extends ClientBase {
             console.log("skipping tweet with no text", tweet.id);
             return { text: "", action: "IGNORE" };
         }
-        console.log("handling tweet", tweet.id);
+        elizaLogger.log("handling tweet", tweet.id);
         const formatTweet = (tweet: Tweet) => {
             return `  ID: ${tweet.id}
   From: ${tweet.name} (@${tweet.username})
@@ -266,8 +266,6 @@ export class TwitterInteractionClient extends ClientBase {
             };
             this.saveRequestMessage(message, state);
         }
-
-        console.log("composeState done");
 
         const shouldRespondContext = composeContext({
             state,

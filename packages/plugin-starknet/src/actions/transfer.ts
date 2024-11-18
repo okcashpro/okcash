@@ -161,79 +161,41 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 69 STRK to 0x1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+                    text: "Send 10 ETH to 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
                 },
             },
             {
-                user: "{{user2}}",
+                user: "{{agent}}",
                 content: {
-                    text: "Transfer to 0x1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF 0.01 ETH",
+                    text: "I'll transfer 10 ETH to that address right away. Let me process that for you.",
                 },
             },
-            {
-                user: "{{user3}}",
-                content: {
-                    text: "Please send 100 STRK tokens to 0x789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF012345",
-                },
-            },
-            {
-                user: "{{user4}}",
-                content: {
-                    text: "I'd like to transfer 0.5 ETH to 0xABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF01234567",
-                },
-            },
-            {
-                user: "{{user5}}",
-                content: {
-                    text: "Can you send 25 STRK to wallet 0x456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF012",
-                },
-            },
+        ],
+        [
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Transfer 1.5 ETH -> 0x123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+                    text: "Can you transfer 50 LORDS tokens to 0x0124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49?",
                 },
             },
             {
-                user: "{{user2}}",
+                user: "{{agent}}",
                 content: {
-                    text: "Send 42.42 STRK tokens to address 0xDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789",
+                    text: "Executing transfer of 50 LORDS tokens to the specified address. One moment please.",
                 },
             },
-            {
-                user: "{{user3}}",
-                content: {
-                    text: "Could you transfer 0.1 ETH to this address: 0xEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABC",
-                },
-            },
-            {
-                user: "{{user4}}",
-                content: {
-                    text: "I am requesting 777 STRK to be sent to this address: 0x0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
-                },
-            },
-            {
-                user: "{{user5}}",
-                content: {
-                    text: "I really think i need 100 lords to be sent to this address: 0xBCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789A",
-                },
-            },
+        ],
+        [
             {
                 user: "{{user1}}",
                 content: {
-                    text: "I am requesting 100 lords to be sent to this address: 0xCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789AB",
+                    text: "Please send 0.5 BTC to 0x03fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac",
                 },
             },
             {
-                user: "{{user2}}",
+                user: "{{agent}}",
                 content: {
-                    text: "Transfer lords to 0x90ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF01234567",
-                },
-            },
-            {
-                user: "{{user3}}",
-                content: {
-                    text: "The repair of the squire blobert kingdom kitchen has been completed. Could you please send 100 LORDS tokens to 0x0277eE04e3f82D4E805Ab0e2044C53fB6d61ABd00a2a7f44B78410e9b43E1344",
+                    text: "Got it, initiating transfer of 0.5 BTC to the provided address. I'll confirm once it's complete.",
                 },
             },
         ],
