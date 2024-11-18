@@ -43,9 +43,9 @@ export class ImageDescriptionService extends Service {
             return;
         }
 
-        const model = models[runtime.character.settings.model];
+        const model = models[runtime.character.modelProvider];
 
-        if (model === ModelProviderName.LLAMALOCAL) {
+        if (model === models[ModelProviderName.LLAMALOCAL]) {
             this.modelId = "onnx-community/Florence-2-base-ft";
 
             env.allowLocalModels = false;
