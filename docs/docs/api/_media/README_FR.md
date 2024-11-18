@@ -23,10 +23,10 @@ Que pouvez-vous faire avec Eliza?
 
 **pré-requis (obligatoire) :**
 
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   installation Nodejs
--   [pnpm](https://pnpm.io/installation)
--   travailler avec PNPM
+- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- installation Nodejs
+- [pnpm](https://pnpm.io/installation)
+- travailler avec PNPM
 
 ### éditer le fichier.env
 
@@ -35,11 +35,10 @@ Que pouvez-vous faire avec Eliza?
 
 ### modifier les fichiers de rôles
 
-- voir le document ` src/core/defaultCharacter ts ` - vous pouvez le modifier
+- voir le document `src/core/defaultCharacter ts` - vous pouvez le modifier
 - vous pouvez également utiliser `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json" ` et simultanément plusieurs robots.
 
 Après avoir terminé la configuration des fichiers de compte et de rôle, lancez votre bot en tapant la ligne de commande suivante:
-
 
 ```
 pnpm i
