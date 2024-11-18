@@ -16,12 +16,12 @@ import {
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
-import { starknetPlugin } from "@ai16z/plugin-starknet";
 import { nodePlugin } from "@ai16z/plugin-node";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
 import yargs from "yargs";
+import { character } from "./character.ts";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -196,6 +196,14 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
+    if (character.plugins.length > 0) {
+        character.plugins.forEach(async (plugin) => {
+            plugin.clients.forEach(async (client) => {
+                clients.push(await client.start(runtime));
+            });
+        });
+    }
+
     return clients;
 }
 
@@ -253,7 +261,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [defaultCharacter];
+    let characters = [character];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
