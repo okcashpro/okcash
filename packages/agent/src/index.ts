@@ -21,9 +21,7 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
 import yargs from "yargs";
-// import { character } from "./character.ts";
-import { blobert } from "./blobert.ts";
-
+import { character } from "./character.ts";
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
         Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
@@ -264,7 +262,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [blobert];
+    let characters = [character];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
