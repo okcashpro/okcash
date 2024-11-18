@@ -1,10 +1,10 @@
 import { Tweet } from "agent-twitter-client";
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import { generateText } from "@ai16z/eliza/src/generation.ts";
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
-import { IAgentRuntime, ModelClass } from "@ai16z/eliza/src/types.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateText } from "@ai16z/eliza";
+import { embeddingZeroVector } from "@ai16z/eliza";
+import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `{{timeline}}
@@ -38,13 +38,19 @@ function truncateToCompleteSentence(text: string): string {
     }
 
     // Attempt to truncate at the last period within the limit
-    const truncatedAtPeriod = text.slice(0, text.lastIndexOf(".", MAX_TWEET_LENGTH) + 1);
+    const truncatedAtPeriod = text.slice(
+        0,
+        text.lastIndexOf(".", MAX_TWEET_LENGTH) + 1
+    );
     if (truncatedAtPeriod.trim().length > 0) {
         return truncatedAtPeriod.trim();
     }
 
     // If no period is found, truncate to the nearest whitespace
-    const truncatedAtSpace = text.slice(0, text.lastIndexOf(" ", MAX_TWEET_LENGTH));
+    const truncatedAtSpace = text.slice(
+        0,
+        text.lastIndexOf(" ", MAX_TWEET_LENGTH)
+    );
     if (truncatedAtSpace.trim().length > 0) {
         return truncatedAtSpace.trim() + "...";
     }
@@ -146,7 +152,9 @@ export class TwitterPostClient extends ClientBase {
             });
 
             // Replace \n with proper line breaks and trim excess spaces
-            const formattedTweet = newTweetContent.replaceAll(/\\n/g, "\n").trim();
+            const formattedTweet = newTweetContent
+                .replaceAll(/\\n/g, "\n")
+                .trim();
 
             // Use the helper function to truncate to complete sentence
             const content = truncateToCompleteSentence(formattedTweet);
