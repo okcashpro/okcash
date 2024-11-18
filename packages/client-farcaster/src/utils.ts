@@ -1,9 +1,22 @@
-const MAX_TWEET_LENGTH = 280; // Updated to Twitter's current character limit
+import { stringToUuid } from "@ai16z/eliza";
+import { type Hex } from "viem";
 
-export function splitCastContent(content: string): string[] {
-    const maxLength = MAX_TWEET_LENGTH;
+const MAX_CAST_LENGTH = 280; // Updated to Twitter's current character limit
+
+export function castId({ hash, agentId }: { hash: Hex; agentId: string }) {
+    return `${hash}-${agentId}`;
+}
+
+export function castUuid(props: { hash: Hex; agentId: string }) {
+    return stringToUuid(castId(props));
+}
+
+export function splitPostContent(
+    content: string,
+    maxLength: number = MAX_CAST_LENGTH
+): string[] {
     const paragraphs = content.split("\n\n").map((p) => p.trim());
-    const tweets: string[] = [];
+    const posts: string[] = [];
     let currentTweet = "";
 
     for (const paragraph of paragraphs) {
@@ -17,24 +30,24 @@ export function splitCastContent(content: string): string[] {
             }
         } else {
             if (currentTweet) {
-                tweets.push(currentTweet.trim());
+                posts.push(currentTweet.trim());
             }
             if (paragraph.length <= maxLength) {
                 currentTweet = paragraph;
             } else {
                 // Split long paragraph into smaller chunks
                 const chunks = splitParagraph(paragraph, maxLength);
-                tweets.push(...chunks.slice(0, -1));
+                posts.push(...chunks.slice(0, -1));
                 currentTweet = chunks[chunks.length - 1];
             }
         }
     }
 
     if (currentTweet) {
-        tweets.push(currentTweet.trim());
+        posts.push(currentTweet.trim());
     }
 
-    return tweets;
+    return posts;
 }
 
 export function splitParagraph(paragraph: string, maxLength: number): string[] {
