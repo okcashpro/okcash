@@ -1,4 +1,4 @@
-import { composeContext } from "@ai16z/eliza";
+import { composeContext, elizaLogger } from "@ai16z/eliza";
 import { generateMessageResponse, generateTrueOrFalse } from "@ai16z/eliza";
 import { booleanFooter, messageCompletionFooter } from "@ai16z/eliza";
 import {
@@ -123,7 +123,7 @@ export const continueAction: Action = {
 
         const shouldContinue = await _shouldContinue(state);
         if (!shouldContinue) {
-            console.log("Not elaborating");
+            elizaLogger.log("Not elaborating, returning");
             return;
         }
 
