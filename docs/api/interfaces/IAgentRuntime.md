@@ -14,7 +14,7 @@ Properties
 
 [packages/core/src/types.ts:532](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L532)
 
----
+***
 
 ### serverUrl
 
@@ -24,7 +24,7 @@ Properties
 
 [packages/core/src/types.ts:533](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L533)
 
----
+***
 
 ### databaseAdapter
 
@@ -34,7 +34,7 @@ Properties
 
 [packages/core/src/types.ts:534](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L534)
 
----
+***
 
 ### token
 
@@ -44,7 +44,7 @@ Properties
 
 [packages/core/src/types.ts:535](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L535)
 
----
+***
 
 ### modelProvider
 
@@ -54,7 +54,7 @@ Properties
 
 [packages/core/src/types.ts:536](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L536)
 
----
+***
 
 ### character
 
@@ -64,7 +64,7 @@ Properties
 
 [packages/core/src/types.ts:537](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L537)
 
----
+***
 
 ### providers
 
@@ -74,7 +74,7 @@ Properties
 
 [packages/core/src/types.ts:538](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L538)
 
----
+***
 
 ### actions
 
@@ -84,7 +84,7 @@ Properties
 
 [packages/core/src/types.ts:539](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L539)
 
----
+***
 
 ### evaluators
 
@@ -94,7 +94,7 @@ Properties
 
 [packages/core/src/types.ts:540](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L540)
 
----
+***
 
 ### messageManager
 
@@ -104,7 +104,7 @@ Properties
 
 [packages/core/src/types.ts:542](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L542)
 
----
+***
 
 ### descriptionManager
 
@@ -114,7 +114,7 @@ Properties
 
 [packages/core/src/types.ts:543](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L543)
 
----
+***
 
 ### loreManager
 
@@ -124,7 +124,7 @@ Properties
 
 [packages/core/src/types.ts:544](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L544)
 
----
+***
 
 ### services
 
@@ -152,7 +152,7 @@ Properties
 
 [packages/core/src/types.ts:547](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L547)
 
----
+***
 
 ### getMemoryManager()
 
@@ -170,11 +170,11 @@ Properties
 
 [packages/core/src/types.ts:549](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L549)
 
----
+***
 
 ### getService()
 
-> **getService**(`service`): _typeof_ [`Service`](../classes/Service.md)
+> **getService**(`service`): *typeof* [`Service`](../classes/Service.md)
 
 #### Parameters
 
@@ -182,13 +182,13 @@ Properties
 
 #### Returns
 
-_typeof_ [`Service`](../classes/Service.md)
+*typeof* [`Service`](../classes/Service.md)
 
 #### Defined in
 
 [packages/core/src/types.ts:551](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L551)
 
----
+***
 
 ### registerService()
 
@@ -206,7 +206,7 @@ _typeof_ [`Service`](../classes/Service.md)
 
 [packages/core/src/types.ts:553](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L553)
 
----
+***
 
 ### getSetting()
 
@@ -224,7 +224,7 @@ _typeof_ [`Service`](../classes/Service.md)
 
 [packages/core/src/types.ts:555](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L555)
 
----
+***
 
 ### getConversationLength()
 
@@ -240,7 +240,7 @@ Methods
 
 [packages/core/src/types.ts:558](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L558)
 
----
+***
 
 ### processActions()
 
@@ -264,7 +264,7 @@ Methods
 
 [packages/core/src/types.ts:559](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L559)
 
----
+***
 
 ### evaluate()
 
@@ -286,7 +286,7 @@ Methods
 
 [packages/core/src/types.ts:565](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L565)
 
----
+***
 
 ### ensureParticipantExists()
 
@@ -306,7 +306,7 @@ Methods
 
 [packages/core/src/types.ts:570](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L570)
 
----
+***
 
 ### ensureUserExists()
 
@@ -330,7 +330,7 @@ Methods
 
 [packages/core/src/types.ts:571](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L571)
 
----
+***
 
 ### registerAction()
 
@@ -348,7 +348,7 @@ Methods
 
 [packages/core/src/types.ts:577](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L577)
 
----
+***
 
 ### ensureConnection()
 
@@ -374,7 +374,7 @@ Methods
 
 [packages/core/src/types.ts:578](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L578)
 
----
+***
 
 ### ensureParticipantInRoom()
 
@@ -394,7 +394,7 @@ Methods
 
 [packages/core/src/types.ts:585](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L585)
 
----
+***
 
 ### ensureRoomExists()
 
@@ -412,7 +412,7 @@ Methods
 
 [packages/core/src/types.ts:586](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L586)
 
----
+***
 
 ### composeState()
 
@@ -432,7 +432,7 @@ Methods
 
 [packages/core/src/types.ts:587](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L587)
 
----
+***
 
 ### updateRecentMessageState()
 

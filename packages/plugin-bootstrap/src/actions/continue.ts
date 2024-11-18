@@ -1,12 +1,6 @@
-import { composeContext } from "@ai16z/eliza/src/context.ts";
-import {
-    generateMessageResponse,
-    generateTrueOrFalse,
-} from "@ai16z/eliza/src/generation.ts";
-import {
-    booleanFooter,
-    messageCompletionFooter,
-} from "@ai16z/eliza/src/parsing.ts";
+import { composeContext } from "@ai16z/eliza";
+import { generateMessageResponse, generateTrueOrFalse } from "@ai16z/eliza";
+import { booleanFooter, messageCompletionFooter } from "@ai16z/eliza";
 import {
     Action,
     ActionExample,

@@ -1,19 +1,21 @@
 import {
-    QueryTweetsResponse,
-    Scraper,
-    SearchMode,
-    Tweet,
-} from "agent-twitter-client";
-import { EventEmitter } from "events";
-import type {
     Content,
     IAgentRuntime,
     IImageDescriptionService,
     Memory,
     State,
     UUID,
+    embeddingZeroVector,
+    elizaLogger,
+    stringToUuid,
 } from "@ai16z/eliza";
-import { embeddingZeroVector, elizaLogger, stringToUuid } from "@ai16z/eliza";
+import {
+    QueryTweetsResponse,
+    Scraper,
+    SearchMode,
+    Tweet,
+} from "agent-twitter-client";
+import { EventEmitter } from "events";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -203,6 +205,23 @@ export class ClientBase extends EventEmitter {
             }
             console.log("Twitter user ID:", userId);
             this.twitterUserId = userId;
+
+            // Initialize Twitter profile
+            const profile = await this.initializeProfile();
+            if (profile) {
+                // console.log("Twitter profile initialized:", profile);
+
+                // Store profile info for use in responses
+                this.runtime.character = {
+                    ...this.runtime.character,
+                    twitterProfile: {
+                        username: profile.username,
+                        screenName: profile.screenName,
+                        bio: profile.bio,
+                        nicknames: profile.nicknames,
+                    },
+                };
+            }
 
             await this.populateTimeline();
 
@@ -574,5 +593,48 @@ export class ClientBase extends EventEmitter {
             `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`,
             cookies
         );
+    }
+
+    async initializeProfile() {
+        const username = this.runtime.getSetting("TWITTER_USERNAME");
+        if (!username) {
+            console.error("Twitter username not configured");
+            return;
+        }
+
+        try {
+            const profile = await this.requestQueue.add(async () => {
+                const profile = await this.twitterClient.getProfile(username);
+                return {
+                    username,
+                    screenName: profile.name || this.runtime.character.name,
+                    bio:
+                        profile.biography ||
+                        typeof this.runtime.character.bio === "string"
+                            ? (this.runtime.character.bio as string)
+                            : this.runtime.character.bio.length > 0
+                              ? this.runtime.character.bio[0]
+                              : "",
+                    nicknames:
+                        this.runtime.character.twitterProfile?.nicknames || [],
+                };
+            });
+
+            return profile;
+        } catch (error) {
+            console.error("Error fetching Twitter profile:", error);
+            return {
+                username: this.runtime.character.name,
+                screenName: username,
+                bio:
+                    typeof this.runtime.character.bio === "string"
+                        ? (this.runtime.character.bio as string)
+                        : this.runtime.character.bio.length > 0
+                          ? this.runtime.character.bio[0]
+                          : "",
+                nicknames:
+                    this.runtime.character.twitterProfile?.nicknames || [],
+            };
+        }
     }
 }

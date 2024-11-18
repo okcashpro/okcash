@@ -30,17 +30,29 @@ Write a single sentence post that is {{adjective}} about {{topic}} (without ment
 Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.`;
 
 export class TwitterPostClient extends ClientBase {
-    onReady() {
+    onReady(postImmediately: boolean = true) {
         const generateNewTweetLoop = () => {
-            this.generateNewTweet();
-            setTimeout(
-                generateNewTweetLoop,
-                (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
-            ); // Random interval between 1 and 4 hours
+            const minMinutes =
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
+            const maxMinutes =
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
+            const randomMinutes =
+                Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) +
+                minMinutes;
+            const delay = randomMinutes * 60 * 1000;
+
+            setTimeout(() => {
+                this.generateNewTweet();
+                generateNewTweetLoop(); // Set up next iteration
+            }, delay);
+
+            console.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-        // setTimeout(() => {
+
+        if (postImmediately) {
+            this.generateNewTweet();
+        }
         generateNewTweetLoop();
-        // }, 5 * 60 * 1000); // Wait 5 minutes before starting the loop
     }
 
     constructor(runtime: IAgentRuntime) {

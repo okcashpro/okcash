@@ -317,6 +317,7 @@ export type Plugin = {
     providers?: Provider[];
     evaluators?: Evaluator[];
     services?: Service[];
+    clients?: Client[];
 };
 
 export enum Clients {
@@ -368,6 +369,12 @@ export type Character = {
         all: string[];
         chat: string[];
         post: string[];
+    };
+    twitterProfile?: {
+        username: string;
+        screenName: string;
+        bio: string;
+        nicknames?: string[];
     };
 };
 
@@ -687,4 +694,10 @@ export enum ServiceType {
     BROWSER = "browser",
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
+}
+
+export enum LoggingLevel {
+    DEBUG = "debug",
+    VERBOSE = "verbose",
+    NONE = "none",
 }

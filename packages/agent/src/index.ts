@@ -30,6 +30,7 @@ import readline from "readline";
 import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { character } from "./character";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -231,6 +232,16 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
+    if (character.plugins?.length > 0) {
+        for (const plugin of character.plugins) {
+            if (plugin.clients) {
+                for (const client of plugin.clients) {
+                    clients.push(await client.start(runtime));
+                }
+            }
+        }
+    }
+
     return clients;
 }
 
@@ -241,10 +252,6 @@ export function createAgent(
     token: string
 ) {
     console.log("Creating runtime for character", character.name);
-    console.log(
-        "character.settings.secrets?.WALLET_PUBLIC_KEY",
-        character.settings.secrets?.WALLET_PUBLIC_KEY
-    );
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -301,7 +308,7 @@ async function startAgent(character: Character, directClient: DirectClient) {
             `Error starting agent for character ${character.name}:`,
             error
         );
-        throw error; // Re-throw after logging
+        throw error;
     }
 }
 
@@ -311,7 +318,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [defaultCharacter];
+    let characters = [character];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);

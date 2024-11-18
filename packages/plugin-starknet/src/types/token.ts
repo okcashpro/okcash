@@ -77,4 +77,30 @@ export interface Gasless {
     }[];
 }
 
+export interface TokenInfo {
+    name: string;
+    symbol: string;
+    address: string;
+    logoUri: string;
+    coingeckoId: string;
+    verified: boolean;
+    market: {
+        currentPrice: number;
+        marketCap: number;
+        fullyDilutedValuation: number;
+        starknetTvl: number;
+        priceChange1h: number;
+        priceChangePercentage1h: number;
+        priceChange24h: number;
+        priceChangePercentage24h: number;
+        priceChange7d: number;
+        priceChangePercentage7d: number;
+        marketCapChange24h: number;
+        marketCapChangePercentage24h: number;
+        starknetVolume24h: number;
+        starknetTradingVolume24h: number;
+    };
+    tags: string[];
+}
+
 export type { Quote, QuoteRequest };
