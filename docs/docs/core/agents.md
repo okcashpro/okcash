@@ -210,6 +210,8 @@ await memoryManager.createMemory({
 - Use immutability in state management.
 - Log errors and maintain stability during service failures.
 
+---
+
 ## Evaluation System
 
 The runtime's [evaluate](/api/classes/AgentRuntime#evaluate) method processes evaluations:
@@ -250,6 +252,7 @@ await memoryManager.createMemory({
   roomId,
 });
 ```
+---
 
 ## Further Reading
 
