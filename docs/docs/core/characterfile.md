@@ -8,7 +8,7 @@ Character files are JSON-formatted configurations that define an AI character's 
 
 ## Overview
 
-A `characterfile` implements the [Character](/api/type-aliases) type and defines the character's:
+A `characterfile` implements the [Character](/api/type-aliases/character) type and defines the character's:
 
 - Core identity and behavior
 - Model provider configuration
@@ -90,11 +90,11 @@ The character's display name for identification and in conversations.
 
 #### `modelProvider` (required)
 
-Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
+Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations/modelprovidername) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
 
 #### `clients` (required)
 
-Array of supported client types from [Clients](/api/enumerations) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
+Array of supported client types from [Clients](/api/enumerations/clients) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
 
 #### `bio`
 
