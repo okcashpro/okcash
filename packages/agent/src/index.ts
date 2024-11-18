@@ -216,6 +216,14 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
+    if (character.plugins.length > 0) {
+        character.plugins.forEach(async (plugin) => {
+            plugin.clients.forEach(async (client) => {
+                clients.push(await client.start(runtime));
+            });
+        });
+    }
+
     return clients;
 }
 
