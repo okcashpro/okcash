@@ -159,26 +159,6 @@ export function getTokenForProvider(
     }
 }
 
-export async function createDirectRuntime(
-    character: Character,
-    db: IDatabaseAdapter,
-    token: string
-) {
-    console.log("Creating runtime for character", character.name);
-    return new AgentRuntime({
-        databaseAdapter: db,
-        token,
-        modelProvider: character.modelProvider,
-        evaluators: [],
-        character,
-        plugins: [],
-        providers: [],
-        actions: [],
-        services: [],
-        managers: [],
-    });
-}
-
 function initializeDatabase() {
     if (process.env.POSTGRES_URL) {
         return new PostgresDatabaseAdapter({
@@ -216,12 +196,14 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
-    if (character.plugins.length > 0) {
-        character.plugins.forEach(async (plugin) => {
-            plugin.clients.forEach(async (client) => {
-                clients.push(await client.start(runtime));
-            });
-        });
+    if (character.plugins?.length > 0) {
+        for (const plugin of character.plugins) {
+            if (plugin.clients) {
+                for (const client of plugin.clients) {
+                    clients.push(await client.start(runtime));
+                }
+            }
+        }
     }
 
     return clients;
@@ -233,10 +215,6 @@ export async function createAgent(
     token: string
 ) {
     console.log("Creating runtime for character", character.name);
-    console.log(
-        "character.settings.secrets?.WALLET_PUBLIC_KEY",
-        character.settings.secrets?.WALLET_PUBLIC_KEY
-    );
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -275,7 +253,7 @@ async function startAgent(character: Character, directClient: any) {
             `Error starting agent for character ${character.name}:`,
             error
         );
-        throw error; // Re-throw after logging
+        throw error;
     }
 }
 

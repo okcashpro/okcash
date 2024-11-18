@@ -2,6 +2,7 @@ import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
+import { validateSettings } from "../utils";
 // Provider configuration
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -10,7 +11,7 @@ const PROVIDER_CONFIG = {
     DEFAULT_RPC: "https://api.mainnet-beta.solana.com",
     TOKEN_ADDRESSES: {
         SOL: "So11111111111111111111111111111111111111112",
-        BTC: "3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh",
+        BTC: "qfnqNqs3nCAHjnyCgLRDbBtq4p2MtHZxw8YjSyYhPoL",
         ETH: "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
     },
 };
@@ -50,16 +51,15 @@ interface Prices {
 
 export class WalletProvider {
     private cache: NodeCache;
+    private runtime: IAgentRuntime;
 
-    constructor(
-        private connection: Connection,
-        private walletPublicKey: PublicKey
-    ) {
+    constructor(runtime: IAgentRuntime) {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
+        this.runtime = runtime;
     }
 
+    //  This should be ETH/STK/BTC
     private async fetchWithRetry(
-        runtime,
         url: string,
         options: RequestInit = {}
     ): Promise<any> {
@@ -73,7 +73,8 @@ export class WalletProvider {
                         Accept: "application/json",
                         "x-chain": "solana",
                         "X-API-KEY":
-                            runtime.getSetting("BIRDEYE_API_KEY", "") || "",
+                            //  TODO: change to starknet
+                            this.runtime.getSetting("BIRDEYE_API_KEY") || "",
                         ...options.headers,
                     },
                 });
@@ -107,7 +108,7 @@ export class WalletProvider {
 
     async fetchPortfolioValue(runtime): Promise<WalletPortfolio> {
         try {
-            const cacheKey = `portfolio-${this.walletPublicKey.toBase58()}`;
+            const cacheKey = `portfolio-${this.runtime.getSetting("STARKNET_WALLET_ADDRESS")}`;
             const cachedValue = this.cache.get<WalletPortfolio>(cacheKey);
 
             if (cachedValue) {
@@ -116,44 +117,46 @@ export class WalletProvider {
             }
             console.log("Cache miss for fetchPortfolioValue");
 
-            const walletData = await this.fetchWithRetry(
-                runtime,
-                `${PROVIDER_CONFIG.BIRDEYE_API}/v1/wallet/token_list?wallet=${this.walletPublicKey.toBase58()}`
-            );
+            // TODO: change to starknet
 
-            if (!walletData?.success || !walletData?.data) {
-                console.error("No portfolio data available", walletData);
-                throw new Error("No portfolio data available");
-            }
+            // const walletData = await this.fetchWithRetry(
+            //     runtime,
+            //     `${PROVIDER_CONFIG.BIRDEYE_API}/v1/wallet/token_list?wallet=${this.walletPublicKey.toBase58()}`
+            // );
 
-            const data = walletData.data;
-            const totalUsd = new BigNumber(data.totalUsd.toString());
-            const prices = await this.fetchPrices(runtime);
-            const solPriceInUSD = new BigNumber(prices.solana.usd.toString());
+            // if (!walletData?.success || !walletData?.data) {
+            //     console.error("No portfolio data available", walletData);
+            //     throw new Error("No portfolio data available");
+            // }
 
-            const items = data.items.map((item: any) => ({
-                ...item,
-                valueSol: new BigNumber(item.valueUsd || 0)
-                    .div(solPriceInUSD)
-                    .toFixed(6),
-                name: item.name || "Unknown",
-                symbol: item.symbol || "Unknown",
-                priceUsd: item.priceUsd || "0",
-                valueUsd: item.valueUsd || "0",
-            }));
+            // const data = walletData.data;
+            // const totalUsd = new BigNumber(data.totalUsd.toString());
+            // const prices = await this.fetchPrices(runtime);
+            // const solPriceInUSD = new BigNumber(prices.solana.usd.toString());
 
-            const totalSol = totalUsd.div(solPriceInUSD);
-            const portfolio = {
-                totalUsd: totalUsd.toString(),
-                totalSol: totalSol.toFixed(6),
-                items: items.sort((a, b) =>
-                    new BigNumber(b.valueUsd)
-                        .minus(new BigNumber(a.valueUsd))
-                        .toNumber()
-                ),
-            };
-            this.cache.set(cacheKey, portfolio);
-            return portfolio;
+            // const items = data.items.map((item: any) => ({
+            //     ...item,
+            //     valueSol: new BigNumber(item.valueUsd || 0)
+            //         .div(solPriceInUSD)
+            //         .toFixed(6),
+            //     name: item.name || "Unknown",
+            //     symbol: item.symbol || "Unknown",
+            //     priceUsd: item.priceUsd || "0",
+            //     valueUsd: item.valueUsd || "0",
+            // }));
+
+            // const totalSol = totalUsd.div(solPriceInUSD);
+            // const portfolio = {
+            //     totalUsd: totalUsd.toString(),
+            //     totalSol: totalSol.toFixed(6),
+            //     items: items.sort((a, b) =>
+            //         new BigNumber(b.valueUsd)
+            //             .minus(new BigNumber(a.valueUsd))
+            //             .toNumber()
+            //     ),
+            // };
+            // this.cache.set(cacheKey, portfolio);
+            // return portfolio;
         } catch (error) {
             console.error("Error fetching portfolio:", error);
             throw error;
@@ -179,30 +182,32 @@ export class WalletProvider {
                 ethereum: { usd: "0" },
             };
 
-            for (const token of tokens) {
-                const response = await this.fetchWithRetry(
-                    runtime,
-                    `${PROVIDER_CONFIG.BIRDEYE_API}/defi/price?address=${token}`,
-                    {
-                        headers: {
-                            "x-chain": "solana",
-                        },
-                    }
-                );
+            // TODO: change to starknet
 
-                if (response?.data?.value) {
-                    const price = response.data.value.toString();
-                    prices[
-                        token === SOL
-                            ? "solana"
-                            : token === BTC
-                              ? "bitcoin"
-                              : "ethereum"
-                    ].usd = price;
-                } else {
-                    console.warn(`No price data available for token: ${token}`);
-                }
-            }
+            // for (const token of tokens) {
+            //     const response = await this.fetchWithRetry(
+            //         runtime,
+            //         `${PROVIDER_CONFIG.BIRDEYE_API}/defi/price?address=${token}`,
+            //         {
+            //             headers: {
+            //                 "x-chain": "solana",
+            //             },
+            //         }
+            //     );
+
+            //     if (response?.data?.value) {
+            //         const price = response.data.value.toString();
+            //         prices[
+            //             token === SOL
+            //                 ? "solana"
+            //                 : token === BTC
+            //                   ? "bitcoin"
+            //                   : "ethereum"
+            //         ].usd = price;
+            //     } else {
+            //         console.warn(`No price data available for token: ${token}`);
+            //     }
+            // }
 
             this.cache.set(cacheKey, prices);
             return prices;
@@ -218,7 +223,7 @@ export class WalletProvider {
         prices: Prices
     ): string {
         let output = `${runtime.character.description}\n`;
-        output += `Wallet Address: ${this.walletPublicKey.toBase58()}\n\n`;
+        output += `Wallet Address: ${this.runtime.getSetting("STARKNET_WALLET_ADDRESS")}\n\n`;
 
         const totalUsdFormatted = new BigNumber(portfolio.totalUsd).toFixed(2);
         const totalSolFormatted = portfolio.totalSol;
@@ -271,38 +276,13 @@ const walletProvider: Provider = {
         _state?: State
     ): Promise<string> => {
         try {
-            // Validate wallet configuration
-            if (!runtime.getSetting("WALLET_PUBLIC_KEY")) {
-                console.error(
-                    "Wallet public key is not configured in settings"
-                );
+            if (!validateSettings(runtime)) {
                 return "";
             }
 
-            // Validate public key format before creating instance
-            if (
-                typeof runtime.getSetting("WALLET_PUBLIC_KEY") !== "string" ||
-                runtime.getSetting("WALLET_PUBLIC_KEY").trim() === ""
-            ) {
-                console.error("Invalid wallet public key format");
-                return "";
-            }
+            const provider = new WalletProvider(runtime);
 
-            let publicKey: PublicKey;
-            try {
-                publicKey = new PublicKey(
-                    runtime.getSetting("WALLET_PUBLIC_KEY")
-                );
-            } catch (error) {
-                console.error("Error creating PublicKey:", error);
-                return "";
-            }
-
-            const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
-            const provider = new WalletProvider(connection, publicKey);
-
-            const porfolio = await provider.getFormattedPortfolio(runtime);
-            return porfolio;
+            return await provider.getFormattedPortfolio(runtime);
         } catch (error) {
             console.error("Error in wallet provider:", error.message);
             return `Failed to fetch wallet information: ${error instanceof Error ? error.message : "Unknown error"}`;
