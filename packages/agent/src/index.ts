@@ -196,12 +196,14 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
-    if (character.plugins.length > 0) {
-        character.plugins.forEach(async (plugin) => {
-            plugin.clients.forEach(async (client) => {
-                clients.push(await client.start(runtime));
-            });
-        });
+    if (character.plugins?.length > 0) {
+        for (const plugin of character.plugins) {
+            if (plugin.clients) {
+                for (const client of plugin.clients) {
+                    clients.push(await client.start(runtime));
+                }
+            }
+        }
     }
 
     return clients;
