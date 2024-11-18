@@ -1,11 +1,15 @@
----
-sidebar_position: 5
-title: Contributing
----
+# Contributing to Eliza
 
-# Contributor Guide
+First off, thank you for considering contributing to Eliza! We welcome contributions from everyone, regardless of experience level.
 
-Welcome to the Eliza contributor guide! This document is designed to help you understand how you can be part of building the future of autonomous AI agents, regardless of your technical background.
+## Contribution License Agreement
+
+By contributing to Eliza, you agree that your contributions will be licensed under the MIT License. This means:
+
+1. You grant us (and everyone else) a perpetual, worldwide, non-exclusive, royalty-free license to use your contributions.
+2. Your contributions are and will be available as Free and Open Source Software (FOSS).
+3. You have the right to submit the work under this license.
+4. You understand that your contributions are public and that a record of the contribution is maintained indefinitely.
 
 ## The OODA Loop: A Framework for Contribution
 
@@ -16,83 +20,109 @@ We believe in the power of the OODA Loop - a decision-making framework that emph
 - **Decide**: Choose a course of action based on your analysis. This could be proposing a new feature, fixing a bug, or creating content.
 - **Act**: Execute your decision and share your work with the community.
 
-By internalizing the OODA Loop, you can quickly identify areas where you can make a meaningful impact and drive the project forward.
-
----
-
 ## How to Contribute
 
 ### For Developers
 
 1. **Extend Eliza's Capabilities**
-
-   - Develop new actions, evaluators, and providers to expand what Eliza agents can do.
-   - Improve existing components and modules.
+   - Develop new actions, evaluators, and providers
+   - Improve existing components and modules
 
 2. **Enhance Infrastructure**
+   - Review open issues and submit PRs
+   - Test and update documentation
+   - Optimize performance
+   - Improve deployment solutions
 
-   - Go through open issues, send back a PR if you can improve anything.
-   - Test currently documented steps to ensure they're still up to date.
-   - Optimize Eliza's database architecture and performance.
-   - Contribute to the autonomous trading system and trust engine.
-   - Improve deployment and scaling solutions.
+1. Fork the repo and create your branch from `main`.
+    1. The name of the branch should start with the issue number and be descriptive of the changes you are making.
+    1. eg. 40--add-test-for-bug-123
+2. If you've added code that should be tested, add tests.
+3. Ensure the test suite passes.
+4. Make sure your code lints.
+5. Issue that pull request!
 
-3. **Implement Integrations**
-   - Build connectors for new platforms and services.
-   - Enhance existing integrations with additional features.
+## Styleguides
 
-### For AI Enthusiasts
+### Git Commit Messages
 
-1. **Fine-tune Models**
+-   Use the present tense ("Add feature" not "Added feature")
+-   Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+-   Limit the first line to 72 characters or less
+-   Reference issues and pull requests liberally after the first line
 
-   - Experiment with fine-tuning models for specific tasks and domains.
-   - Develop best practices for prompt engineering and model selection.
+### JavaScript Styleguide
 
-2. **Develop Characters**
-   - Create compelling character files that showcase Eliza's potential.
-   - Curate knowledge bases and datasets for different use cases.
+-   All JavaScript must adhere to [JavaScript Standard Style](https://standardjs.com/).
 
-### Non-Technical Contributions
+### TypeScript Styleguide
 
-1. **Create Content**
+-   All TypeScript must adhere to [TypeScript Standard Style](https://github.com/standard/ts-standard).
 
-   - Make memes, stickers, emojis, and clips of AI agents that are deployed.
-   - Write tutorials, guides, and blog posts to help others learn about Eliza.
-   - Produce videos showcasing Eliza's capabilities and real-world applications.
+### Documentation Styleguide
 
-2. **Engage the Community**
+-   Use [Markdown](https://daringfireball.net/projects/markdown/) for documentation.
 
-   - Participate in discussions on Discord, Twitter, and other platforms.
-   - Help answer questions and provide support to other community members.
-   - Organize events, workshops, and hackathons to bring people together.
+## Additional Notes
 
-3. **Spread the Word**
-   - Share the Eliza project and help attract new contributors.
-   - Participate in one of our upcoming demo days, show and tell your project.
+### Issue and Pull Request Labels
 
----
+This section lists the labels we use to help us track and manage issues and pull requests.
 
-### Tips for Efficient Contribution
+-   `bug` - Issues that are bugs.
+-   `enhancement` - Issues that are feature requests.
+-   `documentation` - Issues or pull requests related to documentation.
+-   `good first issue` - Good for newcomers.
 
-- Use tools like OBS and Whisper to record and transcribe your work sessions. This allows you to easily document your process and share insights with the community.
-- Leverage AI assistants to help with tasks like code generation, document summarization, and content creation.
-- Collaborate with other community members to divide and conquer larger initiatives.
 
-## Recognition and Rewards
+## Getting Help
 
-We believe in recognizing and rewarding contributors who go above and beyond to drive the project forward. Stand-out contributions may be eligible for:
+- Join [Discord](https://discord.gg/ai16z)
+- Check [FAQ](docs/community/faq.md)
+- Create GitHub issues
 
-- Grants from the ai16z Creator Fund
-- Featuring your project across various channels
-- Opportunities to shape the direction of the project
+## Additional Resources
 
-Note: we're still finalizing details on the creator/dev fund that seeks to retroactively reward valued contributions to the ecosystem.
+- [Local Development Guide](docs/guides/local-development.md)
+- [Configuration Guide](docs/guides/configuration.md)
+- [API Documentation](docs/api)
 
-## Getting Started
+## Contributor Guide
 
-1. Join the [Eliza Discord](https://discord.gg/ai16z) and make a short introduction.
-2. Explore the [documentation](/docs/intro) to understand the project's architecture and capabilities.
-3. Check out the [open issues](https://github.com/ai16z/eliza/issues) on GitHub to find ways to contribute.
-4. Share your ideas and initiatives with the community - we're excited to see what you'll build!
+Welcome to the Eliza contributor guide! This document is designed to help you understand how you can be part of building the future of autonomous AI agents, regardless of your technical background.
 
-Lets push the boundaries of what's possible with autonomous AI agents. Welcome aboard!
+### Code of Conduct
+
+#### Our Pledge
+
+In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to make participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+
+#### Our Standards
+
+Examples of behavior that contributes to creating a positive environment include:
+
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints and experiences
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy towards other community members
+
+Examples of unacceptable behavior include:
+
+- The use of sexualized language or imagery and unwelcome sexual attention or advances
+- Trolling, insulting/derogatory comments, and personal or political attacks
+- Public or private harassment
+- Publishing others' private information without explicit permission
+- Other conduct which could reasonably be considered inappropriate in a professional setting
+
+#### Our Responsibilities
+
+Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+
+Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+
+#### Scope
+
+This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
+
+Thank you for contributing to Eliza and helping build the future of autonomous AI agents! 🎉
