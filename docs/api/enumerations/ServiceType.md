@@ -4,15 +4,15 @@
 
 ## Enumeration Members
 
-### IMAGE\_DESCRIPTION
+### IMAGE_DESCRIPTION
 
-> **IMAGE\_DESCRIPTION**: `"image_description"`
+> **IMAGE_DESCRIPTION**: `"image_description"`
 
 #### Defined in
 
 [packages/core/src/types.ts:658](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L658)
 
-***
+---
 
 ### TRANSCRIPTION
 
@@ -22,7 +22,7 @@
 
 [packages/core/src/types.ts:659](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L659)
 
-***
+---
 
 ### VIDEO
 
@@ -32,17 +32,17 @@
 
 [packages/core/src/types.ts:660](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L660)
 
-***
+---
 
-### TEXT\_GENERATION
+### TEXT_GENERATION
 
-> **TEXT\_GENERATION**: `"text_generation"`
+> **TEXT_GENERATION**: `"text_generation"`
 
 #### Defined in
 
 [packages/core/src/types.ts:661](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L661)
 
-***
+---
 
 ### BROWSER
 
@@ -52,17 +52,17 @@
 
 [packages/core/src/types.ts:662](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L662)
 
-***
+---
 
-### SPEECH\_GENERATION
+### SPEECH_GENERATION
 
-> **SPEECH\_GENERATION**: `"speech_generation"`
+> **SPEECH_GENERATION**: `"speech_generation"`
 
 #### Defined in
 
 [packages/core/src/types.ts:663](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L663)
 
-***
+---
 
 ### PDF
 

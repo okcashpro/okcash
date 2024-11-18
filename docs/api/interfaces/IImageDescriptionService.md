@@ -20,7 +20,7 @@
 
 [packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
 
-***
+---
 
 ### initialize()
 
@@ -40,7 +40,7 @@
 
 [packages/core/src/types.ts:596](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L596)
 
-***
+---
 
 ### describeImage()
 

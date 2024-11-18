@@ -6,7 +6,7 @@
 
 -   🛠 Support des connecteurs Discord/ Twitter / Telegram
 -   🔗 Support des différents modèles d'IA (Llama, Grok, OpenAI, Anthropic, etc.)
--   👥 Gestion de plusieurs agents et assistance 
+-   👥 Gestion de plusieurs agents et assistance
 -   📚 Import et intéractions avec différents types de documents simplifiés
 -   💾 Accès aux données en mémoire et aux documents stockés
 -   🚀 Grande personnalisation possible : création de nouveaux clients et de nouvelles actions
@@ -14,12 +14,11 @@
 
 Que pouvez-vous faire avec Eliza?
 
--   🤖 Chatbot 
+-   🤖 Chatbot
 -   🕵 ️Agents autonomes
 -   📈 Processus automatisés
 -   🎮 PNJ intéractifs
 -   🧠 Trading automatisé
-
 
 # Premiers pas
 
@@ -49,7 +48,7 @@ cp .env.example .env
 
 ### Lancer Eliza
 
-Après avoir terminé la configuration et  les fichiers personnage, lancer le bot en tapant la ligne de commande suivante:
+Après avoir terminé la configuration et les fichiers personnage, lancer le bot en tapant la ligne de commande suivante:
 
 ```bash
 pnpm i
@@ -62,7 +61,7 @@ pnpm clean
 
 #### Ressources additionelles
 
-Il vous faudra peut-être installer Sharp. 
+Il vous faudra peut-être installer Sharp.
 Si il y a une erreur lors du lancement du bot, essayez d'installer Sharp comme ceci :
 
 ```
@@ -80,6 +79,6 @@ pnpm install --include=optional sharp
   <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
 </a>
 
-## Historique d'étoiles 
+## Historique d'étoiles
 
 [![Star History Chart](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)

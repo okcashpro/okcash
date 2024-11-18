@@ -18,9 +18,9 @@ _Utilisée dans [@DegenSpartanAI](https://x.com/degenspartanai) et [@MarcAIndree
 
 **Pré-requis (obligatoire) :**
 
--   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
--   [pnpm](https://pnpm.io/installation)
+- [Python 2.7+](https://www.python.org/downloads/)
+- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [pnpm](https://pnpm.io/installation)
 
 ### Edit the .env file
 
@@ -32,12 +32,12 @@ _Utilisée dans [@DegenSpartanAI](https://x.com/degenspartanai) et [@MarcAIndree
 1. Ouvrir le document `src/core/defaultCharacter.ts` afin de modifier le personnage par défaut
 
 2. Pour ajouter des personnages personnalisés :
-    - Lancer la commande `pnpm start --characters="path/to/your/character.json"`
-    - Plusieurs fichiers personnages peuvent être ajoutés en même temps
+   - Lancer la commande `pnpm start --characters="path/to/your/character.json"`
+   - Plusieurs fichiers personnages peuvent être ajoutés en même temps
 
 ### Lancer Eliza
 
-Après avoir terminé la configuration et  les fichiers personnage, lancer le bot en tapant la ligne de commande suivante:
+Après avoir terminé la configuration et les fichiers personnage, lancer le bot en tapant la ligne de commande suivante:
 
 ```bash
 pnpm i
@@ -70,7 +70,7 @@ Vous pouvez exécuter le modèle OpenAI en définissant la variable d’environn
 
 ## Ressources additionnelles
 
-Il vous faudra peut-être installer Sharp. 
+Il vous faudra peut-être installer Sharp.
 Si il y a une erreur lors du lancement du bot, essayez d'installer Sharp comme ceci :
 
 ```
@@ -88,7 +88,7 @@ DISCORD_API_TOKEN= # Bot token
 OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
 ELEVENLABS_XI_API_KEY= # API key from elevenlabs
 
-# Parmètres ELEVENLABS 
+# Parmètres ELEVENLABS
 ELEVENLABS_MODEL_ID=eleven_multilingual_v2
 ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
 ELEVENLABS_VOICE_STABILITY=0.5
@@ -149,7 +149,7 @@ Llama](#run-with-llama) - Vous pouvez laisser les valeurs X_SERVER_URL et XAI_AP
 
 # Clients
 
-## Bot Discord 
+## Bot Discord
 
 Pour savoir comment configurer votre bot Discord, vous pouvez consulter la documentation officielle de Discord : https://discordjs.guide/preparations/setting-up-a-bot-application.html
 

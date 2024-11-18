@@ -14,7 +14,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:867](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L867)
 
-***
+---
 
 ### context
 
@@ -24,7 +24,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:868](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L868)
 
-***
+---
 
 ### modelClass
 
@@ -34,7 +34,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:869](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L869)
 
-***
+---
 
 ### schema?
 
@@ -44,7 +44,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:870](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L870)
 
-***
+---
 
 ### schemaName?
 
@@ -54,7 +54,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:871](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L871)
 
-***
+---
 
 ### schemaDescription?
 
@@ -64,7 +64,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:872](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L872)
 
-***
+---
 
 ### stop?
 
@@ -74,7 +74,7 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:873](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L873)
 
-***
+---
 
 ### mode?
 
@@ -84,11 +84,11 @@ Configuration options for generating objects with a model.
 
 [packages/core/src/generation.ts:874](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L874)
 
-***
+---
 
-### experimental\_providerMetadata?
+### experimental_providerMetadata?
 
-> `optional` **experimental\_providerMetadata**: `Record`\<`string`, `unknown`\>
+> `optional` **experimental_providerMetadata**: `Record`\<`string`, `unknown`\>
 
 #### Defined in
 
