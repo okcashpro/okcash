@@ -160,7 +160,7 @@ export class MemoryManager implements IMemoryManager {
             await this.runtime.databaseAdapter.getMemoryById(memory.id);
 
         if (existingMessage) {
-            console.log("Memory already exists, skipping");
+            // console.log("Memory already exists, skipping");
             return;
         }
         await this.runtime.databaseAdapter.createMemory(
