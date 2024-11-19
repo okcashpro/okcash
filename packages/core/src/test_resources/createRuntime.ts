@@ -53,12 +53,11 @@ export async function createRuntime({
                 // Load sqlite-vss
                 loadVecExtensions((adapter as SqlJsDatabaseAdapter).db);
                 // Create a test user and session
-                user = {
-                    id: zeroUuid,
-                    email: "test@example.com",
-                } as User;
                 session = {
-                    user: user,
+                    user: {
+                        id: zeroUuid,
+                        email: "test@example.com",
+                    },
                 };
             }
             break;
@@ -120,12 +119,11 @@ export async function createRuntime({
                 // Load sqlite-vss
                 await loadVecExtensions((adapter as SqliteDatabaseAdapter).db);
                 // Create a test user and session
-                user = {
-                    id: zeroUuid,
-                    email: "test@example.com",
-                } as User;
                 session = {
-                    user: user,
+                    user: {
+                        id: zeroUuid,
+                        email: "test@example.com",
+                    },
                 };
             }
             break;
