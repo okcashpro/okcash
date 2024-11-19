@@ -159,9 +159,10 @@ export class AgentRuntime implements IAgentRuntime {
         return serviceInstance as T;
     }
 
-    registerService(service: Service): void {
+    async registerService(service: Service): Promise<void> {
         const serviceType = service.serviceType;
         elizaLogger.log("Registering service:", serviceType);
+
         if (this.services.has(serviceType)) {
             elizaLogger.warn(
                 `Service ${serviceType} is already registered. Skipping registration.`
@@ -169,7 +170,19 @@ export class AgentRuntime implements IAgentRuntime {
             return;
         }
 
-        this.services.set(serviceType, service);
+        try {
+            await service.initialize(this);
+            this.services.set(serviceType, service);
+            elizaLogger.success(
+                `Service ${serviceType} initialized successfully`
+            );
+        } catch (error) {
+            elizaLogger.error(
+                `Failed to initialize service ${serviceType}:`,
+                error
+            );
+            throw error;
+        }
     }
 
     /**
