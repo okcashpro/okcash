@@ -12,7 +12,7 @@
 
 ## 🌍 README Translations
 
-[中文说明](./README_CN.md) | [日本語の説明](./README_JA.md) | [한국어 설명](./README_KOR.md) | [Français](./README_FR.md) | [Português](./README_PTBR.md) | [Türkçe](./README_TR.md) | [Русский](./README_RU.md) | [Español](./README_ES.md)
+[中文说明](./README_CN.md) | [日本語の説明](./README_JA.md) | [한국어 설명](./README_KOR.md) | [Français](./README_FR.md) | [Português](./README_PTBR.md) | [Türkçe](./README_TR.md) | [Русский](./README_RU.md) | [Español](./README_ES.md) | [Italiano](./README_IT.md)
 
 ## ✨ Features
 
@@ -41,7 +41,7 @@
 -   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
-> **Note for Windows Users:** WSL is required
+> **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
 
 ### Edit the .env file
 

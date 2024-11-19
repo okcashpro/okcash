@@ -1,6 +1,8 @@
 # 🔌 Providers
 
-[Providers](/api/interfaces) are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
+[Providers](/api/interfaces/provider) are core modules that inject dynamic context and real-time information into agent interactions. They serve as a bridge between the agent and various external systems, enabling access to market data, wallet information, sentiment analysis, and temporal context.
+
+---
 
 ## Overview
 
