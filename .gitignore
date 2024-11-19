@@ -34,6 +34,7 @@ twitter_cookies.json
 timeline_cache.json
 
 *.sqlite
+agent
 characters/
 
 packages/core/src/providers/cache

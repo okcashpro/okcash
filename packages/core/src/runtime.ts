@@ -348,11 +348,14 @@ export class AgentRuntime implements IAgentRuntime {
                         text: knowledgeItem,
                     },
                 });
+
                 const fragments = await splitChunks(knowledgeItem, 1200, 200);
                 for (const fragment of fragments) {
                     const embedding = await embed(this, fragment);
                     await this.knowledgeManager.createMemory({
-                        id: stringToUuid(fragment),
+                        // We namespace the knowledge base uuid to avoid id
+                        // collision with the document above.
+                        id: stringToUuid(knowledgeId + fragment),
                         roomId: this.agentId,
                         agentId: this.agentId,
                         userId: this.agentId,

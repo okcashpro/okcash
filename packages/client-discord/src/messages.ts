@@ -423,10 +423,10 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.createdTimestamp,
-                embedding: embeddingZeroVector,
             };
 
             if (content.text) {
+                await this.runtime.messageManager.addEmbeddingToMemory(memory);
                 await this.runtime.messageManager.createMemory(memory);
             }
 
