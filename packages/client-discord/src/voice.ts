@@ -374,7 +374,6 @@ export class VoiceManager extends EventEmitter {
             audioStream,
             10000000,
             async (buffer) => {
-                // console.log("buffer: ", buffer);
                 const currentTime = Date.now();
                 const silenceDuration = currentTime - lastChunkTime;
                 if (!buffer) {
@@ -401,15 +400,16 @@ export class VoiceManager extends EventEmitter {
                             this.runtime.getService<ITranscriptionService>(
                                 ServiceType.TRANSCRIPTION
                             );
-                        console.log(
-                            "transcriptionService: ",
-                            transcriptionService
-                        );
+
+                        if (!transcriptionService) {
+                            throw new Error(
+                                "Transcription generation service not found"
+                            );
+                        }
 
                         const text =
                             await transcriptionService.transcribe(wavBuffer);
 
-                        console.log("transcribed text: ", text);
                         transcriptionText += text;
                     } catch (error) {
                         console.error("Error processing audio stream:", error);

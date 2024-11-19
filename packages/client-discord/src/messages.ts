@@ -521,6 +521,12 @@ export class MessageManager {
                                     ServiceType.SPEECH_GENERATION
                                 );
 
+                            if (!speechService) {
+                                throw new Error(
+                                    "Speech generation service not found"
+                                );
+                            }
+
                             const audioStream = await speechService.generate(
                                 this.runtime,
                                 content.text
