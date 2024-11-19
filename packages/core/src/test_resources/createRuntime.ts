@@ -17,6 +17,7 @@ import {
     zeroUuid,
 } from "./constants.ts";
 import { User } from "./types.ts";
+import { getEndpoint } from "../models.ts";
 
 export async function createRuntime({
     env,
@@ -130,7 +131,7 @@ export async function createRuntime({
     }
 
     const runtime = new AgentRuntime({
-        serverUrl: "https://api.openai.com/v1",
+        serverUrl: getEndpoint(ModelProviderName.OPENAI),
         conversationLength,
         token: env!.OPENAI_API_KEY!,
         modelProvider: ModelProviderName.OPENAI,
