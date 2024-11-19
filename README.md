@@ -40,7 +40,7 @@
 -   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
-> **Note for Windows Users:** WSL is required
+> **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
 
 ### Edit the .env file
 
