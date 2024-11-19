@@ -1,5 +1,5 @@
 import { Plugin } from "@ai16z/eliza";
-import { zgUpload } from "./actions/uoload";
+import { zgUpload } from "./actions/upload";
 
 export const zgPlugin: Plugin = {
     name: "ZG",
