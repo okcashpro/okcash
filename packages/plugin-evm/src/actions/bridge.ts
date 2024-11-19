@@ -1,33 +1,11 @@
-import { ChainId, createConfig, executeRoute, getRoutes, type Route, type Execution, ExtendedChain, Chain } from '@lifi/sdk'
-import type { WalletProvider } from '../providers/wallet'
-import type { Transaction, BridgeParams, SupportedChain } from '../types'
+import { ChainId, createConfig, executeRoute, getRoutes, ExtendedChain } from '@lifi/sdk'
+import { WalletProvider } from '../providers/wallet'
+import type { Transaction, BridgeParams } from '../types'
 import { CHAIN_CONFIGS } from '../providers/wallet'
+import { bridgeTemplate } from '../templates'
+import type { IAgentRuntime, Memory, State } from '@ai16z/eliza'
 
-export const bridgeTemplate = `Given the recent messages and wallet information below:
-
-{{recentMessages}}
-
-{{walletInfo}}
-
-Extract the following information about the requested token bridge:
-- Token symbol or address to bridge
-- Source chain (ethereum or base)
-- Destination chain (ethereum or base)
-- Amount to bridge
-- Destination address (if specified)
-
-Respond with a JSON markdown block containing only the extracted values:
-
-\`\`\`json
-{
-    "token": string | null,
-    "fromChain": "ethereum" | "base" | null,
-    "toChain": "ethereum" | "base" | null,
-    "amount": string | null,
-    "toAddress": string | null
-}
-\`\`\`
-`
+export { bridgeTemplate }
 
 export class BridgeAction {
   private config
@@ -92,3 +70,30 @@ export class BridgeAction {
     }
   }
 }
+
+export const bridgeAction = {
+  name: 'bridge',
+  description: 'Bridge tokens between different chains',
+  handler: async (runtime: IAgentRuntime, message: Memory, state: State, options: any) => {
+    const walletProvider = new WalletProvider(runtime)
+    const action = new BridgeAction(walletProvider)
+    return action.bridge(options)
+  },
+  template: bridgeTemplate,
+  validate: async (runtime: IAgentRuntime) => {
+    const privateKey = runtime.getSetting("EVM_PRIVATE_KEY")
+    return typeof privateKey === 'string' && privateKey.startsWith('0x')
+  },
+  examples: [
+    [
+      {
+        user: "user",
+        content: {
+          text: "Bridge 1 ETH from Ethereum to Base",
+          action: "CROSS_CHAIN_TRANSFER"
+        }
+      }
+    ]
+  ],
+  similes: ['CROSS_CHAIN_TRANSFER', 'CHAIN_BRIDGE', 'MOVE_CROSS_CHAIN']
+} // TODO: add more examples / similies

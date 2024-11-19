@@ -1,31 +1,10 @@
 import { ByteArray, parseEther, type Hex } from 'viem'
-import type { WalletProvider } from '../providers/wallet'
+import { WalletProvider } from '../providers/wallet'
 import type { Transaction, TransferParams } from '../types'
+import { transferTemplate } from '../templates'
+import type { IAgentRuntime, Memory, State } from '@ai16z/eliza'
 
-export const transferTemplate = `Given the recent messages and wallet information below:
-
-{{recentMessages}}
-
-{{walletInfo}}
-
-Extract the following information about the requested transfer:
-- Chain to execute on (ethereum or base)
-- Amount to transfer
-- Recipient address
-- Token symbol or address (if not native token)
-
-Respond with a JSON markdown block containing only the extracted values:
-
-\`\`\`json
-{
-    "chain": "ethereum" | "base" | null,
-    "amount": string | null,
-    "toAddress": string | null,
-    "token": string | null
-}
-\`\`\`
-`
-
+export { transferTemplate }
 export class TransferAction {
   constructor(private walletProvider: WalletProvider) {}
 
@@ -63,4 +42,38 @@ export class TransferAction {
       throw new Error(`Transfer failed: ${error.message}`)
     }
   }
+}
+
+export const transferAction = {
+  name: 'transfer',
+  description: 'Transfer tokens between addresses on the same chain',
+  handler: async (runtime: IAgentRuntime, message: Memory, state: State, options: any) => {
+    const walletProvider = new WalletProvider(runtime)
+    const action = new TransferAction(walletProvider)
+    return action.transfer(options)
+  },
+  template: transferTemplate,
+  validate: async (runtime: IAgentRuntime) => {
+    const privateKey = runtime.getSetting("EVM_PRIVATE_KEY")
+    return typeof privateKey === 'string' && privateKey.startsWith('0x')
+  },
+  examples: [
+    [
+      {
+        user: "assistant",
+        content: {
+          text: "I'll help you transfer 1 ETH to 0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          action: "SEND_TOKENS"
+        }
+      },
+      {
+        user: "user",
+        content: {
+          text: "Transfer 1 ETH to 0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          action: "SEND_TOKENS"
+        }
+      }
+    ]
+  ],
+  similes: ['SEND_TOKENS', 'TOKEN_TRANSFER', 'MOVE_TOKENS']
 }

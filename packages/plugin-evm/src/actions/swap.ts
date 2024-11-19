@@ -1,32 +1,11 @@
-import { ChainId, createConfig, executeRoute, getRoutes, ExtendedChain, Chain } from '@lifi/sdk'
-import type { WalletProvider } from '../providers/wallet'
-import type { Transaction, SwapParams, SupportedChain } from '../types'
+import { ChainId, createConfig, executeRoute, getRoutes, ExtendedChain } from '@lifi/sdk'
+import { WalletProvider } from '../providers/wallet'
+import type { Transaction, SwapParams } from '../types'
 import { CHAIN_CONFIGS } from '../providers/wallet'
+import { swapTemplate } from '../templates'
+import type { IAgentRuntime, Memory, State } from '@ai16z/eliza'
 
-export const swapTemplate = `Given the recent messages and wallet information below:
-
-{{recentMessages}}
-
-{{walletInfo}}
-
-Extract the following information about the requested token swap:
-- Input token symbol or address (the token being sold)
-- Output token symbol or address (the token being bought)
-- Amount to swap
-- Chain to execute on (ethereum or base)
-
-Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined:
-
-\`\`\`json
-{
-    "inputToken": string | null,
-    "outputToken": string | null,
-    "amount": string | null,
-    "chain": "ethereum" | "base" | null,
-    "slippage": number | null
-}
-\`\`\`
-`
+export { swapTemplate }
 
 export class SwapAction {
   private config
@@ -104,3 +83,38 @@ export class SwapAction {
     }
   }
 }
+
+export const swapAction = {
+  name: 'swap',
+  description: 'Swap tokens on the same chain',
+  handler: async (runtime: IAgentRuntime, message: Memory, state: State, options: any, callback?: any) => {
+    try {
+      const walletProvider = new WalletProvider(runtime)
+      const action = new SwapAction(walletProvider)
+      return await action.swap(options)
+    } catch (error) {
+      console.error('Error in swap handler:', error.message)
+      if (callback) {
+        callback({ text: `Error: ${error.message}` })
+      }
+      return false
+    }
+  },
+  template: swapTemplate,
+  validate: async (runtime: IAgentRuntime) => {
+    const privateKey = runtime.getSetting("EVM_PRIVATE_KEY")
+    return typeof privateKey === 'string' && privateKey.startsWith('0x')
+  },
+  examples: [
+    [
+      {
+        user: "user",
+        content: {
+          text: "Swap 1 ETH for USDC on Base",
+          action: "TOKEN_SWAP"
+        }
+      }
+    ]
+  ],
+  similes: ['TOKEN_SWAP', 'EXCHANGE_TOKENS', 'TRADE_TOKENS']
+} // TODO: add more examples

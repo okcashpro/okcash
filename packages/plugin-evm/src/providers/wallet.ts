@@ -69,11 +69,16 @@ export class WalletProvider {
     return this.address
   }
 
-  async getWalletBalance(): Promise<string> {
-    const client = this.getPublicClient(this.currentChain);
-    const walletClient = this.getWalletClient();
-    const balance = await client.getBalance({ address: walletClient.account.address });
-    return formatUnits(balance, 18)
+  async getWalletBalance(): Promise<string | null> {
+    try {
+      const client = this.getPublicClient(this.currentChain);
+      const walletClient = this.getWalletClient();
+      const balance = await client.getBalance({ address: walletClient.account.address });
+      return formatUnits(balance, 18)
+    } catch (error) {
+      console.error('Error getting wallet balance:', error)
+      return null
+    }
   }
 
   async connect(): Promise<`0x${string}`> {
@@ -88,6 +93,7 @@ export class WalletProvider {
       await walletClient.switchChain({ id: CHAIN_CONFIGS[chain].chainId })
     } catch (error: any) {
       if (error.code === 4902) {
+        console.log('[WalletProvider] Chain not added to wallet (error 4902) - attempting to add chain first')
         await walletClient.addChain({
           chain: {
             ...CHAIN_CONFIGS[chain].chain,
@@ -126,9 +132,7 @@ export class WalletProvider {
 }
 
 export const evmWalletProvider: Provider = {
-  name: 'evm-wallet',
-  description: 'EVM wallet provider',
-  async get(runtime: IAgentRuntime, message: Memory, state?: State): Promise<string> {
+  async get(runtime: IAgentRuntime, message: Memory, state?: State): Promise<string | null> {
     try {
       const walletProvider = new WalletProvider(runtime)
       const address = walletProvider.getAddress()
@@ -136,10 +140,7 @@ export const evmWalletProvider: Provider = {
       return `EVM Wallet Address: ${address}\nBalance: ${balance} ETH`
     } catch (error) {
       console.error('Error in EVM wallet provider:', error)
-      return ''
+      return null
     }
   },
-  async getState(memory: Memory, state: State): Promise<State> {
-    return state
-  }
 }

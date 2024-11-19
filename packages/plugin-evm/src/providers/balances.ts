@@ -44,18 +44,19 @@ export class BalancesProvider {
           chains: [CHAIN_CONFIGS[chain].chainId]
         })
         
-        const balancePromises = tokens.tokens[CHAIN_CONFIGS[chain].chainId].map(async (token): Promise<TokenWithBalance> => {
+        const balancePromises = tokens.tokens[CHAIN_CONFIGS[chain].chainId].map(async (token): Promise<TokenWithBalance> => { // TODO: Consider destructuring token for readability
+          const { address, symbol, decimals, name, logoURI } = token
           const [balance, price] = await Promise.all([
             getTokenBalances(this.walletAddress, [{
-              address: token.address,
-              symbol: token.symbol,
-              decimals: token.decimals,
-              name: token.name,
+              address,
+              symbol,
+              decimals,
+              name,
               chainId: CHAIN_CONFIGS[chain].chainId,
               priceUSD: '0',
-              logoURI: token.logoURI || ''
+              logoURI: logoURI || ''
             }]),
-            this.getTokenPrice(chain, token.address as Address)
+            this.getTokenPrice(chain, address as Address)
           ])
 
           return {
@@ -75,8 +76,7 @@ export class BalancesProvider {
           }
         })
 
-        const balances = await Promise.all(balancePromises)
-        const nonZeroBalances = balances.filter(t => t.balance > 0n)
+        const nonZeroBalances = (await Promise.all(balancePromises)).filter(t => t.balance > 0n)
         
         const totalValueUSD = nonZeroBalances
           .reduce((sum, t) => sum + Number(t.valueUSD || 0), 0)

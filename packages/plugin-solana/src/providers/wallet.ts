@@ -265,7 +265,7 @@ export class WalletProvider {
 }
 
 const walletProvider: Provider = {
-    get: async (runtime: IAgentRuntime, _message: Memory, _state?: State): Promise<string> => {
+    get: async (runtime: IAgentRuntime, _message: Memory, _state?: State): Promise<string | null> => {
         try {
             const publicKey = runtime.getSetting("SOLANA_PUBLIC_KEY");
             if (!publicKey) {
@@ -284,7 +284,7 @@ const walletProvider: Provider = {
             return await provider.getFormattedPortfolio(runtime);
         } catch (error) {
             console.error("Error in wallet provider:", error);
-            return "";
+            return null;
         }
     }
 };
