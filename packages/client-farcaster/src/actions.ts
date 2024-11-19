@@ -1,5 +1,5 @@
 import { CastId, FarcasterNetwork, Signer } from "@farcaster/hub-nodejs";
-import { CastType, makeCastAdd, makeCastAddData } from "@farcaster/hub-nodejs";
+import { CastType, makeCastAdd } from "@farcaster/hub-nodejs";
 import type { FarcasterClient } from "./client";
 import type { Content, IAgentRuntime, Memory, UUID } from "@ai16z/eliza";
 import type { Cast, Profile } from "./types";
@@ -51,16 +51,15 @@ export async function sendCast({
 
         await client.submitMessage(castAddMessageResult.value);
 
-        const cast: Cast = {
-            ...castAddMessageResult.value,
-            profile,
-        };
+        const cast = await client.loadCastFromMessage(
+            castAddMessageResult.value
+        );
 
         sent.push(cast);
 
         parentCastId = {
-            fid: profile.fid,
-            hash: cast.hash,
+            fid: cast.profile.fid,
+            hash: cast.message.hash,
         };
 
         // TODO: check rate limiting

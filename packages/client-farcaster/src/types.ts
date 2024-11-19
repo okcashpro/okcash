@@ -1,4 +1,4 @@
-import { CastAddBody, CastAddMessage } from "@farcaster/hub-nodejs";
+import type { CastAddMessage } from "@farcaster/hub-nodejs";
 import type { Hex } from "viem";
 
 export type Profile = {
@@ -15,5 +15,12 @@ export type Profile = {
 };
 
 export type Cast = {
+    id: Hex;
     profile: Profile;
-} & CastAddMessage;
+    text: string;
+    message: CastAddMessage;
+    inReplyTo?: {
+        id: Hex;
+        fid: number;
+    };
+};

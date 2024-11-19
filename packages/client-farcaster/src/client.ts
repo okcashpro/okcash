@@ -1,5 +1,6 @@
 import { IAgentRuntime } from "@ai16z/eliza";
 import {
+    CastAddMessage,
     CastId,
     FidRequest,
     getInsecureHubRpcClient,
@@ -9,41 +10,28 @@ import {
     isUserDataAddMessage,
     Message,
     MessagesResponse,
-    ViemLocalEip712Signer,
-    gateway
-    Signer,
 } from "@farcaster/hub-nodejs";
 import { Cast, Profile } from "./types";
 import { toHex } from "viem";
-import {
-    generatePrivateKey,
-    privateKeyToAccount,
-    toAccount,
-} from "viem/accounts";
+import { populateMentions } from "./utils";
 
 export class FarcasterClient {
     runtime: IAgentRuntime;
     farcaster: HubRpcClient;
 
-    cache = new Map<string, string>();
+    cache: Map<string, any>;
 
-    constructor(opts: { runtime: IAgentRuntime; url: string; ssl: boolean }) {
+    constructor(opts: {
+        runtime: IAgentRuntime;
+        url: string;
+        ssl: boolean;
+        cache: Map<string, any>;
+    }) {
+        this.cache = opts.cache;
         this.runtime = opts.runtime;
         this.farcaster = opts.ssl
             ? getSSLHubRpcClient(opts.url)
             : getInsecureHubRpcClient(opts.url);
-    }
-
-    async register() {
-        const account = privateKeyToAccount(generatePrivateKey());
-        const eip712Signer = new ViemLocalEip712Signer(account);
-
-        const signature = await eip712Signer.signRegister({
-            to: account.address,
-            recovery: "0x00000000FcB080a4D6c39a9354dA9EB9bC104cd7",
-            nonce,
-            deadline,
-        });
     }
 
     async submitMessage(cast: Message, retryTimes?: number): Promise<void> {
@@ -54,19 +42,61 @@ export class FarcasterClient {
         }
     }
 
+    async loadCastFromMessage(message: CastAddMessage): Promise<Cast> {
+        const profileMap = {};
+
+        const profile = await this.getProfile(message.data.fid);
+
+        profileMap[message.data.fid] = profile;
+
+        for (const mentionId of message.data.castAddBody.mentions) {
+            if (profileMap[mentionId]) continue;
+            profileMap[mentionId] = await this.getProfile(mentionId);
+        }
+
+        const text = populateMentions(
+            message.data.castAddBody.text,
+            message.data.castAddBody.mentions,
+            message.data.castAddBody.mentionsPositions,
+            profileMap
+        );
+
+        return {
+            id: toHex(message.hash),
+            message,
+            text,
+            profile,
+        };
+    }
+
     async getCast(castId: CastId): Promise<Message> {
+        const castHash = toHex(castId.hash);
+
+        if (this.cache.has(`farcaster/cast/${castHash}`)) {
+            return this.cache.get(`farcaster/cast/${castHash}`);
+        }
+
         const cast = await this.farcaster.getCast(castId);
+
         if (cast.isErr()) {
             throw cast.error;
         }
+
+        this.cache.set(`farcaster/cast/${castHash}`, cast);
+
         return cast.value;
     }
 
-    async getCastByFid(request: FidRequest): Promise<MessagesResponse> {
+    async getCastsByFid(request: FidRequest): Promise<MessagesResponse> {
         const cast = await this.farcaster.getCastsByFid(request);
         if (cast.isErr()) {
             throw cast.error;
         }
+
+        cast.value.messages.map((cast) => {
+            this.cache.set(`farcaster/cast/${toHex(cast.hash)}`, cast);
+        });
+
         return cast.value;
     }
 
@@ -75,10 +105,19 @@ export class FarcasterClient {
         if (cast.isErr()) {
             throw cast.error;
         }
+
+        cast.value.messages.map((cast) => {
+            this.cache.set(`farcaster/cast/${toHex(cast.hash)}`, cast);
+        });
+
         return cast.value;
     }
 
-    async getProfile(fid: number) {
+    async getProfile(fid: number): Promise<Profile> {
+        if (this.cache.has(`farcaster/profile/${fid}`)) {
+            return this.cache.get(`farcaster/profile/${fid}`) as Profile;
+        }
+
         const result = await this.farcaster.getUserDataByFid({
             fid: fid,
             reverse: true,
@@ -122,26 +161,31 @@ export class FarcasterClient {
             profile.signer = toHex(lastMessage.signer);
         }
 
+        this.cache.set(`farcaster/profile/${fid}`, profile);
+
         return profile;
     }
 
-    async getTimeline(request: FidRequest & { profile?: Profile }) {
+    async getTimeline(request: FidRequest): Promise<{
+        timeline: Cast[];
+        nextPageToken?: Uint8Array<ArrayBufferLike> | undefined;
+    }> {
         const timeline: Cast[] = [];
 
-        const profile = request.profile ?? (await this.getProfile(request.fid));
-        const results = await this.getCastByFid(request);
+        const results = await this.getCastsByFid(request);
 
         for (const message of results.messages) {
             if (isCastAddMessage(message)) {
-                timeline.push({
-                    profile,
-                    ...message,
-                });
+                this.cache.set(
+                    `farcaster/cast/${toHex(message.hash)}`,
+                    message
+                );
+
+                timeline.push(await this.loadCastFromMessage(message));
             }
         }
 
         return {
-            profile,
             timeline,
             nextPageToken: results.nextPageToken,
         };

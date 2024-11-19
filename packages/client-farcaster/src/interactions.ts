@@ -7,12 +7,7 @@ import {
     stringToUuid,
     type IAgentRuntime,
 } from "@ai16z/eliza";
-import {
-    CastAddMessage,
-    FarcasterNetwork,
-    isCastAddMessage,
-    type Signer,
-} from "@farcaster/hub-nodejs";
+import { isCastAddMessage, type Signer } from "@farcaster/hub-nodejs";
 import type { FarcasterClient } from "./client";
 import { toHex } from "viem";
 import { buildConversationThread, createCastMemory } from "./memory";
@@ -30,7 +25,8 @@ export class FarcasterInteractionManager {
     constructor(
         public client: FarcasterClient,
         public runtime: IAgentRuntime,
-        private signer: Signer
+        private signer: Signer,
+        public cache: Map<string, any>
     ) {}
 
     public async start() {
@@ -64,18 +60,13 @@ export class FarcasterInteractionManager {
             const roomId = stringToUuid(conversationId);
             const userId = stringToUuid(messageSigner);
 
-            const profile = await this.client.getProfile(mention.data.fid);
-
-            const cast = {
-                ...mention,
-                profile,
-            };
+            const cast = await this.client.loadCastFromMessage(mention);
 
             await this.runtime.ensureConnection(
                 userId,
                 roomId,
-                profile.username,
-                profile.name,
+                cast.profile.username,
+                cast.profile.name,
                 "farcaster"
             );
 
@@ -109,15 +100,13 @@ export class FarcasterInteractionManager {
         cast: Cast;
         memory: Memory;
     }) {
-        const castHash = toHex(cast.hash);
-
-        if (cast.data.fid === agent.fid) {
-            console.log("skipping cast from bot itself", castHash);
+        if (cast.profile.fid === agent.fid) {
+            console.log("skipping cast from bot itself", cast.id);
             return;
         }
 
         if (!memory.content.text) {
-            console.log("skipping cast with no text", castHash);
+            console.log("skipping cast with no text", cast.id);
             return { text: "", action: "IGNORE" };
         }
 
@@ -126,7 +115,6 @@ export class FarcasterInteractionManager {
         const { timeline } = await this.client.getTimeline({
             fid: agent.fid,
             pageSize: 10,
-            profile: agent,
         });
 
         const formattedTimeline = formatTimeline(
@@ -151,7 +139,7 @@ export class FarcasterInteractionManager {
 
         const memoryId = castUuid({
             agentId: this.runtime.agentId,
-            hash: castHash,
+            hash: cast.id,
         });
 
         const castMemory =
@@ -166,8 +154,6 @@ export class FarcasterInteractionManager {
                     cast,
                 })
             );
-
-            // TODO: saveRequestMessage
         }
 
         const shouldRespond = await generateShouldRespond({
@@ -201,21 +187,16 @@ export class FarcasterInteractionManager {
         if (!response.text) return;
 
         try {
-            // const callback: HandlerCallback = async (response: Content) => {
-            //     return results.map((result) => result.memory);
-            // };
-
             const results = await sendCast({
                 runtime: this.runtime,
                 client: this.client,
                 signer: this.signer,
                 profile: cast.profile,
-                network: FarcasterNetwork.MAINNET,
                 content: response,
                 roomId: memory.roomId,
                 inReplyTo: {
-                    fid: cast.data.fid,
-                    hash: cast.hash,
+                    fid: cast.message.data.fid,
+                    hash: cast.message.hash,
                 },
             });
 
@@ -232,10 +213,8 @@ export class FarcasterInteractionManager {
                 results.map((result) => result.memory),
                 newState
             );
-
-            // const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
         } catch (error) {
-            console.error(`Error sending response tweet: ${error}`);
+            console.error(`Error sending response cast: ${error}`);
         }
     }
 }

@@ -16,6 +16,8 @@ export class FarcasterAgentClient implements Client {
         public runtime: IAgentRuntime,
         client?: FarcasterClient
     ) {
+        const cache = new Map<string, any>();
+
         this.signer = new NobleEd25519Signer(
             hexToBytes(runtime.getSetting("FARCASTER_PRIVATE_KEY")! as Hex)
         );
@@ -28,18 +30,21 @@ export class FarcasterAgentClient implements Client {
                 url:
                     runtime.getSetting("FARCASTER_HUB_URL") ??
                     "hub.pinata.cloud",
+                cache,
             });
 
         this.posts = new FarcasterPostManager(
             this.client,
             this.runtime,
-            this.signer
+            this.signer,
+            cache
         );
 
         this.interactions = new FarcasterInteractionManager(
             this.client,
             this.runtime,
-            this.signer
+            this.signer,
+            cache
         );
     }
 

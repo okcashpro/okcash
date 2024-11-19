@@ -1,11 +1,10 @@
-import { toHex } from "viem";
 import { Character, shouldRespondFooter } from "@ai16z/eliza";
-import type { Cast, Profile } from "./types";
+import type { Cast } from "./types";
 
 export const formatCast = (cast: Cast) => {
-    return `ID: ${toHex(cast.hash)}
-From: ${cast.profile.name} (@${cast.profile.username})${cast.profile.username})${cast.data.castAddBody.parentCastId ? `\nIn reply to: ${toHex(cast.data.castAddBody.parentCastId.hash)}` : ""}
-Text: ${cast.data.castAddBody.text}`;
+    return `ID: ${cast.id}
+From: ${cast.profile.name} (@${cast.profile.username})${cast.profile.username})${cast.inReplyTo ? `\nIn reply to: ${cast.inReplyTo.id}` : ""}
+Text: ${cast.text}`;
 };
 
 export const formatTimeline = (

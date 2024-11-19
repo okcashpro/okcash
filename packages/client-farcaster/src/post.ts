@@ -1,3 +1,4 @@
+import { Signer } from "@farcaster/hub-nodejs";
 import {
     composeContext,
     generateText,
@@ -6,15 +7,7 @@ import {
     stringToUuid,
 } from "@ai16z/eliza";
 import { FarcasterClient } from "./client";
-import {
-    CastAddMessage,
-    FarcasterNetwork,
-    isCastAddMessage,
-    Signer,
-} from "@farcaster/hub-nodejs";
-import { Cast } from "./types";
 import { formatTimeline, postTemplate } from "./prompts";
-import { toHex } from "viem";
 import { castUuid } from "./utils";
 import { createCastMemory } from "./memory";
 import { sendCast } from "./actions";
@@ -23,23 +16,25 @@ export class FarcasterPostManager {
     constructor(
         public client: FarcasterClient,
         public runtime: IAgentRuntime,
-        private signer: Signer
+        private signer: Signer,
+        public cache: Map<string, any>
     ) {}
 
     public async start() {
-        const generateNewPostLoop = () => {
-            this.generateNewPost();
+        const generateNewCastLoop = async () => {
+            await this.generateNewCast();
+
             setTimeout(
-                generateNewPostLoop,
+                generateNewCastLoop,
                 (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
             ); // Random interval between 1 and 4 hours
         };
 
-        generateNewPostLoop();
+        generateNewCastLoop();
     }
 
-    private async generateNewPost() {
-        console.log("Generating new tweet");
+    private async generateNewCast() {
+        console.log("Generating new cast");
         try {
             const fid = Number(this.runtime.getSetting("FARCASTER_FID")!);
             // const farcasterUserName =
@@ -57,8 +52,9 @@ export class FarcasterPostManager {
             const { timeline } = await this.client.getTimeline({
                 fid,
                 pageSize: 10,
-                profile,
             });
+
+            this.cache.set("farcaster/timeline", timeline);
 
             const formattedHomeTimeline = formatTimeline(
                 this.runtime.character,
@@ -88,48 +84,46 @@ export class FarcasterPostManager {
                     postTemplate,
             });
 
-            const content = await generateText({
+            const newContent = await generateText({
                 runtime: this.runtime,
                 context,
                 modelClass: ModelClass.SMALL,
             });
 
-            // const slice = newTweetContent.replaceAll(/\\n/g, "\n").trim();
+            const slice = newContent.replaceAll(/\\n/g, "\n").trim();
 
-            // const contentLength = 240;
+            const contentLength = 240;
 
-            // let content = slice.slice(0, contentLength);
-            // // if its bigger than 280, delete the last line
-            // if (content.length > 280) {
-            //     content = content.slice(0, content.lastIndexOf("\n"));
-            // }
+            let content = slice.slice(0, contentLength);
+            // if its bigger than 280, delete the last line
+            if (content.length > 280) {
+                content = content.slice(0, content.lastIndexOf("\n"));
+            }
 
-            // if (content.length > contentLength) {
-            //     // slice at the last period
-            //     content = content.slice(0, content.lastIndexOf("."));
-            // }
+            if (content.length > contentLength) {
+                // slice at the last period
+                content = content.slice(0, content.lastIndexOf("."));
+            }
 
-            // // if it's still too long, get the period before the last period
-            // if (content.length > contentLength) {
-            //     content = content.slice(0, content.lastIndexOf("."));
-            // }
+            // if it's still too long, get the period before the last period
+            if (content.length > contentLength) {
+                content = content.slice(0, content.lastIndexOf("."));
+            }
 
             try {
+                // TODO: handle all the casts?
                 const [{ cast }] = await sendCast({
                     client: this.client,
                     runtime: this.runtime,
                     signer: this.signer,
-                    network: FarcasterNetwork.MAINNET,
                     roomId: generateRoomId,
                     content: { text: content },
                     profile,
                 });
 
-                const castHash = toHex(cast.hash);
-
                 const roomId = castUuid({
                     agentId: this.runtime.agentId,
-                    hash: castHash,
+                    hash: cast.id,
                 });
 
                 await this.runtime.ensureRoomExists(roomId);
