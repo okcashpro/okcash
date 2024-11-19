@@ -351,10 +351,14 @@ export class TrustScoreManager {
             new PublicKey(Wallet!)
         );
 
+        let tokensBalance = 0;
         const prices = await wallet.fetchPrices(runtime);
         const solPrice = prices.solana.usd;
         const buySol = data.buy_amount / parseFloat(solPrice);
         const buy_value_usd = data.buy_amount * processedData.tradeData.price;
+        const token = await this.tokenProvider.fetchTokenTradeData();
+        const tokenPrice = token.price;
+        tokensBalance = buy_value_usd / tokenPrice;
 
         const creationData = {
             token_address: tokenAddress,
@@ -383,6 +387,23 @@ export class TrustScoreManager {
             rapidDump: false,
         };
         this.trustScoreDb.addTradePerformance(creationData, data.is_simulation);
+
+        if (data.is_simulation) {
+            // If the trade is a simulation update the balance
+            this.trustScoreDb.updateTokenBalance(tokenAddress, tokensBalance);
+            // generate some random hash for simulations
+            const hash = Math.random().toString(36).substring(7);
+            const transaction = {
+                tokenAddress: tokenAddress,
+                type: "buy",
+                transactionHash: hash,
+                amount: data.buy_amount,
+                price: processedData.tradeData.price,
+                isSimulation: true,
+                timestamp: new Date().toISOString(),
+            };
+            this.trustScoreDb.addTransaction(transaction);
+        }
         // api call to update trade performance
         this.createTradeInBe(tokenAddress, recommenderId, data);
         return creationData;
@@ -507,6 +528,25 @@ export class TrustScoreManager {
             sellDetailsData,
             isSimulation
         );
+        if (isSimulation) {
+            // If the trade is a simulation update the balance
+            const oldBalance = this.trustScoreDb.getTokenBalance(tokenAddress);
+            const tokenBalance = oldBalance - sellDetails.sell_amount;
+            this.trustScoreDb.updateTokenBalance(tokenAddress, tokenBalance);
+            // generate some random hash for simulations
+            const hash = Math.random().toString(36).substring(7);
+            const transaction = {
+                tokenAddress: tokenAddress,
+                type: "sell",
+                transactionHash: hash,
+                amount: sellDetails.sell_amount,
+                price: processedData.tradeData.price,
+                isSimulation: true,
+                timestamp: new Date().toISOString(),
+            };
+            this.trustScoreDb.addTransaction(transaction);
+        }
+
         return sellDetailsData;
     }
 

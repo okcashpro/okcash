@@ -40,6 +40,7 @@ export interface TokenPerformance {
     rapidDump: boolean;
     suspiciousVolume: boolean;
     validationTrust: number;
+    balance: number;
     lastUpdated: Date;
 }
 
@@ -120,7 +121,18 @@ interface TokenPerformanceRow {
     rapid_dump: number;
     suspicious_volume: number;
     validation_trust: number;
+    balance: number;
     last_updated: string;
+}
+
+interface Transaction {
+    tokenAddress: string;
+    transactionHash: string;
+    type: "buy" | "sell";
+    amount: number;
+    price: number;
+    isSimulation: boolean;
+    timestamp: string;
 }
 
 export class TrustScoreDatabase {
@@ -192,6 +204,7 @@ export class TrustScoreDatabase {
                 rapid_dump BOOLEAN DEFAULT FALSE,
                 suspicious_volume BOOLEAN DEFAULT FALSE,
                 validation_trust REAL DEFAULT 0,
+                balance REAL DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -289,6 +302,20 @@ export class TrustScoreDatabase {
           FOREIGN KEY (recommender_id) REFERENCES recommenders(id) ON DELETE CASCADE
       );
   `);
+
+        // create transactions table
+        this.db.exec(`
+        CREATE TABLE IF NOT EXISTS transactions (
+            token_address TEXT NOT NULL,
+            transaction_hash TEXT PRIMARY KEY,
+            type TEXT NOT NULL,
+            amount REAL NOT NULL,
+            price REAL NOT NULL,
+            timestamp TEXT NOT NULL,
+            is_simulation BOOLEAN DEFAULT FALSE,
+            FOREIGN KEY (token_address) REFERENCES token_performance(token_address) ON DELETE CASCADE
+        );
+    `);
     }
 
     /**
@@ -749,6 +776,25 @@ export class TrustScoreDatabase {
         }
     }
 
+    // update token balance
+
+    updateTokenBalance(tokenAddress: string, balance: number): boolean {
+        const sql = `
+            UPDATE token_performance
+            SET balance = ?,
+                last_updated = CURRENT_TIMESTAMP
+            WHERE token_address = ?;
+        `;
+        try {
+            this.db.prepare(sql).run(balance, tokenAddress);
+            console.log(`Updated token balance for ${tokenAddress}`);
+            return true;
+        } catch (error) {
+            console.error("Error updating token balance:", error);
+            return false;
+        }
+    }
+
     /**
      * Retrieves token performance metrics.
      * @param tokenAddress Token's address
@@ -776,6 +822,7 @@ export class TrustScoreDatabase {
             rapidDump: row.rapid_dump === 1,
             suspiciousVolume: row.suspicious_volume === 1,
             validationTrust: row.validation_trust,
+            balance: row.balance,
             lastUpdated: new Date(row.last_updated),
         };
     }
@@ -1245,6 +1292,79 @@ export class TrustScoreDatabase {
             last_updated: row.last_updated,
             rapidDump: row.rapidDump,
         };
+    }
+
+    // ----- Transactions Methods -----
+    /**
+     * Adds a new transaction to the database.
+     * @param transaction Transaction object
+     * @returns boolean indicating success
+     */
+
+    addTransaction(transaction: Transaction): boolean {
+        const sql = `
+        INSERT INTO transactions (
+            token_address,
+            transaction_hash,
+            type,
+            amount,
+            price,
+            is_simulation,
+            timestamp
+        ) VALUES (?, ?, ?, ?, ?, ?);
+    `;
+        try {
+            this.db
+                .prepare(sql)
+                .run(
+                    transaction.tokenAddress,
+                    transaction.transactionHash,
+                    transaction.type,
+                    transaction.amount,
+                    transaction.price,
+                    transaction.isSimulation,
+                    transaction.timestamp
+                );
+            return true;
+        } catch (error) {
+            console.error("Error adding transaction:", error);
+            return false;
+        }
+    }
+
+    /**
+     * Retrieves all transactions for a specific token.
+     * @param tokenAddress Token's address
+     * @returns Array of Transaction objects
+     */
+    getTransactionsByToken(tokenAddress: string): Transaction[] {
+        const sql = `SELECT * FROM transactions WHERE token_address = ? ORDER BY timestamp DESC;`;
+        const rows = this.db.prepare(sql).all(tokenAddress) as Array<{
+            token_address: string;
+            transaction_hash: string;
+            type: string;
+            amount: number;
+            price: number;
+            is_simulation: boolean;
+            timestamp: string;
+        }>;
+
+        return rows.map((row) => {
+            // Validate and cast 'type' to ensure it matches the expected union type
+            if (row.type !== "buy" && row.type !== "sell") {
+                throw new Error(`Unexpected transaction type: ${row.type}`);
+            }
+
+            return {
+                tokenAddress: row.token_address,
+                transactionHash: row.transaction_hash,
+                type: row.type as "buy" | "sell",
+                amount: row.amount,
+                price: row.price,
+                isSimulation: row.is_simulation,
+                timestamp: new Date(row.timestamp).toISOString(),
+            };
+        });
     }
 
     /**
