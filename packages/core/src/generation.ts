@@ -244,10 +244,11 @@ export async function generateText({
                 elizaLogger.debug(
                     "Using local Llama model for text completion."
                 );
-                const textGenerationService =
-                    runtime.getService<ITextGenerationService>(
+                const textGenerationService = runtime
+                    .getService<ITextGenerationService>(
                         ServiceType.TEXT_GENERATION
-                    );
+                    )
+                    .getInstance();
 
                 if (!textGenerationService) {
                     throw new Error("Text generation service not found");
@@ -858,10 +859,9 @@ export const generateCaption = async (
     description: string;
 }> => {
     const { imageUrl } = data;
-    const imageDescriptionService =
-        runtime.getService<IImageDescriptionService>(
-            ServiceType.IMAGE_DESCRIPTION
-        );
+    const imageDescriptionService = runtime
+        .getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION)
+        .getInstance();
 
     if (!imageDescriptionService) {
         throw new Error("Image description service not found");

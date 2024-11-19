@@ -25,6 +25,7 @@ export class ImageDescriptionService extends Service {
     private processor: Florence2Processor | null = null;
     private tokenizer: PreTrainedTokenizer | null = null;
     private initialized: boolean = false;
+    private runtime: IAgentRuntime | null = null;
 
     static serviceType: ServiceType = ServiceType.IMAGE_DESCRIPTION;
 
@@ -35,14 +36,7 @@ export class ImageDescriptionService extends Service {
         super();
     }
 
-    async initialize(
-        device: string | null = null,
-        runtime: IAgentRuntime
-    ): Promise<void> {
-        if (this.initialized) {
-            return;
-        }
-
+    async initialize(runtime: IAgentRuntime): Promise<void> {
         const model = models[runtime?.character?.modelProvider];
 
         if (model === models[ModelProviderName.LLAMALOCAL]) {
@@ -86,14 +80,15 @@ export class ImageDescriptionService extends Service {
     }
 
     async describeImage(
-        imageUrl: string,
-        device?: string,
-        runtime?: IAgentRuntime
+        imageUrl: string
     ): Promise<{ title: string; description: string }> {
-        this.initialize(device, runtime);
-
         if (this.device === "cloud") {
-            return this.recognizeWithOpenAI(imageUrl, runtime);
+            if (!this.runtime) {
+                throw new Error(
+                    "Runtime is required for OpenAI image recognition"
+                );
+            }
+            return this.recognizeWithOpenAI(imageUrl);
         } else {
             this.queue.push(imageUrl);
             this.processQueue();
@@ -113,9 +108,12 @@ export class ImageDescriptionService extends Service {
     }
 
     private async recognizeWithOpenAI(
-        imageUrl: string,
-        runtime
+        imageUrl: string
     ): Promise<{ title: string; description: string }> {
+        if (!this.runtime) {
+            throw new Error("Runtime is required for OpenAI image recognition");
+        }
+
         const isGif = imageUrl.toLowerCase().endsWith(".gif");
         let imageData: Buffer | null = null;
 
@@ -147,7 +145,7 @@ export class ImageDescriptionService extends Service {
                 imageData,
                 prompt,
                 isGif,
-                runtime
+                this.runtime
             );
             const title = text.split("\n")[0];
             const description = text.split("\n").slice(1).join("\n");

@@ -21,7 +21,7 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
 import yargs from "yargs";
-import { character } from "./character.ts";
+import blobert from "./blobert.ts";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -272,7 +272,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [character];
+    let characters = [blobert];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
@@ -283,7 +283,7 @@ const startAgents = async () => {
             await startAgent(character, directClient);
         }
     } catch (error) {
-        console.error("Error starting agents:", error);
+        elizaLogger.error("Error starting agents:", error);
     }
 
     function chat() {
@@ -296,12 +296,12 @@ const startAgents = async () => {
         });
     }
 
-    console.log("Chat started. Type 'exit' to quit.");
+    elizaLogger.log("Chat started. Type 'exit' to quit.");
     chat();
 };
 
 startAgents().catch((error) => {
-    console.error("Unhandled error in startAgents:", error);
+    elizaLogger.error("Unhandled error in startAgents:", error);
     process.exit(1); // Exit the process after logging
 });
 

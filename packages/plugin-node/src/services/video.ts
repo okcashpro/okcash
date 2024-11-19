@@ -22,6 +22,8 @@ export class VideoService extends Service {
         this.ensureCacheDirectoryExists();
     }
 
+    async initialize(runtime: IAgentRuntime): Promise<void> {}
+
     private ensureCacheDirectoryExists() {
         if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
             fs.mkdirSync(this.CONTENT_CACHE_DIR);
@@ -327,9 +329,9 @@ export class VideoService extends Service {
 
         console.log("Starting transcription...");
         const startTime = Date.now();
-        const transcriptionService = runtime.getService<ITranscriptionService>(
-            ServiceType.TRANSCRIPTION
-        );
+        const transcriptionService = runtime
+            .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
+            .getInstance();
         if (!transcriptionService) {
             throw new Error("Transcription service not found");
         }

@@ -1,7 +1,7 @@
 import { TwitterPostClient } from "./post.ts";
 import { TwitterSearchClient } from "./search.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
-import { IAgentRuntime, Client } from "@ai16z/eliza";
+import { IAgentRuntime, Client, elizaLogger } from "@ai16z/eliza";
 
 class TwitterAllClient {
     post: TwitterPostClient;
@@ -19,11 +19,11 @@ class TwitterAllClient {
 
 export const TwitterClientInterface: Client = {
     async start(runtime: IAgentRuntime) {
-        console.log("Twitter client started");
+        elizaLogger.log("Twitter client started");
         return new TwitterAllClient(runtime);
     },
     async stop(runtime: IAgentRuntime) {
-        console.warn("Twitter client does not support stopping yet");
+        elizaLogger.warn("Twitter client does not support stopping yet");
     },
 };
 

@@ -270,7 +270,7 @@ export class ClientBase extends EventEmitter {
                 console.error("Failed to get user ID");
                 return;
             }
-            console.log("Twitter user ID:", userId);
+            elizaLogger.log("Twitter user ID:", userId);
             this.twitterUserId = userId;
 
             // Initialize Twitter profile

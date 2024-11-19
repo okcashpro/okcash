@@ -401,6 +401,10 @@ export class VoiceManager extends EventEmitter {
                             this.runtime.getService<ITranscriptionService>(
                                 ServiceType.TRANSCRIPTION
                             );
+                        console.log(
+                            "transcriptionService: ",
+                            transcriptionService
+                        );
 
                         const text =
                             await transcriptionService.transcribe(wavBuffer);
