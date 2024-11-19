@@ -25,8 +25,8 @@ import { VoiceManager } from "./voice.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
-    private client: Client;
-    private runtime: IAgentRuntime;
+    client: Client;
+    runtime: IAgentRuntime;
     character: Character;
     private messageManager: MessageManager;
     private voiceManager: VoiceManager;

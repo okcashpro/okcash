@@ -150,16 +150,17 @@ export class AgentRuntime implements IAgentRuntime {
         return this.memoryManagers.get(tableName) || null;
     }
 
-    getService(service: ServiceType): typeof Service | null {
+    getService<T extends Service>(service: ServiceType): T | null {
         const serviceInstance = this.services.get(service);
         if (!serviceInstance) {
             elizaLogger.error(`Service ${service} not found`);
             return null;
         }
-        return serviceInstance as typeof Service;
+        return serviceInstance as T;
     }
+
     registerService(service: Service): void {
-        const serviceType = (service as typeof Service).serviceType;
+        const serviceType = service.serviceType;
         elizaLogger.log("Registering service:", serviceType);
         if (this.services.has(serviceType)) {
             elizaLogger.warn(
@@ -168,7 +169,7 @@ export class AgentRuntime implements IAgentRuntime {
             return;
         }
 
-        this.services.set((service as typeof Service).serviceType, service);
+        this.services.set(serviceType, service);
     }
 
     /**

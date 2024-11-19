@@ -220,7 +220,7 @@ export class ClientBase extends EventEmitter {
                         this.runtime.getSetting("TWITTER_EMAIL"),
                         this.runtime.getSetting("TWITTER_2FA_SECRET")
                     );
-                    console.log("Logged in to Twitter");
+                    elizaLogger.log("Logged in to Twitter");
                     const cookies = await this.twitterClient.getCookies();
                     fs.writeFileSync(
                         cookiesFilePath,

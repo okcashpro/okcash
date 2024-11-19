@@ -327,10 +327,15 @@ export class VideoService extends Service {
 
         console.log("Starting transcription...");
         const startTime = Date.now();
-        const transcript = await runtime
-            .getService(ServiceType.TRANSCRIPTION)
-            .getInstance<ITranscriptionService>()
-            .transcribe(audioBuffer);
+        const transcriptionService = runtime.getService<ITranscriptionService>(
+            ServiceType.TRANSCRIPTION
+        );
+        if (!transcriptionService) {
+            throw new Error("Transcription service not found");
+        }
+
+        const transcript = await transcriptionService.transcribe(audioBuffer);
+
         const endTime = Date.now();
         console.log(
             `Transcription completed in ${(endTime - startTime) / 1000} seconds`

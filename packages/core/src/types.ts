@@ -524,7 +524,7 @@ export interface IMemoryManager {
 
 export abstract class Service {
     private static instance: Service | null = null;
-    static serviceType: ServiceType;
+    serviceType: ServiceType;
 
     public static getInstance<T extends Service>(): T {
         if (!Service.instance) {
@@ -556,7 +556,7 @@ export interface IAgentRuntime {
 
     getMemoryManager(name: string): IMemoryManager | null;
 
-    getService(service: string): typeof Service | null;
+    getService<T extends Service>(service: ServiceType): T | null;
 
     registerService(service: Service): void;
 
@@ -608,6 +608,7 @@ export interface IImageDescriptionService extends Service {
 }
 
 export interface ITranscriptionService extends Service {
+    getInstance(): ITranscriptionService;
     transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null>;
     transcribeAttachmentLocally(
         audioBuffer: ArrayBuffer
@@ -617,6 +618,7 @@ export interface ITranscriptionService extends Service {
 }
 
 export interface IVideoService extends Service {
+    getInstance(): IVideoService;
     isVideoUrl(url: string): boolean;
     processVideo(url: string): Promise<Media>;
     fetchVideoInfo(url: string): Promise<Media>;

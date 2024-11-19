@@ -32,7 +32,7 @@ export class TelegramClient {
                 this.bot.botInfo = botInfo;
             });
 
-            console.log(`Bot username: @${this.bot.botInfo?.username}`);
+            elizaLogger.success(`Bot username: @${this.bot.botInfo?.username}`);
 
             this.messageManager.bot = this.bot;
 
