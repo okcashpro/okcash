@@ -12,6 +12,7 @@ import { Indexer, ZgFile, getFlowContract } from '@0glabs/0g-ts-sdk';
 import { ethers } from 'ethers';
 import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
+import { promises as fs } from 'fs';
 
 
 const uploadTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
@@ -102,7 +103,7 @@ export const zgUpload: Action = {
             console.error("Invalid content for UPLOAD action.");
             if (callback) {
                 callback({
-                    text: "Unable to process zg upload request. Invalid content provided.",
+                    text: "Unable to process 0G upload request. Invalid content provided.",
                     content: { error: "Invalid upload content" },
                 });
             }
@@ -115,6 +116,18 @@ export const zgUpload: Action = {
             const zgPrivateKey = runtime.getSetting("ZEROG_PRIVATE_KEY");
             const flowAddr = runtime.getSetting("ZEROG_FLOW_ADDRESS");
             const filePath = content.filePath;
+            if (!filePath) {
+                console.error("File path is missing");
+                return false;
+            }
+            
+            // Check if file exists and is accessible
+            try {
+                await fs.access(filePath);
+            } catch (error) {
+                console.error(`File ${filePath} does not exist or is not accessible:`, error);
+                return false;
+            }
 
             const file = await ZgFile.fromFilePath(filePath);
             var [tree, err] = await file.merkleTree();
@@ -141,7 +154,7 @@ export const zgUpload: Action = {
             await file.close();
 
         } catch (error) {
-            console.error("Error getting settings for zg upload:", error);
+            console.error("Error getting settings for 0G upload:", error);
         }
     },
     examples: [[

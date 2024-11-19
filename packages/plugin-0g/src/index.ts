@@ -3,7 +3,7 @@ import { zgUpload } from "./actions/upload";
 
 export const zgPlugin: Plugin = {
     name: "ZG",
-    description: "Store data using 0G protocol",
+    description: "0G Plugin for Eliza",
     actions: [zgUpload],
     evaluators: [],
     providers: [],
