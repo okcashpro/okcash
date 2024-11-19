@@ -193,7 +193,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     async handleReactionRemove(reaction: MessageReaction, user: User) {
-        console.log("Reaction removed");
+        elizaLogger.log("Reaction removed");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;

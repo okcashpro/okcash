@@ -12,6 +12,7 @@ import {
     Character,
     IAgentRuntime,
     ModelProviderName,
+    elizaLogger,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
@@ -218,7 +219,11 @@ export async function createAgent(
     db: any,
     token: string
 ) {
-    console.log("Creating runtime for character", character.name);
+    elizaLogger.success(
+        elizaLogger.successesTitle,
+        "Creating runtime for character",
+        character.name
+    );
     return new AgentRuntime({
         databaseAdapter: db,
         token,

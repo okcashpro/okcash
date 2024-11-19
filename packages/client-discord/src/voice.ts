@@ -20,7 +20,7 @@ import {
 import EventEmitter from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { composeContext } from "@ai16z/eliza";
+import { composeContext, elizaLogger } from "@ai16z/eliza";
 import { generateMessageResponse } from "@ai16z/eliza";
 import { embeddingZeroVector } from "@ai16z/eliza";
 import {
@@ -121,7 +121,7 @@ export class AudioMonitor {
             }
         });
         this.readable.on("end", () => {
-            console.log("AudioMonitor ended");
+            elizaLogger.log("AudioMonitor ended");
             this.ended = true;
             if (this.lastFlagged < 0) return;
             callback(this.getBufferFromStart());
@@ -129,13 +129,13 @@ export class AudioMonitor {
         });
         this.readable.on("speakingStopped", () => {
             if (this.ended) return;
-            console.log("Speaking stopped");
+            elizaLogger.log("Speaking stopped");
             if (this.lastFlagged < 0) return;
             callback(this.getBufferFromStart());
         });
         this.readable.on("speakingStarted", () => {
             if (this.ended) return;
-            console.log("Speaking started");
+            elizaLogger.log("Speaking started");
             this.reset();
         });
     }
