@@ -8,15 +8,15 @@ import {
     State,
 } from "@ai16z/eliza/src/types.ts";
 import fs from "fs";
+import { LUMA_CONSTANTS } from './constants';
 
 const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
-    const API_URL = 'https://api.lumalabs.ai/dream-machine/v1/generations';
-    const API_KEY = runtime.getSetting("LUMA_API_KEY");
+    const API_KEY = runtime.getSetting(LUMA_CONSTANTS.API_KEY_SETTING);
 
     try {
         elizaLogger.log("Starting video generation with prompt:", prompt);
 
-        const response = await fetch(API_URL, {
+        const response = await fetch(LUMA_CONSTANTS.API_URL, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${API_KEY}`,
@@ -47,7 +47,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
         while (status !== 'completed' && status !== 'failed') {
             await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
 
-            const statusResponse = await fetch(`${API_URL}/${generationId}`, {
+            const statusResponse = await fetch(`${LUMA_CONSTANTS.API_URL}/${generationId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${API_KEY}`,
