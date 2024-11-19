@@ -117,7 +117,7 @@ export const zgUpload: Action = {
             const flowAddr = runtime.getSetting("ZEROG_FLOW_ADDRESS");
             const filePath = content.filePath;
             if (!filePath) {
-                console.error("File path is missing");
+                console.error("File path is required");
                 return false;
             }
             
