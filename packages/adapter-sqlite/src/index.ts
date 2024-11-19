@@ -1,7 +1,7 @@
 export * from "./sqliteTables.ts";
 export * from "./sqlite_vec.ts";
 
-import { DatabaseAdapter } from "@ai16z/eliza";
+import { DatabaseAdapter, IDatabaseCacheAdapter } from "@ai16z/eliza";
 import { embeddingZeroVector } from "@ai16z/eliza";
 import {
     Account,
@@ -18,7 +18,10 @@ import { v4 } from "uuid";
 import { load } from "./sqlite_vec.ts";
 import { sqliteTables } from "./sqliteTables.ts";
 
-export class SqliteDatabaseAdapter extends DatabaseAdapter {
+export class SqliteDatabaseAdapter
+    extends DatabaseAdapter<Database>
+    implements IDatabaseCacheAdapter
+{
     async getRoom(roomId: UUID): Promise<UUID | null> {
         const sql = "SELECT id FROM rooms WHERE id = ?";
         const room = this.db.prepare(sql).get(roomId) as
@@ -675,5 +678,42 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         return this.db
             .prepare(sql)
             .all(params.userId, params.userId) as Relationship[];
+    }
+
+    async getCache(params: {
+        key: string;
+        agentId: UUID;
+    }): Promise<string | undefined> {
+        const sql = "SELECT value FROM cache WHERE (key = ? AND agentId = ?)";
+        const cached = this.db
+            .prepare<[string, UUID], { value: string }>(sql)
+            .get(params.key, params.agentId);
+
+        return cached.value;
+    }
+
+    async setCache(params: {
+        key: string;
+        agentId: UUID;
+        value: string;
+    }): Promise<boolean> {
+        const sql =
+            "INSERT OR REPLACE INTO cache (key, agentId, value, createdAt) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+        this.db.prepare(sql).run(params.key, params.agentId, params.value);
+        return true;
+    }
+
+    async deleteCache(params: {
+        key: string;
+        agentId: UUID;
+    }): Promise<boolean> {
+        try {
+            const sql = "DELETE FROM cache WHERE key = ? AND agentId = ?";
+            this.db.prepare(sql).run(params.key, params.agentId);
+            return true;
+        } catch (error) {
+            console.log("Error removing cache", error);
+            return false;
+        }
     }
 }

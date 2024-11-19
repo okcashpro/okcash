@@ -2,7 +2,7 @@ export * from "./sqliteTables.ts";
 export * from "./types.ts";
 
 import { v4 } from "uuid";
-import { DatabaseAdapter } from "@ai16z/eliza";
+import { DatabaseAdapter, IDatabaseCacheAdapter } from "@ai16z/eliza";
 import {
     Account,
     Actor,
@@ -16,7 +16,25 @@ import {
 import { sqliteTables } from "./sqliteTables.ts";
 import { Database } from "./types.ts";
 
-export class SqlJsDatabaseAdapter extends DatabaseAdapter {
+export class SqlJsDatabaseAdapter
+    extends DatabaseAdapter<Database>
+    implements IDatabaseCacheAdapter
+{
+    constructor(db: Database) {
+        super();
+        this.db = db;
+
+        // Check if the 'accounts' table exists as a representative table
+        const tableExists = this.db.exec(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'"
+        )[0];
+
+        if (!tableExists) {
+            // If the 'accounts' table doesn't exist, create all the tables
+            this.db.exec(sqliteTables);
+        }
+    }
+
     async getRoom(roomId: UUID): Promise<UUID | null> {
         const sql = "SELECT id FROM rooms WHERE id = ?";
         const stmt = this.db.prepare(sql);
@@ -109,21 +127,6 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         }
         stmt.free();
         return userIds;
-    }
-
-    constructor(db: Database) {
-        super();
-        this.db = db;
-
-        // Check if the 'accounts' table exists as a representative table
-        const tableExists = this.db.exec(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'"
-        )[0];
-
-        if (!tableExists) {
-            // If the 'accounts' table doesn't exist, create all the tables
-            this.db.exec(sqliteTables);
-        }
     }
 
     async getAccountById(userId: UUID): Promise<Account | null> {
@@ -744,5 +747,53 @@ export class SqlJsDatabaseAdapter extends DatabaseAdapter {
         }
         stmt.free();
         return relationships;
+    }
+
+    async getCache(params: {
+        key: string;
+        agentId: UUID;
+    }): Promise<string | undefined> {
+        const sql = "SELECT value FROM cache WHERE (key = ? AND agentId = ?)";
+        const stmt = this.db.prepare(sql);
+
+        stmt.bind([params.key, params.agentId]);
+
+        let cached = undefined;
+        if (stmt.step()) {
+            cached = stmt.getAsObject() as unknown as { value: string };
+        }
+        stmt.free();
+
+        return cached.value;
+    }
+
+    async setCache(params: {
+        key: string;
+        agentId: UUID;
+        value: string;
+    }): Promise<boolean> {
+        const sql =
+            "INSERT OR REPLACE INTO cache (key, agentId, value, createdAt) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+        const stmt = this.db.prepare(sql);
+
+        stmt.run([params.key, params.agentId, params.value]);
+        stmt.free();
+
+        return true;
+    }
+
+    async deleteCache(params: {
+        key: string;
+        agentId: UUID;
+    }): Promise<boolean> {
+        try {
+            const sql = "DELETE FROM cache WHERE key = ? AND agentId = ?";
+            const stmt = this.db.prepare(sql);
+            stmt.run([params.key, params.agentId]);
+            stmt.free();
+        } catch (error) {
+            console.log("Error removing cache", error);
+            return false;
+        }
     }
 }

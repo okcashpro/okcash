@@ -483,17 +483,17 @@ export interface IDatabaseAdapter {
 }
 
 export interface IDatabaseCacheAdapter {
-    getCached(params: {
+    getCache(params: {
         agentId: UUID;
         key: string;
     }): Promise<string | undefined>;
-    setCached(params: {
+    setCache(params: {
         agentId: UUID;
         key: string;
         value: string;
     }): Promise<boolean>;
 
-    deleteCached(params: { agentId: UUID; key: string }): Promise<boolean>;
+    deleteCache(params: { agentId: UUID; key: string }): Promise<boolean>;
 }
 
 export interface IMemoryManager {

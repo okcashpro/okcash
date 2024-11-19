@@ -293,9 +293,9 @@ async function startAgent(character: Character, directClient: DirectClient) {
         character.id ??= stringToUuid(character.name);
 
         const token = getTokenForProvider(character.modelProvider, character);
-        const dataDir = path.join(__dirname, "../../data");
+        const dataDir = path.join(__dirname, "../../../data");
         const db = initializeDatabase(dataDir);
-        const cache = intializeFsCache(dataDir, character);
+        const cache = intializeDbCache(character, db);
         const runtime = createAgent(character, db, cache, token);
 
         const clients = await initializeClients(character, runtime);

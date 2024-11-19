@@ -73,15 +73,15 @@ export class DbCacheAdapter implements ICacheAdapter {
     ) {}
 
     async get(key: string): Promise<string | undefined> {
-        return this.db.getCached({ agentId: this.agentId, key });
+        return this.db.getCache({ agentId: this.agentId, key });
     }
 
     async set(key: string, value: string): Promise<void> {
-        await this.db.setCached({ agentId: this.agentId, key, value });
+        await this.db.setCache({ agentId: this.agentId, key, value });
     }
 
     async delete(key: string): Promise<void> {
-        await this.db.deleteCached({ agentId: this.agentId, key });
+        await this.db.deleteCache({ agentId: this.agentId, key });
     }
 }
 

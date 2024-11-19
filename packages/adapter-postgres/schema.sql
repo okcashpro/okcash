@@ -93,6 +93,15 @@ CREATE TABLE relationships (
     CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
+CREATE TABLE cache (
+    "key" TEXT NOT NULL,
+    "agentId" TEXT NOT NULL,
+    "value" JSONB DEFAULT '{}'::jsonb, 
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "expiresAt" TIMESTAMP, 
+    PRIMARY KEY (key, agentId)
+);
+
 -- Indexes
 CREATE INDEX idx_memories_embedding ON memories USING hnsw ("embedding" vector_cosine_ops);
 CREATE INDEX idx_memories_type_room ON memories("type", "roomId");
