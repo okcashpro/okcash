@@ -1,9 +1,9 @@
 import { Plugin } from "@ai16z/eliza";
 import { zgUpload } from "./actions/uoload";
 
-export const zgUploadPlugin: Plugin = {
-    name: "zgUpload",
-    description: "Upload data using 0G protocol",
+export const zgPlugin: Plugin = {
+    name: "ZG",
+    description: "Store data using 0G protocol",
     actions: [zgUpload],
     evaluators: [],
     providers: [],

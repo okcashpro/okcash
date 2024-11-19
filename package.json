@@ -37,6 +37,7 @@
         "node": ">=22"
     },
     "dependencies": {
+        "@0glabs/0g-ts-sdk": "^0.2.1",
         "ollama-ai-provider": "^0.16.1",
         "optional": "^0.1.4",
         "sharp": "^0.33.5"

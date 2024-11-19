@@ -3,7 +3,6 @@ import {
     HandlerCallback,
     IAgentRuntime,
     Memory,
-    Plugin,
     State,
     ModelClass,
     Content,
@@ -125,7 +124,6 @@ export const zgUpload: Action = {
                 console.log("Error getting file root hash: ", err);
                 return false;
             }
-            await file.close();
 
             const provider = new ethers.JsonRpcProvider(zgEvmRpc);
             const signer = new ethers.Wallet(zgPrivateKey, provider);
@@ -139,6 +137,8 @@ export const zgUpload: Action = {
                 console.log("Error uploading file: ", err);
                 return false;
             }
+
+            await file.close();
 
         } catch (error) {
             console.error("Error getting settings for zg upload:", error);
