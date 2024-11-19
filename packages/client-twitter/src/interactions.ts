@@ -238,7 +238,7 @@ export class TwitterInteractionClient extends ClientBase {
             );
         }
 
-        console.log("Thread: ", thread);
+        elizaLogger.debug("Thread: ", thread);
         const formattedConversation = thread
             .map(
                 (tweet) => `@${tweet.username} (${new Date(
@@ -253,7 +253,7 @@ export class TwitterInteractionClient extends ClientBase {
             )
             .join("\n\n");
 
-        console.log("formattedConversation: ", formattedConversation);
+        elizaLogger.debug("formattedConversation: ", formattedConversation);
 
         const formattedHomeTimeline =
             `# ${this.runtime.character.name}'s Home Timeline\n\n` +

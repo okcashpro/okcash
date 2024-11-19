@@ -220,7 +220,7 @@ export class ClientBase extends EventEmitter {
                         this.runtime.getSetting("TWITTER_EMAIL"),
                         this.runtime.getSetting("TWITTER_2FA_SECRET")
                     );
-                    console.log("Logged in to Twitter");
+                    elizaLogger.log("Logged in to Twitter");
                     const cookies = await this.twitterClient.getCookies();
                     fs.writeFileSync(
                         cookiesFilePath,
@@ -270,7 +270,7 @@ export class ClientBase extends EventEmitter {
                 console.error("Failed to get user ID");
                 return;
             }
-            console.log("Twitter user ID:", userId);
+            elizaLogger.log("Twitter user ID:", userId);
             this.twitterUserId = userId;
 
             // Initialize Twitter profile

@@ -104,8 +104,7 @@ export class AttachmentManager {
         } else if (
             attachment.contentType?.startsWith("video/") ||
             this.runtime
-                .getService(ServiceType.VIDEO)
-                .getInstance<IVideoService>()
+                .getService<IVideoService>(ServiceType.VIDEO)
                 .isVideoUrl(attachment.url)
         ) {
             media = await this.processVideoAttachment(attachment);
@@ -137,10 +136,16 @@ export class AttachmentManager {
                 throw new Error("Unsupported audio/video format");
             }
 
-            const transcription = await this.runtime
-                .getService(ServiceType.TRANSCRIPTION)
-                .getInstance<ITranscriptionService>()
-                .transcribeAttachment(audioBuffer);
+            const transcriptionService =
+                this.runtime.getService<ITranscriptionService>(
+                    ServiceType.TRANSCRIPTION
+                );
+            if (!transcriptionService) {
+                throw new Error("Transcription service not found");
+            }
+
+            const transcription =
+                await transcriptionService.transcribeAttachment(audioBuffer);
             const { title, description } = await generateSummary(
                 this.runtime,
                 transcription
@@ -220,8 +225,7 @@ export class AttachmentManager {
             const response = await fetch(attachment.url);
             const pdfBuffer = await response.arrayBuffer();
             const text = await this.runtime
-                .getService(ServiceType.PDF)
-                .getInstance<IPdfService>()
+                .getService<IPdfService>(ServiceType.PDF)
                 .convertPdfToText(Buffer.from(pdfBuffer));
             const { title, description } = await generateSummary(
                 this.runtime,
@@ -289,8 +293,9 @@ export class AttachmentManager {
     ): Promise<Media> {
         try {
             const { description, title } = await this.runtime
-                .getService(ServiceType.IMAGE_DESCRIPTION)
-                .getInstance<IImageDescriptionService>()
+                .getService<IImageDescriptionService>(
+                    ServiceType.IMAGE_DESCRIPTION
+                )
                 .describeImage(attachment.url);
             return {
                 id: attachment.id,
@@ -322,16 +327,16 @@ export class AttachmentManager {
     private async processVideoAttachment(
         attachment: Attachment
     ): Promise<Media> {
-        if (
-            this.runtime
-                .getService(ServiceType.VIDEO)
-                .getInstance<IVideoService>()
-                .isVideoUrl(attachment.url)
-        ) {
-            const videoInfo = await this.runtime
-                .getService(ServiceType.VIDEO)
-                .getInstance<IVideoService>()
-                .processVideo(attachment.url);
+        const videoService = this.runtime.getService<IVideoService>(
+            ServiceType.VIDEO
+        );
+
+        if (!videoService) {
+            throw new Error("Video service not found");
+        }
+
+        if (videoService.isVideoUrl(attachment.url)) {
+            const videoInfo = await videoService.processVideo(attachment.url);
             return {
                 id: attachment.id,
                 url: attachment.url,

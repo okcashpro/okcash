@@ -178,9 +178,8 @@ export class MessageManager {
             }
 
             if (imageUrl) {
-                const { title, description } = await this.imageService
-                    .getInstance()
-                    .describeImage(imageUrl);
+                const { title, description } =
+                    await this.imageService.describeImage(imageUrl);
                 const fullDescription = `[Image: ${title}\n${description}]`;
                 return { description: fullDescription };
             }
