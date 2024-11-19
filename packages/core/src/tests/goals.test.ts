@@ -18,11 +18,13 @@ import {
     State,
 } from "../types";
 
+import { describe, test, expect, beforeEach, vi } from 'vitest';
+
 // Mock the database adapter
 const mockDatabaseAdapter = {
-    getGoals: jest.fn(),
-    updateGoal: jest.fn(),
-    createGoal: jest.fn(),
+    getGoals: vi.fn(),
+    updateGoal: vi.fn(),
+    createGoal: vi.fn(),
 };
 
 // Mock the runtime
@@ -175,7 +177,7 @@ const sampleGoal: Goal = {
 
 describe("getGoals", () => {
     it("retrieves goals successfully", async () => {
-        (mockDatabaseAdapter.getGoals as jest.Mock).mockResolvedValue([
+        (mockDatabaseAdapter.getGoals).mockResolvedValue([
             sampleGoal,
         ]);
 
@@ -194,7 +196,7 @@ describe("getGoals", () => {
     });
 
     it("handles failure to retrieve goals", async () => {
-        (mockDatabaseAdapter.getGoals as jest.Mock).mockRejectedValue(
+        (mockDatabaseAdapter.getGoals).mockRejectedValue(
             new Error("Failed to retrieve goals")
         );
 
@@ -220,7 +222,7 @@ describe("formatGoalsAsString", () => {
 
 describe("updateGoal", () => {
     it("updates a goal successfully", async () => {
-        (mockDatabaseAdapter.updateGoal as jest.Mock).mockResolvedValue(
+        (mockDatabaseAdapter.updateGoal).mockResolvedValue(
             undefined
         );
 
@@ -231,7 +233,7 @@ describe("updateGoal", () => {
     });
 
     it("handles failure to update a goal", async () => {
-        (mockDatabaseAdapter.updateGoal as jest.Mock).mockRejectedValue(
+        (mockDatabaseAdapter.updateGoal).mockRejectedValue(
             new Error("Failed to update goal")
         );
 
@@ -243,7 +245,7 @@ describe("updateGoal", () => {
 
 describe("createGoal", () => {
     it("creates a goal successfully", async () => {
-        (mockDatabaseAdapter.createGoal as jest.Mock).mockResolvedValue(
+        (mockDatabaseAdapter.createGoal).mockResolvedValue(
             undefined
         );
 
@@ -254,7 +256,7 @@ describe("createGoal", () => {
     });
 
     it("handles failure to create a goal", async () => {
-        (mockDatabaseAdapter.createGoal as jest.Mock).mockRejectedValue(
+        (mockDatabaseAdapter.createGoal).mockRejectedValue(
             new Error("Failed to create goal")
         );
 

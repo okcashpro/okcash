@@ -5,6 +5,7 @@ import {
     formatTimestamp,
 } from "../messages.ts";
 import { IAgentRuntime, Actor, Content, Memory, UUID } from "../types.ts";
+import { describe, test, expect, vi, beforeAll } from 'vitest';
 
 describe("Messages Library", () => {
     let runtime: IAgentRuntime;
@@ -15,9 +16,9 @@ describe("Messages Library", () => {
         // Mock runtime with necessary methods
         runtime = {
             databaseAdapter: {
-                // Casting to a Jest mock function
-                getParticipantsForRoom: jest.fn(),
-                getAccountById: jest.fn(),
+                // Using vi.fn() instead of jest.fn()
+                getParticipantsForRoom: vi.fn(),
+                getAccountById: vi.fn(),
             },
         } as unknown as IAgentRuntime;
 
@@ -38,29 +39,22 @@ describe("Messages Library", () => {
     });
 
     test("getActorDetails should return actors based on roomId", async () => {
-        // Mocking the database adapter methods
         const roomId: UUID = "room1234-1234-1234-1234-123456789abc" as UUID;
 
-        // Properly mocking the resolved values of the mocked methods
-        (
-            runtime.databaseAdapter.getParticipantsForRoom as jest.Mock
-        ).mockResolvedValue([userId]);
-        (runtime.databaseAdapter.getAccountById as jest.Mock).mockResolvedValue(
-            {
-                id: userId,
-                name: "Test User",
-                username: "testuser",
-                details: {
-                    tagline: "A test user",
-                    summary: "This is a test user for the system.",
-                },
-            }
-        );
+        // Using vi.mocked() type assertion instead of jest.Mock casting
+        vi.mocked(runtime.databaseAdapter.getParticipantsForRoom).mockResolvedValue([userId]);
+        vi.mocked(runtime.databaseAdapter.getAccountById).mockResolvedValue({
+            id: userId,
+            name: "Test User",
+            username: "testuser",
+            details: {
+                tagline: "A test user",
+                summary: "This is a test user for the system.",
+            },
+        });
 
-        // Calling the function under test
         const result = await getActorDetails({ runtime, roomId });
 
-        // Assertions
         expect(result.length).toBeGreaterThan(0);
         expect(result[0].name).toBe("Test User");
         expect(result[0].details?.tagline).toBe("A test user");
@@ -69,7 +63,6 @@ describe("Messages Library", () => {
     test("formatActors should format actors into a readable string", () => {
         const formattedActors = formatActors({ actors });
 
-        // Assertions
         expect(formattedActors).toContain("Test User");
         expect(formattedActors).toContain("A test user");
         expect(formattedActors).toContain(

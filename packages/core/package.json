@@ -48,7 +48,8 @@
         "ts-node": "10.9.2",
         "tslib": "2.8.0",
         "tsup": "^8.3.5",
-        "typescript": "5.6.3"
+        "typescript": "5.6.3",
+        "@solana/web3.js": "1.95.4"
     },
     "dependencies": {
         "@ai-sdk/anthropic": "^0.0.53",
