@@ -22,6 +22,7 @@ import { castUuid } from "./utils";
 import { sendCast } from "./actions";
 
 export class FarcasterInteractionManager {
+    private timeout: NodeJS.Timeout | undefined;
     constructor(
         public client: FarcasterClient,
         public runtime: IAgentRuntime,
@@ -31,15 +32,25 @@ export class FarcasterInteractionManager {
 
     public async start() {
         const handleTwitterInteractionsLoop = async () => {
-            await this.handleInteractions();
+            try {
+                await this.handleInteractions();
+            } catch (error) {
+                console.error(error);
+            }
 
-            setTimeout(
+            this.timeout = setTimeout(
                 handleTwitterInteractionsLoop,
                 (Math.floor(Math.random() * (5 - 2 + 1)) + 2) * 60 * 1000
             ); // Random interval between 2-5 minutes
         };
 
-        handleTwitterInteractionsLoop();
+        handleTwitterInteractionsLoop().catch((err) => {
+            console.error(err);
+        });
+    }
+
+    public async stop() {
+        if (this.timeout) clearTimeout(this.timeout);
     }
 
     private async handleInteractions() {

@@ -13,6 +13,8 @@ import { createCastMemory } from "./memory";
 import { sendCast } from "./actions";
 
 export class FarcasterPostManager {
+    private timeout: NodeJS.Timeout | undefined;
+
     constructor(
         public client: FarcasterClient,
         public runtime: IAgentRuntime,
@@ -22,15 +24,24 @@ export class FarcasterPostManager {
 
     public async start() {
         const generateNewCastLoop = async () => {
-            await this.generateNewCast();
+            try {
+                await this.generateNewCast();
+            } catch (error) {
+                console.error(error);
+                return;
+            }
 
-            setTimeout(
+            this.timeout = setTimeout(
                 generateNewCastLoop,
                 (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
             ); // Random interval between 1 and 4 hours
         };
 
         generateNewCastLoop();
+    }
+
+    public async stop() {
+        if (this.timeout) clearTimeout(this.timeout);
     }
 
     private async generateNewCast() {

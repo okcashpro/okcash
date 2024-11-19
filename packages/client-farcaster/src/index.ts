@@ -54,7 +54,7 @@ export class FarcasterAgentClient implements Client {
     }
 
     async stop() {
-        this.posts.start();
-        this.interactions.start();
+        this.posts.stop();
+        this.interactions.stop();
     }
 }
