@@ -1,10 +1,10 @@
 import { Plugin } from "@ai16z/eliza";
-import { zgStorage } from "./actions/uoload";
+import { zgUpload } from "./actions/uoload";
 
-export const zgStoragePlugin: Plugin = {
-    name: "zgStorage",
-    description: "Store data using 0G protocol",
-    actions: [zgStorage],
+export const zgUploadPlugin: Plugin = {
+    name: "zgUpload",
+    description: "Upload data using 0G protocol",
+    actions: [zgUpload],
     evaluators: [],
     providers: [],
 };

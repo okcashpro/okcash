@@ -15,7 +15,7 @@ import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
 
 
-const storageTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
+const uploadTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
 Example response:
 \`\`\`json
@@ -38,22 +38,22 @@ If the user provides any specific description of the file, include that as well.
 
 Respond with a JSON markdown block containing only the extracted values.`;
 
-export interface StorageContent extends Content {
+export interface UploadContent extends Content {
     filePath: string;
 }
 
-function isStorageContent(
+function isUploadContent(
     _runtime: IAgentRuntime,
     content: any
-): content is StorageContent {
-    console.log("Content for storage", content);
+): content is UploadContent {
+    console.log("Content for upload", content);
     return (
         typeof content.filePath === "string"
     );
 }
 
-export const zgStorage: Action = {
-    name: "ZG_STORAGE",
+export const zgUpload: Action = {
+    name: "ZG_UPLOAD",
     similes: [
         "UPLOAD_FILE_TO_ZG",
         "STORE_FILE_ON_ZG",
@@ -78,32 +78,33 @@ export const zgStorage: Action = {
         options: any,
         callback: HandlerCallback
     ) => {
+        console.log("ZG_UPLOAD action called");
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         } else {
             state = await runtime.updateRecentMessageState(state);
         }
 
-        // Compose storage context
-        const storageContext = composeContext({
+        // Compose upload context
+        const uploadContext = composeContext({
             state,
-            template: storageTemplate,
+            template: uploadTemplate,
         });
 
-        // Generate storage content
+        // Generate upload content
         const content = await generateObject({
             runtime,
-            context: storageContext,
+            context: uploadContext,
             modelClass: ModelClass.SMALL,
         });
 
-        // Validate storage content
-        if (!isStorageContent(runtime, content)) {
-            console.error("Invalid content for STORAGE action.");
+        // Validate upload content
+        if (!isUploadContent(runtime, content)) {
+            console.error("Invalid content for UPLOAD action.");
             if (callback) {
                 callback({
-                    text: "Unable to process zg storage request. Invalid content provided.",
-                    content: { error: "Invalid storage content" },
+                    text: "Unable to process zg upload request. Invalid content provided.",
+                    content: { error: "Invalid upload content" },
                 });
             }
             return false;
@@ -140,7 +141,7 @@ export const zgStorage: Action = {
             }
 
         } catch (error) {
-            console.error("Error getting settings for ZG storage:", error);
+            console.error("Error getting settings for zg upload:", error);
         }
     },
     examples: [[
@@ -148,7 +149,7 @@ export const zgStorage: Action = {
             user: "{{user1}}",
             content: { 
                 text: "upload my resume.pdf file",
-                action: "ZG_STORAGE"
+                action: "ZG_UPLOAD"
             }
         }
     ], [
@@ -156,7 +157,7 @@ export const zgStorage: Action = {
             user: "{{user1}}", 
             content: { 
                 text: "can you help me upload this document.docx?",
-                action: "ZG_STORAGE"
+                action: "ZG_UPLOAD"
             }
         }
     ], [
@@ -164,7 +165,7 @@ export const zgStorage: Action = {
             user: "{{user1}}", 
             content: { 
                 text: "I need to upload an image file image.png",
-                action: "ZG_STORAGE"
+                action: "ZG_UPLOAD"
             }
         }
     ]] as ActionExample[][],
