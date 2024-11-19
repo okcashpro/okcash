@@ -25,8 +25,8 @@ import { VoiceManager } from "./voice.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
-    private client: Client;
-    private runtime: IAgentRuntime;
+    client: Client;
+    runtime: IAgentRuntime;
     character: Character;
     private messageManager: MessageManager;
     private voiceManager: VoiceManager;
@@ -193,7 +193,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     async handleReactionRemove(reaction: MessageReaction, user: User) {
-        console.log("Reaction removed");
+        elizaLogger.log("Reaction removed");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;

@@ -93,7 +93,6 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     if (
         isNode &&
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
-        runtime.character.modelProvider !== ModelProviderName.OLLAMA &&
         !settings.USE_OPENAI_EMBEDDING
     ) {
         return await getLocalEmbedding(input);

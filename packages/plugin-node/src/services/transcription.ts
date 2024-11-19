@@ -1,4 +1,4 @@
-import { settings } from "@ai16z/eliza";
+import { IAgentRuntime, settings } from "@ai16z/eliza";
 import { Service, ServiceType } from "@ai16z/eliza";
 import { exec } from "child_process";
 import { File } from "formdata-node";
@@ -26,6 +26,8 @@ export class TranscriptionService extends Service {
 
     private queue: { audioBuffer: ArrayBuffer; resolve: Function }[] = [];
     private processing: boolean = false;
+
+    async initialize(runtime: IAgentRuntime): Promise<void> {}
 
     constructor() {
         super();
