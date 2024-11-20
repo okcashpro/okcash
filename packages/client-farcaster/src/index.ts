@@ -49,12 +49,10 @@ export class FarcasterAgentClient implements Client {
     }
 
     async start() {
-        this.posts.start();
-        this.interactions.start();
+        await Promise.all([this.posts.start(), this.interactions.start()]);
     }
 
     async stop() {
-        this.posts.stop();
-        this.interactions.stop();
+        await Promise.all([this.posts.stop(), this.interactions.stop()]);
     }
 }
