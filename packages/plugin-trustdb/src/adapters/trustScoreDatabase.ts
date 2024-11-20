@@ -827,6 +827,30 @@ export class TrustScoreDatabase {
         };
     }
 
+    getAllTokenPerformancesWithBalance(): TokenPerformance[] {
+        const sql = `SELECT * FROM token_performance WHERE balance > 0;`;
+        const rows = this.db.prepare(sql).all() as TokenPerformanceRow[];
+
+        return rows.map((row) => ({
+            tokenAddress: row.token_address,
+            priceChange24h: row.price_change_24h,
+            volumeChange24h: row.volume_change_24h,
+            trade_24h_change: row.trade_24h_change,
+            liquidity: row.liquidity,
+            liquidityChange24h: row.liquidity_change_24h,
+            holderChange24h: row.holder_change_24h,
+            rugPull: row.rug_pull === 1,
+            isScam: row.is_scam === 1,
+            marketCapChange24h: row.market_cap_change24h,
+            sustainedGrowth: row.sustained_growth === 1,
+            rapidDump: row.rapid_dump === 1,
+            suspiciousVolume: row.suspicious_volume === 1,
+            validationTrust: row.validation_trust,
+            balance: row.balance,
+            lastUpdated: new Date(row.last_updated),
+        }));
+    }
+
     // ----- TokenRecommendations Methods -----
 
     /**
