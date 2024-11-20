@@ -58,18 +58,10 @@ export async function loadCharacters(
         ?.split(",")
         .map((path) => path.trim())
         .map((path) => {
-            if (path.startsWith("../characters")) {
-                return `../${path}`;
-            }
-            if (path.startsWith("characters")) {
-                return `../../${path}`;
-            }
-            if (path.startsWith("./characters")) {
-                return `../.${path}`;
-            }
-            return path;
+            if (path[0] === "/") return path; // handle absolute paths
+            // assume relative to the project root where pnpm is ran
+            return `../${path}`;
         });
-
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
@@ -96,6 +88,8 @@ export async function loadCharacters(
                 loadedCharacters.push(character);
             } catch (e) {
                 console.error(`Error loading character from ${path}: ${e}`);
+                // don't continue to load if a specified file is not found
+                process.exit(1);
             }
         }
     }
