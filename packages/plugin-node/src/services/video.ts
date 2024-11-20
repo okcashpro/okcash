@@ -27,9 +27,9 @@ export class VideoService extends Service {
 
     async initialize(runtime: IAgentRuntime): Promise<void> {}
 
-    private ensureCacheDirectoryExists() {
-        if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
-            fs.mkdirSync(this.CONTENT_CACHE_DIR);
+    private ensureDataDirectoryExists() {
+        if (!fs.existsSync(this.dataDir)) {
+            fs.mkdirSync(this.dataDir);
         }
     }
 
