@@ -1,4 +1,3 @@
-import { CacheManager, MemoryCacheAdapter } from "../cache";
 import {
     getGoals,
     formatGoalsAsString,
@@ -16,18 +15,21 @@ import {
     Memory,
     ModelProviderName,
     Service,
+    ServiceType,
     State,
 } from "../types";
 
-// Mock the database adapter
-const mockDatabaseAdapter = {
-    getGoals: jest.fn(),
-    updateGoal: jest.fn(),
-    createGoal: jest.fn(),
-};
+import { describe, expect, vi } from "vitest";
 
+// Mock the database adapter
+export const mockDatabaseAdapter = {
+    getGoals: vi.fn(),
+    updateGoal: vi.fn(),
+    createGoal: vi.fn(),
+};
+const services = new Map<ServiceType, Service>();
 // Mock the runtime
-const mockRuntime: IAgentRuntime = {
+export const mockRuntime: IAgentRuntime = {
     databaseAdapter: mockDatabaseAdapter as any,
     cacheManager: new CacheManager(new MemoryCacheAdapter()),
     agentId: "qweqew-qweqwe-qweqwe-qweqwe-qweeqw",
@@ -89,8 +91,8 @@ const mockRuntime: IAgentRuntime = {
     getMemoryManager: function (_name: string): IMemoryManager | null {
         throw new Error("Function not implemented.");
     },
-    registerService: function (_service: Service): void {
-        throw new Error("Function not implemented.");
+    registerService: function (service: Service): void {
+        services.set(service.serviceType, service);
     },
     getSetting: function (_key: string): string | null {
         throw new Error("Function not implemented.");
@@ -157,8 +159,10 @@ const mockRuntime: IAgentRuntime = {
     updateRecentMessageState: function (_state: State): Promise<State> {
         throw new Error("Function not implemented.");
     },
-    getService: function (_service: string): typeof Service | null {
-        throw new Error("Function not implemented.");
+    getService: function <T extends Service>(
+        serviceType: ServiceType
+    ): T | null {
+        return (services.get(serviceType) as T) || null;
     },
 };
 
@@ -177,9 +181,7 @@ const sampleGoal: Goal = {
 
 describe("getGoals", () => {
     it("retrieves goals successfully", async () => {
-        (mockDatabaseAdapter.getGoals as jest.Mock).mockResolvedValue([
-            sampleGoal,
-        ]);
+        mockDatabaseAdapter.getGoals.mockResolvedValue([sampleGoal]);
 
         const result = await getGoals({
             runtime: mockRuntime,
@@ -196,7 +198,7 @@ describe("getGoals", () => {
     });
 
     it("handles failure to retrieve goals", async () => {
-        (mockDatabaseAdapter.getGoals as jest.Mock).mockRejectedValue(
+        mockDatabaseAdapter.getGoals.mockRejectedValue(
             new Error("Failed to retrieve goals")
         );
 
@@ -222,9 +224,7 @@ describe("formatGoalsAsString", () => {
 
 describe("updateGoal", () => {
     it("updates a goal successfully", async () => {
-        (mockDatabaseAdapter.updateGoal as jest.Mock).mockResolvedValue(
-            undefined
-        );
+        mockDatabaseAdapter.updateGoal.mockResolvedValue(undefined);
 
         await expect(
             updateGoal({ runtime: mockRuntime, goal: sampleGoal })
@@ -233,7 +233,7 @@ describe("updateGoal", () => {
     });
 
     it("handles failure to update a goal", async () => {
-        (mockDatabaseAdapter.updateGoal as jest.Mock).mockRejectedValue(
+        mockDatabaseAdapter.updateGoal.mockRejectedValue(
             new Error("Failed to update goal")
         );
 
@@ -245,9 +245,7 @@ describe("updateGoal", () => {
 
 describe("createGoal", () => {
     it("creates a goal successfully", async () => {
-        (mockDatabaseAdapter.createGoal as jest.Mock).mockResolvedValue(
-            undefined
-        );
+        mockDatabaseAdapter.createGoal.mockResolvedValue(undefined);
 
         await expect(
             createGoal({ runtime: mockRuntime, goal: sampleGoal })
@@ -256,7 +254,7 @@ describe("createGoal", () => {
     });
 
     it("handles failure to create a goal", async () => {
-        (mockDatabaseAdapter.createGoal as jest.Mock).mockRejectedValue(
+        mockDatabaseAdapter.createGoal.mockRejectedValue(
             new Error("Failed to create goal")
         );
 

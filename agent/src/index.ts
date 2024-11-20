@@ -12,14 +12,12 @@ import {
     ICacheManager,
     IDatabaseCacheAdapter,
     stringToUuid,
-} from "@ai16z/eliza";
-import { AgentRuntime, CacheManager } from "@ai16z/eliza";
-import { settings } from "@ai16z/eliza";
-import {
+    AgentRuntime,
+    CacheManager,
     Character,
     IAgentRuntime,
-    IDatabaseAdapter,
     ModelProviderName,
+    elizaLogger,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
@@ -81,7 +79,6 @@ export async function loadCharacters(
             }
             return path;
         });
-
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
@@ -108,6 +105,8 @@ export async function loadCharacters(
                 loadedCharacters.push(character);
             } catch (e) {
                 console.error(`Error loading character from ${path}: ${e}`);
+                // don't continue to load if a specified file is not found
+                process.exit(1);
             }
         }
     }
@@ -167,6 +166,11 @@ export function getTokenForProvider(
             return (
                 character.settings?.secrets?.HEURIST_API_KEY ||
                 settings.HEURIST_API_KEY
+            );
+        case ModelProviderName.GROQ:
+            return (
+                character.settings?.secrets?.GROQ_API_KEY ||
+                settings.GROQ_API_KEY
             );
     }
 }
@@ -251,7 +255,11 @@ export function createAgent(
     cache: ICacheManager,
     token: string
 ) {
-    console.log("Creating runtime for character", character.name);
+    elizaLogger.success(
+        elizaLogger.successesTitle,
+        "Creating runtime for character",
+        character.name
+    );
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -329,7 +337,7 @@ const startAgents = async () => {
             await startAgent(character, directClient);
         }
     } catch (error) {
-        console.error("Error starting agents:", error);
+        elizaLogger.error("Error starting agents:", error);
     }
 
     function chat() {
@@ -342,12 +350,12 @@ const startAgents = async () => {
         });
     }
 
-    console.log("Chat started. Type 'exit' to quit.");
+    elizaLogger.log("Chat started. Type 'exit' to quit.");
     chat();
 };
 
 startAgents().catch((error) => {
-    console.error("Unhandled error in startAgents:", error);
+    elizaLogger.error("Unhandled error in startAgents:", error);
     process.exit(1); // Exit the process after logging
 });
 

@@ -25,9 +25,11 @@ export class VideoService extends Service {
         this.ensureDataDirectoryExists();
     }
 
-    private ensureDataDirectoryExists() {
-        if (!fs.existsSync(this.dataDir)) {
-            fs.mkdirSync(this.dataDir);
+    async initialize(runtime: IAgentRuntime): Promise<void> {}
+
+    private ensureCacheDirectoryExists() {
+        if (!fs.existsSync(this.CONTENT_CACHE_DIR)) {
+            fs.mkdirSync(this.CONTENT_CACHE_DIR);
         }
     }
 
@@ -331,10 +333,15 @@ export class VideoService extends Service {
 
         console.log("Starting transcription...");
         const startTime = Date.now();
-        const transcript = await runtime
-            .getService(ServiceType.TRANSCRIPTION)
-            .getInstance<ITranscriptionService>()
-            .transcribe(audioBuffer);
+        const transcriptionService = runtime
+            .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
+            .getInstance();
+        if (!transcriptionService) {
+            throw new Error("Transcription service not found");
+        }
+
+        const transcript = await transcriptionService.transcribe(audioBuffer);
+
         const endTime = Date.now();
         console.log(
             `Transcription completed in ${(endTime - startTime) / 1000} seconds`

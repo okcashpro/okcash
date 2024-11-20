@@ -179,13 +179,11 @@ const summarizeAction = {
 
         let currentSummary = "";
 
-        const model = models[runtime.character.settings.model];
-        const chunkSize = model.settings.maxContextLength;
+        const model = models[runtime.character.modelProvider];
+        const chunkSize = model.settings.maxOutputTokens;
 
         state.attachmentsWithText = attachmentsWithText;
         state.objective = objective;
-
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
 
         const context = composeContext({
             state,

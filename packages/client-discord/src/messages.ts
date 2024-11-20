@@ -515,10 +515,23 @@ export class MessageManager {
                         }
                         if (message.channel.type === ChannelType.GuildVoice) {
                             // For voice channels, use text-to-speech
-                            const audioStream = await this.runtime
-                                .getService(ServiceType.SPEECH_GENERATION)
-                                .getInstance<ISpeechService>()
-                                .generate(this.runtime, content.text);
+
+                            const speechService =
+                                this.runtime.getService<ISpeechService>(
+                                    ServiceType.SPEECH_GENERATION
+                                );
+
+                            if (!speechService) {
+                                throw new Error(
+                                    "Speech generation service not found"
+                                );
+                            }
+
+                            const audioStream = await speechService.generate(
+                                this.runtime,
+                                content.text
+                            );
+
                             await this.voiceManager.playAudioStream(
                                 userId,
                                 audioStream
@@ -603,10 +616,18 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await this.runtime
-                    .getService(ServiceType.SPEECH_GENERATION)
-                    .getInstance<ISpeechService>()
-                    .generate(this.runtime, errorMessage);
+
+                const speechService = this.runtime.getService<ISpeechService>(
+                    ServiceType.SPEECH_GENERATION
+                );
+                if (!speechService) {
+                    throw new Error("Speech generation service not found");
+                }
+
+                const audioStream = await speechService.generate(
+                    this.runtime,
+                    errorMessage
+                );
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
                 // For text channels, send the error message
@@ -670,14 +691,17 @@ export class MessageManager {
         for (const url of urls) {
             if (
                 this.runtime
-                    .getService(ServiceType.VIDEO)
-                    .getInstance<IVideoService>()
+                    .getService<IVideoService>(ServiceType.VIDEO)
                     .isVideoUrl(url)
             ) {
-                const videoInfo = await this.runtime
-                    .getService(ServiceType.VIDEO)
-                    .getInstance<IVideoService>()
-                    .processVideo(url);
+                const videoService = this.runtime.getService<IVideoService>(
+                    ServiceType.VIDEO
+                );
+                if (!videoService) {
+                    throw new Error("Video service not found");
+                }
+                const videoInfo = await videoService.processVideo(url);
+
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -687,10 +711,16 @@ export class MessageManager {
                     text: videoInfo.text,
                 });
             } else {
-                const { title, bodyContent } = await this.runtime
-                    .getService(ServiceType.BROWSER)
-                    .getInstance<IBrowserService>()
-                    .getPageContent(url, this.runtime);
+                const browserService = this.runtime.getService<IBrowserService>(
+                    ServiceType.BROWSER
+                );
+                if (!browserService) {
+                    throw new Error("Browser service not found");
+                }
+
+                const { title, bodyContent } =
+                    await browserService.getPageContent(url, this.runtime);
+
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,
                     title + "\n" + bodyContent

@@ -1,5 +1,11 @@
 import { getProviders } from "../providers";
-import { IAgentRuntime, type Memory, type State, type Provider, UUID } from "../types.ts";
+import {
+    IAgentRuntime,
+    type Memory,
+    type State,
+    type Provider,
+    UUID,
+} from "../types.ts";
 
 describe("getProviders", () => {
     let runtime: IAgentRuntime;
@@ -7,19 +13,31 @@ describe("getProviders", () => {
 
     // Mock providers for testing
     const MockProvider1: Provider = {
-        get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+        get: async (
+            _runtime: IAgentRuntime,
+            _message: Memory,
+            _state?: State
+        ) => {
             return "Response from Provider 1";
         },
     };
 
     const MockProvider2: Provider = {
-        get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+        get: async (
+            _runtime: IAgentRuntime,
+            _message: Memory,
+            _state?: State
+        ) => {
             return "Response from Provider 2";
         },
     };
 
     const MockProvider3: Provider = {
-        get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+        get: async (
+            _runtime: IAgentRuntime,
+            _message: Memory,
+            _state?: State
+        ) => {
             return "Response from Provider 3";
         },
     };
@@ -37,11 +55,11 @@ describe("getProviders", () => {
             userId: "00000000-0000-0000-0000-000000000001",
             content: { text: "" },
             roomId: roomId,
-            agentId: "00000000-0000-0000-0000-000000000002"
+            agentId: "00000000-0000-0000-0000-000000000002",
         };
 
         const result = await getProviders(runtime, message, {} as State);
-        
+
         // Check if the responses are concatenated correctly with newline separators
         expect(result).toBe(
             "Response from Provider 1\nResponse from Provider 2\nResponse from Provider 3"
@@ -55,18 +73,22 @@ describe("getProviders", () => {
             userId: "00000000-0000-0000-0000-000000000001",
             content: { text: "" },
             roomId: roomId,
-            agentId: "00000000-0000-0000-0000-000000000002"
+            agentId: "00000000-0000-0000-0000-000000000002",
         };
 
         const result = await getProviders(runtime, message, {} as State);
-        
+
         // No providers, should return an empty string
         expect(result).toBe("");
     });
 
     test("getProviders should handle providers returning undefined", async () => {
         const MockProviderWithUndefinedResponse: Provider = {
-            get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+            get: async (
+                _runtime: IAgentRuntime,
+                _message: Memory,
+                _state?: State
+            ) => {
                 return undefined; // Simulate undefined return
             },
         };
@@ -77,7 +99,7 @@ describe("getProviders", () => {
             userId: "00000000-0000-0000-0000-000000000001",
             content: { text: "" },
             roomId: roomId,
-            agentId: "00000000-0000-0000-0000-000000000002"
+            agentId: "00000000-0000-0000-0000-000000000002",
         };
 
         const result = await getProviders(runtime, message, {} as State);
@@ -88,13 +110,21 @@ describe("getProviders", () => {
 
     test("getProviders should concatenate valid responses and ignore undefined", async () => {
         const MockProviderWithValidAndUndefinedResponse: Provider = {
-            get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+            get: async (
+                _runtime: IAgentRuntime,
+                _message: Memory,
+                _state?: State
+            ) => {
                 return "Valid response";
             },
         };
 
         const MockProviderWithUndefinedResponse: Provider = {
-            get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+            get: async (
+                _runtime: IAgentRuntime,
+                _message: Memory,
+                _state?: State
+            ) => {
                 return undefined;
             },
         };
@@ -108,7 +138,7 @@ describe("getProviders", () => {
             userId: "00000000-0000-0000-0000-000000000001",
             content: { text: "" },
             roomId: roomId,
-            agentId: "00000000-0000-0000-0000-000000000002"
+            agentId: "00000000-0000-0000-0000-000000000002",
         };
 
         const result = await getProviders(runtime, message, {} as State);
@@ -119,7 +149,11 @@ describe("getProviders", () => {
 
     test("getProviders should handle error if one provider fails", async () => {
         const MockProviderThatThrows: Provider = {
-            get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {
+            get: async (
+                _runtime: IAgentRuntime,
+                _message: Memory,
+                _state?: State
+            ) => {
                 throw new Error("Provider error");
             },
         };
@@ -128,12 +162,14 @@ describe("getProviders", () => {
             userId: "00000000-0000-0000-0000-000000000001",
             content: { text: "" },
             roomId: roomId,
-            agentId: "00000000-0000-0000-0000-000000000002"
+            agentId: "00000000-0000-0000-0000-000000000002",
         };
 
         runtime.providers = [MockProviderThatThrows, MockProvider1];
 
         // Expect an error from the first provider but still get the response from the second provider
-        await expect(getProviders(runtime, message, {} as State)).rejects.toThrow("Provider error");
+        await expect(
+            getProviders(runtime, message, {} as State)
+        ).rejects.toThrow("Provider error");
     });
 });

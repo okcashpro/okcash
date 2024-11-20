@@ -60,6 +60,7 @@ Before getting started with Eliza, ensure you have:
    DISCORD_API_TOKEN=      # Bot token
    HEURIST_API_KEY=       # Heurist API key for LLM and image generation
    OPENAI_API_KEY=        # OpenAI API key
+   GROK_API_KEY=          # Grok API key
    ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
    ```
 
