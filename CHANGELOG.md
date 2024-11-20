@@ -1,9 +1,5 @@
 # Changelog
 
-## [v0.1.3-alpha.1](https://github.com/ai16z/eliza/tree/v0.1.3-alpha.1) (2024-11-20)
-
-[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3-alpha.0...v0.1.3-alpha.1)
-
 ## [v0.1.3-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.3-alpha.0) (2024-11-20)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.2...v0.1.3-alpha.0)
