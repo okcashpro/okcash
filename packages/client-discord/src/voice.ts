@@ -519,7 +519,7 @@ export class VoiceManager extends EventEmitter {
                         const callback: HandlerCallback = async (
                             content: Content
                         ) => {
-                            console.log("callback content: ", content);
+                            elizaLogger.debug("callback content: ", content);
                             const { roomId } = memory;
 
                             const responseMemory: Memory = {
@@ -660,8 +660,8 @@ export class VoiceManager extends EventEmitter {
     }
 
     private async _shouldIgnore(message: Memory): Promise<boolean> {
-        console.log("message: ", message);
-        console.log("message.content: ", message.content);
+        // console.log("message: ", message);
+        elizaLogger.debug("message.content: ", message.content);
         // if the message is 3 characters or less, ignore it
         if ((message.content as Content).text.length < 3) {
             return true;
