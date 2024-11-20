@@ -985,42 +985,52 @@ Text: ${attachment.text}
                           formattedCharacterMessageExamples
                       )
                     : "",
-            messageDirections:
-                this.character?.style?.all?.length > 0 ||
-                this.character?.style?.chat.length > 0
-                    ? addHeader(
-                          "# Message Directions for " + this.character.name,
-                          (() => {
-                              const all = this.character?.style?.all || [];
-                              const chat = this.character?.style?.chat || [];
-                              const shuffled = [...all, ...chat].sort(
-                                  () => 0.5 - Math.random()
-                              );
-                              const allSliced = shuffled.slice(
-                                  0,
-                                  conversationLength / 2
-                              );
-                              return allSliced.concat(allSliced).join("\n");
-                          })()
-                      )
-                    : "",
+                    messageDirections:
+                    this.character?.style?.all?.length > 0 ||
+                    this.character?.style?.chat.length > 0
+                        ? addHeader(
+                            "# Message Directions for " + this.character.name,
+                            (() => {
+                                const all = this.character?.style?.all || [];
+                                const chat = this.character?.style?.chat || [];
+                                return [...all, ...chat].join("\n");
+                            })()
+                        )
+                        : "",
+                
             postDirections:
                 this.character?.style?.all?.length > 0 ||
                 this.character?.style?.post.length > 0
                     ? addHeader(
-                          "# Post Directions for " + this.character.name,
-                          (() => {
-                              const all = this.character?.style?.all || [];
-                              const post = this.character?.style?.post || [];
-                              const shuffled = [...all, ...post].sort(
-                                  () => 0.5 - Math.random()
-                              );
-                              return shuffled
-                                  .slice(0, conversationLength / 2)
-                                  .join("\n");
-                          })()
-                      )
+                        "# Post Directions for " + this.character.name,
+                        (() => {
+                            const all = this.character?.style?.all || [];
+                            const post = this.character?.style?.post || [];
+                            return [...all, ...post].join("\n");
+                        })()
+                    )
                     : "",
+                    
+            //old logic left in for reference 
+            //food for thought. how could we dynamically decide what parts of the character to add to the prompt other than random? rag? prompt the llm to decide?
+                    /*
+            postDirections:
+                this.character?.style?.all?.length > 0 ||
+                this.character?.style?.post.length > 0
+                    ? addHeader(
+                            "# Post Directions for " + this.character.name,
+                            (() => {
+                                const all = this.character?.style?.all || [];
+                                const post = this.character?.style?.post || [];
+                                const shuffled = [...all, ...post].sort(
+                                    () => 0.5 - Math.random()
+                                );
+                                return shuffled
+                                    .slice(0, conversationLength / 2)
+                                    .join("\n");
+                            })()
+                        )
+                    : "",*/
             // Agent runtime stuff
             senderName,
             actors:
