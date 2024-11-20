@@ -8,7 +8,13 @@ import {
     ModelClass,
     ServiceType,
     State,
-    UUID, composeContext, elizaLogger, embeddingZeroVector, generateMessageResponse, messageCompletionFooter, stringToUuid
+    UUID,
+    composeContext,
+    elizaLogger,
+    embeddingZeroVector,
+    generateMessageResponse,
+    messageCompletionFooter,
+    stringToUuid,
 } from "@ai16z/eliza";
 import {
     AudioReceiveStream,
@@ -232,11 +238,12 @@ export class VoiceManager extends EventEmitter {
             selfMute: false,
         });
 
-        // Explicitly undeafen and unmute the bot
         const me = channel.guild.members.me;
-        if (me?.voice) {
+        if (me?.voice && me.permissions.has("DeafenMembers")) {
             await me.voice.setDeaf(false);
             await me.voice.setMute(false);
+        } else {
+            elizaLogger.log("Bot lacks permission to modify voice state");
         }
 
         for (const [, member] of channel.members) {
@@ -245,8 +252,8 @@ export class VoiceManager extends EventEmitter {
             }
         }
 
-        connection.on('error', (error) => {
-            console.error('Voice connection error:', error);
+        connection.on("error", (error) => {
+            console.error("Voice connection error:", error);
         });
 
         connection.receiver.speaking.on("start", (userId: string) => {
