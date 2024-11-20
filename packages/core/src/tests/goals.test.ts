@@ -1,8 +1,8 @@
 import {
-    getGoals,
-    formatGoalsAsString,
-    updateGoal,
     createGoal,
+    formatGoalsAsString,
+    getGoals,
+    updateGoal,
 } from "../goals";
 import {
     type Goal,
@@ -19,7 +19,7 @@ import {
     State,
 } from "../types";
 
-import { describe, test, expect, beforeEach, vi } from "vitest";
+import { describe, expect, vi } from "vitest";
 
 // Mock the database adapter
 export const mockDatabaseAdapter = {
