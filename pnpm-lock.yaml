@@ -896,6 +896,9 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
+      dompurify:
+        specifier: 3.2.0
+        version: 3.2.0
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(@swc/core@1.9.2(@swc/helpers@0.5.15))(jiti@1.21.6)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
@@ -20780,7 +20783,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7(supports-color@5.5.0)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
