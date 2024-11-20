@@ -290,42 +290,13 @@ export class PostgresDatabaseAdapter extends DatabaseAdapter {
         match_count: number;
         unique: boolean;
     }): Promise<Memory[]> {
-        const client = await this.pool.connect();
-        try {
-            let sql = `
-                SELECT *,
-                1 - (embedding <-> $3) as similarity
-                FROM memories
-                WHERE type = $1 AND "roomId" = $2
-            `;
-
-            if (params.unique) {
-                sql += ` AND "unique" = true`;
-            }
-
-            sql += ` AND 1 - (embedding <-> $3) >= $4
-                ORDER BY embedding <-> $3
-                LIMIT $5`;
-
-            const { rows } = await client.query(sql, [
-                params.tableName,
-                params.roomId,
-                params.embedding,
-                params.match_threshold,
-                params.match_count,
-            ]);
-
-            return rows.map((row) => ({
-                ...row,
-                content:
-                    typeof row.content === "string"
-                        ? JSON.parse(row.content)
-                        : row.content,
-                similarity: row.similarity,
-            }));
-        } finally {
-            client.release();
-        }
+        return await this.searchMemoriesByEmbedding(params.embedding, {
+            match_threshold: params.match_threshold,
+            count: params.match_count,
+            roomId: params.roomId,
+            unique: params.unique,
+            tableName: params.tableName,
+        });
     }
 
     async getMemories(params: {
