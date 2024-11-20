@@ -1,5 +1,3 @@
-// TODO: add unruggable
-
 import {
     ActionExample,
     elizaLogger,
@@ -12,13 +10,13 @@ import {
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
-import {
-    executeSwap as executeAvnuSwap,
-    fetchQuotes,
-    QuoteRequest,
-} from "@avnu/avnu-sdk";
 
-import { getStarknetAccount, validateSettings } from "../utils/index.ts";
+import {
+    getStarknetAccount,
+    getStarknetProvider,
+    validateSettings,
+} from "../utils/index.ts";
+import { DeployData, Factory } from "@unruggable_starknet/core";
 
 interface SwapContent {
     sellTokenAddress: string;
@@ -26,66 +24,64 @@ interface SwapContent {
     sellAmount: string;
 }
 
-export function isSwapContent(content: SwapContent): content is SwapContent {
+export function isDeployTokenContent(
+    content: DeployData
+): content is DeployData {
     // Validate types
     const validTypes =
-        typeof content.sellTokenAddress === "string" &&
-        typeof content.buyTokenAddress === "string" &&
-        typeof content.sellAmount === "string";
+        typeof content.name === "string" &&
+        typeof content.symbol === "string" &&
+        typeof content.owner === "string" &&
+        typeof content.initialSupply === "string";
     if (!validTypes) {
         return false;
     }
 
     // Validate addresses (must be 32-bytes long with 0x prefix)
     const validAddresses =
-        content.sellTokenAddress.startsWith("0x") &&
-        content.sellTokenAddress.length === 66 &&
-        content.buyTokenAddress.startsWith("0x") &&
-        content.buyTokenAddress.length === 66;
+        content.name.length > 2 &&
+        content.symbol.length > 2 &&
+        parseInt(content.initialSupply) > 0 &&
+        content.owner.startsWith("0x") &&
+        content.owner.length === 66;
 
     return validAddresses;
 }
 
-const swapTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
-
-These are known addresses you will get asked to swap, use these addresses for sellTokenAddress and buyTokenAddress:
-- BROTHER/brother/$brother: 0x03b405a98c9e795d427fe82cdeeeed803f221b52471e3a757574a2b4180793ee
-- BTC/btc: 0x03fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac
-- ETH/eth: 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7
-- STRK/strk: 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d
-- LORDS/lords: 0x0124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49
+const deployTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
 Example response:
 \`\`\`json
 {
-    "sellTokenAddress": "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-    "buyTokenAddress": "0x124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49",
-    "sellAmount": "1000000000000000000"
+    "name": "Brother",
+    "symbol": "BROTHER",
+    "owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "initialSupply": "1000000000000000000"
 }
 \`\`\`
 
 {{recentMessages}}
 
-Extract the following information about the requested token swap:
-- Sell token address
-- Buy token address  
-- Amount to sell (in wei)
+Extract the following information about the requested token deployment:
+- Token Name
+- Token Symbol  
+- Token Owner
+- Token initial supply
 
 Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.`;
 
 export const deployToken: Action = {
-    name: "EXECUTE_STARKNET_SWAP",
+    name: "DEPLOY_STARKNET_UNRUGGABLE_MEME_TOKEN",
     similes: [
-        "STARKNET_SWAP_TOKENS",
-        "STARKNET_TOKEN_SWAP",
-        "STARKNET_TRADE_TOKENS",
-        "STARKNET_EXCHANGE_TOKENS",
+        "DEPLOY_STARKNET_UNRUGGABLE_TOKEN",
+        "STARKNET_DEPLOY_MEMECOIN",
+        "STARKNET_CREATE_MEMECOIN",
     ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         return validateSettings(runtime);
     },
     description:
-        "Perform a token swap on starknet. Use this action when a user asks you to swap tokens anything.",
+        "Deploy an Unruggable Memecoin on Starknet. Use this action when a user asks you to deploy a new token on Starknet.",
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,
@@ -93,62 +89,74 @@ export const deployToken: Action = {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting EXECUTE_STARKNET_SWAP handler...");
+        elizaLogger.log(
+            "Starting DEPLOY_STARKNET_UNRUGGABLE_MEME_TOKEN handler..."
+        );
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         } else {
             state = await runtime.updateRecentMessageState(state);
         }
 
-        const swapContext = composeContext({
+        const deployContext = composeContext({
             state,
-            template: swapTemplate,
+            template: deployTemplate,
         });
 
         const response = await generateObject({
             runtime,
-            context: swapContext,
+            context: deployContext,
             modelClass: ModelClass.MEDIUM,
         });
+        elizaLogger.log("init supply." + response.initialSupply);
+        elizaLogger.log(response);
 
-        if (!isSwapContent(response)) {
-            callback?.({ text: "Invalid swap content, please try again." });
+        if (!isDeployTokenContent(response)) {
+            callback?.({
+                text: "Invalid deployment content, please try again.",
+            });
             return false;
         }
 
         try {
-            // Get quote
-            const quoteParams: QuoteRequest = {
-                sellTokenAddress: response.sellTokenAddress,
-                buyTokenAddress: response.buyTokenAddress,
-                sellAmount: BigInt(response.sellAmount),
-            };
+            const provider = getStarknetProvider(runtime);
+            const account = getStarknetAccount(runtime);
 
-            const quote = await fetchQuotes(quoteParams);
+            const factory = new Factory({
+                provider,
+                chainId: await provider.getChainId(),
+            });
 
-            // Execute swap
-            const swapResult = await executeAvnuSwap(
-                getStarknetAccount(runtime),
-                quote[0],
-                {
-                    slippage: 0.05, // 5% slippage
-                    executeApprove: true,
-                }
-            );
+            const { tokenAddress, calls } = factory.getDeployCalldata({
+                name: response.name,
+                symbol: response.symbol,
+                owner: response.owner,
+                initialSupply: response.initialSupply,
+            });
 
             elizaLogger.log(
-                "Swap completed successfully!" + swapResult.transactionHash
+                "Deployment has been initiated for coin: " +
+                    response.name +
+                    " at address: " +
+                    tokenAddress
             );
+            const tx = await account.execute(calls);
+
             callback?.({
                 text:
-                    "Swap completed successfully! tx: " +
-                    swapResult.transactionHash,
+                    "Token Deployment completed successfully!" +
+                    response.symbol +
+                    " deployed in tx: " +
+                    tx.transaction_hash,
             });
 
             return true;
         } catch (error) {
-            elizaLogger.error("Error during token swap:", error);
-            callback?.({ text: `Error during swap:` });
+            elizaLogger.error("Error during token deployment:", error);
+            callback?.({
+                text: `Error during deployment: ${error.message}`,
+                content: { error: error.message },
+            });
             return false;
         }
     },
@@ -157,13 +165,13 @@ export const deployToken: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Swap 10 ETH for LORDS",
+                    text: "Deploy a new token called Lords with the symbol LORDS, owned by 0x024BA6a4023fB90962bDfc2314F3B94372aa382D155291635fc3E6b777657A5B and initial supply of 1000000000000000000 on Starknet",
                 },
             },
             {
                 user: "{{agent}}",
                 content: {
-                    text: "Ok, I'll swap 10 ETH for LORDS",
+                    text: "Ok, I'll deploy the Lords token to Starknet",
                 },
             },
         ],
@@ -171,13 +179,13 @@ export const deployToken: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Swap 100 $lords on starknet",
+                    text: "Deploy the SLINK coin to Starknet",
                 },
             },
             {
                 user: "{{agent}}",
                 content: {
-                    text: "Ok, I'll swap 100 $lords on starknet",
+                    text: "Ok, I'll deploy your coin on Starknet",
                 },
             },
         ],
@@ -185,13 +193,13 @@ export const deployToken: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Swap 0.5 BTC for LORDS",
+                    text: "Create a new coin on Starknet",
                 },
             },
             {
                 user: "{{agent}}",
                 content: {
-                    text: "Ok, I'll swap 0.5 BTC for LORDS",
+                    text: "Ok, I'll create a new coin for you on Starknet",
                 },
             },
         ],

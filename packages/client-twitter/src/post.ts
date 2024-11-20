@@ -1,6 +1,6 @@
 import { Tweet } from "agent-twitter-client";
 import fs from "fs";
-import { composeContext } from "@ai16z/eliza";
+import { composeContext, elizaLogger } from "@ai16z/eliza";
 import { generateText } from "@ai16z/eliza";
 import { embeddingZeroVector } from "@ai16z/eliza";
 import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
@@ -76,7 +76,7 @@ export class TwitterPostClient extends ClientBase {
                 generateNewTweetLoop(); // Set up next iteration
             }, delay);
 
-            console.log(`Next tweet scheduled in ${randomMinutes} minutes`);
+            elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
 
         if (postImmediately) {
@@ -92,7 +92,7 @@ export class TwitterPostClient extends ClientBase {
     }
 
     private async generateNewTweet() {
-        console.log("Generating new tweet");
+        elizaLogger.log("Generating new tweet");
         try {
             await this.runtime.ensureUserExists(
                 this.runtime.agentId,
