@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.2](https://github.com/ai16z/eliza/tree/v0.1.2) (2024-11-20)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.1...v0.1.2)
+
+**Merged pull requests:**
+
+- fix: configs [\#431](https://github.com/ai16z/eliza/pull/431) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+
 ## [v0.1.1](https://github.com/ai16z/eliza/tree/v0.1.1) (2024-11-20)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.0.10...v0.1.1)
