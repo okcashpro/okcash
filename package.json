@@ -1,5 +1,6 @@
 {
     "name": "eliza",
+    "type": "module",
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "build": "bash ./scripts/build.sh",
