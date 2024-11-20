@@ -1,5 +1,27 @@
 # Changelog
 
+## [v0.1.3](https://github.com/ai16z/eliza/tree/v0.1.3) (2024-11-20)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3-alpha.2...v0.1.3)
+
+**Implemented enhancements:**
+
+- ⚙️Take Order Action Integration [\#53](https://github.com/ai16z/eliza/issues/53)
+- 🔍 Trust Score Calculator [\#52](https://github.com/ai16z/eliza/issues/52)
+- 📊 Order Book System [\#49](https://github.com/ai16z/eliza/issues/49)
+- daos.fun integration [\#33](https://github.com/ai16z/eliza/issues/33)
+
+**Merged pull requests:**
+
+- fix: voice perms [\#447](https://github.com/ai16z/eliza/pull/447) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: unrug [\#444](https://github.com/ai16z/eliza/pull/444) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- feat:  add all the style guidelines to the context [\#441](https://github.com/ai16z/eliza/pull/441) ([o-on-x](https://github.com/o-on-x))
+- fix: fixes some console logs [\#440](https://github.com/ai16z/eliza/pull/440) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: The bot is by default deafened and we don't want that [\#437](https://github.com/ai16z/eliza/pull/437) ([martincik](https://github.com/martincik))
+- fix: path [\#436](https://github.com/ai16z/eliza/pull/436) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: since agent is moved out of packages, adjust default path [\#432](https://github.com/ai16z/eliza/pull/432) ([odilitime](https://github.com/odilitime))
+- fix: Fix linter issues [\#397](https://github.com/ai16z/eliza/pull/397) ([martincik](https://github.com/martincik))
+
 ## [v0.1.3-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.3-alpha.2) (2024-11-20)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3-alpha.1...v0.1.3-alpha.2)
