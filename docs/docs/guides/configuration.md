@@ -70,6 +70,9 @@ ANTHROPIC_API_KEY=
 # Together.ai Settings
 TOGETHER_API_KEY=
 
+# Heurist Settings
+HEURIST_API_KEY=
+
 # Local Model Settings
 XAI_MODEL=meta-llama/Llama-3.1-7b-instruct
 ```
@@ -80,12 +83,12 @@ Configure image generation in your character file:
 
 ```json
 {
-  "modelProvider": "HEURIST",
+  "modelProvider": "heurist",
   "settings": {
     "imageSettings": {
       "steps": 20,
-      "width": 512,
-      "height": 512
+      "width": 1024,
+      "height": 1024
     }
   }
 }
@@ -96,13 +99,14 @@ Example usage:
 ```typescript
 const result = await generateImage(
   {
-    prompt: "pepe_frog, meme, web comic, cartoon, 3d render",
-    width: 512,
-    height: 512,
+    prompt:
+      'A cute anime girl with big breasts and straight long black hair wearing orange T-shirt. The T-shirt has "ai16z" texts in the front. The girl is looking at the viewer',
+    width: 1024,
+    height: 1024,
     numIterations: 20, // optional
     guidanceScale: 3, // optional
     seed: -1, // optional
-    modelId: "PepeXL", // optional
+    modelId: "FLUX.1-dev", // optional
   },
   runtime,
 );

@@ -1,10 +1,12 @@
-import { embeddingZeroVector } from "@ai16z/eliza/src/memory.ts";
 import {
     Content,
     IAgentRuntime,
     IImageDescriptionService,
+    embeddingZeroVector,
     Memory,
     State,
+    elizaLogger,
+    stringToUuid,
     UUID,
 } from "@ai16z/eliza";
 import {
@@ -19,9 +21,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { glob } from "glob";
-
-import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
@@ -172,14 +171,14 @@ export class ClientBase extends EventEmitter {
             this.runtime.character.style.post.join();
 
         try {
-            console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
+            // console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
             if (fs.existsSync(this.tweetCacheFilePath)) {
                 // make it?
                 const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
                 this.lastCheckedTweetId = parseInt(data.trim());
             } else {
-                console.warn("Tweet cache file not found.");
-                console.warn(this.tweetCacheFilePath);
+                // console.warn("Tweet cache file not found.");
+                // console.warn(this.tweetCacheFilePath);
             }
         } catch (error) {
             console.error(
@@ -208,7 +207,7 @@ export class ClientBase extends EventEmitter {
                 );
                 await this.setCookiesFromArray(cookiesArray);
             } else {
-                console.log("Cookies file path:", cookiesFilePath);
+                elizaLogger.debug("Cookies file path:", cookiesFilePath);
                 if (fs.existsSync(cookiesFilePath)) {
                     const cookiesArray = JSON.parse(
                         fs.readFileSync(cookiesFilePath, "utf-8")
@@ -221,7 +220,7 @@ export class ClientBase extends EventEmitter {
                         this.runtime.getSetting("TWITTER_EMAIL"),
                         this.runtime.getSetting("TWITTER_2FA_SECRET")
                     );
-                    console.log("Logged in to Twitter");
+                    elizaLogger.log("Logged in to Twitter");
                     const cookies = await this.twitterClient.getCookies();
                     fs.writeFileSync(
                         cookiesFilePath,
@@ -271,8 +270,25 @@ export class ClientBase extends EventEmitter {
                 console.error("Failed to get user ID");
                 return;
             }
-            console.log("Twitter user ID:", userId);
+            elizaLogger.log("Twitter user ID:", userId);
             this.twitterUserId = userId;
+
+            // Initialize Twitter profile
+            const profile = await this.initializeProfile();
+            if (profile) {
+                // console.log("Twitter profile initialized:", profile);
+
+                // Store profile info for use in responses
+                this.runtime.character = {
+                    ...this.runtime.character,
+                    twitterProfile: {
+                        username: profile.username,
+                        screenName: profile.screenName,
+                        bio: profile.bio,
+                        nicknames: profile.nicknames,
+                    },
+                };
+            }
 
             await this.populateTimeline();
 
@@ -601,6 +617,49 @@ export class ClientBase extends EventEmitter {
                 ...state,
                 twitterClient: this.twitterClient,
             });
+        }
+    }
+
+    async initializeProfile() {
+        const username = this.runtime.getSetting("TWITTER_USERNAME");
+        if (!username) {
+            console.error("Twitter username not configured");
+            return;
+        }
+
+        try {
+            const profile = await this.requestQueue.add(async () => {
+                const profile = await this.twitterClient.getProfile(username);
+                return {
+                    username,
+                    screenName: profile.name || this.runtime.character.name,
+                    bio:
+                        profile.biography ||
+                        typeof this.runtime.character.bio === "string"
+                            ? (this.runtime.character.bio as string)
+                            : this.runtime.character.bio.length > 0
+                              ? this.runtime.character.bio[0]
+                              : "",
+                    nicknames:
+                        this.runtime.character.twitterProfile?.nicknames || [],
+                };
+            });
+
+            return profile;
+        } catch (error) {
+            console.error("Error fetching Twitter profile:", error);
+            return {
+                username: this.runtime.character.name,
+                screenName: username,
+                bio:
+                    typeof this.runtime.character.bio === "string"
+                        ? (this.runtime.character.bio as string)
+                        : this.runtime.character.bio.length > 0
+                          ? this.runtime.character.bio[0]
+                          : "",
+                nicknames:
+                    this.runtime.character.twitterProfile?.nicknames || [],
+            };
         }
     }
 }

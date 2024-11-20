@@ -1,4 +1,4 @@
-import { elizaLogger, ServiceType } from "@ai16z/eliza";
+import { elizaLogger, IAgentRuntime, ServiceType } from "@ai16z/eliza";
 import { Service } from "@ai16z/eliza";
 import fs from "fs";
 import https from "https";
@@ -180,6 +180,9 @@ export class LlamaService extends Service {
         const modelName = "model.gguf";
         this.modelPath = path.join(__dirname, modelName);
     }
+
+    async initialize(runtime: IAgentRuntime): Promise<void> {}
+
     private async ensureInitialized() {
         if (!this.modelInitialized) {
             await this.initializeModel();

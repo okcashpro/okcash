@@ -3,6 +3,7 @@ import { IAgentRuntime, ISpeechService, ServiceType } from "@ai16z/eliza";
 import { getWavHeader } from "./audioUtils.ts";
 import { synthesize } from "../vendor/vits.ts";
 import { Service } from "@ai16z/eliza";
+
 function prependWavHeader(
     readable: Readable,
     audioLength: number,
@@ -107,8 +108,11 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
     }
 }
 
-export class SpeechService extends Service implements ISpeechService {
+export class SpeechService extends Service {
     static serviceType: ServiceType = ServiceType.SPEECH_GENERATION;
+
+    async initialize(runtime: IAgentRuntime): Promise<void> {}
+
     async generate(runtime: IAgentRuntime, text: string): Promise<Readable> {
         // check for elevenlabs API key
         if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
