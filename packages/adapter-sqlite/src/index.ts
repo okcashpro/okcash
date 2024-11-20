@@ -681,7 +681,7 @@ export class SqliteDatabaseAdapter
             .prepare<[string, UUID], { value: string }>(sql)
             .get(params.key, params.agentId);
 
-        return cached.value;
+        return cached?.value ?? undefined;
     }
 
     async setCache(params: {
