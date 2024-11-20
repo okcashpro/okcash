@@ -5,12 +5,13 @@ import {
     formatRelationships,
 } from "../relationships";
 import { IAgentRuntime, type Relationship, type UUID } from "../types";
+import { describe, expect, vi } from 'vitest';
 
 // Mock runtime and databaseAdapter
 const mockDatabaseAdapter = {
-    createRelationship: jest.fn(),
-    getRelationship: jest.fn(),
-    getRelationships: jest.fn(),
+    createRelationship: vi.fn(),
+    getRelationship: vi.fn(),
+    getRelationships: vi.fn(),
 };
 const mockRuntime: IAgentRuntime = {
     databaseAdapter: mockDatabaseAdapter,
@@ -26,7 +27,7 @@ describe("Relationships Module", () => {
     const mockUserId: UUID = generateRandomUUID();
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("createRelationship", () => {
