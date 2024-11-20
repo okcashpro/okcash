@@ -58,7 +58,12 @@ Then read the [Documentation](https://ai16z.github.io/eliza/) to learn how to cu
 ### Manually Start Eliza (Only recommended if you know what you are doing)
 
 ```bash
+# Clone the repository
 git clone https://github.com/ai16z/eliza.git
+
+# Checkout the latest release
+# This project iterates fast, so we recommend checking out the latest release
+git checkout $(git describe --tags --abbrev=0)
 ```
 
 ### Edit the .env file
