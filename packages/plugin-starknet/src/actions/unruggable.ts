@@ -10,19 +10,23 @@ import {
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
-
+import { Percent } from "@uniswap/sdk-core";
 import {
     getStarknetAccount,
     getStarknetProvider,
+    parseFormatedAmount,
+    parseFormatedPercentage,
     validateSettings,
 } from "../utils/index.ts";
 import { DeployData, Factory } from "@unruggable_starknet/core";
-
-interface SwapContent {
-    sellTokenAddress: string;
-    buyTokenAddress: string;
-    sellAmount: string;
-}
+import {
+    AMM,
+    EKUBO_TICK_SPACING,
+    LiquidityType,
+    QUOTE_TOKEN_SYMBOL,
+    RECOMMENDED_EKUBO_FEES,
+} from "@unruggable_starknet/core/constants";
+import { ACCOUNTS, TOKENS } from "../utils/constants.ts";
 
 export function isDeployTokenContent(
     content: DeployData
@@ -108,6 +112,7 @@ export const deployToken: Action = {
             context: deployContext,
             modelClass: ModelClass.MEDIUM,
         });
+
         elizaLogger.log("init supply." + response.initialSupply);
         elizaLogger.log(response);
 
@@ -127,12 +132,57 @@ export const deployToken: Action = {
                 chainId: await provider.getChainId(),
             });
 
-            const { tokenAddress, calls } = factory.getDeployCalldata({
-                name: response.name,
-                symbol: response.symbol,
-                owner: response.owner,
-                initialSupply: response.initialSupply,
-            });
+            const { tokenAddress, calls: deployCalls } =
+                factory.getDeployCalldata({
+                    name: response.name,
+                    symbol: response.symbol,
+                    owner: response.owner,
+                    initialSupply: response.initialSupply,
+                });
+
+            const data = await factory.getMemecoinLaunchData(tokenAddress);
+
+            const { calls: launchCalls } = await factory.getEkuboLaunchCalldata(
+                {
+                    address: tokenAddress,
+                    name: response.name,
+                    symbol: response.symbol,
+                    owner: response.owner,
+                    totalSupply: response.initialSupply,
+                    decimals: 18,
+                    ...data,
+                },
+                {
+                    fees: parseFormatedPercentage("3"),
+                    amm: AMM.EKUBO,
+                    teamAllocations: [
+                        {
+                            address: ACCOUNTS.ELIZA,
+                            amount: new Percent(
+                                2.5,
+                                response.initialSupply
+                            ).toFixed(0),
+                        },
+                        {
+                            address: ACCOUNTS.BLOBERT,
+                            amount: new Percent(
+                                2.5,
+                                response.initialSupply
+                            ).toFixed(0),
+                        },
+                    ],
+                    holdLimit: parseFormatedPercentage("2"),
+                    antiBotPeriod: 3600,
+                    quoteToken: {
+                        address: TOKENS.LORDS,
+                        symbol: "LORDS" as QUOTE_TOKEN_SYMBOL,
+                        name: "Lords",
+                        decimals: 18,
+                        camelCased: false,
+                    },
+                    startingMarketCap: parseFormatedAmount("5000"),
+                }
+            );
 
             elizaLogger.log(
                 "Deployment has been initiated for coin: " +
@@ -140,7 +190,7 @@ export const deployToken: Action = {
                     " at address: " +
                     tokenAddress
             );
-            const tx = await account.execute(calls);
+            const tx = await account.execute([...deployCalls, ...launchCalls]);
 
             callback?.({
                 text:
