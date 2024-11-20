@@ -31,22 +31,21 @@ export class FarcasterInteractionManager {
     ) {}
 
     public async start() {
-        const handleTwitterInteractionsLoop = async () => {
+        const handleInteractionsLoop = async () => {
             try {
                 await this.handleInteractions();
             } catch (error) {
                 console.error(error);
+                return;
             }
 
             this.timeout = setTimeout(
-                handleTwitterInteractionsLoop,
+                handleInteractionsLoop,
                 (Math.floor(Math.random() * (5 - 2 + 1)) + 2) * 60 * 1000
             ); // Random interval between 2-5 minutes
         };
 
-        handleTwitterInteractionsLoop().catch((err) => {
-            console.error(err);
-        });
+        handleInteractionsLoop();
     }
 
     public async stop() {
