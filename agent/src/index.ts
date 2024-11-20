@@ -13,6 +13,7 @@ import {
     IAgentRuntime,
     ModelProviderName,
     elizaLogger,
+    validateCharacterConfig,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
@@ -68,6 +69,8 @@ export async function loadCharacters(
         for (const path of characterPaths) {
             try {
                 const character = JSON.parse(fs.readFileSync(path, "utf8"));
+
+                validateCharacterConfig(character);
 
                 // is there a "plugins" field?
                 if (character.plugins) {
