@@ -875,6 +875,9 @@ importers:
       '@avnu/avnu-sdk':
         specifier: ^2.1.1
         version: 2.1.1(ethers@6.13.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))(qs@6.13.0)(starknet@6.18.0(encoding@0.1.13))
+      '@uniswap/sdk-core':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@unruggable_starknet/core':
         specifier: ^0.1.0
         version: 0.1.0(starknet@6.18.0(encoding@0.1.13))
@@ -2801,6 +2804,9 @@ packages:
   '@ethersproject/bytes@5.7.0':
     resolution: {integrity: sha512-nsbxwgFXWh9NyYWo+U8atvmMsSdKJprTcICAkvbBffT75qDocbuggBU0SJiVK2MuTrp0q+xvLkTnGMPK1+uA9A==}
 
+  '@ethersproject/constants@5.7.0':
+    resolution: {integrity: sha512-DHI+y5dBNvkpYUMiRQyxRBYBefZkJfo70VUkUAsRjcPs47muV9evftfZ0PJVCXYbAiCgght0DtcF9srFQmIgWA==}
+
   '@ethersproject/keccak256@5.7.0':
     resolution: {integrity: sha512-2UcPboeL/iW+pSg6vZ6ydF8tCnv3Iu/8tUmLLzWWGzxWKFFqOBQFLo6uLUv6BDrLgCDfN28RJ/wtByx+jZ4KBg==}
 
@@ -2809,6 +2815,9 @@ packages:
 
   '@ethersproject/rlp@5.7.0':
     resolution: {integrity: sha512-rBxzX2vK8mVF7b0Tol44t5Tb8gomOHkj5guL+HhzQ1yBh/ydjGnpw6at+X6Iw0Kp3OzzzkcKp8N9r0W4kYSs9w==}
+
+  '@ethersproject/strings@5.7.0':
+    resolution: {integrity: sha512-/9nu+lj0YswRNSH0NXYqrh8775XNyEdUQAuf3f+SmOrnVewcJ5SBNAjF7lpgehKi4abvNNXyf+HX86czCdJ8Mg==}
 
   '@google-cloud/vertexai@1.9.0':
     resolution: {integrity: sha512-8brlcJwFXI4fPuBtsDNQqCdWZmz8gV9jeEKOU0vc5H2SjehCQpXK/NwuSEr916zbhlBHtg/sU37qQQdgvh5BRA==}
@@ -4773,6 +4782,10 @@ packages:
 
   '@uniswap/sdk-core@4.2.1':
     resolution: {integrity: sha512-hr7vwYrXScg+V8/rRc2UL/Ixc/p0P7yqe4D/OxzUdMRYr8RZd+8z5Iu9+WembjZT/DCdbTjde6lsph4Og0n1BQ==}
+    engines: {node: '>=10'}
+
+  '@uniswap/sdk-core@6.0.0':
+    resolution: {integrity: sha512-6rwBG/Ut7rL2Dw4xtTF1dHSmtctT3h57q4vXIneLYjlePa1PT0mgp5D7cu/6xKEvO1MFtnMchImpWsclfafdUg==}
     engines: {node: '>=10'}
 
   '@unruggable_starknet/core@0.1.0':
@@ -15683,6 +15696,10 @@ snapshots:
     dependencies:
       '@ethersproject/logger': 5.7.0
 
+  '@ethersproject/constants@5.7.0':
+    dependencies:
+      '@ethersproject/bignumber': 5.7.0
+
   '@ethersproject/keccak256@5.7.0':
     dependencies:
       '@ethersproject/bytes': 5.7.0
@@ -15693,6 +15710,12 @@ snapshots:
   '@ethersproject/rlp@5.7.0':
     dependencies:
       '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
+
+  '@ethersproject/strings@5.7.0':
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/constants': 5.7.0
       '@ethersproject/logger': 5.7.0
 
   '@google-cloud/vertexai@1.9.0(encoding@0.1.13)':
@@ -18124,6 +18147,18 @@ snapshots:
   '@uniswap/sdk-core@4.2.1':
     dependencies:
       '@ethersproject/address': 5.7.0
+      big.js: 5.2.2
+      decimal.js-light: 2.5.1
+      jsbi: 3.2.5
+      tiny-invariant: 1.3.3
+      toformat: 2.0.0
+
+  '@uniswap/sdk-core@6.0.0':
+    dependencies:
+      '@ethersproject/address': 5.7.0
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/keccak256': 5.7.0
+      '@ethersproject/strings': 5.7.0
       big.js: 5.2.2
       decimal.js-light: 2.5.1
       jsbi: 3.2.5
@@ -20783,7 +20818,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7(supports-color@5.5.0)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
