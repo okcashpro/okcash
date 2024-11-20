@@ -18,6 +18,8 @@ import {
     IAgentRuntime,
     ModelProviderName,
     elizaLogger,
+    settings,
+    IDatabaseAdapter,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
@@ -175,29 +177,6 @@ export function getTokenForProvider(
     }
 }
 
-export async function createDirectRuntime(
-    character: Character,
-    db: IDatabaseAdapter,
-    cache: ICacheManager,
-    token: string
-) {
-    console.log("Creating runtime for character", character.name);
-
-    return new AgentRuntime({
-        databaseAdapter: db,
-        token,
-        modelProvider: character.modelProvider,
-        evaluators: [],
-        character,
-        plugins: [],
-        providers: [],
-        actions: [],
-        services: [],
-        managers: [],
-        cacheManager: cache,
-    });
-}
-
 function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
         return new PostgresDatabaseAdapter({
@@ -281,13 +260,10 @@ export function createAgent(
 
 function intializeFsCache(baseDir: string, character: Character) {
     const cacheDir = path.resolve(baseDir, character.id, "cache");
-
     if (!fs.existsSync(cacheDir)) {
         fs.mkdirSync(cacheDir, { recursive: true });
     }
-
     const cache = new CacheManager(new FsCacheAdapter(cacheDir));
-
     return cache;
 }
 
@@ -312,7 +288,7 @@ async function startAgent(character: Character, directClient: DirectClient) {
 
         return clients;
     } catch (error) {
-        console.error(
+        elizaLogger.error(
             `Error starting agent for character ${character.name}:`,
             error
         );
