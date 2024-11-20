@@ -36,6 +36,8 @@ import {
     UUID,
 } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
+import { messageCompletionFooter } from "@ai16z/eliza";
+import { DiscordClient } from "./index.ts";
 
 export function getWavHeader(
     audioLength: number,
@@ -62,9 +64,6 @@ export function getWavHeader(
     wavHeader.writeUInt32LE(audioLength, 40); // Data chunk size
     return wavHeader;
 }
-
-import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
-import { DiscordClient } from ".";
 
 const discordVoiceHandlerTemplate =
     `# Task: Generate conversational voice dialog for {{agentName}}.

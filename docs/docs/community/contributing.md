@@ -78,7 +78,6 @@ By internalizing the OODA Loop, you can quickly identify areas where you can mak
 - Leverage AI assistants to help with tasks like code generation, document summarization, and content creation.
 - Collaborate with other community members to divide and conquer larger initiatives.
 
-
 ---
 
 ## Contributing Guidelines
@@ -199,5 +198,3 @@ Note: we're still finalizing details on the creator/dev fund that seeks to retro
 4. Share your ideas and initiatives with the community - we're excited to see what you'll build!
 
 Lets push the boundaries of what's possible with autonomous AI agents. Welcome aboard!
-
-

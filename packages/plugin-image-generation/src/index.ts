@@ -1,4 +1,4 @@
-import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
+import { elizaLogger } from "@ai16z/eliza";
 import {
     Action,
     HandlerCallback,
