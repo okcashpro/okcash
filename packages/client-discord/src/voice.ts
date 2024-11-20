@@ -1,4 +1,16 @@
 import {
+    Content,
+    HandlerCallback,
+    IAgentRuntime,
+    ISpeechService,
+    ITranscriptionService,
+    Memory,
+    ModelClass,
+    ServiceType,
+    State,
+    UUID, composeContext, elizaLogger, embeddingZeroVector, generateMessageResponse, messageCompletionFooter, stringToUuid
+} from "@ai16z/eliza";
+import {
     AudioReceiveStream,
     NoSubscriberBehavior,
     StreamType,
@@ -20,23 +32,6 @@ import {
 import EventEmitter from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { composeContext, elizaLogger } from "@ai16z/eliza";
-import { generateMessageResponse } from "@ai16z/eliza";
-import { embeddingZeroVector } from "@ai16z/eliza";
-import {
-    Content,
-    HandlerCallback,
-    IAgentRuntime,
-    ISpeechService,
-    ITranscriptionService,
-    Memory,
-    ModelClass,
-    ServiceType,
-    State,
-    UUID,
-} from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
-import { messageCompletionFooter } from "@ai16z/eliza";
 import { DiscordClient } from "./index.ts";
 
 export function getWavHeader(
@@ -222,6 +217,9 @@ export class VoiceManager extends EventEmitter {
         if (oldConnection) {
             try {
                 oldConnection.destroy();
+                // Remove all associated streams and monitors
+                this.streams.clear();
+                this.activeMonitors.clear();
             } catch (error) {
                 console.error("Error leaving voice channel:", error);
             }
@@ -234,11 +232,22 @@ export class VoiceManager extends EventEmitter {
             selfMute: false,
         });
 
+        // Explicitly undeafen and unmute the bot
+        const me = channel.guild.members.me;
+        if (me?.voice) {
+            await me.voice.setDeaf(false);
+            await me.voice.setMute(false);
+        }
+
         for (const [, member] of channel.members) {
             if (!member.user.bot) {
                 this.monitorMember(member, channel);
             }
         }
+
+        connection.on('error', (error) => {
+            console.error('Voice connection error:', error);
+        });
 
         connection.receiver.speaking.on("start", (userId: string) => {
             const user = channel.members.get(userId);
