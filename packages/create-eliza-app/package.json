@@ -13,7 +13,8 @@
     "scripts": {
         "build": "unbuild",
         "dev": "jiti ./src/index.ts",
-        "start": "node ./dist/index.cjs"
+        "start": "node ./dist/index.cjs",
+        "automd": "automd"
     },
     "keywords": [],
     "author": "",
@@ -23,6 +24,7 @@
         "giget": "^1.2.3"
     },
     "devDependencies": {
+        "automd": "^0.3.12",
         "jiti": "^2.4.0",
         "unbuild": "^2.0.0"
     }
