@@ -24,8 +24,12 @@ import {
 import settings from "./settings.ts";
 import {
     Content,
-    IAgentRuntime, IImageDescriptionService, ITextGenerationService, ModelClass, ModelProviderName,
-    ServiceType
+    IAgentRuntime,
+    IImageDescriptionService,
+    ITextGenerationService,
+    ModelClass,
+    ModelProviderName,
+    ServiceType,
 } from "./types.ts";
 
 /**
