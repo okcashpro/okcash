@@ -5,7 +5,7 @@ import {
     formatTimestamp,
 } from "../messages.ts";
 import { IAgentRuntime, Actor, Content, Memory, UUID } from "../types.ts";
-import { describe, test, expect, vi, beforeAll } from 'vitest';
+import { describe, test, expect, vi, beforeAll } from "vitest";
 
 describe("Messages Library", () => {
     let runtime: IAgentRuntime;
@@ -42,7 +42,9 @@ describe("Messages Library", () => {
         const roomId: UUID = "room1234-1234-1234-1234-123456789abc" as UUID;
 
         // Using vi.mocked() type assertion instead of jest.Mock casting
-        vi.mocked(runtime.databaseAdapter.getParticipantsForRoom).mockResolvedValue([userId]);
+        vi.mocked(
+            runtime.databaseAdapter.getParticipantsForRoom
+        ).mockResolvedValue([userId]);
         vi.mocked(runtime.databaseAdapter.getAccountById).mockResolvedValue({
             id: userId,
             name: "Test User",

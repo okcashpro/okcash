@@ -1,5 +1,22 @@
 # Changelog
 
+## [v0.1.3-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.3-alpha.0) (2024-11-20)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.2...v0.1.3-alpha.0)
+
+**Merged pull requests:**
+
+- fix: linting and imports ready for npm [\#433](https://github.com/ai16z/eliza/pull/433) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- docs: Update contributing.md to incorporate Contribution Guidelines [\#430](https://github.com/ai16z/eliza/pull/430) ([monilpat](https://github.com/monilpat))
+
+## [v0.1.2](https://github.com/ai16z/eliza/tree/v0.1.2) (2024-11-20)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.1...v0.1.2)
+
+**Merged pull requests:**
+
+- fix: configs [\#431](https://github.com/ai16z/eliza/pull/431) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+
 ## [v0.1.1](https://github.com/ai16z/eliza/tree/v0.1.1) (2024-11-20)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.0.10...v0.1.1)
