@@ -4,9 +4,9 @@ A minimal CLI tool to scaffold ELIZA applications with zero configuration. Get s
 
 <!-- automd:badges color="yellow" license name="create-eliza-app" codecov bundlephobia packagephobia -->
 
-[![npm version](https://img.shields.io/npm/v/defu?color=yellow)](https://npmjs.com/package/defu)
-[![npm downloads](https://img.shields.io/npm/dm/defu?color=yellow)](https://npm.chart.dev/defu)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/defu?color=yellow)](https://bundlephobia.com/package/defu)
+[![npm version](https://img.shields.io/npm/v/create-eliza-app?color=yellow)](https://npmjs.com/package/create-eliza-app)
+[![npm downloads](https://img.shields.io/npm/dm/create-eliza-app?color=yellow)](https://npm.chart.dev/create-eliza-app)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/create-eliza-app?color=yellow)](https://bundlephobia.com/package/create-eliza-app)
 
 <!-- /automd -->
 
@@ -32,21 +32,6 @@ deno run -A npm:create-eliza-app@latest path
 
 <!-- /automd -->
 
-## Options
-
-```bash
-# Basic usage (creates in current directory)
-pnpm create eliza-app
-
-# Create in specific directory
-pnpm create eliza-app --dir my-project
-
-# Use a custom template
-pnpm create eliza-app --name custom-template
-
-# Use a different template registry
-pnpm create eliza-app --registry https://my-registry.com/templates
-```
 
 ## Command Line Arguments
 
