@@ -69,7 +69,6 @@ export async function loadCharacters(
             }
             return path;
         });
-
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
@@ -96,6 +95,8 @@ export async function loadCharacters(
                 loadedCharacters.push(character);
             } catch (e) {
                 console.error(`Error loading character from ${path}: ${e}`);
+                // don't continue to load if a specified file is not found
+                process.exit(1)
             }
         }
     }
