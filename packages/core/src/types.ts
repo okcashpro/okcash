@@ -381,6 +381,7 @@ export type Character = {
 
 export interface IDatabaseAdapter {
     db: any;
+    init?(): Promise<void>;
     getAccountById(userId: UUID): Promise<Account | null>;
     createAccount(account: Account): Promise<boolean>;
     getMemories(params: {

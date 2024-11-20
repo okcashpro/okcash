@@ -179,12 +179,14 @@ export function getTokenForProvider(
 
 function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
-        return new PostgresDatabaseAdapter({
+        const db = new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
         });
+        return db;
     } else {
         const filePath = path.resolve(dataDir, "db.sqlite");
-        return new SqliteDatabaseAdapter(new Database(filePath));
+        const db = new SqliteDatabaseAdapter(new Database(filePath));
+        return db;
     }
 }
 
@@ -282,6 +284,9 @@ async function startAgent(character: Character, directClient: DirectClient) {
         }
 
         const db = initializeDatabase(dataDir);
+
+        await db.init();
+
         const cache = intializeDbCache(character, db);
         const runtime = createAgent(character, db, cache, token);
 

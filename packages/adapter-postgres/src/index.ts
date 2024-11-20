@@ -12,6 +12,12 @@ import {
     Participant,
     DatabaseAdapter,
 } from "@ai16z/eliza";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 
 export class PostgresDatabaseAdapter
     extends DatabaseAdapter<Pool>
@@ -32,8 +38,22 @@ export class PostgresDatabaseAdapter
         this.pool.on("error", (err) => {
             console.error("Unexpected error on idle client", err);
         });
+    }
 
-        this.testConnection();
+    async init() {
+        await this.testConnection();
+
+        try {
+            const client = await this.pool.connect();
+            const schema = fs.readFileSync(
+                path.resolve(__dirname, "../schema.sql"),
+                "utf8"
+            );
+            await client.query(schema);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
     async testConnection(): Promise<boolean> {

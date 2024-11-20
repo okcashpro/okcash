@@ -74,18 +74,10 @@ export class SqliteDatabaseAdapter
         super();
         this.db = db;
         load(db);
+    }
 
-        // Check if the 'accounts' table exists as a representative table
-        const tableExists = this.db
-            .prepare(
-                "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'"
-            )
-            .get();
-
-        if (!tableExists) {
-            // If the 'accounts' table doesn't exist, create all the tables
-            this.db.exec(sqliteTables);
-        }
+    async init() {
+        this.db.exec(sqliteTables);
     }
 
     async getAccountById(userId: UUID): Promise<Account | null> {
