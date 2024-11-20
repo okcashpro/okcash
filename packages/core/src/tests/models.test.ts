@@ -1,6 +1,6 @@
 import { getModel, getEndpoint } from "../models.ts";
 import { ModelProviderName, ModelClass } from "../types.ts";
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi } from "vitest";
 
 vi.mock("../settings", () => {
     return {
@@ -12,7 +12,7 @@ vi.mock("../settings", () => {
             OPENROUTER_API_KEY: "mock-openrouter-key",
         },
         loadEnv: vi.fn(),
-    }
+    };
 });
 
 describe("Model Provider Tests", () => {
