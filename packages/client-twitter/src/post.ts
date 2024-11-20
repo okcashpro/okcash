@@ -159,6 +159,11 @@ export class TwitterPostClient extends ClientBase {
             // Use the helper function to truncate to complete sentence
             const content = truncateToCompleteSentence(formattedTweet);
 
+            if (this.runtime.getSetting("TWITTER_DRY_RUN") === 'true') {
+                elizaLogger.info(`Dry run: would have posted tweet: ${content}`);
+                return;
+            }
+
             try {
                 const result = await this.requestQueue.add(
                     async () => await this.twitterClient.sendTweet(content)
