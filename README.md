@@ -43,6 +43,24 @@
 
 > **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
 
+### Use the Starter (Recommended)
+
+```bash
+git clone https://github.com/ai16z/eliza-starter.git
+
+cp .env.example .env
+
+pnpm i && pnpm start
+```
+
+Then read the [Documentation](https://ai16z.github.io/eliza/) to learn how to customize your Eliza.
+
+### Manually Start Eliza (Only recommended if you know what you are doing)
+
+```bash
+git clone https://github.com/ai16z/eliza.git
+```
+
 ### Edit the .env file
 
 Copy .env.example to .env and fill in the appropriate values.
