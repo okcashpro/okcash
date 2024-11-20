@@ -338,6 +338,7 @@ export class TrustScoreManager {
         runtime: IAgentRuntime,
         tokenAddress: string,
         recommenderId: string,
+        username: string,
         data: TradeData
     ): Promise<TradePerformance> {
         const recommender =
@@ -405,7 +406,7 @@ export class TrustScoreManager {
             this.trustScoreDb.addTransaction(transaction);
         }
         // api call to update trade performance
-        this.createTradeInBe(tokenAddress, recommenderId, data);
+        this.createTradeInBe(tokenAddress, recommenderId, username, data);
         return creationData;
     }
 
@@ -416,6 +417,7 @@ export class TrustScoreManager {
     async createTradeInBe(
         tokenAddress: string,
         recommenderId: string,
+        username: string,
         data: TradeData,
         retries = 3,
         delayMs = 2000
@@ -434,6 +436,7 @@ export class TrustScoreManager {
                             tokenAddress: tokenAddress,
                             tradeData: data,
                             recommenderId: recommenderId,
+                            username: username,
                         }),
                     }
                 );
