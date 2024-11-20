@@ -1,0 +1,22 @@
+{
+    "name": "@ai16z/client-github",
+    "version": "0.1.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@ai16z/eliza": "workspace:*",
+        "@octokit/rest": "^20.0.2",
+        "@octokit/types": "^12.6.0",
+        "glob": "^10.3.10",
+        "simple-git": "^3.22.0"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.1.0",
+        "tsup": "^8.3.5"
+    },
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --watch"
+    }
+}
