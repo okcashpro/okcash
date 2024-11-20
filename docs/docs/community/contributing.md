@@ -78,6 +78,109 @@ By internalizing the OODA Loop, you can quickly identify areas where you can mak
 - Leverage AI assistants to help with tasks like code generation, document summarization, and content creation.
 - Collaborate with other community members to divide and conquer larger initiatives.
 
+
+---
+
+## Contributing Guidelines
+
+We value structured and clear contributions to ensure the project evolves efficiently. Below are the guidelines for submitting your contributions:
+
+### Pull Request (PR) Title Format
+
+Use the following format for PR titles to maintain consistency and clarity:
+
+```
+feat|fix|docs|style|refactor|test|chore: title
+```
+
+### Pull Request Description Template
+
+When submitting a PR, use this template to ensure all relevant details are included:
+
+```markdown
+<!-- Use this template by filling in information and copy and pasting relevant items out of the html comments. -->
+
+# Relates to:
+
+<!-- LINK TO ISSUE OR TICKET -->
+
+<!-- This risks section is to be filled out before final review and merge. -->
+
+# Risks
+
+<!--
+Low, medium, large. List what kind of risks, and what could be affected.
+-->
+
+# Background
+
+## What does this PR do?
+
+## What kind of change is this?
+
+<!--
+Bug fixes (non-breaking change which fixes an issue)
+Improvements (misc. changes to existing features)
+Features (non-breaking change which adds functionality)
+Updates (new versions of included code)
+-->
+
+<!-- This "Why" section is most relevant if there is no linked issue explaining why. If there is a related issue it might make sense to skip this why section. -->
+<!--
+## Why are we doing this? Any context or related work?
+-->
+
+# Documentation changes needed?
+
+<!--
+My changes do not require a change to the project documentation.
+My changes require a change to the project documentation.
+If a docs change is needed: I have updated the documentation accordingly.
+-->
+
+<!-- Please show how you tested the PR. This will really help if the PR needs to be retested, and probably help the PR get merged quicker. -->
+
+# Testing
+
+## Where should a reviewer start?
+
+## Detailed testing steps
+
+<!--
+None, automated tests are fine.
+-->
+
+<!--
+- As [anon/admin], go to [link]
+  - [do action]
+  - verify [result]
+-->
+
+<!-- If there is a UI change, please include before and after screenshots or videos. This will speed up PRs being merged. It is extra nice to annotate screenshots with arrows or boxes pointing out the differences. -->
+<!--
+## Screenshots
+### Before
+### After
+-->
+
+<!-- If there is anything about the deploy, please make a note. -->
+<!--
+# Deploy Notes
+-->
+
+<!-- Copy and paste command-line output. -->
+<!--
+## Database changes
+-->
+
+<!-- If there is something more than the automated steps, please specify deploy instructions. -->
+<!--
+## Deployment instructions
+-->
+```
+
+---
+
 ## Recognition and Rewards
 
 We believe in recognizing and rewarding contributors who go above and beyond to drive the project forward. Stand-out contributions may be eligible for:
@@ -96,3 +199,5 @@ Note: we're still finalizing details on the creator/dev fund that seeks to retro
 4. Share your ideas and initiatives with the community - we're excited to see what you'll build!
 
 Lets push the boundaries of what's possible with autonomous AI agents. Welcome aboard!
+
+
