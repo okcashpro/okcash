@@ -1,0 +1,29 @@
+{
+    "name": "create-eliza-app",
+    "version": "1.0.0",
+    "description": "",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "dist/index.cjs",
+    "bin": {
+        "create-eliza-app": "dist/index.mjs"
+    },
+    "scripts": {
+        "build": "unbuild",
+        "dev": "jiti ./src/index.ts",
+        "start": "node ./dist/index.cjs"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "citty": "^0.1.6",
+        "giget": "^1.2.3"
+    },
+    "devDependencies": {
+        "jiti": "^2.4.0",
+        "unbuild": "^2.0.0"
+    }
+}
