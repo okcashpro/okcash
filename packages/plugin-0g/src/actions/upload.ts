@@ -6,37 +6,16 @@ import {
     State,
     ModelClass,
     Content,
-    ActionExample
+    ActionExample,
+    generateObjectV2
 } from "@ai16z/eliza";
 import { Indexer, ZgFile, getFlowContract } from '@0glabs/0g-ts-sdk';
 import { ethers } from 'ethers';
 import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
 import { promises as fs } from 'fs';
 
 
-const uploadTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
-
-Example response:
-\`\`\`json
-{
-    "filePath": null,
-    "description": "I want to upload a file"
-}
-\`\`\`
-
-{{recentMessages}}
-
-Extract the user's intention to upload a file from the conversation. Users might express this in various ways, such as:
-- "I want to upload a file"
-- "upload an image"
-- "send a photo"
-- "upload"
-- "let me share a file"
-
-If the user provides any specific description of the file, include that as well.
-
-Respond with a JSON markdown block containing only the extracted values.`;
+import { uploadTemplate } from '../templates/upload';
 
 export interface UploadContent extends Content {
     filePath: string;
@@ -75,7 +54,7 @@ export const zgUpload: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         console.log("ZG_UPLOAD action called");
@@ -92,7 +71,7 @@ export const zgUpload: Action = {
         });
 
         // Generate upload content
-        const content = await generateObject({
+        const content = await generateObjectV2({
             runtime,
             context: uploadContext,
             modelClass: ModelClass.SMALL,
@@ -147,7 +126,7 @@ export const zgUpload: Action = {
             if (err === null) {
                 console.log("File uploaded successfully, tx: ", tx);
                 } else {
-                console.log("Error uploading file: ", err);
+                console.error("Error uploading file: ", err);
                 return false;
             }
 
