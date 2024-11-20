@@ -38,28 +38,28 @@ export async function createRuntime({
 
     switch (env?.TEST_DATABASE_CLIENT as string) {
         case "sqljs":
-        {
-            const module = await import("sql.js");
+            {
+                const module = await import("sql.js");
 
-            const initSqlJs = module.default;
+                const initSqlJs = module.default;
 
-            // SQLite adapter
-            const SQL = await initSqlJs({});
-            const db = new SQL.Database();
+                // SQLite adapter
+                const SQL = await initSqlJs({});
+                const db = new SQL.Database();
 
-            adapter = new SqlJsDatabaseAdapter(db);
+                adapter = new SqlJsDatabaseAdapter(db);
 
-            // Load sqlite-vss
-            loadVecExtensions((adapter as SqlJsDatabaseAdapter).db);
-            // Create a test user and session
-            session = {
-                user: {
-                    id: zeroUuid,
-                    email: "test@example.com",
-                },
-            };
-        }
-        break;
+                // Load sqlite-vss
+                loadVecExtensions((adapter as SqlJsDatabaseAdapter).db);
+                // Create a test user and session
+                session = {
+                    user: {
+                        id: zeroUuid,
+                        email: "test@example.com",
+                    },
+                };
+            }
+            break;
         case "supabase": {
             const module = await import("@supabase/supabase-js");
 
@@ -108,25 +108,25 @@ export async function createRuntime({
         }
         case "sqlite":
         default:
-        {
-            const module = await import("better-sqlite3");
+            {
+                const module = await import("better-sqlite3");
 
-            const Database = module.default;
+                const Database = module.default;
 
-            // SQLite adapter
-            adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
+                // SQLite adapter
+                adapter = new SqliteDatabaseAdapter(new Database(":memory:"));
 
-            // Load sqlite-vss
-            await loadVecExtensions((adapter as SqliteDatabaseAdapter).db);
-            // Create a test user and session
-            session = {
-                user: {
-                    id: zeroUuid,
-                    email: "test@example.com",
-                },
-            };
-        }
-        break;
+                // Load sqlite-vss
+                await loadVecExtensions((adapter as SqliteDatabaseAdapter).db);
+                // Create a test user and session
+                session = {
+                    user: {
+                        id: zeroUuid,
+                        email: "test@example.com",
+                    },
+                };
+            }
+            break;
     }
 
     const runtime = new AgentRuntime({
