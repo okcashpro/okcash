@@ -260,9 +260,7 @@ export function createAgent(
 
 function intializeFsCache(baseDir: string, character: Character) {
     const cacheDir = path.resolve(baseDir, character.id, "cache");
-    if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir, { recursive: true });
-    }
+
     const cache = new CacheManager(new FsCacheAdapter(cacheDir));
     return cache;
 }
@@ -277,7 +275,12 @@ async function startAgent(character: Character, directClient: DirectClient) {
         character.id ??= stringToUuid(character.name);
 
         const token = getTokenForProvider(character.modelProvider, character);
-        const dataDir = path.join(__dirname, "../../../data");
+        const dataDir = path.join(__dirname, "../data");
+
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+
         const db = initializeDatabase(dataDir);
         const cache = intializeDbCache(character, db);
         const runtime = createAgent(character, db, cache, token);
@@ -292,6 +295,7 @@ async function startAgent(character: Character, directClient: DirectClient) {
             `Error starting agent for character ${character.name}:`,
             error
         );
+        console.error(error);
         throw error;
     }
 }
