@@ -54,11 +54,13 @@
 
 ### Edit the .env file
 
-Copy .env.example to .env and fill in the appropriate values
+Copy .env.example to .env and fill in the appropriate values.
 
 ```
 cp .env.example .env
 ```
+
+Note: .env is optional. If your planning to run multiple distinct agents, you can pass secrets through the character JSON
 
 ### Automatically Start Eliza
 
