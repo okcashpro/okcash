@@ -2,7 +2,7 @@
 
 A minimal CLI tool to scaffold ELIZA applications with zero configuration. Get started building your own ELIZA-style chatbot in seconds.
 
-<!-- automd:badges color="yellow" license name="defu" codecov bundlephobia packagephobia -->
+<!-- automd:badges color="yellow" license name="create-eliza-app" codecov bundlephobia packagephobia -->
 
 [![npm version](https://img.shields.io/npm/v/defu?color=yellow)](https://npmjs.com/package/defu)
 [![npm downloads](https://img.shields.io/npm/dm/defu?color=yellow)](https://npm.chart.dev/defu)
