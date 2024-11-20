@@ -10,7 +10,7 @@ sidebar_position: 5
 
 ## Overview
 
- Evaluators enable agents to:
+Evaluators enable agents to:
 
 - Build long-term memory
 - Track goal progress

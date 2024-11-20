@@ -96,7 +96,7 @@ export async function loadCharacters(
             } catch (e) {
                 console.error(`Error loading character from ${path}: ${e}`);
                 // don't continue to load if a specified file is not found
-                process.exit(1)
+                process.exit(1);
             }
         }
     }

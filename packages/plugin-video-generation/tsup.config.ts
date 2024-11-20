@@ -14,6 +14,6 @@ export default defineConfig({
         "@node-llama-cpp",
         "https",
         "http",
-        "agentkeepalive"
+        "agentkeepalive",
     ],
 });

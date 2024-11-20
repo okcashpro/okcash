@@ -1,14 +1,12 @@
-import { SqliteDatabaseAdapter, loadVecExtensions } from "@ai16z/adapter-sqlite";
+import {
+    SqliteDatabaseAdapter,
+    loadVecExtensions,
+} from "@ai16z/adapter-sqlite";
 import { SqlJsDatabaseAdapter } from "@ai16z/adapter-sqljs";
 import { SupabaseDatabaseAdapter } from "@ai16z/adapter-supabase";
 import { DatabaseAdapter } from "../database.ts";
 import { AgentRuntime } from "../runtime.ts";
-import {
-    Action,
-    Evaluator,
-    ModelProviderName,
-    Provider,
-} from "../types.ts";
+import { Action, Evaluator, ModelProviderName, Provider } from "../types.ts";
 import {
     SUPABASE_ANON_KEY,
     SUPABASE_URL,

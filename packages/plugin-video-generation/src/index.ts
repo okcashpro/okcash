@@ -8,7 +8,7 @@ import {
     State,
 } from "@ai16z/eliza/src/types.ts";
 import fs from "fs";
-import { LUMA_CONSTANTS } from './constants';
+import { LUMA_CONSTANTS } from "./constants";
 
 const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
     const API_KEY = runtime.getSetting(LUMA_CONSTANTS.API_KEY_SETTING);
@@ -17,13 +17,13 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
         elizaLogger.log("Starting video generation with prompt:", prompt);
 
         const response = await fetch(LUMA_CONSTANTS.API_URL, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Authorization': `Bearer ${API_KEY}`,
-                'accept': 'application/json',
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${API_KEY}`,
+                accept: "application/json",
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ prompt })
+            body: JSON.stringify({ prompt }),
         });
 
         if (!response.ok) {
@@ -31,69 +31,79 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
             elizaLogger.error("Luma API error:", {
                 status: response.status,
                 statusText: response.statusText,
-                error: errorText
+                error: errorText,
             });
-            throw new Error(`Luma API error: ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `Luma API error: ${response.statusText} - ${errorText}`
+            );
         }
 
         const data = await response.json();
-        elizaLogger.log("Generation request successful, received response:", data);
+        elizaLogger.log(
+            "Generation request successful, received response:",
+            data
+        );
 
         // Poll for completion
         let status = data.status;
         let videoUrl = null;
         const generationId = data.id;
 
-        while (status !== 'completed' && status !== 'failed') {
-            await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+        while (status !== "completed" && status !== "failed") {
+            await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
 
-            const statusResponse = await fetch(`${LUMA_CONSTANTS.API_URL}/${generationId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'accept': 'application/json'
+            const statusResponse = await fetch(
+                `${LUMA_CONSTANTS.API_URL}/${generationId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${API_KEY}`,
+                        accept: "application/json",
+                    },
                 }
-            });
+            );
 
             if (!statusResponse.ok) {
                 const errorText = await statusResponse.text();
                 elizaLogger.error("Status check error:", {
                     status: statusResponse.status,
                     statusText: statusResponse.statusText,
-                    error: errorText
+                    error: errorText,
                 });
-                throw new Error('Failed to check generation status: ' + errorText);
+                throw new Error(
+                    "Failed to check generation status: " + errorText
+                );
             }
 
             const statusData = await statusResponse.json();
             elizaLogger.log("Status check response:", statusData);
 
             status = statusData.state;
-            if (status === 'completed') {
+            if (status === "completed") {
                 videoUrl = statusData.assets?.video;
             }
         }
 
-        if (status === 'failed') {
-            throw new Error('Video generation failed');
+        if (status === "failed") {
+            throw new Error("Video generation failed");
         }
 
         if (!videoUrl) {
-            throw new Error('No video URL in completed response');
+            throw new Error("No video URL in completed response");
         }
 
         return {
             success: true,
-            data: videoUrl
+            data: videoUrl,
         };
     } catch (error) {
         elizaLogger.error("Video generation error:", error);
         return {
             success: false,
-            error: error.message || 'Unknown error occurred'
+            error: error.message || "Unknown error occurred",
         };
     }
-}
+};
 
 const videoGeneration: Action = {
     name: "GENERATE_VIDEO",
@@ -106,7 +116,7 @@ const videoGeneration: Action = {
         "ANIMATE",
         "CREATE_ANIMATION",
         "VIDEO_CREATE",
-        "VIDEO_MAKE"
+        "VIDEO_MAKE",
     ],
     description: "Generate a video based on a text prompt",
     validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -126,8 +136,11 @@ const videoGeneration: Action = {
 
         // Clean up the prompt by removing mentions and commands
         let videoPrompt = message.content.text
-            .replace(/<@\d+>/g, '')  // Remove mentions
-            .replace(/generate video|create video|make video|render video/gi, '')  // Remove commands
+            .replace(/<@\d+>/g, "") // Remove mentions
+            .replace(
+                /generate video|create video|make video|render video/gi,
+                ""
+            ) // Remove commands
             .trim();
 
         if (!videoPrompt || videoPrompt.length < 5) {
@@ -155,30 +168,33 @@ const videoGeneration: Action = {
                 // Save video file
                 fs.writeFileSync(videoFileName, Buffer.from(arrayBuffer));
 
-                callback({
-                    text: "Here's your generated video!",
-                    attachments: [
-                        {
-                            id: crypto.randomUUID(),
-                            url: result.data,
-                            title: "Generated Video",
-                            source: "videoGeneration",
-                            description: videoPrompt,
-                            text: videoPrompt,
-                        },
-                    ],
-                }, [videoFileName]); // Add the video file to the attachments
+                callback(
+                    {
+                        text: "Here's your generated video!",
+                        attachments: [
+                            {
+                                id: crypto.randomUUID(),
+                                url: result.data,
+                                title: "Generated Video",
+                                source: "videoGeneration",
+                                description: videoPrompt,
+                                text: videoPrompt,
+                            },
+                        ],
+                    },
+                    [videoFileName]
+                ); // Add the video file to the attachments
             } else {
                 callback({
                     text: `Video generation failed: ${result.error}`,
-                    error: true
+                    error: true,
                 });
             }
         } catch (error) {
             elizaLogger.error(`Failed to generate video. Error: ${error}`);
             callback({
                 text: `Video generation failed: ${error.message}`,
-                error: true
+                error: true,
             });
         }
     },
@@ -192,24 +208,26 @@ const videoGeneration: Action = {
                 user: "{{agentName}}",
                 content: {
                     text: "I'll create a video of a cat playing piano for you",
-                    action: "GENERATE_VIDEO"
+                    action: "GENERATE_VIDEO",
                 },
-            }
+            },
         ],
         [
             {
                 user: "{{user1}}",
-                content: { text: "Can you make a video of a sunset at the beach?" },
+                content: {
+                    text: "Can you make a video of a sunset at the beach?",
+                },
             },
             {
                 user: "{{agentName}}",
                 content: {
                     text: "I'll generate a beautiful beach sunset video for you",
-                    action: "GENERATE_VIDEO"
+                    action: "GENERATE_VIDEO",
                 },
-            }
-        ]
-    ]
+            },
+        ],
+    ],
 } as Action;
 
 export const videoGenerationPlugin: Plugin = {
