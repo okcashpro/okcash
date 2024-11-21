@@ -175,6 +175,7 @@ export interface Memory {
     embedding?: number[]; // An optional embedding vector representing the semantic content of the memory.
     roomId: UUID; // The room or conversation ID associated with the memory.
     unique?: boolean; // Whether the memory is unique or not
+    similarity?: number; // embedding match similarity
 }
 
 /**
