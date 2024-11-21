@@ -23,6 +23,7 @@ import {
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
+import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { nodePlugin } from "@ai16z/plugin-node";
 import Database from "better-sqlite3";
@@ -249,6 +250,9 @@ export function createAgent(
         character,
         plugins: [
             bootstrapPlugin,
+            character.settings.secrets?.CONFLUX_CORE_PRIVATE_KEY
+                ? confluxPlugin
+                : null,
             nodePlugin,
             character.settings.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,
         ].filter(Boolean),
