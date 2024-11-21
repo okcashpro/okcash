@@ -62,8 +62,11 @@ function truncateToCompleteSentence(text: string): string {
     return text.slice(0, MAX_TWEET_LENGTH - 3).trim() + "...";
 }
 
-export class TwitterPostClient extends ClientBase {
-    onReady(postImmediately: boolean = true) {
+export class TwitterPostClient {
+    client: ClientBase;
+    runtime: IAgentRuntime;
+
+    async start(postImmediately: boolean = true) {
         const generateNewTweetLoop = () => {
             const minMinutes =
                 parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
@@ -88,10 +91,9 @@ export class TwitterPostClient extends ClientBase {
         generateNewTweetLoop();
     }
 
-    constructor(runtime: IAgentRuntime) {
-        super({
-            runtime,
-        });
+    constructor(client: ClientBase, runtime: IAgentRuntime) {
+        this.client = client;
+        this.runtime = runtime;
     }
 
     private async generateNewTweet() {
@@ -106,13 +108,13 @@ export class TwitterPostClient extends ClientBase {
 
             let homeTimeline = [];
 
-            const cachedTimeline = await this.getCachedTimeline();
+            const cachedTimeline = await this.client.getCachedTimeline();
 
             if (cachedTimeline) {
                 homeTimeline = cachedTimeline;
             } else {
-                homeTimeline = await this.fetchHomeTimeline(50);
-                this.cacheTimeline(homeTimeline);
+                homeTimeline = await this.client.fetchHomeTimeline(50);
+                this.client.cacheTimeline(homeTimeline);
             }
 
             const formattedHomeTimeline =
@@ -166,8 +168,11 @@ export class TwitterPostClient extends ClientBase {
             }
 
             try {
-                const result = await this.requestQueue.add(
-                    async () => await this.twitterClient.sendTweet(content)
+                elizaLogger.log(`Posting new tweet:\n ${content}`);
+
+                const result = await this.client.requestQueue.add(
+                    async () =>
+                        await this.client.twitterClient.sendTweet(content)
                 );
                 const body = await result.json();
                 const tweetResult = body.data.create_tweet.tweet_results.result;
@@ -189,6 +194,8 @@ export class TwitterPostClient extends ClientBase {
                     videos: [],
                 } as Tweet;
 
+                elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
+
                 const roomId = stringToUuid(
                     tweet.conversationId + "-" + this.runtime.agentId
                 );
@@ -199,7 +206,7 @@ export class TwitterPostClient extends ClientBase {
                     roomId
                 );
 
-                await this.cacheTweet(tweet);
+                await this.client.cacheTweet(tweet);
 
                 await this.runtime.messageManager.createMemory({
                     id: stringToUuid(tweet.id + "-" + this.runtime.agentId),

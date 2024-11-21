@@ -82,8 +82,16 @@ Thread of Tweets You Are Replying To:
 # INSTRUCTIONS: Respond with [RESPOND] if {{agentName}} should respond, or [IGNORE] if {{agentName}} should not respond to the last message and [STOP] if {{agentName}} should stop participating in the conversation.
 ` + shouldRespondFooter;
 
-export class TwitterInteractionClient extends ClientBase {
-    onReady() {
+export class TwitterInteractionClient {
+    client: ClientBase;
+    runtime: IAgentRuntime;
+
+    constructor(client: ClientBase, runtime: IAgentRuntime) {
+        this.client = client;
+        this.runtime = runtime;
+    }
+
+    async start() {
         const handleTwitterInteractionsLoop = () => {
             this.handleTwitterInteractions();
             setTimeout(
@@ -94,19 +102,15 @@ export class TwitterInteractionClient extends ClientBase {
         handleTwitterInteractionsLoop();
     }
 
-    constructor(runtime: IAgentRuntime) {
-        super({
-            runtime,
-        });
-    }
-
     async handleTwitterInteractions() {
         elizaLogger.log("Checking Twitter interactions");
+
+        const twitterUsername = this.runtime.getSetting("TWITTER_USERNAME");
         try {
             // Check for mentions
             const tweetCandidates = (
-                await this.fetchSearchTweets(
-                    `@${this.runtime.getSetting("TWITTER_USERNAME")}`,
+                await this.client.fetchSearchTweets(
+                    `@${twitterUsername}`,
                     20,
                     SearchMode.Latest
                 )
@@ -115,23 +119,30 @@ export class TwitterInteractionClient extends ClientBase {
             // de-duplicate tweetCandidates with a set
             const uniqueTweetCandidates = [...new Set(tweetCandidates)];
 
+            console.log({ twitterUserId: this.client.twitterUserId });
+
             // Sort tweet candidates by ID in ascending order
             uniqueTweetCandidates
                 .sort((a, b) => a.id.localeCompare(b.id))
-                .filter((tweet) => tweet.userId !== this.twitterUserId);
+                .filter((tweet) => tweet.userId !== this.client.twitterUserId);
 
             // for each tweet candidate, handle the tweet
             for (const tweet of uniqueTweetCandidates) {
                 // console.log("tweet:", tweet);
                 if (
-                    !this.lastCheckedTweetId ||
-                    parseInt(tweet.id) > this.lastCheckedTweetId
+                    !this.client.lastCheckedTweetId ||
+                    parseInt(tweet.id) > this.client.lastCheckedTweetId
                 ) {
+                    elizaLogger.log("New Tweet found", tweet.permanentUrl);
+
                     const roomId = stringToUuid(
                         tweet.conversationId + "-" + this.runtime.agentId
                     );
 
-                    const userIdUUID = stringToUuid(tweet.userId!);
+                    const userIdUUID =
+                        tweet.userId === this.client.twitterUserId
+                            ? this.runtime.agentId
+                            : stringToUuid(tweet.userId!);
 
                     await this.runtime.ensureConnection(
                         userIdUUID,
@@ -141,7 +152,10 @@ export class TwitterInteractionClient extends ClientBase {
                         "twitter"
                     );
 
-                    const thread = await buildConversationThread(tweet, this);
+                    const thread = await buildConversationThread(
+                        tweet,
+                        this.client
+                    );
 
                     const message = {
                         content: { text: tweet.text },
@@ -157,12 +171,12 @@ export class TwitterInteractionClient extends ClientBase {
                     });
 
                     // Update the last checked tweet ID after processing each tweet
-                    this.lastCheckedTweetId = parseInt(tweet.id);
+                    this.client.lastCheckedTweetId = parseInt(tweet.id);
                 }
             }
 
             // Save the latest checked tweet ID to the file
-            await this.cacheLatestCheckedTweetId();
+            await this.client.cacheLatestCheckedTweetId();
 
             elizaLogger.log("Finished checking Twitter interactions");
         } catch (error) {
@@ -200,12 +214,12 @@ export class TwitterInteractionClient extends ClientBase {
         let homeTimeline: Tweet[] = [];
         // read the file if it exists
 
-        const cachedTimeline = await this.getCachedTimeline();
+        const cachedTimeline = await this.client.getCachedTimeline();
         if (cachedTimeline) {
             homeTimeline = cachedTimeline;
         } else {
-            homeTimeline = await this.fetchHomeTimeline(50);
-            await this.cacheTimeline(homeTimeline);
+            homeTimeline = await this.client.fetchHomeTimeline(50);
+            await this.client.cacheTimeline(homeTimeline);
         }
 
         elizaLogger.debug("Thread: ", thread);
@@ -234,7 +248,7 @@ export class TwitterInteractionClient extends ClientBase {
                 .join("\n");
 
         let state = await this.runtime.composeState(message, {
-            twitterClient: this.twitterClient,
+            twitterClient: this.client.twitterClient,
             twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
             currentPost,
             formattedConversation,
@@ -269,7 +283,7 @@ export class TwitterInteractionClient extends ClientBase {
                 roomId,
                 createdAt: tweet.timestamp * 1000,
             };
-            this.saveRequestMessage(message, state);
+            this.client.saveRequestMessage(message, state);
         }
 
         const shouldRespondContext = composeContext({
@@ -321,7 +335,7 @@ export class TwitterInteractionClient extends ClientBase {
             try {
                 const callback: HandlerCallback = async (response: Content) => {
                     const memories = await sendTweet(
-                        this,
+                        this.client,
                         response,
                         message.roomId,
                         this.runtime.getSetting("TWITTER_USERNAME"),

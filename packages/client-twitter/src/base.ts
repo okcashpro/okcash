@@ -125,7 +125,7 @@ export class ClientBase extends EventEmitter {
         );
     }
 
-    constructor({ runtime }: { runtime: IAgentRuntime }) {
+    constructor(runtime: IAgentRuntime) {
         super();
         this.runtime = runtime;
         if (ClientBase._twitterClient) {
@@ -140,94 +140,91 @@ export class ClientBase extends EventEmitter {
             this.runtime.character.style.all.join("\n- ") +
             "- " +
             this.runtime.character.style.post.join();
+    }
 
-        // async initialization
-        (async () => {
-            //test
-            await this.loadCachedLatestCheckedTweetId();
-            // Check for Twitter cookies
-            if (this.runtime.getSetting("TWITTER_COOKIES")) {
-                const cookiesArray = JSON.parse(
-                    this.runtime.getSetting("TWITTER_COOKIES")
-                );
+    async init() {
+        //test
+        await this.loadCachedLatestCheckedTweetId();
+        // Check for Twitter cookies
+        if (this.runtime.getSetting("TWITTER_COOKIES")) {
+            const cookiesArray = JSON.parse(
+                this.runtime.getSetting("TWITTER_COOKIES")
+            );
 
-                await this.setCookiesFromArray(cookiesArray);
+            await this.setCookiesFromArray(cookiesArray);
+        } else {
+            const cachedCookies = await this.getCachedCookies();
+            if (cachedCookies) {
+                await this.setCookiesFromArray(cachedCookies);
             } else {
-                const cachedCookies = await this.getCachedCookies();
-                if (cachedCookies) {
-                    await this.setCookiesFromArray(cachedCookies);
-                } else {
-                    await this.twitterClient.login(
-                        this.runtime.getSetting("TWITTER_USERNAME"),
-                        this.runtime.getSetting("TWITTER_PASSWORD"),
-                        this.runtime.getSetting("TWITTER_EMAIL"),
-                        this.runtime.getSetting("TWITTER_2FA_SECRET")
-                    );
-                    elizaLogger.log("Logged in to Twitter");
-                    const cookies = await this.twitterClient.getCookies();
-                    await this.cacheCookies(cookies);
-                }
+                await this.twitterClient.login(
+                    this.runtime.getSetting("TWITTER_USERNAME"),
+                    this.runtime.getSetting("TWITTER_PASSWORD"),
+                    this.runtime.getSetting("TWITTER_EMAIL"),
+                    this.runtime.getSetting("TWITTER_2FA_SECRET")
+                );
+                elizaLogger.log("Logged in to Twitter");
+                const cookies = await this.twitterClient.getCookies();
+                await this.cacheCookies(cookies);
             }
+        }
 
-            let loggedInWaits = 0;
+        let loggedInWaits = 0;
 
-            while (!(await this.twitterClient.isLoggedIn())) {
-                console.log("Waiting for Twitter login");
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-                if (loggedInWaits > 10) {
-                    console.error("Failed to login to Twitter");
-                    await this.twitterClient.login(
-                        this.runtime.getSetting("TWITTER_USERNAME"),
-                        this.runtime.getSetting("TWITTER_PASSWORD"),
-                        this.runtime.getSetting("TWITTER_EMAIL"),
-                        this.runtime.getSetting("TWITTER_2FA_SECRET")
-                    );
-                    const cookies = await this.twitterClient.getCookies();
-                    await this.cacheCookies(cookies);
-                    loggedInWaits = 0;
-                }
-                loggedInWaits++;
+        while (!(await this.twitterClient.isLoggedIn())) {
+            console.log("Waiting for Twitter login");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            if (loggedInWaits > 10) {
+                console.error("Failed to login to Twitter");
+                await this.twitterClient.login(
+                    this.runtime.getSetting("TWITTER_USERNAME"),
+                    this.runtime.getSetting("TWITTER_PASSWORD"),
+                    this.runtime.getSetting("TWITTER_EMAIL"),
+                    this.runtime.getSetting("TWITTER_2FA_SECRET")
+                );
+                const cookies = await this.twitterClient.getCookies();
+                await this.cacheCookies(cookies);
+                loggedInWaits = 0;
             }
-            const userId = await this.requestQueue.add(async () => {
-                // wait 3 seconds before getting the user id
-                await new Promise((resolve) => setTimeout(resolve, 10000));
-                try {
-                    return await this.twitterClient.getUserIdByScreenName(
-                        this.runtime.getSetting("TWITTER_USERNAME")
-                    );
-                } catch (error) {
-                    console.error("Error getting user ID:", error);
-                    return null;
-                }
-            });
-            if (!userId) {
-                console.error("Failed to get user ID");
-                return;
+            loggedInWaits++;
+        }
+        const userId = await this.requestQueue.add(async () => {
+            // wait 3 seconds before getting the user id
+            await new Promise((resolve) => setTimeout(resolve, 10000));
+            try {
+                return await this.twitterClient.getUserIdByScreenName(
+                    this.runtime.getSetting("TWITTER_USERNAME")
+                );
+            } catch (error) {
+                console.error("Error getting user ID:", error);
+                return null;
             }
-            elizaLogger.log("Twitter user ID:", userId);
-            this.twitterUserId = userId;
+        });
+        if (!userId) {
+            console.error("Failed to get user ID");
+            return;
+        }
+        elizaLogger.log("Twitter user ID:", userId);
+        this.twitterUserId = userId;
 
-            // Initialize Twitter profile
-            const profile = await this.initializeProfile();
-            if (profile) {
-                // console.log("Twitter profile initialized:", profile);
+        // Initialize Twitter profile
+        const profile = await this.initializeProfile();
+        if (profile) {
+            // console.log("Twitter profile initialized:", profile);
 
-                // Store profile info for use in responses
-                this.runtime.character = {
-                    ...this.runtime.character,
-                    twitterProfile: {
-                        username: profile.username,
-                        screenName: profile.screenName,
-                        bio: profile.bio,
-                        nicknames: profile.nicknames,
-                    },
-                };
-            }
+            // Store profile info for use in responses
+            this.runtime.character = {
+                ...this.runtime.character,
+                twitterProfile: {
+                    username: profile.username,
+                    screenName: profile.screenName,
+                    bio: profile.bio,
+                    nicknames: profile.nicknames,
+                },
+            };
+        }
 
-            await this.populateTimeline();
-
-            this.onReady();
-        })();
+        await this.populateTimeline();
     }
 
     async fetchHomeTimeline(count: number): Promise<Tweet[]> {
