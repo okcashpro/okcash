@@ -77,3 +77,9 @@ None, automtated tests are fine.
 <!--
 ## Deployment instructions
 -->
+
+<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for contribute role and join us in #development-feed -->
+<!--
+## Discord username
+
+-->
