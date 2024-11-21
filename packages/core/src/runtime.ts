@@ -89,6 +89,8 @@ export class AgentRuntime implements IAgentRuntime {
      */
     providers: Provider[] = [];
 
+    plugins: Plugin[] = [];
+
     /**
      * The model to use for generateText.
      */
@@ -171,20 +173,6 @@ export class AgentRuntime implements IAgentRuntime {
                 `Service ${serviceType} is already registered. Skipping registration.`
             );
             return;
-        }
-
-        try {
-            await service.initialize(this);
-            this.services.set(serviceType, service);
-            elizaLogger.success(
-                `Service ${serviceType} initialized successfully`
-            );
-        } catch (error) {
-            elizaLogger.error(
-                `Failed to initialize service ${serviceType}:`,
-                error
-            );
-            throw error;
         }
     }
 
@@ -289,25 +277,24 @@ export class AgentRuntime implements IAgentRuntime {
 
         this.token = opts.token;
 
-        [...(opts.character?.plugins || []), ...(opts.plugins || [])].forEach(
-            (plugin) => {
-                plugin.actions?.forEach((action) => {
-                    this.registerAction(action);
-                });
+        this.plugins = [
+            ...(opts.character?.plugins ?? []),
+            ...(opts.plugins ?? []),
+        ];
 
-                plugin.evaluators?.forEach((evaluator) => {
-                    this.registerEvaluator(evaluator);
-                });
+        this.plugins.forEach((plugin) => {
+            plugin.actions?.forEach((action) => {
+                this.registerAction(action);
+            });
 
-                plugin.providers?.forEach((provider) => {
-                    this.registerContextProvider(provider);
-                });
+            plugin.evaluators?.forEach((evaluator) => {
+                this.registerEvaluator(evaluator);
+            });
 
-                plugin.services?.forEach((service) => {
-                    this.registerService(service);
-                });
-            }
-        );
+            plugin.providers?.forEach((provider) => {
+                this.registerContextProvider(provider);
+            });
+        });
 
         (opts.actions ?? []).forEach((action) => {
             this.registerAction(action);
@@ -320,13 +307,38 @@ export class AgentRuntime implements IAgentRuntime {
         (opts.evaluators ?? []).forEach((evaluator: Evaluator) => {
             this.registerEvaluator(evaluator);
         });
+    }
+
+    async initialize() {
+        for (const [serviceType, service] of this.services.entries()) {
+            try {
+                await service.initialize(this);
+                this.services.set(serviceType, service);
+                elizaLogger.success(
+                    `Service ${serviceType} initialized successfully`
+                );
+            } catch (error) {
+                elizaLogger.error(
+                    `Failed to initialize service ${serviceType}:`,
+                    error
+                );
+                throw error;
+            }
+        }
+
+        for (const plugin of this.plugins) {
+            if (plugin.services)
+                await Promise.all(
+                    plugin.services?.map((service) => service.initialize(this))
+                );
+        }
 
         if (
-            opts.character &&
-            opts.character.knowledge &&
-            opts.character.knowledge.length > 0
+            this.character &&
+            this.character.knowledge &&
+            this.character.knowledge.length > 0
         ) {
-            this.processCharacterKnowledge(opts.character.knowledge);
+            await this.processCharacterKnowledge(this.character.knowledge);
         }
     }
 
@@ -338,13 +350,15 @@ export class AgentRuntime implements IAgentRuntime {
      */
     private async processCharacterKnowledge(knowledge: string[]) {
         // ensure the room exists and the agent exists in the room
-        this.ensureRoomExists(this.agentId);
-        this.ensureUserExists(
+        await this.ensureRoomExists(this.agentId);
+
+        await this.ensureUserExists(
             this.agentId,
             this.character.name,
             this.character.name
         );
-        this.ensureParticipantExists(this.agentId, this.agentId);
+
+        await this.ensureParticipantExists(this.agentId, this.agentId);
 
         for (const knowledgeItem of knowledge) {
             const knowledgeId = stringToUuid(knowledgeItem);
@@ -938,6 +952,9 @@ Text: ${attachment.text}
                 );
 
             const knowledge = memories.map((memory) => memory.content.text);
+
+            console.log({ knowledge });
+
             return knowledge;
         }
 

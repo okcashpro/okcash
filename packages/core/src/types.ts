@@ -331,6 +331,7 @@ export enum Clients {
 export type Character = {
     id?: UUID; // optional UUID which can be passed down to identify the character
     name: string;
+    username: string;
     system?: string;
     modelProvider: ModelProviderName;
     modelEndpointOverride?: string;

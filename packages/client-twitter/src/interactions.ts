@@ -313,6 +313,8 @@ export class TwitterInteractionClient {
                 twitterMessageHandlerTemplate,
         });
 
+        console.log("Interactions prompt:\n" + context);
+
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
