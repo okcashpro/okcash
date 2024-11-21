@@ -9,19 +9,17 @@ This guide provides essential best practices for submitting Pull Requests (PRs) 
 
 ## Pre-Review with AI
 
-Before submitting a Pull Request (PR), we strongly recommend conducting a pre-review using an AI tool, such as [Coderabbit](https://www.coderabbit.ai/) or [Sweep](https://www.coderabbit.ai/). This preliminary step helps identify potential issues and provides recommendations for improvement before human intervention. Addressing AI-generated feedback allows contributors to enhance the quality of their submission, ensuring that the subsequent human review is more focused, efficient, and substantive.
+Before submitting a Pull Request (PR), we strongly recommend conducting a pre-review using an AI tool, such as [Coderabbit](https://www.coderabbit.ai/), [Sweep](https://www.coderabbit.ai/), [Cursor](https://www.cursor.so/), or language models like OpenAI's ChatGPT, Claude, etc. This preliminary step helps identify potential issues and provides recommendations for improvement before human intervention. Addressing AI-generated feedback allows contributors to enhance the quality of their submission, ensuring that the subsequent human review is more focused, efficient, and substantive.
 
 ## Checklist for Each New PR
 
 When creating a new PR, a checklist is automatically included through the PR template. Each item in this checklist must be addressed before the PR can be marked as "Ready for Review"; otherwise, the PR should remain in a draft (WIP) state. Here are some best practices we recommend:
 
 1. **Merge Latest Main**: Ensure your branch is up to date by merging the latest `main` branch (`git merge origin/main`).
-2. **Run Tests**: Execute all tests to verify that existing functionalities remain intact and unaffected by your changes.
+2. **Run Tests**: Execute all tests (`pnpm test`) to verify that existing functionalities remain intact and unaffected by your changes.
 3. **Draft PR**: If the work is incomplete or requires early feedback, initiate a Draft PR to communicate progress and invite community input.
 4. **Review Actions**: Complete all actions outlined in the PR template to ensure that each checklist item has been appropriately addressed.
-5. **Category Prefix**: Apply a category prefix to the PR title (e.g., `fix`, `feat`, `refactor`) to maintain uniformity and adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
-
-PRs must include a category prefix that corresponds to the type of change being made (e.g., `fix`, `feat`, `refactor`, `docs`). This prefix must be explicitly stated in the PR title (e.g., `fix: <description>`). Adhering to this convention ensures that all contributions are consistent with the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification, facilitating better traceability and comprehensibility of changes.
+5. **Category Prefix**: Apply a category prefix to the PR title (e.g., `fix`, `feat`, `refactor`, `docs`) to maintain uniformity and adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This ensures that all contributions are consistent, facilitating better traceability and comprehensibility of changes.
 
 Moreover, each PR should address only a single issue to enhance clarity and manageability. Once a PR is approved, it will be merged by a core developer.
 
@@ -42,7 +40,7 @@ Always execute the linter on your changes before submitting a PR. Linting ensure
 
 ## Running Tests
 
-It is imperative to run all existing tests before creating a PR to ensure that your modifications do not introduce regressions or new bugs. This practice preserves the stability and reliability of the codebase, ensuring that the integration of your changes does not disrupt existing functionality.
+It is imperative to run all existing tests (`pnpm test`) before creating a PR to ensure that your modifications do not introduce regressions or new bugs. This practice preserves the stability and reliability of the codebase, ensuring that the integration of your changes does not disrupt existing functionality.
 
 ## Branching Strategy
 
