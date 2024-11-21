@@ -1,4 +1,4 @@
-/* eslint-disable no-dupe-class-members */
+ 
 import { CacheManager, MemoryCacheAdapter } from "../cache.ts"; // Adjust the import based on your project structure
 
 // Now, let’s fix the test suite.

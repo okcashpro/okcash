@@ -13,6 +13,7 @@
     "scripts": {
         "build": "unbuild",
         "dev": "jiti ./src/index.ts",
+        "lint": "eslint . --fix",
         "start": "node ./dist/index.cjs",
         "automd": "automd"
     },
@@ -25,6 +26,10 @@
     },
     "devDependencies": {
         "automd": "^0.3.12",
+        "eslint": "9.13.0",
+        "eslint-config-prettier": "9.1.0",
+        "eslint-plugin-prettier": "5.2.1",
+        "eslint-plugin-vitest": "0.5.4",
         "jiti": "^2.4.0",
         "unbuild": "^2.0.0"
     }

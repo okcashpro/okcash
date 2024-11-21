@@ -126,7 +126,7 @@ export declare class Database {
 
     close(): void;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     create_function(name: string, func: (...args: any[]) => any): Database;
 
     each(

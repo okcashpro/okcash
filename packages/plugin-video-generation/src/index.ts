@@ -135,7 +135,7 @@ const videoGeneration: Action = {
         elizaLogger.log("Video generation request:", message);
 
         // Clean up the prompt by removing mentions and commands
-        let videoPrompt = message.content.text
+        const videoPrompt = message.content.text
             .replace(/<@\d+>/g, "") // Remove mentions
             .replace(
                 /generate video|create video|make video|render video/gi,
