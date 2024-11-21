@@ -14,7 +14,7 @@ import {
     stringToUuid,
     elizaLogger,
 } from "@ai16z/eliza";
-import { ClientBase } from "./base.ts";
+import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 import { embeddingZeroVector } from "@ai16z/eliza";
 
@@ -127,12 +127,11 @@ export class TwitterInteractionClient extends ClientBase {
                     !this.lastCheckedTweetId ||
                     parseInt(tweet.id) > this.lastCheckedTweetId
                 ) {
-                    const conversationId =
-                        tweet.conversationId + "-" + this.runtime.agentId;
+                    const roomId = stringToUuid(
+                        tweet.conversationId + "-" + this.runtime.agentId
+                    );
 
-                    const roomId = stringToUuid(conversationId);
-
-                    const userIdUUID = stringToUuid(tweet.userId as string);
+                    const userIdUUID = stringToUuid(tweet.userId!);
 
                     await this.runtime.ensureConnection(
                         userIdUUID,

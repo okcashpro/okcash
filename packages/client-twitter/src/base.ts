@@ -112,6 +112,7 @@ export class ClientBase extends EventEmitter {
         const tweet = await this.requestQueue.add(() =>
             this.twitterClient.getTweet(tweetId)
         );
+
         await this.cacheTweet(tweet);
         return tweet;
     }
@@ -343,20 +344,24 @@ export class ClientBase extends EventEmitter {
 
             // Check if any of the cached tweets exist in the existing memories
             const someCachedTweetsExist = cachedTimeline.some((tweet) =>
-                existingMemoryIds.has(tweet.id)
+                existingMemoryIds.has(
+                    stringToUuid(tweet.id + "-" + this.runtime.agentId)
+                )
             );
 
             if (someCachedTweetsExist) {
                 // Filter out the cached tweets that already exist in the database
                 const tweetsToSave = cachedTimeline.filter(
-                    (tweet) => !existingMemoryIds.has(tweet.id)
+                    (tweet) =>
+                        !existingMemoryIds.has(
+                            stringToUuid(tweet.id + "-" + this.runtime.agentId)
+                        )
                 );
 
                 // Save the missing tweets as memories
                 for (const tweet of tweetsToSave) {
                     const roomId = stringToUuid(
-                        tweet.conversationId ??
-                            "default-room-" + this.runtime.agentId
+                        tweet.conversationId + "-" + this.runtime.agentId
                     );
                     const tweetuserId =
                         tweet.userId === this.twitterUserId
@@ -428,27 +433,26 @@ export class ClientBase extends EventEmitter {
 
         // Create a Set to store unique tweet IDs
         const tweetIdsToCheck = new Set<string>();
+        const roomIds = new Set<UUID>();
 
         // Add tweet IDs to the Set
         for (const tweet of allTweets) {
             tweetIdsToCheck.add(tweet.id);
+            roomIds.add(
+                stringToUuid(tweet.conversationId + "-" + this.runtime.agentId)
+            );
         }
-
-        // Convert the Set to an array of UUIDs
-        const tweetUuids = Array.from(tweetIdsToCheck).map((id) =>
-            stringToUuid(id + "-" + this.runtime.agentId)
-        );
 
         // Check the existing memories in the database
         const existingMemories =
             await this.runtime.messageManager.getMemoriesByRoomIds({
                 agentId: this.runtime.agentId,
-                roomIds: tweetUuids,
+                roomIds: Array.from(roomIds),
             });
 
         // Create a Set to store the existing memory IDs
         const existingMemoryIds = new Set<UUID>(
-            existingMemories.map((memory) => memory.roomId)
+            existingMemories.map((memory) => memory.id)
         );
 
         // Filter out the tweets that already exist in the database
@@ -469,7 +473,7 @@ export class ClientBase extends EventEmitter {
         // Save the new tweets as memories
         for (const tweet of tweetsToSave) {
             const roomId = stringToUuid(
-                tweet.conversationId ?? "default-room-" + this.runtime.agentId
+                tweet.conversationId + "-" + this.runtime.agentId
             );
             const tweetuserId =
                 tweet.userId === this.twitterUserId

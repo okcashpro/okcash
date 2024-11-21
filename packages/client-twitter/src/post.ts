@@ -7,12 +7,7 @@ import {
     ModelClass,
     stringToUuid,
 } from "@ai16z/eliza";
-import fs from "fs";
-import { composeContext, elizaLogger } from "@ai16z/eliza";
-import { generateText } from "@ai16z/eliza";
-import { embeddingZeroVector } from "@ai16z/eliza";
-import { IAgentRuntime, ModelClass } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
+import { elizaLogger } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `{{timeline}}
@@ -163,8 +158,10 @@ export class TwitterPostClient extends ClientBase {
             // Use the helper function to truncate to complete sentence
             const content = truncateToCompleteSentence(formattedTweet);
 
-            if (this.runtime.getSetting("TWITTER_DRY_RUN") === 'true') {
-                elizaLogger.info(`Dry run: would have posted tweet: ${content}`);
+            if (this.runtime.getSetting("TWITTER_DRY_RUN") === "true") {
+                elizaLogger.info(
+                    `Dry run: would have posted tweet: ${content}`
+                );
                 return;
             }
 
@@ -192,10 +189,9 @@ export class TwitterPostClient extends ClientBase {
                     videos: [],
                 } as Tweet;
 
-                const postId = tweet.id;
-                const conversationId =
-                    tweet.conversationId + "-" + this.runtime.agentId;
-                const roomId = stringToUuid(conversationId);
+                const roomId = stringToUuid(
+                    tweet.conversationId + "-" + this.runtime.agentId
+                );
 
                 await this.runtime.ensureRoomExists(roomId);
                 await this.runtime.ensureParticipantInRoom(
@@ -206,7 +202,7 @@ export class TwitterPostClient extends ClientBase {
                 await this.cacheTweet(tweet);
 
                 await this.runtime.messageManager.createMemory({
-                    id: stringToUuid(postId + "-" + this.runtime.agentId),
+                    id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
                     userId: this.runtime.agentId,
                     agentId: this.runtime.agentId,
                     content: {
