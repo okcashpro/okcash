@@ -631,9 +631,15 @@ export class AgentRuntime implements IAgentRuntime {
             await this.databaseAdapter.getParticipantsForRoom(roomId);
         if (!participants.includes(userId)) {
             await this.databaseAdapter.addParticipant(userId, roomId);
-            elizaLogger.log(
-                `User ${userId} linked to room ${roomId} successfully.`
-            );
+            if (userId === this.agentId) {
+                elizaLogger.log(
+                    `Agent ${this.character.name} linked to room ${roomId} successfully.`
+                );
+            } else {
+                elizaLogger.log(
+                    `User ${userId} linked to room ${roomId} successfully.`
+                );
+            }
         }
     }
 

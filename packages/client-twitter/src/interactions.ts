@@ -105,7 +105,7 @@ export class TwitterInteractionClient {
     async handleTwitterInteractions() {
         elizaLogger.log("Checking Twitter interactions");
 
-        const twitterUsername = this.runtime.getSetting("TWITTER_USERNAME");
+        const twitterUsername = this.client.profile.username;
         try {
             // Check for mentions
             const tweetCandidates = (
@@ -121,7 +121,7 @@ export class TwitterInteractionClient {
             // Sort tweet candidates by ID in ascending order
             uniqueTweetCandidates
                 .sort((a, b) => a.id.localeCompare(b.id))
-                .filter((tweet) => tweet.userId !== this.client.twitterUserId);
+                .filter((tweet) => tweet.userId !== this.client.profile.id);
 
             // for each tweet candidate, handle the tweet
             for (const tweet of uniqueTweetCandidates) {
@@ -136,7 +136,7 @@ export class TwitterInteractionClient {
                     );
 
                     const userIdUUID =
-                        tweet.userId === this.client.twitterUserId
+                        tweet.userId === this.client.profile.id
                             ? this.runtime.agentId
                             : stringToUuid(tweet.userId!);
 
@@ -189,17 +189,18 @@ export class TwitterInteractionClient {
         message: Memory;
         thread: Tweet[];
     }) {
-        if (tweet.username === this.runtime.getSetting("TWITTER_USERNAME")) {
+        if (tweet.userId === this.client.profile.id) {
             // console.log("skipping tweet from bot itself", tweet.id);
             // Skip processing if the tweet is from the bot itself
             return;
         }
 
         if (!message.content.text) {
-            elizaLogger.log("skipping tweet with no text", tweet.id);
+            elizaLogger.log("Skipping Tweet with no text", tweet.id);
             return { text: "", action: "IGNORE" };
         }
-        elizaLogger.log("handling tweet", tweet.id);
+
+        elizaLogger.log("Processing Tweet: ", tweet.id);
         const formatTweet = (tweet: Tweet) => {
             return `  ID: ${tweet.id}
   From: ${tweet.name} (@${tweet.username})
