@@ -1,6 +1,6 @@
 import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres";
 import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
-import { DirectClient, DirectClientInterface } from "@ai16z/client-direct";
+import { DirectClientInterface } from "@ai16z/client-direct";
 import { DiscordClientInterface } from "@ai16z/client-discord";
 import { AutoClientInterface } from "@ai16z/client-auto";
 import { TelegramClientInterface } from "@ai16z/client-telegram";
@@ -20,6 +20,7 @@ import {
     elizaLogger,
     settings,
     IDatabaseAdapter,
+    validateCharacterConfig,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
@@ -31,6 +32,7 @@ import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { character } from "./character.ts";
+import { DirectClient } from "@ai16z/client-direct";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -80,6 +82,8 @@ export async function loadCharacters(
         for (const path of characterPaths) {
             try {
                 const character = JSON.parse(fs.readFileSync(path, "utf8"));
+
+                validateCharacterConfig(character);
 
                 // is there a "plugins" field?
                 if (character.plugins) {

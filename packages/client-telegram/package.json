@@ -8,7 +8,8 @@
         "@ai16z/eliza": "workspace:*",
         "@ai16z/plugin-node": "workspace:*",
         "@telegraf/types": "7.1.0",
-        "telegraf": "4.16.3"
+        "telegraf": "4.16.3",
+        "zod": "3.23.8"
     },
     "devDependencies": {
         "tsup": "^8.3.5"

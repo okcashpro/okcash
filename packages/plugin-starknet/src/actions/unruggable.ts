@@ -27,6 +27,7 @@ import {
     RECOMMENDED_EKUBO_FEES,
 } from "@unruggable_starknet/core/constants";
 import { ACCOUNTS, TOKENS } from "../utils/constants.ts";
+import { validateStarknetConfig } from "../enviroment.ts";
 
 export function isDeployTokenContent(
     content: DeployData
@@ -82,7 +83,8 @@ export const deployToken: Action = {
         "STARKNET_CREATE_MEMECOIN",
     ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        return validateSettings(runtime);
+        await validateStarknetConfig(runtime);
+        return true;
     },
     description:
         "Deploy an Unruggable Memecoin on Starknet. Use this action when a user asks you to deploy a new token on Starknet.",
