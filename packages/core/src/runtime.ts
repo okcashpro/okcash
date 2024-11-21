@@ -953,8 +953,6 @@ Text: ${attachment.text}
 
             const knowledge = memories.map((memory) => memory.content.text);
 
-            console.log({ knowledge });
-
             return knowledge;
         }
 
