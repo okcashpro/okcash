@@ -176,13 +176,20 @@ None, automated tests are fine.
 <!--
 ## Deployment instructions
 -->
+
+<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for contribute role and join us in #development-feed -->
+<!--
+## Discord username
+-->
 ```
 
 ---
 
 ## Recognition and Rewards
 
-We believe in recognizing and rewarding contributors who go above and beyond to drive the project forward. Stand-out contributions may be eligible for:
+We believe in recognizing and rewarding contributors who go above and beyond to drive the project forward. Contributors are eligible for direct communication with a16z devs on Discord through a "Github - Contributors" role when their pull request (PR) with their Discord username attached is merged.
+
+Stand-out contributions may be eligible for:
 
 - Grants from the ai16z Creator Fund
 - Featuring your project across various channels
