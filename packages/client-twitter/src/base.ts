@@ -218,53 +218,56 @@ export class ClientBase extends EventEmitter {
     }
 
     async fetchHomeTimeline(count: number): Promise<Tweet[]> {
-        const homeTimeline = await this.twitterClient.fetchHomeTimeline(
-            count,
-            []
+        elizaLogger.debug("fetching home timeline");
+        const homeTimeline = await this.twitterClient.getUserTweets(
+            this.profile.id,
+            count
         );
 
-        return homeTimeline
-            .filter((t) => t.__typename !== "TweetWithVisibilityResults")
-            .map((tweet) => {
-                // console.log("tweet is", tweet);
-                const obj = {
-                    id: tweet.rest_id,
-                    name:
-                        tweet.name ??
-                        tweet.core?.user_results?.result?.legacy.name,
-                    username:
-                        tweet.username ??
-                        tweet.core?.user_results?.result?.legacy.screen_name,
-                    text: tweet.text ?? tweet.legacy?.full_text,
-                    inReplyToStatusId:
-                        tweet.inReplyToStatusId ??
-                        tweet.legacy?.in_reply_to_status_id_str,
-                    createdAt: tweet.createdAt ?? tweet.legacy?.created_at,
-                    userId: tweet.userId ?? tweet.legacy?.user_id_str,
-                    conversationId:
-                        tweet.conversationId ??
-                        tweet.legacy?.conversation_id_str,
-                    hashtags: tweet.hashtags ?? tweet.legacy?.entities.hashtags,
-                    mentions:
-                        tweet.mentions ?? tweet.legacy?.entities.user_mentions,
-                    photos:
-                        tweet.photos ??
-                        tweet.legacy?.entities.media?.filter(
-                            (media) => media.type === "photo"
-                        ) ??
-                        [],
-                    thread: [],
-                    urls: tweet.urls ?? tweet.legacy?.entities.urls,
-                    videos:
-                        tweet.videos ??
-                        tweet.legacy?.entities.media?.filter(
-                            (media) => media.type === "video"
-                        ) ??
-                        [],
-                };
-                // console.log("obj is", obj);
-                return obj;
-            });
+        // console.dir(homeTimeline, { depth: Infinity });
+
+        return homeTimeline.tweets;
+        // .filter((t) => t.__typename !== "TweetWithVisibilityResults")
+        // .map((tweet) => {
+        //     // console.log("tweet is", tweet);
+        //     const obj = {
+        //         id: tweet.id,
+        //         name:
+        //             tweet.name ??
+        //             tweet. ?.user_results?.result?.legacy.name,
+        //         username:
+        //             tweet.username ??
+        //             tweet.core?.user_results?.result?.legacy.screen_name,
+        //         text: tweet.text ?? tweet.legacy?.full_text,
+        //         inReplyToStatusId:
+        //             tweet.inReplyToStatusId ??
+        //             tweet.legacy?.in_reply_to_status_id_str,
+        //         createdAt: tweet.createdAt ?? tweet.legacy?.created_at,
+        //         userId: tweet.userId ?? tweet.legacy?.user_id_str,
+        //         conversationId:
+        //             tweet.conversationId ??
+        //             tweet.legacy?.conversation_id_str,
+        //         hashtags: tweet.hashtags ?? tweet.legacy?.entities.hashtags,
+        //         mentions:
+        //             tweet.mentions ?? tweet.legacy?.entities.user_mentions,
+        //         photos:
+        //             tweet.photos ??
+        //             tweet.legacy?.entities.media?.filter(
+        //                 (media) => media.type === "photo"
+        //             ) ??
+        //             [],
+        //         thread: [],
+        //         urls: tweet.urls ?? tweet.legacy?.entities.urls,
+        //         videos:
+        //             tweet.videos ??
+        //             tweet.legacy?.entities.media?.filter(
+        //                 (media) => media.type === "video"
+        //             ) ??
+        //             [],
+        //     };
+        //     // console.log("obj is", obj);
+        //     return obj;
+        // });
     }
 
     async fetchSearchTweets(
@@ -305,6 +308,8 @@ export class ClientBase extends EventEmitter {
     }
 
     private async populateTimeline() {
+        elizaLogger.debug("populating timeline...");
+
         const cachedTimeline = await this.getCachedTimeline();
 
         // Check if the cache file exists
@@ -321,6 +326,8 @@ export class ClientBase extends EventEmitter {
                         )
                     ),
                 });
+
+            //TODO: load tweets not in cache?
 
             // Create a Set to store the IDs of existing memories
             const existingMemoryIds = new Set(
@@ -343,23 +350,42 @@ export class ClientBase extends EventEmitter {
                         )
                 );
 
+                console.log({
+                    processingTweets: tweetsToSave
+                        .map((tweet) => tweet.id)
+                        .join(","),
+                });
+
                 // Save the missing tweets as memories
                 for (const tweet of tweetsToSave) {
+                    elizaLogger.log("Saving Tweet", tweet.id);
+
                     const roomId = stringToUuid(
                         tweet.conversationId + "-" + this.runtime.agentId
                     );
-                    const tweetuserId =
+
+                    const userId =
                         tweet.userId === this.profile.id
                             ? this.runtime.agentId
                             : stringToUuid(tweet.userId);
 
-                    await this.runtime.ensureConnection(
-                        tweetuserId,
-                        roomId,
-                        tweet.username,
-                        tweet.name,
-                        "twitter"
-                    );
+                    if (tweet.userId === this.profile.id) {
+                        await this.runtime.ensureConnection(
+                            this.runtime.agentId,
+                            roomId,
+                            this.profile.username,
+                            this.profile.screenName,
+                            "twitter"
+                        );
+                    } else {
+                        await this.runtime.ensureConnection(
+                            userId,
+                            roomId,
+                            tweet.username,
+                            tweet.name,
+                            "twitter"
+                        );
+                    }
 
                     const content = {
                         text: tweet.text,
@@ -381,6 +407,7 @@ export class ClientBase extends EventEmitter {
                         await this.runtime.messageManager.getMemoryById(
                             stringToUuid(tweet.id + "-" + this.runtime.agentId)
                         );
+
                     if (memory) {
                         elizaLogger.log(
                             "Memory already exists, skipping timeline population"
@@ -390,13 +417,15 @@ export class ClientBase extends EventEmitter {
 
                     await this.runtime.messageManager.createMemory({
                         id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
-                        userId: tweetuserId,
+                        userId,
                         content: content,
                         agentId: this.runtime.agentId,
                         roomId,
                         embedding: embeddingZeroVector,
                         createdAt: tweet.timestamp * 1000,
                     });
+
+                    await this.cacheTweet(tweet);
                 }
 
                 elizaLogger.log(
@@ -406,6 +435,8 @@ export class ClientBase extends EventEmitter {
             }
         }
 
+        const timeline = await this.fetchHomeTimeline(cachedTimeline ? 10 : 50);
+
         // Get the most recent 20 mentions and interactions
         const mentionsAndInteractions = await this.fetchSearchTweets(
             `@${this.runtime.getSetting("TWITTER_USERNAME")}`,
@@ -414,7 +445,7 @@ export class ClientBase extends EventEmitter {
         );
 
         // Combine the timeline tweets and mentions/interactions
-        const allTweets = [...mentionsAndInteractions.tweets];
+        const allTweets = [...timeline, ...mentionsAndInteractions.tweets];
 
         // Create a Set to store unique tweet IDs
         const tweetIdsToCheck = new Set<string>();
@@ -448,30 +479,46 @@ export class ClientBase extends EventEmitter {
                 )
         );
 
+        elizaLogger.debug({
+            processingTweets: tweetsToSave.map((tweet) => tweet.id).join(","),
+        });
+
         await this.runtime.ensureUserExists(
             this.runtime.agentId,
-            this.runtime.getSetting("TWITTER_USERNAME"),
+            this.profile.username,
             this.runtime.character.name,
             "twitter"
         );
 
         // Save the new tweets as memories
         for (const tweet of tweetsToSave) {
+            elizaLogger.log("Saving Tweet", tweet.id);
+
             const roomId = stringToUuid(
                 tweet.conversationId + "-" + this.runtime.agentId
             );
-            const tweetuserId =
+            const userId =
                 tweet.userId === this.profile.id
                     ? this.runtime.agentId
                     : stringToUuid(tweet.userId);
 
-            await this.runtime.ensureConnection(
-                tweetuserId,
-                roomId,
-                tweet.username,
-                tweet.name,
-                "twitter"
-            );
+            if (tweet.userId === this.profile.id) {
+                await this.runtime.ensureConnection(
+                    this.runtime.agentId,
+                    roomId,
+                    this.profile.username,
+                    this.profile.screenName,
+                    "twitter"
+                );
+            } else {
+                await this.runtime.ensureConnection(
+                    userId,
+                    roomId,
+                    tweet.username,
+                    tweet.name,
+                    "twitter"
+                );
+            }
 
             const content = {
                 text: tweet.text,
@@ -484,17 +531,20 @@ export class ClientBase extends EventEmitter {
 
             await this.runtime.messageManager.createMemory({
                 id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
-                userId: tweetuserId,
+                userId,
                 content: content,
                 agentId: this.runtime.agentId,
                 roomId,
                 embedding: embeddingZeroVector,
                 createdAt: tweet.timestamp * 1000,
             });
+
+            await this.cacheTweet(tweet);
         }
 
         // Cache
-        await this.cacheTimeline(allTweets);
+        await this.cacheTimeline(timeline);
+        await this.cacheMentions(mentionsAndInteractions.tweets);
     }
 
     async setCookiesFromArray(cookiesArray: any[]) {
@@ -524,7 +574,7 @@ export class ClientBase extends EventEmitter {
                 recentMessage.length > 0 &&
                 recentMessage[0].content === message.content
             ) {
-                console.log("Message already saved", recentMessage[0].id);
+                elizaLogger.debug("Message already saved", recentMessage[0].id);
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,
@@ -568,7 +618,16 @@ export class ClientBase extends EventEmitter {
     async cacheTimeline(timeline: Tweet[]) {
         await this.runtime.cacheManager.set(
             `twitter/${this.profile.username}/timeline`,
-            timeline
+            timeline,
+            { expires: 10 * 1000 }
+        );
+    }
+
+    async cacheMentions(mentions: Tweet[]) {
+        await this.runtime.cacheManager.set(
+            `twitter/${this.profile.username}/mentions`,
+            mentions,
+            { expires: 10 * 1000 }
         );
     }
 
@@ -585,10 +644,21 @@ export class ClientBase extends EventEmitter {
         );
     }
 
-    async fetchProfile(username: string): Promise<TwitterProfile> {
-        const cached = await this.runtime.cacheManager.get<TwitterProfile>(
+    async getCachedProfile(username: string) {
+        return await this.runtime.cacheManager.get<TwitterProfile>(
             `twitter/${username}/profile`
         );
+    }
+
+    async cacheProfile(profile: TwitterProfile) {
+        await this.runtime.cacheManager.set(
+            `twitter/${profile.username}/profile`,
+            profile
+        );
+    }
+
+    async fetchProfile(username: string): Promise<TwitterProfile> {
+        const cached = await this.getCachedProfile(username);
 
         if (cached) return cached;
 
@@ -612,10 +682,7 @@ export class ClientBase extends EventEmitter {
                 } satisfies TwitterProfile;
             });
 
-            this.runtime.cacheManager.set(
-                `twitter/${username}/profile`,
-                profile
-            );
+            this.cacheProfile(profile);
 
             return profile;
         } catch (error) {

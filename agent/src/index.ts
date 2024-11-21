@@ -275,6 +275,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
 async function startAgent(character: Character, directClient: DirectClient) {
     try {
         character.id ??= stringToUuid(character.name);
+        character.username ??= character.name;
 
         const token = getTokenForProvider(character.modelProvider, character);
         const dataDir = path.join(__dirname, "../data");
@@ -289,6 +290,8 @@ async function startAgent(character: Character, directClient: DirectClient) {
 
         const cache = intializeDbCache(character, db);
         const runtime = createAgent(character, db, cache, token);
+
+        await runtime.initialize();
 
         const clients = await initializeClients(character, runtime);
 
@@ -349,9 +352,15 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
+rl.on("SIGINT", () => {
+    rl.close();
+    process.exit(0);
+});
+
 async function handleUserInput(input, agentId) {
     if (input.toLowerCase() === "exit") {
         rl.close();
+        process.exit(0);
         return;
     }
 
