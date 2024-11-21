@@ -335,7 +335,21 @@ export type Character = {
     modelProvider: ModelProviderName;
     modelEndpointOverride?: string;
     templates?: {
-        [key: string]: string;
+        goalsTemplate?: string;
+        factsTemplate?: string;
+        messageHandlerTemplate?: string;
+        shouldRespondTemplate?: string;
+        continueMessageHandlerTemplate?: string;
+        evaluationTemplate?: string;
+        twitterSearchTemplate?: string;
+        twitterPostTemplate?: string;
+        twitterMessageHandlerTemplate?: string;
+        twitterShouldRespondTemplate?: string;
+        telegramMessageHandlerTemplate?: string;
+        telegramShouldRespondTemplate?: string;
+        discordVoiceHandlerTemplate?: string;
+        discordShouldRespondTemplate?: string;
+        discordMessageHandlerTemplate?: string;
     };
     bio: string | string[];
     lore: string[];
