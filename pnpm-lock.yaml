@@ -429,6 +429,9 @@ importers:
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       tsup:
         specifier: ^8.3.5
@@ -473,6 +476,9 @@ importers:
       telegraf:
         specifier: 4.16.3
         version: 4.16.3(encoding@0.1.13)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       tsup:
         specifier: ^8.3.5
@@ -492,6 +498,9 @@ importers:
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       tsup:
         specifier: ^8.3.5
@@ -537,7 +546,7 @@ importers:
         version: 3.4.33(openai@4.69.0(encoding@0.1.13)(zod@3.23.8))(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)
       anthropic-vertex-ai:
         specifier: ^1.0.0
-        version: 1.0.1(encoding@0.1.13)(zod@3.23.8)
+        version: 1.0.2(encoding@0.1.13)(zod@3.23.8)
       fastembed:
         specifier: ^1.14.1
         version: 1.14.1
@@ -5496,8 +5505,8 @@ packages:
   ansicolors@0.3.2:
     resolution: {integrity: sha512-QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==}
 
-  anthropic-vertex-ai@1.0.1:
-    resolution: {integrity: sha512-Gr/7O1YQTO3oOYtq1tScfkUZXePqZ+5qyoaBrPWgnOsS2VZBfS990mD8D7AIkt+rsx77RrheQ/TBp6c1trqRcw==}
+  anthropic-vertex-ai@1.0.2:
+    resolution: {integrity: sha512-4YuK04KMmBGkx6fi2UjnHkE4mhaIov7tnT5La9+DMn/gw/NSOLZoWNUx+13VY3mkcaseKBMEn1DBzdXXJFIP7A==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -13900,7 +13909,7 @@ snapshots:
       '@anthropic-ai/sdk': 0.30.1(encoding@0.1.13)
       '@types/uuid': 10.0.0
       ai: 3.4.33(openai@4.69.0(encoding@0.1.13)(zod@3.23.8))(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)
-      anthropic-vertex-ai: 1.0.1(encoding@0.1.13)(zod@3.23.8)
+      anthropic-vertex-ai: 1.0.2(encoding@0.1.13)(zod@3.23.8)
       fastembed: 1.14.1
       gaxios: 6.7.1(encoding@0.1.13)
       glob: 11.0.0
@@ -19745,7 +19754,7 @@ snapshots:
 
   ansicolors@0.3.2: {}
 
-  anthropic-vertex-ai@1.0.1(encoding@0.1.13)(zod@3.23.8):
+  anthropic-vertex-ai@1.0.2(encoding@0.1.13)(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 0.0.24
       '@ai-sdk/provider-utils': 1.0.20(zod@3.23.8)
@@ -24250,7 +24259,7 @@ snapshots:
 
   log-symbols@4.1.0:
     dependencies:
-      chalk: 4.1.2
+      chalk: 4.1.0
       is-unicode-supported: 0.1.0
 
   log-symbols@6.0.0:

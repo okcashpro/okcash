@@ -2,6 +2,7 @@ import { TwitterPostClient } from "./post.ts";
 import { TwitterSearchClient } from "./search.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
 import { IAgentRuntime, Client, elizaLogger } from "@ai16z/eliza";
+import { validateTwitterConfig } from "./enviroment.ts";
 import { ClientBase } from "./base.ts";
 
 class TwitterManager {
@@ -22,12 +23,16 @@ class TwitterManager {
 
 export const TwitterClientInterface: Client = {
     async start(runtime: IAgentRuntime) {
+        await validateTwitterConfig(runtime);
+
         elizaLogger.log("Twitter client started");
+
         const manager = new TwitterManager(runtime);
 
         await manager.client.init();
 
         await manager.post.start();
+
         await manager.interaction.start();
 
         return manager;
