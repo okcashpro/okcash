@@ -66,8 +66,17 @@ export class TwitterPostClient {
     client: ClientBase;
     runtime: IAgentRuntime;
 
-    async start(postImmediately: boolean = true) {
-        const generateNewTweetLoop = () => {
+    async start(postImmediately: boolean = false) {
+        const generateNewTweetLoop = async () => {
+            const lastPost = await this.runtime.cacheManager.get<{
+                timestamp: number;
+            }>(
+                "twitter/" +
+                    this.runtime.getSetting("TWITTER_USERNAME") +
+                    "/lastPost"
+            );
+
+            const lastPostTimestamp = lastPost?.timestamp ?? 0;
             const minMinutes =
                 parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
             const maxMinutes =
@@ -77,8 +86,11 @@ export class TwitterPostClient {
                 minMinutes;
             const delay = randomMinutes * 60 * 1000;
 
+            if (Date.now() > lastPostTimestamp + delay) {
+                await this.generateNewTweet();
+            }
+
             setTimeout(() => {
-                this.generateNewTweet();
                 generateNewTweetLoop(); // Set up next iteration
             }, delay);
 
@@ -88,6 +100,7 @@ export class TwitterPostClient {
         if (postImmediately) {
             this.generateNewTweet();
         }
+
         generateNewTweetLoop();
     }
 
@@ -193,6 +206,16 @@ export class TwitterPostClient {
                     urls: [],
                     videos: [],
                 } as Tweet;
+
+                await this.runtime.cacheManager.set(
+                    "twitter/" +
+                        this.runtime.getSetting("TWITTER_USERNAME") +
+                        "/lastPost",
+                    {
+                        id: tweet.id,
+                        timestamp: Date.now(),
+                    }
+                );
 
                 elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
 
