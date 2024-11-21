@@ -68,14 +68,13 @@ export function parseArguments(): {
 export async function loadCharacters(
     charactersArg: string
 ): Promise<Character[]> {
-    let characterPaths = charactersArg
-        ?.split(",")
-        .map((path) => path.trim())
-        .map((path) => {
-            if (path[0] === "/") return path; // handle absolute paths
-            // assume relative to the project root where pnpm is ran
-            return `../${path}`;
-        });
+    let characterPaths = charactersArg?.split(",").map((filePath) => {
+        if (path.basename(filePath) === filePath) {
+            filePath = "./characters/" + filePath;
+        }
+        return path.resolve(process.cwd(), filePath.trim());
+    });
+
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
