@@ -61,7 +61,7 @@ jobs:
             - name: Create GitHub Release
               uses: actions/create-release@v1
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
                   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
               with:
                   tag_name: ${{ steps.get_tag.outputs.TAG }}
