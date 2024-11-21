@@ -16,10 +16,10 @@ Transfer tokens from one address to another within Conflux core space.
 
 Transfer tokens from one address to Conflux eSpace.
 
-### Sponsor
+### Sponsor (TBD)
 
 Provide gas for Conflux core space contracts so they can be called without the need to have Conflux in user's wallet.
 
-### Swap
+### Swap (TBD)
 
 Swap tokens on Conflux DEXs.
