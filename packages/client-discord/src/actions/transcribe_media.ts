@@ -1,4 +1,3 @@
-import fs from "fs";
 import { composeContext } from "@ai16z/eliza";
 import { generateText } from "@ai16z/eliza";
 import { parseJSONObjectFromText } from "@ai16z/eliza";
@@ -12,6 +11,7 @@ import {
     ModelClass,
     State,
 } from "@ai16z/eliza";
+
 export const transcriptionTemplate = `# Transcription of media file
 {{mediaTranscript}}
 
@@ -161,9 +161,14 @@ ${mediaTranscript.trim()}
         }
         // if text is big, let's send as an attachment
         else if (callbackData.text) {
-            const transcriptFilename = `content_cache/transcript_${Date.now()}.txt`;
+            const transcriptFilename = `content/transcript_${Date.now()}`;
+
             // save the transcript to a file
-            fs.writeFileSync(transcriptFilename, callbackData.text);
+            await runtime.cacheManager.set(
+                transcriptFilename,
+                callbackData.text
+            );
+
             await callback(
                 {
                     ...callbackData,

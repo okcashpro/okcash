@@ -2,12 +2,12 @@ import {
     Content,
     IAgentRuntime,
     IImageDescriptionService,
-    embeddingZeroVector,
     Memory,
     State,
+    UUID,
+    embeddingZeroVector,
     elizaLogger,
     stringToUuid,
-    UUID,
 } from "@ai16z/eliza";
 import {
     QueryTweetsResponse,
@@ -16,20 +16,12 @@ import {
     Tweet,
 } from "agent-twitter-client";
 import { EventEmitter } from "events";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-import { glob } from "glob";
 
 export function extractAnswer(text: string): string {
     const startIndex = text.indexOf("Answer: ") + 8;
     const endIndex = text.indexOf("<|endoftext|>", 11);
     return text.slice(startIndex, endIndex);
 }
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 class RequestQueue {
     private queue: (() => Promise<any>)[] = [];
@@ -87,11 +79,9 @@ export class ClientBase extends EventEmitter {
     runtime: IAgentRuntime;
     directions: string;
     lastCheckedTweetId: number | null = null;
-    tweetCacheFilePath = __dirname + "/tweetcache/latest_checked_tweet_id.txt";
     imageDescriptionService: IImageDescriptionService;
     temperature: number = 0.5;
 
-    private tweetCache: Map<string, Tweet> = new Map();
     requestQueue: RequestQueue = new RequestQueue();
     twitterUserId: string;
 
@@ -100,41 +90,21 @@ export class ClientBase extends EventEmitter {
             console.warn("Tweet is undefined, skipping cache");
             return;
         }
-        const cacheDir = path.join(
-            __dirname,
-            "tweetcache",
-            tweet.conversationId,
-            `${tweet.id}.json`
-        );
-        await fs.promises.mkdir(path.dirname(cacheDir), { recursive: true });
-        await fs.promises.writeFile(cacheDir, JSON.stringify(tweet, null, 2));
-        this.tweetCache.set(tweet.id, tweet);
+
+        this.runtime.cacheManager.set(`twitter/tweets/${tweet.id}`, tweet);
     }
 
     async getCachedTweet(tweetId: string): Promise<Tweet | undefined> {
-        if (this.tweetCache.has(tweetId)) {
-            return this.tweetCache.get(tweetId);
-        }
-
-        const cacheFile = path.join(
-            __dirname,
-            "tweetcache",
-            "*",
-            `${tweetId}.json`
+        const cached = await this.runtime.cacheManager.get<Tweet>(
+            `twitter/tweets/${tweetId}`
         );
-        const files = await glob(cacheFile);
-        if (files.length > 0) {
-            const tweetData = await fs.promises.readFile(files[0], "utf-8");
-            const tweet = JSON.parse(tweetData) as Tweet;
-            this.tweetCache.set(tweet.id, tweet);
-            return tweet;
-        }
 
-        return undefined;
+        return cached;
     }
 
     async getTweet(tweetId: string): Promise<Tweet> {
         const cachedTweet = await this.getCachedTweet(tweetId);
+
         if (cachedTweet) {
             return cachedTweet;
         }
@@ -170,49 +140,21 @@ export class ClientBase extends EventEmitter {
             "- " +
             this.runtime.character.style.post.join();
 
-        try {
-            // console.log("this.tweetCacheFilePath", this.tweetCacheFilePath);
-            if (fs.existsSync(this.tweetCacheFilePath)) {
-                // make it?
-                const data = fs.readFileSync(this.tweetCacheFilePath, "utf-8");
-                this.lastCheckedTweetId = parseInt(data.trim());
-            } else {
-                // console.warn("Tweet cache file not found.");
-                // console.warn(this.tweetCacheFilePath);
-            }
-        } catch (error) {
-            console.error(
-                "Error loading latest checked tweet ID from file:",
-                error
-            );
-        }
-        const cookiesFilePath = path.join(
-            __dirname,
-            "tweetcache/" +
-                this.runtime.getSetting("TWITTER_USERNAME") +
-                "_cookies.json"
-        );
-
-        const dir = path.dirname(cookiesFilePath);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-
         // async initialization
         (async () => {
+            //test
+            await this.loadCachedLatestCheckedTweetId();
             // Check for Twitter cookies
             if (this.runtime.getSetting("TWITTER_COOKIES")) {
                 const cookiesArray = JSON.parse(
                     this.runtime.getSetting("TWITTER_COOKIES")
                 );
+
                 await this.setCookiesFromArray(cookiesArray);
             } else {
-                elizaLogger.debug("Cookies file path:", cookiesFilePath);
-                if (fs.existsSync(cookiesFilePath)) {
-                    const cookiesArray = JSON.parse(
-                        fs.readFileSync(cookiesFilePath, "utf-8")
-                    );
-                    await this.setCookiesFromArray(cookiesArray);
+                const cachedCookies = await this.getCachedCookies();
+                if (cachedCookies) {
+                    await this.setCookiesFromArray(cachedCookies);
                 } else {
                     await this.twitterClient.login(
                         this.runtime.getSetting("TWITTER_USERNAME"),
@@ -222,11 +164,7 @@ export class ClientBase extends EventEmitter {
                     );
                     elizaLogger.log("Logged in to Twitter");
                     const cookies = await this.twitterClient.getCookies();
-                    fs.writeFileSync(
-                        cookiesFilePath,
-                        JSON.stringify(cookies),
-                        "utf-8"
-                    );
+                    await this.cacheCookies(cookies);
                 }
             }
 
@@ -243,13 +181,8 @@ export class ClientBase extends EventEmitter {
                         this.runtime.getSetting("TWITTER_EMAIL"),
                         this.runtime.getSetting("TWITTER_2FA_SECRET")
                     );
-
                     const cookies = await this.twitterClient.getCookies();
-                    fs.writeFileSync(
-                        cookiesFilePath,
-                        JSON.stringify(cookies),
-                        "utf-8"
-                    );
+                    await this.cacheCookies(cookies);
                     loggedInWaits = 0;
                 }
                 loggedInWaits++;
@@ -386,20 +319,17 @@ export class ClientBase extends EventEmitter {
     }
 
     private async populateTimeline() {
-        const cacheFile = "timeline_cache.json";
+        const cachedTimeline = await this.getCachedTimeline();
 
         // Check if the cache file exists
-        if (fs.existsSync(cacheFile)) {
+        if (cachedTimeline) {
             // Read the cached search results from the file
-            const cachedResults = JSON.parse(
-                fs.readFileSync(cacheFile, "utf-8")
-            );
 
             // Get the existing memories from the database
             const existingMemories =
                 await this.runtime.messageManager.getMemoriesByRoomIds({
                     agentId: this.runtime.agentId,
-                    roomIds: cachedResults.map((tweet) =>
+                    roomIds: cachedTimeline.map((tweet) =>
                         stringToUuid(
                             tweet.conversationId + "-" + this.runtime.agentId
                         )
@@ -412,13 +342,13 @@ export class ClientBase extends EventEmitter {
             );
 
             // Check if any of the cached tweets exist in the existing memories
-            const someCachedTweetsExist = cachedResults.some((tweet) =>
+            const someCachedTweetsExist = cachedTimeline.some((tweet) =>
                 existingMemoryIds.has(tweet.id)
             );
 
             if (someCachedTweetsExist) {
                 // Filter out the cached tweets that already exist in the database
-                const tweetsToSave = cachedResults.filter(
+                const tweetsToSave = cachedTimeline.filter(
                     (tweet) => !existingMemoryIds.has(tweet.id)
                 );
 
@@ -574,8 +504,8 @@ export class ClientBase extends EventEmitter {
             });
         }
 
-        // Cache the search results to the file
-        fs.writeFileSync(cacheFile, JSON.stringify(allTweets));
+        // Cache
+        await this.cacheTimeline(allTweets);
     }
 
     async setCookiesFromArray(cookiesArray: any[]) {
@@ -618,6 +548,51 @@ export class ClientBase extends EventEmitter {
                 twitterClient: this.twitterClient,
             });
         }
+    }
+
+    async loadCachedLatestCheckedTweetId(): Promise<void> {
+        const latestCheckedTweetId =
+            await this.runtime.cacheManager.get<number>(
+                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id`
+            );
+
+        if (latestCheckedTweetId) {
+            this.lastCheckedTweetId = latestCheckedTweetId;
+        }
+    }
+
+    async cacheLatestCheckedTweetId() {
+        if (this.lastCheckedTweetId) {
+            await this.runtime.cacheManager.set(
+                `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/latest_checked_tweet_id`,
+                this.lastCheckedTweetId
+            );
+        }
+    }
+
+    async getCachedTimeline(): Promise<Tweet[] | undefined> {
+        return await this.runtime.cacheManager.get<Tweet[]>(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline`
+        );
+    }
+
+    async cacheTimeline(timeline: Tweet[]) {
+        await this.runtime.cacheManager.set(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/timeline`,
+            timeline
+        );
+    }
+
+    async getCachedCookies() {
+        return await this.runtime.cacheManager.get<any[]>(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`
+        );
+    }
+    async cacheCookies(cookies: any[]) {
+        await this.runtime.cacheManager.set(
+            `twitter/${this.runtime.getSetting("TWITTER_USERNAME")}/cookies`,
+            cookies
+        );
     }
 
     async initializeProfile() {
