@@ -217,6 +217,11 @@ export class TwitterPostClient {
                     }
                 );
 
+                await this.client.cacheTweet(tweet);
+
+                homeTimeline.push(tweet);
+                await this.client.cacheTimeline(homeTimeline);
+
                 elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
 
                 const roomId = stringToUuid(
