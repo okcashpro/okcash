@@ -218,7 +218,7 @@ export class ClientBase extends EventEmitter {
     }
 
     async fetchHomeTimeline(count: number): Promise<Tweet[]> {
-        console.log("fetching home timeline");
+        elizaLogger.debug("fetching home timeline");
         const homeTimeline = await this.twitterClient.getUserTweets(
             this.profile.id,
             count
@@ -308,7 +308,7 @@ export class ClientBase extends EventEmitter {
     }
 
     private async populateTimeline() {
-        console.log("populating timeline...");
+        elizaLogger.debug("populating timeline...");
 
         const cachedTimeline = await this.getCachedTimeline();
 
@@ -479,7 +479,7 @@ export class ClientBase extends EventEmitter {
                 )
         );
 
-        console.log({
+        elizaLogger.debug({
             processingTweets: tweetsToSave.map((tweet) => tweet.id).join(","),
         });
 
@@ -574,7 +574,7 @@ export class ClientBase extends EventEmitter {
                 recentMessage.length > 0 &&
                 recentMessage[0].content === message.content
             ) {
-                console.log("Message already saved", recentMessage[0].id);
+                elizaLogger.debug("Message already saved", recentMessage[0].id);
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,
