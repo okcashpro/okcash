@@ -346,7 +346,7 @@ export class AgentRuntime implements IAgentRuntime {
             const existingDocument =
                 await this.documentsManager.getMemoryById(knowledgeId);
             if (!existingDocument) {
-                console.log(
+                elizaLogger.success(
                     "Processing knowledge for ",
                     this.character.name,
                     " - ",

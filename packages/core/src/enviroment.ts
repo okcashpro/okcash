@@ -3,12 +3,6 @@ import { ModelProviderName, Clients } from "./types";
 
 // TODO: TO COMPLETE
 export const envSchema = z.object({
-    // Discord configuration
-    DISCORD_APPLICATION_ID: z
-        .string()
-        .min(1, "Discord Application ID is required"),
-    DISCORD_API_TOKEN: z.string().min(1, "Discord API Token is required"),
-
     // API Keys with specific formats
     OPENAI_API_KEY: z
         .string()
