@@ -221,7 +221,6 @@ export class TwitterPostClient {
 
                 homeTimeline.push(tweet);
                 await this.client.cacheTimeline(homeTimeline);
-
                 elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
 
                 const roomId = stringToUuid(
@@ -250,10 +249,10 @@ export class TwitterPostClient {
                     createdAt: tweet.timestamp * 1000,
                 });
             } catch (error) {
-                console.error("Error sending tweet:", error);
+                elizaLogger.error("Error sending tweet:", error);
             }
         } catch (error) {
-            console.error("Error generating new tweet:", error);
+            elizaLogger.error("Error generating new tweet:", error);
         }
     }
 }

@@ -118,9 +118,6 @@ export class TwitterInteractionClient {
 
             // de-duplicate tweetCandidates with a set
             const uniqueTweetCandidates = [...new Set(tweetCandidates)];
-
-            console.log({ twitterUserId: this.client.twitterUserId });
-
             // Sort tweet candidates by ID in ascending order
             uniqueTweetCandidates
                 .sort((a, b) => a.id.localeCompare(b.id))
@@ -128,7 +125,6 @@ export class TwitterInteractionClient {
 
             // for each tweet candidate, handle the tweet
             for (const tweet of uniqueTweetCandidates) {
-                // console.log("tweet:", tweet);
                 if (
                     !this.client.lastCheckedTweetId ||
                     parseInt(tweet.id) > this.client.lastCheckedTweetId
@@ -393,19 +389,19 @@ export class TwitterInteractionClient {
         const visited: Set<string> = new Set();
 
         async function processThread(currentTweet: Tweet, depth: number = 0) {
-            console.log("Processing tweet:", {
+            elizaLogger.log("Processing tweet:", {
                 id: currentTweet.id,
                 inReplyToStatusId: currentTweet.inReplyToStatusId,
                 depth: depth,
             });
 
             if (!currentTweet) {
-                console.log("No current tweet found for thread building");
+                elizaLogger.log("No current tweet found for thread building");
                 return;
             }
 
             if (depth >= maxReplies) {
-                console.log("Reached maximum reply depth", depth);
+                elizaLogger.log("Reached maximum reply depth", depth);
                 return;
             }
 
@@ -469,7 +465,7 @@ export class TwitterInteractionClient {
             });
 
             if (currentTweet.inReplyToStatusId) {
-                console.log(
+                elizaLogger.log(
                     "Fetching parent tweet:",
                     currentTweet.inReplyToStatusId
                 );
@@ -479,25 +475,28 @@ export class TwitterInteractionClient {
                     );
 
                     if (parentTweet) {
-                        console.log("Found parent tweet:", {
+                        elizaLogger.log("Found parent tweet:", {
                             id: parentTweet.id,
                             text: parentTweet.text?.slice(0, 50),
                         });
                         await processThread(parentTweet, depth + 1);
                     } else {
-                        console.log(
+                        elizaLogger.log(
                             "No parent tweet found for:",
                             currentTweet.inReplyToStatusId
                         );
                     }
                 } catch (error) {
-                    console.log("Error fetching parent tweet:", {
+                    elizaLogger.log("Error fetching parent tweet:", {
                         tweetId: currentTweet.inReplyToStatusId,
                         error,
                     });
                 }
             } else {
-                console.log("Reached end of reply chain at:", currentTweet.id);
+                elizaLogger.log(
+                    "Reached end of reply chain at:",
+                    currentTweet.id
+                );
             }
         }
 
