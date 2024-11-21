@@ -70,7 +70,7 @@ export async function loadCharacters(
 ): Promise<Character[]> {
     let characterPaths = charactersArg?.split(",").map((filePath) => {
         if (path.basename(filePath) === filePath) {
-            filePath = "./characters/" + filePath;
+            filePath = "../characters/" + filePath;
         }
         return path.resolve(process.cwd(), filePath.trim());
     });
