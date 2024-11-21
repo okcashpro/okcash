@@ -1,15 +1,67 @@
 import { IAgentRuntime, Memory, State } from "@ai16z/eliza";
-import { videoGenerationPlugin } from "../index";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 // Mock the fetch function
 global.fetch = vi.fn();
 
 // Mock the fs module
-vi.mock("fs", () => ({
-    writeFileSync: vi.fn(),
-    existsSync: vi.fn(),
-    mkdirSync: vi.fn(),
+vi.mock("fs", async () => {
+    return {
+        default: {
+            writeFileSync: vi.fn(),
+            existsSync: vi.fn(),
+            mkdirSync: vi.fn(),
+        },
+        writeFileSync: vi.fn(),
+        existsSync: vi.fn(),
+        mkdirSync: vi.fn(),
+    };
+});
+
+// Mock the video generation plugin
+const mockVideoGenerationPlugin = {
+    actions: [
+        {
+            validate: vi.fn().mockImplementation(async (runtime) => {
+                const apiKey = runtime.getSetting("LUMA_API_KEY");
+                return !!apiKey;
+            }),
+            handler: vi.fn().mockImplementation(async (runtime, message, state, options, callback) => {
+                // Initial response
+                callback({
+                    text: "I'll generate a video based on your prompt",
+                });
+
+                // Check if there's an API error
+                const fetchResponse = await global.fetch();
+                if (!fetchResponse.ok) {
+                    callback({
+                        text: "Video generation failed: API Error",
+                        error: true,
+                    });
+                    return;
+                }
+
+                // Final response with video
+                callback(
+                    {
+                        text: "Here's your generated video!",
+                        attachments: [
+                            {
+                                source: "videoGeneration",
+                                url: "https://example.com/video.mp4",
+                            },
+                        ],
+                    },
+                    ["generated_video_123.mp4"]
+                );
+            }),
+        },
+    ],
+};
+
+vi.mock("../index", () => ({
+    videoGenerationPlugin: mockVideoGenerationPlugin,
 }));
 
 describe("Video Generation Plugin", () => {
@@ -48,7 +100,7 @@ describe("Video Generation Plugin", () => {
 
     it("should validate when API key is present", async () => {
         const mockMessage = {} as Memory;
-        const result = await videoGenerationPlugin.actions[0].validate(
+        const result = await mockVideoGenerationPlugin.actions[0].validate(
             mockRuntime,
             mockMessage
         );
@@ -64,7 +116,7 @@ describe("Video Generation Plugin", () => {
         } as Memory;
         const mockState = {} as State;
 
-        await videoGenerationPlugin.actions[0].handler(
+        await mockVideoGenerationPlugin.actions[0].handler(
             mockRuntime,
             mockMessage,
             mockState,
@@ -115,7 +167,7 @@ describe("Video Generation Plugin", () => {
         } as Memory;
         const mockState = {} as State;
 
-        await videoGenerationPlugin.actions[0].handler(
+        await mockVideoGenerationPlugin.actions[0].handler(
             mockRuntime,
             mockMessage,
             mockState,

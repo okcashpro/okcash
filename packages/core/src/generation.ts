@@ -61,6 +61,8 @@ export async function generateText({
         return "";
     }
 
+    elizaLogger.log("Genarating text...");
+
     const provider = runtime.modelProvider;
     const endpoint =
         runtime.character.modelEndpointOverride || models[provider].endpoint;
@@ -314,14 +316,14 @@ export async function generateText({
 
             case ModelProviderName.OLLAMA:
                 {
-                    console.debug("Initializing Ollama model.");
+                    elizaLogger.debug("Initializing Ollama model.");
 
                     const ollamaProvider = createOllama({
                         baseURL: models[provider].endpoint + "/api",
                     });
                     const ollama = ollamaProvider(model);
 
-                    console.debug("****** MODEL\n", model);
+                    elizaLogger.debug("****** MODEL\n", model);
 
                     const { text: ollamaResponse } = await aiGenerateText({
                         model: ollama,
@@ -334,7 +336,7 @@ export async function generateText({
 
                     response = ollamaResponse;
                 }
-                console.debug("Received response from Ollama model.");
+                elizaLogger.debug("Received response from Ollama model.");
                 break;
 
             case ModelProviderName.HEURIST: {
@@ -700,6 +702,8 @@ export async function generateMessageResponse({
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {
+            elizaLogger.log("Genarating message response..");
+
             const response = await generateText({
                 runtime,
                 context,

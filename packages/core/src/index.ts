@@ -19,3 +19,4 @@ export * from "./logger.ts";
 export * from "./parsing.ts";
 export * from "./uuid.ts";
 export * from "./enviroment.ts";
+export * from "./cache.ts";

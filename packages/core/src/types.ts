@@ -381,6 +381,7 @@ export type Character = {
 
 export interface IDatabaseAdapter {
     db: any;
+    init?(): Promise<void>;
     getAccountById(userId: UUID): Promise<Account | null>;
     createAccount(account: Account): Promise<boolean>;
     getMemories(params: {
@@ -483,6 +484,20 @@ export interface IDatabaseAdapter {
     getRelationships(params: { userId: UUID }): Promise<Relationship[]>;
 }
 
+export interface IDatabaseCacheAdapter {
+    getCache(params: {
+        agentId: UUID;
+        key: string;
+    }): Promise<string | undefined>;
+    setCache(params: {
+        agentId: UUID;
+        key: string;
+        value: string;
+    }): Promise<boolean>;
+
+    deleteCache(params: { agentId: UUID; key: string }): Promise<boolean>;
+}
+
 export interface IMemoryManager {
     runtime: IAgentRuntime;
     tableName: string;
@@ -522,6 +537,16 @@ export interface IMemoryManager {
     countMemories(roomId: UUID, unique?: boolean): Promise<number>;
 }
 
+export type CacheOptions = {
+    expires?: number;
+};
+
+export interface ICacheManager {
+    get<T = unknown>(key: string): Promise<T | undefined>;
+    set<T>(key: string, value: T, options?: CacheOptions): Promise<void>;
+    delete(key: string): Promise<void>;
+}
+
 export abstract class Service {
     private static instance: Service | null = null;
 
@@ -559,6 +584,7 @@ export interface IAgentRuntime {
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;
     loreManager: IMemoryManager;
+    cacheManager: ICacheManager;
 
     services: Map<ServiceType, Service>;
     registerMemoryManager(manager: IMemoryManager): void;
