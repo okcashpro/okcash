@@ -136,6 +136,16 @@ TWITTER_EMAIL=    # Account email
 TWITTER_COOKIES=  # Account cookies (auth_token and CT0)
 ```
 
+Example for TWITTER_COOKIES
+
+The TWITTER_COOKIES variable should be a JSON string containing the necessary cookies. You can find these cookies in your web browser's developer tools. Here is an example format:
+
+```bash
+TWITTER_COOKIES='[{"name":"auth_token","value":"your token","domain":".twitter.com"},
+  {"name":"ct0","value":"your ct0","domain":".twitter.com"},
+  {"name":"guest_id","value":"your guest_id","domain":".twitter.com"}]'
+```
+
 ### Telegram Bot
 
 1. Create a bot
