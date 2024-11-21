@@ -65,7 +65,7 @@ export class simulationSellingService {
         await this.executeSells(sellDecisions);
 
         // Perform stop loss checks
-        await this.performStopLoss();
+        await this.performStopLoss(tokenPerformances);
     }
 
     private decideWhenToSell(
@@ -75,12 +75,36 @@ export class simulationSellingService {
         console.log("Deciding when to sell and how much...");
         const decisions: SellDecision[] = [];
 
-        tokenPerformances.forEach((performance) => {
-            const amountToSell = performance.balance * 0.1;
+        tokenPerformances.forEach(async (performance) => {
+            const tokenProvider = new TokenProvider(
+                performance.tokenAddress,
+                this.walletProvider
+            );
+            const sellAmount = await this.amountToSell(
+                performance.tokenAddress,
+                tokenProvider
+            );
+            const amountToSell = sellAmount.sellAmount;
             decisions.push({ tokenPerformance: performance, amountToSell });
         });
 
         return decisions;
+    }
+
+    async amountToSell(tokenAddress: string, tokenProvider: TokenProvider) {
+        // To Do: Implement logic to decide how much to sell
+        //placeholder
+        const processedData: ProcessedTokenData =
+            await tokenProvider.getProcessedTokenData();
+        const prices = await this.walletProvider.fetchPrices(null);
+        const solPrice = prices.solana.usd;
+        const tokenBalance = this.trustScoreDb.getTokenBalance(tokenAddress);
+
+        const sellAmount = tokenBalance * 0.1;
+        const sellSol = sellAmount / parseFloat(solPrice);
+        const sellValueUsd = sellAmount * processedData.tradeData.price;
+
+        return { sellAmount, sellSol, sellValueUsd };
     }
 
     private async executeSells(decisions: SellDecision[]) {
@@ -89,13 +113,62 @@ export class simulationSellingService {
             console.log(
                 `Selling ${decision.amountToSell} of token ${decision.tokenPerformance.tokenSymbol}`
             );
-            // To Do sell logic
+            // update the sell details
+            const sellDetails = {
+                sell_amount: decision.amountToSell,
+                sell_recommender_id: null,
+            };
+            const sellTimeStamp = new Date().toISOString();
+            const tokenProvider = new TokenProvider(
+                decision.tokenPerformance.tokenAddress,
+                this.walletProvider
+            );
+            const sellDetailsData = await this.updateSellDetails(
+                decision.tokenPerformance.tokenAddress,
+                decision.tokenPerformance.recommenderId,
+                sellTimeStamp,
+                sellDetails,
+                true,
+                tokenProvider
+            );
+            console.log("Sell order executed successfully", sellDetailsData);
         }
     }
 
-    private async performStopLoss() {
+    private async performStopLoss(tokenPerformances: TokenPerformance[]) {
         console.log("Performing stop loss checks...");
         // To Do: Implement stop loss logic
+        // check if the token has dropped by more than 50% in the last 24 hours
+        for (const performance of tokenPerformances) {
+            const tokenProvider = new TokenProvider(
+                performance.tokenAddress,
+                this.walletProvider
+            );
+            const processedData: ProcessedTokenData =
+                await tokenProvider.getProcessedTokenData();
+            if (processedData.tradeData.trade_24h_change_percent < -50) {
+                const sellAmount = performance.balance;
+                const sellSol = sellAmount / 100;
+                const sellValueUsd = sellAmount * processedData.tradeData.price;
+                const sellDetails = {
+                    sell_amount: sellAmount,
+                    sell_recommender_id: null,
+                };
+                const sellTimeStamp = new Date().toISOString();
+                const sellDetailsData = await this.updateSellDetails(
+                    performance.tokenAddress,
+                    performance.recommenderId,
+                    sellTimeStamp,
+                    sellDetails,
+                    true,
+                    tokenProvider
+                );
+                console.log(
+                    "Stop loss triggered. Sell order executed successfully",
+                    sellDetailsData
+                );
+            }
+        }
     }
 
     async updateSellDetails(
