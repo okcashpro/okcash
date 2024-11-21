@@ -177,10 +177,9 @@ function initializeDatabase(dataDir: string) {
         });
         return db;
     } else {
-        const filePath = path.resolve(
-            dataDir,
-            process.env.SQLITE_FILE ?? "db.sqlite"
-        );
+        const filePath =
+            process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
+        // ":memory:";
         const db = new SqliteDatabaseAdapter(new Database(filePath));
         return db;
     }
