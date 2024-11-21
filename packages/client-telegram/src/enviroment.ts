@@ -1,3 +1,4 @@
+import { IAgentRuntime } from "@ai16z/eliza";
 import { z } from "zod";
 
 export const telegramEnvSchema = z.object({
@@ -6,14 +7,17 @@ export const telegramEnvSchema = z.object({
 
 export type TelegramConfig = z.infer<typeof telegramEnvSchema>;
 
-// Validate and export the config
-export const telegramConfig = telegramEnvSchema.parse({
-    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
-});
-
-export function validateTelegramConfig(): TelegramConfig {
+export async function validateTelegramConfig(
+    runtime: IAgentRuntime
+): Promise<TelegramConfig> {
     try {
-        return telegramEnvSchema.parse(process.env);
+        const config = {
+            TELEGRAM_BOT_TOKEN:
+                runtime.getSetting("TELEGRAM_BOT_TOKEN") ||
+                process.env.TELEGRAM_BOT_TOKEN,
+        };
+
+        return telegramEnvSchema.parse(config);
     } catch (error) {
         if (error instanceof z.ZodError) {
             const errorMessages = error.errors

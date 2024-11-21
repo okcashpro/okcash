@@ -10,6 +10,7 @@ import * as fs from "fs";
 import { settings } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { generateText } from "@ai16z/eliza";
+import { validateStarknetConfig } from "../enviroment";
 
 interface Order {
     userId: string;
@@ -42,6 +43,8 @@ const take_order: Action = {
     description:
         "Records a starknet buy order based on the user's conviction level.",
     validate: async (runtime: IAgentRuntime, message: Memory) => {
+        await validateStarknetConfig(runtime);
+
         const text = (message.content as Content).text;
         // Check if the message contains a ticker symbol
         const tickerRegex = /\b[A-Z]{1,5}\b/g;

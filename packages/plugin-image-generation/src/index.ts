@@ -11,6 +11,7 @@ import { generateCaption, generateImage } from "@ai16z/eliza";
 
 import fs from "fs";
 import path from "path";
+import { validateImageGenConfig } from "./enviroment";
 
 export function saveBase64Image(base64Data: string, filename: string): string {
     // Create generatedImages directory if it doesn't exist
@@ -76,6 +77,8 @@ const imageGeneration: Action = {
     ],
     description: "Generate an image to go along with the message.",
     validate: async (runtime: IAgentRuntime, message: Memory) => {
+        await validateImageGenConfig(runtime);
+
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
         const heuristApiKeyOk = !!runtime.getSetting("HEURIST_API_KEY");

@@ -3,6 +3,7 @@ import { IAgentRuntime, ISpeechService, ServiceType } from "@ai16z/eliza";
 import { getWavHeader } from "./audioUtils.ts";
 import { synthesize } from "../vendor/vits.ts";
 import { Service } from "@ai16z/eliza";
+import { validateNodeConfig } from "../enviroment.ts";
 
 function prependWavHeader(
     readable: Readable,
@@ -33,7 +34,7 @@ function prependWavHeader(
 }
 
 async function textToSpeech(runtime: IAgentRuntime, text: string) {
-    console.log("11 TTS: " + text);
+    await validateNodeConfig(runtime);
     const body = {
         model_id: runtime.getSetting("ELEVENLABS_MODEL_ID"),
         text: text,

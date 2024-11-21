@@ -10,21 +10,16 @@ export const discordEnvSchema = z.object({
 
 export type DiscordConfig = z.infer<typeof discordEnvSchema>;
 
-// Validate and export the config
-export const discordConfig = discordEnvSchema.parse({
-    DISCORD_APPLICATION_ID: process.env.DISCORD_APPLICATION_ID,
-    DISCORD_API_TOKEN: process.env.DISCORD_API_TOKEN,
-});
-
-export function validateDiscordConfig(runtime: IAgentRuntime): DiscordConfig {
-    console.log(runtime?.character.settings.secrets.DISCORD_APPLICATION_ID);
+export async function validateDiscordConfig(
+    runtime: IAgentRuntime
+): Promise<DiscordConfig> {
     try {
         const config = {
             DISCORD_APPLICATION_ID:
-                runtime?.character.settings.secrets.DISCORD_APPLICATION_ID ||
+                runtime.getSetting("DISCORD_APPLICATION_ID") ||
                 process.env.DISCORD_APPLICATION_ID,
             DISCORD_API_TOKEN:
-                runtime?.character.settings.secrets.DISCORD_API_TOKEN ||
+                runtime.getSetting("DISCORD_API_TOKEN") ||
                 process.env.DISCORD_API_TOKEN,
         };
 
