@@ -299,7 +299,7 @@ export function startDiscord(runtime: IAgentRuntime) {
 
 export const DiscordClientInterface: ElizaClient = {
     start: async (runtime: IAgentRuntime) => {
-        validateDiscordConfig(runtime);
+        // validateDiscordConfig(runtime);
         return new DiscordClient(runtime);
     },
     stop: async (runtime: IAgentRuntime) => {
