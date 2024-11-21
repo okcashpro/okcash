@@ -12,7 +12,7 @@ import { privateKeyToAccount } from "cive/accounts";
 import { testnet } from "cive/chains";
 import { confluxBridgeTransferTemplate } from "../templates/bridgeTransfer";
 import { TransferSchema, isTransferContent } from "../types";
-import crossSpaceCallAbi from "../abi/crossSpaceCall.json";
+import CrossSpaceCallAbi from "../abi/crossSpaceCall";
 
 const bridgeSendCFX = async (
     secretKey: `0x${string}`,
@@ -42,7 +42,7 @@ const bridgeSendCFX = async (
         value: parseCFX(amount),
         chain: testnet,
         data: encodeFunctionData({
-            abi: crossSpaceCallAbi,
+            abi: CrossSpaceCallAbi,
             functionName: "transferEVM",
             args: [espaceTo],
         }),
