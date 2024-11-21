@@ -389,6 +389,19 @@ export class TrustScoreManager {
         };
         this.trustScoreDb.addTradePerformance(creationData, data.is_simulation);
 
+        const tokenRecommendation: TokenRecommendation = {
+            recommenderId: recommenderId,
+            tokenAddress: tokenAddress,
+            timestamp: new Date(),
+            initialMarketCap:
+                processedData.dexScreenerData.pairs[0]?.marketCap || 0,
+            initialLiquidity:
+                processedData.dexScreenerData.pairs[0]?.liquidity || 0,
+            initialPrice: processedData.tradeData.price,
+        };
+
+        this.trustScoreDb.addTokenRecommendation(tokenRecommendation);
+
         if (data.is_simulation) {
             // If the trade is a simulation update the balance
             this.trustScoreDb.updateTokenBalance(tokenAddress, tokensBalance);
