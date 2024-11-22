@@ -33,7 +33,7 @@ interface WalletPortfolio {
     items: Array<Item>;
 }
 
-interface BirdEyePriceData {
+interface _BirdEyePriceData {
     data: {
         [key: string]: {
             price: number;
