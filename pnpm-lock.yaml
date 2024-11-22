@@ -524,17 +524,14 @@ importers:
         specifier: 1.0.0-canary.3
         version: 1.0.0-canary.3(zod@3.23.8)
       '@ai16z/adapter-sqlite':
-        specifier: ^0.1.3
-        version: 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+        specifier: workspace:*
+        version: link:../adapter-sqlite
       '@ai16z/adapter-sqljs':
-        specifier: ^0.1.3
-        version: 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+        specifier: workspace:*
+        version: link:../adapter-sqljs
       '@ai16z/adapter-supabase':
-        specifier: ^0.1.3
-        version: 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@ai16z/plugin-solana':
-        specifier: ^0.1.3
-        version: 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(jiti@2.4.0)(postcss@8.4.49)(react@18.3.1)(rollup@2.79.2)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(terser@5.36.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)(yaml@2.6.1)
+        specifier: workspace:*
+        version: link:../adapter-supabase
       '@anthropic-ai/sdk':
         specifier: ^0.30.1
         version: 0.30.1(encoding@0.1.13)
@@ -676,7 +673,7 @@ importers:
         version: 2.79.2
       ts-jest:
         specifier: 29.2.5
-        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.0)(jest@29.7.0(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)))(typescript@5.6.3)
+        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)))(typescript@5.6.3)
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)
@@ -1126,34 +1123,6 @@ packages:
     peerDependenciesMeta:
       vue:
         optional: true
-
-  '@ai16z/adapter-sqlite@0.1.3':
-    resolution: {integrity: sha512-P05j0xo7HIVKM2xvf8HIzBt6Jkeb43nMdBWQ8BPg/rywcO4BzrJdSAg6vSvQEdkiLBy74KcB0JQW1gXp19Ss2g==}
-    peerDependencies:
-      whatwg-url: 7.1.0
-
-  '@ai16z/adapter-sqljs@0.1.3':
-    resolution: {integrity: sha512-ctVV7ZY33FIUKb7so4y8ZYLOtxSleclZbFs8xZ0TO6P1VMljrJz3Nsn0cZY1l5JSgDyolS1hV9Od8IaWzMisnQ==}
-    peerDependencies:
-      whatwg-url: 7.1.0
-
-  '@ai16z/adapter-supabase@0.1.3':
-    resolution: {integrity: sha512-jDnw0rBGxxyzQ+Q/esc/H+qBc27gvxWy8orkugqpgFiF0mB77h7ivSJqho11h13W8c4tCJGN7qvzh1pxFad+eg==}
-    peerDependencies:
-      whatwg-url: 7.1.0
-
-  '@ai16z/eliza@0.1.3':
-    resolution: {integrity: sha512-MeHvD44YKeYdnmI0k03RpS0COGPUsM5/nYoo7ih9vi7iXWFUWANEa3FReWr8rT51AOdHFXGdaLvTzngI527WjA==}
-
-  '@ai16z/plugin-solana@0.1.3':
-    resolution: {integrity: sha512-q8d7j/HWwxe1TxeTdPQepMTJOFEt0/OP17ynXLw8OCrOeBrBDETC24tKB7CUD1CdNthEXDTzMK5ff5IiDZp5tw==}
-    peerDependencies:
-      whatwg-url: 7.1.0
-
-  '@ai16z/plugin-trustdb@0.1.3':
-    resolution: {integrity: sha512-okVpUxvMi9LiCd7oNp0nzXjnGKLHspmqtSg+wfQhSRcgx2gjPdUrzERve0TBS4U4MqY5KcNGhPJvp4H6s6KlMQ==}
-    peerDependencies:
-      whatwg-url: 7.1.0
 
   '@algolia/autocomplete-core@1.17.7':
     resolution: {integrity: sha512-BjiPOW6ks90UKl7TwMv7oNQMnzU+t/wk9mgIDi6b1tXpUek7MW0lbNOUHpvam9pe3lVCf4xPFT+lK7s+e+fs7Q==}
@@ -13943,178 +13912,6 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
       - zod
-
-  '@ai16z/adapter-sqlite@0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
-    dependencies:
-      '@ai16z/eliza': 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))
-      '@types/better-sqlite3': 7.6.11
-      better-sqlite3: 11.5.0
-      sqlite-vec: 0.1.4-alpha.2
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - encoding
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - vue
-
-  '@ai16z/adapter-sqljs@0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
-    dependencies:
-      '@ai16z/eliza': 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))
-      '@types/sql.js': 1.4.9
-      sql.js: 1.12.0
-      uuid: 11.0.2
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - encoding
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - vue
-
-  '@ai16z/adapter-supabase@0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
-    dependencies:
-      '@ai16z/eliza': 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))
-      '@supabase/supabase-js': 2.46.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - bufferutil
-      - encoding
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - utf-8-validate
-      - vue
-
-  '@ai16z/eliza@0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))':
-    dependencies:
-      '@ai-sdk/anthropic': 0.0.53(zod@3.23.8)
-      '@ai-sdk/google': 0.0.55(zod@3.23.8)
-      '@ai-sdk/google-vertex': 0.0.42(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(zod@3.23.8)
-      '@ai-sdk/groq': 0.0.3(zod@3.23.8)
-      '@ai-sdk/openai': 1.0.0-canary.3(zod@3.23.8)
-      '@anthropic-ai/sdk': 0.30.1(encoding@0.1.13)
-      '@types/uuid': 10.0.0
-      ai: 3.4.33(openai@4.69.0(encoding@0.1.13)(zod@3.23.8))(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)
-      anthropic-vertex-ai: 1.0.2(encoding@0.1.13)(zod@3.23.8)
-      fastembed: 1.14.1
-      gaxios: 6.7.1(encoding@0.1.13)
-      glob: 11.0.0
-      js-sha1: 0.7.0
-      ollama-ai-provider: 0.16.1(zod@3.23.8)
-      openai: 4.69.0(encoding@0.1.13)(zod@3.23.8)
-      tiktoken: 1.0.17
-      tinyld: 1.3.4
-      together-ai: 0.7.0(encoding@0.1.13)
-      unique-names-generator: 4.7.1
-      uuid: 11.0.2
-      zod: 3.23.8
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - encoding
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - vue
-
-  '@ai16z/plugin-solana@0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(jiti@2.4.0)(postcss@8.4.49)(react@18.3.1)(rollup@2.79.2)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(terser@5.36.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)(yaml@2.6.1)':
-    dependencies:
-      '@ai16z/eliza': 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))
-      '@ai16z/plugin-trustdb': 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(encoding@0.1.13)(jiti@2.4.0)(postcss@8.4.49)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(terser@5.36.0)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)(yaml@2.6.1)
-      '@coral-xyz/anchor': 0.30.1(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
-      '@solana/spl-token': 0.4.9(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@solana/web3.js': 1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
-      bignumber: 1.1.0
-      bignumber.js: 9.1.2
-      bs58: 6.0.0
-      node-cache: 5.1.2
-      pumpdotfun-sdk: 1.3.2(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(rollup@2.79.2)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      tsup: 8.3.5(@swc/core@1.9.2(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@edge-runtime/vm'
-      - '@google-cloud/vertexai'
-      - '@microsoft/api-extractor'
-      - '@swc/core'
-      - '@types/node'
-      - '@vitest/browser'
-      - '@vitest/ui'
-      - bufferutil
-      - encoding
-      - fastestsmallesttextencoderdecoder
-      - happy-dom
-      - jiti
-      - jsdom
-      - less
-      - lightningcss
-      - msw
-      - postcss
-      - react
-      - rollup
-      - sass
-      - sass-embedded
-      - solid-js
-      - sswr
-      - stylus
-      - sugarss
-      - supports-color
-      - svelte
-      - terser
-      - tsx
-      - typescript
-      - utf-8-validate
-      - vue
-      - yaml
-
-  '@ai16z/plugin-trustdb@0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(encoding@0.1.13)(jiti@2.4.0)(postcss@8.4.49)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(terser@5.36.0)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)(yaml@2.6.1)':
-    dependencies:
-      '@ai16z/eliza': 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))
-      dompurify: 3.2.0
-      tsup: 8.3.5(@swc/core@1.9.2(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
-      uuid: 11.0.2
-      vitest: 2.1.5(@types/node@22.8.4)(terser@5.36.0)
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@edge-runtime/vm'
-      - '@google-cloud/vertexai'
-      - '@microsoft/api-extractor'
-      - '@swc/core'
-      - '@types/node'
-      - '@vitest/browser'
-      - '@vitest/ui'
-      - encoding
-      - happy-dom
-      - jiti
-      - jsdom
-      - less
-      - lightningcss
-      - msw
-      - postcss
-      - react
-      - sass
-      - sass-embedded
-      - solid-js
-      - sswr
-      - stylus
-      - sugarss
-      - supports-color
-      - svelte
-      - terser
-      - tsx
-      - typescript
-      - vue
-      - yaml
 
   '@algolia/autocomplete-core@1.17.7(@algolia/client-search@5.15.0)(algoliasearch@5.15.0)(search-insights@2.17.3)':
     dependencies:
@@ -27172,20 +26969,6 @@ snapshots:
       end-of-stream: 1.4.4
       once: 1.4.0
 
-  pumpdotfun-sdk@1.3.2(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(rollup@2.79.2)(typescript@5.6.3)(utf-8-validate@5.0.10):
-    dependencies:
-      '@coral-xyz/anchor': 0.30.1(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
-      '@rollup/plugin-json': 6.1.0(rollup@2.79.2)
-      '@solana/spl-token': 0.4.6(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@solana/web3.js': 1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - fastestsmallesttextencoderdecoder
-      - rollup
-      - typescript
-      - utf-8-validate
-
   pumpdotfun-sdk@1.3.2(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(rollup@4.27.3)(typescript@5.6.3)(utf-8-validate@5.0.10):
     dependencies:
       '@coral-xyz/anchor': 0.30.1(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -28917,7 +28700,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.0)(jest@29.7.0(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)))(typescript@5.6.3):
+  ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)))(typescript@5.6.3):
     dependencies:
       bs-logger: 0.2.6
       ejs: 3.1.10
@@ -28935,7 +28718,6 @@ snapshots:
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.26.0)
-      esbuild: 0.24.0
 
   ts-mixer@6.0.4: {}
 
