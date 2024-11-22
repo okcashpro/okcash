@@ -15,32 +15,34 @@ By contributing to Eliza, you agree that your contributions will be licensed und
 
 We believe in the power of the OODA Loop - a decision-making framework that emphasizes speed and adaptability. OODA stands for:
 
-- **Observe**: Gather information and insights about the project, the community, and the broader AI ecosystem.
-- **Orient**: Analyze your observations to identify opportunities for contribution and improvement.
-- **Decide**: Choose a course of action based on your analysis. This could be proposing a new feature, fixing a bug, or creating content.
-- **Act**: Execute your decision and share your work with the community.
+-   **Observe**: Gather information and insights about the project, the community, and the broader AI ecosystem.
+-   **Orient**: Analyze your observations to identify opportunities for contribution and improvement.
+-   **Decide**: Choose a course of action based on your analysis. This could be proposing a new feature, fixing a bug, or creating content.
+-   **Act**: Execute your decision and share your work with the community.
 
 ## How to Contribute
 
 ### For Developers
 
 1. **Extend Eliza's Capabilities**
-   - Develop new actions, evaluators, and providers
-   - Improve existing components and modules
+
+    - Develop new actions, evaluators, and providers
+    - Improve existing components and modules
 
 2. **Enhance Infrastructure**
-   - Review open issues and submit PRs
-   - Test and update documentation
-   - Optimize performance
-   - Improve deployment solutions
 
-1. Fork the repo and create your branch from `main`.
+    - Review open issues and submit PRs
+    - Test and update documentation
+    - Optimize performance
+    - Improve deployment solutions
+
+3. Fork the repo and create your branch from `main`.
     1. The name of the branch should start with the issue number and be descriptive of the changes you are making.
     1. eg. 40--add-test-for-bug-123
-2. If you've added code that should be tested, add tests.
-3. Ensure the test suite passes.
-4. Make sure your code lints.
-5. Issue that pull request!
+4. If you've added code that should be tested, add tests.
+5. Ensure the test suite passes.
+6. Make sure your code lints.
+7. Issue that pull request!
 
 ## Styleguides
 
@@ -74,18 +76,17 @@ This section lists the labels we use to help us track and manage issues and pull
 -   `documentation` - Issues or pull requests related to documentation.
 -   `good first issue` - Good for newcomers.
 
-
 ## Getting Help
 
-- Join [Discord](https://discord.gg/ai16z)
-- Check [FAQ](docs/community/faq.md)
-- Create GitHub issues
+-   Join [Discord](https://discord.gg/ai16z)
+-   Check [FAQ](docs/community/faq.md)
+-   Create GitHub issues
 
 ## Additional Resources
 
-- [Local Development Guide](docs/guides/local-development.md)
-- [Configuration Guide](docs/guides/configuration.md)
-- [API Documentation](docs/api)
+-   [Local Development Guide](docs/guides/local-development.md)
+-   [Configuration Guide](docs/guides/configuration.md)
+-   [API Documentation](docs/api)
 
 ## Contributor Guide
 
@@ -101,19 +102,19 @@ In the interest of fostering an open and welcoming environment, we as contributo
 
 Examples of behavior that contributes to creating a positive environment include:
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+-   Using welcoming and inclusive language
+-   Being respectful of differing viewpoints and experiences
+-   Gracefully accepting constructive criticism
+-   Focusing on what is best for the community
+-   Showing empathy towards other community members
 
 Examples of unacceptable behavior include:
 
-- The use of sexualized language or imagery and unwelcome sexual attention or advances
-- Trolling, insulting/derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+-   The use of sexualized language or imagery and unwelcome sexual attention or advances
+-   Trolling, insulting/derogatory comments, and personal or political attacks
+-   Public or private harassment
+-   Publishing others' private information without explicit permission
+-   Other conduct which could reasonably be considered inappropriate in a professional setting
 
 #### Our Responsibilities
 

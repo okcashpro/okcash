@@ -3,6 +3,7 @@
 First off, thank you for considering contributing to Eliza! We welcome contributions from everyone, regardless of experience level. 🎉
 
 ## Table of Contents
+
 - [Contribution License Agreement](#contribution-license-agreement)
 - [Code of Conduct](#code-of-conduct)
 - [OODA Loop Framework](#the-ooda-loop-a-framework-for-contribution)
@@ -30,6 +31,7 @@ We pledge to make participation in our project a harassment-free experience for 
 ### Our Standards
 
 Positive behavior includes:
+
 - Using welcoming and inclusive language
 - Being respectful of differing viewpoints
 - Gracefully accepting constructive criticism
@@ -37,6 +39,7 @@ Positive behavior includes:
 - Showing empathy towards others
 
 Unacceptable behavior includes:
+
 - Harassment of any kind
 - Discriminatory jokes and language
 - Publishing others' private information
@@ -56,18 +59,19 @@ We follow the OODA Loop for decision-making:
 ### For Developers
 
 1. **Development Process**
+
    ```bash
    # Fork and clone
    git clone https://github.com/yourusername/eliza.git
    cd eliza
-   
+
    # Create branch (include issue number)
    git checkout -b 123-add-new-feature
-   
+
    # Make changes, test, and commit
    npm test
    git commit -m "feat: add new feature"
-   
+
    # Push and create PR
    git push origin 123-add-new-feature
    ```
@@ -82,36 +86,44 @@ We follow the OODA Loop for decision-making:
 ## Pull Request Guidelines
 
 ### PR Title Format
+
 ```
 feat|fix|docs|style|refactor|test|chore: title
 ```
 
 ### PR Template
+
 ```markdown
 # Relates to:
+
 [Link to issue]
 
 # Background
+
 - What does this PR do?
 - What kind of change is this?
 
 # Testing
+
 - How to test the changes
 - Screenshots (if UI changes)
 
 # Documentation
+
 - Required documentation changes
 ```
 
 ## Styleguides
 
 ### Git Commit Messages
+
 - Use present tense ("Add feature" not "Added feature")
 - Use imperative mood ("Move cursor" not "Moves cursor")
 - Limit first line to 72 characters
 - Reference issues after first line
 
 ### Code Style
+
 - JavaScript: Follow [JavaScript Standard Style](https://standardjs.com/)
 - TypeScript: Follow [TypeScript Standard Style](https://github.com/standard/ts-standard)
 - Documentation: Use [Markdown](https://daringfireball.net/projects/markdown/)
@@ -119,6 +131,7 @@ feat|fix|docs|style|refactor|test|chore: title
 ## Recognition and Rewards
 
 Contributors can earn:
+
 - "Github - Contributors" role on Discord
 - Direct communication with a16z devs
 - Recognition for outstanding contributions
