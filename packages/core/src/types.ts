@@ -1017,14 +1017,12 @@ export interface IAgentRuntime {
 }
 
 export interface IImageDescriptionService extends Service {
-    getInstance(): IImageDescriptionService;
     describeImage(
         imageUrl: string
     ): Promise<{ title: string; description: string }>;
 }
 
 export interface ITranscriptionService extends Service {
-    getInstance(): ITranscriptionService;
     transcribeAttachment(audioBuffer: ArrayBuffer): Promise<string | null>;
     transcribeAttachmentLocally(
         audioBuffer: ArrayBuffer
@@ -1034,7 +1032,6 @@ export interface ITranscriptionService extends Service {
 }
 
 export interface IVideoService extends Service {
-    getInstance(): IVideoService;
     isVideoUrl(url: string): boolean;
     processVideo(url: string): Promise<Media>;
     fetchVideoInfo(url: string): Promise<Media>;
@@ -1043,7 +1040,6 @@ export interface IVideoService extends Service {
 }
 
 export interface ITextGenerationService extends Service {
-    getInstance(): ITextGenerationService;
     initializeModel(): Promise<void>;
     queueMessageCompletion(
         context: string,
@@ -1065,7 +1061,6 @@ export interface ITextGenerationService extends Service {
 }
 
 export interface IBrowserService extends Service {
-    getInstance(): IBrowserService;
     closeBrowser(): Promise<void>;
     getPageContent(
         url: string,
@@ -1098,3 +1093,8 @@ export enum LoggingLevel {
     VERBOSE = "verbose",
     NONE = "none",
 }
+
+export type KnowledgeItem = {
+    id: UUID;
+    content: Content;
+};

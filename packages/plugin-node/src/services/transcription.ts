@@ -37,10 +37,6 @@ export class TranscriptionService
 
     async initialize(runtime: IAgentRuntime): Promise<void> {}
 
-    getInstance(): ITranscriptionService {
-        return TranscriptionService.getInstance();
-    }
-
     constructor() {
         super();
         const rootDir = path.resolve(__dirname, "../../");

@@ -70,6 +70,7 @@
         "gaxios": "6.7.1",
         "glob": "11.0.0",
         "js-sha1": "0.7.0",
+        "langchain": "^0.3.6",
         "ollama-ai-provider": "^0.16.1",
         "openai": "4.69.0",
         "tiktoken": "1.0.17",
