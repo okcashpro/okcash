@@ -226,7 +226,7 @@ export class PostgresDatabaseAdapter
             if (rows.length === 0) return null;
 
             const account = rows[0];
-            elizaLogger.log("account", account);
+            // elizaLogger.log("account", account);
             return {
                 ...account,
                 details:
@@ -408,8 +408,6 @@ export class PostgresDatabaseAdapter
                 sql += ` LIMIT $${paramCount}`;
                 values.push(params.count);
             }
-
-            elizaLogger.log("sql", sql, values);
 
             const { rows } = await client.query(sql, values);
             return rows.map((row) => ({
