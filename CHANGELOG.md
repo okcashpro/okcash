@@ -1,5 +1,80 @@
 # Changelog
 
+## [v0.1.4-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.3) (2024-11-22)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.2...v0.1.4-alpha.3)
+
+**Merged pull requests:**
+
+- fix: speech service fix [\#512](https://github.com/ai16z/eliza/pull/512) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+
+## [v0.1.4-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.2) (2024-11-22)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.1...v0.1.4-alpha.2)
+
+**Merged pull requests:**
+
+- fix: services fix [\#509](https://github.com/ai16z/eliza/pull/509) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+
+## [v0.1.4-alpha.1](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.1) (2024-11-22)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.0...v0.1.4-alpha.1)
+
+**Merged pull requests:**
+
+- fix: issue with npm [\#505](https://github.com/ai16z/eliza/pull/505) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+
+## [v0.1.4-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.0) (2024-11-22)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3...v0.1.4-alpha.0)
+
+**Implemented enhancements:**
+
+- Run using Bun.sh [\#492](https://github.com/ai16z/eliza/issues/492)
+- Move Trust DB into package [\#342](https://github.com/ai16z/eliza/issues/342)
+- Core Unit Tests [\#340](https://github.com/ai16z/eliza/issues/340)
+
+**Fixed bugs:**
+
+- Twitter Dry Run not working [\#451](https://github.com/ai16z/eliza/issues/451)
+- getCachedEmbeddings broken for sqlite adapter  [\#251](https://github.com/ai16z/eliza/issues/251)
+
+**Merged pull requests:**
+
+- fix: remove sol dep [\#504](https://github.com/ai16z/eliza/pull/504) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: deps [\#503](https://github.com/ai16z/eliza/pull/503) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- chore: add contributor license [\#502](https://github.com/ai16z/eliza/pull/502) ([futjrnaut](https://github.com/futjrnaut))
+- node-v [\#501](https://github.com/ai16z/eliza/pull/501) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: improve embeddings [\#496](https://github.com/ai16z/eliza/pull/496) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- feat: improve type saftey [\#494](https://github.com/ai16z/eliza/pull/494) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: added missing packages to tsup configs' externals [\#488](https://github.com/ai16z/eliza/pull/488) ([massivefermion](https://github.com/massivefermion))
+- fix: fix character path loading [\#487](https://github.com/ai16z/eliza/pull/487) ([bmgalego](https://github.com/bmgalego))
+- fix: agent loadCharacters file resolver [\#486](https://github.com/ai16z/eliza/pull/486) ([bmgalego](https://github.com/bmgalego))
+- fix: agent type error and sqlite file env [\#484](https://github.com/ai16z/eliza/pull/484) ([bmgalego](https://github.com/bmgalego))
+- feat: Improvements [\#482](https://github.com/ai16z/eliza/pull/482) ([bmgalego](https://github.com/bmgalego))
+- refactor: add template types [\#479](https://github.com/ai16z/eliza/pull/479) ([vivoidos](https://github.com/vivoidos))
+- feat: Twitter Refactor [\#478](https://github.com/ai16z/eliza/pull/478) ([bmgalego](https://github.com/bmgalego))
+- feat: Added TWITTER\_COOKIE example on quickstart.md [\#476](https://github.com/ai16z/eliza/pull/476) ([haeunchin](https://github.com/haeunchin))
+- fix: ci [\#475](https://github.com/ai16z/eliza/pull/475) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- ollama generate case was using console.debug.  [\#474](https://github.com/ai16z/eliza/pull/474) ([drew-royster](https://github.com/drew-royster))
+- feat: Improve knowledge embeddings [\#472](https://github.com/ai16z/eliza/pull/472) ([tarrencev](https://github.com/tarrencev))
+- docs: Update Contributors to bring inline with PR468 [\#470](https://github.com/ai16z/eliza/pull/470) ([odilitime](https://github.com/odilitime))
+- docs: Add Discord username question [\#468](https://github.com/ai16z/eliza/pull/468) ([odilitime](https://github.com/odilitime))
+- feat: adds check [\#466](https://github.com/ai16z/eliza/pull/466) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: Fixing failling tests token.test.ts and videoGeneration.test.ts [\#465](https://github.com/ai16z/eliza/pull/465) ([ai16z-demirix](https://github.com/ai16z-demirix))
+- docs: Create best-practices.md documentation [\#463](https://github.com/ai16z/eliza/pull/463) ([snobbee](https://github.com/snobbee))
+- feat: create-eliza-app [\#462](https://github.com/ai16z/eliza/pull/462) ([coffeeorgreentea](https://github.com/coffeeorgreentea))
+- fix: Add missing fuzzystrmatch extension for levenshtein\(\) method to postgresql schema.sql definition [\#460](https://github.com/ai16z/eliza/pull/460) ([martincik](https://github.com/martincik))
+- Add npm install instructions to homepage header [\#459](https://github.com/ai16z/eliza/pull/459) ([null-hax](https://github.com/null-hax))
+- feat: init github client [\#456](https://github.com/ai16z/eliza/pull/456) ([tarrencev](https://github.com/tarrencev))
+- fix: X dry run [\#452](https://github.com/ai16z/eliza/pull/452) ([laser-riot](https://github.com/laser-riot))
+- feat: readme and linting [\#449](https://github.com/ai16z/eliza/pull/449) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+- fix: ignored modelEndpointOverride in generation [\#446](https://github.com/ai16z/eliza/pull/446) ([darwintree](https://github.com/darwintree))
+- docs: Fix my name in stream notes [\#442](https://github.com/ai16z/eliza/pull/442) ([odilitime](https://github.com/odilitime))
+- fix: postgres embedding issues [\#425](https://github.com/ai16z/eliza/pull/425) ([tarrencev](https://github.com/tarrencev))
+- feat: Cache Manager [\#378](https://github.com/ai16z/eliza/pull/378) ([bmgalego](https://github.com/bmgalego))
+- feat: adding back the renovate file for automated security scanning [\#358](https://github.com/ai16z/eliza/pull/358) ([sirkitree](https://github.com/sirkitree))
+
 ## [v0.1.3](https://github.com/ai16z/eliza/tree/v0.1.3) (2024-11-20)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3-alpha.2...v0.1.3)
