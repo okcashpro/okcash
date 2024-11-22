@@ -111,7 +111,7 @@ const character = {
 Create a new plugin by implementing the Plugin interface:
 
 ```typescript
-import { Plugin, Action, Evaluator, Provider } from "@ai16z/eliza/src/types";
+import { Plugin, Action, Evaluator, Provider } from "@ai16z/eliza";
 
 const myCustomPlugin: Plugin = {
   name: "my-custom-plugin",

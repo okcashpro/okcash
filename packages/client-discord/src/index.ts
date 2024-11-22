@@ -22,11 +22,12 @@ import { MessageManager } from "./messages.ts";
 import channelStateProvider from "./providers/channelState.ts";
 import voiceStateProvider from "./providers/voiceState.ts";
 import { VoiceManager } from "./voice.ts";
+import { validateDiscordConfig } from "./enviroment.ts";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
-    private client: Client;
-    private runtime: IAgentRuntime;
+    client: Client;
+    runtime: IAgentRuntime;
     character: Character;
     private messageManager: MessageManager;
     private voiceManager: VoiceManager;
@@ -193,7 +194,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     async handleReactionRemove(reaction: MessageReaction, user: User) {
-        console.log("Reaction removed");
+        elizaLogger.log("Reaction removed");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;
@@ -297,7 +298,11 @@ export function startDiscord(runtime: IAgentRuntime) {
 }
 
 export const DiscordClientInterface: ElizaClient = {
-    start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
+    start: async (runtime: IAgentRuntime) => {
+        await validateDiscordConfig(runtime);
+
+        return new DiscordClient(runtime);
+    },
     stop: async (runtime: IAgentRuntime) => {
         console.warn("Discord client does not support stopping yet");
     },

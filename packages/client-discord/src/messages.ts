@@ -27,7 +27,7 @@ import {
     TextChannel,
     ThreadChannel,
 } from "discord.js";
-import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
+import { elizaLogger } from "@ai16z/eliza";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
 
@@ -82,68 +82,70 @@ export type InterestChannels = {
 };
 
 const discordShouldRespondTemplate =
-    `# Task: Decide if {{agentName}} should respond.
-About {{agentName}}:
+    `# About {{agentName}}:
 {{bio}}
 
-# INSTRUCTIONS: Determine if {{agentName}} should respond to the message and participate in the conversation. Do not comment. Just respond with "RESPOND" or "IGNORE" or "STOP".
-
 # RESPONSE EXAMPLES
-<user 1>: I just saw a really great movie
-<user 2>: Oh? Which movie?
+{{user1}}: I just saw a really great movie
+{{user2}}: Oh? Which movie?
 Result: [IGNORE]
 
 {{agentName}}: Oh, this is my favorite scene
-<user 1>: sick
-<user 2>: wait, why is it your favorite scene
+{{user1}}: sick
+{{user2}}: wait, why is it your favorite scene
 Result: [RESPOND]
 
-<user>: stfu bot
+{{user1}}: stfu bot
 Result: [STOP]
 
-<user>: Hey {{agent}}, can you help me with something
+{{user1}}: Hey {{agent}}, can you help me with something
 Result: [RESPOND]
 
-<user>: {{agentName}} stfu plz
+{{user1}}: {{agentName}} stfu plz
 Result: [STOP]
 
-<user>: i need help
+{{user1}}: i need help
 {{agentName}}: how can I help you?
-<user>: no. i need help from someone else
+{{user1}}: no. i need help from someone else
 Result: [IGNORE]
 
-<user>: Hey {{agent}}, can I ask you a question
+{{user1}}: Hey {{agent}}, can I ask you a question
 {{agentName}}: Sure, what is it
-<user>: can you ask claude to create a basic react module that demonstrates a counter
+{{user1}}: can you ask claude to create a basic react module that demonstrates a counter
 Result: [RESPOND]
 
-<user>: {{agentName}} can you tell me a story
-<user>: {about a girl named elara
-{{agentName}}: Sure.
-{{agentName}}: Once upon a time, in a quaint little village, there was a curious girl named Elara.
-{{agentName}}: Elara was known for her adventurous spirit and her knack for finding beauty in the mundane.
-<user>: I'm loving it, keep going
+{{user1}}: {{agentName}} can you tell me a story
+{{agentName}}: uhhh...
+{{user1}}: please do it
+{{agentName}}: okay
+{{agentName}}: once upon a time, in a quaint little village, there was a curious girl named elara
+{{user1}}: I'm loving it, keep going
 Result: [RESPOND]
 
-<user>: {{agentName}} stop responding plz
+{{user1}}: {{agentName}} stop responding plz
 Result: [STOP]
 
-<user>: okay, i want to test something. can you say marco?
+{{user1}}: okay, i want to test something. {{agentName}}, can you say marco?
 {{agentName}}: marco
-<user>: great. okay, now do it again
+{{user1}}: great. okay, now do it again
 Result: [RESPOND]
 
 Response options are [RESPOND], [IGNORE] and [STOP].
 
-{{agentName}} is in a room with other users and is very worried about being annoying and saying too much.
+{{agentName}} is in a room with other users and should only respond when they are being addressed, and should not respond if they are continuing a conversation that is very long.
+
 Respond with [RESPOND] to messages that are directed at {{agentName}}, or participate in conversations that are interesting or relevant to their background.
-If a message is not interesting or relevant, respond with [IGNORE]
-Unless directly responding to a user, respond with [IGNORE] to messages that are very short or do not contain much information.
+If a message is not interesting, relevant, or does not directly address {{agentName}}, respond with [IGNORE]
+
+Also, respond with [IGNORE] to messages that are very short or do not contain much information.
+
 If a user asks {{agentName}} to be quiet, respond with [STOP]
 If {{agentName}} concludes a conversation and isn't part of the conversation anymore, respond with [STOP]
 
 IMPORTANT: {{agentName}} is particularly sensitive about being annoying, so if there is any doubt, it is better to respond with [IGNORE].
 If {{agentName}} is conversing with a user and they have not asked to stop, it is better to respond with [RESPOND].
+
+The goal is to decide whether {{agentName}} should respond to the last message.
 
 {{recentMessages}}
 
@@ -421,20 +423,20 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.createdTimestamp,
-                embedding: embeddingZeroVector,
             };
 
             if (content.text) {
+                await this.runtime.messageManager.addEmbeddingToMemory(memory);
                 await this.runtime.messageManager.createMemory(memory);
             }
 
-            let state = (await this.runtime.composeState(userMessage, {
+            let state = await this.runtime.composeState(userMessage, {
                 discordClient: this.client,
                 discordMessage: message,
                 agentName:
                     this.runtime.character.name ||
                     this.client.user?.displayName,
-            })) as State;
+            });
 
             if (!canSendMessage(message.channel).canSend) {
                 return elizaLogger.warn(
@@ -513,10 +515,23 @@ export class MessageManager {
                         }
                         if (message.channel.type === ChannelType.GuildVoice) {
                             // For voice channels, use text-to-speech
-                            const audioStream = await this.runtime
-                                .getService(ServiceType.SPEECH_GENERATION)
-                                .getInstance<ISpeechService>()
-                                .generate(this.runtime, content.text);
+
+                            const speechService =
+                                this.runtime.getService<ISpeechService>(
+                                    ServiceType.SPEECH_GENERATION
+                                );
+
+                            if (!speechService) {
+                                throw new Error(
+                                    "Speech generation service not found"
+                                );
+                            }
+
+                            const audioStream = await speechService.generate(
+                                this.runtime,
+                                content.text
+                            );
+
                             await this.voiceManager.playAudioStream(
                                 userId,
                                 audioStream
@@ -601,10 +616,18 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await this.runtime
-                    .getService(ServiceType.SPEECH_GENERATION)
-                    .getInstance<ISpeechService>()
-                    .generate(this.runtime, errorMessage);
+
+                const speechService = this.runtime.getService<ISpeechService>(
+                    ServiceType.SPEECH_GENERATION
+                );
+                if (!speechService) {
+                    throw new Error("Speech generation service not found");
+                }
+
+                const audioStream = await speechService.generate(
+                    this.runtime,
+                    errorMessage
+                );
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
                 // For text channels, send the error message
@@ -626,6 +649,7 @@ export class MessageManager {
         message: DiscordMessage
     ): Promise<{ processedContent: string; attachments: Media[] }> {
         let processedContent = message.content;
+
         let attachments: Media[] = [];
 
         // Process code blocks in the message content
@@ -668,14 +692,17 @@ export class MessageManager {
         for (const url of urls) {
             if (
                 this.runtime
-                    .getService(ServiceType.VIDEO)
-                    .getInstance<IVideoService>()
+                    .getService<IVideoService>(ServiceType.VIDEO)
                     .isVideoUrl(url)
             ) {
-                const videoInfo = await this.runtime
-                    .getService(ServiceType.VIDEO)
-                    .getInstance<IVideoService>()
-                    .processVideo(url);
+                const videoService = this.runtime.getService<IVideoService>(
+                    ServiceType.VIDEO
+                );
+                if (!videoService) {
+                    throw new Error("Video service not found");
+                }
+                const videoInfo = await videoService.processVideo(url);
+
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -685,10 +712,16 @@ export class MessageManager {
                     text: videoInfo.text,
                 });
             } else {
-                const { title, bodyContent } = await this.runtime
-                    .getService(ServiceType.BROWSER)
-                    .getInstance<IBrowserService>()
-                    .getPageContent(url, this.runtime);
+                const browserService = this.runtime.getService<IBrowserService>(
+                    ServiceType.BROWSER
+                );
+                if (!browserService) {
+                    throw new Error("Browser service not found");
+                }
+
+                const { title, bodyContent } =
+                    await browserService.getPageContent(url, this.runtime);
+
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,
                     title + "\n" + bodyContent

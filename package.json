@@ -8,16 +8,19 @@
         "start:service:all": "pnpm --filter \"@ai16z/agent\" start:service:all --isRoot",
         "stop:service:all": "pnpm --filter \"@ai16z/agent\" stop:service:all",
         "start": "pnpm --filter \"@ai16z/agent\" start --isRoot",
+        "start:client": "pnpm --dir client start --isRoot",
         "dev": "bash ./scripts/dev.sh",
         "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
+        "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
         "clean": "bash ./scripts/clean.sh",
         "docker:build": "bash ./scripts/docker.sh build",
         "docker:run": "bash ./scripts/docker.sh run",
         "docker:bash": "bash ./scripts/docker.sh bash",
         "docker:start": "bash ./scripts/docker.sh start",
-        "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash"
+        "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
+        "test": "bash ./scripts/test.sh"
     },
     "devDependencies": {
         "concurrently": "^9.1.0",
@@ -26,7 +29,9 @@
         "only-allow": "^1.2.1",
         "prettier": "^3.3.3",
         "typedoc": "^0.26.11",
-        "typescript": "5.6.3"
+        "typescript": "5.6.3",
+        "vite": "^5.4.11",
+        "vitest": "^2.1.5"
     },
     "pnpm": {
         "overrides": {

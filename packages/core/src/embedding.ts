@@ -1,23 +1,10 @@
-import { EmbeddingModel, FlagEmbedding } from "fastembed";
-import path from "path";
-import { fileURLToPath } from "url";
-import { models } from "./models.ts";
-import { IAgentRuntime, ModelProviderName, ModelClass } from "./types.ts";
-import fs from "fs";
+import path from "node:path";
+
 import { trimTokens } from "./generation.ts";
+import elizaLogger from "./logger.ts";
+import { models } from "./models.ts";
 import settings from "./settings.ts";
-
-function getRootPath() {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
-    const rootPath = path.resolve(__dirname, "..");
-    if (rootPath.includes("/eliza/")) {
-        return rootPath.split("/eliza/")[0] + "/eliza/";
-    }
-
-    return path.resolve(__dirname, "..");
-}
+import { IAgentRuntime, ModelClass, ModelProviderName } from "./types.ts";
 
 interface EmbeddingOptions {
     model: string;
@@ -39,8 +26,6 @@ async function getRemoteEmbedding(
     // Construct full URL
     const fullUrl = `${baseEndpoint}/embeddings`;
 
-    //console.log("Calling embedding API at:", fullUrl); // Debug log
-
     const requestOptions = {
         method: "POST",
         headers: {
@@ -52,7 +37,7 @@ async function getRemoteEmbedding(
                 : {}),
         },
         body: JSON.stringify({
-            input,
+            input: trimTokens(input, 8191, "gpt-4o-mini"),
             model: options.model,
             length: options.length || 384,
         }),
@@ -62,7 +47,7 @@ async function getRemoteEmbedding(
         const response = await fetch(fullUrl, requestOptions);
 
         if (!response.ok) {
-            console.error("API Response:", await response.text()); // Debug log
+            elizaLogger.error("API Response:", await response.text()); // Debug log
             throw new Error(
                 `Embedding API Error: ${response.status} ${response.statusText}`
             );
@@ -75,7 +60,7 @@ async function getRemoteEmbedding(
         const data: EmbeddingResponse = await response.json();
         return data?.data?.[0].embedding;
     } catch (e) {
-        console.error("Full error details:", e);
+        elizaLogger.error("Full error details:", e);
         throw e;
     }
 }
@@ -85,42 +70,65 @@ async function getRemoteEmbedding(
  * @param input The input to be embedded.
  * @returns The embedding of the input.
  */
+/**
+ * Generate embeddings for input text using configured model provider
+ * @param runtime The agent runtime containing model configuration
+ * @param input The text to generate embeddings for
+ * @returns Array of embedding numbers
+ */
 export async function embed(runtime: IAgentRuntime, input: string) {
+    // Get model provider configuration
     const modelProvider = models[runtime.character.modelProvider];
-    //need to have env override for this to select what to use for embedding if provider doesnt provide or using openai
+
+    // Determine which embedding model to use:
+    // 1. OpenAI if USE_OPENAI_EMBEDDING is true
+    // 2. Provider's own embedding model if available
+    // 3. Fallback to OpenAI embedding model
     const embeddingModel = settings.USE_OPENAI_EMBEDDING
-        ? "text-embedding-3-small" // Use OpenAI if specified
-        : modelProvider.model?.[ModelClass.EMBEDDING] || // Use provider's embedding model if available
-          models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING]; // Fallback to OpenAI
+        ? "text-embedding-3-small"
+        : modelProvider.model?.[ModelClass.EMBEDDING] ||
+          models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING];
 
     if (!embeddingModel) {
         throw new Error("No embedding model configured");
     }
 
-    // Try local embedding first
+    // Check if running in Node.js environment
+    const isNode =
+        typeof process !== "undefined" &&
+        process.versions != null &&
+        process.versions.node != null;
+
+    // Use local embedding if:
+    // - Running in Node.js
+    // - Not using OpenAI provider
+    // - Not forcing OpenAI embeddings
     if (
+        isNode &&
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
-        runtime.character.modelProvider !== ModelProviderName.OLLAMA &&
         !settings.USE_OPENAI_EMBEDDING
     ) {
         return await getLocalEmbedding(input);
     }
 
-    // Check cache
+    // Try to get cached embedding first
     const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
     if (cachedEmbedding) {
         return cachedEmbedding;
     }
 
-    // Get remote embedding
+    // Generate new embedding remotely
     return await getRemoteEmbedding(input, {
         model: embeddingModel,
+        // Use OpenAI endpoint if specified, otherwise use provider endpoint
         endpoint: settings.USE_OPENAI_EMBEDDING
-            ? "https://api.openai.com/v1" // Always use OpenAI endpoint when USE_OPENAI_EMBEDDING is true
+            ? "https://api.openai.com/v1"
             : runtime.character.modelEndpointOverride || modelProvider.endpoint,
+        // Use OpenAI API key if specified, otherwise use runtime token
         apiKey: settings.USE_OPENAI_EMBEDDING
-            ? settings.OPENAI_API_KEY // Use OpenAI key from settings when USE_OPENAI_EMBEDDING is true
-            : runtime.token, // Use runtime token for other providers
+            ? settings.OPENAI_API_KEY
+            : runtime.token,
+        // Special handling for Ollama provider
         isOllama:
             runtime.character.modelProvider === ModelProviderName.OLLAMA &&
             !settings.USE_OPENAI_EMBEDDING,
@@ -128,19 +136,49 @@ export async function embed(runtime: IAgentRuntime, input: string) {
 }
 
 async function getLocalEmbedding(input: string): Promise<number[]> {
-    const cacheDir = getRootPath() + "/cache/";
-    if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir, { recursive: true });
+    // Check if we're in Node.js environment
+    const isNode =
+        typeof process !== "undefined" &&
+        process.versions != null &&
+        process.versions.node != null;
+
+    if (isNode) {
+        const fs = await import("fs");
+        const { FlagEmbedding } = await import("fastembed");
+        const { fileURLToPath } = await import("url");
+
+        function getRootPath() {
+            const __filename = fileURLToPath(import.meta.url);
+            const __dirname = path.dirname(__filename);
+
+            const rootPath = path.resolve(__dirname, "..");
+            if (rootPath.includes("/eliza/")) {
+                return rootPath.split("/eliza/")[0] + "/eliza/";
+            }
+
+            return path.resolve(__dirname, "..");
+        }
+
+        const cacheDir = getRootPath() + "/cache/";
+
+        if (!fs.existsSync(cacheDir)) {
+            fs.mkdirSync(cacheDir, { recursive: true });
+        }
+
+        const embeddingModel = await FlagEmbedding.init({
+            cacheDir: cacheDir,
+        });
+
+        const trimmedInput = trimTokens(input, 8191, "gpt-4o-mini");
+        const embedding = await embeddingModel.queryEmbed(trimmedInput);
+        return embedding;
+    } else {
+        // Browser implementation - fallback to remote embedding
+        elizaLogger.warn(
+            "Local embedding not supported in browser, falling back to remote embedding"
+        );
+        throw new Error("Local embedding not supported in browser");
     }
-
-    const embeddingModel = await FlagEmbedding.init({
-        cacheDir: cacheDir,
-    });
-
-    const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
-    const embedding = await embeddingModel.queryEmbed(trimmedInput);
-    //console.log("Embedding dimensions: ", embedding.length);
-    return embedding;
 }
 
 export async function retrieveCachedEmbedding(
@@ -148,7 +186,7 @@ export async function retrieveCachedEmbedding(
     input: string
 ) {
     if (!input) {
-        console.log("No input to retrieve cached embedding for");
+        elizaLogger.log("No input to retrieve cached embedding for");
         return null;
     }
 

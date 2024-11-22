@@ -4,23 +4,20 @@ sidebar_position: 5
 
 # 📊 Evaluators
 
-## Table of Contents
+[Evaluators](/api/interfaces/evaluator) are core components that assess and extract information from conversations. They integrate with the [AgentRuntime](/api/classes/AgentRuntime)'s evaluation system.
 
-- [Overview](#overview)
-- [Quick Start](#quick-start)
-- [Best Practices](#best-practices)
-- [Built-in Evaluators](#built-in-evaluators)
-- [Creating Custom Evaluators](#creating-custom-evaluators)
-- [Memory Integration](#memory-integration)
+---
 
 ## Overview
 
-[Evaluators](/api/interfaces) are core components that assess and extract information from conversations. They integrate with the [AgentRuntime](/api/classes/AgentRuntime)'s evaluation system, enabling agents to:
+Evaluators enable agents to:
 
 - Build long-term memory
 - Track goal progress
 - Extract facts and insights
 - Maintain contextual awareness
+
+---
 
 ## Quick Start
 
@@ -45,6 +42,8 @@ const evaluator: Evaluator = {
   examples: [],
 };
 ```
+
+---
 
 ## Built-in Evaluators
 
@@ -205,6 +204,8 @@ const memoryEvaluator: Evaluator = {
 };
 ```
 
+---
+
 ## Integration with Agent Runtime
 
 The [AgentRuntime](/api/classes/AgentRuntime) processes evaluators through its [evaluate](/api/classes/AgentRuntime#evaluate) method:
@@ -216,6 +217,8 @@ runtime.registerEvaluator(customEvaluator);
 // Process evaluations
 const results = await runtime.evaluate(message, state);
 ```
+
+---
 
 ## Error Handling
 

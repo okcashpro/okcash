@@ -60,6 +60,7 @@ Before getting started with Eliza, ensure you have:
    DISCORD_API_TOKEN=      # Bot token
    HEURIST_API_KEY=       # Heurist API key for LLM and image generation
    OPENAI_API_KEY=        # OpenAI API key
+   GROK_API_KEY=          # Grok API key
    ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
    ```
 
@@ -67,9 +68,9 @@ Before getting started with Eliza, ensure you have:
 
 Eliza supports multiple AI models:
 
-- **Heurist**: Set `modelProvider: "HEURIST"` in your character file
-  - LLM: Uses Llama models (more available LLM models [here](https://heurist.mintlify.app/developer/supported-models))
-  - Image Generation: Uses PepeXL model (more info of available models [here](https://heurist.mintlify.app/developer/image-generation-api))
+- **Heurist**: Set `modelProvider: "heurist"` in your character file. Most models are uncensored.
+  - LLM: Select available LLMs [here](https://docs.heurist.ai/dev-guide/supported-models#large-language-models-llms) and configure `SMALL_HEURIST_LANGUAGE_MODEL`,`MEDIUM_HEURIST_LANGUAGE_MODEL`,`LARGE_HEURIST_LANGUAGE_MODEL`
+  - Image Generation: Select available Stable Diffusion or Flux models [here](https://docs.heurist.ai/dev-guide/supported-models#image-generation-models) and configure `HEURIST_IMAGE_MODEL` (default is FLUX.1-dev)
 - **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
 - **Grok**: Set `XAI_MODEL=grok-beta`
 - **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
@@ -133,6 +134,16 @@ TWITTER_USERNAME=  # Account username
 TWITTER_PASSWORD=  # Account password
 TWITTER_EMAIL=    # Account email
 TWITTER_COOKIES=  # Account cookies (auth_token and CT0)
+```
+
+Example for TWITTER_COOKIES
+
+The TWITTER_COOKIES variable should be a JSON string containing the necessary cookies. You can find these cookies in your web browser's developer tools. Here is an example format:
+
+```bash
+TWITTER_COOKIES='[{"name":"auth_token","value":"your token","domain":".twitter.com"},
+  {"name":"ct0","value":"your ct0","domain":".twitter.com"},
+  {"name":"guest_id","value":"your guest_id","domain":".twitter.com"}]'
 ```
 
 ### Telegram Bot

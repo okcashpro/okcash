@@ -1,7 +1,4 @@
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
-import * as fs from "fs";
-import settings from "@ai16z/eliza/src/settings.ts";
-
 interface Order {
     userId: string;
     ticker: string;
@@ -16,11 +13,16 @@ const orderBookProvider: Provider = {
         const userId = message.userId;
 
         // Read the order book from the JSON file
-        const orderBookPath = settings.orderBookPath;
-        let orderBook: Order[] = [];
-        if (fs.existsSync(orderBookPath)) {
-            const orderBookData = fs.readFileSync(orderBookPath, "utf-8");
-            orderBook = JSON.parse(orderBookData);
+        const orderBookPath =
+            runtime.getSetting("orderBookPath") ?? "solana/orderBook";
+
+        const orderBook: Order[] = [];
+
+        const cachedOrderBook =
+            await runtime.cacheManager.get<Order[]>(orderBookPath);
+
+        if (cachedOrderBook) {
+            orderBook.push(...cachedOrderBook);
         }
 
         // Filter the orders for the current user

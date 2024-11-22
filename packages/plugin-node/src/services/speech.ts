@@ -1,8 +1,15 @@
 import { PassThrough, Readable } from "stream";
-import { IAgentRuntime, ISpeechService, ServiceType } from "@ai16z/eliza";
+import {
+    IAgentRuntime,
+    ISpeechService,
+    ITranscriptionService,
+    ServiceType,
+} from "@ai16z/eliza";
 import { getWavHeader } from "./audioUtils.ts";
 import { synthesize } from "../vendor/vits.ts";
 import { Service } from "@ai16z/eliza";
+import { validateNodeConfig } from "../enviroment.ts";
+
 function prependWavHeader(
     readable: Readable,
     audioLength: number,
@@ -32,7 +39,7 @@ function prependWavHeader(
 }
 
 async function textToSpeech(runtime: IAgentRuntime, text: string) {
-    console.log("11 TTS: " + text);
+    await validateNodeConfig(runtime);
     const body = {
         model_id: runtime.getSetting("ELEVENLABS_MODEL_ID"),
         text: text,
@@ -109,6 +116,13 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
 
 export class SpeechService extends Service implements ISpeechService {
     static serviceType: ServiceType = ServiceType.SPEECH_GENERATION;
+
+    async initialize(runtime: IAgentRuntime): Promise<void> {}
+
+    getInstance(): ISpeechService {
+        return SpeechService.getInstance();
+    }
+
     async generate(runtime: IAgentRuntime, text: string): Promise<Readable> {
         // check for elevenlabs API key
         if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {

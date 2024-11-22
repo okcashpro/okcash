@@ -1,0 +1,36 @@
+{
+    "name": "@ai16z/agent",
+    "version": "0.0.1",
+    "main": "src/index.ts",
+    "type": "module",
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "start": "tsc && node --loader ts-node/esm src/index.ts",
+        "dev": "tsc && nodemon --watch src --watch ../core/dist --ext ts,json --exec 'node --loader ts-node/esm' src/index.ts",
+        "start:service:all": "pm2 start pnpm --name=\"all\" --restart-delay=3000 --max-restarts=10 -- run start:all",
+        "stop:service:all": "pm2 stop all",
+        "start:all": "node --loader ts-node/esm src/index.ts --characters=\"../characters/eliza.json\",\"../characters/degenspartan.json\",\"../characters/ruby.json\",\"../characters/pmairca.json\""
+    },
+    "dependencies": {
+        "@ai16z/adapter-postgres": "workspace:*",
+        "@ai16z/adapter-sqlite": "workspace:*",
+        "@ai16z/client-auto": "workspace:*",
+        "@ai16z/client-direct": "workspace:*",
+        "@ai16z/client-discord": "workspace:*",
+        "@ai16z/client-telegram": "workspace:*",
+        "@ai16z/client-twitter": "workspace:*",
+        "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-bootstrap": "workspace:*",
+        "@ai16z/plugin-image-generation": "workspace:*",
+        "@ai16z/plugin-node": "workspace:*",
+        "@ai16z/plugin-solana": "workspace:*",
+        "@ai16z/plugin-starknet": "workspace:*",
+        "readline": "^1.3.0",
+        "ws": "^8.18.0",
+        "yargs": "17.7.2"
+    },
+    "devDependencies": {
+        "ts-node": "10.9.2",
+        "tsup": "^8.3.5"
+    }
+}
