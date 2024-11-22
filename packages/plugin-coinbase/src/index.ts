@@ -16,6 +16,7 @@ import {
 import { ChargeContent, ChargeSchema, isChargeContent } from "./types";
 import { chargeTemplate, getChargeTemplate } from "./templates";
 
+const url = "https://api.commerce.coinbase.com/charges";
 interface ChargeRequest {
     name: string;
     description: string;
@@ -27,8 +28,6 @@ interface ChargeRequest {
 }
 
 export async function createCharge(apiKey: string, params: ChargeRequest) {
-    const url = "https://api.commerce.coinbase.com/charges";
-
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -44,7 +43,6 @@ export async function createCharge(apiKey: string, params: ChargeRequest) {
         }
 
         const data = await response.json();
-        console.log("Charge created successfully:", data);
         return data.data;
     } catch (error) {
         console.error("Error creating charge:", error);
@@ -54,8 +52,6 @@ export async function createCharge(apiKey: string, params: ChargeRequest) {
 
 // Function to fetch all charges
 export async function getAllCharges(apiKey: string) {
-    const url = "https://api.commerce.coinbase.com/charges";
-
     try {
         const response = await fetch(url, {
             method: "GET",
@@ -81,10 +77,10 @@ export async function getAllCharges(apiKey: string) {
 
 // Function to fetch details of a specific charge
 export async function getChargeDetails(apiKey: string, chargeId: string) {
-    const url = `https://api.commerce.coinbase.com/charges/${chargeId}`;
+    const getUrl = `${url}${chargeId}`;
 
     try {
-        const response = await fetch(url, {
+        const response = await fetch(getUrl, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -99,7 +95,6 @@ export async function getChargeDetails(apiKey: string, chargeId: string) {
         }
 
         const data = await response.json();
-        console.log(`Fetched charge details for ID ${chargeId}:`, data);
         return data;
     } catch (error) {
         console.error(
@@ -344,19 +339,16 @@ export const getChargeDetailsAction: Action = {
             state,
             template: getChargeTemplate,
         });
-        console.log("context ", context);
         const chargeDetails = await generateObjectV2({
             runtime,
             context,
             modelClass: ModelClass.SMALL,
             schema: ChargeSchema,
         });
-        console.log(chargeDetails);
         if (!isChargeContent(chargeDetails.object)) {
             throw new Error("Invalid content");
         }
         const charge = chargeDetails.object as ChargeContent;
-        console.log("charge ", charge);
         if (!charge.id) {
             callback(
                 {
