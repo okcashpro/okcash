@@ -106,6 +106,111 @@ const character = {
 };
 ```
 
+Here is the updated README with the Coinbase Commerce plugin information added:
+
+---
+
+# 🧩 Plugins
+
+## Overview
+
+Eliza's plugin system provides a modular way to extend the core functionality with additional features, actions, evaluators, and providers. Plugins are self-contained modules that can be easily added or removed to customize your agent's capabilities.
+
+## Core Plugin Concepts
+
+### Plugin Structure
+
+Each plugin in Eliza must implement the `Plugin` interface with the following properties:
+
+```typescript
+interface Plugin {
+  name: string; // Unique identifier for the plugin
+  description: string; // Brief description of plugin functionality
+  actions?: Action[]; // Custom actions provided by the plugin
+  evaluators?: Evaluator[]; // Custom evaluators for behavior assessment
+  providers?: Provider[]; // Context providers for message generation
+  services?: Service[]; // Additional services (optional)
+}
+```
+
+### Available Plugins
+
+#### 1. Bootstrap Plugin (`@eliza/plugin-bootstrap`)
+
+The bootstrap plugin provides essential baseline functionality:
+
+**Actions:**
+
+- `continue` - Continue the current conversation flow
+- `followRoom` - Follow a room for updates
+- `unfollowRoom` - Unfollow a room
+- `ignore` - Ignore specific messages
+- `muteRoom` - Mute notifications from a room
+- `unmuteRoom` - Unmute notifications from a room
+
+**Evaluators:**
+
+- `fact` - Evaluate factual accuracy
+- `goal` - Assess goal completion
+
+**Providers:**
+
+- `boredom` - Manages engagement levels
+- `time` - Provides temporal context
+- `facts` - Supplies factual information
+
+#### 2. Image Generation Plugin (`@eliza/plugin-image-generation`)
+
+Enables AI image generation capabilities:
+
+**Actions:**
+
+- `GENERATE_IMAGE` - Create images based on text descriptions
+- Supports multiple image generation services (Anthropic, Together)
+- Auto-generates captions for created images
+
+#### 3. Node Plugin (`@eliza/plugin-node`)
+
+Provides core Node.js-based services:
+
+**Services:**
+
+- `BrowserService` - Web browsing capabilities
+- `ImageDescriptionService` - Image analysis
+- `LlamaService` - LLM integration
+- `PdfService` - PDF processing
+- `SpeechService` - Text-to-speech
+- `TranscriptionService` - Speech-to-text
+- `VideoService` - Video processing
+
+#### 4. Solana Plugin (`@eliza/plugin-solana`)
+
+Integrates Solana blockchain functionality:
+
+**Evaluators:**
+
+- `trustEvaluator` - Assess transaction trust scores
+
+**Providers:**
+
+- `walletProvider` - Wallet management
+- `trustScoreProvider` - Transaction trust metrics
+
+#### 5. Coinbase Commerce Plugin (`@eliza/plugin-coinbase-commerce`)
+
+Integrates Coinbase Commerce for payment and transaction management:
+
+**Actions:**
+
+- `CREATE_CHARGE` - Create a payment charge using Coinbase Commerce
+- `GET_ALL_CHARGES` - Fetch all payment charges
+- `GET_CHARGE_DETAILS` - Retrieve details for a specific charge
+
+**Description:**
+This plugin enables Eliza to interact with the Coinbase Commerce API to create and manage payment charges, providing seamless integration with cryptocurrency-based payment systems.
+
+---
+
 ### Writing Custom Plugins
 
 Create a new plugin by implementing the Plugin interface:

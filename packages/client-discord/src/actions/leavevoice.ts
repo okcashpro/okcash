@@ -90,7 +90,7 @@ export default {
                 (channel: Channel) => channel.type === ChannelType.GuildVoice
             );
 
-        voiceChannels?.forEach((channel: Channel) => {
+        voiceChannels?.forEach((_channel: Channel) => {
             const connection = getVoiceConnection(
                 (discordMessage as DiscordMessage).guild?.id as string
             );
