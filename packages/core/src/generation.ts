@@ -420,6 +420,7 @@ export function trimTokens(
         encoding.free();
     }
 }
+
 /**
  * Sends a message to the model to determine if it should respond to the given context.
  * @param opts - The options for the generateText request
