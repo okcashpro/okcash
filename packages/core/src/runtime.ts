@@ -175,6 +175,8 @@ export class AgentRuntime implements IAgentRuntime {
             );
             return;
         }
+
+        this.services.set(serviceType, service);
     }
 
     /**
@@ -300,6 +302,10 @@ export class AgentRuntime implements IAgentRuntime {
 
             plugin.evaluators?.forEach((evaluator) => {
                 this.registerEvaluator(evaluator);
+            });
+
+            plugin.services?.forEach((service) => {
+                this.registerService(service);
             });
 
             plugin.providers?.forEach((provider) => {
