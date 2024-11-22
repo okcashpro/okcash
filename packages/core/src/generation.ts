@@ -487,14 +487,13 @@ export async function generateShouldRespond({
  * Splits content into chunks of specified size with optional overlapping bleed sections
  * @param content - The text content to split into chunks
  * @param chunkSize - The maximum size of each chunk in tokens
- * @param model - The model name to use for tokenization (default: runtime.model)
  * @param bleed - Number of characters to overlap between chunks (default: 100)
  * @returns Promise resolving to array of text chunks with bleed sections
  */
 export async function splitChunks(
     content: string,
-    chunkSize: number,
-    bleed: number = 100
+    chunkSize: number = 512,
+    bleed: number = 20
 ): Promise<string[]> {
     const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: Number(chunkSize),

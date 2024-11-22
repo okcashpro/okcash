@@ -1098,3 +1098,8 @@ export enum LoggingLevel {
     VERBOSE = "verbose",
     NONE = "none",
 }
+
+export type KnowledgeItem = {
+    id: UUID;
+    content: Content;
+};
