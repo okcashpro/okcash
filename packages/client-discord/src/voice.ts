@@ -416,11 +416,6 @@ export class VoiceManager extends EventEmitter {
                                 ServiceType.TRANSCRIPTION
                             );
 
-                        console.log(
-                            "transcriptionService: ",
-                            transcriptionService
-                        );
-
                         if (!transcriptionService) {
                             throw new Error(
                                 "Transcription generation service not found"
