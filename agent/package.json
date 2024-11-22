@@ -21,6 +21,7 @@
         "@ai16z/client-twitter": "workspace:*",
         "@ai16z/eliza": "workspace:*",
         "@ai16z/plugin-bootstrap": "workspace:*",
+        "@ai16z/plugin-buttplug": "workspace:*",
         "@ai16z/plugin-image-generation": "workspace:*",
         "@ai16z/plugin-node": "workspace:*",
         "@ai16z/plugin-solana": "workspace:*",

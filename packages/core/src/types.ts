@@ -658,6 +658,7 @@ export type Character = {
     /** Optional configuration */
     settings?: {
         secrets?: { [key: string]: string };
+        buttplug?: boolean;
         voice?: {
             model?: string;
             url?: string;
@@ -1086,6 +1087,7 @@ export enum ServiceType {
     BROWSER = "browser",
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
+    BUTTPLUG = "buttplug",
 }
 
 export enum LoggingLevel {

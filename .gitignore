@@ -5,6 +5,7 @@ node_modules
 .env.production
 concatenated-output.ts
 embedding-cache.json
+packages/plugin-buttplug/intiface-engine
 
 .DS_Store
 

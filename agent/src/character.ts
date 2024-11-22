@@ -8,6 +8,7 @@ export const character: Character = {
     // modelProvider: ModelProviderName.OPENAI,
     // settings: {
     //     secrets: {},
+    //     buttplug: true,
     //     voice: {
     //         model: "en_US-hfc_female-medium",
     //     },
