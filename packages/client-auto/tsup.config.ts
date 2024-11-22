@@ -21,6 +21,7 @@ export default defineConfig({
         "stream",
         "buffer",
         "rpc-websockets",
+        "@solana/web3.js",
         // Add other modules you want to externalize
     ],
 });

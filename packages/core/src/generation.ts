@@ -61,6 +61,8 @@ export async function generateText({
         return "";
     }
 
+    elizaLogger.log("Genarating text...");
+
     const provider = runtime.modelProvider;
     const endpoint =
         runtime.character.modelEndpointOverride || models[provider].endpoint;
@@ -314,14 +316,14 @@ export async function generateText({
 
             case ModelProviderName.OLLAMA:
                 {
-                    console.debug("Initializing Ollama model.");
+                    elizaLogger.debug("Initializing Ollama model.");
 
                     const ollamaProvider = createOllama({
                         baseURL: models[provider].endpoint + "/api",
                     });
                     const ollama = ollamaProvider(model);
 
-                    console.debug("****** MODEL\n", model);
+                    elizaLogger.debug("****** MODEL\n", model);
 
                     const { text: ollamaResponse } = await aiGenerateText({
                         model: ollama,
@@ -334,7 +336,7 @@ export async function generateText({
 
                     response = ollamaResponse;
                 }
-                console.debug("Received response from Ollama model.");
+                elizaLogger.debug("Received response from Ollama model.");
                 break;
 
             case ModelProviderName.HEURIST: {
@@ -461,34 +463,38 @@ export async function generateShouldRespond({
  * Splits content into chunks of specified size with optional overlapping bleed sections
  * @param content - The text content to split into chunks
  * @param chunkSize - The maximum size of each chunk in tokens
- * @param bleed - Number of characters to overlap between chunks (default: 100)
  * @param model - The model name to use for tokenization (default: runtime.model)
+ * @param bleed - Number of characters to overlap between chunks (default: 100)
  * @returns Promise resolving to array of text chunks with bleed sections
  */
 export async function splitChunks(
     content: string,
     chunkSize: number,
+    model: string,
     bleed: number = 100
 ): Promise<string[]> {
-    const encoding = encoding_for_model("gpt-4o-mini");
-
+    const encoding = encoding_for_model(model as TiktokenModel);
     const tokens = encoding.encode(content);
     const chunks: string[] = [];
     const textDecoder = new TextDecoder();
 
     for (let i = 0; i < tokens.length; i += chunkSize) {
-        const chunk = tokens.slice(i, i + chunkSize);
-        const decodedChunk = textDecoder.decode(encoding.decode(chunk));
+        let chunk = tokens.slice(i, i + chunkSize);
 
         // Append bleed characters from the previous chunk
-        const startBleed = i > 0 ? content.slice(i - bleed, i) : "";
-        // Append bleed characters from the next chunk
-        const endBleed =
-            i + chunkSize < tokens.length
-                ? content.slice(i + chunkSize, i + chunkSize + bleed)
-                : "";
+        if (i > 0) {
+            chunk = new Uint32Array([...tokens.slice(i - bleed, i), ...chunk]);
+        }
 
-        chunks.push(startBleed + decodedChunk + endBleed);
+        // Append bleed characters from the next chunk
+        if (i + chunkSize < tokens.length) {
+            chunk = new Uint32Array([
+                ...chunk,
+                ...tokens.slice(i + chunkSize, i + chunkSize + bleed),
+            ]);
+        }
+
+        chunks.push(textDecoder.decode(encoding.decode(chunk)));
     }
 
     return chunks;
@@ -700,6 +706,8 @@ export async function generateMessageResponse({
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {
+            elizaLogger.log("Genarating message response..");
+
             const response = await generateText({
                 runtime,
                 context,
@@ -1039,7 +1047,8 @@ async function handleOpenAI({
     mode,
     modelOptions,
 }: ProviderOptions): Promise<GenerateObjectResult<unknown>> {
-    const openai = createOpenAI({ apiKey });
+    const baseURL = models.openai.endpoint || undefined
+    const openai = createOpenAI({ apiKey, baseURL });
     return await aiGenerateObject({
         model: openai.languageModel(model),
         schema,

@@ -16,7 +16,8 @@
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "test": "vitest"
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"
