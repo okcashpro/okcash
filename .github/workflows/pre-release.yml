@@ -1,4 +1,4 @@
-name: Release
+name: Pre-Release
 
 on:
     workflow_dispatch:
@@ -6,7 +6,7 @@ on:
             release_type:
                 description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
                 required: true
-                default: "patch"
+                default: "prerelease"
 
 jobs:
     release:
@@ -46,8 +46,9 @@ jobs:
             - name: Tag and Publish Packages
               id: tag_publish
               run: |
-                  npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
-                  npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
+                  RELEASE_TYPE=${{ github.event_name == 'push' && 'prerelease' || github.event.inputs.release_type }}
+                  npx lerna version $RELEASE_TYPE --conventional-commits --yes --no-private --force-publish
+                  npx lerna publish from-git --yes --dist-tag next
 
             - name: Get Version Tag
               id: get_tag
@@ -72,4 +73,4 @@ jobs:
                   release_name: Release
                   body_path: CHANGELOG.md
                   draft: false
-                  prerelease: false
+                  prerelease: ${{ github.event_name == 'push' }}

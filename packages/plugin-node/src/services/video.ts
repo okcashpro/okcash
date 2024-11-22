@@ -4,6 +4,7 @@ import {
     ITranscriptionService,
     Media,
     ServiceType,
+    IVideoService,
 } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import ffmpeg from "fluent-ffmpeg";
@@ -12,7 +13,7 @@ import path from "path";
 import { tmpdir } from "os";
 import youtubeDl from "youtube-dl-exec";
 
-export class VideoService extends Service {
+export class VideoService extends Service implements IVideoService {
     static serviceType: ServiceType = ServiceType.VIDEO;
     private cacheKey = "content/video";
     private dataDir = "./content_cache";
@@ -23,6 +24,10 @@ export class VideoService extends Service {
     constructor() {
         super();
         this.ensureDataDirectoryExists();
+    }
+
+    getInstance(): IVideoService {
+        return VideoService.getInstance();
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {}
@@ -88,7 +93,7 @@ export class VideoService extends Service {
 
     public async processVideo(
         url: string,
-        runtime: IAgentRuntime
+        runtime?: IAgentRuntime
     ): Promise<Media> {
         this.queue.push(url);
         this.processQueue(runtime);
@@ -333,9 +338,10 @@ export class VideoService extends Service {
 
         console.log("Starting transcription...");
         const startTime = Date.now();
-        const transcriptionService = runtime
-            .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
-            .getInstance();
+        const transcriptionService = runtime.getService<ITranscriptionService>(
+            ServiceType.TRANSCRIPTION
+        );
+
         if (!transcriptionService) {
             throw new Error("Transcription service not found");
         }

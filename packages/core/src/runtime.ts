@@ -14,8 +14,8 @@ import {
 } from "./evaluators.ts";
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { elizaLogger, embed, splitChunks } from "./index.ts";
-import { embeddingZeroVector, MemoryManager } from "./memory.ts";
+import { elizaLogger } from "./index.ts";
+import { MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
 import { formatPosts } from "./posts.ts";
@@ -44,6 +44,7 @@ import {
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
 import { v4 as uuidv4 } from "uuid";
+import knowledge from "./knowledge.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -174,6 +175,8 @@ export class AgentRuntime implements IAgentRuntime {
             );
             return;
         }
+
+        this.services.set(serviceType, service);
     }
 
     /**
@@ -222,11 +225,21 @@ export class AgentRuntime implements IAgentRuntime {
             opts.character?.id ??
             opts?.agentId ??
             stringToUuid(opts.character?.name ?? uuidv4());
+        this.character = opts.character || defaultCharacter;
+
+        // By convention, we create a user and room using the agent id.
+        // Memories related to it are considered global context for the agent.
+        this.ensureRoomExists(this.agentId);
+        this.ensureUserExists(
+            this.agentId,
+            this.character.name,
+            this.character.name
+        );
+        this.ensureParticipantExists(this.agentId, this.agentId);
 
         elizaLogger.success("Agent ID", this.agentId);
 
         this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
-        this.character = opts.character || defaultCharacter;
         if (!opts.databaseAdapter) {
             throw new Error("No database adapter provided");
         }
@@ -291,6 +304,10 @@ export class AgentRuntime implements IAgentRuntime {
                 this.registerEvaluator(evaluator);
             });
 
+            plugin.services?.forEach((service) => {
+                this.registerService(service);
+            });
+
             plugin.providers?.forEach((provider) => {
                 this.registerContextProvider(provider);
             });
@@ -348,60 +365,28 @@ export class AgentRuntime implements IAgentRuntime {
      * then chunks the content into fragments, embeds each fragment, and creates fragment memories.
      * @param knowledge An array of knowledge items containing id, path, and content.
      */
-    private async processCharacterKnowledge(knowledge: string[]) {
-        // ensure the room exists and the agent exists in the room
-        await this.ensureRoomExists(this.agentId);
-
-        await this.ensureUserExists(
-            this.agentId,
-            this.character.name,
-            this.character.name
-        );
-
-        await this.ensureParticipantExists(this.agentId, this.agentId);
-
-        for (const knowledgeItem of knowledge) {
-            const knowledgeId = stringToUuid(knowledgeItem);
+    private async processCharacterKnowledge(items: string[]) {
+        for (const item of items) {
+            const knowledgeId = stringToUuid(item);
             const existingDocument =
                 await this.documentsManager.getMemoryById(knowledgeId);
-            if (!existingDocument) {
-                elizaLogger.success(
-                    "Processing knowledge for ",
-                    this.character.name,
-                    " - ",
-                    knowledgeItem.slice(0, 100)
-                );
-                await this.documentsManager.createMemory({
-                    embedding: embeddingZeroVector,
-                    id: knowledgeId,
-                    agentId: this.agentId,
-                    roomId: this.agentId,
-                    userId: this.agentId,
-                    createdAt: Date.now(),
-                    content: {
-                        text: knowledgeItem,
-                    },
-                });
-
-                const fragments = await splitChunks(knowledgeItem, 1200, 200);
-                for (const fragment of fragments) {
-                    const embedding = await embed(this, fragment);
-                    await this.knowledgeManager.createMemory({
-                        // We namespace the knowledge base uuid to avoid id
-                        // collision with the document above.
-                        id: stringToUuid(knowledgeId + fragment),
-                        roomId: this.agentId,
-                        agentId: this.agentId,
-                        userId: this.agentId,
-                        createdAt: Date.now(),
-                        content: {
-                            source: knowledgeId,
-                            text: fragment,
-                        },
-                        embedding,
-                    });
-                }
+            if (existingDocument) {
+                return;
             }
+
+            console.log(
+                "Processing knowledge for ",
+                this.character.name,
+                " - ",
+                item.slice(0, 100)
+            );
+
+            await knowledge.set(this, {
+                id: knowledgeId,
+                content: {
+                    text: item,
+                },
+            });
         }
     }
 
@@ -935,33 +920,8 @@ Text: ${attachment.text}
                 .join(" ");
         }
 
-        async function getKnowledge(
-            runtime: AgentRuntime,
-            message: Memory
-        ): Promise<string[]> {
-            const embedding = await embed(runtime, message.content.text);
-
-            const memories =
-                await runtime.knowledgeManager.searchMemoriesByEmbedding(
-                    embedding,
-                    {
-                        roomId: message.agentId,
-                        agentId: message.agentId,
-                        count: 3,
-                    }
-                );
-
-            const knowledge = memories.map((memory) => memory.content.text);
-
-            return knowledge;
-        }
-
-        const formatKnowledge = (knowledge: string[]) => {
-            return knowledge.map((knowledge) => `- ${knowledge}`).join("\n");
-        };
-
         const formattedKnowledge = formatKnowledge(
-            await getKnowledge(this, message)
+            await knowledge.get(this, message)
         );
 
         const initialState = {
@@ -1243,3 +1203,7 @@ Text: ${attachment.text}
         } as State;
     }
 }
+
+const formatKnowledge = (knowledge: string[]) => {
+    return knowledge.map((knowledge) => `- ${knowledge}`).join("\n");
+};

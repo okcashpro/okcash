@@ -1,7 +1,10 @@
-import { embed } from "@ai16z/eliza";
-import { MemoryManager } from "@ai16z/eliza";
-import { formatMessages } from "@ai16z/eliza";
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import {
+    embed,
+    MemoryManager,
+    formatMessages,
+    AgentRuntime as IAgentRuntime,
+} from "@ai16z/eliza";
+import type { Memory, Provider, State } from "@ai16z/eliza";
 import { formatFacts } from "../evaluators/fact.ts";
 
 const factsProvider: Provider = {
@@ -34,6 +37,8 @@ const factsProvider: Provider = {
             roomId: message.roomId,
             count: 10,
             agentId: runtime.agentId,
+            start: 0,
+            end: Date.now(),
         });
 
         // join the two and deduplicate

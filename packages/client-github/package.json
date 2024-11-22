@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/client-github",
-    "version": "0.1.0",
+    "version": "0.1.4-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",

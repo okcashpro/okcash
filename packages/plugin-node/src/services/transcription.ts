@@ -1,4 +1,9 @@
-import { elizaLogger, IAgentRuntime, settings } from "@ai16z/eliza";
+import {
+    elizaLogger,
+    IAgentRuntime,
+    ITranscriptionService,
+    settings,
+} from "@ai16z/eliza";
 import { Service, ServiceType } from "@ai16z/eliza";
 import { exec } from "child_process";
 import { File } from "formdata-node";
@@ -16,7 +21,10 @@ const __dirname = path.dirname(__filename);
 
 const execAsync = promisify(exec);
 
-export class TranscriptionService extends Service {
+export class TranscriptionService
+    extends Service
+    implements ITranscriptionService
+{
     static serviceType: ServiceType = ServiceType.TRANSCRIPTION;
     private CONTENT_CACHE_DIR: string;
     private DEBUG_AUDIO_DIR: string;

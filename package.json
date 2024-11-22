@@ -20,7 +20,8 @@
         "docker:bash": "bash ./scripts/docker.sh bash",
         "docker:start": "bash ./scripts/docker.sh start",
         "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
-        "test": "pnpm --dir packages/core test"
+        "test": "bash ./scripts/test.sh",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "concurrently": "^9.1.0",
@@ -31,7 +32,9 @@
         "typedoc": "^0.26.11",
         "typescript": "5.6.3",
         "vite": "^5.4.11",
-        "vitest": "^2.1.5"
+        "vitest": "^2.1.5",
+        "@commitlint/cli": "^18.4.4",
+        "@commitlint/config-conventional": "^18.4.4"
     },
     "pnpm": {
         "overrides": {

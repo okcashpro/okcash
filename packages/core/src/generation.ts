@@ -2,6 +2,7 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import {
     generateObject as aiGenerateObject,
     generateText as aiGenerateText,
@@ -246,11 +247,10 @@ export async function generateText({
                 elizaLogger.debug(
                     "Using local Llama model for text completion."
                 );
-                const textGenerationService = runtime
-                    .getService<ITextGenerationService>(
+                const textGenerationService =
+                    runtime.getService<ITextGenerationService>(
                         ServiceType.TEXT_GENERATION
-                    )
-                    .getInstance();
+                    );
 
                 if (!textGenerationService) {
                     throw new Error("Text generation service not found");
@@ -380,23 +380,47 @@ export async function generateText({
 
 /**
  * Truncate the context to the maximum length allowed by the model.
- * @param model The model to use for generateText.
- * @param context The context of the message to be completed.
- * @param max_context_length The maximum length of the context to apply to the generateText.
- * @returns
+ * @param context The text to truncate
+ * @param maxTokens Maximum number of tokens to keep
+ * @param model The tokenizer model to use
+ * @returns The truncated text
  */
-export function trimTokens(context, maxTokens, model) {
-    // Count tokens and truncate context if necessary
-    const encoding = encoding_for_model(model as TiktokenModel);
-    let tokens = encoding.encode(context);
-    const textDecoder = new TextDecoder();
-    if (tokens.length > maxTokens) {
-        tokens = tokens.reverse().slice(maxTokens).reverse();
+export function trimTokens(
+    context: string,
+    maxTokens: number,
+    model: TiktokenModel
+): string {
+    if (!context) return "";
+    if (maxTokens <= 0) throw new Error("maxTokens must be positive");
 
-        context = textDecoder.decode(encoding.decode(tokens));
+    // Get the tokenizer for the model
+    const encoding = encoding_for_model(model);
+
+    try {
+        // Encode the text into tokens
+        const tokens = encoding.encode(context);
+
+        // If already within limits, return unchanged
+        if (tokens.length <= maxTokens) {
+            return context;
+        }
+
+        // Keep the most recent tokens by slicing from the end
+        const truncatedTokens = tokens.slice(-maxTokens);
+
+        // Decode back to text and convert to string
+        const decodedText = encoding.decode(truncatedTokens);
+        return new TextDecoder().decode(decodedText);
+    } catch (error) {
+        console.error("Error in trimTokens:", error);
+        // Return truncated string if tokenization fails
+        return context.slice(-maxTokens * 4); // Rough estimate of 4 chars per token
+    } finally {
+        // Clean up tokenizer resources
+        encoding.free();
     }
-    return context;
 }
+
 /**
  * Sends a message to the model to determine if it should respond to the given context.
  * @param opts - The options for the generateText request
@@ -464,36 +488,19 @@ export async function generateShouldRespond({
  * @param content - The text content to split into chunks
  * @param chunkSize - The maximum size of each chunk in tokens
  * @param bleed - Number of characters to overlap between chunks (default: 100)
- * @param model - The model name to use for tokenization (default: runtime.model)
  * @returns Promise resolving to array of text chunks with bleed sections
  */
 export async function splitChunks(
     content: string,
-    chunkSize: number,
-    bleed: number = 100
+    chunkSize: number = 512,
+    bleed: number = 20
 ): Promise<string[]> {
-    const encoding = encoding_for_model("gpt-4o-mini");
+    const textSplitter = new RecursiveCharacterTextSplitter({
+        chunkSize: Number(chunkSize),
+        chunkOverlap: Number(bleed),
+    });
 
-    const tokens = encoding.encode(content);
-    const chunks: string[] = [];
-    const textDecoder = new TextDecoder();
-
-    for (let i = 0; i < tokens.length; i += chunkSize) {
-        const chunk = tokens.slice(i, i + chunkSize);
-        const decodedChunk = textDecoder.decode(encoding.decode(chunk));
-
-        // Append bleed characters from the previous chunk
-        const startBleed = i > 0 ? content.slice(i - bleed, i) : "";
-        // Append bleed characters from the next chunk
-        const endBleed =
-            i + chunkSize < tokens.length
-                ? content.slice(i + chunkSize, i + chunkSize + bleed)
-                : "";
-
-        chunks.push(startBleed + decodedChunk + endBleed);
-    }
-
-    return chunks;
+    return textSplitter.splitText(content);
 }
 
 /**
@@ -863,9 +870,10 @@ export const generateCaption = async (
     description: string;
 }> => {
     const { imageUrl } = data;
-    const imageDescriptionService = runtime
-        .getService<IImageDescriptionService>(ServiceType.IMAGE_DESCRIPTION)
-        .getInstance();
+    const imageDescriptionService =
+        runtime.getService<IImageDescriptionService>(
+            ServiceType.IMAGE_DESCRIPTION
+        );
 
     if (!imageDescriptionService) {
         throw new Error("Image description service not found");
@@ -883,7 +891,7 @@ export const generateCaption = async (
 export interface GenerationOptions {
     runtime: IAgentRuntime;
     context: string;
-    modelClass: ModelClass;
+    modelClass: TiktokenModel;
     schema?: ZodSchema;
     schemaName?: string;
     schemaDescription?: string;
@@ -1043,7 +1051,7 @@ async function handleOpenAI({
     mode,
     modelOptions,
 }: ProviderOptions): Promise<GenerateObjectResult<unknown>> {
-    const baseURL = models.openai.endpoint || undefined
+    const baseURL = models.openai.endpoint || undefined;
     const openai = createOpenAI({ apiKey, baseURL });
     return await aiGenerateObject({
         model: openai.languageModel(model),
