@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.4-alpha.1](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.1) (2024-11-22)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.0...v0.1.4-alpha.1)
+
+**Merged pull requests:**
+
+- fix: issue with npm [\#505](https://github.com/ai16z/eliza/pull/505) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
+
 ## [v0.1.4-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.0) (2024-11-22)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3...v0.1.4-alpha.0)
