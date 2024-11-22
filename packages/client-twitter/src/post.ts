@@ -6,6 +6,7 @@ import {
     IAgentRuntime,
     ModelClass,
     stringToUuid,
+    parseBooleanFromText,
 } from "@ai16z/eliza";
 import { elizaLogger } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
@@ -100,7 +101,14 @@ export class TwitterPostClient {
 
             elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-
+        if (
+            this.runtime.getSetting("POST_IMMEDIATELY") != null &&
+            this.runtime.getSetting("POST_IMMEDIATELY") != ""
+        ) {
+            postImmediately = parseBooleanFromText(
+                this.runtime.getSetting("POST_IMMEDIATELY")
+            );
+        }
         if (postImmediately) {
             this.generateNewTweet();
         }

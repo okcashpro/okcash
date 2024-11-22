@@ -107,6 +107,7 @@ export async function generateText({
 
         switch (provider) {
             case ModelProviderName.OPENAI:
+            case ModelProviderName.ETERNALAI:
             case ModelProviderName.LLAMACLOUD: {
                 elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
@@ -1007,6 +1008,7 @@ export async function handleProvider(
     const { provider, runtime, context, modelClass } = options;
     switch (provider) {
         case ModelProviderName.OPENAI:
+        case ModelProviderName.ETERNALAI:
         case ModelProviderName.LLAMACLOUD:
             return await handleOpenAI(options);
         case ModelProviderName.ANTHROPIC:
