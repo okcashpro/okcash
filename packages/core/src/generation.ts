@@ -30,6 +30,7 @@ import {
     ModelClass,
     ModelProviderName,
     ServiceType,
+    SearchResponse,
 } from "./types.ts";
 
 /**
@@ -881,6 +882,40 @@ export const generateCaption = async (
         description: resp.description.trim(),
     };
 };
+
+export const generateWebSearch = async (
+    query: string,
+    runtime: IAgentRuntime
+): Promise<SearchResponse> => {
+    const apiUrl = "https://api.tavily.com/search";
+    const apiKey = runtime.getSetting("TAVILY_API_KEY");
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                api_key: apiKey,
+                query,
+                include_answer: true,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new elizaLogger.error(
+                `HTTP error! status: ${response.status}`
+            );
+        }
+
+        const data: SearchResponse = await response.json();
+        console.log("Response:", data);
+        return data;
+    } catch (error) {
+        elizaLogger.error("Error:", error);
+    }
+};
 /**
  * Configuration options for generating objects with a model.
  */
@@ -1047,7 +1082,7 @@ async function handleOpenAI({
     mode,
     modelOptions,
 }: ProviderOptions): Promise<GenerateObjectResult<unknown>> {
-    const baseURL = models.openai.endpoint || undefined
+    const baseURL = models.openai.endpoint || undefined;
     const openai = createOpenAI({ apiKey, baseURL });
     return await aiGenerateObject({
         model: openai.languageModel(model),
