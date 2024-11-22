@@ -108,7 +108,9 @@ export class WalletProvider {
 
     async fetchPortfolioValue(runtime): Promise<WalletPortfolio> {
         try {
-            const cacheKey = `portfolio-${this.runtime.getSetting("STARKNET_WALLET_ADDRESS")}`;
+            const cacheKey = `portfolio-${this.runtime.getSetting(
+                "STARKNET_WALLET_ADDRESS"
+            )}`;
             const cachedValue = this.cache.get<WalletPortfolio>(cacheKey);
 
             if (cachedValue) {
@@ -223,7 +225,9 @@ export class WalletProvider {
         prices: Prices
     ): string {
         let output = `${runtime.character.description}\n`;
-        output += `Wallet Address: ${this.runtime.getSetting("STARKNET_WALLET_ADDRESS")}\n\n`;
+        output += `Wallet Address: ${this.runtime.getSetting(
+            "STARKNET_WALLET_ADDRESS"
+        )}\n\n`;
 
         const totalUsdFormatted = new BigNumber(portfolio.totalUsd).toFixed(2);
         const totalSolFormatted = portfolio.totalSol;
@@ -285,7 +289,9 @@ const walletProvider: Provider = {
             return await provider.getFormattedPortfolio(runtime);
         } catch (error) {
             console.error("Error in wallet provider:", error.message);
-            return `Failed to fetch wallet information: ${error instanceof Error ? error.message : "Unknown error"}`;
+            return `Failed to fetch wallet information: ${
+                error instanceof Error ? error.message : "Unknown error"
+            }`;
         }
     },
 };

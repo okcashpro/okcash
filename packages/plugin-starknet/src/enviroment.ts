@@ -1,6 +1,8 @@
 import { IAgentRuntime } from "@ai16z/eliza";
 import { z } from "zod";
 
+const STARKNET_PUBLIC_RPC = "https://starknet-mainnet.public.blastapi.io";
+
 export const starknetEnvSchema = z.object({
     STARKNET_ADDRESS: z.string().min(1, "Starknet address is required"),
     STARKNET_PRIVATE_KEY: z.string().min(1, "Starknet private key is required"),
@@ -22,7 +24,8 @@ export async function validateStarknetConfig(
                 process.env.STARKNET_PRIVATE_KEY,
             STARKNET_RPC_URL:
                 runtime.getSetting("STARKNET_RPC_URL") ||
-                process.env.STARKNET_RPC_URL,
+                process.env.STARKNET_RPC_URL ||
+                STARKNET_PUBLIC_RPC,
         };
 
         return starknetEnvSchema.parse(config);
