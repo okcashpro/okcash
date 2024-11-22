@@ -644,7 +644,7 @@ export class LlamaService extends Service {
             const embeddingModel =
                 process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
             elizaLogger.info(
-                `Using Ollama API for embeddings with model ${embeddingModel}`
+                `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
             );
 
             const response = await fetch(`${ollamaUrl}/api/embeddings`, {
@@ -716,7 +716,7 @@ export class LlamaService extends Service {
         const embeddingModel =
             process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
         elizaLogger.info(
-            `Using Ollama API for embeddings with model ${embeddingModel}`
+            `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
         );
 
         const response = await fetch(`${ollamaUrl}/api/embeddings`, {
