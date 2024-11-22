@@ -126,7 +126,6 @@ export declare class Database {
 
     close(): void;
 
-     
     create_function(name: string, func: (...args: any[]) => any): Database;
 
     each(

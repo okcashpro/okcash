@@ -88,7 +88,6 @@ export class TokenProvider {
     private async fetchWithRetry(
         url: string,
         options: RequestInit = {}
-         
     ): Promise<any> {
         let lastError: Error;
 
@@ -685,7 +684,6 @@ export class TokenProvider {
         console.log({ url });
 
         try {
-             
             while (true) {
                 const params = {
                     limit: limit,
@@ -731,7 +729,6 @@ export class TokenProvider {
                     `Processing ${data.result.token_accounts.length} holders from page ${page}`
                 );
 
-                 
                 data.result.token_accounts.forEach((account: any) => {
                     const owner = account.owner;
                     const balance = parseFloat(account.amount);
@@ -1017,11 +1014,10 @@ export class TokenProvider {
 }
 
 const tokenAddress = PROVIDER_CONFIG.TOKEN_ADDRESSES.Example;
- 
+
 const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
 const tokenProvider: Provider = {
     get: async (
-         
         runtime: IAgentRuntime,
         _message: Memory,
         _state?: State

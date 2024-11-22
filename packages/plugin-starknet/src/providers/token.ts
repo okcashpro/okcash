@@ -468,7 +468,6 @@ export class TokenProvider {
         console.log({ url });
 
         try {
-             
             while (true) {
                 const params = {
                     limit: limit,
@@ -514,7 +513,6 @@ export class TokenProvider {
                     `Processing ${data.result.token_accounts.length} holders from page ${page}`
                 );
 
-                 
                 data.result.token_accounts.forEach((account: any) => {
                     const owner = account.owner;
                     const balance = parseFloat(account.amount);

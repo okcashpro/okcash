@@ -53,7 +53,12 @@ export default [
     },
     // Vitest configuration
     {
-        files: ["src/**/*.test.js", "src/**/*.test.ts", "src/**/*.spec.js", "src/**/*.spec.ts"],
+        files: [
+            "src/**/*.test.js",
+            "src/**/*.test.ts",
+            "src/**/*.spec.js",
+            "src/**/*.spec.ts",
+        ],
         plugins: {
             vitest, // Register Vitest plugin
         },
