@@ -1,4 +1,4 @@
-import { elizaLogger, IAgentRuntime, ServiceType } from "@ai16z/eliza";
+import { elizaLogger, IAgentRuntime, ServiceType, ModelProviderName } from "@ai16z/eliza";
 import { Service } from "@ai16z/eliza";
 import fs from "fs";
 import https from "https";
@@ -252,8 +252,7 @@ export class LlamaService extends Service {
             elizaLogger.success("Model initialization complete");
             this.processQueue();
         } catch (error) {
-            console.error(
-                "Model initialization failed. Deleting model and retrying:", error);
+            elizaLogger.error("Model initialization failed. Deleting model and retrying:", error);
             try {
                 elizaLogger.info("Attempting to delete and re-download model...");
             await this.deleteModel();
