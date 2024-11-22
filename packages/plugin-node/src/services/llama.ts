@@ -1,4 +1,9 @@
-import { elizaLogger, IAgentRuntime, ServiceType, ModelProviderName } from "@ai16z/eliza";
+import {
+    elizaLogger,
+    IAgentRuntime,
+    ServiceType,
+    ModelProviderName,
+} from "@ai16z/eliza";
 import { Service } from "@ai16z/eliza";
 import fs from "fs";
 import https from "https";
@@ -198,13 +203,17 @@ export class LlamaService extends Service {
         } catch (error) {
             elizaLogger.error("Failed to initialize LlamaService:", error);
             // Re-throw with more context
-            throw new Error(`LlamaService initialization failed: ${error.message}`);
+            throw new Error(
+                `LlamaService initialization failed: ${error.message}`
+            );
         }
     }
 
     private async ensureInitialized() {
         if (!this.modelInitialized) {
-            elizaLogger.info("Model not initialized, starting initialization...");
+            elizaLogger.info(
+                "Model not initialized, starting initialization..."
+            );
             await this.initializeModel();
         } else {
             elizaLogger.info("Model already initialized");
@@ -222,9 +231,13 @@ export class LlamaService extends Service {
             );
 
             if (hasCUDA) {
-                elizaLogger.info("LlamaService: CUDA detected, using GPU acceleration");
+                elizaLogger.info(
+                    "LlamaService: CUDA detected, using GPU acceleration"
+                );
             } else {
-                elizaLogger.warn("LlamaService: No CUDA detected - local response will be slow");
+                elizaLogger.warn(
+                    "LlamaService: No CUDA detected - local response will be slow"
+                );
             }
 
             elizaLogger.info("Initializing Llama instance...");
@@ -252,14 +265,24 @@ export class LlamaService extends Service {
             elizaLogger.success("Model initialization complete");
             this.processQueue();
         } catch (error) {
-            elizaLogger.error("Model initialization failed. Deleting model and retrying:", error);
+            elizaLogger.error(
+                "Model initialization failed. Deleting model and retrying:",
+                error
+            );
             try {
-                elizaLogger.info("Attempting to delete and re-download model...");
-            await this.deleteModel();
-            await this.initializeModel();
+                elizaLogger.info(
+                    "Attempting to delete and re-download model..."
+                );
+                await this.deleteModel();
+                await this.initializeModel();
             } catch (retryError) {
-                elizaLogger.error("Model re-initialization failed:", retryError);
-                throw new Error(`Model initialization failed after retry: ${retryError.message}`);
+                elizaLogger.error(
+                    "Model re-initialization failed:",
+                    retryError
+                );
+                throw new Error(
+                    `Model initialization failed after retry: ${retryError.message}`
+                );
             }
         }
     }
@@ -275,48 +298,83 @@ export class LlamaService extends Service {
                 const downloadModel = (url: string) => {
                     https
                         .get(url, (response) => {
-                            if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                                elizaLogger.info(`Following redirect to: ${response.headers.location}`);
+                            if (
+                                response.statusCode >= 300 &&
+                                response.statusCode < 400 &&
+                                response.headers.location
+                            ) {
+                                elizaLogger.info(
+                                    `Following redirect to: ${response.headers.location}`
+                                );
                                 downloadModel(response.headers.location);
-                                    return;
-                                }
-
-                            if (response.statusCode !== 200) {
-                                reject(new Error(`Failed to download model: HTTP ${response.statusCode}`));
                                 return;
                             }
 
-                            totalSize = parseInt(response.headers['content-length'] || '0', 10);
-                            elizaLogger.info(`Downloading model: Hermes-3-Llama-3.1-8B.Q8_0.gguf`);
-                            elizaLogger.info(`Download location: ${this.modelPath}`);
-                            elizaLogger.info(`Total size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
+                            if (response.statusCode !== 200) {
+                                reject(
+                                    new Error(
+                                        `Failed to download model: HTTP ${response.statusCode}`
+                                    )
+                                );
+                                return;
+                            }
+
+                            totalSize = parseInt(
+                                response.headers["content-length"] || "0",
+                                10
+                            );
+                            elizaLogger.info(
+                                `Downloading model: Hermes-3-Llama-3.1-8B.Q8_0.gguf`
+                            );
+                            elizaLogger.info(
+                                `Download location: ${this.modelPath}`
+                            );
+                            elizaLogger.info(
+                                `Total size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`
+                            );
 
                             response.pipe(file);
 
-                            let progressString = '';
+                            let progressString = "";
                             response.on("data", (chunk) => {
                                 downloadedSize += chunk.length;
-                                const progress = totalSize > 0 ? ((downloadedSize / totalSize) * 100).toFixed(1) : '0.0';
-                                const dots = '.'.repeat(Math.floor(Number(progress) / 5));
-                                progressString = `Downloading model: [${dots.padEnd(20, ' ')}] ${progress}%`;
+                                const progress =
+                                    totalSize > 0
+                                        ? (
+                                              (downloadedSize / totalSize) *
+                                              100
+                                          ).toFixed(1)
+                                        : "0.0";
+                                const dots = ".".repeat(
+                                    Math.floor(Number(progress) / 5)
+                                );
+                                progressString = `Downloading model: [${dots.padEnd(20, " ")}] ${progress}%`;
                                 elizaLogger.progress(progressString);
                             });
 
                             file.on("finish", () => {
                                 file.close();
-                                elizaLogger.progress(''); // Clear the progress line
+                                elizaLogger.progress(""); // Clear the progress line
                                 elizaLogger.success("Model download complete");
                                 resolve();
                             });
 
                             response.on("error", (error) => {
                                 fs.unlink(this.modelPath, () => {});
-                                reject(new Error(`Model download failed: ${error.message}`));
+                                reject(
+                                    new Error(
+                                        `Model download failed: ${error.message}`
+                                    )
+                                );
                             });
                         })
                         .on("error", (error) => {
                             fs.unlink(this.modelPath, () => {});
-                            reject(new Error(`Model download request failed: ${error.message}`));
+                            reject(
+                                new Error(
+                                    `Model download request failed: ${error.message}`
+                                )
+                            );
                         });
                 };
 
@@ -465,12 +523,15 @@ export class LlamaService extends Service {
     ): Promise<any | string> {
         const ollamaModel = process.env.OLLAMA_MODEL;
         if (ollamaModel) {
-            const ollamaUrl = process.env.OLLAMA_SERVER_URL || 'http://localhost:11434';
-            elizaLogger.info(`Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`);
-            
+            const ollamaUrl =
+                process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+            elizaLogger.info(
+                `Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`
+            );
+
             const response = await fetch(`${ollamaUrl}/api/generate`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     model: ollamaModel,
                     prompt: context,
@@ -481,12 +542,14 @@ export class LlamaService extends Service {
                         frequency_penalty,
                         presence_penalty,
                         num_predict: max_tokens,
-                    }
+                    },
                 }),
             });
 
             if (!response.ok) {
-                throw new Error(`Ollama request failed: ${response.statusText}`);
+                throw new Error(
+                    `Ollama request failed: ${response.statusText}`
+                );
             }
 
             const result = await response.json();
@@ -576,13 +639,17 @@ export class LlamaService extends Service {
     async getEmbeddingResponse(input: string): Promise<number[] | undefined> {
         const ollamaModel = process.env.OLLAMA_MODEL;
         if (ollamaModel) {
-            const ollamaUrl = process.env.OLLAMA_SERVER_URL || 'http://localhost:11434';
-            const embeddingModel = process.env.OLLAMA_EMBEDDING_MODEL || 'mxbai-embed-large';
-            elizaLogger.info(`Using Ollama API for embeddings with model ${embeddingModel}`);
-            
+            const ollamaUrl =
+                process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+            const embeddingModel =
+                process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
+            elizaLogger.info(
+                `Using Ollama API for embeddings with model ${embeddingModel}`
+            );
+
             const response = await fetch(`${ollamaUrl}/api/embeddings`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     model: embeddingModel,
                     prompt: input,
@@ -590,7 +657,9 @@ export class LlamaService extends Service {
             });
 
             if (!response.ok) {
-                throw new Error(`Ollama embeddings request failed: ${response.statusText}`);
+                throw new Error(
+                    `Ollama embeddings request failed: ${response.statusText}`
+                );
             }
 
             const result = await response.json();
@@ -609,12 +678,15 @@ export class LlamaService extends Service {
 
     private async ollamaCompletion(prompt: string): Promise<string> {
         const ollamaModel = process.env.OLLAMA_MODEL;
-        const ollamaUrl = process.env.OLLAMA_SERVER_URL || 'http://localhost:11434';
-        elizaLogger.info(`Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`);
-        
+        const ollamaUrl =
+            process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+        elizaLogger.info(
+            `Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`
+        );
+
         const response = await fetch(`${ollamaUrl}/api/generate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 model: ollamaModel,
                 prompt: prompt,
@@ -625,7 +697,7 @@ export class LlamaService extends Service {
                     frequency_penalty: 0.5,
                     presence_penalty: 0.5,
                     num_predict: 256,
-                }
+                },
             }),
         });
 
@@ -639,13 +711,17 @@ export class LlamaService extends Service {
 
     private async ollamaEmbedding(text: string): Promise<number[]> {
         const ollamaModel = process.env.OLLAMA_MODEL;
-        const ollamaUrl = process.env.OLLAMA_SERVER_URL || 'http://localhost:11434';
-        const embeddingModel = process.env.OLLAMA_EMBEDDING_MODEL || 'mxbai-embed-large';
-        elizaLogger.info(`Using Ollama API for embeddings with model ${embeddingModel}`);
-        
+        const ollamaUrl =
+            process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+        const embeddingModel =
+            process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
+        elizaLogger.info(
+            `Using Ollama API for embeddings with model ${embeddingModel}`
+        );
+
         const response = await fetch(`${ollamaUrl}/api/embeddings`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 model: embeddingModel,
                 prompt: text,
@@ -653,7 +729,9 @@ export class LlamaService extends Service {
         });
 
         if (!response.ok) {
-            throw new Error(`Ollama embeddings request failed: ${response.statusText}`);
+            throw new Error(
+                `Ollama embeddings request failed: ${response.statusText}`
+            );
         }
 
         const result = await response.json();

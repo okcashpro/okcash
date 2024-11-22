@@ -222,7 +222,7 @@ export class AgentRuntime implements IAgentRuntime {
         elizaLogger.info("Initializing AgentRuntime with options:", {
             character: opts.character?.name,
             modelProvider: opts.modelProvider,
-            characterModelProvider: opts.character?.modelProvider
+            characterModelProvider: opts.character?.modelProvider,
         });
 
         this.#conversationLength =
@@ -288,9 +288,12 @@ export class AgentRuntime implements IAgentRuntime {
         });
 
         this.serverUrl = opts.serverUrl ?? this.serverUrl;
-        
+
         elizaLogger.info("Setting model provider...");
-        elizaLogger.info("- Character model provider:", this.character.modelProvider);
+        elizaLogger.info(
+            "- Character model provider:",
+            this.character.modelProvider
+        );
         elizaLogger.info("- Opts model provider:", opts.modelProvider);
         elizaLogger.info("- Current model provider:", this.modelProvider);
 
@@ -298,13 +301,16 @@ export class AgentRuntime implements IAgentRuntime {
             this.character.modelProvider ??
             opts.modelProvider ??
             this.modelProvider;
-            
+
         elizaLogger.info("Selected model provider:", this.modelProvider);
 
         // Validate model provider
         if (!Object.values(ModelProviderName).includes(this.modelProvider)) {
             elizaLogger.error("Invalid model provider:", this.modelProvider);
-            elizaLogger.error("Available providers:", Object.values(ModelProviderName));
+            elizaLogger.error(
+                "Available providers:",
+                Object.values(ModelProviderName)
+            );
             throw new Error(`Invalid model provider: ${this.modelProvider}`);
         }
 

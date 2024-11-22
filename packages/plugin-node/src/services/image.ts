@@ -71,9 +71,16 @@ export class ImageDescriptionService
                 device: "gpu",
                 progress_callback: (progress) => {
                     if (progress.status === "downloading") {
-                        const percent = ((progress.loaded / progress.total) * 100).toFixed(1);
-                        const dots = '.'.repeat(Math.floor(Number(percent) / 5));
-                        elizaLogger.info(`Downloading Florence model: [${dots.padEnd(20, ' ')}] ${percent}%`);
+                        const percent = (
+                            (progress.loaded / progress.total) *
+                            100
+                        ).toFixed(1);
+                        const dots = ".".repeat(
+                            Math.floor(Number(percent) / 5)
+                        );
+                        elizaLogger.info(
+                            `Downloading Florence model: [${dots.padEnd(20, " ")}] ${percent}%`
+                        );
                     }
                 },
             }
