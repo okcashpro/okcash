@@ -910,7 +910,6 @@ export const generateWebSearch = async (
         }
 
         const data: SearchResponse = await response.json();
-        console.log("Response:", data);
         return data;
     } catch (error) {
         elizaLogger.error("Error:", error);

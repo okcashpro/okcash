@@ -1108,7 +1108,6 @@ export enum ServiceType {
     BROWSER = "browser",
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
-    WEB_SEARCH = "web_search",
 }
 
 export enum LoggingLevel {
