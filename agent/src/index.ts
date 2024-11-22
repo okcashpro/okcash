@@ -31,7 +31,7 @@ import readline from "readline";
 import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { character } from "./character.ts";
+import blobert from "./blobert.ts";
 import type { DirectClient } from "@ai16z/client-direct";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -312,7 +312,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [character];
+    let characters = [blobert];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);

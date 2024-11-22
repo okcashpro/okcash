@@ -63,12 +63,7 @@ async function set(runtime: AgentRuntime, item: KnowledgeItem) {
     });
 
     const preprocessed = preprocess(item.content.text);
-    const fragments = await splitChunks(
-        preprocessed,
-        10,
-        models[runtime.character.modelProvider].model?.[ModelClass.EMBEDDING],
-        5
-    );
+    const fragments = await splitChunks(preprocessed, 10, 5);
 
     for (const fragment of fragments) {
         const embedding = await embed(runtime, fragment);
