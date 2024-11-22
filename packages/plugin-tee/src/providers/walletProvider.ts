@@ -69,7 +69,6 @@ export class WalletProvider {
         for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
             try {
                 const apiKey = runtime.getSetting("BIRDEYE_API_KEY");
-                console.log("API KEY: ", apiKey);
                 const response = await fetch(url, {
                     ...options,
                     headers: {
