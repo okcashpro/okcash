@@ -25,6 +25,9 @@ jobs:
             - name: Run Prettier
               run: pnpm run prettier --check .
 
+            - name: Run Linter
+              run: pnpm run lint
+
             - name: Create test env file
               run: |
                   echo "TEST_DATABASE_CLIENT=sqlite" > packages/core/.env.test
