@@ -143,7 +143,7 @@ async function getLocalEmbedding(input: string): Promise<number[]> {
                 try {
                     return await import("fastembed");
                 } catch (error) {
-                    elizaLogger.error("Failed to load fastembed:", error);
+                    elizaLogger.error("Failed to load fastembed,");
                     throw new Error("fastembed import failed, falling back to remote embedding");
                 }
             })()
