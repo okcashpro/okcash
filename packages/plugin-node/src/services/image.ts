@@ -106,7 +106,7 @@ export class ImageDescriptionService
         this.queue.push(imageUrl);
         this.processQueue();
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             const checkQueue = () => {
                 const index = this.queue.indexOf(imageUrl);
                 if (index !== -1) {

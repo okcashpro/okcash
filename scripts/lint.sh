@@ -41,6 +41,7 @@ for package in "${PACKAGES[@]}"; do
                 echo -e "\033[1;32mSuccessfully linted $package\033[0m\n"
             else
                 echo -e "\033[1;31mLint failed for $package\033[0m"
+                exit 1 # Exit immediately if lint fails
             fi
         else
             echo "No lint script found in $package, skipping lint..."

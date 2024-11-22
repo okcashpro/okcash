@@ -119,7 +119,7 @@ const videoGeneration: Action = {
         "VIDEO_MAKE",
     ],
     description: "Generate a video based on a text prompt",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         elizaLogger.log("Validating video generation action");
         const lumaApiKey = runtime.getSetting("LUMA_API_KEY");
         elizaLogger.log("LUMA_API_KEY present:", !!lumaApiKey);
@@ -128,8 +128,8 @@ const videoGeneration: Action = {
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,
-        state: State,
-        options: any,
+        _state: State,
+        _options: any,
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Video generation request:", message);

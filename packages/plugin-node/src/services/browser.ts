@@ -266,7 +266,7 @@ export class BrowserService extends Service implements IBrowserService {
                     websiteKey: hcaptchaKey,
                 });
                 await page.evaluate((token) => {
-                    // @ts-ignore
+                    // @ts-expect-error expecting window.hcaptcha
                     window.hcaptcha.setResponse(token);
                 }, solution.gRecaptchaResponse);
                 return;
@@ -279,7 +279,7 @@ export class BrowserService extends Service implements IBrowserService {
                     websiteKey: recaptchaKey,
                 });
                 await page.evaluate((token) => {
-                    // @ts-ignore
+                    // @ts-expect-error expecting window.grecaptcha
                     document.getElementById("g-recaptcha-response").innerHTML =
                         token;
                 }, solution.gRecaptchaResponse);

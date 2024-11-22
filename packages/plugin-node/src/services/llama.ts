@@ -181,7 +181,7 @@ export class LlamaService extends Service {
         this.modelPath = path.join(__dirname, modelName);
     }
 
-    async initialize(runtime: IAgentRuntime): Promise<void> {}
+    async initialize(_runtime: IAgentRuntime): Promise<void> {}
 
     private async ensureInitialized() {
         if (!this.modelInitialized) {

@@ -9,7 +9,6 @@ import {
     HolderData,
     ProcessedTokenData,
     TokenSecurityData,
-    TokenTradeData,
     CalculatedBuyAmounts,
     Prices,
 } from "../types/trustDB.ts";
@@ -404,7 +403,7 @@ export class TokenProvider {
     }
 
     // TODO:
-    async analyzeHolderDistribution(tradeData: TokenInfo): Promise<string> {
+    async analyzeHolderDistribution(_tradeData: TokenInfo): Promise<string> {
         // Define the time intervals to consider (e.g., 30m, 1h, 2h)
 
         // TODO: Update to Starknet

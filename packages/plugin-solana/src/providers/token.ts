@@ -889,8 +889,8 @@ export class TokenProvider {
             const liquidityUsd = toBN(liquidity.usd);
             const marketCapUsd = toBN(marketCap);
             const totalSupply = toBN(ownerBalance).plus(creatorBalance);
-            const ownerPercentage = toBN(ownerBalance).dividedBy(totalSupply);
-            const creatorPercentage =
+            const _ownerPercentage = toBN(ownerBalance).dividedBy(totalSupply);
+            const _creatorPercentage =
                 toBN(creatorBalance).dividedBy(totalSupply);
             const top10HolderPercent = toBN(tradeData.volume_24h_usd).dividedBy(
                 totalSupply
