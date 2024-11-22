@@ -1,11 +1,23 @@
 # Changelog
 
-## [Unreleased](https://github.com/ai16z/eliza/tree/HEAD)
+## [v0.1.4-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.0) (2024-11-22)
 
-[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.0...HEAD)
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3...v0.1.4-alpha.0)
+
+**Implemented enhancements:**
+
+- Run using Bun.sh [\#492](https://github.com/ai16z/eliza/issues/492)
+- Move Trust DB into package [\#342](https://github.com/ai16z/eliza/issues/342)
+- Core Unit Tests [\#340](https://github.com/ai16z/eliza/issues/340)
+
+**Fixed bugs:**
+
+- Twitter Dry Run not working [\#451](https://github.com/ai16z/eliza/issues/451)
+- getCachedEmbeddings broken for sqlite adapter  [\#251](https://github.com/ai16z/eliza/issues/251)
 
 **Merged pull requests:**
 
+- fix: remove sol dep [\#504](https://github.com/ai16z/eliza/pull/504) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
 - fix: deps [\#503](https://github.com/ai16z/eliza/pull/503) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
 - chore: add contributor license [\#502](https://github.com/ai16z/eliza/pull/502) ([futjrnaut](https://github.com/futjrnaut))
 - node-v [\#501](https://github.com/ai16z/eliza/pull/501) ([ponderingdemocritus](https://github.com/ponderingdemocritus))
@@ -38,20 +50,6 @@
 - fix: postgres embedding issues [\#425](https://github.com/ai16z/eliza/pull/425) ([tarrencev](https://github.com/tarrencev))
 - feat: Cache Manager [\#378](https://github.com/ai16z/eliza/pull/378) ([bmgalego](https://github.com/bmgalego))
 - feat: adding back the renovate file for automated security scanning [\#358](https://github.com/ai16z/eliza/pull/358) ([sirkitree](https://github.com/sirkitree))
-
-## [v0.1.4-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.4-alpha.0) (2024-11-22)
-
-[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.3...v0.1.4-alpha.0)
-
-**Implemented enhancements:**
-
-- Move Trust DB into package [\#342](https://github.com/ai16z/eliza/issues/342)
-- Core Unit Tests [\#340](https://github.com/ai16z/eliza/issues/340)
-
-**Fixed bugs:**
-
-- Twitter Dry Run not working [\#451](https://github.com/ai16z/eliza/issues/451)
-- getCachedEmbeddings broken for sqlite adapter  [\#251](https://github.com/ai16z/eliza/issues/251)
 
 ## [v0.1.3](https://github.com/ai16z/eliza/tree/v0.1.3) (2024-11-20)
 
