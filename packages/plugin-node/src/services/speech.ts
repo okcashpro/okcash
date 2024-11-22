@@ -37,32 +37,31 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
     await validateNodeConfig(runtime);
 
     try {
-        const body = {
-            model_id: runtime.getSetting("ELEVENLABS_MODEL_ID"),
-            text: text,
-            voice_settings: {
-                similarity_boost: runtime.getSetting(
-                    "ELEVENLABS_VOICE_SIMILARITY_BOOST"
-                ),
-                stability: runtime.getSetting("ELEVENLABS_VOICE_STABILITY"),
-                style: runtime.getSetting("ELEVENLABS_VOICE_STYLE"),
-                use_speaker_boost: runtime.getSetting(
-                    "ELEVENLABS_VOICE_USE_SPEAKER_BOOST"
-                ),
-            },
-        };
-        const options = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "xi-api-key": runtime.getSetting("ELEVENLABS_XI_API_KEY"),
-            },
-            body: JSON.stringify(body),
-        };
-
         const response = await fetch(
             `https://api.elevenlabs.io/v1/text-to-speech/${runtime.getSetting("ELEVENLABS_VOICE_ID")}/stream?optimize_streaming_latency=${runtime.getSetting("ELEVENLABS_OPTIMIZE_STREAMING_LATENCY")}&output_format=${runtime.getSetting("ELEVENLABS_OUTPUT_FORMAT")}`,
-            options
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "xi-api-key": runtime.getSetting("ELEVENLABS_XI_API_KEY"),
+                },
+                body: JSON.stringify({
+                    model_id: runtime.getSetting("ELEVENLABS_MODEL_ID"),
+                    text: text,
+                    voice_settings: {
+                        similarity_boost: runtime.getSetting(
+                            "ELEVENLABS_VOICE_SIMILARITY_BOOST"
+                        ),
+                        stability: runtime.getSetting(
+                            "ELEVENLABS_VOICE_STABILITY"
+                        ),
+                        style: runtime.getSetting("ELEVENLABS_VOICE_STYLE"),
+                        use_speaker_boost: runtime.getSetting(
+                            "ELEVENLABS_VOICE_USE_SPEAKER_BOOST"
+                        ),
+                    },
+                }),
+            }
         );
 
         const status = response.status;
