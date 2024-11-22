@@ -62,7 +62,12 @@ export async function generateText({
         return "";
     }
 
-    elizaLogger.log("Genarating text...");
+    elizaLogger.log("Generating text...");
+
+    elizaLogger.info("Generating text with options:", {
+        modelProvider: runtime.modelProvider,
+        model: modelClass,
+    });
 
     const provider = runtime.modelProvider;
     const endpoint =
@@ -83,6 +88,8 @@ export async function generateText({
     ) {
         model = runtime.getSetting("LLAMACLOUD_MODEL_SMALL");
     }
+
+    elizaLogger.info("Selected model:", model);
 
     const temperature = models[provider].settings.temperature;
     const frequency_penalty = models[provider].settings.frequency_penalty;
@@ -709,7 +716,7 @@ export async function generateMessageResponse({
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {
-            elizaLogger.log("Genarating message response..");
+            elizaLogger.log("Generating message response..");
 
             const response = await generateText({
                 runtime,
