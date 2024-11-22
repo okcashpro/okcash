@@ -4625,8 +4625,8 @@ packages:
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
-  '@swc/types@0.1.16':
-    resolution: {integrity: sha512-okcPxwxfdKUPrH15TbMcuqMJBu6QcxjHwyhYj1IPyaSAKHY7SHqhaS2UCANaOQ/+E6Dor50IgNpSbeJNqcuehw==}
+  '@swc/types@0.1.17':
+    resolution: {integrity: sha512-V5gRru+aD8YVyCOMAjMpWR1Ui577DD5KSJsHP8RAxopAH22jFz6GZd/qxqjO6MJHQhcsjvjOFXyDhyLQUnMveQ==}
 
   '@szmarczak/http-timer@5.0.1':
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
@@ -5721,8 +5721,8 @@ packages:
   bare-path@2.1.3:
     resolution: {integrity: sha512-lh/eITfU8hrj9Ru5quUp0Io1kJWIk1bTjzo7JH1P5dWmQ2EL4hFUlfI8FonAhSlgIfhn63p84CDY/x+PisgcXA==}
 
-  bare-stream@2.3.2:
-    resolution: {integrity: sha512-EFZHSIBkDgSHIwj2l2QZfP4U5OcD4xFAOwhSb/vlr9PIqyGJGvB/nfClJbcnh3EY4jtPE4zsb5ztae96bVF79A==}
+  bare-stream@2.4.0:
+    resolution: {integrity: sha512-sd96/aZ8LjF1uJbEHzIo1LrERPKRFPEy1nZ1eOILftBxrVsFDAQkimHIIq87xrHcubzjNeETsD9PwN0wp+vLiQ==}
 
   base-x@3.0.10:
     resolution: {integrity: sha512-7d0s06rR9rYaIWHkpfLIFICM/tkSVdoPC9qYAQRpxn9DdKNWNsKC0uk++akckyLq16Tx2WIinnZ6WRriAt6njQ==}
@@ -7152,8 +7152,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  electron-to-chromium@1.5.63:
-    resolution: {integrity: sha512-ddeXKuY9BHo/mw145axlyWjlJ1UBt4WK3AlvkT7W2AbqfRQoacVoRUCF6wL3uIx/8wT9oLKXzI+rFqHHscByaA==}
+  electron-to-chromium@1.5.64:
+    resolution: {integrity: sha512-IXEuxU+5ClW2IGEYFC2T7szbyVgehupCWQe5GNh+H065CD6U6IFN0s4KeAMFGNmQolRU4IV7zGBWSYMmZ8uuqQ==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -11449,8 +11449,8 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
-  psl@1.10.0:
-    resolution: {integrity: sha512-KSKHEbjAnpUuAUserOq0FxGXCUrzC3WniuSJhvdbs102rL55266ZcHBqLWOsG30spQMlPdpy7icATiAQehg/iA==}
+  psl@1.13.0:
+    resolution: {integrity: sha512-BFwmFXiJoFqlUpZ5Qssolv15DMyc84gTBds1BjsV1BfXEo1UyyD7GsmN67n7J77uRhoSNW1AXtXKPLcBFQn9Aw==}
 
   pstree.remy@1.1.8:
     resolution: {integrity: sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==}
@@ -11786,8 +11786,8 @@ packages:
   regex@5.0.2:
     resolution: {integrity: sha512-/pczGbKIQgfTMRV0XjABvc5RzLqQmwqxLHdQao2RTXPk+pmTXB2P0IaUHYdYyk412YLwUIkaeMd5T+RzVgTqnQ==}
 
-  regexpu-core@6.1.1:
-    resolution: {integrity: sha512-k67Nb9jvwJcJmVpw0jPttR1/zVfnKf8Km0IPatrU/zJ5XeG3+Slx0xLXs9HByJSzXzrlz5EDvN6yLNMDc2qdnw==}
+  regexpu-core@6.2.0:
+    resolution: {integrity: sha512-H66BPQMrv+V16t8xtmq+UC0CBpiTBA60V8ibS1QVReIp8T1z8hwFxqcGzm9K6lgsN7sB5edVH8a+ze6Fqm4weA==}
     engines: {node: '>=4'}
 
   registry-auth-token@5.0.2:
@@ -11801,8 +11801,8 @@ packages:
   regjsgen@0.8.0:
     resolution: {integrity: sha512-RvwtGe3d7LvWiDQXeQw8p5asZUmfU1G/l6WbUXeHta7Y2PEIvBTwH6E2EfmYUK8pxcxEdEmaomqyp0vZZ7C+3Q==}
 
-  regjsparser@0.11.2:
-    resolution: {integrity: sha512-3OGZZ4HoLJkkAZx/48mTXJNlmqTGOzc0o9OWQPuWpkOlXXPbyN6OafCcoXUnBqE2D3f/T5L+pWc1kdEmnfnRsA==}
+  regjsparser@0.12.0:
+    resolution: {integrity: sha512-cnE+y8bz4NhMjISKbgeVJtqNbtf5QpjZP+Bslo+UqkIt9QPnX9q095eiRRASJG1/tz6dlNr6Z5NsBiWYokp6EQ==}
     hasBin: true
 
   rehype-parse@7.0.1:
@@ -12749,11 +12749,11 @@ packages:
     resolution: {integrity: sha512-n1cw8k1k0x4pgA2+9XrOkFydTerNcJ1zWCO5Nn9scWHTD+5tp8dghT2x1uduQePZTZgd3Tupf+x9BxJjeJi77Q==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@6.1.62:
-    resolution: {integrity: sha512-ohONqbfobpuaylhqFbtCzc0dFFeNz85FVKSesgT8DS9OV3a25Yj730pTj7/dDtCqmgoCgEj6gDiU9XxgHKQlBw==}
+  tldts-core@6.1.63:
+    resolution: {integrity: sha512-H1XCt54xY+QPbwhTgmxLkepX0MVHu3USfMmejiCOdkMbRcP22Pn2FVF127r/GWXVDmXTRezyF3Ckvhn4Fs6j7Q==}
 
-  tldts-experimental@6.1.62:
-    resolution: {integrity: sha512-HQAtXbhAaCvqo7eV7q0vdrUO6rPkN1Mzjc2MPnxHzjkMz/YQPfiqWFece8Txni0NRnFaZdMdRYl7cSSO95TlFA==}
+  tldts-experimental@6.1.63:
+    resolution: {integrity: sha512-Xqxv4UvuTwC/sslspSbkw/52vvYCeZdEJwnv7VFlQEfYvK8fNuIpz5hoOvO7XuzfjqexMRRnVDYUyjqesTYESg==}
 
   tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
@@ -14322,7 +14322,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.0
       '@babel/helper-annotate-as-pure': 7.25.9
-      regexpu-core: 6.1.1
+      regexpu-core: 6.2.0
       semver: 6.3.1
 
   '@babel/helper-define-polyfill-provider@0.6.3(@babel/core@7.26.0)':
@@ -15121,7 +15121,7 @@ snapshots:
       '@cliqz/adblocker': 1.34.0
       '@cliqz/adblocker-content': 1.34.0
       playwright: 1.48.2
-      tldts-experimental: 6.1.62
+      tldts-experimental: 6.1.63
 
   '@cliqz/adblocker@1.34.0':
     dependencies:
@@ -15132,7 +15132,7 @@ snapshots:
       '@remusao/smaz': 1.10.0
       '@types/chrome': 0.0.278
       '@types/firefox-webext-browser': 120.0.4
-      tldts-experimental: 6.1.62
+      tldts-experimental: 6.1.63
 
   '@colors/colors@1.5.0':
     optional: true
@@ -18639,7 +18639,7 @@ snapshots:
   '@swc/core@1.9.2(@swc/helpers@0.5.15)':
     dependencies:
       '@swc/counter': 0.1.3
-      '@swc/types': 0.1.16
+      '@swc/types': 0.1.17
     optionalDependencies:
       '@swc/core-darwin-arm64': 1.9.2
       '@swc/core-darwin-x64': 1.9.2
@@ -18659,7 +18659,7 @@ snapshots:
     dependencies:
       tslib: 2.8.0
 
-  '@swc/types@0.1.16':
+  '@swc/types@0.1.17':
     dependencies:
       '@swc/counter': 0.1.3
 
@@ -20006,7 +20006,7 @@ snapshots:
     dependencies:
       bare-events: 2.5.0
       bare-path: 2.1.3
-      bare-stream: 2.3.2
+      bare-stream: 2.4.0
     optional: true
 
   bare-os@2.4.4:
@@ -20017,7 +20017,7 @@ snapshots:
       bare-os: 2.4.4
     optional: true
 
-  bare-stream@2.3.2:
+  bare-stream@2.4.0:
     dependencies:
       streamx: 2.20.2
     optional: true
@@ -20165,7 +20165,7 @@ snapshots:
   browserslist@4.24.2:
     dependencies:
       caniuse-lite: 1.0.30001683
-      electron-to-chromium: 1.5.63
+      electron-to-chromium: 1.5.64
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
 
@@ -21600,7 +21600,7 @@ snapshots:
     dependencies:
       jake: 10.9.2
 
-  electron-to-chromium@1.5.63: {}
+  electron-to-chromium@1.5.64: {}
 
   emittery@0.13.1: {}
 
@@ -24259,7 +24259,7 @@ snapshots:
 
   log-symbols@4.1.0:
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.2
       is-unicode-supported: 0.1.0
 
   log-symbols@6.0.0:
@@ -26977,7 +26977,7 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
-  psl@1.10.0:
+  psl@1.13.0:
     dependencies:
       punycode: 2.3.1
 
@@ -27443,12 +27443,12 @@ snapshots:
     dependencies:
       regex-utilities: 2.3.0
 
-  regexpu-core@6.1.1:
+  regexpu-core@6.2.0:
     dependencies:
       regenerate: 1.4.2
       regenerate-unicode-properties: 10.2.0
       regjsgen: 0.8.0
-      regjsparser: 0.11.2
+      regjsparser: 0.12.0
       unicode-match-property-ecmascript: 2.0.0
       unicode-match-property-value-ecmascript: 2.2.0
 
@@ -27462,7 +27462,7 @@ snapshots:
 
   regjsgen@0.8.0: {}
 
-  regjsparser@0.11.2:
+  regjsparser@0.12.0:
     dependencies:
       jsesc: 3.0.2
 
@@ -28648,11 +28648,11 @@ snapshots:
 
   tinyspy@3.0.2: {}
 
-  tldts-core@6.1.62: {}
+  tldts-core@6.1.63: {}
 
-  tldts-experimental@6.1.62:
+  tldts-experimental@6.1.63:
     dependencies:
-      tldts-core: 6.1.62
+      tldts-core: 6.1.63
 
   tmp@0.0.33:
     dependencies:
@@ -28697,12 +28697,12 @@ snapshots:
 
   tough-cookie@2.5.0:
     dependencies:
-      psl: 1.10.0
+      psl: 1.13.0
       punycode: 2.3.1
 
   tough-cookie@4.1.4:
     dependencies:
-      psl: 1.10.0
+      psl: 1.13.0
       punycode: 2.3.1
       universalify: 0.2.0
       url-parse: 1.5.10
