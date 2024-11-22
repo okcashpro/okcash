@@ -5,6 +5,7 @@ export const buttplugEnvSchema = z
     .object({
         INTIFACE_URL: z.string().default("ws://localhost:12345"),
         INTIFACE_NAME: z.string().default("Eliza Buttplug Client"),
+        DEVICE_NAME: z.string().default("Eliza Buttplug Device"),
     })
     .refine(
         (data) => {
@@ -31,6 +32,8 @@ export async function validateButtplugConfig(
             INTIFACE_NAME:
                 runtime.getSetting("INTIFACE_NAME") ||
                 process.env.INTIFACE_NAME,
+            DEVICE_NAME:
+                runtime.getSetting("DEVICE_NAME") || process.env.DEVICE_NAME,
         };
 
         return buttplugEnvSchema.parse(config);

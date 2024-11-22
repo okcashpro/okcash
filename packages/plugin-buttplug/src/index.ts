@@ -28,6 +28,7 @@ export class ButtplugService extends Service implements IButtplugService {
     private maxVibrationIntensity = 1;
     private rampUpAndDown = false;
     private rampSteps = 20;
+    private preferredDeviceName: string | undefined;
 
     constructor() {
         super();
@@ -48,10 +49,8 @@ export class ButtplugService extends Service implements IButtplugService {
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
-        // Validate config before connecting
         this.config = await validateButtplugConfig(runtime);
-
-        // Update client name from config
+        this.preferredDeviceName = this.config.DEVICE_NAME;
         this.client = new ButtplugClient(this.config.INTIFACE_NAME);
 
         if (this.config.INTIFACE_URL) {
@@ -86,6 +85,20 @@ export class ButtplugService extends Service implements IButtplugService {
             await this.client.connect(connector);
             this.connected = true;
             await this.client.startScanning();
+
+            // Wait for device discovery
+            await new Promise((r) => setTimeout(r, 5000));
+            console.log("Scanning for devices...");
+
+            // Store discovered devices in the map
+            this.client.devices.forEach((device) => {
+                this.devices.set(device.name, device);
+                console.log(`- ${device.name} (${device.index})`);
+            });
+
+            if (this.devices.size === 0) {
+                console.log("No devices found");
+            }
         } catch (error) {
             console.error("Failed to connect to Buttplug server:", error);
             throw error;
@@ -151,47 +164,88 @@ export class ButtplugService extends Service implements IButtplugService {
     }
 
     private async handleVibrate(event: VibrateEvent) {
-        if (!this.connected) return;
+        if (!this.connected) {
+            throw new Error("Not connected to Buttplug server");
+        }
 
-        let strength = Math.min(event.strength, this.maxVibrationIntensity);
+        const devices = this.getDevices();
+        if (devices.length === 0) {
+            throw new Error("No devices available");
+        }
+
+        let targetDevice;
+        if (this.preferredDeviceName) {
+            targetDevice = this.devices.get(this.preferredDeviceName);
+            if (!targetDevice) {
+                console.warn(
+                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
+                );
+                targetDevice = devices[0];
+            }
+        } else {
+            targetDevice = devices[0];
+        }
 
         if (this.rampUpAndDown) {
-            await this.rampedVibrate(strength, event.duration);
+            const steps = this.rampSteps;
+            const rampLength = (event.duration * 0.2) / steps;
+            let startIntensity = 0;
+            let endIntensity = event.strength;
+            let stepIntensity = (endIntensity - startIntensity) / steps;
+
+            // Ramp up
+            for (let i = 0; i <= steps; i++) {
+                await targetDevice.vibrate(startIntensity + stepIntensity * i);
+                await new Promise((r) => setTimeout(r, rampLength));
+            }
+
+            // Hold
+            await new Promise((r) => setTimeout(r, event.duration * 0.54));
+
+            // Ramp down
+            startIntensity = event.strength;
+            endIntensity = 0;
+            stepIntensity = (endIntensity - startIntensity) / steps;
+
+            for (let i = 0; i <= steps; i++) {
+                await targetDevice.vibrate(startIntensity + stepIntensity * i);
+                await new Promise((r) => setTimeout(r, rampLength));
+            }
         } else {
-            await this.vibrateAll(strength);
+            await targetDevice.vibrate(event.strength);
             await new Promise((r) => setTimeout(r, event.duration));
-            await this.stopAll();
         }
+
+        await targetDevice.stop();
     }
 
-    private async rampedVibrate(targetStrength: number, duration: number) {
-        const stepTime = (duration * 0.2) / this.rampSteps;
-
-        // Ramp up
-        for (let i = 0; i <= this.rampSteps; i++) {
-            const intensity = (targetStrength / this.rampSteps) * i;
-            await this.vibrateAll(intensity);
-            await new Promise((r) => setTimeout(r, stepTime));
+    async vibrate(strength: number, duration: number): Promise<void> {
+        if (this.preferredDeviceName) {
+            const device = this.devices.get(this.preferredDeviceName);
+            if (!device) {
+                console.log(
+                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
+                );
+                const devices = this.getDevices();
+                if (devices.length > 0) {
+                    await this.addToVibrateQueue({
+                        strength,
+                        duration,
+                        deviceId: devices[0].id,
+                    });
+                } else {
+                    throw new Error("No devices available");
+                }
+            } else {
+                await this.addToVibrateQueue({
+                    strength,
+                    duration,
+                    deviceId: device.id,
+                });
+            }
+        } else {
+            await this.addToVibrateQueue({ strength, duration });
         }
-
-        // Hold
-        await new Promise((r) => setTimeout(r, duration * 0.6));
-
-        // Ramp down
-        for (let i = this.rampSteps; i >= 0; i--) {
-            const intensity = (targetStrength / this.rampSteps) * i;
-            await this.vibrateAll(intensity);
-            await new Promise((r) => setTimeout(r, stepTime));
-        }
-
-        await this.stopAll();
-    }
-
-    async vibrate(strength: number, duration: number) {
-        await this.addToVibrateQueue({
-            strength,
-            duration,
-        });
     }
 }
 
@@ -257,6 +311,48 @@ const vibrateAction: Action = {
                 content: {
                     text: "Vibrating at 50% intensity for 2000ms",
                     action: "VIBRATE",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "Make it buzz at max power for 5 seconds" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Vibrating at 100% intensity for 5000ms",
+                    action: "VIBRATE",
+                    options: { intensity: 1.0, duration: 5000 },
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "Give me a gentle buzz" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Vibrating at 25% intensity for 2000ms",
+                    action: "VIBRATE",
+                    options: { intensity: 0.25, duration: 2000 },
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "Vibrate for 10 seconds" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Vibrating at 50% intensity for 10000ms",
+                    action: "VIBRATE",
+                    options: { intensity: 0.5, duration: 10000 },
                 },
             },
         ],
