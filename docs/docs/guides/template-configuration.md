@@ -15,14 +15,14 @@ Here are all the template options you can configure:
 ```json
 {
   "templates": {
-    "goalsTemplate": "",               // Define character goals
-    "factsTemplate": "",              // Specify character knowledge
-    "messageHandlerTemplate": "",      // Handle general messages
-    "shouldRespondTemplate": "",       // Control response triggers
+    "goalsTemplate": "", // Define character goals
+    "factsTemplate": "", // Specify character knowledge
+    "messageHandlerTemplate": "", // Handle general messages
+    "shouldRespondTemplate": "", // Control response triggers
     "continueMessageHandlerTemplate": "", // Manage conversation flow
-    "evaluationTemplate": "",         // Handle response evaluation
-    "twitterSearchTemplate": "",      // Process Twitter searches
-    "twitterPostTemplate": "",        // Format Twitter posts
+    "evaluationTemplate": "", // Handle response evaluation
+    "twitterSearchTemplate": "", // Process Twitter searches
+    "twitterPostTemplate": "", // Format Twitter posts
     "twitterMessageHandlerTemplate": "", // Handle Twitter messages
     "twitterShouldRespondTemplate": "", // Control Twitter responses
     "telegramMessageHandlerTemplate": "", // Handle Telegram messages
@@ -60,11 +60,11 @@ Configure platform-specific behaviors for your character, such as handling direc
   "clientConfig": {
     "telegram": {
       "shouldIgnoreDirectMessages": true, // Ignore DMs
-      "shouldIgnoreBotMessages": true    // Ignore bot messages
+      "shouldIgnoreBotMessages": true // Ignore bot messages
     },
     "discord": {
-      "shouldIgnoreBotMessages": true,   // Ignore bot messages
-      "shouldIgnoreDirectMessages": true  // Ignore DMs
+      "shouldIgnoreBotMessages": true, // Ignore bot messages
+      "shouldIgnoreDirectMessages": true // Ignore DMs
     }
   }
 }
@@ -73,11 +73,13 @@ Configure platform-specific behaviors for your character, such as handling direc
 ## Best Practices
 
 1. **Template Management**
+
    - Keep templates focused and specific
    - Use clear, consistent formatting
    - Document custom template behavior
 
 2. **Client Configuration**
+
    - Configure per platform as needed
    - Test behavior in development
    - Monitor interaction patterns
