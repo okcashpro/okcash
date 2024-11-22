@@ -20,6 +20,9 @@ importers:
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
+      tslog:
+        specifier: ^4.9.3
+        version: 4.9.3
     devDependencies:
       '@commitlint/cli':
         specifier: ^18.4.4

@@ -86,8 +86,10 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     // 3. Fallback to OpenAI embedding model
     const embeddingModel = settings.USE_OPENAI_EMBEDDING
         ? "text-embedding-3-small"
-        : modelProvider.model?.[ModelClass.EMBEDDING] ||
-          models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING];
+        : runtime.character.modelProvider === ModelProviderName.OLLAMA
+        ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
+        : modelProvider.model?.[ModelClass.EMBEDDING]||
+        models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING];;
 
     if (!embeddingModel) {
         throw new Error("No embedding model configured");
