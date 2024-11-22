@@ -143,7 +143,7 @@ async function getLocalEmbedding(input: string): Promise<number[]> {
                 try {
                     return await import("fastembed");
                 } catch (error) {
-                    elizaLogger.error("Failed to load fastembed,");
+                    elizaLogger.error("Failed to load fastembed.");
                     throw new Error("fastembed import failed, falling back to remote embedding");
                 }
             })()
@@ -178,7 +178,7 @@ async function getLocalEmbedding(input: string): Promise<number[]> {
         const embedding = await embeddingModel.queryEmbed(trimmedInput);
         return embedding;
     } catch (error) {
-		elizaLogger.warn("Local embedding not supported in browser, falling back to remote embedding:", error);
+		elizaLogger.warn("Local embedding not supported in browser, falling back to remote embedding.");
         throw new Error("Local embedding not supported in browser");
     }
 }
