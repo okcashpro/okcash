@@ -126,10 +126,31 @@ async function getLocalEmbedding(input: string): Promise<number[]> {
         process.versions != null &&
         process.versions.node != null;
 
-    if (isNode) {
-        const fs = await import("fs");
-        const { FlagEmbedding } = await import("fastembed");
-        const { fileURLToPath } = await import("url");
+    if (!isNode) {
+        elizaLogger.warn(
+            "Local embedding not supported in browser, falling back to remote embedding"
+        );
+        throw new Error("Local embedding not supported in browser");
+    }
+
+    try {
+        // Try to dynamically import all required Node.js modules
+        const moduleImports = await Promise.all([
+            import("fs"),
+            import("url"),
+            // Wrap fastembed import in a try-catch to prevent build errors for non-Node.js environments.
+            (async () => {
+                try {
+                    return await import("fastembed");
+                } catch (error) {
+                    elizaLogger.error("Failed to load fastembed:", error);
+                    throw new Error("fastembed import failed, falling back to remote embedding");
+                }
+            })()
+        ]);
+
+        const [fs, { fileURLToPath }, fastEmbed] = moduleImports;
+        const { FlagEmbedding } = fastEmbed;
 
         function getRootPath() {
             const __filename = fileURLToPath(import.meta.url);
@@ -156,11 +177,8 @@ async function getLocalEmbedding(input: string): Promise<number[]> {
         const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
         const embedding = await embeddingModel.queryEmbed(trimmedInput);
         return embedding;
-    } else {
-        // Browser implementation - fallback to remote embedding
-        elizaLogger.warn(
-            "Local embedding not supported in browser, falling back to remote embedding"
-        );
+    } catch (error) {
+		elizaLogger.warn("Local embedding not supported in browser, falling back to remote embedding:", error);
         throw new Error("Local embedding not supported in browser");
     }
 }
