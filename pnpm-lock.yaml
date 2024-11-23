@@ -795,8 +795,8 @@ importers:
         specifier: 3.1.7
         version: 3.1.7
       pm2:
-        specifier: 5.4.2
-        version: 5.4.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: 5.4.3
+        version: 5.4.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       prettier:
         specifier: 3.3.3
         version: 3.3.3
@@ -1042,8 +1042,8 @@ importers:
         specifier: 1.48.2
         version: 1.48.2
       pm2:
-        specifier: 5.4.2
-        version: 5.4.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: 5.4.3
+        version: 5.4.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       puppeteer-extra:
         specifier: 3.3.6
         version: 3.3.6(puppeteer-core@19.11.1(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))(puppeteer@19.11.1(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))
@@ -2812,6 +2812,7 @@ packages:
     resolution: {integrity: sha512-hArn9FF5ZYi1IkxdJEVnJi+OxlwLV0NJYWpKXsmNOojtGtAZHxmsELA+MZlu2KW1F/K1/nt7lFOfcMXNYweq9w==}
     version: 0.17.0
     engines: {node: '>=16.11.0'}
+    deprecated: This version uses deprecated encryption modes. Please use a newer version.
 
   '@discordjs/ws@1.1.1':
     resolution: {integrity: sha512-PZ+vLpxGCRtmr2RMkqh8Zp+BenUaJqlS6xhgWKEZcgC/vfHLEzpHtKkB0sl3nZWpwtcKk6YWy+pU3okL2I97FA==}
@@ -11696,8 +11697,8 @@ packages:
   pm2-sysmonit@1.2.8:
     resolution: {integrity: sha512-ACOhlONEXdCTVwKieBIQLSi2tQZ8eKinhcr9JpZSUAL8Qy0ajIgRtsLxG/lwPOW3JEKqPyw/UaHmTWhUzpP4kA==}
 
-  pm2@5.4.2:
-    resolution: {integrity: sha512-ynVpBwZampRH3YWLwRepZpQ7X3MvpwLIaqIdFEeBYEhaXbHmEx2KqOdxGV4T54wvKBhH3LixvU1j1bK4/sq7Tw==}
+  pm2@5.4.3:
+    resolution: {integrity: sha512-4/I1htIHzZk1Y67UgOCo4F1cJtas1kSds31N8zN0PybO230id1nigyjGuGFzUnGmUFPmrJ0On22fO1ChFlp7VQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -24344,7 +24345,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7(supports-color@5.5.0)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -25876,7 +25877,7 @@ snapshots:
 
   jest-diff@29.7.0:
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.2
       diff-sequences: 29.6.3
       jest-get-type: 29.6.3
       pretty-format: 29.7.0
@@ -27923,7 +27924,7 @@ snapshots:
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
       axios: 1.7.7(debug@4.3.7)
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       cliui: 8.0.1
@@ -28126,7 +28127,7 @@ snapshots:
   ora@5.3.0:
     dependencies:
       bl: 4.1.0
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       is-interactive: 1.0.0
@@ -28588,7 +28589,7 @@ snapshots:
       - supports-color
     optional: true
 
-  pm2@5.4.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+  pm2@5.4.3(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
       '@pm2/agent': 2.0.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@pm2/io': 6.0.1
