@@ -943,8 +943,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2
       '@opendocsg/pdf2md':
-        specifier: 0.1.31
-        version: 0.1.31(encoding@0.1.13)
+        specifier: 0.1.32
+        version: 0.1.32(encoding@0.1.13)
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -4347,8 +4347,8 @@ packages:
     resolution: {integrity: sha512-I5YPUtfWidh+OzyrlDahJsUpkpGK0kCTmDRbuqGmlCUzOtxdEkX3R4d6Cd08ijQYwkVXQJanPdbKuZBeV2NMaA==}
     engines: {node: '>= 18'}
 
-  '@opendocsg/pdf2md@0.1.31':
-    resolution: {integrity: sha512-Pinl9WSL3P7pMeIdriQCYuBymspbGwt+Wic9ocoIGSYQuxccRC6fMzhRXAgO//MqwTSbgPiKHzYFE2v7Azd9gw==}
+  '@opendocsg/pdf2md@0.1.32':
+    resolution: {integrity: sha512-UK4qVuesmUcpPZXMeO8FwRqpCNwJRBTHcae4j+3Mr3bxrNqilZIIowdrzgcgn8fSQ2Dg/P4/0NoPkxAvf9D5rw==}
     hasBin: true
 
   '@opentelemetry/api@1.9.0':
@@ -19458,7 +19458,7 @@ snapshots:
       '@octokit/request-error': 6.1.5
       '@octokit/webhooks-methods': 5.1.0
 
-  '@opendocsg/pdf2md@0.1.31(encoding@0.1.13)':
+  '@opendocsg/pdf2md@0.1.32(encoding@0.1.13)':
     dependencies:
       enumify: 1.0.4
       minimist: 1.2.8
