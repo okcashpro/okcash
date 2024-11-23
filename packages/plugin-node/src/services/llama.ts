@@ -671,9 +671,32 @@ export class LlamaService extends Service {
             throw new Error("Sequence not initialized");
         }
 
-        const embeddingContext = await this.model.createEmbeddingContext();
-        const embedding = await embeddingContext.getEmbeddingFor(input);
-        return embedding?.vector ? [...embedding.vector] : undefined;
+        const ollamaModel = process.env.OLLAMA_MODEL;
+        const ollamaUrl =
+            process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+        const embeddingModel =
+            process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
+        elizaLogger.info(
+            `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
+        );
+
+        const response = await fetch(`${ollamaUrl}/api/embeddings`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                input: input,
+                model: embeddingModel,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to get embedding: ${response.statusText}`);
+        }
+
+        const embedding = await response.json();
+        return embedding.vector;
     }
 
     private async ollamaCompletion(prompt: string): Promise<string> {
