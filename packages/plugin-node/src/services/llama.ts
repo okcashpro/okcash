@@ -189,22 +189,21 @@ export class LlamaService extends Service {
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
-        elizaLogger.info("Initializing LlamaService...");
         try {
-            // Check if we should use Ollama
-            if (runtime.modelProvider === ModelProviderName.OLLAMA) {
-                elizaLogger.info("Using Ollama provider");
-                this.modelInitialized = true;
+            if (runtime.modelProvider === ModelProviderName.LLAMALOCAL) {
+                elizaLogger.info("Initializing LlamaService...");
+                elizaLogger.info("Using local GGUF model");
+                elizaLogger.info("Ensuring model is initialized...");
+                await this.ensureInitialized();
+                elizaLogger.success("LlamaService initialized successfully");
+            } else {
+                elizaLogger.info(
+                    "Not using local model, skipping initialization"
+                );
                 return;
             }
-
-            elizaLogger.info("Using local GGUF model");
-            elizaLogger.info("Ensuring model is initialized...");
-            await this.ensureInitialized();
-            elizaLogger.success("LlamaService initialized successfully");
         } catch (error) {
             elizaLogger.error("Failed to initialize LlamaService:", error);
-            // Re-throw with more context
             throw new Error(
                 `LlamaService initialization failed: ${error.message}`
             );
