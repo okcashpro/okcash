@@ -58,7 +58,6 @@ async function handler(
     // get goals
     let goalsData = await getGoals({
         runtime,
-        agentId: runtime.agentId,
         roomId: message.roomId,
         onlyInProgress: options.onlyInProgress as boolean,
     });
@@ -82,7 +81,6 @@ async function handler(
     // get goals
     goalsData = await getGoals({
         runtime,
-        agentId: runtime.agentId,
         roomId: message.roomId,
         onlyInProgress: true,
     });
@@ -148,7 +146,6 @@ export const goalEvaluator: Evaluator = {
         // Check if there are active goals that could potentially be updated
         const goals = await getGoals({
             runtime,
-            agentId: runtime.agentId,
             count: 1,
             onlyInProgress: true,
             roomId: message.roomId,
