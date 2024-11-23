@@ -343,7 +343,7 @@ export class PostgresDatabaseAdapter
     }): Promise<Memory[]> {
         if (!params.tableName) throw new Error("tableName is required");
         if (!params.roomId) throw new Error("roomId is required");
-        let sql = `SELECT * FROM memories WHERE type = $1 AND agentId = $2 AND "roomId" = $3`;
+        let sql = `SELECT * FROM memories WHERE type = $1 AND "agentId" = $2 AND "roomId" = $3`;
         const values: any[] = [params.tableName, params.agentId, params.roomId];
         let paramCount = 2;
 
