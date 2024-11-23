@@ -734,7 +734,7 @@ export class LlamaService extends Service {
     }
 
     private async ollamaEmbedding(text: string): Promise<number[]> {
-        // const ollamaModel = process.env.OLLAMA_MODEL;
+        const ollamaModel = process.env.OLLAMA_MODEL;
         const ollamaUrl =
             process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
         const embeddingModel =
