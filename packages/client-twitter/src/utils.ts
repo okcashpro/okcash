@@ -72,7 +72,7 @@ export async function buildConversationThread(
                 "twitter"
             );
 
-            client.runtime.messageManager.createMemory({
+            await client.runtime.messageManager.createMemory({
                 id: stringToUuid(
                     currentTweet.id + "-" + client.runtime.agentId
                 ),
