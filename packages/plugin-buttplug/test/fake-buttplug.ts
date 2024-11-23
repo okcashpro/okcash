@@ -1,4 +1,5 @@
 import WebSocket from "ws";
+import EventEmitter from "events";
 
 interface DeviceHandshake {
     identifier: string;
@@ -6,152 +7,195 @@ interface DeviceHandshake {
     version: number;
 }
 
-export class DeviceSimulator {
-    private ws: WebSocket | null = null;
-    private readonly deviceAddress: string = "8A3D9FAC2A45";
-    name = "LVS Test Device";
-    private connected = false;
-    private connectionPromise: Promise<void> | null = null;
+abstract class SimulatedDevice extends EventEmitter {
+    protected ws: WebSocket | null = null;
+    protected connected = false;
+    protected shouldReconnect = true;
+    name: string;
+    protected cmdLog: Record<number, string> = {};
 
-    constructor() {
-        console.log("[fake-buttplug] Initializing device simulator");
-        this.connectionPromise = this.connect();
+    constructor(
+        protected port: number,
+        protected deviceType: string,
+        protected address: string
+    ) {
+        super();
+        this.name = `Simulated ${deviceType}`;
+        this.connect();
     }
 
-    private async connect(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            console.log(
-                "[fake-buttplug] Attempting to connect to ws://127.0.0.1:54817"
-            );
-            this.ws = new WebSocket("ws://127.0.0.1:54817");
+    private connect(): void {
+        if (this.ws || !this.shouldReconnect) return;
 
-            const timeout = setTimeout(() => {
-                console.log("[fake-buttplug] Connection timeout after 5000ms");
-                reject(new Error("Connection timeout"));
-            }, 5000);
+        console.log(
+            `[fake-buttplug] Connecting ${this.deviceType} to port ${this.port}`
+        );
+        this.ws = new WebSocket(`ws://127.0.0.1:${this.port}`);
 
-            this.ws.on("open", () => {
-                clearTimeout(timeout);
-                this.connected = true;
-                console.log("[fake-buttplug] Connection established");
-
-                const handshake: DeviceHandshake = {
-                    identifier: "Eliza Buttplug Device",
-                    address: this.deviceAddress,
-                    version: 0,
-                };
-                console.log(
-                    "[fake-buttplug] Sending handshake:",
-                    JSON.stringify(handshake)
-                );
-                this.ws?.send(JSON.stringify(handshake));
-                resolve();
-            });
-
-            this.setupEventHandlers();
+        this.ws.on("open", () => {
+            this.connected = true;
+            console.log(`[fake-buttplug] ${this.deviceType} connected`);
+            const handshake: DeviceHandshake = {
+                identifier: this.getIdentifier(),
+                address: this.address,
+                version: 0,
+            };
+            this.ws?.send(JSON.stringify(handshake));
         });
-    }
-
-    private setupEventHandlers(): void {
-        if (!this.ws) return;
 
         this.ws.on("message", (data: string) => {
             const message = data.toString();
-            console.log("[fake-buttplug] Received:", message);
-
-            if (message.startsWith("DeviceType;")) {
-                console.log(
-                    "[fake-buttplug] Responding to DeviceType with device info"
-                );
-                this.ws?.send(`Z:${this.deviceAddress}:10`);
-            }
-        });
-
-        this.ws.on("error", (error: Error) => {
-            console.log("[fake-buttplug] Error:", error.message);
-            this.connected = false;
-        });
-
-        this.ws.on("close", (code: number, reason: Buffer) => {
-            console.log("[fake-buttplug] Connection closed:", {
-                code,
-                reason: reason.toString(),
-            });
-            this.connected = false;
-        });
-    }
-
-    private async ensureConnection(): Promise<void> {
-        if (!this.connected) {
             console.log(
-                "[fake-buttplug] Connection lost, attempting reconnect"
+                `[fake-buttplug] ${this.deviceType} received:`,
+                message
             );
-            this.connectionPromise = this.connect();
-        }
-        if (this.connectionPromise) {
-            await this.connectionPromise;
-        }
-    }
+            this.handleMessage(message);
+        });
 
-    async vibrate(speed: number) {
-        await this.ensureConnection();
-        if (!this.ws || !this.connected) {
-            throw new Error("Device not connected");
-        }
-        const command = `Vibrate:${this.deviceAddress}:${Math.floor(speed * 100)}`;
-        console.log("[fake-buttplug] Sending vibrate command:", command);
-        this.ws.send(command);
-        console.log(`[SIMULATION] Vibrating at ${speed * 100}%`);
-    }
-
-    async stop() {
-        await this.ensureConnection();
-        if (!this.ws || !this.connected) {
-            throw new Error("Device not connected");
-        }
-        const command = `Vibrate:${this.deviceAddress}:0`;
-        console.log("[fake-buttplug] Sending stop command:", command);
-        this.ws.send(command);
-        console.log("[SIMULATION] Stopped vibration");
-
-        // Wait a moment to ensure command is sent
-        await new Promise((r) => setTimeout(r, 100));
-    }
-
-    async disconnect() {
-        if (this.ws) {
-            console.log("[fake-buttplug] Starting disconnect sequence");
-            // Ensure we stop before disconnecting
-            try {
-                await this.stop();
-            } catch (err) {
+        this.ws.on("error", (error) => {
+            if (this.shouldReconnect) {
                 console.log(
-                    "[fake-buttplug] Error during stop in disconnect:",
-                    err
+                    `[fake-buttplug] ${this.deviceType} error:`,
+                    error.message
                 );
+                this.reconnect();
             }
+        });
 
-            // Wait a moment before closing
-            await new Promise((r) => setTimeout(r, 100));
+        this.ws.on("close", () => {
+            if (this.shouldReconnect) {
+                console.log(`[fake-buttplug] ${this.deviceType} disconnected`);
+                this.connected = false;
+                this.reconnect();
+            }
+        });
+    }
 
-            console.log("[fake-buttplug] Closing WebSocket connection");
+    private reconnect(): void {
+        if (!this.connected && this.shouldReconnect) {
+            this.ws = null;
+            setTimeout(() => this.connect(), 1000);
+        }
+    }
+
+    protected abstract getIdentifier(): string;
+    protected abstract handleMessage(message: string): void;
+
+    async disconnect(): Promise<void> {
+        this.shouldReconnect = false;
+        if (this.ws) {
+            await this.stop();
             this.ws.close();
             this.ws = null;
         }
         this.connected = false;
-        this.connectionPromise = null;
-        console.log("[fake-buttplug] Disconnect complete");
+    }
+
+    abstract stop(): Promise<void>;
+}
+
+export class LovenseNora extends SimulatedDevice {
+    private batteryQueryReceived = false;
+    private batteryLevel = 0.9;
+    private vibrateCmdLog: Record<number, string> = {};
+    private rotateCmdLog: Record<number, string> = {};
+
+    constructor(port: number = 54817) {
+        super(port, "Lovense Nora", "696969696969");
+    }
+
+    protected getIdentifier(): string {
+        return "LVSDevice";
+    }
+
+    protected handleMessage(message: string): void {
+        if (message.startsWith("DeviceType;")) {
+            this.ws?.send(`A:${this.address}:10`);
+            console.log(
+                `[fake-buttplug] Sent device type response: A:${this.address}:10`
+            );
+        } else if (message.startsWith("Vibrate:")) {
+            const match = message.match(/Vibrate:(\d+);/);
+            if (match) {
+                const speed = parseInt(match[1]);
+                if (
+                    speed === 0 &&
+                    Object.keys(this.vibrateCmdLog).length === 0
+                ) {
+                    return;
+                }
+                this.vibrateCmdLog[Date.now()] = message;
+                console.log(
+                    `[fake-buttplug] Vibrate command logged: ${message}`
+                );
+            }
+        } else if (message.startsWith("Rotate:")) {
+            const match = message.match(/Rotate:(\d+);/);
+            if (match) {
+                const speed = parseInt(match[1]);
+                if (
+                    speed === 0 &&
+                    Object.keys(this.rotateCmdLog).length === 0
+                ) {
+                    return;
+                }
+                this.rotateCmdLog[Date.now()] = message;
+                console.log(
+                    `[fake-buttplug] Rotate command logged: ${message}`
+                );
+            }
+        } else if (message.startsWith("Battery")) {
+            this.batteryQueryReceived = true;
+            const response = `${Math.floor(this.batteryLevel * 100)};`;
+            this.ws?.send(response);
+            console.log(
+                `[fake-buttplug] Battery query received, responding with: ${response}`
+            );
+        }
+    }
+
+    async vibrate(speed: number): Promise<void> {
+        if (!this.connected || !this.ws) {
+            throw new Error("Device not connected");
+        }
+        const command = `Vibrate:${Math.floor(speed * 100)};`;
+        this.ws.send(command);
+        console.log(`[fake-buttplug] Sending vibrate command: ${command}`);
+    }
+
+    async rotate(speed: number): Promise<void> {
+        if (!this.connected || !this.ws) {
+            throw new Error("Device not connected");
+        }
+        const command = `Rotate:${Math.floor(speed * 100)};`;
+        this.ws.send(command);
+        console.log(`[fake-buttplug] Sending rotate command: ${command}`);
+    }
+
+    async stop(): Promise<void> {
+        if (this.connected && this.ws) {
+            this.ws.send("Vibrate:0;");
+            this.ws.send("Rotate:0;");
+            console.log("[fake-buttplug] Stopping all motors");
+        }
+    }
+
+    async getBatteryLevel(): Promise<number> {
+        if (!this.connected || !this.ws) {
+            throw new Error("Device not connected");
+        }
+        this.ws.send("Battery;");
+        return this.batteryLevel;
     }
 }
 
-// If this file is run directly, create and maintain a simulator instance
+// Start simulator if run directly
 if (import.meta.url === new URL(import.meta.url).href) {
     console.log("[fake-buttplug] Starting simulator service");
-    const simulator = new DeviceSimulator();
+    const simulator = new LovenseNora();
 
-    // Keep the process alive
     process.on("SIGINT", async () => {
-        console.log("[fake-buttplug] Shutting down simulator service");
+        console.log("[fake-buttplug] Shutting down simulator");
         await simulator.disconnect();
         process.exit(0);
     });

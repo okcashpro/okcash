@@ -1,11 +1,12 @@
-import { spawn } from "child_process";
-import { promisify } from "util";
+import { spawn, type ChildProcess } from "child_process";
 import net from "net";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+let intifaceProcess: ChildProcess | null = null;
 
 export async function isPortAvailable(port: number): Promise<boolean> {
     return new Promise((resolve) => {
@@ -22,7 +23,7 @@ export async function isPortAvailable(port: number): Promise<boolean> {
 
 export async function startIntifaceEngine(): Promise<void> {
     try {
-        const child = spawn(
+        intifaceProcess = spawn(
             path.join(__dirname, "../intiface-engine/intiface-engine"),
             [
                 "--websocket-port",
@@ -30,20 +31,74 @@ export async function startIntifaceEngine(): Promise<void> {
                 "--use-bluetooth-le",
                 "--server-name",
                 "Eliza Buttplugin Server",
+                "--log",
+                "debug",
+                "--use-device-websocket-server",
+                "--device-websocket-server-port",
+                "54817",
             ],
             {
-                detached: true,
+                detached: false,
                 stdio: "ignore",
                 windowsHide: true,
             }
         );
 
-        // Unref the child process to allow the parent to exit independently
-        child.unref();
+        // Set up cleanup handler
+        process.on("SIGINT", cleanup);
+        process.on("SIGTERM", cleanup);
+        process.on("exit", cleanup);
 
         // Wait briefly to ensure the process starts
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        console.log("[utils] Intiface Engine started");
     } catch (error) {
         throw new Error(`Failed to start Intiface Engine: ${error}`);
     }
 }
+
+async function cleanup() {
+    if (intifaceProcess) {
+        console.log("[utils] Shutting down Intiface Engine...");
+        try {
+            // Try graceful shutdown first
+            intifaceProcess.kill("SIGTERM");
+
+            // Give it a moment to shut down gracefully
+            await new Promise((r) => setTimeout(r, 1000));
+
+            // Force kill if still running
+            if (intifaceProcess.killed === false) {
+                try {
+                    const killCommand =
+                        process.platform === "win32"
+                            ? spawn("taskkill", [
+                                  "/F",
+                                  "/IM",
+                                  "intiface-engine.exe",
+                              ])
+                            : spawn("pkill", ["intiface-engine"]);
+
+                    await new Promise((resolve) => {
+                        killCommand.on("close", resolve);
+                    });
+                } catch (killErr) {
+                    console.error(
+                        "[utils] Error force killing Intiface Engine:",
+                        killErr
+                    );
+                }
+            }
+        } catch (err) {
+            console.error(
+                "[utils] Error during Intiface Engine shutdown:",
+                err
+            );
+        } finally {
+            intifaceProcess = null;
+        }
+    }
+}
+
+// Export cleanup for manual shutdown if needed
+export { cleanup as shutdownIntifaceEngine };

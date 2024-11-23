@@ -95,6 +95,8 @@ Integrates Buttplug.io for intimate toy control:
 **Actions:**
 
 - `VIBRATE` - Control vibration intensity and duration of connected devices
+- `ROTATE` - Control rotation intensity and duration of connected devices
+- `BATTERY` - Get the battery level of connected devices
 
 ## Using Plugins
 

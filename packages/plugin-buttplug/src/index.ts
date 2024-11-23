@@ -13,6 +13,8 @@ import { isPortAvailable, startIntifaceEngine } from "./utils";
 
 export interface IButtplugService extends Service {
     vibrate(strength: number, duration: number): Promise<void>;
+    rotate?(strength: number, duration: number): Promise<void>;
+    getBatteryLevel?(): Promise<number>;
     isConnected(): boolean;
     getDevices(): any[];
 }
@@ -120,22 +122,6 @@ export class ButtplugService extends Service implements IButtplugService {
     private handleDeviceRemoved(device: any) {
         this.devices.delete(device.name);
         console.log(`Device disconnected: ${device.name}`);
-    }
-
-    async vibrateAll(intensity: number) {
-        for (const device of this.devices.values()) {
-            if (device.vibrateCmd) {
-                await device.vibrate(intensity);
-            }
-        }
-    }
-
-    async stopAll() {
-        for (const device of this.devices.values()) {
-            if (device.stop) {
-                await device.stop();
-            }
-        }
     }
 
     getDevices() {
@@ -246,6 +232,105 @@ export class ButtplugService extends Service implements IButtplugService {
         } else {
             await this.addToVibrateQueue({ strength, duration });
         }
+    }
+
+    async getBatteryLevel(): Promise<number> {
+        if (!this.connected) {
+            throw new Error("Not connected to Buttplug server");
+        }
+
+        const devices = this.getDevices();
+        if (devices.length === 0) {
+            throw new Error("No devices available");
+        }
+
+        let targetDevice;
+        if (this.preferredDeviceName) {
+            targetDevice = this.devices.get(this.preferredDeviceName);
+            if (!targetDevice) {
+                console.warn(
+                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
+                );
+                targetDevice = devices[0];
+            }
+        } else {
+            targetDevice = devices[0];
+        }
+
+        try {
+            const battery = await targetDevice.battery();
+            console.log(
+                `Battery level for ${targetDevice.name}: ${battery * 100}%`
+            );
+            return battery;
+        } catch (err) {
+            console.error("Error getting battery level:", err);
+            throw err;
+        }
+    }
+
+    async rotate(strength: number, duration: number): Promise<void> {
+        if (!this.connected) {
+            throw new Error("Not connected to Buttplug server");
+        }
+
+        const devices = this.getDevices();
+        if (devices.length === 0) {
+            throw new Error("No devices available");
+        }
+
+        let targetDevice;
+        if (this.preferredDeviceName) {
+            targetDevice = this.devices.get(this.preferredDeviceName);
+            if (!targetDevice) {
+                console.warn(
+                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
+                );
+                targetDevice = devices[0];
+            }
+        } else {
+            targetDevice = devices[0];
+        }
+
+        // Check if device supports rotation
+        if (!targetDevice.rotateCmd) {
+            throw new Error("Device does not support rotation");
+        }
+
+        if (this.rampUpAndDown) {
+            await this.rampedRotate(targetDevice, strength, duration);
+        } else {
+            await targetDevice.rotate(strength);
+            await new Promise((r) => setTimeout(r, duration));
+            await targetDevice.stop();
+        }
+    }
+
+    private async rampedRotate(
+        device: any,
+        targetStrength: number,
+        duration: number
+    ) {
+        const stepTime = (duration * 0.2) / this.rampSteps;
+
+        // Ramp up
+        for (let i = 0; i <= this.rampSteps; i++) {
+            const intensity = (targetStrength / this.rampSteps) * i;
+            await device.rotate(intensity);
+            await new Promise((r) => setTimeout(r, stepTime));
+        }
+
+        // Hold
+        await new Promise((r) => setTimeout(r, duration * 0.6));
+
+        // Ramp down
+        for (let i = this.rampSteps; i >= 0; i--) {
+            const intensity = (targetStrength / this.rampSteps) * i;
+            await device.rotate(intensity);
+            await new Promise((r) => setTimeout(r, stepTime));
+        }
+
+        await device.stop();
     }
 }
 
@@ -359,6 +444,144 @@ const vibrateAction: Action = {
     ],
 };
 
+const rotateAction: Action = {
+    name: "ROTATE",
+    similes: ["ROTATE_TOY", "ROTATE_DEVICE", "START_ROTATION", "SPIN"],
+    description: "Control rotation intensity of connected devices",
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
+        try {
+            await validateButtplugConfig(runtime);
+            return true;
+        } catch {
+            return false;
+        }
+    },
+    handler: async (
+        runtime: IAgentRuntime,
+        message: Memory,
+        state: State,
+        options: any,
+        callback: HandlerCallback
+    ) => {
+        const service = runtime.getService<IButtplugService>(
+            ServiceType.BUTTPLUG
+        );
+        if (!service || !service.rotate) {
+            throw new Error("Rotation not supported");
+        }
+
+        const intensity = options?.intensity ?? 0.5;
+        const duration = options?.duration ?? 2000;
+
+        await service.rotate(intensity, duration);
+
+        callback({
+            text: `Rotating at ${intensity * 100}% intensity for ${duration}ms`,
+        });
+    },
+    examples: [
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "Rotate the toy at 70% for 3 seconds" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Rotating at 70% intensity for 3000ms",
+                    action: "ROTATE",
+                    options: { intensity: 0.7, duration: 3000 },
+                },
+            },
+        ],
+    ],
+};
+
+const batteryAction: Action = {
+    name: "BATTERY",
+    similes: [
+        "CHECK_BATTERY",
+        "BATTERY_LEVEL",
+        "TOY_BATTERY",
+        "DEVICE_BATTERY",
+    ],
+    description: "Check battery level of connected devices",
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
+        try {
+            await validateButtplugConfig(runtime);
+            return true;
+        } catch {
+            return false;
+        }
+    },
+    handler: async (
+        runtime: IAgentRuntime,
+        message: Memory,
+        state: State,
+        options: any,
+        callback: HandlerCallback
+    ) => {
+        const service = runtime.getService<IButtplugService>(
+            ServiceType.BUTTPLUG
+        );
+        if (!service || !service.getBatteryLevel) {
+            throw new Error("Battery level check not supported");
+        }
+
+        try {
+            const batteryLevel = await service.getBatteryLevel();
+            callback({
+                text: `Device battery level is at ${Math.round(batteryLevel * 100)}%`,
+            });
+        } catch (err) {
+            callback({
+                text: "Unable to get battery level. Device might not support this feature.",
+            });
+        }
+    },
+    examples: [
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "What's the battery level?" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Device battery level is at 90%",
+                    action: "BATTERY",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "Check toy battery" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Device battery level is at 75%",
+                    action: "BATTERY",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: { text: "How much battery is left?" },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Device battery level is at 45%",
+                    action: "BATTERY",
+                },
+            },
+        ],
+    ],
+};
+
 interface VibrateEvent {
     duration: number;
     strength: number;
@@ -368,7 +591,7 @@ interface VibrateEvent {
 export const buttplugPlugin: Plugin = {
     name: "buttplug",
     description: "Controls intimate hardware devices",
-    actions: [vibrateAction],
+    actions: [vibrateAction, rotateAction, batteryAction],
     evaluators: [],
     providers: [],
     services: [new ButtplugService()],
