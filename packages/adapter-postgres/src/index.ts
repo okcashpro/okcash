@@ -1,11 +1,11 @@
 import { v4 } from "uuid";
 import pg, {
+    type Pool,
     QueryConfig,
     QueryConfigValues,
     QueryResult,
     QueryResultRow,
-    DatabaseError
-    type Pool,
+    DatabaseError,
 } from "pg";
 import {
     Account,
@@ -637,9 +637,7 @@ export class PostgresDatabaseAdapter
             );
             return true;
         } catch (error) {
-
-            if(error instanceof DatabaseError) {
-
+            if (error instanceof DatabaseError) {
                 elizaLogger.log("Error adding participant", error);
                 // This is to prevent duplicate participant error in case of a race condition
                 // Handle unique constraint violation error (code 23505)
