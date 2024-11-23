@@ -48,11 +48,10 @@ export class MemoryManager implements IMemoryManager {
             return memory;
         }
 
-        const memoryText = memory.content.text;
-        if (!memoryText) throw new Error("Memory content is empty");
-        memory.embedding = memoryText
-            ? await embed(this.runtime, memoryText)
-            : embeddingZeroVector.slice();
+        if (memory.content.text) {
+            memory.embedding = await embed(this.runtime, memory.content.text);
+        }
+
         return memory;
     }
 
@@ -68,14 +67,12 @@ export class MemoryManager implements IMemoryManager {
         roomId,
         count = 10,
         unique = true,
-        agentId,
         start,
         end,
     }: {
         roomId: UUID;
         count?: number;
         unique?: boolean;
-        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
@@ -84,7 +81,7 @@ export class MemoryManager implements IMemoryManager {
             count,
             unique,
             tableName: this.tableName,
-            agentId,
+            agentId: this.runtime.agentId,
             start,
             end,
         });
@@ -122,7 +119,6 @@ export class MemoryManager implements IMemoryManager {
         embedding: number[],
         opts: {
             match_threshold?: number;
-            agentId?: UUID;
             count?: number;
             roomId: UUID;
             unique?: boolean;
@@ -133,21 +129,17 @@ export class MemoryManager implements IMemoryManager {
             count = defaultMatchCount,
             roomId,
             unique,
-            agentId,
         } = opts;
 
-        const searchOpts = {
+        const result = await this.runtime.databaseAdapter.searchMemories({
             tableName: this.tableName,
             roomId,
-            agentId,
+            agentId: this.runtime.agentId,
             embedding: embedding,
             match_threshold: match_threshold,
             match_count: count,
             unique: !!unique,
-        };
-
-        const result =
-            await this.runtime.databaseAdapter.searchMemories(searchOpts);
+        });
 
         return result;
     }
@@ -159,6 +151,8 @@ export class MemoryManager implements IMemoryManager {
      * @returns A Promise that resolves when the operation completes.
      */
     async createMemory(memory: Memory, unique = false): Promise<void> {
+        // TODO: check memory.agentId == this.runtime.agentId
+
         const existingMessage =
             await this.runtime.databaseAdapter.getMemoryById(memory.id);
 
@@ -168,6 +162,7 @@ export class MemoryManager implements IMemoryManager {
         }
 
         elizaLogger.log("Creating Memory", memory.id, memory.content.text);
+
         await this.runtime.databaseAdapter.createMemory(
             memory,
             this.tableName,
@@ -175,12 +170,9 @@ export class MemoryManager implements IMemoryManager {
         );
     }
 
-    async getMemoriesByRoomIds(params: {
-        agentId?: UUID;
-        roomIds: UUID[];
-    }): Promise<Memory[]> {
+    async getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]> {
         const result = await this.runtime.databaseAdapter.getMemoriesByRoomIds({
-            agentId: params.agentId,
+            agentId: this.runtime.agentId,
             roomIds: params.roomIds,
         });
         return result;
@@ -188,6 +180,7 @@ export class MemoryManager implements IMemoryManager {
 
     async getMemoryById(id: UUID): Promise<Memory | null> {
         const result = await this.runtime.databaseAdapter.getMemoryById(id);
+        if (result.agentId !== this.runtime.agentId) return null;
         return result;
     }
 

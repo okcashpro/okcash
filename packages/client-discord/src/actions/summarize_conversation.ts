@@ -220,7 +220,6 @@ const summarizeAction = {
         // 2. get these memories from the database
         const memories = await runtime.messageManager.getMemories({
             roomId,
-            agentId: runtime.agentId,
             // subtract start from current time
             start: parseInt(start as string),
             end: parseInt(end as string),

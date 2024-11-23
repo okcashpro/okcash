@@ -82,7 +82,9 @@ export class PostgresDatabaseAdapter
             return true;
         } catch (error) {
             console.error("Database connection test failed:", error);
-            throw new Error(`Failed to connect to database: ${error.message}`);
+            throw new Error(
+                `Failed to connect to database: ${(error as Error).message}`
+            );
         } finally {
             if (client) client.release();
         }
@@ -119,22 +121,17 @@ export class PostgresDatabaseAdapter
     }
 
     async getMemoriesByRoomIds(params: {
+        agentId: UUID;
         roomIds: UUID[];
-        agentId?: UUID;
         tableName: string;
     }): Promise<Memory[]> {
         if (params.roomIds.length === 0) return [];
         const placeholders = params.roomIds
-            .map((_, i) => `$${i + 2}`)
+            .map((_, i) => `$${i + 3}`)
             .join(", ");
 
-        let query = `SELECT * FROM memories WHERE type = $1 AND "roomId" IN (${placeholders})`;
-        let queryParams = [params.tableName, ...params.roomIds];
-
-        if (params.agentId) {
-            query += ` AND "agentId" = $${params.roomIds.length + 2}`;
-            queryParams = [...queryParams, params.agentId];
-        }
+        let query = `SELECT * FROM memories WHERE type = $1 AND "agentId" = $2 AND "roomId" IN (${placeholders})`;
+        let queryParams = [params.tableName, params.agentId, ...params.roomIds];
 
         const { rows } = await this.query(query, queryParams);
         return rows.map((row) => ({
@@ -244,6 +241,7 @@ export class PostgresDatabaseAdapter
                 memory.embedding,
                 {
                     tableName,
+                    agentId: memory.agentId,
                     roomId: memory.roomId,
                     match_threshold: 0.95,
                     count: 1,
@@ -272,6 +270,7 @@ export class PostgresDatabaseAdapter
 
     async searchMemories(params: {
         tableName: string;
+        agentId: UUID;
         roomId: UUID;
         embedding: number[];
         match_threshold: number;
@@ -281,6 +280,7 @@ export class PostgresDatabaseAdapter
         return await this.searchMemoriesByEmbedding(params.embedding, {
             match_threshold: params.match_threshold,
             count: params.match_count,
+            agentId: params.agentId,
             roomId: params.roomId,
             unique: params.unique,
             tableName: params.tableName,
@@ -292,14 +292,14 @@ export class PostgresDatabaseAdapter
         count?: number;
         unique?: boolean;
         tableName: string;
-        agentId?: UUID;
+        agentId: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
         if (!params.tableName) throw new Error("tableName is required");
         if (!params.roomId) throw new Error("roomId is required");
-        let sql = `SELECT * FROM memories WHERE type = $1 AND "roomId" = $2`;
-        const values: any[] = [params.tableName, params.roomId];
+        let sql = `SELECT * FROM memories WHERE type = $1 AND agentId = $2 AND "roomId" = $3`;
+        const values: any[] = [params.tableName, params.agentId, params.roomId];
         let paramCount = 2;
 
         if (params.start) {
@@ -316,12 +316,6 @@ export class PostgresDatabaseAdapter
 
         if (params.unique) {
             sql += ` AND "unique" = true`;
-        }
-
-        if (params.agentId) {
-            paramCount++;
-            sql += ` AND "agentId" = $${paramCount}`;
-            values.push(params.agentId);
         }
 
         sql += ' ORDER BY "createdAt" DESC';

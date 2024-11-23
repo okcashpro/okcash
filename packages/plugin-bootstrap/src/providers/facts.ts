@@ -33,7 +33,6 @@ const factsProvider: Provider = {
         const recentFactsData = await memoryManager.getMemories({
             roomId: message.roomId,
             count: 10,
-            agentId: runtime.agentId,
         });
 
         // join the two and deduplicate

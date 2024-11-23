@@ -405,13 +405,13 @@ export interface IDatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        agentId?: UUID;
+        agentId: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]>;
     getMemoryById(id: UUID): Promise<Memory | null>;
     getMemoriesByRoomIds(params: {
-        agentId?: UUID;
+        agentId: UUID;
         roomIds: UUID[];
     }): Promise<Memory[]>;
     getCachedEmbeddings(params: {
@@ -431,6 +431,7 @@ export interface IDatabaseAdapter {
     getActorDetails(params: { roomId: UUID }): Promise<Actor[]>;
     searchMemories(params: {
         tableName: string;
+        agentId: UUID;
         roomId: UUID;
         embedding: number[];
         match_threshold: number;
@@ -465,6 +466,7 @@ export interface IDatabaseAdapter {
         tableName?: string
     ): Promise<number>;
     getGoals(params: {
+        agentId: UUID;
         roomId: UUID;
         userId?: UUID | null;
         onlyInProgress?: boolean;
@@ -525,7 +527,6 @@ export interface IMemoryManager {
         roomId: UUID;
         count?: number;
         unique?: boolean;
-        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]>;
@@ -533,10 +534,7 @@ export interface IMemoryManager {
         content: string
     ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
     getMemoryById(id: UUID): Promise<Memory | null>;
-    getMemoriesByRoomIds(params: {
-        roomIds: UUID[];
-        agentId?: UUID;
-    }): Promise<Memory[]>;
+    getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
     searchMemoriesByEmbedding(
         embedding: number[],
         opts: {
@@ -544,7 +542,6 @@ export interface IMemoryManager {
             count?: number;
             roomId: UUID;
             unique?: boolean;
-            agentId?: UUID;
         }
     ): Promise<Memory[]>;
     createMemory(memory: Memory, unique?: boolean): Promise<void>;
