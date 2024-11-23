@@ -6,7 +6,6 @@ import {
 } from "./types.ts";
 
 export const getGoals = async ({
-    agentId,
     runtime,
     roomId,
     userId,
@@ -14,14 +13,13 @@ export const getGoals = async ({
     count = 5,
 }: {
     runtime: IAgentRuntime;
-    agentId: UUID;
     roomId: UUID;
     userId?: UUID;
     onlyInProgress?: boolean;
     count?: number;
 }) => {
     return runtime.databaseAdapter.getGoals({
-        agentId,
+        agentId: runtime.agentId,
         roomId,
         userId,
         onlyInProgress,

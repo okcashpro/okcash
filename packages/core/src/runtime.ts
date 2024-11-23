@@ -741,7 +741,6 @@ export class AgentRuntime implements IAgentRuntime {
                 unique: false,
             }),
             getGoals({
-                agentId: this.agentId,
                 runtime: this,
                 count: 10,
                 onlyInProgress: false,

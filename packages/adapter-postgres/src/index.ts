@@ -170,8 +170,12 @@ export class PostgresDatabaseAdapter
             .map((_, i) => `$${i + 3}`)
             .join(", ");
 
-        let query = `SELECT * FROM memories WHERE type = $1 AND "agentId" = $2 AND "roomId" IN (${placeholders})`;
-        let queryParams = [params.tableName, params.agentId, ...params.roomIds];
+        const query = `SELECT * FROM memories WHERE type = $1 AND "agentId" = $2 AND "roomId" IN (${placeholders})`;
+        const queryParams = [
+            params.tableName,
+            params.agentId,
+            ...params.roomIds,
+        ];
 
         const { rows } = await this.query(query, queryParams);
         return rows.map((row) => ({
