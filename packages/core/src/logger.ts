@@ -243,17 +243,6 @@ class ElizaLogger implements IElizaLogger {
             groupTitle: ` ${this.assertsTitle}`,
         });
     }
-
-    progress(message: string) {
-        if (this.isNode) {
-            // Clear the current line and move cursor to beginning
-            process.stdout.clearLine(0);
-            process.stdout.cursorTo(0);
-            process.stdout.write(message);
-        } else {
-            console.log(message);
-        }
-    }
 }
 
 export const elizaLogger = new ElizaLogger();
