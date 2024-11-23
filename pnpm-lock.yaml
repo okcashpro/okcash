@@ -931,8 +931,8 @@ importers:
         specifier: 1.34.0
         version: 1.34.0(playwright@1.48.2)
       '@echogarden/espeak-ng-emscripten':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 0.3.3
+        version: 0.3.3
       '@echogarden/kissfft-wasm':
         specifier: 0.2.0
         version: 0.2.0
@@ -3022,9 +3022,6 @@ packages:
     resolution: {integrity: sha512-3p6oGhuCvfwcEWE52hJ2pMAY05qz1UeHXuITp+ijG2b5z3qizJT4IsP6ZIfiXYg8pW8maUnbwPOLbazpJv2KYQ==}
     engines: {node: '>=18'}
     os: [win32, darwin, linux]
-
-  '@echogarden/espeak-ng-emscripten@0.3.0':
-    resolution: {integrity: sha512-ukSH2lnIRJqthW07lHfEPUUx59OrFovso8bicwbIT4MV/0jvE15nKv7Uk73fwZQSpo9Y+8Lpyr24nP+AJ5AJOA==}
 
   '@echogarden/espeak-ng-emscripten@0.3.3':
     resolution: {integrity: sha512-TvSwLnB0vuqIUptvHZyr63Ywj2m7ureIK864O8aoyw9WqEqHE1x5weBzy/1/soZ4BkEkRvurlLF7ue+tEhyatw==}
@@ -18011,8 +18008,6 @@ snapshots:
       - webpack-cli
 
   '@echogarden/audio-io@0.2.3': {}
-
-  '@echogarden/espeak-ng-emscripten@0.3.0': {}
 
   '@echogarden/espeak-ng-emscripten@0.3.3': {}
 
