@@ -1,11 +1,6 @@
 import settings from "./settings.ts";
-import { Logger } from "tslog";
 
-interface IElizaLogger extends Logger<IElizaLogger> {
-    progress(message: string): void;
-}
-
-class ElizaLogger implements IElizaLogger {
+class ElizaLogger {
     constructor() {
         // Check if we're in Node.js environment
         this.isNode =
@@ -242,6 +237,17 @@ class ElizaLogger implements IElizaLogger {
             icon: "\u0021",
             groupTitle: ` ${this.assertsTitle}`,
         });
+    }
+
+    progress(message: string) {
+        if (this.isNode) {
+            // Clear the current line and move cursor to beginning
+            process.stdout.clearLine(0);
+            process.stdout.cursorTo(0);
+            process.stdout.write(message);
+        } else {
+            console.log(message);
+        }
     }
 }
 
