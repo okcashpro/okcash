@@ -63,7 +63,7 @@ export class ImageDescriptionService
         env.backends.onnx.wasm.proxy = false;
         env.backends.onnx.wasm.numThreads = 1;
 
-        elizaLogger.log("Downloading Florence model...");
+        elizaLogger.info("Downloading Florence model...");
 
         this.model = await Florence2ForConditionalGeneration.from_pretrained(
             this.modelId,
@@ -71,8 +71,15 @@ export class ImageDescriptionService
                 device: "gpu",
                 progress_callback: (progress) => {
                     if (progress.status === "downloading") {
-                        elizaLogger.log(
-                            `Model download progress: ${JSON.stringify(progress)}`
+                        const percent = (
+                            (progress.loaded / progress.total) *
+                            100
+                        ).toFixed(1);
+                        const dots = ".".repeat(
+                            Math.floor(Number(percent) / 5)
+                        );
+                        elizaLogger.info(
+                            `Downloading Florence model: [${dots.padEnd(20, " ")}] ${percent}%`
                         );
                     }
                 },
@@ -81,10 +88,14 @@ export class ImageDescriptionService
 
         elizaLogger.success("Florence model downloaded successfully");
 
+        elizaLogger.info("Downloading processor...");
         this.processor = (await AutoProcessor.from_pretrained(
             this.modelId
         )) as Florence2Processor;
+
+        elizaLogger.info("Downloading tokenizer...");
         this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId);
+        elizaLogger.success("Image service initialization complete");
     }
 
     async describeImage(
@@ -106,7 +117,7 @@ export class ImageDescriptionService
         this.queue.push(imageUrl);
         this.processQueue();
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             const checkQueue = () => {
                 const index = this.queue.indexOf(imageUrl);
                 if (index !== -1) {

@@ -14,10 +14,15 @@
     "scripts": {
         "build": "tsup --format esm --dts",
         "test": "vitest run",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "lint": "eslint . --fix"
     },
     "devDependencies": {
-        "@types/dompurify": "^3.2.0"
+        "@types/dompurify": "^3.2.0",
+        "eslint": "9.13.0",
+        "eslint-config-prettier": "9.1.0",
+        "eslint-plugin-prettier": "5.2.1",
+        "eslint-plugin-vitest": "0.5.4"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

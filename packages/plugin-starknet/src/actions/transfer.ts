@@ -13,11 +13,7 @@ import {
     generateObject,
     elizaLogger,
 } from "@ai16z/eliza";
-import {
-    getStarknetAccount,
-    isTransferContent,
-    validateSettings,
-} from "../utils";
+import { getStarknetAccount, isTransferContent } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { validateStarknetConfig } from "../enviroment";
 
@@ -58,7 +54,7 @@ export default {
         "SEND_ETH_ON_STARKNET",
         "PAY_ON_STARKNET",
     ],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         await validateStarknetConfig(runtime);
         return true;
     },

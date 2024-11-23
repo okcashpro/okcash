@@ -385,7 +385,7 @@ export class VoiceManager extends EventEmitter {
         let transcriptionStarted = false;
         let transcriptionText = "";
 
-        const monitor = new AudioMonitor(
+        const _monitor = new AudioMonitor(
             audioStream,
             10000000,
             async (buffer) => {

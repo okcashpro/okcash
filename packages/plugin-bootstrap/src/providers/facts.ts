@@ -16,7 +16,7 @@ const factsProvider: Provider = {
             actors: state?.actorsData,
         });
 
-        const embedding = await embed(runtime, recentMessages);
+        const _embedding = await embed(runtime, recentMessages);
 
         const memoryManager = new MemoryManager({
             runtime,
