@@ -169,6 +169,7 @@ export class LlamaService extends Service {
     private ctx: LlamaContext | undefined;
     private sequence: LlamaContextSequence | undefined;
     private modelUrl: string;
+    private ollamaModel: string | undefined;
 
     private messageQueue: QueuedMessage[] = [];
     private isProcessing: boolean = false;
@@ -184,6 +185,7 @@ export class LlamaService extends Service {
             "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
         const modelName = "model.gguf";
         this.modelPath = path.join(__dirname, modelName);
+        this.ollamaModel = process.env.OLLAMA_MODEL;
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
@@ -671,13 +673,12 @@ export class LlamaService extends Service {
             throw new Error("Sequence not initialized");
         }
 
-        const ollamaModel = process.env.OLLAMA_MODEL;
         const ollamaUrl =
             process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
         const embeddingModel =
             process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
         elizaLogger.info(
-            `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
+            `Using Ollama API for embeddings with model ${embeddingModel} (base: ${this.ollamaModel})`
         );
 
         const response = await fetch(`${ollamaUrl}/api/embeddings`, {
