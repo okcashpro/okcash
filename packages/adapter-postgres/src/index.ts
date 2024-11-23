@@ -736,7 +736,9 @@ export class PostgresDatabaseAdapter
             );
 
             if (existingParticipant.rows.length > 0) {
-                console.log(`Participant with userId ${userId} already exists in room ${roomId}.`);
+                console.log(
+                    `Participant with userId ${userId} already exists in room ${roomId}.`
+                );
                 return; // Exit early if the participant already exists
             }
 
@@ -750,11 +752,13 @@ export class PostgresDatabaseAdapter
         } catch (error) {
             // This is to prevent duplicate participant error in case of a race condition
             // Handle unique constraint violation error (code 23505)
-            if (error.code === '23505') {
-                console.warn(`Participant with userId ${userId} already exists in room ${roomId}.`);               // Optionally, you can log this or handle it differently
+            if (error.code === "23505") {
+                console.warn(
+                    `Participant with userId ${userId} already exists in room ${roomId}.`
+                ); // Optionally, you can log this or handle it differently
             } else {
                 // Handle other errors
-                console.error('Error adding participant:', error);
+                console.error("Error adding participant:", error);
                 return false;
             }
         } finally {
