@@ -1033,7 +1033,6 @@ export interface ITranscriptionService extends Service {
 
 export interface IVideoService extends Service {
     isVideoUrl(url: string): boolean;
-    processVideo(url: string): Promise<Media>;
     fetchVideoInfo(url: string): Promise<Media>;
     downloadVideo(videoInfo: Media): Promise<string>;
     processVideo(url: string, runtime: IAgentRuntime): Promise<Media>;
