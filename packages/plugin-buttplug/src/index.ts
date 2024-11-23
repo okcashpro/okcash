@@ -9,7 +9,11 @@ import type {
     State,
 } from "@ai16z/eliza";
 import { Service, ServiceType } from "@ai16z/eliza";
-import { isPortAvailable, startIntifaceEngine } from "./utils";
+import {
+    isPortAvailable,
+    startIntifaceEngine,
+    shutdownIntifaceEngine,
+} from "./utils";
 
 export interface IButtplugService extends Service {
     vibrate(strength: number, duration: number): Promise<void>;
@@ -44,6 +48,22 @@ export class ButtplugService extends Service implements IButtplugService {
             "deviceremoved",
             this.handleDeviceRemoved.bind(this)
         );
+
+        // Add cleanup handlers
+        process.on("SIGINT", this.cleanup.bind(this));
+        process.on("SIGTERM", this.cleanup.bind(this));
+        process.on("exit", this.cleanup.bind(this));
+    }
+
+    private async cleanup() {
+        try {
+            if (this.connected) {
+                await this.client.disconnect();
+            }
+            await shutdownIntifaceEngine();
+        } catch (error) {
+            console.error("[ButtplugService] Cleanup error:", error);
+        }
     }
 
     getInstance(): IButtplugService {
@@ -68,7 +88,6 @@ export class ButtplugService extends Service implements IButtplugService {
         if (portAvailable) {
             try {
                 await startIntifaceEngine();
-                await new Promise((resolve) => setTimeout(resolve, 1000));
             } catch (error) {
                 console.error("Failed to start Intiface Engine:", error);
                 throw error;
@@ -79,32 +98,78 @@ export class ButtplugService extends Service implements IButtplugService {
             );
         }
 
-        const connector = new ButtplugNodeWebsocketClientConnector(
-            this.config.INTIFACE_URL
-        );
+        let retries = 5;
+        while (retries > 0) {
+            try {
+                const connector = new ButtplugNodeWebsocketClientConnector(
+                    this.config.INTIFACE_URL
+                );
 
-        try {
-            await this.client.connect(connector);
-            this.connected = true;
-            await this.client.startScanning();
-
-            // Wait for device discovery
-            await new Promise((r) => setTimeout(r, 5000));
-            console.log("Scanning for devices...");
-
-            // Store discovered devices in the map
-            this.client.devices.forEach((device) => {
-                this.devices.set(device.name, device);
-                console.log(`- ${device.name} (${device.index})`);
-            });
-
-            if (this.devices.size === 0) {
-                console.log("No devices found");
+                await this.client.connect(connector);
+                this.connected = true;
+                await this.scanAndGrabDevices();
+                return;
+            } catch (error) {
+                retries--;
+                if (retries > 0) {
+                    console.log(
+                        `Connection attempt failed, retrying... (${retries} attempts left)`
+                    );
+                    await new Promise((r) => setTimeout(r, 2000));
+                } else {
+                    console.error(
+                        "Failed to connect to Buttplug server after all retries:",
+                        error
+                    );
+                    throw error;
+                }
             }
-        } catch (error) {
-            console.error("Failed to connect to Buttplug server:", error);
-            throw error;
         }
+    }
+
+    private async scanAndGrabDevices() {
+        await this.client.startScanning();
+        console.log("Scanning for devices...");
+        await new Promise((r) => setTimeout(r, 2000));
+
+        this.client.devices.forEach((device) => {
+            this.devices.set(device.name, device);
+            console.log(`- ${device.name} (${device.index})`);
+        });
+
+        if (this.devices.size === 0) {
+            console.log("No devices found");
+        }
+    }
+
+    private async ensureDeviceAvailable() {
+        if (!this.connected) {
+            throw new Error("Not connected to Buttplug server");
+        }
+
+        if (this.devices.size === 0) {
+            await this.scanAndGrabDevices();
+        }
+
+        const devices = this.getDevices();
+        if (devices.length === 0) {
+            throw new Error("No devices available");
+        }
+
+        let targetDevice;
+        if (this.preferredDeviceName) {
+            targetDevice = this.devices.get(this.preferredDeviceName);
+            if (!targetDevice) {
+                console.warn(
+                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
+                );
+                targetDevice = devices[0];
+            }
+        } else {
+            targetDevice = devices[0];
+        }
+
+        return targetDevice;
     }
 
     async disconnect() {
@@ -150,27 +215,7 @@ export class ButtplugService extends Service implements IButtplugService {
     }
 
     private async handleVibrate(event: VibrateEvent) {
-        if (!this.connected) {
-            throw new Error("Not connected to Buttplug server");
-        }
-
-        const devices = this.getDevices();
-        if (devices.length === 0) {
-            throw new Error("No devices available");
-        }
-
-        let targetDevice;
-        if (this.preferredDeviceName) {
-            targetDevice = this.devices.get(this.preferredDeviceName);
-            if (!targetDevice) {
-                console.warn(
-                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
-                );
-                targetDevice = devices[0];
-            }
-        } else {
-            targetDevice = devices[0];
-        }
+        const targetDevice = await this.ensureDeviceAvailable();
 
         if (this.rampUpAndDown) {
             const steps = this.rampSteps;
@@ -206,56 +251,16 @@ export class ButtplugService extends Service implements IButtplugService {
     }
 
     async vibrate(strength: number, duration: number): Promise<void> {
-        if (this.preferredDeviceName) {
-            const device = this.devices.get(this.preferredDeviceName);
-            if (!device) {
-                console.log(
-                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
-                );
-                const devices = this.getDevices();
-                if (devices.length > 0) {
-                    await this.addToVibrateQueue({
-                        strength,
-                        duration,
-                        deviceId: devices[0].id,
-                    });
-                } else {
-                    throw new Error("No devices available");
-                }
-            } else {
-                await this.addToVibrateQueue({
-                    strength,
-                    duration,
-                    deviceId: device.id,
-                });
-            }
-        } else {
-            await this.addToVibrateQueue({ strength, duration });
-        }
+        const targetDevice = await this.ensureDeviceAvailable();
+        await this.addToVibrateQueue({
+            strength,
+            duration,
+            deviceId: targetDevice.id,
+        });
     }
 
     async getBatteryLevel(): Promise<number> {
-        if (!this.connected) {
-            throw new Error("Not connected to Buttplug server");
-        }
-
-        const devices = this.getDevices();
-        if (devices.length === 0) {
-            throw new Error("No devices available");
-        }
-
-        let targetDevice;
-        if (this.preferredDeviceName) {
-            targetDevice = this.devices.get(this.preferredDeviceName);
-            if (!targetDevice) {
-                console.warn(
-                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
-                );
-                targetDevice = devices[0];
-            }
-        } else {
-            targetDevice = devices[0];
-        }
+        const targetDevice = await this.ensureDeviceAvailable();
 
         try {
             const battery = await targetDevice.battery();
@@ -270,27 +275,7 @@ export class ButtplugService extends Service implements IButtplugService {
     }
 
     async rotate(strength: number, duration: number): Promise<void> {
-        if (!this.connected) {
-            throw new Error("Not connected to Buttplug server");
-        }
-
-        const devices = this.getDevices();
-        if (devices.length === 0) {
-            throw new Error("No devices available");
-        }
-
-        let targetDevice;
-        if (this.preferredDeviceName) {
-            targetDevice = this.devices.get(this.preferredDeviceName);
-            if (!targetDevice) {
-                console.warn(
-                    `Preferred device ${this.preferredDeviceName} not found, using first available device`
-                );
-                targetDevice = devices[0];
-            }
-        } else {
-            targetDevice = devices[0];
-        }
+        const targetDevice = await this.ensureDeviceAvailable();
 
         // Check if device supports rotation
         if (!targetDevice.rotateCmd) {

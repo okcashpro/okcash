@@ -22,8 +22,12 @@ export async function isPortAvailable(port: number): Promise<boolean> {
 }
 
 export async function startIntifaceEngine(): Promise<void> {
+    const configPath = path.join(
+        __dirname,
+        "../src/buttplug-user-device-config.json"
+    );
     try {
-        intifaceProcess = spawn(
+        const child = spawn(
             path.join(__dirname, "../intiface-engine/intiface-engine"),
             [
                 "--websocket-port",
@@ -31,11 +35,9 @@ export async function startIntifaceEngine(): Promise<void> {
                 "--use-bluetooth-le",
                 "--server-name",
                 "Eliza Buttplugin Server",
-                "--log",
-                "debug",
                 "--use-device-websocket-server",
-                "--device-websocket-server-port",
-                "54817",
+                "--user-device-config-file",
+                configPath,
             ],
             {
                 detached: false,
@@ -44,12 +46,8 @@ export async function startIntifaceEngine(): Promise<void> {
             }
         );
 
-        // Set up cleanup handler
-        process.on("SIGINT", cleanup);
-        process.on("SIGTERM", cleanup);
-        process.on("exit", cleanup);
-
-        // Wait briefly to ensure the process starts
+        child.unref();
+        intifaceProcess = child;
         await new Promise((resolve) => setTimeout(resolve, 5000));
         console.log("[utils] Intiface Engine started");
     } catch (error) {
@@ -102,3 +100,18 @@ async function cleanup() {
 
 // Export cleanup for manual shutdown if needed
 export { cleanup as shutdownIntifaceEngine };
+
+// Start Intiface Engine if run directly
+if (import.meta.url === new URL(import.meta.url).href) {
+    console.log("[utils] Starting Intiface Engine service");
+    startIntifaceEngine().catch((error) => {
+        console.error("[utils] Failed to start Intiface Engine:", error);
+        process.exit(1);
+    });
+
+    process.on("SIGINT", async () => {
+        console.log("[utils] Shutting down Intiface Engine");
+        await cleanup();
+        process.exit(0);
+    });
+}

@@ -5,7 +5,7 @@ export const buttplugEnvSchema = z
     .object({
         INTIFACE_URL: z.string().default("ws://localhost:12345"),
         INTIFACE_NAME: z.string().default("Eliza Buttplug Client"),
-        DEVICE_NAME: z.string().default("Eliza Buttplug Device"),
+        DEVICE_NAME: z.string().default("Lovense Nora"),
     })
     .refine(
         (data) => {

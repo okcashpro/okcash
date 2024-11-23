@@ -123,7 +123,7 @@ export async function startIntifaceEngine(): Promise<void> {
                 "--device-websocket-server-port",
                 WEBSOCKET_PORT.toString(),
                 "--user-device-config-file",
-                path.join(__dirname, "buttplug-user-device-config.json"),
+                path.join(__dirname, "buttplug-user-device-config-test.json"),
             ],
             {
                 detached: true,
