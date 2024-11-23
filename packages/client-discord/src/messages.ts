@@ -693,7 +693,7 @@ export class MessageManager {
             if (
                 this.runtime
                     .getService<IVideoService>(ServiceType.VIDEO)
-                    .isVideoUrl(url)
+                    ?.isVideoUrl(url)
             ) {
                 const videoService = this.runtime.getService<IVideoService>(
                     ServiceType.VIDEO
@@ -701,7 +701,10 @@ export class MessageManager {
                 if (!videoService) {
                     throw new Error("Video service not found");
                 }
-                const videoInfo = await videoService.processVideo(url);
+                const videoInfo = await videoService.processVideo(
+                    url,
+                    this.runtime
+                );
 
                 attachments.push({
                     id: `youtube-${Date.now()}`,

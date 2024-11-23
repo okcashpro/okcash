@@ -93,7 +93,7 @@ export class VideoService extends Service implements IVideoService {
 
     public async processVideo(
         url: string,
-        runtime?: IAgentRuntime
+        runtime: IAgentRuntime
     ): Promise<Media> {
         this.queue.push(url);
         this.processQueue(runtime);
