@@ -647,8 +647,8 @@ importers:
         specifier: ^0.0.55
         version: 0.0.55(zod@3.23.8)
       '@ai-sdk/google-vertex':
-        specifier: ^0.0.42
-        version: 0.0.42(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(zod@3.23.8)
+        specifier: ^0.0.43
+        version: 0.0.43(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(zod@3.23.8)
       '@ai-sdk/groq':
         specifier: ^0.0.3
         version: 0.0.3(zod@3.23.8)
@@ -1276,6 +1276,13 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       '@google-cloud/vertexai': ^1.6.0
+
+  '@ai-sdk/google-vertex@0.0.43':
+    resolution: {integrity: sha512-lmZukH74m6MUl4fbyfz3T4qs5ukDUJ6YB5Dedtu+aK+Mdp05k9qTHAXxWiB8i/VdZqWlS+DEo/+b7pOPX0V7wA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@google-cloud/vertexai': ^1.6.0
+      zod: ^3.0.0
 
   '@ai-sdk/google@0.0.55':
     resolution: {integrity: sha512-dvEMS8Ex2H0OeuFBiT4Q1Kfrxi1ckjooy/PazNLjRQ3w9o9VQq4O24eMQGCuW1Z47qgMdXjhDzsH6qD0HOX6Cw==}
@@ -2780,6 +2787,7 @@ packages:
     resolution: {integrity: sha512-hArn9FF5ZYi1IkxdJEVnJi+OxlwLV0NJYWpKXsmNOojtGtAZHxmsELA+MZlu2KW1F/K1/nt7lFOfcMXNYweq9w==}
     version: 0.17.0
     engines: {node: '>=16.11.0'}
+    deprecated: This version uses deprecated encryption modes. Please use a newer version.
 
   '@discordjs/ws@1.1.1':
     resolution: {integrity: sha512-PZ+vLpxGCRtmr2RMkqh8Zp+BenUaJqlS6xhgWKEZcgC/vfHLEzpHtKkB0sl3nZWpwtcKk6YWy+pU3okL2I97FA==}
@@ -14868,6 +14876,13 @@ snapshots:
       '@google-cloud/vertexai': 1.9.0(encoding@0.1.13)
     transitivePeerDependencies:
       - zod
+
+  '@ai-sdk/google-vertex@0.0.43(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.26
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      '@google-cloud/vertexai': 1.9.0(encoding@0.1.13)
+      zod: 3.23.8
 
   '@ai-sdk/google@0.0.55(zod@3.23.8)':
     dependencies:
