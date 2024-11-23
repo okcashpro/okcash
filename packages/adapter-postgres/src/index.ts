@@ -729,6 +729,18 @@ export class PostgresDatabaseAdapter
     async addParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
         const client = await this.pool.connect();
         try {
+            // Check if the participant already exists
+            const existingParticipant = await client.query(
+                `SELECT * FROM participants WHERE "userId" = $1 AND "roomId" = $2`,
+                [userId, roomId]
+            );
+
+            if (existingParticipant.rows.length > 0) {
+                console.log(`Participant with userId ${userId} already exists in room ${roomId}.`);
+                return; // Exit early if the participant already exists
+            }
+
+            // Proceed to add the participant if they do not exist
             await client.query(
                 `INSERT INTO participants (id, "userId", "roomId") 
                 VALUES ($1, $2, $3)`,
@@ -736,8 +748,15 @@ export class PostgresDatabaseAdapter
             );
             return true;
         } catch (error) {
-            console.log("Error adding participant", error);
-            return false;
+            // This is to prevent duplicate participant error in case of a race condition
+            // Handle unique constraint violation error (code 23505)
+            if (error.code === '23505') {
+                console.warn(`Participant with userId ${userId} already exists in room ${roomId}.`);               // Optionally, you can log this or handle it differently
+            } else {
+                // Handle other errors
+                console.error('Error adding participant:', error);
+                return false;
+            }
         } finally {
             client.release();
         }
