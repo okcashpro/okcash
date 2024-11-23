@@ -53,7 +53,7 @@
         "typescript": "5.6.3"
     },
     "dependencies": {
-        "@ai-sdk/anthropic": "^0.0.53",
+        "@ai-sdk/anthropic": "^0.0.56",
         "@ai-sdk/google": "^0.0.55",
         "@ai-sdk/google-vertex": "^0.0.42",
         "@ai-sdk/groq": "^0.0.3",
