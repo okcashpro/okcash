@@ -180,7 +180,7 @@ class ElizaLogger implements IElizaLogger {
         }
     }
 
-    // @ts-ignore - custom implementation
+    // @ts-expect-error - custom implementation
     log(...strings) {
         this.#logWithStyle(strings, {
             fg: "white",
@@ -190,7 +190,7 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-ignore - custom implementation
+    // @ts-expect-error - custom implementation
     warn(...strings) {
         this.#logWithStyle(strings, {
             fg: "yellow",
@@ -200,7 +200,7 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-ignore - custom implementation
+    // @ts-expect-error - custom implementation
     error(...strings) {
         this.#logWithStyle(strings, {
             fg: "red",
@@ -210,7 +210,7 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-ignore - custom implementation
+    // @ts-expect-error - custom implementation
     info(...strings) {
         this.#logWithStyle(strings, {
             fg: "blue",
@@ -220,7 +220,7 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-ignore - custom implementation
+    // @ts-expect-error - custom implementation
     debug(...strings) {
         if (!this.verbose) return;
         this.#logWithStyle(strings, {
