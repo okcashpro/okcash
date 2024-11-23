@@ -1,5 +1,5 @@
 import settings from "./settings.ts";
-import { Logger, ILogObjMeta, ILogObj } from "tslog";
+import { Logger } from "tslog";
 
 interface IElizaLogger extends Logger<IElizaLogger> {
     progress(message: string): void;
