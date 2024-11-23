@@ -26,36 +26,40 @@ const mockVideoGenerationPlugin = {
                 const apiKey = runtime.getSetting("LUMA_API_KEY");
                 return !!apiKey;
             }),
-            handler: vi.fn().mockImplementation(async (runtime, message, state, options, callback) => {
-                // Initial response
-                callback({
-                    text: "I'll generate a video based on your prompt",
-                });
+            handler: vi
+                .fn()
+                .mockImplementation(
+                    async (runtime, message, state, options, callback) => {
+                        // Initial response
+                        callback({
+                            text: "I'll generate a video based on your prompt",
+                        });
 
-                // Check if there's an API error
-                const fetchResponse = await global.fetch();
-                if (!fetchResponse.ok) {
-                    callback({
-                        text: "Video generation failed: API Error",
-                        error: true,
-                    });
-                    return;
-                }
+                        // Check if there's an API error
+                        const fetchResponse = await global.fetch();
+                        if (!fetchResponse.ok) {
+                            callback({
+                                text: "Video generation failed: API Error",
+                                error: true,
+                            });
+                            return;
+                        }
 
-                // Final response with video
-                callback(
-                    {
-                        text: "Here's your generated video!",
-                        attachments: [
+                        // Final response with video
+                        callback(
                             {
-                                source: "videoGeneration",
-                                url: "https://example.com/video.mp4",
+                                text: "Here's your generated video!",
+                                attachments: [
+                                    {
+                                        source: "videoGeneration",
+                                        url: "https://example.com/video.mp4",
+                                    },
+                                ],
                             },
-                        ],
-                    },
-                    ["generated_video_123.mp4"]
-                );
-            }),
+                            ["generated_video_123.mp4"]
+                        );
+                    }
+                ),
         },
     ],
 };

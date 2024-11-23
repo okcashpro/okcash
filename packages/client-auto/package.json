@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/client-auto",
-    "version": "0.1.3",
+    "version": "0.1.4-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
@@ -17,11 +17,16 @@
         "multer": "1.4.5-lts.1"
     },
     "devDependencies": {
+        "eslint": "9.13.0",
+        "eslint-config-prettier": "9.1.0",
+        "eslint-plugin-prettier": "5.2.1",
+        "eslint-plugin-vitest": "0.5.4",
         "tsup": "^8.3.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "dev": "tsup --watch"
+        "dev": "tsup --watch",
+        "lint": "eslint . --fix"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

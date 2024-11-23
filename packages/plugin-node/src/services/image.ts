@@ -1,6 +1,11 @@
 import { elizaLogger, models } from "@ai16z/eliza";
 import { Service } from "@ai16z/eliza";
-import { IAgentRuntime, ModelProviderName, ServiceType } from "@ai16z/eliza";
+import {
+    IAgentRuntime,
+    ModelProviderName,
+    ServiceType,
+    IImageDescriptionService,
+} from "@ai16z/eliza";
 import {
     AutoProcessor,
     AutoTokenizer,
@@ -17,7 +22,10 @@ import gifFrames from "gif-frames";
 import os from "os";
 import path from "path";
 
-export class ImageDescriptionService extends Service {
+export class ImageDescriptionService
+    extends Service
+    implements IImageDescriptionService
+{
     static serviceType: ServiceType = ServiceType.IMAGE_DESCRIPTION;
 
     private modelId: string = "onnx-community/Florence-2-base-ft";
@@ -29,6 +37,10 @@ export class ImageDescriptionService extends Service {
     private runtime: IAgentRuntime | null = null;
     private queue: string[] = [];
     private processing: boolean = false;
+
+    getInstance(): IImageDescriptionService {
+        return ImageDescriptionService.getInstance();
+    }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
         this.runtime = runtime;
@@ -51,7 +63,7 @@ export class ImageDescriptionService extends Service {
         env.backends.onnx.wasm.proxy = false;
         env.backends.onnx.wasm.numThreads = 1;
 
-        elizaLogger.log("Downloading Florence model...");
+        elizaLogger.info("Downloading Florence model...");
 
         this.model = await Florence2ForConditionalGeneration.from_pretrained(
             this.modelId,
@@ -59,8 +71,15 @@ export class ImageDescriptionService extends Service {
                 device: "gpu",
                 progress_callback: (progress) => {
                     if (progress.status === "downloading") {
-                        elizaLogger.log(
-                            `Model download progress: ${JSON.stringify(progress)}`
+                        const percent = (
+                            (progress.loaded / progress.total) *
+                            100
+                        ).toFixed(1);
+                        const dots = ".".repeat(
+                            Math.floor(Number(percent) / 5)
+                        );
+                        elizaLogger.info(
+                            `Downloading Florence model: [${dots.padEnd(20, " ")}] ${percent}%`
                         );
                     }
                 },
@@ -69,10 +88,14 @@ export class ImageDescriptionService extends Service {
 
         elizaLogger.success("Florence model downloaded successfully");
 
+        elizaLogger.info("Downloading processor...");
         this.processor = (await AutoProcessor.from_pretrained(
             this.modelId
         )) as Florence2Processor;
+
+        elizaLogger.info("Downloading tokenizer...");
         this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId);
+        elizaLogger.success("Image service initialization complete");
     }
 
     async describeImage(
@@ -94,7 +117,7 @@ export class ImageDescriptionService extends Service {
         this.queue.push(imageUrl);
         this.processQueue();
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             const checkQueue = () => {
                 const index = this.queue.indexOf(imageUrl);
                 if (index !== -1) {

@@ -8,7 +8,6 @@ import {
     IVideoService,
     Media,
     ModelClass,
-    Service,
     ServiceType,
 } from "@ai16z/eliza";
 import { Attachment, Collection } from "discord.js";

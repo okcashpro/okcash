@@ -1,207 +1,148 @@
----
-sidebar_position: 5
-title: Contributing
----
+# Contributing to Eliza
 
-# Contributor Guide
+First off, thank you for considering contributing to Eliza! We welcome contributions from everyone, regardless of experience level. 🎉
 
-Welcome to the Eliza contributor guide! This document is designed to help you understand how you can be part of building the future of autonomous AI agents, regardless of your technical background.
+## Table of Contents
+
+- [Contribution License Agreement](#contribution-license-agreement)
+- [Code of Conduct](#code-of-conduct)
+- [OODA Loop Framework](#the-ooda-loop-a-framework-for-contribution)
+- [How to Contribute](#how-to-contribute)
+- [Pull Request Guidelines](#pull-request-guidelines)
+- [Styleguides](#styleguides)
+- [Recognition and Rewards](#recognition-and-rewards)
+- [Getting Help](#getting-help)
+
+## Contribution License Agreement
+
+By contributing to Eliza, you agree that your contributions will be licensed under the MIT License. This means:
+
+1. You grant us (and everyone else) a perpetual, worldwide, non-exclusive, royalty-free license to use your contributions
+2. Your contributions are and will be available as Free and Open Source Software (FOSS)
+3. You have the right to submit the work under this license
+4. You understand that your contributions are public and maintained indefinitely
+
+## Code of Conduct
+
+### Our Pledge
+
+We pledge to make participation in our project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+
+### Our Standards
+
+Positive behavior includes:
+
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy towards others
+
+Unacceptable behavior includes:
+
+- Harassment of any kind
+- Discriminatory jokes and language
+- Publishing others' private information
+- Other unprofessional conduct
 
 ## The OODA Loop: A Framework for Contribution
 
-We believe in the power of the OODA Loop - a decision-making framework that emphasizes speed and adaptability. OODA stands for:
+We follow the OODA Loop for decision-making:
 
-- **Observe**: Gather information and insights about the project, the community, and the broader AI ecosystem.
-- **Orient**: Analyze your observations to identify opportunities for contribution and improvement.
-- **Decide**: Choose a course of action based on your analysis. This could be proposing a new feature, fixing a bug, or creating content.
-- **Act**: Execute your decision and share your work with the community.
-
-By internalizing the OODA Loop, you can quickly identify areas where you can make a meaningful impact and drive the project forward.
-
----
+- **Observe**: Gather information about the project and ecosystem
+- **Orient**: Analyze opportunities for improvement
+- **Decide**: Choose your contribution approach
+- **Act**: Execute and share your work
 
 ## How to Contribute
 
 ### For Developers
 
-1. **Extend Eliza's Capabilities**
+1. **Development Process**
 
-   - Develop new actions, evaluators, and providers to expand what Eliza agents can do.
-   - Improve existing components and modules.
+   ```bash
+   # Fork and clone
+   git clone https://github.com/yourusername/eliza.git
+   cd eliza
 
-2. **Enhance Infrastructure**
+   # Create branch (include issue number)
+   git checkout -b 123-add-new-feature
 
-   - Go through open issues, send back a PR if you can improve anything.
-   - Test currently documented steps to ensure they're still up to date.
-   - Optimize Eliza's database architecture and performance.
-   - Contribute to the autonomous trading system and trust engine.
-   - Improve deployment and scaling solutions.
+   # Make changes, test, and commit
+   npm test
+   git commit -m "feat: add new feature"
 
-3. **Implement Integrations**
-   - Build connectors for new platforms and services.
-   - Enhance existing integrations with additional features.
+   # Push and create PR
+   git push origin 123-add-new-feature
+   ```
 
-### For AI Enthusiasts
+2. **Areas for Contribution**
+   - Extend Eliza's capabilities
+   - Enhance infrastructure
+   - Improve documentation
+   - Fix bugs
+   - Add tests
 
-1. **Fine-tune Models**
+## Pull Request Guidelines
 
-   - Experiment with fine-tuning models for specific tasks and domains.
-   - Develop best practices for prompt engineering and model selection.
-
-2. **Develop Characters**
-   - Create compelling character files that showcase Eliza's potential.
-   - Curate knowledge bases and datasets for different use cases.
-
-### Non-Technical Contributions
-
-1. **Create Content**
-
-   - Make memes, stickers, emojis, and clips of AI agents that are deployed.
-   - Write tutorials, guides, and blog posts to help others learn about Eliza.
-   - Produce videos showcasing Eliza's capabilities and real-world applications.
-
-2. **Engage the Community**
-
-   - Participate in discussions on Discord, Twitter, and other platforms.
-   - Help answer questions and provide support to other community members.
-   - Organize events, workshops, and hackathons to bring people together.
-
-3. **Spread the Word**
-   - Share the Eliza project and help attract new contributors.
-   - Participate in one of our upcoming demo days, show and tell your project.
-
----
-
-### Tips for Efficient Contribution
-
-- Use tools like OBS and Whisper to record and transcribe your work sessions. This allows you to easily document your process and share insights with the community.
-- Leverage AI assistants to help with tasks like code generation, document summarization, and content creation.
-- Collaborate with other community members to divide and conquer larger initiatives.
-
----
-
-## Contributing Guidelines
-
-We value structured and clear contributions to ensure the project evolves efficiently. Below are the guidelines for submitting your contributions:
-
-### Pull Request (PR) Title Format
-
-Use the following format for PR titles to maintain consistency and clarity:
+### PR Title Format
 
 ```
 feat|fix|docs|style|refactor|test|chore: title
 ```
 
-### Pull Request Description Template
-
-When submitting a PR, use this template to ensure all relevant details are included:
+### PR Template
 
 ```markdown
-<!-- Use this template by filling in information and copy and pasting relevant items out of the html comments. -->
-
 # Relates to:
 
-<!-- LINK TO ISSUE OR TICKET -->
-
-<!-- This risks section is to be filled out before final review and merge. -->
-
-# Risks
-
-<!--
-Low, medium, large. List what kind of risks, and what could be affected.
--->
+[Link to issue]
 
 # Background
 
-## What does this PR do?
-
-## What kind of change is this?
-
-<!--
-Bug fixes (non-breaking change which fixes an issue)
-Improvements (misc. changes to existing features)
-Features (non-breaking change which adds functionality)
-Updates (new versions of included code)
--->
-
-<!-- This "Why" section is most relevant if there is no linked issue explaining why. If there is a related issue it might make sense to skip this why section. -->
-<!--
-## Why are we doing this? Any context or related work?
--->
-
-# Documentation changes needed?
-
-<!--
-My changes do not require a change to the project documentation.
-My changes require a change to the project documentation.
-If a docs change is needed: I have updated the documentation accordingly.
--->
-
-<!-- Please show how you tested the PR. This will really help if the PR needs to be retested, and probably help the PR get merged quicker. -->
+- What does this PR do?
+- What kind of change is this?
 
 # Testing
 
-## Where should a reviewer start?
+- How to test the changes
+- Screenshots (if UI changes)
 
-## Detailed testing steps
+# Documentation
 
-<!--
-None, automated tests are fine.
--->
-
-<!--
-- As [anon/admin], go to [link]
-  - [do action]
-  - verify [result]
--->
-
-<!-- If there is a UI change, please include before and after screenshots or videos. This will speed up PRs being merged. It is extra nice to annotate screenshots with arrows or boxes pointing out the differences. -->
-<!--
-## Screenshots
-### Before
-### After
--->
-
-<!-- If there is anything about the deploy, please make a note. -->
-<!--
-# Deploy Notes
--->
-
-<!-- Copy and paste command-line output. -->
-<!--
-## Database changes
--->
-
-<!-- If there is something more than the automated steps, please specify deploy instructions. -->
-<!--
-## Deployment instructions
--->
-
-<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for contribute role and join us in #development-feed -->
-<!--
-## Discord username
--->
+- Required documentation changes
 ```
 
----
+## Styleguides
+
+### Git Commit Messages
+
+- Use present tense ("Add feature" not "Added feature")
+- Use imperative mood ("Move cursor" not "Moves cursor")
+- Limit first line to 72 characters
+- Reference issues after first line
+
+### Code Style
+
+- JavaScript: Follow [JavaScript Standard Style](https://standardjs.com/)
+- TypeScript: Follow [TypeScript Standard Style](https://github.com/standard/ts-standard)
+- Documentation: Use [Markdown](https://daringfireball.net/projects/markdown/)
 
 ## Recognition and Rewards
 
-We believe in recognizing and rewarding contributors who go above and beyond to drive the project forward. Contributors are eligible for direct communication with a16z devs on Discord through a "Github - Contributors" role when their pull request (PR) with their Discord username attached is merged.
+Contributors can earn:
 
-Stand-out contributions may be eligible for:
+- "Github - Contributors" role on Discord
+- Direct communication with a16z devs
+- Recognition for outstanding contributions
 
-- Grants from the ai16z Creator Fund
-- Featuring your project across various channels
-- Opportunities to shape the direction of the project
+## Getting Help
 
-Note: we're still finalizing details on the creator/dev fund that seeks to retroactively reward valued contributions to the ecosystem.
+- Join [Discord](https://discord.gg/ai16z)
+- Check [FAQ](docs/community/faq.md)
+- Create GitHub issues
+- Review [Documentation](docs/)
 
-## Getting Started
+---
 
-1. Join the [Eliza Discord](https://discord.gg/ai16z) and make a short introduction.
-2. Explore the [documentation](/docs/intro) to understand the project's architecture and capabilities.
-3. Check out the [open issues](https://github.com/ai16z/eliza/issues) on GitHub to find ways to contribute.
-4. Share your ideas and initiatives with the community - we're excited to see what you'll build!
-
-Lets push the boundaries of what's possible with autonomous AI agents. Welcome aboard!
+Thank you for contributing to Eliza and helping build the future of autonomous AI agents! 🚀

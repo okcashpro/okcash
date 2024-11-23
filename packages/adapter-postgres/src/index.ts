@@ -4,6 +4,7 @@ import pg, {
     QueryConfigValues,
     QueryResult,
     QueryResultRow,
+    DatabaseError
     type Pool,
 } from "pg";
 import {
@@ -17,6 +18,7 @@ import {
     type IDatabaseCacheAdapter,
     Participant,
     DatabaseAdapter,
+    elizaLogger,
 } from "@ai16z/eliza";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -34,15 +36,50 @@ export class PostgresDatabaseAdapter
     constructor(connectionConfig: any) {
         super();
 
-        this.pool = new pg.Pool({
-            ...connectionConfig,
+        const defaultConfig = {
             max: 20,
             idleTimeoutMillis: 30000,
             connectionTimeoutMillis: 2000,
+        };
+
+        this.pool = new pg.Pool({
+            ...defaultConfig,
+            ...connectionConfig, // Allow overriding defaults
         });
 
-        this.pool.on("error", (err) => {
-            console.error("Unexpected error on idle client", err);
+        this.pool.on("error", async (err) => {
+            elizaLogger.error("Unexpected error on idle client", err);
+
+            // Attempt to reconnect with exponential backoff
+            let retryCount = 0;
+            const maxRetries = 5;
+            const baseDelay = 1000; // Start with 1 second delay
+
+            while (retryCount < maxRetries) {
+                try {
+                    const delay = baseDelay * Math.pow(2, retryCount);
+                    elizaLogger.log(`Attempting to reconnect in ${delay}ms...`);
+                    await new Promise((resolve) => setTimeout(resolve, delay));
+
+                    // Create new pool with same config
+                    this.pool = new pg.Pool(this.pool.options);
+                    await this.testConnection();
+
+                    elizaLogger.log("Successfully reconnected to database");
+                    return;
+                } catch (error) {
+                    retryCount++;
+                    elizaLogger.error(
+                        `Reconnection attempt ${retryCount} failed:`,
+                        error
+                    );
+                }
+            }
+
+            elizaLogger.error(
+                `Failed to reconnect after ${maxRetries} attempts`
+            );
+            throw new Error("Database connection lost and unable to reconnect");
         });
     }
 
@@ -55,7 +92,7 @@ export class PostgresDatabaseAdapter
         try {
             return client.query(queryTextOrConfig, values);
         } catch (error) {
-            console.error(error);
+            elizaLogger.error(error);
             throw error;
         } finally {
             client.release();
@@ -78,10 +115,13 @@ export class PostgresDatabaseAdapter
         try {
             client = await this.pool.connect();
             const result = await client.query("SELECT NOW()");
-            console.log("Database connection test successful:", result.rows[0]);
+            elizaLogger.log(
+                "Database connection test successful:",
+                result.rows[0]
+            );
             return true;
         } catch (error) {
-            console.error("Database connection test failed:", error);
+            elizaLogger.error("Database connection test failed:", error);
             throw new Error(
                 `Failed to connect to database: ${(error as Error).message}`
             );
@@ -170,7 +210,7 @@ export class PostgresDatabaseAdapter
         if (rows.length === 0) return null;
 
         const account = rows[0];
-        console.log("account", account);
+        elizaLogger.log("account", account);
         return {
             ...account,
             details:
@@ -196,7 +236,8 @@ export class PostgresDatabaseAdapter
             );
 
             return true;
-        } catch {
+        } catch (error) {
+            elizaLogger.log("Error creating account", error);
             return false;
         }
     }
@@ -326,8 +367,6 @@ export class PostgresDatabaseAdapter
             values.push(params.count);
         }
 
-        console.log("sql", sql, values);
-
         const { rows } = await this.query(sql, values);
         return rows.map((row) => ({
             ...row,
@@ -426,7 +465,7 @@ export class PostgresDatabaseAdapter
             );
             return true;
         } catch (error) {
-            console.log("Error creating relationship", error);
+            elizaLogger.log("Error creating relationship", error);
             return false;
         }
     }
@@ -577,6 +616,20 @@ export class PostgresDatabaseAdapter
 
     async addParticipant(userId: UUID, roomId: UUID): Promise<boolean> {
         try {
+            const existingParticipant = await this.query(
+                // Check if the participant already exists
+                `SELECT * FROM participants WHERE "userId" = $1 AND "roomId" = $2`,
+                [userId, roomId]
+            );
+
+            if (existingParticipant.rows.length > 0) {
+                elizaLogger.log(
+                    `Participant with userId ${userId} already exists in room ${roomId}.`
+                );
+                return true; // Exit early if the participant already exists
+            }
+
+            // Proceed to add the participant if they do not exist
             await this.query(
                 `INSERT INTO participants (id, "userId", "roomId") 
                 VALUES ($1, $2, $3)`,
@@ -584,7 +637,24 @@ export class PostgresDatabaseAdapter
             );
             return true;
         } catch (error) {
-            console.log("Error adding participant", error);
+
+            if(error instanceof DatabaseError) {
+
+                elizaLogger.log("Error adding participant", error);
+                // This is to prevent duplicate participant error in case of a race condition
+                // Handle unique constraint violation error (code 23505)
+                if (error.code === "23505") {
+                    elizaLogger.warn(
+                        `Participant with userId ${userId} already exists in room ${roomId}.`
+                    ); // Optionally, you can log this or handle it differently
+                    return true;
+                } else {
+                    // Handle other errors
+                    elizaLogger.error("Error adding participant:", error);
+                    return false;
+                }
+            }
+
             return false;
         }
     }
@@ -597,7 +667,7 @@ export class PostgresDatabaseAdapter
             );
             return true;
         } catch (error) {
-            console.log("Error removing participant", error);
+            elizaLogger.log("Error removing participant", error);
             return false;
         }
     }
@@ -682,7 +752,7 @@ export class PostgresDatabaseAdapter
                 details: row.details, // PostgreSQL automatically handles JSON parsing
             }));
         } catch (error) {
-            console.error("Error fetching actor details:", error);
+            elizaLogger.error("Error fetching actor details:", error);
             throw new Error("Failed to fetch actor details");
         }
     }
@@ -699,7 +769,7 @@ export class PostgresDatabaseAdapter
             ]);
             return rows[0]?.value ?? undefined;
         } catch (error) {
-            console.log("Error fetching cache", error);
+            elizaLogger.log("Error fetching cache", error);
             return undefined;
         }
     }
@@ -718,7 +788,7 @@ export class PostgresDatabaseAdapter
             );
             return true;
         } catch (error) {
-            console.log("Error setting cache", error);
+            elizaLogger.log("Error setting cache", error);
             return false;
         }
     }

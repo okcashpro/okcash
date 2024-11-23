@@ -37,7 +37,7 @@ export const TwitterClientInterface: Client = {
 
         return manager;
     },
-    async stop(runtime: IAgentRuntime) {
+    async stop(_runtime: IAgentRuntime) {
         elizaLogger.warn("Twitter client does not support stopping yet");
     },
 };
