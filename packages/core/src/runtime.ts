@@ -737,11 +737,11 @@ export class AgentRuntime implements IAgentRuntime {
             getActorDetails({ runtime: this, roomId }),
             this.messageManager.getMemories({
                 roomId,
-                agentId: this.agentId,
                 count: conversationLength,
                 unique: false,
             }),
             getGoals({
+                agentId: this.agentId,
                 runtime: this,
                 count: 10,
                 onlyInProgress: false,
@@ -877,7 +877,6 @@ Text: ${attachment.text}
             // Check the existing memories in the database
             const existingMemories =
                 await this.messageManager.getMemoriesByRoomIds({
-                    agentId: this.agentId,
                     // filter out the current room id from rooms
                     roomIds: rooms.filter((room) => room !== roomId),
                 });
@@ -1172,7 +1171,6 @@ Text: ${attachment.text}
         const conversationLength = this.getConversationLength();
         const recentMessagesData = await this.messageManager.getMemories({
             roomId: state.roomId,
-            agentId: this.agentId,
             count: conversationLength,
             unique: false,
         });
