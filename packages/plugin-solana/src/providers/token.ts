@@ -604,21 +604,13 @@ export class TokenProvider {
         }
 
         // Sort pairs by both liquidity and market cap to get the highest one
-        return dexData.pairs.reduce((highestPair, currentPair) => {
-            const currentLiquidity = currentPair.liquidity.usd;
-            const currentMarketCap = currentPair.marketCap;
-            const highestLiquidity = highestPair.liquidity.usd;
-            const highestMarketCap = highestPair.marketCap;
-
-            if (
-                currentLiquidity > highestLiquidity ||
-                (currentLiquidity === highestLiquidity &&
-                    currentMarketCap > highestMarketCap)
-            ) {
-                return currentPair;
+        return dexData.pairs.sort((a, b) => {
+            const liquidityDiff = b.liquidity.usd - a.liquidity.usd;
+            if (liquidityDiff !== 0) {
+                return liquidityDiff; // Higher liquidity comes first
             }
-            return highestPair;
-        });
+            return b.marketCap - a.marketCap; // If liquidity is equal, higher market cap comes first
+        })[0];
     }
 
     async analyzeHolderDistribution(
