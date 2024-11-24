@@ -52,11 +52,16 @@ Extract the following details for processing a mass payout using the Coinbase SD
 - **transferAmount** (number): The amount to transfer to each address (in the smallest unit, e.g., Wei for ETH).
 - **assetId** (string): The asset ID to transfer (e.g., ETH, BTC).
 - **network** (string): The blockchain network to use. Allowed values are:
-    - "base": Base blockchain.
-    - "sol": Solana.
-    - "eth": Ethereum.
-    - "arb": Arbitrum.
-    - "pol": Polygon.
+    static networks: {
+        readonly BaseSepolia: "base-sepolia";
+        readonly BaseMainnet: "base-mainnet";
+        readonly EthereumHolesky: "ethereum-holesky";
+        readonly EthereumMainnet: "ethereum-mainnet";
+        readonly PolygonMainnet: "polygon-mainnet";
+        readonly SolanaDevnet: "solana-devnet";
+        readonly SolanaMainnet: "solana-mainnet";
+        readonly ArbitrumMainnet: "arbitrum-mainnet";
+    };
 
 Provide the details in the following JSON format:
 

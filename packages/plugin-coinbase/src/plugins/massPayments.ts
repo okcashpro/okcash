@@ -120,20 +120,12 @@ async function initializeWallet(runtime: IAgentRuntime, networkId: string) {
         wallet = await Wallet.create({ networkId });
 
         // Export wallet data directly
-        const walletData: WalletData = wallet.export(); // Assuming Wallet.export() provides { seed, walletId }
-        const walletAddress = wallet.getDefaultAddress();
-
-        if (runtime.character.settings.secrets) {
-            runtime.character.settings.secrets.COINBASE_GENERATED_WALLET_HEX_SEED =
-                walletData.seed;
-            runtime.character.settings.secrets.COINBASE_GENERATED_WALLET_ID =
-                walletData.walletId;
-        } else {
-            elizaLogger.warn(
-                "Unable to store wallet details: Secrets object is unavailable."
-            );
-        }
-
+        const walletData: WalletData = wallet.export();
+        const walletAddress = await wallet.getDefaultAddress();
+        runtime.character.settings.secrets.COINBASE_GENERATED_WALLET_HEX_SEED =
+            walletData.seed;
+        runtime.character.settings.secrets.COINBASE_GENERATED_WALLET_ID =
+            walletData.walletId;
         // Logging wallet creation
         elizaLogger.log("Created and stored new wallet:", walletAddress);
     } else {
@@ -327,11 +319,11 @@ export const sendMassPayoutAction: Action = {
             const { receivingAddresses, transferAmount, assetId, network } =
                 transferDetails.object as TransferContent;
 
-            const allowedNetworks = ["base", "sol", "eth", "arb", "pol"];
+            const allowedNetworks = Object.values(Coinbase.networks);
 
             if (
                 !network ||
-                !allowedNetworks.includes(network.toLowerCase()) ||
+                !allowedNetworks.includes(network.toLowerCase() as any) ||
                 !receivingAddresses?.length ||
                 transferAmount <= 0 ||
                 !assetId
