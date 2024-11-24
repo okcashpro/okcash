@@ -34,7 +34,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { character } from "./character.ts";
 import type { DirectClient } from "@ai16z/client-direct";
-import blobert from "./blobert.ts";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -179,6 +178,7 @@ function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
         const db = new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
+            parseInputs: true,
         });
         return db;
     } else {
@@ -318,7 +318,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [blobert];
+    let characters = [character];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
