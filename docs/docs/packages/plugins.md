@@ -292,6 +292,7 @@ The plugin automatically handles wallet creation or uses an existing wallet if t
    - **Generate a new wallet** using the Coinbase SDK.
    - Automatically **export the wallet details** (`seed` and `walletId`) and securely store them in `runtime.character.settings.secrets` or other configured storage.
    - Log the wallet’s default address for reference.
+   - If the character file does not exist, the wallet details are saved to a characters/charactername-seed.txt file in the characters directory with a note indicating that the user must manually add these details to settings.secrets or the .env file.
 
 2. **Using an Existing Wallet**
    If wallet information is available during the first run:
