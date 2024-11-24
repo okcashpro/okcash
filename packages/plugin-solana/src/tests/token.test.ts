@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { TokenProvider } from "@ai16z/plugin-solana";
+import { TokenProvider } from "../providers/token.ts";
 
 // Mock NodeCache
 vi.mock("node-cache", () => {

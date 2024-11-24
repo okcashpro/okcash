@@ -60,7 +60,6 @@
         "@ai16z/adapter-sqlite": "workspace:*",
         "@ai16z/adapter-sqljs": "workspace:*",
         "@ai16z/adapter-supabase": "workspace:*",
-        "@ai16z/plugin-solana": "workspace:*",
         "@anthropic-ai/sdk": "0.30.1",
         "@types/uuid": "^10.0.0",
         "ai": "^3.4.23",

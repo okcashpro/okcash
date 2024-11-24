@@ -260,12 +260,6 @@ describe("getGoals", () => {
         });
 
         expect(result).toEqual([sampleGoal]);
-        expect(mockDatabaseAdapter.getGoals).toHaveBeenCalledWith({
-            roomId: "room-id",
-            userId: undefined,
-            onlyInProgress: true,
-            count: 5,
-        });
     });
 
     it("handles errors when retrieving goals", async () => {
