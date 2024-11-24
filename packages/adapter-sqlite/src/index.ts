@@ -296,7 +296,7 @@ export class SqliteDatabaseAdapter
         let sql = `
       SELECT *, vec_distance_L2(embedding, ?) AS similarity
       FROM memories
-      WHERE embedding IS NOT NULL type = ? AND agentId = ?`;
+      WHERE embedding IS NOT NULL AND type = ? AND agentId = ?`;
 
         if (params.unique) {
             sql += " AND `unique` = 1";
