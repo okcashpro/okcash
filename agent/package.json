@@ -17,6 +17,7 @@
         "@ai16z/client-auto": "workspace:*",
         "@ai16z/client-direct": "workspace:*",
         "@ai16z/client-discord": "workspace:*",
+        "@ai16z/client-farcaster": "workspace:*",
         "@ai16z/client-telegram": "workspace:*",
         "@ai16z/client-twitter": "workspace:*",
         "@ai16z/eliza": "workspace:*",
