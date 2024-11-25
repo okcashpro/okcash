@@ -1,25 +1,27 @@
-[@ai16z/eliza v0.1.3](../index.md) / embed
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / embed
 
 # Function: embed()
 
 > **embed**(`runtime`, `input`): `Promise`\<`number`[]\>
 
-Send a message to the OpenAI API for embedding.
+Generate embeddings for input text using configured model provider
 
 ## Parameters
 
 • **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
+The agent runtime containing model configuration
+
 • **input**: `string`
 
-The input to be embedded.
+The text to generate embeddings for
 
 ## Returns
 
 `Promise`\<`number`[]\>
 
-The embedding of the input.
+Array of embedding numbers
 
 ## Defined in
 
-[packages/core/src/embedding.ts:73](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L73)
+[packages/core/src/embedding.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L79)

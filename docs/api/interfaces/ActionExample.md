@@ -1,8 +1,8 @@
-[@ai16z/eliza v0.1.3](../index.md) / ActionExample
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / ActionExample
 
 # Interface: ActionExample
 
-Represents an example of content, typically used for demonstrating or testing purposes. Includes user, content, optional action, and optional source.
+Example content with associated user for demonstration purposes
 
 ## Properties
 
@@ -10,9 +10,11 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 > **user**: `string`
 
+User associated with the example
+
 #### Defined in
 
-[packages/core/src/types.ts:25](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L25)
+[packages/core/src/types.ts:39](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L39)
 
 ***
 
@@ -20,6 +22,8 @@ Represents an example of content, typically used for demonstrating or testing pu
 
 > **content**: [`Content`](Content.md)
 
+Content of the example
+
 #### Defined in
 
-[packages/core/src/types.ts:26](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L26)
+[packages/core/src/types.ts:42](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L42)

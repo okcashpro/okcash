@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.3](../index.md) / embeddingZeroVector
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / embeddingZeroVector
 
 # Variable: embeddingZeroVector
 
