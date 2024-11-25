@@ -38,7 +38,7 @@ Configuration options for generating objects with a model.
 
 ### schema?
 
-> `optional` **schema**: `ZodSchema`
+> `optional` **schema**: `ZodType`\<`any`, `ZodTypeDef`, `any`\>
 
 #### Defined in
 

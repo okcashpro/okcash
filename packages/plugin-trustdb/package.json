@@ -7,9 +7,9 @@
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
         "dompurify": "3.2.0",
-        "tsup": "^8.3.5",
+        "tsup": "8.3.5",
         "uuid": "11.0.2",
-        "vitest": "^2.1.4"
+        "vitest": "2.1.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
@@ -18,7 +18,7 @@
         "lint": "eslint . --fix"
     },
     "devDependencies": {
-        "@types/dompurify": "^3.2.0",
+        "@types/dompurify": "3.2.0",
         "eslint": "9.13.0",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-prettier": "5.2.1",

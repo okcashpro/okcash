@@ -7,15 +7,15 @@
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
         "@ai16z/plugin-trustdb": "workspace:*",
-        "@coral-xyz/anchor": "^0.30.1",
+        "@coral-xyz/anchor": "0.30.1",
         "@solana/spl-token": "0.4.9",
-        "@solana/web3.js": "1.95.4",
+        "@solana/web3.js": "1.95.5",
         "bignumber": "1.1.0",
         "bignumber.js": "9.1.2",
-        "bs58": "^6.0.0",
+        "bs58": "6.0.0",
         "node-cache": "5.1.2",
         "pumpdotfun-sdk": "1.3.2",
-        "tsup": "^8.3.5"
+        "tsup": "8.3.5"
     },
     "devDependencies": {
         "eslint": "9.13.0",
