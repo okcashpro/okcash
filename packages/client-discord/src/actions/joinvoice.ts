@@ -1,6 +1,14 @@
+// eslint-disable-next-line
 // @ts-nocheck
 // src/actions/joinVoice
-import { joinVoiceChannel } from "@discordjs/voice";
+import {
+    Action,
+    ActionExample,
+    composeContext,
+    IAgentRuntime,
+    Memory,
+    State,
+} from "@ai16z/eliza";
 import {
     Channel,
     ChannelType,
@@ -9,14 +17,6 @@ import {
     Guild,
     GuildMember,
 } from "discord.js";
-import { composeContext } from "@ai16z/eliza";
-import {
-    Action,
-    ActionExample,
-    IAgentRuntime,
-    Memory,
-    State,
-} from "@ai16z/eliza";
 
 export default {
     name: "JOIN_VOICE",
@@ -115,8 +115,15 @@ export default {
             );
         });
 
+        if (!state.voiceManager) {
+            state.voiceManager = new VoiceManager({
+                client: state.discordClient,
+                runtime: runtime,
+            });
+        }
+
         if (targetChannel) {
-            joinVoiceChannel({
+            state.voiceManager.joinVoiceChannel({
                 channelId: targetChannel.id,
                 guildId: (discordMessage as DiscordMessage).guild?.id as string,
                 adapterCreator: (client.guilds.cache.get(id) as Guild)
@@ -127,7 +134,7 @@ export default {
             const member = (discordMessage as DiscordMessage)
                 .member as GuildMember;
             if (member?.voice?.channel) {
-                joinVoiceChannel({
+                state.voiceManager.joinVoiceChannel({
                     channelId: member.voice.channel.id,
                     guildId: (discordMessage as DiscordMessage).guild
                         ?.id as string,
@@ -161,7 +168,7 @@ You should only respond with the name of the voice channel or none, no commentar
                 state: guessState as unknown as State,
             });
 
-            const datestr = new Date().toUTCString().replace(/:/g, "-");
+            const _datestr = new Date().toUTCString().replace(/:/g, "-");
 
             const responseContent = await generateText({
                 runtime,
@@ -197,7 +204,7 @@ You should only respond with the name of the voice channel or none, no commentar
                 });
 
                 if (targetChannel) {
-                    joinVoiceChannel({
+                    state.voiceManager.joinVoiceChannel({
                         channelId: targetChannel.id,
                         guildId: (discordMessage as DiscordMessage).guild
                             ?.id as string,

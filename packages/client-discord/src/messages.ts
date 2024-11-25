@@ -423,20 +423,20 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.createdTimestamp,
-                embedding: embeddingZeroVector,
             };
 
             if (content.text) {
+                await this.runtime.messageManager.addEmbeddingToMemory(memory);
                 await this.runtime.messageManager.createMemory(memory);
             }
 
-            let state = (await this.runtime.composeState(userMessage, {
+            let state = await this.runtime.composeState(userMessage, {
                 discordClient: this.client,
                 discordMessage: message,
                 agentName:
                     this.runtime.character.name ||
                     this.client.user?.displayName,
-            })) as State;
+            });
 
             if (!canSendMessage(message.channel).canSend) {
                 return elizaLogger.warn(
@@ -649,6 +649,7 @@ export class MessageManager {
         message: DiscordMessage
     ): Promise<{ processedContent: string; attachments: Media[] }> {
         let processedContent = message.content;
+
         let attachments: Media[] = [];
 
         // Process code blocks in the message content
@@ -692,7 +693,7 @@ export class MessageManager {
             if (
                 this.runtime
                     .getService<IVideoService>(ServiceType.VIDEO)
-                    .isVideoUrl(url)
+                    ?.isVideoUrl(url)
             ) {
                 const videoService = this.runtime.getService<IVideoService>(
                     ServiceType.VIDEO
@@ -700,7 +701,10 @@ export class MessageManager {
                 if (!videoService) {
                     throw new Error("Video service not found");
                 }
-                const videoInfo = await videoService.processVideo(url);
+                const videoInfo = await videoService.processVideo(
+                    url,
+                    this.runtime
+                );
 
                 attachments.push({
                     id: `youtube-${Date.now()}`,

@@ -16,6 +16,10 @@ jobs:
               with:
                   fetch-depth: 0
 
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+
             - uses: pnpm/action-setup@v3
               with:
                   version: 8
@@ -61,7 +65,7 @@ jobs:
             - name: Create GitHub Release
               uses: actions/create-release@v1
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
                   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
               with:
                   tag_name: ${{ steps.get_tag.outputs.TAG }}

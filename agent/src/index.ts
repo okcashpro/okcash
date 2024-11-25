@@ -1,6 +1,6 @@
 import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres";
 import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
-import { DirectClient, DirectClientInterface } from "@ai16z/client-direct";
+import { DirectClientInterface } from "@ai16z/client-direct";
 import { DiscordClientInterface } from "@ai16z/client-discord";
 import { AutoClientInterface } from "@ai16z/client-auto";
 import { TelegramClientInterface } from "@ai16z/client-telegram";
@@ -20,17 +20,23 @@ import {
     elizaLogger,
     settings,
     IDatabaseAdapter,
+    validateCharacterConfig,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { nodePlugin } from "@ai16z/plugin-node";
+import {
+    coinbaseCommercePlugin,
+    coinbaseMassPaymentsPlugin,
+} from "@ai16z/plugin-coinbase";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
 import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { character } from "./character";
+import { character } from "./character.ts";
+import type { DirectClient } from "@ai16z/client-direct";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -66,27 +72,21 @@ export function parseArguments(): {
 export async function loadCharacters(
     charactersArg: string
 ): Promise<Character[]> {
-    let characterPaths = charactersArg
-        ?.split(",")
-        .map((path) => path.trim())
-        .map((path) => {
-            if (path.startsWith("../characters")) {
-                return `../${path}`;
-            }
-            if (path.startsWith("characters")) {
-                return `../../${path}`;
-            }
-            if (path.startsWith("./characters")) {
-                return `../.${path}`;
-            }
-            return path;
-        });
+    let characterPaths = charactersArg?.split(",").map((filePath) => {
+        if (path.basename(filePath) === filePath) {
+            filePath = "../characters/" + filePath;
+        }
+        return path.resolve(process.cwd(), filePath.trim());
+    });
+
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
         for (const path of characterPaths) {
             try {
                 const character = JSON.parse(fs.readFileSync(path, "utf8"));
+
+                validateCharacterConfig(character);
 
                 // is there a "plugins" field?
                 if (character.plugins) {
@@ -179,12 +179,17 @@ export function getTokenForProvider(
 
 function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
-        return new PostgresDatabaseAdapter({
+        const db = new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
+            parseInputs: true,
         });
+        return db;
     } else {
-        const filePath = path.resolve(dataDir, "db.sqlite");
-        return new SqliteDatabaseAdapter(new Database(filePath));
+        const filePath =
+            process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
+        // ":memory:";
+        const db = new SqliteDatabaseAdapter(new Database(filePath));
+        return db;
     }
 }
 
@@ -249,6 +254,16 @@ export function createAgent(
             bootstrapPlugin,
             nodePlugin,
             character.settings.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,
+            character.settings.secrets?.COINBASE_COMMERCE_KEY ||
+            process.env.COINBASE_COMMERCE_KEY
+                ? coinbaseCommercePlugin
+                : null,
+            (character.settings.secrets?.COINBASE_API_KEY ||
+                process.env.COINBASE_API_KEY) &&
+            (character.settings.secrets?.COINBASE_PRIVATE_KEY ||
+                process.env.COINBASE_PRIVATE_KEY)
+                ? coinbaseMassPaymentsPlugin
+                : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -260,9 +275,7 @@ export function createAgent(
 
 function intializeFsCache(baseDir: string, character: Character) {
     const cacheDir = path.resolve(baseDir, character.id, "cache");
-    if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir, { recursive: true });
-    }
+
     const cache = new CacheManager(new FsCacheAdapter(cacheDir));
     return cache;
 }
@@ -272,15 +285,26 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character, directClient: DirectClient) {
+async function startAgent(character: Character, directClient: any) {
     try {
         character.id ??= stringToUuid(character.name);
+        character.username ??= character.name;
 
         const token = getTokenForProvider(character.modelProvider, character);
-        const dataDir = path.join(__dirname, "../../../data");
+        const dataDir = path.join(__dirname, "../data");
+
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+
         const db = initializeDatabase(dataDir);
+
+        await db.init();
+
         const cache = intializeDbCache(character, db);
         const runtime = createAgent(character, db, cache, token);
+
+        await runtime.initialize();
 
         const clients = await initializeClients(character, runtime);
 
@@ -292,6 +316,7 @@ async function startAgent(character: Character, directClient: DirectClient) {
             `Error starting agent for character ${character.name}:`,
             error
         );
+        console.error(error);
         throw error;
     }
 }
@@ -310,7 +335,7 @@ const startAgents = async () => {
 
     try {
         for (const character of characters) {
-            await startAgent(character, directClient);
+            await startAgent(character, directClient as any);
         }
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);
@@ -340,9 +365,15 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
+rl.on("SIGINT", () => {
+    rl.close();
+    process.exit(0);
+});
+
 async function handleUserInput(input, agentId) {
     if (input.toLowerCase() === "exit") {
         rl.close();
+        process.exit(0);
         return;
     }
 

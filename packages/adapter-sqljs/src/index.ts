@@ -23,16 +23,10 @@ export class SqlJsDatabaseAdapter
     constructor(db: Database) {
         super();
         this.db = db;
+    }
 
-        // Check if the 'accounts' table exists as a representative table
-        const tableExists = this.db.exec(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'"
-        )[0];
-
-        if (!tableExists) {
-            // If the 'accounts' table doesn't exist, create all the tables
-            this.db.exec(sqliteTables);
-        }
+    async init() {
+        this.db.exec(sqliteTables);
     }
 
     async getRoom(roomId: UUID): Promise<UUID | null> {

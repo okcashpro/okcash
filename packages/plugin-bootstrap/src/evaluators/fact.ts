@@ -3,7 +3,6 @@ import { generateObjectArray } from "@ai16z/eliza";
 import { MemoryManager } from "@ai16z/eliza";
 import {
     ActionExample,
-    Content,
     IAgentRuntime,
     Memory,
     ModelClass,
@@ -13,7 +12,7 @@ import {
 export const formatFacts = (facts: Memory[]) => {
     const messageStrings = facts
         .reverse()
-        .map((fact: Memory) => `${(fact.content as Content)?.content}`);
+        .map((fact: Memory) => fact.content.text);
     const finalMessageStrings = messageStrings.join("\n");
     return finalMessageStrings;
 };

@@ -16,7 +16,8 @@ import {
     QuoteRequest,
 } from "@avnu/avnu-sdk";
 
-import { getStarknetAccount, validateSettings } from "../utils/index.ts";
+import { getStarknetAccount } from "../utils/index.ts";
+import { validateStarknetConfig } from "../enviroment.ts";
 
 interface SwapContent {
     sellTokenAddress: string;
@@ -79,8 +80,9 @@ export const executeSwap: Action = {
         "STARKNET_TRADE_TOKENS",
         "STARKNET_EXCHANGE_TOKENS",
     ],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
-        return validateSettings(runtime);
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
+        await validateStarknetConfig(runtime);
+        return true;
     },
     description:
         "Perform a token swap on starknet. Use this action when a user asks you to swap tokens anything.",

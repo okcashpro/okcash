@@ -39,6 +39,7 @@ export abstract class DatabaseAdapter<DB = any> implements IDatabaseAdapter {
      * @returns A Promise that resolves to an array of Memory objects.
      */
     abstract getMemories(params: {
+        agentId: UUID;
         roomId: UUID;
         count?: number;
         unique?: boolean;
@@ -46,7 +47,7 @@ export abstract class DatabaseAdapter<DB = any> implements IDatabaseAdapter {
     }): Promise<Memory[]>;
 
     abstract getMemoriesByRoomIds(params: {
-        agentId?: UUID;
+        agentId: UUID;
         roomIds: UUID[];
         tableName: string;
     }): Promise<Memory[]>;
@@ -105,6 +106,7 @@ export abstract class DatabaseAdapter<DB = any> implements IDatabaseAdapter {
      */
     abstract searchMemories(params: {
         tableName: string;
+        agentId: UUID;
         roomId: UUID;
         embedding: number[];
         match_threshold: number;
@@ -188,6 +190,7 @@ export abstract class DatabaseAdapter<DB = any> implements IDatabaseAdapter {
      * @returns A Promise that resolves to an array of Goal objects.
      */
     abstract getGoals(params: {
+        agentId: UUID;
         roomId: UUID;
         userId?: UUID | null;
         onlyInProgress?: boolean;
