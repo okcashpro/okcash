@@ -276,7 +276,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character, directClient: DirectClient) {
+async function startAgent(character: Character, directClient: any) {
     try {
         character.id ??= stringToUuid(character.name);
         character.username ??= character.name;
@@ -326,7 +326,7 @@ const startAgents = async () => {
 
     try {
         for (const character of characters) {
-            await startAgent(character, directClient as DirectClient);
+            await startAgent(character, directClient as any);
         }
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);

@@ -20,21 +20,19 @@
         "docker:bash": "bash ./scripts/docker.sh bash",
         "docker:start": "bash ./scripts/docker.sh start",
         "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
-        "test": "bash ./scripts/test.sh",
-        "prepare": "husky install"
+        "test": "bash ./scripts/test.sh"
     },
     "devDependencies": {
+        "@commitlint/cli": "^18.4.4",
+        "@commitlint/config-conventional": "^18.4.4",
         "concurrently": "^9.1.0",
-        "husky": "^9.1.6",
         "lerna": "^8.1.5",
         "only-allow": "^1.2.1",
         "prettier": "^3.3.3",
         "typedoc": "^0.26.11",
         "typescript": "5.6.3",
         "vite": "^5.4.11",
-        "vitest": "^2.1.5",
-        "@commitlint/cli": "^18.4.4",
-        "@commitlint/config-conventional": "^18.4.4"
+        "vitest": "^2.1.5"
     },
     "pnpm": {
         "overrides": {
