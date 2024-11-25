@@ -24,6 +24,7 @@ PACKAGES=(
     "plugin-trustdb"
     "plugin-solana"
     "plugin-starknet"
+    "plugin-conflux"
     "adapter-postgres"
     "adapter-sqlite"
     "adapter-sqljs"
