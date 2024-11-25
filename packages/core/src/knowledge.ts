@@ -14,7 +14,6 @@ async function get(runtime: AgentRuntime, message: Memory): Promise<string[]> {
         embedding,
         {
             roomId: message.agentId,
-            agentId: message.agentId,
             count: 3,
             match_threshold: 0.1,
         }
@@ -50,13 +49,13 @@ async function set(
     bleed: number = 20
 ) {
     await runtime.documentsManager.createMemory({
-        embedding: embeddingZeroVector,
         id: item.id,
         agentId: runtime.agentId,
         roomId: runtime.agentId,
         userId: runtime.agentId,
         createdAt: Date.now(),
         content: item.content,
+        embedding: embeddingZeroVector,
     });
 
     const preprocessed = preprocess(item.content.text);

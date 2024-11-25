@@ -538,8 +538,12 @@ export class AgentRuntime implements IAgentRuntime {
             return;
         }
 
-        elizaLogger.success(`Executing handler for action: ${action.name}`);
-        await action.handler(this, message, state, {}, callback);
+        try {
+            elizaLogger.info(`Executing handler for action: ${action.name}`);
+            await action.handler(this, message, state, {}, callback);
+        } catch (error) {
+            elizaLogger.error(error);
+        }
     }
 
     /**
@@ -737,7 +741,6 @@ export class AgentRuntime implements IAgentRuntime {
             getActorDetails({ runtime: this, roomId }),
             this.messageManager.getMemories({
                 roomId,
-                agentId: this.agentId,
                 count: conversationLength,
                 unique: false,
             }),
@@ -877,7 +880,6 @@ Text: ${attachment.text}
             // Check the existing memories in the database
             const existingMemories =
                 await this.messageManager.getMemoriesByRoomIds({
-                    agentId: this.agentId,
                     // filter out the current room id from rooms
                     roomIds: rooms.filter((room) => room !== roomId),
                 });
@@ -1172,7 +1174,6 @@ Text: ${attachment.text}
         const conversationLength = this.getConversationLength();
         const recentMessagesData = await this.messageManager.getMemories({
             roomId: state.roomId,
-            agentId: this.agentId,
             count: conversationLength,
             unique: false,
         });

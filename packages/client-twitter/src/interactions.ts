@@ -127,7 +127,7 @@ export class TwitterInteractionClient {
             for (const tweet of uniqueTweetCandidates) {
                 if (
                     !this.client.lastCheckedTweetId ||
-                    parseInt(tweet.id) > this.client.lastCheckedTweetId
+                    BigInt(tweet.id) > this.client.lastCheckedTweetId
                 ) {
                     elizaLogger.log("New Tweet found", tweet.permanentUrl);
 
@@ -167,7 +167,7 @@ export class TwitterInteractionClient {
                     });
 
                     // Update the last checked tweet ID after processing each tweet
-                    this.client.lastCheckedTweetId = parseInt(tweet.id);
+                    this.client.lastCheckedTweetId = BigInt(tweet.id);
                 }
             }
 

@@ -485,7 +485,7 @@ export class VoiceManager extends EventEmitter {
 
                         const memory = {
                             id: stringToUuid(
-                                channelId + "-voice-message-" + Date.now()
+                                roomId + "-voice-message-" + Date.now()
                             ),
                             agentId: this.runtime.agentId,
                             content: {
@@ -540,7 +540,11 @@ export class VoiceManager extends EventEmitter {
 
                             const responseMemory: Memory = {
                                 id: stringToUuid(
-                                    memory.id + "-voice-response-" + Date.now()
+                                    roomId +
+                                        "-" +
+                                        memory.id +
+                                        "-voice-response-" +
+                                        Date.now()
                                 ),
                                 agentId: this.runtime.agentId,
                                 userId: this.runtime.agentId,
