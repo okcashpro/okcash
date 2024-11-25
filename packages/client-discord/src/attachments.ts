@@ -8,7 +8,6 @@ import {
     IVideoService,
     Media,
     ModelClass,
-    Service,
     ServiceType,
 } from "@ai16z/eliza";
 import { Attachment, Collection } from "discord.js";
@@ -336,7 +335,10 @@ export class AttachmentManager {
         }
 
         if (videoService.isVideoUrl(attachment.url)) {
-            const videoInfo = await videoService.processVideo(attachment.url);
+            const videoInfo = await videoService.processVideo(
+                attachment.url,
+                this.runtime
+            );
             return {
                 id: attachment.id,
                 url: attachment.url,

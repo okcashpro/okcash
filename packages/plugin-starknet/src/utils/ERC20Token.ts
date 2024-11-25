@@ -1,4 +1,4 @@
-import { Account, Call, CallData, Calldata, Contract, cairo } from "starknet";
+import { Account, CallData, Calldata, Contract, cairo } from "starknet";
 import erc20Abi from "./erc20.json";
 
 export type ApproveCall = {

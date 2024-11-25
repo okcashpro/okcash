@@ -7,15 +7,14 @@ import {
     ModelClass,
     Content,
     ActionExample,
-    generateObjectV2
+    generateObjectV2,
 } from "@ai16z/eliza";
-import { Indexer, ZgFile, getFlowContract } from '@0glabs/0g-ts-sdk';
-import { ethers } from 'ethers';
+import { Indexer, ZgFile, getFlowContract } from "@0glabs/0g-ts-sdk";
+import { ethers } from "ethers";
 import { composeContext } from "@ai16z/eliza";
-import { promises as fs } from 'fs';
+import { promises as fs } from "fs";
 
-
-import { uploadTemplate } from '../templates/upload';
+import { uploadTemplate } from "../templates/upload";
 
 export interface UploadContent extends Content {
     filePath: string;
@@ -26,9 +25,7 @@ function isUploadContent(
     content: any
 ): content is UploadContent {
     console.log("Content for upload", content);
-    return (
-        typeof content.filePath === "string"
-    );
+    return typeof content.filePath === "string";
 }
 
 export const zgUpload: Action = {
@@ -40,7 +37,7 @@ export const zgUpload: Action = {
         "UPLOAD_TO_ZERO_GRAVITY",
         "STORE_ON_ZERO_GRAVITY",
         "SHARE_FILE_ON_ZG",
-        "PUBLISH_FILE_TO_ZG"
+        "PUBLISH_FILE_TO_ZG",
     ],
     description: "Store data using 0G protocol",
     validate: async (runtime: IAgentRuntime, message: Memory) => {
@@ -99,12 +96,15 @@ export const zgUpload: Action = {
                 console.error("File path is required");
                 return false;
             }
-            
+
             // Check if file exists and is accessible
             try {
                 await fs.access(filePath);
             } catch (error) {
-                console.error(`File ${filePath} does not exist or is not accessible:`, error);
+                console.error(
+                    `File ${filePath} does not exist or is not accessible:`,
+                    error
+                );
                 return false;
             }
 
@@ -122,43 +122,51 @@ export const zgUpload: Action = {
             const indexer = new Indexer(zgIndexerRpc);
             const flowContract = getFlowContract(flowAddr, signer);
 
-            var [tx, err] = await indexer.upload(file, 0, zgEvmRpc, flowContract);
+            var [tx, err] = await indexer.upload(
+                file,
+                0,
+                zgEvmRpc,
+                flowContract
+            );
             if (err === null) {
                 console.log("File uploaded successfully, tx: ", tx);
-                } else {
+            } else {
                 console.error("Error uploading file: ", err);
                 return false;
             }
 
             await file.close();
-
         } catch (error) {
             console.error("Error getting settings for 0G upload:", error);
         }
     },
-    examples: [[
-        {
-            user: "{{user1}}",
-            content: { 
-                text: "upload my resume.pdf file",
-                action: "ZG_UPLOAD"
-            }
-        }
-    ], [
-        {
-            user: "{{user1}}", 
-            content: { 
-                text: "can you help me upload this document.docx?",
-                action: "ZG_UPLOAD"
-            }
-        }
-    ], [
-        {
-            user: "{{user1}}", 
-            content: { 
-                text: "I need to upload an image file image.png",
-                action: "ZG_UPLOAD"
-            }
-        }
-    ]] as ActionExample[][],
+    examples: [
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "upload my resume.pdf file",
+                    action: "ZG_UPLOAD",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "can you help me upload this document.docx?",
+                    action: "ZG_UPLOAD",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "I need to upload an image file image.png",
+                    action: "ZG_UPLOAD",
+                },
+            },
+        ],
+    ] as ActionExample[][],
 } as Action;

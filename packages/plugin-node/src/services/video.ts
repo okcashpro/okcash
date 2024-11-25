@@ -30,7 +30,7 @@ export class VideoService extends Service implements IVideoService {
         return VideoService.getInstance();
     }
 
-    async initialize(runtime: IAgentRuntime): Promise<void> {}
+    async initialize(_runtime: IAgentRuntime): Promise<void> {}
 
     private ensureDataDirectoryExists() {
         if (!fs.existsSync(this.dataDir)) {
@@ -93,7 +93,7 @@ export class VideoService extends Service implements IVideoService {
 
     public async processVideo(
         url: string,
-        runtime?: IAgentRuntime
+        runtime: IAgentRuntime
     ): Promise<Media> {
         this.queue.push(url);
         this.processQueue(runtime);
@@ -140,7 +140,7 @@ export class VideoService extends Service implements IVideoService {
     ): Promise<Media> {
         const videoId =
             url.match(
-                /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/
+                /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/ // eslint-disable-line
             )?.[1] || "";
         const videoUuid = this.getVideoId(videoId);
         const cacheKey = `${this.cacheKey}/${videoUuid}`;
@@ -338,9 +338,10 @@ export class VideoService extends Service implements IVideoService {
 
         console.log("Starting transcription...");
         const startTime = Date.now();
-        const transcriptionService = runtime
-            .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
-            .getInstance();
+        const transcriptionService = runtime.getService<ITranscriptionService>(
+            ServiceType.TRANSCRIPTION
+        );
+
         if (!transcriptionService) {
             throw new Error("Transcription service not found");
         }
