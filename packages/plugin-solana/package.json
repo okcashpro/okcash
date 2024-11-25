@@ -9,7 +9,7 @@
         "@ai16z/plugin-trustdb": "workspace:*",
         "@coral-xyz/anchor": "^0.30.1",
         "@solana/spl-token": "0.4.9",
-        "@solana/web3.js": "1.95.4",
+        "@solana/web3.js": "1.95.5",
         "bignumber": "1.1.0",
         "bignumber.js": "9.1.2",
         "bs58": "^6.0.0",
