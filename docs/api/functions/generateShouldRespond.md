@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.3](../index.md) / generateShouldRespond
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / generateShouldRespond
 
 # Function: generateShouldRespond()
 
@@ -28,4 +28,4 @@ Promise resolving to "RESPOND", "IGNORE", "STOP" or null
 
 ## Defined in
 
-[packages/core/src/generation.ts:414](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L414)
+[packages/core/src/generation.ts:447](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L447)

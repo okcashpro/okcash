@@ -1,8 +1,8 @@
-[@ai16z/eliza v0.1.3](../index.md) / Objective
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Objective
 
 # Interface: Objective
 
-Represents an objective within a goal, detailing what needs to be achieved and whether it has been completed.
+Represents a single objective within a goal
 
 ## Properties
 
@@ -10,9 +10,11 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 > `optional` **id**: `string`
 
+Optional unique identifier
+
 #### Defined in
 
-[packages/core/src/types.ts:51](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L51)
+[packages/core/src/types.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L87)
 
 ***
 
@@ -20,9 +22,11 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 > **description**: `string`
 
+Description of what needs to be achieved
+
 #### Defined in
 
-[packages/core/src/types.ts:52](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L52)
+[packages/core/src/types.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L90)
 
 ***
 
@@ -30,6 +34,8 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 > **completed**: `boolean`
 
+Whether objective is completed
+
 #### Defined in
 
-[packages/core/src/types.ts:53](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L53)
+[packages/core/src/types.ts:93](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L93)

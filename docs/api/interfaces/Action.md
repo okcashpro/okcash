@@ -1,8 +1,8 @@
-[@ai16z/eliza v0.1.3](../index.md) / Action
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Action
 
 # Interface: Action
 
-Represents an action that the agent can perform, including conditions for its use, a description, examples, a handler function, and a validation function.
+Represents an action the agent can perform
 
 ## Properties
 
@@ -10,9 +10,11 @@ Represents an action that the agent can perform, including conditions for its us
 
 > **similes**: `string`[]
 
+Similar action descriptions
+
 #### Defined in
 
-[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
+[packages/core/src/types.ts:377](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L377)
 
 ***
 
@@ -20,9 +22,11 @@ Represents an action that the agent can perform, including conditions for its us
 
 > **description**: `string`
 
+Detailed description
+
 #### Defined in
 
-[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
+[packages/core/src/types.ts:380](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L380)
 
 ***
 
@@ -30,9 +34,11 @@ Represents an action that the agent can perform, including conditions for its us
 
 > **examples**: [`ActionExample`](ActionExample.md)[][]
 
+Example usages
+
 #### Defined in
 
-[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
+[packages/core/src/types.ts:383](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L383)
 
 ***
 
@@ -40,9 +46,11 @@ Represents an action that the agent can perform, including conditions for its us
 
 > **handler**: [`Handler`](../type-aliases/Handler.md)
 
+Handler function
+
 #### Defined in
 
-[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L221)
+[packages/core/src/types.ts:386](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L386)
 
 ***
 
@@ -50,9 +58,11 @@ Represents an action that the agent can perform, including conditions for its us
 
 > **name**: `string`
 
+Action name
+
 #### Defined in
 
-[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L222)
+[packages/core/src/types.ts:389](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L389)
 
 ***
 
@@ -60,6 +70,8 @@ Represents an action that the agent can perform, including conditions for its us
 
 > **validate**: [`Validator`](../type-aliases/Validator.md)
 
+Validation function
+
 #### Defined in
 
-[packages/core/src/types.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L223)
+[packages/core/src/types.ts:392](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L392)
