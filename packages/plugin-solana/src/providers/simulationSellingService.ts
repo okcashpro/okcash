@@ -211,7 +211,8 @@ export class simulationSellingService {
                 const process = await this.startProcessInTheSonarBackend(
                     tokenAddress,
                     balance,
-                    sell_recommender_id
+                    sell_recommender_id,
+                    tokenPerformance.initial_mc
                 );
                 if (process) {
                     this.runningProcesses.add(tokenAddress);
@@ -223,21 +224,23 @@ export class simulationSellingService {
     private async startProcessInTheSonarBackend(
         tokenAddress: string,
         balance: number,
-        sell_recommender_id: string
+        isSimulation: boolean,
+        initial_mc: number
     ) {
         try {
             const message = JSON.stringify({
                 tokenAddress,
                 balance,
-                sell_recommender_id,
+                isSimulation,
+                initial_mc,
             });
             const response = await fetch(
-                `${this.sonarBe}/api/simulation/sell`,
+                `${this.sonarBe}/ai16z-sol/startProcess`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.sonarBeToken}`,
+                        "x-api-key": `${this.sonarBeToken}`,
                     },
                     body: message,
                 }
@@ -266,15 +269,14 @@ export class simulationSellingService {
 
     private stopProcessInTheSonarBackend(tokenAddress: string) {
         try {
-            return fetch(
-                `${this.sonarBe}/api/simulation/sell/${tokenAddress}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${this.sonarBeToken}`,
-                    },
-                }
-            );
+            return fetch(`${this.sonarBe}/ai16z-sol/stopProcess`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": `${this.sonarBeToken}`,
+                },
+                body: JSON.stringify({ tokenAddress }),
+            });
         } catch (error) {
             console.error(
                 `Error stopping process for token ${tokenAddress}:`,

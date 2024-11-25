@@ -41,6 +41,7 @@ export interface TokenPerformance {
     suspiciousVolume: boolean;
     validationTrust: number;
     balance: number;
+    initialMarketCap: number;
     lastUpdated: Date;
 }
 
@@ -122,6 +123,7 @@ interface TokenPerformanceRow {
     suspicious_volume: number;
     validation_trust: number;
     balance: number;
+    initial_market_cap: number;
     last_updated: string;
 }
 
@@ -205,6 +207,7 @@ export class TrustScoreDatabase {
                 suspicious_volume BOOLEAN DEFAULT FALSE,
                 validation_trust REAL DEFAULT 0,
                 balance REAL DEFAULT 0,
+                initial_market_cap REAL DEFAULT 0,
                 last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -731,6 +734,8 @@ export class TrustScoreDatabase {
                 rapid_dump,
                 suspicious_volume,
                 validation_trust,
+                balance,
+                initial_market_cap,
                 last_updated
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             ON CONFLICT(token_address) DO UPDATE SET
@@ -747,6 +752,8 @@ export class TrustScoreDatabase {
                 rapid_dump = excluded.rapid_dump,
                 suspicious_volume = excluded.suspicious_volume,
                 validation_trust = excluded.validation_trust,
+                balance = excluded.balance,
+                initial_market_cap = excluded.initial_market_cap,
                 last_updated = CURRENT_TIMESTAMP;
         `;
         try {
@@ -764,6 +771,8 @@ export class TrustScoreDatabase {
                 performance.sustainedGrowth ? 1 : 0,
                 performance.rapidDump ? 1 : 0,
                 performance.suspiciousVolume ? 1 : 0,
+                performance.balance,
+                performance.initialMarketCap,
                 validationTrust
             );
             console.log(
@@ -823,8 +832,18 @@ export class TrustScoreDatabase {
             suspiciousVolume: row.suspicious_volume === 1,
             validationTrust: row.validation_trust,
             balance: row.balance,
+            initialMarketCap: row.initial_market_cap,
             lastUpdated: new Date(row.last_updated),
         };
+    }
+
+    //getTokenBalance
+    getTokenBalance(tokenAddress: string): number {
+        const sql = `SELECT balance FROM token_performance WHERE token_address = ?;`;
+        const row = this.db.prepare(sql).get(tokenAddress) as {
+            balance: number;
+        };
+        return row.balance;
     }
 
     getAllTokenPerformancesWithBalance(): TokenPerformance[] {
@@ -847,6 +866,7 @@ export class TrustScoreDatabase {
             suspiciousVolume: row.suspicious_volume === 1,
             validationTrust: row.validation_trust,
             balance: row.balance,
+            initialMarketCap: row.initial_market_cap,
             lastUpdated: new Date(row.last_updated),
         }));
     }

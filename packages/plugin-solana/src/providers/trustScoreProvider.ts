@@ -399,8 +399,30 @@ export class TrustScoreManager {
                 processedData.dexScreenerData.pairs[0]?.liquidity || 0,
             initialPrice: processedData.tradeData.price,
         };
-
         this.trustScoreDb.addTokenRecommendation(tokenRecommendation);
+
+        this.trustScoreDb.upsertTokenPerformance({
+            tokenAddress: tokenAddress,
+            priceChange24h: processedData.tradeData.price_change_24h_percent,
+            volumeChange24h: processedData.tradeData.volume_24h,
+            trade_24h_change: processedData.tradeData.trade_24h_change_percent,
+            liquidity:
+                processedData.dexScreenerData.pairs[0]?.liquidity.usd || 0,
+            liquidityChange24h: 0,
+            holderChange24h:
+                processedData.tradeData.unique_wallet_24h_change_percent,
+            rugPull: false,
+            isScam: false,
+            marketCapChange24h: 0,
+            sustainedGrowth: false,
+            rapidDump: false,
+            suspiciousVolume: false,
+            validationTrust: 0,
+            balance: tokensBalance,
+            initialMarketCap:
+                processedData.dexScreenerData.pairs[0]?.marketCap || 0,
+            lastUpdated: new Date(),
+        });
 
         if (data.is_simulation) {
             // If the trade is a simulation update the balance
