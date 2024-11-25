@@ -29,6 +29,7 @@ import {
     ICacheManager,
     IDatabaseAdapter,
     IMemoryManager,
+    KnowledgeItem,
     ModelClass,
     ModelProviderName,
     Plugin,
@@ -952,9 +953,13 @@ Text: ${attachment.text}
                 .join(" ");
         }
 
+
+        const knowledegeData = await knowledge.get(this, message);
+
         const formattedKnowledge = formatKnowledge(
-            await knowledge.get(this, message)
+            knowledegeData
         );
+
 
         const initialState = {
             agentId: this.agentId,
@@ -971,6 +976,7 @@ Text: ${attachment.text}
                       ]
                     : "",
             knowledge: formattedKnowledge,
+            knowledgeData: knowledegeData,
             // Recent interactions between the sender and receiver, formatted as messages
             recentMessageInteractions: formattedMessageInteractions,
             // Recent interactions between the sender and receiver, formatted as posts
@@ -1097,7 +1103,7 @@ Text: ${attachment.text}
                     ? addHeader("# Attachments", formattedAttachments)
                     : "",
             ...additionalKeys,
-        };
+        } as State;
 
         const actionPromises = this.actions.map(async (action: Action) => {
             const result = await action.validate(this, message, initialState);
@@ -1235,6 +1241,6 @@ Text: ${attachment.text}
     }
 }
 
-const formatKnowledge = (knowledge: string[]) => {
-    return knowledge.map((knowledge) => `- ${knowledge}`).join("\n");
+const formatKnowledge = (knowledge: KnowledgeItem[]) => {
+    return knowledge.map((knowledge) => `- ${knowledge.content.text}`).join("\n");
 };

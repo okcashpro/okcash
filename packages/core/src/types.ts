@@ -294,6 +294,11 @@ export interface State {
     /** Optional formatted conversation */
     formattedConversation?: string;
 
+    /** Optional formatted knowledge */
+    knowledge?: string,
+    /** Optional knowledge data */
+    knowledgeData?: KnowledgeItem[],
+
     /** Additional dynamic properties */
     [key: string]: unknown;
 }
