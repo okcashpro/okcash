@@ -253,6 +253,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
                     runtime,
                     rec.contractAddress,
                     userId,
+                    account.username, // we need this to create the recommender account in the BE
                     {
                         buy_amount: rec.buyAmount,
                         is_simulation: true,
