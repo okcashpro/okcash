@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Objective
+[@ai16z/eliza v0.1.3](../index.md) / Objective
 
 # Interface: Objective
 
@@ -14,7 +14,7 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 [packages/core/src/types.ts:51](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L51)
 
----
+***
 
 ### description
 
@@ -24,7 +24,7 @@ Represents an objective within a goal, detailing what needs to be achieved and w
 
 [packages/core/src/types.ts:52](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L52)
 
----
+***
 
 ### completed
 

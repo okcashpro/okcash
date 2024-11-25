@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Plugin
+[@ai16z/eliza v0.1.3](../index.md) / Plugin
 
 # Type Alias: Plugin
 
@@ -30,6 +30,10 @@
 
 > `optional` **services**: [`Service`](../classes/Service.md)[]
 
+### clients?
+
+> `optional` **clients**: [`Client`](Client.md)[]
+
 ## Defined in
 
-[packages/core/src/types.ts:313](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L313)
+[packages/core/src/types.ts:314](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L314)

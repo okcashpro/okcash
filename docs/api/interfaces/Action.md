@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Action
+[@ai16z/eliza v0.1.3](../index.md) / Action
 
 # Interface: Action
 
@@ -12,9 +12,9 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[packages/core/src/types.ts:217](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L217)
+[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
 
----
+***
 
 ### description
 
@@ -22,9 +22,9 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
+[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
 
----
+***
 
 ### examples
 
@@ -32,9 +32,9 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
+[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
 
----
+***
 
 ### handler
 
@@ -42,9 +42,9 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
+[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L221)
 
----
+***
 
 ### name
 
@@ -52,9 +52,9 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L221)
+[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L222)
 
----
+***
 
 ### validate
 
@@ -62,4 +62,4 @@ Represents an action that the agent can perform, including conditions for its us
 
 #### Defined in
 
-[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L222)
+[packages/core/src/types.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L223)

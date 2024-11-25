@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / evaluationTemplate
+[@ai16z/eliza v0.1.3](../index.md) / evaluationTemplate
 
 # Variable: evaluationTemplate
 

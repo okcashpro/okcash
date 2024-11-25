@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Handler
+[@ai16z/eliza v0.1.3](../index.md) / Handler
 
 # Type Alias: Handler()
 
@@ -24,4 +24,4 @@ Represents the type of a handler function, which takes a runtime instance, a mes
 
 ## Defined in
 
-[packages/core/src/types.ts:190](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L190)
+[packages/core/src/types.ts:191](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L191)

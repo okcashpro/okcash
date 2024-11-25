@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / formatRelationships
+[@ai16z/eliza v0.1.3](../index.md) / formatRelationships
 
 # Function: formatRelationships()
 

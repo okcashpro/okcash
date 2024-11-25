@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Character
+[@ai16z/eliza v0.1.3](../index.md) / Character
 
 # Type Alias: Character
 
@@ -13,6 +13,10 @@
 ### name
 
 > **name**: `string`
+
+### username?
+
+> `optional` **username**: `string`
 
 ### system?
 
@@ -30,9 +34,65 @@
 
 > `optional` **templates**: `object`
 
-#### Index Signature
+### templates.goalsTemplate?
 
-\[`key`: `string`\]: `string`
+> `optional` **goalsTemplate**: `string`
+
+### templates.factsTemplate?
+
+> `optional` **factsTemplate**: `string`
+
+### templates.messageHandlerTemplate?
+
+> `optional` **messageHandlerTemplate**: `string`
+
+### templates.shouldRespondTemplate?
+
+> `optional` **shouldRespondTemplate**: `string`
+
+### templates.continueMessageHandlerTemplate?
+
+> `optional` **continueMessageHandlerTemplate**: `string`
+
+### templates.evaluationTemplate?
+
+> `optional` **evaluationTemplate**: `string`
+
+### templates.twitterSearchTemplate?
+
+> `optional` **twitterSearchTemplate**: `string`
+
+### templates.twitterPostTemplate?
+
+> `optional` **twitterPostTemplate**: `string`
+
+### templates.twitterMessageHandlerTemplate?
+
+> `optional` **twitterMessageHandlerTemplate**: `string`
+
+### templates.twitterShouldRespondTemplate?
+
+> `optional` **twitterShouldRespondTemplate**: `string`
+
+### templates.telegramMessageHandlerTemplate?
+
+> `optional` **telegramMessageHandlerTemplate**: `string`
+
+### templates.telegramShouldRespondTemplate?
+
+> `optional` **telegramShouldRespondTemplate**: `string`
+
+### templates.discordVoiceHandlerTemplate?
+
+> `optional` **discordVoiceHandlerTemplate**: `string`
+
+### templates.discordShouldRespondTemplate?
+
+> `optional` **discordShouldRespondTemplate**: `string`
+
+### templates.discordMessageHandlerTemplate?
+
+> `optional` **discordMessageHandlerTemplate**: `string`
 
 ### bio
 
@@ -84,7 +144,7 @@
 
 #### Index Signature
 
-\[`key`: `string`\]: `string`
+ \[`key`: `string`\]: `string`
 
 ### settings.voice?
 
@@ -150,6 +210,30 @@
 
 > **post**: `string`[]
 
+### twitterProfile?
+
+> `optional` **twitterProfile**: `object`
+
+### twitterProfile.id
+
+> **id**: `string`
+
+### twitterProfile.username
+
+> **username**: `string`
+
+### twitterProfile.screenName
+
+> **screenName**: `string`
+
+### twitterProfile.bio
+
+> **bio**: `string`
+
+### twitterProfile.nicknames?
+
+> `optional` **nicknames**: `string`[]
+
 ## Defined in
 
-[packages/core/src/types.ts:329](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L329)
+[packages/core/src/types.ts:331](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L331)

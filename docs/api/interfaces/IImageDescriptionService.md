@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / IImageDescriptionService
+[@ai16z/eliza v0.1.3](../index.md) / IImageDescriptionService
 
 # Interface: IImageDescriptionService
 
@@ -6,7 +6,51 @@
 
 - [`Service`](../classes/Service.md)
 
+## Accessors
+
+### serviceType
+
+#### Get Signature
+
+> **get** **serviceType**(): [`ServiceType`](../enumerations/ServiceType.md)
+
+##### Returns
+
+[`ServiceType`](../enumerations/ServiceType.md)
+
+#### Inherited from
+
+[`Service`](../classes/Service.md).[`serviceType`](../classes/Service.md#serviceType-1)
+
+#### Defined in
+
+[packages/core/src/types.ts:580](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L580)
+
 ## Methods
+
+### initialize()
+
+> `abstract` **initialize**(`runtime`): `Promise`\<`void`\>
+
+Add abstract initialize method that must be implemented by derived classes
+
+#### Parameters
+
+• **runtime**: [`IAgentRuntime`](IAgentRuntime.md)
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Inherited from
+
+[`Service`](../classes/Service.md).[`initialize`](../classes/Service.md#initialize)
+
+#### Defined in
+
+[packages/core/src/types.ts:585](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L585)
+
+***
 
 ### getInstance()
 
@@ -18,29 +62,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
+[packages/core/src/types.ts:658](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L658)
 
----
-
-### initialize()
-
-> **initialize**(`modelId`?, `device`?): `Promise`\<`void`\>
-
-#### Parameters
-
-• **modelId?**: `string`
-
-• **device?**: `string`
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-[packages/core/src/types.ts:596](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L596)
-
----
+***
 
 ### describeImage()
 
@@ -64,4 +88,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:597](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L597)
+[packages/core/src/types.ts:659](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L659)

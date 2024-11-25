@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / splitChunks
+[@ai16z/eliza v0.1.3](../index.md) / splitChunks
 
 # Function: splitChunks()
 
@@ -28,4 +28,4 @@ Promise resolving to array of text chunks with bleed sections
 
 ## Defined in
 
-[packages/core/src/generation.ts:461](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L461)
+[packages/core/src/generation.ts:470](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L470)
