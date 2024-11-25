@@ -261,6 +261,13 @@ function splitMessage(content: string): string[] {
 }
 
 function canSendMessage(channel) {
+    // validate input
+    if (!channel) {
+        return {
+            canSend: false,
+            reason: "No channel given",
+        }
+    }
     // if it is a DM channel, we can always send messages
     if (channel.type === ChannelType.DM) {
         return {
@@ -438,10 +445,11 @@ export class MessageManager {
                     this.client.user?.displayName,
             });
 
-            if (!canSendMessage(message.channel).canSend) {
+            const canSendResult = canSendMessage(message.channel)
+            if (!canSendResult.canSend) {
                 return elizaLogger.warn(
                     `Cannot send message to channel ${message.channel}`,
-                    canSendMessage(message.channel)
+                    canSendResult
                 );
             }
 
