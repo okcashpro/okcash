@@ -45,3 +45,35 @@ Provide the charge details in the following JSON format after retrieving the cha
 Here are the recent user messages for context:
 {{recentMessages}}
 `;
+
+export const transferTemplate = `
+Extract the following details for processing a mass payout using the Coinbase SDK:
+- **receivingAddresses** (array): A list of wallet addresses receiving the funds.
+- **transferAmount** (number): The amount to transfer to each address (in the smallest unit, e.g., Wei for ETH).
+- **assetId** (string): The asset ID to transfer (e.g., ETH, BTC).
+- **network** (string): The blockchain network to use. Allowed values are:
+    static networks: {
+        readonly BaseSepolia: "base-sepolia";
+        readonly BaseMainnet: "base-mainnet";
+        readonly EthereumHolesky: "ethereum-holesky";
+        readonly EthereumMainnet: "ethereum-mainnet";
+        readonly PolygonMainnet: "polygon-mainnet";
+        readonly SolanaDevnet: "solana-devnet";
+        readonly SolanaMainnet: "solana-mainnet";
+        readonly ArbitrumMainnet: "arbitrum-mainnet";
+    };
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "receivingAddresses": ["<receiving_address_1>", "<receiving_address_2>"],
+    "transferAmount": <amount>,
+    "assetId": "<asset_id>",
+    "network": "<network>"
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;

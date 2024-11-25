@@ -25,7 +25,10 @@ import {
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { nodePlugin } from "@ai16z/plugin-node";
-import { coinbaseCommercePlugin } from "@ai16z/plugin-coinbase";
+import {
+    coinbaseCommercePlugin,
+    coinbaseMassPaymentsPlugin,
+} from "@ai16z/plugin-coinbase";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
@@ -254,6 +257,12 @@ export function createAgent(
             character.settings.secrets?.COINBASE_COMMERCE_KEY ||
             process.env.COINBASE_COMMERCE_KEY
                 ? coinbaseCommercePlugin
+                : null,
+            (character.settings.secrets?.COINBASE_API_KEY ||
+                process.env.COINBASE_API_KEY) &&
+            (character.settings.secrets?.COINBASE_PRIVATE_KEY ||
+                process.env.COINBASE_PRIVATE_KEY)
+                ? coinbaseMassPaymentsPlugin
                 : null,
         ].filter(Boolean),
         providers: [],
