@@ -35,11 +35,7 @@ export class simulationSellingService {
 
     private runningProcesses: Set<string> = new Set();
 
-    constructor(
-        runtime: IAgentRuntime,
-        trustScoreDb: TrustScoreDatabase,
-        walletProvider: WalletProvider
-    ) {
+    constructor(runtime: IAgentRuntime, trustScoreDb: TrustScoreDatabase) {
         this.trustScoreDb = trustScoreDb;
 
         this.connection = new Connection(runtime.getSetting("RPC_URL"));
