@@ -1,8 +1,8 @@
-[@ai16z/eliza v1.0.0](../index.md) / Memory
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Memory
 
 # Interface: Memory
 
-Represents a memory record, which could be a message or any other piece of information remembered by the system, including its content, associated user IDs, and optionally, its embedding vector for similarity comparisons.
+Represents a stored memory/message
 
 ## Properties
 
@@ -10,76 +10,104 @@ Represents a memory record, which could be a message or any other piece of infor
 
 > `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Optional unique identifier
+
 #### Defined in
 
-[packages/core/src/types.ts:169](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L169)
+[packages/core/src/types.ts:306](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L306)
 
----
+***
 
 ### userId
 
 > **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Associated user ID
+
 #### Defined in
 
-[packages/core/src/types.ts:170](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L170)
+[packages/core/src/types.ts:309](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L309)
 
----
+***
 
 ### agentId
 
 > **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Associated agent ID
+
 #### Defined in
 
-[packages/core/src/types.ts:171](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L171)
+[packages/core/src/types.ts:312](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L312)
 
----
+***
 
 ### createdAt?
 
 > `optional` **createdAt**: `number`
 
+Optional creation timestamp
+
 #### Defined in
 
-[packages/core/src/types.ts:172](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L172)
+[packages/core/src/types.ts:315](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L315)
 
----
+***
 
 ### content
 
 > **content**: [`Content`](Content.md)
 
+Memory content
+
 #### Defined in
 
-[packages/core/src/types.ts:173](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L173)
+[packages/core/src/types.ts:318](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L318)
 
----
+***
 
 ### embedding?
 
 > `optional` **embedding**: `number`[]
 
+Optional embedding vector
+
 #### Defined in
 
-[packages/core/src/types.ts:174](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L174)
+[packages/core/src/types.ts:321](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L321)
 
----
+***
 
 ### roomId
 
 > **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Associated room ID
+
 #### Defined in
 
-[packages/core/src/types.ts:175](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L175)
+[packages/core/src/types.ts:324](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L324)
 
----
+***
 
 ### unique?
 
 > `optional` **unique**: `boolean`
 
+Whether memory is unique
+
 #### Defined in
 
-[packages/core/src/types.ts:176](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L176)
+[packages/core/src/types.ts:327](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L327)
+
+***
+
+### similarity?
+
+> `optional` **similarity**: `number`
+
+Embedding similarity score
+
+#### Defined in
+
+[packages/core/src/types.ts:330](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L330)
