@@ -297,7 +297,7 @@ export class DirectClient {
             }
         );
         this.app.get(
-            "/fine-tune/:assetId",
+            "/fine-tune/:assetId", 
             async (req: express.Request, res: express.Response) => {
                 const assetId = req.params.assetId;
                 const downloadDir = path.join(process.cwd(), 'downloads', assetId);
