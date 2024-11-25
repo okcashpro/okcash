@@ -27,7 +27,7 @@ export class ERC20Token {
     calldata: CallData;
     constructor(
         token: string,
-        providerOrAccount?: ProviderInterface | AccountInterface,
+        providerOrAccount?: ProviderInterface | AccountInterface
     ) {
         this.contract = new Contract(erc20Abi, token, providerOrAccount);
         this.calldata = new CallData(this.contract.abi);

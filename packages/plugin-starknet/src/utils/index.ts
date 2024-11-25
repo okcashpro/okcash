@@ -4,7 +4,7 @@ import { Account, Contract, RpcProvider } from "starknet";
 
 export const getTokenBalance = async (
     runtime: IAgentRuntime,
-    tokenAddress: string,
+    tokenAddress: string
 ) => {
     const provider = getStarknetProvider(runtime);
 
@@ -30,7 +30,7 @@ export const getStarknetAccount = (runtime: IAgentRuntime) => {
     return new Account(
         getStarknetProvider(runtime),
         runtime.getSetting("STARKNET_ADDRESS"),
-        runtime.getSetting("STARKNET_PRIVATE_KEY"),
+        runtime.getSetting("STARKNET_PRIVATE_KEY")
     );
 };
 
@@ -45,7 +45,7 @@ export const PERCENTAGE_INPUT_PRECISION = 2;
 export const parseFormatedPercentage = (percent: string) =>
     new Percent(
         +percent * 10 ** PERCENTAGE_INPUT_PRECISION,
-        100 * 10 ** PERCENTAGE_INPUT_PRECISION,
+        100 * 10 ** PERCENTAGE_INPUT_PRECISION
     );
 
 interface ParseCurrencyAmountOptions {
@@ -55,7 +55,7 @@ interface ParseCurrencyAmountOptions {
 
 export const formatCurrenyAmount = (
     amount: Fraction,
-    { fixed, significant = 1 }: ParseCurrencyAmountOptions,
+    { fixed, significant = 1 }: ParseCurrencyAmountOptions
 ) => {
     const fixedAmount = amount.toFixed(fixed);
     const significantAmount = amount.toSignificant(significant);
@@ -67,7 +67,7 @@ export const formatCurrenyAmount = (
 export const formatPercentage = (percentage: Percent) => {
     const formatedPercentage = +percentage.toFixed(2);
     const exact = percentage.equalTo(
-        new Percent(Math.round(formatedPercentage * 100), 10000),
+        new Percent(Math.round(formatedPercentage * 100), 10000)
     );
 
     return `${exact ? "" : "~"}${formatedPercentage}%`;
@@ -83,7 +83,7 @@ export type RetryConfig = {
 export async function fetchWithRetry<T>(
     url: string,
     options?: RequestInit,
-    config: RetryConfig = {},
+    config: RetryConfig = {}
 ): Promise<T> {
     const {
         maxRetries = 3,
@@ -101,7 +101,7 @@ export async function fetchWithRetry<T>(
 
             if (!response.ok) {
                 throw new Error(
-                    `Coingecko API HTTP status: ${response.status}`,
+                    `Coingecko API HTTP status: ${response.status}`
                 );
             }
 
