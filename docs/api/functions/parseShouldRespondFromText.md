@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / parseShouldRespondFromText
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / parseShouldRespondFromText
 
 # Function: parseShouldRespondFromText()
 

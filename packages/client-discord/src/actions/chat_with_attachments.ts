@@ -1,4 +1,3 @@
-import fs from "fs";
 import { composeContext } from "@ai16z/eliza";
 import { generateText, trimTokens } from "@ai16z/eliza";
 import { models } from "@ai16z/eliza";
@@ -92,7 +91,11 @@ const summarizeAction = {
     ],
     description:
         "Answer a user request informed by specific attachments based on their IDs. If a user asks to chat with a PDF, or wants more specific information about a link or video or anything else they've attached, this is the action to use.",
-    validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
+    validate: async (
+        _runtime: IAgentRuntime,
+        message: Memory,
+        _state: State
+    ) => {
         if (message.content.source !== "discord") {
             return false;
         }
@@ -222,9 +225,9 @@ ${currentSummary.trim()}
 `;
             await callback(callbackData);
         } else if (currentSummary.trim()) {
-            const summaryFilename = `content_cache/summary_${Date.now()}.txt`;
+            const summaryFilename = `content/summary_${Date.now()}`;
+            await runtime.cacheManager.set(summaryFilename, currentSummary);
             // save the summary to a file
-            fs.writeFileSync(summaryFilename, currentSummary);
             await callback(
                 {
                     ...callbackData,

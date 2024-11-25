@@ -21,27 +21,30 @@ fi
 # Define packages to build in order
 PACKAGES=(
     "core"
-    "plugin-trustdb"
-    "plugin-solana"
-    "plugin-starknet"
     "adapter-postgres"
     "adapter-sqlite"
     "adapter-sqljs"
     "adapter-supabase"
+    "plugin-node"
+    "plugin-trustdb"
+    "plugin-solana"
+    "plugin-starknet"
+    "plugin-conflux"
+    "plugin-0g"
+    "plugin-bootstrap"
+    "plugin-image-generation"
+    "plugin-coinbase"
     "client-auto"
     "client-direct"
     "client-discord"
     "client-telegram"
     "client-twitter"
-    "plugin-node"
-    "plugin-bootstrap"
-    "plugin-image-generation"
 )
 
 # Build packages in specified order
 for package in "${PACKAGES[@]}"; do
     package_path="packages/$package"
-    
+
     if [ ! -d "$package_path" ]; then
         echo -e "\033[1mPackage directory '$package' not found, skipping...\033[0m"
         continue

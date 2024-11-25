@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / models
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / models
 
 # Variable: models
 

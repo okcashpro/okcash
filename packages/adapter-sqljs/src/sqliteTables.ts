@@ -82,6 +82,16 @@ CREATE TABLE IF NOT EXISTS "rooms" (
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table: cache
+CREATE TABLE IF NOT EXISTS "cache" (
+    "key" TEXT NOT NULL,
+    "agentId" TEXT NOT NULL,
+    "value" TEXT DEFAULT '{}' CHECK(json_valid("value")),
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "expiresAt" TIMESTAMP,
+    PRIMARY KEY ("key", "agentId")
+);
+
 -- Index: relationships_id_key
 CREATE UNIQUE INDEX IF NOT EXISTS "relationships_id_key" ON "relationships" ("id");
 

@@ -1,4 +1,3 @@
-import fs from "fs";
 import { composeContext } from "@ai16z/eliza";
 import { generateText, splitChunks, trimTokens } from "@ai16z/eliza";
 import { getActorDetails } from "@ai16z/eliza";
@@ -221,7 +220,6 @@ const summarizeAction = {
         // 2. get these memories from the database
         const memories = await runtime.messageManager.getMemories({
             roomId,
-            agentId: runtime.agentId,
             // subtract start from current time
             start: parseInt(start as string),
             end: parseInt(end as string),
@@ -254,7 +252,7 @@ const summarizeAction = {
 
         const chunks = await splitChunks(formattedMemories, chunkSize, 0);
 
-        const datestr = new Date().toUTCString().replace(/:/g, "-");
+        const _datestr = new Date().toUTCString().replace(/:/g, "-");
 
         state.memoriesWithAttachments = formattedMemories;
         state.objective = objective;
@@ -300,9 +298,9 @@ ${currentSummary.trim()}
 `;
             await callback(callbackData);
         } else if (currentSummary.trim()) {
-            const summaryFilename = `content_cache/conversation_summary_${Date.now()}.txt`;
+            const summaryFilename = `content/conversation_summary_${Date.now()}`;
+            await runtime.cacheManager.set(summaryFilename, currentSummary);
             // save the summary to a file
-            fs.writeFileSync(summaryFilename, currentSummary);
             await callback(
                 {
                     ...callbackData,

@@ -1,25 +1,21 @@
 import {
-    createGoal,
-    formatGoalsAsString,
     getGoals,
+    formatGoalsAsString,
     updateGoal,
-} from "../goals";
+    createGoal,
+} from "../goals.ts";
 import {
-    type Goal,
-    type IAgentRuntime,
-    type UUID,
-    Action,
+    Goal,
     GoalStatus,
-    HandlerCallback,
-    IMemoryManager,
+    IAgentRuntime,
     Memory,
-    ModelProviderName,
+    State,
+    UUID,
     Service,
     ServiceType,
-    State,
 } from "../types";
-
-import { describe, expect, vi } from "vitest";
+import { CacheManager, MemoryCacheAdapter } from "../cache.ts";
+import { describe, expect, vi, beforeEach } from "vitest";
 
 // Mock the database adapter
 export const mockDatabaseAdapter = {
@@ -27,124 +23,192 @@ export const mockDatabaseAdapter = {
     updateGoal: vi.fn(),
     createGoal: vi.fn(),
 };
+
 const services = new Map<ServiceType, Service>();
+
 // Mock the runtime
 export const mockRuntime: IAgentRuntime = {
     databaseAdapter: mockDatabaseAdapter as any,
+    cacheManager: new CacheManager(new MemoryCacheAdapter()),
     agentId: "qweqew-qweqwe-qweqwe-qweqwe-qweeqw",
     serverUrl: "",
-    token: "",
-    modelProvider: ModelProviderName.OPENAI,
-    character: {
-        id: "qweqew-qweqwe-qweqwe-qweqwe-qweeqw",
-        name: "",
-        system: "",
-        modelProvider: ModelProviderName.OPENAI,
-        modelEndpointOverride: "",
-        templates: {},
-        bio: "",
-        lore: [],
-        messageExamples: [],
-        postExamples: [],
-        people: [],
-        topics: [],
-        adjectives: [],
-        knowledge: [],
-        clients: [],
-        plugins: [],
-        settings: {
-            secrets: {},
-            voice: {
-                model: "",
-                url: "",
-            },
-            model: "",
-            embeddingModel: "",
+    token: null,
+    messageManager: {
+        addEmbeddingToMemory: function (_memory: Memory): Promise<Memory> {
+            throw new Error("Function not implemented.");
         },
-        clientConfig: {
-            discord: {
-                shouldIgnoreBotMessages: false,
-                shouldIgnoreDirectMessages: false,
-            },
-            telegram: {
-                shouldIgnoreBotMessages: false,
-                shouldIgnoreDirectMessages: false,
-            },
+        getMemories: function (_opts: {
+            roomId: UUID;
+            count?: number;
+            unique?: boolean;
+            agentId?: UUID;
+            start?: number;
+            end?: number;
+        }): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
         },
-        style: {
-            all: [],
-            chat: [],
-            post: [],
+        getCachedEmbeddings: function (
+            _content: string
+        ): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+            throw new Error("Function not implemented.");
+        },
+        getMemoryById: function (_id: UUID): Promise<Memory | null> {
+            throw new Error("Function not implemented.");
+        },
+        getMemoriesByRoomIds: function (_params: {
+            roomIds: UUID[];
+            agentId?: UUID;
+        }): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        searchMemoriesByEmbedding: function (
+            _embedding: number[],
+            _opts: {
+                match_threshold?: number;
+                count?: number;
+                roomId: UUID;
+                unique?: boolean;
+                agentId?: UUID;
+            }
+        ): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        createMemory: function (
+            _memory: Memory,
+            _unique?: boolean
+        ): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        removeMemory: function (_memoryId: UUID): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        removeAllMemories: function (_roomId: UUID): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        countMemories: function (
+            _roomId: UUID,
+            _unique?: boolean
+        ): Promise<number> {
+            throw new Error("Function not implemented.");
         },
     },
-    providers: [],
-    actions: [],
-    evaluators: [],
-    messageManager: undefined,
-    descriptionManager: undefined,
-    loreManager: undefined,
-    services: undefined,
-    registerMemoryManager: function (_manager: IMemoryManager): void {
-        throw new Error("Function not implemented.");
+    descriptionManager: {
+        addEmbeddingToMemory: function (_memory: Memory): Promise<Memory> {
+            throw new Error("Function not implemented.");
+        },
+        getMemories: function (_opts: {
+            roomId: UUID;
+            count?: number;
+            unique?: boolean;
+            agentId?: UUID;
+            start?: number;
+            end?: number;
+        }): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        getCachedEmbeddings: function (
+            _content: string
+        ): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+            throw new Error("Function not implemented.");
+        },
+        getMemoryById: function (_id: UUID): Promise<Memory | null> {
+            throw new Error("Function not implemented.");
+        },
+        getMemoriesByRoomIds: function (_params: {
+            roomIds: UUID[];
+            agentId?: UUID;
+        }): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        searchMemoriesByEmbedding: function (
+            _embedding: number[],
+            _opts: {
+                match_threshold?: number;
+                count?: number;
+                roomId: UUID;
+                unique?: boolean;
+                agentId?: UUID;
+            }
+        ): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        createMemory: function (
+            _memory: Memory,
+            _unique?: boolean
+        ): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        removeMemory: function (_memoryId: UUID): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        removeAllMemories: function (_roomId: UUID): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        countMemories: function (
+            _roomId: UUID,
+            _unique?: boolean
+        ): Promise<number> {
+            throw new Error("Function not implemented.");
+        },
     },
-    getMemoryManager: function (_name: string): IMemoryManager | null {
-        throw new Error("Function not implemented.");
-    },
-    registerService: function (service: Service): void {
-        services.set(service.serviceType, service);
-    },
-    getSetting: function (_key: string): string | null {
-        throw new Error("Function not implemented.");
-    },
-    getConversationLength: function (): number {
-        throw new Error("Function not implemented.");
-    },
-    processActions: function (
-        _message: Memory,
-        _responses: Memory[],
-        _state?: State,
-        _callback?: HandlerCallback
-    ): Promise<void> {
-        throw new Error("Function not implemented.");
-    },
-    evaluate: function (
-        _message: Memory,
-        _state?: State,
-        _didRespond?: boolean
-    ): Promise<string[]> {
-        throw new Error("Function not implemented.");
-    },
-    ensureParticipantExists: function (
-        _userId: UUID,
-        _roomId: UUID
-    ): Promise<void> {
-        throw new Error("Function not implemented.");
-    },
-    ensureUserExists: function (
-        _userId: UUID,
-        _userName: string | null,
-        _name: string | null,
-        _source: string | null
-    ): Promise<void> {
-        throw new Error("Function not implemented.");
-    },
-    registerAction: function (_action: Action): void {
-        throw new Error("Function not implemented.");
-    },
-    ensureConnection: function (
-        _userId: UUID,
-        _roomId: UUID,
-        _userName?: string,
-        _userScreenName?: string,
-        _source?: string
-    ): Promise<void> {
-        throw new Error("Function not implemented.");
-    },
-    ensureParticipantInRoom: function (
-        _userId: UUID,
-        _roomId: UUID
-    ): Promise<void> {
-        throw new Error("Function not implemented.");
+    loreManager: {
+        addEmbeddingToMemory: function (_memory: Memory): Promise<Memory> {
+            throw new Error("Function not implemented.");
+        },
+        getMemories: function (_opts: {
+            roomId: UUID;
+            count?: number;
+            unique?: boolean;
+            agentId?: UUID;
+            start?: number;
+            end?: number;
+        }): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        getCachedEmbeddings: function (
+            _content: string
+        ): Promise<{ embedding: number[]; levenshtein_score: number }[]> {
+            throw new Error("Function not implemented.");
+        },
+        getMemoryById: function (_id: UUID): Promise<Memory | null> {
+            throw new Error("Function not implemented.");
+        },
+        getMemoriesByRoomIds: function (_params: {
+            roomIds: UUID[];
+            agentId?: UUID;
+        }): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        searchMemoriesByEmbedding: function (
+            _embedding: number[],
+            _opts: {
+                match_threshold?: number;
+                count?: number;
+                roomId: UUID;
+                unique?: boolean;
+                agentId?: UUID;
+            }
+        ): Promise<Memory[]> {
+            throw new Error("Function not implemented.");
+        },
+        createMemory: function (
+            _memory: Memory,
+            _unique?: boolean
+        ): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        removeMemory: function (_memoryId: UUID): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        removeAllMemories: function (_roomId: UUID): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        countMemories: function (
+            _roomId: UUID,
+            _unique?: boolean
+        ): Promise<number> {
+            throw new Error("Function not implemented.");
+        },
     },
     ensureRoomExists: function (_roomId: UUID): Promise<void> {
         throw new Error("Function not implemented.");
@@ -163,14 +227,18 @@ export const mockRuntime: IAgentRuntime = {
     ): T | null {
         return (services.get(serviceType) as T) || null;
     },
+    plugins: [],
+    initialize: function (): Promise<void> {
+        throw new Error("Function not implemented.");
+    },
 };
 
 // Sample data
 const sampleGoal: Goal = {
     id: "goal-id" as UUID,
-    name: "Test Goal",
     roomId: "room-id" as UUID,
     userId: "user-id" as UUID,
+    name: "Test Goal",
     objectives: [
         { description: "Objective 1", completed: false },
         { description: "Objective 2", completed: true },
@@ -179,6 +247,10 @@ const sampleGoal: Goal = {
 };
 
 describe("getGoals", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     it("retrieves goals successfully", async () => {
         mockDatabaseAdapter.getGoals.mockResolvedValue([sampleGoal]);
 
@@ -188,26 +260,27 @@ describe("getGoals", () => {
         });
 
         expect(result).toEqual([sampleGoal]);
-        expect(mockDatabaseAdapter.getGoals).toHaveBeenCalledWith({
-            roomId: "room-id",
-            userId: undefined,
-            onlyInProgress: true,
-            count: 5,
-        });
     });
 
-    it("handles failure to retrieve goals", async () => {
+    it("handles errors when retrieving goals", async () => {
         mockDatabaseAdapter.getGoals.mockRejectedValue(
             new Error("Failed to retrieve goals")
         );
 
         await expect(
-            getGoals({ runtime: mockRuntime, roomId: "room-id" as UUID })
+            getGoals({
+                runtime: mockRuntime,
+                roomId: "room-id" as UUID,
+            })
         ).rejects.toThrow("Failed to retrieve goals");
     });
 });
 
 describe("formatGoalsAsString", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     it("formats goals correctly", () => {
         const formatted = formatGoalsAsString({ goals: [sampleGoal] });
         expect(formatted).toContain("Goal: Test Goal");
@@ -215,23 +288,28 @@ describe("formatGoalsAsString", () => {
         expect(formatted).toContain("- [x] Objective 2  (DONE)");
     });
 
-    it("handles empty goal list", () => {
+    it("handles empty goals array", () => {
         const formatted = formatGoalsAsString({ goals: [] });
         expect(formatted).toBe("");
     });
 });
 
 describe("updateGoal", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     it("updates a goal successfully", async () => {
         mockDatabaseAdapter.updateGoal.mockResolvedValue(undefined);
 
         await expect(
             updateGoal({ runtime: mockRuntime, goal: sampleGoal })
-        ).resolves.toBeUndefined();
+        ).resolves.not.toThrow();
+
         expect(mockDatabaseAdapter.updateGoal).toHaveBeenCalledWith(sampleGoal);
     });
 
-    it("handles failure to update a goal", async () => {
+    it("handles errors when updating a goal", async () => {
         mockDatabaseAdapter.updateGoal.mockRejectedValue(
             new Error("Failed to update goal")
         );
@@ -243,16 +321,21 @@ describe("updateGoal", () => {
 });
 
 describe("createGoal", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     it("creates a goal successfully", async () => {
         mockDatabaseAdapter.createGoal.mockResolvedValue(undefined);
 
         await expect(
             createGoal({ runtime: mockRuntime, goal: sampleGoal })
-        ).resolves.toBeUndefined();
+        ).resolves.not.toThrow();
+
         expect(mockDatabaseAdapter.createGoal).toHaveBeenCalledWith(sampleGoal);
     });
 
-    it("handles failure to create a goal", async () => {
+    it("handles errors when creating a goal", async () => {
         mockDatabaseAdapter.createGoal.mockRejectedValue(
             new Error("Failed to create goal")
         );

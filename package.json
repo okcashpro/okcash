@@ -10,7 +10,7 @@
         "start": "pnpm --filter \"@ai16z/agent\" start --isRoot",
         "start:client": "pnpm --dir client start --isRoot",
         "dev": "bash ./scripts/dev.sh",
-        "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint",
+        "lint": "bash ./scripts/lint.sh",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
@@ -20,32 +20,38 @@
         "docker:bash": "bash ./scripts/docker.sh bash",
         "docker:start": "bash ./scripts/docker.sh start",
         "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
-        "test": "pnpm --dir packages/core test"
+        "test": "bash ./scripts/test.sh"
     },
     "devDependencies": {
-        "concurrently": "^9.1.0",
-        "husky": "^9.1.6",
-        "lerna": "^8.1.5",
-        "only-allow": "^1.2.1",
-        "prettier": "^3.3.3",
-        "typedoc": "^0.26.11",
+        "@commitlint/cli": "^18.4.4",
+        "@commitlint/config-conventional": "^18.4.4",
+        "lerna": "8.1.5",
+        "only-allow": "1.2.1",
+        "concurrently": "9.1.0",
+        "husky": "9.1.7",
+        "prettier": "3.3.3",
+        "typedoc": "0.26.11",
         "typescript": "5.6.3",
-        "vite": "^5.4.11",
-        "vitest": "^2.1.5"
+        "vite": "5.4.11",
+        "vitest": "2.1.5"
     },
     "pnpm": {
         "overrides": {
-            "onnxruntime-node": "^1.20.0"
+            "onnxruntime-node": "1.20.1"
         }
     },
     "engines": {
-        "node": ">=22"
+        "node": "23.3.0"
     },
     "dependencies": {
+        "@coinbase/coinbase-sdk": "^0.10.0",
+        "csv-parse": "^5.6.0",
+        "@0glabs/0g-ts-sdk": "^0.2.1",
         "amqplib": "^0.10.4",
         "ollama-ai-provider": "^0.16.1",
         "optional": "^0.1.4",
-        "sharp": "^0.33.5"
+        "sharp": "^0.33.5",
+        "tslog": "^4.9.3"
     },
     "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
 }
