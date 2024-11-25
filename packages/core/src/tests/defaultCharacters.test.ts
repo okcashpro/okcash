@@ -15,7 +15,7 @@ describe("defaultCharacter", () => {
     });
 
     it("should have the correct modelProvider", () => {
-        expect(defaultCharacter.modelProvider).toBe(ModelProviderName.OPENAI);
+        expect(defaultCharacter.modelProvider).toBe(ModelProviderName.OLLAMA);
     });
 
     it("should have the correct voice model", () => {
