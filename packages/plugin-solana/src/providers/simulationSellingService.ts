@@ -1,14 +1,14 @@
 import {
     TrustScoreDatabase,
     TokenPerformance,
-    TradePerformance,
-    TokenRecommendation,
+    // TradePerformance,
+    // TokenRecommendation,
     ProcessedTokenData,
 } from "@ai16z/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 // Assuming TokenProvider and IAgentRuntime are available
 import { TokenProvider } from "./token.ts";
-import { settings } from "@ai16z/eliza";
+// import { settings } from "@ai16z/eliza";
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { WalletProvider } from "./wallet.ts";
 import * as amqp from "amqplib";
@@ -31,6 +31,7 @@ export class simulationSellingService {
     private amqpChannel: amqp.Channel;
     private sonarBe: string;
     private sonarBeToken: string;
+    private runtime: IAgentRuntime;
 
     private runningProcesses: Set<string> = new Set();
 
@@ -55,6 +56,7 @@ export class simulationSellingService {
         this.initializeRabbitMQ(runtime.getSetting("AMQP_URL"));
         this.sonarBe = runtime.getSetting("SONAR_BE");
         this.sonarBeToken = runtime.getSetting("SONAR_BE_TOKEN");
+        this.runtime = runtime;
     }
     /**
      * Initializes the RabbitMQ connection and starts consuming messages.
@@ -143,7 +145,8 @@ export class simulationSellingService {
             const sellTimeStamp = new Date().toISOString();
             const tokenProvider = new TokenProvider(
                 tokenAddress,
-                this.walletProvider
+                this.walletProvider,
+                this.runtime.cacheManager
             );
 
             // Update sell details in the database
@@ -201,7 +204,8 @@ export class simulationSellingService {
         tokenPerformances.forEach(async (tokenPerformance) => {
             const tokenProvider = new TokenProvider(
                 tokenPerformance.tokenAddress,
-                this.walletProvider
+                this.walletProvider,
+                this.runtime.cacheManager
             );
             const shouldTrade = await tokenProvider.shouldTradeToken();
             if (shouldTrade) {
