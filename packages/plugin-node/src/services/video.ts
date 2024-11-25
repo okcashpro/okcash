@@ -4,6 +4,7 @@ import {
     ITranscriptionService,
     Media,
     ServiceType,
+    IVideoService,
 } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import ffmpeg from "fluent-ffmpeg";
@@ -12,7 +13,7 @@ import path from "path";
 import { tmpdir } from "os";
 import youtubeDl from "youtube-dl-exec";
 
-export class VideoService extends Service {
+export class VideoService extends Service implements IVideoService {
     static serviceType: ServiceType = ServiceType.VIDEO;
     private cacheKey = "content/video";
     private dataDir = "./content_cache";
@@ -25,7 +26,11 @@ export class VideoService extends Service {
         this.ensureDataDirectoryExists();
     }
 
-    async initialize(runtime: IAgentRuntime): Promise<void> {}
+    getInstance(): IVideoService {
+        return VideoService.getInstance();
+    }
+
+    async initialize(_runtime: IAgentRuntime): Promise<void> {}
 
     private ensureDataDirectoryExists() {
         if (!fs.existsSync(this.dataDir)) {
@@ -135,7 +140,7 @@ export class VideoService extends Service {
     ): Promise<Media> {
         const videoId =
             url.match(
-                /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/
+                /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^\/&?]+)/ // eslint-disable-line
             )?.[1] || "";
         const videoUuid = this.getVideoId(videoId);
         const cacheKey = `${this.cacheKey}/${videoUuid}`;
@@ -333,9 +338,10 @@ export class VideoService extends Service {
 
         console.log("Starting transcription...");
         const startTime = Date.now();
-        const transcriptionService = runtime
-            .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
-            .getInstance();
+        const transcriptionService = runtime.getService<ITranscriptionService>(
+            ServiceType.TRANSCRIPTION
+        );
+
         if (!transcriptionService) {
             throw new Error("Transcription service not found");
         }

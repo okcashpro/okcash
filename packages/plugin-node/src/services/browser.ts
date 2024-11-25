@@ -1,4 +1,4 @@
-import { generateText, trimTokens } from "@ai16z/eliza";
+import { generateText, IBrowserService, trimTokens } from "@ai16z/eliza";
 import { parseJSONObjectFromText } from "@ai16z/eliza";
 import { Service } from "@ai16z/eliza";
 import { settings } from "@ai16z/eliza";
@@ -56,7 +56,7 @@ type PageContent = {
     bodyContent: string;
 };
 
-export class BrowserService extends Service {
+export class BrowserService extends Service implements IBrowserService {
     private browser: Browser | undefined;
     private context: BrowserContext | undefined;
     private blocker: PlaywrightBlocker | undefined;
@@ -71,6 +71,10 @@ export class BrowserService extends Service {
     static register(runtime: IAgentRuntime): IAgentRuntime {
         // since we are lazy loading, do nothing
         return runtime;
+    }
+
+    getInstance(): IBrowserService {
+        return BrowserService.getInstance();
     }
 
     constructor() {
@@ -262,6 +266,7 @@ export class BrowserService extends Service {
                     websiteKey: hcaptchaKey,
                 });
                 await page.evaluate((token) => {
+                    // eslint-disable-next-line
                     // @ts-ignore
                     window.hcaptcha.setResponse(token);
                 }, solution.gRecaptchaResponse);
@@ -275,6 +280,7 @@ export class BrowserService extends Service {
                     websiteKey: recaptchaKey,
                 });
                 await page.evaluate((token) => {
+                    // eslint-disable-next-line
                     // @ts-ignore
                     document.getElementById("g-recaptcha-response").innerHTML =
                         token;

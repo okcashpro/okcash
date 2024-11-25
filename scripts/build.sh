@@ -37,12 +37,13 @@ PACKAGES=(
     "plugin-node"
     "plugin-bootstrap"
     "plugin-image-generation"
+    "plugin-coinbase"
 )
 
 # Build packages in specified order
 for package in "${PACKAGES[@]}"; do
     package_path="packages/$package"
-    
+
     if [ ! -d "$package_path" ]; then
         echo -e "\033[1mPackage directory '$package' not found, skipping...\033[0m"
         continue

@@ -26,6 +26,7 @@ import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { nodePlugin } from "@ai16z/plugin-node";
+import { coinbaseCommercePlugin } from "@ai16z/plugin-coinbase";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
@@ -33,7 +34,7 @@ import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { character } from "./character.ts";
-import { DirectClient } from "@ai16z/client-direct";
+import type { DirectClient } from "@ai16z/client-direct";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -69,14 +70,13 @@ export function parseArguments(): {
 export async function loadCharacters(
     charactersArg: string
 ): Promise<Character[]> {
-    let characterPaths = charactersArg
-        ?.split(",")
-        .map((path) => path.trim())
-        .map((path) => {
-            if (path[0] === "/") return path; // handle absolute paths
-            // assume relative to the project root where pnpm is ran
-            return `../${path}`;
-        });
+    let characterPaths = charactersArg?.split(",").map((filePath) => {
+        if (path.basename(filePath) === filePath) {
+            filePath = "../characters/" + filePath;
+        }
+        return path.resolve(process.cwd(), filePath.trim());
+    });
+
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
@@ -182,10 +182,9 @@ function initializeDatabase(dataDir: string) {
         });
         return db;
     } else {
-        const filePath = path.resolve(
-            dataDir,
-            process.env.SQLITE_FILE ?? "db.sqlite"
-        );
+        const filePath =
+            process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
+        // ":memory:";
         const db = new SqliteDatabaseAdapter(new Database(filePath));
         return db;
     }
@@ -255,6 +254,10 @@ export function createAgent(
                 : null,
             nodePlugin,
             character.settings.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,
+            character.settings.secrets?.COINBASE_COMMERCE_KEY ||
+            process.env.COINBASE_COMMERCE_KEY
+                ? coinbaseCommercePlugin
+                : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -279,6 +282,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
 async function startAgent(character: Character, directClient: DirectClient) {
     try {
         character.id ??= stringToUuid(character.name);
+        character.username ??= character.name;
 
         const token = getTokenForProvider(character.modelProvider, character);
         const dataDir = path.join(__dirname, "../data");
@@ -293,6 +297,8 @@ async function startAgent(character: Character, directClient: DirectClient) {
 
         const cache = intializeDbCache(character, db);
         const runtime = createAgent(character, db, cache, token);
+
+        await runtime.initialize();
 
         const clients = await initializeClients(character, runtime);
 
@@ -353,9 +359,15 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
+rl.on("SIGINT", () => {
+    rl.close();
+    process.exit(0);
+});
+
 async function handleUserInput(input, agentId) {
     if (input.toLowerCase() === "exit") {
         rl.close();
+        process.exit(0);
         return;
     }
 
