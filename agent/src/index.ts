@@ -25,7 +25,10 @@ import {
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { nodePlugin } from "@ai16z/plugin-node";
-import { coinbaseCommercePlugin } from "@ai16z/plugin-coinbase";
+import {
+    coinbaseCommercePlugin,
+    coinbaseMassPaymentsPlugin,
+} from "@ai16z/plugin-coinbase";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
@@ -178,6 +181,7 @@ function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
         const db = new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
+            parseInputs: true,
         });
         return db;
     } else {
@@ -254,6 +258,12 @@ export function createAgent(
             process.env.COINBASE_COMMERCE_KEY
                 ? coinbaseCommercePlugin
                 : null,
+            (character.settings.secrets?.COINBASE_API_KEY ||
+                process.env.COINBASE_API_KEY) &&
+            (character.settings.secrets?.COINBASE_PRIVATE_KEY ||
+                process.env.COINBASE_PRIVATE_KEY)
+                ? coinbaseMassPaymentsPlugin
+                : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -275,7 +285,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character, directClient: DirectClient) {
+async function startAgent(character: Character, directClient: any) {
     try {
         character.id ??= stringToUuid(character.name);
         character.username ??= character.name;
@@ -325,7 +335,7 @@ const startAgents = async () => {
 
     try {
         for (const character of characters) {
-            await startAgent(character, directClient as DirectClient);
+            await startAgent(character, directClient as any);
         }
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);

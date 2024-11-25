@@ -1,8 +1,10 @@
-[@ai16z/eliza v1.0.0](../index.md) / Model
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Model
 
 # Type Alias: Model
 
 > **Model**: `object`
+
+Configuration for an AI model
 
 ## Type declaration
 
@@ -10,41 +12,61 @@
 
 > `optional` **endpoint**: `string`
 
+Optional API endpoint
+
 ### settings
 
 > **settings**: `object`
+
+Model settings
 
 ### settings.maxInputTokens
 
 > **maxInputTokens**: `number`
 
+Maximum input tokens
+
 ### settings.maxOutputTokens
 
 > **maxOutputTokens**: `number`
 
-### settings.frequency_penalty?
+Maximum output tokens
 
-> `optional` **frequency_penalty**: `number`
+### settings.frequency\_penalty?
 
-### settings.presence_penalty?
+> `optional` **frequency\_penalty**: `number`
 
-> `optional` **presence_penalty**: `number`
+Optional frequency penalty
 
-### settings.repetition_penalty?
+### settings.presence\_penalty?
 
-> `optional` **repetition_penalty**: `number`
+> `optional` **presence\_penalty**: `number`
+
+Optional presence penalty
+
+### settings.repetition\_penalty?
+
+> `optional` **repetition\_penalty**: `number`
+
+Optional repetition penalty
 
 ### settings.stop
 
 > **stop**: `string`[]
 
+Stop sequences
+
 ### settings.temperature
 
 > **temperature**: `number`
 
+Temperature setting
+
 ### imageSettings?
 
 > `optional` **imageSettings**: `object`
+
+Optional image generation settings
 
 ### imageSettings.steps?
 
@@ -53,6 +75,8 @@
 ### model
 
 > **model**: `object`
+
+Model names by size class
 
 ### model.small
 
@@ -76,4 +100,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:82](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L82)
+[packages/core/src/types.ts:142](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L142)
