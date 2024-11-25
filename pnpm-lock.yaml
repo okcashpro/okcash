@@ -5,57 +5,57 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  onnxruntime-node: ^1.20.0
+  onnxruntime-node: 1.20.1
 
 importers:
 
   .:
     dependencies:
       ollama-ai-provider:
-        specifier: ^0.16.1
+        specifier: 0.16.1
         version: 0.16.1(zod@3.23.8)
       optional:
-        specifier: ^0.1.4
+        specifier: 0.1.4
         version: 0.1.4
       sharp:
-        specifier: ^0.33.5
+        specifier: 0.33.5
         version: 0.33.5
       tslog:
-        specifier: ^4.9.3
+        specifier: 4.9.3
         version: 4.9.3
     devDependencies:
       '@commitlint/cli':
-        specifier: ^18.4.4
+        specifier: 18.6.1
         version: 18.6.1(@types/node@22.8.4)(typescript@5.6.3)
       '@commitlint/config-conventional':
-        specifier: ^18.4.4
+        specifier: 18.6.3
         version: 18.6.3
       concurrently:
-        specifier: ^9.1.0
+        specifier: 9.1.0
         version: 9.1.0
       husky:
-        specifier: ^9.1.6
+        specifier: 9.1.7
         version: 9.1.7
       lerna:
-        specifier: ^8.1.5
+        specifier: 8.1.9
         version: 8.1.9(@swc/core@1.9.3(@swc/helpers@0.5.15))(encoding@0.1.13)
       only-allow:
-        specifier: ^1.2.1
+        specifier: 1.2.1
         version: 1.2.1
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
       typedoc:
-        specifier: ^0.26.11
+        specifier: 0.26.11
         version: 0.26.11(typescript@5.6.3)
       typescript:
         specifier: 5.6.3
         version: 5.6.3
       vite:
-        specifier: ^5.4.11
+        specifier: 5.4.11
         version: 5.4.11(@types/node@22.8.4)(terser@5.36.0)
       vitest:
-        specifier: ^2.1.5
+        specifier: 2.1.5
         version: 2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0)
 
   agent:
@@ -103,10 +103,10 @@ importers:
         specifier: workspace:*
         version: link:../packages/plugin-starknet
       readline:
-        specifier: ^1.3.0
+        specifier: 1.3.0
         version: 1.3.0
       ws:
-        specifier: ^8.18.0
+        specifier: 8.18.0
         version: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       yargs:
         specifier: 17.7.2
@@ -116,7 +116,7 @@ importers:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.9.3(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   client:
@@ -125,38 +125,38 @@ importers:
         specifier: workspace:*
         version: link:../packages/core
       '@radix-ui/react-slot':
-        specifier: ^1.1.0
+        specifier: 1.1.0
         version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
       class-variance-authority:
-        specifier: ^0.7.0
+        specifier: 0.7.0
         version: 0.7.0
       clsx:
         specifier: 2.1.0
         version: 2.1.0
       lucide-react:
-        specifier: ^0.460.0
+        specifier: 0.460.0
         version: 0.460.0(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: 18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       tailwind-merge:
-        specifier: ^2.5.4
+        specifier: 2.5.4
         version: 2.5.4
       tailwindcss-animate:
-        specifier: ^1.0.7
+        specifier: 1.0.7
         version: 1.0.7(tailwindcss@3.4.15(ts-node@10.9.2(@swc/core@1.9.3(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3)))
       vite-plugin-top-level-await:
-        specifier: ^1.4.4
+        specifier: 1.4.4
         version: 1.4.4(@swc/helpers@0.5.15)(rollup@4.27.4)(vite@5.4.11(@types/node@22.8.4)(terser@5.36.0))
       vite-plugin-wasm:
-        specifier: ^3.3.0
+        specifier: 3.3.0
         version: 3.3.0(vite@5.4.11(@types/node@22.8.4)(terser@5.36.0))
     devDependencies:
       '@eslint/js':
-        specifier: ^9.13.0
+        specifier: 9.15.0
         version: 9.15.0
       '@types/node':
         specifier: 22.8.4
@@ -168,10 +168,10 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       '@vitejs/plugin-react':
-        specifier: ^4.3.3
+        specifier: 4.3.3
         version: 4.3.3(vite@5.4.11(@types/node@22.8.4)(terser@5.36.0))
       autoprefixer:
-        specifier: ^10.4.20
+        specifier: 10.4.20
         version: 10.4.20(postcss@8.4.49)
       eslint:
         specifier: ^9.13.0
@@ -183,43 +183,43 @@ importers:
         specifier: ^0.4.14
         version: 0.4.14(eslint@9.13.0(jiti@2.4.0))
       globals:
-        specifier: ^15.11.0
+        specifier: 15.12.0
         version: 15.12.0
       postcss:
-        specifier: ^8.4.49
+        specifier: 8.4.49
         version: 8.4.49
       tailwindcss:
-        specifier: ^3.4.15
+        specifier: 3.4.15
         version: 3.4.15(ts-node@10.9.2(@swc/core@1.9.3(@swc/helpers@0.5.15))(@types/node@22.8.4)(typescript@5.6.3))
       typescript:
         specifier: ~5.6.2
         version: 5.6.3
       typescript-eslint:
-        specifier: ^8.11.0
+        specifier: 8.15.0
         version: 8.15.0(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)
       vite:
-        specifier: ^5.4.10
+        specifier: 5.4.11
         version: 5.4.11(@types/node@22.8.4)(terser@5.36.0)
 
   docs:
     dependencies:
       '@docusaurus/core':
-        specifier: ^3.6.0
+        specifier: 3.6.3
         version: 3.6.3(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/plugin-content-blog':
-        specifier: ^3.6.0
+        specifier: 3.6.3
         version: 3.6.3(@docusaurus/plugin-content-docs@3.6.3(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/plugin-content-docs':
-        specifier: ^3.6.0
+        specifier: 3.6.3
         version: 3.6.3(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/plugin-ideal-image':
-        specifier: ^3.6.0
+        specifier: 3.6.3
         version: 3.6.3(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/preset-classic':
-        specifier: ^3.6.0
+        specifier: 3.6.3
         version: 3.6.3(@algolia/client-search@5.15.0)(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(@types/react@18.3.12)(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@docusaurus/theme-mermaid':
-        specifier: ^3.6.0
+        specifier: 3.6.3
         version: 3.6.3(@docusaurus/plugin-content-docs@3.6.3(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10))(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@mdx-js/react':
         specifier: 3.0.1
@@ -228,7 +228,7 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       docusaurus-lunr-search:
-        specifier: ^3.5.0
+        specifier: 3.5.0
         version: 3.5.0(@docusaurus/core@3.6.3(@mdx-js/react@3.0.1(@types/react@18.3.12)(react@18.3.1))(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(bufferutil@4.0.8)(eslint@9.13.0(jiti@2.4.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       prism-react-renderer:
         specifier: 2.3.1
@@ -250,13 +250,13 @@ importers:
         specifier: 3.6.0
         version: 3.6.0(@swc/core@1.9.3(@swc/helpers@0.5.15))(acorn@8.14.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       docusaurus-plugin-typedoc:
-        specifier: ^1.0.5
+        specifier: 1.0.5
         version: 1.0.5(typedoc-plugin-markdown@4.2.10(typedoc@0.26.11(typescript@5.6.3)))
       typedoc:
-        specifier: ^0.26.11
+        specifier: 0.26.11
         version: 0.26.11(typescript@5.6.3)
       typedoc-plugin-markdown:
-        specifier: ^4.2.9
+        specifier: 4.2.10
         version: 4.2.10(typedoc@0.26.11(typescript@5.6.3))
 
   packages/adapter-postgres:
@@ -265,10 +265,10 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@types/pg':
-        specifier: ^8.11.10
+        specifier: 8.11.10
         version: 8.11.10
       pg:
-        specifier: ^8.13.1
+        specifier: 8.13.1
         version: 8.13.1
     devDependencies:
       eslint:
@@ -284,7 +284,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/adapter-sqlite:
@@ -318,7 +318,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/adapter-sqljs:
@@ -352,7 +352,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/adapter-supabase:
@@ -380,7 +380,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/client-auto:
@@ -432,7 +432,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/client-direct:
@@ -459,7 +459,7 @@ importers:
         specifier: 2.8.5
         version: 2.8.5
       express:
-        specifier: ^4.21.1
+        specifier: 4.21.1
         version: 4.21.1
       multer:
         specifier: 1.4.5-lts.1
@@ -481,7 +481,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/client-discord:
@@ -530,7 +530,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/client-github:
@@ -539,20 +539,20 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@octokit/rest':
-        specifier: ^20.0.2
+        specifier: 20.1.1
         version: 20.1.1
       '@octokit/types':
-        specifier: ^12.6.0
+        specifier: 12.6.0
         version: 12.6.0
       glob:
-        specifier: ^10.3.10
+        specifier: 10.4.5
         version: 10.4.5
       simple-git:
-        specifier: ^3.22.0
+        specifier: 3.27.0
         version: 3.27.0
     devDependencies:
       '@types/glob':
-        specifier: ^8.1.0
+        specifier: 8.1.0
         version: 8.1.0
       eslint:
         specifier: 9.13.0
@@ -567,7 +567,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/client-telegram:
@@ -575,9 +575,6 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-node':
-        specifier: workspace:*
-        version: link:../plugin-node
       '@telegraf/types':
         specifier: 7.1.0
         version: 7.1.0
@@ -601,7 +598,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/client-twitter:
@@ -635,52 +632,43 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/core:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^0.0.56
+        specifier: 0.0.56
         version: 0.0.56(zod@3.23.8)
       '@ai-sdk/google':
-        specifier: ^0.0.55
+        specifier: 0.0.55
         version: 0.0.55(zod@3.23.8)
       '@ai-sdk/google-vertex':
-        specifier: ^0.0.43
+        specifier: 0.0.43
         version: 0.0.43(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(zod@3.23.8)
       '@ai-sdk/groq':
-        specifier: ^0.0.3
+        specifier: 0.0.3
         version: 0.0.3(zod@3.23.8)
       '@ai-sdk/openai':
         specifier: 1.0.4
         version: 1.0.4(zod@3.23.8)
-      '@ai16z/adapter-sqlite':
-        specifier: workspace:*
-        version: link:../adapter-sqlite
-      '@ai16z/adapter-sqljs':
-        specifier: workspace:*
-        version: link:../adapter-sqljs
-      '@ai16z/adapter-supabase':
-        specifier: workspace:*
-        version: link:../adapter-supabase
       '@anthropic-ai/sdk':
         specifier: 0.30.1
         version: 0.30.1(encoding@0.1.13)
       '@types/uuid':
-        specifier: ^10.0.0
+        specifier: 10.0.0
         version: 10.0.0
       ai:
-        specifier: ^3.4.23
+        specifier: 3.4.33
         version: 3.4.33(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)
       anthropic-vertex-ai:
-        specifier: ^1.0.0
+        specifier: 1.0.2
         version: 1.0.2(encoding@0.1.13)(zod@3.23.8)
       fastembed:
-        specifier: ^1.14.1
+        specifier: 1.14.1
         version: 1.14.1
       fastestsmallesttextencoderdecoder:
-        specifier: ^1.0.22
+        specifier: 1.0.22
         version: 1.0.22
       gaxios:
         specifier: 6.7.1
@@ -692,10 +680,10 @@ importers:
         specifier: 0.7.0
         version: 0.7.0
       langchain:
-        specifier: ^0.3.6
+        specifier: 0.3.6
         version: 0.3.6(@langchain/core@0.3.18(openai@4.73.0(encoding@0.1.13)(zod@3.23.8)))(axios@1.7.7)(encoding@0.1.13)(handlebars@4.7.8)(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))
       ollama-ai-provider:
-        specifier: ^0.16.1
+        specifier: 0.16.1
         version: 0.16.1(zod@3.23.8)
       openai:
         specifier: 4.73.0
@@ -707,7 +695,7 @@ importers:
         specifier: 1.3.4
         version: 1.3.4
       together-ai:
-        specifier: ^0.7.0
+        specifier: 0.7.0
         version: 0.7.0(encoding@0.1.13)
       unique-names-generator:
         specifier: 4.7.1
@@ -716,11 +704,11 @@ importers:
         specifier: 11.0.2
         version: 11.0.2
       zod:
-        specifier: ^3.23.8
+        specifier: 3.23.8
         version: 3.23.8
     devDependencies:
       '@eslint/js':
-        specifier: ^9.13.0
+        specifier: 9.15.0
         version: 9.15.0
       '@rollup/plugin-commonjs':
         specifier: 25.0.8
@@ -750,13 +738,13 @@ importers:
         specifier: 29.5.14
         version: 29.5.14
       '@types/mocha':
-        specifier: ^10.0.9
+        specifier: 10.0.10
         version: 10.0.10
       '@types/node':
         specifier: 22.8.4
         version: 22.8.4
       '@types/pdfjs-dist':
-        specifier: ^2.10.378
+        specifier: 2.10.378
         version: 2.10.378(encoding@0.1.13)
       '@types/tar':
         specifier: 6.1.13
@@ -816,7 +804,7 @@ importers:
         specifier: 2.8.0
         version: 2.8.0
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       typescript:
         specifier: 5.6.3
@@ -825,14 +813,14 @@ importers:
   packages/create-eliza-app:
     dependencies:
       citty:
-        specifier: ^0.1.6
+        specifier: 0.1.6
         version: 0.1.6
       giget:
-        specifier: ^1.2.3
+        specifier: 1.2.3
         version: 1.2.3
     devDependencies:
       automd:
-        specifier: ^0.3.12
+        specifier: 0.3.12
         version: 0.3.12
       eslint:
         specifier: 9.13.0
@@ -847,10 +835,10 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       jiti:
-        specifier: ^2.4.0
+        specifier: 2.4.0
         version: 2.4.0
       unbuild:
-        specifier: ^2.0.0
+        specifier: 2.0.0
         version: 2.0.0(typescript@5.6.3)
 
   packages/plugin-bootstrap:
@@ -859,7 +847,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       whatwg-url:
         specifier: 7.1.0
@@ -881,20 +869,20 @@ importers:
   packages/plugin-coinbase:
     dependencies:
       '@ai16z/eliza':
-        specifier: ^0.1.3
+        specifier: 0.1.3
         version: 0.1.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(encoding@0.1.13)(react@18.3.1)(sswr@2.1.0(svelte@5.2.7))(svelte@5.2.7)
       coinbase-api:
-        specifier: ^1.0.5
+        specifier: 1.0.5
         version: 1.0.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       onnxruntime-node:
-        specifier: ^1.20.0
+        specifier: 1.20.1
         version: 1.20.1
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
     devDependencies:
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/plugin-image-generation:
@@ -903,7 +891,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       whatwg-url:
         specifier: 7.1.0
@@ -946,7 +934,7 @@ importers:
         specifier: 0.1.31
         version: 0.1.31(encoding@0.1.13)
       '@types/uuid':
-        specifier: ^10.0.0
+        specifier: 10.0.0
         version: 10.0.0
       alawmulaw:
         specifier: 6.0.0
@@ -970,7 +958,7 @@ importers:
         specifier: 1.6.0
         version: 1.6.0
       echogarden:
-        specifier: ^2.0.7
+        specifier: 2.0.7
         version: 2.0.7(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(encoding@0.1.13)(utf-8-validate@5.0.10)(zod@3.23.8)
       espeak-ng:
         specifier: 1.0.2
@@ -991,7 +979,7 @@ importers:
         specifier: 6.7.1
         version: 6.7.1(encoding@0.1.13)
       gif-frames:
-        specifier: ^0.4.1
+        specifier: 0.4.1
         version: 0.4.1
       glob:
         specifier: 11.0.0
@@ -1033,7 +1021,7 @@ importers:
         specifier: 0.1.18
         version: 0.1.18
       onnxruntime-node:
-        specifier: ^1.20.0
+        specifier: 1.20.1
         version: 1.20.1
       pdfjs-dist:
         specifier: 4.7.76
@@ -1051,7 +1039,7 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(bufferutil@4.0.8)(encoding@0.1.13)(puppeteer-core@19.11.1(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))(typescript@5.6.3)(utf-8-validate@5.0.10)
       sharp:
-        specifier: ^0.33.5
+        specifier: 0.33.5
         version: 0.33.5
       srt:
         specifier: 0.0.3
@@ -1100,7 +1088,7 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.13.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
 
   packages/plugin-solana:
@@ -1112,7 +1100,7 @@ importers:
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@coral-xyz/anchor':
-        specifier: ^0.30.1
+        specifier: 0.30.1
         version: 0.30.1(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
       '@solana/spl-token':
         specifier: 0.4.9
@@ -1127,7 +1115,7 @@ importers:
         specifier: 9.1.2
         version: 9.1.2
       bs58:
-        specifier: ^6.0.0
+        specifier: 6.0.0
         version: 6.0.0
       node-cache:
         specifier: 5.1.2
@@ -1136,7 +1124,7 @@ importers:
         specifier: 1.3.2
         version: 1.3.2(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(rollup@4.27.4)(typescript@5.6.3)(utf-8-validate@5.0.10)
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       whatwg-url:
         specifier: 7.1.0
@@ -1164,22 +1152,22 @@ importers:
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@avnu/avnu-sdk':
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1(ethers@6.13.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))(qs@6.13.0)(starknet@6.18.0(encoding@0.1.13))
       '@uniswap/sdk-core':
-        specifier: ^6.0.0
+        specifier: 6.0.0
         version: 6.0.0
       '@unruggable_starknet/core':
-        specifier: ^0.1.0
+        specifier: 0.1.0
         version: 0.1.0(starknet@6.18.0(encoding@0.1.13))
       starknet:
-        specifier: ^6.17.0
+        specifier: 6.18.0
         version: 6.18.0(encoding@0.1.13)
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       vitest:
-        specifier: ^2.1.4
+        specifier: 2.1.5
         version: 2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0)
       whatwg-url:
         specifier: 7.1.0
@@ -1207,20 +1195,20 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       uuid:
         specifier: 11.0.2
         version: 11.0.2
       vitest:
-        specifier: ^2.1.4
+        specifier: 2.1.5
         version: 2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0)
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
     devDependencies:
       '@types/dompurify':
-        specifier: ^3.2.0
+        specifier: 3.2.0
         version: 3.2.0
       eslint:
         specifier: 9.13.0
@@ -1241,7 +1229,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       tsup:
-        specifier: ^8.3.5
+        specifier: 8.3.5
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       whatwg-url:
         specifier: 7.1.0
@@ -3091,7 +3079,7 @@ packages:
   '@echogarden/transformers-nodejs-lite@2.17.1-lite.3':
     resolution: {integrity: sha512-qD9kvrL1xmce0iiiNEyqq2GW1qoksqvdOpww3Gsgqx/O9tdU/M2R78fji9opY+QU9u8OKH9L+ZzsOQdF5FixZA==}
     peerDependencies:
-      onnxruntime-node: ^1.20.0
+      onnxruntime-node: 1.20.1
 
   '@emnapi/core@1.3.1':
     resolution: {integrity: sha512-pVGjBIt1Y6gg3EJN8jTcfpP/+uuRksIo055oE/OBkDNcjZqVbfkWCksG1Jp4yZnj3iKWyWX8fdG/j6UDYPbFog==}
@@ -19403,7 +19391,7 @@ snapshots:
       '@octokit/request-error': 3.0.3
       '@octokit/types': 9.3.2
       is-plain-object: 5.0.0
-      node-fetch: 2.6.7(encoding@0.1.13)
+      node-fetch: 2.7.0(encoding@0.1.13)
       universal-user-agent: 6.0.1
     transitivePeerDependencies:
       - encoding
@@ -24242,9 +24230,9 @@ snapshots:
   execa@5.0.0:
     dependencies:
       cross-spawn: 7.0.6
-      get-stream: 6.0.0
+      get-stream: 6.0.1
       human-signals: 2.1.0
-      is-stream: 2.0.0
+      is-stream: 2.0.1
       merge-stream: 2.0.0
       npm-run-path: 4.0.1
       onetime: 5.1.2
@@ -25877,7 +25865,7 @@ snapshots:
 
   jest-diff@29.7.0:
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.2
       diff-sequences: 29.6.3
       jest-get-type: 29.6.3
       pretty-format: 29.7.0
@@ -27598,7 +27586,7 @@ snapshots:
       array-differ: 3.0.0
       array-union: 2.1.0
       arrify: 2.0.1
-      minimatch: 3.0.5
+      minimatch: 3.1.2
 
   mustache@4.2.0: {}
 
@@ -27924,7 +27912,7 @@ snapshots:
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
       axios: 1.7.7(debug@4.3.7)
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       cliui: 8.0.1
@@ -28129,7 +28117,7 @@ snapshots:
       bl: 4.1.0
       chalk: 4.1.2
       cli-cursor: 3.1.0
-      cli-spinners: 2.6.1
+      cli-spinners: 2.9.2
       is-interactive: 1.0.0
       log-symbols: 4.1.0
       strip-ansi: 6.0.1
