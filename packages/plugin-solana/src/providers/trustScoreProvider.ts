@@ -153,6 +153,9 @@ export class TrustScoreManager {
                 rapidDump: isRapidDump,
                 suspiciousVolume: suspiciousVolume,
                 validationTrust: validationTrustScore,
+                balance: balance,
+                initialMarketCap:
+                    processedData.dexScreenerData.pairs[0]?.marketCap || 0,
                 lastUpdated: new Date(),
             },
             recommenderMetrics: {
@@ -396,7 +399,7 @@ export class TrustScoreManager {
             initialMarketCap:
                 processedData.dexScreenerData.pairs[0]?.marketCap || 0,
             initialLiquidity:
-                processedData.dexScreenerData.pairs[0]?.liquidity || 0,
+                processedData.dexScreenerData.pairs[0]?.liquidity?.usd || 0,
             initialPrice: processedData.tradeData.price,
         };
         this.trustScoreDb.addTokenRecommendation(tokenRecommendation);
@@ -431,7 +434,7 @@ export class TrustScoreManager {
             const hash = Math.random().toString(36).substring(7);
             const transaction = {
                 tokenAddress: tokenAddress,
-                type: "buy",
+                type: "buy" as "buy" | "sell",
                 transactionHash: hash,
                 amount: data.buy_amount,
                 price: processedData.tradeData.price,
@@ -575,7 +578,7 @@ export class TrustScoreManager {
             const hash = Math.random().toString(36).substring(7);
             const transaction = {
                 tokenAddress: tokenAddress,
-                type: "sell",
+                type: "sell" as "buy" | "sell",
                 transactionHash: hash,
                 amount: sellDetails.sell_amount,
                 price: processedData.tradeData.price,
