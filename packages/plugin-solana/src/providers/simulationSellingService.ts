@@ -211,6 +211,7 @@ export class simulationSellingService {
                 const process = await this.startProcessInTheSonarBackend(
                     tokenAddress,
                     balance,
+                    true,
                     sell_recommender_id,
                     tokenPerformance.initial_mc
                 );
@@ -225,6 +226,7 @@ export class simulationSellingService {
         tokenAddress: string,
         balance: number,
         isSimulation: boolean,
+        sell_recommender_id: string,
         initial_mc: number
     ) {
         try {
@@ -233,6 +235,7 @@ export class simulationSellingService {
                 balance,
                 isSimulation,
                 initial_mc,
+                sell_recommender_id,
             });
             const response = await fetch(
                 `${this.sonarBe}/ai16z-sol/startProcess`,
