@@ -1,4 +1,3 @@
-import { CacheManager, MemoryCacheAdapter } from "../cache";
 import {
     getGoals,
     formatGoalsAsString,
