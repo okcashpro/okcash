@@ -87,7 +87,7 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
             const reader = response.body?.getReader();
             const readable = new Readable({
                 read() {
-                    reader &&
+                    reader && // eslint-disable-line
                         reader.read().then(({ done, value }) => {
                             if (done) {
                                 this.push(null);
@@ -176,7 +176,7 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
 export class SpeechService extends Service implements ISpeechService {
     static serviceType: ServiceType = ServiceType.SPEECH_GENERATION;
 
-    async initialize(runtime: IAgentRuntime): Promise<void> {}
+    async initialize(_runtime: IAgentRuntime): Promise<void> {}
 
     getInstance(): ISpeechService {
         return SpeechService.getInstance();

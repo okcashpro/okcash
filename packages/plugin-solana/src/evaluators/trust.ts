@@ -109,7 +109,6 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     });
 
     const recentRecommendations = await recommendationsManager.getMemories({
-        agentId,
         roomId,
         count: 20,
     });
