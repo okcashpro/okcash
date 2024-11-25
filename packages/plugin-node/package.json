@@ -44,7 +44,7 @@
         "onnxruntime-node": "1.20.1",
         "pdfjs-dist": "4.7.76",
         "playwright": "1.48.2",
-        "pm2": "5.4.2",
+        "pm2": "5.4.3",
         "puppeteer-extra": "3.3.6",
         "puppeteer-extra-plugin-capsolver": "2.0.1",
         "sharp": "0.33.5",
