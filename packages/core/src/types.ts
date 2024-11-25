@@ -947,7 +947,10 @@ export interface IAgentRuntime {
 
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;
+    documentsManager: IMemoryManager;
+    knowledgeManager: IMemoryManager;
     loreManager: IMemoryManager;
+
     cacheManager: ICacheManager;
 
     services: Map<ServiceType, Service>;
