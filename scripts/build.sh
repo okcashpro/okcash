@@ -21,23 +21,24 @@ fi
 # Define packages to build in order
 PACKAGES=(
     "core"
-    "plugin-trustdb"
-    "plugin-solana"
-    "plugin-starknet"
-    "plugin-conflux"
     "adapter-postgres"
     "adapter-sqlite"
     "adapter-sqljs"
     "adapter-supabase"
+    "plugin-node"
+    "plugin-trustdb"
+    "plugin-solana"
+    "plugin-starknet"
+    "plugin-conflux"
+    "plugin-0g"
+    "plugin-bootstrap"
+    "plugin-image-generation"
+    "plugin-coinbase"
     "client-auto"
     "client-direct"
     "client-discord"
     "client-telegram"
     "client-twitter"
-    "plugin-node"
-    "plugin-bootstrap"
-    "plugin-image-generation"
-    "plugin-coinbase"
 )
 
 # Build packages in specified order
