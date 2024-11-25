@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Participant
+[@ai16z/eliza v0.1.3](../index.md) / Participant
 
 # Interface: Participant
 
@@ -12,9 +12,9 @@ Represents a participant in a room, including their ID and account details.
 
 #### Defined in
 
-[packages/core/src/types.ts:287](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L287)
+[packages/core/src/types.ts:288](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L288)
 
----
+***
 
 ### account
 
@@ -22,4 +22,4 @@ Represents a participant in a room, including their ID and account details.
 
 #### Defined in
 
-[packages/core/src/types.ts:288](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L288)
+[packages/core/src/types.ts:289](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L289)

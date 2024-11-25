@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / parseJSONObjectFromText
+[@ai16z/eliza v0.1.3](../index.md) / parseJSONObjectFromText
 
 # Function: parseJSONObjectFromText()
 
@@ -24,4 +24,4 @@ An object parsed from the JSON string if successful; otherwise, null or the resu
 
 ## Defined in
 
-[packages/core/src/parsing.ts:101](https://github.com/ai16z/eliza/blob/main/packages/core/src/parsing.ts#L101)
+[packages/core/src/parsing.ts:103](https://github.com/ai16z/eliza/blob/main/packages/core/src/parsing.ts#L103)

@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / embed
+[@ai16z/eliza v0.1.3](../index.md) / embed
 
 # Function: embed()
 
@@ -22,4 +22,4 @@ The embedding of the input.
 
 ## Defined in
 
-[packages/core/src/embedding.ts:88](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L88)
+[packages/core/src/embedding.ts:73](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L73)

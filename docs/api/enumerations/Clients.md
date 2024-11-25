@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / Clients
+[@ai16z/eliza v0.1.3](../index.md) / Clients
 
 # Enumeration: Clients
 
@@ -10,9 +10,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:323](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L323)
+[packages/core/src/types.ts:325](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L325)
 
----
+***
 
 ### DIRECT
 
@@ -20,9 +20,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:324](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L324)
+[packages/core/src/types.ts:326](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L326)
 
----
+***
 
 ### TWITTER
 
@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:325](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L325)
+[packages/core/src/types.ts:327](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L327)
 
----
+***
 
 ### TELEGRAM
 
@@ -40,4 +40,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:326](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L326)
+[packages/core/src/types.ts:328](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L328)
