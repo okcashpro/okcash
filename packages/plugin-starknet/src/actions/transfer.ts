@@ -84,7 +84,7 @@ export default {
         "SEND_ETH_ON_STARKNET",
         "PAY_ON_STARKNET",
     ],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         await validateStarknetConfig(runtime);
         return true;
     },

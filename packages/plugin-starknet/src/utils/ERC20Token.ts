@@ -1,7 +1,6 @@
 import {
     AccountInterface,
     cairo,
-    Call,
     CallData,
     Calldata,
     Contract,

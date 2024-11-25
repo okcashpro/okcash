@@ -19,8 +19,8 @@ export const TelegramClientInterface: Client = {
         );
         return tg;
     },
-    stop: async (runtime: IAgentRuntime) => {
-        console.warn("Telegram client does not support stopping yet");
+    stop: async (_runtime: IAgentRuntime) => {
+        elizaLogger.warn("Telegram client does not support stopping yet");
     },
 };
 

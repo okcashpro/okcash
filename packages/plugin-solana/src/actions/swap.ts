@@ -325,12 +325,14 @@ export const executeSwap: Action = {
             try {
                 // First try to decode as base58
                 secretKey = bs58.decode(privateKeyString);
+                // eslint-disable-next-line
             } catch (e) {
                 try {
                     // If that fails, try base64
                     secretKey = Uint8Array.from(
                         Buffer.from(privateKeyString, "base64")
                     );
+                    // eslint-disable-next-line
                 } catch (e2) {
                     throw new Error("Invalid private key format");
                 }

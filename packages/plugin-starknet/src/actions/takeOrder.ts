@@ -51,7 +51,7 @@ const take_order: Action = {
         return tickerRegex.test(text);
     },
     handler: async (runtime: IAgentRuntime, message: Memory) => {
-        const text = (message.content as Content).text;
+        const _text = (message.content as Content).text;
         const userId = message.userId;
 
         let ticker, contractAddress;
