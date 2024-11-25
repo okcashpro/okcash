@@ -1,7 +1,7 @@
 export * from "./sqliteTables.ts";
 export * from "./sqlite_vec.ts";
 
-import { DatabaseAdapter } from "@ai16z/eliza";
+import { DatabaseAdapter, IDatabaseCacheAdapter } from "@ai16z/eliza";
 import { embeddingZeroVector } from "@ai16z/eliza";
 import {
     Account,
@@ -18,7 +18,10 @@ import { v4 } from "uuid";
 import { load } from "./sqlite_vec.ts";
 import { sqliteTables } from "./sqliteTables.ts";
 
-export class SqliteDatabaseAdapter extends DatabaseAdapter {
+export class SqliteDatabaseAdapter
+    extends DatabaseAdapter<Database>
+    implements IDatabaseCacheAdapter
+{
     async getRoom(roomId: UUID): Promise<UUID | null> {
         const sql = "SELECT id FROM rooms WHERE id = ?";
         const room = this.db.prepare(sql).get(roomId) as
@@ -71,18 +74,10 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         super();
         this.db = db;
         load(db);
+    }
 
-        // Check if the 'accounts' table exists as a representative table
-        const tableExists = this.db
-            .prepare(
-                "SELECT name FROM sqlite_master WHERE type='table' AND name='accounts'"
-            )
-            .get();
-
-        if (!tableExists) {
-            // If the 'accounts' table doesn't exist, create all the tables
-            this.db.exec(sqliteTables);
-        }
+    async init() {
+        this.db.exec(sqliteTables);
     }
 
     async getAccountById(userId: UUID): Promise<Account | null> {
@@ -148,22 +143,21 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
     }
 
     async getMemoriesByRoomIds(params: {
+        agentId: UUID;
         roomIds: UUID[];
         tableName: string;
-        agentId?: UUID;
     }): Promise<Memory[]> {
         if (!params.tableName) {
             // default to messages
             params.tableName = "messages";
         }
         const placeholders = params.roomIds.map(() => "?").join(", ");
-        let sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
-        let queryParams = [params.tableName, ...params.roomIds];
-
-        if (params.agentId) {
-            sql += ` AND agentId = ?`;
-            queryParams.push(params.agentId);
-        }
+        const sql = `SELECT * FROM memories WHERE type = ? AND agentId = ? AND roomId IN (${placeholders})`;
+        const queryParams = [
+            params.tableName,
+            params.agentId,
+            ...params.roomIds,
+        ];
 
         const stmt = this.db.prepare(sql);
         const rows = stmt.all(...queryParams) as (Memory & {
@@ -194,8 +188,8 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
 
     async createMemory(memory: Memory, tableName: string): Promise<void> {
         // Delete any existing memory with the same ID first
-        const deleteSql = `DELETE FROM memories WHERE id = ? AND type = ?`;
-        this.db.prepare(deleteSql).run(memory.id, tableName);
+        // const deleteSql = `DELETE FROM memories WHERE id = ? AND type = ?`;
+        // this.db.prepare(deleteSql).run(memory.id, tableName);
 
         let isUnique = true;
 
@@ -205,6 +199,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
                 memory.embedding,
                 {
                     tableName,
+                    agentId: memory.agentId,
                     roomId: memory.roomId,
                     match_threshold: 0.95, // 5% similarity threshold
                     count: 1,
@@ -286,7 +281,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             match_threshold?: number;
             count?: number;
             roomId?: UUID;
-            agentId?: UUID;
+            agentId: UUID;
             unique?: boolean;
             tableName: string;
         }
@@ -295,19 +290,16 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
             // JSON.stringify(embedding),
             new Float32Array(embedding),
             params.tableName,
+            params.agentId,
         ];
 
         let sql = `
       SELECT *, vec_distance_L2(embedding, ?) AS similarity
       FROM memories
-      WHERE type = ?`;
+      WHERE embedding IS NOT NULL AND type = ? AND agentId = ?`;
 
         if (params.unique) {
             sql += " AND `unique` = 1";
-        }
-        if (params.agentId) {
-            sql += " AND agentId = ?";
-            queryParams.push(params.agentId);
         }
 
         if (params.roomId) {
@@ -423,7 +415,7 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        agentId?: UUID;
+        agentId: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]> {
@@ -433,17 +425,16 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         if (!params.roomId) {
             throw new Error("roomId is required");
         }
-        let sql = `SELECT * FROM memories WHERE type = ? AND roomId = ?`;
+        let sql = `SELECT * FROM memories WHERE type = ? AND agentId = ? AND roomId = ?`;
 
-        const queryParams = [params.tableName, params.roomId] as any[];
+        const queryParams = [
+            params.tableName,
+            params.agentId,
+            params.roomId,
+        ] as any[];
 
         if (params.unique) {
             sql += " AND `unique` = 1";
-        }
-
-        if (params.agentId) {
-            sql += " AND agentId = ?";
-            queryParams.push(params.agentId);
         }
 
         if (params.start) {
@@ -675,5 +666,42 @@ export class SqliteDatabaseAdapter extends DatabaseAdapter {
         return this.db
             .prepare(sql)
             .all(params.userId, params.userId) as Relationship[];
+    }
+
+    async getCache(params: {
+        key: string;
+        agentId: UUID;
+    }): Promise<string | undefined> {
+        const sql = "SELECT value FROM cache WHERE (key = ? AND agentId = ?)";
+        const cached = this.db
+            .prepare<[string, UUID], { value: string }>(sql)
+            .get(params.key, params.agentId);
+
+        return cached?.value ?? undefined;
+    }
+
+    async setCache(params: {
+        key: string;
+        agentId: UUID;
+        value: string;
+    }): Promise<boolean> {
+        const sql =
+            "INSERT OR REPLACE INTO cache (key, agentId, value, createdAt) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+        this.db.prepare(sql).run(params.key, params.agentId, params.value);
+        return true;
+    }
+
+    async deleteCache(params: {
+        key: string;
+        agentId: UUID;
+    }): Promise<boolean> {
+        try {
+            const sql = "DELETE FROM cache WHERE key = ? AND agentId = ?";
+            this.db.prepare(sql).run(params.key, params.agentId);
+            return true;
+        } catch (error) {
+            console.log("Error removing cache", error);
+            return false;
+        }
     }
 }

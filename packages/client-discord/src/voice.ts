@@ -1,4 +1,22 @@
 import {
+    Content,
+    HandlerCallback,
+    IAgentRuntime,
+    ISpeechService,
+    ITranscriptionService,
+    Memory,
+    ModelClass,
+    ServiceType,
+    State,
+    UUID,
+    composeContext,
+    elizaLogger,
+    embeddingZeroVector,
+    generateMessageResponse,
+    messageCompletionFooter,
+    stringToUuid,
+} from "@ai16z/eliza";
+import {
     AudioReceiveStream,
     NoSubscriberBehavior,
     StreamType,
@@ -20,23 +38,7 @@ import {
 import EventEmitter from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
-import { composeContext } from "@ai16z/eliza";
-import { generateMessageResponse } from "@ai16z/eliza";
-import { embeddingZeroVector } from "@ai16z/eliza";
-import {
-    Content,
-    HandlerCallback,
-    IAgentRuntime,
-    ISpeechService,
-    ITranscriptionService,
-    Memory,
-    ModelClass,
-    Service,
-    ServiceType,
-    State,
-    UUID,
-} from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza/src/uuid.ts";
+import { DiscordClient } from "./index.ts";
 
 export function getWavHeader(
     audioLength: number,
@@ -63,8 +65,6 @@ export function getWavHeader(
     wavHeader.writeUInt32LE(audioLength, 40); // Data chunk size
     return wavHeader;
 }
-
-import { messageCompletionFooter } from "@ai16z/eliza/src/parsing.ts";
 
 const discordVoiceHandlerTemplate =
     `# Task: Generate conversational voice dialog for {{agentName}}.
@@ -121,7 +121,7 @@ export class AudioMonitor {
             }
         });
         this.readable.on("end", () => {
-            console.log("AudioMonitor ended");
+            elizaLogger.log("AudioMonitor ended");
             this.ended = true;
             if (this.lastFlagged < 0) return;
             callback(this.getBufferFromStart());
@@ -129,13 +129,13 @@ export class AudioMonitor {
         });
         this.readable.on("speakingStopped", () => {
             if (this.ended) return;
-            console.log("Speaking stopped");
+            elizaLogger.log("Speaking stopped");
             if (this.lastFlagged < 0) return;
             callback(this.getBufferFromStart());
         });
         this.readable.on("speakingStarted", () => {
             if (this.ended) return;
-            console.log("Speaking started");
+            elizaLogger.log("Speaking started");
             this.reset();
         });
     }
@@ -184,7 +184,7 @@ export class VoiceManager extends EventEmitter {
         { channel: BaseGuildVoiceChannel; monitor: AudioMonitor }
     > = new Map();
 
-    constructor(client: any) {
+    constructor(client: DiscordClient) {
         super();
         this.client = client.client;
         this.runtime = client.runtime;
@@ -223,6 +223,9 @@ export class VoiceManager extends EventEmitter {
         if (oldConnection) {
             try {
                 oldConnection.destroy();
+                // Remove all associated streams and monitors
+                this.streams.clear();
+                this.activeMonitors.clear();
             } catch (error) {
                 console.error("Error leaving voice channel:", error);
             }
@@ -235,11 +238,23 @@ export class VoiceManager extends EventEmitter {
             selfMute: false,
         });
 
+        const me = channel.guild.members.me;
+        if (me?.voice && me.permissions.has("DeafenMembers")) {
+            await me.voice.setDeaf(false);
+            await me.voice.setMute(false);
+        } else {
+            elizaLogger.log("Bot lacks permission to modify voice state");
+        }
+
         for (const [, member] of channel.members) {
             if (!member.user.bot) {
                 this.monitorMember(member, channel);
             }
         }
+
+        connection.on("error", (error) => {
+            console.error("Voice connection error:", error);
+        });
 
         connection.receiver.speaking.on("start", (userId: string) => {
             const user = channel.members.get(userId);
@@ -261,10 +276,10 @@ export class VoiceManager extends EventEmitter {
         member: GuildMember,
         channel: BaseGuildVoiceChannel
     ) {
-        const userId = member.id;
-        const userName = member.user.username;
-        const name = member.user.displayName;
-        const connection = getVoiceConnection(member.guild.id);
+        const userId = member?.id;
+        const userName = member?.user?.username;
+        const name = member?.user?.displayName;
+        const connection = getVoiceConnection(member?.guild?.id);
         const receiveStream = connection?.receiver.subscribe(userId, {
             autoDestroy: true,
             emitClose: true,
@@ -369,13 +384,11 @@ export class VoiceManager extends EventEmitter {
         let lastChunkTime = Date.now();
         let transcriptionStarted = false;
         let transcriptionText = "";
-        console.log("new audio monitor for: ", userId);
 
-        const monitor = new AudioMonitor(
+        const _monitor = new AudioMonitor(
             audioStream,
             10000000,
             async (buffer) => {
-                console.log("buffer: ", buffer);
                 const currentTime = Date.now();
                 const silenceDuration = currentTime - lastChunkTime;
                 if (!buffer) {
@@ -398,12 +411,20 @@ export class VoiceManager extends EventEmitter {
                         const wavBuffer =
                             await this.convertOpusToWav(inputBuffer);
 
-                        console.log("starting transcription");
-                        const text = await this.runtime
-                            .getService(ServiceType.TRANSCRIPTION)
-                            .getInstance<ITranscriptionService>()
-                            .transcribe(wavBuffer);
-                        console.log("transcribed text: ", text);
+                        const transcriptionService =
+                            this.runtime.getService<ITranscriptionService>(
+                                ServiceType.TRANSCRIPTION
+                            );
+
+                        if (!transcriptionService) {
+                            throw new Error(
+                                "Transcription generation service not found"
+                            );
+                        }
+
+                        const text =
+                            await transcriptionService.transcribe(wavBuffer);
+
                         transcriptionText += text;
                     } catch (error) {
                         console.error("Error processing audio stream:", error);
@@ -464,7 +485,7 @@ export class VoiceManager extends EventEmitter {
 
                         const memory = {
                             id: stringToUuid(
-                                channelId + "-voice-message-" + Date.now()
+                                roomId + "-voice-message-" + Date.now()
                             ),
                             agentId: this.runtime.agentId,
                             content: {
@@ -514,12 +535,16 @@ export class VoiceManager extends EventEmitter {
                         const callback: HandlerCallback = async (
                             content: Content
                         ) => {
-                            console.log("callback content: ", content);
+                            elizaLogger.debug("callback content: ", content);
                             const { roomId } = memory;
 
                             const responseMemory: Memory = {
                                 id: stringToUuid(
-                                    memory.id + "-voice-response-" + Date.now()
+                                    roomId +
+                                        "-" +
+                                        memory.id +
+                                        "-voice-response-" +
+                                        Date.now()
                                 ),
                                 agentId: this.runtime.agentId,
                                 userId: this.runtime.agentId,
@@ -540,10 +565,22 @@ export class VoiceManager extends EventEmitter {
                                     await this.runtime.updateRecentMessageState(
                                         state
                                     );
-                                const responseStream = await this.runtime
-                                    .getService(ServiceType.SPEECH_GENERATION)
-                                    .getInstance<ISpeechService>()
-                                    .generate(this.runtime, content.text);
+
+                                const speechService =
+                                    this.runtime.getService<ISpeechService>(
+                                        ServiceType.SPEECH_GENERATION
+                                    );
+                                if (!speechService) {
+                                    throw new Error(
+                                        "Speech generation service not found"
+                                    );
+                                }
+
+                                const responseStream =
+                                    await speechService.generate(
+                                        this.runtime,
+                                        content.text
+                                    );
 
                                 if (responseStream) {
                                     await this.playAudioStream(
@@ -643,8 +680,8 @@ export class VoiceManager extends EventEmitter {
     }
 
     private async _shouldIgnore(message: Memory): Promise<boolean> {
-        console.log("message: ", message);
-        console.log("message.content: ", message.content);
+        // console.log("message: ", message);
+        elizaLogger.debug("message.content: ", message.content);
         // if the message is 3 characters or less, ignore it
         if ((message.content as Content).text.length < 3) {
             return true;

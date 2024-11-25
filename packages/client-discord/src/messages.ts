@@ -27,7 +27,7 @@ import {
     TextChannel,
     ThreadChannel,
 } from "discord.js";
-import { elizaLogger } from "@ai16z/eliza/src/logger.ts";
+import { elizaLogger } from "@ai16z/eliza";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
 
@@ -423,20 +423,20 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.createdTimestamp,
-                embedding: embeddingZeroVector,
             };
 
             if (content.text) {
+                await this.runtime.messageManager.addEmbeddingToMemory(memory);
                 await this.runtime.messageManager.createMemory(memory);
             }
 
-            let state = (await this.runtime.composeState(userMessage, {
+            let state = await this.runtime.composeState(userMessage, {
                 discordClient: this.client,
                 discordMessage: message,
                 agentName:
                     this.runtime.character.name ||
                     this.client.user?.displayName,
-            })) as State;
+            });
 
             if (!canSendMessage(message.channel).canSend) {
                 return elizaLogger.warn(
@@ -515,10 +515,23 @@ export class MessageManager {
                         }
                         if (message.channel.type === ChannelType.GuildVoice) {
                             // For voice channels, use text-to-speech
-                            const audioStream = await this.runtime
-                                .getService(ServiceType.SPEECH_GENERATION)
-                                .getInstance<ISpeechService>()
-                                .generate(this.runtime, content.text);
+
+                            const speechService =
+                                this.runtime.getService<ISpeechService>(
+                                    ServiceType.SPEECH_GENERATION
+                                );
+
+                            if (!speechService) {
+                                throw new Error(
+                                    "Speech generation service not found"
+                                );
+                            }
+
+                            const audioStream = await speechService.generate(
+                                this.runtime,
+                                content.text
+                            );
+
                             await this.voiceManager.playAudioStream(
                                 userId,
                                 audioStream
@@ -603,10 +616,18 @@ export class MessageManager {
             if (message.channel.type === ChannelType.GuildVoice) {
                 // For voice channels, use text-to-speech for the error message
                 const errorMessage = "Sorry, I had a glitch. What was that?";
-                const audioStream = await this.runtime
-                    .getService(ServiceType.SPEECH_GENERATION)
-                    .getInstance<ISpeechService>()
-                    .generate(this.runtime, errorMessage);
+
+                const speechService = this.runtime.getService<ISpeechService>(
+                    ServiceType.SPEECH_GENERATION
+                );
+                if (!speechService) {
+                    throw new Error("Speech generation service not found");
+                }
+
+                const audioStream = await speechService.generate(
+                    this.runtime,
+                    errorMessage
+                );
                 await this.voiceManager.playAudioStream(userId, audioStream);
             } else {
                 // For text channels, send the error message
@@ -628,6 +649,7 @@ export class MessageManager {
         message: DiscordMessage
     ): Promise<{ processedContent: string; attachments: Media[] }> {
         let processedContent = message.content;
+
         let attachments: Media[] = [];
 
         // Process code blocks in the message content
@@ -670,14 +692,20 @@ export class MessageManager {
         for (const url of urls) {
             if (
                 this.runtime
-                    .getService(ServiceType.VIDEO)
-                    .getInstance<IVideoService>()
-                    .isVideoUrl(url)
+                    .getService<IVideoService>(ServiceType.VIDEO)
+                    ?.isVideoUrl(url)
             ) {
-                const videoInfo = await this.runtime
-                    .getService(ServiceType.VIDEO)
-                    .getInstance<IVideoService>()
-                    .processVideo(url);
+                const videoService = this.runtime.getService<IVideoService>(
+                    ServiceType.VIDEO
+                );
+                if (!videoService) {
+                    throw new Error("Video service not found");
+                }
+                const videoInfo = await videoService.processVideo(
+                    url,
+                    this.runtime
+                );
+
                 attachments.push({
                     id: `youtube-${Date.now()}`,
                     url: url,
@@ -687,10 +715,16 @@ export class MessageManager {
                     text: videoInfo.text,
                 });
             } else {
-                const { title, bodyContent } = await this.runtime
-                    .getService(ServiceType.BROWSER)
-                    .getInstance<IBrowserService>()
-                    .getPageContent(url, this.runtime);
+                const browserService = this.runtime.getService<IBrowserService>(
+                    ServiceType.BROWSER
+                );
+                if (!browserService) {
+                    throw new Error("Browser service not found");
+                }
+
+                const { title, bodyContent } =
+                    await browserService.getPageContent(url, this.runtime);
+
                 const { title: newTitle, description } = await generateSummary(
                     this.runtime,
                     title + "\n" + bodyContent

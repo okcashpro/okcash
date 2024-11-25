@@ -1,4 +1,9 @@
-import { elizaLogger, ServiceType } from "@ai16z/eliza";
+import {
+    elizaLogger,
+    IAgentRuntime,
+    ServiceType,
+    ModelProviderName,
+} from "@ai16z/eliza";
 import { Service } from "@ai16z/eliza";
 import fs from "fs";
 import https from "https";
@@ -164,6 +169,7 @@ export class LlamaService extends Service {
     private ctx: LlamaContext | undefined;
     private sequence: LlamaContextSequence | undefined;
     private modelUrl: string;
+    private ollamaModel: string | undefined;
 
     private messageQueue: QueuedMessage[] = [];
     private isProcessing: boolean = false;
@@ -179,15 +185,45 @@ export class LlamaService extends Service {
             "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
         const modelName = "model.gguf";
         this.modelPath = path.join(__dirname, modelName);
+        this.ollamaModel = process.env.OLLAMA_MODEL;
     }
+
+    async initialize(runtime: IAgentRuntime): Promise<void> {
+        try {
+            if (runtime.modelProvider === ModelProviderName.LLAMALOCAL) {
+                elizaLogger.info("Initializing LlamaService...");
+                elizaLogger.info("Using local GGUF model");
+                elizaLogger.info("Ensuring model is initialized...");
+                await this.ensureInitialized();
+                elizaLogger.success("LlamaService initialized successfully");
+            } else {
+                elizaLogger.info(
+                    "Not using local model, skipping initialization"
+                );
+                return;
+            }
+        } catch (error) {
+            elizaLogger.error("Failed to initialize LlamaService:", error);
+            throw new Error(
+                `LlamaService initialization failed: ${error.message}`
+            );
+        }
+    }
+
     private async ensureInitialized() {
         if (!this.modelInitialized) {
+            elizaLogger.info(
+                "Model not initialized, starting initialization..."
+            );
             await this.initializeModel();
+        } else {
+            elizaLogger.info("Model already initialized");
         }
     }
 
     async initializeModel() {
         try {
+            elizaLogger.info("Checking model file...");
             await this.checkModel();
 
             const systemInfo = await si.graphics();
@@ -196,92 +232,150 @@ export class LlamaService extends Service {
             );
 
             if (hasCUDA) {
-                console.log("**** LlamaService: CUDA detected");
+                elizaLogger.info(
+                    "LlamaService: CUDA detected, using GPU acceleration"
+                );
             } else {
-                console.warn(
-                    "**** LlamaService: No CUDA detected - local response will be slow"
+                elizaLogger.warn(
+                    "LlamaService: No CUDA detected - local response will be slow"
                 );
             }
 
+            elizaLogger.info("Initializing Llama instance...");
             this.llama = await getLlama({
-                gpu: "cuda",
+                gpu: hasCUDA ? "cuda" : undefined,
             });
+
+            elizaLogger.info("Creating JSON schema grammar...");
             const grammar = new LlamaJsonSchemaGrammar(
                 this.llama,
                 jsonSchemaGrammar as GbnfJsonSchema
             );
             this.grammar = grammar;
 
+            elizaLogger.info("Loading model...");
             this.model = await this.llama.loadModel({
                 modelPath: this.modelPath,
             });
 
+            elizaLogger.info("Creating context and sequence...");
             this.ctx = await this.model.createContext({ contextSize: 8192 });
             this.sequence = this.ctx.getSequence();
 
             this.modelInitialized = true;
+            elizaLogger.success("Model initialization complete");
             this.processQueue();
         } catch (error) {
-            console.error(
-                "Model initialization failed. Deleting model and retrying...",
+            elizaLogger.error(
+                "Model initialization failed. Deleting model and retrying:",
                 error
             );
-            await this.deleteModel();
-            await this.initializeModel();
+            try {
+                elizaLogger.info(
+                    "Attempting to delete and re-download model..."
+                );
+                await this.deleteModel();
+                await this.initializeModel();
+            } catch (retryError) {
+                elizaLogger.error(
+                    "Model re-initialization failed:",
+                    retryError
+                );
+                throw new Error(
+                    `Model initialization failed after retry: ${retryError.message}`
+                );
+            }
         }
     }
 
     async checkModel() {
         if (!fs.existsSync(this.modelPath)) {
+            elizaLogger.info("Model file not found, starting download...");
             await new Promise<void>((resolve, reject) => {
                 const file = fs.createWriteStream(this.modelPath);
                 let downloadedSize = 0;
+                let totalSize = 0;
 
                 const downloadModel = (url: string) => {
                     https
                         .get(url, (response) => {
-                            const isRedirect =
+                            if (
                                 response.statusCode >= 300 &&
-                                response.statusCode < 400;
-                            if (isRedirect) {
-                                const redirectUrl = response.headers.location;
-                                if (redirectUrl) {
-                                    downloadModel(redirectUrl);
-                                    return;
-                                } else {
-                                    reject(new Error("Redirect URL not found"));
-                                    return;
-                                }
+                                response.statusCode < 400 &&
+                                response.headers.location
+                            ) {
+                                elizaLogger.info(
+                                    `Following redirect to: ${response.headers.location}`
+                                );
+                                downloadModel(response.headers.location);
+                                return;
                             }
 
-                            const totalSize = parseInt(
-                                response.headers["content-length"] ?? "0",
+                            if (response.statusCode !== 200) {
+                                reject(
+                                    new Error(
+                                        `Failed to download model: HTTP ${response.statusCode}`
+                                    )
+                                );
+                                return;
+                            }
+
+                            totalSize = parseInt(
+                                response.headers["content-length"] || "0",
                                 10
                             );
+                            elizaLogger.info(
+                                `Downloading model: Hermes-3-Llama-3.1-8B.Q8_0.gguf`
+                            );
+                            elizaLogger.info(
+                                `Download location: ${this.modelPath}`
+                            );
+                            elizaLogger.info(
+                                `Total size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`
+                            );
 
+                            response.pipe(file);
+
+                            let progressString = "";
                             response.on("data", (chunk) => {
                                 downloadedSize += chunk.length;
-                                file.write(chunk);
-
-                                // Log progress
-                                const progress = (
-                                    (downloadedSize / totalSize) *
-                                    100
-                                ).toFixed(2);
-                                process.stdout.write(
-                                    `Downloaded ${progress}%\r`
+                                const progress =
+                                    totalSize > 0
+                                        ? (
+                                              (downloadedSize / totalSize) *
+                                              100
+                                          ).toFixed(1)
+                                        : "0.0";
+                                const dots = ".".repeat(
+                                    Math.floor(Number(progress) / 5)
                                 );
+                                progressString = `Downloading model: [${dots.padEnd(20, " ")}] ${progress}%`;
+                                elizaLogger.progress(progressString);
                             });
 
-                            response.on("end", () => {
-                                file.end();
+                            file.on("finish", () => {
+                                file.close();
+                                elizaLogger.progress(""); // Clear the progress line
+                                elizaLogger.success("Model download complete");
                                 resolve();
                             });
+
+                            response.on("error", (error) => {
+                                fs.unlink(this.modelPath, () => {});
+                                reject(
+                                    new Error(
+                                        `Model download failed: ${error.message}`
+                                    )
+                                );
+                            });
                         })
-                        .on("error", (err) => {
-                            fs.unlink(this.modelPath, () => {}); // Delete the file async
-                            console.error("Download failed:", err.message);
-                            reject(err);
+                        .on("error", (error) => {
+                            fs.unlink(this.modelPath, () => {});
+                            reject(
+                                new Error(
+                                    `Model download request failed: ${error.message}`
+                                )
+                            );
                         });
                 };
 
@@ -389,6 +483,36 @@ export class LlamaService extends Service {
         this.isProcessing = false;
     }
 
+    async completion(prompt: string, runtime: IAgentRuntime): Promise<string> {
+        try {
+            await this.initialize(runtime);
+
+            if (runtime.modelProvider === ModelProviderName.OLLAMA) {
+                return await this.ollamaCompletion(prompt);
+            }
+
+            return await this.localCompletion(prompt);
+        } catch (error) {
+            elizaLogger.error("Error in completion:", error);
+            throw error;
+        }
+    }
+
+    async embedding(text: string, runtime: IAgentRuntime): Promise<number[]> {
+        try {
+            await this.initialize(runtime);
+
+            if (runtime.modelProvider === ModelProviderName.OLLAMA) {
+                return await this.ollamaEmbedding(text);
+            }
+
+            return await this.localEmbedding(text);
+        } catch (error) {
+            elizaLogger.error("Error in embedding:", error);
+            throw error;
+        }
+    }
+
     private async getCompletionResponse(
         context: string,
         temperature: number,
@@ -398,6 +522,42 @@ export class LlamaService extends Service {
         max_tokens: number,
         useGrammar: boolean
     ): Promise<any | string> {
+        const ollamaModel = process.env.OLLAMA_MODEL;
+        if (ollamaModel) {
+            const ollamaUrl =
+                process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+            elizaLogger.info(
+                `Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`
+            );
+
+            const response = await fetch(`${ollamaUrl}/api/generate`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: ollamaModel,
+                    prompt: context,
+                    stream: false,
+                    options: {
+                        temperature,
+                        stop,
+                        frequency_penalty,
+                        presence_penalty,
+                        num_predict: max_tokens,
+                    },
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    `Ollama request failed: ${response.statusText}`
+                );
+            }
+
+            const result = await response.json();
+            return useGrammar ? { content: result.response } : result.response;
+        }
+
+        // Use local GGUF model
         if (!this.sequence) {
             throw new Error("Model not initialized.");
         }
@@ -426,7 +586,7 @@ export class LlamaService extends Service {
         })) {
             const current = this.model.detokenize([...responseTokens, token]);
             if ([...stop].some((s) => current.includes(s))) {
-                console.log("Stop sequence found");
+                elizaLogger.info("Stop sequence found");
                 break;
             }
 
@@ -434,12 +594,12 @@ export class LlamaService extends Service {
             process.stdout.write(this.model!.detokenize([token]));
             if (useGrammar) {
                 if (current.replaceAll("\n", "").includes("}```")) {
-                    console.log("JSON block found");
+                    elizaLogger.info("JSON block found");
                     break;
                 }
             }
             if (responseTokens.length > max_tokens) {
-                console.log("Max tokens reached");
+                elizaLogger.info("Max tokens reached");
                 break;
             }
         }
@@ -469,7 +629,7 @@ export class LlamaService extends Service {
                 await this.sequence.clearHistory();
                 return parsedResponse;
             } catch (error) {
-                console.error("Error parsing JSON:", error);
+                elizaLogger.error("Error parsing JSON:", error);
             }
         } else {
             await this.sequence.clearHistory();
@@ -478,13 +638,186 @@ export class LlamaService extends Service {
     }
 
     async getEmbeddingResponse(input: string): Promise<number[] | undefined> {
-        await this.ensureInitialized();
-        if (!this.model) {
-            throw new Error("Model not initialized. Call initialize() first.");
+        const ollamaModel = process.env.OLLAMA_MODEL;
+        if (ollamaModel) {
+            const ollamaUrl =
+                process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+            const embeddingModel =
+                process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
+            elizaLogger.info(
+                `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
+            );
+
+            const response = await fetch(`${ollamaUrl}/api/embeddings`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: embeddingModel,
+                    prompt: input,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    `Ollama embeddings request failed: ${response.statusText}`
+                );
+            }
+
+            const result = await response.json();
+            return result.embedding;
+        }
+
+        // Use local GGUF model
+        if (!this.sequence) {
+            throw new Error("Sequence not initialized");
+        }
+
+        const ollamaUrl =
+            process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+        const embeddingModel =
+            process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
+        elizaLogger.info(
+            `Using Ollama API for embeddings with model ${embeddingModel} (base: ${this.ollamaModel})`
+        );
+
+        const response = await fetch(`${ollamaUrl}/api/embeddings`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                input: input,
+                model: embeddingModel,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to get embedding: ${response.statusText}`);
+        }
+
+        const embedding = await response.json();
+        return embedding.vector;
+    }
+
+    private async ollamaCompletion(prompt: string): Promise<string> {
+        const ollamaModel = process.env.OLLAMA_MODEL;
+        const ollamaUrl =
+            process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+        elizaLogger.info(
+            `Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`
+        );
+
+        const response = await fetch(`${ollamaUrl}/api/generate`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: ollamaModel,
+                prompt: prompt,
+                stream: false,
+                options: {
+                    temperature: 0.7,
+                    stop: ["\n"],
+                    frequency_penalty: 0.5,
+                    presence_penalty: 0.5,
+                    num_predict: 256,
+                },
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ollama request failed: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        return result.response;
+    }
+
+    private async ollamaEmbedding(text: string): Promise<number[]> {
+        const ollamaModel = process.env.OLLAMA_MODEL;
+        const ollamaUrl =
+            process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
+        const embeddingModel =
+            process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
+        elizaLogger.info(
+            `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
+        );
+
+        const response = await fetch(`${ollamaUrl}/api/embeddings`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: embeddingModel,
+                prompt: text,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Ollama embeddings request failed: ${response.statusText}`
+            );
+        }
+
+        const result = await response.json();
+        return result.embedding;
+    }
+
+    private async localCompletion(prompt: string): Promise<string> {
+        if (!this.sequence) {
+            throw new Error("Sequence not initialized");
+        }
+
+        const tokens = this.model!.tokenize(prompt);
+
+        // tokenize the words to punish
+        const wordsToPunishTokens = wordsToPunish
+            .map((word) => this.model!.tokenize(word))
+            .flat();
+
+        const repeatPenalty: LlamaContextSequenceRepeatPenalty = {
+            punishTokens: () => wordsToPunishTokens,
+            penalty: 1.2,
+            frequencyPenalty: 0.5,
+            presencePenalty: 0.5,
+        };
+
+        const responseTokens: Token[] = [];
+
+        for await (const token of this.sequence.evaluate(tokens, {
+            temperature: 0.7,
+            repeatPenalty: repeatPenalty,
+            yieldEogToken: false,
+        })) {
+            const current = this.model.detokenize([...responseTokens, token]);
+            if (current.includes("\n")) {
+                elizaLogger.info("Stop sequence found");
+                break;
+            }
+
+            responseTokens.push(token);
+            process.stdout.write(this.model!.detokenize([token]));
+            if (responseTokens.length > 256) {
+                elizaLogger.info("Max tokens reached");
+                break;
+            }
+        }
+
+        const response = this.model!.detokenize(responseTokens);
+
+        if (!response) {
+            throw new Error("Response is undefined");
+        }
+
+        await this.sequence.clearHistory();
+        return response;
+    }
+
+    private async localEmbedding(text: string): Promise<number[]> {
+        if (!this.sequence) {
+            throw new Error("Sequence not initialized");
         }
 
         const embeddingContext = await this.model.createEmbeddingContext();
-        const embedding = await embeddingContext.getEmbeddingFor(input);
+        const embedding = await embeddingContext.getEmbeddingFor(text);
         return embedding?.vector ? [...embedding.vector] : undefined;
     }
 }

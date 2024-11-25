@@ -10,7 +10,7 @@ const PROVIDER_CONFIG = {
     DEFAULT_RPC: "https://api.mainnet-beta.solana.com",
     TOKEN_ADDRESSES: {
         SOL: "So11111111111111111111111111111111111111112",
-        BTC: "qfnqNqs3nCAHjnyCgLRDbBtq4p2MtHZxw8YjSyYhPoL",
+        BTC: "3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh",
         ETH: "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
     },
 };
@@ -33,7 +33,7 @@ interface WalletPortfolio {
     items: Array<Item>;
 }
 
-interface BirdEyePriceData {
+interface _BirdEyePriceData {
     data: {
         [key: string]: {
             price: number;

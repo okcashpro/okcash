@@ -12,10 +12,11 @@
 
 
 CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
 
 BEGIN;
 
-CREATE TABLE accounts (
+CREATE TABLE IF NOT EXISTS accounts (
     "id" UUID PRIMARY KEY,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT,
@@ -25,12 +26,12 @@ CREATE TABLE accounts (
     "details" JSONB DEFAULT '{}'::jsonb
 );
 
-CREATE TABLE rooms (
+CREATE TABLE IF NOT EXISTS rooms (
     "id" UUID PRIMARY KEY,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE memories (
+CREATE TABLE IF NOT EXISTS memories (
     "id" UUID PRIMARY KEY,
     "type" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -45,7 +46,7 @@ CREATE TABLE memories (
     CONSTRAINT fk_agent FOREIGN KEY ("agentId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
-CREATE TABLE goals (
+CREATE TABLE IF NOT EXISTS  goals (
     "id" UUID PRIMARY KEY,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID REFERENCES accounts("id"),
@@ -58,7 +59,7 @@ CREATE TABLE goals (
     CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
-CREATE TABLE logs (
+CREATE TABLE IF NOT EXISTS  logs (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID NOT NULL REFERENCES accounts("id"),
@@ -69,7 +70,7 @@ CREATE TABLE logs (
     CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
-CREATE TABLE participants (
+CREATE TABLE IF NOT EXISTS  participants (
     "id" UUID PRIMARY KEY,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "userId" UUID REFERENCES accounts("id"),
@@ -81,7 +82,7 @@ CREATE TABLE participants (
     CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
-CREATE TABLE relationships (
+CREATE TABLE IF NOT EXISTS  relationships (
     "id" UUID PRIMARY KEY,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "userA" UUID NOT NULL REFERENCES accounts("id"),
@@ -93,11 +94,20 @@ CREATE TABLE relationships (
     CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES accounts("id") ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS  cache (
+    "key" TEXT NOT NULL,
+    "agentId" TEXT NOT NULL,
+    "value" JSONB DEFAULT '{}'::jsonb, 
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "expiresAt" TIMESTAMP, 
+    PRIMARY KEY ("key", "agentId")
+);
+
 -- Indexes
-CREATE INDEX idx_memories_embedding ON memories USING hnsw ("embedding" vector_cosine_ops);
-CREATE INDEX idx_memories_type_room ON memories("type", "roomId");
-CREATE INDEX idx_participants_user ON participants("userId");
-CREATE INDEX idx_participants_room ON participants("roomId");
-CREATE INDEX idx_relationships_users ON relationships("userA", "userB");
+CREATE INDEX IF NOT EXISTS idx_memories_embedding ON memories USING hnsw ("embedding" vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_memories_type_room ON memories("type", "roomId");
+CREATE INDEX IF NOT EXISTS idx_participants_user ON participants("userId");
+CREATE INDEX IF NOT EXISTS idx_participants_room ON participants("roomId");
+CREATE INDEX IF NOT EXISTS idx_relationships_users ON relationships("userA", "userB");
 
 COMMIT;

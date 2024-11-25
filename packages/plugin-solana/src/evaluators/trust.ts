@@ -109,7 +109,6 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     });
 
     const recentRecommendations = await recommendationsManager.getMemories({
-        agentId,
         roomId,
         count: 20,
     });
@@ -153,7 +152,8 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         );
         const tokenProvider = new TokenProvider(
             rec.contractAddress,
-            walletProvider
+            walletProvider,
+            runtime.cacheManager
         );
 
         // TODO: Check to make sure the contract address is valid, it's the right one, etc

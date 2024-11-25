@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# Inform the user about commit message format requirements
+echo "┌──────────────────────────────────────────────────────────────┐"
+echo "│ ℹ️  Commit message must follow the format: 'type: description' │"
+echo "│    Valid types: feat, fix, docs, style, refactor, test, chore │"
+echo "│    Example: 'feat: add new login feature'                     │"
+echo "└──────────────────────────────────────────────────────────────┘"
+echo ""
+
+# Run commitlint to validate the commit message
+npx --no -- commitlint --edit ${1}

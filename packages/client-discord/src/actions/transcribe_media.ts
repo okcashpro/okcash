@@ -1,4 +1,3 @@
-import fs from "fs";
 import { composeContext } from "@ai16z/eliza";
 import { generateText } from "@ai16z/eliza";
 import { parseJSONObjectFromText } from "@ai16z/eliza";
@@ -12,6 +11,7 @@ import {
     ModelClass,
     State,
 } from "@ai16z/eliza";
+
 export const transcriptionTemplate = `# Transcription of media file
 {{mediaTranscript}}
 
@@ -73,7 +73,11 @@ const transcribeMediaAction = {
     ],
     description:
         "Transcribe the full text of an audio or video file that the user has attached.",
-    validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
+    validate: async (
+        _runtime: IAgentRuntime,
+        message: Memory,
+        _state: State
+    ) => {
         if (message.content.source !== "discord") {
             return false;
         }
@@ -161,9 +165,14 @@ ${mediaTranscript.trim()}
         }
         // if text is big, let's send as an attachment
         else if (callbackData.text) {
-            const transcriptFilename = `content_cache/transcript_${Date.now()}.txt`;
+            const transcriptFilename = `content/transcript_${Date.now()}`;
+
             // save the transcript to a file
-            fs.writeFileSync(transcriptFilename, callbackData.text);
+            await runtime.cacheManager.set(
+                transcriptFilename,
+                callbackData.text
+            );
+
             await callback(
                 {
                     ...callbackData,

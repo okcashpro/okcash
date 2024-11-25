@@ -60,6 +60,7 @@ Before getting started with Eliza, ensure you have:
    DISCORD_API_TOKEN=      # Bot token
    HEURIST_API_KEY=       # Heurist API key for LLM and image generation
    OPENAI_API_KEY=        # OpenAI API key
+   GROK_API_KEY=          # Grok API key
    ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
    ```
 
@@ -134,6 +135,18 @@ TWITTER_PASSWORD=  # Account password
 TWITTER_EMAIL=    # Account email
 TWITTER_COOKIES=  # Account cookies (auth_token and CT0)
 ```
+
+Example for TWITTER_COOKIES
+
+The TWITTER_COOKIES variable should be a JSON string containing the necessary cookies. You can find these cookies in your web browser's developer tools. Here is an example format:
+
+```bash
+TWITTER_COOKIES='[{"key":"auth_token","value":"your token","domain":".twitter.com"},
+  {"key":"ct0","value":"your ct0","domain":".twitter.com"},
+  {"key":"guest_id","value":"your guest_id","domain":".twitter.com"}]'
+```
+
+Using TWITTER_COOKIES makes providing TWITTER_PASSWORD and TWITTER_EMAIL unnecessary. TWITTER_USERNAME is still required.
 
 ### Telegram Bot
 
