@@ -1,4 +1,4 @@
-# @ai16z/eliza v0.1.3
+# @ai16z/eliza v0.1.4-alpha.3
 
 ## Enumerations
 
@@ -69,6 +69,7 @@
 - [Plugin](type-aliases/Plugin.md)
 - [Character](type-aliases/Character.md)
 - [CacheOptions](type-aliases/CacheOptions.md)
+- [KnowledgeItem](type-aliases/KnowledgeItem.md)
 
 ## Variables
 
@@ -76,6 +77,7 @@
 - [envSchema](variables/envSchema.md)
 - [CharacterSchema](variables/CharacterSchema.md)
 - [evaluationTemplate](variables/evaluationTemplate.md)
+- [knowledge](variables/knowledge.md)
 - [elizaLogger](variables/elizaLogger.md)
 - [embeddingDimension](variables/embeddingDimension.md)
 - [embeddingZeroVector](variables/embeddingZeroVector.md)

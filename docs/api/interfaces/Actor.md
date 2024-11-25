@@ -1,8 +1,8 @@
-[@ai16z/eliza v0.1.3](../index.md) / Actor
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Actor
 
 # Interface: Actor
 
-Represents an actor in the conversation, which could be a user or the agent itself, including their name, details (such as tagline, summary, and quote), and a unique identifier.
+Represents an actor/participant in a conversation
 
 ## Properties
 
@@ -10,9 +10,11 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 > **name**: `string`
 
+Display name
+
 #### Defined in
 
-[packages/core/src/types.ts:41](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L41)
+[packages/core/src/types.ts:61](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L61)
 
 ***
 
@@ -20,9 +22,11 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 > **username**: `string`
 
+Username/handle
+
 #### Defined in
 
-[packages/core/src/types.ts:42](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L42)
+[packages/core/src/types.ts:64](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L64)
 
 ***
 
@@ -30,21 +34,29 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 > **details**: `object`
 
+Additional profile details
+
 #### tagline
 
 > **tagline**: `string`
+
+Short profile tagline
 
 #### summary
 
 > **summary**: `string`
 
+Longer profile summary
+
 #### quote
 
 > **quote**: `string`
 
+Favorite quote
+
 #### Defined in
 
-[packages/core/src/types.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L43)
+[packages/core/src/types.ts:67](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L67)
 
 ***
 
@@ -52,6 +64,8 @@ Represents an actor in the conversation, which could be a user or the agent itse
 
 > **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Unique identifier
+
 #### Defined in
 
-[packages/core/src/types.ts:44](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L44)
+[packages/core/src/types.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L79)

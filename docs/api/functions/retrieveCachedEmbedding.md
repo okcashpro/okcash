@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.3](../index.md) / retrieveCachedEmbedding
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / retrieveCachedEmbedding
 
 # Function: retrieveCachedEmbedding()
 
@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/embedding.ts:168](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L168)
+[packages/core/src/embedding.ts:210](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L210)

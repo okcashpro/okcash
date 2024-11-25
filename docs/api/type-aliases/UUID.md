@@ -1,10 +1,10 @@
-[@ai16z/eliza v0.1.3](../index.md) / UUID
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / UUID
 
 # Type Alias: UUID
 
 > **UUID**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
-Represents a UUID, which is a universally unique identifier conforming to the UUID standard.
+Represents a UUID string in the format "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 ## Defined in
 

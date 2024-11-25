@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.3](../index.md) / IPdfService
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / IPdfService
 
 # Interface: IPdfService
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:580](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L580)
+[packages/core/src/types.ts:927](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L927)
 
 ## Methods
 
@@ -48,7 +48,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:585](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L585)
+[packages/core/src/types.ts:932](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L932)
 
 ***
 
@@ -62,7 +62,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:719](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L719)
+[packages/core/src/types.ts:1074](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1074)
 
 ***
 
@@ -80,4 +80,4 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:720](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L720)
+[packages/core/src/types.ts:1075](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1075)
