@@ -70,7 +70,7 @@
         "build": "tsup --format esm --dts",
         "dev": "tsup --watch",
         "lint": "eslint . --fix",
-        "postinstall": "npx playwright install-deps && npx playwright install"
+        "postinstall": "node scripts/postinstall.js"
     },
     "peerDependencies": {
         "onnxruntime-node": "^1.20.0",
