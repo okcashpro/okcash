@@ -21,8 +21,10 @@ import {
     messageCompletionFooter,
     ModelClass,
     generateMessageResponse,
-} from "@ai16z/eliza"
-import { character } from "./character.ts";
+} from "@ai16z/eliza";
+
+
+import { bootstrapPlugin } from "@ai16z/plugin-bootstrap"
 import initSqlJs from 'sql.js';
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
@@ -123,6 +125,7 @@ export function createAgent(
         evaluators: [],
         character,
         plugins: [
+            bootstrapPlugin,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -147,7 +150,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character) {
+export async function startAgent(character: Character) {
     try {
         character.id ??= stringToUuid(character.name);
         character.username ??= character.name;
@@ -176,7 +179,7 @@ async function startAgent(character: Character) {
     }
 }
 
-async function handleRoomMessage(runtime: IAgentRuntime, roomId: UUID, user: Account, text: string) {
+export async function handleRoomMessage(runtime: IAgentRuntime, roomId: UUID, user: Account, text: string) {
 
     await runtime.ensureConnection(
         user.id,
@@ -229,6 +232,8 @@ async function handleRoomMessage(runtime: IAgentRuntime, roomId: UUID, user: Acc
             template: messageHandlerTemplate,
         });
 
+        console.log(context)
+
         console.log("generating message response")
 
         const response = await generateMessageResponse({
@@ -240,7 +245,7 @@ async function handleRoomMessage(runtime: IAgentRuntime, roomId: UUID, user: Acc
         console.log(response)
         // save response to memory
         const responseMessage = {
-            // id: stringToUuid(runtime.agentId + roomId + Date.now()),
+            id: stringToUuid(runtime.agentId + roomId + Date.now()),
             ...userMessage,
             userId: runtime.agentId,
             content: response,
@@ -276,7 +281,7 @@ async function handleRoomMessage(runtime: IAgentRuntime, roomId: UUID, user: Acc
         if (message)
             console.log(message)
 
-        return [responseMessage, message]
+        return message ? [responseMessage.content, message] as const : [responseMessage.content] as const
     } catch (error) {
         console.error(error);
         throw error;
@@ -284,35 +289,12 @@ async function handleRoomMessage(runtime: IAgentRuntime, roomId: UUID, user: Acc
 }
 
 
-function createChat(runtime: IAgentRuntime, roomId: UUID, user: Account,) {
+export function createChat(runtime: IAgentRuntime, roomId: UUID, user: Account,) {
     return async function chat(input: string) {
         const res = await handleRoomMessage(runtime, roomId, user, input);
         return res;
     };
 }
-
-
-
-async function main() {
-
-
-    const agent = await startAgent(character);
-    console.log({ agent });
-
-    const chat = createChat(agent, stringToUuid("test"), {
-        id: stringToUuid("fooo"),
-        name: "foo",
-        username: "foo"
-
-    })
-
-    window.chat = chat;
-    console.log(chat);
-}
-
-main().catch(err => {
-    console.error(err);
-})
 
 
 export const messageHandlerTemplate =
