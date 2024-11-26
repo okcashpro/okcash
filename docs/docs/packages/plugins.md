@@ -84,6 +84,20 @@ Integrates Solana blockchain functionality:
 - `walletProvider` - Wallet management
 - `trustScoreProvider` - Transaction trust metrics
 
+#### 5. Buttplug Plugin (`@eliza/plugin-buttplug`)
+
+Integrates Buttplug.io for intimate toy control:
+
+**Services:**
+
+- `ButtplugService` - Buttplug.io integration itself
+
+**Actions:**
+
+- `VIBRATE` - Control vibration intensity and duration of connected devices
+- `ROTATE` - Control rotation intensity and duration of connected devices
+- `BATTERY` - Get the battery level of connected devices
+
 ## Using Plugins
 
 ### Installation
@@ -99,10 +113,10 @@ pnpm add @eliza/plugin-[name]
 ```typescript
 import { bootstrapPlugin } from "@eliza/plugin-bootstrap";
 import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
-
+import { buttplugPlugin } from "@eliza/plugin-buttplug";
 const character = {
   // ... other character config
-  plugins: [bootstrapPlugin, imageGenerationPlugin],
+  plugins: [bootstrapPlugin, imageGenerationPlugin, buttplugPlugin],
 };
 ```
 

@@ -25,6 +25,7 @@ PACKAGES=(
     "adapter-sqlite"
     "adapter-sqljs"
     "adapter-supabase"
+    "plugin-buttplug"
     "plugin-node"
     "plugin-trustdb"
     "plugin-solana"
@@ -66,5 +67,50 @@ for package in "${PACKAGES[@]}"; do
 
     cd - > /dev/null || exit
 done
+
+
+# Download the latest intiface-engine release from GitHub based on OS (linux/macos/win)
+# Determine OS type
+OS=""
+case "$(uname -s)" in
+    Linux*)     OS="linux";;
+    Darwin*)    OS="macos";;
+    MINGW*|MSYS*|CYGWIN*) OS="win";;
+    *)          echo "Unsupported OS"; exit 1;;
+esac
+
+echo -e "\033[1mDownloading intiface-engine for $OS...\033[0m"
+
+# Get latest release info from GitHub API
+LATEST_RELEASE=$(curl -s https://api.github.com/repos/intiface/intiface-engine/releases/latest)
+DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | grep -o "https://.*intiface-engine-$OS-x64-Release\.zip" | head -n 1)
+
+if [ -z "$DOWNLOAD_URL" ]; then
+    echo -e "\033[1;31mCould not find download URL for $OS\033[0m"
+    exit 1
+fi
+
+# Download and extract into packages/plugin-buttplug/intiface-engine
+if curl -L "$DOWNLOAD_URL" -o "packages/plugin-buttplug/intiface-engine.zip"; then
+    echo -e "\033[1;32mSuccessfully downloaded intiface-engine\033[0m"
+    
+    # Clean previous installation if exists
+    rm -rf packages/plugin-buttplug/intiface-engine
+    
+    # Extract
+    unzip -q packages/plugin-buttplug/intiface-engine.zip -d packages/plugin-buttplug/intiface-engine
+    rm packages/plugin-buttplug/intiface-engine.zip
+    
+    # Make binary executable on Unix-like systems
+    if [ "$OS" != "win" ]; then
+        chmod +x packages/plugin-buttplug/intiface-engine/intiface-engine
+    fi
+    
+    echo -e "\033[1;32mSuccessfully set up intiface-engine\033[0m"
+else
+    echo -e "\033[1;31mFailed to download intiface-engine\033[0m"
+    exit 1
+fi
+
 
 echo -e "\033[1mBuild process completed.😎\033[0m"
