@@ -28,7 +28,7 @@
 ### Prerequisiti
 
 -   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
 > **Nota per gli utenti Windows:** È richiesto WSL

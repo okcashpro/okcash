@@ -24,7 +24,7 @@
 **Pré-requisitos (OBRIGATÓRIO):**
 
 -   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 23.1+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23.3+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
 ### Edite o arquivo .env
