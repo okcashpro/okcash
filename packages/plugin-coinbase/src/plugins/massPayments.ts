@@ -122,9 +122,9 @@ async function executeMassPayout(
             if (address) {
                 try {
                     // Check balance before initiating transfer
-                    const walletBalance = await sendingWallet.getBalance(
-                        assetId.toLowerCase()
-                    );
+                    const assetIdLowercase = assetId.toLowerCase();
+                    const walletBalance =
+                        await sendingWallet.getBalance(assetIdLowercase);
 
                     elizaLogger.log("Wallet balance for asset:", {
                         assetId,
@@ -144,11 +144,11 @@ async function executeMassPayout(
                         });
                         continue;
                     }
-
                     const transferDetails = {
                         amount: transferAmount,
-                        assetId: assetId.toLowerCase(),
+                        assetId: assetIdLowercase,
                         destination: address,
+                        gasless: assetIdLowercase === "usdc" ? true : false,
                     };
                     elizaLogger.log("Initiating transfer:", transferDetails);
 
