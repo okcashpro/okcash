@@ -25,6 +25,7 @@ PACKAGES=(
     "adapter-sqlite"
     "adapter-sqljs"
     "adapter-supabase"
+    "plugin-buttplug"
     "plugin-node"
     "plugin-trustdb"
     "plugin-solana"
