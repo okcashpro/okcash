@@ -13,8 +13,6 @@ const timeProvider: Provider = {
         const humanReadable = new Intl.DateTimeFormat("en-US", options).format(
             currentDate
         );
-
-        // The current date and time is Tuesday, November 26, 2024 at 3:17:32 AM UTC. Please use this as your reference for any time-based operations or responses.
         return `The current date and time is ${humanReadable}. Please use this as your reference for any time-based operations or responses.`;
     },
 };
