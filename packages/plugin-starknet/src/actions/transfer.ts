@@ -2,20 +2,50 @@
 // It should just transfer tokens from the agent's wallet to the recipient.
 
 import {
+    type Action,
     ActionExample,
+    composeContext,
+    Content,
+    elizaLogger,
+    generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-    type Action,
-    composeContext,
-    generateObject,
-    elizaLogger,
 } from "@ai16z/eliza";
-import { getStarknetAccount, isTransferContent } from "../utils";
+import { getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { validateStarknetConfig } from "../enviroment";
+
+export interface TransferContent extends Content {
+    tokenAddress: string;
+    recipient: string;
+    amount: string | number;
+}
+
+export function isTransferContent(
+    content: TransferContent
+): content is TransferContent {
+    // Validate types
+    const validTypes =
+        typeof content.tokenAddress === "string" &&
+        typeof content.recipient === "string" &&
+        (typeof content.amount === "string" ||
+            typeof content.amount === "number");
+    if (!validTypes) {
+        return false;
+    }
+
+    // Validate addresses (must be 32-bytes long with 0x prefix)
+    const validAddresses =
+        content.tokenAddress.startsWith("0x") &&
+        content.tokenAddress.length === 66 &&
+        content.recipient.startsWith("0x") &&
+        content.recipient.length === 66;
+
+    return validAddresses;
+}
 
 const transferTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 

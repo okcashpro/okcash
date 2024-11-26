@@ -1,23 +1,6 @@
-import { Content, IAgentRuntime } from "@ai16z/eliza";
+import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
 import { Fraction, Percent } from "@uniswap/sdk-core";
-
 import { Account, Contract, RpcProvider } from "starknet";
-
-export const validateSettings = (runtime: IAgentRuntime) => {
-    const requiredSettings = [
-        "STARKNET_ADDRESS",
-        "STARKNET_PRIVATE_KEY",
-        "STARKNET_RPC_URL",
-    ];
-
-    for (const setting of requiredSettings) {
-        if (!runtime.getSetting(setting)) {
-            return false;
-        }
-    }
-
-    return true;
-};
 
 export const getTokenBalance = async (
     runtime: IAgentRuntime,
@@ -50,35 +33,6 @@ export const getStarknetAccount = (runtime: IAgentRuntime) => {
         runtime.getSetting("STARKNET_PRIVATE_KEY")
     );
 };
-
-export interface TransferContent extends Content {
-    tokenAddress: string;
-    recipient: string;
-    amount: string | number;
-}
-
-export function isTransferContent(
-    content: TransferContent
-): content is TransferContent {
-    // Validate types
-    const validTypes =
-        typeof content.tokenAddress === "string" &&
-        typeof content.recipient === "string" &&
-        (typeof content.amount === "string" ||
-            typeof content.amount === "number");
-    if (!validTypes) {
-        return false;
-    }
-
-    // Validate addresses (must be 32-bytes long with 0x prefix)
-    const validAddresses =
-        content.tokenAddress.startsWith("0x") &&
-        content.tokenAddress.length === 66 &&
-        content.recipient.startsWith("0x") &&
-        content.recipient.length === 66;
-
-    return validAddresses;
-}
 
 export const getPercent = (amount: string | number, decimals: number) => {
     return new Percent(amount, decimals);
@@ -118,3 +72,52 @@ export const formatPercentage = (percentage: Percent) => {
 
     return `${exact ? "" : "~"}${formatedPercentage}%`;
 };
+
+export type RetryConfig = {
+    maxRetries?: number;
+    delay?: number;
+    maxDelay?: number;
+    backoff?: (retryCount: number, delay: number, maxDelay: number) => number;
+};
+
+export async function fetchWithRetry<T>(
+    url: string,
+    options?: RequestInit,
+    config: RetryConfig = {}
+): Promise<T> {
+    const {
+        maxRetries = 3,
+        delay = 1000,
+        maxDelay = 10000,
+        backoff = (retryCount, baseDelay, maxDelay) =>
+            Math.min(baseDelay * Math.pow(2, retryCount), maxDelay),
+    } = config;
+
+    let lastError: Error | null = null;
+
+    for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
+        try {
+            const response = await fetch(url, options);
+
+            if (!response.ok) {
+                throw new Error(
+                    `Coingecko API HTTP status: ${response.status}`
+                );
+            }
+
+            return await response.json();
+        } catch (error) {
+            elizaLogger.debug(`Error fetching ${url}:`, error);
+            lastError = error as Error;
+
+            if (retryCount === maxRetries) break;
+
+            await new Promise((resolve) =>
+                setTimeout(resolve, backoff(retryCount, delay, maxDelay))
+            );
+            elizaLogger.debug(`Retry #${retryCount + 1} to fetch ${url}...`);
+        }
+    }
+
+    throw lastError;
+}
