@@ -20,6 +20,27 @@ export const models: Models = {
             [ModelClass.IMAGE]: "dall-e-3",
         },
     },
+    [ModelProviderName.ETERNALAI]: {
+        endpoint: settings.ETERNALAI_URL,
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]:
+                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.MEDIUM]:
+                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.LARGE]:
+                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.EMBEDDING]: "",
+            [ModelClass.IMAGE]: "",
+        },
+    },
     [ModelProviderName.ANTHROPIC]: {
         settings: {
             stop: [],
