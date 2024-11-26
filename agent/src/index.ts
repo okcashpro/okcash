@@ -38,7 +38,6 @@ import yargs from "yargs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { character } from "./character.ts";
-import type { DirectClient } from "@ai16z/client-direct";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -292,7 +291,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character, directClient: any) {
+async function startAgent(character: Character, directClient) {
     try {
         character.id ??= stringToUuid(character.name);
         character.username ??= character.name;
@@ -342,7 +341,7 @@ const startAgents = async () => {
 
     try {
         for (const character of characters) {
-            await startAgent(character, directClient as any);
+            await startAgent(character, directClient);
         }
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);
