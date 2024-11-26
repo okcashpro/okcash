@@ -122,7 +122,7 @@ export class MemoryManager implements IMemoryManager {
             query_threshold: 2,
             query_input: content,
             query_field_name: "content",
-            query_field_sub_name: "content",
+            query_field_sub_name: "text",
             query_match_count: 10,
         });
     }
