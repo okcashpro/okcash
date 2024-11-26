@@ -23,7 +23,7 @@ async function get(runtime: AgentRuntime, message: Memory): Promise<KnowledgeIte
         ...new Set(
             fragments.map((memory) => {
                 elizaLogger.log(
-                    `Matched fragment: ${memory.content.text} with similarity: ${message.similarity}`
+                    `Matched fragment: ${memory.content.text} with similarity: ${memory.similarity}`
                 );
                 return memory.content.source;
             })
