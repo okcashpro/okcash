@@ -174,6 +174,7 @@ export class LlamaService extends Service {
     private messageQueue: QueuedMessage[] = [];
     private isProcessing: boolean = false;
     private modelInitialized: boolean = false;
+    private runtime: IAgentRuntime | undefined;
 
     static serviceType: ServiceType = ServiceType.TEXT_GENERATION;
 
@@ -189,25 +190,8 @@ export class LlamaService extends Service {
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
-        try {
-            if (runtime.modelProvider === ModelProviderName.LLAMALOCAL) {
-                elizaLogger.info("Initializing LlamaService...");
-                elizaLogger.info("Using local GGUF model");
-                elizaLogger.info("Ensuring model is initialized...");
-                await this.ensureInitialized();
-                elizaLogger.success("LlamaService initialized successfully");
-            } else {
-                elizaLogger.info(
-                    "Not using local model, skipping initialization"
-                );
-                return;
-            }
-        } catch (error) {
-            elizaLogger.error("Failed to initialize LlamaService:", error);
-            throw new Error(
-                `LlamaService initialization failed: ${error.message}`
-            );
-        }
+        elizaLogger.info("Initializing LlamaService...");
+        this.runtime = runtime;
     }
 
     private async ensureInitialized() {

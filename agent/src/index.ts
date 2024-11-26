@@ -23,9 +23,14 @@ import {
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
+import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { solanaPlugin } from "@ai16z/plugin-solana";
+import { zgPlugin } from "@ai16z/plugin-0g";
 import { nodePlugin } from "@ai16z/plugin-node";
-import { coinbaseCommercePlugin } from "@ai16z/plugin-coinbase";
+import {
+    coinbaseCommercePlugin,
+    coinbaseMassPaymentsPlugin,
+} from "@ai16z/plugin-coinbase";
 import Database from "better-sqlite3";
 import fs from "fs";
 import readline from "readline";
@@ -229,6 +234,10 @@ export async function initializeClients(
     return clients;
 }
 
+function getSecret(character: Character, secret: string) {
+    return character.settings.secrets?.[secret] || process.env[secret];
+}
+
 export function createAgent(
     character: Character,
     db: IDatabaseAdapter,
@@ -248,11 +257,18 @@ export function createAgent(
         character,
         plugins: [
             bootstrapPlugin,
+            getSecret(character, "CONFLUX_CORE_PRIVATE_KEY")
+                ? confluxPlugin
+                : null,
             nodePlugin,
-            character.settings.secrets?.WALLET_PUBLIC_KEY ? solanaPlugin : null,
-            character.settings.secrets?.COINBASE_COMMERCE_KEY ||
-            process.env.COINBASE_COMMERCE_KEY
+            getSecret(character, "WALLET_PUBLIC_KEY") ? solanaPlugin : null,
+            getSecret(character, "ZEROG_PRIVATE_KEY") ? zgPlugin : null,
+            getSecret(character, "COINBASE_COMMERCE_KEY")
                 ? coinbaseCommercePlugin
+                : null,
+            getSecret(character, "COINBASE_API_KEY") &&
+                getSecret(character, "COINBASE_PRIVATE_KEY")
+                ? coinbaseMassPaymentsPlugin
                 : null,
         ].filter(Boolean),
         providers: [],
