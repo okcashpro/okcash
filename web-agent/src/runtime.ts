@@ -10,7 +10,6 @@ import {
     IAgentRuntime,
     ModelProviderName,
     elizaLogger,
-    settings,
     IDatabaseAdapter,
     Client,
     UUID,
@@ -23,16 +22,8 @@ import {
     generateMessageResponse,
 } from "@ai16z/eliza";
 
-
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap"
 import initSqlJs from 'sql.js';
-
-export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
-    const waitTime =
-        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-    return new Promise((resolve) => setTimeout(resolve, waitTime));
-};
-
 
 export function getTokenForProvider(
     provider: ModelProviderName,
@@ -40,70 +31,39 @@ export function getTokenForProvider(
 ) {
     switch (provider) {
         case ModelProviderName.OPENAI:
-            return (
-                character.settings?.secrets?.OPENAI_API_KEY ||
-                settings.OPENAI_API_KEY
-            );
+            return getSecret(character, "OPENAI_API_KEY")
         case ModelProviderName.LLAMACLOUD:
-            return (
-                character.settings?.secrets?.LLAMACLOUD_API_KEY ||
-                settings.LLAMACLOUD_API_KEY ||
-                character.settings?.secrets?.TOGETHER_API_KEY ||
-                settings.TOGETHER_API_KEY ||
-                character.settings?.secrets?.XAI_API_KEY ||
-                settings.XAI_API_KEY ||
-                character.settings?.secrets?.OPENAI_API_KEY ||
-                settings.OPENAI_API_KEY
-            );
+            return findSecret(character, ["LLAMACLOUD_API_KEY", "TOGETHER_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY"])
         case ModelProviderName.ANTHROPIC:
-            return (
-                character.settings?.secrets?.ANTHROPIC_API_KEY ||
-                character.settings?.secrets?.CLAUDE_API_KEY ||
-                settings.ANTHROPIC_API_KEY ||
-                settings.CLAUDE_API_KEY
-            );
+            return findSecret(character, ["ANTHROPIC_API_KEY", "CLAUDE_API_KEY"])
         case ModelProviderName.REDPILL:
-            return (
-                character.settings?.secrets?.REDPILL_API_KEY ||
-                settings.REDPILL_API_KEY
-            );
+            return getSecret(character, "REDPILL_API_KEY");
         case ModelProviderName.OPENROUTER:
-            return (
-                character.settings?.secrets?.OPENROUTER ||
-                settings.OPENROUTER_API_KEY
-            );
+            return getSecret(character, "OPENROUTER_API_KEY");
         case ModelProviderName.GROK:
-            return (
-                character.settings?.secrets?.GROK_API_KEY ||
-                settings.GROK_API_KEY
-            );
+            return getSecret(character, "GROK_API_KEY");
         case ModelProviderName.HEURIST:
-            return (
-                character.settings?.secrets?.HEURIST_API_KEY ||
-                settings.HEURIST_API_KEY
-            );
+            return getSecret(character, "HEURIST_API_KEY");
         case ModelProviderName.GROQ:
-            return (
-                character.settings?.secrets?.GROQ_API_KEY ||
-                settings.GROQ_API_KEY
-            );
+            return getSecret(character, "GROQ_API_KEY");
     }
 }
 
-
-export async function initializeClients(
-    character: Character,
-    runtime: IAgentRuntime
-) {
-    const clients: Client[] = [];
-    const clientTypes =
-        character.clients?.map((str) => str.toLowerCase()) || [];
-
-    return clients;
+function findSecret(character: Character, secretKeys: string[]) {
+    for (const secret of secretKeys) {
+        const res = getSecret(character, secret)
+        if (res) return res;
+    }
 }
 
 function getSecret(character: Character, secret: string) {
-    return character.settings?.secrets?.[secret] || process.env[secret];
+    return character.settings?.secrets?.[secret] || localStorage.getItem(character.id + "/secrets/" + secret);
+}
+
+class BrowserAgentRuntime extends AgentRuntime {
+    getSetting(key: string) {
+        return getSecret(this.character, key);
+    }
 }
 
 export function createAgent(
@@ -118,7 +78,7 @@ export function createAgent(
         character.name
     );
 
-    return new AgentRuntime({
+    return new BrowserAgentRuntime({
         databaseAdapter: db,
         token,
         modelProvider: character.modelProvider,
@@ -134,6 +94,18 @@ export function createAgent(
         cacheManager: cache,
     });
 }
+
+async function initializeClients(
+    character: Character,
+    runtime: IAgentRuntime
+) {
+    const clients: Client[] = [];
+    const clientTypes =
+        character.clients?.map((str) => str.toLowerCase()) || [];
+
+    return clients;
+}
+
 
 async function initializeDatabase() {
     const SQL = await initSqlJs({
