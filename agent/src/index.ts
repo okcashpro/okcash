@@ -26,7 +26,7 @@ import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { zgPlugin } from "@ai16z/plugin-0g";
-import { nodePlugin } from "@ai16z/plugin-node";
+import { type NodePlugin, createNodePlugin } from "@ai16z/plugin-node";
 import {
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
@@ -239,6 +239,8 @@ function getSecret(character: Character, secret: string) {
     return character.settings.secrets?.[secret] || process.env[secret];
 }
 
+let nodePlugin: NodePlugin | undefined;
+
 export function createAgent(
     character: Character,
     db: IDatabaseAdapter,
@@ -250,6 +252,9 @@ export function createAgent(
         "Creating runtime for character",
         character.name
     );
+
+    nodePlugin ??= createNodePlugin();
+
     return new AgentRuntime({
         databaseAdapter: db,
         token,
