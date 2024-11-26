@@ -7,8 +7,8 @@ const timeProvider: Provider = {
         // Get UTC time since bots will be communicating with users around the global
         const options = {
             timeZone: "UTC",
-            dateStyle: "full" as "full",
-            timeStyle: "long" as "long",
+            dateStyle: "full" as const,
+            timeStyle: "long" as const,
         };
         const humanReadable = new Intl.DateTimeFormat("en-US", options).format(
             currentDate

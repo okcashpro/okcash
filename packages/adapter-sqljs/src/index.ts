@@ -75,7 +75,7 @@ export class SqlJsDatabaseAdapter
         tableName: string;
     }): Promise<Memory[]> {
         const placeholders = params.roomIds.map(() => "?").join(", ");
-        let sql = `SELECT * FROM memories WHERE 'type' = ? AND agentId = ? AND roomId IN (${placeholders})`;
+        const sql = `SELECT * FROM memories WHERE 'type' = ? AND agentId = ? AND roomId IN (${placeholders})`;
         const stmt = this.db.prepare(sql);
         const queryParams = [params.tableName, params.agentId, ...params.roomIds];
         console.log({ queryParams })
