@@ -1,4 +1,4 @@
-FROM node:23.1.0
+FROM node:23.3.0
 # Install pnpm globally
 RUN npm install -g pnpm@9.4.0
 
