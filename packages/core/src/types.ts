@@ -725,6 +725,7 @@ export interface IDatabaseAdapter {
     getMemoryById(id: UUID): Promise<Memory | null>;
 
     getMemoriesByRoomIds(params: {
+        tableName: string;
         agentId: UUID;
         roomIds: UUID[];
     }): Promise<Memory[]>;
