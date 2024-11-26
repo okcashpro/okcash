@@ -1,4 +1,4 @@
-import { Coinbase, Wallet, WalletData } from "@coinbase/coinbase-sdk";
+import { Coinbase } from "@coinbase/coinbase-sdk";
 import {
     composeContext,
     elizaLogger,
