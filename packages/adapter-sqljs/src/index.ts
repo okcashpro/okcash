@@ -18,8 +18,7 @@ import { Database } from "./types.ts";
 
 export class SqlJsDatabaseAdapter
     extends DatabaseAdapter<Database>
-    implements IDatabaseCacheAdapter
-{
+    implements IDatabaseCacheAdapter {
     constructor(db: Database) {
         super();
         this.db = db;
@@ -71,19 +70,17 @@ export class SqlJsDatabaseAdapter
     }
 
     async getMemoriesByRoomIds(params: {
+        agentId: UUID;
         roomIds: UUID[];
         tableName: string;
-        agentId?: UUID;
     }): Promise<Memory[]> {
         const placeholders = params.roomIds.map(() => "?").join(", ");
-        let sql = `SELECT * FROM memories WHERE type = ? AND roomId IN (${placeholders})`;
+        let sql = `SELECT * FROM memories WHERE 'type' = ? AND agentId = ? AND roomId IN (${placeholders})`;
         const stmt = this.db.prepare(sql);
-        const queryParams = [params.tableName, ...params.roomIds];
-        if (params.agentId) {
-            sql += " AND userId = ?";
-            queryParams.push(params.agentId);
-        }
+        const queryParams = [params.tableName, params.agentId, ...params.roomIds];
+        console.log({ queryParams })
         stmt.bind(queryParams);
+        console.log({ queryParams })
 
         const memories: Memory[] = [];
         while (stmt.step()) {
@@ -224,6 +221,7 @@ export class SqlJsDatabaseAdapter
             const similarMemories = await this.searchMemoriesByEmbedding(
                 memory.embedding,
                 {
+                    agentId: memory.agentId,
                     tableName,
                     roomId: memory.roomId,
                     match_threshold: 0.95, // 5% similarity threshold
@@ -256,6 +254,7 @@ export class SqlJsDatabaseAdapter
 
     async searchMemories(params: {
         tableName: string;
+        agentId: UUID;
         roomId: UUID;
         embedding: number[];
         match_threshold: number;
@@ -268,7 +267,7 @@ export class SqlJsDatabaseAdapter
             // TODO: Uncomment when we compile sql.js with vss
             // `, (1 - vss_distance_l2(embedding, ?)) AS similarity` +
             ` FROM memories
-  WHERE type = ?
+  WHERE type = ? AND agentId = ?
   AND roomId = ?`;
 
         if (params.unique) {
@@ -280,6 +279,7 @@ export class SqlJsDatabaseAdapter
         stmt.bind([
             // JSON.stringify(params.embedding),
             params.tableName,
+            params.agentId,
             params.roomId,
             // params.match_count,
         ]);
@@ -300,10 +300,10 @@ export class SqlJsDatabaseAdapter
     async searchMemoriesByEmbedding(
         _embedding: number[],
         params: {
+            agentId: UUID;
             match_threshold?: number;
             count?: number;
             roomId?: UUID;
-            agentId?: UUID;
             unique?: boolean;
             tableName: string;
         }
@@ -313,7 +313,7 @@ export class SqlJsDatabaseAdapter
             // TODO: Uncomment when we compile sql.js with vss
             // `, (1 - vss_distance_l2(embedding, ?)) AS similarity`+
             ` FROM memories
-        WHERE type = ?`;
+        WHERE type = ? AND agentId = ?`;
 
         if (params.unique) {
             sql += " AND `unique` = 1";
@@ -336,6 +336,7 @@ export class SqlJsDatabaseAdapter
         const bindings = [
             // JSON.stringify(embedding),
             params.tableName,
+            params.agentId,
         ];
         if (params.roomId) {
             bindings.push(params.roomId);
@@ -752,13 +753,13 @@ export class SqlJsDatabaseAdapter
 
         stmt.bind([params.key, params.agentId]);
 
-        let cached = undefined;
+        let cached: { value: string } | undefined = undefined;
         if (stmt.step()) {
             cached = stmt.getAsObject() as unknown as { value: string };
         }
         stmt.free();
 
-        return cached.value;
+        return cached?.value ?? undefined;
     }
 
     async setCache(params: {
@@ -785,6 +786,7 @@ export class SqlJsDatabaseAdapter
             const stmt = this.db.prepare(sql);
             stmt.run([params.key, params.agentId]);
             stmt.free();
+            return true;
         } catch (error) {
             console.log("Error removing cache", error);
             return false;

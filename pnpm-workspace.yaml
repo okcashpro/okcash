@@ -2,4 +2,5 @@ packages:
     - "docs"
     - "packages/*"
     - "client"
+    - "web-agent"
     - "agent"

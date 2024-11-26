@@ -25,3 +25,29 @@ export const isChargeContent = (object: any): object is ChargeContent => {
     console.error("Invalid content: ", object);
     return false;
 };
+
+export const TransferSchema = z.object({
+    network: z.string().toLowerCase(),
+    receivingAddresses: z.array(z.string()),
+    transferAmount: z.number(),
+    assetId: z.string().toLowerCase(),
+});
+
+export interface TransferContent {
+    network: string;
+    receivingAddresses: string[];
+    transferAmount: number;
+    assetId: string;
+}
+
+export const isTransferContent = (object: any): object is TransferContent => {
+    return TransferSchema.safeParse(object).success;
+};
+
+export type Transaction = {
+    address: string;
+    amount: number;
+    status: string;
+    errorCode: string | null;
+    transactionUrl: string | null;
+};

@@ -16,6 +16,7 @@ import {
 } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import { settings } from "@ai16z/eliza";
+import { createApiRouter } from "./api.ts";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export const messageHandlerTemplate =
@@ -67,6 +68,9 @@ export class DirectClient {
 
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
+
+        const apiRouter = createApiRouter(this.agents);
+        this.app.use(apiRouter);
 
         // Define an interface that extends the Express Request interface
         interface CustomRequest extends ExpressRequest {
@@ -264,6 +268,56 @@ export class DirectClient {
                     }
                 }
                 res.json({ images: imagesRes });
+            }
+        );
+
+        this.app.post(
+            "/fine-tune",
+            async (req: express.Request, res: express.Response) => {
+                try {
+                    const response = await fetch('https://api.bageldb.ai/api/v1/asset', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-API-KEY': `${process.env.BAGEL_API_KEY}`
+                        },
+                        body: JSON.stringify(req.body)
+                    });
+
+                    const data = await response.json();
+                    res.json(data);
+                } catch (error) {
+                    res.status(500).json({ 
+                        error: 'Failed to forward request to BagelDB',
+                        details: error.message 
+                    });
+                }
+            }
+        );
+        this.app.get(
+            "/fine-tune/:assetId",
+            async (req: express.Request, res: express.Response) => {
+                const assetId = req.params.assetId;
+                try {
+                    const response = await fetch(`https://api.bageldb.ai/api/v1/asset/${assetId}/download`, {
+                        headers: {
+                            'X-API-KEY': `${process.env.BAGEL_API_KEY}`
+                        }
+                    });
+                    
+                    // Forward the content-type header
+                    res.set('Content-Type', response.headers.get('content-type'));
+                    
+                    // Convert ReadableStream to Buffer and send
+                    const arrayBuffer = await response.arrayBuffer();
+                    const buffer = Buffer.from(arrayBuffer);
+                    res.send(buffer);
+                } catch (error) {
+                    res.status(500).json({ 
+                        error: 'Failed to forward request to BagelDB',
+                        details: error.message 
+                    });
+                }
             }
         );
     }

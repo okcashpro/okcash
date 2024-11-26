@@ -116,5 +116,5 @@ export function preprocess(content: string): string {
 export default {
     get,
     set,
-    process,
+    preprocess,
 };

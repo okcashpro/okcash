@@ -1,8 +1,8 @@
-[@ai16z/eliza v1.0.0](../index.md) / Goal
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Goal
 
 # Interface: Goal
 
-Represents a goal, which is a higher-level aim composed of one or more objectives. Goals are tracked to measure progress or achievements within the conversation or system.
+Represents a high-level goal composed of objectives
 
 ## Properties
 
@@ -10,56 +10,68 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 > `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Optional unique identifier
+
 #### Defined in
 
-[packages/core/src/types.ts:66](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L66)
+[packages/core/src/types.ts:110](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L110)
 
----
+***
 
 ### roomId
 
 > **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+Room ID where goal exists
+
 #### Defined in
 
-[packages/core/src/types.ts:67](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L67)
+[packages/core/src/types.ts:113](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L113)
 
----
+***
 
 ### userId
 
 > **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
+User ID of goal owner
+
 #### Defined in
 
-[packages/core/src/types.ts:68](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L68)
+[packages/core/src/types.ts:116](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L116)
 
----
+***
 
 ### name
 
 > **name**: `string`
 
+Name/title of the goal
+
 #### Defined in
 
-[packages/core/src/types.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L69)
+[packages/core/src/types.ts:119](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L119)
 
----
+***
 
 ### status
 
 > **status**: [`GoalStatus`](../enumerations/GoalStatus.md)
 
+Current status
+
 #### Defined in
 
-[packages/core/src/types.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L70)
+[packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L122)
 
----
+***
 
 ### objectives
 
 > **objectives**: [`Objective`](Objective.md)[]
 
+Component objectives
+
 #### Defined in
 
-[packages/core/src/types.ts:71](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L71)
+[packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L125)
