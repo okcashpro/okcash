@@ -28,7 +28,7 @@ export class WalletProvider {
     async getWalletPortfolio(): Promise<TokenBalances> {
         const cacheKey = `walletPortfolio-${this.runtime.agentId}`;
         const cachedValues = await this.runtime.cacheManager.get<TokenBalances>(
-            cacheKey,
+            cacheKey
         );
         if (cachedValues) {
             elizaLogger.debug("Using cached data for getWalletPortfolio()");
@@ -54,9 +54,8 @@ export class WalletProvider {
 
     async getTokenUsdValues(): Promise<CoingeckoPrices> {
         const cacheKey = "tokenUsdValues";
-        const cachedValues = await this.runtime.cacheManager.get<
-            CoingeckoPrices
-        >(cacheKey);
+        const cachedValues =
+            await this.runtime.cacheManager.get<CoingeckoPrices>(cacheKey);
         if (cachedValues) {
             elizaLogger.debug("Using cached data for getTokenUsdValues()");
             return cachedValues;
@@ -67,7 +66,7 @@ export class WalletProvider {
             .join(",");
 
         const coingeckoPrices = await fetchWithRetry<CoingeckoPrices>(
-            `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoIds}&vs_currencies=usd`,
+            `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoIds}&vs_currencies=usd`
         );
 
         await this.runtime.cacheManager.set(cacheKey, coingeckoPrices, {
@@ -82,7 +81,7 @@ const walletProvider: Provider = {
     get: async (
         runtime: IAgentRuntime,
         _message: Memory,
-        _state?: State,
+        _state?: State
     ): Promise<string> => {
         const provider = new WalletProvider(runtime);
         let walletPortfolio: TokenBalances | null = null;
@@ -101,19 +100,17 @@ const walletProvider: Provider = {
                 const rawBalance = walletPortfolio[token.address];
                 if (rawBalance === undefined) return null;
 
-                const decimalBalance = Number(rawBalance) /
-                    Math.pow(10, token.decimals);
+                const decimalBalance =
+                    Number(rawBalance) / Math.pow(10, token.decimals);
                 const price = tokenUsdValues[token.coingeckoId]?.usd ?? 0;
                 const usdValue = decimalBalance * price;
 
                 if (decimalBalance === 0 && usdValue === 0) return null;
 
-                return `${symbol.padEnd(9)}| ${
-                    decimalBalance
-                        .toFixed(18)
-                        .replace(/\.?0+$/, "")
-                        .padEnd(20)
-                }| ${usdValue.toFixed(2)}`;
+                return `${symbol.padEnd(9)}| ${decimalBalance
+                    .toFixed(18)
+                    .replace(/\.?0+$/, "")
+                    .padEnd(20)}| ${usdValue.toFixed(2)}`;
             })
             .filter((row): row is string => row !== null);
 

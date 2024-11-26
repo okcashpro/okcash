@@ -76,8 +76,7 @@ export const PORTFOLIO_TOKENS = {
         coingeckoId: "bitcoin",
         decimals: 8,
     },
-},
-
+};
 
 export class TokenProvider {
     private cache: Cache;
