@@ -168,7 +168,7 @@ export class FarcasterClient {
 
     async getTimeline(request: FidRequest): Promise<{
         timeline: Cast[];
-        nextPageToken?: Uint8Array<ArrayBufferLike> | undefined;
+        nextPageToken?: Uint8Array | undefined;
     }> {
         const timeline: Cast[] = [];
 
