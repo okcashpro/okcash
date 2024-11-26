@@ -77,3 +77,25 @@ Provide the details in the following JSON format:
 Here are the recent user messages for context:
 {{recentMessages}}
 `;
+
+export const tradeTemplate = `
+Extract the following details for processing a trade using the Coinbase SDK:
+- **network** (string): The blockchain network to use (e.g., base, sol, eth, arb, pol).
+- **amount** (number): The amount to trade (in the smallest unit, e.g., Wei for ETH).
+- **sourceAsset** (string): The asset ID to trade from (ETH, SOL, USDC).
+- **targetAsset** (string): The asset ID to trade to (ETH, SOL, USDC).
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "network": "<network>",
+    "amount": <amount>,
+    "sourceAsset": "<source_asset_id>",
+    "targetAsset": "<target_asset_id>"
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
