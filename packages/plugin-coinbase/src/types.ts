@@ -51,3 +51,32 @@ export type Transaction = {
     errorCode: string | null;
     transactionUrl: string | null;
 };
+
+export const TradeSchema = z.object({
+    network: z.string().toLowerCase(),
+    amount: z.number(),
+    sourceAsset: z.string().toLowerCase(),
+    targetAsset: z.string().toLowerCase(),
+    leverage: z.number().optional(), // Optional leverage for leveraged trades
+});
+
+export interface TradeContent {
+    network: string;
+    amount: number;
+    sourceAsset: string;
+    targetAsset: string;
+}
+
+export const isTradeContent = (object: any): object is TradeContent => {
+    return TradeSchema.safeParse(object).success;
+};
+
+export type TradeTransaction = {
+    network: string;
+    amount: number;
+    sourceAsset: string;
+    targetAsset: string;
+    status: string;
+    errorCode: string | null;
+    transactionUrl: string | null;
+};
