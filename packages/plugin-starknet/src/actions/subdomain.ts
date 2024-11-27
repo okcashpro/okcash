@@ -45,7 +45,7 @@ export function isSubdomainCreation(
         isStarkDomain(content.subdomain) &&
         content.subdomain.split(".").length === 3;
 
-    if (!validTokenAddress) {
+    if (!validStarkName) {
         return false;
     }
     return true;
