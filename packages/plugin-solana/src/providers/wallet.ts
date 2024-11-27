@@ -2,12 +2,14 @@ import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
+import axios from "axios";
 // Provider configuration
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
     MAX_RETRIES: 3,
     RETRY_DELAY: 2000,
     DEFAULT_RPC: "https://api.mainnet-beta.solana.com",
+    GRAPHQL_ENDPOINT: "https://graph.codex.io/graphql",
     TOKEN_ADDRESSES: {
         SOL: "So11111111111111111111111111111111111111112",
         BTC: "3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh",
@@ -153,6 +155,105 @@ export class WalletProvider {
                 ),
             };
             this.cache.set(cacheKey, portfolio);
+            return portfolio;
+        } catch (error) {
+            console.error("Error fetching portfolio:", error);
+            throw error;
+        }
+    }
+
+    async fetchPortfolioValueCodex(runtime): Promise<WalletPortfolio> {
+        try {
+            const cacheKey = `portfolio-${this.walletPublicKey.toBase58()}`;
+            const cachedValue = await this.cache.get<WalletPortfolio>(cacheKey);
+
+            if (cachedValue) {
+                console.log("Cache hit for fetchPortfolioValue");
+                return cachedValue;
+            }
+            console.log("Cache miss for fetchPortfolioValue");
+
+            const query = `
+              query Balances($walletId: String!, $cursor: String) {
+                balances(input: { walletId: $walletId, cursor: $cursor }) {
+                  cursor
+                  items {
+                    walletId
+                    tokenId
+                    balance
+                    shiftedBalance
+                  }
+                }
+              }
+            `;
+
+            const variables = {
+                walletId: `${this.walletPublicKey.toBase58()}:${1399811149}`,
+                cursor: null,
+            };
+
+            const response = await axios.post(
+                PROVIDER_CONFIG.GRAPHQL_ENDPOINT,
+                {
+                    query,
+                    variables,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization:
+                            runtime.getSetting("CODEX_API_KEY", "") || "",
+                    },
+                }
+            );
+
+            const data = response.data?.data?.balances?.items;
+
+            if (!data || data.length === 0) {
+                console.error("No portfolio data available", data);
+                throw new Error("No portfolio data available");
+            }
+
+            // Fetch token prices
+            const prices = await this.fetchPrices(runtime);
+            const solPriceInUSD = new BigNumber(prices.solana.usd.toString());
+
+            // Reformat items
+            const items: Item[] = data.map((item: any) => {
+                return {
+                    name: "Unknown",
+                    address: item.tokenId.split(":")[0],
+                    symbol: item.tokenId.split(":")[0],
+                    decimals: 6,
+                    balance: item.balance,
+                    uiAmount: item.shiftedBalance.toString(),
+                    priceUsd: "",
+                    valueUsd: "",
+                    valueSol: "",
+                };
+            });
+
+            // Calculate total portfolio value
+            const totalUsd = items.reduce(
+                (sum, item) => sum.plus(new BigNumber(item.valueUsd)),
+                new BigNumber(0)
+            );
+
+            const totalSol = totalUsd.div(solPriceInUSD);
+
+            const portfolio: WalletPortfolio = {
+                totalUsd: totalUsd.toFixed(6),
+                totalSol: totalSol.toFixed(6),
+                items: items.sort((a, b) =>
+                    new BigNumber(b.valueUsd)
+                        .minus(new BigNumber(a.valueUsd))
+                        .toNumber()
+                ),
+            };
+
+            // Cache the portfolio for future requests
+            await this.cache.set(cacheKey, portfolio, 60 * 1000); // Cache for 1 minute
+
             return portfolio;
         } catch (error) {
             console.error("Error fetching portfolio:", error);
