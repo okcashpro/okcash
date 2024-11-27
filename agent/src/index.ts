@@ -303,6 +303,7 @@ function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
 }
 
 async function startAgent(character: Character, directClient) {
+    let db: IDatabaseAdapter & IDatabaseCacheAdapter;
     try {
         character.id ??= stringToUuid(character.name);
         character.username ??= character.name;
@@ -314,7 +315,7 @@ async function startAgent(character: Character, directClient) {
             fs.mkdirSync(dataDir, { recursive: true });
         }
 
-        const db = initializeDatabase(dataDir);
+        db = initializeDatabase(dataDir);
 
         await db.init();
 
@@ -334,6 +335,9 @@ async function startAgent(character: Character, directClient) {
             error
         );
         console.error(error);
+        if (db) {
+            await db.close();
+        }
         throw error;
     }
 }

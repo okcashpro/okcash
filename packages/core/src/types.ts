@@ -297,9 +297,9 @@ export interface State {
     formattedConversation?: string;
 
     /** Optional formatted knowledge */
-    knowledge?: string,
+    knowledge?: string;
     /** Optional knowledge data */
-    knowledgeData?: KnowledgeItem[],
+    knowledgeData?: KnowledgeItem[];
 
     /** Additional dynamic properties */
     [key: string]: unknown;
@@ -714,7 +714,10 @@ export interface IDatabaseAdapter {
     db: any;
 
     /** Optional initialization */
-    init?(): Promise<void>;
+    init(): Promise<void>;
+
+    /** Close database connection */
+    close(): Promise<void>;
 
     /** Get account by ID */
     getAccountById(userId: UUID): Promise<Account | null>;

@@ -100,6 +100,14 @@ export class SupabaseDatabaseAdapter extends DatabaseAdapter {
         this.supabase = createClient(supabaseUrl, supabaseKey);
     }
 
+    async init() {
+        // noop
+    }
+
+    async close() {
+        // noop
+    }
+
     async getMemoriesByRoomIds(params: {
         roomIds: UUID[];
         agentId?: UUID;
