@@ -326,12 +326,27 @@ export class VoiceManager extends EventEmitter {
                 }
             }
 
-            // Set up member monitoring
-            for (const [, member] of channel.members) {
-                if (!member.user.bot) {
-                    await this.monitorMember(member, channel);
+            connection.receiver.speaking.on("start", async (userId: string) => {
+                let user = channel.members.get(userId);
+                if (!user) {
+                    try {
+                        user = await channel.guild.members.fetch(userId);
+                    } catch (error) {
+                        console.error("Failed to fetch user:", error);
+                    }
                 }
-            }
+                if (user && !user?.user.bot) {
+                    this.monitorMember(user as GuildMember, channel);
+                    this.streams.get(userId)?.emit("speakingStarted");
+                }
+            });
+    
+            connection.receiver.speaking.on("end", async (userId: string) => {
+                const user = channel.members.get(userId);
+                if (!user?.user.bot) {
+                    this.streams.get(userId)?.emit("speakingStopped");
+                }
+            });
         } catch (error) {
             elizaLogger.log("Failed to establish voice connection:", error);
             connection.destroy();
