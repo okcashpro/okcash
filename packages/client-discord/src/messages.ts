@@ -521,86 +521,49 @@ export class MessageManager {
                                 message.id + "-" + this.runtime.agentId
                             );
                         }
-                        if (message.channel.type === ChannelType.GuildVoice) {
-                            // For voice channels, use text-to-speech
+                        const messages = await sendMessageInChunks(
+                            message.channel as TextChannel,
+                            content.text,
+                            message.id,
+                            files
+                        );
 
-                            const speechService =
-                                this.runtime.getService<ISpeechService>(
-                                    ServiceType.SPEECH_GENERATION
-                                );
-
-                            if (!speechService) {
-                                throw new Error(
-                                    "Speech generation service not found"
-                                );
+                        const memories: Memory[] = [];
+                        for (const m of messages) {
+                            let action = content.action;
+                            // If there's only one message or it's the last message, keep the original action
+                            // For multiple messages, set all but the last to 'CONTINUE'
+                            if (
+                                messages.length > 1 &&
+                                m !== messages[messages.length - 1]
+                            ) {
+                                action = "CONTINUE";
                             }
 
-                            const audioStream = await speechService.generate(
-                                this.runtime,
-                                content.text
-                            );
-
-                            await this.voiceManager.playAudioStream(
-                                userId,
-                                audioStream
-                            );
                             const memory: Memory = {
                                 id: stringToUuid(
-                                    message.id + "-" + this.runtime.agentId
+                                    m.id + "-" + this.runtime.agentId
                                 ),
                                 userId: this.runtime.agentId,
                                 agentId: this.runtime.agentId,
-                                content,
+                                content: {
+                                    ...content,
+                                    action,
+                                    inReplyTo: messageId,
+                                    url: m.url,
+                                },
                                 roomId,
                                 embedding: embeddingZeroVector,
+                                createdAt: m.createdTimestamp,
                             };
-                            return [memory];
-                        } else {
-                            // For text channels, send the message
-                            const messages = await sendMessageInChunks(
-                                message.channel as TextChannel,
-                                content.text,
-                                message.id,
-                                files
-                            );
-
-                            const memories: Memory[] = [];
-                            for (const m of messages) {
-                                let action = content.action;
-                                // If there's only one message or it's the last message, keep the original action
-                                // For multiple messages, set all but the last to 'CONTINUE'
-                                if (
-                                    messages.length > 1 &&
-                                    m !== messages[messages.length - 1]
-                                ) {
-                                    action = "CONTINUE";
-                                }
-
-                                const memory: Memory = {
-                                    id: stringToUuid(
-                                        m.id + "-" + this.runtime.agentId
-                                    ),
-                                    userId: this.runtime.agentId,
-                                    agentId: this.runtime.agentId,
-                                    content: {
-                                        ...content,
-                                        action,
-                                        inReplyTo: messageId,
-                                        url: m.url,
-                                    },
-                                    roomId,
-                                    embedding: embeddingZeroVector,
-                                    createdAt: m.createdTimestamp,
-                                };
-                                memories.push(memory);
-                            }
-                            for (const m of memories) {
-                                await this.runtime.messageManager.createMemory(
-                                    m
-                                );
-                            }
-                            return memories;
+                            memories.push(memory);
                         }
+                        for (const m of memories) {
+                            await this.runtime.messageManager.createMemory(
+                                m
+                            );
+                        }
+                        return memories;
                     } catch (error) {
                         console.error("Error sending message:", error);
                         return [];
