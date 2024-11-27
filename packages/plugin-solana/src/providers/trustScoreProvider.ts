@@ -77,7 +77,7 @@ export class TrustScoreManager {
         this.backendToken = runtime.getSetting("BACKEND_TOKEN");
         this.simulationSellingService = new SimulationSellingService(
             runtime,
-            this.tokenProvider
+            this.trustScoreDb
         );
     }
 
