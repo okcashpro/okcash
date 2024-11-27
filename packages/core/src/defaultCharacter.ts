@@ -5,7 +5,7 @@ export const defaultCharacter: Character = {
     username: "eliza",
     plugins: [],
     clients: [],
-    modelProvider: ModelProviderName.OPENAI,
+    modelProvider: ModelProviderName.LLAMALOCAL,
     settings: {
         secrets: {},
         voice: {

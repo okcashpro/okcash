@@ -1,31 +1,24 @@
 import {
+    type Action,
     ActionExample,
+    composeContext,
     elizaLogger,
+    generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-    type Action,
 } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
 import { Percent } from "@uniswap/sdk-core";
 import {
     getStarknetAccount,
     getStarknetProvider,
     parseFormatedAmount,
     parseFormatedPercentage,
-    validateSettings,
 } from "../utils/index.ts";
 import { DeployData, Factory } from "@unruggable_starknet/core";
-import {
-    AMM,
-    EKUBO_TICK_SPACING,
-    LiquidityType,
-    QUOTE_TOKEN_SYMBOL,
-    RECOMMENDED_EKUBO_FEES,
-} from "@unruggable_starknet/core/constants";
+import { AMM, QUOTE_TOKEN_SYMBOL } from "@unruggable_starknet/core/constants";
 import { ACCOUNTS, TOKENS } from "../utils/constants.ts";
 import { validateStarknetConfig } from "../enviroment.ts";
 
@@ -69,7 +62,7 @@ Example response:
 
 Extract the following information about the requested token deployment:
 - Token Name
-- Token Symbol  
+- Token Symbol
 - Token Owner
 - Token initial supply
 
@@ -82,7 +75,7 @@ export const deployToken: Action = {
         "STARKNET_DEPLOY_MEMECOIN",
         "STARKNET_CREATE_MEMECOIN",
     ],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         await validateStarknetConfig(runtime);
         return true;
     },

@@ -10,6 +10,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { TokenProvider } from "./token.ts";
 import { WalletProvider } from "./wallet.ts";
+import { SimulationSellingService } from "./simulationSellingService.ts";
 import {
     TrustScoreDatabase,
     RecommenderMetrics,
@@ -19,6 +20,7 @@ import {
 } from "@ai16z/plugin-trustdb";
 import { settings } from "@ai16z/eliza";
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { v4 as uuidv4 } from "uuid";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;
 interface TradeData {
@@ -29,7 +31,7 @@ interface sellDetails {
     sell_amount: number;
     sell_recommender_id: string | null;
 }
-interface RecommendationGroup {
+interface _RecommendationGroup {
     recommendation: any;
     trustScore: number;
 }
@@ -52,6 +54,7 @@ interface TokenRecommendationSummary {
 export class TrustScoreManager {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
+    private simulationSellingService: SimulationSellingService;
     private connection: Connection;
     private baseMint: PublicKey;
     private DECAY_RATE = 0.95;
@@ -72,6 +75,10 @@ export class TrustScoreManager {
         );
         this.backend = runtime.getSetting("BACKEND_URL");
         this.backendToken = runtime.getSetting("BACKEND_TOKEN");
+        this.simulationSellingService = new SimulationSellingService(
+            runtime,
+            this.tokenProvider
+        );
     }
 
     //getRecommenederBalance
@@ -146,13 +153,16 @@ export class TrustScoreManager {
                 liquidityChange24h: 0,
                 holderChange24h:
                     processedData.tradeData.unique_wallet_24h_change_percent,
-                rugPull: false, // TODO: Implement rug pull detection
-                isScam: false, // TODO: Implement scam detection
-                marketCapChange24h: 0, // TODO: Implement market cap change
+                rugPull: false,
+                isScam: processedData.tokenCodex.isScam,
+                marketCapChange24h: 0,
                 sustainedGrowth: sustainedGrowth,
                 rapidDump: isRapidDump,
                 suspiciousVolume: suspiciousVolume,
                 validationTrust: validationTrustScore,
+                balance: balance,
+                initialMarketCap:
+                    processedData.dexScreenerData.pairs[0]?.marketCap || 0,
                 lastUpdated: new Date(),
             },
             recommenderMetrics: {
@@ -338,6 +348,7 @@ export class TrustScoreManager {
         runtime: IAgentRuntime,
         tokenAddress: string,
         recommenderId: string,
+        username: string,
         data: TradeData
     ): Promise<TradePerformance> {
         const recommender =
@@ -351,10 +362,15 @@ export class TrustScoreManager {
             new PublicKey(Wallet!)
         );
 
+        let tokensBalance = 0;
         const prices = await wallet.fetchPrices(runtime);
         const solPrice = prices.solana.usd;
         const buySol = data.buy_amount / parseFloat(solPrice);
         const buy_value_usd = data.buy_amount * processedData.tradeData.price;
+        const token = await this.tokenProvider.fetchTokenTradeData();
+        const tokenCodex = await this.tokenProvider.fetchTokenCodex();
+        const tokenPrice = token.price;
+        tokensBalance = buy_value_usd / tokenPrice;
 
         const creationData = {
             token_address: tokenAddress,
@@ -383,8 +399,63 @@ export class TrustScoreManager {
             rapidDump: false,
         };
         this.trustScoreDb.addTradePerformance(creationData, data.is_simulation);
+        // generate unique uuid for each TokenRecommendation
+        const tokenUUId = uuidv4();
+        const tokenRecommendation: TokenRecommendation = {
+            id: tokenUUId,
+            recommenderId: recommenderId,
+            tokenAddress: tokenAddress,
+            timestamp: new Date(),
+            initialMarketCap:
+                processedData.dexScreenerData.pairs[0]?.marketCap || 0,
+            initialLiquidity:
+                processedData.dexScreenerData.pairs[0]?.liquidity?.usd || 0,
+            initialPrice: processedData.tradeData.price,
+        };
+        this.trustScoreDb.addTokenRecommendation(tokenRecommendation);
+
+        this.trustScoreDb.upsertTokenPerformance({
+            tokenAddress: tokenAddress,
+            priceChange24h: processedData.tradeData.price_change_24h_percent,
+            volumeChange24h: processedData.tradeData.volume_24h,
+            trade_24h_change: processedData.tradeData.trade_24h_change_percent,
+            liquidity:
+                processedData.dexScreenerData.pairs[0]?.liquidity.usd || 0,
+            liquidityChange24h: 0,
+            holderChange24h:
+                processedData.tradeData.unique_wallet_24h_change_percent,
+            rugPull: false,
+            isScam: tokenCodex.isScam,
+            marketCapChange24h: 0,
+            sustainedGrowth: false,
+            rapidDump: false,
+            suspiciousVolume: false,
+            validationTrust: 0,
+            balance: tokensBalance,
+            initialMarketCap:
+                processedData.dexScreenerData.pairs[0]?.marketCap || 0,
+            lastUpdated: new Date(),
+        });
+
+        if (data.is_simulation) {
+            // If the trade is a simulation update the balance
+            this.trustScoreDb.updateTokenBalance(tokenAddress, tokensBalance);
+            // generate some random hash for simulations
+            const hash = Math.random().toString(36).substring(7);
+            const transaction = {
+                tokenAddress: tokenAddress,
+                type: "buy" as "buy" | "sell",
+                transactionHash: hash,
+                amount: data.buy_amount,
+                price: processedData.tradeData.price,
+                isSimulation: true,
+                timestamp: new Date().toISOString(),
+            };
+            this.trustScoreDb.addTransaction(transaction);
+        }
+        this.simulationSellingService.processTokenPerformance(tokenAddress);
         // api call to update trade performance
-        this.createTradeInBe(tokenAddress, recommenderId, data);
+        this.createTradeInBe(tokenAddress, recommenderId, username, data);
         return creationData;
     }
 
@@ -395,6 +466,7 @@ export class TrustScoreManager {
     async createTradeInBe(
         tokenAddress: string,
         recommenderId: string,
+        username: string,
         data: TradeData,
         retries = 3,
         delayMs = 2000
@@ -413,6 +485,7 @@ export class TrustScoreManager {
                             tokenAddress: tokenAddress,
                             tradeData: data,
                             recommenderId: recommenderId,
+                            username: username,
                         }),
                     }
                 );
@@ -507,6 +580,25 @@ export class TrustScoreManager {
             sellDetailsData,
             isSimulation
         );
+        if (isSimulation) {
+            // If the trade is a simulation update the balance
+            const oldBalance = this.trustScoreDb.getTokenBalance(tokenAddress);
+            const tokenBalance = oldBalance - sellDetails.sell_amount;
+            this.trustScoreDb.updateTokenBalance(tokenAddress, tokenBalance);
+            // generate some random hash for simulations
+            const hash = Math.random().toString(36).substring(7);
+            const transaction = {
+                tokenAddress: tokenAddress,
+                type: "sell" as "buy" | "sell",
+                transactionHash: hash,
+                amount: sellDetails.sell_amount,
+                price: processedData.tradeData.price,
+                isSimulation: true,
+                timestamp: new Date().toISOString(),
+            };
+            this.trustScoreDb.addTransaction(transaction);
+        }
+
         return sellDetailsData;
     }
 
@@ -605,7 +697,7 @@ export const trustScoreProvider: Provider = {
     async get(
         runtime: IAgentRuntime,
         message: Memory,
-        state?: State
+        _state?: State
     ): Promise<string> {
         try {
             const trustScoreDb = new TrustScoreDatabase(

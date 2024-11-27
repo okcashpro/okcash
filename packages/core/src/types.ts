@@ -187,6 +187,7 @@ export type Model = {
  */
 export type Models = {
     [ModelProviderName.OPENAI]: Model;
+    [ModelProviderName.ETERNALAI]: Model;
     [ModelProviderName.ANTHROPIC]: Model;
     [ModelProviderName.GROK]: Model;
     [ModelProviderName.GROQ]: Model;
@@ -205,6 +206,7 @@ export type Models = {
  */
 export enum ModelProviderName {
     OPENAI = "openai",
+    ETERNALAI = "eternalai",
     ANTHROPIC = "anthropic",
     GROK = "grok",
     GROQ = "groq",
@@ -293,6 +295,11 @@ export interface State {
 
     /** Optional formatted conversation */
     formattedConversation?: string;
+
+    /** Optional formatted knowledge */
+    knowledge?: string,
+    /** Optional knowledge data */
+    knowledgeData?: KnowledgeItem[],
 
     /** Additional dynamic properties */
     [key: string]: unknown;
@@ -618,6 +625,9 @@ export type Character = {
         twitterPostTemplate?: string;
         twitterMessageHandlerTemplate?: string;
         twitterShouldRespondTemplate?: string;
+        farcasterPostTemplate?: string;
+        farcasterMessageHandlerTemplate?: string;
+        farcasterShouldRespondTemplate?: string;
         telegramMessageHandlerTemplate?: string;
         telegramShouldRespondTemplate?: string;
         discordVoiceHandlerTemplate?: string;
@@ -658,6 +668,7 @@ export type Character = {
     /** Optional configuration */
     settings?: {
         secrets?: { [key: string]: string };
+        buttplug?: boolean;
         voice?: {
             model?: string;
             url?: string;
@@ -717,7 +728,7 @@ export interface IDatabaseAdapter {
         count?: number;
         unique?: boolean;
         tableName: string;
-        agentId?: UUID;
+        agentId: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]>;
@@ -725,7 +736,8 @@ export interface IDatabaseAdapter {
     getMemoryById(id: UUID): Promise<Memory | null>;
 
     getMemoriesByRoomIds(params: {
-        agentId?: UUID;
+        tableName: string;
+        agentId: UUID;
         roomIds: UUID[];
     }): Promise<Memory[]>;
 
@@ -749,6 +761,7 @@ export interface IDatabaseAdapter {
 
     searchMemories(params: {
         tableName: string;
+        agentId: UUID;
         roomId: UUID;
         embedding: number[];
         match_threshold: number;
@@ -790,6 +803,7 @@ export interface IDatabaseAdapter {
     ): Promise<number>;
 
     getGoals(params: {
+        agentId: UUID;
         roomId: UUID;
         userId?: UUID | null;
         onlyInProgress?: boolean;
@@ -869,7 +883,6 @@ export interface IMemoryManager {
         roomId: UUID;
         count?: number;
         unique?: boolean;
-        agentId?: UUID;
         start?: number;
         end?: number;
     }): Promise<Memory[]>;
@@ -879,12 +892,7 @@ export interface IMemoryManager {
     ): Promise<{ embedding: number[]; levenshtein_score: number }[]>;
 
     getMemoryById(id: UUID): Promise<Memory | null>;
-
-    getMemoriesByRoomIds(params: {
-        roomIds: UUID[];
-        agentId?: UUID;
-    }): Promise<Memory[]>;
-
+    getMemoriesByRoomIds(params: { roomIds: UUID[] }): Promise<Memory[]>;
     searchMemoriesByEmbedding(
         embedding: number[],
         opts: {
@@ -892,7 +900,6 @@ export interface IMemoryManager {
             count?: number;
             roomId: UUID;
             unique?: boolean;
-            agentId?: UUID;
         }
     ): Promise<Memory[]>;
 
@@ -952,7 +959,10 @@ export interface IAgentRuntime {
 
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;
+    documentsManager: IMemoryManager;
+    knowledgeManager: IMemoryManager;
     loreManager: IMemoryManager;
+
     cacheManager: ICacheManager;
 
     services: Map<ServiceType, Service>;
@@ -1033,7 +1043,6 @@ export interface ITranscriptionService extends Service {
 
 export interface IVideoService extends Service {
     isVideoUrl(url: string): boolean;
-    processVideo(url: string): Promise<Media>;
     fetchVideoInfo(url: string): Promise<Media>;
     downloadVideo(videoInfo: Media): Promise<string>;
     processVideo(url: string, runtime: IAgentRuntime): Promise<Media>;
@@ -1086,6 +1095,7 @@ export enum ServiceType {
     BROWSER = "browser",
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
+    BUTTPLUG = "buttplug",
 }
 
 export enum LoggingLevel {

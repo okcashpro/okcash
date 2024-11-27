@@ -3,7 +3,6 @@ import { generateObjectArray } from "@ai16z/eliza";
 import { MemoryManager } from "@ai16z/eliza";
 import {
     ActionExample,
-    Content,
     IAgentRuntime,
     Memory,
     ModelClass,

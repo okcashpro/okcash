@@ -21,10 +21,12 @@ import {
     NoSubscriberBehavior,
     StreamType,
     VoiceConnection,
+    VoiceConnectionStatus,
     createAudioPlayer,
     createAudioResource,
     getVoiceConnection,
     joinVoiceChannel,
+    entersState,
 } from "@discordjs/voice";
 import {
     BaseGuildVoiceChannel,
@@ -230,6 +232,7 @@ export class VoiceManager extends EventEmitter {
                 console.error("Error leaving voice channel:", error);
             }
         }
+
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
@@ -238,38 +241,103 @@ export class VoiceManager extends EventEmitter {
             selfMute: false,
         });
 
-        const me = channel.guild.members.me;
-        if (me?.voice && me.permissions.has("DeafenMembers")) {
-            await me.voice.setDeaf(false);
-            await me.voice.setMute(false);
-        } else {
-            elizaLogger.log("Bot lacks permission to modify voice state");
+        try {
+            // Wait for either Ready or Signalling state
+            await Promise.race([
+                entersState(connection, VoiceConnectionStatus.Ready, 20_000),
+                entersState(
+                    connection,
+                    VoiceConnectionStatus.Signalling,
+                    20_000
+                ),
+            ]);
+
+            // Log connection success
+            elizaLogger.log(
+                `Voice connection established in state: ${connection.state.status}`
+            );
+
+            // Set up ongoing state change monitoring
+            connection.on("stateChange", async (oldState, newState) => {
+                elizaLogger.log(
+                    `Voice connection state changed from ${oldState.status} to ${newState.status}`
+                );
+
+                if (newState.status === VoiceConnectionStatus.Disconnected) {
+                    elizaLogger.log("Handling disconnection...");
+
+                    try {
+                        // Try to reconnect if disconnected
+                        await Promise.race([
+                            entersState(
+                                connection,
+                                VoiceConnectionStatus.Signalling,
+                                5_000
+                            ),
+                            entersState(
+                                connection,
+                                VoiceConnectionStatus.Connecting,
+                                5_000
+                            ),
+                        ]);
+                        // Seems to be reconnecting to a new channel
+                        elizaLogger.log("Reconnecting to channel...");
+                    } catch (e) {
+                        // Seems to be a real disconnect, destroy and cleanup
+                        elizaLogger.log(
+                            "Disconnection confirmed - cleaning up..." + e
+                        );
+                        connection.destroy();
+                        this.connections.delete(channel.id);
+                    }
+                } else if (
+                    newState.status === VoiceConnectionStatus.Destroyed
+                ) {
+                    this.connections.delete(channel.id);
+                } else if (
+                    !this.connections.has(channel.id) &&
+                    (newState.status === VoiceConnectionStatus.Ready ||
+                        newState.status === VoiceConnectionStatus.Signalling)
+                ) {
+                    this.connections.set(channel.id, connection);
+                }
+            });
+
+            connection.on("error", (error) => {
+                elizaLogger.log("Voice connection error:", error);
+                // Don't immediately destroy - let the state change handler deal with it
+                elizaLogger.log(
+                    "Connection error - will attempt to recover..."
+                );
+            });
+
+            // Store the connection
+            this.connections.set(channel.id, connection);
+
+            // Continue with voice state modifications
+            const me = channel.guild.members.me;
+            if (me?.voice && me.permissions.has("DeafenMembers")) {
+                try {
+                    await me.voice.setDeaf(false);
+                    await me.voice.setMute(false);
+                } catch (error) {
+                    elizaLogger.log("Failed to modify voice state:", error);
+                    // Continue even if this fails
+                }
+            }
+
+            // Set up member monitoring
+            for (const [, member] of channel.members) {
+                if (!member.user.bot) {
+                    await this.monitorMember(member, channel);
+                }
+            }
+        } catch (error) {
+            elizaLogger.log("Failed to establish voice connection:", error);
+            connection.destroy();
+            this.connections.delete(channel.id);
+            throw error;
         }
-
-        for (const [, member] of channel.members) {
-            if (!member.user.bot) {
-                this.monitorMember(member, channel);
-            }
-        }
-
-        connection.on("error", (error) => {
-            console.error("Voice connection error:", error);
-        });
-
-        connection.receiver.speaking.on("start", (userId: string) => {
-            const user = channel.members.get(userId);
-            if (!user?.user.bot) {
-                this.monitorMember(user as GuildMember, channel);
-                this.streams.get(userId)?.emit("speakingStarted");
-            }
-        });
-
-        connection.receiver.speaking.on("end", async (userId: string) => {
-            const user = channel.members.get(userId);
-            if (!user?.user.bot) {
-                this.streams.get(userId)?.emit("speakingStopped");
-            }
-        });
     }
 
     private async monitorMember(
@@ -385,7 +453,7 @@ export class VoiceManager extends EventEmitter {
         let transcriptionStarted = false;
         let transcriptionText = "";
 
-        const monitor = new AudioMonitor(
+        const _monitor = new AudioMonitor(
             audioStream,
             10000000,
             async (buffer) => {
@@ -485,7 +553,7 @@ export class VoiceManager extends EventEmitter {
 
                         const memory = {
                             id: stringToUuid(
-                                channelId + "-voice-message-" + Date.now()
+                                roomId + "-voice-message-" + Date.now()
                             ),
                             agentId: this.runtime.agentId,
                             content: {
@@ -540,7 +608,11 @@ export class VoiceManager extends EventEmitter {
 
                             const responseMemory: Memory = {
                                 id: stringToUuid(
-                                    memory.id + "-voice-response-" + Date.now()
+                                    roomId +
+                                        "-" +
+                                        memory.id +
+                                        "-voice-response-" +
+                                        Date.now()
                                 ),
                                 agentId: this.runtime.agentId,
                                 userId: this.runtime.agentId,
@@ -776,7 +848,7 @@ export class VoiceManager extends EventEmitter {
 
         audioPlayer.on(
             "stateChange",
-            (oldState: any, newState: { status: string }) => {
+            (_oldState: any, newState: { status: string }) => {
                 if (newState.status == "idle") {
                     const idleTime = Date.now();
                     console.log(
@@ -788,34 +860,46 @@ export class VoiceManager extends EventEmitter {
     }
 
     async handleJoinChannelCommand(interaction: any) {
-        const channelId = interaction.options.get("channel")?.value as string;
-        if (!channelId) {
-            await interaction.reply("Please provide a voice channel to join.");
-            return;
-        }
-        const guild = interaction.guild;
-        if (!guild) {
-            return;
-        }
-        const voiceChannel = interaction.guild.channels.cache.find(
-            (channel: VoiceChannel) =>
-                channel.id === channelId &&
-                channel.type === ChannelType.GuildVoice
-        );
-
-        if (!voiceChannel) {
-            await interaction.reply("Voice channel not found!");
-            return;
-        }
-
         try {
-            this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
-            await interaction.reply(
+            // Defer the reply immediately to prevent interaction timeout
+            await interaction.deferReply();
+
+            const channelId = interaction.options.get("channel")
+                ?.value as string;
+            if (!channelId) {
+                await interaction.editReply(
+                    "Please provide a voice channel to join."
+                );
+                return;
+            }
+
+            const guild = interaction.guild;
+            if (!guild) {
+                await interaction.editReply("Could not find guild.");
+                return;
+            }
+
+            const voiceChannel = interaction.guild.channels.cache.find(
+                (channel: VoiceChannel) =>
+                    channel.id === channelId &&
+                    channel.type === ChannelType.GuildVoice
+            );
+
+            if (!voiceChannel) {
+                await interaction.editReply("Voice channel not found!");
+                return;
+            }
+
+            await this.joinChannel(voiceChannel as BaseGuildVoiceChannel);
+            await interaction.editReply(
                 `Joined voice channel: ${voiceChannel.name}`
             );
         } catch (error) {
             console.error("Error joining voice channel:", error);
-            await interaction.reply("Failed to join the voice channel.");
+            // Use editReply instead of reply for the error case
+            await interaction
+                .editReply("Failed to join the voice channel.")
+                .catch(console.error);
         }
     }
 

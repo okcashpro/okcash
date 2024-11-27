@@ -1,5 +1,5 @@
 # Stage 1: Build dependencies in a temporary stage
-FROM node:23.1.0 AS builder
+FROM node:23.3.0 AS builder
 
 # Install required global dependencies
 RUN apt-get update && apt-get install -y \
@@ -48,7 +48,7 @@ WORKDIR /app
 RUN pnpm build
 
 # Stage 2: Production image
-FROM node:23.1.0
+FROM node:23.3.0
 
 # Install dependencies required for the final runtime
 RUN apt-get update && apt-get install -y \

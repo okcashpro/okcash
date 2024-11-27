@@ -16,7 +16,7 @@ const factsProvider: Provider = {
             actors: state?.actorsData,
         });
 
-        const embedding = await embed(runtime, recentMessages);
+        const _embedding = await embed(runtime, recentMessages);
 
         const memoryManager = new MemoryManager({
             runtime,
@@ -36,7 +36,6 @@ const factsProvider: Provider = {
         const recentFactsData = await memoryManager.getMemories({
             roomId: message.roomId,
             count: 10,
-            agentId: runtime.agentId,
             start: 0,
             end: Date.now(),
         });

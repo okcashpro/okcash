@@ -84,6 +84,20 @@ Integrates Solana blockchain functionality:
 - `walletProvider` - Wallet management
 - `trustScoreProvider` - Transaction trust metrics
 
+#### 5. Buttplug Plugin (`@eliza/plugin-buttplug`)
+
+Integrates Buttplug.io for intimate toy control:
+
+**Services:**
+
+- `ButtplugService` - Buttplug.io integration itself
+
+**Actions:**
+
+- `VIBRATE` - Control vibration intensity and duration of connected devices
+- `ROTATE` - Control rotation intensity and duration of connected devices
+- `BATTERY` - Get the battery level of connected devices
+
 ## Using Plugins
 
 ### Installation
@@ -99,12 +113,330 @@ pnpm add @eliza/plugin-[name]
 ```typescript
 import { bootstrapPlugin } from "@eliza/plugin-bootstrap";
 import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
-
+import { buttplugPlugin } from "@eliza/plugin-buttplug";
 const character = {
   // ... other character config
-  plugins: [bootstrapPlugin, imageGenerationPlugin],
+  plugins: [bootstrapPlugin, imageGenerationPlugin, buttplugPlugin],
 };
 ```
+
+Here is the updated README with the Coinbase Commerce plugin information added:
+
+---
+
+# 🧩 Plugins
+
+## Overview
+
+Eliza's plugin system provides a modular way to extend the core functionality with additional features, actions, evaluators, and providers. Plugins are self-contained modules that can be easily added or removed to customize your agent's capabilities.
+
+## Core Plugin Concepts
+
+### Plugin Structure
+
+Each plugin in Eliza must implement the `Plugin` interface with the following properties:
+
+```typescript
+interface Plugin {
+  name: string; // Unique identifier for the plugin
+  description: string; // Brief description of plugin functionality
+  actions?: Action[]; // Custom actions provided by the plugin
+  evaluators?: Evaluator[]; // Custom evaluators for behavior assessment
+  providers?: Provider[]; // Context providers for message generation
+  services?: Service[]; // Additional services (optional)
+}
+```
+
+### Available Plugins
+
+#### 1. Bootstrap Plugin (`@eliza/plugin-bootstrap`)
+
+The bootstrap plugin provides essential baseline functionality:
+
+**Actions:**
+
+- `continue` - Continue the current conversation flow
+- `followRoom` - Follow a room for updates
+- `unfollowRoom` - Unfollow a room
+- `ignore` - Ignore specific messages
+- `muteRoom` - Mute notifications from a room
+- `unmuteRoom` - Unmute notifications from a room
+
+**Evaluators:**
+
+- `fact` - Evaluate factual accuracy
+- `goal` - Assess goal completion
+
+**Providers:**
+
+- `boredom` - Manages engagement levels
+- `time` - Provides temporal context
+- `facts` - Supplies factual information
+
+#### 2. Image Generation Plugin (`@eliza/plugin-image-generation`)
+
+Enables AI image generation capabilities:
+
+**Actions:**
+
+- `GENERATE_IMAGE` - Create images based on text descriptions
+- Supports multiple image generation services (Anthropic, Together)
+- Auto-generates captions for created images
+
+#### 3. Node Plugin (`@eliza/plugin-node`)
+
+Provides core Node.js-based services:
+
+**Services:**
+
+- `BrowserService` - Web browsing capabilities
+- `ImageDescriptionService` - Image analysis
+- `LlamaService` - LLM integration
+- `PdfService` - PDF processing
+- `SpeechService` - Text-to-speech
+- `TranscriptionService` - Speech-to-text
+- `VideoService` - Video processing
+
+#### 4. Solana Plugin (`@eliza/plugin-solana`)
+
+Integrates Solana blockchain functionality:
+
+**Evaluators:**
+
+- `trustEvaluator` - Assess transaction trust scores
+
+**Providers:**
+
+- `walletProvider` - Wallet management
+- `trustScoreProvider` - Transaction trust metrics
+
+#### 5. Coinbase Commerce Plugin (`@eliza/plugin-coinbase`)
+
+Integrates Coinbase Commerce for payment and transaction management:
+
+**Actions:**
+
+- `CREATE_CHARGE` - Create a payment charge using Coinbase Commerce
+- `GET_ALL_CHARGES` - Fetch all payment charges
+- `GET_CHARGE_DETAILS` - Retrieve details for a specific charge
+
+**Description:**
+This plugin enables Eliza to interact with the Coinbase Commerce API to create and manage payment charges, providing seamless integration with cryptocurrency-based payment systems.
+
+---
+
+#### 6. Coinbase MassPayments Plugin (`@eliza/plugin-coinbase`)
+
+This plugin facilitates the processing of cryptocurrency mass payouts using the Coinbase SDK. It enables the creation and management of mass payouts to multiple wallet addresses, logging all transaction details to a CSV file for further analysis.
+
+**Actions:**
+
+- `SEND_MASS_PAYOUT`
+  Sends cryptocurrency mass payouts to multiple wallet addresses.
+  - **Inputs**:
+    - `receivingAddresses` (array of strings): Wallet addresses to receive funds.
+    - `transferAmount` (number): Amount to send to each address (in smallest currency unit, e.g., Wei for ETH).
+    - `assetId` (string): Cryptocurrency asset ID (e.g., `ETH`, `BTC`).
+    - `network` (string): Blockchain network (e.g., `base`, `sol`, `eth`, `arb`, `pol`).
+  - **Outputs**: Logs transaction results (success/failure) in a CSV file.
+  - **Example**:
+    ```json
+    {
+      "receivingAddresses": [
+        "0xA0ba2ACB5846A54834173fB0DD9444F756810f06",
+        "0xF14F2c49aa90BaFA223EE074C1C33b59891826bF"
+      ],
+      "transferAmount": 5000000000000000,
+      "assetId": "ETH",
+      "network": "eth"
+    }
+    ```
+
+**Providers:**
+
+- `massPayoutProvider`
+  Retrieves details of past transactions from the generated CSV file.
+  - **Outputs**: A list of transaction records including the following fields:
+    - `address`: Recipient wallet address.
+    - `amount`: Amount sent.
+    - `status`: Transaction status (`Success` or `Failed`).
+    - `errorCode`: Error code (if any).
+    - `transactionUrl`: URL for transaction details (if available).
+
+**Description:**
+
+The Coinbase MassPayments plugin streamlines cryptocurrency distribution, ensuring efficient and scalable payouts to multiple recipients on supported blockchain networks.
+
+Supported networks:
+
+- `base` (Base blockchain)
+- `sol` (Solana)
+- `eth` (Ethereum)
+- `arb` (Arbitrum)
+- `pol` (Polygon)
+
+**Usage Instructions:**
+
+1. **Configure the Plugin**
+   Add the plugin to your character’s configuration:
+
+   ```typescript
+   import { coinbaseMassPaymentsPlugin } from "@eliza/plugin-coinbase-masspayments";
+
+   const character = {
+     plugins: [coinbaseMassPaymentsPlugin],
+   };
+   ```
+
+2. **Ensure Secure Configuration**
+   Set the following environment variables or runtime settings to ensure the plugin functions securely:
+
+   - `COINBASE_API_KEY`: API key for Coinbase SDK.
+   - `COINBASE_PRIVATE_KEY`: Private key for secure transactions.
+
+---
+
+### Wallet Management
+
+The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
+
+1. **Wallet Generation on First Run**
+   If no wallet information is provided (`COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID`), the plugin will:
+
+   - **Generate a new wallet** using the Coinbase SDK.
+   - Automatically **export the wallet details** (`seed` and `walletId`) and securely store them in `runtime.character.settings.secrets` or other configured storage.
+   - Log the wallet’s default address for reference.
+   - If the character file does not exist, the wallet details are saved to a characters/charactername-seed.txt file in the characters directory with a note indicating that the user must manually add these details to settings.secrets or the .env file.
+
+2. **Using an Existing Wallet**
+   If wallet information is available during the first run:
+   - Provide `COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID` via `runtime.character.settings.secrets` or environment variables.
+   - The plugin will **import the wallet** and use it for processing mass payouts.
+
+---
+
+### Required Configurations
+
+The following configurations must be provided for wallet management:
+
+- **Environment Variables or Secrets**:
+  - `COINBASE_GENERATED_WALLET_HEX_SEED`: Hexadecimal seed of the wallet.
+  - `COINBASE_GENERATED_WALLET_ID`: Unique wallet ID.
+  - These variables must be securely stored in `runtime.character.settings.secrets` or as environment variables.
+
+---
+
+### Wallet Creation Process
+
+1. **Automatic Wallet Creation**
+   When no wallet details are available:
+
+   - A new wallet is created using the Coinbase SDK.
+   - The wallet’s `seed` and `walletId` are retrieved using the following logic:
+     ```typescript
+     const walletData: WalletData = wallet.export();
+     runtime.character.settings.secrets.COINBASE_GENERATED_WALLET_HEX_SEED =
+       walletData.seed;
+     runtime.character.settings.secrets.COINBASE_GENERATED_WALLET_ID =
+       walletData.walletId;
+     ```
+   - The default wallet address is logged:
+     ```typescript
+     const walletAddress = wallet.getDefaultAddress();
+     elizaLogger.log("Created and stored new wallet:", walletAddress);
+     ```
+
+2. **Using Existing Wallet Details**
+   When the wallet details are provided:
+   - The wallet is imported using the following logic:
+     ```typescript
+     wallet = await Wallet.import({
+       seed: storedSeed,
+       walletId: storedWalletId,
+     });
+     elizaLogger.log("Imported existing wallet:", wallet.getDefaultAddress());
+     ```
+
+---
+
+### Example Configuration
+
+#### Automatic Wallet Generation:
+
+No existing wallet information is passed. The plugin creates and stores a new wallet:
+
+```typescript
+runtime.character.settings.secrets = {
+  // Empty settings for first run
+};
+```
+
+Output Log:
+
+```plaintext
+[INFO] Created and stored new wallet: 0x1234567890abcdef1234567890abcdef12345678
+```
+
+#### Using Existing Wallet Information:
+
+Existing wallet details are passed into the runtime:
+
+```typescript
+runtime.character.settings.secrets = {
+  COINBASE_GENERATED_WALLET_HEX_SEED:
+    "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+  COINBASE_GENERATED_WALLET_ID: "wallet-id-123",
+};
+```
+
+Output Log:
+
+```plaintext
+[INFO] Imported existing wallet: 0x1234567890abcdef1234567890abcdef12345678
+```
+
+---
+
+3. **Example Call**
+   An example of using the `SEND_MASS_PAYOUT` action:
+
+   ```typescript
+   const response = await runtime.triggerAction("SEND_MASS_PAYOUT", {
+     receivingAddresses: [
+       "0xA0ba2ACB5846A54834173fB0DD9444F756810f06",
+       "0xF14F2c49aa90BaFA223EE074C1C33b59891826bF",
+     ],
+     transferAmount: 5000000000000000, // 0.005 ETH
+     assetId: "ETH",
+     network: "eth",
+   });
+   console.log("Mass payout response:", response);
+   ```
+
+4. **Transaction Logging**
+   All transactions (successful and failed) are logged to a `transactions.csv` file in the plugin’s working directory:
+   ```plaintext
+   Address,Amount,Status,Error Code,Transaction URL
+   0xA0ba2ACB5846A54834173fB0DD9444F756810f06,5000000000000000,Success,,https://etherscan.io/tx/0x...
+   ```
+
+**Example Output:**
+
+When successful, a response similar to the following will be returned:
+
+```json
+{
+  "text": "Mass payouts completed successfully.\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for more details."
+}
+```
+
+**Best Practices:**
+
+- **Secure Secrets Storage**: Ensure `COINBASE_API_KEY` and `COINBASE_PRIVATE_KEY` are stored securely in `runtime.character.settings.secrets` or environment variables. Either add `COINBASE_GENERATED_WALLET_HEX_SEED`, and `COINBASE_GENERATED_WALLET_ID` from a previous run, or it will be dynamically created
+- **Validation**: Always validate input parameters, especially `receivingAddresses` and `network`, to ensure compliance with expected formats and supported networks.
+- **Error Handling**: Monitor logs for failed transactions or errors in the payout process and adjust retry logic as needed.
+
+---
 
 ### Writing Custom Plugins
 

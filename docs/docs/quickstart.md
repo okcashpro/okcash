@@ -8,7 +8,7 @@ sidebar_position: 2
 
 Before getting started with Eliza, ensure you have:
 
-- [Node.js 23.1.0](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Node.js 23.3.0](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
 - Git for version control
 - A code editor ([VS Code](https://code.visualstudio.com/) or [VSCodium](https://vscodium.com) recommended)
@@ -141,10 +141,12 @@ Example for TWITTER_COOKIES
 The TWITTER_COOKIES variable should be a JSON string containing the necessary cookies. You can find these cookies in your web browser's developer tools. Here is an example format:
 
 ```bash
-TWITTER_COOKIES='[{"name":"auth_token","value":"your token","domain":".twitter.com"},
-  {"name":"ct0","value":"your ct0","domain":".twitter.com"},
-  {"name":"guest_id","value":"your guest_id","domain":".twitter.com"}]'
+TWITTER_COOKIES='[{"key":"auth_token","value":"your token","domain":".twitter.com"},
+  {"key":"ct0","value":"your ct0","domain":".twitter.com"},
+  {"key":"guest_id","value":"your guest_id","domain":".twitter.com"}]'
 ```
+
+Using TWITTER_COOKIES makes providing TWITTER_PASSWORD and TWITTER_EMAIL unnecessary. TWITTER_USERNAME is still required.
 
 ### Telegram Bot
 
@@ -185,7 +187,7 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
 
 1. **Node.js Version**
 
-   - Ensure Node.js 23.1.0 is installed
+   - Ensure Node.js 23.3.0 is installed
    - Use `node -v` to check version
    - Consider using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
 

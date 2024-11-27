@@ -1,15 +1,15 @@
 import {
     Action,
+    ActionExample,
+    composeContext,
+    Content,
+    generateText,
     IAgentRuntime,
     Memory,
-    Content,
-    ActionExample,
     ModelClass,
+    settings,
 } from "@ai16z/eliza";
 import * as fs from "fs";
-import { settings } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateText } from "@ai16z/eliza";
 import { validateStarknetConfig } from "../enviroment";
 
 interface Order {
@@ -51,7 +51,7 @@ const take_order: Action = {
         return tickerRegex.test(text);
     },
     handler: async (runtime: IAgentRuntime, message: Memory) => {
-        const text = (message.content as Content).text;
+        const _text = (message.content as Content).text;
         const userId = message.userId;
 
         let ticker, contractAddress;

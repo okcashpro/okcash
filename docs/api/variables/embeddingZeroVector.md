@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / embeddingZeroVector
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / embeddingZeroVector
 
 # Variable: embeddingZeroVector
 
@@ -6,4 +6,4 @@
 
 ## Defined in
 
-[packages/core/src/memory.ts:10](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L10)
+[packages/core/src/memory.ts:11](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L11)
