@@ -2,8 +2,6 @@ import {
     Content,
     HandlerCallback,
     IAgentRuntime,
-    ISpeechService,
-    ITranscriptionService,
     Memory,
     ModelClass,
     ServiceType,
@@ -13,7 +11,6 @@ import {
     elizaLogger,
     embeddingZeroVector,
     generateMessageResponse,
-    messageCompletionFooter,
     stringToUuid,
     generateShouldRespond,
 } from "@ai16z/eliza";
