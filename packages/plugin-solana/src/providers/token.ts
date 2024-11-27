@@ -9,12 +9,14 @@ import {
     TokenTradeData,
     CalculatedBuyAmounts,
     Prices,
+    TokenCodex,
 } from "../types/token.ts";
 import NodeCache from "node-cache";
 import * as path from "path";
 import { toBN } from "../bignumber.ts";
 import { WalletProvider, Item } from "./wallet.ts";
 import { Connection, PublicKey } from "@solana/web3.js";
+import axios from "axios";
 
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -36,6 +38,8 @@ const PROVIDER_CONFIG = {
 export class TokenProvider {
     private cache: NodeCache;
     private cacheKey: string = "solana/tokens";
+    private NETWORK_ID = 1399811149;
+    private GRAPHQL_ENDPOINT = "https://graph.codex.io/graphql";
 
     constructor(
         //  private connection: Connection,
@@ -152,6 +156,89 @@ export class TokenProvider {
         } catch (error) {
             console.error("Error checking token in wallet:", error);
             return null;
+        }
+    }
+
+    async fetchTokenCodex(): Promise<TokenCodex> {
+        try {
+            const cacheKey = `token_${this.tokenAddress}`;
+            const cachedData = this.getCachedData<TokenCodex>(cacheKey);
+            if (cachedData) {
+                console.log(
+                    `Returning cached token data for ${this.tokenAddress}.`
+                );
+                return cachedData;
+            }
+            const query = `
+            query Token($address: String!, $networkId: Int!) {
+              token(input: { address: $address, networkId: $networkId }) {
+                id
+                address
+                cmcId
+                decimals
+                name
+                symbol
+                totalSupply
+                isScam
+                info {
+                  circulatingSupply
+                  imageThumbUrl
+                }
+                explorerData {
+                  blueCheckmark
+                  description
+                  tokenType
+                }
+              }
+            }
+          `;
+
+            const variables = {
+                address: this.tokenAddress,
+                networkId: this.NETWORK_ID, // Replace with your network ID
+            };
+
+            const response = await axios.post(
+                this.GRAPHQL_ENDPOINT,
+                {
+                    query,
+                    variables,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: settings.CODEX_API_KEY,
+                    },
+                }
+            );
+
+            const token = response.data?.data?.token;
+
+            if (!token) {
+                throw new Error(`No data returned for token ${tokenAddress}`);
+            }
+
+            this.setCachedData(cacheKey, token);
+
+            return {
+                id: token.id,
+                address: token.address,
+                cmcId: token.cmcId,
+                decimals: token.decimals,
+                name: token.name,
+                symbol: token.symbol,
+                totalSupply: token.totalSupply,
+                circulatingSupply: token.info?.circulatingSupply,
+                imageThumbUrl: token.info?.imageThumbUrl,
+                blueCheckmark: token.explorerData?.blueCheckmark,
+                isScam: token.isScam ? true : false,
+            };
+        } catch (error) {
+            console.error(
+                "Error fetching token data from Codex:",
+                error.message
+            );
+            return {} as TokenCodex;
         }
     }
 
@@ -813,6 +900,8 @@ export class TokenProvider {
             );
             const security = await this.fetchTokenSecurity();
 
+            const tokenCodex = await this.fetchTokenCodex();
+
             console.log(`Fetching trade data for token: ${this.tokenAddress}`);
             const tradeData = await this.fetchTokenTradeData();
 
@@ -862,6 +951,7 @@ export class TokenProvider {
                 dexScreenerData: dexData,
                 isDexScreenerListed,
                 isDexScreenerPaid,
+                tokenCodex,
             };
 
             // console.log("Processed token data:", processedData);

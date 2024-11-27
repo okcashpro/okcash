@@ -18,7 +18,7 @@ interface SellDetails {
     sell_recommender_id: string | null;
 }
 
-export class simulationSellingService {
+export class SimulationSellingService {
     private trustScoreDb: TrustScoreDatabase;
     private walletProvider: WalletProvider;
     private connection: Connection;
@@ -178,7 +178,7 @@ export class simulationSellingService {
         await this.startListeners();
     }
 
-    private async startListeners() {
+    public async startListeners() {
         // scanning recommendations and selling
         console.log("Scanning for token performances...");
         const tokenPerformances =
@@ -198,28 +198,65 @@ export class simulationSellingService {
 
         // start the process in the sonar backend
         tokenPerformances.forEach(async (tokenPerformance) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const tokenProvider = new TokenProvider(
                 tokenPerformance.tokenAddress,
                 this.walletProvider,
                 this.runtime.cacheManager
             );
-            const shouldTrade = await tokenProvider.shouldTradeToken();
-            if (shouldTrade) {
-                const balance = tokenPerformance.balance;
-                const sell_recommender_id = tokenPerformance.recommenderId;
-                const tokenAddress = tokenPerformance.tokenAddress;
-                const process = await this.startProcessInTheSonarBackend(
-                    tokenAddress,
-                    balance,
-                    true,
-                    sell_recommender_id,
-                    tokenPerformance.initial_mc
-                );
-                if (process) {
-                    this.runningProcesses.add(tokenAddress);
-                }
+            // const shouldTrade = await tokenProvider.shouldTradeToken();
+            // if (shouldTrade) {
+            const balance = tokenPerformance.balance;
+            const sell_recommender_id = tokenPerformance.recommenderId;
+            const tokenAddress = tokenPerformance.tokenAddress;
+            const process = await this.startProcessInTheSonarBackend(
+                tokenAddress,
+                balance,
+                true,
+                sell_recommender_id,
+                tokenPerformance.initial_mc
+            );
+            if (process) {
+                this.runningProcesses.add(tokenAddress);
             }
+            // }
         });
+    }
+
+    public processTokenPerformance(tokenAddress: string) {
+        try {
+            const runningProcesses = this.runningProcesses;
+            // check if token is already being processed
+            if (runningProcesses.has(tokenAddress)) {
+                console.log(`Token ${tokenAddress} is already being processed`);
+                return;
+            }
+            const tokenPerformance =
+                this.trustScoreDb.getTokenPerformance(tokenAddress);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const tokenProvider = new TokenProvider(
+                tokenPerformance.tokenAddress,
+                this.walletProvider,
+                this.runtime.cacheManager
+            );
+            const balance = tokenPerformance.balance;
+            const sell_recommender_id = tokenPerformance.recommenderId;
+            const process = this.startProcessInTheSonarBackend(
+                tokenAddress,
+                balance,
+                true,
+                sell_recommender_id,
+                tokenPerformance.initial_mc
+            );
+            if (process) {
+                this.runningProcesses.add(tokenAddress);
+            }
+        } catch (error) {
+            console.error(
+                `Error getting token performance for token ${tokenAddress}:`,
+                error
+            );
+        }
     }
 
     private async startProcessInTheSonarBackend(

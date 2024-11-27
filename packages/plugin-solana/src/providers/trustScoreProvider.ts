@@ -10,6 +10,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { TokenProvider } from "./token.ts";
 import { WalletProvider } from "./wallet.ts";
+import { SimulationSellingService } from "./simulationSellingService.ts";
 import {
     TrustScoreDatabase,
     RecommenderMetrics,
@@ -53,6 +54,7 @@ interface TokenRecommendationSummary {
 export class TrustScoreManager {
     private tokenProvider: TokenProvider;
     private trustScoreDb: TrustScoreDatabase;
+    private simulationSellingService: SimulationSellingService;
     private connection: Connection;
     private baseMint: PublicKey;
     private DECAY_RATE = 0.95;
@@ -73,6 +75,10 @@ export class TrustScoreManager {
         );
         this.backend = runtime.getSetting("BACKEND_URL");
         this.backendToken = runtime.getSetting("BACKEND_TOKEN");
+        this.simulationSellingService = new SimulationSellingService(
+            runtime,
+            this.tokenProvider
+        );
     }
 
     //getRecommenederBalance
@@ -147,9 +153,9 @@ export class TrustScoreManager {
                 liquidityChange24h: 0,
                 holderChange24h:
                     processedData.tradeData.unique_wallet_24h_change_percent,
-                rugPull: false, // TODO: Implement rug pull detection
-                isScam: false, // TODO: Implement scam detection
-                marketCapChange24h: 0, // TODO: Implement market cap change
+                rugPull: false,
+                isScam: processedData.tokenCodex.isScam,
+                marketCapChange24h: 0,
                 sustainedGrowth: sustainedGrowth,
                 rapidDump: isRapidDump,
                 suspiciousVolume: suspiciousVolume,
@@ -362,6 +368,7 @@ export class TrustScoreManager {
         const buySol = data.buy_amount / parseFloat(solPrice);
         const buy_value_usd = data.buy_amount * processedData.tradeData.price;
         const token = await this.tokenProvider.fetchTokenTradeData();
+        const tokenCodex = await this.tokenProvider.fetchTokenCodex();
         const tokenPrice = token.price;
         tokensBalance = buy_value_usd / tokenPrice;
 
@@ -418,7 +425,7 @@ export class TrustScoreManager {
             holderChange24h:
                 processedData.tradeData.unique_wallet_24h_change_percent,
             rugPull: false,
-            isScam: false,
+            isScam: tokenCodex.isScam,
             marketCapChange24h: 0,
             sustainedGrowth: false,
             rapidDump: false,
@@ -446,6 +453,7 @@ export class TrustScoreManager {
             };
             this.trustScoreDb.addTransaction(transaction);
         }
+        this.simulationSellingService.processTokenPerformance(tokenAddress);
         // api call to update trade performance
         this.createTradeInBe(tokenAddress, recommenderId, username, data);
         return creationData;
