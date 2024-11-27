@@ -2,9 +2,9 @@ import {
     IAgentRuntime,
     ModelClass,
     elizaLogger,
-    generateText, 
-    trimTokens, 
-    parseJSONObjectFromText
+    generateText,
+    trimTokens,
+    parseJSONObjectFromText,
 } from "@ai16z/eliza";
 import {
     ChannelType,
@@ -165,7 +165,7 @@ export function canSendMessage(channel) {
         return {
             canSend: false,
             reason: "No channel given",
-        }
+        };
     }
     // if it is a DM channel, we can always send messages
     if (channel.type === ChannelType.DM) {
@@ -221,4 +221,3 @@ export function canSendMessage(channel) {
                 : null,
     };
 }
-
