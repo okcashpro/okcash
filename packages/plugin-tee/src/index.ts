@@ -1,4 +1,4 @@
-import { Plugin, Action, Evaluator, Provider } from "@ai16z/eliza";
+import { Plugin } from "@ai16z/eliza";
 import { remoteAttestationProvider } from "./providers/remoteAttestationProvider";
 import { deriveKeyProvider } from "./providers/deriveKeyProvider";
 import { walletProvider } from "./providers/walletProvider";
