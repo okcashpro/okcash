@@ -889,24 +889,44 @@ export class VoiceManager extends EventEmitter {
     }
 
     async scanGuild(guild: Guild) {
-        const channels = (await guild.channels.fetch()).filter(
-            (channel) => channel?.type == ChannelType.GuildVoice
-        );
         let chosenChannel: BaseGuildVoiceChannel | null = null;
 
-        for (const [, channel] of channels) {
-            const voiceChannel = channel as BaseGuildVoiceChannel;
-            if (
-                voiceChannel.members.size > 0 &&
-                (chosenChannel === null ||
-                    voiceChannel.members.size > chosenChannel.members.size)
-            ) {
-                chosenChannel = voiceChannel;
+        try {
+            const channelId = this.runtime.getSetting(
+                "DISCORD_VOICE_CHANNEL_ID"
+            ) as string;
+            if (channelId) {
+                const channel = await guild.channels.fetch(channelId);
+                if (channel?.isVoiceBased()) {
+                    chosenChannel = channel as BaseGuildVoiceChannel;
+                }
             }
-        }
 
-        if (chosenChannel != null) {
-            this.joinChannel(chosenChannel);
+            if (!chosenChannel) {
+                const channels = (await guild.channels.fetch()).filter(
+                    (channel) => channel?.type == ChannelType.GuildVoice
+                );
+                for (const [, channel] of channels) {
+                    const voiceChannel = channel as BaseGuildVoiceChannel;
+                    if (
+                        voiceChannel.members.size > 0 &&
+                        (chosenChannel === null ||
+                            voiceChannel.members.size >
+                                chosenChannel.members.size)
+                    ) {
+                        chosenChannel = voiceChannel;
+                    }
+                }
+            }
+
+            if (chosenChannel) {
+                console.log(`Joining channel: ${chosenChannel.name}`);
+                await this.joinChannel(chosenChannel);
+            } else {
+                console.warn("No suitable voice channel found to join.");
+            }
+        } catch (error) {
+            console.error("Error selecting or joining a voice channel:", error);
         }
     }
 
