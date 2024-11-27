@@ -17,6 +17,7 @@ import {
     stringToUuid,
 } from "@ai16z/eliza";
 import {
+    AudioPlayer,
     AudioReceiveStream,
     NoSubscriberBehavior,
     StreamType,
@@ -41,6 +42,8 @@ import EventEmitter from "events";
 import prism from "prism-media";
 import { Readable, pipeline } from "stream";
 import { DiscordClient } from "./index.ts";
+
+import debounce from "lodash/debounce.js";
 
 export function getWavHeader(
     audioLength: number,
@@ -177,6 +180,16 @@ export class AudioMonitor {
 }
 
 export class VoiceManager extends EventEmitter {
+    private userStates: Map<
+        string,
+        {
+            buffers: Buffer[];
+            totalLength: number;
+            lastActive: number;
+            transcriptionText: string;
+        }
+    > = new Map();
+    private activeAudioPlayer: AudioPlayer | null = null;
     private client: Client;
     private runtime: IAgentRuntime;
     private streams: Map<string, Readable> = new Map();
@@ -459,259 +472,259 @@ export class VoiceManager extends EventEmitter {
         channel: BaseGuildVoiceChannel,
         audioStream: Readable
     ) {
+        console.log(`Starting audio monitor for user: ${userId}`);
         const channelId = channel.id;
-        const buffers: Buffer[] = [];
-        let totalLength = 0;
-        const maxSilenceTime = 1000; // Maximum pause duration in milliseconds
-        const minSilenceTime = 50; // Minimum silence duration to trigger transcription
-        let lastChunkTime = Date.now();
-        let transcriptionStarted = false;
-        let transcriptionText = "";
+        if (!this.userStates.has(userId)) {
+            this.userStates.set(userId, {
+                buffers: [],
+                totalLength: 0,
+                lastActive: Date.now(),
+                transcriptionText: "",
+            });
+        }
 
-        const _monitor = new AudioMonitor(
+        const state = this.userStates.get(userId);
+
+        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 1500; // wait for 1.5 seconds of silence
+
+        const debouncedProcessTranscription = debounce(async () => {
+            await this.processTranscription(
+                userId,
+                channelId,
+                channel,
+                name,
+                userName
+            );
+        }, DEBOUNCE_TRANSCRIPTION_THRESHOLD);
+
+        const processBuffer = async (buffer: Buffer) => {
+            try {
+                state!.buffers.push(buffer);
+                state!.totalLength += buffer.length;
+                state!.lastActive = Date.now();
+
+                debouncedProcessTranscription();
+            } catch (error) {
+                console.error(
+                    `Error processing buffer for user ${userId}:`,
+                    error
+                );
+            }
+        };
+
+        const monitor = new AudioMonitor(
             audioStream,
             10000000,
             async (buffer) => {
-                const currentTime = Date.now();
-                const silenceDuration = currentTime - lastChunkTime;
                 if (!buffer) {
-                    // Handle error
-                    console.error("Empty buffer received");
+                    console.error("Received empty buffer");
                     return;
                 }
-                buffers.push(buffer);
-                totalLength += buffer.length;
-                lastChunkTime = currentTime;
-
-                if (silenceDuration > minSilenceTime && !transcriptionStarted) {
-                    transcriptionStarted = true;
-                    const inputBuffer = Buffer.concat(buffers, totalLength);
-                    buffers.length = 0;
-                    totalLength = 0;
-
-                    try {
-                        // Convert Opus to WAV and add the header
-                        const wavBuffer =
-                            await this.convertOpusToWav(inputBuffer);
-
-                        const transcriptionService =
-                            this.runtime.getService<ITranscriptionService>(
-                                ServiceType.TRANSCRIPTION
-                            );
-
-                        if (!transcriptionService) {
-                            throw new Error(
-                                "Transcription generation service not found"
-                            );
-                        }
-
-                        const text =
-                            await transcriptionService.transcribe(wavBuffer);
-
-                        transcriptionText += text;
-                    } catch (error) {
-                        console.error("Error processing audio stream:", error);
-                    }
-                }
-
-                if (silenceDuration > maxSilenceTime && transcriptionStarted) {
-                    console.log("transcription finished");
-                    transcriptionStarted = false;
-
-                    if (!transcriptionText) return;
-
-                    try {
-                        const text = transcriptionText;
-
-                        // handle whisper cases
-                        if (
-                            (text.length < 15 &&
-                                text.includes("[BLANK_AUDIO]")) ||
-                            (text.length < 5 &&
-                                text.toLowerCase().includes("you"))
-                        ) {
-                            transcriptionText = ""; // Reset transcription text
-                            return;
-                        }
-
-                        const roomId = stringToUuid(
-                            channelId + "-" + this.runtime.agentId
-                        );
-                        const userIdUUID = stringToUuid(userId);
-
-                        await this.runtime.ensureConnection(
-                            userIdUUID,
-                            roomId,
-                            userName,
-                            name,
-                            "discord"
-                        );
-
-                        let state = await this.runtime.composeState(
-                            {
-                                agentId: this.runtime.agentId,
-                                content: { text: text, source: "Discord" },
-                                userId: userIdUUID,
-                                roomId,
-                            },
-                            {
-                                discordChannel: channel,
-                                discordClient: this.client,
-                                agentName: this.runtime.character.name,
-                            }
-                        );
-
-                        if (text && text.startsWith("/")) {
-                            transcriptionText = ""; // Reset transcription text
-                            return null;
-                        }
-
-                        const memory = {
-                            id: stringToUuid(
-                                roomId + "-voice-message-" + Date.now()
-                            ),
-                            agentId: this.runtime.agentId,
-                            content: {
-                                text: text,
-                                source: "discord",
-                                url: channel.url,
-                            },
-                            userId: userIdUUID,
-                            roomId,
-                            embedding: embeddingZeroVector,
-                            createdAt: Date.now(),
-                        };
-
-                        if (!memory.content.text) {
-                            transcriptionText = ""; // Reset transcription text
-                            return { text: "", action: "IGNORE" };
-                        }
-
-                        await this.runtime.messageManager.createMemory(memory);
-
-                        state =
-                            await this.runtime.updateRecentMessageState(state);
-
-                        const shouldIgnore = await this._shouldIgnore(memory);
-
-                        if (shouldIgnore) {
-                            transcriptionText = ""; // Reset transcription text
-                            return { text: "", action: "IGNORE" };
-                        }
-
-                        const context = composeContext({
-                            state,
-                            template:
-                                this.runtime.character.templates
-                                    ?.discordVoiceHandlerTemplate ||
-                                this.runtime.character.templates
-                                    ?.messageHandlerTemplate ||
-                                discordVoiceHandlerTemplate,
-                        });
-
-                        const responseContent = await this._generateResponse(
-                            memory,
-                            state,
-                            context
-                        );
-
-                        const callback: HandlerCallback = async (
-                            content: Content
-                        ) => {
-                            elizaLogger.debug("callback content: ", content);
-                            const { roomId } = memory;
-
-                            const responseMemory: Memory = {
-                                id: stringToUuid(
-                                    roomId +
-                                        "-" +
-                                        memory.id +
-                                        "-voice-response-" +
-                                        Date.now()
-                                ),
-                                agentId: this.runtime.agentId,
-                                userId: this.runtime.agentId,
-                                content: {
-                                    ...content,
-                                    user: this.runtime.character.name,
-                                    inReplyTo: memory.id,
-                                },
-                                roomId,
-                                embedding: embeddingZeroVector,
-                            };
-
-                            if (responseMemory.content.text?.trim()) {
-                                await this.runtime.messageManager.createMemory(
-                                    responseMemory
-                                );
-                                state =
-                                    await this.runtime.updateRecentMessageState(
-                                        state
-                                    );
-
-                                const speechService =
-                                    this.runtime.getService<ISpeechService>(
-                                        ServiceType.SPEECH_GENERATION
-                                    );
-                                if (!speechService) {
-                                    throw new Error(
-                                        "Speech generation service not found"
-                                    );
-                                }
-
-                                const responseStream =
-                                    await speechService.generate(
-                                        this.runtime,
-                                        content.text
-                                    );
-
-                                if (responseStream) {
-                                    await this.playAudioStream(
-                                        userId,
-                                        responseStream as Readable
-                                    );
-                                }
-                                await this.runtime.evaluate(memory, state);
-                            } else {
-                                console.warn("Empty response, skipping");
-                            }
-                            return [responseMemory];
-                        };
-
-                        const responseMemories =
-                            await callback(responseContent);
-
-                        const response = responseContent;
-
-                        const content = (response.responseMessage ||
-                            response.content ||
-                            response.message) as string;
-
-                        if (!content) {
-                            transcriptionText = ""; // Reset transcription text
-                            return null;
-                        }
-
-                        console.log("responseMemories: ", responseMemories);
-
-                        await this.runtime.processActions(
-                            memory,
-                            responseMemories,
-                            state,
-                            callback
-                        );
-
-                        transcriptionText = ""; // Reset transcription text
-                    } catch (error) {
-                        console.error(
-                            "Error processing transcribed text:",
-                            error
-                        );
-                        transcriptionText = ""; // Reset transcription text
-                    }
-                }
+                await processBuffer(buffer);
             }
         );
+    }
+
+    private async processTranscription(
+        userId: UUID,
+        channelId: string,
+        channel: BaseGuildVoiceChannel,
+        name: string,
+        userName: string
+    ) {
+        const state = this.userStates.get(userId);
+        if (!state || state.buffers.length === 0) return;
+        try {
+            const inputBuffer = Buffer.concat(state.buffers, state.totalLength);
+            state.buffers.length = 0; // Clear the buffers
+            state.totalLength = 0;
+
+            // Convert Opus to WAV
+            const wavBuffer = await this.convertOpusToWav(inputBuffer);
+
+            console.log("Starting transcription...");
+
+            const transcriptionText = await this.runtime
+                .getService(ServiceType.TRANSCRIPTION)
+                .transcribe(wavBuffer);
+
+            function isValidTranscription(text: string): boolean {
+                if (!text || text.includes("[BLANK_AUDIO]")) return false;
+                return true;
+            }
+
+            if (transcriptionText && isValidTranscription(transcriptionText)) {
+                state.transcriptionText += transcriptionText;
+            }
+
+            if (state.transcriptionText.length) {
+                this.cleanupAudioPlayer(this.activeAudioPlayer);
+                const finalText = state.transcriptionText;
+                state.transcriptionText = "";
+                await this.handleUserMessage(
+                    finalText,
+                    userId,
+                    channelId,
+                    channel,
+                    name,
+                    userName
+                );
+            }
+        } catch (error) {
+            console.error(
+                `Error transcribing audio for user ${userId}:`,
+                error
+            );
+        }
+    }
+
+    private async handleUserMessage(
+        message: string,
+        userId: UUID,
+        channelId: string,
+        channel: BaseGuildVoiceChannel,
+        name: string,
+        userName: string
+    ) {
+        try {
+            const roomId = stringToUuid(channelId + "-" + this.runtime.agentId);
+            const userIdUUID = stringToUuid(userId);
+
+            await this.runtime.ensureConnection(
+                userIdUUID,
+                roomId,
+                userName,
+                name,
+                "discord"
+            );
+
+            let state = await this.runtime.composeState(
+                {
+                    agentId: this.runtime.agentId,
+                    content: { text: message, source: "Discord" },
+                    userId: userIdUUID,
+                    roomId,
+                },
+                {
+                    discordChannel: channel,
+                    discordClient: this.client,
+                    agentName: this.runtime.character.name,
+                }
+            );
+
+            if (message && message.startsWith("/")) {
+                return null;
+            }
+
+            const memory = {
+                id: stringToUuid(channelId + "-voice-message-" + Date.now()),
+                agentId: this.runtime.agentId,
+                content: {
+                    text: message,
+                    source: "discord",
+                    url: channel.url,
+                },
+                userId: userIdUUID,
+                roomId,
+                embedding: embeddingZeroVector,
+                createdAt: Date.now(),
+            };
+
+            if (!memory.content.text) {
+                return { text: "", action: "IGNORE" };
+            }
+
+            await this.runtime.messageManager.createMemory(memory);
+
+            state = await this.runtime.updateRecentMessageState(state);
+
+            const shouldIgnore = await this._shouldIgnore(memory);
+
+            if (shouldIgnore) {
+                return { text: "", action: "IGNORE" };
+            }
+
+            const context = composeContext({
+                state,
+                template:
+                    this.runtime.character.templates
+                        ?.discordVoiceHandlerTemplate ||
+                    this.runtime.character.templates?.messageHandlerTemplate ||
+                    discordVoiceHandlerTemplate,
+            });
+
+            const responseContent = await this._generateResponse(
+                memory,
+                state,
+                context
+            );
+
+            const callback: HandlerCallback = async (content: Content) => {
+                console.log("callback content: ", content);
+                const { roomId } = memory;
+
+                const responseMemory: Memory = {
+                    id: stringToUuid(
+                        memory.id + "-voice-response-" + Date.now()
+                    ),
+                    agentId: this.runtime.agentId,
+                    userId: this.runtime.agentId,
+                    content: {
+                        ...content,
+                        user: this.runtime.character.name,
+                        inReplyTo: memory.id,
+                    },
+                    roomId,
+                    embedding: embeddingZeroVector,
+                };
+
+                if (responseMemory.content.text?.trim()) {
+                    await this.runtime.messageManager.createMemory(
+                        responseMemory
+                    );
+                    state = await this.runtime.updateRecentMessageState(state);
+
+                    const responseStream = await this.runtime
+                        .getService(ServiceType.SPEECH_GENERATION)
+                        .generate(this.runtime, content.text);
+
+                    if (responseStream) {
+                        await this.playAudioStream(
+                            userId,
+                            responseStream as Readable
+                        );
+                    }
+
+                    await this.runtime.evaluate(memory, state);
+                } else {
+                    console.warn("Empty response, skipping");
+                }
+                return [responseMemory];
+            };
+
+            const responseMemories = await callback(responseContent);
+
+            const response = responseContent;
+
+            const content = (response.responseMessage ||
+                response.content ||
+                response.message) as string;
+
+            if (!content) {
+                return null;
+            }
+
+            console.log("responseMemories: ", responseMemories);
+
+            await this.runtime.processActions(
+                memory,
+                responseMemories,
+                state,
+                callback
+            );
+        } catch (error) {
+            console.error("Error processing transcribed text:", error);
+        }
     }
 
     private async convertOpusToWav(pcmBuffer: Buffer): Promise<Buffer> {
@@ -843,11 +856,13 @@ export class VoiceManager extends EventEmitter {
             console.log(`No connection for user ${userId}`);
             return;
         }
+        this.cleanupAudioPlayer(this.activeAudioPlayer);
         const audioPlayer = createAudioPlayer({
             behaviors: {
                 noSubscriber: NoSubscriberBehavior.Pause,
             },
         });
+        this.activeAudioPlayer = audioPlayer;
         connection.subscribe(audioPlayer);
 
         const audioStartTime = Date.now();
@@ -872,6 +887,16 @@ export class VoiceManager extends EventEmitter {
                 }
             }
         );
+    }
+
+    cleanupAudioPlayer(audioPlayer: AudioPlayer) {
+        if (!audioPlayer) return;
+
+        audioPlayer.stop();
+        audioPlayer.removeAllListeners();
+        if (audioPlayer === this.activeAudioPlayer) {
+            this.activeAudioPlayer = null;
+        }
     }
 
     async handleJoinChannelCommand(interaction: any) {
