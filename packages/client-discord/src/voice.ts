@@ -347,6 +347,36 @@ export class VoiceManager extends EventEmitter {
             rate: DECODE_SAMPLE_RATE,
             frameSize: DECODE_FRAME_SIZE,
         });
+        const volumeBuffer: number[] = [];
+        const VOLUME_WINDOW_SIZE = 30;
+        const SPEAKING_THRESHOLD = 0.05;
+        opusDecoder.on("data", (pcmData: Buffer) => {
+            // Monitor the audio volume while the agent is speaking.
+            // If the average volume of the user's audio exceeds the defined threshold, it indicates active speaking.
+            // When active speaking is detected, stop the agent's current audio playback to avoid overlap.
+
+            if (this.activeAudioPlayer) {
+                const samples = new Int16Array(
+                    pcmData.buffer,
+                    pcmData.byteOffset,
+                    pcmData.length / 2
+                );
+                const maxAmplitude = Math.max(...samples.map(Math.abs)) / 32768;
+                volumeBuffer.push(maxAmplitude);
+
+                if (volumeBuffer.length > VOLUME_WINDOW_SIZE) {
+                    volumeBuffer.shift();
+                }
+                const avgVolume =
+                    volumeBuffer.reduce((sum, v) => sum + v, 0) /
+                    VOLUME_WINDOW_SIZE;
+
+                if (avgVolume > SPEAKING_THRESHOLD) {
+                    volumeBuffer.length = 0;
+                    this.cleanupAudioPlayer(this.activeAudioPlayer);
+                }
+            }
+        });
         pipeline(
             receiveStream as AudioReceiveStream,
             opusDecoder as any,
@@ -444,7 +474,7 @@ export class VoiceManager extends EventEmitter {
 
         const state = this.userStates.get(userId);
 
-        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 1500; // wait for 1.5 seconds of silence
+        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 2500; // wait for 1.5 seconds of silence
 
         const debouncedProcessTranscription = debounce(async () => {
             await this.processTranscription(
