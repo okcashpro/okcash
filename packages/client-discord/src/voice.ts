@@ -312,7 +312,7 @@ export class VoiceManager extends EventEmitter {
                     this.streams.get(userId)?.emit("speakingStarted");
                 }
             });
-    
+
             connection.receiver.speaking.on("end", async (userId: string) => {
                 const user = channel.members.get(userId);
                 if (!user?.user.bot) {

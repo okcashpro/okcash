@@ -27,8 +27,15 @@ import {
 import { elizaLogger } from "@ai16z/eliza";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
-import { discordShouldRespondTemplate, discordMessageHandlerTemplate } from "./templates.ts";
-import { generateSummary, sendMessageInChunks, canSendMessage } from "./utils.ts";
+import {
+    discordShouldRespondTemplate,
+    discordMessageHandlerTemplate,
+} from "./templates.ts";
+import {
+    generateSummary,
+    sendMessageInChunks,
+    canSendMessage,
+} from "./utils.ts";
 
 export type InterestChannels = {
     [key: string]: {
@@ -159,7 +166,7 @@ export class MessageManager {
                     this.client.user?.displayName,
             });
 
-            const canSendResult = canSendMessage(message.channel)
+            const canSendResult = canSendMessage(message.channel);
             if (!canSendResult.canSend) {
                 return elizaLogger.warn(
                     `Cannot send message to channel ${message.channel}`,
@@ -273,9 +280,7 @@ export class MessageManager {
                             memories.push(memory);
                         }
                         for (const m of memories) {
-                            await this.runtime.messageManager.createMemory(
-                                m
-                            );
+                            await this.runtime.messageManager.createMemory(m);
                         }
                         return memories;
                     } catch (error) {
