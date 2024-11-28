@@ -39,6 +39,7 @@ PACKAGES=(
     "plugin-bootstrap"
     "plugin-evm"
     "plugin-image-generation"
+    "plugin-tee"
     "client-auto"
     "client-direct"
     "client-discord"

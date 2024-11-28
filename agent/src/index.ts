@@ -33,6 +33,9 @@ import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
+import { teePlugin } from "@ai16z/plugin-tee";
+
+import buttplugPlugin from "@ai16z/plugin-buttplug";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
@@ -290,7 +293,8 @@ export function createAgent(
             getSecret(character, "COINBASE_PRIVATE_KEY")
                 ? coinbaseMassPaymentsPlugin
                 : null,
-            // getSecret(character, "BUTTPLUG_API_KEY") ? buttplugPlugin : null,
+            getSecret(character, "BUTTPLUG_API_KEY") ? buttplugPlugin : null,
+            getSecret(character, "WALLET_SECRET_SALT") ? teePlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],

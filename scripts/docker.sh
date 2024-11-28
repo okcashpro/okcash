@@ -45,6 +45,7 @@ case "$1" in
             "plugin-node"
             "plugin-solana"
             "plugin-evm"
+            "plugin-tee"
         )
 
         # Start building the docker run command
