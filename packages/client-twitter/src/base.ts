@@ -5,7 +5,7 @@ import {
     Memory,
     State,
     UUID,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     elizaLogger,
     stringToUuid,
 } from "@ai16z/eliza";
@@ -420,7 +420,7 @@ export class ClientBase extends EventEmitter {
                         content: content,
                         agentId: this.runtime.agentId,
                         roomId,
-                        embedding: embeddingZeroVector,
+                        embedding: getEmbeddingZeroVector(this.runtime),
                         createdAt: tweet.timestamp * 1000,
                     });
 
@@ -533,7 +533,7 @@ export class ClientBase extends EventEmitter {
                 content: content,
                 agentId: this.runtime.agentId,
                 roomId,
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(this.runtime),
                 createdAt: tweet.timestamp * 1000,
             });
 
@@ -575,7 +575,7 @@ export class ClientBase extends EventEmitter {
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(this.runtime),
                 });
             }
 

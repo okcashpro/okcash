@@ -2,7 +2,7 @@ import { Tweet } from "agent-twitter-client";
 import {
     composeContext,
     generateText,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     IAgentRuntime,
     ModelClass,
     stringToUuid,
@@ -209,8 +209,8 @@ export class TwitterPostClient {
                 );
                 const body = await result.json();
                 if (!body?.data?.create_tweet?.tweet_results?.result) {
-                  console.error("Error sending tweet; Bad response:", body);
-                  return;
+                    console.error("Error sending tweet; Bad response:", body);
+                    return;
                 }
                 const tweetResult = body.data.create_tweet.tweet_results.result;
 
@@ -267,7 +267,7 @@ export class TwitterPostClient {
                         source: "twitter",
                     },
                     roomId,
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(this.runtime),
                     createdAt: tweet.timestamp * 1000,
                 });
             } catch (error) {

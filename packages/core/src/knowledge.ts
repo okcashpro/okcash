@@ -1,12 +1,14 @@
 import { AgentRuntime } from "./runtime.ts";
-import { embed } from "./embedding.ts";
+import { embed, getEmbeddingZeroVector } from "./embedding.ts";
 import { KnowledgeItem, UUID, type Memory } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
-import { embeddingZeroVector } from "./memory.ts";
 import { splitChunks } from "./generation.ts";
 import elizaLogger from "./logger.ts";
 
-async function get(runtime: AgentRuntime, message: Memory): Promise<KnowledgeItem[]> {
+async function get(
+    runtime: AgentRuntime,
+    message: Memory
+): Promise<KnowledgeItem[]> {
     const processed = preprocess(message.content.text);
     elizaLogger.log(`Querying knowledge for: ${processed}`);
     const embedding = await embed(runtime, processed);
@@ -54,7 +56,7 @@ async function set(
         userId: runtime.agentId,
         createdAt: Date.now(),
         content: item.content,
-        embedding: embeddingZeroVector,
+        embedding: getEmbeddingZeroVector(runtime),
     });
 
     const preprocessed = preprocess(item.content.text);

@@ -9,7 +9,7 @@ import {
     UUID,
     composeContext,
     elizaLogger,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     generateMessageResponse,
     stringToUuid,
     generateShouldRespond,
@@ -500,17 +500,13 @@ export class VoiceManager extends EventEmitter {
             }
         };
 
-        new AudioMonitor(
-            audioStream,
-            10000000,
-            async (buffer) => {
-                if (!buffer) {
-                    console.error("Received empty buffer");
-                    return;
-                }
-                await processBuffer(buffer);
+        new AudioMonitor(audioStream, 10000000, async (buffer) => {
+            if (!buffer) {
+                console.error("Received empty buffer");
+                return;
             }
-        );
+            await processBuffer(buffer);
+        });
     }
 
     private async processTranscription(
@@ -534,7 +530,7 @@ export class VoiceManager extends EventEmitter {
 
             const transcriptionText = await this.runtime
                 .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
-            .transcribe(wavBuffer);
+                .transcribe(wavBuffer);
 
             function isValidTranscription(text: string): boolean {
                 if (!text || text.includes("[BLANK_AUDIO]")) return false;
@@ -614,7 +610,7 @@ export class VoiceManager extends EventEmitter {
                 },
                 userId: userIdUUID,
                 roomId,
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(this.runtime),
                 createdAt: Date.now(),
             };
 
@@ -674,7 +670,7 @@ export class VoiceManager extends EventEmitter {
                         inReplyTo: memory.id,
                     },
                     roomId,
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(this.runtime),
                 };
 
                 if (responseMemory.content.text?.trim()) {
@@ -684,7 +680,9 @@ export class VoiceManager extends EventEmitter {
                     state = await this.runtime.updateRecentMessageState(state);
 
                     const responseStream = await this.runtime
-                        .getService<ISpeechService>(ServiceType.SPEECH_GENERATION)
+                        .getService<ISpeechService>(
+                            ServiceType.SPEECH_GENERATION
+                        )
                         .generate(this.runtime, content.text);
 
                     if (responseStream) {

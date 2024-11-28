@@ -1,4 +1,4 @@
-import { embeddingZeroVector } from "@ai16z/eliza";
+import { getEmbeddingZeroVector } from "@ai16z/eliza";
 import { Character, Client as ElizaClient, IAgentRuntime } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import { elizaLogger } from "@ai16z/eliza";
@@ -189,7 +189,7 @@ export class DiscordClient extends EventEmitter {
             },
             roomId,
             createdAt: Date.now(),
-            embedding: embeddingZeroVector,
+            embedding: getEmbeddingZeroVector(this.runtime),
         });
     }
 
@@ -259,7 +259,7 @@ export class DiscordClient extends EventEmitter {
                 },
                 roomId,
                 createdAt: Date.now(),
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(this.runtime),
             });
         } catch (error) {
             console.error("Error creating reaction removal message:", error);

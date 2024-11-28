@@ -65,6 +65,30 @@ async function getRemoteEmbedding(
     }
 }
 
+export function getEmbeddingType(runtime: IAgentRuntime): "local" | "remote" {
+    const isNode =
+        typeof process !== "undefined" &&
+        process.versions != null &&
+        process.versions.node != null;
+
+    // Use local embedding if:
+    // - Running in Node.js
+    // - Not using OpenAI provider
+    // - Not forcing OpenAI embeddings
+    const isLocal =
+        isNode &&
+        runtime.character.modelProvider !== ModelProviderName.OPENAI &&
+        !settings.USE_OPENAI_EMBEDDING;
+
+    return isLocal ? "local" : "remote";
+}
+
+export function getEmbeddingZeroVector(runtime: IAgentRuntime): number[] {
+    const embeddingDimension =
+        getEmbeddingType(runtime) === "local" ? 384 : 1536;
+    return Array(embeddingDimension).fill(0);
+}
+
 /**
  * Send a message to the OpenAI API for embedding.
  * @param input The input to be embedded.
@@ -95,21 +119,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         throw new Error("No embedding model configured");
     }
 
-    // Check if running in Node.js environment
-    const isNode =
-        typeof process !== "undefined" &&
-        process.versions != null &&
-        process.versions.node != null;
-
-    // Use local embedding if:
-    // - Running in Node.js
-    // - Not using OpenAI provider
-    // - Not forcing OpenAI embeddings
-    if (
-        isNode &&
-        runtime.character.modelProvider !== ModelProviderName.OPENAI &&
-        !settings.USE_OPENAI_EMBEDDING
-    ) {
+    if (getEmbeddingType(runtime) === "local") {
         return await getLocalEmbedding(input);
     }
 

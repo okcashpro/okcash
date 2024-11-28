@@ -13,10 +13,10 @@ import {
     State,
     stringToUuid,
     elizaLogger,
+    getEmbeddingZeroVector,
 } from "@ai16z/eliza";
 import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
-import { embeddingZeroVector } from "@ai16z/eliza";
 
 export const twitterMessageHandlerTemplate =
     `{{timeline}}
@@ -130,13 +130,20 @@ export class TwitterInteractionClient {
                     BigInt(tweet.id) > this.client.lastCheckedTweetId
                 ) {
                     // Generate the tweetId UUID the same way it's done in handleTweet
-                    const tweetId = stringToUuid(tweet.id + "-" + this.runtime.agentId);
+                    const tweetId = stringToUuid(
+                        tweet.id + "-" + this.runtime.agentId
+                    );
 
                     // Check if we've already processed this tweet
-                    const existingResponse = await this.runtime.messageManager.getMemoryById(tweetId);
+                    const existingResponse =
+                        await this.runtime.messageManager.getMemoryById(
+                            tweetId
+                        );
 
                     if (existingResponse) {
-                        elizaLogger.log(`Already responded to tweet ${tweet.id}, skipping`);
+                        elizaLogger.log(
+                            `Already responded to tweet ${tweet.id}, skipping`
+                        );
                         continue;
                     }
                     elizaLogger.log("New Tweet found", tweet.permanentUrl);
@@ -280,10 +287,10 @@ export class TwitterInteractionClient {
                     url: tweet.permanentUrl,
                     inReplyTo: tweet.inReplyToStatusId
                         ? stringToUuid(
-                            tweet.inReplyToStatusId +
-                            "-" +
-                            this.runtime.agentId
-                        )
+                              tweet.inReplyToStatusId +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -447,10 +454,10 @@ export class TwitterInteractionClient {
                         url: currentTweet.permanentUrl,
                         inReplyTo: currentTweet.inReplyToStatusId
                             ? stringToUuid(
-                                currentTweet.inReplyToStatusId +
-                                "-" +
-                                this.runtime.agentId
-                            )
+                                  currentTweet.inReplyToStatusId +
+                                      "-" +
+                                      this.runtime.agentId
+                              )
                             : undefined,
                     },
                     createdAt: currentTweet.timestamp * 1000,
@@ -459,7 +466,7 @@ export class TwitterInteractionClient {
                         currentTweet.userId === this.twitterUserId
                             ? this.runtime.agentId
                             : stringToUuid(currentTweet.userId),
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(this.runtime),
                 });
             }
 
