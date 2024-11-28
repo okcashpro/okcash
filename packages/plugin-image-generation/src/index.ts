@@ -82,10 +82,11 @@ const imageGeneration: Action = {
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
         const heuristApiKeyOk = !!runtime.getSetting("HEURIST_API_KEY");
+        const falApiKeyOk = !!runtime.getSetting("FAL_API_KEY");
 
         // TODO: Add openai DALL-E generation as well
 
-        return anthropicApiKeyOk || togetherApiKeyOk || heuristApiKeyOk;
+        return anthropicApiKeyOk || togetherApiKeyOk || heuristApiKeyOk || falApiKeyOk;
     },
     handler: async (
         runtime: IAgentRuntime,
