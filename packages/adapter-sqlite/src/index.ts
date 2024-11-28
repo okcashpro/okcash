@@ -2,7 +2,6 @@ export * from "./sqliteTables.ts";
 export * from "./sqlite_vec.ts";
 
 import { DatabaseAdapter, IDatabaseCacheAdapter } from "@ai16z/eliza";
-import { getEmbeddingZeroVector } from "@ai16z/eliza";
 import {
     Account,
     Actor,
