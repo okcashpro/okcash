@@ -34,7 +34,7 @@ const baseDir = path.resolve(__dirname, "../../plugin-coinbase/src/plugins");
 const csvFilePath = path.join(baseDir, "transactions.csv");
 
 export const massPayoutProvider: Provider = {
-    get: async (runtime: IAgentRuntime, message: Memory) => {
+    get: async (runtime: IAgentRuntime, _message: Memory) => {
         try {
             Coinbase.configure({
                 apiKeyName:
