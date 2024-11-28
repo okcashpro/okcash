@@ -262,14 +262,14 @@ export const models: Models = {
         endpoint: "https://api.galadriel.com/v1",
         settings: {
             stop: [],
-            maxInputTokens: 128000, //need to confirm
+            maxInputTokens: 128000,
             maxOutputTokens: 8192, 
             frequency_penalty: 0.5,
             presence_penalty: 0.5,
             temperature: 0.8,
         },
         model: {
-            [ModelClass.SMALL]: "llama3.1:8b",
+            [ModelClass.SMALL]: "llama3.1:70b",
             [ModelClass.MEDIUM]: "llama3.1:70b",
             [ModelClass.LARGE]: "llama3.1:405b",
             [ModelClass.EMBEDDING]: "gte-large-en-v1.5",
