@@ -770,14 +770,14 @@ export const generateImage = async (
         count = 1;
     }
 
-    const model = getModel(runtime.character.imageModelProvider, ModelClass.IMAGE);
-    const modelSettings = models[runtime.character.imageModelProvider].imageSettings;
+    const model = getModel(runtime.imageModelProvider, ModelClass.IMAGE);
+    const modelSettings = models[runtime.imageModelProvider].imageSettings;
 
     elizaLogger.info("Generating image with options:", {
         imageModelProvider: model,
     });
 
-    const apiKey = runtime.character.imageModelProvider === runtime.character.modelProvider
+    const apiKey = runtime.imageModelProvider === runtime.modelProvider
         ? runtime.token
         : runtime.getSetting("HEURIST_API_KEY") ??
         runtime.getSetting("TOGETHER_API_KEY") ??
@@ -785,7 +785,7 @@ export const generateImage = async (
         runtime.getSetting("OPENAI_API_KEY");
 
     try {
-        if (runtime.character.imageModelProvider === ModelProviderName.HEURIST) {
+        if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
             const response = await fetch(
                 "http://sequencer.heurist.xyz/submit_job",
                 {
@@ -823,7 +823,7 @@ export const generateImage = async (
             const imageURL = await response.json();
             return { success: true, data: [imageURL] };
         } else if (
-            runtime.character.imageModelProvider === ModelProviderName.LLAMACLOUD
+            runtime.imageModelProvider === ModelProviderName.LLAMACLOUD
         ) {
             const together = new Together({ apiKey: apiKey as string });
             const response = await together.images.create({
@@ -852,7 +852,7 @@ export const generateImage = async (
                 })
             );
             return { success: true, data: base64s };
-        } else if (runtime.character.imageModelProvider === ModelProviderName.FAL) {
+        } else if (runtime.imageModelProvider === ModelProviderName.FAL) {
             fal.config({
                 credentials: apiKey as string
             });
