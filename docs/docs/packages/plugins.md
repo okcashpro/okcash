@@ -244,6 +244,25 @@ The plugin automatically handles wallet creation or uses an existing wallet if t
 
 ---
 
+### Coinbase Wallet Management
+
+The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
+
+1. **Wallet Generation on First Run**
+   If no wallet information is provided (`COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID`), the plugin will:
+
+   - **Generate a new wallet** using the Coinbase SDK.
+   - Automatically **export the wallet details** (`seed` and `walletId`) and securely store them in `runtime.character.settings.secrets` or other configured storage.
+   - Log the wallet’s default address for reference.
+   - If the character file does not exist, the wallet details are saved to a characters/charactername-seed.txt file in the characters directory with a note indicating that the user must manually add these details to settings.secrets or the .env file.
+
+2. **Using an Existing Wallet**
+   If wallet information is available during the first run:
+   - Provide `COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID` via `runtime.character.settings.secrets` or environment variables.
+   - The plugin will **import the wallet** and use it for processing mass payouts.
+
+---
+
 #### 6. Coinbase MassPayments Plugin (`@eliza/plugin-coinbase`)
 
 This plugin facilitates the processing of cryptocurrency mass payouts using the Coinbase SDK. It enables the creation and management of mass payouts to multiple wallet addresses, logging all transaction details to a CSV file for further analysis.
@@ -313,112 +332,24 @@ Supported networks:
    - `COINBASE_API_KEY`: API key for Coinbase SDK.
    - `COINBASE_PRIVATE_KEY`: Private key for secure transactions.
 
----
+**Wallet Management:**
 
-#### 7. Coinbase Trading Plugin (`@eliza/plugin-coinbase`)
+The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
 
-This plugin enables cryptocurrency trading functionality using the Coinbase SDK. It allows the execution and logging of trades between various supported cryptocurrency assets across multiple networks.
+1. **Wallet Generation on First Run**
+   If no wallet information is provided (`COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID`), the plugin will:
 
-**Actions:**
+   - **Generate a new wallet** using the Coinbase SDK.
+   - Automatically **export the wallet details** (`seed` and `walletId`) and securely store them in `runtime.character.settings.secrets` or other configured storage.
+   - Log the wallet’s default address for reference.
+   - If the character file does not exist, the wallet details are saved to a characters/charactername-seed.txt file in the characters directory with a note indicating that the user must manually add these details to settings.secrets or the .env file.
 
-- `EXECUTE_TRADE`
-  Facilitates cryptocurrency trading by swapping one asset for another. For now USDC and ETH supported
-  - **Inputs**:
-    - `network` (string): Blockchain network (e.g., `base`, `sol`, `eth`, `arb`, `pol`).
-    - `fromAssetId` (string): Cryptocurrency asset ID to trade from (e.g., `ETH`, `USDC`).
-    - `toAssetId` (string): Cryptocurrency asset ID to trade to (e.g., `USDC`, `DAI`).
-    - `amount` (number): Amount of the source asset to trade (in the smallest currency unit, e.g., Wei for ETH).
-  - **Outputs**: Logs the trade details (success/failure) in a CSV file for transparency and analysis.
-  - **Example**:
-    ```json
-    {
-      "network": "base",
-      "fromAssetId": "ETH",
-      "toAssetId": "USDC",
-      "amount": 0.01
-    }
-    ```
+2. **Using an Existing Wallet**
+   If wallet information is available during the first run:
+   - Provide `COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID` via `runtime.character.settings.secrets` or environment variables.
+   - The plugin will **import the wallet** and use it for processing mass payouts.
 
-**Providers:**
-
-- `tradeProvider`
-  Retrieves a list of past trades from the CSV log.
-  - **Outputs**: A list of trade records including:
-    - `network`: Blockchain network used for the trade.
-    - `fromAmount`: Amount of the source asset traded.
-    - `fromAsset`: Source cryptocurrency asset.
-    - `toAmount`: Amount of the target asset received.
-    - `toAsset`: Target cryptocurrency asset.
-    - `status`: Trade status (`Success` or `Failed`).
-    - `transactionUrl`: URL for transaction details (if available).
-
-**Description:**
-
-The Coinbase Trading plugin allows seamless asset trading on supported networks, providing robust error handling, automated logging, and transaction transparency.
-
-Supported networks:
-
-- `base` (Base blockchain)
-- `sol` (Solana)
-- `eth` (Ethereum)
-- `arb` (Arbitrum)
-- `pol` (Polygon)
-
-**Usage Instructions:**
-
-1. **Configure the Plugin**
-   Add the plugin to your character’s configuration:
-
-   ```typescript
-   import { coinbaseTradingPlugin } from "@eliza/plugin-coinbase-trading";
-
-   const character = {
-     plugins: [coinbaseTradingPlugin],
-   };
-   ```
-
-2. **Ensure Secure Configuration**
-   Set the following environment variables or runtime settings to ensure the plugin functions securely:
-
-   - `COINBASE_API_KEY`: API key for Coinbase SDK.
-   - `COINBASE_PRIVATE_KEY`: Private key for secure transactions.
-
----
-
-**Example Call:**
-
-To execute a trade using the `EXECUTE_TRADE` action:
-
-```typescript
-const response = await runtime.triggerAction("EXECUTE_TRADE", {
-  network: "eth",
-  fromAssetId: "ETH",
-  toAssetId: "USDC",
-  amount: 0.01,
-});
-console.log("Trade response:", response);
-```
-
-**Transaction Logging:**
-
-All trades are logged to a `trades.csv` file for transparency, with the following structure:
-
-```plaintext
-Network,From Amount,Source Asset,To Amount,Target Asset,Status,Transaction URL
-eth,0.01,ETH,15,USDC,Success,https://etherscan.io/tx/0x...
-```
-
----
-
-**Best Practices:**
-
-- **Validation**: Validate input parameters (`network`, `fromAssetId`, `toAssetId`, `amount`) to ensure they comply with supported networks and assets.
-- **Error Monitoring**: Monitor logs for failed transactions to handle retries or investigate issues.
-- **Secure Keys**: Store API and private keys securely in `runtime.character.settings.secrets` or as environment variables.
-
----
-
-### Required Configurations
+**Required Configurations:**
 
 The following configurations must be provided for wallet management:
 
@@ -534,6 +465,86 @@ When successful, a response similar to the following will be returned:
 - **Secure Secrets Storage**: Ensure `COINBASE_API_KEY` and `COINBASE_PRIVATE_KEY` are stored securely in `runtime.character.settings.secrets` or environment variables. Either add `COINBASE_GENERATED_WALLET_HEX_SEED`, and `COINBASE_GENERATED_WALLET_ID` from a previous run, or it will be dynamically created
 - **Validation**: Always validate input parameters, especially `receivingAddresses` and `network`, to ensure compliance with expected formats and supported networks.
 - **Error Handling**: Monitor logs for failed transactions or errors in the payout process and adjust retry logic as needed.
+
+---
+
+#### 7. TEE Plugin (`@ai16z/plugin-tee`)
+
+Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
+
+**Providers:**
+
+- `deriveKeyProvider` - Allows for secure key derivation within a TEE environment. It supports deriving keys for both Solana (Ed25519) and Ethereum (ECDSA) chains.
+- `remoteAttestationProvider` - Generate a Remote Attestation Quote based on `report_data`.
+
+**DeriveKeyProvider Usage**
+
+```typescript
+import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+
+// Initialize the provider
+const provider = new DeriveKeyProvider();
+
+// Derive a raw key
+try {
+  const rawKey = await provider.rawDeriveKey(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // rawKey is a DeriveKeyResponse that can be used for further processing
+  // to get the uint8Array do the following
+  const rawKeyArray = rawKey.asUint8Array();
+} catch (error) {
+  console.error("Raw key derivation failed:", error);
+}
+
+// Derive a Solana keypair (Ed25519)
+try {
+  const solanaKeypair = await provider.deriveEd25519Keypair(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // solanaKeypair can now be used for Solana operations
+} catch (error) {
+  console.error("Solana key derivation failed:", error);
+}
+
+// Derive an Ethereum keypair (ECDSA)
+try {
+  const evmKeypair = await provider.deriveEcdsaKeypair(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // evmKeypair can now be used for Ethereum operations
+} catch (error) {
+  console.error("EVM key derivation failed:", error);
+}
+```
+
+**RemoteAttestationProvider Usage**
+
+```typescript
+import { RemoteAttestationProvider } from "@ai16z/plugin-tee";
+// Initialize the provider
+const provider = new RemoteAttestationProvider();
+// Generate Remote Attestation
+try {
+  const attestation = await provider.generateAttestation("your-report-data");
+  console.log("Attestation:", attestation);
+} catch (error) {
+  console.error("Failed to generate attestation:", error);
+}
+```
+
+**Configuration**
+
+When using the provider through the runtime environment, ensure the following settings are configured:
+
+```env
+ # Optional, for simulator purposes if testing on mac or windows. Leave empty for Linux x86 machines.
+DSTACK_SIMULATOR_ENDPOINT="http://host.docker.internal:8090"
+WALLET_SECRET_SALT=your-secret-salt // Required to single agent deployments
+```
 
 ---
 
