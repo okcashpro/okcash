@@ -22,6 +22,7 @@ export async function validateSolanaConfig(
                 runtime.getSetting("WALLET_SECRET_KEY") ||
                 process.env.WALLET_SECRET_KEY,
             WALLET_PUBLIC_KEY:
+                runtime.getSetting("SOLANA_PUBLIC_KEY") ||
                 runtime.getSetting("WALLET_PUBLIC_KEY") ||
                 process.env.WALLET_PUBLIC_KEY,
             SOL_ADDRESS:

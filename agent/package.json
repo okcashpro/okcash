@@ -31,6 +31,7 @@
         "@ai16z/plugin-coinbase": "workspace:*",
         "readline": "1.3.0",
         "ws": "8.18.0",
+        "@ai16z/plugin-evm": "workspace:*",
         "yargs": "17.7.2"
     },
     "devDependencies": {
