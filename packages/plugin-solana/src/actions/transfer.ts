@@ -138,7 +138,9 @@ export default {
         }
 
         try {
-            const privateKeyString = runtime.getSetting("WALLET_PRIVATE_KEY")!;
+            const privateKeyString =
+                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
+                runtime.getSetting("WALLET_PRIVATE_KEY");
             const secretKey = bs58.decode(privateKeyString);
             const senderKeypair = Keypair.fromSecretKey(secretKey);
 

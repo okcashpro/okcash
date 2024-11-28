@@ -69,6 +69,7 @@ export const executeSwapForDAO: Action = {
             const authority = Keypair.fromSecretKey(
                 Uint8Array.from(
                     Buffer.from(
+                        runtime.getSetting("SOLANA_PRIVATE_KEY") ??
                         runtime.getSetting("WALLET_PRIVATE_KEY"), // should be the authority private key
                         "base64"
                     )

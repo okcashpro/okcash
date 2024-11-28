@@ -675,6 +675,11 @@ export type Character = {
         };
         model?: string;
         embeddingModel?: string;
+        chains?: {
+            evm?: any[];
+            solana?: any[];
+            [key: string]: any[];
+        };
     };
 
     /** Optional client-specific config */
