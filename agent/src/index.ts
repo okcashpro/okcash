@@ -208,6 +208,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.GROQ_API_KEY ||
                 settings.GROQ_API_KEY
             );
+        case ModelProviderName.GALADRIEL:
+            return (
+                character.settings?.secrets?.GALADRIEL_API_KEY ||
+                settings.GALADRIEL_API_KEY
+            );
     }
 }
 
