@@ -87,17 +87,18 @@ export class BrowserService extends Service implements IBrowserService {
         );
     }
 
-    async initialize() { }
+    async initialize() {}
 
     async initializeBrowser() {
         if (!this.browser) {
             this.browser = await chromium.launch({
+                headless: true,
                 args: ["--no-sandbox", "--disable-setuid-sandbox"],
             });
 
             this.context = await this.browser.newContext({
                 userAgent:
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
             });
 
             this.blocker =
