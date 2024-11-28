@@ -14,12 +14,7 @@ import {
 } from "@ai16z/eliza";
 import { initializeWallet } from "../utils";
 import { tradeTemplate } from "../templates";
-import {
-    isTradeContent,
-    TradeContent,
-    TradeSchema,
-    TradeTransaction,
-} from "../types";
+import { isTradeContent, TradeContent, TradeSchema } from "../types";
 import { readFile } from "fs/promises";
 import { parse } from "csv-parse/sync";
 import path from "path";
@@ -119,7 +114,7 @@ export const executeTradeAction: Action = {
     name: "EXECUTE_TRADE",
     description:
         "Execute a trade between two assets using the Coinbase SDK and log the result.",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         elizaLogger.log("Validating runtime for EXECUTE_TRADE...");
         return (
             !!(
@@ -134,9 +129,9 @@ export const executeTradeAction: Action = {
     },
     handler: async (
         runtime: IAgentRuntime,
-        message: Memory,
+        _message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Starting EXECUTE_TRADE handler...");
