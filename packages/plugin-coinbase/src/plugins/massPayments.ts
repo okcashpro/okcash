@@ -36,6 +36,14 @@ const csvFilePath = path.join(baseDir, "transactions.csv");
 export const massPayoutProvider: Provider = {
     get: async (runtime: IAgentRuntime, message: Memory) => {
         try {
+            Coinbase.configure({
+                apiKeyName:
+                    runtime.getSetting("COINBASE_API_KEY") ??
+                    process.env.COINBASE_API_KEY,
+                privateKey:
+                    runtime.getSetting("COINBASE_PRIVATE_KEY") ??
+                    process.env.COINBASE_PRIVATE_KEY,
+            });
             elizaLogger.log("Reading CSV file from:", csvFilePath);
 
             // Ensure the CSV file exists
@@ -376,7 +384,7 @@ Check the CSV file for full details.`,
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Distribute 0.0001 ETH on base network to 0xA0ba2ACB5846A54834173fB0DD9444F756810f06 and 0xF14F2c49aa90BaFA223EE074C1C33b59891826bF",
+                    text: "Distribute 0.0001 ETH on base to 0xA0ba2ACB5846A54834173fB0DD9444F756810f06 and 0xF14F2c49aa90BaFA223EE074C1C33b59891826bF",
                 },
             },
             {

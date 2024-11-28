@@ -31,6 +31,14 @@ const tradeCsvFilePath = path.join(baseDir, "trades.csv");
 export const tradeProvider: Provider = {
     get: async (runtime: IAgentRuntime, _message: Memory) => {
         try {
+            Coinbase.configure({
+                apiKeyName:
+                    runtime.getSetting("COINBASE_API_KEY") ??
+                    process.env.COINBASE_API_KEY,
+                privateKey:
+                    runtime.getSetting("COINBASE_PRIVATE_KEY") ??
+                    process.env.COINBASE_PRIVATE_KEY,
+            });
             elizaLogger.log("Reading CSV file from:", tradeCsvFilePath);
 
             // Check if the file exists; if not, create it with headers
@@ -239,7 +247,7 @@ export const executeTradeAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Trade 0.00001 ETH for USDC on the base",
+                    text: "Trade 0.00001 ETH for USDC on base",
                 },
             },
             {
