@@ -35,6 +35,7 @@ PACKAGES=(
     "plugin-bootstrap"
     "plugin-image-generation"
     "plugin-coinbase"
+    "plugin-tee"
     "client-auto"
     "client-direct"
     "client-discord"
