@@ -956,6 +956,7 @@ export interface IAgentRuntime {
     databaseAdapter: IDatabaseAdapter;
     token: string | null;
     modelProvider: ModelProviderName;
+    imageModelProvider: ModelProviderName;
     character: Character;
     providers: Provider[];
     actions: Action[];
