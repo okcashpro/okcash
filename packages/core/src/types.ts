@@ -218,6 +218,7 @@ export enum ModelProviderName {
     OPENROUTER = "openrouter",
     OLLAMA = "ollama",
     HEURIST = "heurist",
+    GALADRIEL = "galadriel"
 }
 
 /**
