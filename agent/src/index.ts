@@ -68,57 +68,81 @@ export function parseArguments(): {
             })
             .parseSync();
     } catch (error) {
-        console.error("Error parsing arguments:", error);
+        elizaLogger.error("Error parsing arguments:", error);
         return {};
+    }
+}
+
+function tryLoadFile(filePath: string): string | null {
+    try {
+        return fs.readFileSync(filePath, "utf8");
+    } catch (e) {
+        return null;
     }
 }
 
 export async function loadCharacters(
     charactersArg: string
 ): Promise<Character[]> {
-    let characterPaths = charactersArg?.split(",").map((filePath) => {
-        if (path.basename(filePath) === filePath) {
-            filePath = "../characters/" + filePath;
-        }
-        return path.resolve(process.cwd(), filePath.trim());
-    });
-
+    let characterPaths = charactersArg?.split(",").map((filePath) => filePath.trim());
     const loadedCharacters = [];
 
     if (characterPaths?.length > 0) {
-        for (const path of characterPaths) {
-            try {
-                const character = JSON.parse(fs.readFileSync(path, "utf8"));
+        for (const characterPath of characterPaths) {
+            let content = null;
+            let resolvedPath = "";
+            
+            // Try different path resolutions in order
+            const pathsToTry = [
+                characterPath, // exact path as specified
+                path.resolve(process.cwd(), characterPath), // relative to cwd
+                path.resolve(__dirname, characterPath), // relative to current script
+                path.resolve(__dirname, "../characters", path.basename(characterPath)), // relative to characters dir from agent
+                path.resolve(__dirname, "../../characters", path.basename(characterPath)), // relative to project root characters dir
+            ];
 
+            for (const tryPath of pathsToTry) {
+                content = tryLoadFile(tryPath);
+                if (content !== null) {
+                    resolvedPath = tryPath;
+                    break;
+                }
+            }
+
+            if (content === null) {
+                elizaLogger.error(`Error loading character from ${characterPath}: File not found in any of the expected locations`);
+                elizaLogger.error("Tried the following paths:");
+                pathsToTry.forEach(p => elizaLogger.error(` - ${p}`));
+                process.exit(1);
+            }
+
+            try {
+                const character = JSON.parse(content);
                 validateCharacterConfig(character);
 
-                // is there a "plugins" field?
+                // Handle plugins
                 if (character.plugins) {
-                    console.log("Plugins are: ", character.plugins);
-
+                    elizaLogger.info("Plugins are: ", character.plugins);
                     const importedPlugins = await Promise.all(
                         character.plugins.map(async (plugin) => {
-                            // if the plugin name doesnt start with @eliza,
-
                             const importedPlugin = await import(plugin);
                             return importedPlugin;
                         })
                     );
-
                     character.plugins = importedPlugins;
                 }
 
                 loadedCharacters.push(character);
+                elizaLogger.info(`Successfully loaded character from: ${resolvedPath}`);
             } catch (e) {
-                console.error(`Error loading character from ${path}: ${e}`);
-                // don't continue to load if a specified file is not found
+                elizaLogger.error(`Error parsing character from ${resolvedPath}: ${e}`);
                 process.exit(1);
             }
         }
     }
 
     if (loadedCharacters.length === 0) {
-        console.log("No characters found, using default character");
+        elizaLogger.info("No characters found, using default character");
         loadedCharacters.push(defaultCharacter);
     }
 
