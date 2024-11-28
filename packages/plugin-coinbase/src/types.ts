@@ -1,3 +1,4 @@
+import { Coinbase } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
 
 export const ChargeSchema = z.object({
@@ -51,12 +52,12 @@ export type Transaction = {
     errorCode: string | null;
     transactionUrl: string | null;
 };
-
+const assetValues = Object.values(Coinbase.assets) as [string, ...string[]];
 export const TradeSchema = z.object({
     network: z.string().toLowerCase(),
     amount: z.number(),
-    sourceAsset: z.string().toLowerCase(),
-    targetAsset: z.string().toLowerCase(),
+    sourceAsset: z.enum(assetValues),
+    targetAsset: z.enum(assetValues),
     leverage: z.number().optional(), // Optional leverage for leveraged trades
 });
 
