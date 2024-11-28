@@ -91,6 +91,8 @@ sh scripts/start.sh
 2. To load custom characters:
     - Use `pnpm start --characters="path/to/your/character.json"`
     - Multiple character files can be loaded simultaneously
+3. Connect with X (Twitter)
+    - change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
 
 ### Manually Start Eliza
 
