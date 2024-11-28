@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@ai16z/eliza": "0.1.3",
+        "@ai16z/eliza": "^0.1.3",
         "coinbase-api": "1.0.5"
     },
     "devDependencies": {
@@ -17,8 +17,8 @@
     },
     "peerDependencies": {
         "onnxruntime-node": "1.20.1",
-        "whatwg-url": "7.1.0",
-        "vue": "3.5.13"
+        "vue": "3.5.13",
+        "whatwg-url": "7.1.0"
     },
     "trustedDependencies": {
         "onnxruntime-node": "^1.20.0",

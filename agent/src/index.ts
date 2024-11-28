@@ -30,6 +30,7 @@ import { nodePlugin } from "@ai16z/plugin-node";
 import {
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
+    tradePlugin,
 } from "@ai16z/plugin-coinbase";
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -266,10 +267,10 @@ export function createAgent(
             getSecret(character, "COINBASE_COMMERCE_KEY")
                 ? coinbaseCommercePlugin
                 : null,
-            getSecret(character, "COINBASE_API_KEY") &&
-                getSecret(character, "COINBASE_PRIVATE_KEY")
-                ? coinbaseMassPaymentsPlugin
-                : null,
+            ...(getSecret(character, "COINBASE_API_KEY") &&
+            getSecret(character, "COINBASE_PRIVATE_KEY")
+                ? [coinbaseMassPaymentsPlugin, tradePlugin]
+                : []),
         ].filter(Boolean),
         providers: [],
         actions: [],

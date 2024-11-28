@@ -236,7 +236,7 @@ export const executeTradeAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Trade 0.01 ETH for USDC on the base network.",
+                    text: "Trade 0.0001 ETH for USDC on the base",
                 },
             },
             {
@@ -286,6 +286,14 @@ export const executeTradeAction: Action = {
                 },
             },
         ],
+    ],
+    similes: [
+        "CREATE_TRADE",
+        "TRADE",
+        "SWAP",
+        "EXCHANGE",
+        "SWAP_ASSETS",
+        "SWAP_CURRENCY",
     ],
 };
 
