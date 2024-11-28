@@ -63,9 +63,6 @@ export class BrowserService extends Service implements IBrowserService {
     private captchaSolver: CaptchaSolver;
     private cacheKey = "content/browser";
 
-    private queue: string[] = [];
-    private processing: boolean = false;
-
     static serviceType: ServiceType = ServiceType.BROWSER;
 
     static register(runtime: IAgentRuntime): IAgentRuntime {
@@ -143,47 +140,11 @@ export class BrowserService extends Service implements IBrowserService {
         runtime: IAgentRuntime
     ): Promise<PageContent> {
         await this.initializeBrowser();
-        this.queue.push(url);
-        this.processQueue(runtime);
-
-        return new Promise((resolve, reject) => {
-            const checkQueue = async () => {
-                const index = this.queue.indexOf(url);
-                if (index !== -1) {
-                    setTimeout(checkQueue, 100);
-                } else {
-                    try {
-                        const result = await this.fetchPageContent(
-                            url,
-                            runtime
-                        );
-                        resolve(result);
-                    } catch (error) {
-                        reject(error);
-                    }
-                }
-            };
-            checkQueue();
-        });
+        return await this.fetchPageContent(url, runtime);
     }
 
     private getCacheKey(url: string): string {
         return stringToUuid(url);
-    }
-
-    private async processQueue(runtime: IAgentRuntime): Promise<void> {
-        if (this.processing || this.queue.length === 0) {
-            return;
-        }
-
-        this.processing = true;
-
-        while (this.queue.length > 0) {
-            const url = this.queue.shift();
-            await this.fetchPageContent(url, runtime);
-        }
-
-        this.processing = false;
     }
 
     private async fetchPageContent(
@@ -236,15 +197,15 @@ export class BrowserService extends Service implements IBrowserService {
             if (captchaDetected) {
                 await this.solveCaptcha(page, url);
             }
-            const title = await page.evaluate(() => document.title);
+            const documentTitle = await page.evaluate(() => document.title);
             const bodyContent = await page.evaluate(
                 () => document.body.innerText
             );
-            const { description } = await generateSummary(
+            const { title: parsedTitle, description } = await generateSummary(
                 runtime,
-                title + "\n" + bodyContent
+                documentTitle + "\n" + bodyContent
             );
-            const content = { title, description, bodyContent };
+            const content = { title: parsedTitle, description, bodyContent };
             await runtime.cacheManager.set(`${this.cacheKey}/${cacheKey}`, {
                 url,
                 content,

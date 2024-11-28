@@ -29,11 +29,7 @@ import {
     discordShouldRespondTemplate,
     discordMessageHandlerTemplate,
 } from "./templates.ts";
-import {
-    generateSummary,
-    sendMessageInChunks,
-    canSendMessage,
-} from "./utils.ts";
+import { sendMessageInChunks, canSendMessage } from "./utils.ts";
 
 export type InterestChannels = {
     [key: string]: {
@@ -410,20 +406,16 @@ export class MessageManager {
                     throw new Error("Browser service not found");
                 }
 
-                const { title, bodyContent } =
+                const { title, description: summary } =
                     await browserService.getPageContent(url, this.runtime);
 
-                const { title: newTitle, description } = await generateSummary(
-                    this.runtime,
-                    title + "\n" + bodyContent
-                );
                 attachments.push({
                     id: `webpage-${Date.now()}`,
                     url: url,
-                    title: newTitle || "Web Page",
+                    title: title || "Web Page",
                     source: "Web",
-                    description,
-                    text: bodyContent,
+                    description: summary,
+                    text: summary,
                 });
             }
         }
