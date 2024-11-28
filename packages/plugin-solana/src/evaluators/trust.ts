@@ -148,7 +148,10 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         // create the wallet provider and token provider
         const walletProvider = new WalletProvider(
             new Connection("https://api.mainnet-beta.solana.com"),
-            new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
+            new PublicKey(
+                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+                runtime.getSetting("WALLET_PUBLIC_KEY")
+            )
         );
         const tokenProvider = new TokenProvider(
             rec.contractAddress,
