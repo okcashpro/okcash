@@ -1,15 +1,24 @@
-// Exports
-export * from "./actions/index.ts";
-export * from "./clients/index.ts";
-export * from "./adapters/index.ts";
-export * from "./providers/index.ts";
-export * from "./core/index.ts";
-export * from "./cli/index.ts";
-
-import { elizaLogger as Logging } from "./core/index.ts";
-
-// // Initialize the pretty console
-export const elizaLogger = new Logging();
-elizaLogger.clear();
-elizaLogger.closeByNewLine = true;
-elizaLogger.useIcons = true;
+export * from "./actions.ts";
+export * from "./context.ts";
+export * from "./database.ts";
+export * from "./defaultCharacter.ts";
+export * from "./embedding.ts";
+export * from "./evaluators.ts";
+export * from "./generation.ts";
+export * from "./goals.ts";
+export * from "./memory.ts";
+export * from "./messages.ts";
+export * from "./models.ts";
+export * from "./posts.ts";
+export * from "./providers.ts";
+export * from "./relationships.ts";
+export * from "./runtime.ts";
+export * from "./settings.ts";
+export * from "./types.ts";
+export * from "./logger.ts";
+export * from "./parsing.ts";
+export * from "./uuid.ts";
+export * from "./enviroment.ts";
+export * from "./cache.ts";
+export { default as knowledge } from "./knowledge.ts";
+export * from "./utils.ts";

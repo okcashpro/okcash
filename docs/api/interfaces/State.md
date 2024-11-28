@@ -1,0 +1,321 @@
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / State
+
+# Interface: State
+
+Represents the current state/context of a conversation
+
+## Indexable
+
+ \[`key`: `string`\]: `unknown`
+
+## Properties
+
+### userId?
+
+> `optional` **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+ID of user who sent current message
+
+#### Defined in
+
+[packages/core/src/types.ts:228](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L228)
+
+***
+
+### agentId?
+
+> `optional` **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+ID of agent in conversation
+
+#### Defined in
+
+[packages/core/src/types.ts:231](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L231)
+
+***
+
+### bio
+
+> **bio**: `string`
+
+Agent's biography
+
+#### Defined in
+
+[packages/core/src/types.ts:234](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L234)
+
+***
+
+### lore
+
+> **lore**: `string`
+
+Agent's background lore
+
+#### Defined in
+
+[packages/core/src/types.ts:237](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L237)
+
+***
+
+### messageDirections
+
+> **messageDirections**: `string`
+
+Message handling directions
+
+#### Defined in
+
+[packages/core/src/types.ts:240](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L240)
+
+***
+
+### postDirections
+
+> **postDirections**: `string`
+
+Post handling directions
+
+#### Defined in
+
+[packages/core/src/types.ts:243](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L243)
+
+***
+
+### roomId
+
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Current room/conversation ID
+
+#### Defined in
+
+[packages/core/src/types.ts:246](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L246)
+
+***
+
+### agentName?
+
+> `optional` **agentName**: `string`
+
+Optional agent name
+
+#### Defined in
+
+[packages/core/src/types.ts:249](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L249)
+
+***
+
+### senderName?
+
+> `optional` **senderName**: `string`
+
+Optional message sender name
+
+#### Defined in
+
+[packages/core/src/types.ts:252](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L252)
+
+***
+
+### actors
+
+> **actors**: `string`
+
+String representation of conversation actors
+
+#### Defined in
+
+[packages/core/src/types.ts:255](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L255)
+
+***
+
+### actorsData?
+
+> `optional` **actorsData**: [`Actor`](Actor.md)[]
+
+Optional array of actor objects
+
+#### Defined in
+
+[packages/core/src/types.ts:258](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L258)
+
+***
+
+### goals?
+
+> `optional` **goals**: `string`
+
+Optional string representation of goals
+
+#### Defined in
+
+[packages/core/src/types.ts:261](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L261)
+
+***
+
+### goalsData?
+
+> `optional` **goalsData**: [`Goal`](Goal.md)[]
+
+Optional array of goal objects
+
+#### Defined in
+
+[packages/core/src/types.ts:264](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L264)
+
+***
+
+### recentMessages
+
+> **recentMessages**: `string`
+
+Recent message history as string
+
+#### Defined in
+
+[packages/core/src/types.ts:267](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L267)
+
+***
+
+### recentMessagesData
+
+> **recentMessagesData**: [`Memory`](Memory.md)[]
+
+Recent message objects
+
+#### Defined in
+
+[packages/core/src/types.ts:270](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L270)
+
+***
+
+### actionNames?
+
+> `optional` **actionNames**: `string`
+
+Optional valid action names
+
+#### Defined in
+
+[packages/core/src/types.ts:273](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L273)
+
+***
+
+### actions?
+
+> `optional` **actions**: `string`
+
+Optional action descriptions
+
+#### Defined in
+
+[packages/core/src/types.ts:276](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L276)
+
+***
+
+### actionsData?
+
+> `optional` **actionsData**: [`Action`](Action.md)[]
+
+Optional action objects
+
+#### Defined in
+
+[packages/core/src/types.ts:279](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L279)
+
+***
+
+### actionExamples?
+
+> `optional` **actionExamples**: `string`
+
+Optional action examples
+
+#### Defined in
+
+[packages/core/src/types.ts:282](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L282)
+
+***
+
+### providers?
+
+> `optional` **providers**: `string`
+
+Optional provider descriptions
+
+#### Defined in
+
+[packages/core/src/types.ts:285](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L285)
+
+***
+
+### responseData?
+
+> `optional` **responseData**: [`Content`](Content.md)
+
+Optional response content
+
+#### Defined in
+
+[packages/core/src/types.ts:288](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L288)
+
+***
+
+### recentInteractionsData?
+
+> `optional` **recentInteractionsData**: [`Memory`](Memory.md)[]
+
+Optional recent interaction objects
+
+#### Defined in
+
+[packages/core/src/types.ts:291](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L291)
+
+***
+
+### recentInteractions?
+
+> `optional` **recentInteractions**: `string`
+
+Optional recent interactions string
+
+#### Defined in
+
+[packages/core/src/types.ts:294](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L294)
+
+***
+
+### formattedConversation?
+
+> `optional` **formattedConversation**: `string`
+
+Optional formatted conversation
+
+#### Defined in
+
+[packages/core/src/types.ts:297](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L297)
+
+***
+
+### knowledge?
+
+> `optional` **knowledge**: `string`
+
+Optional formatted knowledge
+
+#### Defined in
+
+[packages/core/src/types.ts:300](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L300)
+
+***
+
+### knowledgeData?
+
+> `optional` **knowledgeData**: [`KnowledgeItem`](../type-aliases/KnowledgeItem.md)[]
+
+Optional knowledge data
+
+#### Defined in
+
+[packages/core/src/types.ts:302](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L302)

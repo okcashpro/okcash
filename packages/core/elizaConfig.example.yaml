@@ -1,6 +1,6 @@
 # Load custom actions from the actions directory
 
-# Close this into a elizaConfig.yaml file that is ignored by git
+# Clone this into a elizaConfig.yaml file that is ignored by git
 
 # Paths are relative to the core/src directory
 

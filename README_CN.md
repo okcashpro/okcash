@@ -23,7 +23,7 @@
 
 **前置要求（必须）:**
 
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   Nodejs安装
 -   [pnpm](https://pnpm.io/installation)
 -   使用pnpm
@@ -104,6 +104,15 @@ XAI_MODEL=
 # For asking Claude stuff
 ANTHROPIC_API_KEY=
 
+# EVM
+EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+EVM_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Solana
+SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Fallback Wallet Configuration (deprecated)
 WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
 WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
 

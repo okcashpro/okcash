@@ -1,140 +1,186 @@
-# Secrets Management
+---
+sidebar_position: 11
+---
 
-## Overview
+# 🔐 Secrets Management
 
-Eliza provides multiple options for managing secrets and credentials, including environment variables and character-specific secrets. This guide covers best practices for managing API keys, tokens, and other sensitive configuration values across different deployment scenarios.
+A comprehensive guide for managing secrets, API keys, and sensitive configuration in Eliza.
 
-## Environment Variables
+## Core Concepts
 
-### Basic Setup
+### Environment Variables
 
-Create a `.env` file in your project root:
-
-```bash
-# Core API Keys
-OPENAI_API_KEY=sk-your-key
-ANTHROPIC_API_KEY=your-key
-ELEVENLABS_XI_API_KEY=your-key
-
-# Discord Configuration
-DISCORD_APPLICATION_ID=your-app-id
-DISCORD_API_TOKEN=your-bot-token
-
-# Twitter Configuration
-TWITTER_USERNAME=your-username
-TWITTER_PASSWORD=your-password
-TWITTER_EMAIL=your-email
-TWITTER_COOKIES=your-cookies
-
-# Database Configuration (Optional)
-SUPABASE_URL=your-supabase-url
-SUPABASE_SERVICE_API_KEY=your-service-key
-
-# Voice Settings (Optional)
-ELEVENLABS_MODEL_ID=eleven_multilingual_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
-```
-
-## Character-Specific Secrets
-
-### Configuration in Character Files
-
-Character files can include their own secrets, which override environment variables:
-
-```json
-{
-  "name": "AgentName",
-  "clients": ["discord", "twitter"],
-  "modelProvider": "openai",
-  "settings": {
-    "secrets": {
-      "OPENAI_API_KEY": "character-specific-key",
-      "DISCORD_TOKEN": "bot-specific-token",
-      "TWITTER_USERNAME": "bot-twitter-handle",
-      "TWITTER_PASSWORD": "bot-twitter-password"
-    }
-  }
-}
-```
-
-### Precedence Order
-
-Secrets are resolved in the following order:
+Eliza uses a hierarchical environment variable system:
 
 1. Character-specific secrets (highest priority)
 2. Environment variables
 3. Default values (lowest priority)
 
-## Best Practices
+### Secret Types
 
-### 1. Secret Storage
-
-- Never commit secret files to version control
-- Use `.gitignore` to exclude sensitive files:
+Common secrets you'll need to manage:
 
 ```bash
-# .gitignore
-.env
-.env.*
-characters/**/secrets.json
-**/serviceAccount.json
+# API Keys
+OPENAI_API_KEY=sk-*
+ANTHROPIC_API_KEY=your-key
+ELEVENLABS_XI_API_KEY=your-key
+GOOGLE_GENERATIVE_AI_API_KEY=your-key
+
+# Client Authentication
+DISCORD_API_TOKEN=your-token
+TELEGRAM_BOT_TOKEN=your-token
+
+# Database Credentials
+SUPABASE_URL=your-url
+SUPABASE_SERVICE_API_KEY=your-key
+
+# EVM
+EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+EVM_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Solana
+SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Fallback Wallet Configuration (deprecated)
+WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
 ```
 
-### 2. Development Workflow
+## Implementation Guide
 
-Create different environment files for different environments:
+### Basic Setup
+
+1. Create a `.env` file from template:
 
 ```bash
-.env.development    # Local development settings
-.env.staging       # Staging environment
-.env.production    # Production settings
+cp .env.example .env
 ```
 
-### 3. Secret Rotation
-
-Implement a rotation strategy:
+2. Configure environment discovery:
 
 ```typescript
-class SecretManager {
-  private static readonly SECRET_LIFETIME = 90 * 24 * 60 * 60 * 1000; // 90 days
+import { config } from "dotenv";
+import path from "path";
 
-  async shouldRotateSecret(secretName: string): Promise<boolean> {
-    const lastRotation = await this.getLastRotation(secretName);
-    return Date.now() - lastRotation > SecretManager.SECRET_LIFETIME;
+export function findNearestEnvFile(startDir = process.cwd()) {
+  let currentDir = startDir;
+
+  while (currentDir !== path.parse(currentDir).root) {
+    const envPath = path.join(currentDir, ".env");
+
+    if (fs.existsSync(envPath)) {
+      return envPath;
+    }
+
+    currentDir = path.dirname(currentDir);
+  }
+
+  return null;
+}
+```
+
+### Character-Specific Secrets
+
+Define secrets in character files:
+
+```json
+{
+  "name": "TradingBot",
+  "settings": {
+    "secrets": {
+      "OPENAI_API_KEY": "character-specific-key",
+      "WALLET_PRIVATE_KEY": "character-specific-wallet"
+    }
   }
 }
 ```
 
-### 4. Secure Character Files
-
-When using character-specific secrets:
+Access secrets in code:
 
 ```typescript
-// Validate character file location
-const isSecurePath = (path: string): boolean => {
-  return !path.includes("../") && !path.startsWith("/");
-};
-
-// Load character securely
-const loadCharacter = async (path: string) => {
-  if (!isSecurePath(path)) {
-    throw new Error("Invalid character file path");
-  }
-  // Load and validate character
-};
+const apiKey = runtime.getSetting("OPENAI_API_KEY");
 ```
 
-## Security Considerations
+### Secure Storage
 
-### 1. Access Control
+#### Database Secrets
 
-Implement proper access controls for secret management:
+Use encrypted connection strings:
+
+```typescript
+class SecureDatabase {
+  private connection: Connection;
+
+  constructor(encryptedConfig: string) {
+    const config = this.decryptConfig(encryptedConfig);
+    this.connection = new Connection(config);
+  }
+
+  private decryptConfig(encrypted: string): DatabaseConfig {
+    // Implement decryption logic
+    return JSON.parse(decrypted);
+  }
+}
+```
+
+#### Wallet Management
+
+Secure handling of blockchain credentials:
+
+```typescript
+class WalletManager {
+  private async initializeWallet(runtime: IAgentRuntime) {
+    const privateKey =
+        runtime.getSetting("SOLANA_PRIVATE_KEY") ??
+        runtime.getSetting("WALLET_PRIVATE_KEY");
+
+    if (!privateKey) {
+      throw new Error("Wallet private key not configured");
+    }
+
+    // Validate key format
+    try {
+      const keyBuffer = Buffer.from(privateKey, "base64");
+      if (keyBuffer.length !== 64) {
+        throw new Error("Invalid key length");
+      }
+    } catch (error) {
+      throw new Error("Invalid private key format");
+    }
+
+    // Initialize wallet securely
+    return new Wallet(privateKey);
+  }
+}
+```
+
+### Secret Rotation
+
+Implement automatic secret rotation:
+
+```typescript
+class SecretRotation {
+  private static readonly SECRET_LIFETIME = 90 * 24 * 60 * 60 * 1000; // 90 days
+
+  async shouldRotateSecret(secretName: string): Promise<boolean> {
+    const lastRotation = await this.getLastRotation(secretName);
+    return Date.now() - lastRotation > SecretRotation.SECRET_LIFETIME;
+  }
+
+  async rotateSecret(secretName: string): Promise<void> {
+    // Implement rotation logic
+    const newSecret = await this.generateNewSecret();
+    await this.updateSecret(secretName, newSecret);
+    await this.recordRotation(secretName);
+  }
+}
+```
+
+### Access Control
+
+Implement proper access controls:
 
 ```typescript
 class SecretAccess {
@@ -147,12 +193,23 @@ class SecretAccess {
   static validateAccess(key: string): boolean {
     return this.ALLOWED_KEYS.includes(key);
   }
+
+  static async getSecret(
+    runtime: IAgentRuntime,
+    key: string,
+  ): Promise<string | null> {
+    if (!this.validateAccess(key)) {
+      throw new Error(`Unauthorized access to secret: ${key}`);
+    }
+
+    return runtime.getSetting(key);
+  }
 }
 ```
 
-### 2. Encryption at Rest
+### Encryption at Rest
 
-For stored secrets:
+Implement encryption for stored secrets:
 
 ```typescript
 import { createCipheriv, createDecipheriv } from "crypto";
@@ -161,13 +218,58 @@ class SecretEncryption {
   static async encrypt(value: string, key: Buffer): Promise<string> {
     const iv = crypto.randomBytes(16);
     const cipher = createCipheriv("aes-256-gcm", key, iv);
-    // ... implementation
+
+    let encrypted = cipher.update(value, "utf8", "hex");
+    encrypted += cipher.final("hex");
+
+    return JSON.stringify({
+      iv: iv.toString("hex"),
+      encrypted,
+      tag: cipher.getAuthTag().toString("hex"),
+    });
   }
 
   static async decrypt(encrypted: string, key: Buffer): Promise<string> {
-    // ... implementation
+    const { iv, encrypted: encryptedData, tag } = JSON.parse(encrypted);
+
+    const decipher = createDecipheriv(
+      "aes-256-gcm",
+      key,
+      Buffer.from(iv, "hex"),
+    );
+
+    decipher.setAuthTag(Buffer.from(tag, "hex"));
+
+    let decrypted = decipher.update(encryptedData, "hex", "utf8");
+    decrypted += decipher.final("utf8");
+
+    return decrypted;
   }
 }
+```
+
+## Best Practices
+
+### 1. Environment Segregation
+
+Maintain separate environment files:
+
+```bash
+.env.development    # Local development settings
+.env.staging       # Staging environment
+.env.production    # Production settings
+```
+
+### 2. Git Security
+
+Exclude sensitive files:
+
+```gitignore
+# .gitignore
+.env
+.env.*
+characters/**/secrets.json
+**/serviceAccount.json
 ```
 
 ### 3. Secret Validation
@@ -185,21 +287,93 @@ async function validateSecrets(character: Character): Promise<void> {
 }
 ```
 
+### 4. Error Handling
+
+Secure error messages:
+
+```typescript
+try {
+  await loadSecrets();
+} catch (error) {
+  if (error.code === "ENOENT") {
+    console.error("Environment file not found");
+  } else if (error instanceof ValidationError) {
+    console.error("Invalid secret format");
+  } else {
+    // Log securely without exposing secret values
+    console.error("Error loading secrets");
+  }
+}
+```
+
+## Security Considerations
+
+### 1. Handling API Keys
+
+```typescript
+class APIKeyManager {
+  private validateAPIKey(key: string): boolean {
+    if (key.startsWith("sk-")) {
+      return key.length > 20;
+    }
+    return false;
+  }
+
+  async rotateAPIKey(provider: string): Promise<void> {
+    // Implement key rotation logic
+  }
+}
+```
+
+### 2. Secure Configuration Loading
+
+```typescript
+class ConfigLoader {
+  private static sanitizePath(path: string): boolean {
+    return !path.includes("../") && !path.startsWith("/");
+  }
+
+  async loadConfig(path: string): Promise<Config> {
+    if (!this.sanitizePath(path)) {
+      throw new Error("Invalid config path");
+    }
+    // Load configuration
+  }
+}
+```
+
+### 3. Memory Security
+
+```typescript
+class SecureMemory {
+  private secrets: Map<string, WeakRef<string>> = new Map();
+
+  set(key: string, value: string): void {
+    this.secrets.set(key, new WeakRef(value));
+  }
+
+  get(key: string): string | null {
+    const ref = this.secrets.get(key);
+    return ref?.deref() ?? null;
+  }
+}
+```
+
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Missing Secrets**
+1. Missing Secrets
 
 ```typescript
-if (!process.env.OPENAI_API_KEY && !character.settings.secrets.OPENAI_API_KEY) {
+if (!process.env.OPENAI_API_KEY) {
   throw new Error(
     "OpenAI API key not found in environment or character settings",
   );
 }
 ```
 
-2. **Invalid Secret Format**
+2. Invalid Secret Format
 
 ```typescript
 function validateApiKey(key: string): boolean {
@@ -211,24 +385,25 @@ function validateApiKey(key: string): boolean {
 }
 ```
 
-3. **Secret Loading Errors**
+3. Secret Loading Errors
 
 ```typescript
 try {
   await loadSecrets();
 } catch (error) {
-  if (error.code === "ENOENT") {
-    console.error("Environment file not found");
-  } else if (error instanceof ValidationError) {
-    console.error("Invalid secret format");
+  if (error.response) {
+    console.error("Response data:", error.response.data);
+    console.error("Response status:", error.response.status);
+  } else if (error.request) {
+    console.error("No response received:", error.request);
+  } else {
+    console.error("Error setting up request:", error.message);
   }
 }
 ```
 
 ## Related Resources
 
-- [Configuration Guide](./configuration.md) for general configuration options
-- [Character Files](../core/characterfile.md) for character-specific settings
-- [Local Development](./local-development.md) for development environment setup
-
-Remember to follow security best practices and never expose sensitive credentials in logs, error messages, or version control systems.
+- [Configuration Guide](./configuration.md) for general setup
+- [Local Development](./local-development.md) for development environment
+- [Infrastructure Guide](../advanced/infrastructure.md) for deployment security

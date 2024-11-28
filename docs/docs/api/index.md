@@ -25,7 +25,8 @@
 
 **Prerequisites (MUST):**
 
-- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Python 2.7+](https://www.python.org/downloads/)
+- [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
 
 ### Edit the .env file
@@ -83,6 +84,7 @@ DISCORD_APPLICATION_ID=
 DISCORD_API_TOKEN= # Bot token
 OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
 ELEVENLABS_XI_API_KEY= # API key from elevenlabs
+GOOGLE_GENERATIVE_AI_API_KEY= # Gemini API key
 
 # ELEVENLABS SETTINGS
 ELEVENLABS_MODEL_ID=eleven_multilingual_v2
@@ -107,6 +109,15 @@ XAI_MODEL=
 # For asking Claude stuff
 ANTHROPIC_API_KEY=
 
+# EVM
+EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+EVM_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Solana
+SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Fallback Wallet Configuration (deprecated)
 WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
 WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
 

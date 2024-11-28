@@ -1,25 +1,91 @@
+import { elizaLogger } from "@ai16z/eliza";
 import {
+    Action,
     HandlerCallback,
     IAgentRuntime,
     Memory,
-    State,
     Plugin,
-    Action,
-} from "@eliza/core";
-import { elizaLogger } from "@eliza/core";
-import { generateCaption, generateImage } from "./utils.ts";
+    State,
+} from "@ai16z/eliza";
+import { generateImage } from "@ai16z/eliza";
+
+import fs from "fs";
+import path from "path";
+import { validateImageGenConfig } from "./enviroment";
+
+export function saveBase64Image(base64Data: string, filename: string): string {
+    // Create generatedImages directory if it doesn't exist
+    const imageDir = path.join(process.cwd(), "generatedImages");
+    if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir, { recursive: true });
+    }
+
+    // Remove the data:image/png;base64 prefix if it exists
+    const base64Image = base64Data.replace(/^data:image\/\w+;base64,/, "");
+
+    // Create a buffer from the base64 string
+    const imageBuffer = Buffer.from(base64Image, "base64");
+
+    // Create full file path
+    const filepath = path.join(imageDir, `${filename}.png`);
+
+    // Save the file
+    fs.writeFileSync(filepath, imageBuffer);
+
+    return filepath;
+}
+
+export async function saveHeuristImage(
+    imageUrl: string,
+    filename: string
+): Promise<string> {
+    const imageDir = path.join(process.cwd(), "generatedImages");
+    if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir, { recursive: true });
+    }
+
+    // Fetch image from URL
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const imageBuffer = Buffer.from(arrayBuffer);
+
+    // Create full file path
+    const filepath = path.join(imageDir, `${filename}.png`);
+
+    // Save the file
+    fs.writeFileSync(filepath, imageBuffer);
+
+    return filepath;
+}
 
 const imageGeneration: Action = {
     name: "GENERATE_IMAGE",
-    similes: ["IMAGE_GENERATION", "IMAGE_GEN", "CREATE_IMAGE", "MAKE_PICTURE"],
+    similes: [
+        "IMAGE_GENERATION",
+        "IMAGE_GEN",
+        "CREATE_IMAGE",
+        "MAKE_PICTURE",
+        "GENERATE_IMAGE",
+        "GENERATE_A",
+        "DRAW",
+        "DRAW_A",
+        "MAKE_A",
+    ],
     description: "Generate an image to go along with the message.",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
+        await validateImageGenConfig(runtime);
+
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
+        const heuristApiKeyOk = !!runtime.getSetting("HEURIST_API_KEY");
 
         // TODO: Add openai DALL-E generation as well
 
-        return anthropicApiKeyOk && togetherApiKeyOk;
+        return anthropicApiKeyOk || togetherApiKeyOk || heuristApiKeyOk;
     },
     handler: async (
         runtime: IAgentRuntime,
@@ -58,36 +124,66 @@ const imageGeneration: Action = {
             );
             for (let i = 0; i < images.data.length; i++) {
                 const image = images.data[i];
-                elizaLogger.log(`Processing image ${i + 1}:`, image);
 
-                const caption = await generateCaption(
+                // Save the image and get filepath
+                const filename = `generated_${Date.now()}_${i}`;
+
+                // Choose save function based on image data format
+                const filepath = image.startsWith("http")
+                    ? await saveHeuristImage(image, filename)
+                    : saveBase64Image(image, filename);
+
+                elizaLogger.log(`Processing image ${i + 1}:`, filename);
+
+                //just dont even add a caption or a description just have it generate & send
+                /*
+                try {
+                    const imageService = runtime.getService(ServiceType.IMAGE_DESCRIPTION);
+                    if (imageService && typeof imageService.describeImage === 'function') {
+                        const caption = await imageService.describeImage({ imageUrl: filepath });
+                        captionText = caption.description;
+                        captionTitle = caption.title;
+                    }
+                } catch (error) {
+                    elizaLogger.error("Caption generation failed, using default caption:", error);
+                }*/
+
+                const _caption = "...";
+                /*= await generateCaption(
                     {
                         imageUrl: image,
                     },
                     runtime
-                );
+                );*/
+
+                res.push({ image: filepath, caption: "..." }); //caption.title });
 
                 elizaLogger.log(
                     `Generated caption for image ${i + 1}:`,
-                    caption.title
+                    "..." //caption.title
                 );
-                res.push({ image: image, caption: caption.title });
+                //res.push({ image: image, caption: caption.title });
 
                 callback(
                     {
-                        text: caption.description,
+                        text: "...", //caption.description,
                         attachments: [
                             {
                                 id: crypto.randomUUID(),
-                                url: image,
+                                url: filepath,
                                 title: "Generated image",
                                 source: "imageGeneration",
-                                description: caption.title,
-                                text: caption.description,
+                                description: "...", //caption.title,
+                                text: "...", //caption.description,
                             },
                         ],
                     },
-                    []
+                    [
+                        {
+                            attachment: filepath,
+                            name: `${filename}.png`,
+                        },
+                    ]
                 );
             }
         } else {

@@ -1,4 +1,10 @@
-# Eliza
+# Eliza - Multi-agent simulation framework
+
+# https://github.com/ai16z/eliza
+
+# Visit https://eliza.builders for support
+
+# dev branch
 
 <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
 
@@ -19,7 +25,7 @@ _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAInd
 
 **Prerequisites (MUST):**
 
-- [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
 
 ### Edit the .env file

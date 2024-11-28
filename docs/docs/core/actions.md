@@ -1,111 +1,143 @@
 ---
-sidebar_position: 4
+sidebar_position: 6
 ---
 
-# Actions
+# ⚡ Actions
 
-Actions are executable behaviors that agents can perform in response to messages. They allow agents to interact with external systems, modify their behavior, and perform tasks beyond simple message responses.
+Actions are core building blocks in Eliza that define how agents respond to and interact with messages. They allow agents to interact with external systems, modify their behavior, and perform tasks beyond simple message responses.
+
+---
 
 ## Overview
 
-Each Action has:
+Each Action consists of:
 
-- A unique name and similar variations (similes)
-- A validation function
-- A handler function
-- A description
-- Example usage patterns
+- `name`: Unique identifier for the action
+- `similes`: Array of alternative names/variations
+- `description`: Detailed explanation of the action's purpose
+- `validate`: Function that checks if action is appropriate
+- `handler`: Implementation of the action's behavior
+- `examples`: Array of example usage patterns
 
-## Built-in Actions
+---
 
-### Basic Conversation Actions
+## Implementation
 
-#### CONTINUE
+```typescript
+interface Action {
+  name: string;
+  similes: string[];
+  description: string;
+  examples: ActionExample[][];
+  handler: Handler;
+  validate: Validator;
+}
+```
 
-- Continues the conversation when additional context is needed
-- Used for natural conversation flow
-- Prevents over-dominating conversations
-- Limited to maximum of 3 continues in a row
+Source: https://github.com/ai16z/eliza/packages/core/src/types.ts
 
-#### IGNORE
+---
 
-- Disengages from conversation when appropriate
-- Used for:
-  - Handling aggressive/inappropriate users
-  - After natural conversation endings
-  - When agent should stop responding
-  - Following goodbyes or closings
+# Built-in Actions
 
-#### NONE
+---
 
-- Default action when just responding normally
-- No additional behaviors needed
-- Basic conversational responses
+## Conversation Flow
 
-### Room Management Actions
+### CONTINUE
 
-#### FOLLOW_ROOM
+- Maintains conversation when more context is needed
+- Manages natural dialogue progression
+- Limited to 3 consecutive continues
 
-- Actively follows a conversation/channel
-- Participates without needing explicit mentions
-- Used when:
-  - Explicitly asked to participate
-  - Topic is highly relevant
-  - Input would be valuable
+### IGNORE
 
-#### UNFOLLOW_ROOM
-
-- Stops following a previously followed room
-- Only responds when explicitly mentioned
-- Used when:
-  - Asked to reduce participation
-  - Agent is being too disruptive
-  - Input is no longer needed
-
-#### MUTE_ROOM & UNMUTE_ROOM
-
-- Completely mutes/unmutes a room
-- More strict than follow/unfollow
-- Used for temporary or permanent disengagement
-
-### External Integrations
-
-#### ASK_CLAUDE
-
-- Forwards complex queries to Claude AI
+- Gracefully disengages from conversations
 - Handles:
-  - Code review/debugging
-  - Content creation
-  - Complex analysis
-  - Detailed explanations
+  - Inappropriate interactions
+  - Natural conversation endings
+  - Post-closing responses
 
-#### IMAGE_GENERATION
+### NONE
 
-- Creates images from text descriptions
-- Supports multiple providers
-- Includes image captioning
-- Returns base64 encoded images
+- Default response action
+- Used for standard conversational replies
 
-### Trading/Financial Actions
+---
 
-#### SWAP
+## External Integrations
 
-- Executes token swaps on Solana
-- Handles slippage and validation
-- Supports:
-  - Quote fetching
-  - Transaction simulation
-  - Error handling
+### TAKE_ORDER
 
-#### TAKE_ORDER
-
-- Records trading orders
+- Records trading/purchase orders
 - Processes user conviction levels
-- Manages order book updates
+- Validates ticker symbols and contract addresses
+
+```typescript
+const take_order: Action = {
+  name: "TAKE_ORDER",
+  similes: ["BUY_ORDER", "PLACE_ORDER"],
+  description: "Records a buy order based on the user's conviction level.",
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    const text = (message.content as Content).text;
+    const tickerRegex = /\b[A-Z]{1,5}\b/g;
+    return tickerRegex.test(text);
+  },
+  // ... rest of implementation
+};
+```
+
+Source: https://github.com/ai16z/eliza/packages/plugin-solana/src/actions/takeOrder.ts
+
+---
 
 ## Creating Custom Actions
 
-To create a custom action, implement the Action interface:
+1. Implement the Action interface
+2. Define validation logic
+3. Implement handler functionality
+4. Provide usage examples
+
+Example:
+
+```typescript
+const customAction: Action = {
+  name: "CUSTOM_ACTION",
+  similes: ["SIMILAR_ACTION"],
+  description: "Action purpose",
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    // Validation logic
+    return true;
+  },
+  handler: async (runtime: IAgentRuntime, message: Memory) => {
+    // Implementation
+  },
+  examples: [],
+};
+```
+
+### Testing Actions
+
+Use the built-in testing framework:
+
+```typescript
+test("Validate action behavior", async () => {
+  const message: Memory = {
+    userId: user.id,
+    content: { text: "Test message" },
+    roomId,
+  };
+
+  const response = await handleMessage(runtime, message);
+  // Verify response
+});
+```
+
+---
+
+## Core Concepts
+
+### Action Structure
 
 ```typescript
 interface Action {
@@ -117,87 +149,238 @@ interface Action {
     runtime: IAgentRuntime,
     message: Memory,
     state?: State,
-    options?: any,
-    callback?: HandlerCallback,
-  ) => Promise<any>;
+  ) => Promise<void>;
   examples: ActionExample[][];
 }
 ```
 
-Example custom action:
+### Key Components
+
+- **name**: Unique identifier for the action
+- **similes**: Alternative names/triggers for the action
+- **description**: Explains when and how the action should be used
+- **validate**: Determines if the action can be executed
+- **handler**: Implements the action's behavior
+- **examples**: Demonstrates proper usage patterns
+
+---
+
+## Built-in Actions
+
+### CONTINUE
+
+Continues the conversation when appropriate:
 
 ```typescript
-const customAction: Action = {
-  name: "CUSTOM_ACTION",
-  similes: ["ALTERNATIVE_NAME"],
-  description: "Describes what the action does",
+const continueAction: Action = {
+  name: "CONTINUE",
+  similes: ["ELABORATE", "KEEP_TALKING"],
+  description:
+    "Used when the message requires a follow-up. Don't use when conversation is finished.",
   validate: async (runtime, message) => {
     // Validation logic
     return true;
   },
-  handler: async (runtime, message, state, options, callback) => {
-    // Action implementation
-    return result;
+  handler: async (runtime, message, state) => {
+    // Continuation logic
+  },
+};
+```
+
+### IGNORE
+
+Stops responding to irrelevant or completed conversations:
+
+```typescript
+const ignoreAction: Action = {
+  name: "IGNORE",
+  similes: ["STOP_TALKING", "STOP_CHATTING"],
+  description:
+    "Used when ignoring the user is appropriate (conversation ended, user is aggressive, etc.)",
+  handler: async (runtime, message) => {
+    return true;
+  },
+};
+```
+
+### FOLLOW_ROOM
+
+Actively participates in a conversation:
+
+```typescript
+const followRoomAction: Action = {
+  name: "FOLLOW_ROOM",
+  similes: ["FOLLOW_CHAT", "FOLLOW_CONVERSATION"],
+  description:
+    "Start following channel with interest, responding without explicit mentions.",
+  handler: async (runtime, message) => {
+    // Room following logic
+  },
+};
+```
+
+---
+
+## Creating Custom Actions
+
+### Basic Action Template
+
+```typescript
+const customAction: Action = {
+  name: "CUSTOM_ACTION",
+  similes: ["ALTERNATE_NAME", "OTHER_TRIGGER"],
+  description: "Detailed description of when and how to use this action",
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    // Validation logic
+    return true;
+  },
+  handler: async (runtime: IAgentRuntime, message: Memory) => {
+    // Implementation logic
+    return true;
   },
   examples: [
-    // Usage examples
+    [
+      {
+        user: "{{user1}}",
+        content: { text: "Trigger message" },
+      },
+      {
+        user: "{{user2}}",
+        content: { text: "Response", action: "CUSTOM_ACTION" },
+      },
+    ],
   ],
 };
 ```
 
-## Handler Callback
+### Advanced Action Example
 
-Actions can use the callback parameter to:
+```typescript
+const complexAction: Action = {
+  name: "PROCESS_DOCUMENT",
+  similes: ["READ_DOCUMENT", "ANALYZE_DOCUMENT"],
+  description: "Process and analyze uploaded documents",
+  validate: async (runtime, message) => {
+    const hasAttachment = message.content.attachments?.length > 0;
+    const supportedTypes = ["pdf", "txt", "doc"];
+    return (
+      hasAttachment &&
+      supportedTypes.includes(message.content.attachments[0].type)
+    );
+  },
+  handler: async (runtime, message, state) => {
+    const attachment = message.content.attachments[0];
 
-- Send intermediate responses
-- Update conversation state
-- Add attachments
-- Trigger other actions
+    // Process document
+    const content = await runtime
+      .getService<IDocumentService>(ServiceType.DOCUMENT)
+      .processDocument(attachment);
+
+    // Store in memory
+    await runtime.documentsManager.createMemory({
+      id: generateId(),
+      content: { text: content },
+      userId: message.userId,
+      roomId: message.roomId,
+    });
+
+    return true;
+  },
+};
+```
+
+---
+
+## Implementation Patterns
+
+### State-Based Actions
+
+```typescript
+const stateAction: Action = {
+  name: "UPDATE_STATE",
+  handler: async (runtime, message, state) => {
+    const newState = await runtime.composeState(message, {
+      additionalData: "new-data",
+    });
+
+    await runtime.updateState(newState);
+    return true;
+  },
+};
+```
+
+### Service Integration
+
+```typescript
+const serviceAction: Action = {
+  name: "TRANSCRIBE_AUDIO",
+  handler: async (runtime, message) => {
+    const transcriptionService = runtime.getService<ITranscriptionService>(
+      ServiceType.TRANSCRIPTION,
+    );
+
+    const result = await transcriptionService.transcribe(
+      message.content.attachments[0],
+    );
+
+    return true;
+  },
+};
+```
+
+---
 
 ## Best Practices
 
-1. **Validation**
+### Action Design
 
-   - Always validate input parameters
-   - Check for required permissions
-   - Verify preconditions
+1. **Clear Purpose**
+
+   - Single responsibility principle
+   - Well-defined triggers
+   - Clear success criteria
+
+2. **Robust Validation**
+
+   - Check prerequisites
+   - Validate input data
    - Handle edge cases
 
-2. **Error Handling**
+3. **Error Handling**
+   - Graceful failure
+   - Meaningful error messages
+   - State recovery
 
-   - Implement proper error catching
-   - Provide informative error messages
-   - Handle network failures gracefully
-   - Clean up resources on failure
+### Example Organization
 
-3. **Examples**
-
-   - Provide clear usage examples
-   - Show expected inputs/outputs
-   - Demonstrate error cases
-   - Include edge cases
-
-4. **State Management**
-   - Keep track of action state
-   - Clean up after completion
-   - Handle interruptions
-   - Maintain consistency
-
-## Testing Actions
-
-Test your actions using the example format:
+1. **Comprehensive Coverage**
 
 ```typescript
-const examples = [
+examples: [
+  // Happy path
+  [basicUsageExample],
+  // Edge cases
+  [edgeCaseExample],
+  // Error cases
+  [errorCaseExample],
+];
+```
+
+2. **Clear Context**
+
+```typescript
+examples: [
   [
     {
       user: "{{user1}}",
-      content: { text: "Input message" },
+      content: {
+        text: "Context message showing why action is needed",
+      },
     },
     {
       user: "{{user2}}",
       content: {
-        text: "Response",
+        text: "Clear response demonstrating action usage",
         action: "ACTION_NAME",
       },
     },
@@ -205,4 +388,165 @@ const examples = [
 ];
 ```
 
-## Related
+---
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Action Not Triggering**
+
+   - Check validation logic
+   - Verify similes list
+   - Review example patterns
+
+2. **Handler Failures**
+
+   - Validate service availability
+   - Check state requirements
+   - Review error logs
+
+3. **State Inconsistencies**
+   - Verify state updates
+   - Check concurrent modifications
+   - Review state transitions
+
+## Advanced Features
+
+### Action Composition
+
+```typescript
+const compositeAction: Action = {
+  name: "PROCESS_AND_RESPOND",
+  handler: async (runtime, message) => {
+    // Process first action
+    await runtime.processAction("ANALYZE_CONTENT", message);
+
+    // Process second action
+    await runtime.processAction("GENERATE_RESPONSE", message);
+
+    return true;
+  },
+};
+```
+
+### Action Chains
+
+```typescript
+const chainedAction: Action = {
+  name: "WORKFLOW",
+  handler: async (runtime, message) => {
+    const actions = ["VALIDATE", "PROCESS", "RESPOND"];
+
+    for (const actionName of actions) {
+      await runtime.processAction(actionName, message);
+    }
+
+    return true;
+  },
+};
+```
+
+---
+
+## Example: Complete Action Implementation
+
+```typescript
+import { Action, IAgentRuntime, Memory, State } from "@ai16z/eliza";
+
+const documentAnalysisAction: Action = {
+  name: "ANALYZE_DOCUMENT",
+  similes: ["READ_DOCUMENT", "PROCESS_DOCUMENT", "REVIEW_DOCUMENT"],
+  description: "Analyzes uploaded documents and provides insights",
+
+  validate: async (runtime: IAgentRuntime, message: Memory) => {
+    // Check for document attachment
+    if (!message.content.attachments?.length) {
+      return false;
+    }
+
+    // Verify document type
+    const attachment = message.content.attachments[0];
+    return ["pdf", "txt", "doc"].includes(attachment.type);
+  },
+
+  handler: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
+    try {
+      // Get document service
+      const docService = runtime.getService<IDocumentService>(
+        ServiceType.DOCUMENT,
+      );
+
+      // Process document
+      const content = await docService.processDocument(
+        message.content.attachments[0],
+      );
+
+      // Store analysis
+      await runtime.documentsManager.createMemory({
+        id: generateId(),
+        content: {
+          text: content,
+          analysis: await docService.analyze(content),
+        },
+        userId: message.userId,
+        roomId: message.roomId,
+        createdAt: Date.now(),
+      });
+
+      return true;
+    } catch (error) {
+      console.error("Document analysis failed:", error);
+      return false;
+    }
+  },
+
+  examples: [
+    [
+      {
+        user: "{{user1}}",
+        content: {
+          text: "Can you analyze this document?",
+          attachments: [{ type: "pdf", url: "document.pdf" }],
+        },
+      },
+      {
+        user: "{{user2}}",
+        content: {
+          text: "I'll analyze that document for you",
+          action: "ANALYZE_DOCUMENT",
+        },
+      },
+    ],
+  ],
+};
+```
+
+---
+
+# Best Practices
+
+1. **Validation**
+
+   - Thoroughly check input parameters
+   - Verify runtime conditions
+   - Handle edge cases
+
+2. **Error Handling**
+
+   - Implement comprehensive error catching
+   - Provide clear error messages
+   - Clean up resources properly
+
+3. **Documentation**
+   - Include clear usage examples
+   - Document expected inputs/outputs
+   - Explain error scenarios
+
+---
+
+## Further Reading
+
+- [Provider System](./providers.md)
+- [Service Integration](#)
+- [Memory Management](../../packages/core)
