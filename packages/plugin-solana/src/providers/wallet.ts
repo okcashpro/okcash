@@ -2,7 +2,7 @@ import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
-import axios from "axios";
+
 // Provider configuration
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -192,20 +192,17 @@ export class WalletProvider {
                 cursor: null,
             };
 
-            const response = await axios.post(
-                PROVIDER_CONFIG.GRAPHQL_ENDPOINT,
-                {
-                    query,
-                    variables,
+            const response = await fetch(PROVIDER_CONFIG.GRAPHQL_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': runtime.getSetting("CODEX_API_KEY", "") || ""
                 },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization:
-                            runtime.getSetting("CODEX_API_KEY", "") || "",
-                    },
-                }
-            );
+                body: JSON.stringify({
+                    query,
+                    variables
+                })
+            }).then(res => res.json());
 
             const data = response.data?.data?.balances?.items;
 
