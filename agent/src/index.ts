@@ -30,6 +30,7 @@ import {
     coinbaseMassPaymentsPlugin,
 } from "@ai16z/plugin-coinbase";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
+import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import {
     createNodePlugin,
 } from "@ai16z/plugin-node";
@@ -182,6 +183,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.GROQ_API_KEY ||
                 settings.GROQ_API_KEY
             );
+        case ModelProviderName.FAL:
+            return (
+                character.settings?.secrets?.FAL_API_KEY ||
+                settings.FAL_API_KEY
+            );
     }
 }
 
@@ -283,6 +289,10 @@ export function createAgent(
                 ? coinbaseMassPaymentsPlugin
                 : null,
             getSecret(character, "BUTTPLUG_API_KEY") ? buttplugPlugin : null,
+            getSecret(character, "FAL_API_KEY") &&
+                getSecret(character, "FAL_API_KEY")
+                ? imageGenerationPlugin
+                : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
