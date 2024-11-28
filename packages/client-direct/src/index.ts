@@ -290,7 +290,7 @@ export class DirectClient {
                     res.json(data);
                 } catch (error) {
                     res.status(500).json({ 
-                        error: 'Failed to forward request to BagelDB',
+                        error: 'Please create an account at bakery.bagel.net and get an API key. Then set the BAGEL_API_KEY environment variable.',
                         details: error.message 
                     });
                 }
