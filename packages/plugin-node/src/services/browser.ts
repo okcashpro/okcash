@@ -90,13 +90,16 @@ export class BrowserService extends Service implements IBrowserService {
         if (!this.browser) {
             this.browser = await chromium.launch({
                 headless: true,
-                args: ["--no-sandbox", "--disable-setuid-sandbox"],
+                args: [
+                    "--disable-dev-shm-usage", // Uses /tmp instead of /dev/shm. Prevents memory issues on low-memory systems
+                    "--block-new-web-contents", // Prevents creation of new windows/tabs
+                ],
             });
 
             const platform = process.platform;
             let userAgent = "";
 
-            // Change the user agent to match the platform to reduce captcha rates
+            // Change the user agent to match the platform to reduce bot detection
             switch (platform) {
                 case "darwin":
                     userAgent =
@@ -117,6 +120,7 @@ export class BrowserService extends Service implements IBrowserService {
 
             this.context = await this.browser.newContext({
                 userAgent,
+                acceptDownloads: false,
             });
 
             this.blocker =
