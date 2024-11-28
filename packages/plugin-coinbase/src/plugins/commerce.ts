@@ -15,6 +15,7 @@ import {
 } from "@ai16z/eliza";
 import { ChargeContent, ChargeSchema, isChargeContent } from "../types";
 import { chargeTemplate, getChargeTemplate } from "../templates";
+import { getWalletDetails } from "../utils";
 
 const url = "https://api.commerce.coinbase.com/charges";
 interface ChargeRequest {
@@ -420,7 +421,11 @@ export const chargeProvider: Provider = {
         const charges = await getAllCharges(
             runtime.getSetting("COINBASE_COMMERCE_KEY")
         );
-        return charges.data;
+        const { balances, transactions } = await getWalletDetails(runtime);
+        elizaLogger.log("Charges:", charges);
+        elizaLogger.log("Current Balances:", balances);
+        elizaLogger.log("Last Transactions:", transactions);
+        return { charges: charges.data, balances, transactions };
     },
 };
 

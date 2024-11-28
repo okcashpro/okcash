@@ -12,7 +12,7 @@ import {
     ModelClass,
     Provider,
 } from "@ai16z/eliza";
-import { initializeWallet } from "../utils";
+import { getWalletDetails, initializeWallet } from "../utils";
 import { tradeTemplate } from "../templates";
 import { isTradeContent, TradeContent, TradeSchema } from "../types";
 import { readFile } from "fs/promises";
@@ -29,7 +29,7 @@ const baseDir = path.resolve(__dirname, "../../plugin-coinbase/src/plugins");
 const tradeCsvFilePath = path.join(baseDir, "trades.csv");
 
 export const tradeProvider: Provider = {
-    get: async (_runtime: IAgentRuntime, _message: Memory) => {
+    get: async (runtime: IAgentRuntime, _message: Memory) => {
         try {
             elizaLogger.log("Reading CSV file from:", tradeCsvFilePath);
 
@@ -60,15 +60,22 @@ export const tradeProvider: Provider = {
             });
 
             elizaLogger.log("Parsed CSV records:", records);
-            return records.map((record: any) => ({
-                network: record["Network"] || undefined,
-                amount: parseFloat(record["From Amount"]) || undefined,
-                sourceAsset: record["Source Asset"] || undefined,
-                toAmount: parseFloat(record["To Amount"]) || undefined,
-                targetAsset: record["Target Asset"] || undefined,
-                status: record["Status"] || undefined,
-                transactionUrl: record["Transaction URL"] || "",
-            }));
+            const { balances, transactions } = await getWalletDetails(runtime);
+            elizaLogger.log("Current Balances:", balances);
+            elizaLogger.log("Last Transactions:", transactions);
+            return {
+                currentTrades: records.map((record: any) => ({
+                    network: record["Network"] || undefined,
+                    amount: parseFloat(record["From Amount"]) || undefined,
+                    sourceAsset: record["Source Asset"] || undefined,
+                    toAmount: parseFloat(record["To Amount"]) || undefined,
+                    targetAsset: record["Target Asset"] || undefined,
+                    status: record["Status"] || undefined,
+                    transactionUrl: record["Transaction URL"] || "",
+                })),
+                balances,
+                transactions,
+            };
         } catch (error) {
             elizaLogger.error("Error in tradeProvider:", error);
             return [];
