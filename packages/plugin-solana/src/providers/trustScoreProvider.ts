@@ -77,7 +77,7 @@ export class TrustScoreManager {
         this.backendToken = runtime.getSetting("BACKEND_TOKEN");
         this.simulationSellingService = new SimulationSellingService(
             runtime,
-            this.tokenProvider
+            this.trustScoreDb
         );
     }
 
@@ -416,6 +416,7 @@ export class TrustScoreManager {
 
         this.trustScoreDb.upsertTokenPerformance({
             tokenAddress: tokenAddress,
+            symbol: processedData.tokenCodex.symbol,
             priceChange24h: processedData.tradeData.price_change_24h_percent,
             volumeChange24h: processedData.tradeData.volume_24h,
             trade_24h_change: processedData.tradeData.trade_24h_change_percent,
@@ -453,7 +454,10 @@ export class TrustScoreManager {
             };
             this.trustScoreDb.addTransaction(transaction);
         }
-        this.simulationSellingService.processTokenPerformance(tokenAddress);
+        this.simulationSellingService.processTokenPerformance(
+            tokenAddress,
+            recommenderId
+        );
         // api call to update trade performance
         this.createTradeInBe(tokenAddress, recommenderId, username, data);
         return creationData;
@@ -531,7 +535,7 @@ export class TrustScoreManager {
         const processedData: ProcessedTokenData =
             await this.tokenProvider.getProcessedTokenData();
         const wallet = new WalletProvider(
-            new Connection("https://api.mainnet-beta.solana.com"),
+            this.connection,
             new PublicKey(Wallet!)
         );
         const prices = await wallet.fetchPrices(runtime);
