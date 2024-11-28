@@ -58,6 +58,7 @@
         "@ai-sdk/groq": "0.0.3",
         "@ai-sdk/openai": "1.0.4",
         "@anthropic-ai/sdk": "0.30.1",
+        "@fal-ai/client": "^1.2.0",
         "@types/uuid": "10.0.0",
         "ai": "3.4.33",
         "anthropic-vertex-ai": "1.0.2",
