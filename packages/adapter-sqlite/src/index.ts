@@ -80,6 +80,10 @@ export class SqliteDatabaseAdapter
         this.db.exec(sqliteTables);
     }
 
+    async close() {
+        this.db.close();
+    }
+
     async getAccountById(userId: UUID): Promise<Account | null> {
         const sql = "SELECT * FROM accounts WHERE id = ?";
         const account = this.db.prepare(sql).get(userId) as Account;

@@ -299,9 +299,9 @@ export interface State {
     formattedConversation?: string;
 
     /** Optional formatted knowledge */
-    knowledge?: string,
+    knowledge?: string;
     /** Optional knowledge data */
-    knowledgeData?: KnowledgeItem[],
+    knowledgeData?: KnowledgeItem[];
 
     /** Additional dynamic properties */
     [key: string]: unknown;
@@ -680,6 +680,11 @@ export type Character = {
         };
         model?: string;
         embeddingModel?: string;
+        chains?: {
+            evm?: any[];
+            solana?: any[];
+            [key: string]: any[];
+        };
     };
 
     /** Optional client-specific config */
@@ -719,7 +724,10 @@ export interface IDatabaseAdapter {
     db: any;
 
     /** Optional initialization */
-    init?(): Promise<void>;
+    init(): Promise<void>;
+
+    /** Close database connection */
+    close(): Promise<void>;
 
     /** Get account by ID */
     getAccountById(userId: UUID): Promise<Account | null>;

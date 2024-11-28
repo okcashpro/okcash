@@ -2,8 +2,7 @@ import {
     TrustScoreDatabase,
     TokenPerformance,
     // TradePerformance,
-    // TokenRecommendation,
-    ProcessedTokenData,
+    TokenRecommendation,
 } from "@ai16z/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 // Assuming TokenProvider and IAgentRuntime are available
@@ -12,13 +11,14 @@ import { TokenProvider } from "./token.ts";
 import { IAgentRuntime } from "@ai16z/eliza";
 import { WalletProvider } from "./wallet.ts";
 import * as amqp from "amqplib";
+import { ProcessedTokenData } from "../types/token.ts";
 
 interface SellDetails {
     sell_amount: number;
     sell_recommender_id: string | null;
 }
 
-export class simulationSellingService {
+export class SimulationSellingService {
     private trustScoreDb: TrustScoreDatabase;
     private walletProvider: WalletProvider;
     private connection: Connection;
@@ -41,7 +41,10 @@ export class simulationSellingService {
         this.connection = new Connection(runtime.getSetting("RPC_URL"));
         this.walletProvider = new WalletProvider(
             this.connection,
-            new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
+            new PublicKey(
+                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+                runtime.getSetting("WALLET_PUBLIC_KEY")
+            )
         );
         this.baseMint = new PublicKey(
             runtime.getSetting("BASE_MINT") ||
@@ -130,7 +133,7 @@ export class simulationSellingService {
 
         try {
             console.log(
-                `Executing sell for token ${tokenPerformance.tokenSymbol}: ${amountToSell}`
+                `Executing sell for token ${tokenPerformance.symbol}: ${amountToSell}`
             );
 
             // Update the sell details
@@ -148,7 +151,7 @@ export class simulationSellingService {
             // Update sell details in the database
             const sellDetailsData = await this.updateSellDetails(
                 tokenAddress,
-                tokenPerformance.recommenderId,
+                sell_recommender_id,
                 sellTimeStamp,
                 sellDetails,
                 true, // isSimulation
@@ -178,7 +181,7 @@ export class simulationSellingService {
         await this.startListeners();
     }
 
-    private async startListeners() {
+    public async startListeners() {
         // scanning recommendations and selling
         console.log("Scanning for token performances...");
         const tokenPerformances =
@@ -198,28 +201,75 @@ export class simulationSellingService {
 
         // start the process in the sonar backend
         tokenPerformances.forEach(async (tokenPerformance) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const tokenProvider = new TokenProvider(
                 tokenPerformance.tokenAddress,
                 this.walletProvider,
                 this.runtime.cacheManager
             );
-            const shouldTrade = await tokenProvider.shouldTradeToken();
-            if (shouldTrade) {
-                const balance = tokenPerformance.balance;
-                const sell_recommender_id = tokenPerformance.recommenderId;
-                const tokenAddress = tokenPerformance.tokenAddress;
-                const process = await this.startProcessInTheSonarBackend(
-                    tokenAddress,
-                    balance,
-                    true,
-                    sell_recommender_id,
-                    tokenPerformance.initial_mc
+            // const shouldTrade = await tokenProvider.shouldTradeToken();
+            // if (shouldTrade) {
+            const tokenRecommendations: TokenRecommendation[] =
+                this.trustScoreDb.getRecommendationsByToken(
+                    tokenPerformance.tokenAddress
                 );
-                if (process) {
-                    this.runningProcesses.add(tokenAddress);
-                }
+            const tokenRecommendation: TokenRecommendation =
+                tokenRecommendations[0];
+            const balance = tokenPerformance.balance;
+            const sell_recommender_id = tokenRecommendation.recommenderId;
+            const tokenAddress = tokenPerformance.tokenAddress;
+            const process = await this.startProcessInTheSonarBackend(
+                tokenAddress,
+                balance,
+                true,
+                sell_recommender_id,
+                tokenPerformance.initialMarketCap
+            );
+            if (process) {
+                this.runningProcesses.add(tokenAddress);
             }
+            // }
         });
+    }
+
+    public processTokenPerformance(
+        tokenAddress: string,
+        recommenderId: string
+    ) {
+        try {
+            const runningProcesses = this.runningProcesses;
+            // check if token is already being processed
+            if (runningProcesses.has(tokenAddress)) {
+                console.log(`Token ${tokenAddress} is already being processed`);
+                return;
+            }
+            const tokenPerformance =
+                this.trustScoreDb.getTokenPerformance(tokenAddress);
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const tokenProvider = new TokenProvider(
+                tokenPerformance.tokenAddress,
+                this.walletProvider,
+                this.runtime.cacheManager
+            );
+            const balance = tokenPerformance.balance;
+            const sell_recommender_id = recommenderId;
+            const process = this.startProcessInTheSonarBackend(
+                tokenAddress,
+                balance,
+                true,
+                sell_recommender_id,
+                tokenPerformance.initialMarketCap
+            );
+            if (process) {
+                this.runningProcesses.add(tokenAddress);
+            }
+        } catch (error) {
+            console.error(
+                `Error getting token performance for token ${tokenAddress}:`,
+                error
+            );
+        }
     }
 
     private async startProcessInTheSonarBackend(

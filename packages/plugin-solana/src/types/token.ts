@@ -7,6 +7,20 @@ export interface TokenSecurityData {
     top10HolderPercent: number;
 }
 
+export interface TokenCodex {
+    id: string;
+    address: string;
+    cmcId: number;
+    decimals: number;
+    name: string;
+    symbol: string;
+    totalSupply: string;
+    circulatingSupply: string;
+    imageThumbUrl: string;
+    blueCheckmark: boolean;
+    isScam: boolean;
+}
+
 export interface TokenTradeData {
     address: string;
     holder: number;
@@ -213,6 +227,7 @@ export interface ProcessedTokenData {
 
     isDexScreenerListed: boolean;
     isDexScreenerPaid: boolean;
+    tokenCodex: TokenCodex;
 }
 
 export interface DexScreenerPair {
