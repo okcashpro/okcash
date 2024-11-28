@@ -199,6 +199,7 @@ export type Models = {
     [ModelProviderName.OPENROUTER]: Model;
     [ModelProviderName.OLLAMA]: Model;
     [ModelProviderName.HEURIST]: Model;
+    [ModelProviderName.GALADRIEL]: Model;
 };
 
 /**
