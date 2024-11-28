@@ -41,7 +41,10 @@ export class SimulationSellingService {
         this.connection = new Connection(runtime.getSetting("RPC_URL"));
         this.walletProvider = new WalletProvider(
             this.connection,
-            new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
+            new PublicKey(
+                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+                runtime.getSetting("WALLET_PUBLIC_KEY")
+            )
         );
         this.baseMint = new PublicKey(
             runtime.getSetting("BASE_MINT") ||

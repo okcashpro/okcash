@@ -1,4 +1,5 @@
 import { names, uniqueNamesGenerator } from "unique-names-generator";
+import { v4 as uuidv4 } from "uuid";
 import {
     composeActionExamples,
     formatActionNames,
@@ -15,6 +16,7 @@ import {
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { elizaLogger } from "./index.ts";
+import knowledge from "./knowledge.ts";
 import { MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
@@ -44,8 +46,6 @@ import {
     type Memory,
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
-import { v4 as uuidv4 } from "uuid";
-import knowledge from "./knowledge.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,

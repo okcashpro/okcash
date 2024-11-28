@@ -294,7 +294,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:202](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L202)
+[packages/core/src/memory.ts:203](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L203)
 
 ***
 
@@ -322,7 +322,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:213](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L213)
+[packages/core/src/memory.ts:214](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L214)
 
 ***
 
@@ -350,7 +350,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:225](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L225)
+[packages/core/src/memory.ts:226](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L226)
 
 ***
 
@@ -382,4 +382,4 @@ A Promise resolving to the count of memories.
 
 #### Defined in
 
-[packages/core/src/memory.ts:238](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L238)
+[packages/core/src/memory.ts:239](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L239)

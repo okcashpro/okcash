@@ -44,6 +44,7 @@ case "$1" in
             "plugin-image-generation"
             "plugin-node"
             "plugin-solana"
+            "plugin-evm"
             "plugin-tee"
         )
 
