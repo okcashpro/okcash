@@ -32,7 +32,6 @@ import {
 import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
-import { nodePlugin } from "@ai16z/plugin-node";
 import { teePlugin } from "@ai16z/plugin-tee";
 
 import Database from "better-sqlite3";
