@@ -308,7 +308,7 @@ This plugin enables cryptocurrency trading functionality using the Coinbase SDK.
 **Actions:**
 
 - `EXECUTE_TRADE`
-  Facilitates cryptocurrency trading by swapping one asset for another.
+  Facilitates cryptocurrency trading by swapping one asset for another. For now USDC and ETH supported
   - **Inputs**:
     - `network` (string): Blockchain network (e.g., `base`, `sol`, `eth`, `arb`, `pol`).
     - `fromAssetId` (string): Cryptocurrency asset ID to trade from (e.g., `ETH`, `USDC`).
