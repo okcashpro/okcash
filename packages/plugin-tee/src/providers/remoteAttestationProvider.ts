@@ -27,7 +27,7 @@ const remoteAttestationProvider: Provider = {
         const endpoint = runtime.getSetting("DSTACK_SIMULATOR_ENDPOINT");
         const provider = new RemoteAttestationProvider(endpoint);
         const agentId = runtime.agentId;
-        
+
         try {
             const attestation = await provider.generateAttestation(agentId);
             return `Your Agent's remote attestation is: ${attestation}`;
