@@ -17,6 +17,9 @@ importers:
       '@ai16z/eliza':
         specifier: 0.1.4-alpha.3
         version: 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(@langchain/core@0.3.19(openai@4.69.0(encoding@0.1.13)(zod@3.23.8)))(axios@1.7.8)(bufferutil@4.0.8)(encoding@0.1.13)(handlebars@4.7.8)(react@18.3.1)(sswr@2.1.0(svelte@5.2.10))(svelte@5.2.10)(utf-8-validate@5.0.10)(whatwg-url@14.0.0)
+      '@ai16z/eliza':
+        specifier: 0.1.4-alpha.3
+        version: 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0(encoding@0.1.13))(@langchain/core@0.3.19(openai@4.69.0(encoding@0.1.13)(zod@3.23.8)))(axios@1.7.8)(bufferutil@4.0.8)(encoding@0.1.13)(handlebars@4.7.8)(react@18.3.1)(sswr@2.1.0(svelte@5.2.10))(svelte@5.2.10)(utf-8-validate@5.0.10)(whatwg-url@14.0.0)
       '@coinbase/coinbase-sdk':
         specifier: ^0.10.0
         version: 0.10.0(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
