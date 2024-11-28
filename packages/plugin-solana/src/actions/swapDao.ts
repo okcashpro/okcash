@@ -64,7 +64,7 @@ export const executeSwapForDAO: Action = {
 
         try {
             const connection = new Connection(
-                "https://api.mainnet-beta.solana.com" // better if we use a better rpc
+                runtime.getSetting("RPC_URL") as string
             );
             const authority = Keypair.fromSecretKey(
                 Uint8Array.from(

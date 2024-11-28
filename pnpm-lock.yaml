@@ -5679,8 +5679,8 @@ packages:
   '@solana/web3.js@1.95.5':
     resolution: {integrity: sha512-hU9cBrbg1z6gEjLH9vwIckGBVB78Ijm0iZFNk4ocm5OD82piPwuk3MeQ1rfiKD9YQtr95krrcaopb49EmQJlRg==}
 
-  '@starknet-io/types-js@0.7.9':
-    resolution: {integrity: sha512-dtxMAyd8dEgKw0J8CkEnesyheKUM8HGllIO8tiXGqy+QJixAM15fhHTmnvrQJx1Hh1DSA24tRkSJMrz5/Estbw==}
+  '@starknet-io/types-js@0.7.10':
+    resolution: {integrity: sha512-1VtCqX4AHWJlRRSYGSn+4X1mqolI1Tdq62IwzoU2vUuEE72S1OlEeGhpvd6XsdqXcfHmVzYfj8k1XtKBQqwo9w==}
 
   '@supabase/auth-js@2.65.1':
     resolution: {integrity: sha512-IA7i2Xq2SWNCNMKxwmPlHafBQda0qtnFr8QnyyBr+KaSxoXXqEzFCnQ1dGTy6bsZjVBgXu++o3qrDypTspaAPw==}
@@ -21743,7 +21743,7 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@starknet-io/types-js@0.7.9': {}
+  '@starknet-io/types-js@0.7.10': {}
 
   '@supabase/auth-js@2.65.1':
     dependencies:
@@ -32286,7 +32286,7 @@ snapshots:
       isomorphic-fetch: 3.0.0(encoding@0.1.13)
       lossless-json: 4.0.2
       pako: 2.1.0
-      starknet-types-07: '@starknet-io/types-js@0.7.9'
+      starknet-types-07: '@starknet-io/types-js@0.7.10'
       ts-mixer: 6.0.4
     transitivePeerDependencies:
       - encoding
