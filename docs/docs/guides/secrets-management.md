@@ -133,8 +133,8 @@ Secure handling of blockchain credentials:
 class WalletManager {
   private async initializeWallet(runtime: IAgentRuntime) {
     const privateKey =
-        runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-        runtime.getSetting("WALLET_PRIVATE_KEY");
+      runtime.getSetting("SOLANA_PRIVATE_KEY") ??
+      runtime.getSetting("WALLET_PRIVATE_KEY");
 
     if (!privateKey) {
       throw new Error("Wallet private key not configured");

@@ -43,7 +43,7 @@ export class SimulationSellingService {
             this.connection,
             new PublicKey(
                 runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY")
+                    runtime.getSetting("WALLET_PUBLIC_KEY")
             )
         );
         this.baseMint = new PublicKey(

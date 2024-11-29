@@ -12,8 +12,7 @@ import {
     VideoService,
 } from "./services/index.ts";
 
-
-export type NodePlugin = ReturnType<typeof createNodePlugin>
+export type NodePlugin = ReturnType<typeof createNodePlugin>;
 
 export function createNodePlugin() {
     return {
@@ -28,5 +27,5 @@ export function createNodePlugin() {
             new TranscriptionService(),
             new VideoService(),
         ],
-    } as const satisfies Plugin
-};
+    } as const satisfies Plugin;
+}

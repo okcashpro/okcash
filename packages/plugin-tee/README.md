@@ -26,7 +26,7 @@ try {
     );
     // rawKey is a DeriveKeyResponse that can be used for further processing
     // to get the uint8Array do the following
-    const rawKeyArray = rawKey.asUint8Array()
+    const rawKeyArray = rawKey.asUint8Array();
 } catch (error) {
     console.error("Raw key derivation failed:", error);
 }
