@@ -12,6 +12,7 @@
         "dev": "tsup --format esm --dts --watch",
         "build:docs": "cd docs && pnpm run build",
         "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
         "test:watch": "vitest"
     },
     "author": "",
@@ -34,6 +35,7 @@
         "@types/wav-encoder": "1.3.3",
         "@typescript-eslint/eslint-plugin": "8.12.2",
         "@typescript-eslint/parser": "8.12.2",
+        "@vitest/coverage-v8": "2.1.5",
         "dotenv": "16.4.5",
         "eslint": "^9.15.0",
         "eslint-config-prettier": "9.1.0",

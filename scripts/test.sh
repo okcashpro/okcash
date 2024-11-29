@@ -34,8 +34,16 @@ for package in "${PACKAGES[@]}"; do
     cd "$package_path" || continue
 
     if [ -f "package.json" ]; then
-        # Run tests if available
-        if npm run | grep -q " test"; then
+        # Run tests with coverage if TEST_COVERAGE is set and test:coverage script exists
+        if [[ -n "$TEST_COVERAGE" ]] && npm run | grep -q " test:coverage"; then
+            echo -e "\033[1mRunning coverage tests for package: $package\033[0m"
+            if npm run test:coverage; then
+                echo -e "\033[1;32mSuccessfully tested $package with coverage\033[0m\n"
+            else
+                echo -e "\033[1;31mCoverage tests failed for $package\033[0m"
+            fi
+        # Otherwise, run regular tests if available
+        elif npm run | grep -q " test"; then
             echo -e "\033[1mRunning tests for package: $package\033[0m"
             if npm run test; then
                 echo -e "\033[1;32mSuccessfully tested $package\033[0m\n"
