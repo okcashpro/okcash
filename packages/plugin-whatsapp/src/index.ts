@@ -1,4 +1,4 @@
-import { Plugin } from "@eliza/core";
+import { Plugin } from "@ai16z/eliza";
 import { WhatsAppClient } from "./client";
 import { WhatsAppConfig, WhatsAppMessage, WhatsAppWebhookEvent } from "./types";
 import { MessageHandler, WebhookHandler } from "./handlers";
@@ -8,7 +8,13 @@ export class WhatsAppPlugin implements Plugin {
     private messageHandler: MessageHandler;
     private webhookHandler: WebhookHandler;
 
+    name: string;
+    description: string;
+
     constructor(private config: WhatsAppConfig) {
+        this.name = "WhatsApp Cloud API Plugin";
+        this.description =
+            "A plugin for integrating WhatsApp Cloud API with your application.";
         this.client = new WhatsAppClient(config);
         this.messageHandler = new MessageHandler(this.client);
         this.webhookHandler = new WebhookHandler(this.client);
