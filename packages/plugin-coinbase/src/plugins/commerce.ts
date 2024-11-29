@@ -15,6 +15,8 @@ import {
 } from "@ai16z/eliza";
 import { ChargeContent, ChargeSchema, isChargeContent } from "../types";
 import { chargeTemplate, getChargeTemplate } from "../templates";
+import { getWalletDetails } from "../utils";
+import { Coinbase } from "@coinbase/coinbase-sdk";
 
 const url = "https://api.commerce.coinbase.com/charges";
 interface ChargeRequest {
@@ -420,7 +422,26 @@ export const chargeProvider: Provider = {
         const charges = await getAllCharges(
             runtime.getSetting("COINBASE_COMMERCE_KEY")
         );
-        return charges.data;
+        // Ensure API key is available
+        const coinbaseAPIKey =
+            runtime.getSetting("COINBASE_API_KEY") ??
+            process.env.COINBASE_API_KEY;
+        const coinbasePrivateKey =
+            runtime.getSetting("COINBASE_PRIVATE_KEY") ??
+            process.env.COINBASE_PRIVATE_KEY;
+        let balances = [];
+        let transactions = [];
+        if (coinbaseAPIKey && coinbasePrivateKey) {
+            Coinbase.configure({
+                apiKeyName: coinbaseAPIKey,
+                privateKey: coinbasePrivateKey,
+            });
+            const { balances, transactions } = await getWalletDetails(runtime);
+            elizaLogger.log("Current Balances:", balances);
+            elizaLogger.log("Last Transactions:", transactions);
+        }
+        elizaLogger.log("Charges:", charges);
+        return { charges: charges.data, balances, transactions };
     },
 };
 
