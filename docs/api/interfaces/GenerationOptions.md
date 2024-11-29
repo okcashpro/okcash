@@ -28,7 +28,7 @@ Configuration options for generating objects with a model.
 
 ### modelClass
 
-> **modelClass**: `TiktokenModel`
+> **modelClass**: [`ModelClass`](../enumerations/ModelClass.md)
 
 #### Defined in
 

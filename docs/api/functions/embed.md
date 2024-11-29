@@ -24,4 +24,4 @@ Array of embedding numbers
 
 ## Defined in
 
-[packages/core/src/embedding.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L79)
+[packages/core/src/embedding.ts:103](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L103)

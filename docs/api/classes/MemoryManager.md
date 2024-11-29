@@ -36,7 +36,7 @@ The AgentRuntime instance associated with this manager.
 
 #### Defined in
 
-[packages/core/src/memory.ts:36](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L36)
+[packages/core/src/memory.ts:33](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L33)
 
 ## Properties
 
@@ -52,7 +52,7 @@ The AgentRuntime instance associated with this manager.
 
 #### Defined in
 
-[packages/core/src/memory.ts:23](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L23)
+[packages/core/src/memory.ts:20](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L20)
 
 ***
 
@@ -68,7 +68,7 @@ The name of the database table this manager operates on.
 
 #### Defined in
 
-[packages/core/src/memory.ts:28](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L28)
+[packages/core/src/memory.ts:25](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L25)
 
 ## Methods
 
@@ -102,7 +102,7 @@ Error if the memory content is empty
 
 #### Defined in
 
-[packages/core/src/memory.ts:55](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L55)
+[packages/core/src/memory.ts:52](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L52)
 
 ***
 
@@ -146,7 +146,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/memory.ts:90](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L90)
+[packages/core/src/memory.ts:87](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L87)
 
 ***
 
@@ -168,7 +168,7 @@ A Promise resolving to an array of Memory objects.
 
 #### Defined in
 
-[packages/core/src/memory.ts:114](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L114)
+[packages/core/src/memory.ts:111](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L111)
 
 ***
 
@@ -216,7 +216,7 @@ A Promise resolving to an array of Memory objects that match the embedding.
 
 #### Defined in
 
-[packages/core/src/memory.ts:140](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L140)
+[packages/core/src/memory.ts:137](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L137)
 
 ***
 
@@ -248,7 +248,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:175](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L175)
+[packages/core/src/memory.ts:172](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L172)
 
 ***
 
@@ -272,7 +272,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:195](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L195)
+[packages/core/src/memory.ts:192](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L192)
 
 ***
 
@@ -294,7 +294,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:203](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L203)
+[packages/core/src/memory.ts:200](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L200)
 
 ***
 
@@ -322,7 +322,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:214](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L214)
+[packages/core/src/memory.ts:211](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L211)
 
 ***
 
@@ -350,7 +350,7 @@ A Promise that resolves when the operation completes.
 
 #### Defined in
 
-[packages/core/src/memory.ts:226](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L226)
+[packages/core/src/memory.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L223)
 
 ***
 
@@ -382,4 +382,4 @@ A Promise resolving to the count of memories.
 
 #### Defined in
 
-[packages/core/src/memory.ts:239](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L239)
+[packages/core/src/memory.ts:236](https://github.com/ai16z/eliza/blob/main/packages/core/src/memory.ts#L236)

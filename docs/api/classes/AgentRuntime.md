@@ -891,4 +891,4 @@ The state of the agent.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:1179](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L1179)
+[packages/core/src/runtime.ts:1177](https://github.com/ai16z/eliza/blob/main/packages/core/src/runtime.ts#L1177)

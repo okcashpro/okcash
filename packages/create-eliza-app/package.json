@@ -12,7 +12,6 @@
     },
     "scripts": {
         "build": "unbuild",
-        "dev": "jiti ./src/index.ts",
         "lint": "eslint . --fix",
         "start": "node ./dist/index.cjs",
         "automd": "automd"
