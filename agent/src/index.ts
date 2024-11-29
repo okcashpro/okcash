@@ -90,6 +90,24 @@ export async function loadCharacters(
         .map((filePath) => filePath.trim());
     const loadedCharacters = [];
 
+    // Add logging here
+    elizaLogger.info("Character loading details:", {
+        characterPaths,
+        cwd: process.cwd(),
+        dirname: __dirname,
+        fullPath: path.resolve(
+            process.cwd(),
+            "characters/8bitoracle.laozi.character.json"
+        ),
+        exists: fs.existsSync(
+            path.resolve(
+                process.cwd(),
+                "characters/8bitoracle.laozi.character.json"
+            )
+        ),
+        dirContents: fs.readdirSync(process.cwd()),
+    });
+
     if (characterPaths?.length > 0) {
         for (const characterPath of characterPaths) {
             let content = null;
@@ -99,7 +117,13 @@ export async function loadCharacters(
             const pathsToTry = [
                 characterPath, // exact path as specified
                 path.resolve(process.cwd(), characterPath), // relative to cwd
+                path.resolve(process.cwd(), "agent", characterPath), // Add this
                 path.resolve(__dirname, characterPath), // relative to current script
+                path.resolve(
+                    __dirname,
+                    "characters",
+                    path.basename(characterPath)
+                ), // relative to agent/characters
                 path.resolve(
                     __dirname,
                     "../characters",
@@ -111,6 +135,14 @@ export async function loadCharacters(
                     path.basename(characterPath)
                 ), // relative to project root characters dir
             ];
+
+            elizaLogger.info(
+                "Trying paths:",
+                pathsToTry.map((p) => ({
+                    path: p,
+                    exists: fs.existsSync(p),
+                }))
+            );
 
             for (const tryPath of pathsToTry) {
                 content = tryLoadFile(tryPath);
@@ -231,18 +263,30 @@ export function getTokenForProvider(
             );
         case ModelProviderName.FAL:
             return (
-                character.settings?.secrets?.FAL_API_KEY ||
-                settings.FAL_API_KEY
+                character.settings?.secrets?.FAL_API_KEY || settings.FAL_API_KEY
             );
     }
 }
 
 function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
+        elizaLogger.info("Initializing PostgreSQL connection...");
         const db = new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
             parseInputs: true,
         });
+
+        // Test the connection
+        db.init()
+            .then(() => {
+                elizaLogger.success(
+                    "Successfully connected to PostgreSQL database"
+                );
+            })
+            .catch((error) => {
+                elizaLogger.error("Failed to connect to PostgreSQL:", error);
+            });
+
         return db;
     } else {
         const filePath =
@@ -340,8 +384,8 @@ export function createAgent(
                 ? coinbaseCommercePlugin
                 : null,
             getSecret(character, "FAL_API_KEY") ||
-                getSecret(character, "OPENAI_API_KEY") ||
-                getSecret(character, "HEURIST_API_KEY")
+            getSecret(character, "OPENAI_API_KEY") ||
+            getSecret(character, "HEURIST_API_KEY")
                 ? imageGenerationPlugin
                 : null,
             ...(getSecret(character, "COINBASE_API_KEY") &&
@@ -476,7 +520,9 @@ async function handleUserInput(input, agentId) {
         );
 
         const data = await response.json();
-        data.forEach((message) => elizaLogger.log(`${"Agent"}: ${message.text}`));
+        data.forEach((message) =>
+            elizaLogger.log(`${"Agent"}: ${message.text}`)
+        );
     } catch (error) {
         console.error("Error fetching response:", error);
     }

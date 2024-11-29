@@ -45,14 +45,14 @@ export const models: Models = {
         settings: {
             stop: [],
             maxInputTokens: 200000,
-            maxOutputTokens: 8192,
+            maxOutputTokens: 4096,
             frequency_penalty: 0.4,
             presence_penalty: 0.4,
             temperature: 0.7,
         },
         endpoint: "https://api.anthropic.com/v1",
         model: {
-            [ModelClass.SMALL]: "claude-3-5-haiku-20241022",
+            [ModelClass.SMALL]: "claude-3-haiku-20240307",
             [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
             [ModelClass.LARGE]: "claude-3-5-sonnet-20241022",
         },
@@ -272,7 +272,7 @@ export const models: Models = {
         settings: {
             stop: [],
             maxInputTokens: 128000,
-            maxOutputTokens: 8192, 
+            maxOutputTokens: 8192,
             frequency_penalty: 0.5,
             presence_penalty: 0.5,
             temperature: 0.8,
@@ -293,11 +293,11 @@ export const models: Models = {
             temperature: 0.7,
         },
         imageSettings: {
-            steps: 28,            
+            steps: 28,
         },
         endpoint: "https://api.fal.ai/v1",
         model: {
-            [ModelClass.SMALL]: "",  // FAL doesn't provide text models
+            [ModelClass.SMALL]: "", // FAL doesn't provide text models
             [ModelClass.MEDIUM]: "",
             [ModelClass.LARGE]: "",
             [ModelClass.EMBEDDING]: "",

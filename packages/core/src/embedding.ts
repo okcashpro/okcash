@@ -1,18 +1,42 @@
 import path from "node:path";
-
-import { trimTokens } from "./generation.ts";
-import elizaLogger from "./logger.ts";
 import { models } from "./models.ts";
+import { IAgentRuntime, ModelProviderName, ModelClass } from "./types.ts";
+// import fs from "fs";
+import { trimTokens } from "./generation.ts";
 import settings from "./settings.ts";
-import { IAgentRuntime, ModelClass, ModelProviderName } from "./types.ts";
-
+import elizaLogger from "./logger.ts";
+import { EmbeddingModel } from "fastembed";
 interface EmbeddingOptions {
     model: string;
     endpoint: string;
     apiKey?: string;
     length?: number;
     isOllama?: boolean;
+    dimensions?: number;
+    provider?: string;
 }
+
+// Add the embedding configuration
+export const getEmbeddingConfig = () => ({
+    dimensions:
+        settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
+            ? 1536 // OpenAI
+            : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
+              ? 1024 // Ollama mxbai-embed-large
+              : 384, // BGE
+    model:
+        settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
+            ? "text-embedding-3-small"
+            : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
+              ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
+              : EmbeddingModel.BGESmallENV15,
+    provider:
+        settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
+            ? "OpenAI"
+            : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
+              ? "Ollama"
+              : "BGE",
+});
 
 async function getRemoteEmbedding(
     input: string,
@@ -37,9 +61,12 @@ async function getRemoteEmbedding(
                 : {}),
         },
         body: JSON.stringify({
-            input: trimTokens(input, 8000, "gpt-4o-mini"),
+            input,
             model: options.model,
-            length: options.length || 384,
+            dimensions:
+                options.dimensions ||
+                options.length ||
+                getEmbeddingConfig().dimensions, // Prefer dimensions, fallback to length
         }),
     };
 
@@ -84,152 +111,239 @@ export function getEmbeddingType(runtime: IAgentRuntime): "local" | "remote" {
 }
 
 export function getEmbeddingZeroVector(runtime: IAgentRuntime): number[] {
-    const embeddingDimension =
-        getEmbeddingType(runtime) === "local" ? 384 : 1536;
+    let embeddingDimension = 384; // Default BGE dimension
+
+    if (settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true") {
+        embeddingDimension = 1536; // OpenAI dimension
+    } else if (settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true") {
+        embeddingDimension = 1024; // Ollama mxbai-embed-large dimension
+    }
+
     return Array(embeddingDimension).fill(0);
 }
 
 /**
- * Send a message to the OpenAI API for embedding.
- * @param input The input to be embedded.
- * @returns The embedding of the input.
+ * Gets embeddings from a remote API endpoint.  Falls back to local BGE/384
+ *
+ * @param {string} input - The text to generate embeddings for
+ * @param {EmbeddingOptions} options - Configuration options including:
+ *   - model: The model name to use
+ *   - endpoint: Base API endpoint URL
+ *   - apiKey: Optional API key for authentication
+ *   - isOllama: Whether this is an Ollama endpoint
+ *   - dimensions: Desired embedding dimensions
+ * @param {IAgentRuntime} runtime - The agent runtime context
+ * @returns {Promise<number[]>} Array of embedding values
+ * @throws {Error} If the API request fails
  */
-/**
- * Generate embeddings for input text using configured model provider
- * @param runtime The agent runtime containing model configuration
- * @param input The text to generate embeddings for
- * @returns Array of embedding numbers
- */
+
 export async function embed(runtime: IAgentRuntime, input: string) {
-    // Get model provider configuration
-    const modelProvider = models[runtime.character.modelProvider];
-
-    // Determine which embedding model to use:
-    // 1. OpenAI if USE_OPENAI_EMBEDDING is true
-    // 2. Provider's own embedding model if available
-    // 3. Fallback to OpenAI embedding model
-    const embeddingModel = settings.USE_OPENAI_EMBEDDING
-        ? "text-embedding-3-small"
-        : runtime.character.modelProvider === ModelProviderName.OLLAMA
-          ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
-          : modelProvider.model?.[ModelClass.EMBEDDING] ||
-            models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING];
-
-    if (!embeddingModel) {
-        throw new Error("No embedding model configured");
-    }
-
-    if (getEmbeddingType(runtime) === "local") {
-        return await getLocalEmbedding(input);
-    }
-
-    // Try to get cached embedding first
-    const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
-    if (cachedEmbedding) {
-        return cachedEmbedding;
-    }
-
-    // Generate new embedding remotely
-    return await getRemoteEmbedding(input, {
-        model: embeddingModel,
-        // Use OpenAI endpoint if specified, otherwise use provider endpoint
-        endpoint: settings.USE_OPENAI_EMBEDDING
-            ? "https://api.openai.com/v1"
-            : runtime.character.modelEndpointOverride || modelProvider.endpoint,
-        // Use OpenAI API key if specified, otherwise use runtime token
-        apiKey: settings.USE_OPENAI_EMBEDDING
-            ? settings.OPENAI_API_KEY
-            : runtime.token,
-        // Special handling for Ollama provider
-        isOllama:
-            runtime.character.modelProvider === ModelProviderName.OLLAMA &&
-            !settings.USE_OPENAI_EMBEDDING,
+    elizaLogger.debug("Embedding request:", {
+        modelProvider: runtime.character.modelProvider,
+        useOpenAI: process.env.USE_OPENAI_EMBEDDING,
+        input: input?.slice(0, 50) + "...",
+        inputType: typeof input,
+        inputLength: input?.length,
+        isString: typeof input === "string",
+        isEmpty: !input,
     });
-}
 
-async function getLocalEmbedding(input: string): Promise<number[]> {
-    // Check if we're in Node.js environment
-    const isNode =
-        typeof process !== "undefined" &&
-        process.versions != null &&
-        process.versions.node != null;
-
-    if (!isNode) {
-        elizaLogger.warn(
-            "Local embedding not supported in browser, falling back to remote embedding"
-        );
-        throw new Error("Local embedding not supported in browser");
+    // Validate input
+    if (!input || typeof input !== "string" || input.trim().length === 0) {
+        elizaLogger.warn("Invalid embedding input:", {
+            input,
+            type: typeof input,
+            length: input?.length,
+        });
+        return []; // Return empty embedding array
     }
 
-    try {
-        // Try to dynamically import all required Node.js modules
-        const moduleImports = await Promise.all([
-            import("fs"),
-            import("url"),
-            // Wrap fastembed import in a try-catch to prevent build errors for non-Node.js environments.
-            (async () => {
-                try {
-                    return await import("fastembed");
-                    // eslint-disable-next-line
-                } catch (_error) {
-                    elizaLogger.error("Failed to load fastembed.");
-                    throw new Error(
-                        "fastembed import failed, falling back to remote embedding"
-                    );
+    // Check cache first
+    const cachedEmbedding = await retrieveCachedEmbedding(runtime, input);
+    if (cachedEmbedding) return cachedEmbedding;
+
+    const config = getEmbeddingConfig();
+    const isNode = typeof process !== "undefined" && process.versions?.node;
+
+    // Determine which embedding path to use
+    if (config.provider === "OpenAI") {
+        return await getRemoteEmbedding(input, {
+            model: config.model,
+            endpoint: "https://api.openai.com/v1",
+            apiKey: settings.OPENAI_API_KEY,
+            dimensions: config.dimensions,
+        });
+    }
+
+    if (config.provider === "Ollama") {
+        return await getRemoteEmbedding(input, {
+            model: config.model,
+            endpoint:
+                runtime.character.modelEndpointOverride ||
+                models[ModelProviderName.OLLAMA].endpoint,
+            isOllama: true,
+            dimensions: config.dimensions,
+        });
+    }
+
+    // BGE - try local first if in Node
+    if (isNode) {
+        try {
+            return await getLocalEmbedding(input);
+        } catch (error) {
+            elizaLogger.warn(
+                "Local embedding failed, falling back to remote",
+                error
+            );
+        }
+    }
+
+    // Fallback to remote override
+    return await getRemoteEmbedding(input, {
+        model: config.model,
+        endpoint:
+            runtime.character.modelEndpointOverride ||
+            models[runtime.character.modelProvider].endpoint,
+        apiKey: runtime.token,
+        dimensions: config.dimensions,
+    });
+
+    async function getLocalEmbedding(input: string): Promise<number[]> {
+        elizaLogger.debug("DEBUG - Inside getLocalEmbedding function");
+
+        // Check if we're in Node.js environment
+        const isNode =
+            typeof process !== "undefined" &&
+            process.versions != null &&
+            process.versions.node != null;
+
+        if (isNode) {
+            const fs = await import("fs");
+            const { FlagEmbedding } = await import("fastembed");
+            const { fileURLToPath } = await import("url");
+
+            function getRootPath() {
+                const __filename = fileURLToPath(import.meta.url);
+                const __dirname = path.dirname(__filename);
+
+                const rootPath = path.resolve(__dirname, "..");
+                if (rootPath.includes("/eliza/")) {
+                    return rootPath.split("/eliza/")[0] + "/eliza/";
                 }
-            })(),
-        ]);
 
-        const [fs, { fileURLToPath }, fastEmbed] = moduleImports;
-        const { FlagEmbedding } = fastEmbed;
-
-        function getRootPath() {
-            const __filename = fileURLToPath(import.meta.url);
-            const __dirname = path.dirname(__filename);
-
-            const rootPath = path.resolve(__dirname, "..");
-            if (rootPath.includes("/eliza/")) {
-                return rootPath.split("/eliza/")[0] + "/eliza/";
+                return path.resolve(__dirname, "..");
             }
 
-            return path.resolve(__dirname, "..");
+            const cacheDir = getRootPath() + "/cache/";
+
+            if (!fs.existsSync(cacheDir)) {
+                fs.mkdirSync(cacheDir, { recursive: true });
+            }
+
+            elizaLogger.debug("Initializing BGE embedding model...");
+
+            const embeddingModel = await FlagEmbedding.init({
+                cacheDir: cacheDir,
+                model: EmbeddingModel.BGESmallENV15,
+                // BGE-small-en-v1.5 specific settings
+                maxLength: 512, // BGE's context window
+            });
+
+            elizaLogger.debug("Generating embedding for input:", {
+                inputLength: input.length,
+                inputPreview: input.slice(0, 100) + "...",
+            });
+
+            // Let fastembed handle tokenization internally
+            const embedding = await embeddingModel.queryEmbed(input);
+
+            // Debug the raw embedding
+            elizaLogger.debug("Raw embedding from BGE:", {
+                type: typeof embedding,
+                isArray: Array.isArray(embedding),
+                dimensions: Array.isArray(embedding)
+                    ? embedding.length
+                    : "not an array",
+                sample: Array.isArray(embedding)
+                    ? embedding.slice(0, 5)
+                    : embedding,
+            });
+
+            // Process the embedding into the correct format
+            let finalEmbedding: number[];
+
+            if (
+                ArrayBuffer.isView(embedding) &&
+                embedding.constructor === Float32Array
+            ) {
+                // Direct Float32Array result
+                finalEmbedding = Array.from(embedding);
+            } else if (
+                Array.isArray(embedding) &&
+                ArrayBuffer.isView(embedding[0]) &&
+                embedding[0].constructor === Float32Array
+            ) {
+                // Nested Float32Array result
+                finalEmbedding = Array.from(embedding[0]);
+            } else if (Array.isArray(embedding)) {
+                // Direct array result
+                finalEmbedding = embedding;
+            } else {
+                throw new Error(
+                    `Unexpected embedding format: ${typeof embedding}`
+                );
+            }
+
+            elizaLogger.debug("Processed embedding:", {
+                length: finalEmbedding.length,
+                sample: finalEmbedding.slice(0, 5),
+                allNumbers: finalEmbedding.every((n) => typeof n === "number"),
+            });
+
+            // Ensure all values are proper numbers
+            finalEmbedding = finalEmbedding.map((n) => Number(n));
+
+            // Validate the final embedding
+            if (
+                !Array.isArray(finalEmbedding) ||
+                finalEmbedding[0] === undefined
+            ) {
+                throw new Error(
+                    "Invalid embedding format: must be an array starting with a number"
+                );
+            }
+
+            // Validate embedding dimensions (should be 384 for BGE-small)
+            if (finalEmbedding.length !== 384) {
+                elizaLogger.warn(
+                    `Unexpected embedding dimension: ${finalEmbedding.length} (expected 384)`
+                );
+            }
+
+            return finalEmbedding;
+        } else {
+            // Browser implementation - fallback to remote embedding
+            elizaLogger.warn(
+                "Local embedding not supported in browser, falling back to remote embedding"
+            );
+            throw new Error("Local embedding not supported in browser");
         }
-
-        const cacheDir = getRootPath() + "/cache/";
-
-        if (!fs.existsSync(cacheDir)) {
-            fs.mkdirSync(cacheDir, { recursive: true });
-        }
-
-        const embeddingModel = await FlagEmbedding.init({
-            cacheDir: cacheDir,
-        });
-
-        const trimmedInput = trimTokens(input, 8000, "gpt-4o-mini");
-        const embedding = await embeddingModel.queryEmbed(trimmedInput);
-        return embedding;
-        // eslint-disable-next-line
-    } catch (_error) {
-        elizaLogger.warn(
-            "Local embedding not supported in browser, falling back to remote embedding."
-        );
-        throw new Error("Local embedding not supported in browser");
     }
-}
 
-export async function retrieveCachedEmbedding(
-    runtime: IAgentRuntime,
-    input: string
-) {
-    if (!input) {
-        elizaLogger.log("No input to retrieve cached embedding for");
+    async function retrieveCachedEmbedding(
+        runtime: IAgentRuntime,
+        input: string
+    ) {
+        if (!input) {
+            elizaLogger.log("No input to retrieve cached embedding for");
+            return null;
+        }
+
+        const similaritySearchResult =
+            await runtime.messageManager.getCachedEmbeddings(input);
+        if (similaritySearchResult.length > 0) {
+            return similaritySearchResult[0].embedding;
+        }
         return null;
     }
-
-    const similaritySearchResult =
-        await runtime.messageManager.getCachedEmbeddings(input);
-    if (similaritySearchResult.length > 0) {
-        return similaritySearchResult[0].embedding;
-    }
-    return null;
 }
