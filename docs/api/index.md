@@ -69,6 +69,8 @@
 - [Plugin](type-aliases/Plugin.md)
 - [Character](type-aliases/Character.md)
 - [CacheOptions](type-aliases/CacheOptions.md)
+- [SearchResult](type-aliases/SearchResult.md)
+- [SearchResponse](type-aliases/SearchResponse.md)
 - [KnowledgeItem](type-aliases/KnowledgeItem.md)
 
 ## Variables
@@ -114,6 +116,7 @@
 - [generateMessageResponse](functions/generateMessageResponse.md)
 - [generateImage](functions/generateImage.md)
 - [generateCaption](functions/generateCaption.md)
+- [generateWebSearch](functions/generateWebSearch.md)
 - [generateObjectV2](functions/generateObjectV2.md)
 - [handleProvider](functions/handleProvider.md)
 - [getGoals](functions/getGoals.md)

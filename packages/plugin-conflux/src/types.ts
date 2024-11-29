@@ -44,7 +44,11 @@ export const PumpSellSchema = z.object({
     }),
 });
 
-export const PumpSchema = z.union([PumpCreateSchema, PumpBuySchema, PumpSellSchema]);
+export const PumpSchema = z.union([
+    PumpCreateSchema,
+    PumpBuySchema,
+    PumpSellSchema,
+]);
 
 export type PumpContent = z.infer<typeof PumpSchema>;
 export type PumpCreateContent = z.infer<typeof PumpCreateSchema>;
@@ -82,4 +86,3 @@ export function isPumpSellContent(object: any): object is PumpSellContent {
     console.error("Invalid content: ", object);
     return false;
 }
-

@@ -85,7 +85,13 @@ const imageGeneration: Action = {
         const falApiKeyOk = !!runtime.getSetting("FAL_API_KEY");
         const openAiApiKeyOk = !!runtime.getSetting("OPENAI_API_KEY");
 
-        return anthropicApiKeyOk || togetherApiKeyOk || heuristApiKeyOk || falApiKeyOk || openAiApiKeyOk;
+        return (
+            anthropicApiKeyOk ||
+            togetherApiKeyOk ||
+            heuristApiKeyOk ||
+            falApiKeyOk ||
+            openAiApiKeyOk
+        );
     },
     handler: async (
         runtime: IAgentRuntime,

@@ -153,7 +153,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
             ),
             new PublicKey(
                 runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY")
+                    runtime.getSetting("WALLET_PUBLIC_KEY")
             )
         );
         const tokenProvider = new TokenProvider(

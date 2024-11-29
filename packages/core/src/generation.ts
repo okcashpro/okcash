@@ -33,7 +33,7 @@ import {
     ServiceType,
     SearchResponse,
 } from "./types.ts";
-import { fal, } from "@fal-ai/client";
+import { fal } from "@fal-ai/client";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -800,12 +800,13 @@ export const generateImage = async (
         imageModelProvider: model,
     });
 
-    const apiKey = runtime.imageModelProvider === runtime.modelProvider
-        ? runtime.token
-        : runtime.getSetting("HEURIST_API_KEY") ??
-        runtime.getSetting("TOGETHER_API_KEY") ??
-        runtime.getSetting("FAL_API_KEY") ??
-        runtime.getSetting("OPENAI_API_KEY");
+    const apiKey =
+        runtime.imageModelProvider === runtime.modelProvider
+            ? runtime.token
+            : (runtime.getSetting("HEURIST_API_KEY") ??
+              runtime.getSetting("TOGETHER_API_KEY") ??
+              runtime.getSetting("FAL_API_KEY") ??
+              runtime.getSetting("OPENAI_API_KEY"));
 
     try {
         if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
@@ -877,7 +878,7 @@ export const generateImage = async (
             return { success: true, data: base64s };
         } else if (runtime.imageModelProvider === ModelProviderName.FAL) {
             fal.config({
-                credentials: apiKey as string
+                credentials: apiKey as string,
             });
 
             // Prepare the input parameters according to their schema
@@ -890,14 +891,16 @@ export const generateImage = async (
                 enable_safety_checker: true,
                 output_format: "png" as const,
                 seed: data.seed ?? 6252023,
-                ...(runtime.getSetting("FAL_AI_LORA_PATH") ? {
-                    loras: [
-                        {
-                            path: runtime.getSetting("FAL_AI_LORA_PATH"),
-                            scale: 1
-                        }
-                    ]
-                } : {})
+                ...(runtime.getSetting("FAL_AI_LORA_PATH")
+                    ? {
+                          loras: [
+                              {
+                                  path: runtime.getSetting("FAL_AI_LORA_PATH"),
+                                  scale: 1,
+                              },
+                          ],
+                      }
+                    : {}),
             };
 
             // Subscribe to the model
@@ -908,7 +911,7 @@ export const generateImage = async (
                     if (update.status === "IN_PROGRESS") {
                         elizaLogger.info(update.logs.map((log) => log.message));
                     }
-                }
+                },
             });
 
             // Convert the returned image URLs to base64 to match existing functionality
@@ -916,7 +919,7 @@ export const generateImage = async (
                 const response = await fetch(image.url);
                 const blob = await response.blob();
                 const buffer = await blob.arrayBuffer();
-                const base64 = Buffer.from(buffer).toString('base64');
+                const base64 = Buffer.from(buffer).toString("base64");
                 return `data:${image.content_type};base64,${base64}`;
             });
 
