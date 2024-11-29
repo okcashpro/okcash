@@ -77,7 +77,7 @@ async function set(
         userId: runtime.agentId,
         createdAt: Date.now(),
         content: item.content,
-        embedding: getEmbeddingZeroVector(runtime),
+        embedding: getEmbeddingZeroVector(),
     });
 
     const preprocessed = preprocess(item.content.text);

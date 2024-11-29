@@ -267,7 +267,7 @@ export class MessageManager {
                                     url: m.url,
                                 },
                                 roomId,
-                                embedding: getEmbeddingZeroVector(this.runtime),
+                                embedding: getEmbeddingZeroVector(),
                                 createdAt: m.createdTimestamp,
                             };
                             memories.push(memory);

@@ -267,7 +267,7 @@ export class TwitterPostClient {
                         source: "twitter",
                     },
                     roomId,
-                    embedding: getEmbeddingZeroVector(this.runtime),
+                    embedding: getEmbeddingZeroVector(),
                     createdAt: tweet.timestamp * 1000,
                 });
             } catch (error) {
