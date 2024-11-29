@@ -21,8 +21,13 @@ export class WebhookHandler {
                     await this.handleStatus(status);
                 }
             }
-        } catch (error) {
-            throw new Error(`Failed to handle webhook event: ${error.message}`);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw new Error(
+                    `Failed to send WhatsApp message: ${error.message}`
+                );
+            }
+            throw new Error("Failed to send WhatsApp message");
         }
     }
 
