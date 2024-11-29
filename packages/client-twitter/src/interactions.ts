@@ -466,7 +466,7 @@ export class TwitterInteractionClient {
                         currentTweet.userId === this.twitterUserId
                             ? this.runtime.agentId
                             : stringToUuid(currentTweet.userId),
-                    embedding: getEmbeddingZeroVector(this.runtime),
+                    embedding: getEmbeddingZeroVector(),
                 });
             }
 

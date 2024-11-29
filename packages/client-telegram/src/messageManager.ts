@@ -405,7 +405,7 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.date * 1000,
-                embedding: getEmbeddingZeroVector(this.runtime),
+                embedding: getEmbeddingZeroVector(),
             };
 
             // Create memory
@@ -468,7 +468,7 @@ export class MessageManager {
                                 inReplyTo: messageId,
                             },
                             createdAt: sentMessage.date * 1000,
-                            embedding: getEmbeddingZeroVector(this.runtime),
+                            embedding: getEmbeddingZeroVector(),
                         };
 
                         // Set action to CONTINUE for all messages except the last one

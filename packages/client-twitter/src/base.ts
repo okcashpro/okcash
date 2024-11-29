@@ -420,7 +420,7 @@ export class ClientBase extends EventEmitter {
                         content: content,
                         agentId: this.runtime.agentId,
                         roomId,
-                        embedding: getEmbeddingZeroVector(this.runtime),
+                        embedding: getEmbeddingZeroVector(),
                         createdAt: tweet.timestamp * 1000,
                     });
 
@@ -533,7 +533,7 @@ export class ClientBase extends EventEmitter {
                 content: content,
                 agentId: this.runtime.agentId,
                 roomId,
-                embedding: getEmbeddingZeroVector(this.runtime),
+                embedding: getEmbeddingZeroVector(),
                 createdAt: tweet.timestamp * 1000,
             });
 
@@ -575,7 +575,7 @@ export class ClientBase extends EventEmitter {
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,
-                    embedding: getEmbeddingZeroVector(this.runtime),
+                    embedding: getEmbeddingZeroVector(),
                 });
             }
 

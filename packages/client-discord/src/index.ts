@@ -257,7 +257,7 @@ export class DiscordClient extends EventEmitter {
                 },
                 roomId,
                 createdAt: timestamp,
-                embedding: getEmbeddingZeroVector(this.runtime),
+                embedding: getEmbeddingZeroVector(),
             };
 
             try {
@@ -348,7 +348,7 @@ export class DiscordClient extends EventEmitter {
                 },
                 roomId,
                 createdAt: Date.now(),
-                embedding: getEmbeddingZeroVector(this.runtime),
+                embedding: getEmbeddingZeroVector(),
             });
         } catch (error) {
             console.error("Error creating reaction removal message:", error);

@@ -43,7 +43,7 @@ export function createCastMemory({
             hash: cast.id,
         },
         roomId,
-        embedding: getEmbeddingZeroVector(runtime),
+        embedding: getEmbeddingZeroVector(),
         createdAt: cast.message.data.timestamp * 1000,
     };
 }
