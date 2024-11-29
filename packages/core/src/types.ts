@@ -649,9 +649,6 @@ export type Character = {
     /** Example posts */
     postExamples: string[];
 
-    /** Known people */
-    people: string[];
-
     /** Known topics */
     topics: string[];
 

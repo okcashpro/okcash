@@ -140,6 +140,11 @@ export class WalletProvider {
 
 export const evmWalletProvider: Provider = {
   async get(runtime: IAgentRuntime, message: Memory, state?: State): Promise<string | null> {
+    // Check if the user has an EVM wallet
+    if (!runtime.getSetting("EVM_PRIVATE_KEY")) {
+      return null
+    }
+
     try {
       const walletProvider = new WalletProvider(runtime)
       const address = walletProvider.getAddress()

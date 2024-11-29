@@ -22,7 +22,7 @@ import { MessageManager } from "./messages.ts";
 import channelStateProvider from "./providers/channelState.ts";
 import voiceStateProvider from "./providers/voiceState.ts";
 import { VoiceManager } from "./voice.ts";
-import { validateDiscordConfig } from "./enviroment.ts";
+import { PermissionsBitField } from "discord.js";
 
 export class DiscordClient extends EventEmitter {
     apiToken: string;
@@ -34,6 +34,7 @@ export class DiscordClient extends EventEmitter {
 
     constructor(runtime: IAgentRuntime) {
         super();
+
         this.apiToken = runtime.getSetting("DISCORD_API_TOKEN") as string;
         this.client = new Client({
             intents: [
@@ -112,85 +113,173 @@ export class DiscordClient extends EventEmitter {
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
         elizaLogger.success(`Logged in as ${readyClient.user?.tag}`);
+
+        // Register slash commands
+        const commands = [
+            {
+                name: "joinchannel",
+                description: "Join a voice channel",
+                options: [
+                    {
+                        name: "channel",
+                        type: 7, // CHANNEL type
+                        description: "The voice channel to join",
+                        required: true,
+                        channel_types: [2], // GuildVoice type
+                    },
+                ],
+            },
+            {
+                name: "leavechannel",
+                description: "Leave the current voice channel",
+            },
+        ];
+
+        try {
+            await this.client.application?.commands.set(commands);
+            elizaLogger.success("Slash commands registered");
+        } catch (error) {
+            console.error("Error registering slash commands:", error);
+        }
+
+        // Required permissions for the bot
+        const requiredPermissions = [
+            // Text Permissions
+            PermissionsBitField.Flags.ViewChannel,
+            PermissionsBitField.Flags.SendMessages,
+            PermissionsBitField.Flags.SendMessagesInThreads,
+            PermissionsBitField.Flags.CreatePrivateThreads,
+            PermissionsBitField.Flags.CreatePublicThreads,
+            PermissionsBitField.Flags.EmbedLinks,
+            PermissionsBitField.Flags.AttachFiles,
+            PermissionsBitField.Flags.AddReactions,
+            PermissionsBitField.Flags.UseExternalEmojis,
+            PermissionsBitField.Flags.UseExternalStickers,
+            PermissionsBitField.Flags.MentionEveryone,
+            PermissionsBitField.Flags.ManageMessages,
+            PermissionsBitField.Flags.ReadMessageHistory,
+            // Voice Permissions
+            PermissionsBitField.Flags.Connect,
+            PermissionsBitField.Flags.Speak,
+            PermissionsBitField.Flags.UseVAD,
+            PermissionsBitField.Flags.PrioritySpeaker,
+        ].reduce((a, b) => a | b, 0n);
+
         elizaLogger.success("Use this URL to add the bot to your server:");
         elizaLogger.success(
-            `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=0&scope=bot%20applications.commands`
+            `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=${requiredPermissions}&scope=bot%20applications.commands`
         );
         await this.onReady();
     }
 
     async handleReactionAdd(reaction: MessageReaction, user: User) {
-        elizaLogger.log("Reaction added");
-        // if (user.bot) return;
+        try {
+            elizaLogger.log("Reaction added");
 
-        let emoji = reaction.emoji.name;
-        if (!emoji && reaction.emoji.id) {
-            emoji = `<:${reaction.emoji.name}:${reaction.emoji.id}>`;
-        }
-
-        // Fetch the full message if it's a partial
-        if (reaction.partial) {
-            try {
-                await reaction.fetch();
-            } catch (error) {
-                console.error(
-                    "Something went wrong when fetching the message:",
-                    error
-                );
+            // Early returns
+            if (!reaction || !user) {
+                elizaLogger.warn("Invalid reaction or user");
                 return;
             }
+
+            // Get emoji info
+            let emoji = reaction.emoji.name;
+            if (!emoji && reaction.emoji.id) {
+                emoji = `<:${reaction.emoji.name}:${reaction.emoji.id}>`;
+            }
+
+            // Fetch full message if partial
+            if (reaction.partial) {
+                try {
+                    await reaction.fetch();
+                } catch (error) {
+                    elizaLogger.error(
+                        "Failed to fetch partial reaction:",
+                        error
+                    );
+                    return;
+                }
+            }
+
+            // Generate IDs with timestamp to ensure uniqueness
+            const timestamp = Date.now();
+            const roomId = stringToUuid(
+                `${reaction.message.channel.id}-${this.runtime.agentId}`
+            );
+            const userIdUUID = stringToUuid(
+                `${user.id}-${this.runtime.agentId}`
+            );
+            const reactionUUID = stringToUuid(
+                `${reaction.message.id}-${user.id}-${emoji}-${timestamp}-${this.runtime.agentId}`
+            );
+
+            // Validate IDs
+            if (!userIdUUID || !roomId) {
+                elizaLogger.error("Invalid user ID or room ID", {
+                    userIdUUID,
+                    roomId,
+                });
+                return;
+            }
+
+            // Process message content
+            const messageContent = reaction.message.content || "";
+            const truncatedContent =
+                messageContent.length > 100
+                    ? `${messageContent.substring(0, 100)}...`
+                    : messageContent;
+            const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
+
+            // Get user info
+            const userName = reaction.message.author?.username || "unknown";
+            const name = reaction.message.author?.displayName || userName;
+
+            // Ensure connection
+            await this.runtime.ensureConnection(
+                userIdUUID,
+                roomId,
+                userName,
+                name,
+                "discord"
+            );
+
+            // Create memory with retry logic
+            const memory = {
+                id: reactionUUID,
+                userId: userIdUUID,
+                agentId: this.runtime.agentId,
+                content: {
+                    text: reactionMessage,
+                    source: "discord",
+                    inReplyTo: stringToUuid(
+                        `${reaction.message.id}-${this.runtime.agentId}`
+                    ),
+                },
+                roomId,
+                createdAt: timestamp,
+                embedding: getEmbeddingZeroVector(this.runtime),
+            };
+
+            try {
+                await this.runtime.messageManager.createMemory(memory);
+                elizaLogger.debug("Reaction memory created", {
+                    reactionId: reactionUUID,
+                    emoji,
+                    userId: user.id,
+                });
+            } catch (error) {
+                if (error.code === "23505") {
+                    // Duplicate key error
+                    elizaLogger.warn("Duplicate reaction memory, skipping", {
+                        reactionId: reactionUUID,
+                    });
+                    return;
+                }
+                throw error; // Re-throw other errors
+            }
+        } catch (error) {
+            elizaLogger.error("Error handling reaction:", error);
         }
-
-        const messageContent = reaction.message.content;
-        const truncatedContent =
-            messageContent.length > 100
-                ? messageContent.substring(0, 100) + "..."
-                : messageContent;
-
-        const reactionMessage = `*<${emoji}>: "${truncatedContent}"*`;
-
-        const roomId = stringToUuid(
-            reaction.message.channel.id + "-" + this.runtime.agentId
-        );
-        const userIdUUID = stringToUuid(user.id + "-" + this.runtime.agentId);
-
-        // Generate a unique UUID for the reaction
-        const reactionUUID = stringToUuid(
-            `${reaction.message.id}-${user.id}-${emoji}-${this.runtime.agentId}`
-        );
-
-        // ensure the user id and room id are valid
-        if (!userIdUUID || !roomId) {
-            console.error("Invalid user id or room id");
-            return;
-        }
-        const userName = reaction.message.author.username;
-        const name = reaction.message.author.displayName;
-
-        await this.runtime.ensureConnection(
-            userIdUUID,
-            roomId,
-            userName,
-            name,
-            "discord"
-        );
-
-        // Save the reaction as a message
-        await this.runtime.messageManager.createMemory({
-            id: reactionUUID, // This is the ID of the reaction message
-            userId: userIdUUID,
-            agentId: this.runtime.agentId,
-            content: {
-                text: reactionMessage,
-                source: "discord",
-                inReplyTo: stringToUuid(
-                    reaction.message.id + "-" + this.runtime.agentId
-                ), // This is the ID of the original message
-            },
-            roomId,
-            createdAt: Date.now(),
-            embedding: getEmbeddingZeroVector(this.runtime),
-        });
     }
 
     async handleReactionRemove(reaction: MessageReaction, user: User) {
@@ -298,12 +387,8 @@ export function startDiscord(runtime: IAgentRuntime) {
 }
 
 export const DiscordClientInterface: ElizaClient = {
-    start: async (runtime: IAgentRuntime) => {
-        await validateDiscordConfig(runtime);
-
-        return new DiscordClient(runtime);
-    },
-    stop: async (_runtime: IAgentRuntime) => {
+    start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
+    stop: async (runtime: IAgentRuntime) => {
         console.warn("Discord client does not support stopping yet");
     },
 };

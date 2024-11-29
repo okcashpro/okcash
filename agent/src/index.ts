@@ -55,8 +55,10 @@ export function parseArguments(): {
     character?: string;
     characters?: string;
 } {
+    console.log("parsing arguments")
+    console.log("process.argv", process.argv)
     try {
-        return yargs(process.argv.slice(2))
+        return yargs(process.argv.slice(3))
             .option("character", {
                 type: "string",
                 description: "Path to the character JSON file",
@@ -88,8 +90,10 @@ export async function loadCharacters(
         ?.split(",")
         .map((filePath) => filePath.trim());
     const loadedCharacters = [];
+    console.log("****characterPaths", characterPaths)
 
     if (characterPaths?.length > 0) {
+        console.log("has characters")
         for (const characterPath of characterPaths) {
             let content = null;
             let resolvedPath = "";
@@ -115,6 +119,7 @@ export async function loadCharacters(
                 content = tryLoadFile(tryPath);
                 if (content !== null) {
                     resolvedPath = tryPath;
+                    console.log("resolvedPath", resolvedPath)
                     break;
                 }
             }
@@ -131,6 +136,7 @@ export async function loadCharacters(
             try {
                 const character = JSON.parse(content);
                 validateCharacterConfig(character);
+                console.log("character is", character)
 
                 // Handle plugins
                 if (character.plugins) {
@@ -371,7 +377,8 @@ async function startAgent(character: Character, directClient) {
             fs.mkdirSync(dataDir, { recursive: true });
         }
 
-        db = initializeDatabase(dataDir);
+        db = initializeDatabase(dataDir) as IDatabaseAdapter &
+            IDatabaseCacheAdapter;
 
         await db.init();
 
@@ -403,6 +410,7 @@ const startAgents = async () => {
     const args = parseArguments();
 
     let charactersArg = args.characters || args.character;
+    console.log("charactersArg is", charactersArg)
 
     let characters = [defaultCharacter];
 
