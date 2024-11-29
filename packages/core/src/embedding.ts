@@ -1,8 +1,6 @@
 import path from "node:path";
 import { models } from "./models.ts";
-import { IAgentRuntime, ModelProviderName, ModelClass } from "./types.ts";
-// import fs from "fs";
-import { trimTokens } from "./generation.ts";
+import { IAgentRuntime, ModelProviderName } from "./types.ts";
 import settings from "./settings.ts";
 import elizaLogger from "./logger.ts";
 import { EmbeddingModel } from "fastembed";
@@ -110,7 +108,7 @@ export function getEmbeddingType(runtime: IAgentRuntime): "local" | "remote" {
     return isLocal ? "local" : "remote";
 }
 
-export function getEmbeddingZeroVector(runtime: IAgentRuntime): number[] {
+export function getEmbeddingZeroVector(): number[] {
     let embeddingDimension = 384; // Default BGE dimension
 
     if (settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true") {

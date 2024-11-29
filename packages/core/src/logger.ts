@@ -1,5 +1,3 @@
-import settings from "./settings.ts";
-
 class ElizaLogger {
     constructor() {
         // Check if we're in Node.js environment
