@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
 
-// Import the entire module as default
-import pg from "pg";
-type Pool = pg.Pool;
+import postgres from "pg";
+const { Pool } = postgres;
+type PoolType = typeof postgres.Pool;
 
 import {
     QueryConfig,
@@ -32,10 +32,10 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename); // get the name of the directory
 
 export class PostgresDatabaseAdapter
-    extends DatabaseAdapter<Pool>
+    extends DatabaseAdapter<PoolType>
     implements IDatabaseCacheAdapter
 {
-    private pool: Pool;
+    private pool: InstanceType<PoolType>;
     private readonly maxRetries: number = 3;
     private readonly baseDelay: number = 1000; // 1 second
     private readonly maxDelay: number = 10000; // 10 seconds
@@ -51,7 +51,7 @@ export class PostgresDatabaseAdapter
             connectionTimeoutMillis: this.connectionTimeout,
         };
 
-        this.pool = new pg.Pool({
+        this.pool = new Pool({
             ...defaultConfig,
             ...connectionConfig, // Allow overriding defaults
         });
@@ -137,7 +137,7 @@ export class PostgresDatabaseAdapter
             await this.pool.end();
 
             // Create new pool
-            this.pool = new pg.Pool({
+            this.pool = new Pool({
                 ...this.pool.options,
                 connectionTimeoutMillis: this.connectionTimeout,
             });
