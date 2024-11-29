@@ -374,6 +374,31 @@ export async function generateText({
                 break;
             }
 
+            case ModelProviderName.GALADRIEL: {
+                elizaLogger.debug("Initializing Galadriel model.");
+                const galadriel = createOpenAI({
+                    apiKey: apiKey,
+                    baseURL: endpoint,
+                });
+
+                const { text: galadrielResponse } = await aiGenerateText({
+                    model: galadriel.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = galadrielResponse;
+                elizaLogger.debug("Received response from Galadriel model.");
+                break;
+            }
+
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
                 elizaLogger.error(errorMessage);
