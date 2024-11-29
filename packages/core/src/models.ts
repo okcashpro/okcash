@@ -177,9 +177,18 @@ export const models: Models = {
         // Available models: https://docs.red-pill.ai/get-started/supported-models
         // To test other models, change the models below
         model: {
-            [ModelClass.SMALL]: "gpt-4o-mini", // [ModelClass.SMALL]: "claude-3-5-sonnet-20241022",
-            [ModelClass.MEDIUM]: "gpt-4o", // [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
-            [ModelClass.LARGE]: "gpt-4o", // [ModelClass.LARGE]: "claude-3-opus-20240229",
+            [ModelClass.SMALL]:
+                settings.SMALL_REDPILL_MODEL ||
+                settings.REDPILL_MODEL ||
+                "gpt-4o-mini",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_REDPILL_MODEL ||
+                settings.REDPILL_MODEL ||
+                "gpt-4o",
+            [ModelClass.LARGE]:
+                settings.LARGE_REDPILL_MODEL ||
+                settings.REDPILL_MODEL ||
+                "gpt-4o",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
