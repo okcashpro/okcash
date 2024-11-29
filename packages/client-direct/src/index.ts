@@ -59,8 +59,9 @@ export interface SimliClientConfig {
     audioRef: any;
 }
 export class DirectClient {
-    private app: express.Application;
+    public app: express.Application;
     private agents: Map<string, AgentRuntime>;
+    private server: any; // Store server instance
 
     constructor() {
         elizaLogger.log("DirectClient constructor");
@@ -369,9 +370,36 @@ export class DirectClient {
     }
 
     public start(port: number) {
-        this.app.listen(port, () => {
+        this.server = this.app.listen(port, () => {
             elizaLogger.success(`Server running at http://localhost:${port}/`);
         });
+
+        // Handle graceful shutdown
+        const gracefulShutdown = () => {
+            elizaLogger.log('Received shutdown signal, closing server...');
+            this.server.close(() => {
+                elizaLogger.success('Server closed successfully');
+                process.exit(0);
+            });
+
+            // Force close after 5 seconds if server hasn't closed
+            setTimeout(() => {
+                elizaLogger.error('Could not close connections in time, forcefully shutting down');
+                process.exit(1);
+            }, 5000);
+        };
+
+        // Handle different shutdown signals
+        process.on('SIGTERM', gracefulShutdown);
+        process.on('SIGINT', gracefulShutdown);
+    }
+
+    public stop() {
+        if (this.server) {
+            this.server.close(() => {
+                elizaLogger.success('Server stopped');
+            });
+        }
     }
 }
 
@@ -383,8 +411,10 @@ export const DirectClientInterface: Client = {
         client.start(serverPort);
         return client;
     },
-    stop: async (_runtime: IAgentRuntime) => {
-        elizaLogger.warn("Direct client does not support stopping yet");
+    stop: async (_runtime: IAgentRuntime, client?: any) => {
+        if (client instanceof DirectClient) {
+            client.stop();
+        }
     },
 };
 

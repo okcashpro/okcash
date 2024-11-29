@@ -25,11 +25,12 @@
     "devDependencies": {
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
-        "lerna": "8.1.5",
-        "only-allow": "1.2.1",
         "concurrently": "9.1.0",
         "husky": "9.1.7",
+        "lerna": "8.1.5",
+        "only-allow": "1.2.1",
         "prettier": "3.3.3",
+        "turbo": "^2.3.3",
         "typedoc": "0.26.11",
         "typescript": "5.6.3",
         "vite": "5.4.11",
@@ -44,10 +45,10 @@
         "node": "23.3.0"
     },
     "dependencies": {
-        "@coinbase/coinbase-sdk": "^0.10.0",
-        "csv-parse": "^5.6.0",
         "@0glabs/0g-ts-sdk": "^0.2.1",
+        "@coinbase/coinbase-sdk": "^0.10.0",
         "amqplib": "0.10.5",
+        "csv-parse": "^5.6.0",
         "ollama-ai-provider": "^0.16.1",
         "optional": "^0.1.4",
         "sharp": "^0.33.5",

@@ -957,6 +957,8 @@ Text: ${attachment.text}
 
         const formattedKnowledge = formatKnowledge(knowledegeData);
 
+        console.log('***** formattedKnowledge *****', formattedKnowledge)
+
         const initialState = {
             agentId: this.agentId,
             agentName,
