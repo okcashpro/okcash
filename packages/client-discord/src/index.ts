@@ -388,7 +388,7 @@ export function startDiscord(runtime: IAgentRuntime) {
 
 export const DiscordClientInterface: ElizaClient = {
     start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
-    stop: async (runtime: IAgentRuntime) => {
+    stop: async (_runtime: IAgentRuntime) => {
         console.warn("Discord client does not support stopping yet");
     },
 };

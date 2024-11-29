@@ -31,6 +31,7 @@ import {
     tradePlugin,
 } from "@ai16z/plugin-coinbase";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
+import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
@@ -55,8 +56,6 @@ export function parseArguments(): {
     character?: string;
     characters?: string;
 } {
-    console.log("parsing arguments")
-    console.log("process.argv", process.argv)
     try {
         return yargs(process.argv.slice(3))
             .option("character", {
@@ -90,10 +89,8 @@ export async function loadCharacters(
         ?.split(",")
         .map((filePath) => filePath.trim());
     const loadedCharacters = [];
-    console.log("****characterPaths", characterPaths)
 
     if (characterPaths?.length > 0) {
-        console.log("has characters")
         for (const characterPath of characterPaths) {
             let content = null;
             let resolvedPath = "";
@@ -119,7 +116,6 @@ export async function loadCharacters(
                 content = tryLoadFile(tryPath);
                 if (content !== null) {
                     resolvedPath = tryPath;
-                    console.log("resolvedPath", resolvedPath)
                     break;
                 }
             }
@@ -136,7 +132,6 @@ export async function loadCharacters(
             try {
                 const character = JSON.parse(content);
                 validateCharacterConfig(character);
-                console.log("character is", character)
 
                 // Handle plugins
                 if (character.plugins) {
@@ -233,6 +228,11 @@ export function getTokenForProvider(
             return (
                 character.settings?.secrets?.GALADRIEL_API_KEY ||
                 settings.GALADRIEL_API_KEY
+            );
+        case ModelProviderName.FAL:
+            return (
+                character.settings?.secrets?.FAL_API_KEY ||
+                settings.FAL_API_KEY
             );
     }
 }
@@ -339,6 +339,11 @@ export function createAgent(
             getSecret(character, "COINBASE_COMMERCE_KEY")
                 ? coinbaseCommercePlugin
                 : null,
+            getSecret(character, "FAL_API_KEY") ||
+                getSecret(character, "OPENAI_API_KEY") ||
+                getSecret(character, "HEURIST_API_KEY")
+                ? imageGenerationPlugin
+                : null,
             ...(getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY")
                 ? [coinbaseMassPaymentsPlugin, tradePlugin]
@@ -410,7 +415,6 @@ const startAgents = async () => {
     const args = parseArguments();
 
     let charactersArg = args.characters || args.character;
-    console.log("charactersArg is", charactersArg)
 
     let characters = [defaultCharacter];
 
@@ -472,7 +476,7 @@ async function handleUserInput(input, agentId) {
         );
 
         const data = await response.json();
-        data.forEach((message) => console.log(`${"Agent"}: ${message.text}`));
+        data.forEach((message) => elizaLogger.log(`${"Agent"}: ${message.text}`));
     } catch (error) {
         console.error("Error fetching response:", error);
     }

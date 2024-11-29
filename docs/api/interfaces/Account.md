@@ -14,7 +14,7 @@ Unique identifier
 
 #### Defined in
 
-[packages/core/src/types.ts:485](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L485)
+[packages/core/src/types.ts:489](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L489)
 
 ***
 
@@ -26,7 +26,7 @@ Display name
 
 #### Defined in
 
-[packages/core/src/types.ts:488](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L488)
+[packages/core/src/types.ts:492](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L492)
 
 ***
 
@@ -38,7 +38,7 @@ Username
 
 #### Defined in
 
-[packages/core/src/types.ts:491](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L491)
+[packages/core/src/types.ts:495](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L495)
 
 ***
 
@@ -54,7 +54,7 @@ Optional additional details
 
 #### Defined in
 
-[packages/core/src/types.ts:494](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L494)
+[packages/core/src/types.ts:498](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L498)
 
 ***
 
@@ -66,7 +66,7 @@ Optional email
 
 #### Defined in
 
-[packages/core/src/types.ts:497](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L497)
+[packages/core/src/types.ts:501](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L501)
 
 ***
 
@@ -78,4 +78,4 @@ Optional avatar URL
 
 #### Defined in
 
-[packages/core/src/types.ts:500](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L500)
+[packages/core/src/types.ts:504](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L504)

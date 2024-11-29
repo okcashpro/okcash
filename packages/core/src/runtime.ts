@@ -99,6 +99,11 @@ export class AgentRuntime implements IAgentRuntime {
     modelProvider: ModelProviderName;
 
     /**
+     * The model to use for generateImage.
+     */
+    imageModelProvider: ModelProviderName;
+
+    /**
      * Fetch function to use
      * Some environments may not have access to the global fetch function and need a custom fetch override.
      */
@@ -303,7 +308,12 @@ export class AgentRuntime implements IAgentRuntime {
             opts.modelProvider ??
             this.modelProvider;
 
+        this.imageModelProvider =
+            this.character.imageModelProvider ??
+            this.modelProvider;
+
         elizaLogger.info("Selected model provider:", this.modelProvider);
+        elizaLogger.info("Selected image model provider:", this.imageModelProvider);
 
         // Validate model provider
         if (!Object.values(ModelProviderName).includes(this.modelProvider)) {
@@ -405,7 +415,7 @@ export class AgentRuntime implements IAgentRuntime {
                 continue;
             }
 
-            console.log(
+            elizaLogger.info(
                 "Processing knowledge for ",
                 this.character.name,
                 " - ",
@@ -956,8 +966,6 @@ Text: ${attachment.text}
         const knowledegeData = await knowledge.get(this, message);
 
         const formattedKnowledge = formatKnowledge(knowledegeData);
-
-        console.log('***** formattedKnowledge *****', formattedKnowledge)
 
         const initialState = {
             agentId: this.agentId,

@@ -32,6 +32,7 @@ import {
     ModelProviderName,
     ServiceType,
 } from "./types.ts";
+import { fal, } from "@fal-ai/client";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -232,7 +233,6 @@ export async function generateText({
             }
 
             case ModelProviderName.GROQ: {
-                console.log("Initializing Groq model.");
                 const groq = createGroq({ apiKey });
 
                 const { text: groqResponse } = await aiGenerateText({
@@ -249,7 +249,6 @@ export async function generateText({
                 });
 
                 response = groqResponse;
-                console.log("Received response from Groq model.");
                 break;
             }
 
@@ -563,7 +562,6 @@ export async function generateTrueOrFalse({
     modelClass: string;
 }): Promise<boolean> {
     let retryDelay = 1000;
-    console.log("modelClass", modelClass);
 
     const stop = Array.from(
         new Set([
@@ -794,15 +792,22 @@ export const generateImage = async (
         count = 1;
     }
 
-    const model = getModel(runtime.character.modelProvider, ModelClass.IMAGE);
-    const modelSettings = models[runtime.character.modelProvider].imageSettings;
-    const apiKey =
-        runtime.token ??
-        runtime.getSetting("HEURIST_API_KEY") ??
+    const model = getModel(runtime.imageModelProvider, ModelClass.IMAGE);
+    const modelSettings = models[runtime.imageModelProvider].imageSettings;
+
+    elizaLogger.info("Generating image with options:", {
+        imageModelProvider: model,
+    });
+
+    const apiKey = runtime.imageModelProvider === runtime.modelProvider
+        ? runtime.token
+        : runtime.getSetting("HEURIST_API_KEY") ??
         runtime.getSetting("TOGETHER_API_KEY") ??
+        runtime.getSetting("FAL_API_KEY") ??
         runtime.getSetting("OPENAI_API_KEY");
+
     try {
-        if (runtime.character.modelProvider === ModelProviderName.HEURIST) {
+        if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
             const response = await fetch(
                 "http://sequencer.heurist.xyz/submit_job",
                 {
@@ -840,7 +845,7 @@ export const generateImage = async (
             const imageURL = await response.json();
             return { success: true, data: [imageURL] };
         } else if (
-            runtime.character.modelProvider === ModelProviderName.LLAMACLOUD
+            runtime.imageModelProvider === ModelProviderName.LLAMACLOUD
         ) {
             const together = new Together({ apiKey: apiKey as string });
             const response = await together.images.create({
@@ -868,6 +873,53 @@ export const generateImage = async (
                     return base64;
                 })
             );
+            return { success: true, data: base64s };
+        } else if (runtime.imageModelProvider === ModelProviderName.FAL) {
+            fal.config({
+                credentials: apiKey as string
+            });
+
+            // Prepare the input parameters according to their schema
+            const input = {
+                prompt: prompt,
+                image_size: "square" as const,
+                num_inference_steps: modelSettings?.steps ?? 50,
+                guidance_scale: 3.5,
+                num_images: count,
+                enable_safety_checker: true,
+                output_format: "png" as const,
+                seed: data.seed ?? 6252023,
+                ...(runtime.getSetting("FAL_AI_LORA_PATH") ? {
+                    loras: [
+                        {
+                            path: runtime.getSetting("FAL_AI_LORA_PATH"),
+                            scale: 1
+                        }
+                    ]
+                } : {})
+            };
+
+            // Subscribe to the model
+            const result = await fal.subscribe(model, {
+                input,
+                logs: true,
+                onQueueUpdate: (update) => {
+                    if (update.status === "IN_PROGRESS") {
+                        elizaLogger.info(update.logs.map((log) => log.message));
+                    }
+                }
+            });
+
+            // Convert the returned image URLs to base64 to match existing functionality
+            const base64Promises = result.data.images.map(async (image) => {
+                const response = await fetch(image.url);
+                const blob = await response.blob();
+                const buffer = await blob.arrayBuffer();
+                const base64 = Buffer.from(buffer).toString('base64');
+                return `data:${image.content_type};base64,${base64}`;
+            });
+
+            const base64s = await Promise.all(base64Promises);
             return { success: true, data: base64s };
         } else {
             let targetSize = `${width}x${height}`;

@@ -48,4 +48,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:747](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L747)
+[packages/core/src/generation.ts:773](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L773)

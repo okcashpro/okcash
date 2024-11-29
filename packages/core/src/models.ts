@@ -284,6 +284,26 @@ export const models: Models = {
             [ModelClass.EMBEDDING]: "gte-large-en-v1.5",
         },
     },
+    [ModelProviderName.FAL]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            repetition_penalty: 0.4,
+            temperature: 0.7,
+        },
+        imageSettings: {
+            steps: 28,            
+        },
+        endpoint: "https://api.fal.ai/v1",
+        model: {
+            [ModelClass.SMALL]: "",  // FAL doesn't provide text models
+            [ModelClass.MEDIUM]: "",
+            [ModelClass.LARGE]: "",
+            [ModelClass.EMBEDDING]: "",
+            [ModelClass.IMAGE]: "fal-ai/flux-lora",
+        },
+    },
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {

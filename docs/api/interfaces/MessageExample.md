@@ -14,7 +14,7 @@ Associated user
 
 #### Defined in
 
-[packages/core/src/types.ts:345](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L345)
+[packages/core/src/types.ts:349](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L349)
 
 ***
 
@@ -26,4 +26,4 @@ Message content
 
 #### Defined in
 
-[packages/core/src/types.ts:348](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L348)
+[packages/core/src/types.ts:352](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L352)

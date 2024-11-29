@@ -429,8 +429,8 @@ export const chargeProvider: Provider = {
         const coinbasePrivateKey =
             runtime.getSetting("COINBASE_PRIVATE_KEY") ??
             process.env.COINBASE_PRIVATE_KEY;
-        let balances = [];
-        let transactions = [];
+        const balances = [];
+        const transactions = [];
         if (coinbaseAPIKey && coinbasePrivateKey) {
             Coinbase.configure({
                 apiKeyName: coinbaseAPIKey,
