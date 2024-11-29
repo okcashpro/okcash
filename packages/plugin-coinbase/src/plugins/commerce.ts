@@ -115,7 +115,7 @@ export const createCoinbaseChargeAction: Action = {
         "COINBASE_CHARGE",
     ],
     description: "Create a charge using Coinbase Commerce.",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         const coinbaseCommerceKeyOk = !!runtime.getSetting(
             "COINBASE_COMMERCE_KEY"
         );
@@ -127,7 +127,7 @@ export const createCoinbaseChargeAction: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Composing state for message:", message);
@@ -260,7 +260,7 @@ export const getAllChargesAction: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         try {
@@ -325,7 +325,7 @@ export const getChargeDetailsAction: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Composing state for message:", message);
@@ -416,7 +416,7 @@ export const getChargeDetailsAction: Action = {
 };
 
 export const chargeProvider: Provider = {
-    get: async (runtime: IAgentRuntime, message: Memory) => {
+    get: async (runtime: IAgentRuntime, _message: Memory) => {
         const charges = await getAllCharges(
             runtime.getSetting("COINBASE_COMMERCE_KEY")
         );

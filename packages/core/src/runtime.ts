@@ -963,13 +963,9 @@ Text: ${attachment.text}
                 .join(" ");
         }
 
-
         const knowledegeData = await knowledge.get(this, message);
 
-        const formattedKnowledge = formatKnowledge(
-            knowledegeData
-        );
-
+        const formattedKnowledge = formatKnowledge(knowledegeData);
 
         const initialState = {
             agentId: this.agentId,
@@ -1252,5 +1248,7 @@ Text: ${attachment.text}
 }
 
 const formatKnowledge = (knowledge: KnowledgeItem[]) => {
-    return knowledge.map((knowledge) => `- ${knowledge.content.text}`).join("\n");
+    return knowledge
+        .map((knowledge) => `- ${knowledge.content.text}`)
+        .join("\n");
 };
