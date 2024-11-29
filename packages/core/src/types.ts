@@ -1100,6 +1100,23 @@ export interface IPdfService extends Service {
     convertPdfToText(pdfBuffer: Buffer): Promise<string>;
 }
 
+export type SearchResult = {
+    title: string;
+    url: string;
+    content: string;
+    score: number;
+    raw_content: string | null;
+};
+
+export type SearchResponse = {
+    query: string;
+    follow_up_questions: string[] | null;
+    answer: string | null;
+    images: string[];
+    results: SearchResult[];
+    response_time: number;
+};
+
 export enum ServiceType {
     IMAGE_DESCRIPTION = "image_description",
     TRANSCRIPTION = "transcription",

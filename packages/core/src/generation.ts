@@ -31,6 +31,7 @@ import {
     ModelClass,
     ModelProviderName,
     ServiceType,
+    SearchResponse,
 } from "./types.ts";
 import { fal, } from "@fal-ai/client";
 
@@ -971,6 +972,39 @@ export const generateCaption = async (
         title: resp.title.trim(),
         description: resp.description.trim(),
     };
+};
+
+export const generateWebSearch = async (
+    query: string,
+    runtime: IAgentRuntime
+): Promise<SearchResponse> => {
+    const apiUrl = "https://api.tavily.com/search";
+    const apiKey = runtime.getSetting("TAVILY_API_KEY");
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                api_key: apiKey,
+                query,
+                include_answer: true,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new elizaLogger.error(
+                `HTTP error! status: ${response.status}`
+            );
+        }
+
+        const data: SearchResponse = await response.json();
+        return data;
+    } catch (error) {
+        elizaLogger.error("Error:", error);
+    }
 };
 /**
  * Configuration options for generating objects with a model.
