@@ -221,7 +221,7 @@ export enum ModelProviderName {
     OLLAMA = "ollama",
     HEURIST = "heurist",
     GALADRIEL = "galadriel",
-    FAL = "falai"
+    FAL = "falai",
 }
 
 /**

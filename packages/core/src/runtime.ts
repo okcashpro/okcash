@@ -296,12 +296,15 @@ export class AgentRuntime implements IAgentRuntime {
         this.serverUrl = opts.serverUrl ?? this.serverUrl;
 
         elizaLogger.info("Setting model provider...");
-        elizaLogger.info(
-            "- Character model provider:",
-            this.character.modelProvider
-        );
-        elizaLogger.info("- Opts model provider:", opts.modelProvider);
-        elizaLogger.info("- Current model provider:", this.modelProvider);
+        elizaLogger.info("Model Provider Selection:", {
+            characterModelProvider: this.character.modelProvider,
+            optsModelProvider: opts.modelProvider,
+            currentModelProvider: this.modelProvider,
+            finalSelection:
+                this.character.modelProvider ??
+                opts.modelProvider ??
+                this.modelProvider,
+        });
 
         this.modelProvider =
             this.character.modelProvider ??
@@ -309,11 +312,13 @@ export class AgentRuntime implements IAgentRuntime {
             this.modelProvider;
 
         this.imageModelProvider =
-            this.character.imageModelProvider ??
-            this.modelProvider;
+            this.character.imageModelProvider ?? this.modelProvider;
 
         elizaLogger.info("Selected model provider:", this.modelProvider);
-        elizaLogger.info("Selected image model provider:", this.imageModelProvider);
+        elizaLogger.info(
+            "Selected image model provider:",
+            this.imageModelProvider
+        );
 
         // Validate model provider
         if (!Object.values(ModelProviderName).includes(this.modelProvider)) {
@@ -825,7 +830,7 @@ export class AgentRuntime implements IAgentRuntime {
             .map(
                 (attachment) =>
                     `ID: ${attachment.id}
-Name: ${attachment.title} 
+Name: ${attachment.title}
 URL: ${attachment.url}
 Type: ${attachment.source}
 Description: ${attachment.description}
@@ -1227,7 +1232,7 @@ Text: ${attachment.text}
                 (attachment) =>
                     `ID: ${attachment.id}
 Name: ${attachment.title}
-URL: ${attachment.url} 
+URL: ${attachment.url}
 Type: ${attachment.source}
 Description: ${attachment.description}
 Text: ${attachment.text}

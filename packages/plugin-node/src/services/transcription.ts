@@ -289,7 +289,7 @@ export class TranscriptionService
                     translateToEnglish: false,
                     wordTimestamps: false,
                     timestamps_length: 60,
-                    splitOnWord: true,
+                    // splitOnWord: true,
                 },
             });
 
