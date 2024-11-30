@@ -84,11 +84,13 @@ Extract the following details for processing a trade using the Coinbase SDK:
 - **amount** (number): The amount to trade (in the smallest unit, e.g., Wei for ETH).
 - **sourceAsset** (string): The asset ID to trade from (must be one of: ETH, SOL, USDC, WETH, GWEI, LAMPORT).
 - **targetAsset** (string): The asset ID to trade to (must be one of: ETH, SOL, USDC, WETH, GWEI, LAMPORT).
+- **side** (string): The side of the trade (must be either "BUY" or "SELL").
 
 Ensure that:
 1. **network** is one of the supported networks: "base", "sol", "eth", "arb", or "pol".
 2. **sourceAsset** and **targetAsset** are valid assets from the provided list.
 3. **amount** is a positive number.
+4. **side** is either "BUY" or "SELL".
 
 Provide the details in the following JSON format:
 
@@ -97,7 +99,8 @@ Provide the details in the following JSON format:
     "network": "<network>",
     "amount": <amount>,
     "sourceAsset": "<source_asset_id>",
-    "targetAsset": "<target_asset_id>"
+    "targetAsset": "<target_asset_id>",
+    "side": "<side>"
 }
 \`\`\`
 
