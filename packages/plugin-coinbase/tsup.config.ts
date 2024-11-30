@@ -15,12 +15,14 @@ export default defineConfig({
         "https",
         "http",
         "agentkeepalive",
-        "@coinbase/coinbase-sdk",
         "fs/promises",
         "csv-writer",
         "csv-parse/sync",
         "path",
         "url",
+        "coinbase-advanced-sdk",
+        "buffer",
+        "util"
         // Add other modules you want to externalize
     ],
 });

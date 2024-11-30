@@ -807,7 +807,7 @@ importers:
         version: link:../plugin-trustdb
       '@aptos-labs/ts-sdk':
         specifier: ^1.26.0
-        version: 1.33.0
+        version: 1.33.1
       bignumber:
         specifier: 1.1.0
         version: 1.1.0
@@ -865,6 +865,9 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
+      coinbase-advanced-sdk:
+        specifier: file:../../packages/plugin-coinbase/advanced-sdk-ts
+        version: advanced-sdk-ts@file:packages/plugin-coinbase/advanced-sdk-ts
       coinbase-api:
         specifier: 1.0.5
         version: 1.0.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -1643,8 +1646,8 @@ packages:
     resolution: {integrity: sha512-kJsoy4fAPTOhzVr7Vwq8s/AUg6BQiJDa7WOqRzev4zsuIS3+JCuIZ6vUd7UBsjnxtmguJJulMRs9qWCzVBt2XA==}
     engines: {node: '>=15.10.0'}
 
-  '@aptos-labs/ts-sdk@1.33.0':
-    resolution: {integrity: sha512-svdlPH5r2dlSue2D9WXaaTslsmX18WLytAho6IRZJxQjEssglk64I6c1G9S8BTjRQj/ug6ahTwp6lx3eWuyd8Q==}
+  '@aptos-labs/ts-sdk@1.33.1':
+    resolution: {integrity: sha512-d6nWtUI//fyEN8DeLjm3+ro87Ad6+IKwR9pCqfrs/Azahso1xR1Llxd/O6fj/m1DDsuDj/HAsCsy5TC/aKD6Eg==}
     engines: {node: '>=11.0.0'}
 
   '@avnu/avnu-sdk@2.1.1':
@@ -6662,6 +6665,9 @@ packages:
   address@1.2.2:
     resolution: {integrity: sha512-4B/qKCfeE/ODUaAUpSwfzazo5x29WD4r3vXiWsB7I2mSDAihwEqKO+g8GELZUQSSAo5e1XTYh3ZVfLyxBc12nA==}
     engines: {node: '>= 10.0.0'}
+
+  advanced-sdk-ts@file:packages/plugin-coinbase/advanced-sdk-ts:
+    resolution: {directory: packages/plugin-coinbase/advanced-sdk-ts, type: directory}
 
   aes-js@4.0.0-beta.5:
     resolution: {integrity: sha512-G965FqalsNyrPqgEGON7nIx1e/OVENSgiEIzyC63haUMuvNnwIgIjMs52hlTCKhkBny7A2ORNlfY9Zu+jmGk1Q==}
@@ -16169,7 +16175,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@aptos-labs/ts-sdk@1.33.0':
+  '@aptos-labs/ts-sdk@1.33.1':
     dependencies:
       '@aptos-labs/aptos-cli': 1.0.2
       '@aptos-labs/aptos-client': 0.1.1
@@ -23048,6 +23054,8 @@ snapshots:
   add-stream@1.0.0: {}
 
   address@1.2.2: {}
+
+  advanced-sdk-ts@file:packages/plugin-coinbase/advanced-sdk-ts: {}
 
   aes-js@4.0.0-beta.5: {}
 
