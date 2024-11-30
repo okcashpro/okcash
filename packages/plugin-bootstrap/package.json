@@ -8,12 +8,7 @@
         "@ai16z/eliza": "workspace:*",
         "tsup": "8.3.5"
     },
-    "devDependencies": {
-        "eslint": "^9.15.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4"
-    },
+    "devDependencies": {},
     "scripts": {
         "build": "tsup --format esm --dts",
         "dev": "tsup --watch",
