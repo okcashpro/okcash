@@ -1,7 +1,9 @@
 services:
     tee:
         command: ["pnpm", "start"]
-        image: hashwarlock/tee-agent:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
         stdin_open: true
         tty: true
         volumes:
