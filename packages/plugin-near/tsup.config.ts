@@ -2,18 +2,11 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
     entry: ["src/index.ts"],
-    outDir: "dist",
+    format: ["esm", "cjs"],
+    dts: true,
+    splitting: false,
     sourcemap: true,
     clean: true,
-    format: ["esm"], // Ensure you're targeting CommonJS
-    external: [
-        "dotenv", // Externalize dotenv to prevent bundling
-        "fs", // Externalize fs to use Node.js built-in module
-        "path", // Externalize other built-ins if necessary
-        "@reflink/reflink",
-        "@node-llama-cpp",
-        "https",
-        "http",
-        "agentkeepalive",
-    ],
+    shims: true,
+    treeshake: true
 });

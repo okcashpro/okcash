@@ -104,8 +104,8 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 \`\`\``;
 
 export const executeSwap: Action = {
-    name: "EXECUTE_SWAP",
-    similes: ["SWAP_TOKENS", "TOKEN_SWAP", "TRADE_TOKENS", "EXCHANGE_TOKENS"],
+    name: "EXECUTE_SWAP_NEAR",
+    similes: ["SWAP_TOKENS_NEAR", "TOKEN_SWAP_NEAR", "TRADE_TOKENS_NEAR", "EXCHANGE_TOKENS_NEAR"],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         console.log("Message:", message);
         return true;

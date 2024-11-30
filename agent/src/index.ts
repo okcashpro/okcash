@@ -37,6 +37,7 @@ import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
 import { teePlugin } from "@ai16z/plugin-tee";
+import { nearPlugin } from "@ai16z/plugin-near";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
@@ -161,7 +162,7 @@ export async function loadCharacters(
                             return importedPlugin.default;
                         })
                     );
-                    character.plugins = importedPlugins;
+                    character.plugins = importedPlugins.filter(Boolean);
                 }
 
                 loadedCharacters.push(character);
@@ -372,7 +373,12 @@ export function createAgent(
                 !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
                 ? solanaPlugin
                 : null,
-            getSecret(character, "EVM_PRIVATE_KEY") ||
+            getSecret(character, "NEAR_PUBLIC_KEY") ||
+            (getSecret(character, "WALLET_PUBLIC_KEY") &&
+                !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("ed25519"))
+                ? nearPlugin
+                : null,
+            getSecret(character, "EVM_PUBLIC_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
                 !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
                 ? evmPlugin
