@@ -34,12 +34,12 @@ jobs:
                   echo "NODE_ENV=test" >> packages/core/.env.test
 
             - name: Run tests
-              run: cd packages/core && pnpm test:coverage
+              run: cd packages/core && pnpm test
 
             - name: Build packages
               run: pnpm run build
 
-            - name: Upload coverage reports to Codecov
-              uses: codecov/codecov-action@v5
-              with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
+            # - name: Upload coverage reports to Codecov
+            #   uses: codecov/codecov-action@v5
+            #   with:
+            #       token: ${{ secrets.CODECOV_TOKEN }}
