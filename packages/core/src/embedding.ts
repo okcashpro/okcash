@@ -3,7 +3,7 @@ import { models } from "./models.ts";
 import { IAgentRuntime, ModelProviderName } from "./types.ts";
 import settings from "./settings.ts";
 import elizaLogger from "./logger.ts";
-import { EmbeddingModel } from "fastembed";
+
 interface EmbeddingOptions {
     model: string;
     endpoint: string;
@@ -27,7 +27,7 @@ export const getEmbeddingConfig = () => ({
             ? "text-embedding-3-small"
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
-              : EmbeddingModel.BGESmallENV15,
+              : "BGE-small-en-v1.5",
     provider:
         settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
             ? "OpenAI"
@@ -215,10 +215,29 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             process.versions != null &&
             process.versions.node != null;
 
-        if (isNode) {
-            const fs = await import("fs");
-            const { FlagEmbedding } = await import("fastembed");
-            const { fileURLToPath } = await import("url");
+        if (!isNode) {
+            elizaLogger.warn(
+                "Local embedding not supported in browser, falling back to remote embedding"
+            );
+            throw new Error("Local embedding not supported in browser");
+        }
+
+        try {
+            const moduleImports = await Promise.all([
+                import("fs"),
+                import("url"),
+                (async () => {
+                    try {
+                        return await import("fastembed");
+                    } catch {
+                        elizaLogger.error("Failed to load fastembed.");
+                        throw new Error("fastembed import failed, falling back to remote embedding");
+                    }
+                })()
+            ]);
+
+            const [fs, { fileURLToPath }, fastEmbed] = moduleImports;
+            const { FlagEmbedding, EmbeddingModel } = fastEmbed;
 
             function getRootPath() {
                 const __filename = fileURLToPath(import.meta.url);
@@ -319,7 +338,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             }
 
             return finalEmbedding;
-        } else {
+        } catch {
             // Browser implementation - fallback to remote embedding
             elizaLogger.warn(
                 "Local embedding not supported in browser, falling back to remote embedding"
