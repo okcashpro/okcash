@@ -5,6 +5,7 @@ node_modules
 .env.production
 concatenated-output.ts
 embedding-cache.json
+packages/plugin-buttplug/intiface-engine
 
 .DS_Store
 
@@ -42,3 +43,5 @@ packages/core/src/providers/cache/*
 cache/*
 packages/plugin-coinbase/src/plugins/transactions.csv
 packages/plugin-coinbase/package-lock.json
+
+.turbo

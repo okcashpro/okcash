@@ -38,7 +38,7 @@
 ### Prerequisites
 
 -   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
 > **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
@@ -91,6 +91,8 @@ sh scripts/start.sh
 2. To load custom characters:
     - Use `pnpm start --characters="path/to/your/character.json"`
     - Multiple character files can be loaded simultaneously
+3. Connect with X (Twitter)
+    - change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
 
 ### Manually Start Eliza
 

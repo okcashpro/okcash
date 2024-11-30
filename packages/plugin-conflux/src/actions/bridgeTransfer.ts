@@ -5,8 +5,19 @@ import {
     State,
     HandlerCallback,
 } from "@ai16z/eliza";
-import { generateObjectV2, composeContext, ModelClass, Content } from "@ai16z/eliza";
-import { createPublicClient, createWalletClient, http, parseCFX, encodeFunctionData } from "cive";
+import {
+    generateObjectV2,
+    composeContext,
+    ModelClass,
+    Content,
+} from "@ai16z/eliza";
+import {
+    createPublicClient,
+    createWalletClient,
+    http,
+    parseCFX,
+    encodeFunctionData,
+} from "cive";
 import { hexAddressToBase32 } from "cive/utils";
 import { privateKeyToAccount } from "cive/accounts";
 import { testnet } from "cive/chains";
@@ -58,7 +69,12 @@ export const bridgeTransfer: Action = {
     name: "BRIDGE_SEND_CFX",
     description:
         "Bridge transfer CFX from Conflux Core Space to another in Conflux eSpace. The address is a 0x-prefix address",
-    similes: ["BRIDGE_SEND_CONFLUX", "CROSS_SPACE_SEND_CFX", "BRIDGE_TRANSFER_CFX", "CROSS_SPACE_TRANSFER_CFX"],
+    similes: [
+        "BRIDGE_SEND_CONFLUX",
+        "CROSS_SPACE_SEND_CFX",
+        "BRIDGE_TRANSFER_CFX",
+        "CROSS_SPACE_TRANSFER_CFX",
+    ],
     examples: [
         [
             {
@@ -112,13 +128,20 @@ export const bridgeTransfer: Action = {
             throw new Error("Invalid content");
         }
 
-        const secretKey = runtime.getSetting("CONFLUX_CORE_PRIVATE_KEY") as `0x${string}`;
+        const secretKey = runtime.getSetting(
+            "CONFLUX_CORE_PRIVATE_KEY"
+        ) as `0x${string}`;
         const rpcUrl = runtime.getSetting("CONFLUX_CORE_SPACE_RPC_URL");
 
         let success = false;
 
         try {
-            const hash = await bridgeSendCFX(secretKey, rpcUrl, content.object.to as `0x${string}`, content.object.amount.toString());
+            const hash = await bridgeSendCFX(
+                secretKey,
+                rpcUrl,
+                content.object.to as `0x${string}`,
+                content.object.amount.toString()
+            );
             success = true;
             if (!callback) {
                 return success;

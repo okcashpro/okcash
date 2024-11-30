@@ -19,6 +19,19 @@ export abstract class DatabaseAdapter<DB = any> implements IDatabaseAdapter {
      * The database instance.
      */
     db: DB;
+
+    /**
+     * Optional initialization method for the database adapter.
+     * @returns A Promise that resolves when initialization is complete.
+     */
+    abstract init(): Promise<void>;
+
+    /**
+     * Optional close method for the database adapter.
+     * @returns A Promise that resolves when closing is complete.
+     */
+    abstract close(): Promise<void>;
+
     /**
      * Retrieves an account by its ID.
      * @param userId The UUID of the user account to retrieve.

@@ -1,5 +1,5 @@
 import { Tweet } from "agent-twitter-client";
-import { embeddingZeroVector } from "@ai16z/eliza";
+import { getEmbeddingZeroVector } from "@ai16z/eliza";
 import { Content, Memory, UUID } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base";
@@ -95,7 +95,7 @@ export async function buildConversationThread(
                     currentTweet.userId === client.profile.id
                         ? client.runtime.agentId
                         : stringToUuid(currentTweet.userId),
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(),
             });
         }
 
@@ -182,29 +182,33 @@ export async function sendTweet(
                     previousTweetId
                 )
         );
-        // Parse the response
         const body = await result.json();
-        const tweetResult = body.data.create_tweet.tweet_results.result;
 
-        const finalTweet: Tweet = {
-            id: tweetResult.rest_id,
-            text: tweetResult.legacy.full_text,
-            conversationId: tweetResult.legacy.conversation_id_str,
-            //createdAt:
-            timestamp: tweetResult.timestamp * 1000,
-            userId: tweetResult.legacy.user_id_str,
-            inReplyToStatusId: tweetResult.legacy.in_reply_to_status_id_str,
-            permanentUrl: `https://twitter.com/${twitterUsername}/status/${tweetResult.rest_id}`,
-            hashtags: [],
-            mentions: [],
-            photos: [],
-            thread: [],
-            urls: [],
-            videos: [],
-        };
-
-        sentTweets.push(finalTweet);
-        previousTweetId = finalTweet.id;
+        // if we have a response
+        if (body?.data?.create_tweet?.tweet_results?.result) {
+            // Parse the response
+            const tweetResult = body.data.create_tweet.tweet_results.result;
+            const finalTweet: Tweet = {
+                id: tweetResult.rest_id,
+                text: tweetResult.legacy.full_text,
+                conversationId: tweetResult.legacy.conversation_id_str,
+                //createdAt:
+                timestamp: tweetResult.timestamp * 1000,
+                userId: tweetResult.legacy.user_id_str,
+                inReplyToStatusId: tweetResult.legacy.in_reply_to_status_id_str,
+                permanentUrl: `https://twitter.com/${twitterUsername}/status/${tweetResult.rest_id}`,
+                hashtags: [],
+                mentions: [],
+                photos: [],
+                thread: [],
+                urls: [],
+                videos: [],
+            };
+            sentTweets.push(finalTweet);
+            previousTweetId = finalTweet.id;
+        } else {
+            console.error("Error sending chunk", chunk, "repsonse:", body);
+        }
 
         // Wait a bit between tweets to avoid rate limiting issues
         await wait(1000, 2000);
@@ -225,7 +229,7 @@ export async function sendTweet(
                 : undefined,
         },
         roomId,
-        embedding: embeddingZeroVector,
+        embedding: getEmbeddingZeroVector(),
         createdAt: tweet.timestamp * 1000,
     }));
 

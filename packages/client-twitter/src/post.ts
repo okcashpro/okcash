@@ -2,10 +2,11 @@ import { Tweet } from "agent-twitter-client";
 import {
     composeContext,
     generateText,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     IAgentRuntime,
     ModelClass,
     stringToUuid,
+    parseBooleanFromText,
 } from "@ai16z/eliza";
 import { elizaLogger } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
@@ -100,7 +101,14 @@ export class TwitterPostClient {
 
             elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-
+        if (
+            this.runtime.getSetting("POST_IMMEDIATELY") != null &&
+            this.runtime.getSetting("POST_IMMEDIATELY") != ""
+        ) {
+            postImmediately = parseBooleanFromText(
+                this.runtime.getSetting("POST_IMMEDIATELY")
+            );
+        }
         if (postImmediately) {
             this.generateNewTweet();
         }
@@ -200,9 +208,12 @@ export class TwitterPostClient {
                         await this.client.twitterClient.sendTweet(content)
                 );
                 const body = await result.json();
+                if (!body?.data?.create_tweet?.tweet_results?.result) {
+                    console.error("Error sending tweet; Bad response:", body);
+                    return;
+                }
                 const tweetResult = body.data.create_tweet.tweet_results.result;
 
-                // console.dir({ tweetResult }, { depth: Infinity });
                 const tweet = {
                     id: tweetResult.rest_id,
                     name: this.client.profile.screenName,
@@ -256,7 +267,7 @@ export class TwitterPostClient {
                         source: "twitter",
                     },
                     roomId,
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(),
                     createdAt: tweet.timestamp * 1000,
                 });
             } catch (error) {

@@ -5,7 +5,7 @@ export const defaultCharacter: Character = {
     username: "eliza",
     plugins: [],
     clients: [],
-    modelProvider: ModelProviderName.OLLAMA,
+    modelProvider: ModelProviderName.LLAMALOCAL,
     settings: {
         secrets: {},
         voice: {
@@ -213,7 +213,6 @@ export const defaultCharacter: Character = {
         "vaguely offensive but also hilarious",
         "schizo-autist",
     ],
-    people: [],
     topics: [
         // broad topics
         "metaphysics",

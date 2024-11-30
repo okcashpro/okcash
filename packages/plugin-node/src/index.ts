@@ -12,18 +12,20 @@ import {
     VideoService,
 } from "./services/index.ts";
 
-export const nodePlugin: Plugin = {
-    name: "default",
-    description: "Default plugin, with basic actions and evaluators",
-    services: [
-        new BrowserService(),
-        new ImageDescriptionService(),
-        new LlamaService(),
-        new PdfService(),
-        new SpeechService(),
-        new TranscriptionService(),
-        new VideoService(),
-    ],
-};
+export type NodePlugin = ReturnType<typeof createNodePlugin>;
 
-export default nodePlugin;
+export function createNodePlugin() {
+    return {
+        name: "default",
+        description: "Default plugin, with basic actions and evaluators",
+        services: [
+            new BrowserService(),
+            new ImageDescriptionService(),
+            new LlamaService(),
+            new PdfService(),
+            new SpeechService(),
+            new TranscriptionService(),
+            new VideoService(),
+        ],
+    } as const satisfies Plugin;
+}

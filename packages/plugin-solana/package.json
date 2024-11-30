@@ -19,7 +19,7 @@
         "vitest": "2.1.4"
     },
     "devDependencies": {
-        "eslint": "9.13.0",
+        "eslint": "^9.15.0",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-prettier": "5.2.1",
         "eslint-plugin-vitest": "0.5.4"
@@ -30,6 +30,7 @@
         "test": "vitest run"
     },
     "peerDependencies": {
-        "whatwg-url": "7.1.0"
+        "whatwg-url": "7.1.0",
+        "form-data": "4.0.1"
     }
 }

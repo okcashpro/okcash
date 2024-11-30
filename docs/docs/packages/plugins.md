@@ -84,6 +84,20 @@ Integrates Solana blockchain functionality:
 - `walletProvider` - Wallet management
 - `trustScoreProvider` - Transaction trust metrics
 
+#### 5. Buttplug Plugin (`@eliza/plugin-buttplug`)
+
+Integrates Buttplug.io for intimate toy control:
+
+**Services:**
+
+- `ButtplugService` - Buttplug.io integration itself
+
+**Actions:**
+
+- `VIBRATE` - Control vibration intensity and duration of connected devices
+- `ROTATE` - Control rotation intensity and duration of connected devices
+- `BATTERY` - Get the battery level of connected devices
+
 ## Using Plugins
 
 ### Installation
@@ -91,7 +105,7 @@ Integrates Solana blockchain functionality:
 1. Install the desired plugin package:
 
 ```bash
-pnpm add @eliza/plugin-[name]
+pnpm add @ai16z/plugin-[name]
 ```
 
 2. Import and register the plugin in your character configuration:
@@ -99,10 +113,10 @@ pnpm add @eliza/plugin-[name]
 ```typescript
 import { bootstrapPlugin } from "@eliza/plugin-bootstrap";
 import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
-
+import { buttplugPlugin } from "@eliza/plugin-buttplug";
 const character = {
   // ... other character config
-  plugins: [bootstrapPlugin, imageGenerationPlugin],
+  plugins: [bootstrapPlugin, imageGenerationPlugin, buttplugPlugin],
 };
 ```
 
@@ -211,6 +225,44 @@ This plugin enables Eliza to interact with the Coinbase Commerce API to create a
 
 ---
 
+### Coinbase Wallet Management
+
+The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
+
+1. **Wallet Generation on First Run**
+   If no wallet information is provided (`COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID`), the plugin will:
+
+   - **Generate a new wallet** using the Coinbase SDK.
+   - Automatically **export the wallet details** (`seed` and `walletId`) and securely store them in `runtime.character.settings.secrets` or other configured storage.
+   - Log the wallet’s default address for reference.
+   - If the character file does not exist, the wallet details are saved to a characters/charactername-seed.txt file in the characters directory with a note indicating that the user must manually add these details to settings.secrets or the .env file.
+
+2. **Using an Existing Wallet**
+   If wallet information is available during the first run:
+   - Provide `COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID` via `runtime.character.settings.secrets` or environment variables.
+   - The plugin will **import the wallet** and use it for processing mass payouts.
+
+---
+
+### Coinbase Wallet Management
+
+The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
+
+1. **Wallet Generation on First Run**
+   If no wallet information is provided (`COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID`), the plugin will:
+
+   - **Generate a new wallet** using the Coinbase SDK.
+   - Automatically **export the wallet details** (`seed` and `walletId`) and securely store them in `runtime.character.settings.secrets` or other configured storage.
+   - Log the wallet’s default address for reference.
+   - If the character file does not exist, the wallet details are saved to a characters/charactername-seed.txt file in the characters directory with a note indicating that the user must manually add these details to settings.secrets or the .env file.
+
+2. **Using an Existing Wallet**
+   If wallet information is available during the first run:
+   - Provide `COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID` via `runtime.character.settings.secrets` or environment variables.
+   - The plugin will **import the wallet** and use it for processing mass payouts.
+
+---
+
 #### 6. Coinbase MassPayments Plugin (`@eliza/plugin-coinbase`)
 
 This plugin facilitates the processing of cryptocurrency mass payouts using the Coinbase SDK. It enables the creation and management of mass payouts to multiple wallet addresses, logging all transaction details to a CSV file for further analysis.
@@ -280,9 +332,7 @@ Supported networks:
    - `COINBASE_API_KEY`: API key for Coinbase SDK.
    - `COINBASE_PRIVATE_KEY`: Private key for secure transactions.
 
----
-
-### Wallet Management
+**Wallet Management:**
 
 The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
 
@@ -299,9 +349,7 @@ The plugin automatically handles wallet creation or uses an existing wallet if t
    - Provide `COINBASE_GENERATED_WALLET_HEX_SEED` and `COINBASE_GENERATED_WALLET_ID` via `runtime.character.settings.secrets` or environment variables.
    - The plugin will **import the wallet** and use it for processing mass payouts.
 
----
-
-### Required Configurations
+**Required Configurations:**
 
 The following configurations must be provided for wallet management:
 
@@ -343,9 +391,7 @@ The following configurations must be provided for wallet management:
      elizaLogger.log("Imported existing wallet:", wallet.getDefaultAddress());
      ```
 
----
-
-### Example Configuration
+**Example Configuration:**
 
 #### Automatic Wallet Generation:
 
@@ -380,8 +426,6 @@ Output Log:
 ```plaintext
 [INFO] Imported existing wallet: 0x1234567890abcdef1234567890abcdef12345678
 ```
-
----
 
 3. **Example Call**
    An example of using the `SEND_MASS_PAYOUT` action:
@@ -421,6 +465,166 @@ When successful, a response similar to the following will be returned:
 - **Secure Secrets Storage**: Ensure `COINBASE_API_KEY` and `COINBASE_PRIVATE_KEY` are stored securely in `runtime.character.settings.secrets` or environment variables. Either add `COINBASE_GENERATED_WALLET_HEX_SEED`, and `COINBASE_GENERATED_WALLET_ID` from a previous run, or it will be dynamically created
 - **Validation**: Always validate input parameters, especially `receivingAddresses` and `network`, to ensure compliance with expected formats and supported networks.
 - **Error Handling**: Monitor logs for failed transactions or errors in the payout process and adjust retry logic as needed.
+
+---
+
+#### 7. TEE Plugin (`@ai16z/plugin-tee`)
+
+Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
+
+**Providers:**
+
+- `deriveKeyProvider` - Allows for secure key derivation within a TEE environment. It supports deriving keys for both Solana (Ed25519) and Ethereum (ECDSA) chains.
+- `remoteAttestationProvider` - Generate a Remote Attestation Quote based on `report_data`.
+
+**DeriveKeyProvider Usage**
+
+```typescript
+import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+
+// Initialize the provider
+const provider = new DeriveKeyProvider();
+
+// Derive a raw key
+try {
+  const rawKey = await provider.rawDeriveKey(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // rawKey is a DeriveKeyResponse that can be used for further processing
+  // to get the uint8Array do the following
+  const rawKeyArray = rawKey.asUint8Array();
+} catch (error) {
+  console.error("Raw key derivation failed:", error);
+}
+
+// Derive a Solana keypair (Ed25519)
+try {
+  const solanaKeypair = await provider.deriveEd25519Keypair(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // solanaKeypair can now be used for Solana operations
+} catch (error) {
+  console.error("Solana key derivation failed:", error);
+}
+
+// Derive an Ethereum keypair (ECDSA)
+try {
+  const evmKeypair = await provider.deriveEcdsaKeypair(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // evmKeypair can now be used for Ethereum operations
+} catch (error) {
+  console.error("EVM key derivation failed:", error);
+}
+```
+
+**RemoteAttestationProvider Usage**
+
+```typescript
+import { RemoteAttestationProvider } from "@ai16z/plugin-tee";
+// Initialize the provider
+const provider = new RemoteAttestationProvider();
+// Generate Remote Attestation
+try {
+  const attestation = await provider.generateAttestation("your-report-data");
+  console.log("Attestation:", attestation);
+} catch (error) {
+  console.error("Failed to generate attestation:", error);
+}
+```
+
+**Configuration**
+
+When using the provider through the runtime environment, ensure the following settings are configured:
+
+```env
+ # Optional, for simulator purposes if testing on mac or windows. Leave empty for Linux x86 machines.
+DSTACK_SIMULATOR_ENDPOINT="http://host.docker.internal:8090"
+WALLET_SECRET_SALT=your-secret-salt // Required to single agent deployments
+```
+
+---
+
+#### 7. TEE Plugin (`@ai16z/plugin-tee`)
+
+Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
+
+**Providers:**
+
+- `deriveKeyProvider` - Allows for secure key derivation within a TEE environment. It supports deriving keys for both Solana (Ed25519) and Ethereum (ECDSA) chains.
+- `remoteAttestationProvider` - Generate a Remote Attestation Quote based on `report_data`.
+
+**DeriveKeyProvider Usage**
+
+```typescript
+import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+
+// Initialize the provider
+const provider = new DeriveKeyProvider();
+
+// Derive a raw key
+try {
+  const rawKey = await provider.rawDeriveKey(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // rawKey is a DeriveKeyResponse that can be used for further processing
+  // to get the uint8Array do the following
+  const rawKeyArray = rawKey.asUint8Array();
+} catch (error) {
+  console.error("Raw key derivation failed:", error);
+}
+
+// Derive a Solana keypair (Ed25519)
+try {
+  const solanaKeypair = await provider.deriveEd25519Keypair(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // solanaKeypair can now be used for Solana operations
+} catch (error) {
+  console.error("Solana key derivation failed:", error);
+}
+
+// Derive an Ethereum keypair (ECDSA)
+try {
+  const evmKeypair = await provider.deriveEcdsaKeypair(
+    "/path/to/derive",
+    "subject-identifier",
+  );
+  // evmKeypair can now be used for Ethereum operations
+} catch (error) {
+  console.error("EVM key derivation failed:", error);
+}
+```
+
+**RemoteAttestationProvider Usage**
+
+```typescript
+import { RemoteAttestationProvider } from "@ai16z/plugin-tee";
+// Initialize the provider
+const provider = new RemoteAttestationProvider();
+// Generate Remote Attestation
+try {
+  const attestation = await provider.generateAttestation("your-report-data");
+  console.log("Attestation:", attestation);
+} catch (error) {
+  console.error("Failed to generate attestation:", error);
+}
+```
+
+**Configuration**
+
+When using the provider through the runtime environment, ensure the following settings are configured:
+
+```env
+ # Optional, for simulator purposes if testing on mac or windows. Leave empty for Linux x86 machines.
+DSTACK_SIMULATOR_ENDPOINT="http://host.docker.internal:8090"
+WALLET_SECRET_SALT=your-secret-salt // Required to single agent deployments
+```
 
 ---
 
