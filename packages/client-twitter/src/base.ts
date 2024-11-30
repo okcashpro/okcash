@@ -137,9 +137,6 @@ export class ClientBase extends EventEmitter {
     constructor(runtime: IAgentRuntime) {
         super();
         this.runtime = runtime;
-        if (!ClientBase._twitterClients) {
-            ClientBase._twitterClients = {};
-        }
         const username = this.runtime.getSetting("TWITTER_USERNAME");
         if (ClientBase._twitterClients[username]) {
             this.twitterClient = ClientBase._twitterClients[username];
