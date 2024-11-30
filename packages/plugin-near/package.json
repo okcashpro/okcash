@@ -1,0 +1,29 @@
+{
+    "name": "@ai16z/plugin-near",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-trustdb": "workspace:*",
+        "@ref-finance/ref-sdk": "^1.4.6",
+        "tsup": "8.3.5",
+        "near-api-js": "5.0.1"
+    },
+    "devDependencies": {
+        "eslint": "^9.15.0",
+        "eslint-config-prettier": "9.1.0",
+        "eslint-plugin-prettier": "5.2.1",
+        "eslint-plugin-vitest": "0.5.4"
+    },
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "lint": "eslint . --fix"
+    },
+    "peerDependencies": {
+        "whatwg-url": "7.1.0"
+    }
+}
