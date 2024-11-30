@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 
 // Import the entire module as default
 import pg, { Pool } from "pg";
-type PgPool = typeof Pool;
+type PoolType = pg.Pool;
 
 import {
     QueryConfig,
@@ -32,7 +32,7 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename); // get the name of the directory
 
 export class PostgresDatabaseAdapter
-    extends DatabaseAdapter<PgPool>
+    extends DatabaseAdapter<PoolType>
     implements IDatabaseCacheAdapter
 {
     private pool: PoolType;
@@ -755,7 +755,6 @@ export class PostgresDatabaseAdapter
         return this.withRetry(async () => {
             try {
                 const relationshipId = v4();
-                await this.pool.query(
                 await this.pool.query(
                     `INSERT INTO relationships (id, "userA", "userB", "userId")
                     VALUES ($1, $2, $3, $4)
