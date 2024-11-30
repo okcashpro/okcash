@@ -20,7 +20,7 @@ Respond with a JSON markdown block containing only the extracted values:
     "token": string | null
 }
 \`\`\`
-`
+`;
 
 export const bridgeTemplate = `Given the recent messages and wallet information below:
 
@@ -46,7 +46,7 @@ Respond with a JSON markdown block containing only the extracted values:
     "toAddress": string | null
 }
 \`\`\`
-`
+`;
 
 export const swapTemplate = `Given the recent messages and wallet information below:
 
@@ -71,4 +71,4 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
     "slippage": number | null
 }
 \`\`\`
-` 
+`;

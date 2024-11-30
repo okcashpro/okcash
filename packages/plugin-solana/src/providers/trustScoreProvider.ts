@@ -140,14 +140,19 @@ export class TrustScoreManager {
 
         return {
             tokenPerformance: {
-                tokenAddress: processedData.dexScreenerData.pairs[0]?.baseToken.address ||
+                tokenAddress:
+                    processedData.dexScreenerData.pairs[0]?.baseToken.address ||
                     "",
-                priceChange24h: processedData.tradeData.price_change_24h_percent,
+                priceChange24h:
+                    processedData.tradeData.price_change_24h_percent,
                 volumeChange24h: processedData.tradeData.volume_24h,
-                trade_24h_change: processedData.tradeData.trade_24h_change_percent,
-                liquidity: processedData.dexScreenerData.pairs[0]?.liquidity.usd || 0,
+                trade_24h_change:
+                    processedData.tradeData.trade_24h_change_percent,
+                liquidity:
+                    processedData.dexScreenerData.pairs[0]?.liquidity.usd || 0,
                 liquidityChange24h: 0,
-                holderChange24h: processedData.tradeData.unique_wallet_24h_change_percent,
+                holderChange24h:
+                    processedData.tradeData.unique_wallet_24h_change_percent,
                 rugPull: false,
                 isScam: processedData.tokenCodex.isScam,
                 marketCapChange24h: 0,
@@ -156,9 +161,10 @@ export class TrustScoreManager {
                 suspiciousVolume: suspiciousVolume,
                 validationTrust: validationTrustScore,
                 balance: balance,
-                initialMarketCap: processedData.dexScreenerData.pairs[0]?.marketCap || 0,
+                initialMarketCap:
+                    processedData.dexScreenerData.pairs[0]?.marketCap || 0,
                 lastUpdated: new Date(),
-                symbol: ""
+                symbol: "",
             },
             recommenderMetrics: {
                 recommenderId: recommenderId,

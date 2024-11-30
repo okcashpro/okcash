@@ -40,7 +40,7 @@ export default [
             "no-undef": "off",
             "@typescript-eslint/no-unsafe-function-type": "off",
             // Customize TypeScript rules
-            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-explicit-any": "warn",
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
