@@ -18,4 +18,4 @@ Object containing environment variables
 
 ## Defined in
 
-[packages/core/src/settings.ts:53](https://github.com/ai16z/eliza/blob/main/packages/core/src/settings.ts#L53)
+[packages/core/src/settings.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/settings.ts#L69)
