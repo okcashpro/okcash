@@ -9,11 +9,6 @@ export default [
                 tsconfigRootDir: import.meta.dirname,
                 project: "./tsconfig.json",
             },
-        },
-        rules: {
-            "@typescript-eslint/no-unused-expressions": "off",
-            "@typescript-eslint/no-explicit-any": "warn",
-            "no-console": ["warn", { allow: ["warn", "error"] }],
-        },
+        }
     },
 ];
