@@ -2,7 +2,7 @@
     "name": "eliza",
     "scripts": {
         "preinstall": "npx only-allow pnpm",
-        "build": "turbo check-types build",
+        "build": "turbo run build --filter=@ai16z/plugin-bootstrap^... --filter=@ai16z/eliza^... --filter=@ai16z/web-agent^...",
         "start": "pnpm --filter \"@ai16z/agent\" start --isRoot",
         "start:client": "pnpm --dir client start --isRoot",
         "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEBUG=eliza:* pnpm --filter \"@ai16z/agent\" start --isRoot",
