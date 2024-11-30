@@ -95,17 +95,10 @@ export async function loadCharacters(
         characterPaths,
         cwd: process.cwd(),
         dirname: __dirname,
-        fullPath: path.resolve(
-            process.cwd(),
-            "characters/8bitoracle.laozi.character.json"
-        ),
-        exists: fs.existsSync(
-            path.resolve(
-                process.cwd(),
-                "characters/8bitoracle.laozi.character.json"
-            )
-        ),
         dirContents: fs.readdirSync(process.cwd()),
+        characters: fs
+            .readdirSync(path.join(process.cwd(), "characters"))
+            .filter((file) => file.endsWith(".character.json")),
     });
 
     if (characterPaths?.length > 0) {

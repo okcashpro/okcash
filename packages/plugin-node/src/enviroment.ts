@@ -3,27 +3,21 @@ import { z } from "zod";
 
 export const nodeEnvSchema = z.object({
     OPENAI_API_KEY: z.string().min(1, "OpenAI API key is required"),
+
+    // Core settings
     ELEVENLABS_XI_API_KEY: z.string().optional(),
-    ELEVENLABS_MODEL_ID: z.string().min(1, "ElevenLabs model ID is required"),
-    ELEVENLABS_VOICE_ID: z.string().min(1, "ElevenLabs voice ID is required"),
-    ELEVENLABS_VOICE_STABILITY: z
-        .string()
-        .min(1, "ElevenLabs voice stability is required"),
-    ELEVENLABS_VOICE_SIMILARITY_BOOST: z
-        .string()
-        .min(1, "ElevenLabs voice similarity boost is required"),
-    ELEVENLABS_VOICE_STYLE: z
-        .string()
-        .min(1, "ElevenLabs voice style is required"),
-    ELEVENLABS_VOICE_USE_SPEAKER_BOOST: z
-        .string()
-        .min(1, "ElevenLabs voice speaker boost setting is required"),
-    ELEVENLABS_OPTIMIZE_STREAMING_LATENCY: z
-        .string()
-        .min(1, "ElevenLabs streaming latency optimization is required"),
-    ELEVENLABS_OUTPUT_FORMAT: z
-        .string()
-        .min(1, "ElevenLabs output format is required"),
+
+    // All other settings optional with defaults
+    ELEVENLABS_MODEL_ID: z.string().optional(),
+    ELEVENLABS_VOICE_ID: z.string().optional(),
+    ELEVENLABS_VOICE_STABILITY: z.string().optional(),
+    ELEVENLABS_VOICE_SIMILARITY_BOOST: z.string().optional(),
+    ELEVENLABS_VOICE_STYLE: z.string().optional(),
+    ELEVENLABS_VOICE_USE_SPEAKER_BOOST: z.string().optional(),
+    ELEVENLABS_OPTIMIZE_STREAMING_LATENCY: z.string().optional(),
+    ELEVENLABS_OUTPUT_FORMAT: z.string().optional(),
+    VITS_VOICE: z.string().optional(),
+    VITS_MODEL: z.string().optional(),
 });
 
 export type NodeConfig = z.infer<typeof nodeEnvSchema>;
@@ -32,34 +26,51 @@ export async function validateNodeConfig(
     runtime: IAgentRuntime
 ): Promise<NodeConfig> {
     try {
+        const voiceSettings = runtime.character.settings?.voice;
+        const elevenlabs = voiceSettings?.elevenlabs;
+
+        // Only include what's absolutely required
         const config = {
             OPENAI_API_KEY:
                 runtime.getSetting("OPENAI_API_KEY") ||
                 process.env.OPENAI_API_KEY,
-            ELEVENLABS_MODEL_ID:
-                runtime.getSetting("ELEVENLABS_MODEL_ID") ||
-                process.env.ELEVENLABS_MODEL_ID,
-            ELEVENLABS_VOICE_ID:
-                runtime.getSetting("ELEVENLABS_VOICE_ID") ||
-                process.env.ELEVENLABS_VOICE_ID,
-            ELEVENLABS_VOICE_STABILITY:
-                runtime.getSetting("ELEVENLABS_VOICE_STABILITY") ||
-                process.env.ELEVENLABS_VOICE_STABILITY,
-            ELEVENLABS_VOICE_SIMILARITY_BOOST:
-                runtime.getSetting("ELEVENLABS_VOICE_SIMILARITY_BOOST") ||
-                process.env.ELEVENLABS_VOICE_SIMILARITY_BOOST,
-            ELEVENLABS_VOICE_STYLE:
-                runtime.getSetting("ELEVENLABS_VOICE_STYLE") ||
-                process.env.ELEVENLABS_VOICE_STYLE,
-            ELEVENLABS_VOICE_USE_SPEAKER_BOOST:
-                runtime.getSetting("ELEVENLABS_VOICE_USE_SPEAKER_BOOST") ||
-                process.env.ELEVENLABS_VOICE_USE_SPEAKER_BOOST,
-            ELEVENLABS_OPTIMIZE_STREAMING_LATENCY:
-                runtime.getSetting("ELEVENLABS_OPTIMIZE_STREAMING_LATENCY") ||
-                process.env.ELEVENLABS_OPTIMIZE_STREAMING_LATENCY,
-            ELEVENLABS_OUTPUT_FORMAT:
-                runtime.getSetting("ELEVENLABS_OUTPUT_FORMAT") ||
-                process.env.ELEVENLABS_OUTPUT_FORMAT,
+            ELEVENLABS_XI_API_KEY:
+                runtime.getSetting("ELEVENLABS_XI_API_KEY") ||
+                process.env.ELEVENLABS_XI_API_KEY,
+
+            // Use character card settings first, fall back to env vars, then defaults
+            ...(runtime.getSetting("ELEVENLABS_XI_API_KEY") && {
+                ELEVENLABS_MODEL_ID:
+                    elevenlabs?.model ||
+                    process.env.ELEVENLABS_MODEL_ID ||
+                    "eleven_monolingual_v1",
+                ELEVENLABS_VOICE_ID:
+                    elevenlabs?.voiceId || process.env.ELEVENLABS_VOICE_ID,
+                ELEVENLABS_VOICE_STABILITY:
+                    elevenlabs?.stability ||
+                    process.env.ELEVENLABS_VOICE_STABILITY ||
+                    "0.5",
+                ELEVENLABS_VOICE_SIMILARITY_BOOST:
+                    elevenlabs?.similarityBoost ||
+                    process.env.ELEVENLABS_VOICE_SIMILARITY_BOOST ||
+                    "0.75",
+                ELEVENLABS_VOICE_STYLE:
+                    elevenlabs?.style ||
+                    process.env.ELEVENLABS_VOICE_STYLE ||
+                    "0",
+                ELEVENLABS_VOICE_USE_SPEAKER_BOOST:
+                    elevenlabs?.useSpeakerBoost ||
+                    process.env.ELEVENLABS_VOICE_USE_SPEAKER_BOOST ||
+                    "true",
+                ELEVENLABS_OPTIMIZE_STREAMING_LATENCY:
+                    process.env.ELEVENLABS_OPTIMIZE_STREAMING_LATENCY || "0",
+                ELEVENLABS_OUTPUT_FORMAT:
+                    process.env.ELEVENLABS_OUTPUT_FORMAT || "pcm_16000",
+            }),
+
+            // VITS settings
+            VITS_VOICE: voiceSettings?.model || process.env.VITS_VOICE,
+            VITS_MODEL: process.env.VITS_MODEL,
         };
 
         return nodeEnvSchema.parse(config);

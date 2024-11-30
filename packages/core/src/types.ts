@@ -674,8 +674,17 @@ export type Character = {
         secrets?: { [key: string]: string };
         buttplug?: boolean;
         voice?: {
-            model?: string;
-            url?: string;
+            model?: string; // For VITS
+            url?: string; // Legacy VITS support
+            elevenlabs?: {
+                // New structured ElevenLabs config
+                voiceId: string;
+                model?: string;
+                stability?: string;
+                similarityBoost?: string;
+                style?: string;
+                useSpeakerBoost?: string;
+            };
         };
         model?: string;
         embeddingModel?: string;
