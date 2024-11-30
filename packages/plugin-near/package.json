@@ -9,7 +9,8 @@
         "@ai16z/plugin-trustdb": "workspace:*",
         "@ref-finance/ref-sdk": "^1.4.6",
         "tsup": "8.3.5",
-        "near-api-js": "5.0.1"
+        "near-api-js": "5.0.1",
+        "bignumber.js": "9.1.5"
     },
     "devDependencies": {
         "eslint": "^9.15.0",
