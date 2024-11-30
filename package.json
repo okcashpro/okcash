@@ -28,6 +28,7 @@
         "cross-env": "^7.0.3",
         "eslint": "^9.15.0",
         "eslint-config-prettier": "9.1.0",
+        "eslint-plugin-vitest": "0.5.4",
         "husky": "9.1.7",
         "lerna": "8.1.5",
         "only-allow": "1.2.1",
