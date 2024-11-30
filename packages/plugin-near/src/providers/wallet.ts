@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
 import fs from "fs";
 import os from "os";
+import { KeyPairString } from "near-api-js/lib/utils";
 
 const PROVIDER_CONFIG = {
     networkId: "testnet",
@@ -36,7 +37,7 @@ interface WalletPortfolio {
 export class WalletProvider implements Provider {
     private cache: NodeCache;
     private account: Account | null = null;
-
+    private keyStore: keyStores.InMemoryKeyStore;
     constructor(private accountId: string) {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
     }
@@ -54,7 +55,7 @@ export class WalletProvider implements Provider {
         }
     }
 
-    private async connect(runtime: IAgentRuntime) {
+    public async connect(runtime: IAgentRuntime) {
         if (this.account) return this.account;
 
         const secretKey = runtime.getSetting("NEAR_WALLET_SECRET_KEY");
@@ -65,7 +66,7 @@ export class WalletProvider implements Provider {
         }
 
         // Create KeyPair from secret key
-        const keyPair = KeyPair.fromString(secretKey);
+        const keyPair = KeyPair.fromString(secretKey as KeyPairString);
 
         // Set the key in the keystore
         await this.keyStore.setKey(PROVIDER_CONFIG.networkId, this.accountId, keyPair);
@@ -172,7 +173,7 @@ export class WalletProvider implements Provider {
     }
 
     formatPortfolio(runtime: IAgentRuntime, portfolio: WalletPortfolio): string {
-        let output = `${runtime.character.description}\n`;
+        let output = `${runtime.character.system}\n`;
         output += `Account ID: ${this.accountId}\n\n`;
 
         const totalUsdFormatted = new BigNumber(portfolio.totalUsd).toFixed(2);

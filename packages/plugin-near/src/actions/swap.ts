@@ -13,6 +13,7 @@ import { connect, keyStores, utils } from "near-api-js";
 import BigNumber from "bignumber.js";
 import { init_env, ftGetTokenMetadata, estimateSwap, instantSwap } from '@ref-finance/ref-sdk';
 import { walletProvider } from "../providers/wallet";
+import { KeyPairString } from "near-api-js/lib/utils";
 
 // Initialize Ref SDK with testnet environment
 init_env('testnet');
@@ -160,7 +161,7 @@ export const executeSwap: Action = {
 
             // Create keystore and connect to NEAR
             const keyStore = new keyStores.InMemoryKeyStore();
-            const keyPair = utils.KeyPair.fromString(secretKey);
+            const keyPair = utils.KeyPair.fromString(secretKey as KeyPairString);
             await keyStore.setKey("testnet", accountId, keyPair);
 
             const nearConnection = await connect({
@@ -189,7 +190,7 @@ export const executeSwap: Action = {
                         methodName: functionCall.methodName,
                         args: functionCall.args,
                         gas: functionCall.gas,
-                        attachedDeposit: functionCall.amount ? new BigNumber(functionCall.amount).toFixed() : "0",
+                        attachedDeposit: functionCall.amount ? BigInt(functionCall.amount) : BigInt(0),
                     });
                     results.push(result);
                 }
