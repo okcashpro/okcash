@@ -26447,7 +26447,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.4
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -32227,44 +32227,6 @@ snapshots:
     dependencies:
       esprima: 4.0.1
 
-<<<<<<< HEAD
-  ref-struct@1.1.0:
-    dependencies:
-      debug: 2.6.9
-      ref: 1.3.5
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
-  ref@1.3.5:
-    dependencies:
-      bindings: 1.5.0
-      debug: 2.6.9
-      nan: 2.22.0
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
-||||||| parent of c5168df3 (chore: pnpm-lock.yaml)
-=======
-  ref-struct@1.1.0:
-    dependencies:
-      debug: 2.6.9
-      ref: 1.3.5
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
-  ref@1.3.5:
-    dependencies:
-      bindings: 1.2.1
-      debug: 2.6.9
-      nan: 2.22.0
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
->>>>>>> c5168df3 (chore: pnpm-lock.yaml)
   reflect-metadata@0.2.2: {}
 
   regenerate-unicode-properties@10.2.0:
