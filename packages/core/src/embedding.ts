@@ -229,7 +229,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                 (async () => {
                     try {
                         return await import("fastembed");
-                    } catch (error) {
+                    } catch {
                         elizaLogger.error("Failed to load fastembed.");
                         throw new Error("fastembed import failed, falling back to remote embedding");
                     }
@@ -338,7 +338,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             }
 
             return finalEmbedding;
-        } catch (error) {
+        } catch {
             // Browser implementation - fallback to remote embedding
             elizaLogger.warn(
                 "Local embedding not supported in browser, falling back to remote embedding"
