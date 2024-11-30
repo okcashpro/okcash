@@ -1,11 +1,22 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "tasks": {
-        "build": {
-            "outputs": ["dist/**"]
-        },
         "check-types": {
-            "dependsOn": ["^check-types"]
+            "dependsOn": ["build"]
+        },
+        "@ai16z/agent#check-types": {
+            "dependsOn": ["@ai16z/plugin-solana#build"]
+        },
+        "build": {
+            "outputs": ["dist/**"],
+            "dependsOn": ["^@ai16z/eliza#build"]
+        },
+        "@ai16z/plugin-solana#build": {
+            "outputs": ["dist/**"],
+            "dependsOn": ["@ai16z/plugin-trustdb#build"]
+        },
+        "eliza-docs#build": {
+            "outputs": ["build/**"]
         },
         "dev": {
             "persistent": true,
