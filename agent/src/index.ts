@@ -265,6 +265,16 @@ export function getTokenForProvider(
             return (
                 character.settings?.secrets?.FAL_API_KEY || settings.FAL_API_KEY
             );
+        case ModelProviderName.ALI_BAILIAN:
+            return (
+                character.settings?.secrets?.ALI_BAILIAN_API_KEY ||
+                settings.ALI_BAILIAN_API_KEY
+            );
+        case ModelProviderName.VOLENGINE:
+            return (
+                character.settings?.secrets?.VOLENGINE_API_KEY ||
+                settings.VOLENGINE_API_KEY
+            );
     }
 }
 

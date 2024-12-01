@@ -304,6 +304,40 @@ export const models: Models = {
             [ModelClass.IMAGE]: "fal-ai/flux-lora",
         },
     },
+    [ModelProviderName.ALI_BAILIAN]: {
+        endpoint: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.4,
+            presence_penalty: 0.4,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: "qwen-turbo",
+            [ModelClass.MEDIUM]: "qwen-plus",
+            [ModelClass.LARGE]: "qwen-max",
+            [ModelClass.IMAGE]: "wanx-v1",
+        },
+    },
+    [ModelProviderName.VOLENGINE]: {
+        endpoint: "https://open.volcengineapi.com/api/v3/",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.4,
+            presence_penalty: 0.4,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: "doubao-lite-128k",
+            [ModelClass.MEDIUM]: "doubao-pro-128k",
+            [ModelClass.LARGE]: "doubao-pro-128k",
+            [ModelClass.EMBEDDING]: "doubao-embedding",
+        },
+    },
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
