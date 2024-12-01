@@ -138,6 +138,9 @@ importers:
       '@ai16z/plugin-evm':
         specifier: workspace:*
         version: link:../packages/plugin-evm
+      '@ai16z/plugin-goat':
+        specifier: workspace:*
+        version: link:../packages/plugin-goat
       '@ai16z/plugin-icp':
         specifier: workspace:*
         version: link:../packages/plugin-icp
@@ -865,6 +868,30 @@ importers:
         version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
       viem:
         specifier: 2.21.53
+        version: 2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      whatwg-url:
+        specifier: 7.1.0
+        version: 7.1.0
+
+  packages/plugin-goat:
+    dependencies:
+      '@ai16z/eliza':
+        specifier: workspace:*
+        version: link:../core
+      '@goat-sdk/core':
+        specifier: 0.3.8
+        version: 0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.1.6
+        version: 0.1.6(@goat-sdk/core@0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-viem':
+        specifier: 0.1.3
+        version: 0.1.3(@goat-sdk/core@0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(@swc/core@1.9.3(@swc/helpers@0.5.15))(jiti@2.4.0)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
+      viem:
+        specifier: ^2.21.45
         version: 2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       whatwg-url:
         specifier: 7.1.0
@@ -3622,6 +3649,24 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
+  '@goat-sdk/core@0.3.8':
+    resolution: {integrity: sha512-1H8Cziyjj3bN78M4GETGN8+/fAQhtTPqMowSyAgIZtC/MGWvf41H2SR0FNba/xhfCOALhb0UfhGOsXCswvM5iA==}
+    engines: {node: '>=20.12.2 <21', npm: please-use-pnpm, pnpm: '>=9', yarn: please-use-pnpm}
+
+  '@goat-sdk/plugin-erc20@0.1.6':
+    resolution: {integrity: sha512-vX0TQmAHSFMqjsYFyp+XYgV7a7TMvfQykQB5f0wMRFFbUgJKqcWxG8O/3WPjBcXTm7/B9C2Ebq0ByXowboHLjw==}
+    engines: {node: '>=20.12.2 <21', npm: please-use-pnpm, pnpm: '>=9', yarn: please-use-pnpm}
+    peerDependencies:
+      '@goat-sdk/core': 0.3.7
+      viem: ^2.21.49
+
+  '@goat-sdk/wallet-viem@0.1.3':
+    resolution: {integrity: sha512-2uofsH/dVmeJk/4V2/tJ1rDk6/ZFQlthUO50tg366hjq0vjINJXMQqYGwSLnv5Z3PMmdfPCSd5xikFEfA+1ZZw==}
+    engines: {node: '>=20.12.2 <21', npm: please-use-pnpm, pnpm: '>=9', yarn: please-use-pnpm}
+    peerDependencies:
+      '@goat-sdk/core': 0.3.4
+      viem: ^2.21.49
+
   '@google-cloud/vertexai@1.9.0':
     resolution: {integrity: sha512-8brlcJwFXI4fPuBtsDNQqCdWZmz8gV9jeEKOU0vc5H2SjehCQpXK/NwuSEr916zbhlBHtg/sU37qQQdgvh5BRA==}
     engines: {node: '>=18.0.0'}
@@ -5785,9 +5830,6 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
-  '@types/better-sqlite3@7.6.11':
-    resolution: {integrity: sha512-i8KcD3PgGtGBLl3+mMYA8PdKkButvPyARxA7IQAd6qeslht13qxb1zzO8dRCtE7U3IoJS782zDBAeoKiM695kg==}
-
   '@types/better-sqlite3@7.6.12':
     resolution: {integrity: sha512-fnQmj8lELIj7BSrZQAdBMHEHX8OZLYIHXqAKT1O7tDfLxaINzf00PMjw22r3N/xXh0w/sGHlO6SVaCQ2mj78lg==}
 
@@ -6979,9 +7021,6 @@ packages:
 
   bent@7.3.12:
     resolution: {integrity: sha512-T3yrKnVGB63zRuoco/7Ybl7BwwGZR0lceoVG5XmQyMIH9s19SV5m+a8qam4if0zQuAmOQTyPTPmsQBdAorGK3w==}
-
-  better-sqlite3@11.5.0:
-    resolution: {integrity: sha512-e/6eggfOutzoK0JWiU36jsisdWoHOfN9iWiW/SieKvb7SAa6aGNmBM/UKyp+/wWSXpLlWNN8tCPwoDNPhzUvuQ==}
 
   better-sqlite3@11.6.0:
     resolution: {integrity: sha512-2J6k/eVxcFYY2SsTxsXrj6XylzHWPxveCn4fKPKZFv/Vqn/Cd7lOuX4d7rGQXT5zL+97MkNL3nSbCrIoe3LkgA==}
@@ -14029,19 +14068,9 @@ packages:
   sql.js@1.12.0:
     resolution: {integrity: sha512-Bi+43yMx/tUFZVYD4AUscmdL6NHn3gYQ+CM+YheFWLftOmrEC/Mz6Yh7E96Y2WDHYz3COSqT+LP6Z79zgrwJlA==}
 
-  sqlite-vec-darwin-arm64@0.1.4-alpha.2:
-    resolution: {integrity: sha512-eOZwQ3Z0pX/ALHLq71ZF0HAQLPRHu6b9PhH17xI2euqN6u9vdL2jDkem6d99O+wV4vYnShj4Vzt25LDet4Ehsg==}
-    cpu: [arm64]
-    os: [darwin]
-
   sqlite-vec-darwin-arm64@0.1.6:
     resolution: {integrity: sha512-5duw/xhM3xE6BCQd//eAkyHgBp9FIwK6veldRhPG96dT6Zpjov3bG02RuE7JAQj0SVJYRW8bJwZ4LxqW0+Q7Dw==}
     cpu: [arm64]
-    os: [darwin]
-
-  sqlite-vec-darwin-x64@0.1.4-alpha.2:
-    resolution: {integrity: sha512-uEyfy1ZdBP3KJNxY3jEaqDwZG2QYthKOGYpcC1OPNVspbLBU98dxFs2p3mDAOF3VarDzoLazQVRo14m+MqM5uw==}
-    cpu: [x64]
     os: [darwin]
 
   sqlite-vec-darwin-x64@0.1.6:
@@ -14049,28 +14078,15 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  sqlite-vec-linux-x64@0.1.4-alpha.2:
-    resolution: {integrity: sha512-n8/slC9CuQ2TWXLqoyiRT4e2WN2/Ph5hq6RwinUWjyShqKgCtnTSalGyXEElYb1Pa/BXU3P3Odzc8N7zj2ryoQ==}
-    cpu: [x64]
-    os: [linux]
-
   sqlite-vec-linux-x64@0.1.6:
     resolution: {integrity: sha512-411tWPswywIzdkp+zsAUav4A03f0FjnNfpZFlOw8fBebFR74RSFkwM8Xryf18gLHiYAXUBI4mjY9+/xjwBjKpg==}
     cpu: [x64]
     os: [linux]
 
-  sqlite-vec-windows-x64@0.1.4-alpha.2:
-    resolution: {integrity: sha512-YErL7ewC74PzGVS0UFfZrZ6lEy1WZ2OQPZt3lQDUC/qNo7rVZ5l4ZhRb2JczB7uKPVYEZoTdMbseDrM77gFg+A==}
-    cpu: [x64]
-    os: [win32]
-
   sqlite-vec-windows-x64@0.1.6:
     resolution: {integrity: sha512-Dy9/KlKJDrjuQ/RRkBqGkMZuSh5bTJDMMOFZft9VJZaXzpYxb5alpgdvD4bbKegpDdfPi2BT4+PBivsNJSlMoQ==}
     cpu: [x64]
     os: [win32]
-
-  sqlite-vec@0.1.4-alpha.2:
-    resolution: {integrity: sha512-FAdsljvZHdSK4w5wWYiRoVOmnaatO0m2HHRNk1P0y4kl1Nb/MzWvMJriZwa/Kj8sEqFpIwHWg/+woRKB0X1jhg==}
 
   sqlite-vec@0.1.6:
     resolution: {integrity: sha512-hQZU700TU2vWPXZYDULODjKXeMio6rKX7UpPN7Tq9qjPW671IEgURGrcC5LDBMl0q9rBvAuzmcmJmImMqVibYQ==}
@@ -19202,6 +19218,29 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
+  '@goat-sdk/core@0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@solana/web3.js': 1.95.5(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
+      viem: 2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - typescript
+      - utf-8-validate
+
+  '@goat-sdk/plugin-erc20@0.1.6(@goat-sdk/core@0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+    dependencies:
+      '@goat-sdk/core': 0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      viem: 2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod: 3.23.8
+
+  '@goat-sdk/wallet-viem@0.1.3(@goat-sdk/core@0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+    dependencies:
+      '@goat-sdk/core': 0.3.8(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      viem: 2.21.53(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+
   '@google-cloud/vertexai@1.9.0(encoding@0.1.13)':
     dependencies:
       google-auth-library: 9.15.0(encoding@0.1.13)
@@ -21878,10 +21917,6 @@ snapshots:
     dependencies:
       '@babel/types': 7.26.0
 
-  '@types/better-sqlite3@7.6.11':
-    dependencies:
-      '@types/node': 22.8.4
-
   '@types/better-sqlite3@7.6.12':
     dependencies:
       '@types/node': 22.8.4
@@ -23341,11 +23376,6 @@ snapshots:
       bytesish: 0.4.4
       caseless: 0.12.0
       is-stream: 2.0.1
-
-  better-sqlite3@11.5.0:
-    dependencies:
-      bindings: 1.5.0
-      prebuild-install: 7.1.2
 
   better-sqlite3@11.6.0:
     dependencies:
@@ -32191,36 +32221,17 @@ snapshots:
 
   sql.js@1.12.0: {}
 
-  sqlite-vec-darwin-arm64@0.1.4-alpha.2:
-    optional: true
-
   sqlite-vec-darwin-arm64@0.1.6:
-    optional: true
-
-  sqlite-vec-darwin-x64@0.1.4-alpha.2:
     optional: true
 
   sqlite-vec-darwin-x64@0.1.6:
     optional: true
 
-  sqlite-vec-linux-x64@0.1.4-alpha.2:
-    optional: true
-
   sqlite-vec-linux-x64@0.1.6:
-    optional: true
-
-  sqlite-vec-windows-x64@0.1.4-alpha.2:
     optional: true
 
   sqlite-vec-windows-x64@0.1.6:
     optional: true
-
-  sqlite-vec@0.1.4-alpha.2:
-    optionalDependencies:
-      sqlite-vec-darwin-arm64: 0.1.4-alpha.2
-      sqlite-vec-darwin-x64: 0.1.4-alpha.2
-      sqlite-vec-linux-x64: 0.1.4-alpha.2
-      sqlite-vec-windows-x64: 0.1.4-alpha.2
 
   sqlite-vec@0.1.6:
     optionalDependencies:
