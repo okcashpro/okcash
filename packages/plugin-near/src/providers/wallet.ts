@@ -214,9 +214,7 @@ const walletProvider: Provider  = {
             if (!accountId) {
                 throw new Error("NEAR_ADDRESS not configured");
             }
-
             const provider = new WalletProvider(accountId);
-            const account = await provider.connect(runtime);
             return await provider.getFormattedPortfolio(runtime);
         } catch (error) {
             console.error("Error in wallet provider:", error);
