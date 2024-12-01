@@ -29,7 +29,7 @@
         "vite-plugin-wasm": "3.3.0"
     },
     "devDependencies": {
-        "@eslint/js": "9.15.0",
+        "@eslint/js": "9.16.0",
         "@types/node": "22.8.4",
         "@types/react": "18.3.12",
         "@types/react-dom": "18.3.1",
