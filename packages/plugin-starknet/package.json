@@ -1,19 +1,25 @@
 {
     "name": "@ai16z/plugin-starknet",
-    "version": "0.0.1",
+    "version": "0.1.4-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@avnu/avnu-sdk": "^2.1.1",
-        "starknet": "^6.11.0",
-        "tsup": "^8.3.5",
-        "vitest": "^2.1.4"
+        "@ai16z/plugin-trustdb": "workspace:*",
+        "@avnu/avnu-sdk": "2.1.1",
+        "@uniswap/sdk-core": "6.0.0",
+        "@unruggable_starknet/core": "0.1.0",
+        "starknet": "6.18.0",
+        "tsup": "8.3.5",
+        "vitest": "2.1.5"
     },
+    "devDependencies": {},
     "scripts": {
         "build": "tsup --format esm --dts",
-        "test": "vitest"
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "lint": "eslint . --fix"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

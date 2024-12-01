@@ -25,4 +25,4 @@ jobs:
             - name: Set status
               if: failure()
               run: |
-                  gh pr comment ${{ github.event.pull_request.number }} --body "❌ PR title does not match the required pattern. Please use the format: 'type: description' (e.g., 'feat: add new feature')."
+                  gh pr comment ${{ github.event.pull_request.number }} --body "❌ PR title does not match the required pattern. Please use the format: 'type: description' (e.g., 'feat|fix|docs|style|refactor|test|chore: title')."

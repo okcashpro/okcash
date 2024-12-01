@@ -109,7 +109,6 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     });
 
     const recentRecommendations = await recommendationsManager.getMemories({
-        agentId,
         roomId,
         count: 20,
     });
@@ -148,12 +147,19 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
     for (const rec of filteredRecommendations) {
         // create the wallet provider and token provider
         const walletProvider = new WalletProvider(
-            new Connection("https://api.mainnet-beta.solana.com"),
-            new PublicKey(runtime.getSetting("WALLET_PUBLIC_KEY"))
+            new Connection(
+                runtime.getSetting("RPC_URL") ||
+                    "https://api.mainnet-beta.solana.com"
+            ),
+            new PublicKey(
+                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+                    runtime.getSetting("WALLET_PUBLIC_KEY")
+            )
         );
         const tokenProvider = new TokenProvider(
             rec.contractAddress,
-            walletProvider
+            walletProvider,
+            runtime.cacheManager
         );
 
         // TODO: Check to make sure the contract address is valid, it's the right one, etc
@@ -253,6 +259,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
                     runtime,
                     rec.contractAddress,
                     userId,
+                    account.username, // we need this to create the recommender account in the BE
                     {
                         buy_amount: rec.buyAmount,
                         is_simulation: true,

@@ -19,32 +19,56 @@ case "$1" in
             docker rm eliza
         fi
 
-        docker run \
-            --platform linux/amd64 \
-            -p 3000:3000 \
-            -d \
-            -v "$(pwd)/characters:/app/characters" \
-            -v "$(pwd)/.env:/app/.env" \
-            -v "$(pwd)/docs:/app/docs" \
-            -v "$(pwd)/scripts:/app/scripts" \
-            -v "$(pwd)/packages/adapter-postgres/src:/app/packages/adapter-postgres/src" \
-            -v "$(pwd)/packages/adapter-sqlite/src:/app/packages/adapter-sqlite/src" \
-            -v "$(pwd)/packages/adapter-sqljs/src:/app/packages/adapter-sqljs/src" \
-            -v "$(pwd)/packages/adapter-supabase/src:/app/packages/adapter-supabase/src" \
-            -v "$(pwd)/packages/agent/src:/app/packages/agent/src" \
-            -v "$(pwd)/packages/client-auto/src:/app/packages/client-auto/src" \
-            -v "$(pwd)/packages/client-direct/src:/app/packages/client-direct/src" \
-            -v "$(pwd)/packages/client-discord/src:/app/packages/client-discord/src" \
-            -v "$(pwd)/packages/client-telegram/src:/app/packages/client-telegram/src" \
-            -v "$(pwd)/packages/client-twitter/src:/app/packages/client-twitter/src" \
-            -v "$(pwd)/packages/core/src:/app/packages/core/src" \
-            -v "$(pwd)/packages/core/types:/app/packages/core/types" \
-            -v "$(pwd)/packages/plugin-bootstrap/src:/app/packages/plugin-bootstrap/src" \
-            -v "$(pwd)/packages/plugin-image-generation/src:/app/packages/plugin-image-generation/src" \
-            -v "$(pwd)/packages/plugin-node/src:/app/packages/plugin-node/src" \
-            -v "$(pwd)/packages/plugin-solana/src:/app/packages/plugin-solana/src" \
-            --name eliza \
-            eliza
+        # Define base directories to mount
+        BASE_MOUNTS=(
+            "characters:/app/characters"
+            ".env:/app/.env"
+            "agent:/app/agent"
+            "docs:/app/docs"
+            "scripts:/app/scripts"
+        )
+
+        # Define package directories to mount
+        PACKAGES=(
+            "adapter-postgres"
+            "adapter-sqlite"
+            "adapter-sqljs"
+            "adapter-supabase"
+            "client-auto"
+            "client-direct"
+            "client-discord"
+            "client-telegram"
+            "client-twitter"
+            "core"
+            "plugin-bootstrap"
+            "plugin-image-generation"
+            "plugin-node"
+            "plugin-solana"
+            "plugin-evm"
+            "plugin-tee"
+        )
+
+        # Start building the docker run command
+        CMD="docker run --platform linux/amd64 -p 3000:3000 -d"
+
+        # Add base mounts
+        for mount in "${BASE_MOUNTS[@]}"; do
+            CMD="$CMD -v \"$(pwd)/$mount\""
+        done
+
+        # Add package mounts
+        for package in "${PACKAGES[@]}"; do
+            CMD="$CMD -v \"$(pwd)/packages/$package/src:/app/packages/$package/src\""
+        done
+
+        # Add core types mount separately (special case)
+        CMD="$CMD -v \"$(pwd)/packages/core/types:/app/packages/core/types\""
+
+        # Add container name and image
+        CMD="$CMD --name eliza eliza"
+
+        # Execute the command
+        eval $CMD
         ;;
     start)
         docker start eliza

@@ -1,18 +1,24 @@
 {
     "name": "@ai16z/plugin-trustdb",
-    "version": "0.0.1",
+    "version": "0.1.4-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "tsup": "^8.3.5",
+        "dompurify": "3.2.1",
+        "tsup": "8.3.5",
         "uuid": "11.0.2",
-        "vitest": "^2.1.4"
+        "vitest": "2.1.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "test": "vitest"
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "lint": "eslint . --fix"
+    },
+    "devDependencies": {
+        "@types/dompurify": "3.2.0"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

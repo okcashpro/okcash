@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / generateObjectV2
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / generateObjectV2
 
 # Function: generateObjectV2()
 
@@ -24,4 +24,4 @@ Configuration options for generating objects.
 
 ## Defined in
 
-[packages/core/src/generation.ts:897](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L897)
+[packages/core/src/generation.ts:1042](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1042)

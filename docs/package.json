@@ -15,26 +15,26 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.6.0",
-    "@docusaurus/plugin-content-blog": "^3.6.0",
-    "@docusaurus/plugin-content-docs": "^3.6.0",
-    "@docusaurus/plugin-ideal-image": "^3.6.0",
-    "@docusaurus/preset-classic": "^3.6.0",
-    "@docusaurus/theme-mermaid": "^3.6.0",
+    "@docusaurus/core": "3.6.3",
+    "@docusaurus/plugin-content-blog": "3.6.3",
+    "@docusaurus/plugin-content-docs": "3.6.3",
+    "@docusaurus/plugin-ideal-image": "3.6.3",
+    "@docusaurus/preset-classic": "3.6.3",
+    "@docusaurus/theme-mermaid": "3.6.3",
     "@mdx-js/react": "3.0.1",
-    "clsx": "2.1.0",
-    "docusaurus-lunr-search": "^3.5.0",
+    "clsx": "2.1.1",
+    "docusaurus-lunr-search": "3.5.0",
     "prism-react-renderer": "2.3.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-router-dom": "6.22.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.6.0",
-    "@docusaurus/types": "3.6.0",
-    "docusaurus-plugin-typedoc": "^1.0.5",
-    "typedoc": "^0.26.11",
-    "typedoc-plugin-markdown": "^4.2.9"
+    "@docusaurus/module-type-aliases": "3.6.3",
+    "@docusaurus/types": "3.6.3",
+    "docusaurus-plugin-typedoc": "1.0.5",
+    "typedoc": "0.26.11",
+    "typedoc-plugin-markdown": "4.2.10"
   },
   "browserslist": {
     "production": [
@@ -49,6 +49,6 @@
     ]
   },
   "engines": {
-    "node": "23.1.0"
+    "node": "23.3.0"
   }
 }

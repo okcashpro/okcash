@@ -1,14 +1,11 @@
 {
     "name": "@ai16z/client-auto",
-    "version": "0.0.1",
+    "version": "0.1.4-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@ai16z/plugin-image-generation": "workspace:*",
-        "@ai16z/plugin-solana": "workspace:*",
-        "@ai16z/plugin-trustdb": "workspace:*",
         "@types/body-parser": "1.19.5",
         "@types/cors": "2.8.17",
         "@types/express": "5.0.0",
@@ -17,11 +14,12 @@
         "multer": "1.4.5-lts.1"
     },
     "devDependencies": {
-        "tsup": "^8.3.5"
+        "tsup": "8.3.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "dev": "tsup --watch"
+        "dev": "tsup --watch",
+        "lint": "eslint . --fix"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

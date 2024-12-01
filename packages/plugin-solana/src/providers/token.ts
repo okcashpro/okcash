@@ -1,4 +1,4 @@
-import { settings } from "@ai16z/eliza";
+import { ICacheManager, settings } from "@ai16z/eliza";
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import {
     DexScreenerData,
@@ -9,8 +9,8 @@ import {
     TokenTradeData,
     CalculatedBuyAmounts,
     Prices,
+    TokenCodex,
 } from "../types/token.ts";
-import * as fs from "fs";
 import NodeCache from "node-cache";
 import * as path from "path";
 import { toBN } from "../bignumber.ts";
@@ -36,93 +36,61 @@ const PROVIDER_CONFIG = {
 
 export class TokenProvider {
     private cache: NodeCache;
-    private cacheDir: string;
+    private cacheKey: string = "solana/tokens";
+    private NETWORK_ID = 1399811149;
+    private GRAPHQL_ENDPOINT = "https://graph.codex.io/graphql";
 
     constructor(
         //  private connection: Connection,
         private tokenAddress: string,
-        private walletProvider: WalletProvider
+        private walletProvider: WalletProvider,
+        private cacheManager: ICacheManager
     ) {
         this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
-        const __dirname = path.resolve();
-
-        // Find the 'eliza' folder in the filepath and adjust the cache directory path
-        const elizaIndex = __dirname.indexOf("eliza");
-        if (elizaIndex !== -1) {
-            const pathToEliza = __dirname.slice(0, elizaIndex + 5); // include 'eliza'
-            this.cacheDir = path.join(pathToEliza, "cache");
-        } else {
-            this.cacheDir = path.join(__dirname, "cache");
-        }
-
-        this.cacheDir = path.join(__dirname, "cache");
-        if (!fs.existsSync(this.cacheDir)) {
-            fs.mkdirSync(this.cacheDir);
-        }
     }
 
-    private readCacheFromFile<T>(cacheKey: string): T | null {
-        const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        console.log({ filePath });
-        if (fs.existsSync(filePath)) {
-            const fileContent = fs.readFileSync(filePath, "utf-8");
-            const parsed = JSON.parse(fileContent);
-            const now = Date.now();
-            if (now < parsed.expiry) {
-                console.log(
-                    `Reading cached data from file for key: ${cacheKey}`
-                );
-                return parsed.data as T;
-            } else {
-                console.log(
-                    `Cache expired for key: ${cacheKey}. Deleting file.`
-                );
-                fs.unlinkSync(filePath);
-            }
-        }
-        return null;
+    private async readFromCache<T>(key: string): Promise<T | null> {
+        const cached = await this.cacheManager.get<T>(
+            path.join(this.cacheKey, key)
+        );
+        return cached;
     }
 
-    private writeCacheToFile<T>(cacheKey: string, data: T): void {
-        const filePath = path.join(this.cacheDir, `${cacheKey}.json`);
-        const cacheData = {
-            data: data,
-            expiry: Date.now() + 300000, // 5 minutes in milliseconds
-        };
-        fs.writeFileSync(filePath, JSON.stringify(cacheData), "utf-8");
-        console.log(`Cached data written to file for key: ${cacheKey}`);
+    private async writeToCache<T>(key: string, data: T): Promise<void> {
+        await this.cacheManager.set(path.join(this.cacheKey, key), data, {
+            expires: Date.now() + 5 * 60 * 1000,
+        });
     }
 
-    private getCachedData<T>(cacheKey: string): T | null {
+    private async getCachedData<T>(key: string): Promise<T | null> {
         // Check in-memory cache first
-        const cachedData = this.cache.get<T>(cacheKey);
+        const cachedData = this.cache.get<T>(key);
         if (cachedData) {
             return cachedData;
         }
 
         // Check file-based cache
-        const fileCachedData = this.readCacheFromFile<T>(cacheKey);
+        const fileCachedData = await this.readFromCache<T>(key);
         if (fileCachedData) {
             // Populate in-memory cache
-            this.cache.set(cacheKey, fileCachedData);
+            this.cache.set(key, fileCachedData);
             return fileCachedData;
         }
 
         return null;
     }
 
-    private setCachedData<T>(cacheKey: string, data: T): void {
+    private async setCachedData<T>(cacheKey: string, data: T): Promise<void> {
         // Set in-memory cache
         this.cache.set(cacheKey, data);
 
         // Write to file-based cache
-        this.writeCacheToFile(cacheKey, data);
+        await this.writeToCache(cacheKey, data);
     }
 
     private async fetchWithRetry(
         url: string,
         options: RequestInit = {}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ): Promise<any> {
         let lastError: Error;
 
@@ -187,6 +155,87 @@ export class TokenProvider {
         } catch (error) {
             console.error("Error checking token in wallet:", error);
             return null;
+        }
+    }
+
+    async fetchTokenCodex(): Promise<TokenCodex> {
+        try {
+            const cacheKey = `token_${this.tokenAddress}`;
+            const cachedData = this.getCachedData<TokenCodex>(cacheKey);
+            if (cachedData) {
+                console.log(
+                    `Returning cached token data for ${this.tokenAddress}.`
+                );
+                return cachedData;
+            }
+            const query = `
+            query Token($address: String!, $networkId: Int!) {
+              token(input: { address: $address, networkId: $networkId }) {
+                id
+                address
+                cmcId
+                decimals
+                name
+                symbol
+                totalSupply
+                isScam
+                info {
+                  circulatingSupply
+                  imageThumbUrl
+                }
+                explorerData {
+                  blueCheckmark
+                  description
+                  tokenType
+                }
+              }
+            }
+          `;
+
+            const variables = {
+                address: this.tokenAddress,
+                networkId: this.NETWORK_ID, // Replace with your network ID
+            };
+
+            const response = await fetch(this.GRAPHQL_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: settings.CODEX_API_KEY,
+                },
+                body: JSON.stringify({
+                    query,
+                    variables,
+                }),
+            }).then((res) => res.json());
+
+            const token = response.data?.data?.token;
+
+            if (!token) {
+                throw new Error(`No data returned for token ${tokenAddress}`);
+            }
+
+            this.setCachedData(cacheKey, token);
+
+            return {
+                id: token.id,
+                address: token.address,
+                cmcId: token.cmcId,
+                decimals: token.decimals,
+                name: token.name,
+                symbol: token.symbol,
+                totalSupply: token.totalSupply,
+                circulatingSupply: token.info?.circulatingSupply,
+                imageThumbUrl: token.info?.imageThumbUrl,
+                blueCheckmark: token.explorerData?.blueCheckmark,
+                isScam: token.isScam ? true : false,
+            };
+        } catch (error) {
+            console.error(
+                "Error fetching token data from Codex:",
+                error.message
+            );
+            return {} as TokenCodex;
         }
     }
 
@@ -598,7 +647,7 @@ export class TokenProvider {
         symbol: string
     ): Promise<DexScreenerPair | null> {
         const cacheKey = `dexScreenerData_search_${symbol}`;
-        const cachedData = this.getCachedData<DexScreenerData>(cacheKey);
+        const cachedData = await this.getCachedData<DexScreenerData>(cacheKey);
         if (cachedData) {
             console.log("Returning cached search DexScreener data.");
             return this.getHighestLiquidityPair(cachedData);
@@ -639,21 +688,13 @@ export class TokenProvider {
         }
 
         // Sort pairs by both liquidity and market cap to get the highest one
-        return dexData.pairs.reduce((highestPair, currentPair) => {
-            const currentLiquidity = currentPair.liquidity.usd;
-            const currentMarketCap = currentPair.marketCap;
-            const highestLiquidity = highestPair.liquidity.usd;
-            const highestMarketCap = highestPair.marketCap;
-
-            if (
-                currentLiquidity > highestLiquidity ||
-                (currentLiquidity === highestLiquidity &&
-                    currentMarketCap > highestMarketCap)
-            ) {
-                return currentPair;
+        return dexData.pairs.sort((a, b) => {
+            const liquidityDiff = b.liquidity.usd - a.liquidity.usd;
+            if (liquidityDiff !== 0) {
+                return liquidityDiff; // Higher liquidity comes first
             }
-            return highestPair;
-        });
+            return b.marketCap - a.marketCap; // If liquidity is equal, higher market cap comes first
+        })[0];
     }
 
     async analyzeHolderDistribution(
@@ -719,7 +760,6 @@ export class TokenProvider {
         console.log({ url });
 
         try {
-            // eslint-disable-next-line no-constant-condition
             while (true) {
                 const params = {
                     limit: limit,
@@ -765,7 +805,6 @@ export class TokenProvider {
                     `Processing ${data.result.token_accounts.length} holders from page ${page}`
                 );
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 data.result.token_accounts.forEach((account: any) => {
                     const owner = account.owner;
                     const balance = parseFloat(account.amount);
@@ -858,6 +897,8 @@ export class TokenProvider {
             );
             const security = await this.fetchTokenSecurity();
 
+            const tokenCodex = await this.fetchTokenCodex();
+
             console.log(`Fetching trade data for token: ${this.tokenAddress}`);
             const tradeData = await this.fetchTokenTradeData();
 
@@ -907,6 +948,7 @@ export class TokenProvider {
                 dexScreenerData: dexData,
                 isDexScreenerListed,
                 isDexScreenerPaid,
+                tokenCodex,
             };
 
             // console.log("Processed token data:", processedData);
@@ -926,8 +968,8 @@ export class TokenProvider {
             const liquidityUsd = toBN(liquidity.usd);
             const marketCapUsd = toBN(marketCap);
             const totalSupply = toBN(ownerBalance).plus(creatorBalance);
-            const ownerPercentage = toBN(ownerBalance).dividedBy(totalSupply);
-            const creatorPercentage =
+            const _ownerPercentage = toBN(ownerBalance).dividedBy(totalSupply);
+            const _creatorPercentage =
                 toBN(creatorBalance).dividedBy(totalSupply);
             const top10HolderPercent = toBN(tradeData.volume_24h_usd).dividedBy(
                 totalSupply
@@ -1051,11 +1093,10 @@ export class TokenProvider {
 }
 
 const tokenAddress = PROVIDER_CONFIG.TOKEN_ADDRESSES.Example;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const connection = new Connection(PROVIDER_CONFIG.DEFAULT_RPC);
 const tokenProvider: Provider = {
     get: async (
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         runtime: IAgentRuntime,
         _message: Memory,
         _state?: State
@@ -1065,7 +1106,13 @@ const tokenProvider: Provider = {
                 connection,
                 new PublicKey(PROVIDER_CONFIG.MAIN_WALLET)
             );
-            const provider = new TokenProvider(tokenAddress, walletProvider);
+
+            const provider = new TokenProvider(
+                tokenAddress,
+                walletProvider,
+                runtime.cacheManager
+            );
+
             return provider.getFormattedTokenReport();
         } catch (error) {
             console.error("Error fetching token data:", error);

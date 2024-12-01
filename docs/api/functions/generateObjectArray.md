@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / generateObjectArray
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / generateObjectArray
 
 # Function: generateObjectArray()
 
@@ -20,4 +20,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:633](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L633)
+[packages/core/src/generation.ts:679](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L679)

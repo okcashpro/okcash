@@ -1,6 +1,8 @@
-[@ai16z/eliza v1.0.0](../index.md) / ModelProviderName
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / ModelProviderName
 
 # Enumeration: ModelProviderName
+
+Available model providers
 
 ## Enumeration Members
 
@@ -10,9 +12,19 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:121](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L121)
+[packages/core/src/types.ts:210](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L210)
 
----
+***
+
+### ETERNALAI
+
+> **ETERNALAI**: `"eternalai"`
+
+#### Defined in
+
+[packages/core/src/types.ts:211](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L211)
+
+***
 
 ### ANTHROPIC
 
@@ -20,9 +32,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L122)
+[packages/core/src/types.ts:212](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L212)
 
----
+***
 
 ### GROK
 
@@ -30,9 +42,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:123](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L123)
+[packages/core/src/types.ts:213](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L213)
 
----
+***
 
 ### GROQ
 
@@ -40,9 +52,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:124](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L124)
+[packages/core/src/types.ts:214](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L214)
 
----
+***
 
 ### LLAMACLOUD
 
@@ -50,9 +62,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L125)
+[packages/core/src/types.ts:215](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L215)
 
----
+***
 
 ### LLAMALOCAL
 
@@ -60,9 +72,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:126](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L126)
+[packages/core/src/types.ts:216](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L216)
 
----
+***
 
 ### GOOGLE
 
@@ -70,19 +82,19 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:127](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L127)
+[packages/core/src/types.ts:217](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L217)
 
----
+***
 
-### CLAUDE_VERTEX
+### CLAUDE\_VERTEX
 
-> **CLAUDE_VERTEX**: `"claude_vertex"`
+> **CLAUDE\_VERTEX**: `"claude_vertex"`
 
 #### Defined in
 
-[packages/core/src/types.ts:128](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L128)
+[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
 
----
+***
 
 ### REDPILL
 
@@ -90,9 +102,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:129](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L129)
+[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
 
----
+***
 
 ### OPENROUTER
 
@@ -100,9 +112,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:130](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L130)
+[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
 
----
+***
 
 ### OLLAMA
 
@@ -110,9 +122,9 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:131](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L131)
+[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L221)
 
----
+***
 
 ### HEURIST
 
@@ -120,4 +132,24 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:132](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L132)
+[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L222)
+
+***
+
+### GALADRIEL
+
+> **GALADRIEL**: `"galadriel"`
+
+#### Defined in
+
+[packages/core/src/types.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L223)
+
+***
+
+### FAL
+
+> **FAL**: `"falai"`
+
+#### Defined in
+
+[packages/core/src/types.ts:224](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L224)

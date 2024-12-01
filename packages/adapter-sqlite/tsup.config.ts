@@ -16,6 +16,7 @@ export default defineConfig({
         "http",
         "agentkeepalive",
         "@anush008/tokenizers",
+        "uuid",
         // Add other modules you want to externalize
     ],
 });
