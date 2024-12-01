@@ -22,4 +22,4 @@ string
 
 ## Defined in
 
-[packages/core/src/messages.ts:45](https://github.com/ai16z/eliza/blob/main/packages/core/src/messages.ts#L45)
+[packages/core/src/messages.ts:45](https://github.com/madjin/eliza/blob/main/packages/core/src/messages.ts#L45)

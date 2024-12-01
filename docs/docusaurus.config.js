@@ -4,9 +4,9 @@ const config = {
   title: "eliza",
   tagline: "Flexible, scalable AI agents for everyone",
   favicon: "img/favicon.ico",
-  url: "https://ai16z.github.io",
+  url: "https://madjin.github.io",
   baseUrl: "/eliza/",
-  organizationName: "ai16z",
+  organizationName: "madjin",
   projectName: "eliza",
   deploymentBranch: "gh-pages",
   trailingSlash: true,
@@ -22,6 +22,40 @@ const config = {
   },
   themes: ["@docusaurus/theme-mermaid"],
   plugins: [
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "community",
+        path: "community",
+        routeBasePath: "community",
+        sidebarItemsGenerator: async function ({defaultSidebarItemsGenerator, ...args}) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return sidebarItems.map(item => {
+            if (item.type === 'category') {
+              switch(item.label.toLowerCase()) {
+                case 'streams':
+                  item.label = '📺 ' + item.label;
+                  break;
+                case 'development':
+                  item.label = '💻 ' + item.label;
+                  break;
+                case 'the_arena':
+                  item.label = '🏟️ ' + item.label;
+                  break;
+                default:
+                  item.label = '📄 ' + item.label;
+              }
+            }
+            return item;
+          })
+          .sort((a, b) => {
+            const labelA = a.label || ''; // Ensure `label` exists
+            const labelB = b.label || ''; // Ensure `label` exists
+            return labelA.localeCompare(labelB, undefined, { numeric: true });
+          });
+        }
+      }
+    ],
     [
       "docusaurus-plugin-typedoc",
       {
@@ -126,6 +160,13 @@ const config = {
           docsPluginId: "api",
           position: "left",
           label: "API",
+          docId: "index",
+        },
+        {
+          type: "doc",
+          docsPluginId: "community",
+          position: "left",
+          label: "Community",
           docId: "index",
         },
         {
