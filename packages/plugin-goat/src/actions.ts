@@ -85,8 +85,6 @@ function createAction<TWalletClient extends WalletClient>(
                     tool
                 );
 
-                console.log(`Parameters: ${JSON.stringify(parameters)}`);
-
                 const parsedParameters = tool.parameters.safeParse(parameters);
                 if (!parsedParameters.success) {
                     callback?.({
@@ -95,12 +93,6 @@ function createAction<TWalletClient extends WalletClient>(
                     });
                     return false;
                 }
-
-                console.log(
-                    `Executing action ${tool.name} with parameters: ${JSON.stringify(
-                        parsedParameters.data
-                    )}`
-                );
 
                 const result = await tool.method(
                     walletClient,
