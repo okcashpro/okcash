@@ -6,9 +6,9 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "tsup": "^8.3.5",
+        "tsup": "8.3.5",
         "@0glabs/0g-ts-sdk": "0.2.1",
-        "ethers": "^6.0.0"
+        "ethers": "6.13.4"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
