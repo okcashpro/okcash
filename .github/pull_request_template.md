@@ -47,7 +47,7 @@ If a docs change is needed: I have updated the documentation accordingly.
 ## Detailed testing steps
 
 <!--
-None, automtated tests are fine.
+None, automated tests are fine.
 -->
 
 <!--

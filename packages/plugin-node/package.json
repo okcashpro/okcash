@@ -60,10 +60,7 @@
         "youtube-dl-exec": "3.0.10"
     },
     "devDependencies": {
-        "eslint": "9.13.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4",
+        "@types/node": "22.8.4",
         "tsup": "8.3.5"
     },
     "scripts": {

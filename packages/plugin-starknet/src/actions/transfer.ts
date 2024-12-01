@@ -17,10 +17,12 @@ import {
 import { getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { validateStarknetConfig } from "../enviroment";
+import { getAddressFromName, isStarkDomain } from "../utils/starknetId";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
-    recipient: string;
+    recipient?: string;
+    starkName?: string;
     amount: string | number;
 }
 
@@ -30,21 +32,40 @@ export function isTransferContent(
     // Validate types
     const validTypes =
         typeof content.tokenAddress === "string" &&
-        typeof content.recipient === "string" &&
+        (typeof content.recipient === "string" ||
+            typeof content.starkName === "string") &&
         (typeof content.amount === "string" ||
             typeof content.amount === "number");
     if (!validTypes) {
         return false;
     }
 
-    // Validate addresses (must be 32-bytes long with 0x prefix)
-    const validAddresses =
+    // Validate tokenAddress (must be 32-bytes long with 0x prefix)
+    const validTokenAddress =
         content.tokenAddress.startsWith("0x") &&
-        content.tokenAddress.length === 66 &&
-        content.recipient.startsWith("0x") &&
-        content.recipient.length === 66;
+        content.tokenAddress.length === 66;
+    if (!validTokenAddress) {
+        return false;
+    }
 
-    return validAddresses;
+    // Additional checks based on whether recipient or starkName is defined
+    if (content.recipient) {
+        // Validate recipient address (must be 32-bytes long with 0x prefix)
+        const validRecipient =
+            content.recipient.startsWith("0x") &&
+            content.recipient.length === 66;
+        if (!validRecipient) {
+            return false;
+        }
+    } else if (content.starkName) {
+        // .stark name validation
+        const validStarkName = isStarkDomain(content.starkName);
+        if (!validStarkName) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 const transferTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
@@ -62,6 +83,7 @@ Example response:
 {
     "tokenAddress": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
     "recipient": "0x1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+    "starkName": "domain.stark",
     "amount": "0.001"
 }
 \`\`\`
@@ -71,6 +93,7 @@ Example response:
 Given the recent messages, extract the following information about the requested token transfer:
 - Token contract address
 - Recipient wallet address
+- Recipient .stark name
 
 
 Respond with a JSON markdown block containing only the extracted values.`;
@@ -126,7 +149,7 @@ export default {
             elizaLogger.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
-                    text: "Not enough information to transfer tokens. Please respond with token address, recipient, and amount.",
+                    text: "Not enough information to transfer tokens. Please respond with token address, recipient address or stark name, and amount.",
                     content: { error: "Invalid transfer content" },
                 });
             }
@@ -142,10 +165,10 @@ export default {
                 Number(content.amount) * Math.pow(10, Number(decimals))
             );
             const amountWei = BigInt(amountInteger.toString());
-            const transferCall = erc20Token.transferCall(
-                content.recipient,
-                amountWei
-            );
+            const recipient =
+                content.recipient ??
+                (await getAddressFromName(account, content.starkName));
+            const transferCall = erc20Token.transferCall(recipient, amountWei);
 
             elizaLogger.success(
                 "Transferring",
@@ -153,7 +176,7 @@ export default {
                 "of",
                 content.tokenAddress,
                 "to",
-                content.recipient
+                recipient
             );
 
             const tx = await account.execute(transferCall);
@@ -202,6 +225,20 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
+                    text: "Send 10 ETH to domain.stark",
+                },
+            },
+            {
+                user: "{{agent}}",
+                content: {
+                    text: "I'll transfer 10 ETH to domain.stark et address 0x0124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49 right away. Let me process that for you.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
                     text: "Can you transfer 50 LORDS tokens to 0x0124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49?",
                 },
             },
@@ -216,6 +253,20 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
+                    text: "Can you transfer 50 LORDS tokens to domain.stark?",
+                },
+            },
+            {
+                user: "{{agent}}",
+                content: {
+                    text: "Executing transfer of 50 LORDS tokens to domain.stark at address 0x0124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49. One moment please.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
                     text: "Please send 0.5 BTC to 0x03fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac",
                 },
             },
@@ -223,6 +274,20 @@ export default {
                 user: "{{agent}}",
                 content: {
                     text: "Got it, initiating transfer of 0.5 BTC to the provided address. I'll confirm once it's complete.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Please send 0.5 BTC to domain.stark",
+                },
+            },
+            {
+                user: "{{agent}}",
+                content: {
+                    text: "Got it, initiating transfer of 0.5 BTC to domain.stark at address 0x03fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac. I'll confirm once it's complete.",
                 },
             },
         ],

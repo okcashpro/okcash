@@ -32,4 +32,4 @@ The completed message.
 
 ## Defined in
 
-[packages/core/src/generation.ts:49](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L49)
+[packages/core/src/generation.ts:51](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L51)

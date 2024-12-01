@@ -166,6 +166,21 @@ const sidebars = {
               items: [
                 {
                   type: "doc",
+                  id: "community/streams/2024-11-29",
+                  label: "What Did You Get Done This Week 3",
+                },
+                {
+                  type: "doc",
+                  id: "community/streams/2024-11-28",
+                  label: "World Builders Panel",
+                },
+                {
+                  type: "doc",
+                  id: "community/streams/2024-11-26",
+                  label: "AI Agent Dev School 1",
+                },
+                {
+                  type: "doc",
                   id: "community/streams/2024-11-24",
                   label: "Hats Protocol Presentation",
                 },

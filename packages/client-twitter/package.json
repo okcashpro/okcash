@@ -6,15 +6,11 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "agent-twitter-client": "0.0.14",
+        "agent-twitter-client": "0.0.16",
         "glob": "11.0.0",
         "zod": "3.23.8"
     },
     "devDependencies": {
-        "eslint": "9.13.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4",
         "tsup": "8.3.5"
     },
     "scripts": {

@@ -15,6 +15,8 @@ import {
 } from "@ai16z/eliza";
 import { ChargeContent, ChargeSchema, isChargeContent } from "../types";
 import { chargeTemplate, getChargeTemplate } from "../templates";
+import { getWalletDetails } from "../utils";
+import { Coinbase } from "@coinbase/coinbase-sdk";
 
 const url = "https://api.commerce.coinbase.com/charges";
 interface ChargeRequest {
@@ -115,7 +117,7 @@ export const createCoinbaseChargeAction: Action = {
         "COINBASE_CHARGE",
     ],
     description: "Create a charge using Coinbase Commerce.",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         const coinbaseCommerceKeyOk = !!runtime.getSetting(
             "COINBASE_COMMERCE_KEY"
         );
@@ -127,7 +129,7 @@ export const createCoinbaseChargeAction: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Composing state for message:", message);
@@ -260,7 +262,7 @@ export const getAllChargesAction: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         try {
@@ -325,7 +327,7 @@ export const getChargeDetailsAction: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        _options: any,
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Composing state for message:", message);
@@ -416,11 +418,30 @@ export const getChargeDetailsAction: Action = {
 };
 
 export const chargeProvider: Provider = {
-    get: async (runtime: IAgentRuntime, message: Memory) => {
+    get: async (runtime: IAgentRuntime, _message: Memory) => {
         const charges = await getAllCharges(
             runtime.getSetting("COINBASE_COMMERCE_KEY")
         );
-        return charges.data;
+        // Ensure API key is available
+        const coinbaseAPIKey =
+            runtime.getSetting("COINBASE_API_KEY") ??
+            process.env.COINBASE_API_KEY;
+        const coinbasePrivateKey =
+            runtime.getSetting("COINBASE_PRIVATE_KEY") ??
+            process.env.COINBASE_PRIVATE_KEY;
+        const balances = [];
+        const transactions = [];
+        if (coinbaseAPIKey && coinbasePrivateKey) {
+            Coinbase.configure({
+                apiKeyName: coinbaseAPIKey,
+                privateKey: coinbasePrivateKey,
+            });
+            const { balances, transactions } = await getWalletDetails(runtime);
+            elizaLogger.log("Current Balances:", balances);
+            elizaLogger.log("Last Transactions:", transactions);
+        }
+        elizaLogger.log("Charges:", charges);
+        return { charges: charges.data, balances, transactions };
     },
 };
 

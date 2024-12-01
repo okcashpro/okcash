@@ -48,10 +48,6 @@ Main Character schema
 
 > **postExamples**: `ZodArray`\<`ZodString`, `"many"`\>
 
-### people
-
-> **people**: `ZodArray`\<`ZodString`, `"many"`\>
-
 ### topics
 
 > **topics**: `ZodArray`\<`ZodString`, `"many"`\>

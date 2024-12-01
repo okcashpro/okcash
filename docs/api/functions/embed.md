@@ -4,13 +4,13 @@
 
 > **embed**(`runtime`, `input`): `Promise`\<`number`[]\>
 
-Generate embeddings for input text using configured model provider
+Gets embeddings from a remote API endpoint.  Falls back to local BGE/384
 
 ## Parameters
 
 • **runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
 
-The agent runtime containing model configuration
+The agent runtime context
 
 • **input**: `string`
 
@@ -20,8 +20,12 @@ The text to generate embeddings for
 
 `Promise`\<`number`[]\>
 
-Array of embedding numbers
+Array of embedding values
+
+## Throws
+
+If the API request fails
 
 ## Defined in
 
-[packages/core/src/embedding.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L79)
+[packages/core/src/embedding.ts:138](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L138)

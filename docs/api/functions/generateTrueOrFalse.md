@@ -28,4 +28,4 @@ Promise resolving to a boolean value parsed from the model's response
 
 ## Defined in
 
-[packages/core/src/generation.ts:530](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L530)
+[packages/core/src/generation.ts:552](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L552)

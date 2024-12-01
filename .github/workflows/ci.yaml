@@ -38,3 +38,8 @@ jobs:
 
             - name: Build packages
               run: pnpm run build
+
+            # - name: Upload coverage reports to Codecov
+            #   uses: codecov/codecov-action@v5
+            #   with:
+            #       token: ${{ secrets.CODECOV_TOKEN }}

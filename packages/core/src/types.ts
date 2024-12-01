@@ -199,6 +199,8 @@ export type Models = {
     [ModelProviderName.OPENROUTER]: Model;
     [ModelProviderName.OLLAMA]: Model;
     [ModelProviderName.HEURIST]: Model;
+    [ModelProviderName.GALADRIEL]: Model;
+    [ModelProviderName.FAL]: Model;
 };
 
 /**
@@ -218,6 +220,8 @@ export enum ModelProviderName {
     OPENROUTER = "openrouter",
     OLLAMA = "ollama",
     HEURIST = "heurist",
+    GALADRIEL = "galadriel",
+    FAL = "falai",
 }
 
 /**
@@ -297,9 +301,9 @@ export interface State {
     formattedConversation?: string;
 
     /** Optional formatted knowledge */
-    knowledge?: string,
+    knowledge?: string;
     /** Optional knowledge data */
-    knowledgeData?: KnowledgeItem[],
+    knowledgeData?: KnowledgeItem[];
 
     /** Additional dynamic properties */
     [key: string]: unknown;
@@ -610,6 +614,9 @@ export type Character = {
     /** Model provider to use */
     modelProvider: ModelProviderName;
 
+    /** Image model provider to use, if different from modelProvider */
+    imageModelProvider?: ModelProviderName;
+
     /** Optional model endpoint override */
     modelEndpointOverride?: string;
 
@@ -647,9 +654,6 @@ export type Character = {
     /** Example posts */
     postExamples: string[];
 
-    /** Known people */
-    people: string[];
-
     /** Known topics */
     topics: string[];
 
@@ -675,6 +679,11 @@ export type Character = {
         };
         model?: string;
         embeddingModel?: string;
+        chains?: {
+            evm?: any[];
+            solana?: any[];
+            [key: string]: any[];
+        };
     };
 
     /** Optional client-specific config */
@@ -714,7 +723,10 @@ export interface IDatabaseAdapter {
     db: any;
 
     /** Optional initialization */
-    init?(): Promise<void>;
+    init(): Promise<void>;
+
+    /** Close database connection */
+    close(): Promise<void>;
 
     /** Get account by ID */
     getAccountById(userId: UUID): Promise<Account | null>;
@@ -951,6 +963,7 @@ export interface IAgentRuntime {
     databaseAdapter: IDatabaseAdapter;
     token: string | null;
     modelProvider: ModelProviderName;
+    imageModelProvider: ModelProviderName;
     character: Character;
     providers: Provider[];
     actions: Action[];
@@ -1086,6 +1099,23 @@ export interface IPdfService extends Service {
     getInstance(): IPdfService;
     convertPdfToText(pdfBuffer: Buffer): Promise<string>;
 }
+
+export type SearchResult = {
+    title: string;
+    url: string;
+    content: string;
+    score: number;
+    raw_content: string | null;
+};
+
+export type SearchResponse = {
+    query: string;
+    follow_up_questions: string[] | null;
+    answer: string | null;
+    images: string[];
+    results: SearchResult[];
+    response_time: number;
+};
 
 export enum ServiceType {
     IMAGE_DESCRIPTION = "image_description",

@@ -1,5 +1,3 @@
-import settings from "./settings.ts";
-
 class ElizaLogger {
     constructor() {
         // Check if we're in Node.js environment
@@ -9,7 +7,15 @@ class ElizaLogger {
             process.versions.node != null;
 
         // Set verbose based on environment
-        this.verbose = this.isNode ? settings.VERBOSE === "true" : false;
+        this.verbose = this.isNode ? process.env.VERBOSE === "true" : false;
+
+        // Add initialization logging
+        console.log(`[ElizaLogger] Initializing with:
+            isNode: ${this.isNode}
+            verbose: ${this.verbose}
+            VERBOSE env: ${process.env.VERBOSE}
+            NODE_ENV: ${process.env.NODE_ENV}
+        `);
     }
 
     private isNode: boolean;
@@ -212,7 +218,14 @@ class ElizaLogger {
     }
 
     debug(...strings) {
-        if (!this.verbose) return;
+        if (!this.verbose) {
+            // for diagnosing verbose logging issues
+            // console.log(
+            //     "[ElizaLogger] Debug message suppressed (verbose=false):",
+            //     ...strings
+            // );
+            return;
+        }
         this.#logWithStyle(strings, {
             fg: "magenta",
             bg: "",

@@ -100,18 +100,3 @@ async function cleanup() {
 
 // Export cleanup for manual shutdown if needed
 export { cleanup as shutdownIntifaceEngine };
-
-// Start Intiface Engine if run directly
-if (import.meta.url === new URL(import.meta.url).href) {
-    console.log("[utils] Starting Intiface Engine service");
-    startIntifaceEngine().catch((error) => {
-        console.error("[utils] Failed to start Intiface Engine:", error);
-        process.exit(1);
-    });
-
-    process.on("SIGINT", async () => {
-        console.log("[utils] Shutting down Intiface Engine");
-        await cleanup();
-        process.exit(0);
-    });
-}

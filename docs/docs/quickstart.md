@@ -44,6 +44,12 @@ Before getting started with Eliza, ensure you have:
    pnpm install
    ```
 
+   Build the local libraries
+
+   ```bash
+   pnpm build
+   ```
+
 2. **Configure Environment**
 
    Copy example environment file
@@ -259,7 +265,7 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    If that doesn't work, try clearing your node_modules in the root folder
 
    ```bash
-   rm -fr node_modules; rm pnpm-lock.yaml
+   rm -fr node_modules; pnpm store prune
    ```
 
    Then reinstall the requirements
