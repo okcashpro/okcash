@@ -12,7 +12,7 @@ import { elizaLogger } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `
-# Knowledge
+# Areas of Expertise
 {{knowledge}}
 
 # About {{agentName}} (@{{twitterUserName}}):
@@ -88,7 +88,7 @@ export class TwitterPostClient {
             const randomMinutes =
                 Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) +
                 minMinutes;
-            const delay = randomMinutes * 60 * 1000;
+            const delay = 1 * 60 * 1000;
 
             if (Date.now() > lastPostTimestamp + delay) {
                 await this.generateNewTweet();
@@ -153,8 +153,6 @@ export class TwitterPostClient {
                     this.runtime.character.templates?.twitterPostTemplate ||
                     twitterPostTemplate,
             });
-
-            console.log("post context", context, "\n\n");
 
             elizaLogger.debug("generate post prompt:\n" + context);
 
@@ -222,8 +220,6 @@ export class TwitterPostClient {
 
                 await this.client.cacheTweet(tweet);
 
-                previousPosts.push(tweet);
-                await this.client.cacheTimeline(previousPosts);
                 elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
 
                 const roomId = stringToUuid(
