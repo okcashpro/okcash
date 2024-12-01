@@ -52,7 +52,7 @@
         "@coinbase/coinbase-sdk": "0.10.0",
         "amqplib": "0.10.5",
         "csv-parse": "5.6.0",
-        "eslint-plugin-vitest": "^0.5.4",
+        "eslint-plugin-vitest": "0.5.4",
         "ollama-ai-provider": "0.16.1",
         "optional": "0.1.4",
         "pnpm": "9.14.4",
