@@ -210,7 +210,7 @@ Integrates Solana blockchain functionality:
 
 ### Charity Contributions
 
-All Coinbase trades and transfers automatically donate 1% of the transaction amount to charity. The charity address is determined based on the network used for the transaction. The current charity being supported is [GiveDirectly](https://www.givedirectly.org/crypto/?_gl=1*va5e6k*_gcl_au*MTM1NDUzNTk5Mi4xNzMzMDczNjA3*_ga*OTIwMDMwNTMwLjE3MzMwNzM2MDg.*_ga_GV8XF9FJ16*MTczMzA3MzYwNy4xLjEuMTczMzA3MzYyMi40NS4wLjA.).
+All Coinbase trades and transfers automatically donate 1% of the transaction amount to charity. Currently, the charity addresses are hardcoded based on the network used for the transaction, with the current charity being supported as X.
 
 The charity addresses for each network are as follows:
 
@@ -220,7 +220,7 @@ The charity addresses for each network are as follows:
 - **Arbitrum**: `0x1234567890123456789012345678901234567890`
 - **Polygon**: `0x1234567890123456789012345678901234567890`
 
-This feature ensures that every transaction contributes to a good cause, and the charity address can be configured in the future to support different organizations.
+In the future, we aim to integrate with The Giving Block API to allow for dynamic and configurable donations, enabling support for a wider range of charitable organizations.
 
 
 #### 5. Coinbase Commerce Plugin (`@eliza/plugin-coinbase`)
