@@ -7,11 +7,11 @@ import os from "os";
 import { KeyPairString } from "near-api-js/lib/utils";
 
 const PROVIDER_CONFIG = {
-    networkId: "testnet",
-    nodeUrl: process.env.RPC_URL || "https://rpc.testnet.near.org",
-    walletUrl: "https://testnet.mynearwallet.com/",
-    helperUrl: "https://helper.testnet.near.org",
-    explorerUrl: "https://testnet.nearblocks.io",
+    networkId: process.env.NEAR_NETWORK || "testnet",
+    nodeUrl: process.env.RPC_URL || `https://rpc.${process.env.NEAR_NETWORK || "testnet"}.near.org`,
+    walletUrl: `https://${process.env.NEAR_NETWORK || "testnet"}.mynearwallet.com/`,
+    helperUrl: `https://helper.${process.env.NEAR_NETWORK || "testnet"}.near.org`,
+    explorerUrl: `https://${process.env.NEAR_NETWORK || "testnet"}.nearblocks.io`,
     MAX_RETRIES: 3,
     RETRY_DELAY: 2000,
     SLIPPAGE: process.env.SLIPPAGE ? parseInt(process.env.SLIPPAGE) : 1,
