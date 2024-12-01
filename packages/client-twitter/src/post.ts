@@ -124,6 +124,9 @@ export class TwitterPostClient {
         elizaLogger.log("Generating new tweet");
 
         try {
+            const roomId = stringToUuid(
+                "twitter_generate_room-" + this.client.profile.username
+            );
             await this.runtime.ensureUserExists(
                 this.runtime.agentId,
                 this.client.profile.username,
@@ -135,7 +138,7 @@ export class TwitterPostClient {
             const state = await this.runtime.composeState(
                 {
                     userId: this.runtime.agentId,
-                    roomId: stringToUuid("twitter_generate_room"),
+                    roomId: roomId,
                     agentId: this.runtime.agentId,
                     content: {
                         text: topics,
@@ -198,6 +201,9 @@ export class TwitterPostClient {
                     text: tweetResult.legacy.full_text,
                     conversationId: tweetResult.legacy.conversation_id_str,
                     createdAt: tweetResult.legacy.created_at,
+                    timestamp: new Date(
+                        tweetResult.legacy.created_at
+                    ).getTime(),
                     userId: this.client.profile.id,
                     inReplyToStatusId:
                         tweetResult.legacy.in_reply_to_status_id_str,
@@ -222,10 +228,6 @@ export class TwitterPostClient {
 
                 elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
 
-                const roomId = stringToUuid(
-                    tweet.conversationId + "-" + this.runtime.agentId
-                );
-
                 await this.runtime.ensureRoomExists(roomId);
                 await this.runtime.ensureParticipantInRoom(
                     this.runtime.agentId,
@@ -243,7 +245,7 @@ export class TwitterPostClient {
                     },
                     roomId,
                     embedding: getEmbeddingZeroVector(),
-                    createdAt: tweet.timestamp * 1000,
+                    createdAt: tweet.timestamp,
                 });
             } catch (error) {
                 elizaLogger.error("Error sending tweet:", error);
