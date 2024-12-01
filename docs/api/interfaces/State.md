@@ -18,7 +18,7 @@ ID of user who sent current message
 
 #### Defined in
 
-[packages/core/src/types.ts:232](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L232)
+[packages/core/src/types.ts:232](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L232)
 
 ***
 
@@ -30,7 +30,7 @@ ID of agent in conversation
 
 #### Defined in
 
-[packages/core/src/types.ts:235](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L235)
+[packages/core/src/types.ts:235](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L235)
 
 ***
 
@@ -42,7 +42,7 @@ Agent's biography
 
 #### Defined in
 
-[packages/core/src/types.ts:238](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L238)
+[packages/core/src/types.ts:238](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L238)
 
 ***
 
@@ -54,7 +54,7 @@ Agent's background lore
 
 #### Defined in
 
-[packages/core/src/types.ts:241](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L241)
+[packages/core/src/types.ts:241](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L241)
 
 ***
 
@@ -66,7 +66,7 @@ Message handling directions
 
 #### Defined in
 
-[packages/core/src/types.ts:244](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L244)
+[packages/core/src/types.ts:244](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L244)
 
 ***
 
@@ -78,7 +78,7 @@ Post handling directions
 
 #### Defined in
 
-[packages/core/src/types.ts:247](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L247)
+[packages/core/src/types.ts:247](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L247)
 
 ***
 
@@ -90,7 +90,7 @@ Current room/conversation ID
 
 #### Defined in
 
-[packages/core/src/types.ts:250](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L250)
+[packages/core/src/types.ts:250](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L250)
 
 ***
 
@@ -102,7 +102,7 @@ Optional agent name
 
 #### Defined in
 
-[packages/core/src/types.ts:253](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L253)
+[packages/core/src/types.ts:253](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L253)
 
 ***
 
@@ -114,7 +114,7 @@ Optional message sender name
 
 #### Defined in
 
-[packages/core/src/types.ts:256](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L256)
+[packages/core/src/types.ts:256](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L256)
 
 ***
 
@@ -126,7 +126,7 @@ String representation of conversation actors
 
 #### Defined in
 
-[packages/core/src/types.ts:259](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L259)
+[packages/core/src/types.ts:259](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L259)
 
 ***
 
@@ -138,7 +138,7 @@ Optional array of actor objects
 
 #### Defined in
 
-[packages/core/src/types.ts:262](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L262)
+[packages/core/src/types.ts:262](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L262)
 
 ***
 
@@ -150,7 +150,7 @@ Optional string representation of goals
 
 #### Defined in
 
-[packages/core/src/types.ts:265](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L265)
+[packages/core/src/types.ts:265](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L265)
 
 ***
 
@@ -162,7 +162,7 @@ Optional array of goal objects
 
 #### Defined in
 
-[packages/core/src/types.ts:268](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L268)
+[packages/core/src/types.ts:268](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L268)
 
 ***
 
@@ -174,7 +174,7 @@ Recent message history as string
 
 #### Defined in
 
-[packages/core/src/types.ts:271](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L271)
+[packages/core/src/types.ts:271](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L271)
 
 ***
 
@@ -186,7 +186,7 @@ Recent message objects
 
 #### Defined in
 
-[packages/core/src/types.ts:274](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L274)
+[packages/core/src/types.ts:274](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L274)
 
 ***
 
@@ -198,7 +198,7 @@ Optional valid action names
 
 #### Defined in
 
-[packages/core/src/types.ts:277](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L277)
+[packages/core/src/types.ts:277](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L277)
 
 ***
 
@@ -210,7 +210,7 @@ Optional action descriptions
 
 #### Defined in
 
-[packages/core/src/types.ts:280](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L280)
+[packages/core/src/types.ts:280](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L280)
 
 ***
 
@@ -222,7 +222,7 @@ Optional action objects
 
 #### Defined in
 
-[packages/core/src/types.ts:283](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L283)
+[packages/core/src/types.ts:283](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L283)
 
 ***
 
@@ -234,7 +234,7 @@ Optional action examples
 
 #### Defined in
 
-[packages/core/src/types.ts:286](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L286)
+[packages/core/src/types.ts:286](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L286)
 
 ***
 
@@ -246,7 +246,7 @@ Optional provider descriptions
 
 #### Defined in
 
-[packages/core/src/types.ts:289](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L289)
+[packages/core/src/types.ts:289](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L289)
 
 ***
 
@@ -258,7 +258,7 @@ Optional response content
 
 #### Defined in
 
-[packages/core/src/types.ts:292](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L292)
+[packages/core/src/types.ts:292](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L292)
 
 ***
 
@@ -270,7 +270,7 @@ Optional recent interaction objects
 
 #### Defined in
 
-[packages/core/src/types.ts:295](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L295)
+[packages/core/src/types.ts:295](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L295)
 
 ***
 
@@ -282,7 +282,7 @@ Optional recent interactions string
 
 #### Defined in
 
-[packages/core/src/types.ts:298](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L298)
+[packages/core/src/types.ts:298](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L298)
 
 ***
 
@@ -294,7 +294,7 @@ Optional formatted conversation
 
 #### Defined in
 
-[packages/core/src/types.ts:301](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L301)
+[packages/core/src/types.ts:301](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L301)
 
 ***
 
@@ -306,7 +306,7 @@ Optional formatted knowledge
 
 #### Defined in
 
-[packages/core/src/types.ts:304](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L304)
+[packages/core/src/types.ts:304](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L304)
 
 ***
 
@@ -318,4 +318,4 @@ Optional knowledge data
 
 #### Defined in
 
-[packages/core/src/types.ts:306](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L306)
+[packages/core/src/types.ts:306](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L306)

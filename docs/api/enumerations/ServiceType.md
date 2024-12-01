@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1121](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1121)
+[packages/core/src/types.ts:1121](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1121)
 
 ***
 
@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1122)
+[packages/core/src/types.ts:1122](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1122)
 
 ***
 
@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1123](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1123)
+[packages/core/src/types.ts:1123](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1123)
 
 ***
 
@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1124](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1124)
+[packages/core/src/types.ts:1124](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1124)
 
 ***
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1125)
+[packages/core/src/types.ts:1125](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1125)
 
 ***
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1126](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1126)
+[packages/core/src/types.ts:1126](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1126)
 
 ***
 
@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1127](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1127)
+[packages/core/src/types.ts:1127](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1127)
 
 ***
 
@@ -80,4 +80,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1128](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1128)
+[packages/core/src/types.ts:1128](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L1128)

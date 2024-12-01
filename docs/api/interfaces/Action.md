@@ -14,7 +14,7 @@ Similar action descriptions
 
 #### Defined in
 
-[packages/core/src/types.ts:388](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L388)
+[packages/core/src/types.ts:388](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L388)
 
 ***
 
@@ -26,7 +26,7 @@ Detailed description
 
 #### Defined in
 
-[packages/core/src/types.ts:391](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L391)
+[packages/core/src/types.ts:391](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L391)
 
 ***
 
@@ -38,7 +38,7 @@ Example usages
 
 #### Defined in
 
-[packages/core/src/types.ts:394](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L394)
+[packages/core/src/types.ts:394](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L394)
 
 ***
 
@@ -50,7 +50,7 @@ Handler function
 
 #### Defined in
 
-[packages/core/src/types.ts:397](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L397)
+[packages/core/src/types.ts:397](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L397)
 
 ***
 
@@ -62,7 +62,7 @@ Action name
 
 #### Defined in
 
-[packages/core/src/types.ts:400](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L400)
+[packages/core/src/types.ts:400](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L400)
 
 ***
 
@@ -74,4 +74,4 @@ Validation function
 
 #### Defined in
 
-[packages/core/src/types.ts:403](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L403)
+[packages/core/src/types.ts:403](https://github.com/madjin/eliza/blob/main/packages/core/src/types.ts#L403)

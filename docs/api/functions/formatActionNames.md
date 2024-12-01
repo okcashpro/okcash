@@ -20,4 +20,4 @@ A comma-separated string of action names.
 
 ## Defined in
 
-[packages/core/src/actions.ts:47](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions.ts#L47)
+[packages/core/src/actions.ts:47](https://github.com/madjin/eliza/blob/main/packages/core/src/actions.ts#L47)
