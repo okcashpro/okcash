@@ -26,7 +26,7 @@ const config = {
       "docusaurus-plugin-typedoc",
       {
         entryPoints: ["../packages/core/src/index.ts"],
-        tsconfig: "../tsconfig.json",
+        tsconfig: "../packages/core/tsconfig.json",
         out: "./api",
         skipErrorChecking: true,
         excludeExternals: false,

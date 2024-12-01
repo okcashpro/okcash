@@ -6,9 +6,9 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "dompurify": "3.2.1",
+        "dompurify": "3.2.2",
         "tsup": "8.3.5",
-        "uuid": "11.0.2",
+        "uuid": "11.0.3",
         "vitest": "2.1.5"
     },
     "scripts": {

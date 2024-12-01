@@ -8,7 +8,7 @@
         "@ai16z/eliza": "workspace:*",
         "@types/sql.js": "1.4.9",
         "sql.js": "1.12.0",
-        "uuid": "11.0.2"
+        "uuid": "11.0.3"
     },
     "devDependencies": {
         "tsup": "8.3.5"
