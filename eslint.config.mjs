@@ -12,7 +12,8 @@ export default [
             parser: typescript,
             parserOptions: {
                 ecmaVersion: "latest",
-                sourceType: "module"
+                sourceType: "module",
+                project: "./tsconfig.json", // Make sure your tsconfig includes @types/node
             },
             globals: {
                 // Add Node.js globals
