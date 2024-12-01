@@ -24,6 +24,7 @@
         "@ai16z/plugin-image-generation": "workspace:*",
         "@ai16z/plugin-node": "workspace:*",
         "@ai16z/plugin-solana": "workspace:*",
+        "@ai16z/plugin-icp": "workspace:*",
         "readline": "^1.3.0",
         "ws": "^8.18.0",
         "yargs": "17.7.2"

@@ -33,9 +33,10 @@ export type ActorCreator = <T>(
 ) => Promise<ActorSubclass<T>>;
 
 export type CreateMemeTokenArg = {
-    name?: string;
-    symbol?: string;
+    name: string;
+    symbol: string;
     description: string;
+    logo: string;
     twitter?: string;
     website?: string;
     telegram?: string;

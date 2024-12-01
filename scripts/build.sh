@@ -23,6 +23,7 @@ PACKAGES=(
     "core"
     "plugin-trustdb"
     "plugin-solana"
+    "plugin-icp"
     "plugin-starknet"
     "adapter-postgres"
     "adapter-sqlite"
