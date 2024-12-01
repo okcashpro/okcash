@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "cive": "^0.7.1",
+        "cive": "0.7.1",
         "@ai16z/eliza": "workspace:*"
     },
     "scripts": {
