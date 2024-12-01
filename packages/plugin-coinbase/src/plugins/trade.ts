@@ -1,4 +1,4 @@
-import { Coinbase, Trade } from "@coinbase/coinbase-sdk";
+import { Coinbase} from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
@@ -12,7 +12,7 @@ import {
     ModelClass,
     Provider,
 } from "@ai16z/eliza";
-import { executeTradeAndCharityTransfer, getWalletDetails, initializeWallet } from "../utils";
+import { executeTradeAndCharityTransfer, getWalletDetails } from "../utils";
 import { tradeTemplate } from "../templates";
 import { isTradeContent, TradeContent, TradeSchema } from "../types";
 import { readFile } from "fs/promises";

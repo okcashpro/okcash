@@ -25,7 +25,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import { createArrayCsvWriter } from "csv-writer";
-import { appendTransactionsToCsv, executeTransfer, executeTransferAndCharityTransfer, getCharityAddress, getWalletDetails, initializeWallet } from "../utils";
+import { appendTransactionsToCsv, executeTransfer, getCharityAddress, getWalletDetails, initializeWallet } from "../utils";
 
 // Dynamically resolve the file path to the src/plugins directory
 const __filename = fileURLToPath(import.meta.url);
