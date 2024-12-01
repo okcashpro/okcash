@@ -373,6 +373,26 @@ export async function generateText({
                 elizaLogger.debug("Received response from Heurist model.");
                 break;
             }
+            case ModelProviderName.GAIANET:
+                elizaLogger.debug("Initializing GAIANET model.");
+                const openai = createOpenAI({ apiKey, baseURL: endpoint });
+
+                const { text: openaiResponse } = await aiGenerateText({
+                    model: openai.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = openaiResponse;
+                elizaLogger.debug("Received response from GAIANET model.");
+                break;
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;

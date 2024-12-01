@@ -88,6 +88,8 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         ? "text-embedding-3-small"
         : runtime.character.modelProvider === ModelProviderName.OLLAMA
           ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
+            : runtime.character.modelProvider === ModelProviderName.GAIANET ?
+                settings.GAIANET_EMBEDDING_MODEL || "gaianet-embedding"
           : modelProvider.model?.[ModelClass.EMBEDDING] ||
             models[ModelProviderName.OPENAI].model[ModelClass.EMBEDDING];
 
@@ -108,6 +110,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     if (
         isNode &&
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
+        runtime.character.modelProvider !== ModelProviderName.GAIANET &&
         !settings.USE_OPENAI_EMBEDDING
     ) {
         return await getLocalEmbedding(input);
