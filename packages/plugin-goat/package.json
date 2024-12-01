@@ -6,7 +6,6 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@ai16z/plugin-trustdb": "workspace:*",
         "@goat-sdk/core": "0.3.7",
         "@goat-sdk/plugin-erc20": "0.1.5",
         "@goat-sdk/wallet-viem": "0.1.3",
