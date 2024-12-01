@@ -2,8 +2,13 @@ import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 
-import { type IAgentRuntime } from "@ai16z/eliza";
+import { Memory, Provider, State, type IAgentRuntime } from "@ai16z/eliza";
 import { viem } from "@goat-sdk/wallet-viem";
+
+
+// Add the chain you want to use, remember to update also
+// the EVM_PROVIDER_URL to the correct one for the chain
+export const chain = base;
 
 /**
  * Create a wallet client for the given runtime.
@@ -24,8 +29,26 @@ export async function getWalletClient(runtime: IAgentRuntime) {
 
     const walletClient = createWalletClient({
         account: privateKeyToAccount(privateKey as `0x${string}`),
-        chain: base,
+        chain: chain,
         transport: http(provider),
     });
     return viem(walletClient);
 }
+
+export const walletProvider: Provider = {
+    async get(
+        runtime: IAgentRuntime,
+        message: Memory,
+        state?: State
+    ): Promise<string | null> {
+        try {
+            const walletClient = await getWalletClient(runtime);
+            const address = walletClient.getAddress();
+            const balance = await walletClient.balanceOf(address);
+            return `EVM Wallet Address: ${address}\nBalance: ${balance} ETH`;
+        } catch (error) {
+            console.error("Error in EVM wallet provider:", error);
+            return null;
+        }
+    },
+};

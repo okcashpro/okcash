@@ -2,7 +2,6 @@ import {
     type WalletClient,
     type Plugin,
     getDeferredTools,
-    parametersToJsonExample,
     addParametersToDescription,
     type ChainForWalletClient,
     type DeferredTool,
@@ -16,7 +15,7 @@ import {
     ModelClass,
     type State,
     composeContext,
-    generateObject,
+    generateObjectV2,
 } from "@ai16z/eliza";
 
 type GetOnChainActionsParams<TWalletClient extends WalletClient> = {
@@ -50,7 +49,7 @@ export async function getOnChainActions<TWalletClient extends WalletClient>({
             ...action,
             name: action.name.toUpperCase(),
         }))
-        .map((tool) => createAction(tool, getWalletClient))
+        .map((tool) => createAction(tool, getWalletClient));
 }
 
 function createAction<TWalletClient extends WalletClient>(
@@ -82,8 +81,11 @@ function createAction<TWalletClient extends WalletClient>(
                 );
                 const parameters = await generateParameters(
                     runtime,
-                    parameterContext
+                    parameterContext,
+                    tool
                 );
+
+                console.log(`Parameters: ${JSON.stringify(parameters)}`);
 
                 const parsedParameters = tool.parameters.safeParse(parameters);
                 if (!parsedParameters.success) {
@@ -93,6 +95,12 @@ function createAction<TWalletClient extends WalletClient>(
                     });
                     return false;
                 }
+
+                console.log(
+                    `Executing action ${tool.name} with parameters: ${JSON.stringify(
+                        parsedParameters.data
+                    )}`
+                );
 
                 const result = await tool.method(
                     walletClient,
@@ -128,34 +136,27 @@ function composeParameterContext<TWalletClient extends WalletClient>(
     tool: DeferredTool<TWalletClient>,
     state: State
 ): string {
-    const contextTemplate = `Respond with a JSON markdown block containing only the extracted values for action "${
-        tool.name
-    }". Use null for any values that cannot be determined.
+    const contextTemplate = `{{recentMessages}}
 
-Example response:
-\`\`\`json
-${parametersToJsonExample(tool.parameters)}
-\`\`\`
-
-{{recentMessages}}
-
-Given the recent messages, extract the following information for the action "${
-        tool.name
-    }":
+Given the recent messages, extract the following information for the action "${tool.name}":
 ${addParametersToDescription("", tool.parameters)}
 `;
     return composeContext({ state, template: contextTemplate });
 }
 
-async function generateParameters(
+async function generateParameters<TWalletClient extends WalletClient>(
     runtime: IAgentRuntime,
-    context: string
+    context: string,
+    tool: DeferredTool<TWalletClient>
 ): Promise<unknown> {
-    return generateObject({
+    const { object } = await generateObjectV2({
         runtime,
         context,
         modelClass: ModelClass.SMALL,
+        schema: tool.parameters,
     });
+
+    return object;
 }
 
 function composeResponseContext<TWalletClient extends WalletClient>(
@@ -164,9 +165,30 @@ function composeResponseContext<TWalletClient extends WalletClient>(
     state: State
 ): string {
     const responseTemplate = `
+    # Action Examples
+{{actionExamples}}
+(Action examples are for reference only. Do not use the information from them in your response.)
+
+# Knowledge
+{{knowledge}}
+
+# Task: Generate dialog and actions for the character {{agentName}}.
+About {{agentName}}:
+{{bio}}
+{{lore}}
+
+{{providers}}
+
+{{attachments}}
+
+# Capabilities
+Note that {{agentName}} is capable of reading/seeing/hearing various forms of media, including images, videos, audio, plaintext and PDFs. Recent attachments have been included above under the "Attachments" section.
+
 The action "${tool.name}" was executed successfully.
 Here is the result:
 ${JSON.stringify(result)}
+
+{{actions}}
 
 Respond to the message knowing that the action was successful and these were the previous messages:
 {{recentMessages}}
