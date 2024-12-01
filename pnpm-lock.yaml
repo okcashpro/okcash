@@ -24,7 +24,7 @@ importers:
         specifier: 5.6.0
         version: 5.6.0
       eslint-plugin-vitest:
-        specifier: ^0.5.4
+        specifier: 0.5.4
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.16.0(@typescript-eslint/parser@8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       ollama-ai-provider:
         specifier: 0.16.1
@@ -55,8 +55,8 @@ importers:
         specifier: 8.16.0
         version: 8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)
       '@vitest/eslint-plugin':
-        specifier: 1.0.1
-        version: 1.0.1(@typescript-eslint/utils@8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
+        specifier: 1.1.13
+        version: 1.1.13(@typescript-eslint/utils@8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))
       concurrently:
         specifier: 9.1.0
         version: 9.1.0
@@ -141,6 +141,9 @@ importers:
       '@ai16z/plugin-evm':
         specifier: workspace:*
         version: link:../packages/plugin-evm
+      '@ai16z/plugin-icp':
+        specifier: workspace:*
+        version: link:../packages/plugin-icp
       '@ai16z/plugin-image-generation':
         specifier: workspace:*
         version: link:../packages/plugin-image-generation
@@ -6343,16 +6346,14 @@ packages:
       '@vitest/browser':
         optional: true
 
-  '@vitest/eslint-plugin@1.0.1':
-    resolution: {integrity: sha512-albpL56cL9XMwHJWCWZqjDxkuDkBXBF3WpPGOv6q2WA3cipCP41cKEwfSGktoRNGmPN77wuX452O8pM+z+ApNw==}
+  '@vitest/eslint-plugin@1.1.13':
+    resolution: {integrity: sha512-oabbCT4fCQfmFNtH2UuDfHx1d7dzi+VD3qwCpBfECfyzQq/Re9u7qTtE2WqV/hAuAOALw3ZVRiub2mXmpTyn/Q==}
     peerDependencies:
       '@typescript-eslint/utils': '>= 8.0'
       eslint: '>= 8.57.0'
       typescript: '>= 5.0.0'
       vitest: '*'
     peerDependenciesMeta:
-      '@typescript-eslint/utils':
-        optional: true
       typescript:
         optional: true
       vitest:
@@ -22599,11 +22600,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/eslint-plugin@1.0.1(@typescript-eslint/utils@8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))':
+  '@vitest/eslint-plugin@1.1.13(@typescript-eslint/utils@8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3))(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)(vitest@2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0))':
     dependencies:
+      '@typescript-eslint/utils': 8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)
       eslint: 9.16.0(jiti@2.4.0)
     optionalDependencies:
-      '@typescript-eslint/utils': 8.16.0(eslint@9.16.0(jiti@2.4.0))(typescript@5.6.3)
       typescript: 5.6.3
       vitest: 2.1.5(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.8)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.36.0)
 
