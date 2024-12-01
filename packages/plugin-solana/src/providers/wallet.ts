@@ -372,7 +372,10 @@ const walletProvider: Provider = {
         try {
             const publicKey = runtime.getSetting("SOLANA_PUBLIC_KEY");
             if (!publicKey) {
-                throw new Error("SOLANA_PUBLIC_KEY not configured");
+                console.error(
+                    "SOLANA_PUBLIC_KEY not configured, skipping wallet injection"
+                );
+                return "";
             }
 
             const connection = new Connection(
