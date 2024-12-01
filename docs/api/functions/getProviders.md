@@ -28,4 +28,4 @@ A string that concatenates the outputs of each provider.
 
 ## Defined in
 
-[packages/core/src/providers.ts:10](https://github.com/madjin/eliza/blob/main/packages/core/src/providers.ts#L10)
+[packages/core/src/providers.ts:10](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers.ts#L10)
