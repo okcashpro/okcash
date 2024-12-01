@@ -21,11 +21,12 @@ export class WalletProvider {
             throw new Error("Private key is required");
         }
         try {
-            const rawKey = Buffer.from(this.privateKey, "base64");
-            const privateKeyBytes = rawKey.subarray(16, 48);
+            const privateKeyBytes = Buffer.from(this.privateKey, "hex");
+            if (privateKeyBytes.length !== 32) {
+                throw new Error("Invalid private key length");
+            }
             return Ed25519KeyIdentity.fromSecretKey(privateKeyBytes);
         } catch (error) {
-            console.error("Error creating identity:", error);
             throw new Error("Failed to create ICP identity");
         }
     };
@@ -86,7 +87,6 @@ export const icpWalletProvider: Provider = {
                 createActor: wallet.createActor,
             };
         } catch (error: any) {
-            console.error("Error in wallet provider:", error);
             return {
                 wallet: null,
                 identity: null,
