@@ -185,34 +185,10 @@ export class LlamaService extends Service {
         this.modelUrl =
             "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true";
         const modelName = "model.gguf";
-
-        function findCacheFolder() {
-            if (process.env.LLAMALOCAL_PATH) {
-                return process.env.LLAMALOCAL_PATH.trim();
-            }
-
-            // see if current file path contains /eliza/
-            if (import.meta.url.includes("/eliza/")) {
-                // find /eliza/cache in the path
-                const cachePath = import.meta.url.split("/eliza/")[0] + "/eliza/cache";
-                return cachePath;
-            }
-
-            // if cache path not found, throw a warning and return "./"
-            elizaLogger.warn(
-                "LlamaService: No cache path found, using current directory-- rebuilds will probably erase the model - please set env var LLAMALOCAL_PATH"
-            );
-            return "./";
-        }
-
         this.modelPath = path.join(
             process.env.LLAMALOCAL_PATH?.trim() ?? "./",
             modelName
         );
-
-        console.log("*** MODEL PATH: ", this.modelPath);
-
-        console.log("findCacheFolder: ", findCacheFolder());
         this.ollamaModel = process.env.OLLAMA_MODEL;
     }
 
