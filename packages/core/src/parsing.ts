@@ -2,7 +2,7 @@ const jsonBlockPattern = /```json\n([\s\S]*?)\n```/;
 
 export const messageCompletionFooter = `\nResponse format should be formatted in a JSON block like this:
 \`\`\`json
-{ "user": "{{agentName}}", "text": string, "action": "string" }
+{ "user": "{{agentName}}", "text": "string", "action": "string" }
 \`\`\``;
 
 export const shouldRespondFooter = `The available options are [RESPOND], [IGNORE], or [STOP]. Choose the most appropriate option.
