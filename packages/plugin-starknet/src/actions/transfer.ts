@@ -168,10 +168,7 @@ export default {
             const recipient =
                 content.recipient ??
                 (await getAddressFromName(account, content.starkName));
-            const transferCall = erc20Token.transferCall(
-                recipient,
-                amountWei
-            );
+            const transferCall = erc20Token.transferCall(recipient, amountWei);
 
             elizaLogger.success(
                 "Transferring",

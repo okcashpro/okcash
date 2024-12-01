@@ -12,7 +12,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:589](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L589)
+[packages/core/src/types.ts:595](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L595)
 
 ***
 
@@ -22,7 +22,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:590](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L590)
+[packages/core/src/types.ts:596](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L596)
 
 ***
 
@@ -32,7 +32,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:591](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L591)
+[packages/core/src/types.ts:597](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L597)
 
 ***
 
@@ -42,4 +42,4 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:592](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L592)
+[packages/core/src/types.ts:598](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L598)

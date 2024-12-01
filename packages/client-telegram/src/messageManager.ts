@@ -2,7 +2,7 @@ import { Message } from "@telegraf/types";
 import { Context, Telegraf } from "telegraf";
 
 import { composeContext, elizaLogger, ServiceType } from "@ai16z/eliza";
-import { embeddingZeroVector } from "@ai16z/eliza";
+import { getEmbeddingZeroVector } from "@ai16z/eliza";
 import {
     Content,
     HandlerCallback,
@@ -405,7 +405,7 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.date * 1000,
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(),
             };
 
             // Create memory
@@ -468,7 +468,7 @@ export class MessageManager {
                                 inReplyTo: messageId,
                             },
                             createdAt: sentMessage.date * 1000,
-                            embedding: embeddingZeroVector,
+                            embedding: getEmbeddingZeroVector(),
                         };
 
                         // Set action to CONTINUE for all messages except the last one

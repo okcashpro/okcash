@@ -1,4 +1,4 @@
-import { embed } from "./embedding.ts";
+import { embed, getEmbeddingZeroVector } from "./embedding.ts";
 import elizaLogger from "./logger.ts";
 import {
     IAgentRuntime,
@@ -6,9 +6,6 @@ import {
     type Memory,
     type UUID,
 } from "./types.ts";
-
-export const embeddingDimension = 1536;
-export const embeddingZeroVector = Array(embeddingDimension).fill(0);
 
 const defaultMatchThreshold = 0.1;
 const defaultMatchCount = 10;
@@ -73,7 +70,7 @@ export class MemoryManager implements IMemoryManager {
         } catch (error) {
             elizaLogger.error("Failed to generate embedding:", error);
             // Fallback to zero vector if embedding fails
-            memory.embedding = embeddingZeroVector.slice();
+            memory.embedding = getEmbeddingZeroVector().slice();
         }
 
         return memory;

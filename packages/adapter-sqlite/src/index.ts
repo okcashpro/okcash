@@ -2,7 +2,6 @@ export * from "./sqliteTables.ts";
 export * from "./sqlite_vec.ts";
 
 import { DatabaseAdapter, IDatabaseCacheAdapter } from "@ai16z/eliza";
-import { embeddingZeroVector } from "@ai16z/eliza";
 import {
     Account,
     Actor,
@@ -222,7 +221,7 @@ export class SqliteDatabaseAdapter
             memory.id ?? v4(),
             tableName,
             content,
-            new Float32Array(memory.embedding ?? embeddingZeroVector), // Store as Float32Array
+            new Float32Array(memory.embedding!), // Store as Float32Array
             memory.userId,
             memory.roomId,
             memory.agentId,

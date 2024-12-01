@@ -198,16 +198,16 @@ export class TokenProvider {
             };
 
             const response = await fetch(this.GRAPHQL_ENDPOINT, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': settings.CODEX_API_KEY
+                    "Content-Type": "application/json",
+                    Authorization: settings.CODEX_API_KEY,
                 },
                 body: JSON.stringify({
                     query,
-                    variables
-                })
-            }).then(res => res.json());
+                    variables,
+                }),
+            }).then((res) => res.json());
 
             const token = response.data?.data?.token;
 

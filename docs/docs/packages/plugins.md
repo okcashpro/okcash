@@ -105,7 +105,7 @@ Integrates Buttplug.io for intimate toy control:
 1. Install the desired plugin package:
 
 ```bash
-pnpm add @eliza/plugin-[name]
+pnpm add @ai16z/plugin-[name]
 ```
 
 2. Import and register the plugin in your character configuration:

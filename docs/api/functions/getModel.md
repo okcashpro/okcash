@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/models.ts:263](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L263)
+[packages/core/src/models.ts:329](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L329)

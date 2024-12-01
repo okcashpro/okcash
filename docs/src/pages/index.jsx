@@ -1,3 +1,4 @@
+import React from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import Layout from "@theme/Layout";

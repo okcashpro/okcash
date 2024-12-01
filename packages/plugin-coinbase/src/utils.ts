@@ -1,11 +1,12 @@
-import { Wallet, WalletData } from "@coinbase/coinbase-sdk";
+import { Coinbase, Wallet, WalletData } from "@coinbase/coinbase-sdk";
 import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
 import fs from "fs";
 import path from "path";
+import { EthereumTransaction } from "@coinbase/coinbase-sdk/dist/client";
 
 export async function initializeWallet(
     runtime: IAgentRuntime,
-    networkId: string
+    networkId: string = Coinbase.networks.EthereumMainnet
 ) {
     let wallet: Wallet;
     const storedSeed =
@@ -122,4 +123,81 @@ export async function updateCharacterSecrets(
         return false;
     }
     return true;
+}
+
+export const getAssetType = (transaction: EthereumTransaction) => {
+    // Check for ETH
+    if (transaction.value && transaction.value !== "0") {
+        return "ETH";
+    }
+
+    // Check for ERC-20 tokens
+    if (transaction.token_transfers && transaction.token_transfers.length > 0) {
+        return transaction.token_transfers
+            .map((transfer) => {
+                return transfer.token_id;
+            })
+            .join(", ");
+    }
+
+    return "N/A";
+};
+
+/**
+ * Fetches and formats wallet balances and recent transactions.
+ *
+ * @param {IAgentRuntime} runtime - The runtime for wallet initialization.
+ * @param {string} networkId - The network ID (optional, defaults to ETH mainnet).
+ * @returns {Promise<{balances: Array<{asset: string, amount: string}>, transactions: Array<any>}>} - An object with formatted balances and transactions.
+ */
+export async function getWalletDetails(
+    runtime: IAgentRuntime,
+    networkId: string = Coinbase.networks.EthereumMainnet
+): Promise<{
+    balances: Array<{ asset: string; amount: string }>;
+    transactions: Array<{
+        timestamp: string;
+        amount: string;
+        asset: string; // Ensure getAssetType is implemented
+        status: string;
+        transactionUrl: string;
+    }>;
+}> {
+    try {
+        // Initialize the wallet, defaulting to the specified network or ETH mainnet
+        const wallet = await initializeWallet(runtime, networkId);
+
+        // Fetch balances
+        const balances = await wallet.listBalances();
+        const formattedBalances = Array.from(balances, (balance) => ({
+            asset: balance[0],
+            amount: balance[1].toString(),
+        }));
+
+        // Fetch the wallet's recent transactions
+        const walletAddress = await wallet.getDefaultAddress();
+        const transactions = (
+            await walletAddress.listTransactions({ limit: 10 })
+        ).data;
+
+        const formattedTransactions = transactions.map((transaction) => {
+            const content = transaction.content();
+            return {
+                timestamp: content.block_timestamp || "N/A",
+                amount: content.value || "N/A",
+                asset: getAssetType(content) || "N/A", // Ensure getAssetType is implemented
+                status: transaction.getStatus(),
+                transactionUrl: transaction.getTransactionLink() || "N/A",
+            };
+        });
+
+        // Return formatted data
+        return {
+            balances: formattedBalances,
+            transactions: formattedTransactions,
+        };
+    } catch (error) {
+        console.error("Error fetching wallet details:", error);
+        throw new Error("Unable to retrieve wallet details.");
+    }
 }

@@ -14,7 +14,7 @@ Evaluation context
 
 #### Defined in
 
-[packages/core/src/types.ts:407](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L407)
+[packages/core/src/types.ts:413](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L413)
 
 ***
 
@@ -26,7 +26,7 @@ Example messages
 
 #### Defined in
 
-[packages/core/src/types.ts:410](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L410)
+[packages/core/src/types.ts:416](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L416)
 
 ***
 
@@ -38,4 +38,4 @@ Expected outcome
 
 #### Defined in
 
-[packages/core/src/types.ts:413](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L413)
+[packages/core/src/types.ts:419](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L419)

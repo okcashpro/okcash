@@ -25,7 +25,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import { createArrayCsvWriter } from "csv-writer";
-import { initializeWallet } from "../utils";
+import { getWalletDetails, initializeWallet } from "../utils";
 
 // Dynamically resolve the file path to the src/plugins directory
 const __filename = fileURLToPath(import.meta.url);
@@ -34,11 +34,19 @@ const baseDir = path.resolve(__dirname, "../../plugin-coinbase/src/plugins");
 const csvFilePath = path.join(baseDir, "transactions.csv");
 
 export const massPayoutProvider: Provider = {
-    get: async (_runtime: IAgentRuntime, _message: Memory) => {
+    get: async (runtime: IAgentRuntime, _message: Memory) => {
         try {
+            Coinbase.configure({
+                apiKeyName:
+                    runtime.getSetting("COINBASE_API_KEY") ??
+                    process.env.COINBASE_API_KEY,
+                privateKey:
+                    runtime.getSetting("COINBASE_PRIVATE_KEY") ??
+                    process.env.COINBASE_PRIVATE_KEY,
+            });
             elizaLogger.log("Reading CSV file from:", csvFilePath);
 
-            // Check if the file exists; if not, create it with headers
+            // Ensure the CSV file exists
             if (!fs.existsSync(csvFilePath)) {
                 elizaLogger.warn("CSV file not found. Creating a new one.");
                 const csvWriter = createArrayCsvWriter({
@@ -62,17 +70,26 @@ export const massPayoutProvider: Provider = {
                 skip_empty_lines: true,
             });
 
+            const { balances, transactions } = await getWalletDetails(runtime);
+
             elizaLogger.log("Parsed CSV records:", records);
-            return records.map((record: any) => ({
-                address: record["Address"] || undefined,
-                amount: parseFloat(record["Amount"]) || undefined,
-                status: record["Status"] || undefined,
-                errorCode: record["Error Code"] || "",
-                transactionUrl: record["Transaction URL"] || "",
-            }));
+            elizaLogger.log("Current Balances:", balances);
+            elizaLogger.log("Last Transactions:", transactions);
+
+            return {
+                currentTransactions: records.map((record: any) => ({
+                    address: record["Address"] || undefined,
+                    amount: parseFloat(record["Amount"]) || undefined,
+                    status: record["Status"] || undefined,
+                    errorCode: record["Error Code"] || "",
+                    transactionUrl: record["Transaction URL"] || "",
+                })),
+                balances,
+                transactionHistory: transactions,
+            };
         } catch (error) {
             elizaLogger.error("Error in massPayoutProvider:", error);
-            return [];
+            return { csvRecords: [], balances: [], transactions: [] };
         }
     },
 };
@@ -367,7 +384,7 @@ Check the CSV file for full details.`,
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Distribute 0.0001 ETH on base network to 0xA0ba2ACB5846A54834173fB0DD9444F756810f06 and 0xF14F2c49aa90BaFA223EE074C1C33b59891826bF",
+                    text: "Distribute 0.0001 ETH on base to 0xA0ba2ACB5846A54834173fB0DD9444F756810f06 and 0xF14F2c49aa90BaFA223EE074C1C33b59891826bF",
                 },
             },
             {

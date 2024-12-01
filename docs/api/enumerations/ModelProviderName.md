@@ -12,7 +12,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:208](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L208)
+[packages/core/src/types.ts:211](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L211)
 
 ***
 
@@ -22,7 +22,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:209](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L209)
+[packages/core/src/types.ts:212](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L212)
 
 ***
 
@@ -32,7 +32,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:210](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L210)
+[packages/core/src/types.ts:213](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L213)
 
 ***
 
@@ -42,7 +42,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:211](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L211)
+[packages/core/src/types.ts:214](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L214)
 
 ***
 
@@ -52,7 +52,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:212](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L212)
+[packages/core/src/types.ts:215](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L215)
 
 ***
 
@@ -62,7 +62,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:213](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L213)
+[packages/core/src/types.ts:216](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L216)
 
 ***
 
@@ -72,7 +72,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:214](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L214)
+[packages/core/src/types.ts:217](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L217)
 
 ***
 
@@ -82,7 +82,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:215](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L215)
+[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
 
 ***
 
@@ -92,7 +92,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:216](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L216)
+[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
 
 ***
 
@@ -102,7 +102,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:217](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L217)
+[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
 
 ***
 
@@ -112,7 +112,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
+[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L221)
 
 ***
 
@@ -122,7 +122,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
+[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L222)
 
 ***
 
@@ -132,4 +132,34 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
+[packages/core/src/types.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L223)
+
+***
+
+### GALADRIEL
+
+> **GALADRIEL**: `"galadriel"`
+
+#### Defined in
+
+[packages/core/src/types.ts:224](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L224)
+
+***
+
+### FAL
+
+> **FAL**: `"falai"`
+
+#### Defined in
+
+[packages/core/src/types.ts:225](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L225)
+
+***
+
+### GAIANET
+
+> **GAIANET**: `"gaianet"`
+
+#### Defined in
+
+[packages/core/src/types.ts:226](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L226)

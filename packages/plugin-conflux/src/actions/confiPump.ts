@@ -5,19 +5,15 @@ import {
     State,
     HandlerCallback,
 } from "@ai16z/eliza";
+import { generateObjectV2, composeContext, ModelClass } from "@ai16z/eliza";
 import {
-    generateObjectV2,
-    composeContext,
-    ModelClass,
-} from "@ai16z/eliza";
-import { 
-    createPublicClient, 
-    createWalletClient, 
-    http, 
+    createPublicClient,
+    createWalletClient,
+    http,
     parseEther,
     encodeFunctionData,
     WalletClient,
-    Account 
+    Account,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { confluxESpaceTestnet, confluxESpace } from "viem/chains";
@@ -39,11 +35,13 @@ async function ensureAllowance(
     rpcUrl: string,
     account: Account,
     tokenAddress: `0x${string}`,
-    memeAddress: `0x${string}`, 
+    memeAddress: `0x${string}`,
     amount: bigint
 ) {
-    console.log(`Checking allowance: token: ${tokenAddress} meme: ${memeAddress} amount: ${amount}`);
-    
+    console.log(
+        `Checking allowance: token: ${tokenAddress} meme: ${memeAddress} amount: ${amount}`
+    );
+
     const publicClient = createPublicClient({
         transport: http(rpcUrl),
         chain: confluxESpaceTestnet,
@@ -59,8 +57,10 @@ async function ensureAllowance(
     console.log("allowance:", allowance);
 
     if (allowance < amount) {
-        console.log(`allowance(${allowance}) is less than amount(${amount}), approving...`);
-        
+        console.log(
+            `allowance(${allowance}) is less than amount(${amount}), approving...`
+        );
+
         const hash = await walletClient.sendTransaction({
             account,
             to: tokenAddress,
@@ -84,7 +84,8 @@ async function ensureAllowance(
 // Main ConfiPump action definition
 export const confiPump: Action = {
     name: "CONFI_PUMP",
-    description: "Perform actions on ConfiPump, for example create a new token, buy a token, or sell a token.",
+    description:
+        "Perform actions on ConfiPump, for example create a new token, buy a token, or sell a token.",
     similes: ["SELL_TOKEN", "BUY_TOKEN", "CREATE_TOKEN"],
     examples: [
         // Create token example
@@ -103,8 +104,10 @@ export const confiPump: Action = {
                     content: {
                         tokenInfo: {
                             symbol: "GLITCHIZA",
-                            address: "EugPwuZ8oUMWsYHeBGERWvELfLGFmA1taDtmY8uMeX6r",
-                            creator: "9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
+                            address:
+                                "EugPwuZ8oUMWsYHeBGERWvELfLGFmA1taDtmY8uMeX6r",
+                            creator:
+                                "9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
                             name: "GLITCHIZA",
                             description: "A GLITCHIZA token",
                         },
@@ -234,8 +237,15 @@ export const confiPump: Action = {
                     if (!isPumpBuyContent(contentObject)) {
                         throw new Error("Invalid content");
                     }
-                    value = parseUnits(contentObject.params.value.toString(), 18);
-                    console.log("buying: ", contentObject.params.tokenAddress, value);
+                    value = parseUnits(
+                        contentObject.params.value.toString(),
+                        18
+                    );
+                    console.log(
+                        "buying: ",
+                        contentObject.params.tokenAddress,
+                        value
+                    );
                     data = encodeFunctionData({
                         abi: MEMEABI,
                         functionName: "buy",
@@ -271,7 +281,9 @@ export const confiPump: Action = {
                         rpcUrl,
                         account,
                         tokenAddress as `0x${string}`,
-                        runtime.getSetting("CONFLUX_MEME_CONTRACT_ADDRESS") as `0x${string}`,
+                        runtime.getSetting(
+                            "CONFLUX_MEME_CONTRACT_ADDRESS"
+                        ) as `0x${string}`,
                         amountUnits
                     );
 
@@ -290,7 +302,9 @@ export const confiPump: Action = {
                 chain: confluxESpaceTestnet,
             });
 
-            const memeContractAddress = runtime.getSetting("CONFLUX_MEME_CONTRACT_ADDRESS") as `0x${string}`;
+            const memeContractAddress = runtime.getSetting(
+                "CONFLUX_MEME_CONTRACT_ADDRESS"
+            ) as `0x${string}`;
 
             const simulate = await publicClient.call({
                 to: memeContractAddress,

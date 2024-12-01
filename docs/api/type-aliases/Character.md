@@ -38,6 +38,12 @@ Optional system prompt
 
 Model provider to use
 
+### imageModelProvider?
+
+> `optional` **imageModelProvider**: [`ModelProviderName`](../enumerations/ModelProviderName.md)
+
+Image model provider to use, if different from modelProvider
+
 ### modelEndpointOverride?
 
 > `optional` **modelEndpointOverride**: `string`
@@ -145,12 +151,6 @@ Example messages
 > **postExamples**: `string`[]
 
 Example posts
-
-### people
-
-> **people**: `string`[]
-
-Known people
 
 ### topics
 
@@ -312,4 +312,4 @@ Optional Twitter profile
 
 ## Defined in
 
-[packages/core/src/types.ts:597](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L597)
+[packages/core/src/types.ts:603](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L603)

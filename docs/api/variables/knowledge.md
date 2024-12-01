@@ -52,4 +52,4 @@
 
 ## Defined in
 
-[packages/core/src/knowledge.ts:115](https://github.com/ai16z/eliza/blob/main/packages/core/src/knowledge.ts#L115)
+[packages/core/src/knowledge.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/knowledge.ts#L150)

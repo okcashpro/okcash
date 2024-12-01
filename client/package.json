@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc -b && vite build",
+        "build": "vite build",
+        "check-types": "tsc --noEmit",
         "lint": "eslint .",
         "preview": "vite preview"
     },
@@ -34,7 +35,6 @@
         "@types/react-dom": "18.3.1",
         "@vitejs/plugin-react": "4.3.3",
         "autoprefixer": "10.4.20",
-        "eslint": "9.13.0",
         "eslint-plugin-react-hooks": "5.0.0",
         "eslint-plugin-react-refresh": "0.4.14",
         "globals": "15.11.0",

@@ -5,7 +5,7 @@ import {
     Memory,
     State,
     UUID,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     elizaLogger,
     stringToUuid,
 } from "@ai16z/eliza";
@@ -82,7 +82,7 @@ class RequestQueue {
 }
 
 export class ClientBase extends EventEmitter {
-    static _twitterClient: Scraper;
+    static _twitterClients: { [accountIdentifier: string]: Scraper } = {};
     twitterClient: Scraper;
     runtime: IAgentRuntime;
     directions: string;
@@ -137,11 +137,12 @@ export class ClientBase extends EventEmitter {
     constructor(runtime: IAgentRuntime) {
         super();
         this.runtime = runtime;
-        if (ClientBase._twitterClient) {
-            this.twitterClient = ClientBase._twitterClient;
+        const username = this.runtime.getSetting("TWITTER_USERNAME");
+        if (ClientBase._twitterClients[username]) {
+            this.twitterClient = ClientBase._twitterClients[username];
         } else {
             this.twitterClient = new Scraper();
-            ClientBase._twitterClient = this.twitterClient;
+            ClientBase._twitterClients[username] = this.twitterClient;
         }
 
         this.directions =
@@ -178,7 +179,7 @@ export class ClientBase extends EventEmitter {
                 username,
                 this.runtime.getSetting("TWITTER_PASSWORD"),
                 this.runtime.getSetting("TWITTER_EMAIL"),
-                this.runtime.getSetting("TWITTER_2FA_SECRET")
+                this.runtime.getSetting("TWITTER_2FA_SECRET") || undefined
             );
 
             if (await this.twitterClient.isLoggedIn()) {
@@ -420,7 +421,7 @@ export class ClientBase extends EventEmitter {
                         content: content,
                         agentId: this.runtime.agentId,
                         roomId,
-                        embedding: embeddingZeroVector,
+                        embedding: getEmbeddingZeroVector(),
                         createdAt: tweet.timestamp * 1000,
                     });
 
@@ -533,7 +534,7 @@ export class ClientBase extends EventEmitter {
                 content: content,
                 agentId: this.runtime.agentId,
                 roomId,
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(),
                 createdAt: tweet.timestamp * 1000,
             });
 
@@ -575,7 +576,7 @@ export class ClientBase extends EventEmitter {
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(),
                 });
             }
 
