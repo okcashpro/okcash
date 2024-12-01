@@ -30,6 +30,7 @@ PACKAGES=(
     "plugin-trustdb"
     "plugin-solana"
     "plugin-starknet"
+    "plugin-icp"
     "plugin-conflux"
     "plugin-0g"
     "plugin-bootstrap"
