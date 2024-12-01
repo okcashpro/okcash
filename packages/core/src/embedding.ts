@@ -21,19 +21,25 @@ export const getEmbeddingConfig = () => ({
             ? 1536 // OpenAI
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? 1024 // Ollama mxbai-embed-large
-              : 384, // BGE
+              :settings.USE_GAIANET_EMBEDDING?.toLowerCase() === "true"
+                ? 1536 // GaiaNet
+                : 384, // BGE
     model:
         settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
             ? "text-embedding-3-small"
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
-              : "BGE-small-en-v1.5",
+              : settings.USE_GAIANET_EMBEDDING?.toLowerCase() === "true"
+                ? settings.GAIANET_EMBEDDING_MODEL || "nomic-embed"
+                : "BGE-small-en-v1.5",
     provider:
         settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
             ? "OpenAI"
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? "Ollama"
-              : "BGE",
+              : settings.USE_GAIANET_EMBEDDING?.toLowerCase() === "true"
+                ? "GaiaNet"
+                : "BGE",
 });
 
 async function getRemoteEmbedding(
@@ -103,6 +109,7 @@ export function getEmbeddingType(runtime: IAgentRuntime): "local" | "remote" {
     const isLocal =
         isNode &&
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
+        runtime.character.modelProvider !== ModelProviderName.GAIANET &&
         !settings.USE_OPENAI_EMBEDDING;
 
     return isLocal ? "local" : "remote";
@@ -180,6 +187,17 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                 runtime.character.modelEndpointOverride ||
                 models[ModelProviderName.OLLAMA].endpoint,
             isOllama: true,
+            dimensions: config.dimensions,
+        });
+    }
+
+    if (config.provider=="GaiaNet") {
+        return await getRemoteEmbedding(input, {
+            model: config.model,
+            endpoint:
+                runtime.character.modelEndpointOverride ||
+                models[ModelProviderName.GAIANET].endpoint,
+            apiKey: settings.GAIANET_API_KEY || runtime.token,
             dimensions: config.dimensions,
         });
     }

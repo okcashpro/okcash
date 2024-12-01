@@ -52,4 +52,4 @@ Optional clients
 
 ## Defined in
 
-[packages/core/src/types.ts:566](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L566)
+[packages/core/src/types.ts:568](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L568)

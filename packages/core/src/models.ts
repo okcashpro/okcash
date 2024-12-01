@@ -304,6 +304,26 @@ export const models: Models = {
             [ModelClass.IMAGE]: "fal-ai/flux-lora",
         },
     },
+    [ModelProviderName.GAIANET]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            repetition_penalty: 0.4,
+            temperature: 0.7,
+        },
+        endpoint: settings.GAIANET_SERVER_URL || "http://localhost:8080/v1",
+        model: {
+            [ModelClass.SMALL]:
+                settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.MEDIUM]:
+                settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.LARGE]:
+                settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.EMBEDDING]:
+                settings.GAIANET_EMBEDDING_MODEL || "nomic-embed",
+        },
+    }
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
