@@ -381,6 +381,21 @@ export const models: Models = {
             [ModelClass.EMBEDDING]: "doubao-embedding",
         },
     },
+    [ModelProviderName.HYPERBOLIC]: {
+        endpoint: "https://api.hyperbolic.xyz/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: "meta-llama/Llama-3.2-3B-Instruct",
+            [ModelClass.MEDIUM]: "meta-llama/Meta-Llama-3.1-70B-Instruct",
+            [ModelClass.LARGE]: "meta-llama/Meta-Llama-3.1-405-Instruct",
+            [ModelClass.IMAGE]: "FLUX.1-dev",
+        },
+    },
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
