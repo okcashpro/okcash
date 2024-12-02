@@ -13,7 +13,8 @@
         "viem": "^2.21.45"
     },
     "scripts": {
-        "build": "tsup --format esm --dts"
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"
