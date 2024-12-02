@@ -128,25 +128,21 @@ const imageGeneration: Action = {
                 prompt: imagePrompt,
                 width: options.width || 1024,
                 height: options.height || 1024,
-                ...(options.count !== undefined
-                    ? { count: options.count || 1 }
-                    : {}),
-                ...(options.negativePrompt !== undefined
+                ...(options.count != null ? { count: options.count || 1 } : {}),
+                ...(options.negativePrompt != null
                     ? { negativePrompt: options.negativePrompt }
                     : {}),
-                ...(options.numIterations !== undefined
+                ...(options.numIterations != null
                     ? { numIterations: options.numIterations }
                     : {}),
-                ...(options.guidanceScale !== undefined
+                ...(options.guidanceScale != null
                     ? { guidanceScale: options.guidanceScale }
                     : {}),
-                ...(options.seed !== undefined ? { seed: options.seed } : {}),
-                ...(options.modelId !== undefined
+                ...(options.seed != null ? { seed: options.seed } : {}),
+                ...(options.modelId != null
                     ? { modelId: options.modelId }
                     : {}),
-                ...(options.jobId !== undefined
-                    ? { jobId: options.jobId }
-                    : {}),
+                ...(options.jobId != null ? { jobId: options.jobId } : {}),
             },
             runtime
         );

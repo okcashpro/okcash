@@ -107,7 +107,6 @@ export const models: Models = {
             [ModelClass.EMBEDDING]: "llama-3.1-8b-instant",
         },
     },
-    // TODO: Remove LLAMACLOUD and just use Together
     [ModelProviderName.LLAMACLOUD]: {
         settings: {
             stop: [],
