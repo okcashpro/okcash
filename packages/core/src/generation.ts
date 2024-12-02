@@ -806,11 +806,6 @@ export const generateImage = async (
     data?: string[];
     error?: any;
 }> => {
-    const { prompt, width, height } = data;
-    let { count } = data;
-    if (!count) {
-        count = 1;
-    }
 
     const model = getModel(runtime.imageModelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.imageModelProvider].imageSettings;
@@ -866,16 +861,18 @@ export const generateImage = async (
             const imageURL = await response.json();
             return { success: true, data: [imageURL] };
         } else if (
+            // TODO: Fix LLAMACLOUD -> Together?
             runtime.imageModelProvider === ModelProviderName.LLAMACLOUD
         ) {
             const together = new Together({ apiKey: apiKey as string });
+            // Fix: steps 4 is for schnell; 28 is for dev. 
             const response = await together.images.create({
                 model: "black-forest-labs/FLUX.1-schnell",
-                prompt,
-                width,
-                height,
+                data.prompt,
+                data.width,
+                data.height,
                 steps: modelSettings?.steps ?? 4,
-                n: count,
+                n: data.count,
             });
             const urls: string[] = [];
             for (let i = 0; i < response.data.length; i++) {
@@ -902,11 +899,11 @@ export const generateImage = async (
 
             // Prepare the input parameters according to their schema
             const input = {
-                prompt: prompt,
+                prompt: data.prompt,
                 image_size: "square" as const,
                 num_inference_steps: modelSettings?.steps ?? 50,
-                guidance_scale: 3.5,
-                num_images: count,
+                guidance_scale: data.guidanceScale || 3.5,
+                num_images: data.count,
                 enable_safety_checker: true,
                 output_format: "png" as const,
                 seed: data.seed ?? 6252023,
@@ -956,9 +953,9 @@ export const generateImage = async (
             const openai = new OpenAI({ apiKey: apiKey as string });
             const response = await openai.images.generate({
                 model,
-                prompt,
+                data.prompt,
                 size: targetSize as "1024x1024" | "1792x1024" | "1024x1792",
-                n: count,
+                n: data.count,
                 response_format: "b64_json",
             });
             const base64s = response.data.map(

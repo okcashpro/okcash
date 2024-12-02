@@ -11,7 +11,7 @@ import { generateImage } from "@ai16z/eliza";
 
 import fs from "fs";
 import path from "path";
-import { validateImageGenConfig } from "./enviroment";
+import { validateImageGenConfig } from "./environment";
 
 export function saveBase64Image(base64Data: string, filename: string): string {
     // Create generatedImages directory if it doesn't exist
@@ -97,7 +97,17 @@ const imageGeneration: Action = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        options: {
+          width?: number; 
+          height?: number; 
+          count?: number;
+          negativePrompt?: string;
+          numIterations?: number;
+          guidanceScale?: number;
+          seed?: number;
+          modelId?: string;
+          jobId?: string;
+        },
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Composing state for message:", message);
@@ -116,9 +126,15 @@ const imageGeneration: Action = {
         const images = await generateImage(
             {
                 prompt: imagePrompt,
-                width: 1024,
-                height: 1024,
-                count: 1,
+                ...(options.width !== undefined ? { width: options.width || 1024 } : {}),
+                ...(options.height !== undefined ? { height: options.height || 1024 } : {}),
+                ...(options.count !== undefined ? { count: options.count || 1 } : {}),
+                ...(options.negativePrompt !== undefined ? { negativePrompt: options.negativePrompt } : {}),
+                ...(options.numIterations !== undefined ? { numIterations: options.numIterations } : {}),
+                ...(options.guidanceScale !== undefined ? { guidanceScale: options.guidanceScale } : {}),
+                ...(options.seed !== undefined ? { seed: options.seed } : {}),
+                ...(options.modelId !== undefined ? { modelId: options.modelId } : {}),
+                ...(options.jobId !== undefined ? { jobId: options.jobId } : {})
             },
             runtime
         );
