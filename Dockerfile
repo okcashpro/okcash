@@ -1,30 +1,55 @@
-FROM node:23.3.0
-RUN npm install -g pnpm@9.4.0
+# Use a specific Node.js version for better reproducibility
+FROM node:23.3.0-slim AS builder
+
+# Install pnpm globally and install necessary build tools
+RUN npm install -g pnpm@9.4.0 && \
+    apt-get update && \
+    apt-get install -y git python3 make g++ && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set Python 3 as the default python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Set the working directory
 WORKDIR /app
 
-# Add configuration files and install dependencies
-ADD pnpm-workspace.yaml /app/pnpm-workspace.yaml
-ADD package.json /app/package.json
-ADD .npmrc /app/.npmrc
-ADD tsconfig.json /app/tsconfig.json
-ADD turbo.json /app/turbo.json
+# Copy package.json and other configuration files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc turbo.json ./
 
-# Add the documentation
-ADD docs /app/docs
+# Copy the rest of the application code
+COPY agent ./agent
+COPY packages ./packages
+COPY scripts ./scripts
+COPY characters ./characters
 
-# Add the rest of the application code
-ADD agent /app/agent
-ADD packages /app/packages
+# Install dependencies and build the project
+RUN pnpm install \
+    && pnpm build \
+    && pnpm prune --prod
 
-# Add the environment variables
-ADD scripts /app/scripts
-ADD characters /app/characters
-ADD .env /app/.env
+# Create a new stage for the final image
+FROM node:23.3.0-slim
 
-RUN pnpm i
-RUN pnpm build
+# Install runtime dependencies if needed
+RUN npm install -g pnpm@9.4.0 && \
+    apt-get update && \
+    apt-get install -y git python3 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Command to run the container
-CMD ["tail", "-f", "/dev/null"]
+WORKDIR /app
+
+# Copy built artifacts and production dependencies from the builder stage
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/.npmrc ./
+COPY --from=builder /app/turbo.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/agent ./agent
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/characters ./characters
+
+# Set the command to run the application
+CMD ["pnpm", "start"]
