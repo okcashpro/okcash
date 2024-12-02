@@ -4,6 +4,7 @@ import { getWavHeader } from "./audioUtils.ts";
 import { Service } from "@ai16z/eliza";
 import { validateNodeConfig } from "../enviroment.ts";
 import * as Echogarden from "echogarden";
+import { elizaLogger } from "@ai16z/eliza";
 
 function prependWavHeader(
     readable: Readable,
@@ -33,12 +34,50 @@ function prependWavHeader(
     return passThrough;
 }
 
+async function getVoiceSettings(runtime: IAgentRuntime) {
+    const hasElevenLabs = !!runtime.getSetting("ELEVENLABS_XI_API_KEY");
+    const useVits = !hasElevenLabs;
+
+    // Get voice settings from character card
+    const voiceSettings = runtime.character.settings?.voice;
+    const elevenlabsSettings = voiceSettings?.elevenlabs;
+
+    elizaLogger.debug("Voice settings:", {
+        hasElevenLabs,
+        useVits,
+        voiceSettings,
+        elevenlabsSettings,
+    });
+
+    return {
+        elevenlabsVoiceId:
+            elevenlabsSettings?.voiceId ||
+            runtime.getSetting("ELEVENLABS_VOICE_ID"),
+        elevenlabsModel:
+            elevenlabsSettings?.model ||
+            runtime.getSetting("ELEVENLABS_MODEL_ID") ||
+            "eleven_monolingual_v1",
+        elevenlabsStability:
+            elevenlabsSettings?.stability ||
+            runtime.getSetting("ELEVENLABS_VOICE_STABILITY") ||
+            "0.5",
+        // ... other ElevenLabs settings ...
+        vitsVoice:
+            voiceSettings?.model ||
+            voiceSettings?.url ||
+            runtime.getSetting("VITS_VOICE") ||
+            "en_US-hfc_female-medium",
+        useVits,
+    };
+}
+
 async function textToSpeech(runtime: IAgentRuntime, text: string) {
     await validateNodeConfig(runtime);
+    const { elevenlabsVoiceId } = await getVoiceSettings(runtime);
 
     try {
         const response = await fetch(
-            `https://api.elevenlabs.io/v1/text-to-speech/${runtime.getSetting("ELEVENLABS_VOICE_ID")}/stream?optimize_streaming_latency=${runtime.getSetting("ELEVENLABS_OPTIMIZE_STREAMING_LATENCY")}&output_format=${runtime.getSetting("ELEVENLABS_OUTPUT_FORMAT")}`,
+            `https://api.elevenlabs.io/v1/text-to-speech/${elevenlabsVoiceId}/stream?optimize_streaming_latency=${runtime.getSetting("ELEVENLABS_OPTIMIZE_STREAMING_LATENCY")}&output_format=${runtime.getSetting("ELEVENLABS_OUTPUT_FORMAT")}`,
             {
                 method: "POST",
                 headers: {
@@ -125,9 +164,10 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
     } catch (error) {
         if (error.message === "QUOTA_EXCEEDED") {
             // Fall back to VITS
+            const { vitsVoice } = await getVoiceSettings(runtime);
             const { audio } = await Echogarden.synthesize(text, {
                 engine: "vits",
-                voice: "en_US-hfc_female-medium",
+                voice: vitsVoice,
             });
 
             let wavStream: Readable;
@@ -173,6 +213,53 @@ async function textToSpeech(runtime: IAgentRuntime, text: string) {
     }
 }
 
+async function processVitsAudio(audio: any): Promise<Readable> {
+    let wavStream: Readable;
+    if (audio instanceof Buffer) {
+        console.log("audio is a buffer");
+        wavStream = Readable.from(audio);
+    } else if ("audioChannels" in audio && "sampleRate" in audio) {
+        console.log("audio is a RawAudio");
+        const floatBuffer = Buffer.from(audio.audioChannels[0].buffer);
+        console.log("buffer length: ", floatBuffer.length);
+
+        const sampleRate = audio.sampleRate;
+        const floatArray = new Float32Array(floatBuffer.buffer);
+        const pcmBuffer = new Int16Array(floatArray.length);
+
+        for (let i = 0; i < floatArray.length; i++) {
+            pcmBuffer[i] = Math.round(floatArray[i] * 32767);
+        }
+
+        const wavHeaderBuffer = getWavHeader(
+            pcmBuffer.length * 2,
+            sampleRate,
+            1,
+            16
+        );
+        const wavBuffer = Buffer.concat([
+            wavHeaderBuffer,
+            Buffer.from(pcmBuffer.buffer),
+        ]);
+        wavStream = Readable.from(wavBuffer);
+    } else {
+        throw new Error("Unsupported audio format");
+    }
+    return wavStream;
+}
+
+async function generateVitsAudio(
+    runtime: IAgentRuntime,
+    text: string
+): Promise<Readable> {
+    const { vitsVoice } = await getVoiceSettings(runtime);
+    const { audio } = await Echogarden.synthesize(text, {
+        engine: "vits",
+        voice: vitsVoice,
+    });
+    return processVitsAudio(audio);
+}
+
 export class SpeechService extends Service implements ISpeechService {
     static serviceType: ServiceType = ServiceType.SPEECH_GENERATION;
 
@@ -184,103 +271,16 @@ export class SpeechService extends Service implements ISpeechService {
 
     async generate(runtime: IAgentRuntime, text: string): Promise<Readable> {
         try {
-            // check for elevenlabs API key
-            if (runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
-                return await textToSpeech(runtime, text);
+            const { useVits } = await getVoiceSettings(runtime);
+
+            if (useVits || !runtime.getSetting("ELEVENLABS_XI_API_KEY")) {
+                return await generateVitsAudio(runtime, text);
             }
 
-            // Default to VITS if no ElevenLabs API key
-            const { audio } = await Echogarden.synthesize(text, {
-                engine: "vits",
-                voice: "en_US-hfc_female-medium",
-            });
-
-            let wavStream: Readable;
-            if (audio instanceof Buffer) {
-                console.log("audio is a buffer");
-                wavStream = Readable.from(audio);
-            } else if ("audioChannels" in audio && "sampleRate" in audio) {
-                console.log("audio is a RawAudio");
-                const floatBuffer = Buffer.from(audio.audioChannels[0].buffer);
-                console.log("buffer length: ", floatBuffer.length);
-
-                // Get the sample rate from the RawAudio object
-                const sampleRate = audio.sampleRate;
-
-                // Create a Float32Array view of the floatBuffer
-                const floatArray = new Float32Array(floatBuffer.buffer);
-
-                // Convert 32-bit float audio to 16-bit PCM
-                const pcmBuffer = new Int16Array(floatArray.length);
-                for (let i = 0; i < floatArray.length; i++) {
-                    pcmBuffer[i] = Math.round(floatArray[i] * 32767);
-                }
-
-                // Prepend WAV header to the buffer
-                const wavHeaderBuffer = getWavHeader(
-                    pcmBuffer.length * 2,
-                    sampleRate,
-                    1,
-                    16
-                );
-                const wavBuffer = Buffer.concat([
-                    wavHeaderBuffer,
-                    Buffer.from(pcmBuffer.buffer),
-                ]);
-
-                wavStream = Readable.from(wavBuffer);
-            } else {
-                throw new Error("Unsupported audio format");
-            }
-
-            return wavStream;
+            return await textToSpeech(runtime, text);
         } catch (error) {
             console.error("Speech generation error:", error);
-            // If ElevenLabs fails for any reason, fall back to VITS
-            const { audio } = await Echogarden.synthesize(text, {
-                engine: "vits",
-                voice: "en_US-hfc_female-medium",
-            });
-
-            let wavStream: Readable;
-            if (audio instanceof Buffer) {
-                console.log("audio is a buffer");
-                wavStream = Readable.from(audio);
-            } else if ("audioChannels" in audio && "sampleRate" in audio) {
-                console.log("audio is a RawAudio");
-                const floatBuffer = Buffer.from(audio.audioChannels[0].buffer);
-                console.log("buffer length: ", floatBuffer.length);
-
-                // Get the sample rate from the RawAudio object
-                const sampleRate = audio.sampleRate;
-
-                // Create a Float32Array view of the floatBuffer
-                const floatArray = new Float32Array(floatBuffer.buffer);
-
-                // Convert 32-bit float audio to 16-bit PCM
-                const pcmBuffer = new Int16Array(floatArray.length);
-                for (let i = 0; i < floatArray.length; i++) {
-                    pcmBuffer[i] = Math.round(floatArray[i] * 32767);
-                }
-
-                // Prepend WAV header to the buffer
-                const wavHeaderBuffer = getWavHeader(
-                    pcmBuffer.length * 2,
-                    sampleRate,
-                    1,
-                    16
-                );
-                const wavBuffer = Buffer.concat([
-                    wavHeaderBuffer,
-                    Buffer.from(pcmBuffer.buffer),
-                ]);
-
-                wavStream = Readable.from(wavBuffer);
-            } else {
-                throw new Error("Unsupported audio format");
-            }
-
-            return wavStream;
+            return await generateVitsAudio(runtime, text);
         }
     }
 }

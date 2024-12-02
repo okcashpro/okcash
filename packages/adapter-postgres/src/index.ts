@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
 
-// Import the entire module as default
-import pg from "pg";
-type Pool = pg.Pool;
+import postgres from "pg";
+const { Pool } = postgres;
+type PoolType = typeof postgres.Pool;
 
 import {
     QueryConfig,
@@ -32,10 +32,10 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename); // get the name of the directory
 
 export class PostgresDatabaseAdapter
-    extends DatabaseAdapter<Pool>
+    extends DatabaseAdapter<PoolType>
     implements IDatabaseCacheAdapter
 {
-    private pool: Pool;
+    private pool: InstanceType<PoolType>;
     private readonly maxRetries: number = 3;
     private readonly baseDelay: number = 1000; // 1 second
     private readonly maxDelay: number = 10000; // 10 seconds
@@ -51,7 +51,7 @@ export class PostgresDatabaseAdapter
             connectionTimeoutMillis: this.connectionTimeout,
         };
 
-        this.pool = new pg.Pool({
+        this.pool = new Pool({
             ...defaultConfig,
             ...connectionConfig, // Allow overriding defaults
         });
@@ -137,7 +137,7 @@ export class PostgresDatabaseAdapter
             await this.pool.end();
 
             // Create new pool
-            this.pool = new pg.Pool({
+            this.pool = new Pool({
                 ...this.pool.options,
                 connectionTimeoutMillis: this.connectionTimeout,
             });
@@ -174,12 +174,33 @@ export class PostgresDatabaseAdapter
     async init() {
         await this.testConnection();
 
-        const schema = fs.readFileSync(
-            path.resolve(__dirname, "../schema.sql"),
-            "utf8"
-        );
+        const client = await this.pool.connect();
+        try {
+            await client.query("BEGIN");
 
-        await this.query(schema);
+            // Check if schema already exists (check for a core table)
+            const { rows } = await client.query(`
+                SELECT EXISTS (
+                    SELECT FROM information_schema.tables
+                    WHERE table_name = 'rooms'
+                );
+            `);
+
+            if (!rows[0].exists) {
+                const schema = fs.readFileSync(
+                    path.resolve(__dirname, "../schema.sql"),
+                    "utf8"
+                );
+                await client.query(schema);
+            }
+
+            await client.query("COMMIT");
+        } catch (error) {
+            await client.query("ROLLBACK");
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 
     async close() {
