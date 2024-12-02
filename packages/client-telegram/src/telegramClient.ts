@@ -6,12 +6,16 @@ export class TelegramClient {
     private bot: Telegraf<Context>;
     private runtime: IAgentRuntime;
     private messageManager: MessageManager;
+    private backend;
+    private backendToken;
 
     constructor(runtime: IAgentRuntime, botToken: string) {
         elizaLogger.log("📱 Constructing new TelegramClient...");
         this.runtime = runtime;
         this.bot = new Telegraf(botToken);
         this.messageManager = new MessageManager(this.bot, this.runtime);
+        this.backend = runtime.getSetting("BACKEND_URL");
+        this.backendToken = runtime.getSetting("BACKEND_TOKEN");
         elizaLogger.log("✅ TelegramClient constructor completed");
     }
 
@@ -45,6 +49,24 @@ export class TelegramClient {
 
         this.bot.on("message", async (ctx) => {
             try {
+                const userId = ctx.from?.id.toString();
+                const username =
+                    ctx.from?.username || ctx.from?.first_name || "Unknown";
+                if (!userId) {
+                    elizaLogger.warn(
+                        "Received message from a user without an ID."
+                    );
+                    return;
+                }
+                try {
+                    await this.getOrCreateRecommenderInBe(userId, username);
+                } catch (error) {
+                    elizaLogger.error(
+                        "Error getting or creating recommender in backend",
+                        error
+                    );
+                }
+
                 await this.messageManager.handleMessage(ctx);
             } catch (error) {
                 elizaLogger.error("❌ Error handling message:", error);
@@ -100,5 +122,45 @@ export class TelegramClient {
         elizaLogger.log("Stopping Telegram bot...");
         await this.bot.stop();
         elizaLogger.log("Telegram bot stopped");
+    }
+    public async getOrCreateRecommenderInBe(
+        recommenderId: string,
+        username: string,
+        retries = 3,
+        delayMs = 2000
+    ) {
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                const response = await fetch(
+                    `${this.backend}/api/updaters/getOrCreateRecommender`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.backendToken}`,
+                        },
+                        body: JSON.stringify({
+                            recommenderId: recommenderId,
+                            username: username,
+                        }),
+                    }
+                );
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error(
+                    `Attempt ${attempt} failed: Error getting or creating recommender in backend`,
+                    error
+                );
+                if (attempt < retries) {
+                    console.log(`Retrying in ${delayMs} ms...`);
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, delayMs)
+                    );
+                } else {
+                    console.error("All attempts failed.");
+                }
+            }
+        }
     }
 }
