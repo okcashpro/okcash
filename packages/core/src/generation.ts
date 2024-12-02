@@ -375,7 +375,7 @@ export async function generateText({
                 elizaLogger.debug("Received response from Heurist model.");
                 break;
             }
-            case ModelProviderName.GAIANET:
+            case ModelProviderName.GAIANET: {
                 elizaLogger.debug("Initializing GAIANET model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
@@ -395,6 +395,7 @@ export async function generateText({
                 response = openaiResponse;
                 elizaLogger.debug("Received response from GAIANET model.");
                 break;
+            }
 
             case ModelProviderName.GALADRIEL: {
                 elizaLogger.debug("Initializing Galadriel model.");
