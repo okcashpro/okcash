@@ -73,6 +73,14 @@ try {
 
 ### Configuration
 
+To get a TEE simulator for local testing, use the following commands:
+
+```bash
+docker pull phalanetwork/tappd-simulator:latest
+# by default the simulator is available in localhost:8090
+docker run --rm -p 8090:8090 phalanetwork/tappd-simulator:latest
+```
+
 When using the provider through the runtime environment, ensure the following settings are configured:
 
 ```env
