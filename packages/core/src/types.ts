@@ -202,6 +202,8 @@ export type Models = {
     [ModelProviderName.GALADRIEL]: Model;
     [ModelProviderName.FAL]: Model;
     [ModelProviderName.GAIANET]: Model;
+    [ModelProviderName.ALI_BAILIAN]: Model;
+    [ModelProviderName.VOLENGINE]: Model;
 };
 
 /**
@@ -224,6 +226,8 @@ export enum ModelProviderName {
     GALADRIEL = "galadriel",
     FAL = "falai",
     GAIANET = "gaianet",
+    ALI_BAILIAN = "ali_bailian",
+    VOLENGINE = "volengine",
 }
 
 /**
