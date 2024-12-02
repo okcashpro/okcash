@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "tsc --format esm --dts",
+        "build": "tsup --format esm --dts",
         "dev": "tsup --format esm --dts --watch",
         "test": "jest",
         "lint": "eslint . --fix"
