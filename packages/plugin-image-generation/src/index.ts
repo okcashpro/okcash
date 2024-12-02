@@ -98,15 +98,15 @@ const imageGeneration: Action = {
         message: Memory,
         state: State,
         options: {
-          width?: number; 
-          height?: number; 
-          count?: number;
-          negativePrompt?: string;
-          numIterations?: number;
-          guidanceScale?: number;
-          seed?: number;
-          modelId?: string;
-          jobId?: string;
+            width?: number;
+            height?: number;
+            count?: number;
+            negativePrompt?: string;
+            numIterations?: number;
+            guidanceScale?: number;
+            seed?: number;
+            modelId?: string;
+            jobId?: string;
         },
         callback: HandlerCallback
     ) => {
@@ -126,15 +126,27 @@ const imageGeneration: Action = {
         const images = await generateImage(
             {
                 prompt: imagePrompt,
-                ...(options.width !== undefined ? { width: options.width || 1024 } : {}),
-                ...(options.height !== undefined ? { height: options.height || 1024 } : {}),
-                ...(options.count !== undefined ? { count: options.count || 1 } : {}),
-                ...(options.negativePrompt !== undefined ? { negativePrompt: options.negativePrompt } : {}),
-                ...(options.numIterations !== undefined ? { numIterations: options.numIterations } : {}),
-                ...(options.guidanceScale !== undefined ? { guidanceScale: options.guidanceScale } : {}),
+                width: options.width || 1024,
+                height: options.height || 1024,
+                ...(options.count !== undefined
+                    ? { count: options.count || 1 }
+                    : {}),
+                ...(options.negativePrompt !== undefined
+                    ? { negativePrompt: options.negativePrompt }
+                    : {}),
+                ...(options.numIterations !== undefined
+                    ? { numIterations: options.numIterations }
+                    : {}),
+                ...(options.guidanceScale !== undefined
+                    ? { guidanceScale: options.guidanceScale }
+                    : {}),
                 ...(options.seed !== undefined ? { seed: options.seed } : {}),
-                ...(options.modelId !== undefined ? { modelId: options.modelId } : {}),
-                ...(options.jobId !== undefined ? { jobId: options.jobId } : {})
+                ...(options.modelId !== undefined
+                    ? { modelId: options.modelId }
+                    : {}),
+                ...(options.jobId !== undefined
+                    ? { jobId: options.jobId }
+                    : {}),
             },
             runtime
         );
