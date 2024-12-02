@@ -65,6 +65,10 @@ export function parseArguments(): {
     }
 }
 
+function isAllStrings(arr: unknown[]): boolean {
+    return Array.isArray(arr) && arr.every((item) => typeof item === "string");
+}
+
 export async function loadCharacters(
     charactersArg: string
 ): Promise<Character[]> {
@@ -85,7 +89,7 @@ export async function loadCharacters(
                 validateCharacterConfig(character);
 
                 // is there a "plugins" field?
-                if (character.plugins) {
+                if (isAllStrings(character.plugins)) {
                     console.log("Plugins are: ", character.plugins);
 
                     const importedPlugins = await Promise.all(
@@ -93,7 +97,7 @@ export async function loadCharacters(
                             // if the plugin name doesnt start with @eliza,
 
                             const importedPlugin = await import(plugin);
-                            return importedPlugin;
+                            return importedPlugin.default;
                         })
                     );
 
