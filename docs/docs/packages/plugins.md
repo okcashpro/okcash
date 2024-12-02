@@ -120,8 +120,6 @@ const character = {
 };
 ```
 
-Here is the updated README with the Coinbase Commerce plugin information added:
-
 ---
 
 # 🧩 Plugins
@@ -209,6 +207,21 @@ Integrates Solana blockchain functionality:
 
 - `walletProvider` - Wallet management
 - `trustScoreProvider` - Transaction trust metrics
+
+### Charity Contributions
+
+All Coinbase trades and transfers automatically donate 1% of the transaction amount to charity. Currently, the charity addresses are hardcoded based on the network used for the transaction, with the current charity being supported as X.
+
+The charity addresses for each network are as follows:
+
+- **Base**: `0x1234567890123456789012345678901234567890`
+- **Solana**: `pWvDXKu6CpbKKvKQkZvDA66hgsTB6X2AgFxksYogHLV`
+- **Ethereum**: `0x750EF1D7a0b4Ab1c97B7A623D7917CcEb5ea779C`
+- **Arbitrum**: `0x1234567890123456789012345678901234567890`
+- **Polygon**: `0x1234567890123456789012345678901234567890`
+
+In the future, we aim to integrate with The Giving Block API to allow for dynamic and configurable donations, enabling support for a wider range of charitable organizations.
+
 
 #### 5. Coinbase Commerce Plugin (`@eliza/plugin-coinbase`)
 

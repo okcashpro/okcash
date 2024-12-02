@@ -28,4 +28,4 @@ The truncated text
 
 ## Defined in
 
-[packages/core/src/generation.ts:443](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L443)
+[packages/core/src/generation.ts:446](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L446)

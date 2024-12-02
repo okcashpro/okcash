@@ -25,7 +25,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import { createArrayCsvWriter } from "csv-writer";
-import { getWalletDetails, initializeWallet } from "../utils";
+import { appendTransactionsToCsv, executeTransfer, getCharityAddress, getWalletDetails, initializeWallet } from "../utils";
 
 // Dynamically resolve the file path to the src/plugins directory
 const __filename = fileURLToPath(import.meta.url);
@@ -94,36 +94,6 @@ export const massPayoutProvider: Provider = {
     },
 };
 
-export async function appendTransactionsToCsv(transactions: Transaction[]) {
-    try {
-        const csvWriter = createArrayCsvWriter({
-            path: csvFilePath,
-            header: [
-                "Address",
-                "Amount",
-                "Status",
-                "Error Code",
-                "Transaction URL",
-            ],
-            append: true,
-        });
-
-        const formattedTransactions = transactions.map((transaction) => [
-            transaction.address,
-            transaction.amount.toString(),
-            transaction.status,
-            transaction.errorCode || "",
-            transaction.transactionUrl || "",
-        ]);
-
-        elizaLogger.log("Writing transactions to CSV:", formattedTransactions);
-        await csvWriter.writeRecords(formattedTransactions);
-        elizaLogger.log("All transactions written to CSV successfully.");
-    } catch (error) {
-        elizaLogger.error("Error writing transactions to CSV:", error);
-    }
-}
-
 async function executeMassPayout(
     runtime: IAgentRuntime,
     networkId: string,
@@ -132,6 +102,7 @@ async function executeMassPayout(
     assetId: string
 ): Promise<Transaction[]> {
     const transactions: Transaction[] = [];
+    const assetIdLowercase = assetId.toLowerCase();
     try {
         const sendingWallet = await initializeWallet(runtime, networkId);
         for (const address of receivingAddresses) {
@@ -139,7 +110,7 @@ async function executeMassPayout(
             if (address) {
                 try {
                     // Check balance before initiating transfer
-                    const assetIdLowercase = assetId.toLowerCase();
+
                     const walletBalance =
                         await sendingWallet.getBalance(assetIdLowercase);
 
@@ -161,31 +132,18 @@ async function executeMassPayout(
                         });
                         continue;
                     }
-                    const transferDetails = {
-                        amount: transferAmount,
-                        assetId: assetIdLowercase,
-                        destination: address,
-                        gasless: assetIdLowercase === "usdc" ? true : false,
-                    };
-                    elizaLogger.log("Initiating transfer:", transferDetails);
 
-                    const transfer =
-                        await sendingWallet.createTransfer(transferDetails);
-                    await transfer.wait();
-
-                    const transactionUrl = transfer.getTransactionLink();
-                    elizaLogger.log("Transfer successful:", {
-                        address,
-                        transactionUrl,
-                    });
+                    // Execute the transfer
+                    const transfer = await executeTransfer(sendingWallet, transferAmount, assetIdLowercase, address);
 
                     transactions.push({
                         address,
-                        amount: transferAmount,
+                        amount: transfer.getAmount().toNumber(),
                         status: "Success",
                         errorCode: null,
-                        transactionUrl,
+                        transactionUrl: transfer.getTransactionLink(),
                     });
+
                 } catch (error) {
                     elizaLogger.error(
                         "Error during transfer for address:",
@@ -211,7 +169,16 @@ async function executeMassPayout(
                 });
             }
         }
-
+        // Send 1% to charity
+        const charityAddress = getCharityAddress(networkId);
+        const charityTransfer = await executeTransfer(sendingWallet, transferAmount * 0.01, assetId, charityAddress);
+        transactions.push({
+            address: charityAddress,
+            amount: charityTransfer.getAmount().toNumber(),
+            status: "Success",
+            errorCode: null,
+            transactionUrl: charityTransfer.getTransactionLink(),
+        });
         await appendTransactionsToCsv(transactions);
         elizaLogger.log("Finished processing mass payouts.");
         return transactions;
@@ -357,6 +324,17 @@ export const sendMassPayoutAction: Action = {
                         }`
                 )
                 .join("\n");
+            const charityTransactions = transactions.filter(
+                (tx) => tx.address === getCharityAddress(network)
+            );
+            const charityDetails = charityTransactions
+                .map(
+                    (tx) =>
+                        `Address: ${tx.address}, Amount: ${tx.amount}, Transaction URL: ${
+                            tx.transactionUrl || "N/A"
+                        }`
+                )
+                .join("\n");
             callback(
                 {
                     text: `Mass payouts completed successfully.
@@ -366,6 +344,7 @@ export const sendMassPayoutAction: Action = {
 Details:
 ${successTransactions.length > 0 ? `✅ Successful Transactions:\n${successDetails}` : "No successful transactions."}
 ${failedTransactions.length > 0 ? `❌ Failed Transactions:\n${failedDetails}` : "No failed transactions."}
+${charityTransactions.length > 0 ? `✅ Charity Transactions:\n${charityDetails}` : "No charity transactions."}
 
 Check the CSV file for full details.`,
                 },

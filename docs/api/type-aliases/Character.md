@@ -212,6 +212,36 @@ Optional configuration
 
 > `optional` **url**: `string`
 
+### settings.voice.elevenlabs?
+
+> `optional` **elevenlabs**: `object`
+
+### settings.voice.elevenlabs.voiceId
+
+> **voiceId**: `string`
+
+New structured ElevenLabs config
+
+### settings.voice.elevenlabs.model?
+
+> `optional` **model**: `string`
+
+### settings.voice.elevenlabs.stability?
+
+> `optional` **stability**: `string`
+
+### settings.voice.elevenlabs.similarityBoost?
+
+> `optional` **similarityBoost**: `string`
+
+### settings.voice.elevenlabs.style?
+
+> `optional` **style**: `string`
+
+### settings.voice.elevenlabs.useSpeakerBoost?
+
+> `optional` **useSpeakerBoost**: `string`
+
 ### settings.model?
 
 > `optional` **model**: `string`
@@ -312,4 +342,4 @@ Optional Twitter profile
 
 ## Defined in
 
-[packages/core/src/types.ts:603](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L603)
+[packages/core/src/types.ts:607](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L607)

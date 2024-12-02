@@ -20,4 +20,4 @@ Configuration options specific to the provider.
 
 ## Defined in
 
-[packages/core/src/generation.ts:1147](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1147)
+[packages/core/src/generation.ts:1150](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1150)
