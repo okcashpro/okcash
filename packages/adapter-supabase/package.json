@@ -6,14 +6,15 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@supabase/supabase-js": "2.46.1"
+        "@supabase/supabase-js": "2.46.2"
     },
     "devDependencies": {
-        "tsup": "^8.3.5"
+        "tsup": "8.3.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "dev": "tsup --watch"
+        "dev": "tsup --watch",
+        "lint": "eslint . --fix"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

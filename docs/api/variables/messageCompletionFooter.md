@@ -1,8 +1,8 @@
-[@ai16z/eliza v1.0.0](../index.md) / messageCompletionFooter
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / messageCompletionFooter
 
 # Variable: messageCompletionFooter
 
-> `const` **messageCompletionFooter**: "\nResponse format should be formatted in a JSON block like this:\n\`\`\`json\n\{ \"user\": \"\{\{agentName\}\}\", \"text\": string, \"action\": \"string\" \}\n\`\`\`"
+> `const` **messageCompletionFooter**: "\nResponse format should be formatted in a JSON block like this:\n\`\`\`json\n\{ \"user\": \"\{\{agentName\}\}\", \"text\": \"string\", \"action\": \"string\" \}\n\`\`\`"
 
 ## Defined in
 

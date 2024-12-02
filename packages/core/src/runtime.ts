@@ -1,4 +1,5 @@
 import { names, uniqueNamesGenerator } from "unique-names-generator";
+import { v4 as uuidv4 } from "uuid";
 import {
     composeActionExamples,
     formatActionNames,
@@ -15,6 +16,7 @@ import {
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
 import { elizaLogger } from "./index.ts";
+import knowledge from "./knowledge.ts";
 import { MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
 import { parseJsonArrayFromText } from "./parsing.ts";
@@ -29,6 +31,7 @@ import {
     ICacheManager,
     IDatabaseAdapter,
     IMemoryManager,
+    KnowledgeItem,
     ModelClass,
     ModelProviderName,
     Plugin,
@@ -43,8 +46,6 @@ import {
     type Memory,
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
-import { v4 as uuidv4 } from "uuid";
-import knowledge from "./knowledge.ts";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
@@ -96,6 +97,11 @@ export class AgentRuntime implements IAgentRuntime {
      * The model to use for generateText.
      */
     modelProvider: ModelProviderName;
+
+    /**
+     * The model to use for generateImage.
+     */
+    imageModelProvider: ModelProviderName;
 
     /**
      * Fetch function to use
@@ -176,7 +182,9 @@ export class AgentRuntime implements IAgentRuntime {
             return;
         }
 
+        // Add the service to the services map
         this.services.set(serviceType, service);
+        elizaLogger.success(`Service ${serviceType} registered successfully`);
     }
 
     /**
@@ -217,6 +225,12 @@ export class AgentRuntime implements IAgentRuntime {
         cacheManager: ICacheManager;
         logging?: boolean;
     }) {
+        elizaLogger.info("Initializing AgentRuntime with options:", {
+            character: opts.character?.name,
+            modelProvider: opts.modelProvider,
+            characterModelProvider: opts.character?.modelProvider,
+        });
+
         this.#conversationLength =
             opts.conversationLength ?? this.#conversationLength;
         this.databaseAdapter = opts.databaseAdapter;
@@ -280,10 +294,42 @@ export class AgentRuntime implements IAgentRuntime {
         });
 
         this.serverUrl = opts.serverUrl ?? this.serverUrl;
+
+        elizaLogger.info("Setting model provider...");
+        elizaLogger.info("Model Provider Selection:", {
+            characterModelProvider: this.character.modelProvider,
+            optsModelProvider: opts.modelProvider,
+            currentModelProvider: this.modelProvider,
+            finalSelection:
+                this.character.modelProvider ??
+                opts.modelProvider ??
+                this.modelProvider,
+        });
+
         this.modelProvider =
             this.character.modelProvider ??
             opts.modelProvider ??
             this.modelProvider;
+
+        this.imageModelProvider =
+            this.character.imageModelProvider ?? this.modelProvider;
+
+        elizaLogger.info("Selected model provider:", this.modelProvider);
+        elizaLogger.info(
+            "Selected image model provider:",
+            this.imageModelProvider
+        );
+
+        // Validate model provider
+        if (!Object.values(ModelProviderName).includes(this.modelProvider)) {
+            elizaLogger.error("Invalid model provider:", this.modelProvider);
+            elizaLogger.error(
+                "Available providers:",
+                Object.values(ModelProviderName)
+            );
+            throw new Error(`Invalid model provider: ${this.modelProvider}`);
+        }
+
         if (!this.serverUrl) {
             elizaLogger.warn("No serverUrl provided, defaulting to localhost");
         }
@@ -371,10 +417,10 @@ export class AgentRuntime implements IAgentRuntime {
             const existingDocument =
                 await this.documentsManager.getMemoryById(knowledgeId);
             if (existingDocument) {
-                return;
+                continue;
             }
 
-            console.log(
+            elizaLogger.info(
                 "Processing knowledge for ",
                 this.character.name,
                 " - ",
@@ -508,8 +554,12 @@ export class AgentRuntime implements IAgentRuntime {
             return;
         }
 
-        elizaLogger.success(`Executing handler for action: ${action.name}`);
-        await action.handler(this, message, state, {}, callback);
+        try {
+            elizaLogger.info(`Executing handler for action: ${action.name}`);
+            await action.handler(this, message, state, {}, callback);
+        } catch (error) {
+            elizaLogger.error(error);
+        }
     }
 
     /**
@@ -707,7 +757,6 @@ export class AgentRuntime implements IAgentRuntime {
             getActorDetails({ runtime: this, roomId }),
             this.messageManager.getMemories({
                 roomId,
-                agentId: this.agentId,
                 count: conversationLength,
                 unique: false,
             }),
@@ -781,7 +830,7 @@ export class AgentRuntime implements IAgentRuntime {
             .map(
                 (attachment) =>
                     `ID: ${attachment.id}
-Name: ${attachment.title} 
+Name: ${attachment.title}
 URL: ${attachment.url}
 Type: ${attachment.source}
 Description: ${attachment.description}
@@ -847,7 +896,6 @@ Text: ${attachment.text}
             // Check the existing memories in the database
             const existingMemories =
                 await this.messageManager.getMemoriesByRoomIds({
-                    agentId: this.agentId,
                     // filter out the current room id from rooms
                     roomIds: rooms.filter((room) => room !== roomId),
                 });
@@ -920,9 +968,9 @@ Text: ${attachment.text}
                 .join(" ");
         }
 
-        const formattedKnowledge = formatKnowledge(
-            await knowledge.get(this, message)
-        );
+        const knowledegeData = await knowledge.get(this, message);
+
+        const formattedKnowledge = formatKnowledge(knowledegeData);
 
         const initialState = {
             agentId: this.agentId,
@@ -939,6 +987,7 @@ Text: ${attachment.text}
                       ]
                     : "",
             knowledge: formattedKnowledge,
+            knowledgeData: knowledegeData,
             // Recent interactions between the sender and receiver, formatted as messages
             recentMessageInteractions: formattedMessageInteractions,
             // Recent interactions between the sender and receiver, formatted as posts
@@ -1065,7 +1114,7 @@ Text: ${attachment.text}
                     ? addHeader("# Attachments", formattedAttachments)
                     : "",
             ...additionalKeys,
-        };
+        } as State;
 
         const actionPromises = this.actions.map(async (action: Action) => {
             const result = await action.validate(this, message, initialState);
@@ -1142,7 +1191,6 @@ Text: ${attachment.text}
         const conversationLength = this.getConversationLength();
         const recentMessagesData = await this.messageManager.getMemories({
             roomId: state.roomId,
-            agentId: this.agentId,
             count: conversationLength,
             unique: false,
         });
@@ -1184,7 +1232,7 @@ Text: ${attachment.text}
                 (attachment) =>
                     `ID: ${attachment.id}
 Name: ${attachment.title}
-URL: ${attachment.url} 
+URL: ${attachment.url}
 Type: ${attachment.source}
 Description: ${attachment.description}
 Text: ${attachment.text}
@@ -1204,6 +1252,8 @@ Text: ${attachment.text}
     }
 }
 
-const formatKnowledge = (knowledge: string[]) => {
-    return knowledge.map((knowledge) => `- ${knowledge}`).join("\n");
+const formatKnowledge = (knowledge: KnowledgeItem[]) => {
+    return knowledge
+        .map((knowledge) => `- ${knowledge.content.text}`)
+        .join("\n");
 };

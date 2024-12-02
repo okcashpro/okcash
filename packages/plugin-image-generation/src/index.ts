@@ -7,11 +7,11 @@ import {
     Plugin,
     State,
 } from "@ai16z/eliza";
-import { generateCaption, generateImage } from "@ai16z/eliza";
+import { generateImage } from "@ai16z/eliza";
 
 import fs from "fs";
 import path from "path";
-import { validateImageGenConfig } from "./enviroment";
+import { validateImageGenConfig } from "./environment";
 
 export function saveBase64Image(base64Data: string, filename: string): string {
     // Create generatedImages directory if it doesn't exist
@@ -76,22 +76,38 @@ const imageGeneration: Action = {
         "MAKE_A",
     ],
     description: "Generate an image to go along with the message.",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
         await validateImageGenConfig(runtime);
 
         const anthropicApiKeyOk = !!runtime.getSetting("ANTHROPIC_API_KEY");
         const togetherApiKeyOk = !!runtime.getSetting("TOGETHER_API_KEY");
         const heuristApiKeyOk = !!runtime.getSetting("HEURIST_API_KEY");
+        const falApiKeyOk = !!runtime.getSetting("FAL_API_KEY");
+        const openAiApiKeyOk = !!runtime.getSetting("OPENAI_API_KEY");
 
-        // TODO: Add openai DALL-E generation as well
-
-        return anthropicApiKeyOk || togetherApiKeyOk || heuristApiKeyOk;
+        return (
+            anthropicApiKeyOk ||
+            togetherApiKeyOk ||
+            heuristApiKeyOk ||
+            falApiKeyOk ||
+            openAiApiKeyOk
+        );
     },
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any,
+        options: {
+            width?: number;
+            height?: number;
+            count?: number;
+            negativePrompt?: string;
+            numIterations?: number;
+            guidanceScale?: number;
+            seed?: number;
+            modelId?: string;
+            jobId?: string;
+        },
         callback: HandlerCallback
     ) => {
         elizaLogger.log("Composing state for message:", message);
@@ -110,9 +126,23 @@ const imageGeneration: Action = {
         const images = await generateImage(
             {
                 prompt: imagePrompt,
-                width: 1024,
-                height: 1024,
-                count: 1,
+                width: options.width || 1024,
+                height: options.height || 1024,
+                ...(options.count != null ? { count: options.count || 1 } : {}),
+                ...(options.negativePrompt != null
+                    ? { negativePrompt: options.negativePrompt }
+                    : {}),
+                ...(options.numIterations != null
+                    ? { numIterations: options.numIterations }
+                    : {}),
+                ...(options.guidanceScale != null
+                    ? { guidanceScale: options.guidanceScale }
+                    : {}),
+                ...(options.seed != null ? { seed: options.seed } : {}),
+                ...(options.modelId != null
+                    ? { modelId: options.modelId }
+                    : {}),
+                ...(options.jobId != null ? { jobId: options.jobId } : {}),
             },
             runtime
         );
@@ -148,7 +178,7 @@ const imageGeneration: Action = {
                     elizaLogger.error("Caption generation failed, using default caption:", error);
                 }*/
 
-                const caption = "...";
+                const _caption = "...";
                 /*= await generateCaption(
                     {
                         imageUrl: image,

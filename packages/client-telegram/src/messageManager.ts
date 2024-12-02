@@ -1,8 +1,8 @@
 import { Message } from "@telegraf/types";
 import { Context, Telegraf } from "telegraf";
 
-import { composeContext } from "@ai16z/eliza";
-import { embeddingZeroVector } from "@ai16z/eliza";
+import { composeContext, elizaLogger, ServiceType } from "@ai16z/eliza";
+import { getEmbeddingZeroVector } from "@ai16z/eliza";
 import {
     Content,
     HandlerCallback,
@@ -17,7 +17,6 @@ import { stringToUuid } from "@ai16z/eliza";
 
 import { generateMessageResponse, generateShouldRespond } from "@ai16z/eliza";
 import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
-import { ImageDescriptionService } from "@ai16z/plugin-node";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -137,57 +136,49 @@ Thread of Tweets You Are Replying To:
 export class MessageManager {
     public bot: Telegraf<Context>;
     private runtime: IAgentRuntime;
-    private imageService: IImageDescriptionService;
 
     constructor(bot: Telegraf<Context>, runtime: IAgentRuntime) {
         this.bot = bot;
         this.runtime = runtime;
-        this.imageService = ImageDescriptionService.getInstance();
     }
 
     // Process image messages and generate descriptions
     private async processImage(
         message: Message
     ): Promise<{ description: string } | null> {
-        // console.log(
-        //     "🖼️ Processing image message:",
-        //     JSON.stringify(message, null, 2)
-        // );
-
         try {
             let imageUrl: string | null = null;
 
-            // Handle photo messages
             if ("photo" in message && message.photo?.length > 0) {
                 const photo = message.photo[message.photo.length - 1];
                 const fileLink = await this.bot.telegram.getFileLink(
                     photo.file_id
                 );
                 imageUrl = fileLink.toString();
-            }
-            // Handle image documents
-            else if (
+            } else if (
                 "document" in message &&
                 message.document?.mime_type?.startsWith("image/")
             ) {
-                const doc = message.document;
                 const fileLink = await this.bot.telegram.getFileLink(
-                    doc.file_id
+                    message.document.file_id
                 );
                 imageUrl = fileLink.toString();
             }
 
             if (imageUrl) {
+                const imageDescriptionService =
+                    this.runtime.getService<IImageDescriptionService>(
+                        ServiceType.IMAGE_DESCRIPTION
+                    );
                 const { title, description } =
-                    await this.imageService.describeImage(imageUrl);
-                const fullDescription = `[Image: ${title}\n${description}]`;
-                return { description: fullDescription };
+                    await imageDescriptionService.describeImage(imageUrl);
+                return { description: `[Image: ${title}\n${description}]` };
             }
         } catch (error) {
             console.error("❌ Error processing image:", error);
         }
 
-        return null; // No image found
+        return null;
     }
 
     // Decide if the bot should respond to the message
@@ -196,7 +187,6 @@ export class MessageManager {
         state: State
     ): Promise<boolean> {
         // Respond if bot is mentioned
-
         if (
             "text" in message &&
             message.text?.includes(`@${this.bot.botInfo?.username}`)
@@ -209,7 +199,7 @@ export class MessageManager {
             return true;
         }
 
-        // Respond to images in group chats
+        // Don't respond to images in group chats
         if (
             "photo" in message ||
             ("document" in message &&
@@ -238,7 +228,7 @@ export class MessageManager {
             return response === "RESPOND";
         }
 
-        return false; // No criteria met
+        return false;
     }
 
     // Send long messages in chunks
@@ -291,7 +281,7 @@ export class MessageManager {
     // Generate a response using AI
     private async _generateResponse(
         message: Memory,
-        state: State,
+        _state: State,
         context: string
     ): Promise<Content> {
         const { userId, roomId } = message;
@@ -306,9 +296,10 @@ export class MessageManager {
             console.error("❌ No response from generateMessageResponse");
             return null;
         }
+
         await this.runtime.databaseAdapter.log({
             body: { message, context, response },
-            userId: userId,
+            userId,
             roomId,
             type: "response",
         });
@@ -342,14 +333,23 @@ export class MessageManager {
         try {
             // Convert IDs to UUIDs
             const userId = stringToUuid(ctx.from.id.toString()) as UUID;
+
+            // Get user name
             const userName =
                 ctx.from.username || ctx.from.first_name || "Unknown User";
+
+            // Get chat ID
             const chatId = stringToUuid(
                 ctx.chat?.id.toString() + "-" + this.runtime.agentId
             ) as UUID;
+
+            // Get agent ID
             const agentId = this.runtime.agentId;
+
+            // Get room ID
             const roomId = chatId;
 
+            // Ensure connection
             await this.runtime.ensureConnection(
                 userId,
                 roomId,
@@ -358,6 +358,7 @@ export class MessageManager {
                 "telegram"
             );
 
+            // Get message ID
             const messageId = stringToUuid(
                 message.message_id.toString() + "-" + this.runtime.agentId
             ) as UUID;
@@ -382,17 +383,18 @@ export class MessageManager {
                 return; // Skip if no content
             }
 
+            // Create content
             const content: Content = {
                 text: fullText,
                 source: "telegram",
-                // inReplyTo:
-                //     "reply_to_message" in message && message.reply_to_message
-                //         ? stringToUuid(
-                //               message.reply_to_message.message_id.toString() +
-                //                   "-" +
-                //                   this.runtime.agentId
-                //           )
-                //         : undefined,
+                inReplyTo:
+                    "reply_to_message" in message && message.reply_to_message
+                        ? stringToUuid(
+                              message.reply_to_message.message_id.toString() +
+                                  "-" +
+                                  this.runtime.agentId
+                          )
+                        : undefined,
             };
 
             // Create memory for the message
@@ -403,9 +405,10 @@ export class MessageManager {
                 roomId,
                 content,
                 createdAt: message.date * 1000,
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(),
             };
 
+            // Create memory
             await this.runtime.messageManager.createMemory(memory);
 
             // Update state with the new memory
@@ -465,7 +468,7 @@ export class MessageManager {
                                 inReplyTo: messageId,
                             },
                             createdAt: sentMessage.date * 1000,
-                            embedding: embeddingZeroVector,
+                            embedding: getEmbeddingZeroVector(),
                         };
 
                         // Set action to CONTINUE for all messages except the last one
@@ -498,8 +501,8 @@ export class MessageManager {
 
             await this.runtime.evaluate(memory, state, shouldRespond);
         } catch (error) {
-            console.error("❌ Error handling message:", error);
-            console.error("Error sending message:", error);
+            elizaLogger.error("❌ Error handling message:", error);
+            elizaLogger.error("Error sending message:", error);
         }
     }
 }

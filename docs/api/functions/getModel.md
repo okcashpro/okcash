@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / getModel
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / getModel
 
 # Function: getModel()
 
@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/models.ts:242](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L242)
+[packages/core/src/models.ts:360](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L360)

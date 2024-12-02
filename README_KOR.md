@@ -24,7 +24,7 @@
 **필수 요구사항:**
 
 -   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 23.1+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23.3+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
 ## .env 파일 편집
@@ -108,6 +108,14 @@ XAI_MODEL=
 # For asking Claude stuff
 ANTHROPIC_API_KEY=
 
+# EVM
+EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+
+# Solana
+SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Fallback Wallet Configuration (deprecated)
 WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
 WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
 

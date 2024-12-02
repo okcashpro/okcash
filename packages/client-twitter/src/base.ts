@@ -5,7 +5,7 @@ import {
     Memory,
     State,
     UUID,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     elizaLogger,
     stringToUuid,
 } from "@ai16z/eliza";
@@ -82,11 +82,11 @@ class RequestQueue {
 }
 
 export class ClientBase extends EventEmitter {
-    static _twitterClient: Scraper;
+    static _twitterClients: { [accountIdentifier: string]: Scraper } = {};
     twitterClient: Scraper;
     runtime: IAgentRuntime;
     directions: string;
-    lastCheckedTweetId: number | null = null;
+    lastCheckedTweetId: bigint | null = null;
     imageDescriptionService: IImageDescriptionService;
     temperature: number = 0.5;
 
@@ -137,11 +137,12 @@ export class ClientBase extends EventEmitter {
     constructor(runtime: IAgentRuntime) {
         super();
         this.runtime = runtime;
-        if (ClientBase._twitterClient) {
-            this.twitterClient = ClientBase._twitterClient;
+        const username = this.runtime.getSetting("TWITTER_USERNAME");
+        if (ClientBase._twitterClients[username]) {
+            this.twitterClient = ClientBase._twitterClients[username];
         } else {
             this.twitterClient = new Scraper();
-            ClientBase._twitterClient = this.twitterClient;
+            ClientBase._twitterClients[username] = this.twitterClient;
         }
 
         this.directions =
@@ -178,7 +179,7 @@ export class ClientBase extends EventEmitter {
                 username,
                 this.runtime.getSetting("TWITTER_PASSWORD"),
                 this.runtime.getSetting("TWITTER_EMAIL"),
-                this.runtime.getSetting("TWITTER_2FA_SECRET")
+                this.runtime.getSetting("TWITTER_2FA_SECRET") || undefined
             );
 
             if (await this.twitterClient.isLoggedIn()) {
@@ -319,7 +320,6 @@ export class ClientBase extends EventEmitter {
             // Get the existing memories from the database
             const existingMemories =
                 await this.runtime.messageManager.getMemoriesByRoomIds({
-                    agentId: this.runtime.agentId,
                     roomIds: cachedTimeline.map((tweet) =>
                         stringToUuid(
                             tweet.conversationId + "-" + this.runtime.agentId
@@ -421,7 +421,7 @@ export class ClientBase extends EventEmitter {
                         content: content,
                         agentId: this.runtime.agentId,
                         roomId,
-                        embedding: embeddingZeroVector,
+                        embedding: getEmbeddingZeroVector(),
                         createdAt: tweet.timestamp * 1000,
                     });
 
@@ -462,7 +462,6 @@ export class ClientBase extends EventEmitter {
         // Check the existing memories in the database
         const existingMemories =
             await this.runtime.messageManager.getMemoriesByRoomIds({
-                agentId: this.runtime.agentId,
                 roomIds: Array.from(roomIds),
             });
 
@@ -535,7 +534,7 @@ export class ClientBase extends EventEmitter {
                 content: content,
                 agentId: this.runtime.agentId,
                 roomId,
-                embedding: embeddingZeroVector,
+                embedding: getEmbeddingZeroVector(),
                 createdAt: tweet.timestamp * 1000,
             });
 
@@ -564,7 +563,6 @@ export class ClientBase extends EventEmitter {
             const recentMessage = await this.runtime.messageManager.getMemories(
                 {
                     roomId: message.roomId,
-                    agentId: this.runtime.agentId,
                     count: 1,
                     unique: false,
                 }
@@ -578,7 +576,7 @@ export class ClientBase extends EventEmitter {
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,
-                    embedding: embeddingZeroVector,
+                    embedding: getEmbeddingZeroVector(),
                 });
             }
 
@@ -591,12 +589,12 @@ export class ClientBase extends EventEmitter {
 
     async loadLatestCheckedTweetId(): Promise<void> {
         const latestCheckedTweetId =
-            await this.runtime.cacheManager.get<number>(
+            await this.runtime.cacheManager.get<string>(
                 `twitter/${this.profile.username}/latest_checked_tweet_id`
             );
 
         if (latestCheckedTweetId) {
-            this.lastCheckedTweetId = latestCheckedTweetId;
+            this.lastCheckedTweetId = BigInt(latestCheckedTweetId);
         }
     }
 
@@ -604,7 +602,7 @@ export class ClientBase extends EventEmitter {
         if (this.lastCheckedTweetId) {
             await this.runtime.cacheManager.set(
                 `twitter/${this.profile.username}/latest_checked_tweet_id`,
-                this.lastCheckedTweetId
+                this.lastCheckedTweetId.toString()
             );
         }
     }

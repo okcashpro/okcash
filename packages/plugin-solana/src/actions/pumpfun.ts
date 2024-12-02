@@ -2,12 +2,7 @@ import { AnchorProvider } from "@coral-xyz/anchor";
 import { Wallet } from "@coral-xyz/anchor";
 import { generateImage } from "@ai16z/eliza";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
-import {
-    CreateTokenMetadata,
-    DEFAULT_DECIMALS,
-    PriorityFee,
-    PumpFunSDK,
-} from "pumpdotfun-sdk";
+import { CreateTokenMetadata, PriorityFee, PumpFunSDK } from "pumpdotfun-sdk";
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import bs58 from "bs58";
@@ -232,13 +227,14 @@ export const sellToken = async ({
     }
 };
 
+// previous logic:
+// if (typeof window !== "undefined" && typeof window.confirm === "function") {
+//     return window.confirm(
+//         "Confirm the creation and purchase of the token?"
+//     );
+// }
+// return true;
 const promptConfirmation = async (): Promise<boolean> => {
-    return true;
-    if (typeof window !== "undefined" && typeof window.confirm === "function") {
-        return window.confirm(
-            "Confirm the creation and purchase of the token?"
-        );
-    }
     return true;
 };
 
@@ -275,7 +271,7 @@ Respond with a JSON markdown block containing only the extracted values.`;
 export default {
     name: "CREATE_AND_BUY_TOKEN",
     similes: ["CREATE_AND_PURCHASE_TOKEN", "DEPLOY_AND_BUY_TOKEN"],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (_runtime: IAgentRuntime, _message: Memory) => {
         return true; //return isCreateAndBuyContent(runtime, message.content);
     },
     description:
@@ -391,7 +387,9 @@ export default {
         const slippage = "2000";
         try {
             // Get private key from settings and create deployer keypair
-            const privateKeyString = runtime.getSetting("WALLET_PRIVATE_KEY")!;
+            const privateKeyString =
+                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
+                runtime.getSetting("WALLET_PRIVATE_KEY");
             const secretKey = bs58.decode(privateKeyString);
             const deployerKeypair = Keypair.fromSecretKey(secretKey);
 

@@ -10,7 +10,6 @@ import {
     IVideoService,
     Memory,
     ModelClass,
-    Service,
     ServiceType,
     State,
 } from "@ai16z/eliza";
@@ -73,7 +72,11 @@ export default {
     ],
     description:
         "Downloads a video or audio file from a URL and attaches it to the response message.",
-    validate: async (runtime: IAgentRuntime, message: Memory, state: State) => {
+    validate: async (
+        runtime: IAgentRuntime,
+        message: Memory,
+        _state: State
+    ) => {
         if (message.content.source !== "discord") {
             return false;
         }

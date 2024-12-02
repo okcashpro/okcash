@@ -7,7 +7,15 @@ class ElizaLogger {
             process.versions.node != null;
 
         // Set verbose based on environment
-        this.verbose = this.isNode ? process.env.verbose === "true" : false;
+        this.verbose = this.isNode ? process.env.VERBOSE === "true" : false;
+
+        // Add initialization logging
+        console.log(`[ElizaLogger] Initializing with:
+            isNode: ${this.isNode}
+            verbose: ${this.verbose}
+            VERBOSE env: ${process.env.VERBOSE}
+            NODE_ENV: ${process.env.NODE_ENV}
+        `);
     }
 
     private isNode: boolean;
@@ -209,22 +217,29 @@ class ElizaLogger {
         });
     }
 
+    debug(...strings) {
+        if (!this.verbose) {
+            // for diagnosing verbose logging issues
+            // console.log(
+            //     "[ElizaLogger] Debug message suppressed (verbose=false):",
+            //     ...strings
+            // );
+            return;
+        }
+        this.#logWithStyle(strings, {
+            fg: "magenta",
+            bg: "",
+            icon: "\u1367",
+            groupTitle: ` ${this.debugsTitle}`,
+        });
+    }
+
     success(...strings) {
         this.#logWithStyle(strings, {
             fg: "green",
             bg: "",
             icon: "\u2713",
             groupTitle: ` ${this.successesTitle}`,
-        });
-    }
-
-    debug(...strings) {
-        if (!this.verbose) return;
-        this.#logWithStyle(strings, {
-            fg: "magenta",
-            bg: "",
-            icon: "\u1367",
-            groupTitle: ` ${this.debugsTitle}`,
         });
     }
 
@@ -235,6 +250,17 @@ class ElizaLogger {
             icon: "\u0021",
             groupTitle: ` ${this.assertsTitle}`,
         });
+    }
+
+    progress(message: string) {
+        if (this.isNode) {
+            // Clear the current line and move cursor to beginning
+            process.stdout.clearLine(0);
+            process.stdout.cursorTo(0);
+            process.stdout.write(message);
+        } else {
+            console.log(message);
+        }
     }
 }
 

@@ -1,4 +1,11 @@
-import { Account, Call, CallData, Calldata, Contract, cairo } from "starknet";
+import {
+    AccountInterface,
+    cairo,
+    CallData,
+    Calldata,
+    Contract,
+    ProviderInterface,
+} from "starknet";
 import erc20Abi from "./erc20.json";
 
 export type ApproveCall = {
@@ -17,13 +24,21 @@ export class ERC20Token {
     abi: any;
     contract: Contract;
     calldata: CallData;
-    constructor(token: string, account?: Account) {
-        this.contract = new Contract(erc20Abi, token, account);
+    constructor(
+        token: string,
+        providerOrAccount?: ProviderInterface | AccountInterface
+    ) {
+        this.contract = new Contract(erc20Abi, token, providerOrAccount);
         this.calldata = new CallData(this.contract.abi);
     }
 
     public address() {
         return this.contract.address;
+    }
+
+    public async balanceOf(account: string): Promise<bigint> {
+        const result = await this.contract.call("balance_of", [account]);
+        return result as bigint;
     }
 
     public async decimals() {

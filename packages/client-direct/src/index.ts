@@ -11,12 +11,14 @@ import {
     Content,
     Memory,
     ModelClass,
-    State,
     Client,
     IAgentRuntime,
 } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import { settings } from "@ai16z/eliza";
+import { createApiRouter } from "./api.ts";
+import * as fs from "fs";
+import * as path from "path";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export const messageHandlerTemplate =
@@ -57,8 +59,9 @@ export interface SimliClientConfig {
     audioRef: any;
 }
 export class DirectClient {
-    private app: express.Application;
+    public app: express.Application;
     private agents: Map<string, AgentRuntime>;
+    private server: any; // Store server instance
 
     constructor() {
         elizaLogger.log("DirectClient constructor");
@@ -68,6 +71,9 @@ export class DirectClient {
 
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
+
+        const apiRouter = createApiRouter(this.agents);
+        this.app.use(apiRouter);
 
         // Define an interface that extends the Express Request interface
         interface CustomRequest extends ExpressRequest {
@@ -222,7 +228,7 @@ export class DirectClient {
 
                 await runtime.evaluate(memory, state);
 
-                const result = await runtime.processActions(
+                const _result = await runtime.processActions(
                     memory,
                     [responseMessage],
                     state,
@@ -233,7 +239,7 @@ export class DirectClient {
                 );
 
                 if (message) {
-                    res.json([message, response]);
+                    res.json([response, message]);
                 } else {
                     res.json([response]);
                 }
@@ -267,6 +273,109 @@ export class DirectClient {
                 res.json({ images: imagesRes });
             }
         );
+
+        this.app.post(
+            "/fine-tune",
+            async (req: express.Request, res: express.Response) => {
+                try {
+                    const response = await fetch(
+                        "https://api.bageldb.ai/api/v1/asset",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-API-KEY": `${process.env.BAGEL_API_KEY}`,
+                            },
+                            body: JSON.stringify(req.body),
+                        }
+                    );
+
+                    const data = await response.json();
+                    res.json(data);
+                } catch (error) {
+                    res.status(500).json({
+                        error: "Please create an account at bakery.bagel.net and get an API key. Then set the BAGEL_API_KEY environment variable.",
+                        details: error.message,
+                    });
+                }
+            }
+        );
+        this.app.get(
+            "/fine-tune/:assetId",
+            async (req: express.Request, res: express.Response) => {
+                const assetId = req.params.assetId;
+                const downloadDir = path.join(
+                    process.cwd(),
+                    "downloads",
+                    assetId
+                );
+
+                console.log("Download directory:", downloadDir);
+
+                try {
+                    console.log("Creating directory...");
+                    await fs.promises.mkdir(downloadDir, { recursive: true });
+
+                    console.log("Fetching file...");
+                    const fileResponse = await fetch(
+                        `https://api.bageldb.ai/api/v1/asset/${assetId}/download`,
+                        {
+                            headers: {
+                                "X-API-KEY": `${process.env.BAGEL_API_KEY}`,
+                            },
+                        }
+                    );
+
+                    if (!fileResponse.ok) {
+                        throw new Error(
+                            `API responded with status ${fileResponse.status}: ${await fileResponse.text()}`
+                        );
+                    }
+
+                    console.log("Response headers:", fileResponse.headers);
+
+                    const fileName =
+                        fileResponse.headers
+                            .get("content-disposition")
+                            ?.split("filename=")[1]
+                            ?.replace(/"/g, "") || "default_name.txt";
+
+                    console.log("Saving as:", fileName);
+
+                    const arrayBuffer = await fileResponse.arrayBuffer();
+                    const buffer = Buffer.from(arrayBuffer);
+
+                    const filePath = path.join(downloadDir, fileName);
+                    console.log("Full file path:", filePath);
+
+                    await fs.promises.writeFile(filePath, buffer);
+
+                    // Verify file was written
+                    const stats = await fs.promises.stat(filePath);
+                    console.log(
+                        "File written successfully. Size:",
+                        stats.size,
+                        "bytes"
+                    );
+
+                    res.json({
+                        success: true,
+                        message: "Single file downloaded successfully",
+                        downloadPath: downloadDir,
+                        fileCount: 1,
+                        fileName: fileName,
+                        fileSize: stats.size,
+                    });
+                } catch (error) {
+                    console.error("Detailed error:", error);
+                    res.status(500).json({
+                        error: "Failed to download files from BagelDB",
+                        details: error.message,
+                        stack: error.stack,
+                    });
+                }
+            }
+        );
     }
 
     public registerAgent(runtime: AgentRuntime) {
@@ -278,22 +387,53 @@ export class DirectClient {
     }
 
     public start(port: number) {
-        this.app.listen(port, () => {
+        this.server = this.app.listen(port, () => {
             elizaLogger.success(`Server running at http://localhost:${port}/`);
         });
+
+        // Handle graceful shutdown
+        const gracefulShutdown = () => {
+            elizaLogger.log("Received shutdown signal, closing server...");
+            this.server.close(() => {
+                elizaLogger.success("Server closed successfully");
+                process.exit(0);
+            });
+
+            // Force close after 5 seconds if server hasn't closed
+            setTimeout(() => {
+                elizaLogger.error(
+                    "Could not close connections in time, forcefully shutting down"
+                );
+                process.exit(1);
+            }, 5000);
+        };
+
+        // Handle different shutdown signals
+        process.on("SIGTERM", gracefulShutdown);
+        process.on("SIGINT", gracefulShutdown);
+    }
+
+    public stop() {
+        if (this.server) {
+            this.server.close(() => {
+                elizaLogger.success("Server stopped");
+            });
+        }
     }
 }
 
 export const DirectClientInterface: Client = {
-    start: async (runtime: IAgentRuntime) => {
+    start: async (_runtime: IAgentRuntime) => {
         elizaLogger.log("DirectClientInterface start");
         const client = new DirectClient();
         const serverPort = parseInt(settings.SERVER_PORT || "3000");
         client.start(serverPort);
         return client;
     },
-    stop: async (runtime: IAgentRuntime) => {
-        elizaLogger.warn("Direct client does not support stopping yet");
+    stop: async (_runtime: IAgentRuntime, client?: any) => {
+        if (client instanceof DirectClient) {
+            client.stop();
+        }
     },
 };
 
