@@ -8,6 +8,9 @@ interface AccordionProps {
     data: GitHubItem[];
     loadMore?: () => void;
     total_count: number;
+    primaryText?: string;
+    secondaryText?: string;
+    mainBackgroundColor?: string;
 }
 
 export const Accordion: React.FC<AccordionProps> = ({
@@ -17,6 +20,9 @@ export const Accordion: React.FC<AccordionProps> = ({
     data,
     loadMore,
     total_count,
+    primaryText,
+    secondaryText,
+    mainBackgroundColor,
 }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [hoverLoadMore, setHoverLoadMore] = useState<boolean>(false);
@@ -35,8 +41,9 @@ export const Accordion: React.FC<AccordionProps> = ({
                 flexDirection: "column",
                 justifyContent: "center",
                 borderRadius: "0.5rem",
-                border: "1px solid #e5e7eb",
                 padding: "1rem",
+                color: primaryText ?? "black",
+                background: mainBackgroundColor ?? "",
             }}
         >
             <div
@@ -48,7 +55,6 @@ export const Accordion: React.FC<AccordionProps> = ({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    // height: "100%",
                     width: "100%",
                 }}
             >
@@ -78,17 +84,18 @@ export const Accordion: React.FC<AccordionProps> = ({
                     }}
                 >
                     {data.map((entry, index) => (
-                        <div key={index}>
+                        <div
+                            key={index}
+                            style={{
+                                opacity: hoveredIndex === index ? 0.8 : 1.0,
+                            }}
+                        >
                             <div
                                 style={{
                                     display: "flex",
                                     flexDirection: "column",
                                     marginBottom: "0.5rem",
                                     cursor: "pointer",
-                                    color:
-                                        hoveredIndex === index
-                                            ? "#3b82f6"
-                                            : "black",
                                     transition: "color 0.2s ease",
                                 }}
                                 onMouseEnter={() => setHoveredIndex(index)}
@@ -105,7 +112,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                                 <div
                                     style={{
                                         fontSize: "0.8rem",
-                                        color: "gray",
+                                        color: secondaryText ?? "gray",
                                     }}
                                 >
                                     {entry.created_at.split("T")[0]}
@@ -125,7 +132,9 @@ export const Accordion: React.FC<AccordionProps> = ({
                 >
                     <span
                         style={{
-                            color: hoverLoadMore ? "#3b82f6" : "black",
+                            color: hoverLoadMore
+                                ? (secondaryText ?? "#3b82f6")
+                                : (primaryText ?? "black"),
                             cursor: "pointer",
                         }}
                         onMouseEnter={() => setHoverLoadMore(true)}

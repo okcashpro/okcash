@@ -1,7 +1,7 @@
 import React from "react";
 import { StatCardProps } from "./Contributions";
 
-export const StatCard: React.FC<StatCardProps> = ({ title, value }) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, style }) => {
     return (
         <div
             style={{
@@ -11,6 +11,7 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value }) => {
                 backgroundColor: "white",
                 borderRadius: "0.5rem",
                 padding: "24px",
+                ...style,
             }}
         >
             <div style={{ fontSize: "1rem", fontWeight: "bold" }}>{title}</div>

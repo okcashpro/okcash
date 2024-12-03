@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Accordion } from "./Accordion";
 import { StatCard } from "./StatCard";
+import { THEME_COLORS } from "./Contributors";
 
 export interface GitHubItem {
     html_url: string;
@@ -11,6 +12,7 @@ export interface GitHubItem {
 export interface StatCardProps {
     title: string;
     value: number;
+    style?: React.CSSProperties;
 }
 
 export interface AccordionItem {
@@ -23,7 +25,7 @@ const initializeAccordionItem = (): AccordionItem => ({
     total_count: 0,
 });
 
-const Contributions = ({ contributor, onBack }) => {
+const Contributions = ({ contributor, onBack, darkMode }) => {
     const [commitsData, setCommitsData] = useState<AccordionItem>(
         initializeAccordionItem(),
     );
@@ -176,7 +178,9 @@ const Contributions = ({ contributor, onBack }) => {
                 width: "100%",
                 padding: "1rem",
                 gap: "1rem",
-                color: "black",
+                color: darkMode
+                    ? THEME_COLORS.dark.primaryText
+                    : THEME_COLORS.light.primaryText,
             }}
         >
             <div>
@@ -194,7 +198,9 @@ const Contributions = ({ contributor, onBack }) => {
                     borderRadius: "0.5rem",
                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                     transition: "box-shadow 0.2s ease-in-out",
-                    backgroundColor: "white",
+                    backgroundColor: darkMode
+                        ? THEME_COLORS.dark.mainBackgroundColor
+                        : THEME_COLORS.light.mainBackgroundColor,
                     padding: "24px",
                     justifyContent: "center",
                 }}
@@ -225,7 +231,13 @@ const Contributions = ({ contributor, onBack }) => {
                         <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                             {contributor.login}
                         </div>
-                        <div style={{ color: "#4b5563" }}>
+                        <div
+                            style={{
+                                color: darkMode
+                                    ? THEME_COLORS.dark.secondaryText
+                                    : THEME_COLORS.light.secondaryText,
+                            }}
+                        >
                             {contributor.contributions} contributions
                         </div>
                     </div>
@@ -244,6 +256,14 @@ const Contributions = ({ contributor, onBack }) => {
                         key={index}
                         title={stat.title}
                         value={stat.data?.total_count}
+                        style={{
+                            backgroundColor: darkMode
+                                ? THEME_COLORS.dark.mainBackgroundColor
+                                : THEME_COLORS.light.mainBackgroundColor,
+                            color: darkMode
+                                ? THEME_COLORS.dark.primaryText
+                                : THEME_COLORS.light.primaryText,
+                        }}
                     />
                 ))}
             </div>
@@ -263,6 +283,21 @@ const Contributions = ({ contributor, onBack }) => {
                         data={item.data.data}
                         loadMore={item.loadMore}
                         total_count={item.data.total_count}
+                        primaryText={
+                            darkMode
+                                ? THEME_COLORS.dark.primaryText
+                                : THEME_COLORS.light.primaryText
+                        }
+                        secondaryText={
+                            darkMode
+                                ? THEME_COLORS.dark.secondaryText
+                                : THEME_COLORS.light.secondaryText
+                        }
+                        mainBackgroundColor={
+                            darkMode
+                                ? THEME_COLORS.dark.mainBackgroundColor
+                                : THEME_COLORS.light.mainBackgroundColor
+                        }
                     />
                 ))}
             </div>

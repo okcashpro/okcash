@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ContributorCard from "./Contributor";
 import Contributions from "./Contributions";
+import { useColorMode } from "@docusaurus/theme-common";
 
 export interface Contributor {
     id: number;
@@ -13,14 +14,36 @@ export interface Contributor {
 export interface ContributorProps {
     contributor: Contributor;
     onSelect: () => void;
+    darkMode: boolean;
 }
 
+export const THEME_COLORS = {
+    light: {
+        mainBackgroundColor: "white",
+        secondaryBackground: "rgba(0, 0, 0, 0.05)",
+        primaryText: "black",
+        secondaryText: "#ffa600",
+    },
+    dark: {
+        mainBackgroundColor: "#1b1b1d",
+        secondaryBackground: "#242526",
+        primaryText: "white",
+        secondaryText: "#add8e6",
+    },
+};
+
 const Contributors: React.FC = () => {
+    const { colorMode } = useColorMode();
     const [selectedContributor, setSelectedContributor] =
         useState<Contributor | null>(null);
     const [contributors, setContributors] = useState<Contributor[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [darkMode, setDarkMode] = useState<boolean>(colorMode === "dark");
+
+    useEffect(() => {
+        setDarkMode(colorMode === "dark");
+    }, [colorMode]);
 
     useEffect(() => {
         const fetchAllContributors = async () => {
@@ -72,7 +95,9 @@ const Contributors: React.FC = () => {
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
                 gap: "1rem",
-                backgroundColor: "#f9fafb",
+                backgroundColor: darkMode
+                    ? THEME_COLORS.dark.secondaryBackground
+                    : THEME_COLORS.light.secondaryBackground,
                 padding: "10px",
                 width: "100%",
             }}
@@ -81,6 +106,7 @@ const Contributors: React.FC = () => {
                 <Contributions
                     contributor={selectedContributor}
                     onBack={() => setSelectedContributor(null)}
+                    darkMode={darkMode}
                 />
             ) : (
                 contributors.map((contributor) => (
@@ -90,6 +116,7 @@ const Contributors: React.FC = () => {
                         onSelect={() => {
                             setSelectedContributor(contributor);
                         }}
+                        darkMode={darkMode}
                     />
                 ))
             )}

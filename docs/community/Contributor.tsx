@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { ContributorProps } from "./Contributors";
+import { THEME_COLORS } from "./Contributors";
 
 const ContributorCard: React.FC<ContributorProps> = ({
     contributor,
     onSelect,
+    darkMode,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     return (
@@ -17,11 +19,15 @@ const ContributorCard: React.FC<ContributorProps> = ({
                     ? "0 4px 6px rgba(0, 0, 0, 0.1)"
                     : "0 1px 2px rgba(0, 0, 0, 0.05)",
                 transition: "box-shadow 0.2s ease-in-out",
-                backgroundColor: "white",
+                backgroundColor: darkMode
+                    ? THEME_COLORS.dark.mainBackgroundColor
+                    : THEME_COLORS.light.mainBackgroundColor,
                 cursor: isHovered ? "pointer" : "default",
                 padding: "24px",
                 justifyContent: "center",
-                color: "black",
+                color: darkMode
+                    ? THEME_COLORS.dark.primaryText
+                    : THEME_COLORS.light.primaryText,
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -53,7 +59,13 @@ const ContributorCard: React.FC<ContributorProps> = ({
                     <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                         {contributor.login}
                     </div>
-                    <div style={{ color: "#4b5563" }}>
+                    <div
+                        style={{
+                            color: darkMode
+                                ? THEME_COLORS.dark.secondaryText
+                                : THEME_COLORS.light.secondaryText,
+                        }}
+                    >
                         {contributor.contributions} contributions
                     </div>
                 </div>
