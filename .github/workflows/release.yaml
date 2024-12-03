@@ -43,15 +43,17 @@ jobs:
               run: |
                   # Get the latest release tag
                   LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-                  echo "Publishing version: $LATEST_TAG"
 
                   # Force clean the working directory and reset any changes
+                  echo "Cleaning working directory and resetting any changes"
                   git clean -fd
                   git reset --hard HEAD
 
                   # Force checkout the latest tag
+                  echo "Checking out latest tag: $LATEST_TAG"
                   git checkout -f $LATEST_TAG
 
+                  echo "Publishing version: $LATEST_TAG"
                   npx lerna publish from-git --yes --dist-tag latest
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
