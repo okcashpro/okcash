@@ -188,7 +188,19 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                     style={{ cursor: "pointer", fontWeight: "bold" }}
                     onClick={onBack}
                 >
-                    ❮ back
+                    <span
+                        style={{
+                            border: "solid currentColor",
+                            borderWidth: "0 2px 2px 0",
+                            display: "inline-block",
+                            height: "8px",
+                            pointerEvents: "none",
+                            transform: "translateY(-1px) rotate(135deg)",
+                            width: "8px",
+                            marginRight: "1px",
+                        }}
+                    ></span>
+                    <span>back</span>
                 </span>
             </div>
             <div
