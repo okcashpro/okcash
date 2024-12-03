@@ -203,20 +203,20 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 69 EZSIS BieefG47jAHCGZBxi2q87RDuHyGZyYC3vAzxpyu8pump to 9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
+                    text: "Send 69 APT tokens to 0x4f2e63be8e7fe287836e29cde6f3d5cbc96eefd0c0e3f3747668faa2ae7324b0",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll send 69 EZSIS tokens now...",
+                    text: "I'll send 69 APT tokens now...",
                     action: "SEND_TOKEN",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Successfully sent 69 EZSIS tokens to 9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa\nTransaction: 5KtPn3DXXzHkb7VAVHZGwXJQqww39ASnrf7YkyJoF2qAGEpBEEGvRHLnnTG8ZVwKqNHMqSckWVGnsQAgfH5pbxEb",
+                    text: "Successfully sent 69 APT tokens to 0x4f2e63be8e7fe287836e29cde6f3d5cbc96eefd0c0e3f3747668faa2ae7324b0, Transaction: 0x39a8c432d9bdad993a33cc1faf2e9b58fb7dd940c0425f1d6db3997e4b4b05c0",
                 },
             },
         ],
