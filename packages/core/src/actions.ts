@@ -14,7 +14,7 @@ export const composeActionExamples = (actionsData: Action[], count: number) => {
     ]);
 
     const actionExamples: ActionExample[][] = [];
-    const length = data.length;
+    let length = data.length;
     for (let i = 0; i < count && length; i++) {
         const actionId = i % length;
         const examples = data[actionId];
