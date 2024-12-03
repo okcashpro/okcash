@@ -917,9 +917,15 @@ importers:
       '@ai16z/plugin-trustdb':
         specifier: workspace:*
         version: link:../plugin-trustdb
+      '@onflow/config':
+        specifier: 1.5.1
+        version: 1.5.1
       '@onflow/fcl':
         specifier: 1.13.1
         version: 1.13.1(@types/react@18.3.12)(bufferutil@4.0.8)(encoding@0.1.13)(google-protobuf@3.21.4)(jiti@2.4.0)(postcss@8.4.49)(react@18.3.1)(utf-8-validate@5.0.10)
+      '@onflow/typedefs':
+        specifier: 1.4.0
+        version: 1.4.0
       bignumber.js:
         specifier: 9.1.2
         version: 9.1.2
@@ -945,15 +951,6 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
     devDependencies:
-      '@onflow/config':
-        specifier: 1.5.1
-        version: 1.5.1
-      '@onflow/typedefs':
-        specifier: 1.4.0
-        version: 1.4.0
-      '@onflow/types':
-        specifier: 1.4.1
-        version: 1.4.1
       '@types/elliptic':
         specifier: 6.4.18
         version: 6.4.18
