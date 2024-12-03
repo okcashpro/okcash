@@ -79,7 +79,10 @@ const Contributors: React.FC = () => {
             }}
         >
             {selectedContributor ? (
-                <Contributions contributor={selectedContributor} />
+                <Contributions
+                    contributor={selectedContributor}
+                    onBack={() => setSelectedContributor(null)}
+                />
             ) : (
                 contributors.map((contributor) => (
                     <ContributorCard

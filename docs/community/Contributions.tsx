@@ -13,7 +13,7 @@ export interface StatCardProps {
     value: number;
 }
 
-const Contributions = ({ contributor }) => {
+const Contributions = ({ contributor, onBack }) => {
     const [contributorStat, setContributorState] = useState<StatCardProps[]>(
         [],
     );
@@ -129,6 +129,12 @@ const Contributions = ({ contributor }) => {
                 gap: "1rem",
             }}
         >
+            <div
+                style={{ cursor: "pointer", fontWeight: "bold" }}
+                onClick={onBack}
+            >
+                ❮ back
+            </div>
             <div
                 key={contributor.id}
                 style={{
