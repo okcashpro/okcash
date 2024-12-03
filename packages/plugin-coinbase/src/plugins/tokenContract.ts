@@ -285,7 +285,7 @@ export const invokeContractAction: Action = {
                 return;
             }
 
-            const { contractAddress, method, abi, args, amount, assetId, network } = invocationDetails.object;
+            const { contractAddress, method, args, amount, assetId, network } = invocationDetails.object;
 
             const wallet = await initializeWallet(runtime, network);
 
