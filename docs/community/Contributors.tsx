@@ -49,7 +49,7 @@ const Contributors: React.FC = () => {
         setDarkMode(colorMode === "dark");
     }, [colorMode]);
 
-    const fetchAllContributors = async (page: number) => {
+    const fetchContributors = async (page: number) => {
         loadingRef.current = true;
         try {
             const response = await fetch(
@@ -76,7 +76,7 @@ const Contributors: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchAllContributors(pageRef.current);
+        fetchContributors(pageRef.current);
     }, []);
 
     useEffect(() => {
@@ -88,7 +88,7 @@ const Contributors: React.FC = () => {
                     hasMoreRef.current
                 ) {
                     pageRef.current++;
-                    fetchAllContributors(pageRef.current);
+                    fetchContributors(pageRef.current);
                 }
             },
             { threshold: 1.0 },
@@ -151,7 +151,7 @@ const Contributors: React.FC = () => {
                     height: "1px",
                     backgroundColor: "transparent",
                 }}
-            ></div>
+            />
         </div>
     );
 };
