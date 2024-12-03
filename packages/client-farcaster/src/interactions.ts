@@ -60,14 +60,23 @@ export class FarcasterInteractionManager {
         });
 
         const agent = await this.client.getProfile(agentFid);
-        console.log(
-            `[Farcaster Neynar Client] Found ${mentions.length} mentions.`
-        );
         for (const mention of mentions) {
             const messageHash = toHex(mention.hash);
             const conversationId = `${messageHash}-${this.runtime.agentId}`;
             const roomId = stringToUuid(conversationId);
             const userId = stringToUuid(mention.authorFid.toString());
+
+            const pastMemoryId = castUuid({
+                agentId: this.runtime.agentId,
+                hash: mention.hash,
+            });
+
+            const pastMemory =
+                await this.runtime.messageManager.getMemoryById(pastMemoryId);
+
+            if (pastMemory) {
+                continue;
+            }
 
             await this.runtime.ensureConnection(
                 userId,
@@ -77,7 +86,7 @@ export class FarcasterInteractionManager {
                 "farcaster"
             );
 
-            await buildConversationThread({
+            const thread = await buildConversationThread({
                 client: this.client,
                 runtime: this.runtime,
                 cast: mention,
@@ -94,6 +103,7 @@ export class FarcasterInteractionManager {
                 agent,
                 cast: mention,
                 memory,
+                thread
             });
         }
 
@@ -104,10 +114,12 @@ export class FarcasterInteractionManager {
         agent,
         cast,
         memory,
+        thread
     }: {
         agent: Profile;
         cast: Cast;
         memory: Memory;
+        thread: Cast[]
     }) {
         if (cast.profile.fid === agent.fid) {
             console.log("skipping cast from bot itself", cast.hash);
@@ -193,11 +205,6 @@ export class FarcasterInteractionManager {
         response.inReplyTo = memoryId;
 
         if (!response.text) return;
-
-        if (cast.timestamp < this.client.lastInteractionTimestamp) {
-            console.log(`Cast ${cast.hash} was sent before startup. Skipping.`);
-            return;
-        }
 
         try {
             console.log(`Replying to cast ${cast.hash}.`);

@@ -54,16 +54,15 @@ export async function buildConversationThread({
     cast: Cast;
     runtime: IAgentRuntime;
     client: FarcasterClient;
-}): Promise<void> {
+}): Promise<Cast[]> {
     const thread: Cast[] = [];
     const visited: Set<string> = new Set();
-
     async function processThread(currentCast: Cast) {
-        if (visited.has(cast.hash)) {
+        if (visited.has(currentCast.hash)) {
             return;
         }
 
-        visited.add(cast.hash);
+        visited.add(currentCast.hash);
 
         const roomId = castUuid({
             hash: currentCast.hash,
@@ -74,9 +73,9 @@ export async function buildConversationThread({
         const memory = await runtime.messageManager.getMemoryById(roomId);
 
         if (!memory) {
-            elizaLogger.log("Creating memory for cast", cast.hash);
+            elizaLogger.log("Creating memory for cast", currentCast.hash);
 
-            const userId = stringToUuid(cast.profile.username);
+            const userId = stringToUuid(currentCast.profile.username);
 
             await runtime.ensureConnection(
                 userId,
@@ -104,4 +103,5 @@ export async function buildConversationThread({
     }
 
     await processThread(cast);
+    return thread;
 }

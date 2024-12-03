@@ -91,6 +91,14 @@ export class FarcasterClient {
                 name: response.cast.author.display_name || "anon",
                 username: response.cast.author.username,
             },
+            ...(response.cast.parent_hash
+                ? {
+                      inReplyTo: {
+                          hash: response.cast.parent_hash,
+                          fid: response.cast.parent_author.fid,
+                      },
+                  }
+                : {}),
             timestamp: new Date(response.cast.timestamp),
         };
 
@@ -143,6 +151,14 @@ export class FarcasterClient {
                     name: notification.cast!.author.display_name || "anon",
                     username: notification.cast!.author.username,
                 },
+                ...(notification.cast!.parent_hash
+                    ? {
+                          inReplyTo: {
+                              hash: notification.cast!.parent_hash,
+                              fid: notification.cast!.parent_author.fid,
+                          },
+                      }
+                    : {}),
                 timestamp: new Date(notification.cast!.timestamp),
             };
             mentions.push(cast);

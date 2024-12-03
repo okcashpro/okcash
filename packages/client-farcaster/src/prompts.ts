@@ -24,7 +24,7 @@ export const headerTemplate = `
 # Knowledge
 {{knowledge}}
 
-About {{agentName}} (@{{farcasterUserName}}):
+About {{agentName}} (@{{farcasterUsername}}):
 {{bio}}
 {{lore}}
 {{postDirections}}
@@ -38,7 +38,7 @@ About {{agentName}} (@{{farcasterUserName}}):
 export const postTemplate =
     headerTemplate +
     `
-# Task: Generate a post in the voice and style of {{agentName}}, aka @{{farcasterUserName}}
+# Task: Generate a post in the voice and style of {{agentName}}, aka @{{farcasterUsername}}
 Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}.
 Try to write something totally different than previous posts. Do not add commentary or ackwowledge this request, just write the post.
 
@@ -49,6 +49,9 @@ export const messageHandlerTemplate =
     `
 Recent interactions between {{agentName}} and other users:
 {{recentPostInteractions}}
+
+Thread of casts You Are Replying To:
+{{formattedConversation}}
 
 # Task: Generate a post in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}):
 {{currentPost}}` +
