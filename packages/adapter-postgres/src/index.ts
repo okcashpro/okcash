@@ -185,12 +185,33 @@ export class PostgresDatabaseAdapter
     async init() {
         await this.testConnection();
 
-        const schema = fs.readFileSync(
-            path.resolve(__dirname, "../schema.sql"),
-            "utf8"
-        );
+        const client = await this.pool.connect();
+        try {
+            await client.query("BEGIN");
 
-        await this.query(schema);
+            // Check if schema already exists (check for a core table)
+            const { rows } = await client.query(`
+                SELECT EXISTS (
+                    SELECT FROM information_schema.tables
+                    WHERE table_name = 'rooms'
+                );
+            `);
+
+            if (!rows[0].exists) {
+                const schema = fs.readFileSync(
+                    path.resolve(__dirname, "../schema.sql"),
+                    "utf8"
+                );
+                await client.query(schema);
+            }
+
+            await client.query("COMMIT");
+        } catch (error) {
+            await client.query("ROLLBACK");
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 
     async close() {
