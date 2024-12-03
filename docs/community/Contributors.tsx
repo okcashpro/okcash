@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ContributorCard from "./Contributor";
 import Contributions from "./Contributions";
 import { useColorMode } from "@docusaurus/theme-common";
@@ -38,50 +38,74 @@ const Contributors: React.FC = () => {
         useState<Contributor | null>(null);
     const [contributors, setContributors] = useState<Contributor[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
     const [darkMode, setDarkMode] = useState<boolean>(colorMode === "dark");
+
+    const observerRef = useRef<HTMLDivElement | null>(null);
+    const pageRef = useRef<number>(1);
+    const loadingRef = useRef<boolean>(true);
+    const hasMoreRef = useRef<boolean>(true);
 
     useEffect(() => {
         setDarkMode(colorMode === "dark");
     }, [colorMode]);
 
-    useEffect(() => {
-        const fetchAllContributors = async () => {
-            let allContributors: Contributor[] = [];
-            let page = 1;
-
-            try {
-                while (true) {
-                    const response = await fetch(
-                        `https://api.github.com/repos/ai16z/eliza/contributors?per_page=30&page=${page}`,
-                    );
-                    if (!response.ok) {
-                        throw new Error(
-                            `Error fetching contributors: ${response.statusText}`,
-                        );
-                    }
-                    const data: Contributor[] = await response.json();
-
-                    if (data.length === 0) {
-                        break;
-                    }
-
-                    allContributors = [...allContributors, ...data];
-                    page++;
-                }
-
-                setContributors(allContributors);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Unknown error");
-            } finally {
-                setLoading(false);
+    const fetchAllContributors = async (page: number) => {
+        loadingRef.current = true;
+        try {
+            const response = await fetch(
+                `https://api.github.com/repos/ai16z/eliza/contributors?per_page=30&page=${page}`,
+            );
+            if (!response.ok) {
+                throw new Error(
+                    `Error fetching contributors: ${response.statusText}`,
+                );
             }
-        };
+            const data: Contributor[] = await response.json();
+            if (data.length === 0) {
+                hasMoreRef.current = false;
+                return;
+            }
+            const currentContributors = [...contributors, ...data];
 
-        fetchAllContributors();
+            setContributors(currentContributors);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Unknown error");
+        } finally {
+            loadingRef.current = false;
+        }
+    };
+
+    useEffect(() => {
+        fetchAllContributors(pageRef.current);
     }, []);
 
-    if (loading) {
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (
+                    entries[0].isIntersecting &&
+                    !loadingRef.current &&
+                    hasMoreRef.current
+                ) {
+                    pageRef.current++;
+                    fetchAllContributors(pageRef.current);
+                }
+            },
+            { threshold: 1.0 },
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) {
+                observer.unobserve(observerRef.current);
+            }
+        };
+    }, [contributors]);
+
+    if (!contributors.length) {
         return <div>Loading...</div>;
     }
 
@@ -93,7 +117,7 @@ const Contributors: React.FC = () => {
         <div
             style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gridTemplateColumns: `repeat(${selectedContributor ? "1" : "auto-fit"}, minmax(300px, 1fr))`,
                 gap: "1rem",
                 backgroundColor: darkMode
                     ? THEME_COLORS.dark.secondaryBackground
@@ -120,6 +144,14 @@ const Contributors: React.FC = () => {
                     />
                 ))
             )}
+
+            <div
+                ref={observerRef}
+                style={{
+                    height: "1px",
+                    backgroundColor: "transparent",
+                }}
+            ></div>
         </div>
     );
 };
