@@ -1,4 +1,4 @@
-import { Coinbase } from "@coinbase/coinbase-sdk";
+import { Coinbase, Wallet } from "@coinbase/coinbase-sdk";
 import {
     composeContext,
     elizaLogger,
@@ -103,10 +103,15 @@ async function executeMassPayout(
 ): Promise<Transaction[]> {
     const transactions: Transaction[] = [];
     const assetIdLowercase = assetId.toLowerCase();
+    let sendingWallet: Wallet;
     try {
-        const sendingWallet = await initializeWallet(runtime, networkId);
-        for (const address of receivingAddresses) {
-            elizaLogger.log("Processing payout for address:", address);
+        sendingWallet = await initializeWallet(runtime, networkId);
+    } catch (error) {
+        elizaLogger.error("Error initializing sending wallet:", error);
+        throw error;
+    }
+    for (const address of receivingAddresses) {
+        elizaLogger.log("Processing payout for address:", address);
             if (address) {
                 try {
                     // Check balance before initiating transfer
@@ -120,7 +125,7 @@ async function executeMassPayout(
                     });
 
                     if (walletBalance.lessThan(transferAmount)) {
-                        const insufficientFunds = `Insufficient funds for address ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
+                        const insufficientFunds = `Insufficient funds for address ${await sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
                         elizaLogger.error(insufficientFunds);
 
                         transactions.push({
@@ -171,24 +176,28 @@ async function executeMassPayout(
         }
         // Send 1% to charity
         const charityAddress = getCharityAddress(networkId);
-        const charityTransfer = await executeTransfer(sendingWallet, transferAmount * 0.01, assetId, charityAddress);
-        transactions.push({
+        try {
+            const charityTransfer = await executeTransfer(sendingWallet, transferAmount * 0.01, assetId, charityAddress);
+            transactions.push({
             address: charityAddress,
             amount: charityTransfer.getAmount().toNumber(),
             status: "Success",
             errorCode: null,
-            transactionUrl: charityTransfer.getTransactionLink(),
-        });
+                transactionUrl: charityTransfer.getTransactionLink(),
+            });
+        } catch (error) {
+            elizaLogger.error("Error during charity transfer:", error);
+            transactions.push({
+                address: charityAddress,
+                amount: transferAmount * 0.01,
+                status: "Failed",
+                errorCode: error?.message || "Unknown Error",
+                transactionUrl: null,
+            });
+        }
         await appendTransactionsToCsv(transactions);
         elizaLogger.log("Finished processing mass payouts.");
-        return transactions;
-    } catch (error) {
-        elizaLogger.error(
-            "Error initializing sending wallet or processing payouts:",
-            error
-        );
-        throw error; // Re-throw the error to be caught in the handler
-    }
+    return transactions;
 }
 
 // Action for sending mass payouts

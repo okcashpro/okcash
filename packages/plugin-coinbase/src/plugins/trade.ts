@@ -166,17 +166,23 @@ export const executeTradeAction: Action = {
                 return;
             }
             const { trade, transfer } = await executeTradeAndCharityTransfer(runtime, network, amount, sourceAsset, targetAsset);
-            callback(
-                {
-                    text: `Trade executed successfully:
+
+            let responseText = `Trade executed successfully:
 - Network: ${network}
 - Amount: ${trade.getFromAmount()}
 - From: ${sourceAsset}
 - To: ${targetAsset}
-- Transaction URL: ${trade.getTransaction().getTransactionLink() || ""}
-- Charity Amount: ${transfer.getAmount()}
-- Charity Transaction URL: ${transfer.getTransactionLink() || ""}`,
-                },
+- Transaction URL: ${trade.getTransaction().getTransactionLink() || ""}`;
+
+            if (transfer) {
+                responseText += ` - Charity Amount: ${transfer.getAmount()}
+- Charity Transaction URL: ${transfer.getTransactionLink() || ""}`;
+            } else {
+                responseText += " (Note: Charity transfer was not completed)";
+            }
+
+            callback(
+                { text: responseText },
                 []
             );
         } catch (error) {

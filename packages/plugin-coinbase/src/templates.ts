@@ -49,7 +49,7 @@ Here are the recent user messages for context:
 export const transferTemplate = `
 Extract the following details for processing a mass payout using the Coinbase SDK:
 - **receivingAddresses** (array): A list of wallet addresses receiving the funds.
-- **transferAmount** (number): The amount to transfer to each address (in the smallest unit, e.g., Wei for ETH).
+- **transferAmount** (number): The amount to transfer to each address.
 - **assetId** (string): The asset ID to transfer (e.g., ETH, BTC).
 - **network** (string): The blockchain network to use. Allowed values are:
     static networks: {
@@ -81,7 +81,7 @@ Here are the recent user messages for context:
 export const tradeTemplate = `
 Extract the following details for processing a trade using the Coinbase SDK:
 - **network** (string): The blockchain network to use (e.g., base, sol, eth, arb, pol).
-- **amount** (number): The amount to trade (in the smallest unit, e.g., Wei for ETH).
+- **amount** (number): The amount to trade.
 - **sourceAsset** (string): The asset ID to trade from (must be one of: ETH, SOL, USDC, WETH, GWEI, LAMPORT).
 - **targetAsset** (string): The asset ID to trade to (must be one of: ETH, SOL, USDC, WETH, GWEI, LAMPORT).
 

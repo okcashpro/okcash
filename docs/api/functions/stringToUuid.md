@@ -6,7 +6,7 @@
 
 ## Parameters
 
-• **target**: `string`
+• **target**: `string` \| `number`
 
 ## Returns
 
