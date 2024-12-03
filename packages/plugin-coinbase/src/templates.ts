@@ -104,3 +104,60 @@ Provide the details in the following JSON format:
 Here are the recent user messages for context:
 {{recentMessages}}
 `;
+
+export const tokenContractTemplate = `
+Extract the following details for deploying a token contract using the Coinbase SDK:
+- **contractType** (string): The type of token contract to deploy (ERC20, ERC721, or ERC1155)
+- **name** (string): The name of the token
+- **symbol** (string): The symbol of the token
+- **network** (string): The blockchain network to deploy on (e.g., base, eth, arb, pol)
+- **baseURI** (string, optional): The base URI for token metadata (required for ERC721 and ERC1155)
+- **totalSupply** (number, optional): The total supply of tokens (only for ERC20)
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "contractType": "<contract_type>",
+    "name": "<token_name>",
+    "symbol": "<token_symbol>",
+    "network": "<network>",
+    "baseURI": "<base_uri>",
+    "totalSupply": <total_supply>
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
+
+// Add to templates.ts
+export const contractInvocationTemplate = `
+Extract the following details for invoking a smart contract using the Coinbase SDK:
+- **contractAddress** (string): The address of the contract to invoke
+- **method** (string): The method to invoke on the contract
+- **abi** (array): The ABI of the contract
+- **args** (object, optional): The arguments to pass to the contract method
+- **amount** (number, optional): The amount of the asset to send to a payable contract method
+- **assetId** (string, optional): The ID of the asset to send to a payable contract method
+- **network** (string): The blockchain network to use (e.g., base, eth, arb, pol)
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "contractAddress": "<contract_address>",
+    "method": "<method_name>",
+    "abi": [<contract_abi>],
+    "args": {
+        "<arg_name>": "<arg_value>"
+    },
+    "amount": <amount>,
+    "assetId": "<asset_id>",
+    "network": "<network>"
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
