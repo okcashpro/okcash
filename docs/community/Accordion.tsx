@@ -20,12 +20,18 @@ export const Accordion: React.FC<AccordionProps> = ({
 }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [hoverLoadMore, setHoverLoadMore] = useState<boolean>(false);
+    const [maxHeight, setMaxHeight] = useState<string>(
+        isOpen ? "1000px" : "0px",
+    );
+
+    React.useEffect(() => {
+        setMaxHeight(isOpen ? "1000px" : "0px");
+    }, [isOpen]);
 
     return (
         <div
             style={{
                 display: "flex",
-                gap: "1rem",
                 flexDirection: "column",
                 justifyContent: "center",
                 borderRadius: "0.5rem",
@@ -42,25 +48,38 @@ export const Accordion: React.FC<AccordionProps> = ({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    height: "100%",
+                    // height: "100%",
                     width: "100%",
                 }}
             >
                 <div>{title}</div>
-                <div>{isOpen ? "▼" : "▶"}</div>
+                <div
+                    style={{
+                        transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                        transition: "transform 0.3s ease",
+                    }}
+                >
+                    {"▶"}
+                </div>
             </div>
-            {isOpen && (
+            <div
+                style={{
+                    maxHeight,
+                    overflow: "hidden",
+                    transition: "max-height 0.3s ease",
+                }}
+            >
                 <div
                     style={{
                         display: "flex",
                         flexDirection: "column",
                         gap: "1rem",
-                        marginTop: "0.5rem",
+                        marginTop: "2rem",
                         marginLeft: "1rem",
                     }}
                 >
                     {data.map((entry, index) => (
-                        <div key={index} style={{ marginBottom: "0.5rem" }}>
+                        <div key={index}>
                             <div
                                 style={{
                                     display: "flex",
@@ -96,7 +115,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                         </div>
                     ))}
                 </div>
-            )}
+            </div>
             {isOpen && loadMore && data.length < total_count && (
                 <div
                     style={{
