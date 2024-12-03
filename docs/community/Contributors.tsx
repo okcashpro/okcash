@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import ContributorCard from "./Contributor";
 import Contributions from "./Contributions";
 import { useColorMode } from "@docusaurus/theme-common";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 export interface Contributor {
     id: number;
@@ -33,6 +34,9 @@ export const THEME_COLORS = {
 };
 
 const Contributors: React.FC = () => {
+    const { siteConfig } = useDocusaurusContext();
+    const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
+
     const { colorMode } = useColorMode();
     const [selectedContributor, setSelectedContributor] =
         useState<Contributor | null>(null);
@@ -54,6 +58,13 @@ const Contributors: React.FC = () => {
         try {
             const response = await fetch(
                 `https://api.github.com/repos/ai16z/eliza/contributors?per_page=30&page=${page}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+                        Accept: "application/vnd.github.v3+json",
+                    },
+                },
             );
             if (!response.ok) {
                 throw new Error(
