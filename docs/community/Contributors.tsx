@@ -58,10 +58,6 @@ const Contributors: React.FC = () => {
         fetchAllContributors();
     }, []);
 
-    useEffect(() => {
-        console.log(contributors);
-    }, [contributors]);
-
     if (loading) {
         return <div>Loading...</div>;
     }

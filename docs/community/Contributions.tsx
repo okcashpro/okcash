@@ -45,8 +45,6 @@ const Contributions = ({ contributor }) => {
                 stats.push({ title: "PRs", value: prData.total_count });
                 setPrsData(prData.items || []);
 
-                console.log(prData);
-
                 // Fetch Issues
                 const issueResponse = await fetch(
                     `https://api.github.com/search/issues?q=type:issue+author:${contributor.login}+repo:ai16z/eliza`,
