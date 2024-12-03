@@ -9,6 +9,7 @@ import {
     AgentRuntime,
     CacheManager,
     Character,
+    Clients,
     DbCacheAdapter,
     FsCacheAdapter,
     IAgentRuntime,
@@ -36,6 +37,7 @@ import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
+import { aptosPlugin, TransferAptosToken } from "@ai16z/plugin-aptos";
 import { teePlugin } from "@ai16z/plugin-tee";
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -367,11 +369,11 @@ export function createAgent(
                 ? confluxPlugin
                 : null,
             nodePlugin,
-            getSecret(character, "SOLANA_PUBLIC_KEY") ||
-            (getSecret(character, "WALLET_PUBLIC_KEY") &&
-                !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
-                ? solanaPlugin
-                : null,
+            // getSecret(character, "SOLANA_PUBLIC_KEY") ||
+            // (getSecret(character, "WALLET_PUBLIC_KEY") &&
+            //     !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
+            //     ? solanaPlugin
+            //     : null,
             getSecret(character, "EVM_PRIVATE_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
                 !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
@@ -392,6 +394,7 @@ export function createAgent(
                 : []),
             getSecret(character, "WALLET_SECRET_SALT") ? teePlugin : null,
             getSecret(character, "ALCHEMY_API_KEY") ? goatPlugin : null,
+            getSecret(character, "APTOS_PRIVATE_KEY") ? aptosPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -460,7 +463,16 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [defaultCharacter];
+    const character = defaultCharacter;
+    let customAptosPlugin = aptosPlugin;
+    let customTransferAptToken = TransferAptosToken;
+    customTransferAptToken.validate = async (content, runtime, callback) => {
+        return true;
+    };
+    customAptosPlugin.actions = [customTransferAptToken];
+    character.plugins = [customAptosPlugin];
+    character.modelProvider = ModelProviderName.OPENAI;
+    let characters = [character];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
