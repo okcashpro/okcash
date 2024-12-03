@@ -300,8 +300,6 @@ export async function getWalletDetails(
             amount: balance[1].toString(),
         }));
 
-        // Fetch the wallet's recent transactions
-        const walletAddress = await wallet.getDefaultAddress();
         const transactions =[];
 
         const formattedTransactions = transactions.map((transaction) => {
