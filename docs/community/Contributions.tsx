@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Accordion } from "./Accordion";
 import { StatCard } from "./StatCard";
 import { THEME_COLORS } from "./Contributors";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 export interface GitHubItem {
     html_url: string;
@@ -26,6 +27,9 @@ const initializeAccordionItem = (): AccordionItem => ({
 });
 
 const Contributions = ({ contributor, onBack, darkMode }) => {
+    const { siteConfig } = useDocusaurusContext();
+    const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
+
     const [commitsData, setCommitsData] = useState<AccordionItem>(
         initializeAccordionItem(),
     );
@@ -64,7 +68,9 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
             const commitResponse = await fetch(
                 `https://api.github.com/repos/ai16z/eliza/commits?author=${contributor.login}&page=${page}`,
                 {
+                    method: "GET",
                     headers: {
+                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },
@@ -90,7 +96,9 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
             const prResponse = await fetch(
                 `https://api.github.com/search/issues?q=type:pr+author:${contributor.login}+repo:ai16z/eliza&page=${page}`,
                 {
+                    method: "GET",
                     headers: {
+                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },
@@ -116,7 +124,9 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
             const issueResponse = await fetch(
                 `https://api.github.com/search/issues?q=type:issue+author:${contributor.login}+repo:ai16z/eliza&page=${page}`,
                 {
+                    method: "GET",
                     headers: {
+                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },
