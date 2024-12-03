@@ -1,4 +1,4 @@
-import { Coinbase } from "@coinbase/coinbase-sdk";
+import { Coinbase, SmartContract } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
@@ -82,6 +82,7 @@ export const deployTokenContractAction: Action = {
                 modelClass: ModelClass.SMALL,
                 schema: TokenContractSchema,
             });
+            elizaLogger.log("Contract details:", contractDetails.object);
 
             if (!isTokenContractContent(contractDetails.object)) {
                 callback(
@@ -94,9 +95,9 @@ export const deployTokenContractAction: Action = {
             }
 
             const { contractType, name, symbol, network, baseURI, totalSupply } = contractDetails.object;
-
+            elizaLogger.log("Contract details:", contractDetails.object);
             const wallet = await initializeWallet(runtime, network);
-            let contract;
+            let contract: SmartContract;
             let deploymentDetails;
 
             switch (contractType.toLowerCase()) {
@@ -125,25 +126,14 @@ export const deployTokenContractAction: Action = {
                         baseURI,
                     };
                     break;
-
-                case "erc1155":
-                    contract = await wallet.deployMultiToken({
-                        uri: baseURI || "",
-                    });
-                    deploymentDetails = {
-                        contractType: "ERC1155",
-                        totalSupply: "N/A",
-                        baseURI,
-                    };
-                    break;
-
                 default:
                     throw new Error(`Unsupported contract type: ${contractType}`);
             }
 
             // Wait for deployment to complete
-            await contract.waitForDeployment();
-
+            await contract.wait();
+            elizaLogger.log("Deployment details:", deploymentDetails);
+            elizaLogger.log("Contract deployed successfully:", contract);
             // Log deployment to CSV
             const csvWriter = createArrayCsvWriter({
                 path: contractsCsvFilePath,
@@ -159,14 +149,15 @@ export const deployTokenContractAction: Action = {
                 ],
                 append: true,
             });
-
+            const transaction = contract.getTransaction()?.getTransactionLink() || "";
+            const contractAddress = contract.getContractAddress();
             await csvWriter.writeRecords([[
                 deploymentDetails.contractType,
                 name,
                 symbol,
                 network,
-                contract.getAddress(),
-                contract.getDeploymentTransaction()?.getTransactionLink() || "",
+                contractAddress,
+                transaction,
                 deploymentDetails.baseURI,
                 deploymentDetails.totalSupply || "",
             ]]);
@@ -178,8 +169,8 @@ export const deployTokenContractAction: Action = {
 - Name: ${name}
 - Symbol: ${symbol}
 - Network: ${network}
-- Contract Address: ${contract.getAddress()}
-- Transaction URL: ${contract.getDeploymentTransaction()?.getTransactionLink() || "N/A"}
+- Contract Address: ${contractAddress}
+- Transaction URL: ${transaction}
 ${deploymentDetails.baseURI !== "N/A" ? `- Base URI: ${deploymentDetails.baseURI}` : ""}
 ${deploymentDetails.totalSupply !== "N/A" ? `- Total Supply: ${deploymentDetails.totalSupply}` : ""}
 
@@ -203,7 +194,7 @@ Contract deployment has been logged to the CSV file.`,
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Deploy an ERC20 token named 'MyToken' with symbol 'MTK' on the base network",
+                    text: "Deploy an ERC721 token named 'MyNFT' with symbol 'MNFT' on base network with URI 'https://pbs.twimg.com/profile_images/1848823420336934913/oI0-xNGe_400x400.jpg'",
                 },
             },
             {
@@ -217,6 +208,25 @@ Contract deployment has been logged to the CSV file.`,
 - Contract Address: 0x...
 - Transaction URL: https://basescan.org/tx/...
 - Total Supply: 1000000`,
+                },
+            },
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Deploy an ERC721 token named 'MyNFT' with symbol 'MNFT' on the base network",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: `Token contract deployed successfully:
+- Type: ERC721
+- Name: MyNFT
+- Symbol: MNFT
+- Network: base
+- Contract Address: 0x...
+- Transaction URL: https://basescan.org/tx/...
+- URI: https://pbs.twimg.com/profile_images/1848823420336934913/oI0-xNGe_400x400.jpg`,
                 },
             },
         ],
@@ -264,7 +274,7 @@ export const invokeContractAction: Action = {
                 modelClass: ModelClass.SMALL,
                 schema: ContractInvocationSchema,
             });
-
+            elizaLogger.log("Invocation details:", invocationDetails.object);
             if (!isContractInvocationContent(invocationDetails.object)) {
                 callback(
                     {
@@ -283,11 +293,232 @@ export const invokeContractAction: Action = {
             const invocationOptions = {
                 contractAddress,
                 method,
-                abi,
+                abi: [
+                    {
+                        "constant": true,
+                        "inputs": [],
+                        "name": "name",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "string"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "constant": false,
+                        "inputs": [
+                            {
+                                "name": "_spender",
+                                "type": "address"
+                            },
+                            {
+                                "name": "_value",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "approve",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "bool"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "constant": true,
+                        "inputs": [],
+                        "name": "totalSupply",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "uint256"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "constant": false,
+                        "inputs": [
+                            {
+                                "name": "_from",
+                                "type": "address"
+                            },
+                            {
+                                "name": "_to",
+                                "type": "address"
+                            },
+                            {
+                                "name": "_value",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "transferFrom",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "bool"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "constant": true,
+                        "inputs": [],
+                        "name": "decimals",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "uint8"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "constant": true,
+                        "inputs": [
+                            {
+                                "name": "_owner",
+                                "type": "address"
+                            }
+                        ],
+                        "name": "balanceOf",
+                        "outputs": [
+                            {
+                                "name": "balance",
+                                "type": "uint256"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "constant": true,
+                        "inputs": [],
+                        "name": "symbol",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "string"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "constant": false,
+                        "inputs": [
+                            {
+                                "name": "_to",
+                                "type": "address"
+                            },
+                            {
+                                "name": "_value",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "transfer",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "bool"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "constant": true,
+                        "inputs": [
+                            {
+                                "name": "_owner",
+                                "type": "address"
+                            },
+                            {
+                                "name": "_spender",
+                                "type": "address"
+                            }
+                        ],
+                        "name": "allowance",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "uint256"
+                            }
+                        ],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "payable": true,
+                        "stateMutability": "payable",
+                        "type": "fallback"
+                    },
+                    {
+                        "anonymous": false,
+                        "inputs": [
+                            {
+                                "indexed": true,
+                                "name": "owner",
+                                "type": "address"
+                            },
+                            {
+                                "indexed": true,
+                                "name": "spender",
+                                "type": "address"
+                            },
+                            {
+                                "indexed": false,
+                                "name": "value",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "Approval",
+                        "type": "event"
+                    },
+                    {
+                        "anonymous": false,
+                        "inputs": [
+                            {
+                                "indexed": true,
+                                "name": "from",
+                                "type": "address"
+                            },
+                            {
+                                "indexed": true,
+                                "name": "to",
+                                "type": "address"
+                            },
+                            {
+                                "indexed": false,
+                                "name": "value",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "Transfer",
+                        "type": "event"
+                    }
+                ],
                 args,
                 ...(amount && assetId ? { amount, assetId } : {}),
             };
-
+            elizaLogger.log("Invocation options:", invocationOptions);
             // Invoke the contract
             const invocation = await wallet.invokeContract(invocationOptions);
 
@@ -350,7 +581,7 @@ Contract invocation has been logged to the CSV file.`,
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Call the 'transfer' method on my ERC20 token contract at 0x123... with amount 100",
+                    text: " Call the 'transfer' method on my ERC20 token contract at 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b  with amount 100 to recepient 0xbcF7C64B880FA89a015970dC104E848d485f99A3",
                 },
             },
             {

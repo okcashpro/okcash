@@ -158,6 +158,45 @@ Provide the details in the following JSON format:
 }
 \`\`\`
 
+Example for invoking a transfer method on an ERC20 token contract:
+
+\`\`\`json
+{
+    "contractAddress": "0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
+    "method": "transfer",
+    "abi": [
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "to",
+                    "type": "address"
+                },
+                {
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ],
+    "args": {
+        "to": "0xRecipientAddressHere",
+        "value": 1000
+    },
+    "network": "eth"
+}
+\`\`\`
+
 Here are the recent user messages for context:
 {{recentMessages}}
 `;
