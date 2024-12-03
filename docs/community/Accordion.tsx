@@ -25,7 +25,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     );
 
     React.useEffect(() => {
-        setMaxHeight(isOpen ? "1000px" : "0px");
+        setMaxHeight(isOpen ? "5000px" : "0px");
     }, [isOpen]);
 
     return (
@@ -74,8 +74,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                         display: "flex",
                         flexDirection: "column",
                         gap: "1rem",
-                        marginTop: "2rem",
-                        marginLeft: "1rem",
+                        margin: "2rem 0 1rem 1rem",
                     }}
                 >
                     {data.map((entry, index) => (
