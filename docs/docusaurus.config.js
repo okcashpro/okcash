@@ -220,9 +220,9 @@ const config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-    customFields: {
-        GITHUB_ACCESS_TOKEN: process.env.GITHUB_ACCESS_TOKEN,
-    },
+  },
+  customFields: {
+    GITHUB_ACCESS_TOKEN: process.env.GITHUB_ACCESS_TOKEN,
   },
 };
 
