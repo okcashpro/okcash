@@ -163,7 +163,7 @@ const Contributors: React.FC = () => {
                     backgroundColor: "transparent",
                 }}
             />
-            {hasMore && <div>Load more...</div>}
+            {hasMore && <div>Loading more...</div>}
         </div>
     );
 };
