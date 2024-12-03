@@ -7,6 +7,7 @@ interface AccordionProps {
     onToggle: () => void;
     data: GitHubItem[];
     loadMore?: () => void;
+    total_count: number;
 }
 
 export const Accordion: React.FC<AccordionProps> = ({
@@ -15,6 +16,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     onToggle,
     data,
     loadMore,
+    total_count,
 }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [hoverLoadMore, setHoverLoadMore] = useState<boolean>(false);
@@ -95,7 +97,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                     ))}
                 </div>
             )}
-            {isOpen && loadMore && (
+            {isOpen && loadMore && data.length < total_count && (
                 <div
                     style={{
                         width: "100%",

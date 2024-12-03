@@ -13,55 +13,41 @@ export interface StatCardProps {
     value: number;
 }
 
+export interface AccordionItem {
+    data: GitHubItem[];
+    total_count: number;
+}
+
+const initializeAccordionItem = (): AccordionItem => ({
+    data: [],
+    total_count: 0,
+});
+
 const Contributions = ({ contributor, onBack }) => {
-    const [contributorStat, setContributorState] = useState<StatCardProps[]>(
-        [],
+    const [commitsData, setCommitsData] = useState<AccordionItem>(
+        initializeAccordionItem(),
     );
-    const [commitsData, setCommitsData] = useState<GitHubItem[]>([]);
-    const [prsData, setPrsData] = useState<GitHubItem[]>([]);
-    const [issuesData, setIssuesData] = useState<GitHubItem[]>([]);
+    const [prsData, setPrsData] = useState<AccordionItem>(
+        initializeAccordionItem(),
+    );
+    const [issuesData, setIssuesData] = useState<AccordionItem>(
+        initializeAccordionItem(),
+    );
     const [openAccordion, setOpenAccordion] = useState<string | null>(null);
-    const [commitPage, setCommitPage] = useState(1); // Track the current page for commits
+
+    const [commitPage, setCommitPage] = useState(1);
+    const [prPage, sePrPage] = useState(1);
+    const [issuePage, setIssuePage] = useState(1);
 
     useEffect(() => {
         const fetchContributorStats = async () => {
-            const stats: StatCardProps[] = [
-                { title: "Commits", value: contributor.contributions },
-            ];
-
             try {
                 await fetchCommits(commitPage);
-
-                // Fetch PRs
-                const prResponse = await fetch(
-                    `https://api.github.com/search/issues?q=type:pr+author:${contributor.login}+repo:ai16z/eliza`,
-                    {
-                        headers: {
-                            Accept: "application/vnd.github.v3+json",
-                        },
-                    },
-                );
-                const prData = await prResponse.json();
-                stats.push({ title: "PRs", value: prData.total_count });
-                setPrsData(prData.items || []);
-
-                // Fetch Issues
-                const issueResponse = await fetch(
-                    `https://api.github.com/search/issues?q=type:issue+author:${contributor.login}+repo:ai16z/eliza`,
-                    {
-                        headers: {
-                            Accept: "application/vnd.github.v3+json",
-                        },
-                    },
-                );
-                const issueData = await issueResponse.json();
-                stats.push({ title: "Issues", value: issueData.total_count });
-                setIssuesData(issueData.items || []);
+                await fetchPRs(prPage);
+                await fetchIssues(issuePage);
             } catch (error) {
                 console.error("Error fetching contributor stats:", error);
             }
-
-            setContributorState(stats);
         };
 
         fetchContributorStats();
@@ -87,9 +73,65 @@ const Contributions = ({ contributor, onBack }) => {
                 title: commit.commit.message,
                 created_at: commit.commit.author.date,
             }));
-            setCommitsData((prevData) => [...prevData, ...commitItems]); // Append new commits
+            const currentCommitsData = [...commitsData.data, ...commitItems];
+            setCommitsData({
+                data: currentCommitsData,
+                total_count: contributor.contributions,
+            });
         } catch (error) {
             console.error("Error fetching commits:", error);
+        }
+    };
+
+    const fetchPRs = async (page: number) => {
+        try {
+            const prResponse = await fetch(
+                `https://api.github.com/search/issues?q=type:pr+author:${contributor.login}+repo:ai16z/eliza&page=${page}`,
+                {
+                    headers: {
+                        Accept: "application/vnd.github.v3+json",
+                    },
+                },
+            );
+            const prData = await prResponse.json();
+            const prItems = prData.items.map((pr: any) => ({
+                html_url: pr.html_url,
+                title: pr.title,
+                created_at: pr.created_at,
+            }));
+            const currentPrsData = [...prsData.data, ...prItems];
+            setPrsData({
+                data: currentPrsData,
+                total_count: prData.total_count,
+            });
+        } catch (error) {
+            console.error("Error fetching PRs:", error);
+        }
+    };
+
+    const fetchIssues = async (page: number) => {
+        try {
+            const issueResponse = await fetch(
+                `https://api.github.com/search/issues?q=type:issue+author:${contributor.login}+repo:ai16z/eliza&page=${page}`,
+                {
+                    headers: {
+                        Accept: "application/vnd.github.v3+json",
+                    },
+                },
+            );
+            const issueData = await issueResponse.json();
+            const issueItems = issueData.items.map((issue: any) => ({
+                html_url: issue.html_url,
+                title: issue.title,
+                created_at: issue.created_at,
+            }));
+            const currentIssuesData = [...issuesData.data, ...issueItems];
+            setIssuesData({
+                data: currentIssuesData,
+                total_count: issueData.total_count,
+            });
+        } catch (error) {
+            console.error("Error fetching issues:", error);
         }
     };
 
@@ -98,24 +140,31 @@ const Contributions = ({ contributor, onBack }) => {
             title: "Commits",
             data: commitsData,
             section: "commits",
-            loadMore:
-                commitsData.length >= contributor.contributions
-                    ? undefined
-                    : () => {
-                          const nextPage = commitPage + 1;
-                          fetchCommits(nextPage);
-                          setCommitPage(nextPage);
-                      },
+            loadMore: () => {
+                const nextPage = commitPage + 1;
+                fetchCommits(nextPage);
+                setCommitPage(nextPage);
+            },
         },
         {
             title: "Pull Requests",
             data: prsData,
             section: "pullRequests",
+            loadMore: () => {
+                const nextPage = prPage + 1;
+                fetchPRs(nextPage);
+                sePrPage(nextPage);
+            },
         },
         {
             title: "Issues",
             data: issuesData,
             section: "issues",
+            loadMore: () => {
+                const nextPage = issuePage + 1;
+                fetchIssues(nextPage);
+                setIssuePage(nextPage);
+            },
         },
     ];
 
@@ -190,11 +239,11 @@ const Contributions = ({ contributor, onBack }) => {
                     marginTop: "1rem",
                 }}
             >
-                {contributorStat.map((stat, index) => (
+                {accordionItems.map((stat, index) => (
                     <StatCard
                         key={index}
                         title={stat.title}
-                        value={stat.value}
+                        value={stat.data?.total_count}
                     />
                 ))}
             </div>
@@ -211,8 +260,9 @@ const Contributions = ({ contributor, onBack }) => {
                         title={item.title}
                         isOpen={openAccordion === item.section}
                         onToggle={() => toggleAccordion(item.section)}
-                        data={item.data}
+                        data={item.data.data}
                         loadMore={item.loadMore}
+                        total_count={item.data.total_count}
                     />
                 ))}
             </div>
