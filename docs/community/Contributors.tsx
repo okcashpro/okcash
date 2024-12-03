@@ -69,9 +69,8 @@ const Contributors: React.FC = () => {
     return (
         <div
             style={{
-                display: "flex",
-                justifyContent: "space-around",
-                flexWrap: "wrap",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
                 gap: "1rem",
                 backgroundColor: "#f9fafb",
                 padding: "10px",
