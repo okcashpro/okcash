@@ -2,11 +2,6 @@ name: Release
 
 on:
     workflow_dispatch:
-        inputs:
-            release_type:
-                description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
-                required: true
-                default: "patch"
 
 jobs:
     release:
@@ -52,6 +47,10 @@ jobs:
 
                   # Checkout the latest tag
                   git checkout $LATEST_TAG
+
+                  # Clean any untracked files that differ from the latest tag and reset any changes
+                  git clean -fd
+                  git reset --hard $LATEST_TAG
 
                   npx lerna publish from-git --yes --dist-tag latest
               env:
