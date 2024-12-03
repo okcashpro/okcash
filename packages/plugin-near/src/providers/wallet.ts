@@ -1,10 +1,8 @@
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { KeyPair, keyStores, connect, Account, utils } from "near-api-js";
 import BigNumber from "bignumber.js";
-import NodeCache from "node-cache";
-import fs from "fs";
-import os from "os";
 import { KeyPairString } from "near-api-js/lib/utils";
+import NodeCache from "node-cache";
 
 const PROVIDER_CONFIG = {
     networkId: process.env.NEAR_NETWORK || "testnet",
@@ -40,6 +38,7 @@ export class WalletProvider implements Provider {
     private keyStore: keyStores.InMemoryKeyStore;
     constructor(private accountId: string) {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
+        this.keyStore = new keyStores.InMemoryKeyStore();
     }
 
     async get(

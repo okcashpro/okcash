@@ -11,7 +11,7 @@ import {
 } from "@ai16z/eliza";
 import { connect, keyStores, utils } from "near-api-js";
 import BigNumber from "bignumber.js";
-import { init_env, ftGetTokenMetadata, estimateSwap, instantSwap } from '@ref-finance/ref-sdk';
+import { init_env, ftGetTokenMetadata, estimateSwap, instantSwap, fetchAllPools, FT_MINIMUM_STORAGE_BALANCE_LARGE } from '@ref-finance/ref-sdk';
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
@@ -23,7 +23,7 @@ async function swapToken(
     inputTokenId: string,
     outputTokenId: string,
     amount: string,
-    slippageTolerance: number = 0.01
+    slippageTolerance: number = 0.1
 ): Promise<any> {
     try {
         // Get token metadata
@@ -31,17 +31,16 @@ async function swapToken(
         const tokenOut = await ftGetTokenMetadata(outputTokenId);
 
         // Get all pools for estimation
-        const response = await fetch('https://testnet-indexer.ref-finance.com/list-pools');
-        const { simplePools } = await response.json();
+        const { ratedPools, unRatedPools, simplePools} = await fetchAllPools(200);
 
-        // Estimate swap
+        console.log("Pools:", simplePools);
         const swapTodos = await estimateSwap({
             tokenIn,
             tokenOut,
             amountIn: amount,
             simplePools,
             options: {
-                enableSmartRouting: true
+                enableSmartRouting: true,
             }
         });
 
@@ -176,7 +175,7 @@ export const executeSwap: Action = {
                 response.inputTokenId,
                 response.outputTokenId,
                 response.amount,
-                0.01 // 1% slippage tolerance
+                0.1 // 1% slippage tolerance
             );
 
             // Sign and send transactions
@@ -190,7 +189,7 @@ export const executeSwap: Action = {
                         methodName: functionCall.methodName,
                         args: functionCall.args,
                         gas: functionCall.gas,
-                        attachedDeposit: functionCall.amount ? BigInt(functionCall.amount) : BigInt(0),
+                        attachedDeposit: BigInt(1),
                     });
                     results.push(result);
                 }
@@ -208,7 +207,7 @@ export const executeSwap: Action = {
         } catch (error) {
             console.error("Error during token swap:", error);
             const responseMsg = {
-                text: `Error during swap: ${error.message}`,
+                text: `Error during swap: ${error instanceof Error ? error.message : String(error)}`,
             };
             callback?.(responseMsg);
             return false;

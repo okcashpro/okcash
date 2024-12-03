@@ -4,7 +4,7 @@ import { walletProvider } from "./providers/wallet";
 import { executeSwap } from "./actions/swap";
 
 export const nearPlugin: Plugin = {
-    name: "near",
+    name: "NEAR",
     description: "Near Protocol Plugin for Eliza",
     providers: [walletProvider],
     actions: [executeSwap],
