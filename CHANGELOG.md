@@ -1,5 +1,33 @@
 # Changelog
 
+## [v0.1.5-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.0) (2024-12-03)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5...v0.1.5-alpha.0)
+
+**Fixed bugs:**
+
+- Plugin system in character.plugins is not working [\#795](https://github.com/ai16z/eliza/issues/795)
+
+**Closed issues:**
+
+- State should use a cosine similarity of messages in the DB  [\#471](https://github.com/ai16z/eliza/issues/471)
+
+**Merged pull requests:**
+
+- fix: update package version to v0.1.5-alpha.0 [\#808](https://github.com/ai16z/eliza/pull/808) ([cygaar](https://github.com/cygaar))
+- fix: release workflow part 3 [\#807](https://github.com/ai16z/eliza/pull/807) ([cygaar](https://github.com/cygaar))
+- fix: part 2 of updating the npm publish workflow [\#806](https://github.com/ai16z/eliza/pull/806) ([cygaar](https://github.com/cygaar))
+- fix: update npm publication workflow [\#805](https://github.com/ai16z/eliza/pull/805) ([cygaar](https://github.com/cygaar))
+- fix: swap type error, create user trust on first message in telegram [\#800](https://github.com/ai16z/eliza/pull/800) ([MarcoMandar](https://github.com/MarcoMandar))
+- refactor: Improve actions samples random selection [\#799](https://github.com/ai16z/eliza/pull/799) ([dievardump](https://github.com/dievardump))
+- fix: Docker default non-interactive mode for Cloud instances [\#796](https://github.com/ai16z/eliza/pull/796) ([rarepepi](https://github.com/rarepepi))
+- fix: dev command [\#793](https://github.com/ai16z/eliza/pull/793) ([shakkernerd](https://github.com/shakkernerd))
+- chore: update README\_KOR.md to match latest README.md [\#789](https://github.com/ai16z/eliza/pull/789) ([mike0295](https://github.com/mike0295))
+- fix: enviroment -\> environment [\#787](https://github.com/ai16z/eliza/pull/787) ([tomguluson92](https://github.com/tomguluson92))
+- Update generation.ts to fix TOGETHER/LLAMACLOUD image generation [\#786](https://github.com/ai16z/eliza/pull/786) ([ProphetX10](https://github.com/ProphetX10))
+- fixs: uuid compatible for number [\#785](https://github.com/ai16z/eliza/pull/785) ([tomguluson92](https://github.com/tomguluson92))
+- fix: When the plugins field in the .character.json file is configured with plugin name. [\#784](https://github.com/ai16z/eliza/pull/784) ([xwxtwd](https://github.com/xwxtwd))
+
 ## [v0.1.5](https://github.com/ai16z/eliza/tree/v0.1.5) (2024-12-02)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.3...v0.1.5)
