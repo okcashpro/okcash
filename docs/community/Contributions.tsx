@@ -29,7 +29,6 @@ const initializeAccordionItem = (): AccordionItem => ({
 const Contributions = ({ contributor, onBack, darkMode }) => {
     const { siteConfig } = useDocusaurusContext();
     const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
-
     const [commitsData, setCommitsData] = useState<AccordionItem>(
         initializeAccordionItem(),
     );

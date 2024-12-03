@@ -36,18 +36,17 @@ export const THEME_COLORS = {
 const Contributors: React.FC = () => {
     const { siteConfig } = useDocusaurusContext();
     const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
-
     const { colorMode } = useColorMode();
     const [selectedContributor, setSelectedContributor] =
         useState<Contributor | null>(null);
     const [contributors, setContributors] = useState<Contributor[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [darkMode, setDarkMode] = useState<boolean>(colorMode === "dark");
+    const [hasMore, setHasMore] = useState<boolean>(true);
 
     const observerRef = useRef<HTMLDivElement | null>(null);
     const pageRef = useRef<number>(1);
     const loadingRef = useRef<boolean>(true);
-    const hasMoreRef = useRef<boolean>(true);
 
     useEffect(() => {
         setDarkMode(colorMode === "dark");
@@ -73,7 +72,7 @@ const Contributors: React.FC = () => {
             }
             const data: Contributor[] = await response.json();
             if (data.length === 0) {
-                hasMoreRef.current = false;
+                setHasMore(false);
                 return;
             }
             const currentContributors = [...contributors, ...data];
@@ -96,7 +95,7 @@ const Contributors: React.FC = () => {
                 if (
                     entries[0].isIntersecting &&
                     !loadingRef.current &&
-                    hasMoreRef.current
+                    hasMore
                 ) {
                     loadingRef.current = true;
                     pageRef.current++;
@@ -115,7 +114,7 @@ const Contributors: React.FC = () => {
                 observer.unobserve(observerRef.current);
             }
         };
-    }, [contributors]);
+    }, [contributors, hasMore]);
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -164,6 +163,7 @@ const Contributors: React.FC = () => {
                     backgroundColor: "transparent",
                 }}
             />
+            {hasMore && <div>Load more...</div>}
         </div>
     );
 };
