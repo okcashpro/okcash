@@ -45,12 +45,12 @@ jobs:
                   LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
                   echo "Publishing version: $LATEST_TAG"
 
-                  # Clean any untracked files and reset any changes
-                  git clean -fd
-                  git reset --hard HEAD
-
                   # Checkout the latest tag
                   git checkout $LATEST_TAG
+
+                  # Clean any untracked files that differ from the latest tag and reset any changes
+                  git clean -fd
+                  git reset --hard $LATEST_TAG
 
                   npx lerna publish from-git --yes --dist-tag latest
               env:
