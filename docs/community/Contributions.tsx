@@ -127,13 +127,16 @@ const Contributions = ({ contributor, onBack }) => {
                 width: "100%",
                 padding: "1rem",
                 gap: "1rem",
+                color: "black",
             }}
         >
-            <div
-                style={{ cursor: "pointer", fontWeight: "bold" }}
-                onClick={onBack}
-            >
-                ❮ back
+            <div>
+                <span
+                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    onClick={onBack}
+                >
+                    ❮ back
+                </span>
             </div>
             <div
                 key={contributor.id}

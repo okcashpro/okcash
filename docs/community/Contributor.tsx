@@ -21,6 +21,7 @@ const ContributorCard: React.FC<ContributorProps> = ({
                 cursor: isHovered ? "pointer" : "default",
                 padding: "24px",
                 justifyContent: "center",
+                color: "black",
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
