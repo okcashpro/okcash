@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/plugin-whatsapp",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.0",
     "description": "WhatsApp Cloud API plugin",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
