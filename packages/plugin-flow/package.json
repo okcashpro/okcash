@@ -1,0 +1,29 @@
+{
+    "name": "@ai16z/plugin-flow",
+    "version": "0.1.5-alpha.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@ai16z/eliza": "workspace:*",
+        "@ai16z/plugin-trustdb": "workspace:*",
+        "@onflow/fcl": "1.13.1",
+        "bignumber.js": "9.1.2",
+        "bs58": "6.0.0",
+        "node-cache": "5.1.2",
+        "zod": "3.23.8"
+    },
+    "devDependencies": {
+        "tsup": "8.3.5",
+        "vitest": "2.1.4"
+    },
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch",
+        "lint": "eslint . --fix",
+        "test": "vitest run"
+    },
+    "peerDependencies": {
+        "whatwg-url": "7.1.0"
+    }
+}
