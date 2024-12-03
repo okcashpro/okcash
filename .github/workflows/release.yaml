@@ -2,11 +2,6 @@ name: Release
 
 on:
     workflow_dispatch:
-        inputs:
-            release_type:
-                description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
-                required: true
-                default: "patch"
 
 jobs:
     release:
@@ -49,6 +44,10 @@ jobs:
                   # Get the latest release tag
                   LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
                   echo "Publishing version: $LATEST_TAG"
+
+                  # Clean any untracked files and reset any changes
+                  git clean -fd
+                  git reset --hard HEAD
 
                   # Checkout the latest tag
                   git checkout $LATEST_TAG
