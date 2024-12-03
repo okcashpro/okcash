@@ -141,7 +141,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                         onMouseLeave={() => setHoverLoadMore(false)}
                         onClick={loadMore}
                     >
-                        Load more...
+                        Load more
                     </span>
                 </div>
             )}
