@@ -25,5 +25,8 @@ export default defineConfig({
         "amqplib",
         // Add other modules you want to externalize
         "@onflow/fcl",
+        "@onflow/types",
+        "sha3",
+        "elliptic",
     ],
 });
