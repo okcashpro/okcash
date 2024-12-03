@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { GitHubItem } from "./Contributions";
 
 interface AccordionProps {
@@ -30,9 +30,20 @@ export const Accordion: React.FC<AccordionProps> = ({
         isOpen ? "1000px" : "0px",
     );
 
+    const contentRef = useRef<HTMLDivElement>(null);
+
     React.useEffect(() => {
-        setMaxHeight(isOpen ? "5000px" : "0px");
+        setMaxHeight(isOpen ? "1000px" : "0px");
     }, [isOpen]);
+
+    useEffect(() => {
+        if (contentRef.current) {
+            contentRef.current.scrollTo({
+                top: contentRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }, [data]);
 
     return (
         <div
@@ -69,10 +80,13 @@ export const Accordion: React.FC<AccordionProps> = ({
                 </div>
             </div>
             <div
+                ref={contentRef}
                 style={{
                     maxHeight,
-                    overflow: "hidden",
-                    transition: isOpen ? "max-height 3s ease" : "",
+                    overflow: "scroll",
+                    transition: isOpen ? "max-height 1s ease" : "",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
                 }}
             >
                 <div
