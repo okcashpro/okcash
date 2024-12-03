@@ -72,7 +72,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                 style={{
                     maxHeight,
                     overflow: "hidden",
-                    transition: "max-height 0.3s ease",
+                    transition: isOpen ? "max-height 3s ease" : "",
                 }}
             >
                 <div

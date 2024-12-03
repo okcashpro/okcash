@@ -87,6 +87,7 @@ const Contributors: React.FC = () => {
                     !loadingRef.current &&
                     hasMoreRef.current
                 ) {
+                    loadingRef.current = true;
                     pageRef.current++;
                     fetchContributors(pageRef.current);
                 }
@@ -105,12 +106,12 @@ const Contributors: React.FC = () => {
         };
     }, [contributors]);
 
-    if (!contributors.length) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>Error: {error}</div>;
+    }
+
+    if (!contributors.length) {
+        return <div>Loading...</div>;
     }
 
     return (
