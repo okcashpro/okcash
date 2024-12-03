@@ -369,11 +369,11 @@ export function createAgent(
                 ? confluxPlugin
                 : null,
             nodePlugin,
-            // getSecret(character, "SOLANA_PUBLIC_KEY") ||
-            // (getSecret(character, "WALLET_PUBLIC_KEY") &&
-            //     !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
-            //     ? solanaPlugin
-            //     : null,
+            getSecret(character, "SOLANA_PUBLIC_KEY") ||
+            (getSecret(character, "WALLET_PUBLIC_KEY") &&
+                !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
+                ? solanaPlugin
+                : null,
             getSecret(character, "EVM_PRIVATE_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
                 !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
@@ -463,16 +463,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    const character = defaultCharacter;
-    let customAptosPlugin = aptosPlugin;
-    let customTransferAptToken = TransferAptosToken;
-    customTransferAptToken.validate = async (content, runtime, callback) => {
-        return true;
-    };
-    customAptosPlugin.actions = [customTransferAptToken];
-    character.plugins = [customAptosPlugin];
-    character.modelProvider = ModelProviderName.OPENAI;
-    let characters = [character];
+    let characters = [defaultCharacter];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
