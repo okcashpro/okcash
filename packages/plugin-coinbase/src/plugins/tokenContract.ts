@@ -607,5 +607,5 @@ Contract invocation has been logged to the CSV file.`,
 export const tokenContractPlugin: Plugin = {
     name: "tokenContract",
     description: "Enables deployment and invoking of ERC20, ERC721, and ERC1155 token contracts using the Coinbase SDK",
-    actions: [deployTokenContractAction, invokeContractAction],
+    actions: [deployTokenContractAction],
 };
