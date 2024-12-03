@@ -6,23 +6,20 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "dompurify": "3.2.0",
-        "tsup": "^8.3.5",
-        "uuid": "11.0.2",
-        "vitest": "^2.1.4"
+        "dompurify": "3.2.2",
+        "tsup": "8.3.5",
+        "uuid": "11.0.3",
+        "vitest": "2.1.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch",
         "test": "vitest run",
         "test:watch": "vitest",
         "lint": "eslint . --fix"
     },
     "devDependencies": {
-        "@types/dompurify": "^3.2.0",
-        "eslint": "9.13.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4"
+        "@types/dompurify": "3.2.0"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

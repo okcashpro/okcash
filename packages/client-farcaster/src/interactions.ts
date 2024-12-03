@@ -140,8 +140,8 @@ export class FarcasterInteractionManager {
         const shouldRespondContext = composeContext({
             state,
             template:
-                /*this.runtime.character.templates
-                    ?.farcasterShouldRespondTemplate ||*/
+                this.runtime.character.templates
+                    ?.farcasterShouldRespondTemplate ||
                 this.runtime.character?.templates?.shouldRespondTemplate ||
                 shouldRespondTemplate,
         });
@@ -157,9 +157,8 @@ export class FarcasterInteractionManager {
         if (!castMemory) {
             await this.runtime.messageManager.createMemory(
                 createCastMemory({
-                    agentId: this.runtime.agentId,
                     roomId: memory.roomId,
-                    userId: memory.userId,
+                    runtime: this.runtime,
                     cast,
                 })
             );
@@ -179,8 +178,8 @@ export class FarcasterInteractionManager {
         const context = composeContext({
             state,
             template:
-                /*this.runtime.character.templates
-                    ?.farcasterMessageHandlerTemplate ??*/
+                this.runtime.character.templates
+                    ?.farcasterMessageHandlerTemplate ??
                 this.runtime.character?.templates?.messageHandlerTemplate ??
                 messageHandlerTemplate,
         });

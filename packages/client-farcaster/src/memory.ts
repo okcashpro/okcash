@@ -1,6 +1,6 @@
 import {
     elizaLogger,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     IAgentRuntime,
     stringToUuid,
     type Memory,
@@ -11,32 +11,29 @@ import { toHex } from "viem";
 import { castUuid } from "./utils";
 import { FarcasterClient } from "./client";
 
-//TODO refactor for neynar responses
 export function createCastMemory({
     roomId,
-    agentId,
-    userId,
+    runtime,
     cast,
 }: {
     roomId: UUID;
-    agentId: UUID;
-    userId: UUID;
+    runtime: IAgentRuntime;
     cast: Cast;
 }): Memory {
-    const inReplyTo = cast.inReplyTo
+    const inReplyTo =  cast.inReplyTo
         ? castUuid({
-              hash: toHex(cast.inReplyTo.hash),
-              agentId,
+            hash: toHex(cast.inReplyTo.hash),
+            agentId: runtime.agentId,
           })
         : undefined;
 
     return {
         id: castUuid({
             hash: cast.hash,
-            agentId,
+            agentId: runtime.agentId,
         }),
-        agentId,
-        userId,
+        agentId: runtime.agentId,
+        userId: runtime.agentId,
         content: {
             text: cast.text,
             source: "farcaster",
@@ -45,7 +42,7 @@ export function createCastMemory({
             hash: cast.hash,
         },
         roomId,
-        embedding: embeddingZeroVector,
+        embedding: getEmbeddingZeroVector(),
     };
 }
 
@@ -92,8 +89,7 @@ export async function buildConversationThread({
             await runtime.messageManager.createMemory(
                 createCastMemory({
                     roomId,
-                    agentId: runtime.agentId,
-                    userId,
+                    runtime,
                     cast: currentCast,
                 })
             );

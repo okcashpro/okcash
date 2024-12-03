@@ -1,3 +1,5 @@
+import "./config.ts"; // Add this line first
+
 export * from "./actions.ts";
 export * from "./context.ts";
 export * from "./database.ts";
@@ -18,6 +20,7 @@ export * from "./types.ts";
 export * from "./logger.ts";
 export * from "./parsing.ts";
 export * from "./uuid.ts";
-export * from "./enviroment.ts";
+export * from "./environment.ts";
 export * from "./cache.ts";
 export { default as knowledge } from "./knowledge.ts";
+export * from "./utils.ts";

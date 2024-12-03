@@ -158,7 +158,6 @@ export class FarcasterClient {
         }
 
         const result = await this.neynar.fetchBulkUsers({ fids: [fid] });
-        //console.log(result)
         if (!result.users || result.users.length < 1) {
             console.log("getUserDataByFid ERROR");
 
@@ -209,7 +208,7 @@ export class FarcasterClient {
 
         return {
             timeline,
-            //TODO implement out paging
+            //TODO implement paging
             //nextPageToken: results.nextPageToken,
         };
     }

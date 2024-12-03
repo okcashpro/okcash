@@ -4,6 +4,7 @@ import {
     IAgentRuntime,
     ModelClass,
     stringToUuid,
+    elizaLogger
 } from "@ai16z/eliza";
 import { FarcasterClient } from "./client";
 import { formatTimeline, postTemplate } from "./prompts";
@@ -26,7 +27,7 @@ export class FarcasterPostManager {
             try {
                 await this.generateNewCast();
             } catch (error) {
-                console.error(error);
+                elizaLogger.error(error)
                 return;
             }
 
@@ -44,10 +45,7 @@ export class FarcasterPostManager {
     }
 
     private async generateNewCast() {
-        console.log(
-            "%c  [Farcaster Neynar Client] Generating new cast...",
-            "color: #8565cb;"
-        );
+        elizaLogger.info("Generating new cast");
         try {
             const fid = Number(this.runtime.getSetting("FARCASTER_FID")!);
             // const farcasterUserName =
@@ -92,7 +90,7 @@ export class FarcasterPostManager {
             const context = composeContext({
                 state,
                 template:
-                    //this.runtime.character.templates?.farcasterPostTemplate ||
+                    this.runtime.character.templates?.farcasterPostTemplate ||
                     postTemplate,
             });
 
@@ -147,10 +145,6 @@ export class FarcasterPostManager {
                 );
 
                 console.log(
-                    "%c✔ SUCCESS",
-                    "color: #8565cb; font-weight: bold;"
-                );
-                console.log(
                     `%c  [Farcaster Neynar Client] Published cast ${cast.hash}`,
                     "color: #8565cb;"
                 );
@@ -158,16 +152,15 @@ export class FarcasterPostManager {
                 await this.runtime.messageManager.createMemory(
                     createCastMemory({
                         roomId,
-                        userId: this.runtime.agentId,
-                        agentId: this.runtime.agentId,
+                        runtime: this.runtime,
                         cast,
                     })
                 );
             } catch (error) {
-                console.error("Error sending cast:", error);
+                elizaLogger.error("Error sending cast:", error)
             }
         } catch (error) {
-            console.error("Error generating new cast:", error);
+            elizaLogger.error("Error generating new cast:", error)
         }
     }
 }

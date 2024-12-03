@@ -634,12 +634,16 @@ export const trustScoreProvider: Provider = {
             const user = await runtime.databaseAdapter.getAccountById(userId);
 
             // Format the trust score string
-            const trustScoreString = `${user.name}'s trust score: ${trustScore.toFixed(2)}`;
+            const trustScoreString = `${
+                user.name
+            }'s trust score: ${trustScore.toFixed(2)}`;
 
             return trustScoreString;
         } catch (error) {
             console.error("Error in trust score provider:", error.message);
-            return `Failed to fetch trust score: ${error instanceof Error ? error.message : "Unknown error"}`;
+            return `Failed to fetch trust score: ${
+                error instanceof Error ? error.message : "Unknown error"
+            }`;
         }
     },
 };

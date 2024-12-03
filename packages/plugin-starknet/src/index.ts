@@ -2,6 +2,7 @@ import { Plugin } from "@ai16z/eliza";
 import { executeSwap } from "./actions/swap";
 import transfer from "./actions/transfer";
 import { deployToken } from "./actions/unruggable";
+import transferSubdomain from "./actions/subdomain";
 export const PROVIDER_CONFIG = {
     AVNU_API: "https://starknet.impulse.avnu.fi/v1",
     MAX_RETRIES: 3,
@@ -20,7 +21,7 @@ export const PROVIDER_CONFIG = {
 export const starknetPlugin: Plugin = {
     name: "starknet",
     description: "Starknet Plugin for Eliza",
-    actions: [transfer, executeSwap, deployToken],
+    actions: [transfer, executeSwap, deployToken, transferSubdomain],
     evaluators: [],
     providers: [],
 };

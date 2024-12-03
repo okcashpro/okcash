@@ -1,4 +1,4 @@
-[@ai16z/eliza v1.0.0](../index.md) / generateTrueOrFalse
+[@ai16z/eliza v0.1.4-alpha.3](../index.md) / generateTrueOrFalse
 
 # Function: generateTrueOrFalse()
 
@@ -28,4 +28,4 @@ Promise resolving to a boolean value parsed from the model's response
 
 ## Defined in
 
-[packages/core/src/generation.ts:505](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L505)
+[packages/core/src/generation.ts:575](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L575)

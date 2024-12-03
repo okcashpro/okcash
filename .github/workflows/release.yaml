@@ -2,11 +2,6 @@ name: Release
 
 on:
     workflow_dispatch:
-        inputs:
-            release_type:
-                description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
-                required: true
-                default: "patch"
 
 jobs:
     release:
@@ -43,11 +38,23 @@ jobs:
             - name: Build packages
               run: pnpm run build
 
-            - name: Tag and Publish Packages
-              id: tag_publish
+            - name: Publish Packages
+              id: publish
               run: |
-                  npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
-                  npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
+                  # Get the latest release tag
+                  LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+                  echo "Publishing version: $LATEST_TAG"
+
+                  # Checkout the latest tag
+                  git checkout $LATEST_TAG
+
+                  # Clean any untracked files that differ from the latest tag and reset any changes
+                  git clean -fd
+                  git reset --hard $LATEST_TAG
+
+                  npx lerna publish from-git --yes --dist-tag latest
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: Get Version Tag
               id: get_tag

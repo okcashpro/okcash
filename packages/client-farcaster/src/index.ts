@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime } from "@ai16z/eliza";
+import { Client, IAgentRuntime, elizaLogger } from "@ai16z/eliza";
 import { FarcasterClient } from "./client";
 import { FarcasterPostManager } from "./post";
 import { FarcasterInteractionManager } from "./interactions";
@@ -20,7 +20,7 @@ export class FarcasterAgentClient implements Client {
         this.signerUuid = runtime.getSetting("FARCASTER_NEYNAR_SIGNER_UUID")!;
 
         const neynarConfig = new Configuration({
-            apiKey: runtime.getSetting("FARCASTER_NEYNAR_API_KEY")!, // Replace with your Neynar API Key.
+            apiKey: runtime.getSetting("FARCASTER_NEYNAR_API_KEY")!,
         });
 
         const neynarClient = new NeynarAPIClient(neynarConfig);
@@ -38,11 +38,7 @@ export class FarcasterAgentClient implements Client {
                 cache,
             });
 
-        console.log("%c✔ SUCCESS", "color: #8565cb; font-weight: bold;");
-        console.log(
-            "%c  Farcaster Neynar client initialized.",
-            "color: #8565cb;"
-        );
+        elizaLogger.info("Farcaster Neynar client initialized.")
 
         this.posts = new FarcasterPostManager(
             this.client,

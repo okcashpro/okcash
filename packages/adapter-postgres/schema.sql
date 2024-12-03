@@ -14,6 +14,22 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
 
+-- Create a function to determine vector dimension
+CREATE OR REPLACE FUNCTION get_embedding_dimension()
+RETURNS INTEGER AS $$
+BEGIN
+    -- Check for OpenAI first
+    IF current_setting('app.use_openai_embedding', TRUE) = 'true' THEN
+        RETURN 1536;  -- OpenAI dimension
+    -- Then check for Ollama
+    ELSIF current_setting('app.use_ollama_embedding', TRUE) = 'true' THEN
+        RETURN 1024;  -- Ollama mxbai-embed-large dimension
+    ELSE
+        RETURN 384;   -- BGE/Other embedding dimension
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS accounts (
@@ -36,7 +52,7 @@ CREATE TABLE IF NOT EXISTS memories (
     "type" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "content" JSONB NOT NULL,
-    "embedding" vector(1536),
+    "embedding" vector(get_embedding_dimension()),  -- Dynamic vector size
     "userId" UUID REFERENCES accounts("id"),
     "agentId" UUID REFERENCES accounts("id"),
     "roomId" UUID REFERENCES rooms("id"),
@@ -97,9 +113,9 @@ CREATE TABLE IF NOT EXISTS  relationships (
 CREATE TABLE IF NOT EXISTS  cache (
     "key" TEXT NOT NULL,
     "agentId" TEXT NOT NULL,
-    "value" JSONB DEFAULT '{}'::jsonb, 
+    "value" JSONB DEFAULT '{}'::jsonb,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "expiresAt" TIMESTAMP, 
+    "expiresAt" TIMESTAMP,
     PRIMARY KEY ("key", "agentId")
 );
 

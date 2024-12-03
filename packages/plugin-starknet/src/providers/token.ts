@@ -23,6 +23,61 @@ import { PROVIDER_CONFIG } from "../index.ts";
 import { Cache } from "../utils/cache.ts";
 import { TokenInfo } from "../types/token.ts";
 
+export const PORTFOLIO_TOKENS = {
+    // Coingecko IDs src:
+    // https://api.coingecko.com/api/v3/coins/list
+    // https://docs.google.com/spreadsheets/d/1wTTuxXt8n9q7C4NDXqQpI3wpKu1_5bGVmP9Xz0XGSyU/edit?gid=0#gid=0
+
+    BROTHER: {
+        address:
+            "0x3b405a98c9e795d427fe82cdeeeed803f221b52471e3a757574a2b4180793ee",
+        coingeckoId: "starknet-brother",
+        decimals: 18,
+    },
+    CASH: {
+        address:
+            "0x0498edfaf50ca5855666a700c25dd629d577eb9afccdf3b5977aec79aee55ada",
+        coingeckoId: "opus-cash",
+        decimals: 18,
+    },
+    ETH: {
+        address:
+            "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        coingeckoId: "ethereum",
+        decimals: 18,
+    },
+    LORDS: {
+        address:
+            "0x124aeb495b947201f5fac96fd1138e326ad86195b98df6dec9009158a533b49",
+        coingeckoId: "lords",
+        decimals: 18,
+    },
+    STRK: {
+        address:
+            "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        coingeckoId: "starknet",
+        decimals: 18,
+    },
+    USDC: {
+        address:
+            "0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8",
+        coingeckoId: "usd-coin",
+        decimals: 6,
+    },
+    USDT: {
+        address:
+            "0x068f5c6a61780768455de69077e07e89787839bf8166decfbf92b645209c0fb8",
+        coingeckoId: "tether",
+        decimals: 6,
+    },
+    WBTC: {
+        address:
+            "0x03fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac",
+        coingeckoId: "bitcoin",
+        decimals: 8,
+    },
+};
+
 export class TokenProvider {
     private cache: Cache;
 
@@ -52,7 +107,9 @@ export class TokenProvider {
 
                 if (!response.ok) {
                     throw new Error(
-                        `HTTP error! status: ${response.status}, message: ${await response.text()}`
+                        `HTTP error! status: ${
+                            response.status
+                        }, message: ${await response.text()}`
                     );
                 }
 
@@ -385,21 +442,13 @@ export class TokenProvider {
         }
 
         // Sort pairs by both liquidity and market cap to get the highest one
-        return dexData.pairs.reduce((highestPair, currentPair) => {
-            const currentLiquidity = currentPair.liquidity.usd;
-            const currentMarketCap = currentPair.marketCap;
-            const highestLiquidity = highestPair.liquidity.usd;
-            const highestMarketCap = highestPair.marketCap;
-
-            if (
-                currentLiquidity > highestLiquidity ||
-                (currentLiquidity === highestLiquidity &&
-                    currentMarketCap > highestMarketCap)
-            ) {
-                return currentPair;
+        return dexData.pairs.sort((a, b) => {
+            const liquidityDiff = b.liquidity.usd - a.liquidity.usd;
+            if (liquidityDiff !== 0) {
+                return liquidityDiff; // Higher liquidity comes first
             }
-            return highestPair;
-        });
+            return b.marketCap - a.marketCap; // If liquidity is equal, higher market cap comes first
+        })[0];
     }
 
     // TODO:
@@ -463,7 +512,9 @@ export class TokenProvider {
         const limit = 1000;
         let cursor;
         //HELIOUS_API_KEY needs to be added
-        const url = `https://mainnet.helius-rpc.com/?api-key=${settings.HELIUS_API_KEY || ""}`;
+        const url = `https://mainnet.helius-rpc.com/?api-key=${
+            settings.HELIUS_API_KEY || ""
+        }`;
         console.log({ url });
 
         try {
@@ -503,7 +554,9 @@ export class TokenProvider {
                     data.result.token_accounts.length === 0
                 ) {
                     console.log(
-                        `No more holders found. Total pages fetched: ${page - 1}`
+                        `No more holders found. Total pages fetched: ${
+                            page - 1
+                        }`
                     );
                     break;
                 }
@@ -745,25 +798,39 @@ export class TokenProvider {
         output += `\n`;
 
         // Recent Trades
-        output += `**Recent Trades (Last 24h):** ${data.recentTrades ? "Yes" : "No"}\n\n`;
+        output += `**Recent Trades (Last 24h):** ${
+            data.recentTrades ? "Yes" : "No"
+        }\n\n`;
 
         // High-Supply Holders
         output += `**Holders with >2% Supply:** ${data.highSupplyHoldersCount}\n\n`;
 
         // DexScreener Status
-        output += `**DexScreener Listing:** ${data.isDexScreenerListed ? "Yes" : "No"}\n`;
+        output += `**DexScreener Listing:** ${
+            data.isDexScreenerListed ? "Yes" : "No"
+        }\n`;
         if (data.isDexScreenerListed) {
-            output += `- Listing Type: ${data.isDexScreenerPaid ? "Paid" : "Free"}\n`;
+            output += `- Listing Type: ${
+                data.isDexScreenerPaid ? "Paid" : "Free"
+            }\n`;
             output += `- Number of DexPairs: ${data.dexScreenerData.pairs.length}\n\n`;
             output += `**DexScreener Pairs:**\n`;
             data.dexScreenerData.pairs.forEach((pair, index) => {
                 output += `\n**Pair ${index + 1}:**\n`;
                 output += `- DEX: ${pair.dexId}\n`;
                 output += `- URL: ${pair.url}\n`;
-                output += `- Price USD: $${num.toBigInt(pair.priceUsd).toString()}\n`;
-                output += `- Volume (24h USD): $${num.toBigInt(pair.volume.h24).toString()}\n`;
-                output += `- Boosts Active: ${pair.boosts && pair.boosts.active}\n`;
-                output += `- Liquidity USD: $${num.toBigInt(pair.liquidity.usd).toString()}\n`;
+                output += `- Price USD: $${num
+                    .toBigInt(pair.priceUsd)
+                    .toString()}\n`;
+                output += `- Volume (24h USD): $${num
+                    .toBigInt(pair.volume.h24)
+                    .toString()}\n`;
+                output += `- Boosts Active: ${
+                    pair.boosts && pair.boosts.active
+                }\n`;
+                output += `- Liquidity USD: $${num
+                    .toBigInt(pair.liquidity.usd)
+                    .toString()}\n`;
             });
         }
         output += `\n`;

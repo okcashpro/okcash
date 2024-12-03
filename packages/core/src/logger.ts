@@ -1,11 +1,4 @@
-import settings from "./settings.ts";
-import { Logger } from "tslog";
-
-interface IElizaLogger extends Logger<IElizaLogger> {
-    progress(message: string): void;
-}
-
-class ElizaLogger implements IElizaLogger {
+class ElizaLogger {
     constructor() {
         // Check if we're in Node.js environment
         this.isNode =
@@ -14,7 +7,15 @@ class ElizaLogger implements IElizaLogger {
             process.versions.node != null;
 
         // Set verbose based on environment
-        this.verbose = this.isNode ? settings.VERBOSE === "true" : false;
+        this.verbose = this.isNode ? process.env.VERBOSE === "true" : false;
+
+        // Add initialization logging
+        console.log(`[ElizaLogger] Initializing with:
+            isNode: ${this.isNode}
+            verbose: ${this.verbose}
+            VERBOSE env: ${process.env.VERBOSE}
+            NODE_ENV: ${process.env.NODE_ENV}
+        `);
     }
 
     private isNode: boolean;
@@ -180,7 +181,6 @@ class ElizaLogger implements IElizaLogger {
         }
     }
 
-    // @ts-expect-error- custom implementation
     log(...strings) {
         this.#logWithStyle(strings, {
             fg: "white",
@@ -190,7 +190,6 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-expect-error- custom implementation
     warn(...strings) {
         this.#logWithStyle(strings, {
             fg: "yellow",
@@ -200,7 +199,6 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-expect-error- custom implementation
     error(...strings) {
         this.#logWithStyle(strings, {
             fg: "red",
@@ -210,7 +208,6 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-expect-error- custom implementation
     info(...strings) {
         this.#logWithStyle(strings, {
             fg: "blue",
@@ -220,9 +217,15 @@ class ElizaLogger implements IElizaLogger {
         });
     }
 
-    // @ts-expect-error- custom implementation
     debug(...strings) {
-        if (!this.verbose) return;
+        if (!this.verbose) {
+            // for diagnosing verbose logging issues
+            // console.log(
+            //     "[ElizaLogger] Debug message suppressed (verbose=false):",
+            //     ...strings
+            // );
+            return;
+        }
         this.#logWithStyle(strings, {
             fg: "magenta",
             bg: "",

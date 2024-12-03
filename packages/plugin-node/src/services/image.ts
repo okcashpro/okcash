@@ -43,17 +43,8 @@ export class ImageDescriptionService
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
+        console.log("Initializing ImageDescriptionService");
         this.runtime = runtime;
-        const model = models[runtime?.character?.modelProvider];
-
-        if (model === models[ModelProviderName.LLAMALOCAL]) {
-            await this.initializeLocalModel();
-        } else {
-            this.modelId = "gpt-4o-mini";
-            this.device = "cloud";
-        }
-
-        this.initialized = true;
     }
 
     private async initializeLocalModel(): Promise<void> {
@@ -102,7 +93,16 @@ export class ImageDescriptionService
         imageUrl: string
     ): Promise<{ title: string; description: string }> {
         if (!this.initialized) {
-            throw new Error("ImageDescriptionService not initialized");
+            const model = models[this.runtime?.character?.modelProvider];
+
+            if (model === models[ModelProviderName.LLAMALOCAL]) {
+                await this.initializeLocalModel();
+            } else {
+                this.modelId = "gpt-4o-mini";
+                this.device = "cloud";
+            }
+
+            this.initialized = true;
         }
 
         if (this.device === "cloud") {

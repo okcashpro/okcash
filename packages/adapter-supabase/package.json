@@ -6,18 +6,14 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@supabase/supabase-js": "2.46.1"
+        "@supabase/supabase-js": "2.46.2"
     },
     "devDependencies": {
-        "eslint": "9.13.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4",
-        "tsup": "^8.3.5"
+        "tsup": "8.3.5"
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "dev": "tsup --watch",
+        "dev": "tsup --format esm --dts --watch",
         "lint": "eslint . --fix"
     },
     "peerDependencies": {

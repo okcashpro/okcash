@@ -2,33 +2,33 @@ import { Tweet } from "agent-twitter-client";
 import {
     composeContext,
     generateText,
-    embeddingZeroVector,
+    getEmbeddingZeroVector,
     IAgentRuntime,
     ModelClass,
     stringToUuid,
+    parseBooleanFromText,
 } from "@ai16z/eliza";
 import { elizaLogger } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
 
-const twitterPostTemplate = `{{timeline}}
-
-# Knowledge
+const twitterPostTemplate = `
+# Areas of Expertise
 {{knowledge}}
 
-About {{agentName}} (@{{twitterUserName}}):
+# About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
-{{postDirections}}
+{{topics}}
 
 {{providers}}
 
-{{recentPosts}}
-
 {{characterPostExamples}}
 
-# Task: Generate a post in the voice and style of {{agentName}}, aka @{{twitterUserName}}
-Write a single sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Try to write something totally different than previous posts. Do not add commentary or acknowledge this request, just write the post.
-Your response should not contain any questions. Brief, concise statements only. No emojis. Use \\n\\n (double spaces) between statements.`;
+{{postDirections}}
+
+# Task: Generate a post in the voice and style and perspective of {{agentName}} @{{twitterUserName}}.
+Write a 1-3 sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Do not add commentary or acknowledge this request, just write the post.
+Your response should not contain any questions. Brief, concise statements only. The total character count MUST be less than 280. No emojis. Use \\n\\n (double spaces) between statements.`;
 
 const MAX_TWEET_LENGTH = 280;
 
@@ -100,7 +100,14 @@ export class TwitterPostClient {
 
             elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-
+        if (
+            this.runtime.getSetting("POST_IMMEDIATELY") != null &&
+            this.runtime.getSetting("POST_IMMEDIATELY") != ""
+        ) {
+            postImmediately = parseBooleanFromText(
+                this.runtime.getSetting("POST_IMMEDIATELY")
+            );
+        }
         if (postImmediately) {
             this.generateNewTweet();
         }
@@ -117,6 +124,9 @@ export class TwitterPostClient {
         elizaLogger.log("Generating new tweet");
 
         try {
+            const roomId = stringToUuid(
+                "twitter_generate_room-" + this.client.profile.username
+            );
             await this.runtime.ensureUserExists(
                 this.runtime.agentId,
                 this.client.profile.username,
@@ -124,32 +134,11 @@ export class TwitterPostClient {
                 "twitter"
             );
 
-            let homeTimeline: Tweet[] = [];
-
-            const cachedTimeline = await this.client.getCachedTimeline();
-
-            // console.log({ cachedTimeline });
-
-            if (cachedTimeline) {
-                homeTimeline = cachedTimeline;
-            } else {
-                homeTimeline = await this.client.fetchHomeTimeline(10);
-                await this.client.cacheTimeline(homeTimeline);
-            }
-            const formattedHomeTimeline =
-                `# ${this.runtime.character.name}'s Home Timeline\n\n` +
-                homeTimeline
-                    .map((tweet) => {
-                        return `#${tweet.id}\n${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? `\nIn reply to: ${tweet.inReplyToStatusId}` : ""}\n${new Date(tweet.timestamp).toDateString()}\n\n${tweet.text}\n---\n`;
-                    })
-                    .join("\n");
-
             const topics = this.runtime.character.topics.join(", ");
-
             const state = await this.runtime.composeState(
                 {
                     userId: this.runtime.agentId,
-                    roomId: stringToUuid("twitter_generate_room"),
+                    roomId: roomId,
                     agentId: this.runtime.agentId,
                     content: {
                         text: topics,
@@ -158,7 +147,6 @@ export class TwitterPostClient {
                 },
                 {
                     twitterUserName: this.client.profile.username,
-                    timeline: formattedHomeTimeline,
                 }
             );
 
@@ -200,9 +188,12 @@ export class TwitterPostClient {
                         await this.client.twitterClient.sendTweet(content)
                 );
                 const body = await result.json();
+                if (!body?.data?.create_tweet?.tweet_results?.result) {
+                    console.error("Error sending tweet; Bad response:", body);
+                    return;
+                }
                 const tweetResult = body.data.create_tweet.tweet_results.result;
 
-                // console.dir({ tweetResult }, { depth: Infinity });
                 const tweet = {
                     id: tweetResult.rest_id,
                     name: this.client.profile.screenName,
@@ -210,6 +201,9 @@ export class TwitterPostClient {
                     text: tweetResult.legacy.full_text,
                     conversationId: tweetResult.legacy.conversation_id_str,
                     createdAt: tweetResult.legacy.created_at,
+                    timestamp: new Date(
+                        tweetResult.legacy.created_at
+                    ).getTime(),
                     userId: this.client.profile.id,
                     inReplyToStatusId:
                         tweetResult.legacy.in_reply_to_status_id_str,
@@ -232,13 +226,7 @@ export class TwitterPostClient {
 
                 await this.client.cacheTweet(tweet);
 
-                homeTimeline.push(tweet);
-                await this.client.cacheTimeline(homeTimeline);
                 elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
-
-                const roomId = stringToUuid(
-                    tweet.conversationId + "-" + this.runtime.agentId
-                );
 
                 await this.runtime.ensureRoomExists(roomId);
                 await this.runtime.ensureParticipantInRoom(
@@ -256,8 +244,8 @@ export class TwitterPostClient {
                         source: "twitter",
                     },
                     roomId,
-                    embedding: embeddingZeroVector,
-                    createdAt: tweet.timestamp * 1000,
+                    embedding: getEmbeddingZeroVector(),
+                    createdAt: tweet.timestamp,
                 });
             } catch (error) {
                 elizaLogger.error("Error sending tweet:", error);

@@ -8,7 +8,7 @@ sidebar_position: 2
 
 Before getting started with Eliza, ensure you have:
 
-- [Node.js 23.1.0](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Node.js 23.3.0](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
 - Git for version control
 - A code editor ([VS Code](https://code.visualstudio.com/) or [VSCodium](https://vscodium.com) recommended)
@@ -42,6 +42,12 @@ Before getting started with Eliza, ensure you have:
 
    ```bash
    pnpm install
+   ```
+
+   Build the local libraries
+
+   ```bash
+   pnpm build
    ```
 
 2. **Configure Environment**
@@ -187,7 +193,7 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
 
 1. **Node.js Version**
 
-   - Ensure Node.js 23.1.0 is installed
+   - Ensure Node.js 23.3.0 is installed
    - Use `node -v` to check version
    - Consider using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
 
@@ -259,7 +265,7 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    If that doesn't work, try clearing your node_modules in the root folder
 
    ```bash
-   rm -fr node_modules; rm pnpm-lock.yaml
+   rm -fr node_modules; pnpm store prune
    ```
 
    Then reinstall the requirements

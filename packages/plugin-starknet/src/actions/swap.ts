@@ -1,15 +1,15 @@
 import {
+    Action,
     ActionExample,
+    composeContext,
     elizaLogger,
+    generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-    type Action,
 } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
 import {
     executeSwap as executeAvnuSwap,
     fetchQuotes,
@@ -17,7 +17,7 @@ import {
 } from "@avnu/avnu-sdk";
 
 import { getStarknetAccount } from "../utils/index.ts";
-import { validateStarknetConfig } from "../enviroment.ts";
+import { validateStarknetConfig } from "../environment.ts";
 
 interface SwapContent {
     sellTokenAddress: string;
@@ -67,7 +67,7 @@ Example response:
 
 Extract the following information about the requested token swap:
 - Sell token address
-- Buy token address  
+- Buy token address
 - Amount to sell (in wei)
 
 Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.`;

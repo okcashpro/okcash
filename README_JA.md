@@ -23,7 +23,7 @@
 
 **必須条件:**
 
--   [Node.js 22+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
 ### .envファイルの編集
@@ -106,6 +106,14 @@ XAI_MODEL=
 # Claudeに質問するため
 ANTHROPIC_API_KEY=
 
+# EVM
+EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+
+# Solana
+SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
+SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
+
+# Fallback Wallet Configuration (deprecated)
 WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
 WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
 

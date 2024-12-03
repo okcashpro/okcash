@@ -1,5 +1,4 @@
 import { stringToUuid } from "@ai16z/eliza";
-import type { Hex } from "viem";
 
 const MAX_CAST_LENGTH = 280; // Updated to Twitter's current character limit
 

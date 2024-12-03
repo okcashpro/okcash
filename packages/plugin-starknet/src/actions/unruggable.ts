@@ -1,15 +1,15 @@
 import {
+    type Action,
     ActionExample,
+    composeContext,
     elizaLogger,
+    generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-    type Action,
 } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
 import { Percent } from "@uniswap/sdk-core";
 import {
     getStarknetAccount,
@@ -20,7 +20,7 @@ import {
 import { DeployData, Factory } from "@unruggable_starknet/core";
 import { AMM, QUOTE_TOKEN_SYMBOL } from "@unruggable_starknet/core/constants";
 import { ACCOUNTS, TOKENS } from "../utils/constants.ts";
-import { validateStarknetConfig } from "../enviroment.ts";
+import { validateStarknetConfig } from "../environment.ts";
 
 export function isDeployTokenContent(
     content: DeployData
@@ -62,7 +62,7 @@ Example response:
 
 Extract the following information about the requested token deployment:
 - Token Name
-- Token Symbol  
+- Token Symbol
 - Token Owner
 - Token initial supply
 

@@ -23,6 +23,7 @@ case "$1" in
         BASE_MOUNTS=(
             "characters:/app/characters"
             ".env:/app/.env"
+            "agent:/app/agent"
             "docs:/app/docs"
             "scripts:/app/scripts"
         )
@@ -33,7 +34,6 @@ case "$1" in
             "adapter-sqlite"
             "adapter-sqljs"
             "adapter-supabase"
-            "agent"
             "client-auto"
             "client-direct"
             "client-discord"
@@ -45,6 +45,8 @@ case "$1" in
             "plugin-image-generation"
             "plugin-node"
             "plugin-solana"
+            "plugin-evm"
+            "plugin-tee"
         )
 
         # Start building the docker run command
