@@ -51,10 +51,10 @@ jobs:
 
                   # Force checkout the latest tag
                   echo "Checking out latest tag: $LATEST_TAG"
-                  git checkout -f $LATEST_TAG
+                  git checkout -b temp-publish-branch $LATEST_TAG
 
                   echo "Publishing version: $LATEST_TAG"
-                  npx lerna publish from-git --yes --dist-tag latest
+                  npx lerna publish from-package --yes --dist-tag latest
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
