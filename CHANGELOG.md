@@ -1,8 +1,8 @@
 # Changelog
 
-## [v0.1.5-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.2) (2024-12-04)
+## [v0.1.5-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.3) (2024-12-04)
 
-[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.0...v0.1.5-alpha.2)
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.0...v0.1.5-alpha.3)
 
 **Implemented enhancements:**
 
