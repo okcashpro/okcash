@@ -59,7 +59,3 @@ jobs:
                   npx lerna publish from-package --yes --dist-tag latest
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-            - name: Get Version Tag
-              id: get_tag
-              run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
