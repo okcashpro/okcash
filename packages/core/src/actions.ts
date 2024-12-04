@@ -9,13 +9,27 @@ import { Action, ActionExample } from "./types.ts";
  * @returns A string containing formatted examples of conversations.
  */
 export const composeActionExamples = (actionsData: Action[], count: number) => {
-    const actionExamples: ActionExample[][] = actionsData
-        .sort(() => 0.5 - Math.random())
-        .map((action: Action) =>
-            action.examples.sort(() => 0.5 - Math.random()).slice(0, 5)
-        )
-        .flat()
-        .slice(0, count);
+    const data: ActionExample[][][] = actionsData.map((action: Action) => [
+        ...action.examples,
+    ]);
+
+    const actionExamples: ActionExample[][] = [];
+    let length = data.length;
+    for (let i = 0; i < count && length; i++) {
+        const actionId = i % length;
+        const examples = data[actionId];
+        if (examples.length) {
+            const rand = ~~(Math.random() * examples.length);
+            actionExamples[i] = examples.splice(rand, 1)[0];
+        } else {
+            i--;
+        }
+
+        if (examples.length == 0) {
+            data.splice(actionId, 1);
+            length--;
+        }
+    }
 
     const formattedExamples = actionExamples.map((example) => {
         const exampleNames = Array.from({ length: 5 }, () =>

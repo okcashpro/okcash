@@ -30,6 +30,7 @@ import {
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
     tradePlugin,
+    tokenContractPlugin,
 } from "@ai16z/plugin-coinbase";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
@@ -388,7 +389,7 @@ export function createAgent(
                 : null,
             ...(getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY")
-                ? [coinbaseMassPaymentsPlugin, tradePlugin]
+                ? [coinbaseMassPaymentsPlugin, tradePlugin, tokenContractPlugin]
                 : []),
             getSecret(character, "WALLET_SECRET_SALT") ? teePlugin : null,
             getSecret(character, "ALCHEMY_API_KEY") ? goatPlugin : null,
@@ -485,7 +486,9 @@ const startAgents = async () => {
     }
 
     elizaLogger.log("Chat started. Type 'exit' to quit.");
-    chat();
+    if (!args["non-interactive"]) {
+        chat();
+    }
 };
 
 startAgents().catch((error) => {

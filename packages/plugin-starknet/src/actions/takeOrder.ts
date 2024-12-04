@@ -10,7 +10,7 @@ import {
     settings,
 } from "@ai16z/eliza";
 import * as fs from "fs";
-import { validateStarknetConfig } from "../enviroment";
+import { validateStarknetConfig } from "../environment";
 
 interface Order {
     userId: string;
