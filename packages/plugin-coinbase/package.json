@@ -1,12 +1,12 @@
 {
     "name": "@ai16z/plugin-coinbase",
-    "version": "0.1.5-alpha.1",
+    "version": "0.1.5-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "coinbase-api": "1.0.5",
-        "@ai16z/eliza": "workspace:*"
+        "@ai16z/eliza": "workspace:*",
+        "coinbase-api": "1.0.5"
     },
     "devDependencies": {
         "tsup": "8.3.5"

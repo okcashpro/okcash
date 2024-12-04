@@ -1,5 +1,38 @@
 # Changelog
 
+## [v0.1.5-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.3) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.2...v0.1.5-alpha.3)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.3 [\#838](https://github.com/ai16z/eliza/pull/838) ([cygaar](https://github.com/cygaar))
+- chore: Revert/viem version and bump @goat-sdk/plugin-erc20 [\#836](https://github.com/ai16z/eliza/pull/836) ([shakkernerd](https://github.com/shakkernerd))
+- chore: revert viem package version [\#834](https://github.com/ai16z/eliza/pull/834) ([shakkernerd](https://github.com/shakkernerd))
+
+## [v0.1.5-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.2) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.0...v0.1.5-alpha.2)
+
+**Implemented enhancements:**
+
+- feat: Add circuit breaker pattern for database operations [\#712](https://github.com/ai16z/eliza/issues/712)
+
+**Fixed bugs:**
+
+- 404 Localhost port 3000 [\#804](https://github.com/ai16z/eliza/issues/804)
+- actions examples selection does not select things properly [\#798](https://github.com/ai16z/eliza/issues/798)
+- recentPosts always empty [\#679](https://github.com/ai16z/eliza/issues/679)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.1 [\#833](https://github.com/ai16z/eliza/pull/833) ([cygaar](https://github.com/cygaar))
+- fix: pin all node dependencies + update @solana/web3.js to safe version [\#832](https://github.com/ai16z/eliza/pull/832) ([cygaar](https://github.com/cygaar))
+- fix: docker-setup.md [\#826](https://github.com/ai16z/eliza/pull/826) ([Freytes](https://github.com/Freytes))
+- fix: twitter cache expires [\#824](https://github.com/ai16z/eliza/pull/824) ([palsp](https://github.com/palsp))
+- feat: \(core\) Add circuit breaker pattern for database operations -… [\#812](https://github.com/ai16z/eliza/pull/812) ([augchan42](https://github.com/augchan42))
+- fix: lerna publish command [\#811](https://github.com/ai16z/eliza/pull/811) ([cygaar](https://github.com/cygaar))
+
 ## [v0.1.5-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.0) (2024-12-03)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5...v0.1.5-alpha.0)
