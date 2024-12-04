@@ -481,6 +481,146 @@ When successful, a response similar to the following will be returned:
 
 ---
 
+#### 8. Coinbase Token Contract Plugin (`@eliza/plugin-coinbase`)
+
+This plugin enables the deployment and interaction with various token contracts (ERC20, ERC721, ERC1155) using the Coinbase SDK. It provides functionality for both deploying new token contracts and interacting with existing ones.
+
+**Actions:**
+
+1. `DEPLOY_TOKEN_CONTRACT`
+   Deploys a new token contract (ERC20, ERC721, or ERC1155).
+   - **Inputs**:
+     - `contractType` (string): Type of contract to deploy (`ERC20`, `ERC721`, or `ERC1155`)
+     - `name` (string): Name of the token
+     - `symbol` (string): Symbol of the token
+     - `network` (string): Blockchain network to deploy on
+     - `baseURI` (string, optional): Base URI for token metadata (required for ERC721 and ERC1155)
+     - `totalSupply` (number, optional): Total supply of tokens (only for ERC20)
+   - **Example**:
+     ```json
+     {
+       "contractType": "ERC20",
+       "name": "MyToken",
+       "symbol": "MTK",
+       "network": "base",
+       "totalSupply": 1000000
+     }
+     ```
+
+2. `INVOKE_CONTRACT`
+   Invokes a method on a deployed smart contract.
+   - **Inputs**:
+     - `contractAddress` (string): Address of the contract to invoke
+     - `method` (string): Method name to invoke
+     - `abi` (array): Contract ABI
+     - `args` (object, optional): Arguments for the method
+     - `amount` (number, optional): Amount of asset to send (for payable methods)
+     - `assetId` (string, optional): Asset ID to send
+     - `network` (string): Blockchain network to use
+   - **Example**:
+     ```json
+     {
+       "contractAddress": "0x123...",
+       "method": "transfer",
+       "abi": [...],
+       "args": {
+         "to": "0x456...",
+         "amount": "1000000000000000000"
+       },
+       "network": "base"
+     }
+     ```
+
+**Description:**
+
+The Coinbase Token Contract plugin simplifies the process of deploying and interacting with various token contracts on supported blockchain networks. It supports:
+
+- ERC20 token deployment with customizable supply
+- ERC721 (NFT) deployment with metadata URI support
+- ERC1155 (Multi-token) deployment with metadata URI support
+- Contract method invocation for deployed contracts
+
+All contract deployments and interactions are logged to a CSV file for record-keeping and auditing purposes.
+
+**Usage Instructions:**
+
+1. **Configure the Plugin**
+   Add the plugin to your character's configuration:
+
+   ```typescript
+   import { tokenContractPlugin } from "@eliza/plugin-coinbase";
+
+   const character = {
+     plugins: [tokenContractPlugin],
+   };
+   ```
+
+2. **Required Configurations**
+   Ensure the following environment variables or runtime settings are configured:
+   - `COINBASE_API_KEY`: API key for Coinbase SDK
+   - `COINBASE_PRIVATE_KEY`: Private key for secure transactions
+   - Wallet configuration (same as MassPayments plugin)
+
+**Example Deployments:**
+
+1. **ERC20 Token**
+   ```typescript
+   const response = await runtime.triggerAction("DEPLOY_TOKEN_CONTRACT", {
+     contractType: "ERC20",
+     name: "MyToken",
+     symbol: "MTK",
+     network: "base",
+     totalSupply: 1000000
+   });
+   ```
+
+2. **NFT Collection**
+   ```typescript
+   const response = await runtime.triggerAction("DEPLOY_TOKEN_CONTRACT", {
+     contractType: "ERC721",
+     name: "MyNFT",
+     symbol: "MNFT",
+     network: "eth",
+     baseURI: "https://api.mynft.com/metadata/"
+   });
+   ```
+
+3. **Multi-token Collection**
+   ```typescript
+   const response = await runtime.triggerAction("DEPLOY_TOKEN_CONTRACT", {
+     contractType: "ERC1155",
+     name: "MyMultiToken",
+     symbol: "MMT",
+     network: "pol",
+     baseURI: "https://api.mymultitoken.com/metadata/"
+   });
+   ```
+
+**Contract Interaction Example:**
+
+```typescript
+const response = await runtime.triggerAction("INVOKE_CONTRACT", {
+  contractAddress: "0x123...",
+  method: "transfer",
+  abi: [...],
+  args: {
+    to: "0x456...",
+    amount: "1000000000000000000"
+  },
+  network: "base"
+});
+```
+
+**Best Practices:**
+
+- Always verify contract parameters before deployment
+- Store contract addresses and deployment details securely
+- Test contract interactions on testnets before mainnet deployment
+- Keep track of deployed contracts using the generated CSV logs
+- Ensure proper error handling for failed deployments or interactions
+
+---
+
 #### 7. TEE Plugin (`@ai16z/plugin-tee`)
 
 Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
