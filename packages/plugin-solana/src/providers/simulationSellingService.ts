@@ -12,6 +12,7 @@ import { IAgentRuntime } from "@ai16z/eliza";
 import { WalletProvider } from "./wallet.ts";
 import * as amqp from "amqplib";
 import { ProcessedTokenData } from "../types/token.ts";
+import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
 
 interface SellDetails {
     sell_amount: number;
@@ -39,13 +40,7 @@ export class SimulationSellingService {
         this.trustScoreDb = trustScoreDb;
 
         this.connection = new Connection(runtime.getSetting("RPC_URL"));
-        this.walletProvider = new WalletProvider(
-            this.connection,
-            new PublicKey(
-                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                    runtime.getSetting("WALLET_PUBLIC_KEY")
-            )
-        );
+        this.initializeWalletProvider();
         this.baseMint = new PublicKey(
             runtime.getSetting("BASE_MINT") ||
                 "So11111111111111111111111111111111111111112"
@@ -173,6 +168,33 @@ export class SimulationSellingService {
                 error
             );
         }
+    }
+
+    /**
+     * Derives the public key based on the TEE (Trusted Execution Environment) mode and initializes the wallet provider.
+     * If TEE mode is enabled, derives a keypair using the DeriveKeyProvider with the wallet secret salt and agent ID.
+     * If TEE mode is disabled, uses the provided Solana public key or wallet public key from settings.
+     */
+    private async initializeWalletProvider(): Promise<void> {
+        const teeMode = this.runtime.getSetting("TEE_MODE") || TEEMode.OFF;
+        let publicKey: PublicKey;
+
+        if (teeMode !== TEEMode.OFF) {
+            const deriveKeyProvider = new DeriveKeyProvider(teeMode);
+            const deriveKeyPairResult = await deriveKeyProvider.deriveEd25519Keypair(
+                "/",
+                this.runtime.getSetting("WALLET_SECRET_SALT"),
+                this.runtime.agentId
+            );
+            publicKey = deriveKeyPairResult.keypair.publicKey;
+        } else {
+            publicKey = new PublicKey(
+                this.runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+                this.runtime.getSetting("WALLET_PUBLIC_KEY")
+            );
+        }
+
+        this.walletProvider = new WalletProvider(this.connection, publicKey);
     }
 
     public async startService() {

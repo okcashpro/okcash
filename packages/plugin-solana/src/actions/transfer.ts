@@ -25,6 +25,7 @@ import {
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
+import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
@@ -138,11 +139,25 @@ export default {
         }
 
         try {
-            const privateKeyString =
+            // Check if we should use TEE mode
+            const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
+            let senderKeypair: Keypair;
+
+            if (teeMode !== TEEMode.OFF) {
+                const deriveKeyProvider = new DeriveKeyProvider(teeMode);
+                const deriveKeyPairResult = await deriveKeyProvider.deriveEd25519Keypair(
+                    "/",
+                    runtime.getSetting("WALLET_SECRET_SALT"),
+                    runtime.agentId
+                );
+                senderKeypair = deriveKeyPairResult.keypair;
+            } else {
+                const privateKeyString =
                 runtime.getSetting("SOLANA_PRIVATE_KEY") ??
                 runtime.getSetting("WALLET_PRIVATE_KEY");
-            const secretKey = bs58.decode(privateKeyString);
-            const senderKeypair = Keypair.fromSecretKey(secretKey);
+                const secretKey = bs58.decode(privateKeyString);
+                senderKeypair = Keypair.fromSecretKey(secretKey);
+            }
 
             const connection = new Connection(settings.RPC_URL!);
 

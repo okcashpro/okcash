@@ -24,6 +24,8 @@ import { TokenProvider } from "../providers/token.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { walletProvider, WalletProvider } from "../providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
+import { TEEMode } from "@ai16z/plugin-tee";
+import { DeriveKeyProvider } from "@ai16z/plugin-tee";
 
 async function swapToken(
     connection: Connection,
@@ -110,7 +112,7 @@ Example response:
 \`\`\`json
 {
     "inputTokenSymbol": "SOL",
-    "outputTokenSymbol": "USDC", 
+    "outputTokenSymbol": "USDC",
     "inputTokenCA": "So11111111111111111111111111111111111111112",
     "outputTokenCA": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
     "amount": 1.5
@@ -125,7 +127,7 @@ Given the recent messages and wallet information below:
 
 Extract the following information about the requested token swap:
 - Input token symbol (the token being sold)
-- Output token symbol (the token being bought) 
+- Output token symbol (the token being bought)
 - Input token contract address if provided
 - Output token contract address if provided
 - Amount to swap
@@ -134,7 +136,7 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 \`\`\`json
 {
     "inputTokenSymbol": string | null,
-    "outputTokenSymbol": string | null, 
+    "outputTokenSymbol": string | null,
     "inputTokenCA": string | null,
     "outputTokenCA": string | null,
     "amount": number | string | null
@@ -145,12 +147,10 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 
 // get all the tokens in the wallet using the wallet provider
 async function getTokensInWallet(runtime: IAgentRuntime) {
+    const publicKey = await getPublicKey(runtime);
     const walletProvider = new WalletProvider(
         new Connection("https://api.mainnet-beta.solana.com"),
-        new PublicKey(
-            runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY")
-        )
+        publicKey
     );
 
     const walletInfo = await walletProvider.fetchPortfolioValue(runtime);
@@ -173,6 +173,26 @@ async function getTokenFromWallet(runtime: IAgentRuntime, tokenSymbol: string) {
         console.error("Error checking token in wallet:", error);
         return null;
     }
+}
+
+// Get the public key
+async function getPublicKey(runtime: IAgentRuntime): Promise<PublicKey> {
+    const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
+
+    if (teeMode !== TEEMode.OFF) {
+        const deriveKeyProvider = new DeriveKeyProvider(teeMode);
+        const deriveKeyPairResult = await deriveKeyProvider.deriveEd25519Keypair(
+            "/",
+            runtime.getSetting("WALLET_SECRET_SALT"),
+            runtime.agentId
+        );
+        return deriveKeyPairResult.keypair.publicKey;
+    }
+
+    return new PublicKey(
+        runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+        runtime.getSetting("WALLET_PUBLIC_KEY")
+    );
 }
 
 // swapToken should took CA, not symbol
@@ -293,10 +313,7 @@ export const executeSwap: Action = {
             const connection = new Connection(
                 "https://api.mainnet-beta.solana.com"
             );
-            const walletPublicKey = new PublicKey(
-                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                    runtime.getSetting("WALLET_PUBLIC_KEY")
-            );
+            const walletPublicKey = await getPublicKey(runtime);
 
             const provider = new WalletProvider(connection, walletPublicKey);
 
@@ -322,26 +339,39 @@ export const executeSwap: Action = {
                 VersionedTransaction.deserialize(transactionBuf);
 
             console.log("Preparing to sign transaction...");
-            const privateKeyString =
-                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                runtime.getSetting("WALLET_PRIVATE_KEY");
+
+            const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
+            const deriveKeyProvider = new DeriveKeyProvider(teeMode);
 
             // Handle different private key formats
             let secretKey: Uint8Array;
-            try {
-                // First try to decode as base58
-                secretKey = bs58.decode(privateKeyString);
-                // eslint-disable-next-line
-            } catch (e) {
+            let privateKeyString: string;
+            if (teeMode === TEEMode.OFF) {
+                privateKeyString =
+                    runtime.getSetting("SOLANA_PRIVATE_KEY") ??
+                    runtime.getSetting("WALLET_PRIVATE_KEY");
                 try {
-                    // If that fails, try base64
-                    secretKey = Uint8Array.from(
-                        Buffer.from(privateKeyString, "base64")
-                    );
+                    // First try to decode as base58
+                    secretKey = bs58.decode(privateKeyString);
                     // eslint-disable-next-line
-                } catch (e2) {
-                    throw new Error("Invalid private key format");
+                } catch (e) {
+                    try {
+                        // If that fails, try base64
+                        secretKey = Uint8Array.from(
+                            Buffer.from(privateKeyString, "base64")
+                        );
+                        // eslint-disable-next-line
+                    } catch (e2) {
+                        throw new Error("Invalid private key format");
+                    }
                 }
+            } else {
+                const rawDeriveKeyResult =
+                    await deriveKeyProvider.rawDeriveKey(
+                        "/",
+                        runtime.getSetting("WALLET_SECRET_SALT")
+                );
+                secretKey = rawDeriveKeyResult.asUint8Array();
             }
 
             // Verify the key length
@@ -357,8 +387,10 @@ export const executeSwap: Action = {
 
             // Verify the public key matches what we expect
             const expectedPublicKey =
-                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY");
+                teeMode === TEEMode.OFF
+                    ? (runtime.getSetting("SOLANA_PUBLIC_KEY") ??
+                      runtime.getSetting("WALLET_PUBLIC_KEY"))
+                    : walletPublicKey.toBase58();
             if (keypair.publicKey.toBase58() !== expectedPublicKey) {
                 throw new Error(
                     "Generated public key doesn't match expected public key"
