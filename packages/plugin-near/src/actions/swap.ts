@@ -34,7 +34,7 @@ async function swapToken(
     inputTokenId: string,
     outputTokenId: string,
     amount: string,
-    slippageTolerance: number = 0.1
+    slippageTolerance: number = Number(runtime.getSetting("SLIPPAGE_TOLERANCE")) || 0.01
 ): Promise<any> {
     try {
         // Get token metadata
@@ -229,7 +229,7 @@ export const executeSwap: Action = {
                 response.inputTokenId,
                 response.outputTokenId,
                 response.amount,
-                0.01 // 1% slippage tolerance
+                Number(runtime.getSetting("SLIPPAGE_TOLERANCE")) || 0.01
             );
 
             // Sign and send transactions
