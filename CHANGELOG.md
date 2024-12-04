@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.1.5-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.3) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.2...v0.1.5-alpha.3)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.3 [\#838](https://github.com/ai16z/eliza/pull/838) ([cygaar](https://github.com/cygaar))
+- chore: Revert/viem version and bump @goat-sdk/plugin-erc20 [\#836](https://github.com/ai16z/eliza/pull/836) ([shakkernerd](https://github.com/shakkernerd))
+- chore: revert viem package version [\#834](https://github.com/ai16z/eliza/pull/834) ([shakkernerd](https://github.com/shakkernerd))
+
 ## [v0.1.5-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.2) (2024-12-04)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.0...v0.1.5-alpha.2)
