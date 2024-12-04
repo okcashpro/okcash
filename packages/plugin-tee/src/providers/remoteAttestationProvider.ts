@@ -1,6 +1,7 @@
 import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { TdxQuoteResponse, TappdClient } from "@phala/dstack-sdk";
 import { RemoteAttestationQuote, TEEMode } from "../types/tee";
+import crypto from "crypto";
 
 class RemoteAttestationProvider {
     private client: TappdClient;
@@ -34,6 +35,7 @@ class RemoteAttestationProvider {
             console.log("Generating remote attestation...");
             const tdxQuote: TdxQuoteResponse = await this.client.tdxQuote(reportData);
             console.log("Remote attestation generated successfully!");
+            console.log(crypto.createHash('sha512').update(Buffer.from(crypto.createHash('sha384').update(reportData).digest('hex'), 'hex')).digest('hex'));
             const quote: RemoteAttestationQuote = {
                 quote: tdxQuote.quote,
                 timestamp: Date.now(),
@@ -58,6 +60,7 @@ const remoteAttestationProvider: Provider = {
         const agentId = runtime.agentId;
 
         try {
+            console.log("Generating attestation for: ", agentId);
             const attestation = await provider.generateAttestation(agentId);
             return `Your Agent's remote attestation is: ${JSON.stringify(attestation)}`;
         } catch (error) {

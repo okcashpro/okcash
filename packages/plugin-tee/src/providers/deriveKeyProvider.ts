@@ -46,8 +46,9 @@ class DeriveKeyProvider {
             agentId,
             publicKey
         }
-        console.log("Generating attestation for: ", JSON.stringify(deriveKeyData));
-        const quote = await this.raProvider.generateAttestation(JSON.stringify(deriveKeyData));
+        const reportdata = JSON.stringify(deriveKeyData);
+        console.log("Generating attestation for: ", reportdata);
+        const quote = await this.raProvider.generateAttestation(reportdata);
         console.log("TEE Quote generated:", quote);
         return quote;
     }
