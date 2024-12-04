@@ -164,6 +164,35 @@ export class FlowWalletProvider implements FlowSignerInterface {
     }
 }
 
+// ----- Helpers -----
+
+/**
+ * Check if an address is a Flow address
+ * @param address Address to check
+ */
+export function isFlowAddress(address: string) {
+    const regExp = /^0x[a-fA-F0-9]{16}$/gi;
+    return regExp.test(address);
+}
+
+/**
+ * Check if an address is an EVM address
+ * @param address Address to check
+ */
+export function isEVMAddress(address: string) {
+    const regExp = /^0x[a-fA-F0-9]{40}$/gi;
+    return regExp.test(address);
+}
+
+/**
+ * Check if a string is a Cadence identifier
+ * @param str String to check
+ */
+export function isCadenceIdentifier(str: string) {
+    const cadenceIdentifier = /^A\.[0-9a-fA-F]{16}\.[0-9a-zA-Z_]+/;
+    return cadenceIdentifier.test(str);
+}
+
 /**
  * Get the signer address
  */

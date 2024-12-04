@@ -11,14 +11,19 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
+import Exception from "../types/exception";
 import { getFlowConnectorInstance } from "../providers/connector.provider";
-import { FlowWalletProvider } from "../providers/wallet.provider";
+import {
+    FlowWalletProvider,
+    isCadenceIdentifier,
+    isEVMAddress,
+    isFlowAddress,
+} from "../providers/wallet.provider";
 import { transferTemplate } from "../templates";
 import { validateFlowConfig } from "../environment";
 import { TransactionResponse } from "../types";
-import Exception from "../types/exception";
-
-export { transferTemplate };
+import { transactions } from "../assets/transaction.defs";
+import { scripts } from "../assets/script.defs";
 
 /**
  * The generated content for the transfer action
@@ -39,8 +44,12 @@ function isTransferContent(
 ): content is TransferContent {
     elizaLogger.log("Content for transfer", content);
     return (
-        (typeof content.token === "string" || !content.token) &&
+        (!content.token ||
+            (typeof content.token === "string" &&
+                (isCadenceIdentifier(content.token) ||
+                    isEVMAddress(content.token)))) &&
         typeof content.to === "string" &&
+        (isEVMAddress(content.to) || isFlowAddress(content.to)) &&
         (typeof content.amount === "string" ||
             typeof content.amount === "number") &&
         typeof content.matched === "boolean"
@@ -122,7 +131,68 @@ export class TransferAction {
         }
 
         // Execute transfer
-        // TODO: Implement the transfer logic here
+        const authz = this.walletProvider.buildAuthorization(this.useKeyIndex); // use default private key
+
+        // For different token types, we need to handle the token differently
+        if (!content.token) {
+            elizaLogger.log(
+                `${logPrefix} Sending ${content.amount} FLOW to ${content.to}...`
+            );
+            // Transfer FLOW token
+            resp.txid = await this.walletProvider.sendTransaction(
+                transactions.mainFlowTokenDynamicTransfer,
+                (arg, t) => [
+                    arg(content.to, t.String),
+                    arg(content.amount, t.UFix64),
+                ],
+                authz
+            );
+        } else if (isCadenceIdentifier(content.token)) {
+            // Transfer Fungible Token on Cadence side
+            const [_, tokenAddr, tokenContractName] = content.token.split(".");
+            elizaLogger.log(
+                `${logPrefix} Sending ${content.amount} A.${tokenAddr}${tokenContractName} to ${content.to}...`
+            );
+
+            resp.txid = await this.walletProvider.sendTransaction(
+                transactions.mainFTGenericTransfer,
+                (arg, t) => [
+                    arg(content.amount, t.UFix64),
+                    arg(content.to, t.Address),
+                    arg(tokenAddr, t.Address),
+                    arg(tokenContractName, t.String),
+                ],
+                authz
+            );
+        } else if (isEVMAddress(content.token)) {
+            // Transfer ERC20 token on EVM side
+            // we need to update the amount to be in the smallest unit
+            const decimals = await this.walletProvider.executeScript(
+                scripts.evmERC20GetDecimals,
+                (arg, t) => [arg(content.token, t.String)],
+                "18"
+            );
+            const adjustedAmount = BigInt(
+                Number(content.amount) * Math.pow(10, parseInt(decimals))
+            );
+
+            elizaLogger.log(
+                `${logPrefix} Sending ${adjustedAmount} ${content.token}(EVM) to ${content.to}...`
+            );
+
+            resp.txid = await this.walletProvider.sendTransaction(
+                transactions.mainEVMTransferERC20,
+                (arg, t) => [
+                    arg(content.token, t.String),
+                    arg(content.to, t.String),
+                    // Convert the amount to string, the string should be pure number, not a scientific notation
+                    arg(adjustedAmount.toString(), t.UInt256),
+                ],
+                authz
+            );
+        }
+
+        elizaLogger.log(`${logPrefix} Sent transaction: ${resp.txid}`);
 
         // call the callback with the transaction response
         if (callback) {
@@ -131,6 +201,7 @@ export class TransferAction {
                 text: `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}\nTransaction: ${resp.txid}`,
                 content: {
                     success: true,
+                    txid: resp.txid,
                     token: content.token,
                     to: content.to,
                     amount: content.amount,
@@ -138,6 +209,8 @@ export class TransferAction {
             });
         }
         elizaLogger.log("Completed Flow Plugin's SEND_TOKEN handler.");
+
+        return resp;
     }
 }
 
@@ -208,13 +281,13 @@ export const transferAction = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 1 FLOW(A.1654653399040a61.FlowToken.Vault) to 0xa2de93114bae3e73",
+                    text: "Send 1 FLOW(A.1654653399040a61.FlowToken) to 0xa2de93114bae3e73",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Sending 1 FLOW(A.1654653399040a61.FlowToken.Vault) tokens now, pls wait...",
+                    text: "Sending 1 FLOW(A.1654653399040a61.FlowToken) tokens now, pls wait...",
                     action: "SEND_TOKEN",
                 },
             },
