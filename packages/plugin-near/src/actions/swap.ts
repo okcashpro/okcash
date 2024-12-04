@@ -10,13 +10,24 @@ import {
     generateObject,
 } from "@ai16z/eliza";
 import { connect, keyStores, utils } from "near-api-js";
-import BigNumber from "bignumber.js";
-import { init_env, ftGetTokenMetadata, estimateSwap, instantSwap, fetchAllPools, FT_MINIMUM_STORAGE_BALANCE_LARGE } from '@ref-finance/ref-sdk';
+import { init_env, ftGetTokenMetadata, estimateSwap, instantSwap, fetchAllPools, FT_MINIMUM_STORAGE_BALANCE_LARGE, ONE_YOCTO_NEAR } from '@ref-finance/ref-sdk';
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
-// Initialize Ref SDK with testnet environment
-init_env('testnet');
+
+async function checkStorageBalance(account: any, contractId: string): Promise<boolean> {
+    try {
+        const balance = await account.viewFunction({
+            contractId,
+            methodName: 'storage_balance_of',
+            args: { account_id: account.accountId }
+        });
+        return balance !== null && balance.total !== '0';
+    } catch (error) {
+        console.log(`Error checking storage balance: ${error}`);
+        return false;
+    }
+}
 
 async function swapToken(
     runtime: IAgentRuntime,
@@ -29,11 +40,11 @@ async function swapToken(
         // Get token metadata
         const tokenIn = await ftGetTokenMetadata(inputTokenId);
         const tokenOut = await ftGetTokenMetadata(outputTokenId);
+        const networkId = runtime.getSetting("NEAR_NETWORK") || "testnet";
+        const nodeUrl = runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org";
 
         // Get all pools for estimation
-        const { ratedPools, unRatedPools, simplePools} = await fetchAllPools(200);
-
-        console.log("Pools:", simplePools);
+        const { ratedPools, unRatedPools, simplePools} = await fetchAllPools();
         const swapTodos = await estimateSwap({
             tokenIn,
             tokenOut,
@@ -54,8 +65,24 @@ async function swapToken(
             throw new Error("NEAR_ADDRESS not configured");
         }
 
-        // Execute swap
-        const transactions = await instantSwap({
+        const secretKey = runtime.getSetting("NEAR_WALLET_SECRET_KEY");
+        const keyStore = new keyStores.InMemoryKeyStore();
+        const keyPair = utils.KeyPair.fromString(secretKey as KeyPairString);
+        await keyStore.setKey(networkId, accountId, keyPair);
+
+        const nearConnection = await connect({
+            networkId,
+            keyStore,
+            nodeUrl,
+        });
+
+        const account = await nearConnection.account(accountId);
+
+        // Check storage balance for both tokens
+        const hasStorageIn = await checkStorageBalance(account, inputTokenId);
+        const hasStorageOut = await checkStorageBalance(account, outputTokenId);
+
+        let transactions = await instantSwap({
             tokenIn,
             tokenOut,
             amountIn: amount,
@@ -63,6 +90,31 @@ async function swapToken(
             slippageTolerance,
             AccountId: accountId
         });
+
+        // If storage deposit is needed, add it to transactions
+        if (!hasStorageIn) {
+            transactions.unshift({
+                receiverId: inputTokenId,
+                functionCalls: [{
+                    methodName: 'storage_deposit',
+                    args: { account_id: accountId, registration_only: true },
+                    gas: '30000000000000',
+                    amount: FT_MINIMUM_STORAGE_BALANCE_LARGE
+                }]
+            });
+        }
+
+        if (!hasStorageOut) {
+            transactions.unshift({
+                receiverId: outputTokenId,
+                functionCalls: [{
+                    methodName: 'storage_deposit',
+                    args: { account_id: accountId, registration_only: true },
+                    gas: '30000000000000',
+                    amount: FT_MINIMUM_STORAGE_BALANCE_LARGE
+                }]
+            });
+        }
 
         return transactions;
     } catch (error) {
@@ -117,6 +169,8 @@ export const executeSwap: Action = {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
+        // Initialize Ref SDK with testnet environment
+        init_env(runtime.getSetting("NEAR_NETWORK") || "testnet");
         // Compose state
         if (!state) {
             state = (await runtime.composeState(message)) as State;
@@ -164,9 +218,9 @@ export const executeSwap: Action = {
             await keyStore.setKey("testnet", accountId, keyPair);
 
             const nearConnection = await connect({
-                networkId: "testnet",
+                networkId: runtime.getSetting("NEAR_NETWORK") || "testnet",
                 keyStore,
-                nodeUrl: "https://rpc.testnet.near.org",
+                nodeUrl: runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org",
             });
 
             // Execute swap
@@ -175,7 +229,7 @@ export const executeSwap: Action = {
                 response.inputTokenId,
                 response.outputTokenId,
                 response.amount,
-                0.1 // 1% slippage tolerance
+                0.01 // 1% slippage tolerance
             );
 
             // Sign and send transactions
@@ -189,7 +243,7 @@ export const executeSwap: Action = {
                         methodName: functionCall.methodName,
                         args: functionCall.args,
                         gas: functionCall.gas,
-                        attachedDeposit: BigInt(1),
+                        attachedDeposit: BigInt(functionCall.amount === ONE_YOCTO_NEAR ? '1' : functionCall.amount),
                     });
                     results.push(result);
                 }
