@@ -1,4 +1,10 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import {
+    IAgentRuntime,
+    ICacheManager,
+    Memory,
+    Provider,
+    State,
+} from "@ai16z/eliza";
 import {
     Account,
     Aptos,
@@ -10,6 +16,8 @@ import {
 } from "@aptos-labs/ts-sdk";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
+import * as path from "path";
+import { APT_DECIMALS } from "../constants";
 
 // Provider configuration
 const PROVIDER_CONFIG = {
@@ -19,7 +27,7 @@ const PROVIDER_CONFIG = {
 
 interface WalletPortfolio {
     totalUsd: string;
-    totalApt?: string;
+    totalApt: string;
 }
 
 interface Prices {
@@ -28,15 +36,56 @@ interface Prices {
 
 export class WalletProvider {
     private cache: NodeCache;
+    private cacheKey: string = "aptos/wallet";
 
     constructor(
         private aptosClient: Aptos,
-        private address: string
+        private address: string,
+        private cacheManager: ICacheManager
     ) {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
     }
 
-    private async fetchAptPriceWithRetry() {
+    private async readFromCache<T>(key: string): Promise<T | null> {
+        const cached = await this.cacheManager.get<T>(
+            path.join(this.cacheKey, key)
+        );
+        return cached;
+    }
+
+    private async writeToCache<T>(key: string, data: T): Promise<void> {
+        await this.cacheManager.set(path.join(this.cacheKey, key), data, {
+            expires: Date.now() + 5 * 60 * 1000,
+        });
+    }
+
+    private async getCachedData<T>(key: string): Promise<T | null> {
+        // Check in-memory cache first
+        const cachedData = this.cache.get<T>(key);
+        if (cachedData) {
+            return cachedData;
+        }
+
+        // Check file-based cache
+        const fileCachedData = await this.readFromCache<T>(key);
+        if (fileCachedData) {
+            // Populate in-memory cache
+            this.cache.set(key, fileCachedData);
+            return fileCachedData;
+        }
+
+        return null;
+    }
+
+    private async setCachedData<T>(cacheKey: string, data: T): Promise<void> {
+        // Set in-memory cache
+        this.cache.set(cacheKey, data);
+
+        // Write to file-based cache
+        await this.writeToCache(cacheKey, data);
+    }
+
+    private async fetchPricesWithRetry() {
         let lastError: Error;
 
         for (let i = 0; i < PROVIDER_CONFIG.MAX_RETRIES; i++) {
@@ -77,19 +126,20 @@ export class WalletProvider {
     async fetchPortfolioValue(): Promise<WalletPortfolio> {
         try {
             const cacheKey = `portfolio-${this.address}`;
-            const cachedValue = this.cache.get<WalletPortfolio>(cacheKey);
+            const cachedValue =
+                await this.getCachedData<WalletPortfolio>(cacheKey);
 
             if (cachedValue) {
-                console.log("Cache hit for fetchPortfolioValue");
+                console.log("Cache hit for fetchPortfolioValue", cachedValue);
                 return cachedValue;
             }
             console.log("Cache miss for fetchPortfolioValue");
 
-            const aptPrice = await this.fetchAptPrice().catch((error) => {
+            const prices = await this.fetchPrices().catch((error) => {
                 console.error("Error fetching APT price:", error);
                 throw error;
             });
-            const aptAmount = await this.aptosClient
+            const aptAmountOnChain = await this.aptosClient
                 .getAccountAPTAmount({
                     accountAddress: this.address,
                 })
@@ -98,13 +148,17 @@ export class WalletProvider {
                     throw error;
                 });
 
-            const totalUsd = new BigNumber(aptAmount).times(aptPrice.apt.usd);
+            const aptAmount = new BigNumber(aptAmountOnChain).div(
+                new BigNumber(10).pow(APT_DECIMALS)
+            );
+            const totalUsd = new BigNumber(aptAmount).times(prices.apt.usd);
 
             const portfolio = {
                 totalUsd: totalUsd.toString(),
                 totalApt: aptAmount.toString(),
             };
-            this.cache.set(cacheKey, portfolio);
+            this.setCachedData(cacheKey, portfolio);
+            console.log("Fetched portfolio:", portfolio);
             return portfolio;
         } catch (error) {
             console.error("Error fetching portfolio:", error);
@@ -112,10 +166,10 @@ export class WalletProvider {
         }
     }
 
-    async fetchAptPrice(): Promise<Prices> {
+    async fetchPrices(): Promise<Prices> {
         try {
             const cacheKey = "prices";
-            const cachedValue = this.cache.get<Prices>(cacheKey);
+            const cachedValue = await this.getCachedData<Prices>(cacheKey);
 
             if (cachedValue) {
                 console.log("Cache hit for fetchPrices");
@@ -123,7 +177,7 @@ export class WalletProvider {
             }
             console.log("Cache miss for fetchPrices");
 
-            const aptPriceData = await this.fetchAptPriceWithRetry().catch(
+            const aptPriceData = await this.fetchPricesWithRetry().catch(
                 (error) => {
                     console.error("Error fetching APT price:", error);
                     throw error;
@@ -132,7 +186,7 @@ export class WalletProvider {
             const prices: Prices = {
                 apt: { usd: aptPriceData.pair.priceUsd },
             };
-            this.cache.set(cacheKey, prices);
+            this.setCachedData(cacheKey, prices);
             return prices;
         } catch (error) {
             console.error("Error fetching prices:", error);
@@ -141,13 +195,13 @@ export class WalletProvider {
     }
 
     formatPortfolio(runtime, portfolio: WalletPortfolio): string {
-        let output = `${runtime.character.description}\n`;
-        output += `Wallet Address: ${this.address}\n\n`;
+        let output = `${runtime.character.name}\n`;
+        output += `Wallet Address: ${this.address}\n`;
 
         const totalUsdFormatted = new BigNumber(portfolio.totalUsd).toFixed(2);
-        const totalAptFormatted = portfolio.totalApt;
+        const totalAptFormatted = new BigNumber(portfolio.totalApt).toFixed(4);
 
-        output += `Total Value: $${totalUsdFormatted} (${totalAptFormatted} APT)\n\n`;
+        output += `Total Value: $${totalUsdFormatted} (${totalAptFormatted} APT)\n`;
 
         return output;
     }
@@ -188,7 +242,8 @@ const walletProvider: Provider = {
             );
             const provider = new WalletProvider(
                 aptosClient,
-                aptosAccount.accountAddress.toStringLong()
+                aptosAccount.accountAddress.toStringLong(),
+                runtime.cacheManager
             );
             return await provider.getFormattedPortfolio(runtime);
         } catch (error) {
