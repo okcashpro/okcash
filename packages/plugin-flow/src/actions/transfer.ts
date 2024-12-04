@@ -1,30 +1,143 @@
-import type {
-    Action,
-    ActionExample,
-    HandlerCallback,
-    IAgentRuntime,
-    Memory,
-    State,
+import {
+    composeContext,
+    Content,
+    elizaLogger,
+    generateObject,
+    ModelClass,
+    type Action,
+    type ActionExample,
+    type HandlerCallback,
+    type IAgentRuntime,
+    type Memory,
+    type State,
 } from "@ai16z/eliza";
 import { getFlowConnectorInstance } from "../providers/connector.provider";
 import { FlowWalletProvider } from "../providers/wallet.provider";
 import { transferTemplate } from "../templates";
+import { validateFlowConfig } from "../environment";
+import { TransactionResponse } from "../types";
+import Exception from "../types/exception";
 
 export { transferTemplate };
 
+/**
+ * The generated content for the transfer action
+ */
+export interface TransferContent extends Content {
+    token: string | null;
+    amount: string;
+    to: string;
+    matched: boolean;
+}
+
+/**
+ * Check if the content is a transfer content
+ */
+function isTransferContent(
+    runtime: IAgentRuntime,
+    content: any
+): content is TransferContent {
+    elizaLogger.log("Content for transfer", content);
+    return (
+        (typeof content.token === "string" || !content.token) &&
+        typeof content.to === "string" &&
+        (typeof content.amount === "string" ||
+            typeof content.amount === "number") &&
+        typeof content.matched === "boolean"
+    );
+}
+
 export class TransferAction {
-    constructor(private walletProvider: FlowWalletProvider) {}
+    public useKeyIndex: number;
+
+    constructor(private walletProvider: FlowWalletProvider) {
+        // Initialize key index
+        this.useKeyIndex = 0;
+    }
 
     async transfer(
         runtime: IAgentRuntime,
         message: Memory,
-        state: State
-    ): Promise<Transaction> {
-        try {
-            // TODO
-        } catch (error) {
-            throw new Error(`Transfer failed: ${error.message}`);
+        state: State,
+        callback?: HandlerCallback
+    ): Promise<TransactionResponse> {
+        elizaLogger.log("Starting Flow Plugin's SEND_TOKEN handler...");
+
+        // Initialize or update state
+        if (!state) {
+            state = (await runtime.composeState(message)) as State;
+        } else {
+            state = await runtime.updateRecentMessageState(state);
         }
+
+        // Compose transfer context
+        const transferContext = composeContext({
+            state,
+            template: transferTemplate,
+        });
+
+        // Generate transfer content
+        const content = await generateObject({
+            runtime,
+            context: transferContext,
+            modelClass: ModelClass.SMALL,
+        });
+
+        const resp: TransactionResponse = {
+            signer: {
+                address: this.walletProvider.address,
+                keyIndex: this.useKeyIndex,
+            },
+            txid: "",
+        };
+        const logPrefix = `<Address: ${resp.signer.address}>[${resp.signer.keyIndex}]`;
+
+        // Validate transfer content
+        if (!isTransferContent(runtime, content)) {
+            elizaLogger.error("Invalid content for SEND_TOKEN action.");
+            if (callback) {
+                callback({
+                    text: `${logPrefix} Unable to process transfer request. Invalid content provided.`,
+                    content: { error: "Invalid transfer content" },
+                });
+            }
+            throw new Exception(50100, "Invalid transfer content");
+        }
+
+        // Check if the content is matched
+        if (!content.matched) {
+            elizaLogger.error("Content does not match the transfer template.");
+            if (callback) {
+                callback({
+                    text: `${logPrefix} Unable to process transfer request. Content does not match the transfer template.`,
+                    content: {
+                        error: "Content does not match the transfer template",
+                    },
+                });
+            }
+            throw new Exception(
+                50100,
+                "Content does not match the transfer template"
+            );
+        }
+
+        // Execute transfer
+        // TODO: Implement the transfer logic here
+
+        // call the callback with the transaction response
+        if (callback) {
+            const tokenName = content.token || "FLOW";
+            callback({
+                text: `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}\nTransaction: ${resp.txid}`,
+                content: {
+                    success: true,
+                    token: content.token,
+                    to: content.to,
+                    amount: content.amount,
+                },
+            });
+        }
+        elizaLogger.log("Completed Flow Plugin's SEND_TOKEN handler.");
     }
 }
 
@@ -39,10 +152,9 @@ export const transferAction = {
         "PAY",
     ],
     description: "Transfer tokens from the agent's wallet to another address",
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
-        console.log("Validating transfer from user:", message.userId);
-        const privateKey = runtime.getSetting("FLOW_PRIVATE_KEY");
-        return typeof privateKey === "string" && privateKey.startsWith("0x");
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
+        await validateFlowConfig(runtime);
+        return true;
     },
     handler: async (
         runtime: IAgentRuntime,
@@ -54,10 +166,22 @@ export const transferAction = {
         const flowConnector = await getFlowConnectorInstance(runtime);
         const walletProvider = new FlowWalletProvider(runtime, flowConnector);
         const action = new TransferAction(walletProvider);
-        const _result = await action.transfer(runtime, message, state);
-        return false;
+        try {
+            const res = await action.transfer(
+                runtime,
+                message,
+                state,
+                callback
+            );
+            elizaLogger.log(
+                `Transfer action response: Sender<${res.signer.address}[${res.signer.keyIndex}> - ${res.txid}`
+            );
+        } catch (error) {
+            elizaLogger.error("Error in transfer action:", error.message);
+            return false;
+        }
+        return true;
     },
-    template: transferTemplate,
     examples: [
         [
             {

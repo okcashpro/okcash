@@ -30,7 +30,7 @@ export class FlowConnector {
                 return "http://localhost:8888";
             default:
                 throw new Exception(
-                    50100,
+                    50000,
                     `Network type ${this.network} is not supported`
                 );
         }

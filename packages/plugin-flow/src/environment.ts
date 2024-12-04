@@ -4,10 +4,14 @@ import { z } from "zod";
 const FLOW_MAINNET_PUBLIC_RPC = "https://mainnet.onflow.org";
 
 export const flowEnvSchema = z.object({
-    FLOW_ADDRESS: z.string().min(1, "Flow native address is required"),
+    FLOW_ADDRESS: z
+        .string()
+        .min(1, "Flow native address is required")
+        .startsWith("0x", "Flow address must start with 0x"),
     FLOW_PRIVATE_KEY: z
         .string()
-        .min(1, "Flow private key for the address is required"),
+        .min(1, "Flow private key for the address is required")
+        .startsWith("0x", "Flow private key must start with 0x"),
     FLOW_NETWORK: z.string().optional().default("mainnet"),
     FLOW_ENDPOINT_URL: z.string().optional().default(FLOW_MAINNET_PUBLIC_RPC),
 });

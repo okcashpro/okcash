@@ -1,4 +1,10 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import {
+    elizaLogger,
+    IAgentRuntime,
+    Memory,
+    Provider,
+    State,
+} from "@ai16z/eliza";
 import NodeCache from "node-cache";
 import * as fcl from "@onflow/fcl";
 import type { CompositeSignature, Account } from "@onflow/typedefs";
@@ -36,6 +42,7 @@ export class FlowWalletProvider implements FlowSignerInterface {
     runtime: IAgentRuntime;
     private readonly privateKeyHex?: string;
     public readonly address: string;
+    // Runtime data
     private account: Account | null = null;
     public maxKeyIndex = 0;
 
@@ -49,7 +56,7 @@ export class FlowWalletProvider implements FlowSignerInterface {
 
         const privateKey = runtime.getSetting("FLOW_PRIVATE_KEY");
         if (!privateKey) {
-            console.warn(
+            elizaLogger.warn(
                 `The default Flow wallet ${this.address} has no private key`
             );
         } else {
@@ -91,9 +98,14 @@ export class FlowWalletProvider implements FlowSignerInterface {
      * Build authorization
      */
     buildAuthorization(accountIndex = 0, privateKey = this.privateKeyHex) {
+        if (this.account) {
+            if (accountIndex > this.maxKeyIndex) {
+                throw new Exception(50200, "Invalid account index");
+            }
+        }
         const address = this.address;
         if (!privateKey) {
-            throw new Error("No private key provided");
+            throw new Exception(50200, "No private key provided");
         }
         return (account: any) => {
             return {
@@ -158,8 +170,8 @@ export class FlowWalletProvider implements FlowSignerInterface {
 function getSignerAddress(runtime: IAgentRuntime): string {
     const signerAddr = runtime.getSetting("FLOW_ADDRESS");
     if (!signerAddr) {
-        console.error("No signer address");
-        throw new Exception(50110, "No signer info");
+        elizaLogger.error("No signer address");
+        throw new Exception(50200, "No signer info");
     }
     return signerAddr;
 }
@@ -175,7 +187,7 @@ const flowWalletProvider: Provider = {
             !runtime.getSetting("FLOW_ADDRESS") ||
             !runtime.getSetting("FLOW_PRIVATE_KEY")
         ) {
-            console.error(
+            elizaLogger.error(
                 "FLOW_ADDRESS or FLOW_PRIVATE_KEY not configured, skipping wallet injection"
             );
             return null;
@@ -188,7 +200,7 @@ const flowWalletProvider: Provider = {
             const balance = await walletProvider.getWalletBalance();
             return `Flow Wallet Address: ${address}\nBalance: ${balance} FLOW`;
         } catch (error) {
-            console.error("Error in Flow wallet provider:", error);
+            elizaLogger.error("Error in Flow wallet provider:", error.message);
             return null;
         }
     },

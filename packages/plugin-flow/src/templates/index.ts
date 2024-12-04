@@ -13,9 +13,8 @@ Extract the following information about the requested transfer:
     1. Cadence address: "0x1654653399040a61"
     2. EVM address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
 - Field "matched": Boolean value indicating if field "token" matches the field "to" or not. Here is the rules:
-    1. if field "token" is null, field "to" can be EVM address or Cadence address, so the value of "matched" should be true.
-    2. if field "token" is Cadence address, field "to" should be Cadence address, so the value of "matched" should be true, otherwise false.
-    3. if field "token" is ERC20 contract address, field "to" should be EVM address, so the value of "matched" should be true, otherwise false.
+    1. if field "token" is "null" or Cadence resource identifier, field "to" can be EVM address or Cadence address, so the value of "matched" should be true.
+    2. if field "token" is ERC20 contract address, field "to" should be EVM address, so the value of "matched" should be true, otherwise false.
 
 Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined:
 

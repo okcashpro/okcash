@@ -1,4 +1,10 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import {
+    elizaLogger,
+    IAgentRuntime,
+    Memory,
+    Provider,
+    State,
+} from "@ai16z/eliza";
 
 import FlowConnector, { NetworkType } from "./utils/flow.connector";
 
@@ -89,7 +95,10 @@ const flowConnectorProvider: Provider = {
             );
             return provider.getConnectorStatus(runtime);
         } catch (error) {
-            console.error("Error in Flow connector provider:", error);
+            elizaLogger.error(
+                "Error in Flow connector provider:",
+                error.message
+            );
             return null;
         }
     },
