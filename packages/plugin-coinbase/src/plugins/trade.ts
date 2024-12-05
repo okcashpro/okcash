@@ -1,4 +1,4 @@
-import { Coinbase} from "@coinbase/coinbase-sdk";
+import { Coinbase } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
@@ -21,7 +21,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import { createArrayCsvWriter } from "csv-writer";
-
 
 // Dynamically resolve the file path to the src/plugins directory
 const __filename = fileURLToPath(import.meta.url);
@@ -136,7 +135,7 @@ export const executeTradeAction: Action = {
             const tradeDetails = await generateObjectV2({
                 runtime,
                 context,
-                modelClass: ModelClass.SMALL,
+                modelClass: ModelClass.LARGE,
                 schema: TradeSchema,
             });
 
@@ -165,7 +164,13 @@ export const executeTradeAction: Action = {
                 );
                 return;
             }
-            const { trade, transfer } = await executeTradeAndCharityTransfer(runtime, network, amount, sourceAsset, targetAsset);
+            const { trade, transfer } = await executeTradeAndCharityTransfer(
+                runtime,
+                network,
+                amount,
+                sourceAsset,
+                targetAsset
+            );
             callback(
                 {
                     text: `Trade executed successfully:
@@ -264,4 +269,3 @@ export const tradePlugin: Plugin = {
     actions: [executeTradeAction],
     providers: [tradeProvider],
 };
-

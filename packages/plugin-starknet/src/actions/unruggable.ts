@@ -20,7 +20,7 @@ import {
 import { DeployData, Factory } from "@unruggable_starknet/core";
 import { AMM, QUOTE_TOKEN_SYMBOL } from "@unruggable_starknet/core/constants";
 import { ACCOUNTS, TOKENS } from "../utils/constants.ts";
-import { validateStarknetConfig } from "../enviroment.ts";
+import { validateStarknetConfig } from "../environment.ts";
 
 export function isDeployTokenContent(
     content: DeployData
