@@ -54,7 +54,7 @@ export const muteRoomAction: Action = {
             const response = await generateTrueOrFalse({
                 runtime,
                 context: shouldMuteContext,
-                modelClass: ModelClass.SMALL,
+                modelClass: ModelClass.LARGE,
             });
 
             return response;
