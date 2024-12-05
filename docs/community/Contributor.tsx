@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { ContributorProps } from "./Contributors";
 import { THEME_COLORS } from "./Contributors";
+import { hexToRgb } from "./utils";
+import ScoreIcon from "./ScoreIcon";
+import Summary from "./Summary";
 
 const ContributorCard: React.FC<ContributorProps> = ({
     contributor,
     onSelect,
     darkMode,
+    userActivitySummary,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
+
     return (
         <div
             key={contributor.id}
             style={{
-                flex: "1 1 300px",
-                height: "100px",
+                position: "relative",
                 borderRadius: "0.5rem",
+                height: "16rem",
                 boxShadow: isHovered
                     ? "0 4px 6px rgba(0, 0, 0, 0.1)"
                     : "0 1px 2px rgba(0, 0, 0, 0.05)",
@@ -33,6 +38,32 @@ const ContributorCard: React.FC<ContributorProps> = ({
             onMouseLeave={() => setIsHovered(false)}
             onClick={onSelect}
         >
+            <ScoreIcon
+                style={{
+                    width: "3.5rem",
+                    height: "1.8rem",
+                    position: "absolute",
+                    backgroundColor: darkMode
+                        ? `rgba(${hexToRgb(THEME_COLORS.dark.secondaryText)}, 0.2)`
+                        : `rgba(${hexToRgb(THEME_COLORS.light.secondaryText)}, 0.2)`,
+                    color: darkMode
+                        ? THEME_COLORS.dark.secondaryText
+                        : THEME_COLORS.light.secondaryText,
+                    fontSize: "0.75rem",
+                    padding: "0.2rem",
+                    fontWeight: "bold",
+                    top: "8px",
+                    right: "8px",
+                    gap: "0.15rem",
+                }}
+                iconColor={
+                    darkMode
+                        ? THEME_COLORS.dark.secondaryText
+                        : THEME_COLORS.light.secondaryText
+                }
+                iconSize="1rem"
+            />
+
             <div
                 style={{
                     display: "flex",
@@ -56,9 +87,23 @@ const ContributorCard: React.FC<ContributorProps> = ({
                         justifyContent: "center",
                     }}
                 >
-                    <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-                        {contributor.login}
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <div
+                            style={{
+                                fontWeight: "bold",
+                                fontSize: "1.2rem",
+                                marginRight: "0.5rem",
+                            }}
+                        >
+                            {contributor.login}
+                        </div>
                     </div>
+
                     <div
                         style={{
                             color: darkMode
@@ -70,6 +115,20 @@ const ContributorCard: React.FC<ContributorProps> = ({
                     </div>
                 </div>
             </div>
+            <Summary
+                summary={userActivitySummary.activityDetails}
+                style={{
+                    marginTop: "1rem",
+                    color: darkMode
+                        ? `rgba(${hexToRgb(THEME_COLORS.dark.primaryText)}, 0.5)`
+                        : `rgba(${hexToRgb(THEME_COLORS.light.primaryText)}, 0.5)`,
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 5,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                }}
+            />
         </div>
     );
 };

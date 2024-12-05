@@ -16,21 +16,32 @@ export interface ContributorProps {
     contributor: Contributor;
     onSelect: () => void;
     darkMode: boolean;
+    userActivitySummary: UserActivitySummary;
 }
 
 export const THEME_COLORS = {
     light: {
-        mainBackgroundColor: "white",
+        mainBackgroundColor: "#ffffff",
         secondaryBackground: "rgba(0, 0, 0, 0.05)",
-        primaryText: "black",
+        primaryText: "#000000",
         secondaryText: "#ffa600",
     },
     dark: {
         mainBackgroundColor: "#1b1b1d",
         secondaryBackground: "#242526",
-        primaryText: "white",
+        primaryText: "#ffffff",
         secondaryText: "#add8e6",
     },
+};
+
+export interface UserActivitySummary {
+    score: number;
+    activityDetails: string;
+}
+const userActivitySummary = {
+    score: 363,
+    activityDetails:
+        "This user is actively working on improving the default character, refactoring image interfaces to transition from LLAMACLOUD to TOGETHER provider, optimizing Dockerfiles for reduced build time, integrating more language models (LLMs) and plugins like goat and jin's docs changes. They are also updating dependencies, adding quality of life updates on Twitter, implementing a Turborepo feature, and fixing various issues across different platforms such as Discord, Telegram, and Conflux.",
 };
 
 export const GITHUB_PAGE_LIMIT = 30; // The maximum number to fetch per page from the GitHub API.
@@ -144,6 +155,7 @@ const Contributors: React.FC = () => {
                     contributor={selectedContributor}
                     onBack={() => setSelectedContributor(null)}
                     darkMode={darkMode}
+                    userActivitySummary={userActivitySummary}
                 />
             ) : (
                 contributors.map((contributor) => (
@@ -154,6 +166,7 @@ const Contributors: React.FC = () => {
                             setSelectedContributor(contributor);
                         }}
                         darkMode={darkMode}
+                        userActivitySummary={userActivitySummary}
                     />
                 ))
             )}

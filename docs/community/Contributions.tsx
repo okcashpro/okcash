@@ -3,6 +3,9 @@ import { Accordion } from "./Accordion";
 import { StatCard } from "./StatCard";
 import { THEME_COLORS } from "./Contributors";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { hexToRgb } from "./utils";
+import ScoreIcon from "./ScoreIcon";
+import Summary from "./Summary";
 
 export interface GitHubItem {
     html_url: string;
@@ -34,7 +37,12 @@ const initializeAccordionItem = (): AccordionItem => ({
     total_count: 0,
 });
 
-const Contributions = ({ contributor, onBack, darkMode }) => {
+const Contributions = ({
+    contributor,
+    onBack,
+    darkMode,
+    userActivitySummary,
+}) => {
     const { siteConfig } = useDocusaurusContext();
     const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
     const [commitsData, setCommitsData] = useState<AccordionItem>(
@@ -237,12 +245,13 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                     height: "100px",
                     borderRadius: "0.5rem",
                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                    transition: "box-shadow 0.2s ease-in-out",
                     backgroundColor: darkMode
                         ? THEME_COLORS.dark.mainBackgroundColor
                         : THEME_COLORS.light.mainBackgroundColor,
                     padding: "24px",
-                    justifyContent: "center",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                 }}
             >
                 <div
@@ -282,13 +291,47 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                         </div>
                     </div>
                 </div>
+                <ScoreIcon
+                    style={{
+                        width: "5rem",
+                        height: "2.5rem",
+                        backgroundColor: darkMode
+                            ? `rgba(${hexToRgb(THEME_COLORS.dark.secondaryText)}, 0.2)`
+                            : `rgba(${hexToRgb(THEME_COLORS.light.secondaryText)}, 0.2)`,
+                        color: darkMode
+                            ? THEME_COLORS.dark.secondaryText
+                            : THEME_COLORS.light.secondaryText,
+                        fontSize: "1rem",
+                        padding: "0.35",
+                        fontWeight: "bold",
+                        gap: "0.25rem",
+                    }}
+                    iconColor={
+                        darkMode
+                            ? THEME_COLORS.dark.secondaryText
+                            : THEME_COLORS.light.secondaryText
+                    }
+                    iconSize="1.5rem"
+                />
             </div>
+
+            <Summary
+                summary={userActivitySummary.activityDetails}
+                style={{
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "0.5rem",
+                    padding: "2rem",
+                    backgroundColor: darkMode
+                        ? THEME_COLORS.dark.mainBackgroundColor
+                        : THEME_COLORS.light.mainBackgroundColor,
+                }}
+            />
+
             <div
                 style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
                     gap: "1rem",
-                    marginTop: "1rem",
                 }}
             >
                 {accordionItems.map((stat, index) => (
