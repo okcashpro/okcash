@@ -4,6 +4,7 @@ import { THEME_COLORS } from "./Contributors";
 import { hexToRgb } from "./utils";
 import ScoreIcon from "./ScoreIcon";
 import Summary from "./Summary";
+import Hero from "./Hero";
 
 const ContributorCard: React.FC<ContributorProps> = ({
     contributor,
@@ -15,7 +16,6 @@ const ContributorCard: React.FC<ContributorProps> = ({
 
     return (
         <div
-            key={contributor.id}
             style={{
                 position: "relative",
                 borderRadius: "0.5rem",
@@ -52,8 +52,8 @@ const ContributorCard: React.FC<ContributorProps> = ({
                     fontSize: "0.75rem",
                     padding: "0.2rem",
                     fontWeight: "bold",
-                    top: "8px",
-                    right: "8px",
+                    top: "10px",
+                    right: "10px",
                     gap: "0.15rem",
                 }}
                 iconColor={
@@ -63,58 +63,15 @@ const ContributorCard: React.FC<ContributorProps> = ({
                 }
                 iconSize="1rem"
             />
-
-            <div
-                style={{
-                    display: "flex",
-                    gap: "10px",
-                    alignItems: "center",
-                }}
-            >
-                <img
-                    src={contributor.avatar_url}
-                    alt={`${contributor.login}'s avatar`}
-                    style={{
-                        width: "48px",
-                        height: "48px",
-                        borderRadius: "50%",
-                    }}
-                />
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                    }}
-                >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
-                        <div
-                            style={{
-                                fontWeight: "bold",
-                                fontSize: "1.2rem",
-                                marginRight: "0.5rem",
-                            }}
-                        >
-                            {contributor.login}
-                        </div>
-                    </div>
-
-                    <div
-                        style={{
-                            color: darkMode
-                                ? THEME_COLORS.dark.secondaryText
-                                : THEME_COLORS.light.secondaryText,
-                        }}
-                    >
-                        {contributor.contributions} contributions
-                    </div>
-                </div>
-            </div>
+            <Hero
+                contributor={contributor}
+                secondaryText={
+                    darkMode
+                        ? THEME_COLORS.dark.secondaryText
+                        : THEME_COLORS.light.secondaryText
+                }
+                profilePictureSize="48px"
+            />
             <Summary
                 summary={userActivitySummary.activityDetails}
                 style={{

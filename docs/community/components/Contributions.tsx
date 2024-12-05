@@ -6,6 +6,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { hexToRgb } from "./utils";
 import ScoreIcon from "./ScoreIcon";
 import Summary from "./Summary";
+import Hero from "./Hero";
 
 export interface GitHubItem {
     html_url: string;
@@ -240,7 +241,6 @@ const Contributions = ({
                 </span>
             </div>
             <div
-                key={contributor.id}
                 style={{
                     height: "100px",
                     borderRadius: "0.5rem",
@@ -254,43 +254,15 @@ const Contributions = ({
                     alignItems: "center",
                 }}
             >
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "center",
-                    }}
-                >
-                    <img
-                        src={contributor.avatar_url}
-                        alt={`${contributor.login}'s avatar`}
-                        style={{
-                            width: "64px",
-                            height: "64px",
-                            borderRadius: "50%",
-                        }}
-                    />
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-                            {contributor.login}
-                        </div>
-                        <div
-                            style={{
-                                color: darkMode
-                                    ? THEME_COLORS.dark.secondaryText
-                                    : THEME_COLORS.light.secondaryText,
-                            }}
-                        >
-                            {contributor.contributions} contributions
-                        </div>
-                    </div>
-                </div>
+                <Hero
+                    contributor={contributor}
+                    secondaryText={
+                        darkMode
+                            ? THEME_COLORS.dark.secondaryText
+                            : THEME_COLORS.light.secondaryText
+                    }
+                    profilePictureSize="64px"
+                />
                 <ScoreIcon
                     style={{
                         width: "5rem",

@@ -158,27 +158,28 @@ const Contributors: React.FC = () => {
                     userActivitySummary={userActivitySummary}
                 />
             ) : (
-                contributors.map((contributor) => (
-                    <ContributorCard
-                        key={contributor.id}
-                        contributor={contributor}
-                        onSelect={() => {
-                            setSelectedContributor(contributor);
+                <>
+                    {contributors.map((contributor) => (
+                        <ContributorCard
+                            key={contributor.id}
+                            contributor={contributor}
+                            onSelect={() => {
+                                setSelectedContributor(contributor);
+                            }}
+                            darkMode={darkMode}
+                            userActivitySummary={userActivitySummary}
+                        />
+                    ))}
+                    <div
+                        ref={observerRef}
+                        style={{
+                            height: "1px",
+                            backgroundColor: "transparent",
                         }}
-                        darkMode={darkMode}
-                        userActivitySummary={userActivitySummary}
                     />
-                ))
+                    {hasMore && <div>Loading more...</div>}
+                </>
             )}
-
-            <div
-                ref={observerRef}
-                style={{
-                    height: "1px",
-                    backgroundColor: "transparent",
-                }}
-            />
-            {hasMore && <div>Loading more...</div>}
         </div>
     );
 };
