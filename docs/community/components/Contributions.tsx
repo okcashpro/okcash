@@ -42,7 +42,8 @@ const Contributions = ({
     contributor,
     onBack,
     darkMode,
-    userActivitySummary,
+    activitySummary,
+    score,
 }) => {
     const { siteConfig } = useDocusaurusContext();
     const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
@@ -284,11 +285,12 @@ const Contributions = ({
                             : THEME_COLORS.light.secondaryText
                     }
                     iconSize="1.5rem"
+                    score={score}
                 />
             </div>
 
             <Summary
-                summary={userActivitySummary.activityDetails}
+                summary={activitySummary}
                 style={{
                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                     borderRadius: "0.5rem",

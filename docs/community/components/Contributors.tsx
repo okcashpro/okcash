@@ -3,6 +3,7 @@ import ContributorCard from "./Contributor";
 import Contributions from "./Contributions";
 import { useColorMode } from "@docusaurus/theme-common";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import contributorsSpec from "../contributors.json";
 
 export interface Contributor {
     id: number;
@@ -16,7 +17,8 @@ export interface ContributorProps {
     contributor: Contributor;
     onSelect: () => void;
     darkMode: boolean;
-    userActivitySummary: UserActivitySummary;
+    activitySummary?: string;
+    score?: number;
 }
 
 export const THEME_COLORS = {
@@ -34,15 +36,10 @@ export const THEME_COLORS = {
     },
 };
 
-export interface UserActivitySummary {
+export interface ActivityDetails {
     score: number;
-    activityDetails: string;
+    activitySummary: string;
 }
-const userActivitySummary = {
-    score: 363,
-    activityDetails:
-        "This user is actively working on improving the default character, refactoring image interfaces to transition from LLAMACLOUD to TOGETHER provider, optimizing Dockerfiles for reduced build time, integrating more language models (LLMs) and plugins like goat and jin's docs changes. They are also updating dependencies, adding quality of life updates on Twitter, implementing a Turborepo feature, and fixing various issues across different platforms such as Discord, Telegram, and Conflux.",
-};
 
 export const GITHUB_PAGE_LIMIT = 30; // The maximum number to fetch per page from the GitHub API.
 
@@ -56,6 +53,9 @@ const Contributors: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [darkMode, setDarkMode] = useState<boolean>(colorMode === "dark");
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const [activitySummaries, setActivitySummaries] = useState<
+        Map<string, ActivityDetails>
+    >(new Map());
 
     const observerRef = useRef<HTMLDivElement | null>(null);
     const pageRef = useRef<number>(1);
@@ -99,6 +99,14 @@ const Contributors: React.FC = () => {
     };
 
     useEffect(() => {
+        const currentActivitySummaries = new Map(activitySummaries);
+        contributorsSpec.forEach((spec) => {
+            currentActivitySummaries.set(spec.contributor, {
+                score: spec.score,
+                activitySummary: spec.summary,
+            });
+        });
+        setActivitySummaries(currentActivitySummaries);
         fetchContributors(pageRef.current);
     }, []);
 
@@ -155,7 +163,13 @@ const Contributors: React.FC = () => {
                     contributor={selectedContributor}
                     onBack={() => setSelectedContributor(null)}
                     darkMode={darkMode}
-                    userActivitySummary={userActivitySummary}
+                    activitySummary={
+                        activitySummaries.get(selectedContributor.login)
+                            ?.activitySummary
+                    }
+                    score={
+                        activitySummaries.get(selectedContributor.login)?.score
+                    }
                 />
             ) : (
                 <>
@@ -167,7 +181,13 @@ const Contributors: React.FC = () => {
                                 setSelectedContributor(contributor);
                             }}
                             darkMode={darkMode}
-                            userActivitySummary={userActivitySummary}
+                            activitySummary={
+                                activitySummaries.get(contributor.login)
+                                    ?.activitySummary
+                            }
+                            score={
+                                activitySummaries.get(contributor.login)?.score
+                            }
                         />
                     ))}
                     <div

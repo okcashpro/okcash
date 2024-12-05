@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ScoreIcon({ style, iconColor, iconSize }) {
+export default function ScoreIcon({ style, iconColor, iconSize, score }) {
     function Flash({ size, fill }) {
         return (
             <svg
@@ -26,7 +26,7 @@ export default function ScoreIcon({ style, iconColor, iconSize }) {
             }}
         >
             <Flash size={iconSize} fill={iconColor} />
-            <div>{Math.floor(Math.random() * 900)}</div>
+            <div>{score || "NULL"}</div>
         </div>
     );
 }

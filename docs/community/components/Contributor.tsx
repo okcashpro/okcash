@@ -10,7 +10,8 @@ const ContributorCard: React.FC<ContributorProps> = ({
     contributor,
     onSelect,
     darkMode,
-    userActivitySummary,
+    activitySummary,
+    score,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
 
@@ -40,7 +41,7 @@ const ContributorCard: React.FC<ContributorProps> = ({
         >
             <ScoreIcon
                 style={{
-                    width: "3.5rem",
+                    width: "4rem",
                     height: "1.8rem",
                     position: "absolute",
                     backgroundColor: darkMode
@@ -62,6 +63,7 @@ const ContributorCard: React.FC<ContributorProps> = ({
                         : THEME_COLORS.light.secondaryText
                 }
                 iconSize="1rem"
+                score={score}
             />
             <Hero
                 contributor={contributor}
@@ -73,7 +75,7 @@ const ContributorCard: React.FC<ContributorProps> = ({
                 profilePictureSize="48px"
             />
             <Summary
-                summary={userActivitySummary.activityDetails}
+                summary={activitySummary}
                 style={{
                     marginTop: "1rem",
                     color: darkMode

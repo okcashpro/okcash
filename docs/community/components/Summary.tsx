@@ -7,7 +7,7 @@ export default function Summary({ summary, style }) {
                 ...style,
             }}
         >
-            {summary}
+            {summary || "No summary available"}
         </div>
     );
 }
