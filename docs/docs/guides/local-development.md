@@ -12,7 +12,7 @@ Before you begin, ensure you have:
 
 ```bash
 # Required
-Node.js 23.3.0
+Node.js 23+
 pnpm
 Git
 
