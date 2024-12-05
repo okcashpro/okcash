@@ -243,6 +243,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { DeriveKeyProvider } from "@ai16z/plugin-tee";
 import { TEEMode } from "@ai16z/plugin-tee";
+import { getWalletKey } from "../keypairUtils.ts";
 
 const pumpfunTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
@@ -389,23 +390,10 @@ export default {
         const slippage = "2000";
         try {
             // Get private key from settings and create deployer keypair
-            const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
-            const deriveKeyProvider = new DeriveKeyProvider(teeMode);
-            let deployerKeypair: Keypair;
-            if (teeMode === TEEMode.OFF) {
-                const privateKeyString =
-                    runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                    runtime.getSetting("WALLET_PRIVATE_KEY");
-                    const secretKey = bs58.decode(privateKeyString);
-                    deployerKeypair = Keypair.fromSecretKey(secretKey);
-            } else {
-                const deriveKeyResult = await deriveKeyProvider.deriveEd25519Keypair(
-                    "/",
-                    runtime.getSetting("WALLET_SECRET_SALT"),
-                    runtime.agentId
-                );
-                deployerKeypair = deriveKeyResult.keypair;
-            }
+            const { keypair: deployerKeypair } = await getWalletKey(
+                runtime,
+                true
+            );
 
             // Generate new mint keypair
             const mintKeypair = Keypair.generate();

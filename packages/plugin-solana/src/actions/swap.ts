@@ -26,6 +26,7 @@ import { walletProvider, WalletProvider } from "../providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
 import { TEEMode } from "@ai16z/plugin-tee";
 import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+import { getWalletKey } from "../keypairUtils.ts";
 
 async function swapToken(
     connection: Connection,
@@ -175,26 +176,6 @@ async function getTokenFromWallet(runtime: IAgentRuntime, tokenSymbol: string) {
     }
 }
 
-// Get the public key
-async function getPublicKey(runtime: IAgentRuntime): Promise<PublicKey> {
-    const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
-
-    if (teeMode !== TEEMode.OFF) {
-        const deriveKeyProvider = new DeriveKeyProvider(teeMode);
-        const deriveKeyPairResult = await deriveKeyProvider.deriveEd25519Keypair(
-            "/",
-            runtime.getSetting("WALLET_SECRET_SALT"),
-            runtime.agentId
-        );
-        return deriveKeyPairResult.keypair.publicKey;
-    }
-
-    return new PublicKey(
-        runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-        runtime.getSetting("WALLET_PUBLIC_KEY")
-    );
-}
-
 // swapToken should took CA, not symbol
 
 export const executeSwap: Action = {
@@ -313,7 +294,10 @@ export const executeSwap: Action = {
             const connection = new Connection(
                 "https://api.mainnet-beta.solana.com"
             );
-            const walletPublicKey = await getPublicKey(runtime);
+            const { publicKey: walletPublicKey } = await getWalletKey(
+                runtime,
+                false
+            );
 
             const provider = new WalletProvider(connection, walletPublicKey);
 
@@ -340,58 +324,10 @@ export const executeSwap: Action = {
 
             console.log("Preparing to sign transaction...");
 
-            const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
-            const deriveKeyProvider = new DeriveKeyProvider(teeMode);
-
-            // Handle different private key formats
-            let secretKey: Uint8Array;
-            let privateKeyString: string;
-            if (teeMode === TEEMode.OFF) {
-                privateKeyString =
-                    runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                    runtime.getSetting("WALLET_PRIVATE_KEY");
-                try {
-                    // First try to decode as base58
-                    secretKey = bs58.decode(privateKeyString);
-                    // eslint-disable-next-line
-                } catch (e) {
-                    try {
-                        // If that fails, try base64
-                        secretKey = Uint8Array.from(
-                            Buffer.from(privateKeyString, "base64")
-                        );
-                        // eslint-disable-next-line
-                    } catch (e2) {
-                        throw new Error("Invalid private key format");
-                    }
-                }
-            } else {
-                const rawDeriveKeyResult =
-                    await deriveKeyProvider.rawDeriveKey(
-                        "/",
-                        runtime.getSetting("WALLET_SECRET_SALT")
-                );
-                secretKey = rawDeriveKeyResult.asUint8Array();
-            }
-
-            // Verify the key length
-            if (secretKey.length !== 64) {
-                console.error("Invalid key length:", secretKey.length);
-                throw new Error(
-                    `Invalid private key length: ${secretKey.length}. Expected 64 bytes.`
-                );
-            }
-
             console.log("Creating keypair...");
-            const keypair = Keypair.fromSecretKey(secretKey);
-
+            const { keypair } = await getWalletKey(runtime, true);
             // Verify the public key matches what we expect
-            const expectedPublicKey =
-                teeMode === TEEMode.OFF
-                    ? (runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                      runtime.getSetting("WALLET_PUBLIC_KEY"))
-                    : walletPublicKey.toBase58();
-            if (keypair.publicKey.toBase58() !== expectedPublicKey) {
+            if (keypair.publicKey.toBase58() !== walletPublicKey.toBase58()) {
                 throw new Error(
                     "Generated public key doesn't match expected public key"
                 );

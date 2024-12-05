@@ -18,6 +18,7 @@ import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { DeriveKeyProvider } from "@ai16z/plugin-tee";
 import { TEEMode } from "@ai16z/plugin-tee";
+import { getWalletKey } from "../keypairUtils.ts";
 
 const shouldProcessTemplate =
     `# Task: Decide if the recent messages should be processed for token recommendations.
@@ -146,24 +147,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         );
     });
 
-    // Check if we should use TEE mode
-    const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
-    let publicKey: PublicKey;
-
-    if (teeMode !== TEEMode.OFF) {
-        const deriveKeyProvider = new DeriveKeyProvider(teeMode);
-        const deriveKeyPairResult = await deriveKeyProvider.deriveEd25519Keypair(
-            "/",
-            runtime.getSetting("WALLET_SECRET_SALT"),
-            runtime.agentId
-        );
-        publicKey = deriveKeyPairResult.keypair.publicKey;
-    } else {
-        publicKey = new PublicKey(
-            runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-            runtime.getSetting("WALLET_PUBLIC_KEY")
-        );
-    }
+    const { publicKey } = await getWalletKey(runtime, false);
 
     for (const rec of filteredRecommendations) {
         // create the wallet provider and token provider

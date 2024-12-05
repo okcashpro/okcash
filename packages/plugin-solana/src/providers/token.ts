@@ -18,6 +18,7 @@ import { WalletProvider, Item } from "./wallet.ts";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { DeriveKeyProvider } from "@ai16z/plugin-tee";
 import { TEEMode } from "@ai16z/plugin-tee";
+import { getWalletKey } from "../keypairUtils.ts";
 
 const PROVIDER_CONFIG = {
     BIRDEYE_API: "https://public-api.birdeye.so",
@@ -1104,23 +1105,8 @@ const tokenProvider: Provider = {
         _state?: State
     ): Promise<string> => {
         try {
-            // Check if we should use TEE mode
-            const teeMode = runtime.getSetting("TEE_MODE") || TEEMode.OFF;
-            let publicKey: PublicKey;
+            const { publicKey } = await getWalletKey(runtime, false);
 
-            if (teeMode !== TEEMode.OFF) {
-                const deriveKeyProvider = new DeriveKeyProvider(teeMode);
-                const deriveKeyPairResult = await deriveKeyProvider.deriveEd25519Keypair(
-                    "/",
-                    runtime.getSetting("WALLET_SECRET_SALT"),
-                    runtime.agentId
-                );
-                publicKey = deriveKeyPairResult.keypair.publicKey;
-            } else {
-                publicKey = new PublicKey(
-                    PROVIDER_CONFIG.MAIN_WALLET
-                );
-            }
             const walletProvider = new WalletProvider(
                 connection,
                 publicKey
