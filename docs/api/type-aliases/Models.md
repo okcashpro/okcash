@@ -28,9 +28,13 @@ Model configurations by provider
 
 > **groq**: [`Model`](Model.md)
 
-### llama\_cloud
+### llama_cloud
 
-> **llama\_cloud**: [`Model`](Model.md)
+> **llama_cloud**: [`Model`](Model.md)
+
+### together
+
+> **together**: [`Model`](Model.md)
 
 ### together
 
@@ -83,6 +87,10 @@ Model configurations by provider
 ### volengine
 
 > **volengine**: [`Model`](Model.md)
+
+### hyperbolic
+
+> **hyperbolic**: [`Model`](Model.md)
 
 ## Defined in
 

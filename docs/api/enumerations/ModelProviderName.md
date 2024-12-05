@@ -14,7 +14,7 @@ Available model providers
 
 [packages/core/src/types.ts:214](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L214)
 
-***
+---
 
 ### ETERNALAI
 
@@ -24,7 +24,7 @@ Available model providers
 
 [packages/core/src/types.ts:215](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L215)
 
-***
+---
 
 ### ANTHROPIC
 
@@ -34,7 +34,7 @@ Available model providers
 
 [packages/core/src/types.ts:216](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L216)
 
-***
+---
 
 ### GROK
 
@@ -44,7 +44,7 @@ Available model providers
 
 [packages/core/src/types.ts:217](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L217)
 
-***
+---
 
 ### GROQ
 
@@ -54,7 +54,7 @@ Available model providers
 
 [packages/core/src/types.ts:218](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L218)
 
-***
+---
 
 ### LLAMACLOUD
 
@@ -64,7 +64,7 @@ Available model providers
 
 [packages/core/src/types.ts:219](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L219)
 
-***
+---
 
 ### TOGETHER
 
@@ -74,7 +74,7 @@ Available model providers
 
 [packages/core/src/types.ts:220](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L220)
 
-***
+---
 
 ### LLAMALOCAL
 
@@ -84,7 +84,7 @@ Available model providers
 
 [packages/core/src/types.ts:221](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L221)
 
-***
+---
 
 ### GOOGLE
 
@@ -94,17 +94,17 @@ Available model providers
 
 [packages/core/src/types.ts:222](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L222)
 
-***
+---
 
-### CLAUDE\_VERTEX
+### CLAUDE_VERTEX
 
-> **CLAUDE\_VERTEX**: `"claude_vertex"`
+> **CLAUDE_VERTEX**: `"claude_vertex"`
 
 #### Defined in
 
 [packages/core/src/types.ts:223](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L223)
 
-***
+---
 
 ### REDPILL
 
@@ -114,7 +114,7 @@ Available model providers
 
 [packages/core/src/types.ts:224](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L224)
 
-***
+---
 
 ### OPENROUTER
 
@@ -124,7 +124,7 @@ Available model providers
 
 [packages/core/src/types.ts:225](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L225)
 
-***
+---
 
 ### OLLAMA
 
@@ -134,7 +134,7 @@ Available model providers
 
 [packages/core/src/types.ts:226](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L226)
 
-***
+---
 
 ### HEURIST
 
@@ -144,7 +144,7 @@ Available model providers
 
 [packages/core/src/types.ts:227](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L227)
 
-***
+---
 
 ### GALADRIEL
 
@@ -154,7 +154,7 @@ Available model providers
 
 [packages/core/src/types.ts:228](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L228)
 
-***
+---
 
 ### FAL
 
@@ -164,7 +164,7 @@ Available model providers
 
 [packages/core/src/types.ts:229](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L229)
 
-***
+---
 
 ### GAIANET
 
@@ -174,17 +174,17 @@ Available model providers
 
 [packages/core/src/types.ts:230](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L230)
 
-***
+---
 
-### ALI\_BAILIAN
+### ALI_BAILIAN
 
-> **ALI\_BAILIAN**: `"ali_bailian"`
+> **ALI_BAILIAN**: `"ali_bailian"`
 
 #### Defined in
 
 [packages/core/src/types.ts:231](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L231)
 
-***
+---
 
 ### VOLENGINE
 
