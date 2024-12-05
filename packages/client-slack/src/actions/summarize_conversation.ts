@@ -12,7 +12,10 @@ import {
     Memory,
     ModelClass,
     State,
+    ServiceType,
+    elizaLogger
 } from "@ai16z/eliza";
+import { ISlackService, SLACK_SERVICE_TYPE } from "../types/slack-types";
 
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
@@ -29,25 +32,34 @@ export const dateRangeTemplate = `# Messages we are summarizing (the conversatio
 {{recentMessages}}
 
 # Instructions: {{senderName}} is requesting a summary of the conversation. Your goal is to determine their objective, along with the range of dates that their request covers.
-The "objective" is a detailed description of what the user wants to summarize based on the conversation. If they just ask for a general summary, you can either base it off the converation if the summary range is very recent, or set the object to be general, like "a detailed summary of the conversation between all users".
-The "start" and "end" are the range of dates that the user wants to summarize, relative to the current time. The start and end should be relative to the current time, and measured in seconds, minutes, hours and days. The format is "2 days ago" or "3 hours ago" or "4 minutes ago" or "5 seconds ago", i.e. "<integer> <unit> ago".
-If you aren't sure, you can use a default range of "0 minutes ago" to "2 hours ago" or more. Better to err on the side of including too much than too little.
+The "objective" is a detailed description of what the user wants to summarize based on the conversation. If they just ask for a general summary, you can either base it off the conversation if the summary range is very recent, or set the object to be general, like "a detailed summary of the conversation between all users".
 
-Your response must be formatted as a JSON block with this structure:
+The "start" and "end" are the range of dates that the user wants to summarize, relative to the current time. The format MUST be a number followed by a unit, like:
+- "5 minutes ago"
+- "2 hours ago"
+- "1 day ago"
+- "30 seconds ago"
+
+For example:
 \`\`\`json
 {
-  "objective": "<What the user wants to summarize>",
-  "start": "0 minutes ago",
-  "end": "2 hours ago"
+  "objective": "a detailed summary of the conversation between all users",
+  "start": "2 hours ago",
+  "end": "0 minutes ago"
 }
 \`\`\`
+
+If the user asks for "today", use "24 hours ago" as start and "0 minutes ago" as end.
+If no time range is specified, default to "2 hours ago" for start and "0 minutes ago" for end.
 `;
 
 const getDateRange = async (
     runtime: IAgentRuntime,
     message: Memory,
     state: State
-): Promise<{ objective: string; start: string | number; end: string | number } | null> => {
+): Promise<{ objective: string; start: number; end: number } | undefined> => {
+    state = (await runtime.composeState(message)) as State;
+
     const context = composeContext({
         state,
         template: dateRangeTemplate,
@@ -67,36 +79,46 @@ const getDateRange = async (
         } | null;
         
         if (parsedResponse?.objective && parsedResponse?.start && parsedResponse?.end) {
-            const startIntegerString = (parsedResponse.start as string).match(/\d+/)?.[0];
-            const endIntegerString = (parsedResponse.end as string).match(/\d+/)?.[0];
-
-            const multipliers = {
-                second: 1 * 1000,
-                minute: 60 * 1000,
-                hour: 3600 * 1000,
-                day: 86400 * 1000,
+            // Parse time strings like "5 minutes ago", "2 hours ago", etc.
+            const parseTimeString = (timeStr: string): number | null => {
+                const match = timeStr.match(/^(\d+)\s+(second|minute|hour|day)s?\s+ago$/i);
+                if (!match) return null;
+                
+                const [_, amount, unit] = match;
+                const value = parseInt(amount);
+                
+                if (isNaN(value)) return null;
+                
+                const multipliers: { [key: string]: number } = {
+                    second: 1000,
+                    minute: 60 * 1000,
+                    hour: 60 * 60 * 1000,
+                    day: 24 * 60 * 60 * 1000
+                };
+                
+                const multiplier = multipliers[unit.toLowerCase()];
+                if (!multiplier) return null;
+                
+                return value * multiplier;
             };
 
-            const startMultiplier = (parsedResponse.start as string).match(
-                /second|minute|hour|day/
-            )?.[0];
-            const endMultiplier = (parsedResponse.end as string).match(
-                /second|minute|hour|day/
-            )?.[0];
+            const startTime = parseTimeString(parsedResponse.start as string);
+            const endTime = parseTimeString(parsedResponse.end as string);
 
-            const startInteger = startIntegerString ? parseInt(startIntegerString) : 0;
-            const endInteger = endIntegerString ? parseInt(endIntegerString) : 0;
+            if (startTime === null || endTime === null) {
+                elizaLogger.error("Invalid time format in response", parsedResponse);
+                continue;
+            }
 
-            const startTime = startInteger * multipliers[startMultiplier as keyof typeof multipliers];
-            const endTime = endInteger * multipliers[endMultiplier as keyof typeof multipliers];
-
-            parsedResponse.start = Date.now() - startTime;
-            parsedResponse.end = Date.now() - endTime;
-
-            return parsedResponse;
+            return {
+                objective: parsedResponse.objective,
+                start: Date.now() - startTime,
+                end: Date.now() - endTime
+            };
         }
     }
-    return null;
+    
+    return undefined;
 };
 
 const summarizeAction: Action = {
@@ -161,10 +183,10 @@ const summarizeAction: Action = {
             message.content.text.toLowerCase().includes(keyword.toLowerCase())
         );
     },
-    handler: (async (
+    handler: async (
         runtime: IAgentRuntime,
         message: Memory,
-        state: State | undefined,
+        state: State,
         _options: any,
         callback: HandlerCallback
     ): Promise<Content> => {
@@ -177,12 +199,11 @@ const summarizeAction: Action = {
             attachments: [],
         };
 
-        const { roomId } = message;
-
         // 1. Extract date range from the message
         const dateRange = await getDateRange(runtime, message, currentState);
         if (!dateRange) {
-            console.error("Couldn't get date range from message");
+            elizaLogger.error("Couldn't determine date range from message");
+            callbackData.text = "I couldn't determine the time range to summarize. Please try asking for a specific period like 'last hour' or 'today'.";
             await callback(callbackData);
             return callbackData;
         }
@@ -191,22 +212,30 @@ const summarizeAction: Action = {
 
         // 2. Get memories from the database
         const memories = await runtime.messageManager.getMemories({
-            roomId,
-            start: parseInt(start as string),
-            end: parseInt(end as string),
+            roomId: message.roomId,
+            start,
+            end,
             count: 10000,
             unique: false,
         });
 
+        if (!memories || memories.length === 0) {
+            callbackData.text = "I couldn't find any messages in that time range to summarize.";
+            await callback(callbackData);
+            return callbackData;
+        }
+
         const actors = await getActorDetails({
             runtime: runtime as IAgentRuntime,
-            roomId,
+            roomId: message.roomId,
         });
 
         const actorMap = new Map(actors.map((actor) => [actor.id, actor]));
 
         const formattedMemories = memories
             .map((memory) => {
+                const actor = actorMap.get(memory.userId);
+                const userName = actor?.name || actor?.username || "Unknown User";
                 const attachments = memory.content.attachments
                     ?.map((attachment: Media) => {
                         if (!attachment) return '';
@@ -214,7 +243,7 @@ const summarizeAction: Action = {
                     })
                     .filter(text => text !== '')
                     .join("\n");
-                return `${actorMap.get(memory.userId)?.name ?? "Unknown User"} (${actorMap.get(memory.userId)?.username ?? ""}): ${memory.content.text}\n${attachments || ''}`;
+                return `${userName}: ${memory.content.text}\n${attachments || ''}`;
             })
             .join("\n");
 
@@ -228,6 +257,7 @@ const summarizeAction: Action = {
         currentState.memoriesWithAttachments = formattedMemories;
         currentState.objective = objective;
 
+        // Only process one chunk at a time and stop after getting a valid summary
         for (let i = 0; i < chunks.length; i++) {
             const chunk = chunks[i];
             currentState.currentSummary = currentSummary;
@@ -248,40 +278,87 @@ const summarizeAction: Action = {
                 modelClass: ModelClass.SMALL,
             });
 
-            currentSummary = currentSummary + "\n" + summary;
+            if (summary) {
+                currentSummary = currentSummary + "\n" + summary;
+                break; // Stop after getting first valid summary
+            }
         }
 
-        if (!currentSummary) {
-            console.error("No summary found!");
+        if (!currentSummary.trim()) {
+            callbackData.text = "I wasn't able to generate a summary of the conversation.";
             await callback(callbackData);
             return callbackData;
         }
 
-        callbackData.text = currentSummary.trim();
+        // Format dates consistently
+        const formatDate = (timestamp: number) => {
+            const date = new Date(timestamp);
+            const pad = (n: number) => n < 10 ? `0${n}` : n;
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+        };
 
-        if (
-            callbackData.text &&
-            (currentSummary.trim()?.split("\n").length < 4 ||
-                currentSummary.trim()?.split(" ").length < 100)
-        ) {
-            callbackData.text = `Here is the summary:
-\`\`\`md
-${currentSummary.trim()}
-\`\`\`
-`;
-            await callback(callbackData);
-        } else if (currentSummary.trim()) {
-            const summaryFilename = `content/conversation_summary_${Date.now()}`;
-            await runtime.cacheManager.set(summaryFilename, currentSummary);
+        try {
+            // Get the user's name for the summary header
+            const requestingUser = actorMap.get(message.userId);
+            const userName = requestingUser?.name || requestingUser?.username || "Unknown User";
             
-            callbackData.text = `I've attached the summary of the conversation from \`${new Date(parseInt(start as string)).toString()}\` to \`${new Date(parseInt(end as string)).toString()}\` as a text file.`;
-            await callback(callbackData, [summaryFilename]);
-        } else {
-            await callback(callbackData);
-        }
+            const summaryContent = `Summary of conversation from ${formatDate(start)} to ${formatDate(end)}
 
-        return callbackData;
-    }) as Handler,
+Here is a detailed summary of the conversation between ${userName} and ${runtime.character.name}:\n\n${currentSummary.trim()}`;
+            
+            // If summary is long, upload as a file
+            if (summaryContent.length > 1000) {
+                const summaryFilename = `summary_${Date.now()}.txt`;
+                elizaLogger.debug("Uploading summary file to Slack...");
+                
+                try {
+                    // Save file content
+                    await runtime.cacheManager.set(summaryFilename, summaryContent);
+                    
+                    // Get the Slack service from runtime
+                    const slackService = runtime.getService(SLACK_SERVICE_TYPE) as ISlackService;
+                    if (!slackService?.client) {
+                        elizaLogger.error("Slack service not found or not properly initialized");
+                        throw new Error('Slack service not found');
+                    }
+
+                    // Upload file using Slack's API
+                    elizaLogger.debug(`Uploading file ${summaryFilename} to channel ${message.roomId}`);
+                    const uploadResult = await slackService.client.files.upload({
+                        channels: message.roomId,
+                        filename: summaryFilename,
+                        title: 'Conversation Summary',
+                        content: summaryContent,
+                        initial_comment: `I've created a summary of the conversation from ${formatDate(start)} to ${formatDate(end)}.`
+                    });
+                    
+                    if (uploadResult.ok) {
+                        elizaLogger.success("Successfully uploaded summary file to Slack");
+                        callbackData.text = `I've created a summary of the conversation from ${formatDate(start)} to ${formatDate(end)}. You can find it in the thread above.`;
+                    } else {
+                        elizaLogger.error("Failed to upload file to Slack:", uploadResult.error);
+                        throw new Error('Failed to upload file to Slack');
+                    }
+                } catch (error) {
+                    elizaLogger.error('Error uploading summary file:', error);
+                    // Fallback to sending as a message
+                    callbackData.text = summaryContent;
+                }
+            } else {
+                // For shorter summaries, just send as a message
+                callbackData.text = summaryContent;
+            }
+            
+            await callback(callbackData);
+            return callbackData;
+            
+        } catch (error) {
+            elizaLogger.error("Error in summary generation:", error);
+            callbackData.text = "I encountered an error while generating the summary. Please try again.";
+            await callback(callbackData);
+            return callbackData;
+        }
+    },
     examples: [
         [
             {

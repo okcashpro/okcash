@@ -8,8 +8,9 @@ import { MessageManager } from './messages';
 import { validateSlackConfig } from './environment';
 import chat_with_attachments from './actions/chat_with_attachments';
 import summarize_conversation from './actions/summarize_conversation';
-import transcribe_media from './actions/transcribe_media';
+// import transcribe_media from './actions/transcribe_media';
 import { channelStateProvider } from './providers/channelState';
+import { SlackService } from './services/slack.service';
 
 interface SlackRequest extends Request {
     rawBody?: Buffer;
@@ -65,8 +66,6 @@ export class SlackClient extends EventEmitter {
             if (event.type === 'message' || event.type === 'app_mention') {
                 await this.messageManager.handleMessage(event);
             }
-            
-            this.emit(event.type, event);
         } catch (error) {
             elizaLogger.error("❌ [EVENT] Error handling event:", error);
         }
@@ -125,6 +124,11 @@ export class SlackClient extends EventEmitter {
             
             const config = await validateSlackConfig(this.runtime);
             
+            // Initialize and register Slack service
+            const slackService = new SlackService();
+            await slackService.initialize(this.runtime);
+            await this.runtime.registerService(slackService);
+            
             // Get detailed bot info
             const auth = await this.client.auth.test();
             if (!auth.ok) throw new Error("Failed to authenticate with Slack");
@@ -165,7 +169,7 @@ export class SlackClient extends EventEmitter {
             // Register actions and providers
             this.runtime.registerAction(chat_with_attachments);
             this.runtime.registerAction(summarize_conversation);
-            this.runtime.registerAction(transcribe_media);
+            // this.runtime.registerAction(transcribe_media);
             this.runtime.providers.push(channelStateProvider);
 
             // Add request logging middleware
