@@ -23,6 +23,7 @@ import {
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { zgPlugin } from "@ai16z/plugin-0g";
+import { goatPlugin } from "@ai16z/plugin-goat";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 // import { buttplugPlugin } from "@ai16z/plugin-buttplug";
 import {
@@ -396,6 +397,7 @@ export function createAgent(
                 ? [coinbaseMassPaymentsPlugin, tradePlugin]
                 : []),
             getSecret(character, "WALLET_SECRET_SALT") ? teePlugin : null,
+            getSecret(character, "ALCHEMY_API_KEY") ? goatPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
