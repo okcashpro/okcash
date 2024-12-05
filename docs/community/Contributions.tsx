@@ -23,7 +23,7 @@ export interface AccordionItem {
     state?: string;
 }
 
-export enum PR_BULLET_COLOR {
+export enum BULLET_COLOR {
     OPEN = "#1A7F37",
     CLOSE = "#D1242F",
     MERGE = "#8250DF",
@@ -117,10 +117,10 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                 created_at: pr.created_at,
                 bullet:
                     pr.state === "open"
-                        ? PR_BULLET_COLOR.OPEN
+                        ? BULLET_COLOR.OPEN
                         : pr.pull_request.merged_at
-                          ? PR_BULLET_COLOR.MERGE
-                          : PR_BULLET_COLOR.CLOSE,
+                          ? BULLET_COLOR.MERGE
+                          : BULLET_COLOR.CLOSE,
             }));
             const currentPrsData = [...prsData.data, ...prItems];
 
@@ -152,8 +152,8 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                 created_at: issue.created_at,
                 bullet:
                     issue.state === "open"
-                        ? PR_BULLET_COLOR.OPEN
-                        : PR_BULLET_COLOR.CLOSE,
+                        ? BULLET_COLOR.OPEN
+                        : BULLET_COLOR.CLOSE,
             }));
             const currentIssuesData = [...issuesData.data, ...issueItems];
             setIssuesData({
