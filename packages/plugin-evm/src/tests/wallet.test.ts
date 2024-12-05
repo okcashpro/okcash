@@ -22,7 +22,7 @@ describe("Wallet provider", () => {
             expect(walletProvider.getAddress()).to.be.eq(expectedAddress);
         });
         it("sets default chain to ethereum mainnet", () => {
-            walletProvider = new WalletProvider(pk, []);
+            walletProvider = new WalletProvider(pk);
 
             expect(walletProvider.chains.mainnet.id).to.be.eq(mainnet.id);
             expect(walletProvider.getCurrentChain().id).to.be.eq(mainnet.id);

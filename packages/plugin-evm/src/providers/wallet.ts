@@ -19,11 +19,11 @@ export class WalletProvider {
     chains: Record<string, Chain> = { mainnet: viemChains.mainnet };
     account: Account;
 
-    constructor(privateKey: `0x${string}`, chainNames: SupportedChain[]) {
+    constructor(privateKey: `0x${string}`, chainNames?: SupportedChain[]) {
         this.setAccount(privateKey);
         this.setChains(chainNames);
 
-        if (chainNames.length > 0) {
+        if (chainNames?.length > 0) {
             this.setCurrentChain(chainNames[0]);
         }
     }
@@ -90,7 +90,10 @@ export class WalletProvider {
     private setAccount = (pk: `0x${string}`) => {
         this.account = privateKeyToAccount(pk);
     };
-    private setChains = (chainNames: SupportedChain[]) => {
+    private setChains = (chainNames?: SupportedChain[]) => {
+        if (!chainNames) {
+            return;
+        }
         chainNames.forEach((name) => {
             const chain = viemChains[name];
 
