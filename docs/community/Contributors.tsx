@@ -33,6 +33,8 @@ export const THEME_COLORS = {
     },
 };
 
+export const GITHUB_PAGE_LIMIT = 30; // The maximum number to fetch per page from the GitHub API.
+
 const Contributors: React.FC = () => {
     const { siteConfig } = useDocusaurusContext();
     const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
@@ -56,7 +58,7 @@ const Contributors: React.FC = () => {
         loadingRef.current = true;
         try {
             const response = await fetch(
-                `https://api.github.com/repos/ai16z/eliza/contributors?per_page=30&page=${page}`,
+                `https://api.github.com/repos/ai16z/eliza/contributors?per_page=${GITHUB_PAGE_LIMIT}&page=${page}`,
                 {
                     method: "GET",
                     headers: {

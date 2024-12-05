@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { GitHubItem } from "./Contributions";
+import { GITHUB_PAGE_LIMIT } from "./Contributors";
 
 interface AccordionProps {
     title: string;
@@ -37,7 +38,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     }, [isOpen]);
 
     useEffect(() => {
-        if (contentRef.current) {
+        if (contentRef.current && data.length > GITHUB_PAGE_LIMIT) {
             contentRef.current.scrollTo({
                 top: contentRef.current.scrollHeight,
                 behavior: "smooth",

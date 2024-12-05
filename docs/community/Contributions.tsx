@@ -109,6 +109,7 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                 created_at: pr.created_at,
             }));
             const currentPrsData = [...prsData.data, ...prItems];
+
             setPrsData({
                 data: currentPrsData,
                 total_count: prData.total_count,
