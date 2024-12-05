@@ -380,22 +380,16 @@ export async function executeTransfer(wallet: Wallet, amount: number, sourceAsse
 
 /**
  * Gets the charity address based on the network.
- * For now we are giving to the following charity, but will make this configurable in the future
- * https://www.givedirectly.org/crypto/?_gl=1*va5e6k*_gcl_au*MTM1NDUzNTk5Mi4xNzMzMDczNjA3*_ga*OTIwMDMwNTMwLjE3MzMwNzM2MDg.*_ga_GV8XF9FJ16*MTczMzA3MzYwNy4xLjEuMTczMzA3MzYyMi40NS4wLjA.
  * @param {string} network - The network to use.
+ * @throws {Error} If charity address for the network is not configured
  */
 export function getCharityAddress(network: string): string {
- let charityAddress;
-    if (network === "base") {
-        charityAddress = "0x1234567890123456789012345678901234567890";
-    } else if (network === "sol") {
-        charityAddress = "pWvDXKu6CpbKKvKQkZvDA66hgsTB6X2AgFxksYogHLV";
-    } else if (network === "eth") {
-        charityAddress = "0x750EF1D7a0b4Ab1c97B7A623D7917CcEb5ea779C";
-    } else if (network === "arb") {
-        charityAddress = "0x1234567890123456789012345678901234567890";
-    } else if (network === "pol") {
-        charityAddress = "0x1234567890123456789012345678901234567890";
+    const networkKey = `CHARITY_ADDRESS_${network.toUpperCase()}`;
+    const charityAddress = process.env[networkKey];
+
+    if (!charityAddress) {
+        throw new Error(`Charity address not configured for network ${network}. Please set ${networkKey} in your environment variables.`);
     }
+
     return charityAddress;
 }
