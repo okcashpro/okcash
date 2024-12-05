@@ -11,34 +11,13 @@ import type { CompositeSignature, Account } from "@onflow/typedefs";
 import type { FlowConnector } from "./utils/flow.connector";
 import { getFlowConnectorInstance } from "./connector.provider";
 import PureSigner from "./utils/pure.signer";
+import { IFlowScriptExecutor, IFlowSigner } from "../types";
 import Exception from "../types/exception";
-
-/**
- * Signer interface
- */
-export interface FlowSignerInterface {
-    /**
-     * Send a transaction
-     */
-    sendTransaction(
-        code: string,
-        args: fcl.ArgumentFunction,
-        authz?: fcl.FclAuthorization
-    ): Promise<string>;
-
-    /**
-     * Build authorization
-     */
-    buildAuthorization(
-        accountIndex?: number,
-        privateKey?: string
-    ): (acct: Account) => Promise<fcl.AuthZ>;
-}
 
 /**
  * Flow wallet Provider
  */
-export class FlowWalletProvider implements FlowSignerInterface {
+export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
     runtime: IAgentRuntime;
     private readonly privateKeyHex?: string;
     public readonly address: string;
@@ -60,7 +39,9 @@ export class FlowWalletProvider implements FlowSignerInterface {
                 `The default Flow wallet ${this.address} has no private key`
             );
         } else {
-            this.privateKeyHex = privateKey;
+            this.privateKeyHex = privateKey.startsWith("0x")
+                ? privateKey.slice(2)
+                : privateKey;
         }
     }
 
@@ -227,6 +208,7 @@ const flowWalletProvider: Provider = {
             const walletProvider = new FlowWalletProvider(runtime, connector);
             const address = walletProvider.address;
             const balance = await walletProvider.getWalletBalance();
+            // TODO: use the result from GetAccountInfo script
             return `Flow Wallet Address: ${address}\nBalance: ${balance} FLOW`;
         } catch (error) {
             elizaLogger.error("Error in Flow wallet provider:", error.message);

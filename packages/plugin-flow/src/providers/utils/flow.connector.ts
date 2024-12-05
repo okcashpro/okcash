@@ -1,5 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import type { Account, TransactionStatus } from "@onflow/typedefs";
+import { IFlowScriptExecutor } from "../../types";
 import Exception from "../../types/exception";
 
 export type NetworkType = "mainnet" | "testnet" | "emulator";
@@ -7,7 +8,7 @@ export type NetworkType = "mainnet" | "testnet" | "emulator";
 let isGloballyInited = false;
 let globallyPromise = null;
 
-export class FlowConnector {
+export class FlowConnector implements IFlowScriptExecutor {
     /**
      * Initialize the Flow SDK
      */
