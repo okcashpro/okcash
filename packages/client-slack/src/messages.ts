@@ -1,20 +1,25 @@
-import { WebClient } from '@slack/web-api';
-import { elizaLogger } from '@ai16z/eliza';
-import { IAgentRuntime, Memory, Content, State } from '@ai16z/eliza';
 import { 
     stringToUuid, 
     getEmbeddingZeroVector, 
     composeContext, 
-    generateMessageResponse, 
+    generateMessageResponse,
     generateShouldRespond,
-    ModelClass 
+    ModelClass,
+    Memory,
+    Content,
+    State,
+    elizaLogger,
+    HandlerCallback
 } from '@ai16z/eliza';
 import { slackMessageHandlerTemplate, slackShouldRespondTemplate } from './templates';
+import { WebClient } from '@slack/web-api';
+import { IAgentRuntime } from '@ai16z/eliza';
 
 export class MessageManager {
     private client: WebClient;
     private runtime: IAgentRuntime;
     private botUserId: string;
+    private processedMessages: Map<string, number> = new Map();
 
     constructor(client: WebClient, runtime: IAgentRuntime, botUserId: string) {
         elizaLogger.log("📱 Initializing MessageManager...");
@@ -22,45 +27,133 @@ export class MessageManager {
         this.runtime = runtime;
         this.botUserId = botUserId;
         elizaLogger.debug("MessageManager initialized with botUserId:", botUserId);
+
+        // Clear old processed messages every hour
+        setInterval(() => {
+            const oneHourAgo = Date.now() - 3600000;
+            for (const [key, timestamp] of this.processedMessages.entries()) {
+                if (timestamp < oneHourAgo) {
+                    this.processedMessages.delete(key);
+                }
+            }
+        }, 3600000);
+    }
+
+    private cleanMessage(text: string): string {
+        elizaLogger.debug("🧹 [CLEAN] Cleaning message text:", text);
+        // Remove bot mention
+        const cleaned = text.replace(new RegExp(`<@${this.botUserId}>`, 'g'), '').trim();
+        elizaLogger.debug("✨ [CLEAN] Cleaned result:", cleaned);
+        return cleaned;
+    }
+
+    private async _shouldRespond(message: any, state: State): Promise<boolean> {
+        // Always respond to direct mentions
+        if (message.type === 'app_mention' || message.text?.includes(`<@${this.botUserId}>`)) {
+            return true;
+        }
+
+        // Always respond in direct messages
+        if (message.channel_type === 'im') {
+            return true;
+        }
+
+        // Use the shouldRespond template to decide
+        const shouldRespondContext = composeContext({
+            state,
+            template: this.runtime.character.templates?.slackShouldRespondTemplate || 
+                     this.runtime.character.templates?.shouldRespondTemplate || 
+                     slackShouldRespondTemplate,
+        });
+
+        const response = await generateShouldRespond({
+            runtime: this.runtime,
+            context: shouldRespondContext,
+            modelClass: ModelClass.SMALL,
+        });
+
+        return response === 'RESPOND';
+    }
+
+    private async _generateResponse(
+        memory: Memory,
+        state: State,
+        context: string
+    ): Promise<Content> {
+        const { userId, roomId } = memory;
+
+        const response = await generateMessageResponse({
+            runtime: this.runtime,
+            context,
+            modelClass: ModelClass.SMALL,
+        });
+
+        if (!response) {
+            elizaLogger.error("No response from generateMessageResponse");
+            return {
+                text: "I apologize, but I'm having trouble generating a response right now.",
+                source: 'slack'
+            };
+        }
+
+        await this.runtime.databaseAdapter.log({
+            body: { memory, context, response },
+            userId: userId,
+            roomId,
+            type: "response",
+        });
+
+        // If response includes a CONTINUE action but there's no direct mention or thread,
+        // remove the action to prevent automatic continuation
+        if (
+            response.action === 'CONTINUE' && 
+            !memory.content.text?.includes(`<@${this.botUserId}>`) &&
+            !state.recentMessages?.includes(memory.id)
+        ) {
+            elizaLogger.debug("🛑 [CONTINUE] Removing CONTINUE action as message is not a direct interaction");
+            delete response.action;
+        }
+
+        return response;
     }
 
     public async handleMessage(event: any) {
         elizaLogger.debug("📥 [DETAILED] Incoming message event:", JSON.stringify(event, null, 2));
 
-        // Ignore messages from bots (including ourselves)
-        if (event.bot_id || event.user === this.botUserId) {
-            elizaLogger.debug("⏭️ [SKIP] Message from bot or self:", {
-                bot_id: event.bot_id,
-                user: event.user,
-                bot_user_id: this.botUserId
-            });
-            return;
-        }
-
         try {
-            // Check if this is a direct mention or a message in a channel where the bot is mentioned
-            const isMention = event.type === 'app_mention' || 
-                            (event.text && event.text.includes(`<@${this.botUserId}>`));
-            
-            // Skip if it's not a mention and not in a direct message
-            if (!isMention && event.channel_type !== 'im') {
-                elizaLogger.debug("⏭️ [SKIP] Not a mention or direct message");
+            // Generate a unique key for this message that includes all relevant data
+            const messageKey = `${event.channel}-${event.ts}-${event.type}-${event.text}`;
+            const currentTime = Date.now();
+
+            // Check if we've already processed this message
+            if (this.processedMessages.has(messageKey)) {
+                elizaLogger.debug("⏭️ [SKIP] Message already processed:", {
+                    key: messageKey,
+                    originalTimestamp: this.processedMessages.get(messageKey),
+                    currentTime
+                });
                 return;
             }
 
-            elizaLogger.debug("🎯 [CONTEXT] Message details:", {
-                is_mention: isMention,
-                channel_type: event.channel_type,
-                thread_ts: event.thread_ts,
-                text: event.text,
-                channel: event.channel,
-                subtype: event.subtype,
-                event_type: event.type
+            // Add to processed messages map with current timestamp
+            this.processedMessages.set(messageKey, currentTime);
+            elizaLogger.debug("✨ [NEW] Processing new message:", {
+                key: messageKey,
+                timestamp: currentTime
             });
 
-            // Clean the message text by removing the bot mention
+            // Ignore messages from bots (including ourselves)
+            if (event.bot_id || event.user === this.botUserId) {
+                elizaLogger.debug("⏭️ [SKIP] Message from bot or self:", {
+                    bot_id: event.bot_id,
+                    user: event.user,
+                    bot_user_id: this.botUserId
+                });
+                return;
+            }
+
+            // Clean the message text
             const cleanedText = this.cleanMessage(event.text || '');
-            elizaLogger.debug("🧹 [CLEAN] Cleaned message text:", cleanedText);
 
             // Generate unique IDs for the conversation
             const roomId = stringToUuid(`${event.channel}-${this.runtime.agentId}`);
@@ -81,8 +174,6 @@ export class MessageManager {
                 event.user_name || event.user,
                 'slack'
             );
-
-            elizaLogger.debug("🔌 [CONNECTION] Connection ensured for user");
 
             // Create memory for the message
             const content: Content = {
@@ -110,8 +201,8 @@ export class MessageManager {
                 await this.runtime.messageManager.createMemory(memory);
             }
 
-            // Compose state for response generation
-            const state = await this.runtime.composeState(
+            // Initial state composition
+            let state = await this.runtime.composeState(
                 { content, userId, agentId: this.runtime.agentId, roomId },
                 {
                     slackClient: this.client,
@@ -121,6 +212,9 @@ export class MessageManager {
                 }
             );
 
+            // Update state with recent messages
+            state = await this.runtime.updateRecentMessageState(state);
+
             elizaLogger.debug("🔄 [STATE] Composed state:", {
                 agentName: state.agentName,
                 senderName: state.senderName,
@@ -128,29 +222,17 @@ export class MessageManager {
                 recentMessages: state.recentMessages?.length || 0
             });
 
-            // Always respond to direct mentions and direct messages
-            const shouldRespond = isMention || event.channel_type === 'im' ? 'RESPOND' : 'IGNORE';
-            
-            elizaLogger.debug("✅ [DECISION] Should respond:", {
-                decision: shouldRespond,
-                isMention,
-                channelType: event.channel_type
-            });
+            // Check if we should respond
+            const shouldRespond = await this._shouldRespond(event, state);
 
-            if (shouldRespond === 'RESPOND') {
-                elizaLogger.debug("💭 [GENERATE] Generating response...");
-                
+            if (shouldRespond) {
                 // Generate response using message handler template
                 const context = composeContext({
                     state,
                     template: this.runtime.character.templates?.slackMessageHandlerTemplate || slackMessageHandlerTemplate,
                 });
 
-                const responseContent = await generateMessageResponse({
-                    runtime: this.runtime,
-                    context,
-                    modelClass: ModelClass.SMALL,
-                });
+                const responseContent = await this._generateResponse(memory, state, context);
 
                 elizaLogger.debug("📝 [RESPONSE] Generated response content:", {
                     hasText: !!responseContent?.text,
@@ -182,52 +264,63 @@ export class MessageManager {
                         text_length: responseContent.text.length
                     });
 
-                    await this.sendMessage(event.channel, responseContent.text, event.thread_ts);
-                    elizaLogger.debug("✉️ [SUCCESS] Response sent successfully");
+                    const callback: HandlerCallback = async (content: Content) => {
+                        try {
+                            const response = await this.client.chat.postMessage({
+                                channel: event.channel,
+                                text: content.text,
+                                thread_ts: event.thread_ts
+                            });
+                            
+                            const responseMemory: Memory = {
+                                id: stringToUuid(`${response.ts}-${this.runtime.agentId}`),
+                                userId: this.runtime.agentId,
+                                agentId: this.runtime.agentId,
+                                roomId,
+                                content: {
+                                    ...content,
+                                    inReplyTo: messageId,
+                                },
+                                createdAt: Date.now(),
+                                embedding: getEmbeddingZeroVector(),
+                            };
+
+                            await this.runtime.messageManager.createMemory(responseMemory);
+                            return [responseMemory];
+                        } catch (error) {
+                            elizaLogger.error("Error sending message:", error);
+                            return [];
+                        }
+                    };
+
+                    const responseMessages = await callback(responseContent);
+
+                    // Update state with new messages
+                    state = await this.runtime.updateRecentMessageState(state);
+
+                    // Process any actions
+                    await this.runtime.processActions(
+                        memory,
+                        responseMessages,
+                        state,
+                        callback
+                    );
                 }
-            } else {
-                elizaLogger.debug("⏭️ [SKIP] Skipping response based on shouldRespond:", shouldRespond);
             }
+
+            // Evaluate the interaction
+            await this.runtime.evaluate(memory, state, shouldRespond);
+
         } catch (error) {
-            elizaLogger.error("❌ [ERROR] Error handling message:", error);
-            await this.sendMessage(
-                event.channel,
-                "Sorry, I encountered an error processing your message.",
-                event.thread_ts
-            );
-        }
-    }
-
-    private cleanMessage(text: string): string {
-        elizaLogger.debug("🧼 [CLEAN] Cleaning message:", text);
-        // Remove mention of the bot
-        const cleaned = text.replace(new RegExp(`<@${this.botUserId}>`, 'g'), '').trim();
-        elizaLogger.debug("✨ [CLEAN] Cleaned result:", cleaned);
-        return cleaned;
-    }
-
-    private async sendMessage(channel: string, text: string, thread_ts?: string) {
-        elizaLogger.debug("📤 [SEND] Sending message:", {
-            channel,
-            text_length: text.length,
-            thread_ts: thread_ts || 'none'
-        });
-
-        try {
-            const response = await this.client.chat.postMessage({
-                channel,
-                text,
-                thread_ts,
+            elizaLogger.error("❌ [ERROR] Error handling message:", {
+                error: error instanceof Error ? error.message : String(error),
+                stack: error instanceof Error ? error.stack : undefined
             });
-            elizaLogger.debug("📨 [SEND] Message sent successfully:", {
-                ts: response.ts,
-                channel: response.channel,
-                ok: response.ok
+            await this.client.chat.postMessage({
+                channel: event.channel,
+                text: "Sorry, I encountered an error processing your message.",
+                thread_ts: event.thread_ts
             });
-            return response;
-        } catch (error) {
-            elizaLogger.error("❌ [ERROR] Failed to send message:", error);
-            throw error;
         }
     }
 } 
