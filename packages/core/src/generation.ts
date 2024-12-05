@@ -447,6 +447,8 @@ export async function generateText({
                         undefined,
                     temperature: temperature,
                     maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
                 });
 
                 response = galadrielResponse;
