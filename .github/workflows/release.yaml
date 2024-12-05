@@ -1,6 +1,8 @@
 name: Release
 
 on:
+    release:
+        types: [created]
     workflow_dispatch:
 
 jobs:
@@ -57,28 +59,3 @@ jobs:
                   npx lerna publish from-package --yes --dist-tag latest
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-            - name: Get Version Tag
-              id: get_tag
-              run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-
-            - name: Generate Release Body
-              id: release_body
-              run: |
-                  if [ -f CHANGELOG.md ]; then
-                    echo "body=$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
-                  else
-                    echo "body=No changelog provided for this release." >> $GITHUB_OUTPUT
-                  fi
-
-            - name: Create GitHub Release
-              uses: actions/create-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-                  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-              with:
-                  tag_name: ${{ steps.get_tag.outputs.TAG }}
-                  release_name: Release
-                  body_path: CHANGELOG.md
-                  draft: false
-                  prerelease: false
