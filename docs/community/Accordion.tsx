@@ -123,7 +123,25 @@ export const Accordion: React.FC<AccordionProps> = ({
                                     )
                                 }
                             >
-                                <div>{entry.title}</div>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem",
+                                    }}
+                                >
+                                    {entry.bullet && (
+                                        <div
+                                            style={{
+                                                width: "0.5rem",
+                                                height: "0.5rem",
+                                                borderRadius: "50%",
+                                                backgroundColor: entry.bullet,
+                                            }}
+                                        ></div>
+                                    )}
+                                    <div>{entry.title}</div>
+                                </div>
                                 <div
                                     style={{
                                         fontSize: "0.8rem",

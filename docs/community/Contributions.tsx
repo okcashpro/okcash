@@ -8,6 +8,7 @@ export interface GitHubItem {
     html_url: string;
     title: string;
     created_at: string;
+    bullet?: string;
 }
 
 export interface StatCardProps {
@@ -19,6 +20,13 @@ export interface StatCardProps {
 export interface AccordionItem {
     data: GitHubItem[];
     total_count: number;
+    state?: string;
+}
+
+export enum PR_BULLET_COLOR {
+    OPEN = "#1A7F37",
+    CLOSE = "#D1242F",
+    MERGE = "#8250DF",
 }
 
 const initializeAccordionItem = (): AccordionItem => ({
@@ -107,6 +115,12 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                 html_url: pr.html_url,
                 title: pr.title,
                 created_at: pr.created_at,
+                bullet:
+                    pr.state === "open"
+                        ? PR_BULLET_COLOR.OPEN
+                        : pr.pull_request.merged_at
+                          ? PR_BULLET_COLOR.MERGE
+                          : PR_BULLET_COLOR.CLOSE,
             }));
             const currentPrsData = [...prsData.data, ...prItems];
 
@@ -136,6 +150,10 @@ const Contributions = ({ contributor, onBack, darkMode }) => {
                 html_url: issue.html_url,
                 title: issue.title,
                 created_at: issue.created_at,
+                bullet:
+                    issue.state === "open"
+                        ? PR_BULLET_COLOR.OPEN
+                        : PR_BULLET_COLOR.CLOSE,
             }));
             const currentIssuesData = [...issuesData.data, ...issueItems];
             setIssuesData({
