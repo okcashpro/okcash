@@ -28,9 +28,9 @@ Model configurations by provider
 
 > **groq**: [`Model`](Model.md)
 
-### llama_cloud
+### llama\_cloud
 
-> **llama_cloud**: [`Model`](Model.md)
+> **llama\_cloud**: [`Model`](Model.md)
 
 ### together
 
