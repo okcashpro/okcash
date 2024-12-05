@@ -87,6 +87,16 @@ export class WalletProvider {
         this.setCurrentChain(chain);
     }
 
+    getChainConfigs(chainName: SupportedChain): Chain {
+        const chain = viemChains[chainName];
+
+        if (!chain?.id) {
+            throw new Error("Invalid chain name");
+        }
+
+        return chain;
+    }
+
     private setAccount = (pk: `0x${string}`) => {
         this.account = privateKeyToAccount(pk);
     };

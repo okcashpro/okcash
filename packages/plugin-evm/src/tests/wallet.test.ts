@@ -114,6 +114,11 @@ describe("Wallet provider", () => {
             const newChains = walletProvider.chains;
             expect(newChains.arbitrum.id).to.be.eq(arbitrum.id);
         });
+        it("gets chain configs", () => {
+            const chain = walletProvider.getChainConfigs("iotex");
+
+            expect(chain.id).to.eq(iotex.id);
+        })
         it("throws if tries to switch to an invalid chain", () => {
             const initialChain = walletProvider.getCurrentChain().id;
             expect(initialChain).to.be.eq(iotex.id);
