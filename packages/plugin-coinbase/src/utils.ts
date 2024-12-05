@@ -381,9 +381,17 @@ export async function executeTransfer(wallet: Wallet, amount: number, sourceAsse
 /**
  * Gets the charity address based on the network.
  * @param {string} network - The network to use.
- * @throws {Error} If charity address for the network is not configured
+ * @param {boolean} isCharitable - Whether charity donations are enabled
+ * @throws {Error} If charity address for the network is not configured when charity is enabled
  */
-export function getCharityAddress(network: string): string {
+export function getCharityAddress(network: string, isCharitable: boolean = false): string | null {
+    // Check both environment variable and passed parameter
+    const isCharityEnabled = process.env.IS_CHARITABLE === 'true' && isCharitable;
+
+    if (!isCharityEnabled) {
+        return null;
+    }
+
     const networkKey = `CHARITY_ADDRESS_${network.toUpperCase()}`;
     const charityAddress = process.env[networkKey];
 
