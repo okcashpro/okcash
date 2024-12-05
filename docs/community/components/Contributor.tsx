@@ -20,7 +20,7 @@ const ContributorCard: React.FC<ContributorProps> = ({
             style={{
                 position: "relative",
                 borderRadius: "0.5rem",
-                height: "16rem",
+                height: "13.5rem",
                 boxShadow: isHovered
                     ? "0 4px 6px rgba(0, 0, 0, 0.1)"
                     : "0 1px 2px rgba(0, 0, 0, 0.05)",
@@ -79,13 +79,14 @@ const ContributorCard: React.FC<ContributorProps> = ({
                 style={{
                     marginTop: "1rem",
                     color: darkMode
-                        ? `rgba(${hexToRgb(THEME_COLORS.dark.primaryText)}, 0.5)`
-                        : `rgba(${hexToRgb(THEME_COLORS.light.primaryText)}, 0.5)`,
+                        ? `rgba(${hexToRgb(THEME_COLORS.dark.primaryText)}, 0.7)`
+                        : `rgba(${hexToRgb(THEME_COLORS.light.primaryText)}, 0.7)`,
                     display: "-webkit-box",
                     WebkitBoxOrient: "vertical",
-                    WebkitLineClamp: 5,
+                    WebkitLineClamp: 4,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    fontSize: "0.85rem",
                 }}
             />
         </div>

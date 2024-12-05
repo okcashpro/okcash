@@ -266,7 +266,7 @@ const Contributions = ({
                 />
                 <ScoreIcon
                     style={{
-                        width: "5rem",
+                        width: "6rem",
                         height: "2.5rem",
                         backgroundColor: darkMode
                             ? `rgba(${hexToRgb(THEME_COLORS.dark.secondaryText)}, 0.2)`

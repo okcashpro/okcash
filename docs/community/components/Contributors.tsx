@@ -149,7 +149,7 @@ const Contributors: React.FC = () => {
         <div
             style={{
                 display: "grid",
-                gridTemplateColumns: `repeat(${selectedContributor ? "1" : "auto-fit"}, minmax(300px, 1fr))`,
+                gridTemplateColumns: `repeat(${selectedContributor ? "1" : "auto-fit"}, minmax(400px, 1fr))`,
                 gap: "1rem",
                 backgroundColor: darkMode
                     ? THEME_COLORS.dark.secondaryBackground
