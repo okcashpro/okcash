@@ -14,7 +14,7 @@ Unique identifier
 
 #### Defined in
 
-[packages/core/src/types.ts:495](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L495)
+[packages/core/src/types.ts:495](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L495)
 
 ***
 
@@ -26,7 +26,7 @@ Display name
 
 #### Defined in
 
-[packages/core/src/types.ts:498](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L498)
+[packages/core/src/types.ts:498](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L498)
 
 ***
 
@@ -38,7 +38,7 @@ Username
 
 #### Defined in
 
-[packages/core/src/types.ts:501](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L501)
+[packages/core/src/types.ts:501](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L501)
 
 ***
 
@@ -54,7 +54,7 @@ Optional additional details
 
 #### Defined in
 
-[packages/core/src/types.ts:504](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L504)
+[packages/core/src/types.ts:504](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L504)
 
 ***
 
@@ -66,7 +66,7 @@ Optional email
 
 #### Defined in
 
-[packages/core/src/types.ts:507](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L507)
+[packages/core/src/types.ts:507](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L507)
 
 ***
 
@@ -78,4 +78,4 @@ Optional avatar URL
 
 #### Defined in
 
-[packages/core/src/types.ts:510](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L510)
+[packages/core/src/types.ts:510](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L510)

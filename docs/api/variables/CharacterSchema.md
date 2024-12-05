@@ -100,4 +100,4 @@ Main Character schema
 
 ## Defined in
 
-[packages/core/src/enviroment.ts:66](https://github.com/ai16z/eliza/blob/main/packages/core/src/enviroment.ts#L66)
+[packages/core/src/enviroment.ts:66](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/enviroment.ts#L66)

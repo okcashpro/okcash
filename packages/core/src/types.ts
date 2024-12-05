@@ -600,6 +600,7 @@ export enum Clients {
     DIRECT = "direct",
     TWITTER = "twitter",
     TELEGRAM = "telegram",
+    SLACK = "slack",
 }
 /**
  * Configuration for an agent character
@@ -646,6 +647,8 @@ export type Character = {
         discordVoiceHandlerTemplate?: string;
         discordShouldRespondTemplate?: string;
         discordMessageHandlerTemplate?: string;
+        slackMessageHandlerTemplate?: string;
+        slackShouldRespondTemplate?: string;
     };
 
     /** Character biography */
@@ -708,6 +711,10 @@ export type Character = {
             shouldIgnoreDirectMessages?: boolean;
         };
         telegram?: {
+            shouldIgnoreBotMessages?: boolean;
+            shouldIgnoreDirectMessages?: boolean;
+        };
+        slack?: {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
         };
@@ -1141,6 +1148,7 @@ export enum ServiceType {
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
     BUTTPLUG = "buttplug",
+    SLACK = "slack"
 }
 
 export enum LoggingLevel {
@@ -1153,3 +1161,7 @@ export type KnowledgeItem = {
     id: UUID;
     content: Content;
 };
+
+export interface ISlackService extends Service {
+    client: any;
+}

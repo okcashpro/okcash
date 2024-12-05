@@ -23,4 +23,4 @@ An array parsed from the JSON string if successful; otherwise, null.
 
 ## Defined in
 
-[packages/core/src/parsing.ts:60](https://github.com/ai16z/eliza/blob/main/packages/core/src/parsing.ts#L60)
+[packages/core/src/parsing.ts:60](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/parsing.ts#L60)

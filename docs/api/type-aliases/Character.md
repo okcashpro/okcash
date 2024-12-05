@@ -128,6 +128,14 @@ Optional prompt templates
 
 > `optional` **discordMessageHandlerTemplate**: `string`
 
+### templates.slackMessageHandlerTemplate?
+
+> `optional` **slackMessageHandlerTemplate**: `string`
+
+### templates.slackShouldRespondTemplate?
+
+> `optional` **slackShouldRespondTemplate**: `string`
+
 ### bio
 
 > **bio**: `string` \| `string`[]
@@ -296,6 +304,18 @@ Optional client-specific config
 
 > `optional` **shouldIgnoreDirectMessages**: `boolean`
 
+### clientConfig.slack?
+
+> `optional` **slack**: `object`
+
+### clientConfig.slack.shouldIgnoreBotMessages?
+
+> `optional` **shouldIgnoreBotMessages**: `boolean`
+
+### clientConfig.slack.shouldIgnoreDirectMessages?
+
+> `optional` **shouldIgnoreDirectMessages**: `boolean`
+
 ### style
 
 > **style**: `object`
@@ -342,4 +362,4 @@ Optional Twitter profile
 
 ## Defined in
 
-[packages/core/src/types.ts:607](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L607)
+[packages/core/src/types.ts:608](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L608)

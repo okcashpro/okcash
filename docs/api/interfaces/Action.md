@@ -14,7 +14,7 @@ Similar action descriptions
 
 #### Defined in
 
-[packages/core/src/types.ts:394](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L394)
+[packages/core/src/types.ts:394](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L394)
 
 ***
 
@@ -26,7 +26,7 @@ Detailed description
 
 #### Defined in
 
-[packages/core/src/types.ts:397](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L397)
+[packages/core/src/types.ts:397](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L397)
 
 ***
 
@@ -38,7 +38,7 @@ Example usages
 
 #### Defined in
 
-[packages/core/src/types.ts:400](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L400)
+[packages/core/src/types.ts:400](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L400)
 
 ***
 
@@ -50,7 +50,7 @@ Handler function
 
 #### Defined in
 
-[packages/core/src/types.ts:403](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L403)
+[packages/core/src/types.ts:403](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L403)
 
 ***
 
@@ -62,7 +62,7 @@ Action name
 
 #### Defined in
 
-[packages/core/src/types.ts:406](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L406)
+[packages/core/src/types.ts:406](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L406)
 
 ***
 
@@ -74,4 +74,4 @@ Validation function
 
 #### Defined in
 
-[packages/core/src/types.ts:409](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L409)
+[packages/core/src/types.ts:409](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L409)

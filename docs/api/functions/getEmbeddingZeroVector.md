@@ -10,4 +10,4 @@
 
 ## Defined in
 
-[packages/core/src/embedding.ts:118](https://github.com/ai16z/eliza/blob/main/packages/core/src/embedding.ts#L118)
+[packages/core/src/embedding.ts:118](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/embedding.ts#L118)

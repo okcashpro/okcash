@@ -41,5 +41,12 @@
     },
     "[shellscript]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
-    }
+    },
+    "cursor.rules.file": ".cursorrules",
+    "cursor.agents.enabled": true,
+    "cursor.monitor.autoStart": true,
+    "cursor.workspace.root": "/Users/ilessio/dev-agents/eliza_aiflow",
+    "cursor.tools.path": "/Users/ilessio/dev-agents/eliza_aiflow/tools",
+    "cursor.agents.solver": "IssueSolverAgent",
+    "cursor.agents.debugger": "DebugAgent"
 }

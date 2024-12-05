@@ -14,7 +14,7 @@ Unique identifier
 
 #### Defined in
 
-[packages/core/src/types.ts:469](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L469)
+[packages/core/src/types.ts:469](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L469)
 
 ***
 
@@ -26,7 +26,7 @@ First user ID
 
 #### Defined in
 
-[packages/core/src/types.ts:472](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L472)
+[packages/core/src/types.ts:472](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L472)
 
 ***
 
@@ -38,7 +38,7 @@ Second user ID
 
 #### Defined in
 
-[packages/core/src/types.ts:475](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L475)
+[packages/core/src/types.ts:475](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L475)
 
 ***
 
@@ -50,7 +50,7 @@ Primary user ID
 
 #### Defined in
 
-[packages/core/src/types.ts:478](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L478)
+[packages/core/src/types.ts:478](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L478)
 
 ***
 
@@ -62,7 +62,7 @@ Associated room ID
 
 #### Defined in
 
-[packages/core/src/types.ts:481](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L481)
+[packages/core/src/types.ts:481](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L481)
 
 ***
 
@@ -74,7 +74,7 @@ Relationship status
 
 #### Defined in
 
-[packages/core/src/types.ts:484](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L484)
+[packages/core/src/types.ts:484](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L484)
 
 ***
 
@@ -86,4 +86,4 @@ Optional creation timestamp
 
 #### Defined in
 
-[packages/core/src/types.ts:487](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L487)
+[packages/core/src/types.ts:487](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L487)

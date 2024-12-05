@@ -12,4 +12,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:942](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L942)
+[packages/core/src/types.ts:949](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L949)

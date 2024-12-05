@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/models.ts:360](https://github.com/ai16z/eliza/blob/main/packages/core/src/models.ts#L360)
+[packages/core/src/models.ts:360](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/models.ts#L360)

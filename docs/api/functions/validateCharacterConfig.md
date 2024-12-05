@@ -16,4 +16,4 @@ Validation function
 
 ## Defined in
 
-[packages/core/src/enviroment.ts:130](https://github.com/ai16z/eliza/blob/main/packages/core/src/enviroment.ts#L130)
+[packages/core/src/enviroment.ts:130](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/enviroment.ts#L130)

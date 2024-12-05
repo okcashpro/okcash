@@ -1,4 +1,5 @@
 import { WebClient } from '@slack/web-api';
+import { Service, ServiceType } from '@ai16z/eliza';
 
 export interface SlackConfig {
   appId: string;
@@ -26,4 +27,13 @@ export interface SlackMessage {
     title: string;
     size: number;
   }>;
+}
+
+// We'll temporarily use TEXT_GENERATION as our service type
+// This is not ideal but allows us to work within current constraints
+export const SLACK_SERVICE_TYPE = ServiceType.TEXT_GENERATION;
+
+// Interface extending core Service
+export interface ISlackService extends Service {
+  client: WebClient;
 }

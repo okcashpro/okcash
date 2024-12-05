@@ -18,4 +18,4 @@
 
 ## Defined in
 
-[packages/core/src/goals.ts:55](https://github.com/ai16z/eliza/blob/main/packages/core/src/goals.ts#L55)
+[packages/core/src/goals.ts:55](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/goals.ts#L55)

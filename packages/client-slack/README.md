@@ -45,6 +45,8 @@ oauth_config:
       - channels:join
       - channels:read
       - chat:write
+      - files:read
+      - files:write
       - groups:history
       - groups:read
       - im:history
@@ -63,6 +65,7 @@ settings:
       - message.groups
       - message.im
       - message.mpim
+      - file_shared
   interactivity:
     is_enabled: true
     request_url: YOUR_NGROK_URL/slack/interactions

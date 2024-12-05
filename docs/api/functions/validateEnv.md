@@ -12,4 +12,4 @@ Validation function
 
 ## Defined in
 
-[packages/core/src/enviroment.ts:26](https://github.com/ai16z/eliza/blob/main/packages/core/src/enviroment.ts#L26)
+[packages/core/src/enviroment.ts:26](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/enviroment.ts#L26)

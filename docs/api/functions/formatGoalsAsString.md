@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/goals.ts:30](https://github.com/ai16z/eliza/blob/main/packages/core/src/goals.ts#L30)
+[packages/core/src/goals.ts:30](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/goals.ts#L30)

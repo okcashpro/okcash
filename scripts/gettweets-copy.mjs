@@ -1,37 +1,28 @@
 import { Scraper } from "agent-twitter-client";
+import dotenv from "dotenv";
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from 'url';
 
-// Get the directory name properly in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+dotenv.config();
 
-const TWEETS_FILE = path.join(__dirname, "tweets.json");
-
-// Direct credentials
-const credentials = {
-    username: "evepredict",
-    password: "Roving4-Avoid0-Revival6-Snide3",
-    email: "ilessio.aimaster@gmail.com"
-};
+const TWEETS_FILE = "tweets.json";
 
 (async () => {
     try {
-        console.log(`Tweets will be saved to: ${TWEETS_FILE}`);
-        
         // Create a new instance of the Scraper
         const scraper = new Scraper();
 
-        // Log in to Twitter using the configured credentials
-        await scraper.login(credentials.username, credentials.password);
+        // Log in to Twitter using the configured environment variables
+        await scraper.login(
+            process.env.TWITTER_USERNAME,
+            process.env.TWITTER_PASSWORD
+        );
 
         // Check if login was successful
         if (await scraper.isLoggedIn()) {
             console.log("Logged in successfully!");
 
-            // Fetch all tweets for the user "@aixbt_agent"
-            const tweets = scraper.getTweets("aixbt_agent", 2000);
+            // Fetch all tweets for the user "@realdonaldtrump"
+            const tweets = scraper.getTweets("pmarca", 2000);
 
             // Initialize an empty array to store the fetched tweets
             let fetchedTweets = [];
@@ -40,10 +31,10 @@ const credentials = {
             if (fs.existsSync(TWEETS_FILE)) {
                 const fileContent = fs.readFileSync(TWEETS_FILE, "utf-8");
                 fetchedTweets = JSON.parse(fileContent);
-                console.log(`Loaded ${fetchedTweets.length} existing tweets`);
             }
 
             // skip first 200
+
             let count = 0;
 
             // Fetch and process tweets
@@ -64,18 +55,11 @@ const credentials = {
                 // Add the new tweet to the fetched tweets array
                 fetchedTweets.push(tweet);
 
-                try {
-                    // Save the updated fetched tweets to the JSON file
-                    fs.writeFileSync(
-                        TWEETS_FILE,
-                        JSON.stringify(fetchedTweets, null, 2)
-                    );
-                    if (count % 50 === 0) {
-                        console.log(`Saved ${fetchedTweets.length} tweets to ${TWEETS_FILE}`);
-                    }
-                } catch (err) {
-                    console.error("Error saving file:", err);
-                }
+                // Save the updated fetched tweets to the JSON file
+                fs.writeFileSync(
+                    TWEETS_FILE,
+                    JSON.stringify(fetchedTweets, null, 2)
+                );
             }
 
             console.log("All tweets fetched and saved to", TWEETS_FILE);

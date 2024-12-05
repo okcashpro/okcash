@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:966](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L966)
+[packages/core/src/types.ts:973](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L973)
 
 ## Methods
 
@@ -48,7 +48,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:971](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L971)
+[packages/core/src/types.ts:978](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L978)
 
 ***
 
@@ -66,7 +66,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1064](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1064)
+[packages/core/src/types.ts:1071](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L1071)
 
 ***
 
@@ -84,7 +84,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1065](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1065)
+[packages/core/src/types.ts:1072](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L1072)
 
 ***
 
@@ -102,7 +102,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1068](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1068)
+[packages/core/src/types.ts:1075](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L1075)
 
 ***
 
@@ -120,4 +120,4 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1069](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1069)
+[packages/core/src/types.ts:1076](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L1076)

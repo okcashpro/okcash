@@ -12,7 +12,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:599](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L599)
+[packages/core/src/types.ts:599](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L599)
 
 ***
 
@@ -22,7 +22,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:600](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L600)
+[packages/core/src/types.ts:600](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L600)
 
 ***
 
@@ -32,7 +32,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L601)
+[packages/core/src/types.ts:601](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L601)
 
 ***
 
@@ -42,4 +42,14 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:602](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L602)
+[packages/core/src/types.ts:602](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L602)
+
+***
+
+### SLACK
+
+> **SLACK**: `"slack"`
+
+#### Defined in
+
+[packages/core/src/types.ts:603](https://github.com/AIFlowML/eliza_aiflow/blob/main/packages/core/src/types.ts#L603)
