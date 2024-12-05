@@ -20,4 +20,4 @@
 
 ## Defined in
 
-[packages/core/src/relationships.ts:18](https://github.com/ai16z/eliza/blob/main/packages/core/src/relationships.ts#L18)
+[packages/core/src/relationships.ts:18](https://github.com/monilpat/eliza/blob/main/packages/core/src/relationships.ts#L18)
