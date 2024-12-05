@@ -395,6 +395,48 @@ Check the CSV file for full details.`,
                 },
             },
         ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Airdrop 10 USDC to these community members: 0x789..., 0x101... on base network",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Mass payout completed successfully:\n- Airdropped 10 USDC to 2 addresses on base network\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for transaction details.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Multi-send 0.25 ETH to team wallets: 0x222..., 0x333... on Ethereum",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Mass payout completed successfully:\n- Multi-sent 0.25 ETH to 2 addresses on Ethereum network\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for transaction details.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Distribute rewards of 5 SOL each to contest winners: winner1.sol, winner2.sol on Solana",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Mass payout completed successfully:\n- Distributed 5 SOL to 2 addresses on Solana network\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for transaction details.",
+                },
+            },
+        ],
     ],
 };
 

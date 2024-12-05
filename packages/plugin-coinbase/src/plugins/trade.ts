@@ -200,18 +200,13 @@ export const executeTradeAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Trade 0.00001 ETH for USDC on base",
+                    text: "Swap 1 ETH for USDC on base network",
                 },
             },
             {
                 user: "{{agentName}}",
                 content: {
-                    text: `Trade executed successfully:
-- Network: base
-- Amount: 0.01
-- From: ETH
-- To: USDC
-- Transaction URL: https://www.basescan.com/`,
+                    text: "Trade executed successfully:\n- Swapped 1 ETH for USDC on base network\n- Transaction URL: https://basescan.io/tx/...\n- Status: Completed",
                 },
             },
         ],
@@ -219,18 +214,13 @@ export const executeTradeAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Swap 1 SOL for USDC on the sol network.",
+                    text: "Convert 1000 USDC to SOL on Solana",
                 },
             },
             {
                 user: "{{agentName}}",
                 content: {
-                    text: `Trade executed successfully:
-- Network: sol
-- Amount: 1
-- From: SOL
-- To: USDC
-- Transaction URL: https://www.solscan.com/`,
+                    text: "Trade executed successfully:\n- Converted 1000 USDC to SOL on Solana network\n- Transaction URL: https://solscan.io/tx/...\n- Status: Completed",
                 },
             },
         ],
@@ -238,29 +228,67 @@ export const executeTradeAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Exchange 100 USDC for ETH on the pol network.",
+                    text: "Exchange 5 WETH for ETH on Arbitrum",
                 },
             },
             {
                 user: "{{agentName}}",
                 content: {
-                    text: `Trade executed successfully:
-- Network: pol
-- Amount: 100
-- From: USDC
-- To: ETH
-- Transaction URL: https://www.etherscan.com/`,
+                    text: "Trade executed successfully:\n- Exchanged 5 WETH for ETH on Arbitrum network\n- Transaction URL: https://arbiscan.io/tx/...\n- Status: Completed",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Trade 100 GWEI for USDC on Polygon",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Trade executed successfully:\n- Traded 100 GWEI for USDC on Polygon network\n- Transaction URL: https://polygonscan.com/tx/...\n- Status: Completed",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Market buy ETH with 500 USDC on base",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Trade executed successfully:\n- Bought ETH with 500 USDC on base network\n- Transaction URL: https://basescan.io/tx/...\n- Status: Completed",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Sell 2.5 SOL for USDC on Solana mainnet",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Trade executed successfully:\n- Sold 2.5 SOL for USDC on Solana network\n- Transaction URL: https://solscan.io/tx/...\n- Status: Completed",
                 },
             },
         ],
     ],
     similes: [
-        "CREATE_TRADE",
-        "TRADE",
-        "SWAP",
-        "EXCHANGE",
-        "SWAP_ASSETS",
-        "SWAP_CURRENCY",
+        "EXECUTE_TRADE",         // Primary action name
+        "SWAP_TOKENS",          // For token swaps
+        "CONVERT_CURRENCY",     // For currency conversion
+        "EXCHANGE_ASSETS",      // For asset exchange
+        "MARKET_BUY",          // For buying assets
+        "MARKET_SELL",         // For selling assets
+        "TRADE_CRYPTO",        // Generic crypto trading
     ],
 };
 
