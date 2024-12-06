@@ -156,6 +156,13 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
         await this.syncAccountInfo();
         return this.account?.balance ?? 0;
     }
+
+    /**
+     * Query the balance of this wallet
+     */
+    async queryAccountBalanceInfo() {
+        return await queries.queryAccountBalanceInfo(this, this.address);
+    }
 }
 
 // ----- Helpers -----
@@ -219,10 +226,7 @@ const flowWalletProvider: Provider = {
         try {
             const connector = await getFlowConnectorInstance(runtime);
             const walletProvider = new FlowWalletProvider(runtime, connector);
-            const info = await queries.queryAccountBalanceInfo(
-                walletProvider,
-                walletProvider.address
-            );
+            const info = await walletProvider.queryAccountBalanceInfo();
             if (!info || info?.address !== walletProvider.address) {
                 elizaLogger.error("Invalid account info");
                 return null;
