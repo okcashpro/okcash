@@ -1,5 +1,31 @@
 # Changelog
 
+## [v0.1.5-alpha.4](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.4) (2024-12-06)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.3...v0.1.5-alpha.4)
+
+**Fixed bugs:**
+
+- `pnpm  start` crashes if there is too much data in knowledge [\#866](https://github.com/ai16z/eliza/issues/866)
+- Twitter login some function not work.  [\#857](https://github.com/ai16z/eliza/issues/857)
+
+**Merged pull requests:**
+
+- docs: Add AI Agent Dev School Parts 2 and 3 summaries and timestamps [\#877](https://github.com/ai16z/eliza/pull/877) ([YoungPhlo](https://github.com/YoungPhlo))
+- Add google model env vars [\#875](https://github.com/ai16z/eliza/pull/875) ([peersky](https://github.com/peersky))
+- Update quickstart.md [\#872](https://github.com/ai16z/eliza/pull/872) ([oxSaturn](https://github.com/oxSaturn))
+- Remove duplicated coinbase CDP options in .env.example [\#863](https://github.com/ai16z/eliza/pull/863) ([juntao](https://github.com/juntao))
+- test: adding environment and knowledge tests [\#862](https://github.com/ai16z/eliza/pull/862) ([ai16z-demirix](https://github.com/ai16z-demirix))
+- Updated quickstart.md to contemplate common issue [\#861](https://github.com/ai16z/eliza/pull/861) ([fede2442](https://github.com/fede2442))
+- fix: Use LARGE models for responses [\#853](https://github.com/ai16z/eliza/pull/853) ([lalalune](https://github.com/lalalune))
+- Update Node version in local-development.md [\#850](https://github.com/ai16z/eliza/pull/850) ([oxSaturn](https://github.com/oxSaturn))
+- fix: plugins docs [\#848](https://github.com/ai16z/eliza/pull/848) ([cygaar](https://github.com/cygaar))
+- fix: run release workflow after a github release is created [\#846](https://github.com/ai16z/eliza/pull/846) ([cygaar](https://github.com/cygaar))
+- fix: Include scripts/postinstall.js in the final NPM package [\#843](https://github.com/ai16z/eliza/pull/843) ([martincik](https://github.com/martincik))
+- feat: add Aptos plugin [\#818](https://github.com/ai16z/eliza/pull/818) ([0xaptosj](https://github.com/0xaptosj))
+- feat: add coinbase  ERC20, ERC721, and ERC1155 tokenContract deployment / invokement plugin [\#803](https://github.com/ai16z/eliza/pull/803) ([monilpat](https://github.com/monilpat))
+- feat: coinbase webhook + add more examples + testing [\#801](https://github.com/ai16z/eliza/pull/801) ([monilpat](https://github.com/monilpat))
+
 ## [v0.1.5-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.3) (2024-12-04)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.2...v0.1.5-alpha.3)
