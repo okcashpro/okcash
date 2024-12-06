@@ -23,7 +23,7 @@ import { transferTemplate } from "../templates";
 import { validateFlowConfig } from "../environment";
 import { TransactionResponse } from "../types";
 import { transactions } from "../assets/transaction.defs";
-import { scripts } from "../assets/script.defs";
+import * as queries from "../queries";
 
 /**
  * The generated content for the transfer action
@@ -56,13 +56,14 @@ function isTransferContent(
     );
 }
 
-export class TransferAction {
-    public useKeyIndex: number;
+// FIXME: We need to use dynamic key index
+const USE_KEY_INDEX = 0;
 
-    constructor(private walletProvider: FlowWalletProvider) {
-        // Initialize key index
-        this.useKeyIndex = 0;
-    }
+export class TransferAction {
+    constructor(
+        private walletProvider: FlowWalletProvider,
+        public readonly useKeyIndex: number = USE_KEY_INDEX
+    ) {}
 
     async transfer(
         runtime: IAgentRuntime,
@@ -130,84 +131,134 @@ export class TransferAction {
             );
         }
 
-        // Execute transfer
-        const authz = this.walletProvider.buildAuthorization(this.useKeyIndex); // use default private key
+        // Parsed fields
+        const recipient = content.to;
+        const amount =
+            typeof content.amount === "number"
+                ? content.amount
+                : parseFloat(content.amount);
 
-        // For different token types, we need to handle the token differently
-        if (!content.token) {
-            elizaLogger.log(
-                `${logPrefix} Sending ${content.amount} FLOW to ${content.to}...`
-            );
-            // Transfer FLOW token
-            resp.txid = await this.walletProvider.sendTransaction(
-                transactions.mainFlowTokenDynamicTransfer,
-                (arg, t) => [
-                    arg(content.to, t.String),
-                    arg(content.amount, t.UFix64),
-                ],
-                authz
-            );
-        } else if (isCadenceIdentifier(content.token)) {
-            // Transfer Fungible Token on Cadence side
-            const [_, tokenAddr, tokenContractName] = content.token.split(".");
-            elizaLogger.log(
-                `${logPrefix} Sending ${content.amount} A.${tokenAddr}${tokenContractName} to ${content.to}...`
-            );
+        // Check if the wallet has enough balance to transfer
+        const accountInfo = await queries.queryAccountBalanceInfo(
+            this.walletProvider,
+            this.walletProvider.address
+        );
+        const totalBalance =
+            accountInfo.balance + (accountInfo.coaBalance ?? 0);
 
-            resp.txid = await this.walletProvider.sendTransaction(
-                transactions.mainFTGenericTransfer,
-                (arg, t) => [
-                    arg(content.amount, t.UFix64),
-                    arg(content.to, t.Address),
-                    arg(tokenAddr, t.Address),
-                    arg(tokenContractName, t.String),
-                ],
-                authz
-            );
-        } else if (isEVMAddress(content.token)) {
-            // Transfer ERC20 token on EVM side
-            // we need to update the amount to be in the smallest unit
-            const decimals = await this.walletProvider.executeScript(
-                scripts.evmERC20GetDecimals,
-                (arg, t) => [arg(content.token, t.String)],
-                "18"
-            );
-            const adjustedAmount = BigInt(
-                Number(content.amount) * Math.pow(10, parseInt(decimals))
-            );
-
-            elizaLogger.log(
-                `${logPrefix} Sending ${adjustedAmount} ${content.token}(EVM) to ${content.to}...`
-            );
-
-            resp.txid = await this.walletProvider.sendTransaction(
-                transactions.mainEVMTransferERC20,
-                (arg, t) => [
-                    arg(content.token, t.String),
-                    arg(content.to, t.String),
-                    // Convert the amount to string, the string should be pure number, not a scientific notation
-                    arg(adjustedAmount.toString(), t.UInt256),
-                ],
-                authz
-            );
+        // Check if the amount is valid
+        if (totalBalance < amount) {
+            elizaLogger.error("Insufficient balance to transfer.");
+            if (callback) {
+                callback({
+                    text: `${logPrefix} Unable to process transfer request. Insufficient balance.`,
+                    content: {
+                        error: "Insufficient balance",
+                    },
+                });
+            }
+            throw new Exception(50100, "Insufficient balance to transfer");
         }
 
-        elizaLogger.log(`${logPrefix} Sent transaction: ${resp.txid}`);
+        try {
+            // Execute transfer
+            const authz = this.walletProvider.buildAuthorization(
+                this.useKeyIndex
+            ); // use default private key
 
-        // call the callback with the transaction response
-        if (callback) {
-            const tokenName = content.token || "FLOW";
-            callback({
-                text: `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}\nTransaction: ${resp.txid}`,
-                content: {
-                    success: true,
-                    txid: resp.txid,
-                    token: content.token,
-                    to: content.to,
-                    amount: content.amount,
-                },
-            });
+            // For different token types, we need to handle the token differently
+            if (!content.token) {
+                elizaLogger.log(
+                    `${logPrefix} Sending ${amount} FLOW to ${recipient}...`
+                );
+                // Transfer FLOW token
+                resp.txid = await this.walletProvider.sendTransaction(
+                    transactions.mainFlowTokenDynamicTransfer,
+                    (arg, t) => [
+                        arg(recipient, t.String),
+                        arg(amount.toFixed(1), t.UFix64),
+                    ],
+                    authz
+                );
+            } else if (isCadenceIdentifier(content.token)) {
+                // Transfer Fungible Token on Cadence side
+                const [_, tokenAddr, tokenContractName] =
+                    content.token.split(".");
+                elizaLogger.log(
+                    `${logPrefix} Sending ${amount} A.${tokenAddr}${tokenContractName} to ${recipient}...`
+                );
+
+                resp.txid = await this.walletProvider.sendTransaction(
+                    transactions.mainFTGenericTransfer,
+                    (arg, t) => [
+                        arg(amount.toFixed(1), t.UFix64),
+                        arg(recipient, t.Address),
+                        arg(tokenAddr, t.Address),
+                        arg(tokenContractName, t.String),
+                    ],
+                    authz
+                );
+            } else if (isEVMAddress(content.token)) {
+                // Transfer ERC20 token on EVM side
+                // we need to update the amount to be in the smallest unit
+                const decimals = await queries.queryEvmERC20Decimals(
+                    this.walletProvider,
+                    content.token
+                );
+                const adjustedAmount = BigInt(amount * Math.pow(10, decimals));
+
+                elizaLogger.log(
+                    `${logPrefix} Sending ${adjustedAmount} ${content.token}(EVM) to ${recipient}...`
+                );
+
+                resp.txid = await this.walletProvider.sendTransaction(
+                    transactions.mainEVMTransferERC20,
+                    (arg, t) => [
+                        arg(content.token, t.String),
+                        arg(recipient, t.String),
+                        // Convert the amount to string, the string should be pure number, not a scientific notation
+                        arg(adjustedAmount.toString(), t.UInt256),
+                    ],
+                    authz
+                );
+            }
+
+            elizaLogger.log(`${logPrefix} Sent transaction: ${resp.txid}`);
+
+            // call the callback with the transaction response
+            if (callback) {
+                const tokenName = content.token || "FLOW";
+                callback({
+                    text: `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}\nTransaction: ${resp.txid}`,
+                    content: {
+                        success: true,
+                        txid: resp.txid,
+                        token: content.token,
+                        to: content.to,
+                        amount: content.amount,
+                    },
+                });
+            }
+        } catch (e: any) {
+            elizaLogger.error("Error in sending transaction:", e.message);
+            if (callback) {
+                callback({
+                    text: `${logPrefix} Unable to process transfer request. Error in sending transaction.`,
+                    content: {
+                        error: e.message,
+                    },
+                });
+            }
+            if (e instanceof Exception) {
+                throw e;
+            } else {
+                throw new Exception(
+                    50100,
+                    "Error in sending transaction: " + e.message
+                );
+            }
         }
+
         elizaLogger.log("Completed Flow Plugin's SEND_TOKEN handler.");
 
         return resp;
@@ -227,6 +278,15 @@ export const transferAction = {
     description: "Transfer tokens from the agent's wallet to another address",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
         await validateFlowConfig(runtime);
+        const flowConnector = await getFlowConnectorInstance(runtime);
+        const walletProvider = new FlowWalletProvider(runtime, flowConnector);
+        try {
+            await walletProvider.syncAccountInfo();
+            // TODO: We need to check if the key index is valid
+        } catch {
+            elizaLogger.error("Failed to sync account info");
+            return false;
+        }
         return true;
     },
     handler: async (

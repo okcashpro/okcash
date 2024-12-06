@@ -9,10 +9,11 @@ import NodeCache from "node-cache";
 import * as fcl from "@onflow/fcl";
 import type { CompositeSignature, Account } from "@onflow/typedefs";
 import type { FlowConnector } from "./utils/flow.connector";
+import { IFlowScriptExecutor, IFlowSigner } from "../types";
 import { getFlowConnectorInstance } from "./connector.provider";
 import PureSigner from "./utils/pure.signer";
-import { IFlowScriptExecutor, IFlowSigner } from "../types";
 import Exception from "../types/exception";
+import * as queries from "../queries";
 
 /**
  * Flow wallet Provider
@@ -206,10 +207,15 @@ const flowWalletProvider: Provider = {
         try {
             const connector = await getFlowConnectorInstance(runtime);
             const walletProvider = new FlowWalletProvider(runtime, connector);
-            const address = walletProvider.address;
-            const balance = await walletProvider.getWalletBalance();
-            // TODO: use the result from GetAccountInfo script
-            return `Flow Wallet Address: ${address}\nBalance: ${balance} FLOW`;
+            const info = await queries.queryAccountBalanceInfo(
+                walletProvider,
+                walletProvider.address
+            );
+            if (!info || info?.address !== walletProvider.address) {
+                elizaLogger.error("Invalid account info");
+                return null;
+            }
+            return `Flow Wallet Address: ${walletProvider.address}\nBalance: ${info.balance} FLOW\nIts COA(EVM) Address: ${info.coaAddress}\nCOA(EVM) Balance: ${info.coaBalance ?? 0} FLOW`;
         } catch (error) {
             elizaLogger.error("Error in Flow wallet provider:", error.message);
             return null;

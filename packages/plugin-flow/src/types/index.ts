@@ -43,3 +43,10 @@ export interface TransactionResponse {
     };
     txid: string;
 }
+
+export interface FlowAccountBalanceInfo {
+    address: string;
+    balance: number;
+    coaAddress?: string;
+    coaBalance?: number;
+}
