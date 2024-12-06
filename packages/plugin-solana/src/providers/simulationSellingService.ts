@@ -43,7 +43,7 @@ export class SimulationSellingService {
             this.connection,
             new PublicKey(
                 runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY")
+                    runtime.getSetting("WALLET_PUBLIC_KEY")
             )
         );
         this.baseMint = new PublicKey(
@@ -407,7 +407,7 @@ export class SimulationSellingService {
         const hash = Math.random().toString(36).substring(7);
         const transaction = {
             tokenAddress: tokenAddress,
-            type: "sell",
+            type: "sell" as "buy" | "sell",
             transactionHash: hash,
             amount: sellDetails.sell_amount,
             price: processedData.tradeData.price,

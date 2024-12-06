@@ -16,7 +16,7 @@ import {
 } from "@ai16z/eliza";
 import { getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
-import { validateStarknetConfig } from "../enviroment";
+import { validateStarknetConfig } from "../environment";
 import { getAddressFromName, isStarkDomain } from "../utils/starknetId";
 
 export interface TransferContent extends Content {
@@ -168,10 +168,7 @@ export default {
             const recipient =
                 content.recipient ??
                 (await getAddressFromName(account, content.starkName));
-            const transferCall = erc20Token.transferCall(
-                recipient,
-                amountWei
-            );
+            const transferCall = erc20Token.transferCall(recipient, amountWei);
 
             elizaLogger.success(
                 "Transferring",

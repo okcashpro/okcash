@@ -284,7 +284,11 @@ const walletProvider: Provider = {
             let publicKey: PublicKey;
             try {
                 const deriveKeyProvider = new DeriveKeyProvider();
-                const derivedKeyPair: Keypair = await deriveKeyProvider.deriveEd25519Keypair("/", runtime.getSetting("WALLET_SECRET_SALT"));
+                const derivedKeyPair: Keypair =
+                    await deriveKeyProvider.deriveEd25519Keypair(
+                        "/",
+                        runtime.getSetting("WALLET_SECRET_SALT")
+                    );
                 publicKey = derivedKeyPair.publicKey;
                 console.log("Wallet Public Key: ", publicKey.toBase58());
             } catch (error) {

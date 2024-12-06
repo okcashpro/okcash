@@ -2,7 +2,7 @@ import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Keypair } from "@solana/web3.js";
 import crypto from "crypto";
 import { DeriveKeyResponse, TappdClient } from "@phala/dstack-sdk";
-import { privateKeyToAccount } from "viem/accounts"
+import { privateKeyToAccount } from "viem/accounts";
 import { PrivateKeyAccount, keccak256 } from "viem";
 
 class DeriveKeyProvider {
@@ -12,7 +12,10 @@ class DeriveKeyProvider {
         this.client = endpoint ? new TappdClient(endpoint) : new TappdClient();
     }
 
-    async rawDeriveKey(path: string, subject: string): Promise<DeriveKeyResponse> {
+    async rawDeriveKey(
+        path: string,
+        subject: string
+    ): Promise<DeriveKeyResponse> {
         try {
             if (!path || !subject) {
                 console.error(
@@ -31,7 +34,10 @@ class DeriveKeyProvider {
         }
     }
 
-    async deriveEd25519Keypair(path: string, subject: string): Promise<Keypair> {
+    async deriveEd25519Keypair(
+        path: string,
+        subject: string
+    ): Promise<Keypair> {
         try {
             if (!path || !subject) {
                 console.error(
@@ -57,7 +63,10 @@ class DeriveKeyProvider {
         }
     }
 
-    async deriveEcdsaKeypair(path: string, subject: string): Promise<PrivateKeyAccount> {
+    async deriveEcdsaKeypair(
+        path: string,
+        subject: string
+    ): Promise<PrivateKeyAccount> {
         try {
             if (!path || !subject) {
                 console.error(
@@ -66,7 +75,8 @@ class DeriveKeyProvider {
             }
 
             console.log("Deriving ECDSA Key in TEE...");
-            const deriveKeyResponse: DeriveKeyResponse = await this.client.deriveKey(path, subject);
+            const deriveKeyResponse: DeriveKeyResponse =
+                await this.client.deriveKey(path, subject);
             const hex = keccak256(deriveKeyResponse.asUint8Array());
             const keypair: PrivateKeyAccount = privateKeyToAccount(hex);
             console.log("ECDSA Key Derived Successfully!");
@@ -95,12 +105,18 @@ const deriveKeyProvider: Provider = {
             try {
                 const secretSalt =
                     runtime.getSetting("WALLET_SECRET_SALT") || "secret_salt";
-                const solanaKeypair = await provider.deriveEd25519Keypair("/", secretSalt);
-                const evmKeypair = await provider.deriveEcdsaKeypair("/", secretSalt);
+                const solanaKeypair = await provider.deriveEd25519Keypair(
+                    "/",
+                    secretSalt
+                );
+                const evmKeypair = await provider.deriveEcdsaKeypair(
+                    "/",
+                    secretSalt
+                );
                 return JSON.stringify({
                     solana: solanaKeypair.publicKey,
-                    evm: evmKeypair.address
-                })
+                    evm: evmKeypair.address,
+                });
             } catch (error) {
                 console.error("Error creating PublicKey:", error);
                 return "";

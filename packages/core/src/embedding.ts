@@ -3,7 +3,7 @@ import { models } from "./models.ts";
 import { IAgentRuntime, ModelProviderName } from "./types.ts";
 import settings from "./settings.ts";
 import elizaLogger from "./logger.ts";
-import { EmbeddingModel } from "fastembed";
+
 interface EmbeddingOptions {
     model: string;
     endpoint: string;
@@ -21,19 +21,25 @@ export const getEmbeddingConfig = () => ({
             ? 1536 // OpenAI
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? 1024 // Ollama mxbai-embed-large
-              : 384, // BGE
+              :settings.USE_GAIANET_EMBEDDING?.toLowerCase() === "true"
+                ? 1536 // GaiaNet
+                : 384, // BGE
     model:
         settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
             ? "text-embedding-3-small"
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large"
-              : EmbeddingModel.BGESmallENV15,
+              : settings.USE_GAIANET_EMBEDDING?.toLowerCase() === "true"
+                ? settings.GAIANET_EMBEDDING_MODEL || "nomic-embed"
+                : "BGE-small-en-v1.5",
     provider:
         settings.USE_OPENAI_EMBEDDING?.toLowerCase() === "true"
             ? "OpenAI"
             : settings.USE_OLLAMA_EMBEDDING?.toLowerCase() === "true"
               ? "Ollama"
-              : "BGE",
+              : settings.USE_GAIANET_EMBEDDING?.toLowerCase() === "true"
+                ? "GaiaNet"
+                : "BGE",
 });
 
 async function getRemoteEmbedding(
@@ -103,6 +109,7 @@ export function getEmbeddingType(runtime: IAgentRuntime): "local" | "remote" {
     const isLocal =
         isNode &&
         runtime.character.modelProvider !== ModelProviderName.OPENAI &&
+        runtime.character.modelProvider !== ModelProviderName.GAIANET &&
         !settings.USE_OPENAI_EMBEDDING;
 
     return isLocal ? "local" : "remote";
@@ -184,6 +191,17 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         });
     }
 
+    if (config.provider=="GaiaNet") {
+        return await getRemoteEmbedding(input, {
+            model: config.model,
+            endpoint:
+                runtime.character.modelEndpointOverride ||
+                models[ModelProviderName.GAIANET].endpoint,
+            apiKey: settings.GAIANET_API_KEY || runtime.token,
+            dimensions: config.dimensions,
+        });
+    }
+
     // BGE - try local first if in Node
     if (isNode) {
         try {
@@ -215,10 +233,29 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             process.versions != null &&
             process.versions.node != null;
 
-        if (isNode) {
-            const fs = await import("fs");
-            const { FlagEmbedding } = await import("fastembed");
-            const { fileURLToPath } = await import("url");
+        if (!isNode) {
+            elizaLogger.warn(
+                "Local embedding not supported in browser, falling back to remote embedding"
+            );
+            throw new Error("Local embedding not supported in browser");
+        }
+
+        try {
+            const moduleImports = await Promise.all([
+                import("fs"),
+                import("url"),
+                (async () => {
+                    try {
+                        return await import("fastembed");
+                    } catch {
+                        elizaLogger.error("Failed to load fastembed.");
+                        throw new Error("fastembed import failed, falling back to remote embedding");
+                    }
+                })()
+            ]);
+
+            const [fs, { fileURLToPath }, fastEmbed] = moduleImports;
+            const { FlagEmbedding, EmbeddingModel } = fastEmbed;
 
             function getRootPath() {
                 const __filename = fileURLToPath(import.meta.url);
@@ -319,7 +356,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             }
 
             return finalEmbedding;
-        } else {
+        } catch {
             // Browser implementation - fallback to remote embedding
             elizaLogger.warn(
                 "Local embedding not supported in browser, falling back to remote embedding"

@@ -11,7 +11,7 @@ import {
 import { Buffer } from "buffer";
 import { createOllama } from "ollama-ai-provider";
 import OpenAI from "openai";
-import { encoding_for_model, TiktokenModel } from "tiktoken";
+import { encodingForModel, TiktokenModel } from "js-tiktoken";
 import Together from "together-ai";
 import { ZodSchema } from "zod";
 import { elizaLogger } from "./index.ts";
@@ -33,7 +33,7 @@ import {
     ServiceType,
     SearchResponse,
 } from "./types.ts";
-import { fal, } from "@fal-ai/client";
+import { fal } from "@fal-ai/client";
 
 /**
  * Send a message to the model for a text generateText - receive a string back and parse how you'd like
@@ -78,17 +78,25 @@ export async function generateText({
 
     // if runtime.getSetting("LLAMACLOUD_MODEL_LARGE") is true and modelProvider is LLAMACLOUD, then use the large model
     if (
-        runtime.getSetting("LLAMACLOUD_MODEL_LARGE") &&
-        provider === ModelProviderName.LLAMACLOUD
+        (runtime.getSetting("LLAMACLOUD_MODEL_LARGE") &&
+            provider === ModelProviderName.LLAMACLOUD) ||
+        (runtime.getSetting("TOGETHER_MODEL_LARGE") &&
+            provider === ModelProviderName.TOGETHER)
     ) {
-        model = runtime.getSetting("LLAMACLOUD_MODEL_LARGE");
+        model =
+            runtime.getSetting("LLAMACLOUD_MODEL_LARGE") ||
+            runtime.getSetting("TOGETHER_MODEL_LARGE");
     }
 
     if (
-        runtime.getSetting("LLAMACLOUD_MODEL_SMALL") &&
-        provider === ModelProviderName.LLAMACLOUD
+        (runtime.getSetting("LLAMACLOUD_MODEL_SMALL") &&
+            provider === ModelProviderName.LLAMACLOUD) ||
+        (runtime.getSetting("TOGETHER_MODEL_SMALL") &&
+            provider === ModelProviderName.TOGETHER)
     ) {
-        model = runtime.getSetting("LLAMACLOUD_MODEL_SMALL");
+        model =
+            runtime.getSetting("LLAMACLOUD_MODEL_SMALL") ||
+            runtime.getSetting("TOGETHER_MODEL_SMALL");
     }
 
     elizaLogger.info("Selected model:", model);
@@ -118,7 +126,10 @@ export async function generateText({
             // OPENAI & LLAMACLOUD shared same structure.
             case ModelProviderName.OPENAI:
             case ModelProviderName.ETERNALAI:
-            case ModelProviderName.LLAMACLOUD: {
+            case ModelProviderName.ALI_BAILIAN:
+            case ModelProviderName.VOLENGINE:
+            case ModelProviderName.LLAMACLOUD:
+            case ModelProviderName.TOGETHER: {
                 elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
@@ -373,6 +384,27 @@ export async function generateText({
                 elizaLogger.debug("Received response from Heurist model.");
                 break;
             }
+            case ModelProviderName.GAIANET: {
+                elizaLogger.debug("Initializing GAIANET model.");
+                const openai = createOpenAI({ apiKey, baseURL: endpoint });
+
+                const { text: openaiResponse } = await aiGenerateText({
+                    model: openai.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                    frequencyPenalty: frequency_penalty,
+                    presencePenalty: presence_penalty,
+                });
+
+                response = openaiResponse;
+                elizaLogger.debug("Received response from GAIANET model.");
+                break;
+            }
 
             case ModelProviderName.GALADRIEL: {
                 elizaLogger.debug("Initializing Galadriel model.");
@@ -429,7 +461,7 @@ export function trimTokens(
     if (maxTokens <= 0) throw new Error("maxTokens must be positive");
 
     // Get the tokenizer for the model
-    const encoding = encoding_for_model(model);
+    const encoding = encodingForModel(model);
 
     try {
         // Encode the text into tokens
@@ -443,16 +475,12 @@ export function trimTokens(
         // Keep the most recent tokens by slicing from the end
         const truncatedTokens = tokens.slice(-maxTokens);
 
-        // Decode back to text and convert to string
-        const decodedText = encoding.decode(truncatedTokens);
-        return new TextDecoder().decode(decodedText);
+        // Decode back to text - js-tiktoken decode() returns a string directly
+        return encoding.decode(truncatedTokens);
     } catch (error) {
         console.error("Error in trimTokens:", error);
         // Return truncated string if tokenization fails
         return context.slice(-maxTokens * 4); // Rough estimate of 4 chars per token
-    } finally {
-        // Clean up tokenizer resources
-        encoding.free();
     }
 }
 
@@ -787,12 +815,6 @@ export const generateImage = async (
     data?: string[];
     error?: any;
 }> => {
-    const { prompt, width, height } = data;
-    let { count } = data;
-    if (!count) {
-        count = 1;
-    }
-
     const model = getModel(runtime.imageModelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.imageModelProvider].imageSettings;
 
@@ -800,12 +822,13 @@ export const generateImage = async (
         imageModelProvider: model,
     });
 
-    const apiKey = runtime.imageModelProvider === runtime.modelProvider
-        ? runtime.token
-        : runtime.getSetting("HEURIST_API_KEY") ??
-        runtime.getSetting("TOGETHER_API_KEY") ??
-        runtime.getSetting("FAL_API_KEY") ??
-        runtime.getSetting("OPENAI_API_KEY");
+    const apiKey =
+        runtime.imageModelProvider === runtime.modelProvider
+            ? runtime.token
+            : (runtime.getSetting("HEURIST_API_KEY") ??
+              runtime.getSetting("TOGETHER_API_KEY") ??
+              runtime.getSetting("FAL_API_KEY") ??
+              runtime.getSetting("OPENAI_API_KEY"));
 
     try {
         if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
@@ -846,58 +869,80 @@ export const generateImage = async (
             const imageURL = await response.json();
             return { success: true, data: [imageURL] };
         } else if (
+            runtime.imageModelProvider === ModelProviderName.TOGETHER ||
+            // for backwards compat
             runtime.imageModelProvider === ModelProviderName.LLAMACLOUD
         ) {
             const together = new Together({ apiKey: apiKey as string });
             const response = await together.images.create({
                 model: "black-forest-labs/FLUX.1-schnell",
-                prompt,
-                width,
-                height,
+                prompt: data.prompt,
+                width: data.width,
+                height: data.height,
                 steps: modelSettings?.steps ?? 4,
-                n: count,
+                n: data.count,
             });
-            const urls: string[] = [];
-            for (let i = 0; i < response.data.length; i++) {
-                const json = response.data[i].b64_json;
-                // decode base64
-                const base64 = Buffer.from(json, "base64").toString("base64");
-                urls.push(base64);
+
+            // Add type assertion to handle the response properly
+            const togetherResponse = response as unknown as TogetherAIImageResponse;
+
+            if (!togetherResponse.data || !Array.isArray(togetherResponse.data)) {
+                throw new Error("Invalid response format from Together AI");
             }
-            const base64s = await Promise.all(
-                urls.map(async (url) => {
-                    const response = await fetch(url);
-                    const blob = await response.blob();
-                    const buffer = await blob.arrayBuffer();
-                    let base64 = Buffer.from(buffer).toString("base64");
-                    base64 = "data:image/jpeg;base64," + base64;
-                    return base64;
-                })
-            );
+
+            // Rest of the code remains the same...
+            const base64s = await Promise.all(togetherResponse.data.map(async (image) => {
+                if (!image.url) {
+                    elizaLogger.error("Missing URL in image data:", image);
+                    throw new Error("Missing URL in Together AI response");
+                }
+
+                // Fetch the image from the URL
+                const imageResponse = await fetch(image.url);
+                if (!imageResponse.ok) {
+                    throw new Error(`Failed to fetch image: ${imageResponse.statusText}`);
+                }
+
+                // Convert to blob and then to base64
+                const blob = await imageResponse.blob();
+                const arrayBuffer = await blob.arrayBuffer();
+                const base64 = Buffer.from(arrayBuffer).toString('base64');
+                
+                // Return with proper MIME type
+                return `data:image/jpeg;base64,${base64}`;
+            }));
+
+            if (base64s.length === 0) {
+                throw new Error("No images generated by Together AI");
+            }
+
+            elizaLogger.debug(`Generated ${base64s.length} images`);
             return { success: true, data: base64s };
         } else if (runtime.imageModelProvider === ModelProviderName.FAL) {
             fal.config({
-                credentials: apiKey as string
+                credentials: apiKey as string,
             });
 
             // Prepare the input parameters according to their schema
             const input = {
-                prompt: prompt,
+                prompt: data.prompt,
                 image_size: "square" as const,
                 num_inference_steps: modelSettings?.steps ?? 50,
-                guidance_scale: 3.5,
-                num_images: count,
+                guidance_scale: data.guidanceScale || 3.5,
+                num_images: data.count,
                 enable_safety_checker: true,
                 output_format: "png" as const,
                 seed: data.seed ?? 6252023,
-                ...(runtime.getSetting("FAL_AI_LORA_PATH") ? {
-                    loras: [
-                        {
-                            path: runtime.getSetting("FAL_AI_LORA_PATH"),
-                            scale: 1
-                        }
-                    ]
-                } : {})
+                ...(runtime.getSetting("FAL_AI_LORA_PATH")
+                    ? {
+                          loras: [
+                              {
+                                  path: runtime.getSetting("FAL_AI_LORA_PATH"),
+                                  scale: 1,
+                              },
+                          ],
+                      }
+                    : {}),
             };
 
             // Subscribe to the model
@@ -908,7 +953,7 @@ export const generateImage = async (
                     if (update.status === "IN_PROGRESS") {
                         elizaLogger.info(update.logs.map((log) => log.message));
                     }
-                }
+                },
             });
 
             // Convert the returned image URLs to base64 to match existing functionality
@@ -916,14 +961,14 @@ export const generateImage = async (
                 const response = await fetch(image.url);
                 const blob = await response.blob();
                 const buffer = await blob.arrayBuffer();
-                const base64 = Buffer.from(buffer).toString('base64');
+                const base64 = Buffer.from(buffer).toString("base64");
                 return `data:${image.content_type};base64,${base64}`;
             });
 
             const base64s = await Promise.all(base64Promises);
             return { success: true, data: base64s };
         } else {
-            let targetSize = `${width}x${height}`;
+            let targetSize = `${data.width}x${data.height}`;
             if (
                 targetSize !== "1024x1024" &&
                 targetSize !== "1792x1024" &&
@@ -934,9 +979,9 @@ export const generateImage = async (
             const openai = new OpenAI({ apiKey: apiKey as string });
             const response = await openai.images.generate({
                 model,
-                prompt,
+                prompt: data.prompt,
                 size: targetSize as "1024x1024" | "1792x1024" | "1024x1792",
-                n: count,
+                n: data.count,
                 response_format: "b64_json",
             });
             const base64s = response.data.map(
@@ -1132,7 +1177,10 @@ export async function handleProvider(
     switch (provider) {
         case ModelProviderName.OPENAI:
         case ModelProviderName.ETERNALAI:
+        case ModelProviderName.ALI_BAILIAN:
+        case ModelProviderName.VOLENGINE:
         case ModelProviderName.LLAMACLOUD:
+        case ModelProviderName.TOGETHER:
             return await handleOpenAI(options);
         case ModelProviderName.ANTHROPIC:
             return await handleAnthropic(options);
@@ -1374,4 +1422,13 @@ async function handleOllama({
         mode,
         ...modelOptions,
     });
+}
+
+// Add type definition for Together AI response
+interface TogetherAIImageResponse {
+    data: Array<{
+        url: string;
+        content_type?: string;
+        image_type?: string;
+    }>;
 }

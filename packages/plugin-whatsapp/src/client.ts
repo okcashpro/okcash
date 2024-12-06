@@ -1,38 +1,38 @@
-import axios, { AxiosInstance } from 'axios';
-import { WhatsAppConfig, WhatsAppMessage } from './types';
+import axios, { AxiosInstance } from "axios";
+import { WhatsAppConfig, WhatsAppMessage } from "./types";
 
 export class WhatsAppClient {
-  private client: AxiosInstance;
-  private config: WhatsAppConfig;
+    private client: AxiosInstance;
+    private config: WhatsAppConfig;
 
-  constructor(config: WhatsAppConfig) {
-    this.config = config;
-    this.client = axios.create({
-      baseURL: 'https://graph.facebook.com/v17.0',
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+    constructor(config: WhatsAppConfig) {
+        this.config = config;
+        this.client = axios.create({
+            baseURL: "https://graph.facebook.com/v17.0",
+            headers: {
+                Authorization: `Bearer ${config.accessToken}`,
+                "Content-Type": "application/json",
+            },
+        });
+    }
 
-  async sendMessage(message: WhatsAppMessage): Promise<any> {
-    const endpoint = `/${this.config.phoneNumberId}/messages`;
-    
-    const payload = {
-      messaging_product: 'whatsapp',
-      recipient_type: 'individual',
-      to: message.to,
-      type: message.type,
-      ...(message.type === 'text' 
-        ? { text: { body: message.content } }
-        : { template: message.content }),
-    };
+    async sendMessage(message: WhatsAppMessage): Promise<any> {
+        const endpoint = `/${this.config.phoneNumberId}/messages`;
 
-    return this.client.post(endpoint, payload);
-  }
+        const payload = {
+            messaging_product: "whatsapp",
+            recipient_type: "individual",
+            to: message.to,
+            type: message.type,
+            ...(message.type === "text"
+                ? { text: { body: message.content } }
+                : { template: message.content }),
+        };
 
-  async verifyWebhook(token: string): Promise<boolean> {
-    return token === this.config.webhookVerifyToken;
-  }
-} 
+        return this.client.post(endpoint, payload);
+    }
+
+    async verifyWebhook(token: string): Promise<boolean> {
+        return token === this.config.webhookVerifyToken;
+    }
+}

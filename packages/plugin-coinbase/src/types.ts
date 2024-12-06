@@ -1,5 +1,6 @@
 import { Coinbase } from "@coinbase/coinbase-sdk";
 import { z } from "zod";
+import { WebhookEventType, WebhookEventFilter, WebhookEventTypeFilter } from "@coinbase/coinbase-sdk/dist/client";
 
 export const ChargeSchema = z.object({
     id: z.string().nullable(),
@@ -82,4 +83,76 @@ export type TradeTransaction = {
     status: string;
     errorCode: string | null;
     transactionUrl: string | null;
+};
+
+export interface TokenContractContent {
+    contractType: "ERC20" | "ERC721" | "ERC1155";
+    name: string;
+    symbol: string;
+    network: string;
+    baseURI?: string;
+    totalSupply?: number;
+}
+
+export const TokenContractSchema = z.object({
+    contractType: z.enum(["ERC20", "ERC721", "ERC1155"]).describe("The type of token contract to deploy"),
+    name: z.string().describe("The name of the token"),
+    symbol: z.string().describe("The symbol of the token"),
+    network: z.string().describe("The blockchain network to deploy on"),
+    baseURI: z.string().optional().describe("The base URI for token metadata (required for ERC721 and ERC1155)"),
+    totalSupply: z.number().optional().describe("The total supply of tokens (only for ERC20)"),
+}).refine(data => {
+    if (data.contractType === "ERC20") {
+        return typeof data.totalSupply === "number" || data.totalSupply === undefined;
+    }
+    if (["ERC721", "ERC1155"].includes(data.contractType)) {
+        return typeof data.baseURI === "string" || data.baseURI === undefined;
+    }
+    return true;
+}, {
+    message: "Invalid token contract content",
+    path: ["contractType"],
+});
+
+export const isTokenContractContent = (obj: any): obj is TokenContractContent => {
+    return TokenContractSchema.safeParse(obj).success;
+};
+
+// Add to types.ts
+export interface ContractInvocationContent {
+    contractAddress: string;
+    method: string;
+    abi: any[];
+    args?: Record<string, any>;
+    amount?: number;
+    assetId?: string;
+    network: string;
+}
+
+export const ContractInvocationSchema = z.object({
+    contractAddress: z.string().describe("The address of the contract to invoke"),
+    method: z.string().describe("The method to invoke on the contract"),
+    abi: z.array(z.any()).describe("The ABI of the contract"),
+    args: z.record(z.string(), z.any()).optional().describe("The arguments to pass to the contract method"),
+    amount: z.number().optional().describe("The amount of the asset to send to a payable contract method"),
+    assetId: z.string().optional().describe("The ID of the asset to send to a payable contract method"),
+    network: z.string().describe("The blockchain network to use"),
+});
+
+export const isContractInvocationContent = (obj: any): obj is ContractInvocationContent => {
+    return ContractInvocationSchema.safeParse(obj).success;
+};
+
+
+export const WebhookSchema = z.object({
+    networkId: z.string(),
+    eventType: z.nativeEnum(WebhookEventType),
+    eventTypeFilter:z.custom<WebhookEventTypeFilter>().optional(),
+    eventFilters: z.array(z.custom<WebhookEventFilter>()).optional()
+});
+
+export type WebhookContent = z.infer<typeof WebhookSchema>;
+
+export const isWebhookContent = (object: any): object is WebhookContent => {
+    return WebhookSchema.safeParse(object).success;
 };

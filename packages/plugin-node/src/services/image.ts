@@ -101,7 +101,7 @@ export class ImageDescriptionService
                 this.modelId = "gpt-4o-mini";
                 this.device = "cloud";
             }
-    
+
             this.initialized = true;
         }
 

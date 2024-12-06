@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/plugin-starknet",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
@@ -14,14 +14,9 @@
         "tsup": "8.3.5",
         "vitest": "2.1.5"
     },
-    "devDependencies": {
-        "eslint": "^9.15.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4"
-    },
     "scripts": {
         "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch",
         "test": "vitest run",
         "test:watch": "vitest",
         "lint": "eslint . --fix"

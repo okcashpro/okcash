@@ -1,20 +1,16 @@
 {
     "name": "@ai16z/adapter-sqlite",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.3",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@types/better-sqlite3": "7.6.11",
-        "better-sqlite3": "11.5.0",
-        "sqlite-vec": "0.1.4-alpha.2"
+        "@types/better-sqlite3": "7.6.12",
+        "better-sqlite3": "11.6.0",
+        "sqlite-vec": "0.1.6"
     },
     "devDependencies": {
-        "eslint": "^9.15.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4",
         "tsup": "8.3.5"
     },
     "scripts": {

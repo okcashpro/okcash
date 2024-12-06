@@ -66,6 +66,10 @@ git clone https://github.com/ai16z/eliza.git
 git checkout $(git describe --tags --abbrev=0)
 ```
 
+### Start Eliza with Gitpod
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+
 ### Edit the .env file
 
 Copy .env.example to .env and fill in the appropriate values.

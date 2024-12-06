@@ -46,6 +46,10 @@ const factsProvider: Provider = {
                 index === self.findIndex((t) => t.id === fact.id)
         );
 
+        if (allFacts.length === 0) {
+            return "";
+        }
+
         const formattedFacts = formatFacts(allFacts);
 
         return "Key facts that {{agentName}} knows:\n{{formattedFacts}}"

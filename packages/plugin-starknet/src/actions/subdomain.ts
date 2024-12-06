@@ -14,7 +14,7 @@ import {
     elizaLogger,
 } from "@ai16z/eliza";
 import { getStarknetAccount } from "../utils";
-import { validateStarknetConfig } from "../enviroment";
+import { validateStarknetConfig } from "../environment";
 import { getTransferSubdomainCall, isStarkDomain } from "../utils/starknetId";
 
 export interface SubdomainCreationContent extends Content {

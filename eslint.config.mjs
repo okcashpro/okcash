@@ -2,7 +2,7 @@ import eslint from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import typescript from "@typescript-eslint/parser";
 import prettier from "eslint-config-prettier";
-import vitest from "eslint-plugin-vitest"; // Add Vitest plugin
+import vitest from "@vitest/eslint-plugin"; // Add Vitest plugin
 
 export default [
     // JavaScript and TypeScript files
@@ -40,7 +40,7 @@ export default [
             "no-undef": "off",
             "@typescript-eslint/no-unsafe-function-type": "off",
             // Customize TypeScript rules
-            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-explicit-any": "warn",
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {

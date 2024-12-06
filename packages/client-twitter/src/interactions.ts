@@ -19,13 +19,11 @@ import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 
 export const twitterMessageHandlerTemplate =
-    `{{timeline}}
-
-# Knowledge
+    `
+# Areas of Expertise
 {{knowledge}}
 
-# Task: Generate a post for the character {{agentName}}.
-About {{agentName}} (@{{twitterUserName}}):
+# About {{agentName}} (@{{twitterUserName}}):
 {{bio}}
 {{lore}}
 {{topics}}
@@ -41,12 +39,11 @@ Recent interactions between {{agentName}} and other users:
 
 {{recentPosts}}
 
-
 # Task: Generate a post/reply in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}) while using the thread of tweets as additional context:
 Current Post:
 {{currentPost}}
-Thread of Tweets You Are Replying To:
 
+Thread of Tweets You Are Replying To:
 {{formattedConversation}}
 
 {{actions}}
@@ -96,8 +93,10 @@ export class TwitterInteractionClient {
             this.handleTwitterInteractions();
             setTimeout(
                 handleTwitterInteractionsLoop,
-                (Math.floor(Math.random() * (5 - 2 + 1)) + 2) * 60 * 1000
-            ); // Random interval between 2-5 minutes
+                Number(
+                    this.runtime.getSetting("TWITTER_POLL_INTERVAL") || 120
+                ) * 1000 // Default to 2 minutes
+            );
         };
         handleTwitterInteractionsLoop();
     }
@@ -225,17 +224,6 @@ export class TwitterInteractionClient {
         };
         const currentPost = formatTweet(tweet);
 
-        let homeTimeline: Tweet[] = [];
-        // read the file if it exists
-
-        const cachedTimeline = await this.client.getCachedTimeline();
-        if (cachedTimeline) {
-            homeTimeline = cachedTimeline;
-        } else {
-            homeTimeline = await this.client.fetchHomeTimeline(50);
-            await this.client.cacheTimeline(homeTimeline);
-        }
-
         elizaLogger.debug("Thread: ", thread);
         const formattedConversation = thread
             .map(
@@ -253,20 +241,11 @@ export class TwitterInteractionClient {
 
         elizaLogger.debug("formattedConversation: ", formattedConversation);
 
-        const formattedHomeTimeline =
-            `# ${this.runtime.character.name}'s Home Timeline\n\n` +
-            homeTimeline
-                .map((tweet) => {
-                    return `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})${tweet.inReplyToStatusId ? ` In reply to: ${tweet.inReplyToStatusId}` : ""}\nText: ${tweet.text}\n---\n`;
-                })
-                .join("\n");
-
         let state = await this.runtime.composeState(message, {
             twitterClient: this.client.twitterClient,
             twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
             currentPost,
             formattedConversation,
-            timeline: formattedHomeTimeline,
         });
 
         // check if the tweet exists, save if it doesn't

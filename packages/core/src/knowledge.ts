@@ -37,7 +37,7 @@ async function get(
         embedding,
         {
             roomId: message.agentId,
-            count: 3,
+            count: 5,
             match_threshold: 0.1,
         }
     );

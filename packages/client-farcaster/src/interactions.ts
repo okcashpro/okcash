@@ -188,7 +188,7 @@ export class FarcasterInteractionManager {
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
         });
 
         response.inReplyTo = memoryId;

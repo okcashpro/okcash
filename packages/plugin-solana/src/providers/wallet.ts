@@ -193,16 +193,17 @@ export class WalletProvider {
             };
 
             const response = await fetch(PROVIDER_CONFIG.GRAPHQL_ENDPOINT, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': runtime.getSetting("CODEX_API_KEY", "") || ""
+                    "Content-Type": "application/json",
+                    Authorization:
+                        runtime.getSetting("CODEX_API_KEY", "") || "",
                 },
                 body: JSON.stringify({
                     query,
-                    variables
-                })
-            }).then(res => res.json());
+                    variables,
+                }),
+            }).then((res) => res.json());
 
             const data = response.data?.data?.balances?.items;
 
@@ -363,17 +364,24 @@ export class WalletProvider {
 }
 
 const walletProvider: Provider = {
-    get: async (runtime: IAgentRuntime, _message: Memory, _state?: State): Promise<string | null> => {
+    get: async (
+        runtime: IAgentRuntime,
+        _message: Memory,
+        _state?: State
+    ): Promise<string | null> => {
         try {
             const publicKey = runtime.getSetting("SOLANA_PUBLIC_KEY");
             if (!publicKey) {
-                throw new Error("SOLANA_PUBLIC_KEY not configured");
+                console.error(
+                    "SOLANA_PUBLIC_KEY not configured, skipping wallet injection"
+                );
+                return "";
             }
 
             const connection = new Connection(
                 runtime.getSetting("RPC_URL") || PROVIDER_CONFIG.DEFAULT_RPC
             );
-            
+
             const provider = new WalletProvider(
                 connection,
                 new PublicKey(publicKey)
@@ -384,7 +392,7 @@ const walletProvider: Provider = {
             console.error("Error in wallet provider:", error);
             return null;
         }
-    }
+    },
 };
 
 // Module exports

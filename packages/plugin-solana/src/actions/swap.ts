@@ -149,7 +149,7 @@ async function getTokensInWallet(runtime: IAgentRuntime) {
         new Connection("https://api.mainnet-beta.solana.com"),
         new PublicKey(
             runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-            runtime.getSetting("WALLET_PUBLIC_KEY")
+                runtime.getSetting("WALLET_PUBLIC_KEY")
         )
     );
 
@@ -295,7 +295,7 @@ export const executeSwap: Action = {
             );
             const walletPublicKey = new PublicKey(
                 runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY")
+                    runtime.getSetting("WALLET_PUBLIC_KEY")
             );
 
             const provider = new WalletProvider(connection, walletPublicKey);
@@ -356,7 +356,7 @@ export const executeSwap: Action = {
             const keypair = Keypair.fromSecretKey(secretKey);
 
             // Verify the public key matches what we expect
-            const expectedPublicKey = 
+            const expectedPublicKey =
                 runtime.getSetting("SOLANA_PUBLIC_KEY") ??
                 runtime.getSetting("WALLET_PUBLIC_KEY");
             if (keypair.publicKey.toBase58() !== expectedPublicKey) {

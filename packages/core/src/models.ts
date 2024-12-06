@@ -128,6 +128,27 @@ export const models: Models = {
             [ModelClass.IMAGE]: "black-forest-labs/FLUX.1-schnell",
         },
     },
+    [ModelProviderName.TOGETHER]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            repetition_penalty: 0.4,
+            temperature: 0.7,
+        },
+        imageSettings: {
+            steps: 4,
+        },
+        endpoint: "https://api.together.ai/v1",
+        model: {
+            [ModelClass.SMALL]: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+            [ModelClass.MEDIUM]: "meta-llama-3.1-8b-instruct",
+            [ModelClass.LARGE]: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
+            [ModelClass.EMBEDDING]:
+                "togethercomputer/m2-bert-80M-32k-retrieval",
+            [ModelClass.IMAGE]: "black-forest-labs/FLUX.1-schnell",
+        },
+    },
     [ModelProviderName.LLAMALOCAL]: {
         settings: {
             stop: ["<|eot_id|>", "<|eom_id|>"],
@@ -302,6 +323,57 @@ export const models: Models = {
             [ModelClass.LARGE]: "",
             [ModelClass.EMBEDDING]: "",
             [ModelClass.IMAGE]: "fal-ai/flux-lora",
+        },
+    },
+    [ModelProviderName.GAIANET]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            repetition_penalty: 0.4,
+            temperature: 0.7,
+        },
+        endpoint: settings.GAIANET_SERVER_URL || "http://localhost:8080/v1",
+        model: {
+            [ModelClass.SMALL]: settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.MEDIUM]: settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.LARGE]: settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.EMBEDDING]:
+                settings.GAIANET_EMBEDDING_MODEL || "nomic-embed",
+        },
+    },
+    [ModelProviderName.ALI_BAILIAN]: {
+        endpoint: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.4,
+            presence_penalty: 0.4,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: "qwen-turbo",
+            [ModelClass.MEDIUM]: "qwen-plus",
+            [ModelClass.LARGE]: "qwen-max",
+            [ModelClass.IMAGE]: "wanx-v1",
+        },
+    },
+    [ModelProviderName.VOLENGINE]: {
+        endpoint: "https://open.volcengineapi.com/api/v3/",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.4,
+            presence_penalty: 0.4,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: "doubao-lite-128k",
+            [ModelClass.MEDIUM]: "doubao-pro-128k",
+            [ModelClass.LARGE]: "doubao-pro-128k",
+            [ModelClass.EMBEDDING]: "doubao-embedding",
         },
     },
 };

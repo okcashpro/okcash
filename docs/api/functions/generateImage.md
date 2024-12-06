@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / generateImage
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / generateImage
 
 # Function: generateImage()
 
@@ -48,4 +48,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:770](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L770)
+[packages/core/src/generation.ts:799](https://github.com/monilpat/eliza/blob/main/packages/core/src/generation.ts#L799)

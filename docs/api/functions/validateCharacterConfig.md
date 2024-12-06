@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / validateCharacterConfig
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / validateCharacterConfig
 
 # Function: validateCharacterConfig()
 
@@ -16,4 +16,4 @@ Validation function
 
 ## Defined in
 
-[packages/core/src/enviroment.ts:130](https://github.com/ai16z/eliza/blob/main/packages/core/src/enviroment.ts#L130)
+[packages/core/src/environment.ts:133](https://github.com/monilpat/eliza/blob/main/packages/core/src/environment.ts#L133)

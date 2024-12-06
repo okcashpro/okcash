@@ -17,7 +17,7 @@ import {
 } from "@avnu/avnu-sdk";
 
 import { getStarknetAccount } from "../utils/index.ts";
-import { validateStarknetConfig } from "../enviroment.ts";
+import { validateStarknetConfig } from "../environment.ts";
 
 interface SwapContent {
     sellTokenAddress: string;

@@ -192,6 +192,7 @@ export type Models = {
     [ModelProviderName.GROK]: Model;
     [ModelProviderName.GROQ]: Model;
     [ModelProviderName.LLAMACLOUD]: Model;
+    [ModelProviderName.TOGETHER]: Model;
     [ModelProviderName.LLAMALOCAL]: Model;
     [ModelProviderName.GOOGLE]: Model;
     [ModelProviderName.CLAUDE_VERTEX]: Model;
@@ -201,6 +202,9 @@ export type Models = {
     [ModelProviderName.HEURIST]: Model;
     [ModelProviderName.GALADRIEL]: Model;
     [ModelProviderName.FAL]: Model;
+    [ModelProviderName.GAIANET]: Model;
+    [ModelProviderName.ALI_BAILIAN]: Model;
+    [ModelProviderName.VOLENGINE]: Model;
 };
 
 /**
@@ -213,6 +217,7 @@ export enum ModelProviderName {
     GROK = "grok",
     GROQ = "groq",
     LLAMACLOUD = "llama_cloud",
+    TOGETHER = "together",
     LLAMALOCAL = "llama_local",
     GOOGLE = "google",
     CLAUDE_VERTEX = "claude_vertex",
@@ -222,6 +227,9 @@ export enum ModelProviderName {
     HEURIST = "heurist",
     GALADRIEL = "galadriel",
     FAL = "falai",
+    GAIANET = "gaianet",
+    ALI_BAILIAN = "ali_bailian",
+    VOLENGINE = "volengine",
 }
 
 /**
@@ -674,8 +682,17 @@ export type Character = {
         secrets?: { [key: string]: string };
         buttplug?: boolean;
         voice?: {
-            model?: string;
-            url?: string;
+            model?: string; // For VITS
+            url?: string; // Legacy VITS support
+            elevenlabs?: {
+                // New structured ElevenLabs config
+                voiceId: string;
+                model?: string;
+                stability?: string;
+                similarityBoost?: string;
+                style?: string;
+                useSpeakerBoost?: string;
+            };
         };
         model?: string;
         embeddingModel?: string;

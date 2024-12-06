@@ -27,9 +27,8 @@ export class WalletProvider {
 
     async getWalletPortfolio(): Promise<TokenBalances> {
         const cacheKey = `walletPortfolio-${this.runtime.agentId}`;
-        const cachedValues = await this.runtime.cacheManager.get<TokenBalances>(
-            cacheKey
-        );
+        const cachedValues =
+            await this.runtime.cacheManager.get<TokenBalances>(cacheKey);
         if (cachedValues) {
             elizaLogger.debug("Using cached data for getWalletPortfolio()");
             return cachedValues;

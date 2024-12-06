@@ -620,9 +620,8 @@ export const trustScoreProvider: Provider = {
             }
 
             // Get the recommender metrics for the user
-            const recommenderMetrics = await trustScoreDb.getRecommenderMetrics(
-                userId
-            );
+            const recommenderMetrics =
+                await trustScoreDb.getRecommenderMetrics(userId);
 
             if (!recommenderMetrics) {
                 console.error("No recommender metrics found for user:", userId);
