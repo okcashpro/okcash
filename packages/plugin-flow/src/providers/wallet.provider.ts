@@ -136,11 +136,12 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
     async syncAccountInfo() {
         this.account = await this.connector.getAccount(this.address);
         this.maxKeyIndex = this.account.keys.length - 1;
-        this.cache.set("balance", this.account.balance);
+        this.cache.set("balance", this.account.balance / 1e8);
         elizaLogger.debug("Flow account info synced", {
             address: this.address,
             balance: this.account.balance,
             maxKeyIndex: this.maxKeyIndex,
+            keys: this.account.keys,
         });
     }
 
@@ -149,12 +150,12 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
      * @returns Wallet balance
      */
     async getWalletBalance(forceRefresh = false): Promise<number> {
-        const cachedBalance = this.cache.get<number>("balance");
+        const cachedBalance = await this.cache.get<number>("balance");
         if (!forceRefresh && cachedBalance) {
             return cachedBalance;
         }
         await this.syncAccountInfo();
-        return this.account?.balance ?? 0;
+        return this.account ? this.account.balance / 1e8 : 0;
     }
 
     /**
