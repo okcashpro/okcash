@@ -1,18 +1,4 @@
-import {
-    getAssociatedTokenAddressSync,
-    createTransferInstruction,
-} from "@solana/spl-token";
-import bs58 from "bs58";
-import { elizaLogger, settings } from "@ai16z/eliza";
-
-import {
-    Connection,
-    Keypair,
-    PublicKey,
-    TransactionMessage,
-    VersionedTransaction,
-} from "@solana/web3.js";
-
+import { elizaLogger } from "@ai16z/eliza";
 import {
     ActionExample,
     Content,
@@ -25,20 +11,25 @@ import {
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
+import {
+    Account,
+    Aptos,
+    AptosConfig,
+    Ed25519PrivateKey,
+    Network,
+    PrivateKey,
+    PrivateKeyVariants,
+} from "@aptos-labs/ts-sdk";
+import { walletProvider } from "../providers/wallet";
 
 export interface TransferContent extends Content {
-    tokenAddress: string;
     recipient: string;
     amount: string | number;
 }
 
-function isTransferContent(
-    runtime: IAgentRuntime,
-    content: any
-): content is TransferContent {
+function isTransferContent(content: any): content is TransferContent {
     console.log("Content for transfer", content);
     return (
-        typeof content.tokenAddress === "string" &&
         typeof content.recipient === "string" &&
         (typeof content.amount === "string" ||
             typeof content.amount === "number")
@@ -50,8 +41,7 @@ const transferTemplate = `Respond with a JSON markdown block containing only the
 Example response:
 \`\`\`json
 {
-    "tokenAddress": "BieefG47jAHCGZBxi2q87RDuHyGZyYC3vAzxpyu8pump",
-    "recipient": "9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
+    "recipient": "0x2badda48c062e861ef17a96a806c451fd296a49f45b272dee17f85b0e32663fd",
     "amount": "1000"
 }
 \`\`\`
@@ -59,7 +49,6 @@ Example response:
 {{recentMessages}}
 
 Given the recent messages, extract the following information about the requested token transfer:
-- Token contract address
 - Recipient wallet address
 - Amount to transfer
 
@@ -71,11 +60,11 @@ export default {
         "TRANSFER_TOKEN",
         "TRANSFER_TOKENS",
         "SEND_TOKENS",
-        "SEND_SOL",
+        "SEND_APT",
         "PAY",
     ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
-        console.log("Validating transfer from user:", message.userId);
+        console.log("Validating apt transfer from user:", message.userId);
         //add custom validate logic here
         /*
             const adminIds = runtime.getSetting("ADMIN_USER_IDS")?.split(",") || [];
@@ -105,6 +94,9 @@ export default {
     ): Promise<boolean> => {
         elizaLogger.log("Starting SEND_TOKEN handler...");
 
+        const walletInfo = await walletProvider.get(runtime, message, state);
+        state.walletInfo = walletInfo;
+
         // Initialize or update state
         if (!state) {
             state = (await runtime.composeState(message)) as State;
@@ -122,11 +114,11 @@ export default {
         const content = await generateObject({
             runtime,
             context: transferContext,
-            modelClass: ModelClass.LARGE,
+            modelClass: ModelClass.SMALL,
         });
 
         // Validate transfer content
-        if (!isTransferContent(runtime, content)) {
+        if (!isTransferContent(content)) {
             console.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
@@ -138,88 +130,55 @@ export default {
         }
 
         try {
-            const privateKeyString =
-                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                runtime.getSetting("WALLET_PRIVATE_KEY");
-            const secretKey = bs58.decode(privateKeyString);
-            const senderKeypair = Keypair.fromSecretKey(secretKey);
+            const privateKey = runtime.getSetting("APTOS_PRIVATE_KEY");
+            const aptosAccount = Account.fromPrivateKey({
+                privateKey: new Ed25519PrivateKey(
+                    PrivateKey.formatPrivateKey(
+                        privateKey,
+                        PrivateKeyVariants.Ed25519
+                    )
+                ),
+            });
+            const network = runtime.getSetting("APTOS_NETWORK") as Network;
+            const aptosClient = new Aptos(
+                new AptosConfig({
+                    network,
+                })
+            );
 
-            const connection = new Connection(settings.RPC_URL!);
-
-            const mintPubkey = new PublicKey(content.tokenAddress);
-            const recipientPubkey = new PublicKey(content.recipient);
-
-            // Get decimals (simplest way)
-            const mintInfo = await connection.getParsedAccountInfo(mintPubkey);
-            const decimals =
-                (mintInfo.value?.data as any)?.parsed?.info?.decimals ?? 9;
-
-            // Adjust amount with decimals
+            const APT_DECIMALS = 8;
             const adjustedAmount = BigInt(
-                Number(content.amount) * Math.pow(10, decimals)
+                Number(content.amount) * Math.pow(10, APT_DECIMALS)
             );
             console.log(
                 `Transferring: ${content.amount} tokens (${adjustedAmount} base units)`
             );
 
-            // Rest of the existing working code...
-            const senderATA = getAssociatedTokenAddressSync(
-                mintPubkey,
-                senderKeypair.publicKey
-            );
-            const recipientATA = getAssociatedTokenAddressSync(
-                mintPubkey,
-                recipientPubkey
-            );
+            const tx = await aptosClient.transaction.build.simple({
+                sender: aptosAccount.accountAddress.toStringLong(),
+                data: {
+                    function: "0x1::aptos_account::transfer",
+                    typeArguments: [],
+                    functionArguments: [content.recipient, adjustedAmount],
+                },
+            });
+            const committedTransaction =
+                await aptosClient.signAndSubmitTransaction({
+                    signer: aptosAccount,
+                    transaction: tx,
+                });
+            const executedTransaction = await aptosClient.waitForTransaction({
+                transactionHash: committedTransaction.hash,
+            });
 
-            const instructions = [];
-
-            const recipientATAInfo =
-                await connection.getAccountInfo(recipientATA);
-            if (!recipientATAInfo) {
-                const { createAssociatedTokenAccountInstruction } =
-                    await import("@solana/spl-token");
-                instructions.push(
-                    createAssociatedTokenAccountInstruction(
-                        senderKeypair.publicKey,
-                        recipientATA,
-                        recipientPubkey,
-                        mintPubkey
-                    )
-                );
-            }
-
-            instructions.push(
-                createTransferInstruction(
-                    senderATA,
-                    recipientATA,
-                    senderKeypair.publicKey,
-                    adjustedAmount
-                )
-            );
-
-            // Create and sign versioned transaction
-            const messageV0 = new TransactionMessage({
-                payerKey: senderKeypair.publicKey,
-                recentBlockhash: (await connection.getLatestBlockhash())
-                    .blockhash,
-                instructions,
-            }).compileToV0Message();
-
-            const transaction = new VersionedTransaction(messageV0);
-            transaction.sign([senderKeypair]);
-
-            // Send transaction
-            const signature = await connection.sendTransaction(transaction);
-
-            console.log("Transfer successful:", signature);
+            console.log("Transfer successful:", executedTransaction.hash);
 
             if (callback) {
                 callback({
-                    text: `Successfully transferred ${content.amount} tokens to ${content.recipient}\nTransaction: ${signature}`,
+                    text: `Successfully transferred ${content.amount} APT to ${content.recipient}, Transaction: ${executedTransaction.hash}`,
                     content: {
                         success: true,
-                        signature,
+                        hash: executedTransaction.hash,
                         amount: content.amount,
                         recipient: content.recipient,
                     },
@@ -244,20 +203,20 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 69 EZSIS BieefG47jAHCGZBxi2q87RDuHyGZyYC3vAzxpyu8pump to 9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
+                    text: "Send 69 APT tokens to 0x4f2e63be8e7fe287836e29cde6f3d5cbc96eefd0c0e3f3747668faa2ae7324b0",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll send 69 EZSIS tokens now...",
+                    text: "I'll send 69 APT tokens now...",
                     action: "SEND_TOKEN",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Successfully sent 69 EZSIS tokens to 9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa\nTransaction: 5KtPn3DXXzHkb7VAVHZGwXJQqww39ASnrf7YkyJoF2qAGEpBEEGvRHLnnTG8ZVwKqNHMqSckWVGnsQAgfH5pbxEb",
+                    text: "Successfully sent 69 APT tokens to 0x4f2e63be8e7fe287836e29cde6f3d5cbc96eefd0c0e3f3747668faa2ae7324b0, Transaction: 0x39a8c432d9bdad993a33cc1faf2e9b58fb7dd940c0425f1d6db3997e4b4b05c0",
                 },
             },
         ],
