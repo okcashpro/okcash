@@ -1,4 +1,4 @@
-import { Coinbase, Trade, Transfer, Wallet, WalletData } from "@coinbase/coinbase-sdk";
+import { Coinbase, Trade, Transfer, Wallet, WalletData, Webhook } from "@coinbase/coinbase-sdk";
 import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
 import fs from "fs";
 import path from "path";
@@ -12,7 +12,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const baseDir = path.resolve(__dirname, "../../plugin-coinbase/src/plugins");
 const tradeCsvFilePath = path.join(baseDir, "trades.csv");
-const csvFilePath = path.join(baseDir, "transactions.csv");
+const transactionCsvFilePath = path.join(baseDir, "transactions.csv");
+const webhookCsvFilePath = path.join(baseDir, "webhooks.csv");
 
 export async function initializeWallet(
     runtime: IAgentRuntime,
@@ -173,7 +174,7 @@ export async function appendTradeToCsv(trade: Trade) {
 export async function appendTransactionsToCsv(transactions: Transaction[]) {
     try {
         const csvWriter = createArrayCsvWriter({
-            path: csvFilePath,
+            path: transactionCsvFilePath,
             header: [
                 "Address",
                 "Amount",
@@ -197,6 +198,55 @@ export async function appendTransactionsToCsv(transactions: Transaction[]) {
         elizaLogger.log("All transactions written to CSV successfully.");
     } catch (error) {
         elizaLogger.error("Error writing transactions to CSV:", error);
+    }
+}
+// create a function to append webhooks to a csv
+export async function appendWebhooksToCsv(webhooks: Webhook[]) {
+    try {
+        // Ensure the CSV file exists
+        if (!fs.existsSync(webhookCsvFilePath)) {
+            elizaLogger.warn("CSV file not found. Creating a new one.");
+            const csvWriter = createArrayCsvWriter({
+                path: webhookCsvFilePath,
+                header: [
+                    "Webhook ID",
+                    "Network ID",
+                    "Event Type",
+                    "Event Filters",
+                    "Event Type Filter",
+                    "Notification URI",
+                ],
+            });
+            await csvWriter.writeRecords([]); // Create an empty file with headers
+            elizaLogger.log("New CSV file created with headers.");
+                    }
+        const csvWriter = createArrayCsvWriter({
+            path: webhookCsvFilePath,
+            header: [
+                "Webhook ID",
+                "Network ID",
+                "Event Type",
+                "Event Filters",
+                "Event Type Filter",
+                "Notification URI",
+            ],
+            append: true,
+        });
+
+        const formattedWebhooks = webhooks.map((webhook) => [
+            webhook.getId(),
+            webhook.getNetworkId(),
+            webhook.getEventType(),
+            JSON.stringify(webhook.getEventFilters()),
+            JSON.stringify(webhook.getEventTypeFilter()),
+            webhook.getNotificationURI(),
+        ]);
+
+        elizaLogger.log("Writing webhooks to CSV:", formattedWebhooks);
+        await csvWriter.writeRecords(formattedWebhooks);
+        elizaLogger.log("All webhooks written to CSV successfully.");
+    } catch (error) {
+        elizaLogger.error("Error writing webhooks to CSV:", error);
     }
 }
 

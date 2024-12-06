@@ -200,3 +200,91 @@ Example for invoking a transfer method on an ERC20 token contract:
 Here are the recent user messages for context:
 {{recentMessages}}
 `;
+
+export const webhookTemplate = `
+Extract the following details for creating a webhook:
+- **networkId** (string): The network ID for which the webhook is created.
+Allowed values are:
+    static networks: {
+        readonly BaseSepolia: "base-sepolia";
+        readonly BaseMainnet: "base-mainnet";
+        readonly EthereumHolesky: "ethereum-holesky";
+        readonly EthereumMainnet: "ethereum-mainnet";
+        readonly PolygonMainnet: "polygon-mainnet";
+        readonly SolanaDevnet: "solana-devnet";
+        readonly SolanaMainnet: "solana-mainnet";
+        readonly ArbitrumMainnet: "arbitrum-mainnet";
+    };
+- **eventType** (string): The type of event for the webhook.
+export declare const WebhookEventType: {
+    readonly Unspecified: "unspecified";
+    readonly Erc20Transfer: "erc20_transfer";
+    readonly Erc721Transfer: "erc721_transfer";
+    readonly WalletActivity: "wallet_activity";
+};
+- **eventTypeFilter** (string, optional): Filter for wallet activity event type.
+export interface WebhookEventTypeFilter {
+    /**
+     * A list of wallet addresses to filter on.
+     * @type {Array<string>}
+     * @memberof WebhookWalletActivityFilter
+     */
+    'addresses'?: Array<string>;
+    /**
+     * The ID of the wallet that owns the webhook.
+     * @type {string}
+     * @memberof WebhookWalletActivityFilter
+     */
+    'wallet_id'?: string;
+}
+- **eventFilters** (array, optional): Filters applied to the events that determine which specific events trigger the webhook.
+export interface Array<WebhookEventFilter> {
+    /**
+     * The onchain contract address of the token for which the events should be tracked.
+     * @type {string}
+     * @memberof WebhookEventFilter
+     */
+    'contract_address'?: string;
+    /**
+     * The onchain address of the sender. Set this filter to track all transfer events originating from your address.
+     * @type {string}
+     * @memberof WebhookEventFilter
+     */
+    'from_address'?: string;
+    /**
+     * The onchain address of the receiver. Set this filter to track all transfer events sent to your address.
+     * @type {string}
+     * @memberof WebhookEventFilter
+     */
+    'to_address'?: string;
+}
+Provide the details in the following JSON format:
+\`\`\`json
+{
+    "networkId": "<networkId>",
+    "eventType": "<eventType>",
+    "eventTypeFilter": "<eventTypeFilter>",
+    "eventFilters": [<eventFilter1>, <eventFilter2>]
+}
+\`\`\`
+
+
+
+Example for creating a webhook on the Sepolia testnet for ERC20 transfers originating from a specific wallet 0x1234567890123456789012345678901234567890 on transfers from 0xbcF7C64B880FA89a015970dC104E848d485f99A3
+
+\`\`\`javascript
+
+    networkId: 'base-sepolia', // Listening on sepolia testnet transactions
+    eventType: 'erc20_transfer',
+    eventTypeFilter: {
+      addresses: ['0x1234567890123456789012345678901234567890']
+    },
+    eventFilters: [{
+      from_address: '0xbcF7C64B880FA89a015970dC104E848d485f99A3',
+    }],
+});
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;

@@ -125,7 +125,7 @@ async function executeMassPayout(
                     });
 
                     if (walletBalance.lessThan(transferAmount)) {
-                        const insufficientFunds = `Insufficient funds for address ${await sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
+                        const insufficientFunds = `Insufficient funds for address ${sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
                         elizaLogger.error(insufficientFunds);
 
                         transactions.push({

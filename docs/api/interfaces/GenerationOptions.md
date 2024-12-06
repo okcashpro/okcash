@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / GenerationOptions
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / GenerationOptions
 
 # Interface: GenerationOptions
 

@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / CharacterSchema
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / CharacterSchema
 
 # Variable: CharacterSchema
 
@@ -100,4 +100,4 @@ Main Character schema
 
 ## Defined in
 
-[packages/core/src/enviroment.ts:66](https://github.com/monilpat/eliza/blob/main/packages/core/src/enviroment.ts#L66)
+[packages/core/src/environment.ts:66](https://github.com/monilpat/eliza/blob/main/packages/core/src/environment.ts#L66)
