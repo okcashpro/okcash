@@ -1,4 +1,4 @@
-import { Coinbase } from "@coinbase/coinbase-sdk";
+import { Coinbase, Transaction } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
@@ -168,27 +168,17 @@ export const executeTradeAction: Action = {
             const { trade, transfer } = await executeTradeAndCharityTransfer(runtime, network, amount, sourceAsset, targetAsset);
 
             let responseText = `Trade executed successfully:
-            const { trade, transfer } = await executeTradeAndCharityTransfer(
-                runtime,
-                network,
-                amount,
-                sourceAsset,
-                targetAsset
-            );
-            callback(
-                {
-                    text: `Trade executed successfully:
 - Network: ${network}
 - Amount: ${trade.getFromAmount()}
 - From: ${sourceAsset}
 - To: ${targetAsset}
-- Transaction URL: ${trade.getTransaction().getTransactionLink() || ""}`;
+- Transaction URL: ${trade.getTransaction().getTransactionLink() || ""}
+- Charity Transaction URL: ${transfer.getTransactionLink() || ""}`;
 
             if (transfer) {
-                responseText += ` - Charity Amount: ${transfer.getAmount()}
-- Charity Transaction URL: ${transfer.getTransactionLink() || ""}`;
+                responseText += `\n- Charity Amount: ${transfer.getAmount()}`;
             } else {
-                responseText += " (Note: Charity transfer was not completed)";
+                responseText += "\n(Note: Charity transfer was not completed)";
             }
 
             callback(

@@ -1,4 +1,0 @@
-Webhook ID,Network ID,Event Type,Event Filters,Event Type Filter,Notification URI
-
-675282775e02c169cf194b61,base-mainnet,erc20_transfer,[object Object],,https://webhook.site/2ef65a7a-f358-4e09-983b-1ac8fced2253
-675282f35e02c169cf194b62,base-mainnet,erc20_transfer,"[{""from_address"":""0xbcf7c64b880fa89a015970dc104e848d485f99a3""}]",,https://webhook.site/2ef65a7a-f358-4e09-983b-1ac8fced2253

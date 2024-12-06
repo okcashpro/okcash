@@ -1,8 +1,0 @@
-Address,Amount,Status,Error Code,Transaction URL
-
-0xA0ba2ACB5846A54834173fB0DD9444F756810f06,0.0001,Success,,https://basescan.org/tx/0x461b32b6b5ffd755eb134cb24f79c9136b8af5fd744b1d91320dc43bf2a902ad
-0xF14F2c49aa90BaFA223EE074C1C33b59891826bF,0.0001,Success,,https://basescan.org/tx/0x225d624c98023b9d8a4ec53911679672685c1e3aaffce8fdb99db8a85bdc07b8
-0xA0ba2ACB5846A54834173fB0DD9444F756810f06,1,Failed,"Insufficient funds for address WalletAddress{ addressId: '0xF789d875614c04E1CfDfE13B99315B45e5F9c049', networkId: 'base-mainnet', walletId: 'c077eff5-fd4b-4dc7-a822-1d54a560d1b8' } to send to 0xA0ba2ACB5846A54834173fB0DD9444F756810f06. Required: 1, Available: 0.028499",
-,0.01,Failed,Cannot read properties of undefined (reading 'getAmount'),
-0xA0ba2ACB5846A54834173fB0DD9444F756810f06,0.001,Success,,https://basescan.org/tx/0x197265e5c1a6fa51052f34fdfaebfe89b62e440c9fc677b71402278e5ea5ed66
-,0.00001,Failed,Cannot read properties of undefined (reading 'getAmount'),
