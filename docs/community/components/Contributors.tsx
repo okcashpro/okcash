@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import ContributorCard from "./Contributor";
 import Contributions from "./Contributions";
 import { useColorMode } from "@docusaurus/theme-common";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import contributorsSpec from "../contributors.json";
+import { useGithubAccessToken } from "./utils";
 
 export interface Contributor {
     id: number;
@@ -44,8 +44,7 @@ export interface ActivityDetails {
 export const GITHUB_PAGE_LIMIT = 30; // The maximum number to fetch per page from the GitHub API.
 
 const Contributors: React.FC = () => {
-    const { siteConfig } = useDocusaurusContext();
-    const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
+    const githubAccessToken = useGithubAccessToken();
     const { colorMode } = useColorMode();
     const [selectedContributor, setSelectedContributor] =
         useState<Contributor | null>(null);
@@ -73,7 +72,7 @@ const Contributors: React.FC = () => {
                 {
                     method: "GET",
                     headers: {
-                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+                        Authorization: `token ${githubAccessToken}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },

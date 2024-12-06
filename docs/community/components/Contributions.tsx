@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Accordion } from "./Accordion";
 import { StatCard } from "./StatCard";
 import { THEME_COLORS } from "./Contributors";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import { hexToRgb } from "./utils";
+import { hexToRgb, useGithubAccessToken } from "./utils";
 import ScoreIcon from "./ScoreIcon";
 import Summary from "./Summary";
 import Hero from "./Hero";
@@ -45,8 +44,7 @@ const Contributions = ({
     activitySummary,
     score,
 }) => {
-    const { siteConfig } = useDocusaurusContext();
-    const { GITHUB_ACCESS_TOKEN } = siteConfig.customFields;
+    const githubAccessToken = useGithubAccessToken();
     const [commitsData, setCommitsData] = useState<AccordionItem>(
         initializeAccordionItem(),
     );
@@ -87,7 +85,7 @@ const Contributions = ({
                 {
                     method: "GET",
                     headers: {
-                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+                        Authorization: `token ${githubAccessToken}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },
@@ -115,7 +113,7 @@ const Contributions = ({
                 {
                     method: "GET",
                     headers: {
-                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+                        Authorization: `token ${githubAccessToken}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },
@@ -150,7 +148,7 @@ const Contributions = ({
                 {
                     method: "GET",
                     headers: {
-                        Authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+                        Authorization: `token ${githubAccessToken}`,
                         Accept: "application/vnd.github.v3+json",
                     },
                 },
