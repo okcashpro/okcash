@@ -357,9 +357,9 @@ export async function getWalletDetails(
 
         // Fetch the wallet's recent transactions
         const walletAddress = await wallet.getDefaultAddress();
-        const transactions =[];
-
-        const formattedTransactions = transactions.map((transaction) => {
+        const transactions = await walletAddress.listTransactions();
+        const transactionsData = transactions?.data ?? [];
+        const formattedTransactions = transactionsData.map((transaction) => {
             const content = transaction.content();
             return {
                 timestamp: content.block_timestamp || "N/A",
@@ -373,7 +373,7 @@ export async function getWalletDetails(
         // Return formatted data
         return {
             balances: formattedBalances,
-            transactions: [],
+            transactions: formattedTransactions,
         };
     } catch (error) {
         console.error("Error fetching wallet details:", error);
