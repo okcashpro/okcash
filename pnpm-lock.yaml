@@ -141,6 +141,9 @@ importers:
       '@ai16z/plugin-evm':
         specifier: workspace:*
         version: link:../packages/plugin-evm
+      '@ai16z/plugin-flow':
+        specifier: workspace:*
+        version: link:../packages/plugin-flow
       '@ai16z/plugin-goat':
         specifier: workspace:*
         version: link:../packages/plugin-goat
