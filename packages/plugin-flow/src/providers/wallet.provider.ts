@@ -47,6 +47,13 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
     }
 
     /**
+     * Get the network type
+     */
+    get network() {
+        return this.connector.network;
+    }
+
+    /**
      * Send a transaction
      * @param code Cadence code
      * @param args Cadence arguments
@@ -130,6 +137,11 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
         this.account = await this.connector.getAccount(this.address);
         this.maxKeyIndex = this.account.keys.length - 1;
         this.cache.set("balance", this.account.balance);
+        elizaLogger.debug("Flow account info synced", {
+            address: this.address,
+            balance: this.account.balance,
+            maxKeyIndex: this.maxKeyIndex,
+        });
     }
 
     /**
@@ -215,7 +227,7 @@ const flowWalletProvider: Provider = {
                 elizaLogger.error("Invalid account info");
                 return null;
             }
-            return `Flow Wallet Address: ${walletProvider.address}\nBalance: ${info.balance} FLOW\nIts COA(EVM) Address: ${info.coaAddress}\nCOA(EVM) Balance: ${info.coaBalance ?? 0} FLOW`;
+            return `Flow Wallet Address: ${walletProvider.address}\nBalance: ${info.balance} FLOW\nFlow COA(EVM) Address: ${info.coaAddress || "unknown"}\nFLOW COA(EVM) Balance: ${info.coaBalance ?? 0} FLOW`;
         } catch (error) {
             elizaLogger.error("Error in Flow wallet provider:", error.message);
             return null;

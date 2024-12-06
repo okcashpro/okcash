@@ -65,14 +65,14 @@ export class TransferAction {
         public readonly useKeyIndex: number = USE_KEY_INDEX
     ) {}
 
-    async transfer(
+    /**
+     * Process the messages and generate the transfer content
+     */
+    async processMessages(
         runtime: IAgentRuntime,
         message: Memory,
-        state: State,
-        callback?: HandlerCallback
-    ): Promise<TransactionResponse> {
-        elizaLogger.log("Starting Flow Plugin's SEND_TOKEN handler...");
-
+        state: State
+    ): Promise<TransferContent> {
         // Initialize or update state
         if (!state) {
             state = (await runtime.composeState(message)) as State;
@@ -93,6 +93,29 @@ export class TransferAction {
             modelClass: ModelClass.SMALL,
         });
 
+        // Validate transfer content
+        if (!isTransferContent(runtime, content)) {
+            elizaLogger.error("Invalid content for SEND_COIN action.");
+            throw new Exception(50100, "Invalid transfer content");
+        }
+
+        // Check if the content is matched
+        if (!content.matched) {
+            elizaLogger.error("Content does not match the transfer template.");
+            throw new Exception(
+                50100,
+                "Content does not match the transfer template"
+            );
+        }
+        return content;
+    }
+
+    async transfer(
+        content: TransferContent,
+        callback?: HandlerCallback
+    ): Promise<TransactionResponse> {
+        elizaLogger.log("Starting Flow Plugin's SEND_COIN handler...");
+
         const resp: TransactionResponse = {
             signer: {
                 address: this.walletProvider.address,
@@ -100,36 +123,7 @@ export class TransferAction {
             },
             txid: "",
         };
-        const logPrefix = `<Address: ${resp.signer.address}>[${resp.signer.keyIndex}]`;
-
-        // Validate transfer content
-        if (!isTransferContent(runtime, content)) {
-            elizaLogger.error("Invalid content for SEND_TOKEN action.");
-            if (callback) {
-                callback({
-                    text: `${logPrefix} Unable to process transfer request. Invalid content provided.`,
-                    content: { error: "Invalid transfer content" },
-                });
-            }
-            throw new Exception(50100, "Invalid transfer content");
-        }
-
-        // Check if the content is matched
-        if (!content.matched) {
-            elizaLogger.error("Content does not match the transfer template.");
-            if (callback) {
-                callback({
-                    text: `${logPrefix} Unable to process transfer request. Content does not match the transfer template.`,
-                    content: {
-                        error: "Content does not match the transfer template",
-                    },
-                });
-            }
-            throw new Exception(
-                50100,
-                "Content does not match the transfer template"
-            );
-        }
+        const logPrefix = `Address: ${resp.signer.address}, using keyIdex: ${resp.signer.keyIndex}\n`;
 
         // Parsed fields
         const recipient = content.to;
@@ -185,15 +179,14 @@ export class TransferAction {
                 const [_, tokenAddr, tokenContractName] =
                     content.token.split(".");
                 elizaLogger.log(
-                    `${logPrefix} Sending ${amount} A.${tokenAddr}${tokenContractName} to ${recipient}...`
+                    `${logPrefix} Sending ${amount} A.${tokenAddr}.${tokenContractName} to ${recipient}...`
                 );
-
                 resp.txid = await this.walletProvider.sendTransaction(
                     transactions.mainFTGenericTransfer,
                     (arg, t) => [
                         arg(amount.toFixed(1), t.UFix64),
                         arg(recipient, t.Address),
-                        arg(tokenAddr, t.Address),
+                        arg("0x" + tokenAddr, t.Address),
                         arg(tokenContractName, t.String),
                     ],
                     authz
@@ -228,8 +221,13 @@ export class TransferAction {
             // call the callback with the transaction response
             if (callback) {
                 const tokenName = content.token || "FLOW";
+                const baseUrl =
+                    this.walletProvider.network === "testnet"
+                        ? "https://testnet.flowscan.io"
+                        : "https://flowscan.io";
+                const txURL = `${baseUrl}/tx/${resp.txid}/events`;
                 callback({
-                    text: `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}\nTransaction: ${resp.txid}`,
+                    text: `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}\nTransaction: [${resp.txid}](${txURL})`,
                     content: {
                         success: true,
                         txid: resp.txid,
@@ -259,23 +257,25 @@ export class TransferAction {
             }
         }
 
-        elizaLogger.log("Completed Flow Plugin's SEND_TOKEN handler.");
+        elizaLogger.log("Completed Flow Plugin's SEND_COIN handler.");
 
         return resp;
     }
 }
 
 export const transferAction = {
-    name: "SEND_TOKEN",
+    name: "SEND_COIN",
     similes: [
-        "TRANSFER",
-        "TRANSFER_TOKEN",
-        "TRANSFER_TOKENS",
-        "SEND_TOKENS",
+        "SEND_TOKEN",
+        "SEND_TOKEN_ON_FLOW",
+        "TRANSFER_TOKEN_ON_FLOW",
+        "TRANSFER_TOKENS_ON_FLOW",
+        "TRANSFER_FLOW",
         "SEND_FLOW",
-        "PAY",
+        "PAY_BY_FLOW",
     ],
-    description: "Transfer tokens from the agent's wallet to another address",
+    description:
+        "Call this action to transfer any fungible token/coin from the agent's Flow wallet to another address",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
         await validateFlowConfig(runtime);
         const flowConnector = await getFlowConnectorInstance(runtime);
@@ -299,18 +299,30 @@ export const transferAction = {
         const flowConnector = await getFlowConnectorInstance(runtime);
         const walletProvider = new FlowWalletProvider(runtime, flowConnector);
         const action = new TransferAction(walletProvider);
+        let content: TransferContent;
         try {
-            const res = await action.transfer(
-                runtime,
-                message,
-                state,
-                callback
-            );
+            content = await action.processMessages(runtime, message, state);
+        } catch (err) {
+            elizaLogger.error("Error in processing messages:", err.message);
+            if (callback) {
+                callback({
+                    text:
+                        "Unable to process transfer request. Invalid content: " +
+                        err.message,
+                    content: {
+                        error: "Invalid content",
+                    },
+                });
+            }
+            return false;
+        }
+
+        try {
+            const res = await action.transfer(content, callback);
             elizaLogger.log(
-                `Transfer action response: Sender<${res.signer.address}[${res.signer.keyIndex}> - ${res.txid}`
+                `Transfer action response: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`
             );
-        } catch (error) {
-            elizaLogger.error("Error in transfer action:", error.message);
+        } catch {
             return false;
         }
         return true;
@@ -327,13 +339,7 @@ export const transferAction = {
                 user: "{{user2}}",
                 content: {
                     text: "Sending 1 FLOW tokens now, pls wait...",
-                    action: "SEND_TOKEN",
-                },
-            },
-            {
-                user: "{{user2}}",
-                content: {
-                    text: "Successfully sent 1 FLOW to 0xa2de93114bae3e73\nTransaction ID: de5f9f45f6ccefb4b5affa05fc6ea28d86249014748c2c9efca3fcf8c03183f1",
+                    action: "SEND_COIN",
                 },
             },
         ],
@@ -341,20 +347,14 @@ export const transferAction = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 1 FLOW(A.1654653399040a61.FlowToken) to 0xa2de93114bae3e73",
+                    text: "Send 1 FLOW - A.1654653399040a61.FlowToken to 0xa2de93114bae3e73",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Sending 1 FLOW(A.1654653399040a61.FlowToken) tokens now, pls wait...",
-                    action: "SEND_TOKEN",
-                },
-            },
-            {
-                user: "{{user2}}",
-                content: {
-                    text: "Successfully sent 1 FLOW to 0xa2de93114bae3e73\nTransaction ID: de5f9f45f6ccefb4b5affa05fc6ea28d86249014748c2c9efca3fcf8c03183f1",
+                    text: "Sending 1 FLOW tokens now, pls wait...",
+                    action: "SEND_COIN",
                 },
             },
         ],
@@ -362,20 +362,14 @@ export const transferAction = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Send 1000 FROTH(0xb73bf8e6a4477a952e0338e6cc00cc0ce5ad04ba) to 0x000000000000000000000002e44fbfbd00395de5",
+                    text: "Send 1000 FROTH - 0xb73bf8e6a4477a952e0338e6cc00cc0ce5ad04ba to 0x000000000000000000000002e44fbfbd00395de5",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Sending 1000 FROTH(0xb73bf8e6a4477a952e0338e6cc00cc0ce5ad04ba) tokens now, pls wait...",
-                    action: "SEND_TOKEN",
-                },
-            },
-            {
-                user: "{{user2}}",
-                content: {
-                    text: "Successfully sent 1000 FROTH to 0x000000000000000000000002e44fbfbd00395de5\nTransaction ID: de5f9f45f6ccefb4b5affa05fc6ea28d86249014748c2c9efca3fcf8c03183f1",
+                    text: "Sending 1000 FROTH tokens now, pls wait...",
+                    action: "SEND_COIN",
                 },
             },
         ],
