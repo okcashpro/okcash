@@ -134,7 +134,7 @@ const Contributors: React.FC = () => {
                 observer.unobserve(observerRef.current);
             }
         };
-    }, [contributors, hasMore]);
+    }, [contributors, hasMore, selectedContributor]);
 
     if (error) {
         return <div>Error: {error}</div>;
