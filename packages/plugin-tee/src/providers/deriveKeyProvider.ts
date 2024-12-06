@@ -47,9 +47,9 @@ class DeriveKeyProvider {
             publicKey
         }
         const reportdata = JSON.stringify(deriveKeyData);
-        console.log("Generating attestation for: ", reportdata);
+        console.log("Generating Remote Attestation Quote for Derive Key...");
         const quote = await this.raProvider.generateAttestation(reportdata);
-        console.log("TEE Quote generated:", quote);
+        console.log("Remote Attestation Quote generated successfully!");
         return quote;
     }
 
