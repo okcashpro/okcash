@@ -155,8 +155,6 @@ TWITTER_COOKIES='[{"key":"auth_token","value":"your token","domain":".twitter.co
   {"key":"guest_id","value":"your guest_id","domain":".twitter.com"}]'
 ```
 
-Using TWITTER_COOKIES makes providing TWITTER_PASSWORD and TWITTER_EMAIL unnecessary. TWITTER_USERNAME is still required.
-
 ### Telegram Bot
 
 1. Create a bot
