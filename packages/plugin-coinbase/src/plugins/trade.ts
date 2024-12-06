@@ -1,4 +1,4 @@
-import { Coinbase, Transaction } from "@coinbase/coinbase-sdk";
+import { Coinbase} from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
