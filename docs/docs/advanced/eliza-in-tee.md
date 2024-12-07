@@ -8,6 +8,17 @@ sidebar_position: 17
 
 ## Overview
 
+The Eliza agent can be deployed in a TEE environment to ensure the security and privacy of the agent's data. This guide will walk you through the process of setting up and running an Eliza agent in a TEE environment by utilizing the TEE Plugin in the Eliza Framework.
+
+### Background
+
+The TEE Plugin in the Eliza Framework is built on top of the [Dstack SDK](https://github.com/Dstack-TEE/dstack), which is designed to simplify the steps for developers to deploy programs to CVM (Confidential VM), and to follow the security best practices by default. The main features include:
+
+- Convert any docker container to a CVM image to deploy on supported TEEs
+- Remote Attestation API and a chain-of-trust visualization on Web UI
+- Automatic RA-HTTPS wrapping with content addressing domain on 0xABCD.dstack.host
+- Decouple the app execution and state persistent from specific hardware with decentralized Root-of-Trust
+
 ---
 
 ## Core Components
@@ -144,7 +155,7 @@ To set up your environment for TEE development:
    ```bash
    pnpm i
    pnpm build
-   pnpm start --character=./characters/eternalai.character.json
+   pnpm start --character=./characters/yourcharacter.character.json
    ```
 
 4. **Verify TEE Attestation**
