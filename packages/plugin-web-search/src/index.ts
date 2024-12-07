@@ -1,4 +1,4 @@
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 import {
     Action,
     HandlerCallback,
@@ -6,10 +6,10 @@ import {
     Memory,
     Plugin,
     State,
-} from "@ai16z/eliza";
-import { generateWebSearch } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { generateWebSearch } from "@okcashpro/eliza";
 
-import { SearchResult } from "@ai16z/eliza";
+import { SearchResult } from "@okcashpro/eliza";
 
 const webSearch: Action = {
     name: "WEB_SEARCH",

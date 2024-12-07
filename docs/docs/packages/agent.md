@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # 🤖 Agent Package
 
-The Agent Package (`@eliza/agent`) provides the high-level orchestration layer for Eliza, managing agent lifecycles, character loading, client initialization, and runtime coordination.
+The Agent Package (`@okai/agent`) provides the high-level orchestration layer for OKai, managing agent lifecycles, character loading, client initialization, and runtime coordination.
 
 ## Architecture Overview
 
@@ -39,7 +39,7 @@ graph TD
 
 ## Key Responsibilities
 
-The Agent Package (`@ai16z/agent`) serves as the orchestration layer for Eliza, handling:
+The Agent Package (`@okcashpro/agent`) serves as the orchestration layer for OKai, handling:
 
 - Character and plugin loading
 - Runtime initialization and management
@@ -50,13 +50,13 @@ The Agent Package (`@ai16z/agent`) serves as the orchestration layer for Eliza, 
 ## Installation
 
 ```bash
-pnpm add @ai16z/agent
+pnpm add @okcashpro/agent
 ```
 
 ## Quick Start
 
 ```typescript
-import { startAgents, loadCharacters } from "@ai16z/agent";
+import { startAgents, loadCharacters } from "@okcashpro/agent";
 
 // Load characters from files
 const args = parseArguments();

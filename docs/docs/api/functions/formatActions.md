@@ -18,4 +18,4 @@ A detailed string of actions, including names and descriptions.
 
 ## Defined in
 
-[packages/core/src/actions.ts:59](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/actions.ts#L59)
+[packages/core/src/actions.ts:59](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/actions.ts#L59)

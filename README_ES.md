@@ -1,6 +1,6 @@
 # OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="Banner de Eliza" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="Banner de OKai" width="100%" />
 
 ## Funcionalidades
 
@@ -44,7 +44,7 @@ pnpm i
 pnpm start
 ```
 
-# Personalizando a Eliza
+# Personalizando a OKai
 
 ### Agregando acciones personalizadas
 

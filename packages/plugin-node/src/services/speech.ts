@@ -1,10 +1,10 @@
 import { PassThrough, Readable } from "stream";
-import { IAgentRuntime, ISpeechService, ServiceType } from "@ai16z/eliza";
+import { IAgentRuntime, ISpeechService, ServiceType } from "@okcashpro/eliza";
 import { getWavHeader } from "./audioUtils.ts";
-import { Service } from "@ai16z/eliza";
+import { Service } from "@okcashpro/eliza";
 import { validateNodeConfig } from "../environment.ts";
 import * as Echogarden from "echogarden";
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 
 function prependWavHeader(
     readable: Readable,

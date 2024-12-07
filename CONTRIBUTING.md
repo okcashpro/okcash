@@ -1,10 +1,10 @@
-# Contributing to Eliza
+# Contributing to OKai
 
-First off, thank you for considering contributing to Eliza! We welcome contributions from everyone, regardless of experience level.
+First off, thank you for considering contributing to OKai! We welcome contributions from everyone, regardless of experience level.
 
 ## Contribution License Agreement
 
-By contributing to Eliza, you agree that your contributions will be licensed under the MIT License. This means:
+By contributing to OKai, you agree that your contributions will be licensed under the MIT License. This means:
 
 1. You grant us (and everyone else) a perpetual, worldwide, non-exclusive, royalty-free license to use your contributions.
 2. Your contributions are and will be available as Free and Open Source Software (FOSS).
@@ -24,7 +24,7 @@ We believe in the power of the OODA Loop - a decision-making framework that emph
 
 ### For Developers
 
-1. **Extend Eliza's Capabilities**
+1. **Extend OKai's Capabilities**
 
     - Develop new actions, evaluators, and providers
     - Improve existing components and modules
@@ -78,7 +78,7 @@ This section lists the labels we use to help us track and manage issues and pull
 
 ## Getting Help
 
--   Join [Discord](https://discord.gg/ai16z)
+-   Join [Discord](https://discord.gg/grvpc8c)
 -   Check [FAQ](docs/community/faq.md)
 -   Create GitHub issues
 
@@ -90,7 +90,7 @@ This section lists the labels we use to help us track and manage issues and pull
 
 ## Contributor Guide
 
-Welcome to the Eliza contributor guide! This document is designed to help you understand how you can be part of building the future of autonomous AI agents, regardless of your technical background.
+Welcome to the OKai contributor guide! This document is designed to help you understand how you can be part of building the future of autonomous AI agents, regardless of your technical background.
 
 ### Code of Conduct
 
@@ -126,4 +126,4 @@ Project maintainers have the right and responsibility to remove, edit, or reject
 
 This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
 
-Thank you for contributing to Eliza and helping build the future of autonomous AI agents! 🎉
+Thank you for contributing to OKai and helping build the future of autonomous AI agents! 🎉

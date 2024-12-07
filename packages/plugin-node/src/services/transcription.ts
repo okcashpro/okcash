@@ -3,8 +3,8 @@ import {
     IAgentRuntime,
     ITranscriptionService,
     settings,
-} from "@ai16z/eliza";
-import { Service, ServiceType } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { Service, ServiceType } from "@okcashpro/eliza";
 import { exec } from "child_process";
 import { File } from "formdata-node";
 import fs from "fs";

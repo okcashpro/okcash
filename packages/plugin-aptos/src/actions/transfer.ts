@@ -1,4 +1,4 @@
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 import {
     ActionExample,
     Content,
@@ -8,9 +8,9 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/eliza";
+import { generateObject } from "@okcashpro/eliza";
 import {
     Account,
     Aptos,

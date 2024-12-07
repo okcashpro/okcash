@@ -1,4 +1,4 @@
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@okcashpro/eliza";
 import { z } from "zod";
 
 export const discordEnvSchema = z.object({

@@ -11,7 +11,7 @@ import {
     State,
     HandlerCallback,
     Plugin,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import {
     TransferSchema,
     isTransferContent,

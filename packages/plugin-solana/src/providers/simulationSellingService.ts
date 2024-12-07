@@ -3,12 +3,12 @@ import {
     TokenPerformance,
     // TradePerformance,
     TokenRecommendation,
-} from "@ai16z/plugin-trustdb";
+} from "@okcashpro/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 // Assuming TokenProvider and IAgentRuntime are available
 import { TokenProvider } from "./token.ts";
-// import { settings } from "@ai16z/eliza";
-import { IAgentRuntime } from "@ai16z/eliza";
+// import { settings } from "@okcashpro/eliza";
+import { IAgentRuntime } from "@okcashpro/eliza";
 import { WalletProvider } from "./wallet.ts";
 import * as amqp from "amqplib";
 import { ProcessedTokenData } from "../types/token.ts";

@@ -2,31 +2,31 @@
 
 ## Overview
 
-Database Adapters provide the persistence layer for Eliza, enabling storage and retrieval of memories, relationships, goals, and other core data. The system supports multiple database backends through a unified interface.
+Database Adapters provide the persistence layer for OKai, enabling storage and retrieval of memories, relationships, goals, and other core data. The system supports multiple database backends through a unified interface.
 
 ## Available Adapters
 
-Eliza includes the following database adapters:
+OKai includes the following database adapters:
 
-- **PostgreSQL Adapter** (`@eliza/adapter-postgres`) - Production-ready adapter for PostgreSQL databases
-- **SQLite Adapter** (`@eliza/adapter-sqlite`) - Lightweight adapter for SQLite, perfect for development
-- **SQL.js Adapter** (`@eliza/adapter-sqljs`) - In-memory SQLite adapter for testing
-- **Supabase Adapter** (`@eliza/adapter-supabase`) - Cloud-native adapter for Supabase
+- **PostgreSQL Adapter** (`@okai/adapter-postgres`) - Production-ready adapter for PostgreSQL databases
+- **SQLite Adapter** (`@okai/adapter-sqlite`) - Lightweight adapter for SQLite, perfect for development
+- **SQL.js Adapter** (`@okai/adapter-sqljs`) - In-memory SQLite adapter for testing
+- **Supabase Adapter** (`@okai/adapter-supabase`) - Cloud-native adapter for Supabase
 
 ## Installation
 
 ```bash
 # PostgreSQL
-pnpm add @eliza/adapter-postgres
+pnpm add @okai/adapter-postgres
 
 # SQLite
-pnpm add @eliza/adapter-sqlite
+pnpm add @okai/adapter-sqlite
 
 # SQL.js
-pnpm add @eliza/adapter-sqljs
+pnpm add @okai/adapter-sqljs
 
 # Supabase
-pnpm add @eliza/adapter-supabase
+pnpm add @okai/adapter-supabase
 ```
 
 ## Quick Start
@@ -34,7 +34,7 @@ pnpm add @eliza/adapter-supabase
 ### SQLite (Development)
 
 ```typescript
-import { SqliteDatabaseAdapter } from "@eliza/adapter-sqlite";
+import { SqliteDatabaseAdapter } from "@okai/adapter-sqlite";
 import Database from "better-sqlite3";
 
 const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
@@ -43,7 +43,7 @@ const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
 ### PostgreSQL (Production)
 
 ```typescript
-import { PostgresDatabaseAdapter } from "@eliza/adapter-postgres";
+import { PostgresDatabaseAdapter } from "@okai/adapter-postgres";
 
 const db = new PostgresDatabaseAdapter({
   connectionString: process.env.DATABASE_URL,
@@ -57,7 +57,7 @@ const db = new PostgresDatabaseAdapter({
 ### Supabase (Cloud)
 
 ```typescript
-import { SupabaseDatabaseAdapter } from "@eliza/adapter-supabase";
+import { SupabaseDatabaseAdapter } from "@okai/adapter-supabase";
 
 const db = new SupabaseDatabaseAdapter(
   process.env.SUPABASE_URL,
@@ -69,7 +69,7 @@ const db = new SupabaseDatabaseAdapter(
 
 ### Memory Storage
 
-Memories are the fundamental unit of storage in Eliza. They represent messages, documents, and other content with optional embeddings for semantic search.
+Memories are the fundamental unit of storage in OKai. They represent messages, documents, and other content with optional embeddings for semantic search.
 
 ```typescript
 interface Memory {

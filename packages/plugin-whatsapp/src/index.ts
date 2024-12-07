@@ -1,4 +1,4 @@
-import { Plugin } from "@ai16z/eliza";
+import { Plugin } from "@okcashpro/eliza";
 import { WhatsAppClient } from "./client";
 import { WhatsAppConfig, WhatsAppMessage, WhatsAppWebhookEvent } from "./types";
 import { MessageHandler, WebhookHandler } from "./handlers";

@@ -5,7 +5,7 @@ import { runMain } from "citty";
 
 const DEFAULT_TEMPLATE = "eliza";
 const DEFAULT_REGISTRY =
-    "https://raw.githubusercontent.com/ai16z/eliza/main/packages/create-eliza-app/registry";
+    "https://raw.githubusercontent.com/okcashpro/okai/main/packages/create-eliza-app/registry";
 
 runMain({
     args: {

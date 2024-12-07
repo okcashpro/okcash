@@ -1,8 +1,8 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / elizaLogger
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / elizaLogger
 
 # Variable: elizaLogger
 
-> `const` **elizaLogger**: `ElizaLogger`
+> `const` **elizaLogger**: `OKaiLogger`
 
 ## Defined in
 

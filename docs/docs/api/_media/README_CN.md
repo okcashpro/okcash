@@ -1,6 +1,6 @@
 # OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
 ## 功能
 
@@ -12,7 +12,7 @@
 - ☁️ 多模型支持，包括Llama、OpenAI、Grok、Anthropic等
 - 📦 简单好用
 
-你可以用Eliza做什么？
+你可以用OKai做什么？
 
 - 🤖 聊天机器人
 - 🕵️ 自主Agents
@@ -45,7 +45,7 @@ pnpm i
 pnpm start
 ```
 
-# 自定义Eliza
+# 自定义OKai
 
 ### 添加常规行为
 

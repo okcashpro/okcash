@@ -4,7 +4,7 @@ import {
     generateObjectV2,
     ModelClass,
     Provider,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import {
     Action,
     HandlerCallback,
@@ -12,7 +12,7 @@ import {
     Memory,
     Plugin,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { ChargeContent, ChargeSchema, isChargeContent } from "../types";
 import { chargeTemplate, getChargeTemplate } from "../templates";
 import { getWalletDetails } from "../utils";

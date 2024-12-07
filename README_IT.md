@@ -1,7 +1,7 @@
 # OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 </div>
 
 ## ✨ Caratteristiche
@@ -41,7 +41,7 @@ Copia .env.example in .env e inserisci i valori appropriati
 cp .env.example .env
 ```
 
-### Avvia Eliza Automaticamente
+### Avvia OKai Automaticamente
 
 Questo script eseguirà tutti i comandi necessari per configurare il progetto e avviare il bot con il personaggio predefinito.
 
@@ -57,7 +57,7 @@ sh scripts/start.sh
     - Usa `pnpm start --characters="percorso/del/tuo/personaggio.json"`
     - È possibile caricare più file di personaggi contemporaneamente
 
-### Avvia Eliza Manualmente
+### Avvia OKai Manualmente
 
 ```bash
 pnpm i
@@ -78,15 +78,15 @@ pnpm install --include=optional sharp
 
 ### Community e contatti
 
--   [GitHub Issues](https://github.com/ai16z/eliza/issues). Ideale per: bug riscontrati utilizzando Eliza e proposte di funzionalità.
--   [Discord](https://discord.gg/ai16z). Ideale per: condividere le tue applicazioni e interagire con la community.
+-   [GitHub Issues](https://github.com/okcashpro/okai/issues). Ideale per: bug riscontrati utilizzando OKai e proposte di funzionalità.
+-   [Discord](https://discord.gg/grvpc8c). Ideale per: condividere le tue applicazioni e interagire con la community.
 
 ## Contributori
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
 </a>
 
 ## Cronologia Stelle
 
-[![Grafico Cronologia Stelle](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![Grafico Cronologia Stelle](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)

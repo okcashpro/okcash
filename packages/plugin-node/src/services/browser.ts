@@ -1,9 +1,9 @@
-import { generateText, IBrowserService, trimTokens } from "@ai16z/eliza";
-import { parseJSONObjectFromText } from "@ai16z/eliza";
-import { Service } from "@ai16z/eliza";
-import { settings } from "@ai16z/eliza";
-import { IAgentRuntime, ModelClass, ServiceType } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
+import { generateText, IBrowserService, trimTokens } from "@okcashpro/eliza";
+import { parseJSONObjectFromText } from "@okcashpro/eliza";
+import { Service } from "@okcashpro/eliza";
+import { settings } from "@okcashpro/eliza";
+import { IAgentRuntime, ModelClass, ServiceType } from "@okcashpro/eliza";
+import { stringToUuid } from "@okcashpro/eliza";
 import { PlaywrightBlocker } from "@cliqz/adblocker-playwright";
 import CaptchaSolver from "capsolver-npm";
 import { Browser, BrowserContext, chromium, Page } from "playwright";
@@ -16,11 +16,11 @@ async function generateSummary(
     text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
 
     const prompt = `Please generate a concise summary for the following text:
-  
+
   Text: """
   ${text}
   """
-  
+
   Respond with a JSON object in the following format:
   \`\`\`json
   {

@@ -99,7 +99,7 @@ const config = {
         treatValidationWarningsAsErrors: true,
         searchInComments: true,
         navigationLinks: {
-          GitHub: "https://github.com/ai16z/eliza",
+          GitHub: "https://github.com/okcashpro/okai",
           Documentation: "/docs/intro",
         },
       },
@@ -120,7 +120,7 @@ const config = {
       {
         docs: {
           sidebarPath: "./sidebars.js",
-          editUrl: "https://github.com/ai16z/eliza/tree/main/docs/",
+          editUrl: "https://github.com/okcashpro/okai/tree/main/docs/",
           routeBasePath: "docs",
           exclude: ["**/_media/**"],
         },
@@ -145,7 +145,7 @@ const config = {
     navbar: {
       title: "eliza",
       logo: {
-        alt: "Eliza Logo",
+        alt: "OKai Logo",
         src: "img/favicon.ico",
       },
       items: [
@@ -170,7 +170,7 @@ const config = {
           docId: "index",
         },
         {
-          href: "https://github.com/ai16z/eliza",
+          href: "https://github.com/okcashpro/okai",
           label: "GitHub",
           position: "right",
         },
@@ -193,7 +193,7 @@ const config = {
           items: [
             {
               label: "Discord",
-              href: "https://discord.gg/ai16z",
+              href: "https://discord.gg/grvpc8c",
             },
             {
               label: "Twitter",
@@ -206,12 +206,12 @@ const config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/ai16z/eliza",
+              href: "https://github.com/okcashpro/okai",
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} ai16z.ai`,
+      copyright: `Copyright © ${new Date().getFullYear()} OK`,
     },
     prism: {
       theme: prismThemes.github,

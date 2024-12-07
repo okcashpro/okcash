@@ -4,13 +4,13 @@ sidebar_position: 11
 
 # 🔐 Secrets Management
 
-A comprehensive guide for managing secrets, API keys, and sensitive configuration in Eliza.
+A comprehensive guide for managing secrets, API keys, and sensitive configuration in OKai.
 
 ## Core Concepts
 
 ### Environment Variables
 
-Eliza uses a hierarchical environment variable system:
+OKai uses a hierarchical environment variable system:
 
 1. Character-specific secrets (highest priority)
 2. Environment variables

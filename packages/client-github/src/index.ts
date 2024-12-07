@@ -12,7 +12,7 @@ import {
     IAgentRuntime,
     knowledge,
     stringToUuid,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { validateGithubConfig } from "./environment";
 
 export interface GitHubConfig {

@@ -1,6 +1,6 @@
-import { composeContext, elizaLogger } from "@ai16z/eliza";
-import { generateMessageResponse, generateTrueOrFalse } from "@ai16z/eliza";
-import { booleanFooter, messageCompletionFooter } from "@ai16z/eliza";
+import { composeContext, elizaLogger } from "@okcashpro/eliza";
+import { generateMessageResponse, generateTrueOrFalse } from "@okcashpro/eliza";
+import { booleanFooter, messageCompletionFooter } from "@okcashpro/eliza";
 import {
     Action,
     ActionExample,
@@ -10,7 +10,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 
 const maxContinuesInARow = 3;
 

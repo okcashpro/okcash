@@ -4,7 +4,7 @@ sidebar_position: 12
 
 # 💻 Local Development Guide
 
-This guide covers setting up and working with Eliza in a development environment.
+This guide covers setting up and working with OKai in a development environment.
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ CUDA Toolkit (for GPU acceleration)
 
 ```bash
 # Clone the repository
-git clone https://github.com/ai16z/eliza.git
+git clone https://github.com/okcashpro/okai.git
 cd eliza
 
 # Install dependencies
@@ -99,7 +99,7 @@ pnpm run lint          # Lint code
 ### SQLite (Recommended for Development)
 
 ```typescript
-import { SqliteDatabaseAdapter } from "@ai16z/eliza/adapters";
+import { SqliteDatabaseAdapter } from "@okcashpro/okai/adapters";
 import Database from "better-sqlite3";
 
 const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
@@ -108,7 +108,7 @@ const db = new SqliteDatabaseAdapter(new Database("./dev.db"));
 ### In-Memory Database (for Testing)
 
 ```typescript
-import { SqlJsDatabaseAdapter } from "@ai16z/eliza/adapters";
+import { SqlJsDatabaseAdapter } from "@okcashpro/okai/adapters";
 
 const db = new SqlJsDatabaseAdapter(new Database(":memory:"));
 ```
@@ -148,7 +148,7 @@ pnpm test:sqljs
 ### Writing Tests
 
 ```typescript
-import { runAiTest } from "@ai16z/eliza/test_resources";
+import { runAiTest } from "@okcashpro/okai/test_resources";
 
 describe("Feature Test", () => {
   beforeEach(async () => {
@@ -176,7 +176,7 @@ describe("Feature Test", () => {
 
 ```typescript
 // plugins/my-plugin/src/index.ts
-import { Plugin } from "@ai16z/eliza/types";
+import { Plugin } from "@okcashpro/okai/types";
 
 export const myPlugin: Plugin = {
   name: "my-plugin",
@@ -218,7 +218,7 @@ Create `.vscode/launch.json`:
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Eliza",
+      "name": "Debug OKai",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.ts",
       "runtimeArgs": ["-r", "ts-node/register"],

@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # ⚡ Actions
 
-Actions are core building blocks in Eliza that define how agents respond to and interact with messages. They allow agents to interact with external systems, modify their behavior, and perform tasks beyond simple message responses.
+Actions are core building blocks in OKai that define how agents respond to and interact with messages. They allow agents to interact with external systems, modify their behavior, and perform tasks beyond simple message responses.
 
 ---
 
@@ -34,7 +34,7 @@ interface Action {
 }
 ```
 
-Source: https://github.com/ai16z/eliza/packages/core/src/types.ts
+Source: https://github.com/okcashpro/okai/packages/core/src/types.ts
 
 ---
 
@@ -87,7 +87,7 @@ const take_order: Action = {
 };
 ```
 
-Source: https://github.com/ai16z/eliza/packages/plugin-solana/src/actions/takeOrder.ts
+Source: https://github.com/okcashpro/okai/packages/plugin-solana/src/actions/takeOrder.ts
 
 ---
 
@@ -452,7 +452,7 @@ const chainedAction: Action = {
 ## Example: Complete Action Implementation
 
 ```typescript
-import { Action, IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import { Action, IAgentRuntime, Memory, State } from "@okcashpro/okai";
 
 const documentAnalysisAction: Action = {
   name: "ANALYZE_DOCUMENT",

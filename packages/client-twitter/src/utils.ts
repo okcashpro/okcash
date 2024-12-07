@@ -1,9 +1,9 @@
 import { Tweet } from "agent-twitter-client";
-import { getEmbeddingZeroVector } from "@ai16z/eliza";
-import { Content, Memory, UUID } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
+import { getEmbeddingZeroVector } from "@okcashpro/eliza";
+import { Content, Memory, UUID } from "@okcashpro/eliza";
+import { stringToUuid } from "@okcashpro/eliza";
 import { ClientBase } from "./base";
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 
 const MAX_TWEET_LENGTH = 280; // Updated to Twitter's current character limit
 

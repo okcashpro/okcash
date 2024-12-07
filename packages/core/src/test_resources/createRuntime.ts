@@ -1,9 +1,9 @@
 import {
     SqliteDatabaseAdapter,
     loadVecExtensions,
-} from "@ai16z/adapter-sqlite";
-import { SqlJsDatabaseAdapter } from "@ai16z/adapter-sqljs";
-import { SupabaseDatabaseAdapter } from "@ai16z/adapter-supabase";
+} from "@okcashpro/adapter-sqlite";
+import { SqlJsDatabaseAdapter } from "@okcashpro/adapter-sqljs";
+import { SupabaseDatabaseAdapter } from "@okcashpro/adapter-supabase";
 import { DatabaseAdapter } from "../database.ts";
 import { getEndpoint } from "../models.ts";
 import { AgentRuntime } from "../runtime.ts";

@@ -8,7 +8,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:650](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L650)
+[packages/core/src/types.ts:650](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L650)
 
 ---
 
@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:646](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L646)
+[packages/core/src/types.ts:646](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L646)
 
 ---
 
@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:652](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L652)
+[packages/core/src/types.ts:652](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L652)
 
 ---
 
@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:651](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L651)
+[packages/core/src/types.ts:651](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L651)
 
 ---
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:649](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L649)
+[packages/core/src/types.ts:649](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L649)
 
 ---
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:647](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L647)
+[packages/core/src/types.ts:647](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L647)
 
 ---
 
@@ -68,4 +68,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:648](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L648)
+[packages/core/src/types.ts:648](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L648)

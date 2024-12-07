@@ -1,4 +1,4 @@
-import { IAgentRuntime, IPdfService, Service, ServiceType } from "@ai16z/eliza";
+import { IAgentRuntime, IPdfService, Service, ServiceType } from "@okcashpro/eliza";
 import { getDocument, PDFDocumentProxy } from "pdfjs-dist";
 import { TextItem, TextMarkedContent } from "pdfjs-dist/types/src/display/api";
 

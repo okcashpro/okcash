@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## Overview
 
-The Core Package (`@ai16z/core`) provides the fundamental building blocks of Eliza's architecture, handling essential functionalities like:
+The Core Package (`@okcashpro/core`) provides the fundamental building blocks of OKai's architecture, handling essential functionalities like:
 
 - Memory Management & Semantic Search
 - Message Processing & Generation
@@ -18,17 +18,17 @@ The Core Package (`@ai16z/core`) provides the fundamental building blocks of Eli
 ## Installation
 
 ```bash
-pnpm add @ai16z/core
+pnpm add @okcashpro/core
 ```
 
 ## Key Components
 
 ### AgentRuntime
 
-The AgentRuntime class serves as the central nervous system of Eliza, orchestrating all major components:
+The AgentRuntime class serves as the central nervous system of OKai, orchestrating all major components:
 
 ```typescript
-import { AgentRuntime } from "@ai16z/core";
+import { AgentRuntime } from "@okcashpro/core";
 
 const runtime = new AgentRuntime({
   // Core configuration

@@ -1,7 +1,7 @@
 # OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 </div>
 
 <div align="center">
@@ -42,29 +42,29 @@
 ### Starter 사용 (권장)
 
 ```bash
-git clone https://github.com/ai16z/eliza-starter.git
+git clone https://github.com/okcashpro/okai-starter.git
 
 cp .env.example .env
 
 pnpm i && pnpm start
 ```
 
-[문서](https://okcashpro.github.io/okai/)를 참고하여 Eliza를 커스마이징 방법을 확인하세요.
+[문서](https://okcashpro.github.io/okai/)를 참고하여 OKai를 커스마이징 방법을 확인하세요.
 
 ### 직접 실행하기 (경험자만 권장)
 
 ```bash
 # 리포지토리 클론
-git clone https://github.com/ai16z/eliza.git
+git clone https://github.com/okcashpro/okai.git
 
 # 최신 릴리스로 체크아웃
 # 프로젝트가 빠르게 수정되므로 최신 릴리스를 체크아웃하는 것을 권장합니다.
 git checkout $(git describe --tags --abbrev=0)
 ```
 
-### Gitpod로 Eliza 시작
+### Gitpod로 OKai 시작
 
-[![Gitpod로 열기](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+[![Gitpod로 열기](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/okcashpro/okai/tree/main)
 
 ### .env 파일 편집
 
@@ -114,15 +114,15 @@ pnpm install --include=optional sharp
 
 ### Community & contact
 
--   [깃헙 이슈](https://github.com/ai16z/eliza/issues). 용도: Eliza 사용 중 발견된 버그 리포트, 기능 제안.
--   [Discord](https://discord.gg/ai16z). 용도: 애플리케이션 공유 및 커뮤니티 활동.
+-   [깃헙 이슈](https://github.com/okcashpro/okai/issues). 용도: OKai 사용 중 발견된 버그 리포트, 기능 제안.
+-   [Discord](https://discord.gg/grvpc8c). 용도: 애플리케이션 공유 및 커뮤니티 활동.
 
 ## 컨트리뷰터
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
 </a>
 
 ## 스타 기록
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)

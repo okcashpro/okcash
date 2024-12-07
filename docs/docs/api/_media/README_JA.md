@@ -1,6 +1,6 @@
 # OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
 ## 機能
 

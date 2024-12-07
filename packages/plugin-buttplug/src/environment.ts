@@ -1,10 +1,10 @@
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@okcashpro/eliza";
 import { z } from "zod";
 
 export const buttplugEnvSchema = z
     .object({
         INTIFACE_URL: z.string().default("ws://localhost:12345"),
-        INTIFACE_NAME: z.string().default("Eliza Buttplug Client"),
+        INTIFACE_NAME: z.string().default("OKai Buttplug Client"),
         DEVICE_NAME: z.string().default("Lovense Nora"),
     })
     .refine(

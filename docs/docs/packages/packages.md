@@ -6,15 +6,15 @@ sidebar_position: 1
 
 ## Core Components
 
-- **@ai16z/core**: Central framework and shared functionality
-- **@ai16z/agent**: Agent runtime and management
-- **@ai16z/adapters**: Database implementations (PostgreSQL, SQLite, etc.)
-- **@ai16z/clients**: Platform integrations (Discord, Telegram, etc.)
-- **@ai16z/plugins**: Extension modules for additional functionality
+- **@okcashpro/core**: Central framework and shared functionality
+- **@okcashpro/agent**: Agent runtime and management
+- **@okcashpro/adapters**: Database implementations (PostgreSQL, SQLite, etc.)
+- **@okcashpro/clients**: Platform integrations (Discord, Telegram, etc.)
+- **@okcashpro/plugins**: Extension modules for additional functionality
 
 ## Package Architecture
 
-The Eliza framework is built on a modular architecture where each package serves a specific purpose:
+The OKai framework is built on a modular architecture where each package serves a specific purpose:
 
 1. **Core Package**: Provides the fundamental building blocks
 2. **Agent Package**: Handles agent lifecycle and runtime
@@ -39,13 +39,13 @@ graph TD
 
 ```
 # Install core package
-pnpm add @ai16z/core
+pnpm add @okcashpro/core
 
 # Install specific adapters
-pnpm add @ai16z/adapter-postgres
-pnpm add @ai16z/adapter-sqlite
+pnpm add @okcashpro/adapter-postgres
+pnpm add @okcashpro/adapter-sqlite
 
 # Install clients
-pnpm add @ai16z/client-discord
-pnpm add @ai16z/client-Telegram
+pnpm add @okcashpro/client-discord
+pnpm add @okcashpro/client-Telegram
 ```

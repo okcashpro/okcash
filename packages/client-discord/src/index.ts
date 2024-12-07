@@ -1,7 +1,7 @@
-import { getEmbeddingZeroVector } from "@ai16z/eliza";
-import { Character, Client as ElizaClient, IAgentRuntime } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
-import { elizaLogger } from "@ai16z/eliza";
+import { getEmbeddingZeroVector } from "@okcashpro/eliza";
+import { Character, Client as OKaiClient, IAgentRuntime } from "@okcashpro/eliza";
+import { stringToUuid } from "@okcashpro/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 import {
     Client,
     Events,
@@ -386,7 +386,7 @@ export function startDiscord(runtime: IAgentRuntime) {
     return new DiscordClient(runtime);
 }
 
-export const DiscordClientInterface: ElizaClient = {
+export const DiscordClientInterface: OKaiClient = {
     start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
     stop: async (_runtime: IAgentRuntime) => {
         console.warn("Discord client does not support stopping yet");

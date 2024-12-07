@@ -3,7 +3,7 @@ import { ModelProviderName } from "../types";
 
 describe("defaultCharacter", () => {
     it("should have the correct name", () => {
-        expect(defaultCharacter.name).toBe("Eliza");
+        expect(defaultCharacter.name).toBe("OKai");
     });
 
     it("should have an empty plugins array", () => {

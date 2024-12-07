@@ -8,7 +8,7 @@ import {
     getEmbeddingZeroVector,
     elizaLogger,
     stringToUuid,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import {
     QueryTweetsResponse,
     Scraper,

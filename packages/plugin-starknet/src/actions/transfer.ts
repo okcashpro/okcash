@@ -13,7 +13,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { validateStarknetConfig } from "../environment";

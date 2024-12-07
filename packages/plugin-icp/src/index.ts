@@ -1,10 +1,10 @@
-import { Plugin } from "@ai16z/eliza";
+import { Plugin } from "@okcashpro/eliza";
 import { icpWalletProvider } from "./providers/wallet";
 import { executeCreateToken } from "./actions/createToken";
 
 export const icpPlugin: Plugin = {
     name: "icp",
-    description: "Internet Computer Protocol Plugin for Eliza",
+    description: "Internet Computer Protocol Plugin for OKai",
     providers: [icpWalletProvider],
     actions: [executeCreateToken],
     evaluators: [],

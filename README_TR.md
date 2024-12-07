@@ -1,7 +1,7 @@
 # OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 </div>
 
 <div align="center">
@@ -78,15 +78,15 @@ pnpm install --include=optional sharp
 
 ### Topluluk ve İletişim
 
--   [GitHub Issues](https://github.com/ai16z/eliza/issues). Buna uygundur: Eliza kullanırken karşılaştığınız hatalar ve özellik önerileri.
--   [Discord](https://discord.gg/ai16z). Buna uygundur: Uygulamalarınızı paylaşmak ve toplulukla vakit geçirmek.
+-   [GitHub Issues](https://github.com/okcashpro/okai/issues). Buna uygundur: OKai kullanırken karşılaştığınız hatalar ve özellik önerileri.
+-   [Discord](https://discord.gg/grvpc8c). Buna uygundur: Uygulamalarınızı paylaşmak ve toplulukla vakit geçirmek.
 
 ## Katkıda Bulunanlar
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
 </a>
 
 ## Yıldız Geçmişi
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)

@@ -6,13 +6,13 @@ sidebar_position: 14
 
 ## Overview
 
-Eliza's infrastructure is built on a flexible database architecture that supports multiple adapters and efficient data storage mechanisms for AI agent interactions, memory management, and relationship tracking.
+OKai's infrastructure is built on a flexible database architecture that supports multiple adapters and efficient data storage mechanisms for AI agent interactions, memory management, and relationship tracking.
 
 ## Core Components
 
 ### Database Adapters
 
-Eliza supports multiple database backends through a pluggable adapter system:
+OKai supports multiple database backends through a pluggable adapter system:
 
 - **PostgreSQL** - Full-featured adapter with vector search capabilities
 - **SQLite** - Lightweight local database option
@@ -298,7 +298,7 @@ async function cleanupOldMemories() {
 
   await db.query(
     `
-        DELETE FROM memories 
+        DELETE FROM memories
         WHERE "createdAt" < $1
     `,
     [cutoffDate],

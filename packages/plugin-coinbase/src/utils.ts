@@ -1,5 +1,5 @@
 import { Coinbase, Trade, Transfer, Wallet, WalletData, Webhook } from "@coinbase/coinbase-sdk";
-import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
+import { elizaLogger, IAgentRuntime } from "@okcashpro/eliza";
 import fs from "fs";
 import path from "path";
 import { EthereumTransaction } from "@coinbase/coinbase-sdk/dist/client";

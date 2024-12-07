@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / addHeader
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / addHeader
 
 # Function: addHeader()
 

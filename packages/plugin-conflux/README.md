@@ -1,4 +1,4 @@
-# @ai16z/plugin-conflux
+# @okcashpro/plugin-conflux
 
 This plugin provides actions and providers for interacting with the [Conflux network](https://www.confluxdocs.com/docs/general).
 

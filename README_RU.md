@@ -1,7 +1,7 @@
 # OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 </div>
 
 <div align="center">
@@ -67,7 +67,7 @@ cp .env.example .env
     - Используйте команду `pnpm start --characters="path/to/your/character.json"`
     - Можно загружать несколько файлов персонажей одновременно.
 
-### Запуск Eliza
+### Запуск OKai
 
 После настройки файла `.env` и файла персонажа вы можете запустить бота с помощью следующей команды:
 
@@ -175,15 +175,15 @@ npx --no node-llama-cpp source download --gpu cuda
 
 ### Сообщество и контакты
 
--   [GitHub Issues](https://github.com/ai16z/eliza/issues). Лучше всего подходит для: сообщений об ошибках при использовании Eliza и предложений новых функций.
--   [Discord](https://discord.gg/ai16z). Лучше всего подходит для: обмена своими приложениями и общения с сообществом.
+-   [GitHub Issues](https://github.com/okcashpro/okai/issues). Лучше всего подходит для: сообщений об ошибках при использовании OKai и предложений новых функций.
+-   [Discord](https://discord.gg/grvpc8c). Лучше всего подходит для: обмена своими приложениями и общения с сообществом.
 
 ## Контрибьюторы
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
 </a>
 
 ## История звёзд
 
-[![График истории звёзд](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![График истории звёзд](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)

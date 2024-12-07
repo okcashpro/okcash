@@ -1,4 +1,4 @@
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 import {
     Action,
     HandlerCallback,
@@ -6,7 +6,7 @@ import {
     Memory,
     Plugin,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import fs from "fs";
 import { LUMA_CONSTANTS } from "./constants";
 

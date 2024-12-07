@@ -1,4 +1,4 @@
-import { Plugin } from "@ai16z/eliza";
+import { Plugin } from "@okcashpro/eliza";
 import { executeSwap } from "./actions/swap";
 import transfer from "./actions/transfer";
 import { deployToken } from "./actions/unruggable";
@@ -20,7 +20,7 @@ export const PROVIDER_CONFIG = {
 
 export const starknetPlugin: Plugin = {
     name: "starknet",
-    description: "Starknet Plugin for Eliza",
+    description: "Starknet Plugin for OKai",
     actions: [transfer, executeSwap, deployToken, transferSubdomain],
     evaluators: [],
     providers: [],

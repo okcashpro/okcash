@@ -45,7 +45,7 @@ pnpm i
 pnpm start
 ```
 
-# 사용자 정의 Eliza
+# 사용자 정의 OKai
 
 ### 일반 행동을 추가한다
 

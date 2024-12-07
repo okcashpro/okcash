@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / updateGoal
+[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / updateGoal
 
 # Function: updateGoal()
 

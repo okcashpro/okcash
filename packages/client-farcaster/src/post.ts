@@ -5,7 +5,7 @@ import {
     ModelClass,
     stringToUuid,
     elizaLogger
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { FarcasterClient } from "./client";
 import { formatTimeline, postTemplate } from "./prompts";
 import { castUuid } from "./utils";

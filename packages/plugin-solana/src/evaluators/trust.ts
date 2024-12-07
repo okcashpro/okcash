@@ -10,11 +10,11 @@ import {
     Memory,
     ModelClass,
     Evaluator,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
 import { WalletProvider } from "../providers/wallet.ts";
-import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
+import { TrustScoreDatabase } from "@okcashpro/plugin-trustdb";
 import { Connection, PublicKey } from "@solana/web3.js";
 
 const shouldProcessTemplate =

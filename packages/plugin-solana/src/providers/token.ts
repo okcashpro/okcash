@@ -1,5 +1,5 @@
-import { ICacheManager, settings } from "@ai16z/eliza";
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { ICacheManager, settings } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
 import {
     DexScreenerData,
     DexScreenerPair,

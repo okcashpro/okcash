@@ -4,16 +4,16 @@
         "check-types": {
             "dependsOn": ["build"]
         },
-        "@ai16z/agent#check-types": {
-            "dependsOn": ["@ai16z/plugin-solana#build"]
+        "@okcashpro/agent#check-types": {
+            "dependsOn": ["@okcashpro/plugin-solana#build"]
         },
         "build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["^@ai16z/eliza#build"]
+            "dependsOn": ["^@okcashpro/okai#build"]
         },
-        "@ai16z/plugin-solana#build": {
+        "@okcashpro/plugin-solana#build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["@ai16z/plugin-trustdb#build"]
+            "dependsOn": ["@okcashpro/plugin-trustdb#build"]
         },
         "eliza-docs#build": {
             "outputs": ["build/**"]

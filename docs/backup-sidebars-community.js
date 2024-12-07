@@ -83,7 +83,7 @@ const sidebarsCommunity = {
             {
               type: "doc",
               id: "streams/2024-10-25",
-              label: "X: Eliza Framework",
+              label: "X: OKai Framework",
             },
           ],
         },

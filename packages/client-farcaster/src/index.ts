@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime, elizaLogger } from "@ai16z/eliza";
+import { Client, IAgentRuntime, elizaLogger } from "@okcashpro/eliza";
 import { FarcasterClient } from "./client";
 import { FarcasterPostManager } from "./post";
 import { FarcasterInteractionManager } from "./interactions";

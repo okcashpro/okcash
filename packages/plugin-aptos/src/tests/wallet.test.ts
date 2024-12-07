@@ -9,7 +9,7 @@ import {
     PrivateKey,
     PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
-import { defaultCharacter } from "@ai16z/eliza";
+import { defaultCharacter } from "@okcashpro/eliza";
 import BigNumber from "bignumber.js";
 import { APT_DECIMALS } from "../constants.ts";
 
@@ -96,7 +96,7 @@ describe("WalletProvider", () => {
                 .toFixed(2);
 
             expect(result).toEqual(
-                `Eliza\nWallet Address: ${walletProvider.address}\n` +
+                `OKai\nWallet Address: ${walletProvider.address}\n` +
                     `Total Value: $${totalUsd} (${aptAmount} APT)\n`
             );
         });

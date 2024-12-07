@@ -1,11 +1,11 @@
-import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres";
-import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
-import { AutoClientInterface } from "@ai16z/client-auto";
-import { DirectClientInterface } from "@ai16z/client-direct";
-import { DiscordClientInterface } from "@ai16z/client-discord";
-import { TelegramClientInterface } from "@ai16z/client-telegram";
-import { TwitterClientInterface } from "@ai16z/client-twitter";
-import { FarcasterAgentClient } from "@ai16z/client-farcaster";
+import { PostgresDatabaseAdapter } from "@okcashpro/adapter-postgres";
+import { SqliteDatabaseAdapter } from "@okcashpro/adapter-sqlite";
+import { AutoClientInterface } from "@okcashpro/client-auto";
+import { DirectClientInterface } from "@okcashpro/client-direct";
+import { DiscordClientInterface } from "@okcashpro/client-discord";
+import { TelegramClientInterface } from "@okcashpro/client-telegram";
+import { TwitterClientInterface } from "@okcashpro/client-twitter";
+import { FarcasterAgentClient } from "@okcashpro/client-farcaster";
 import {
     AgentRuntime,
     CacheManager,
@@ -23,26 +23,26 @@ import {
     settings,
     stringToUuid,
     validateCharacterConfig,
-} from "@ai16z/eliza";
-import { zgPlugin } from "@ai16z/plugin-0g";
-import { goatPlugin } from "@ai16z/plugin-goat";
-import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
-// import { buttplugPlugin } from "@ai16z/plugin-buttplug";
+} from "@okcashpro/eliza";
+import { zgPlugin } from "@okcashpro/plugin-0g";
+import { goatPlugin } from "@okcashpro/plugin-goat";
+import { bootstrapPlugin } from "@okcashpro/plugin-bootstrap";
+// import { buttplugPlugin } from "@okcashpro/plugin-buttplug";
 import {
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
     tradePlugin,
     tokenContractPlugin,
     webhookPlugin,
-} from "@ai16z/plugin-coinbase";
-import { confluxPlugin } from "@ai16z/plugin-conflux";
-import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
-import { evmPlugin } from "@ai16z/plugin-evm";
-import { createNodePlugin } from "@ai16z/plugin-node";
-import { solanaPlugin } from "@ai16z/plugin-solana";
-import { aptosPlugin, TransferAptosToken } from "@ai16z/plugin-aptos";
-import { flowPlugin } from "@ai16z/plugin-flow";
-import { teePlugin } from "@ai16z/plugin-tee";
+} from "@okcashpro/plugin-coinbase";
+import { confluxPlugin } from "@okcashpro/plugin-conflux";
+import { imageGenerationPlugin } from "@okcashpro/plugin-image-generation";
+import { evmPlugin } from "@okcashpro/plugin-evm";
+import { createNodePlugin } from "@okcashpro/plugin-node";
+import { solanaPlugin } from "@okcashpro/plugin-solana";
+import { aptosPlugin, TransferAptosToken } from "@okcashpro/plugin-aptos";
+import { flowPlugin } from "@okcashpro/plugin-flow";
+import { teePlugin } from "@okcashpro/plugin-tee";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";

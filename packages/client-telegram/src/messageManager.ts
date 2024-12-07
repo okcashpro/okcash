@@ -1,8 +1,8 @@
 import { Message } from "@telegraf/types";
 import { Context, Telegraf } from "telegraf";
 
-import { composeContext, elizaLogger, ServiceType } from "@ai16z/eliza";
-import { getEmbeddingZeroVector } from "@ai16z/eliza";
+import { composeContext, elizaLogger, ServiceType } from "@okcashpro/eliza";
+import { getEmbeddingZeroVector } from "@okcashpro/eliza";
 import {
     Content,
     HandlerCallback,
@@ -12,11 +12,11 @@ import {
     ModelClass,
     State,
     UUID,
-} from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { stringToUuid } from "@okcashpro/eliza";
 
-import { generateMessageResponse, generateShouldRespond } from "@ai16z/eliza";
-import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
+import { generateMessageResponse, generateShouldRespond } from "@okcashpro/eliza";
+import { messageCompletionFooter, shouldRespondFooter } from "@okcashpro/eliza";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 

@@ -1,5 +1,5 @@
-import { generateText, trimTokens } from "@ai16z/eliza";
-import { parseJSONObjectFromText } from "@ai16z/eliza";
+import { generateText, trimTokens } from "@okcashpro/eliza";
+import { parseJSONObjectFromText } from "@okcashpro/eliza";
 import {
     IAgentRuntime,
     IImageDescriptionService,
@@ -9,7 +9,7 @@ import {
     Media,
     ModelClass,
     ServiceType,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { Attachment, Collection } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
@@ -22,11 +22,11 @@ async function generateSummary(
     text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
 
     const prompt = `Please generate a concise summary for the following text:
-  
+
   Text: """
   ${text}
   """
-  
+
   Respond with a JSON object in the following format:
   \`\`\`json
   {

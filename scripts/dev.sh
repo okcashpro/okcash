@@ -40,13 +40,13 @@ cat << "EOF"
 *                                                                     *
 *     Add your plugin to the "dependencies" section like so:         *
 *                                                                     *
-*        "@ai16z/your-plugin-name": "workspace:*"                    *
+*        "@okcashpro/your-plugin-name": "workspace:*"                    *
 *                                                                     *
 *  5. Edit the 'index.ts' file in 'agent/src':                       *
 *                                                                     *
 *     a. Import your plugin:                                         *
 *                                                                     *
-*        import yourPlugin from '@ai16z/your-plugin-name';           *
+*        import yourPlugin from '@okcashpro/your-plugin-name';           *
 *                                                                     *
 *     b. Add your plugin to the `plugins` array:                     *
 *                                                                     *

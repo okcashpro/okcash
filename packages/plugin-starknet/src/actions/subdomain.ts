@@ -12,7 +12,7 @@ import {
     generateObject,
     Content,
     elizaLogger,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { getStarknetAccount } from "../utils";
 import { validateStarknetConfig } from "../environment";
 import { getTransferSubdomainCall, isStarkDomain } from "../utils/starknetId";

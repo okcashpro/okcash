@@ -1,5 +1,5 @@
 {
-    "name": "@ai16z/plugin-whatsapp",
+    "name": "@okcashpro/plugin-whatsapp",
     "version": "0.1.5-alpha.5",
     "description": "WhatsApp Cloud API plugin",
     "main": "dist/index.js",
@@ -11,7 +11,7 @@
         "lint": "eslint . --fix"
     },
     "dependencies": {
-        "@ai16z/eliza": "workspace:*",
+        "@okcashpro/eliza": "workspace:*",
         "axios": "1.7.8"
     },
     "devDependencies": {

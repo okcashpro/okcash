@@ -1,12 +1,12 @@
 # OKai - Multi-agent simulation framework
 
-# https://github.com/ai16z/eliza
+# https://github.com/okcashpro/okai
 
 # Visit https://eliza.builders for support
 
 # dev branch
 
-<img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
 _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
 
@@ -15,7 +15,7 @@ _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAInd
 - Full-featured Discord and Twitter connectors, with Discord voice channel support
 - Full conversational and document RAG memory
 - Can read links and PDFs, transcribe audio and videos, summarize conversations, and more
-- Highly extensible - create your own actions and clients to extend Eliza's capabilities
+- Highly extensible - create your own actions and clients to extend OKai's capabilities
 - Supports open source and local models (default configured with Nous Hermes Llama 3.1B)
 - Supports OpenAI for cloud inference on a light-weight device
 - "Ask Claude" mode for calling Claude on more complex queries
@@ -45,7 +45,7 @@ pnpm i
 pnpm start
 ```
 
-# Customising Eliza
+# Customising OKai
 
 ### Adding custom actions
 

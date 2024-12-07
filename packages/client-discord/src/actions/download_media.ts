@@ -1,6 +1,6 @@
 import path from "path";
-import { composeContext } from "@ai16z/eliza";
-import { parseJSONObjectFromText } from "@ai16z/eliza";
+import { composeContext } from "@okcashpro/eliza";
+import { parseJSONObjectFromText } from "@okcashpro/eliza";
 import {
     Action,
     ActionExample,
@@ -12,8 +12,8 @@ import {
     ModelClass,
     ServiceType,
     State,
-} from "@ai16z/eliza";
-import { generateText } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { generateText } from "@okcashpro/eliza";
 
 export const mediaUrlTemplate = `# Messages we are searching for a media URL
 {{recentMessages}}

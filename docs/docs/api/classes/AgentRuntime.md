@@ -77,7 +77,7 @@ The JWT token, can be a JWT token if outside worker, or an OpenAI token if insid
 
 #### Defined in
 
-[packages/core/src/runtime.ts:192](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L192)
+[packages/core/src/runtime.ts:192](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L192)
 
 ## Properties
 
@@ -93,7 +93,7 @@ Custom actions that the agent can perform.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:78](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L78)
+[packages/core/src/runtime.ts:78](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L78)
 
 ---
 
@@ -109,7 +109,7 @@ The ID of the agent
 
 #### Defined in
 
-[packages/core/src/runtime.ts:59](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L59)
+[packages/core/src/runtime.ts:59](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L59)
 
 ---
 
@@ -125,7 +125,7 @@ The character to use for the agent
 
 #### Defined in
 
-[packages/core/src/runtime.ts:104](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L104)
+[packages/core/src/runtime.ts:104](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L104)
 
 ---
 
@@ -141,7 +141,7 @@ The database adapter used for interacting with the database.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:68](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L68)
+[packages/core/src/runtime.ts:68](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L68)
 
 ---
 
@@ -157,7 +157,7 @@ Store and recall descriptions of users based on conversations.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:114](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L114)
+[packages/core/src/runtime.ts:114](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L114)
 
 ---
 
@@ -169,7 +169,7 @@ Hold large documents that can be referenced
 
 #### Defined in
 
-[packages/core/src/runtime.ts:124](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L124)
+[packages/core/src/runtime.ts:124](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L124)
 
 ---
 
@@ -185,7 +185,7 @@ Evaluators used to assess and guide the agent's responses.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:83](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L83)
+[packages/core/src/runtime.ts:83](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L83)
 
 ---
 
@@ -220,7 +220,7 @@ Some environments may not have access to the global fetch function and need a cu
 
 #### Defined in
 
-[packages/core/src/runtime.ts:99](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L99)
+[packages/core/src/runtime.ts:99](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L99)
 
 ---
 
@@ -232,7 +232,7 @@ Searchable document fragments
 
 #### Defined in
 
-[packages/core/src/runtime.ts:129](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L129)
+[packages/core/src/runtime.ts:129](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L129)
 
 ---
 
@@ -248,7 +248,7 @@ Manage the creation and recall of static information (documents, historical game
 
 #### Defined in
 
-[packages/core/src/runtime.ts:119](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L119)
+[packages/core/src/runtime.ts:119](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L119)
 
 ---
 
@@ -258,7 +258,7 @@ Manage the creation and recall of static information (documents, historical game
 
 #### Defined in
 
-[packages/core/src/runtime.ts:132](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L132)
+[packages/core/src/runtime.ts:132](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L132)
 
 ---
 
@@ -274,7 +274,7 @@ Store messages that are sent and received by the agent.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:109](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L109)
+[packages/core/src/runtime.ts:109](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L109)
 
 ---
 
@@ -290,7 +290,7 @@ The model to use for generateText.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:93](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L93)
+[packages/core/src/runtime.ts:93](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L93)
 
 ---
 
@@ -306,7 +306,7 @@ Context providers used to provide context for message generation.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:88](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L88)
+[packages/core/src/runtime.ts:88](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L88)
 
 ---
 
@@ -322,7 +322,7 @@ The base URL of the server where the agent's requests are processed.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:63](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L63)
+[packages/core/src/runtime.ts:63](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L63)
 
 ---
 
@@ -336,7 +336,7 @@ The base URL of the server where the agent's requests are processed.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:131](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L131)
+[packages/core/src/runtime.ts:131](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L131)
 
 ---
 
@@ -352,7 +352,7 @@ Authentication token used for securing requests.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:73](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L73)
+[packages/core/src/runtime.ts:73](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L73)
 
 ## Methods
 
@@ -382,7 +382,7 @@ The state of the agent.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:667](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L667)
+[packages/core/src/runtime.ts:667](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L667)
 
 ---
 
@@ -412,7 +412,7 @@ The state of the agent.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:618](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L618)
+[packages/core/src/runtime.ts:618](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L618)
 
 ---
 
@@ -444,7 +444,7 @@ An error if the participant cannot be added.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:571](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L571)
+[packages/core/src/runtime.ts:571](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L571)
 
 ---
 
@@ -468,7 +468,7 @@ An error if the participant cannot be added.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:607](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L607)
+[packages/core/src/runtime.ts:607](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L607)
 
 ---
 
@@ -499,7 +499,7 @@ An error if the room cannot be created.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:654](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L654)
+[packages/core/src/runtime.ts:654](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L654)
 
 ---
 
@@ -535,7 +535,7 @@ The user name to ensure the existence of.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:587](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L587)
+[packages/core/src/runtime.ts:587](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L587)
 
 ---
 
@@ -571,7 +571,7 @@ The results of the evaluation.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:501](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L501)
+[packages/core/src/runtime.ts:501](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L501)
 
 ---
 
@@ -593,7 +593,7 @@ The number of recent messages to be kept in memory.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:394](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L394)
+[packages/core/src/runtime.ts:394](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L394)
 
 ---
 
@@ -615,7 +615,7 @@ The number of recent messages to be kept in memory.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:149](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L149)
+[packages/core/src/runtime.ts:149](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L149)
 
 ---
 
@@ -637,7 +637,7 @@ _typeof_ [`Service`](Service.md)
 
 #### Defined in
 
-[packages/core/src/runtime.ts:153](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L153)
+[packages/core/src/runtime.ts:153](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L153)
 
 ---
 
@@ -659,7 +659,7 @@ _typeof_ [`Service`](Service.md)
 
 #### Defined in
 
-[packages/core/src/runtime.ts:372](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L372)
+[packages/core/src/runtime.ts:372](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L372)
 
 ---
 
@@ -691,7 +691,7 @@ The message to process.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:428](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L428)
+[packages/core/src/runtime.ts:428](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L428)
 
 ---
 
@@ -717,7 +717,7 @@ The action to register.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:402](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L402)
+[packages/core/src/runtime.ts:402](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L402)
 
 ---
 
@@ -739,7 +739,7 @@ The context provider to register.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:419](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L419)
+[packages/core/src/runtime.ts:419](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L419)
 
 ---
 
@@ -761,7 +761,7 @@ The evaluator to register.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:411](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L411)
+[packages/core/src/runtime.ts:411](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L411)
 
 ---
 
@@ -783,7 +783,7 @@ The evaluator to register.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:134](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L134)
+[packages/core/src/runtime.ts:134](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L134)
 
 ---
 
@@ -805,7 +805,7 @@ The evaluator to register.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:161](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L161)
+[packages/core/src/runtime.ts:161](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L161)
 
 ---
 
@@ -827,4 +827,4 @@ The evaluator to register.
 
 #### Defined in
 
-[packages/core/src/runtime.ts:1124](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L1124)
+[packages/core/src/runtime.ts:1124](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/runtime.ts#L1124)

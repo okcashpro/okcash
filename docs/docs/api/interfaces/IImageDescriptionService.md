@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:585](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L585)
+[packages/core/src/types.ts:585](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L585)
 
 ---
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:583](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L583)
+[packages/core/src/types.ts:583](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L583)
 
 ---
 
@@ -62,4 +62,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:584](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L584)
+[packages/core/src/types.ts:584](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L584)

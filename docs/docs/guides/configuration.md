@@ -4,7 +4,7 @@ sidebar_position: 9
 
 # ⚙️ Configuration Guide
 
-This guide covers how to configure Eliza for different use cases and environments. We'll walk through all available configuration options and best practices.
+This guide covers how to configure OKai for different use cases and environments. We'll walk through all available configuration options and best practices.
 
 ## Environment Configuration
 

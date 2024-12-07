@@ -11,12 +11,12 @@ Given the early stage of the project, we currently only support the latest versi
 
 ## Reporting a Vulnerability
 
-We take the security of Eliza seriously. If you believe you have found a security vulnerability, please report it to us following these steps:
+We take the security of OKai seriously. If you believe you have found a security vulnerability, please report it to us following these steps:
 
 ### Private Reporting Process
 
 1. **DO NOT** create a public GitHub issue for the vulnerability
-2. Send an email to security@eliza.builders with:
+2. Send an email to security@okai.builders with:
     - A detailed description of the vulnerability
     - Steps to reproduce the issue
     - Potential impact of the vulnerability
@@ -120,6 +120,6 @@ As an MIT licensed project, users should understand:
 
 ## Contact
 
--   Security Issues: security@eliza.builders
--   General Questions: Join our [Discord](https://discord.gg/ai16z)
--   Updates: Follow our [security advisory page](https://github.com/ai16z/eliza/security/advisories)
+-   Security Issues: security@okai.builders
+-   General Questions: Join our [Discord](https://discord.gg/grvpc8c)
+-   Updates: Follow our [security advisory page](https://github.com/okcashpro/okai/security/advisories)

@@ -4,13 +4,13 @@ import {
     Memory,
     State,
     HandlerCallback,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import {
     generateObjectV2,
     composeContext,
     ModelClass,
     Content,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import {
     createPublicClient,
     createWalletClient,

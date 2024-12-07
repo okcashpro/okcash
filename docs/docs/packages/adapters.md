@@ -6,38 +6,38 @@ sidebar_position: 1
 
 ## Overview
 
-Database Adapters provide Eliza's persistence layer, enabling storage and retrieval of memories, relationships, goals, and other data through a unified interface. The system supports multiple database backends:
+Database Adapters provide OKai's persistence layer, enabling storage and retrieval of memories, relationships, goals, and other data through a unified interface. The system supports multiple database backends:
 
 ### Available Adapters
 
 Each adapter is optimized for different use cases:
 
-- **PostgreSQL** (`@ai16z/adapter-postgres`)
+- **PostgreSQL** (`@okcashpro/adapter-postgres`)
 
   - Production-ready with vector search
   - Connection pooling and high performance
   - JSONB and pgvector support
 
-- **SQLite** (`@ai16z/adapter-sqlite`)
+- **SQLite** (`@okcashpro/adapter-sqlite`)
 
   - Lightweight local development
   - No external dependencies
   - Full-text search capabilities
 
-- **Supabase** (`@ai16z/adapter-supabase`)
+- **Supabase** (`@okcashpro/adapter-supabase`)
 
   - Cloud-native PostgreSQL
   - Real-time subscriptions
   - Built-in RPC functions
 
-- **SQL.js** (`@ai16z/adapter-sqljs`)
+- **SQL.js** (`@okcashpro/adapter-sqljs`)
   - In-memory SQLite for testing
   - Browser compatibility
   - Zero configuration
 
 ### Architecture Overview
 
-Eliza's database adapters provide a unified interface for data persistence across different storage backends. The following diagram shows how adapters integrate with the system:
+OKai's database adapters provide a unified interface for data persistence across different storage backends. The following diagram shows how adapters integrate with the system:
 
 ```mermaid
 classDiagram
@@ -139,16 +139,16 @@ Key components:
 
 ```bash
 # PostgreSQL
-pnpm add @ai16z/adapter-postgres pg
+pnpm add @okcashpro/adapter-postgres pg
 
 # SQLite
-pnpm add @ai16z/adapter-sqlite better-sqlite3
+pnpm add @okcashpro/adapter-sqlite better-sqlite3
 
 # SQL.js
-pnpm add @ai16z/adapter-sqljs sql.js
+pnpm add @okcashpro/adapter-sqljs sql.js
 
 # Supabase
-pnpm add @ai16z/adapter-supabase @supabase/supabase-js
+pnpm add @okcashpro/adapter-supabase @supabase/supabase-js
 ```
 
 ---
@@ -158,7 +158,7 @@ pnpm add @ai16z/adapter-supabase @supabase/supabase-js
 ### PostgreSQL Setup
 
 ```typescript
-import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres";
+import { PostgresDatabaseAdapter } from "@okcashpro/adapter-postgres";
 
 const db = new PostgresDatabaseAdapter({
   connectionString: process.env.DATABASE_URL,
@@ -174,7 +174,7 @@ await db.testConnection();
 ### SQLite Setup
 
 ```typescript
-import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
+import { SqliteDatabaseAdapter } from "@okcashpro/adapter-sqlite";
 import Database from "better-sqlite3";
 
 const db = new SqliteDatabaseAdapter(
@@ -190,7 +190,7 @@ const db = new SqliteDatabaseAdapter(
 ### Supabase Setup
 
 ```typescript
-import { SupabaseDatabaseAdapter } from "@ai16z/adapter-supabase";
+import { SupabaseDatabaseAdapter } from "@okcashpro/adapter-supabase";
 
 const db = new SupabaseDatabaseAdapter(
   process.env.SUPABASE_URL!,
@@ -520,7 +520,7 @@ CREATE TABLE IF NOT EXISTS memories (
   createdAt INTEGER NOT NULL
 );
 
-CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts 
+CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts
   USING fts5(content, content_rowid=id);
 
 CREATE TABLE IF NOT EXISTS goals (

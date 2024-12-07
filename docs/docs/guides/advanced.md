@@ -4,16 +4,16 @@ sidebar_position: 10
 
 # 🔧 Advanced Usage Guide
 
-This guide covers advanced features and capabilities of Eliza, including complex integrations, custom services, and specialized plugins.
+This guide covers advanced features and capabilities of OKai, including complex integrations, custom services, and specialized plugins.
 
 ## Service Integration
 
 ### Video Processing Service
 
-Eliza supports advanced video processing capabilities through the `VideoService`:
+OKai supports advanced video processing capabilities through the `VideoService`:
 
 ```typescript
-import { VideoService } from "@ai16z/eliza/plugin-node";
+import { VideoService } from "@okcashpro/okai/plugin-node";
 
 // Initialize service
 const videoService = new VideoService();
@@ -35,7 +35,7 @@ Key features:
 The `ImageDescriptionService` provides advanced image analysis:
 
 ```typescript
-import { ImageDescriptionService } from "@ai16z/eliza/plugin-node";
+import { ImageDescriptionService } from "@okcashpro/okai/plugin-node";
 
 const imageService = new ImageDescriptionService();
 const description = await imageService.describeImage(imageUrl, "gpu", runtime);
@@ -55,7 +55,7 @@ Features:
 The Solana plugin provides comprehensive blockchain functionality:
 
 ```typescript
-import { solanaPlugin } from "@ai16z/eliza/plugin-solana";
+import { solanaPlugin } from "@okcashpro/okai/plugin-solana";
 
 // Initialize plugin
 runtime.registerPlugin(solanaPlugin);
@@ -211,7 +211,7 @@ class TrustScoreDatabase {
 ```typescript
 const customPlugin: Plugin = {
   name: "custom-plugin",
-  description: "Custom Plugin for Eliza",
+  description: "Custom Plugin for OKai",
   actions: [
     // Custom actions
   ],

@@ -9,7 +9,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { Percent } from "@uniswap/sdk-core";
 import {
     getStarknetAccount,

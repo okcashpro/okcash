@@ -30,4 +30,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:311](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L311)
+[packages/core/src/types.ts:311](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L311)

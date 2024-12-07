@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/embedding.ts:146](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/embedding.ts#L146)
+[packages/core/src/embedding.ts:146](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/embedding.ts#L146)

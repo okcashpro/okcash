@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / ConversationExample
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / ConversationExample
 
 # Interface: ConversationExample
 

@@ -1,6 +1,6 @@
 # OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
 ## la fonctionnalité
 
@@ -12,7 +12,7 @@
 - ☁ ️ plusieurs modèles, y compris Llama, OpenAI Grok Anthropic, etc.
 - 📦 simple et facile à utiliser
 
-Que pouvez-vous faire avec Eliza?
+Que pouvez-vous faire avec OKai?
 
 - 🤖 le chatbot
 - 🕵 ️ Agents autonomes
@@ -45,7 +45,7 @@ pnpm i
 pnpm start
 ```
 
-# personnalisez votre Eliza
+# personnalisez votre OKai
 
 ### ajouter un comportement régulier
 

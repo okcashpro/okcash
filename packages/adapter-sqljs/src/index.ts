@@ -7,7 +7,7 @@ import {
     type Memory,
     type Relationship,
     type UUID
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { v4 } from "uuid";
 import { sqliteTables } from "./sqliteTables.ts";
 import { Database } from "./types.ts";

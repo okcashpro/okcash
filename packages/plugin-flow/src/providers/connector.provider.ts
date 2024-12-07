@@ -4,7 +4,7 @@ import {
     Memory,
     Provider,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 
 import FlowConnector, { NetworkType } from "./utils/flow.connector";
 

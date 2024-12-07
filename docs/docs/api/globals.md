@@ -1,4 +1,4 @@
-# @ai16z/eliza
+# @okcashpro/okai
 
 ## Enumerations
 

@@ -3,7 +3,7 @@ export * from "./providers/wallet.ts";
 export * from "./providers/trustScoreProvider.ts";
 export * from "./evaluators/trust.ts";
 
-import { Plugin } from "@ai16z/eliza";
+import { Plugin } from "@okcashpro/eliza";
 import { executeSwap } from "./actions/swap.ts";
 import take_order from "./actions/takeOrder";
 import pumpfun from "./actions/pumpfun.ts";
@@ -19,7 +19,7 @@ export { TokenProvider, WalletProvider };
 
 export const solanaPlugin: Plugin = {
     name: "solana",
-    description: "Solana Plugin for Eliza",
+    description: "Solana Plugin for OKai",
     actions: [
         executeSwap,
         pumpfun,

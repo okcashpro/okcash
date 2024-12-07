@@ -10,7 +10,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/types.ts:66](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L66)
+[packages/core/src/types.ts:66](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L66)
 
 ---
 
@@ -20,7 +20,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/types.ts:69](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L69)
+[packages/core/src/types.ts:69](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L69)
 
 ---
 
@@ -30,7 +30,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/types.ts:71](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L71)
+[packages/core/src/types.ts:71](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L71)
 
 ---
 
@@ -40,7 +40,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/types.ts:67](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L67)
+[packages/core/src/types.ts:67](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L67)
 
 ---
 
@@ -50,7 +50,7 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/types.ts:70](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L70)
+[packages/core/src/types.ts:70](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L70)
 
 ---
 
@@ -60,4 +60,4 @@ Represents a goal, which is a higher-level aim composed of one or more objective
 
 #### Defined in
 
-[packages/core/src/types.ts:68](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L68)
+[packages/core/src/types.ts:68](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L68)

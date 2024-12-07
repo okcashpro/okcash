@@ -45,7 +45,7 @@ function HomepageHeader() {
               alt="blurred"
             />
             <pre className={styles.codeBlock}>
-              <code className="language-bash">{`npm install @ai16z/eliza`}</code>
+              <code className="language-bash">{`npm install @okcashpro/okai`}</code>
             </pre>
           </div>
         </div>

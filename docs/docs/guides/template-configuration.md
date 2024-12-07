@@ -6,7 +6,7 @@ This guide covers how to configure custom templates and client behaviors for you
 
 ### Overview
 
-You can customize your character's behavior by overriding default prompt templates in your character's JSON file. ai16z/eliza provides default prompts for standard behaviors, making all template fields optional.
+You can customize your character's behavior by overriding default prompt templates in your character's JSON file. okcashpro/okai provides default prompts for standard behaviors, making all template fields optional.
 
 ### Available Template Options
 

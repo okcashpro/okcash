@@ -1,7 +1,7 @@
 export * from "./sqliteTables.ts";
 export * from "./sqlite_vec.ts";
 
-import { DatabaseAdapter, IDatabaseCacheAdapter } from "@ai16z/eliza";
+import { DatabaseAdapter, IDatabaseCacheAdapter } from "@okcashpro/eliza";
 import {
     Account,
     Actor,
@@ -11,7 +11,7 @@ import {
     type Memory,
     type Relationship,
     type UUID,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { Database } from "better-sqlite3";
 import { v4 } from "uuid";
 import { load } from "./sqlite_vec.ts";
@@ -248,8 +248,8 @@ export class SqliteDatabaseAdapter
 
         let sql = `
             SELECT *, vec_distance_L2(embedding, ?) AS similarity
-            FROM memories 
-            WHERE type = ? 
+            FROM memories
+            WHERE type = ?
             AND roomId = ?`;
 
         if (params.unique) {
@@ -340,24 +340,24 @@ export class SqliteDatabaseAdapter
         // First get content text and calculate Levenshtein distance
         const sql = `
             WITH content_text AS (
-                SELECT 
+                SELECT
                     embedding,
                     json_extract(
                         json(content),
                         '$.' || ? || '.' || ?
                     ) as content_text
-                FROM memories 
+                FROM memories
                 WHERE type = ?
                 AND json_extract(
                     json(content),
                     '$.' || ? || '.' || ?
                 ) IS NOT NULL
             )
-            SELECT 
+            SELECT
                 embedding,
                 length(?) + length(content_text) - (
                     length(?) + length(content_text) - (
-                        length(replace(lower(?), lower(content_text), '')) + 
+                        length(replace(lower(?), lower(content_text), '')) +
                         length(replace(lower(content_text), lower(?), ''))
                     ) / 2
                 ) as levenshtein_score

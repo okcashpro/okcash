@@ -18,4 +18,4 @@ A comma-separated string of action names.
 
 ## Defined in
 
-[packages/core/src/actions.ts:47](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/actions.ts#L47)
+[packages/core/src/actions.ts:47](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/actions.ts#L47)

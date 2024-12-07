@@ -137,7 +137,7 @@ Features:
 ### Basic Provider Template
 
 ```typescript
-import { Provider, IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import { Provider, IAgentRuntime, Memory, State } from "@okcashpro/okai";
 
 const customProvider: Provider = {
   get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {
@@ -241,7 +241,7 @@ const state = await runtime.composeState(message);
 ## Example: Complete Provider
 
 ```typescript
-import { Provider, IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import { Provider, IAgentRuntime, Memory, State } from "@okcashpro/okai";
 
 const comprehensiveProvider: Provider = {
   get: async (runtime: IAgentRuntime, message: Memory, state?: State) => {

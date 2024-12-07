@@ -24,7 +24,7 @@ Evaluators enable agents to:
 1. Import the necessary evaluator types:
 
 ```typescript
-import { Evaluator, IAgentRuntime, Memory, State } from "@ai16z/eliza-core";
+import { Evaluator, IAgentRuntime, Memory, State } from "@okcashpro/okai-core";
 ```
 
 2. Choose or create an evaluator:
@@ -60,7 +60,7 @@ interface Fact {
 }
 ```
 
-Source: https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts
+Source: https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts
 
 **Example Facts:**
 
@@ -152,7 +152,7 @@ interface Evaluator {
 }
 ```
 
-Source: https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts
+Source: https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts
 
 ### Memory Integration
 
@@ -173,7 +173,7 @@ try {
 }
 ```
 
-Source: https://github.com/ai16z/eliza/blob/main/packages/core/src/tests/memory.test.ts
+Source: https://github.com/okcashpro/okai/blob/main/packages/core/src/tests/memory.test.ts
 
 ### Memory Usage
 

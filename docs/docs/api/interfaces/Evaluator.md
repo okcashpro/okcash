@@ -10,7 +10,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:236](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L236)
+[packages/core/src/types.ts:236](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L236)
 
 ---
 
@@ -20,7 +20,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:237](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L237)
+[packages/core/src/types.ts:237](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L237)
 
 ---
 
@@ -30,7 +30,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:239](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L239)
+[packages/core/src/types.ts:239](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L239)
 
 ---
 
@@ -40,7 +40,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:240](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L240)
+[packages/core/src/types.ts:240](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L240)
 
 ---
 
@@ -50,7 +50,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:241](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L241)
+[packages/core/src/types.ts:241](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L241)
 
 ---
 
@@ -60,7 +60,7 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:238](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L238)
+[packages/core/src/types.ts:238](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L238)
 
 ---
 
@@ -70,4 +70,4 @@ Represents an evaluator, which is used to assess and guide the agent's responses
 
 #### Defined in
 
-[packages/core/src/types.ts:242](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L242)
+[packages/core/src/types.ts:242](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/types.ts#L242)

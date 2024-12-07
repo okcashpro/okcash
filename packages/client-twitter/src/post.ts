@@ -7,8 +7,8 @@ import {
     ModelClass,
     stringToUuid,
     parseBooleanFromText,
-} from "@ai16z/eliza";
-import { elizaLogger } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { elizaLogger } from "@okcashpro/eliza";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `

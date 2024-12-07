@@ -1,6 +1,6 @@
-# [Eliza](https://github.com/ai16z/eliza) Chatbot Docker Setup Guide
+# [OKai](https://github.com/okcashpro/okai) Chatbot Docker Setup Guide
 
-This guide provides instructions for installing and running the Eliza chatbot using either Docker or direct installation on a server.
+This guide provides instructions for installing and running the OKai chatbot using either Docker or direct installation on a server.
 
 ## Prerequisites
 
@@ -69,7 +69,7 @@ This guide provides instructions for installing and running the Eliza chatbot us
    ```bash
    pnpm docker
    ```
-   
+
 ## Docker Management Commands
 
 - Check running containers:
@@ -77,7 +77,7 @@ This guide provides instructions for installing and running the Eliza chatbot us
   docker ps
   ```
 
-- Remove Eliza container:
+- Remove OKai container:
   ```bash
   docker rm /eliza
   ```
@@ -109,7 +109,7 @@ docker rmi -f $(docker images -aq)
   ```
 - Remove All Build Cache
    - To clear the build cache entirely, use:
-   ```bash  
+   ```bash
    docker builder prune -a -f
    ```
 - Verify Cleanup

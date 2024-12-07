@@ -1,6 +1,6 @@
 # OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
 _Utilisée dans [@DegenSpartanAI](https://x.com/degenspartanai) et [@MarcAIndreessen](https://x.com/pmairca)_
 
@@ -35,7 +35,7 @@ _Utilisée dans [@DegenSpartanAI](https://x.com/degenspartanai) et [@MarcAIndree
    - Lancer la commande `pnpm start --characters="path/to/your/character.json"`
    - Plusieurs fichiers personnages peuvent être ajoutés en même temps
 
-### Lancer Eliza
+### Lancer OKai
 
 Après avoir terminé la configuration et les fichiers personnage, lancer le bot en tapant la ligne de commande suivante:
 
@@ -48,7 +48,7 @@ pnpm start
 pnpm clean
 ```
 
-# Personnaliser Eliza
+# Personnaliser OKai
 
 ### Ajouter un des actions personnalisées
 

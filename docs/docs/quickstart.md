@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ## Prerequisites
 
-Before getting started with Eliza, ensure you have:
+Before getting started with OKai, ensure you have:
 
 - [Python 2.7+](https://www.python.org/downloads/)
 - [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -19,12 +19,12 @@ Before getting started with Eliza, ensure you have:
 
 1. **Clone and Install**
 
-   Please be sure to check what the [latest available stable version tag](https://github.com/ai16z/eliza/tags) is.
+   Please be sure to check what the [latest available stable version tag](https://github.com/okcashpro/okai/tags) is.
 
    Clone the repository
 
    ```bash
-   git clone https://github.com/ai16z/eliza.git
+   git clone https://github.com/okcashpro/okai.git
    ```
 
    Enter directory
@@ -75,7 +75,7 @@ Before getting started with Eliza, ensure you have:
 
 ## Choose Your Model
 
-Eliza supports multiple AI models:
+OKai supports multiple AI models:
 
 - **Heurist**: Set `modelProvider: "heurist"` in your character file. Most models are uncensored.
   - LLM: Select available LLMs [here](https://docs.heurist.ai/dev-guide/supported-models#large-language-models-llms) and configure `SMALL_HEURIST_LANGUAGE_MODEL`,`MEDIUM_HEURIST_LANGUAGE_MODEL`,`LARGE_HEURIST_LANGUAGE_MODEL`
@@ -229,10 +229,10 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    pnpm add -w -D ts-node typescript @types/node
 
    # Add dependencies to the agent package specifically
-   pnpm add -D ts-node typescript @types/node --filter "@ai16z/agent"
+   pnpm add -D ts-node typescript @types/node --filter "@okcashpro/agent"
 
    # Also add to the core package since it's needed there too
-   pnpm add -D ts-node typescript @types/node --filter "@ai16z/eliza"
+   pnpm add -D ts-node typescript @types/node --filter "@okcashpro/okai"
 
    # First clean everything
    pnpm clean
@@ -286,4 +286,4 @@ Once you have your agent running, explore:
 
 For detailed API documentation, troubleshooting, and advanced features, check out our [full documentation](https://okcashpro.github.io/okai/).
 
-Join our [Discord community](https://discord.gg/ai16z) for support and updates!
+Join our [Discord community](https://discord.gg/grvpc8c) for support and updates!

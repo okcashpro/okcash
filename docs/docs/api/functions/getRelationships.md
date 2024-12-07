@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/relationships.ts:33](https://github.com/ai16z/eliza/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/relationships.ts#L33)
+[packages/core/src/relationships.ts:33](https://github.com/okcashpro/okai/blob/7fcf54e7fb2ba027d110afcc319c0b01b3f181dc/packages/core/src/relationships.ts#L33)

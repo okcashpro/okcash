@@ -11,7 +11,7 @@ import {
     generateObjectV2,
     ModelClass,
     Provider,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { WebhookSchema, isWebhookContent, WebhookContent } from "../types";
 import { webhookTemplate } from "../templates";
 import { appendWebhooksToCsv } from "../utils";

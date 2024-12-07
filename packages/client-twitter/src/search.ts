@@ -1,7 +1,7 @@
 import { SearchMode } from "agent-twitter-client";
-import { composeContext } from "@ai16z/eliza";
-import { generateMessageResponse, generateText } from "@ai16z/eliza";
-import { messageCompletionFooter } from "@ai16z/eliza";
+import { composeContext } from "@okcashpro/eliza";
+import { generateMessageResponse, generateText } from "@okcashpro/eliza";
+import { messageCompletionFooter } from "@okcashpro/eliza";
 import {
     Content,
     HandlerCallback,
@@ -10,8 +10,8 @@ import {
     ModelClass,
     ServiceType,
     State,
-} from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { stringToUuid } from "@okcashpro/eliza";
 import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 
@@ -108,7 +108,7 @@ export class TwitterSearchClient extends ClientBase {
 
             const prompt = `
   Here are some tweets related to the search term "${searchTerm}":
-  
+
   ${[...slicedTweets, ...homeTimeline]
       .filter((tweet) => {
           // ignore tweets where any of the thread tweets contain a tweet by the bot
@@ -126,7 +126,7 @@ export class TwitterSearchClient extends ClientBase {
   `
       )
       .join("\n")}
-  
+
   Which tweet is the most interesting and relevant for Ruby to reply to? Please provide only the ID of the tweet in your response.
   Notes:
     - Respond to English tweets only
@@ -241,7 +241,7 @@ export class TwitterSearchClient extends ClientBase {
                 twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
                 timeline: formattedHomeTimeline,
                 tweetContext: `${tweetBackground}
-  
+
   Original Post:
   By @${selectedTweet.username}
   ${selectedTweet.text}${replyContext.length > 0 && `\nReplies to original post:\n${replyContext}`}

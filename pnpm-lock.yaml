@@ -96,76 +96,76 @@ importers:
 
   agent:
     dependencies:
-      '@ai16z/adapter-postgres':
+      '@okcashpro/adapter-postgres':
         specifier: workspace:*
         version: link:../packages/adapter-postgres
-      '@ai16z/adapter-sqlite':
+      '@okcashpro/adapter-sqlite':
         specifier: workspace:*
         version: link:../packages/adapter-sqlite
-      '@ai16z/client-auto':
+      '@okcashpro/client-auto':
         specifier: workspace:*
         version: link:../packages/client-auto
-      '@ai16z/client-direct':
+      '@okcashpro/client-direct':
         specifier: workspace:*
         version: link:../packages/client-direct
-      '@ai16z/client-discord':
+      '@okcashpro/client-discord':
         specifier: workspace:*
         version: link:../packages/client-discord
-      '@ai16z/client-farcaster':
+      '@okcashpro/client-farcaster':
         specifier: workspace:*
         version: link:../packages/client-farcaster
-      '@ai16z/client-telegram':
+      '@okcashpro/client-telegram':
         specifier: workspace:*
         version: link:../packages/client-telegram
-      '@ai16z/client-twitter':
+      '@okcashpro/client-twitter':
         specifier: workspace:*
         version: link:../packages/client-twitter
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../packages/core
-      '@ai16z/plugin-0g':
+      '@okcashpro/plugin-0g':
         specifier: workspace:*
         version: link:../packages/plugin-0g
-      '@ai16z/plugin-aptos':
+      '@okcashpro/plugin-aptos':
         specifier: workspace:*
         version: link:../packages/plugin-aptos
-      '@ai16z/plugin-bootstrap':
+      '@okcashpro/plugin-bootstrap':
         specifier: workspace:*
         version: link:../packages/plugin-bootstrap
-      '@ai16z/plugin-buttplug':
+      '@okcashpro/plugin-buttplug':
         specifier: workspace:*
         version: link:../packages/plugin-buttplug
-      '@ai16z/plugin-coinbase':
+      '@okcashpro/plugin-coinbase':
         specifier: workspace:*
         version: link:../packages/plugin-coinbase
-      '@ai16z/plugin-conflux':
+      '@okcashpro/plugin-conflux':
         specifier: workspace:*
         version: link:../packages/plugin-conflux
-      '@ai16z/plugin-evm':
+      '@okcashpro/plugin-evm':
         specifier: workspace:*
         version: link:../packages/plugin-evm
-      '@ai16z/plugin-flow':
+      '@okcashpro/plugin-flow':
         specifier: workspace:*
         version: link:../packages/plugin-flow
-      '@ai16z/plugin-goat':
+      '@okcashpro/plugin-goat':
         specifier: workspace:*
         version: link:../packages/plugin-goat
-      '@ai16z/plugin-icp':
+      '@okcashpro/plugin-icp':
         specifier: workspace:*
         version: link:../packages/plugin-icp
-      '@ai16z/plugin-image-generation':
+      '@okcashpro/plugin-image-generation':
         specifier: workspace:*
         version: link:../packages/plugin-image-generation
-      '@ai16z/plugin-node':
+      '@okcashpro/plugin-node':
         specifier: workspace:*
         version: link:../packages/plugin-node
-      '@ai16z/plugin-solana':
+      '@okcashpro/plugin-solana':
         specifier: workspace:*
         version: link:../packages/plugin-solana
-      '@ai16z/plugin-starknet':
+      '@okcashpro/plugin-starknet':
         specifier: workspace:*
         version: link:../packages/plugin-starknet
-      '@ai16z/plugin-tee':
+      '@okcashpro/plugin-tee':
         specifier: workspace:*
         version: link:../packages/plugin-tee
       readline:
@@ -187,7 +187,7 @@ importers:
 
   client:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../packages/core
       '@radix-ui/react-dialog':
@@ -339,7 +339,7 @@ importers:
 
   packages/adapter-postgres:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@types/pg':
@@ -355,7 +355,7 @@ importers:
 
   packages/adapter-sqlite:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@types/better-sqlite3':
@@ -377,7 +377,7 @@ importers:
 
   packages/adapter-sqljs:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@types/sql.js':
@@ -399,7 +399,7 @@ importers:
 
   packages/adapter-supabase:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@supabase/supabase-js':
@@ -415,7 +415,7 @@ importers:
 
   packages/client-auto:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@types/body-parser':
@@ -446,10 +446,10 @@ importers:
 
   packages/client-direct:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-image-generation':
+      '@okcashpro/plugin-image-generation':
         specifier: workspace:*
         version: link:../plugin-image-generation
       '@types/body-parser':
@@ -486,10 +486,10 @@ importers:
 
   packages/client-discord:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-node':
+      '@okcashpro/plugin-node':
         specifier: workspace:*
         version: link:../plugin-node
       '@discordjs/opus':
@@ -523,7 +523,7 @@ importers:
 
   packages/client-farcaster:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@neynar/nodejs-sdk':
@@ -536,7 +536,7 @@ importers:
 
   packages/client-github:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@octokit/rest':
@@ -561,7 +561,7 @@ importers:
 
   packages/client-telegram:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@telegraf/types':
@@ -580,7 +580,7 @@ importers:
 
   packages/client-twitter:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       agent-twitter-client:
@@ -790,7 +790,7 @@ importers:
       '@0glabs/0g-ts-sdk':
         specifier: 0.2.1
         version: 0.2.1(bufferutil@4.0.8)(ethers@6.13.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       ethers:
@@ -802,10 +802,10 @@ importers:
 
   packages/plugin-aptos:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
+      '@okcashpro/plugin-trustdb':
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@aptos-labs/ts-sdk':
@@ -835,7 +835,7 @@ importers:
 
   packages/plugin-bootstrap:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       tsup:
@@ -847,7 +847,7 @@ importers:
 
   packages/plugin-buttplug:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       buttplug:
@@ -865,7 +865,7 @@ importers:
 
   packages/plugin-coinbase:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       coinbase-api:
@@ -878,7 +878,7 @@ importers:
 
   packages/plugin-conflux:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       cive:
@@ -887,10 +887,10 @@ importers:
 
   packages/plugin-evm:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
+      '@okcashpro/plugin-trustdb':
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@lifi/data-types':
@@ -914,10 +914,10 @@ importers:
 
   packages/plugin-flow:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
+      '@okcashpro/plugin-trustdb':
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@onflow/config':
@@ -969,7 +969,7 @@ importers:
 
   packages/plugin-goat:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@goat-sdk/core':
@@ -993,7 +993,7 @@ importers:
 
   packages/plugin-icp:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@dfinity/agent':
@@ -1024,7 +1024,7 @@ importers:
 
   packages/plugin-image-generation:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       tsup:
@@ -1036,7 +1036,7 @@ importers:
 
   packages/plugin-node:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@cliqz/adblocker-playwright':
@@ -1208,10 +1208,10 @@ importers:
 
   packages/plugin-solana:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
+      '@okcashpro/plugin-trustdb':
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@coral-xyz/anchor':
@@ -1253,10 +1253,10 @@ importers:
 
   packages/plugin-starknet:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
+      '@okcashpro/plugin-trustdb':
         specifier: workspace:*
         version: link:../plugin-trustdb
       '@avnu/avnu-sdk':
@@ -1283,7 +1283,7 @@ importers:
 
   packages/plugin-tee:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       '@phala/dstack-sdk':
@@ -1322,7 +1322,7 @@ importers:
 
   packages/plugin-trustdb:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       dompurify:
@@ -1347,7 +1347,7 @@ importers:
 
   packages/plugin-video-generation:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       tsup:
@@ -1359,7 +1359,7 @@ importers:
 
   packages/plugin-web-search:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       tsup:
@@ -1371,7 +1371,7 @@ importers:
 
   packages/plugin-whatsapp:
     dependencies:
-      '@ai16z/eliza':
+      '@okcashpro/okai':
         specifier: workspace:*
         version: link:../core
       axios:

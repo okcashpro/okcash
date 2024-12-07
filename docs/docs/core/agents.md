@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 🤖 Agents
 
-Agents are the core components of the Eliza framework that handle autonomous interactions. Each agent runs in a runtime environment and can interact through various clients (Discord, Telegram, etc.) while maintaining consistent behavior and memory.
+Agents are the core components of the OKai framework that handle autonomous interactions. Each agent runs in a runtime environment and can interact through various clients (Discord, Telegram, etc.) while maintaining consistent behavior and memory.
 
 ---
 
@@ -70,7 +70,7 @@ Each element in the runtime interface plays a crucial role:
 This section demonstrates setting up an agent with basic and optional configurations. It provides a working example and sample code that helps users quickly start building:
 
 ```typescript
-import { AgentRuntime, ModelProviderName } from "@ai16z/eliza";
+import { AgentRuntime, ModelProviderName } from "@okcashpro/okai";
 
 // Configuration example
 const runtime = new AgentRuntime({
@@ -136,7 +136,7 @@ const updatedState = await runtime.updateRecentMessageState(state);
 
 ## Memory Systems
 
-The Eliza framework uses multiple types of memory to support an agent's long-term engagement, contextual understanding, and adaptive responses. Each type of memory serves a specific purpose:
+The OKai framework uses multiple types of memory to support an agent's long-term engagement, contextual understanding, and adaptive responses. Each type of memory serves a specific purpose:
 
 - **Message History**: Stores recent conversations to provide continuity within a session. This helps the agent maintain conversational context and avoid repetitive responses within short-term exchanges.
 

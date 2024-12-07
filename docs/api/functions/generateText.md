@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / generateText
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / generateText
 
 # Function: generateText()
 

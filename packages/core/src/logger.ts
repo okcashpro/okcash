@@ -1,4 +1,4 @@
-class ElizaLogger {
+class OKaiLogger {
     constructor() {
         // Check if we're in Node.js environment
         this.isNode =
@@ -10,7 +10,7 @@ class ElizaLogger {
         this.verbose = this.isNode ? process.env.VERBOSE === "true" : false;
 
         // Add initialization logging
-        console.log(`[ElizaLogger] Initializing with:
+        console.log(`[OKaiLogger] Initializing with:
             isNode: ${this.isNode}
             verbose: ${this.verbose}
             VERBOSE env: ${process.env.VERBOSE}
@@ -221,7 +221,7 @@ class ElizaLogger {
         if (!this.verbose) {
             // for diagnosing verbose logging issues
             // console.log(
-            //     "[ElizaLogger] Debug message suppressed (verbose=false):",
+            //     "[OKaiLogger] Debug message suppressed (verbose=false):",
             //     ...strings
             // );
             return;
@@ -264,7 +264,7 @@ class ElizaLogger {
     }
 }
 
-export const elizaLogger = new ElizaLogger();
+export const elizaLogger = new OKaiLogger();
 elizaLogger.clear();
 elizaLogger.closeByNewLine = true;
 elizaLogger.useIcons = true;

@@ -1,4 +1,4 @@
-import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
+import { elizaLogger, IAgentRuntime } from "@okcashpro/eliza";
 import { Fraction, Percent } from "@uniswap/sdk-core";
 import { Account, Contract, RpcProvider } from "starknet";
 

@@ -1,7 +1,7 @@
-import { composeContext } from "@ai16z/eliza";
-import { generateText, trimTokens } from "@ai16z/eliza";
-import { models } from "@ai16z/eliza";
-import { parseJSONObjectFromText } from "@ai16z/eliza";
+import { composeContext } from "@okcashpro/eliza";
+import { generateText, trimTokens } from "@okcashpro/eliza";
+import { models } from "@okcashpro/eliza";
+import { parseJSONObjectFromText } from "@okcashpro/eliza";
 import {
     Action,
     ActionExample,
@@ -11,7 +11,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 
@@ -22,7 +22,7 @@ Summarization objective: {{objective}}
 
 # Instructions: Summarize the attachments. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details based on the objective. Only respond with the new summary text.`;
 
-export const attachmentIdsTemplate = `# Messages we are summarizing 
+export const attachmentIdsTemplate = `# Messages we are summarizing
 {{recentMessages}}
 
 # Instructions: {{senderName}} is requesting a summary of specific attachments. Your goal is to determine their objective, along with the list of attachment IDs to summarize.

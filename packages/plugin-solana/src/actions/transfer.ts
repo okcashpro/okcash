@@ -3,7 +3,7 @@ import {
     createTransferInstruction,
 } from "@solana/spl-token";
 import bs58 from "bs58";
-import { elizaLogger, settings } from "@ai16z/eliza";
+import { elizaLogger, settings } from "@okcashpro/eliza";
 
 import {
     Connection,
@@ -22,9 +22,9 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
+} from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/eliza";
+import { generateObject } from "@okcashpro/eliza";
 
 export interface TransferContent extends Content {
     tokenAddress: string;

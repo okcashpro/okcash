@@ -2,15 +2,15 @@
 sidebar_position: 1
 ---
 
-# Introduction to Eliza
+# Introduction to OKai
 
 ![](/img/okai_banner.png)
 
 _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
 
-## What is Eliza?
+## What is OKai?
 
-Eliza is a powerful multi-agent simulation framework designed to create, deploy, and manage autonomous AI agents. Built with TypeScript, it provides a flexible and extensible platform for developing intelligent agents that can interact across multiple platforms while maintaining consistent personalities and knowledge.
+OKai is a powerful multi-agent simulation framework designed to create, deploy, and manage autonomous AI agents. Built with TypeScript, it provides a flexible and extensible platform for developing intelligent agents that can interact across multiple platforms while maintaining consistent personalities and knowledge.
 
 ## Key Features
 
@@ -56,7 +56,7 @@ Eliza is a powerful multi-agent simulation framework designed to create, deploy,
 
 ## Use Cases
 
-Eliza can be used to create:
+OKai can be used to create:
 
 1. **AI Assistants**
 
@@ -83,14 +83,14 @@ Eliza can be used to create:
 
 ## Getting Started
 
-Eliza is designed to be accessible while maintaining powerful capabilities:
+OKai is designed to be accessible while maintaining powerful capabilities:
 
 - **Quick Start**: Begin with basic configuration and default character
 - **Customization**: Extend functionality through custom actions and clients
 - **Scaling**: Deploy multiple agents with different personalities
 - **Integration**: Connect to various platforms and services
 
-Check out our [Quickstart Guide](./quickstart.md) to begin your journey with Eliza.
+Check out our [Quickstart Guide](./quickstart.md) to begin your journey with OKai.
 
 ## Architecture Overview
 
@@ -106,9 +106,9 @@ graph TD
 
 ## Community and Support
 
-Eliza is backed by an active community of developers and users:
+OKai is backed by an active community of developers and users:
 
-- **Open Source**: Contribute to the project on [GitHub](https://github.com/ai16z/eliza)
+- **Open Source**: Contribute to the project on [GitHub](https://github.com/okcashpro/okai)
 - **Documentation**: Comprehensive guides and API references
 - **Examples**: Ready-to-use character templates and implementations
 - **Support**: Active community for troubleshooting and discussion
@@ -119,4 +119,4 @@ Eliza is backed by an active community of developers and users:
 - [Understand Core Concepts](../core/agents)
 - [Explore Advanced Features](./guides/advanced.md)
 
-Join us in building the future of autonomous AI agents with Eliza!
+Join us in building the future of autonomous AI agents with OKai!

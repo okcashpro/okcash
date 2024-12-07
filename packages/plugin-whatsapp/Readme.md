@@ -6,12 +6,12 @@ A plugin for integrating WhatsApp Cloud API with your application.
 
 </file>
 
-npm install @eliza/plugin-whatsapp
+npm install @okai/plugin-whatsapp
 
 ## Configuration
 
 typescript
-import { WhatsAppPlugin } from '@eliza/plugin-whatsapp';
+import { WhatsAppPlugin } from '@okai/plugin-whatsapp';
 const whatsappPlugin = new WhatsAppPlugin({
 accessToken: 'your_access_token',
 phoneNumberId: 'your_phone_number_id',

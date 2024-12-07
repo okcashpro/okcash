@@ -1,6 +1,6 @@
 export * from "./services/index.ts";
 
-import { Plugin } from "@ai16z/eliza";
+import { Plugin } from "@okcashpro/eliza";
 
 import {
     BrowserService,

@@ -6,7 +6,7 @@ sidebar_position: 16
 
 ## Overview
 
-Eliza's autonomous trading system enables automated token trading on the Solana blockchain. The system integrates with Jupiter aggregator for efficient swaps, implements smart order routing, and includes risk management features.
+OKai's autonomous trading system enables automated token trading on the Solana blockchain. The system integrates with Jupiter aggregator for efficient swaps, implements smart order routing, and includes risk management features.
 
 ## Core Components
 

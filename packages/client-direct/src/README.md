@@ -8,7 +8,7 @@ Set the `BAGEL_API_KEY` environment variable to your API key.
 
 In bakery, create your model and fine-tune dataset.
 
-## Fine-tune with Eliza
+## Fine-tune with OKai
 
 ```bash
 curl -X POST http://localhost:3000/fine-tune \

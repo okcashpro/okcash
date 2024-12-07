@@ -2,13 +2,13 @@
 
 ## Overview
 
-Eliza's plugin system provides a modular way to extend the core functionality with additional features, actions, evaluators, and providers. Plugins are self-contained modules that can be easily added or removed to customize your agent's capabilities.
+OKai's plugin system provides a modular way to extend the core functionality with additional features, actions, evaluators, and providers. Plugins are self-contained modules that can be easily added or removed to customize your agent's capabilities.
 
 ## Core Plugin Concepts
 
 ### Plugin Structure
 
-Each plugin in Eliza must implement the `Plugin` interface with the following properties:
+Each plugin in OKai must implement the `Plugin` interface with the following properties:
 
 ```typescript
 interface Plugin {
@@ -28,15 +28,15 @@ interface Plugin {
 1. Install the desired plugin package:
 
 ```bash
-pnpm add @ai16z/plugin-[name]
+pnpm add @okcashpro/plugin-[name]
 ```
 
 2. Import and register the plugin in your character configuration:
 
 ```typescript
-import { bootstrapPlugin } from "@eliza/plugin-bootstrap";
-import { imageGenerationPlugin } from "@eliza/plugin-image-generation";
-import { buttplugPlugin } from "@eliza/plugin-buttplug";
+import { bootstrapPlugin } from "@okai/plugin-bootstrap";
+import { imageGenerationPlugin } from "@okai/plugin-image-generation";
+import { buttplugPlugin } from "@okai/plugin-buttplug";
 const character = {
     // ... other character config
     plugins: [bootstrapPlugin, imageGenerationPlugin, buttplugPlugin],
@@ -47,7 +47,7 @@ const character = {
 
 ### Available Plugins
 
-#### 1. Bootstrap Plugin (`@eliza/plugin-bootstrap`)
+#### 1. Bootstrap Plugin (`@okai/plugin-bootstrap`)
 
 The bootstrap plugin provides essential baseline functionality:
 
@@ -71,7 +71,7 @@ The bootstrap plugin provides essential baseline functionality:
 - `time` - Provides temporal context
 - `facts` - Supplies factual information
 
-#### 2. Image Generation Plugin (`@eliza/plugin-image-generation`)
+#### 2. Image Generation Plugin (`@okai/plugin-image-generation`)
 
 Enables AI image generation capabilities:
 
@@ -81,7 +81,7 @@ Enables AI image generation capabilities:
 - Supports multiple image generation services (Anthropic, Together)
 - Auto-generates captions for created images
 
-#### 3. Node Plugin (`@eliza/plugin-node`)
+#### 3. Node Plugin (`@okai/plugin-node`)
 
 Provides core Node.js-based services:
 
@@ -95,7 +95,7 @@ Provides core Node.js-based services:
 - `TranscriptionService` - Speech-to-text
 - `VideoService` - Video processing
 
-#### 4. Solana Plugin (`@eliza/plugin-solana`)
+#### 4. Solana Plugin (`@okai/plugin-solana`)
 
 Integrates Solana blockchain functionality:
 
@@ -122,7 +122,7 @@ The charity addresses for each network are as follows:
 
 In the future, we aim to integrate with The Giving Block API to allow for dynamic and configurable donations, enabling support for a wider range of charitable organizations.
 
-#### 5. Coinbase Commerce Plugin (`@eliza/plugin-coinbase`)
+#### 5. Coinbase Commerce Plugin (`@okai/plugin-coinbase`)
 
 Integrates Coinbase Commerce for payment and transaction management:
 
@@ -133,7 +133,7 @@ Integrates Coinbase Commerce for payment and transaction management:
 - `GET_CHARGE_DETAILS` - Retrieve details for a specific charge
 
 **Description:**
-This plugin enables Eliza to interact with the Coinbase Commerce API to create and manage payment charges, providing seamless integration with cryptocurrency-based payment systems.
+This plugin enables OKai to interact with the Coinbase Commerce API to create and manage payment charges, providing seamless integration with cryptocurrency-based payment systems.
 
 ---
 
@@ -156,7 +156,7 @@ The plugin automatically handles wallet creation or uses an existing wallet if t
 
 ---
 
-#### 6. Coinbase MassPayments Plugin (`@eliza/plugin-coinbase`)
+#### 6. Coinbase MassPayments Plugin (`@okai/plugin-coinbase`)
 
 This plugin facilitates the processing of cryptocurrency mass payouts using the Coinbase SDK. It enables the creation and management of mass payouts to multiple wallet addresses, logging all transaction details to a CSV file for further analysis.
 
@@ -212,7 +212,7 @@ Supported networks:
    Add the plugin to your character's configuration:
 
     ```typescript
-    import { coinbaseMassPaymentsPlugin } from "@eliza/plugin-coinbase-masspayments";
+    import { coinbaseMassPaymentsPlugin } from "@okai/plugin-coinbase-masspayments";
 
     const character = {
         plugins: [coinbaseMassPaymentsPlugin],
@@ -302,7 +302,7 @@ When successful, a response similar to the following will be returned:
 
 ---
 
-#### 8. Coinbase Token Contract Plugin (`@eliza/plugin-coinbase`)
+#### 8. Coinbase Token Contract Plugin (`@okai/plugin-coinbase`)
 
 This plugin enables the deployment and interaction with various token contracts (ERC20, ERC721, ERC1155) using the Coinbase SDK. It provides functionality for both deploying new token contracts and interacting with existing ones.
 
@@ -370,7 +370,7 @@ All contract deployments and interactions are logged to a CSV file for record-ke
    Add the plugin to your character's configuration:
 
     ```typescript
-    import { tokenContractPlugin } from "@eliza/plugin-coinbase";
+    import { tokenContractPlugin } from "@okai/plugin-coinbase";
 
     const character = {
         plugins: [tokenContractPlugin],
@@ -445,9 +445,9 @@ const response = await runtime.triggerAction("INVOKE_CONTRACT", {
 
 ---
 
-#### 7. TEE Plugin (`@ai16z/plugin-tee`)
+#### 7. TEE Plugin (`@okcashpro/plugin-tee`)
 
-Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
+Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced OKai Agents:
 
 **Providers:**
 
@@ -457,7 +457,7 @@ Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Tru
 **DeriveKeyProvider Usage**
 
 ```typescript
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+import { DeriveKeyProvider } from "@okcashpro/plugin-tee";
 
 // Initialize the provider
 const provider = new DeriveKeyProvider();
@@ -501,7 +501,7 @@ try {
 **RemoteAttestationProvider Usage**
 
 ```typescript
-import { RemoteAttestationProvider } from "@ai16z/plugin-tee";
+import { RemoteAttestationProvider } from "@okcashpro/plugin-tee";
 // Initialize the provider
 const provider = new RemoteAttestationProvider();
 // Generate Remote Attestation
@@ -533,7 +533,7 @@ WALLET_SECRET_SALT=your-secret-salt // Required to single agent deployments
 
 ---
 
-#### 9. Webhook Plugin (`@eliza/plugin-coinbase-webhooks`)
+#### 9. Webhook Plugin (`@okai/plugin-coinbase-webhooks`)
 
 Manages webhooks using the Coinbase SDK, allowing for the creation and management of webhooks to listen for specific events on the Coinbase platform.
 
@@ -562,7 +562,7 @@ Manages webhooks using the Coinbase SDK, allowing for the creation and managemen
 
 **Description:**
 
-The Webhook Plugin enables Eliza to interact with the Coinbase SDK to create and manage webhooks. This allows for real-time event handling and notifications based on specific criteria set by the user.
+The Webhook Plugin enables OKai to interact with the Coinbase SDK to create and manage webhooks. This allows for real-time event handling and notifications based on specific criteria set by the user.
 
 **Usage Instructions:**
 
@@ -570,7 +570,7 @@ The Webhook Plugin enables Eliza to interact with the Coinbase SDK to create and
    Add the plugin to your character’s configuration:
 
    ```typescript
-   import { webhookPlugin } from "@eliza/plugin-coinbase-webhooks";
+   import { webhookPlugin } from "@okai/plugin-coinbase-webhooks";
 
    const character = {
      plugins: [webhookPlugin],
@@ -608,7 +608,7 @@ console.log("Webhook creation response:", response);
 Create a new plugin by implementing the Plugin interface:
 
 ```typescript
-import { Plugin, Action, Evaluator, Provider } from "@ai16z/eliza";
+import { Plugin, Action, Evaluator, Provider } from "@okcashpro/okai";
 
 const myCustomPlugin: Plugin = {
     name: "my-custom-plugin",

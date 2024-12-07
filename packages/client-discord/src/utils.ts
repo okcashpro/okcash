@@ -5,7 +5,7 @@ import {
     generateText,
     trimTokens,
     parseJSONObjectFromText,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import {
     ChannelType,
     Message as DiscordMessage,
@@ -50,11 +50,11 @@ export async function generateSummary(
     text = trimTokens(text, 100000, "gpt-4o-mini"); // TODO: clean this up
 
     const prompt = `Please generate a concise summary for the following text:
-  
+
   Text: """
   ${text}
   """
-  
+
   Respond with a JSON object in the following format:
   \`\`\`json
   {

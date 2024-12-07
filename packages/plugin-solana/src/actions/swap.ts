@@ -7,7 +7,7 @@ import {
 } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import { v4 as uuidv4 } from "uuid";
-import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
+import { TrustScoreDatabase } from "@okcashpro/plugin-trustdb";
 import {
     ActionExample,
     HandlerCallback,
@@ -19,7 +19,7 @@ import {
     composeContext,
     generateObject,
     settings,
-} from "@ai16z/eliza";
+} from "@okcashpro/eliza";
 import { TokenProvider } from "../providers/token.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { walletProvider, WalletProvider } from "../providers/wallet.ts";
@@ -110,7 +110,7 @@ Example response:
 \`\`\`json
 {
     "inputTokenSymbol": "SOL",
-    "outputTokenSymbol": "USDC", 
+    "outputTokenSymbol": "USDC",
     "inputTokenCA": "So11111111111111111111111111111111111111112",
     "outputTokenCA": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
     "amount": 1.5
@@ -125,7 +125,7 @@ Given the recent messages and wallet information below:
 
 Extract the following information about the requested token swap:
 - Input token symbol (the token being sold)
-- Output token symbol (the token being bought) 
+- Output token symbol (the token being bought)
 - Input token contract address if provided
 - Output token contract address if provided
 - Amount to swap
@@ -134,7 +134,7 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 \`\`\`json
 {
     "inputTokenSymbol": string | null,
-    "outputTokenSymbol": string | null, 
+    "outputTokenSymbol": string | null,
     "inputTokenCA": string | null,
     "outputTokenCA": string | null,
     "amount": number | string | null
