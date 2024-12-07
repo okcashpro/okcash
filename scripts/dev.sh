@@ -38,7 +38,7 @@ cat << "EOF"
 *                                                                     *
 *  4. Update the 'agent/package.json' file:                          *
 *                                                                     *
-*     Add your plugin to the "dependencies" section like so:       *
+*     Add your plugin to the "dependencies" section like so:         *
 *                                                                     *
 *        "@ai16z/your-plugin-name": "workspace:*"                    *
 *                                                                     *
@@ -60,6 +60,12 @@ cat << "EOF"
 ***********************************************************************
 
 EOF
+
+# 2 seconds delay
+for i in {1..5}; do
+  echo -n "."
+  sleep 0.4
+done
 
 # Check if the packages directory exists
 if [ ! -d "$PACKAGES_DIR" ]; then
