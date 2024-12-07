@@ -1,9 +1,5 @@
-import type { CastAddMessage } from "@farcaster/hub-nodejs";
-import type { Hex } from "viem";
-
 export type Profile = {
     fid: number;
-    signer: Hex;
     name: string;
     username: string;
     pfp?: string;
@@ -14,13 +10,30 @@ export type Profile = {
     // github?: string;
 };
 
-export type Cast = {
-    id: Hex;
-    profile: Profile;
+export type NeynarCastResponse = {
+    hash: string;
+    authorFid: number;
     text: string;
-    message: CastAddMessage;
+};
+
+export type Cast = {
+    hash: string;
+    authorFid: number;
+    text: string;
+    profile: Profile;
     inReplyTo?: {
-        id: Hex;
+        hash: string;
         fid: number;
     };
+    timestamp: Date;
+};
+
+export type CastId = {
+    hash: string;
+    fid: number;
+};
+
+export type FidRequest = {
+    fid: number;
+    pageSize: number;
 };
