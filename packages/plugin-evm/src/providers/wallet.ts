@@ -19,12 +19,12 @@ export class WalletProvider {
     chains: Record<string, Chain> = { mainnet: viemChains.mainnet };
     account: Account;
 
-    constructor(privateKey: `0x${string}`, chainNames?: SupportedChain[]) {
+    constructor(privateKey: `0x${string}`, chains?: Record<string, Chain>) {
         this.setAccount(privateKey);
-        this.setChains(chainNames);
+        this.setChains(chains);
 
-        if (chainNames?.length > 0) {
-            this.setCurrentChain(chainNames[0]);
+        if (chains && Object.keys(chains).length > 0) {
+            this.setCurrentChain(Object.keys(chains)[0] as SupportedChain);
         }
     }
 
@@ -46,6 +46,16 @@ export class WalletProvider {
     getWalletClient(chainName: SupportedChain): WalletClient {
         const { walletClient } = this.createClients(chainName);
         return walletClient;
+    }
+
+    getChainConfigs(chainName: SupportedChain): Chain {
+        const chain = viemChains[chainName];
+
+        if (!chain?.id) {
+            throw new Error("Invalid chain name");
+        }
+
+        return chain;
     }
 
     async getWalletBalance(): Promise<string | null> {
@@ -76,50 +86,47 @@ export class WalletProvider {
         }
     }
 
-    addChain(chain: SupportedChain) {
-        this.setChains([chain]);
+    addChain(chain: Record<string, Chain>) {
+        this.setChains(chain);
     }
 
-    switchChain(chain: SupportedChain) {
-        if (!this.chains[chain]) {
-            this.addChain(chain);
+    switchChain(chainName: SupportedChain, customRpcUrl?: string) {
+        if (!this.chains[chainName]) {
+            const chain = WalletProvider.genChainFromName(
+                chainName,
+                customRpcUrl
+            );
+            this.addChain({ [chainName]: chain });
         }
-        this.setCurrentChain(chain);
-    }
-
-    getChainConfigs(chainName: SupportedChain): Chain {
-        const chain = viemChains[chainName];
-
-        if (!chain?.id) {
-            throw new Error("Invalid chain name");
-        }
-
-        return chain;
+        this.setCurrentChain(chainName);
     }
 
     private setAccount = (pk: `0x${string}`) => {
         this.account = privateKeyToAccount(pk);
     };
-    private setChains = (chainNames?: SupportedChain[]) => {
-        if (!chainNames) {
+
+    private setChains = (chains?: Record<string, Chain>) => {
+        if (!chains) {
             return;
         }
-        chainNames.forEach((name) => {
-            const chain = viemChains[name];
-
-            if (!chain?.id) {
-                throw new Error("Invalid chain name");
-            }
-
-            this.chains[name] = chain;
+        Object.keys(chains).forEach((chain: string) => {
+            this.chains[chain] = chains[chain];
         });
     };
+
     private setCurrentChain = (chain: SupportedChain) => {
         this.currentChain = chain;
     };
-    private createHttpTransport = (chain: SupportedChain) => {
-        return http(this.chains[chain].rpcUrls.default.http[0]);
+
+    private createHttpTransport = (chainName: SupportedChain) => {
+        const chain = this.chains[chainName];
+
+        if (chain.rpcUrls.custom) {
+            return http(chain.rpcUrls.custom.http[0]);
+        }
+        return http(chain.rpcUrls.default.http[0]);
     };
+
     private createClients = (chain: SupportedChain) => {
         const transport = this.createHttpTransport(chain);
 
@@ -136,7 +143,59 @@ export class WalletProvider {
             }),
         };
     };
+
+    static genChainFromName(
+        chainName: string,
+        customRpcUrl?: string | null
+    ): Chain {
+        const baseChain = viemChains[chainName];
+
+        if (!baseChain?.id) {
+            throw new Error("Invalid chain name");
+        }
+
+        const viemChain: Chain = customRpcUrl
+            ? {
+                  ...baseChain,
+                  rpcUrls: {
+                      ...baseChain.rpcUrls,
+                      custom: {
+                          http: [customRpcUrl],
+                      },
+                  },
+              }
+            : baseChain;
+
+        return viemChain;
+    }
 }
+
+const genChainsFromRuntime = (
+    runtime: IAgentRuntime
+): Record<string, Chain> => {
+    const chainNames =
+        (runtime.character.settings.chains?.evm as SupportedChain[]) || [];
+    const chains = {};
+
+    chainNames.forEach((chainName) => {
+        const rpcUrl = runtime.getSetting(
+            "ETHEREUM_PROVIDER_" + chainName.toUpperCase()
+        );
+        const chain = WalletProvider.genChainFromName(chainName, rpcUrl);
+        chains[chainName] = chain;
+    });
+
+    const mainnet_rpcurl = runtime.getSetting("EVM_PROVIDER_URL");
+    if (mainnet_rpcurl) {
+        const chain = WalletProvider.genChainFromName(
+            "mainnet",
+            mainnet_rpcurl
+        );
+        chains["mainnet"] = chain;
+    }
+
+    return chains;
+};
 
 export const evmWalletProvider: Provider = {
     async get(
@@ -145,17 +204,16 @@ export const evmWalletProvider: Provider = {
         state?: State
     ): Promise<string | null> {
         const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
-        const chainNames =
-            (runtime.character.settings.chains?.evm as SupportedChain[]) || [];
-
         if (!privateKey) {
             return null;
         }
 
+        const chains = genChainsFromRuntime(runtime);
+
         try {
             const walletProvider = new WalletProvider(
                 privateKey as `0x${string}`,
-                chainNames
+                chains
             );
             const address = walletProvider.getAddress();
             const balance = await walletProvider.getWalletBalance();
