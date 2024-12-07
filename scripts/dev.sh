@@ -107,7 +107,7 @@ else
 fi
 
 # Run build command first
-if ! pnpm dev:build; then
+if ! pnpm build; then
   echo "Build failed. Exiting."
   exit 1
 fi
