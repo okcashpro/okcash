@@ -1,6 +1,6 @@
-# Eliza
+# OKai
 
-<img src="_media/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+<img src="_media/okai_banner.png" alt="Eliza Banner" width="100%" />
 
 ### [For Chinese Version: 中文说明](_media/README_CN.md)
 

@@ -1,6 +1,6 @@
-# Eliza
+# OKai
 
-<img src="./docs/static/img/eliza_banner.jpg" alt="eliza banner" width="100%"/>
+<img src="./docs/static/img/okai_banner.png" alt="eliza banner" width="100%"/>
 
 ## 기능
 

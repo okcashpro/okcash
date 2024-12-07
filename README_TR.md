@@ -1,13 +1,13 @@
-# Eliza 🤖
+# OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
 </div>
 
 <div align="center">
-  
+
   📖 [Dokümantasyon](https://ai16z.github.io/eliza/) | 🎯 [Örnekler](https://github.com/thejoven/awesome-eliza)
-  
+
 </div>
 
 ## ✨ Özellikler
@@ -55,7 +55,7 @@ cp .env.example .env
     - `pnpm start --characters="path/to/your/character.json"` komutunu kullanın
     - Birden fazla karakter dosyası aynı anda yüklenebilir
 
-### Eliza'yı Başlatın
+### OKai'yı Başlatın
 
 .env dosyasını ve karakter dosyasını ayarladıktan sonra, botu aşağıdaki komutla başlatabilirsiniz:
 

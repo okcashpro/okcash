@@ -1,4 +1,4 @@
-# Eliza - Multi-agent simulation framework
+# OKai - Multi-agent simulation framework
 
 # https://github.com/ai16z/eliza
 
@@ -6,7 +6,7 @@
 
 # dev branch
 
-<img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+<img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
 
 _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
 

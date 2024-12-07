@@ -1,7 +1,7 @@
-# Eliza 🤖
+# OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
 </div>
 
 <div align="center">

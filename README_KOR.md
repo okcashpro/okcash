@@ -1,7 +1,7 @@
-# Eliza 🤖
+# OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.png" alt="Eliza Banner" width="100%" />
 </div>
 
 <div align="center">
@@ -76,7 +76,7 @@ cp .env.example .env
 
 참고: .env는 선택 사항입니다. 여러 개의 에이전트를 실행하려는 경우, 캐릭터 JSON 파일을 통해 비밀 변수를 전달할 수 있습니다.
 
-### Eliza 자동 시작
+### OKai 자동 시작
 
 아래 명령은 프로젝트를 설정하고 기본 캐릭터와 함께 봇을 시작합니다.
 ```bash
@@ -93,7 +93,7 @@ sh scripts/start.sh
 3. X (Twitter) 연결:
     - 캐릭터 파일에서 `"clients": []`를 `"clients": ["twitter"]`로 변경합니다.
 
-### Eliza 수동 시작
+### OKai 수동 시작
 
 ```bash
 pnpm i

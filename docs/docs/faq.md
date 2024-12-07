@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-## Eliza FAQ
+## OKai FAQ
 
 ### What is Eliza?
 
