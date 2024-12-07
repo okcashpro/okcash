@@ -1,6 +1,6 @@
-import { composeContext } from "@okcashpro/eliza";
-import { generateText } from "@okcashpro/eliza";
-import { parseJSONObjectFromText } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
+import { generateText } from "@okcashpro/okai";
+import { parseJSONObjectFromText } from "@okcashpro/okai";
 import {
     Action,
     ActionExample,
@@ -10,7 +10,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 export const transcriptionTemplate = `# Transcription of media file
 {{mediaTranscript}}

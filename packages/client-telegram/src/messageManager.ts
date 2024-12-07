@@ -1,8 +1,8 @@
 import { Message } from "@telegraf/types";
 import { Context, Telegraf } from "telegraf";
 
-import { composeContext, elizaLogger, ServiceType } from "@okcashpro/eliza";
-import { getEmbeddingZeroVector } from "@okcashpro/eliza";
+import { composeContext, okaiLogger, ServiceType } from "@okcashpro/okai";
+import { getEmbeddingZeroVector } from "@okcashpro/okai";
 import {
     Content,
     HandlerCallback,
@@ -12,11 +12,11 @@ import {
     ModelClass,
     State,
     UUID,
-} from "@okcashpro/eliza";
-import { stringToUuid } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
 
-import { generateMessageResponse, generateShouldRespond } from "@okcashpro/eliza";
-import { messageCompletionFooter, shouldRespondFooter } from "@okcashpro/eliza";
+import { generateMessageResponse, generateShouldRespond } from "@okcashpro/okai";
+import { messageCompletionFooter, shouldRespondFooter } from "@okcashpro/okai";
 
 const MAX_MESSAGE_LENGTH = 4096; // Telegram's max message length
 
@@ -501,8 +501,8 @@ export class MessageManager {
 
             await this.runtime.evaluate(memory, state, shouldRespond);
         } catch (error) {
-            elizaLogger.error("❌ Error handling message:", error);
-            elizaLogger.error("Error sending message:", error);
+            okaiLogger.error("❌ Error handling message:", error);
+            okaiLogger.error("Error sending message:", error);
         }
     }
 }

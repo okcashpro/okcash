@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@types/pg": "8.11.10",
         "pg": "8.13.1"
     },

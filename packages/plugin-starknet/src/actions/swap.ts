@@ -2,14 +2,14 @@ import {
     Action,
     ActionExample,
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     executeSwap as executeAvnuSwap,
     fetchQuotes,
@@ -93,7 +93,7 @@ export const executeSwap: Action = {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting EXECUTE_STARKNET_SWAP handler...");
+        okaiLogger.log("Starting EXECUTE_STARKNET_SWAP handler...");
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         } else {
@@ -111,7 +111,7 @@ export const executeSwap: Action = {
             modelClass: ModelClass.MEDIUM,
         });
 
-        elizaLogger.debug("Response:", response);
+        okaiLogger.debug("Response:", response);
 
         if (!isSwapContent(response)) {
             callback?.({ text: "Invalid swap content, please try again." });
@@ -138,7 +138,7 @@ export const executeSwap: Action = {
                 }
             );
 
-            elizaLogger.log(
+            okaiLogger.log(
                 "Swap completed successfully! tx: " + swapResult.transactionHash
             );
             callback?.({
@@ -149,7 +149,7 @@ export const executeSwap: Action = {
 
             return true;
         } catch (error) {
-            elizaLogger.error("Error during token swap:", error);
+            okaiLogger.error("Error during token swap:", error);
             callback?.({ text: `Error during swap:` });
             return false;
         }

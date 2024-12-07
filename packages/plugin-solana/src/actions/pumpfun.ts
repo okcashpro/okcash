@@ -1,6 +1,6 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { Wallet } from "@coral-xyz/anchor";
-import { generateImage } from "@okcashpro/eliza";
+import { generateImage } from "@okcashpro/okai";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { CreateTokenMetadata, PriorityFee, PumpFunSDK } from "pumpdotfun-sdk";
 
@@ -18,7 +18,7 @@ import {
     generateObject,
     composeContext,
     type Action,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 import { walletProvider } from "../providers/wallet.ts";
 

@@ -3,7 +3,7 @@ import {
     getFlowConnectorInstance,
     FlowConnectorProvider,
 } from "../providers/connector.provider";
-import { defaultCharacter } from "@okcashpro/eliza";
+import { defaultCharacter } from "@okcashpro/okai";
 
 describe("ConnectorProvider", () => {
     let connectorProvider: FlowConnectorProvider;

@@ -12,9 +12,9 @@ import {
     ModelClass,
     State,
     stringToUuid,
-    elizaLogger,
+    okaiLogger,
     getEmbeddingZeroVector,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 
@@ -105,7 +105,7 @@ export class TwitterInteractionClient {
     }
 
     async handleTwitterInteractions() {
-        elizaLogger.log("Checking Twitter interactions");
+        okaiLogger.log("Checking Twitter interactions");
 
         const twitterUsername = this.client.profile.username;
         try {
@@ -143,12 +143,12 @@ export class TwitterInteractionClient {
                         );
 
                     if (existingResponse) {
-                        elizaLogger.log(
+                        okaiLogger.log(
                             `Already responded to tweet ${tweet.id}, skipping`
                         );
                         continue;
                     }
-                    elizaLogger.log("New Tweet found", tweet.permanentUrl);
+                    okaiLogger.log("New Tweet found", tweet.permanentUrl);
 
                     const roomId = stringToUuid(
                         tweet.conversationId + "-" + this.runtime.agentId
@@ -193,9 +193,9 @@ export class TwitterInteractionClient {
             // Save the latest checked tweet ID to the file
             await this.client.cacheLatestCheckedTweetId();
 
-            elizaLogger.log("Finished checking Twitter interactions");
+            okaiLogger.log("Finished checking Twitter interactions");
         } catch (error) {
-            elizaLogger.error("Error handling Twitter interactions:", error);
+            okaiLogger.error("Error handling Twitter interactions:", error);
         }
     }
 
@@ -215,11 +215,11 @@ export class TwitterInteractionClient {
         }
 
         if (!message.content.text) {
-            elizaLogger.log("Skipping Tweet with no text", tweet.id);
+            okaiLogger.log("Skipping Tweet with no text", tweet.id);
             return { text: "", action: "IGNORE" };
         }
 
-        elizaLogger.log("Processing Tweet: ", tweet.id);
+        okaiLogger.log("Processing Tweet: ", tweet.id);
         const formatTweet = (tweet: Tweet) => {
             return `  ID: ${tweet.id}
   From: ${tweet.name} (@${tweet.username})
@@ -227,7 +227,7 @@ export class TwitterInteractionClient {
         };
         const currentPost = formatTweet(tweet);
 
-        elizaLogger.debug("Thread: ", thread);
+        okaiLogger.debug("Thread: ", thread);
         const formattedConversation = thread
             .map(
                 (tweet) => `@${tweet.username} (${new Date(
@@ -242,7 +242,7 @@ export class TwitterInteractionClient {
             )
             .join("\n\n");
 
-        elizaLogger.debug("formattedConversation: ", formattedConversation);
+        okaiLogger.debug("formattedConversation: ", formattedConversation);
 
         let state = await this.runtime.composeState(message, {
             twitterClient: this.client.twitterClient,
@@ -257,7 +257,7 @@ export class TwitterInteractionClient {
             await this.runtime.messageManager.getMemoryById(tweetId);
 
         if (!tweetExists) {
-            elizaLogger.log("tweet does not exist, saving");
+            okaiLogger.log("tweet does not exist, saving");
             const userIdUUID = stringToUuid(tweet.userId as string);
             const roomId = stringToUuid(tweet.conversationId);
 
@@ -299,7 +299,7 @@ export class TwitterInteractionClient {
 
         // Promise<"RESPOND" | "IGNORE" | "STOP" | null> {
         if (shouldRespond !== "RESPOND") {
-            elizaLogger.log("Not responding to message");
+            okaiLogger.log("Not responding to message");
             return { text: "Response Decision:", action: shouldRespond };
         }
 
@@ -312,7 +312,7 @@ export class TwitterInteractionClient {
                 twitterMessageHandlerTemplate,
         });
 
-        elizaLogger.debug("Interactions prompt:\n" + context);
+        okaiLogger.debug("Interactions prompt:\n" + context);
 
         const response = await generateMessageResponse({
             runtime: this.runtime,
@@ -378,7 +378,7 @@ export class TwitterInteractionClient {
                 );
                 await wait();
             } catch (error) {
-                elizaLogger.error(`Error sending response tweet: ${error}`);
+                okaiLogger.error(`Error sending response tweet: ${error}`);
             }
         }
     }
@@ -391,19 +391,19 @@ export class TwitterInteractionClient {
         const visited: Set<string> = new Set();
 
         async function processThread(currentTweet: Tweet, depth: number = 0) {
-            elizaLogger.log("Processing tweet:", {
+            okaiLogger.log("Processing tweet:", {
                 id: currentTweet.id,
                 inReplyToStatusId: currentTweet.inReplyToStatusId,
                 depth: depth,
             });
 
             if (!currentTweet) {
-                elizaLogger.log("No current tweet found for thread building");
+                okaiLogger.log("No current tweet found for thread building");
                 return;
             }
 
             if (depth >= maxReplies) {
-                elizaLogger.log("Reached maximum reply depth", depth);
+                okaiLogger.log("Reached maximum reply depth", depth);
                 return;
             }
 
@@ -453,21 +453,21 @@ export class TwitterInteractionClient {
             }
 
             if (visited.has(currentTweet.id)) {
-                elizaLogger.log("Already visited tweet:", currentTweet.id);
+                okaiLogger.log("Already visited tweet:", currentTweet.id);
                 return;
             }
 
             visited.add(currentTweet.id);
             thread.unshift(currentTweet);
 
-            elizaLogger.debug("Current thread state:", {
+            okaiLogger.debug("Current thread state:", {
                 length: thread.length,
                 currentDepth: depth,
                 tweetId: currentTweet.id,
             });
 
             if (currentTweet.inReplyToStatusId) {
-                elizaLogger.log(
+                okaiLogger.log(
                     "Fetching parent tweet:",
                     currentTweet.inReplyToStatusId
                 );
@@ -477,25 +477,25 @@ export class TwitterInteractionClient {
                     );
 
                     if (parentTweet) {
-                        elizaLogger.log("Found parent tweet:", {
+                        okaiLogger.log("Found parent tweet:", {
                             id: parentTweet.id,
                             text: parentTweet.text?.slice(0, 50),
                         });
                         await processThread(parentTweet, depth + 1);
                     } else {
-                        elizaLogger.log(
+                        okaiLogger.log(
                             "No parent tweet found for:",
                             currentTweet.inReplyToStatusId
                         );
                     }
                 } catch (error) {
-                    elizaLogger.log("Error fetching parent tweet:", {
+                    okaiLogger.log("Error fetching parent tweet:", {
                         tweetId: currentTweet.inReplyToStatusId,
                         error,
                     });
                 }
             } else {
-                elizaLogger.log(
+                okaiLogger.log(
                     "Reached end of reply chain at:",
                     currentTweet.id
                 );
@@ -505,7 +505,7 @@ export class TwitterInteractionClient {
         // Need to bind this context for the inner function
         await processThread.bind(this)(tweet, 0);
 
-        elizaLogger.debug("Final thread built:", {
+        okaiLogger.debug("Final thread built:", {
             totalTweets: thread.length,
             tweetIds: thread.map((t) => ({
                 id: t.id,

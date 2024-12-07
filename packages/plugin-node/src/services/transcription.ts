@@ -1,10 +1,10 @@
 import {
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     ITranscriptionService,
     settings,
-} from "@okcashpro/eliza";
-import { Service, ServiceType } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { Service, ServiceType } from "@okcashpro/okai";
 import { exec } from "child_process";
 import { File } from "formdata-node";
 import fs from "fs";
@@ -125,7 +125,7 @@ export class TranscriptionService
             const probeResult = JSON.parse(stdout);
             const stream = probeResult.streams[0];
 
-            elizaLogger.log("Input audio info:", stream);
+            okaiLogger.log("Input audio info:", stream);
 
             let ffmpegCommand = `ffmpeg -i "${inputPath}" -ar ${this.TARGET_SAMPLE_RATE} -ac 1`;
 
@@ -135,7 +135,7 @@ export class TranscriptionService
 
             ffmpegCommand += ` "${outputPath}"`;
 
-            elizaLogger.log("FFmpeg command:", ffmpegCommand);
+            okaiLogger.log("FFmpeg command:", ffmpegCommand);
 
             await execAsync(ffmpegCommand);
 
@@ -144,7 +144,7 @@ export class TranscriptionService
             fs.unlinkSync(outputPath);
             return convertedBuffer;
         } catch (error) {
-            elizaLogger.error("Error converting audio:", error);
+            okaiLogger.error("Error converting audio:", error);
             throw error;
         }
     }
@@ -156,7 +156,7 @@ export class TranscriptionService
         const filePath = path.join(this.DEBUG_AUDIO_DIR, filename);
 
         fs.writeFileSync(filePath, Buffer.from(audioBuffer));
-        elizaLogger.log(`Debug audio saved: ${filePath}`);
+        okaiLogger.log(`Debug audio saved: ${filePath}`);
     }
 
     public async transcribeAttachment(
@@ -210,7 +210,7 @@ export class TranscriptionService
     private async transcribeWithOpenAI(
         audioBuffer: ArrayBuffer
     ): Promise<string | null> {
-        elizaLogger.log("Transcribing audio with OpenAI...");
+        okaiLogger.log("Transcribing audio with OpenAI...");
 
         try {
             await this.saveDebugAudio(audioBuffer, "openai_input_original");
@@ -234,22 +234,22 @@ export class TranscriptionService
             });
 
             const trimmedResult = (result as any).trim();
-            elizaLogger.log(`OpenAI speech to text result: "${trimmedResult}"`);
+            okaiLogger.log(`OpenAI speech to text result: "${trimmedResult}"`);
 
             return trimmedResult;
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "Error in OpenAI speech-to-text conversion:",
                 error
             );
             if (error.response) {
-                elizaLogger.error("Response data:", error.response.data);
-                elizaLogger.error("Response status:", error.response.status);
-                elizaLogger.error("Response headers:", error.response.headers);
+                okaiLogger.error("Response data:", error.response.data);
+                okaiLogger.error("Response status:", error.response.status);
+                okaiLogger.error("Response headers:", error.response.headers);
             } else if (error.request) {
-                elizaLogger.error("No response received:", error.request);
+                okaiLogger.error("No response received:", error.request);
             } else {
-                elizaLogger.error("Error setting up request:", error.message);
+                okaiLogger.error("Error setting up request:", error.message);
             }
             return null;
         }
@@ -259,7 +259,7 @@ export class TranscriptionService
         audioBuffer: ArrayBuffer
     ): Promise<string | null> {
         try {
-            elizaLogger.log("Transcribing audio locally...");
+            okaiLogger.log("Transcribing audio locally...");
 
             await this.saveDebugAudio(audioBuffer, "local_input_original");
 
@@ -273,7 +273,7 @@ export class TranscriptionService
             );
             fs.writeFileSync(tempWavFile, convertedBuffer);
 
-            elizaLogger.debug(`Temporary WAV file created: ${tempWavFile}`);
+            okaiLogger.debug(`Temporary WAV file created: ${tempWavFile}`);
 
             let output = await nodewhisper(tempWavFile, {
                 modelName: "base.en",
@@ -307,12 +307,12 @@ export class TranscriptionService
             fs.unlinkSync(tempWavFile);
 
             if (!output || output.length < 5) {
-                elizaLogger.log("Output is null or too short, returning null");
+                okaiLogger.log("Output is null or too short, returning null");
                 return null;
             }
             return output;
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "Error in local speech-to-text conversion:",
                 error
             );

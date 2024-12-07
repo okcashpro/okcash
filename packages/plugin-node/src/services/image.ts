@@ -1,11 +1,11 @@
-import { elizaLogger, models } from "@okcashpro/eliza";
-import { Service } from "@okcashpro/eliza";
+import { okaiLogger, models } from "@okcashpro/okai";
+import { Service } from "@okcashpro/okai";
 import {
     IAgentRuntime,
     ModelProviderName,
     ServiceType,
     IImageDescriptionService,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     AutoProcessor,
     AutoTokenizer,
@@ -54,7 +54,7 @@ export class ImageDescriptionService
         env.backends.onnx.wasm.proxy = false;
         env.backends.onnx.wasm.numThreads = 1;
 
-        elizaLogger.info("Downloading Florence model...");
+        okaiLogger.info("Downloading Florence model...");
 
         this.model = await Florence2ForConditionalGeneration.from_pretrained(
             this.modelId,
@@ -69,7 +69,7 @@ export class ImageDescriptionService
                         const dots = ".".repeat(
                             Math.floor(Number(percent) / 5)
                         );
-                        elizaLogger.info(
+                        okaiLogger.info(
                             `Downloading Florence model: [${dots.padEnd(20, " ")}] ${percent}%`
                         );
                     }
@@ -77,16 +77,16 @@ export class ImageDescriptionService
             }
         );
 
-        elizaLogger.success("Florence model downloaded successfully");
+        okaiLogger.success("Florence model downloaded successfully");
 
-        elizaLogger.info("Downloading processor...");
+        okaiLogger.info("Downloading processor...");
         this.processor = (await AutoProcessor.from_pretrained(
             this.modelId
         )) as Florence2Processor;
 
-        elizaLogger.info("Downloading tokenizer...");
+        okaiLogger.info("Downloading tokenizer...");
         this.tokenizer = await AutoTokenizer.from_pretrained(this.modelId);
-        elizaLogger.success("Image service initialization complete");
+        okaiLogger.success("Image service initialization complete");
     }
 
     async describeImage(
@@ -170,7 +170,7 @@ export class ImageDescriptionService
                 description: descriptionParts.join("\n"),
             };
         } catch (error) {
-            elizaLogger.error("Error in recognizeWithOpenAI:", error);
+            okaiLogger.error("Error in recognizeWithOpenAI:", error);
             throw error;
         }
     }
@@ -218,7 +218,7 @@ export class ImageDescriptionService
                 const data = await response.json();
                 return data.choices[0].message.content;
             } catch (error) {
-                elizaLogger.error(
+                okaiLogger.error(
                     `OpenAI request failed (attempt ${attempt + 1}):`,
                     error
                 );
@@ -248,13 +248,13 @@ export class ImageDescriptionService
             throw new Error("Model components not initialized");
         }
 
-        elizaLogger.log("Processing image:", imageUrl);
+        okaiLogger.log("Processing image:", imageUrl);
         const isGif = imageUrl.toLowerCase().endsWith(".gif");
         let imageToProcess = imageUrl;
 
         try {
             if (isGif) {
-                elizaLogger.log("Extracting first frame from GIF");
+                okaiLogger.log("Extracting first frame from GIF");
                 const { filePath } =
                     await this.extractFirstFrameFromGif(imageUrl);
                 imageToProcess = filePath;
@@ -266,7 +266,7 @@ export class ImageDescriptionService
                 this.processor.construct_prompts("<DETAILED_CAPTION>");
             const textInputs = this.tokenizer(prompts);
 
-            elizaLogger.log("Generating image description");
+            okaiLogger.log("Generating image description");
             const generatedIds = (await this.model.generate({
                 ...textInputs,
                 ...visionInputs,
@@ -286,7 +286,7 @@ export class ImageDescriptionService
             const detailedCaption = result["<DETAILED_CAPTION>"] as string;
             return { title: detailedCaption, description: detailedCaption };
         } catch (error) {
-            elizaLogger.error("Error processing image:", error);
+            okaiLogger.error("Error processing image:", error);
             throw error;
         } finally {
             if (isGif && imageToProcess !== imageUrl) {

@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@supabase/supabase-js": "2.46.2"
     },
     "devDependencies": {

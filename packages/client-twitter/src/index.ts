@@ -1,7 +1,7 @@
 import { TwitterPostClient } from "./post.ts";
 import { TwitterSearchClient } from "./search.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
-import { IAgentRuntime, Client, elizaLogger } from "@okcashpro/eliza";
+import { IAgentRuntime, Client, okaiLogger } from "@okcashpro/okai";
 import { validateTwitterConfig } from "./environment.ts";
 import { ClientBase } from "./base.ts";
 
@@ -25,7 +25,7 @@ export const TwitterClientInterface: Client = {
     async start(runtime: IAgentRuntime) {
         await validateTwitterConfig(runtime);
 
-        elizaLogger.log("Twitter client started");
+        okaiLogger.log("Twitter client started");
 
         const manager = new TwitterManager(runtime);
 
@@ -38,7 +38,7 @@ export const TwitterClientInterface: Client = {
         return manager;
     },
     async stop(_runtime: IAgentRuntime) {
-        elizaLogger.warn("Twitter client does not support stopping yet");
+        okaiLogger.warn("Twitter client does not support stopping yet");
     },
 };
 

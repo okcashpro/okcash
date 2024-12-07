@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@types/better-sqlite3": "7.6.12",
         "better-sqlite3": "11.6.0",
         "sqlite-vec": "0.1.6"

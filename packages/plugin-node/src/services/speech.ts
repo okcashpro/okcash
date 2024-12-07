@@ -1,10 +1,10 @@
 import { PassThrough, Readable } from "stream";
-import { IAgentRuntime, ISpeechService, ServiceType } from "@okcashpro/eliza";
+import { IAgentRuntime, ISpeechService, ServiceType } from "@okcashpro/okai";
 import { getWavHeader } from "./audioUtils.ts";
-import { Service } from "@okcashpro/eliza";
+import { Service } from "@okcashpro/okai";
 import { validateNodeConfig } from "../environment.ts";
 import * as Echogarden from "echogarden";
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 
 function prependWavHeader(
     readable: Readable,
@@ -42,7 +42,7 @@ async function getVoiceSettings(runtime: IAgentRuntime) {
     const voiceSettings = runtime.character.settings?.voice;
     const elevenlabsSettings = voiceSettings?.elevenlabs;
 
-    elizaLogger.debug("Voice settings:", {
+    okaiLogger.debug("Voice settings:", {
         hasElevenLabs,
         useVits,
         voiceSettings,

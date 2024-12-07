@@ -1,8 +1,8 @@
-import { composeContext } from "@okcashpro/eliza";
-import { generateText, splitChunks, trimTokens } from "@okcashpro/eliza";
-import { getActorDetails } from "@okcashpro/eliza";
-import { models } from "@okcashpro/eliza";
-import { parseJSONObjectFromText } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
+import { generateText, splitChunks, trimTokens } from "@okcashpro/okai";
+import { getActorDetails } from "@okcashpro/okai";
+import { models } from "@okcashpro/okai";
+import { parseJSONObjectFromText } from "@okcashpro/okai";
 import {
     Action,
     ActionExample,
@@ -13,7 +13,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}
 

@@ -10,10 +10,10 @@ export class Cache {
         this.cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
         const __dirname = path.resolve();
 
-        // Find the 'eliza' folder in the filepath and adjust the cache directory path
-        const elizaIndex = __dirname.indexOf("eliza");
-        if (elizaIndex !== -1) {
-            const pathToOKai = __dirname.slice(0, elizaIndex + 5); // include 'eliza'
+        // Find the 'okai' folder in the filepath and adjust the cache directory path
+        const okaiIndex = __dirname.indexOf("okai");
+        if (okaiIndex !== -1) {
+            const pathToOKai = __dirname.slice(0, okaiIndex + 5); // include 'okai'
             this.cacheDir = path.join(pathToOKai, "cache");
         } else {
             this.cacheDir = path.join(__dirname, "cache");

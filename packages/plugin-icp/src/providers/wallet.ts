@@ -3,7 +3,7 @@ import { Actor, ActorSubclass, HttpAgent } from "@dfinity/agent";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { IDL } from "@dfinity/candid";
 import { Principal } from "@dfinity/principal";
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 
 export class WalletProvider {
     private privateKey: string;

@@ -10,7 +10,7 @@ import {
     Memory,
     ModelClass,
     Evaluator,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
 import { WalletProvider } from "../providers/wallet.ts";

@@ -48,7 +48,7 @@ pnpm start
 
 ### Agregando acciones personalizadas
 
-Para evitar conflictos en el directorio central, se recomienda agregar acciones personalizadas a un directorio `custom_actions` y luego agregarlas al archivo `elizaConfig.yaml`. Consulte el archivo `elizaConfig.example.yaml` para un ejemplo.
+Para evitar conflictos en el directorio central, se recomienda agregar acciones personalizadas a un directorio `custom_actions` y luego agregarlas al archivo `okaiConfig.yaml`. Consulte el archivo `okaiConfig.example.yaml` para un ejemplo.
 
 ## Ejecución con Diferentes Modelos
 

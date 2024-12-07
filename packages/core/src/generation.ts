@@ -14,7 +14,7 @@ import OpenAI from "openai";
 import { encodingForModel, TiktokenModel } from "js-tiktoken";
 import Together from "together-ai";
 import { ZodSchema } from "zod";
-import { elizaLogger } from "./index.ts";
+import { okaiLogger } from "./index.ts";
 import { getModel, models } from "./models.ts";
 import {
     parseBooleanFromText,
@@ -64,9 +64,9 @@ export async function generateText({
         return "";
     }
 
-    elizaLogger.log("Generating text...");
+    okaiLogger.log("Generating text...");
 
-    elizaLogger.info("Generating text with options:", {
+    okaiLogger.info("Generating text with options:", {
         modelProvider: runtime.modelProvider,
         model: modelClass,
     });
@@ -99,7 +99,7 @@ export async function generateText({
             runtime.getSetting("TOGETHER_MODEL_SMALL");
     }
 
-    elizaLogger.info("Selected model:", model);
+    okaiLogger.info("Selected model:", model);
 
     const temperature = models[provider].settings.temperature;
     const frequency_penalty = models[provider].settings.frequency_penalty;
@@ -110,7 +110,7 @@ export async function generateText({
     const apiKey = runtime.token;
 
     try {
-        elizaLogger.debug(
+        okaiLogger.debug(
             `Trimming context to max length of ${max_context_length} tokens.`
         );
         context = await trimTokens(context, max_context_length, "gpt-4o");
@@ -118,7 +118,7 @@ export async function generateText({
         let response: string;
 
         const _stop = stop || models[provider].settings.stop;
-        elizaLogger.debug(
+        okaiLogger.debug(
             `Using provider: ${provider}, model: ${model}, temperature: ${temperature}, max response length: ${max_response_length}`
         );
 
@@ -130,7 +130,7 @@ export async function generateText({
             case ModelProviderName.VOLENGINE:
             case ModelProviderName.LLAMACLOUD:
             case ModelProviderName.TOGETHER: {
-                elizaLogger.debug("Initializing OpenAI model.");
+                okaiLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: openaiResponse } = await aiGenerateText({
@@ -147,7 +147,7 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                elizaLogger.debug("Received response from OpenAI model.");
+                okaiLogger.debug("Received response from OpenAI model.");
                 break;
             }
 
@@ -168,12 +168,12 @@ export async function generateText({
                 });
 
                 response = googleResponse;
-                elizaLogger.debug("Received response from Google model.");
+                okaiLogger.debug("Received response from Google model.");
                 break;
             }
 
             case ModelProviderName.ANTHROPIC: {
-                elizaLogger.debug("Initializing Anthropic model.");
+                okaiLogger.debug("Initializing Anthropic model.");
 
                 const anthropic = createAnthropic({ apiKey });
 
@@ -191,12 +191,12 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                elizaLogger.debug("Received response from Anthropic model.");
+                okaiLogger.debug("Received response from Anthropic model.");
                 break;
             }
 
             case ModelProviderName.CLAUDE_VERTEX: {
-                elizaLogger.debug("Initializing Claude Vertex model.");
+                okaiLogger.debug("Initializing Claude Vertex model.");
 
                 const anthropic = createAnthropic({ apiKey });
 
@@ -214,14 +214,14 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                elizaLogger.debug(
+                okaiLogger.debug(
                     "Received response from Claude Vertex model."
                 );
                 break;
             }
 
             case ModelProviderName.GROK: {
-                elizaLogger.debug("Initializing Grok model.");
+                okaiLogger.debug("Initializing Grok model.");
                 const grok = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: grokResponse } = await aiGenerateText({
@@ -240,7 +240,7 @@ export async function generateText({
                 });
 
                 response = grokResponse;
-                elizaLogger.debug("Received response from Grok model.");
+                okaiLogger.debug("Received response from Grok model.");
                 break;
             }
 
@@ -265,7 +265,7 @@ export async function generateText({
             }
 
             case ModelProviderName.LLAMALOCAL: {
-                elizaLogger.debug(
+                okaiLogger.debug(
                     "Using local Llama model for text completion."
                 );
                 const textGenerationService =
@@ -285,12 +285,12 @@ export async function generateText({
                     presence_penalty,
                     max_response_length
                 );
-                elizaLogger.debug("Received response from local Llama model.");
+                okaiLogger.debug("Received response from local Llama model.");
                 break;
             }
 
             case ModelProviderName.REDPILL: {
-                elizaLogger.debug("Initializing RedPill model.");
+                okaiLogger.debug("Initializing RedPill model.");
                 const serverUrl = models[provider].endpoint;
                 const openai = createOpenAI({ apiKey, baseURL: serverUrl });
 
@@ -308,12 +308,12 @@ export async function generateText({
                 });
 
                 response = redpillResponse;
-                elizaLogger.debug("Received response from redpill model.");
+                okaiLogger.debug("Received response from redpill model.");
                 break;
             }
 
             case ModelProviderName.OPENROUTER: {
-                elizaLogger.debug("Initializing OpenRouter model.");
+                okaiLogger.debug("Initializing OpenRouter model.");
                 const serverUrl = models[provider].endpoint;
                 const openrouter = createOpenAI({ apiKey, baseURL: serverUrl });
 
@@ -331,20 +331,20 @@ export async function generateText({
                 });
 
                 response = openrouterResponse;
-                elizaLogger.debug("Received response from OpenRouter model.");
+                okaiLogger.debug("Received response from OpenRouter model.");
                 break;
             }
 
             case ModelProviderName.OLLAMA:
                 {
-                    elizaLogger.debug("Initializing Ollama model.");
+                    okaiLogger.debug("Initializing Ollama model.");
 
                     const ollamaProvider = createOllama({
                         baseURL: models[provider].endpoint + "/api",
                     });
                     const ollama = ollamaProvider(model);
 
-                    elizaLogger.debug("****** MODEL\n", model);
+                    okaiLogger.debug("****** MODEL\n", model);
 
                     const { text: ollamaResponse } = await aiGenerateText({
                         model: ollama,
@@ -357,11 +357,11 @@ export async function generateText({
 
                     response = ollamaResponse;
                 }
-                elizaLogger.debug("Received response from Ollama model.");
+                okaiLogger.debug("Received response from Ollama model.");
                 break;
 
             case ModelProviderName.HEURIST: {
-                elizaLogger.debug("Initializing Heurist model.");
+                okaiLogger.debug("Initializing Heurist model.");
                 const heurist = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
@@ -381,11 +381,11 @@ export async function generateText({
                 });
 
                 response = heuristResponse;
-                elizaLogger.debug("Received response from Heurist model.");
+                okaiLogger.debug("Received response from Heurist model.");
                 break;
             }
             case ModelProviderName.GAIANET: {
-                elizaLogger.debug("Initializing GAIANET model.");
+                okaiLogger.debug("Initializing GAIANET model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: openaiResponse } = await aiGenerateText({
@@ -402,12 +402,12 @@ export async function generateText({
                 });
 
                 response = openaiResponse;
-                elizaLogger.debug("Received response from GAIANET model.");
+                okaiLogger.debug("Received response from GAIANET model.");
                 break;
             }
 
             case ModelProviderName.GALADRIEL: {
-                elizaLogger.debug("Initializing Galadriel model.");
+                okaiLogger.debug("Initializing Galadriel model.");
                 const galadriel = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
@@ -427,20 +427,20 @@ export async function generateText({
                 });
 
                 response = galadrielResponse;
-                elizaLogger.debug("Received response from Galadriel model.");
+                okaiLogger.debug("Received response from Galadriel model.");
                 break;
             }
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
-                elizaLogger.error(errorMessage);
+                okaiLogger.error(errorMessage);
                 throw new Error(errorMessage);
             }
         }
 
         return response;
     } catch (error) {
-        elizaLogger.error("Error in generateText:", error);
+        okaiLogger.error("Error in generateText:", error);
         throw error;
     }
 }
@@ -510,7 +510,7 @@ export async function generateShouldRespond({
     let retryDelay = 1000;
     while (true) {
         try {
-            elizaLogger.debug(
+            okaiLogger.debug(
                 "Attempting to generate text with context:",
                 context
             );
@@ -520,27 +520,27 @@ export async function generateShouldRespond({
                 modelClass,
             });
 
-            elizaLogger.debug("Received response from generateText:", response);
+            okaiLogger.debug("Received response from generateText:", response);
             const parsedResponse = parseShouldRespondFromText(response.trim());
             if (parsedResponse) {
-                elizaLogger.debug("Parsed response:", parsedResponse);
+                okaiLogger.debug("Parsed response:", parsedResponse);
                 return parsedResponse;
             } else {
-                elizaLogger.debug("generateShouldRespond no response");
+                okaiLogger.debug("generateShouldRespond no response");
             }
         } catch (error) {
-            elizaLogger.error("Error in generateShouldRespond:", error);
+            okaiLogger.error("Error in generateShouldRespond:", error);
             if (
                 error instanceof TypeError &&
                 error.message.includes("queueTextCompletion")
             ) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "TypeError: Cannot read properties of null (reading 'queueTextCompletion')"
                 );
             }
         }
 
-        elizaLogger.log(`Retrying in ${retryDelay}ms...`);
+        okaiLogger.log(`Retrying in ${retryDelay}ms...`);
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
         retryDelay *= 2;
     }
@@ -613,7 +613,7 @@ export async function generateTrueOrFalse({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLogger.error("Error in generateTrueOrFalse:", error);
+            okaiLogger.error("Error in generateTrueOrFalse:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -646,7 +646,7 @@ export async function generateTextArray({
     modelClass: string;
 }): Promise<string[]> {
     if (!context) {
-        elizaLogger.error("generateTextArray context is empty");
+        okaiLogger.error("generateTextArray context is empty");
         return [];
     }
     let retryDelay = 1000;
@@ -664,7 +664,7 @@ export async function generateTextArray({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLogger.error("Error in generateTextArray:", error);
+            okaiLogger.error("Error in generateTextArray:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -682,7 +682,7 @@ export async function generateObject({
     modelClass: string;
 }): Promise<any> {
     if (!context) {
-        elizaLogger.error("generateObject context is empty");
+        okaiLogger.error("generateObject context is empty");
         return null;
     }
     let retryDelay = 1000;
@@ -700,7 +700,7 @@ export async function generateObject({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLogger.error("Error in generateObject:", error);
+            okaiLogger.error("Error in generateObject:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -718,7 +718,7 @@ export async function generateObjectArray({
     modelClass: string;
 }): Promise<any[]> {
     if (!context) {
-        elizaLogger.error("generateObjectArray context is empty");
+        okaiLogger.error("generateObjectArray context is empty");
         return [];
     }
     let retryDelay = 1000;
@@ -736,7 +736,7 @@ export async function generateObjectArray({
                 return parsedResponse;
             }
         } catch (error) {
-            elizaLogger.error("Error in generateTextArray:", error);
+            okaiLogger.error("Error in generateTextArray:", error);
         }
 
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -771,7 +771,7 @@ export async function generateMessageResponse({
     let retryLength = 1000; // exponential backoff
     while (true) {
         try {
-            elizaLogger.log("Generating message response..");
+            okaiLogger.log("Generating message response..");
 
             const response = await generateText({
                 runtime,
@@ -782,17 +782,17 @@ export async function generateMessageResponse({
             // try parsing the response as JSON, if null then try again
             const parsedContent = parseJSONObjectFromText(response) as Content;
             if (!parsedContent) {
-                elizaLogger.debug("parsedContent is null, retrying");
+                okaiLogger.debug("parsedContent is null, retrying");
                 continue;
             }
 
             return parsedContent;
         } catch (error) {
-            elizaLogger.error("ERROR:", error);
+            okaiLogger.error("ERROR:", error);
             // wait for 2 seconds
             retryLength *= 2;
             await new Promise((resolve) => setTimeout(resolve, retryLength));
-            elizaLogger.debug("Retrying...");
+            okaiLogger.debug("Retrying...");
         }
     }
 }
@@ -819,7 +819,7 @@ export const generateImage = async (
     const model = getModel(runtime.imageModelProvider, ModelClass.IMAGE);
     const modelSettings = models[runtime.imageModelProvider].imageSettings;
 
-    elizaLogger.info("Generating image with options:", {
+    okaiLogger.info("Generating image with options:", {
         imageModelProvider: model,
     });
 
@@ -899,7 +899,7 @@ export const generateImage = async (
             const base64s = await Promise.all(
                 togetherResponse.data.map(async (image) => {
                     if (!image.url) {
-                        elizaLogger.error("Missing URL in image data:", image);
+                        okaiLogger.error("Missing URL in image data:", image);
                         throw new Error("Missing URL in Together AI response");
                     }
 
@@ -925,7 +925,7 @@ export const generateImage = async (
                 throw new Error("No images generated by Together AI");
             }
 
-            elizaLogger.debug(`Generated ${base64s.length} images`);
+            okaiLogger.debug(`Generated ${base64s.length} images`);
             return { success: true, data: base64s };
         } else if (runtime.imageModelProvider === ModelProviderName.FAL) {
             fal.config({
@@ -960,7 +960,7 @@ export const generateImage = async (
                 logs: true,
                 onQueueUpdate: (update) => {
                     if (update.status === "IN_PROGRESS") {
-                        elizaLogger.info(update.logs.map((log) => log.message));
+                        okaiLogger.info(update.logs.map((log) => log.message));
                     }
                 },
             });
@@ -1055,7 +1055,7 @@ export const generateWebSearch = async (
         });
 
         if (!response.ok) {
-            throw new elizaLogger.error(
+            throw new okaiLogger.error(
                 `HTTP error! status: ${response.status}`
             );
         }
@@ -1063,7 +1063,7 @@ export const generateWebSearch = async (
         const data: SearchResponse = await response.json();
         return data;
     } catch (error) {
-        elizaLogger.error("Error:", error);
+        okaiLogger.error("Error:", error);
     }
 };
 /**
@@ -1219,7 +1219,7 @@ export async function handleProvider(
             return await handleOllama(options);
         default: {
             const errorMessage = `Unsupported provider: ${provider}`;
-            elizaLogger.error(errorMessage);
+            okaiLogger.error(errorMessage);
             throw new Error(errorMessage);
         }
     }

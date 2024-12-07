@@ -1,4 +1,4 @@
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 import {
     Action,
     HandlerCallback,
@@ -6,8 +6,8 @@ import {
     Memory,
     Plugin,
     State,
-} from "@okcashpro/eliza";
-import { generateImage } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { generateImage } from "@okcashpro/okai";
 
 import fs from "fs";
 import path from "path";
@@ -110,19 +110,19 @@ const imageGeneration: Action = {
         },
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Composing state for message:", message);
+        okaiLogger.log("Composing state for message:", message);
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
-        elizaLogger.log("User ID:", userId);
+        okaiLogger.log("User ID:", userId);
 
         const imagePrompt = message.content.text;
-        elizaLogger.log("Image prompt received:", imagePrompt);
+        okaiLogger.log("Image prompt received:", imagePrompt);
 
         // TODO: Generate a prompt for the image
 
         const res: { image: string; caption: string }[] = [];
 
-        elizaLogger.log("Generating image with prompt:", imagePrompt);
+        okaiLogger.log("Generating image with prompt:", imagePrompt);
         const images = await generateImage(
             {
                 prompt: imagePrompt,
@@ -148,7 +148,7 @@ const imageGeneration: Action = {
         );
 
         if (images.success && images.data && images.data.length > 0) {
-            elizaLogger.log(
+            okaiLogger.log(
                 "Image generation successful, number of images:",
                 images.data.length
             );
@@ -163,7 +163,7 @@ const imageGeneration: Action = {
                     ? await saveHeuristImage(image, filename)
                     : saveBase64Image(image, filename);
 
-                elizaLogger.log(`Processing image ${i + 1}:`, filename);
+                okaiLogger.log(`Processing image ${i + 1}:`, filename);
 
                 //just dont even add a caption or a description just have it generate & send
                 /*
@@ -175,7 +175,7 @@ const imageGeneration: Action = {
                         captionTitle = caption.title;
                     }
                 } catch (error) {
-                    elizaLogger.error("Caption generation failed, using default caption:", error);
+                    okaiLogger.error("Caption generation failed, using default caption:", error);
                 }*/
 
                 const _caption = "...";
@@ -188,7 +188,7 @@ const imageGeneration: Action = {
 
                 res.push({ image: filepath, caption: "..." }); //caption.title });
 
-                elizaLogger.log(
+                okaiLogger.log(
                     `Generated caption for image ${i + 1}:`,
                     "..." //caption.title
                 );
@@ -217,7 +217,7 @@ const imageGeneration: Action = {
                 );
             }
         } else {
-            elizaLogger.error("Image generation failed or returned no data.");
+            okaiLogger.error("Image generation failed or returned no data.");
         }
     },
     examples: [

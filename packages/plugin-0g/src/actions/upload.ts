@@ -8,10 +8,10 @@ import {
     Content,
     ActionExample,
     generateObjectV2,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { Indexer, ZgFile, getFlowContract } from "@0glabs/0g-ts-sdk";
 import { ethers } from "ethers";
-import { composeContext } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
 import { promises as fs } from "fs";
 
 import { uploadTemplate } from "../templates/upload";

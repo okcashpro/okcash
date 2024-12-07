@@ -47,7 +47,7 @@ pnpm start
 
 ### カスタムアクションの追加
 
-コアディレクトリでのGitの競合を避けるために、カスタムアクションを`custom_actions`ディレクトリに追加し、それを`elizaConfig.yaml`ファイルに追加することをお勧めします。例については`elizaConfig.example.yaml`ファイルを参照してください。
+コアディレクトリでのGitの競合を避けるために、カスタムアクションを`custom_actions`ディレクトリに追加し、それを`okaiConfig.yaml`ファイルに追加することをお勧めします。例については`okaiConfig.example.yaml`ファイルを参照してください。
 
 ## 異なるモデルでの実行
 

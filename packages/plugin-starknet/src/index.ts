@@ -1,4 +1,4 @@
-import { Plugin } from "@okcashpro/eliza";
+import { Plugin } from "@okcashpro/okai";
 import { executeSwap } from "./actions/swap";
 import transfer from "./actions/transfer";
 import { deployToken } from "./actions/unruggable";

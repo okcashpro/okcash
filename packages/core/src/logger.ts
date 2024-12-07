@@ -264,9 +264,9 @@ class OKaiLogger {
     }
 }
 
-export const elizaLogger = new OKaiLogger();
-elizaLogger.clear();
-elizaLogger.closeByNewLine = true;
-elizaLogger.useIcons = true;
+export const okaiLogger = new OKaiLogger();
+okaiLogger.clear();
+okaiLogger.closeByNewLine = true;
+okaiLogger.useIcons = true;
 
-export default elizaLogger;
+export default okaiLogger;

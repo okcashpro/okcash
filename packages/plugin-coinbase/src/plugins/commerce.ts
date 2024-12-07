@@ -1,10 +1,10 @@
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObjectV2,
     ModelClass,
     Provider,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     Action,
     HandlerCallback,
@@ -12,7 +12,7 @@ import {
     Memory,
     Plugin,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { ChargeContent, ChargeSchema, isChargeContent } from "../types";
 import { chargeTemplate, getChargeTemplate } from "../templates";
 import { getWalletDetails } from "../utils";
@@ -139,7 +139,7 @@ export const createCoinbaseChargeAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Composing state for message:", message);
+        okaiLogger.log("Composing state for message:", message);
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         } else {
@@ -171,7 +171,7 @@ export const createCoinbaseChargeAction: Action = {
             return;
         }
 
-        elizaLogger.log("Charge details received:", chargeDetails);
+        okaiLogger.log("Charge details received:", chargeDetails);
 
         // Initialize Coinbase Commerce client
 
@@ -190,7 +190,7 @@ export const createCoinbaseChargeAction: Action = {
                 }
             );
 
-            elizaLogger.log(
+            okaiLogger.log(
                 "Coinbase Commerce charge created:",
                 chargeResponse
             );
@@ -212,7 +212,7 @@ export const createCoinbaseChargeAction: Action = {
                 []
             );
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "Error creating Coinbase Commerce charge:",
                 error
             );
@@ -332,7 +332,7 @@ export const getAllChargesAction: Action = {
         callback: HandlerCallback
     ) => {
         try {
-            elizaLogger.log("Composing state for message:", message);
+            okaiLogger.log("Composing state for message:", message);
             if (!state) {
                 state = (await runtime.composeState(message)) as State;
             } else {
@@ -342,7 +342,7 @@ export const getAllChargesAction: Action = {
                 runtime.getSetting("COINBASE_COMMERCE_KEY")
             );
 
-            elizaLogger.log("Fetched all charges:", charges);
+            okaiLogger.log("Fetched all charges:", charges);
 
             callback(
                 {
@@ -351,7 +351,7 @@ export const getAllChargesAction: Action = {
                 []
             );
         } catch (error) {
-            elizaLogger.error("Error fetching all charges:", error);
+            okaiLogger.error("Error fetching all charges:", error);
             callback(
                 {
                     text: "Failed to fetch all charges. Please try again.",
@@ -396,7 +396,7 @@ export const getChargeDetailsAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Composing state for message:", message);
+        okaiLogger.log("Composing state for message:", message);
         if (!state) {
             state = (await runtime.composeState(message)) as State;
         } else {
@@ -433,7 +433,7 @@ export const getChargeDetailsAction: Action = {
                 charge.id
             );
 
-            elizaLogger.log("Fetched charge details:", chargeDetails);
+            okaiLogger.log("Fetched charge details:", chargeDetails);
 
             callback(
                 {
@@ -452,7 +452,7 @@ export const getChargeDetailsAction: Action = {
                 []
             );
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 `Error fetching details for charge ID ${charge.id}:`,
                 error
             );
@@ -503,10 +503,10 @@ export const chargeProvider: Provider = {
                 privateKey: coinbasePrivateKey,
             });
             const { balances, transactions } = await getWalletDetails(runtime);
-            elizaLogger.log("Current Balances:", balances);
-            elizaLogger.log("Last Transactions:", transactions);
+            okaiLogger.log("Current Balances:", balances);
+            okaiLogger.log("Last Transactions:", transactions);
         }
-        elizaLogger.log("Charges:", charges);
+        okaiLogger.log("Charges:", charges);
         return { charges: charges.data, balances, transactions };
     },
 };

@@ -1,6 +1,6 @@
 # OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="eliza banner" width="100%"/>
+<img src="./docs/static/img/okai_banner.png" alt="okai banner" width="100%"/>
 
 ## 기능
 
@@ -12,7 +12,7 @@
 - ☁ ️여 모형 지지 llama · openai grok anthropic 등
 - 📦 간단 하기도 좋습니다.
 
-eliza로 뭘 할 수 있나요?
+okai로 뭘 할 수 있나요?
 
 - 🤖 챗 봇
 - 🕵 ️ 자주 agents
@@ -49,7 +49,7 @@ pnpm start
 
 ### 일반 행동을 추가한다
 
-커널 디렉터리에서 git 충돌을 방지하기 위해 custom_actions 디렉터리에 사용자 정의 동작을 추가하고 elizaconfig.yaml 파일에서 동작을 설정할 것을 제안한다.elizaconfig.example.yaml 파일의 예제는 참조할 수 있다.
+커널 디렉터리에서 git 충돌을 방지하기 위해 custom_actions 디렉터리에 사용자 정의 동작을 추가하고 okaiconfig.yaml 파일에서 동작을 설정할 것을 제안한다.okaiconfig.example.yaml 파일의 예제는 참조할 수 있다.
 
 다른 대형 모델들을 배치한다
 

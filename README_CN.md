@@ -49,7 +49,7 @@ pnpm start
 
 ### 添加常规行为
 
-为避免在核心目录中的 Git 冲突，我们建议将自定义操作添加到 custom_actions 目录中，并在 elizaConfig.yaml 文件中配置这些操作。可以参考 elizaConfig.example.yaml 文件中的示例。
+为避免在核心目录中的 Git 冲突，我们建议将自定义操作添加到 custom_actions 目录中，并在 okaiConfig.yaml 文件中配置这些操作。可以参考 okaiConfig.example.yaml 文件中的示例。
 
 ## 配置不同的大模型
 

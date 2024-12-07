@@ -25,7 +25,7 @@
         "@okcashpro/client-farcaster": "workspace:*",
         "@okcashpro/client-telegram": "workspace:*",
         "@okcashpro/client-twitter": "workspace:*",
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@okcashpro/plugin-0g": "workspace:*",
         "@okcashpro/plugin-aptos": "workspace:*",
         "@okcashpro/plugin-bootstrap": "workspace:*",

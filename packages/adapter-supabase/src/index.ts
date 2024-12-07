@@ -9,8 +9,8 @@ import {
     type UUID,
     Participant,
     Room,
-} from "@okcashpro/eliza";
-import { DatabaseAdapter } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { DatabaseAdapter } from "@okcashpro/okai";
 import { v4 as uuid } from "uuid";
 export class SupabaseDatabaseAdapter extends DatabaseAdapter {
     async getRoom(roomId: UUID): Promise<UUID | null> {

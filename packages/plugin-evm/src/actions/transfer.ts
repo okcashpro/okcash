@@ -2,7 +2,7 @@ import { ByteArray, parseEther, type Hex } from "viem";
 import { WalletProvider } from "../providers/wallet";
 import type { Transaction, TransferParams } from "../types";
 import { transferTemplate } from "../templates";
-import type { IAgentRuntime, Memory, State } from "@okcashpro/eliza";
+import type { IAgentRuntime, Memory, State } from "@okcashpro/okai";
 
 export { transferTemplate };
 export class TransferAction {

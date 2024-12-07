@@ -1,7 +1,7 @@
 import { SearchMode } from "agent-twitter-client";
-import { composeContext } from "@okcashpro/eliza";
-import { generateMessageResponse, generateText } from "@okcashpro/eliza";
-import { messageCompletionFooter } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
+import { generateMessageResponse, generateText } from "@okcashpro/okai";
+import { messageCompletionFooter } from "@okcashpro/okai";
 import {
     Content,
     HandlerCallback,
@@ -10,8 +10,8 @@ import {
     ModelClass,
     ServiceType,
     State,
-} from "@okcashpro/eliza";
-import { stringToUuid } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
 import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
 

@@ -1,5 +1,5 @@
-import { composeContext } from "@okcashpro/eliza";
-import { generateMessageResponse, generateShouldRespond } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
+import { generateMessageResponse, generateShouldRespond } from "@okcashpro/okai";
 import {
     Content,
     HandlerCallback,
@@ -13,15 +13,15 @@ import {
     ServiceType,
     State,
     UUID,
-} from "@okcashpro/eliza";
-import { stringToUuid, getEmbeddingZeroVector } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { stringToUuid, getEmbeddingZeroVector } from "@okcashpro/okai";
 import {
     ChannelType,
     Client,
     Message as DiscordMessage,
     TextChannel,
 } from "discord.js";
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 import { AttachmentManager } from "./attachments.ts";
 import { VoiceManager } from "./voice.ts";
 import {
@@ -161,7 +161,7 @@ export class MessageManager {
 
             const canSendResult = canSendMessage(message.channel);
             if (!canSendResult.canSend) {
-                return elizaLogger.warn(
+                return okaiLogger.warn(
                     `Cannot send message to channel ${message.channel}`,
                     canSendResult
                 );

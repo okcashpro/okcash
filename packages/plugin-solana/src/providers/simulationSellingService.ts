@@ -7,8 +7,8 @@ import {
 import { Connection, PublicKey } from "@solana/web3.js";
 // Assuming TokenProvider and IAgentRuntime are available
 import { TokenProvider } from "./token.ts";
-// import { settings } from "@okcashpro/eliza";
-import { IAgentRuntime } from "@okcashpro/eliza";
+// import { settings } from "@okcashpro/okai";
+import { IAgentRuntime } from "@okcashpro/okai";
 import { WalletProvider } from "./wallet.ts";
 import * as amqp from "amqplib";
 import { ProcessedTokenData } from "../types/token.ts";
@@ -77,7 +77,7 @@ export class SimulationSellingService {
      * Sets up the consumer for the specified RabbitMQ queue.
      */
     private async consumeMessages() {
-        const queue = "process_eliza_simulation";
+        const queue = "process_okai_simulation";
         await this.amqpChannel.assertQueue(queue, { durable: true });
         this.amqpChannel.consume(
             queue,
@@ -288,7 +288,7 @@ export class SimulationSellingService {
                 sell_recommender_id,
             });
             const response = await fetch(
-                `${this.sonarBe}/ai16z-sol/startProcess`,
+                `${this.sonarBe}/OK-sol/startProcess`,
                 {
                     method: "POST",
                     headers: {
@@ -322,7 +322,7 @@ export class SimulationSellingService {
 
     private stopProcessInTheSonarBackend(tokenAddress: string) {
         try {
-            return fetch(`${this.sonarBe}/ai16z-sol/stopProcess`, {
+            return fetch(`${this.sonarBe}/OK-sol/stopProcess`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

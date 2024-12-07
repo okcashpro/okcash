@@ -7,8 +7,8 @@ import {
     ModelClass,
     stringToUuid,
     parseBooleanFromText,
-} from "@okcashpro/eliza";
-import { elizaLogger } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { okaiLogger } from "@okcashpro/okai";
 import { ClientBase } from "./base.ts";
 
 const twitterPostTemplate = `
@@ -98,7 +98,7 @@ export class TwitterPostClient {
                 generateNewTweetLoop(); // Set up next iteration
             }, delay);
 
-            elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
+            okaiLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
         if (
             this.runtime.getSetting("POST_IMMEDIATELY") != null &&
@@ -121,7 +121,7 @@ export class TwitterPostClient {
     }
 
     private async generateNewTweet() {
-        elizaLogger.log("Generating new tweet");
+        okaiLogger.log("Generating new tweet");
 
         try {
             const roomId = stringToUuid(
@@ -157,7 +157,7 @@ export class TwitterPostClient {
                     twitterPostTemplate,
             });
 
-            elizaLogger.debug("generate post prompt:\n" + context);
+            okaiLogger.debug("generate post prompt:\n" + context);
 
             const newTweetContent = await generateText({
                 runtime: this.runtime,
@@ -174,14 +174,14 @@ export class TwitterPostClient {
             const content = truncateToCompleteSentence(formattedTweet);
 
             if (this.runtime.getSetting("TWITTER_DRY_RUN") === "true") {
-                elizaLogger.info(
+                okaiLogger.info(
                     `Dry run: would have posted tweet: ${content}`
                 );
                 return;
             }
 
             try {
-                elizaLogger.log(`Posting new tweet:\n ${content}`);
+                okaiLogger.log(`Posting new tweet:\n ${content}`);
 
                 const result = await this.client.requestQueue.add(
                     async () =>
@@ -226,7 +226,7 @@ export class TwitterPostClient {
 
                 await this.client.cacheTweet(tweet);
 
-                elizaLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
+                okaiLogger.log(`Tweet posted:\n ${tweet.permanentUrl}`);
 
                 await this.runtime.ensureRoomExists(roomId);
                 await this.runtime.ensureParticipantInRoom(
@@ -248,10 +248,10 @@ export class TwitterPostClient {
                     createdAt: tweet.timestamp,
                 });
             } catch (error) {
-                elizaLogger.error("Error sending tweet:", error);
+                okaiLogger.error("Error sending tweet:", error);
             }
         } catch (error) {
-            elizaLogger.error("Error generating new tweet:", error);
+            okaiLogger.error("Error generating new tweet:", error);
         }
     }
 }

@@ -30,7 +30,7 @@ Before getting started with OKai, ensure you have:
    Enter directory
 
    ```bash
-   cd eliza
+   cd okai
    ```
 
    Switch to latest tagged release
@@ -251,7 +251,7 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    If you see
 
    ```
-   Error starting agents: Error: The module '.../eliza-agents/dv/eliza/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+   Error starting agents: Error: The module '.../okai-agents/dv/okai/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
    was compiled against a different Node.js version using
    NODE_MODULE_VERSION 131. This version of Node.js requires
    NODE_MODULE_VERSION 127. Please try re-compiling or re-installing

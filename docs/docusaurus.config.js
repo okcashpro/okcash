@@ -1,13 +1,13 @@
 import { themes as prismThemes } from "prism-react-renderer";
 
 const config = {
-  title: "eliza",
+  title: "okai",
   tagline: "Flexible, scalable AI agents for everyone",
   favicon: "img/favicon.ico",
   url: "https://okcashpro.github.io",
-  baseUrl: "/eliza/",
-  organizationName: "ai16z",
-  projectName: "eliza",
+  baseUrl: "/okai/",
+  organizationName: "OK",
+  projectName: "okai",
   deploymentBranch: "gh-pages",
   trailingSlash: true,
   onBrokenLinks: "ignore",
@@ -143,7 +143,7 @@ const config = {
       },
     },
     navbar: {
-      title: "eliza",
+      title: "okai",
       logo: {
         alt: "OKai Logo",
         src: "img/favicon.ico",
@@ -197,7 +197,7 @@ const config = {
             },
             {
               label: "Twitter",
-              href: "https://twitter.com/ai16zdao",
+              href: "https://twitter.com/OKdao",
             },
           ],
         },

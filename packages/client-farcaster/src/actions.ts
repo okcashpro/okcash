@@ -1,5 +1,5 @@
 import type { FarcasterClient } from "./client";
-import type { Content, IAgentRuntime, Memory, UUID } from "@okcashpro/eliza";
+import type { Content, IAgentRuntime, Memory, UUID } from "@okcashpro/okai";
 import type { Cast, CastId, Profile } from "./types";
 import { createCastMemory } from "./memory";
 import { splitPostContent } from "./utils";

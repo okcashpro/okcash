@@ -3,7 +3,7 @@ import {
     createTransferInstruction,
 } from "@solana/spl-token";
 import bs58 from "bs58";
-import { elizaLogger, settings } from "@okcashpro/eliza";
+import { okaiLogger, settings } from "@okcashpro/okai";
 
 import {
     Connection,
@@ -22,9 +22,9 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@okcashpro/eliza";
-import { composeContext } from "@okcashpro/eliza";
-import { generateObject } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { composeContext } from "@okcashpro/okai";
+import { generateObject } from "@okcashpro/okai";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
@@ -103,7 +103,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting SEND_TOKEN handler...");
+        okaiLogger.log("Starting SEND_TOKEN handler...");
 
         // Initialize or update state
         if (!state) {

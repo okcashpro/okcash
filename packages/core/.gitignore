@@ -1,5 +1,5 @@
 node_modules
 dist
-elizaConfig.yaml
+okaiConfig.yaml
 custom_actions/
 cache/

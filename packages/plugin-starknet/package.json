@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@okcashpro/plugin-trustdb": "workspace:*",
         "@avnu/avnu-sdk": "2.1.1",
         "@uniswap/sdk-core": "6.0.0",

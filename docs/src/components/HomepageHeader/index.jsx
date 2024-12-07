@@ -12,7 +12,7 @@ function HomepageHeader() {
         <div className={styles.heroSection}>
           <div>
             <h1 className={styles.heroTitle}>
-              eliza is a simple, fast, and{" "}
+              okai is a simple, fast, and{" "}
               <span className={styles.headerTextGradient}>
                 lightweight AI agent
               </span>{" "}
@@ -28,7 +28,7 @@ function HomepageHeader() {
               </a>
               <div className={styles.githubButton}>
                 <iframe
-                  src="https://ghbtns.com/github-btn.html?user=ai16z&repo=eliza&type=star&count=true&size=large"
+                  src="https://ghbtns.com/github-btn.html?user=OK&repo=okai&type=star&count=true&size=large"
                   frameborder="0"
                   scrolling="0"
                   width="135"
@@ -40,7 +40,7 @@ function HomepageHeader() {
           </div>
           <div className={styles.heroRight}>
             <img
-              src="/eliza/img/blurback.png"
+              src="/okai/img/blurback.png"
               className={styles.blurPhoto}
               alt="blurred"
             />

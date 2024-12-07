@@ -1,8 +1,8 @@
 // THIS IS INCOMPLETE
 // Look for the TODOs to see what needs to be updated
 
-import { settings } from "@okcashpro/eliza";
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { settings } from "@okcashpro/okai";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import {
     DexScreenerData,
     DexScreenerPair,

@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import { TappdClient } from "@phala/dstack-sdk";
 
 class RemoteAttestationProvider {

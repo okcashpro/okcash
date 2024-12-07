@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@phala/dstack-sdk": "0.1.4",
         "@solana/spl-token": "0.4.9",
         "@solana/web3.js": "1.95.8",

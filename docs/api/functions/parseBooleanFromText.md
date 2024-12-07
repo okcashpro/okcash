@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / parseBooleanFromText
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / parseBooleanFromText
 
 # Function: parseBooleanFromText()
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/parsing.ts:36](https://github.com/monilpat/eliza/blob/main/packages/core/src/parsing.ts#L36)
+[packages/core/src/parsing.ts:36](https://github.com/monilpat/okai/blob/main/packages/core/src/parsing.ts#L36)

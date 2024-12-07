@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, State } from "@okcashpro/okai";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 // Mock the fetch function

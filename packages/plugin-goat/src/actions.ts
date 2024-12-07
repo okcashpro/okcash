@@ -16,7 +16,7 @@ import {
     type State,
     composeContext,
     generateObjectV2,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 type GetOnChainActionsParams<TWalletClient extends WalletClient> = {
     chain: ChainForWalletClient<TWalletClient>;

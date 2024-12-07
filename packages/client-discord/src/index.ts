@@ -1,7 +1,7 @@
-import { getEmbeddingZeroVector } from "@okcashpro/eliza";
-import { Character, Client as OKaiClient, IAgentRuntime } from "@okcashpro/eliza";
-import { stringToUuid } from "@okcashpro/eliza";
-import { elizaLogger } from "@okcashpro/eliza";
+import { getEmbeddingZeroVector } from "@okcashpro/okai";
+import { Character, Client as OKaiClient, IAgentRuntime } from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
+import { okaiLogger } from "@okcashpro/okai";
 import {
     Client,
     Events,
@@ -112,7 +112,7 @@ export class DiscordClient extends EventEmitter {
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
-        elizaLogger.success(`Logged in as ${readyClient.user?.tag}`);
+        okaiLogger.success(`Logged in as ${readyClient.user?.tag}`);
 
         // Register slash commands
         const commands = [
@@ -137,7 +137,7 @@ export class DiscordClient extends EventEmitter {
 
         try {
             await this.client.application?.commands.set(commands);
-            elizaLogger.success("Slash commands registered");
+            okaiLogger.success("Slash commands registered");
         } catch (error) {
             console.error("Error registering slash commands:", error);
         }
@@ -165,8 +165,8 @@ export class DiscordClient extends EventEmitter {
             PermissionsBitField.Flags.PrioritySpeaker,
         ].reduce((a, b) => a | b, 0n);
 
-        elizaLogger.success("Use this URL to add the bot to your server:");
-        elizaLogger.success(
+        okaiLogger.success("Use this URL to add the bot to your server:");
+        okaiLogger.success(
             `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=${requiredPermissions}&scope=bot%20applications.commands`
         );
         await this.onReady();
@@ -174,11 +174,11 @@ export class DiscordClient extends EventEmitter {
 
     async handleReactionAdd(reaction: MessageReaction, user: User) {
         try {
-            elizaLogger.log("Reaction added");
+            okaiLogger.log("Reaction added");
 
             // Early returns
             if (!reaction || !user) {
-                elizaLogger.warn("Invalid reaction or user");
+                okaiLogger.warn("Invalid reaction or user");
                 return;
             }
 
@@ -193,7 +193,7 @@ export class DiscordClient extends EventEmitter {
                 try {
                     await reaction.fetch();
                 } catch (error) {
-                    elizaLogger.error(
+                    okaiLogger.error(
                         "Failed to fetch partial reaction:",
                         error
                     );
@@ -215,7 +215,7 @@ export class DiscordClient extends EventEmitter {
 
             // Validate IDs
             if (!userIdUUID || !roomId) {
-                elizaLogger.error("Invalid user ID or room ID", {
+                okaiLogger.error("Invalid user ID or room ID", {
                     userIdUUID,
                     roomId,
                 });
@@ -262,7 +262,7 @@ export class DiscordClient extends EventEmitter {
 
             try {
                 await this.runtime.messageManager.createMemory(memory);
-                elizaLogger.debug("Reaction memory created", {
+                okaiLogger.debug("Reaction memory created", {
                     reactionId: reactionUUID,
                     emoji,
                     userId: user.id,
@@ -270,7 +270,7 @@ export class DiscordClient extends EventEmitter {
             } catch (error) {
                 if (error.code === "23505") {
                     // Duplicate key error
-                    elizaLogger.warn("Duplicate reaction memory, skipping", {
+                    okaiLogger.warn("Duplicate reaction memory, skipping", {
                         reactionId: reactionUUID,
                     });
                     return;
@@ -278,12 +278,12 @@ export class DiscordClient extends EventEmitter {
                 throw error; // Re-throw other errors
             }
         } catch (error) {
-            elizaLogger.error("Error handling reaction:", error);
+            okaiLogger.error("Error handling reaction:", error);
         }
     }
 
     async handleReactionRemove(reaction: MessageReaction, user: User) {
-        elizaLogger.log("Reaction removed");
+        okaiLogger.log("Reaction removed");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;

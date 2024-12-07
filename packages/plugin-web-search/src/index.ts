@@ -1,4 +1,4 @@
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 import {
     Action,
     HandlerCallback,
@@ -6,10 +6,10 @@ import {
     Memory,
     Plugin,
     State,
-} from "@okcashpro/eliza";
-import { generateWebSearch } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { generateWebSearch } from "@okcashpro/okai";
 
-import { SearchResult } from "@okcashpro/eliza";
+import { SearchResult } from "@okcashpro/okai";
 
 const webSearch: Action = {
     name: "WEB_SEARCH",
@@ -38,15 +38,15 @@ const webSearch: Action = {
         options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Composing state for message:", message);
+        okaiLogger.log("Composing state for message:", message);
         state = (await runtime.composeState(message)) as State;
         const userId = runtime.agentId;
-        elizaLogger.log("User ID:", userId);
+        okaiLogger.log("User ID:", userId);
 
         const webSearchPrompt = message.content.text;
-        elizaLogger.log("web search prompt received:", webSearchPrompt);
+        okaiLogger.log("web search prompt received:", webSearchPrompt);
 
-        elizaLogger.log("Generating image with prompt:", webSearchPrompt);
+        okaiLogger.log("Generating image with prompt:", webSearchPrompt);
         const searchResponse = await generateWebSearch(
             webSearchPrompt,
             runtime
@@ -71,7 +71,7 @@ const webSearch: Action = {
                 text: responseList,
             });
         } else {
-            elizaLogger.error("search failed or returned no data.");
+            okaiLogger.error("search failed or returned no data.");
         }
     },
     examples: [

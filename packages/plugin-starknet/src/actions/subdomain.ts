@@ -11,8 +11,8 @@ import {
     composeContext,
     generateObject,
     Content,
-    elizaLogger,
-} from "@okcashpro/eliza";
+    okaiLogger,
+} from "@okcashpro/okai";
 import { getStarknetAccount } from "../utils";
 import { validateStarknetConfig } from "../environment";
 import { getTransferSubdomainCall, isStarkDomain } from "../utils/starknetId";
@@ -91,7 +91,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting CREATE_SUBDOMAIN handler...");
+        okaiLogger.log("Starting CREATE_SUBDOMAIN handler...");
 
         // Initialize or update state
         if (!state) {
@@ -113,11 +113,11 @@ export default {
             modelClass: ModelClass.MEDIUM,
         });
 
-        elizaLogger.debug("Transfer content:", content);
+        okaiLogger.debug("Transfer content:", content);
 
         // Validate transfer content
         if (!isSubdomainCreation(content)) {
-            elizaLogger.error("Invalid content for CREATE_SUBDOMAIN action.");
+            okaiLogger.error("Invalid content for CREATE_SUBDOMAIN action.");
             if (callback) {
                 callback({
                     text: "Not enough information to create subdomain. Please respond with your domain and the subdomain to create.",
@@ -136,7 +136,7 @@ export default {
                 content.recipient
             );
 
-            elizaLogger.success(
+            okaiLogger.success(
                 "Transferring",
                 content.subdomain,
                 "to",
@@ -145,7 +145,7 @@ export default {
 
             const tx = await account.execute(transferCall);
 
-            elizaLogger.success(
+            okaiLogger.success(
                 "Transfer completed successfully! tx: " + tx.transaction_hash
             );
             if (callback) {
@@ -159,7 +159,7 @@ export default {
 
             return true;
         } catch (error) {
-            elizaLogger.error("Error during subdomain transfer:", error);
+            okaiLogger.error("Error during subdomain transfer:", error);
             if (callback) {
                 callback({
                     text: `Error transferring subdomain ${content.subdomain}: ${error.message}`,

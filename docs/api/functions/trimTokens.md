@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / trimTokens
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / trimTokens
 
 # Function: trimTokens()
 
@@ -28,4 +28,4 @@ The truncated text
 
 ## Defined in
 
-[packages/core/src/generation.ts:455](https://github.com/monilpat/eliza/blob/main/packages/core/src/generation.ts#L455)
+[packages/core/src/generation.ts:455](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L455)

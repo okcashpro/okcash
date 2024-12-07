@@ -8,7 +8,7 @@ import {
     Memory,
     ModelClass,
     settings,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import * as fs from "fs";
 import { validateStarknetConfig } from "../environment";
 

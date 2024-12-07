@@ -1,5 +1,5 @@
 import { Coinbase, Trade, Transfer, Wallet, WalletData, Webhook } from "@coinbase/coinbase-sdk";
-import { elizaLogger, IAgentRuntime } from "@okcashpro/eliza";
+import { okaiLogger, IAgentRuntime } from "@okcashpro/okai";
 import fs from "fs";
 import path from "path";
 import { EthereumTransaction } from "@coinbase/coinbase-sdk/dist/client";
@@ -47,23 +47,23 @@ export async function initializeWallet(
                 walletData.seed
             );
             if (walletIDSave && seedSave) {
-                elizaLogger.log("Successfully updated character secrets.");
+                okaiLogger.log("Successfully updated character secrets.");
             } else {
                 const seedFilePath = `characters/${runtime.character.name.toLowerCase()}-seed.txt`;
-                elizaLogger.error(
+                okaiLogger.error(
                     `Failed to update character secrets so adding gitignored ${seedFilePath} file please add it your env or character file and delete:`
                 );
                 // save it to gitignored file
                 wallet.saveSeed(seedFilePath);
             }
-            elizaLogger.log("Wallet created and stored new wallet:", walletAddress);
+            okaiLogger.log("Wallet created and stored new wallet:", walletAddress);
         } catch (error) {
-            elizaLogger.error("Error updating character secrets:", error);
+            okaiLogger.error("Error updating character secrets:", error);
             throw error;
         }
 
         // Logging wallet creation
-        elizaLogger.log("Created and stored new wallet:", walletAddress);
+        okaiLogger.log("Created and stored new wallet:", walletAddress);
     } else {
         // Importing existing wallet using stored seed and wallet ID
         // Always defaults to base-mainnet we can't select the network here
@@ -72,10 +72,10 @@ export async function initializeWallet(
             walletId: storedWalletId,
         });
         const networkId = wallet.getNetworkId();
-        elizaLogger.log("Imported existing wallet for network:", networkId);
+        okaiLogger.log("Imported existing wallet for network:", networkId);
 
         // Logging wallet import
-        elizaLogger.log(
+        okaiLogger.log(
             "Imported existing wallet:",
             await wallet.getDefaultAddress()
         );
@@ -95,7 +95,7 @@ export async function initializeWallet(
 export async function executeTradeAndCharityTransfer(runtime: IAgentRuntime, network: string, amount: number, sourceAsset: string, targetAsset: string) {
     const wallet = await initializeWallet(runtime, network);
 
-    elizaLogger.log("Wallet initialized:", {
+    okaiLogger.log("Wallet initialized:", {
         network,
         address: await wallet.getDefaultAddress(),
     });
@@ -113,7 +113,7 @@ export async function executeTradeAndCharityTransfer(runtime: IAgentRuntime, net
     let transfer: Transfer;
     if (charityAddress && charityAmount > 0) {
         transfer = await executeTransfer(wallet, charityAmount, assetIdLowercase, charityAddress);
-        elizaLogger.log("Charity Transfer successful:", {
+        okaiLogger.log("Charity Transfer successful:", {
             address: charityAddress,
             transactionUrl: transfer.getTransactionLink(),
         });
@@ -127,9 +127,9 @@ export async function executeTradeAndCharityTransfer(runtime: IAgentRuntime, net
     }
 
     const trade: Trade = await wallet.createTrade(tradeParams);
-    elizaLogger.log("Trade initiated:", trade.toString());
+    okaiLogger.log("Trade initiated:", trade.toString());
     await trade.wait();
-    elizaLogger.log("Trade completed successfully:", trade.toString());
+    okaiLogger.log("Trade completed successfully:", trade.toString());
     await appendTradeToCsv(trade);
     return {
         trade,
@@ -163,11 +163,11 @@ export async function appendTradeToCsv(trade: Trade) {
             trade.getTransaction().getTransactionLink() || "",
         ];
 
-        elizaLogger.log("Writing trade to CSV:", formattedTrade);
+        okaiLogger.log("Writing trade to CSV:", formattedTrade);
         await csvWriter.writeRecords([formattedTrade]);
-        elizaLogger.log("Trade written to CSV successfully.");
+        okaiLogger.log("Trade written to CSV successfully.");
     } catch (error) {
-        elizaLogger.error("Error writing trade to CSV:", error);
+        okaiLogger.error("Error writing trade to CSV:", error);
     }
 }
 
@@ -193,11 +193,11 @@ export async function appendTransactionsToCsv(transactions: Transaction[]) {
             transaction.transactionUrl || "",
         ]);
 
-        elizaLogger.log("Writing transactions to CSV:", formattedTransactions);
+        okaiLogger.log("Writing transactions to CSV:", formattedTransactions);
         await csvWriter.writeRecords(formattedTransactions);
-        elizaLogger.log("All transactions written to CSV successfully.");
+        okaiLogger.log("All transactions written to CSV successfully.");
     } catch (error) {
-        elizaLogger.error("Error writing transactions to CSV:", error);
+        okaiLogger.error("Error writing transactions to CSV:", error);
     }
 }
 // create a function to append webhooks to a csv
@@ -205,7 +205,7 @@ export async function appendWebhooksToCsv(webhooks: Webhook[]) {
     try {
         // Ensure the CSV file exists
         if (!fs.existsSync(webhookCsvFilePath)) {
-            elizaLogger.warn("CSV file not found. Creating a new one.");
+            okaiLogger.warn("CSV file not found. Creating a new one.");
             const csvWriter = createArrayCsvWriter({
                 path: webhookCsvFilePath,
                 header: [
@@ -218,7 +218,7 @@ export async function appendWebhooksToCsv(webhooks: Webhook[]) {
                 ],
             });
             await csvWriter.writeRecords([]); // Create an empty file with headers
-            elizaLogger.log("New CSV file created with headers.");
+            okaiLogger.log("New CSV file created with headers.");
                     }
         const csvWriter = createArrayCsvWriter({
             path: webhookCsvFilePath,
@@ -242,11 +242,11 @@ export async function appendWebhooksToCsv(webhooks: Webhook[]) {
             webhook.getNotificationURI(),
         ]);
 
-        elizaLogger.log("Writing webhooks to CSV:", formattedWebhooks);
+        okaiLogger.log("Writing webhooks to CSV:", formattedWebhooks);
         await csvWriter.writeRecords(formattedWebhooks);
-        elizaLogger.log("All webhooks written to CSV successfully.");
+        okaiLogger.log("All webhooks written to CSV successfully.");
     } catch (error) {
-        elizaLogger.error("Error writing webhooks to CSV:", error);
+        okaiLogger.error("Error writing webhooks to CSV:", error);
     }
 }
 
@@ -269,7 +269,7 @@ export async function updateCharacterSecrets(
 
         // Check if the character file exists
         if (!fs.existsSync(characterFilePath)) {
-            elizaLogger.error("Character file not found:", characterFilePath);
+            okaiLogger.error("Character file not found:", characterFilePath);
             return false;
         }
 
@@ -300,7 +300,7 @@ export async function updateCharacterSecrets(
             `Updated ${key} in character.settings.secrets for ${characterFilePath}.`
         );
     } catch (error) {
-        elizaLogger.error("Error updating character secrets:", error);
+        okaiLogger.error("Error updating character secrets:", error);
         return false;
     }
     return true;
@@ -397,7 +397,7 @@ export async function executeTransferAndCharityTransfer(wallet: Wallet, amount: 
     let charityTransfer: Transfer;
     if (charityAddress && charityAmount > 0) {
         charityTransfer = await executeTransfer(wallet, charityAmount, assetIdLowercase, charityAddress);
-        elizaLogger.log("Charity Transfer successful:", charityTransfer.toString());
+        okaiLogger.log("Charity Transfer successful:", charityTransfer.toString());
     }
 
     const transferDetails = {
@@ -406,9 +406,9 @@ export async function executeTransferAndCharityTransfer(wallet: Wallet, amount: 
         destination: targetAddress,
         gasless: assetIdLowercase === "usdc" ? true : false,
     };
-    elizaLogger.log("Initiating transfer:", transferDetails);
+    okaiLogger.log("Initiating transfer:", transferDetails);
     const transfer = await wallet.createTransfer(transferDetails);
-    elizaLogger.log("Transfer initiated:", transfer.toString());
+    okaiLogger.log("Transfer initiated:", transfer.toString());
     await transfer.wait();
 
     let responseText = `Transfer executed successfully:
@@ -425,7 +425,7 @@ export async function executeTransferAndCharityTransfer(wallet: Wallet, amount: 
         responseText += "\n(Note: Charity transfer was not completed)";
     }
 
-    elizaLogger.log(responseText);
+    okaiLogger.log(responseText);
 
     return {
         transfer,
@@ -449,17 +449,17 @@ export async function executeTransfer(wallet: Wallet, amount: number, sourceAsse
         destination: targetAddress,
         gasless: assetIdLowercase === "usdc" ? true : false,
     };
-    elizaLogger.log("Initiating transfer:", transferDetails);
+    okaiLogger.log("Initiating transfer:", transferDetails);
     let transfer: Transfer | undefined;
     try {
         transfer = await wallet.createTransfer(transferDetails);
-        elizaLogger.log("Transfer initiated:", transfer.toString());
+        okaiLogger.log("Transfer initiated:", transfer.toString());
         await transfer.wait({
         intervalSeconds: 1,
         timeoutSeconds: 20,
         });
     } catch (error) {
-        elizaLogger.error("Error executing transfer:", error);
+        okaiLogger.error("Error executing transfer:", error);
     }
     return transfer;
 }

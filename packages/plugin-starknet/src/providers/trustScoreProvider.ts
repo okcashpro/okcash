@@ -17,8 +17,8 @@ import {
     TradePerformance,
     TokenRecommendation,
 } from "@okcashpro/plugin-trustdb";
-import { settings } from "@okcashpro/eliza";
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { settings } from "@okcashpro/okai";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import { getTokenBalance } from "../utils/index.ts";
 import { TokenProvider } from "./token.ts";
 

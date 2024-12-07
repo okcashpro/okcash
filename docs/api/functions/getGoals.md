@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / getGoals
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / getGoals
 
 # Function: getGoals()
 
@@ -24,4 +24,4 @@
 
 ## Defined in
 
-[packages/core/src/goals.ts:8](https://github.com/monilpat/eliza/blob/main/packages/core/src/goals.ts#L8)
+[packages/core/src/goals.ts:8](https://github.com/monilpat/okai/blob/main/packages/core/src/goals.ts#L8)

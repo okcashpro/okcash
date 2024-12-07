@@ -15,7 +15,7 @@ import {
 } from "./evaluators.ts";
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { elizaLogger } from "./index.ts";
+import { okaiLogger } from "./index.ts";
 import knowledge from "./knowledge.ts";
 import { MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
@@ -149,7 +149,7 @@ export class AgentRuntime implements IAgentRuntime {
         }
 
         if (this.memoryManagers.has(manager.tableName)) {
-            elizaLogger.warn(
+            okaiLogger.warn(
                 `Memory manager ${manager.tableName} is already registered. Skipping registration.`
             );
             return;
@@ -165,7 +165,7 @@ export class AgentRuntime implements IAgentRuntime {
     getService<T extends Service>(service: ServiceType): T | null {
         const serviceInstance = this.services.get(service);
         if (!serviceInstance) {
-            elizaLogger.error(`Service ${service} not found`);
+            okaiLogger.error(`Service ${service} not found`);
             return null;
         }
         return serviceInstance as T;
@@ -173,10 +173,10 @@ export class AgentRuntime implements IAgentRuntime {
 
     async registerService(service: Service): Promise<void> {
         const serviceType = service.serviceType;
-        elizaLogger.log("Registering service:", serviceType);
+        okaiLogger.log("Registering service:", serviceType);
 
         if (this.services.has(serviceType)) {
-            elizaLogger.warn(
+            okaiLogger.warn(
                 `Service ${serviceType} is already registered. Skipping registration.`
             );
             return;
@@ -184,7 +184,7 @@ export class AgentRuntime implements IAgentRuntime {
 
         // Add the service to the services map
         this.services.set(serviceType, service);
-        elizaLogger.success(`Service ${serviceType} registered successfully`);
+        okaiLogger.success(`Service ${serviceType} registered successfully`);
     }
 
     /**
@@ -225,7 +225,7 @@ export class AgentRuntime implements IAgentRuntime {
         cacheManager: ICacheManager;
         logging?: boolean;
     }) {
-        elizaLogger.info("Initializing AgentRuntime with options:", {
+        okaiLogger.info("Initializing AgentRuntime with options:", {
             character: opts.character?.name,
             modelProvider: opts.modelProvider,
             characterModelProvider: opts.character?.modelProvider,
@@ -251,7 +251,7 @@ export class AgentRuntime implements IAgentRuntime {
         );
         this.ensureParticipantExists(this.agentId, this.agentId);
 
-        elizaLogger.success("Agent ID", this.agentId);
+        okaiLogger.success("Agent ID", this.agentId);
 
         this.fetch = (opts.fetch as typeof fetch) ?? this.fetch;
         if (!opts.databaseAdapter) {
@@ -295,8 +295,8 @@ export class AgentRuntime implements IAgentRuntime {
 
         this.serverUrl = opts.serverUrl ?? this.serverUrl;
 
-        elizaLogger.info("Setting model provider...");
-        elizaLogger.info("Model Provider Selection:", {
+        okaiLogger.info("Setting model provider...");
+        okaiLogger.info("Model Provider Selection:", {
             characterModelProvider: this.character.modelProvider,
             optsModelProvider: opts.modelProvider,
             currentModelProvider: this.modelProvider,
@@ -314,16 +314,16 @@ export class AgentRuntime implements IAgentRuntime {
         this.imageModelProvider =
             this.character.imageModelProvider ?? this.modelProvider;
 
-        elizaLogger.info("Selected model provider:", this.modelProvider);
-        elizaLogger.info(
+        okaiLogger.info("Selected model provider:", this.modelProvider);
+        okaiLogger.info(
             "Selected image model provider:",
             this.imageModelProvider
         );
 
         // Validate model provider
         if (!Object.values(ModelProviderName).includes(this.modelProvider)) {
-            elizaLogger.error("Invalid model provider:", this.modelProvider);
-            elizaLogger.error(
+            okaiLogger.error("Invalid model provider:", this.modelProvider);
+            okaiLogger.error(
                 "Available providers:",
                 Object.values(ModelProviderName)
             );
@@ -331,7 +331,7 @@ export class AgentRuntime implements IAgentRuntime {
         }
 
         if (!this.serverUrl) {
-            elizaLogger.warn("No serverUrl provided, defaulting to localhost");
+            okaiLogger.warn("No serverUrl provided, defaulting to localhost");
         }
 
         this.token = opts.token;
@@ -377,11 +377,11 @@ export class AgentRuntime implements IAgentRuntime {
             try {
                 await service.initialize(this);
                 this.services.set(serviceType, service);
-                elizaLogger.success(
+                okaiLogger.success(
                     `Service ${serviceType} initialized successfully`
                 );
             } catch (error) {
-                elizaLogger.error(
+                okaiLogger.error(
                     `Failed to initialize service ${serviceType}:`,
                     error
                 );
@@ -420,7 +420,7 @@ export class AgentRuntime implements IAgentRuntime {
                 continue;
             }
 
-            elizaLogger.info(
+            okaiLogger.info(
                 "Processing knowledge for ",
                 this.character.name,
                 " - ",
@@ -467,7 +467,7 @@ export class AgentRuntime implements IAgentRuntime {
      * @param action The action to register.
      */
     registerAction(action: Action) {
-        elizaLogger.success(`Registering action: ${action.name}`);
+        okaiLogger.success(`Registering action: ${action.name}`);
         this.actions.push(action);
     }
 
@@ -499,7 +499,7 @@ export class AgentRuntime implements IAgentRuntime {
         callback?: HandlerCallback
     ): Promise<void> {
         if (!responses[0].content?.action) {
-            elizaLogger.warn("No action found in the response content.");
+            okaiLogger.warn("No action found in the response content.");
             return;
         }
 
@@ -507,7 +507,7 @@ export class AgentRuntime implements IAgentRuntime {
             .toLowerCase()
             .replace("_", "");
 
-        elizaLogger.success(`Normalized action: ${normalizedAction}`);
+        okaiLogger.success(`Normalized action: ${normalizedAction}`);
 
         let action = this.actions.find(
             (a: { name: string }) =>
@@ -519,7 +519,7 @@ export class AgentRuntime implements IAgentRuntime {
         );
 
         if (!action) {
-            elizaLogger.info("Attempting to find action in similes.");
+            okaiLogger.info("Attempting to find action in similes.");
             for (const _action of this.actions) {
                 const simileAction = _action.similes.find(
                     (simile) =>
@@ -533,7 +533,7 @@ export class AgentRuntime implements IAgentRuntime {
                 );
                 if (simileAction) {
                     action = _action;
-                    elizaLogger.success(
+                    okaiLogger.success(
                         `Action found in similes: ${action.name}`
                     );
                     break;
@@ -542,7 +542,7 @@ export class AgentRuntime implements IAgentRuntime {
         }
 
         if (!action) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "No action found for",
                 responses[0].content.action
             );
@@ -550,15 +550,15 @@ export class AgentRuntime implements IAgentRuntime {
         }
 
         if (!action.handler) {
-            elizaLogger.error(`Action ${action.name} has no handler.`);
+            okaiLogger.error(`Action ${action.name} has no handler.`);
             return;
         }
 
         try {
-            elizaLogger.info(`Executing handler for action: ${action.name}`);
+            okaiLogger.info(`Executing handler for action: ${action.name}`);
             await action.handler(this, message, state, {}, callback);
         } catch (error) {
-            elizaLogger.error(error);
+            okaiLogger.error(error);
         }
     }
 
@@ -572,7 +572,7 @@ export class AgentRuntime implements IAgentRuntime {
     async evaluate(message: Memory, state?: State, didRespond?: boolean) {
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
-                elizaLogger.log("Evaluating", evaluator.name);
+                okaiLogger.log("Evaluating", evaluator.name);
                 if (!evaluator.handler) {
                     return null;
                 }
@@ -671,7 +671,7 @@ export class AgentRuntime implements IAgentRuntime {
                 email: email || (userName || "Bot") + "@" + source || "Unknown", // Temporary
                 details: { summary: "" },
             });
-            elizaLogger.success(`User ${userName} created successfully.`);
+            okaiLogger.success(`User ${userName} created successfully.`);
         }
     }
 
@@ -681,11 +681,11 @@ export class AgentRuntime implements IAgentRuntime {
         if (!participants.includes(userId)) {
             await this.databaseAdapter.addParticipant(userId, roomId);
             if (userId === this.agentId) {
-                elizaLogger.log(
+                okaiLogger.log(
                     `Agent ${this.character.name} linked to room ${roomId} successfully.`
                 );
             } else {
-                elizaLogger.log(
+                okaiLogger.log(
                     `User ${userId} linked to room ${roomId} successfully.`
                 );
             }
@@ -732,7 +732,7 @@ export class AgentRuntime implements IAgentRuntime {
         const room = await this.databaseAdapter.getRoom(roomId);
         if (!room) {
             await this.databaseAdapter.createRoom(roomId);
-            elizaLogger.log(`Room ${roomId} created successfully.`);
+            okaiLogger.log(`Room ${roomId} created successfully.`);
         }
     }
 

@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";

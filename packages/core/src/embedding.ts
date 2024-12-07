@@ -2,7 +2,7 @@ import path from "node:path";
 import { models } from "./models.ts";
 import { IAgentRuntime, ModelProviderName } from "./types.ts";
 import settings from "./settings.ts";
-import elizaLogger from "./logger.ts";
+import okaiLogger from "./logger.ts";
 
 interface EmbeddingOptions {
     model: string;
@@ -78,7 +78,7 @@ async function getRemoteEmbedding(
         const response = await fetch(fullUrl, requestOptions);
 
         if (!response.ok) {
-            elizaLogger.error("API Response:", await response.text()); // Debug log
+            okaiLogger.error("API Response:", await response.text()); // Debug log
             throw new Error(
                 `Embedding API Error: ${response.status} ${response.statusText}`
             );
@@ -91,7 +91,7 @@ async function getRemoteEmbedding(
         const data: EmbeddingResponse = await response.json();
         return data?.data?.[0].embedding;
     } catch (e) {
-        elizaLogger.error("Full error details:", e);
+        okaiLogger.error("Full error details:", e);
         throw e;
     }
 }
@@ -143,7 +143,7 @@ export function getEmbeddingZeroVector(): number[] {
  */
 
 export async function embed(runtime: IAgentRuntime, input: string) {
-    elizaLogger.debug("Embedding request:", {
+    okaiLogger.debug("Embedding request:", {
         modelProvider: runtime.character.modelProvider,
         useOpenAI: process.env.USE_OPENAI_EMBEDDING,
         input: input?.slice(0, 50) + "...",
@@ -155,7 +155,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
 
     // Validate input
     if (!input || typeof input !== "string" || input.trim().length === 0) {
-        elizaLogger.warn("Invalid embedding input:", {
+        okaiLogger.warn("Invalid embedding input:", {
             input,
             type: typeof input,
             length: input?.length,
@@ -207,7 +207,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         try {
             return await getLocalEmbedding(input);
         } catch (error) {
-            elizaLogger.warn(
+            okaiLogger.warn(
                 "Local embedding failed, falling back to remote",
                 error
             );
@@ -225,7 +225,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
     });
 
     async function getLocalEmbedding(input: string): Promise<number[]> {
-        elizaLogger.debug("DEBUG - Inside getLocalEmbedding function");
+        okaiLogger.debug("DEBUG - Inside getLocalEmbedding function");
 
         // Check if we're in Node.js environment
         const isNode =
@@ -234,7 +234,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             process.versions.node != null;
 
         if (!isNode) {
-            elizaLogger.warn(
+            okaiLogger.warn(
                 "Local embedding not supported in browser, falling back to remote embedding"
             );
             throw new Error("Local embedding not supported in browser");
@@ -248,7 +248,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                     try {
                         return await import("fastembed");
                     } catch {
-                        elizaLogger.error("Failed to load fastembed.");
+                        okaiLogger.error("Failed to load fastembed.");
                         throw new Error("fastembed import failed, falling back to remote embedding");
                     }
                 })()
@@ -262,8 +262,8 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                 const __dirname = path.dirname(__filename);
 
                 const rootPath = path.resolve(__dirname, "..");
-                if (rootPath.includes("/eliza/")) {
-                    return rootPath.split("/eliza/")[0] + "/eliza/";
+                if (rootPath.includes("/okai/")) {
+                    return rootPath.split("/okai/")[0] + "/okai/";
                 }
 
                 return path.resolve(__dirname, "..");
@@ -275,7 +275,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                 fs.mkdirSync(cacheDir, { recursive: true });
             }
 
-            elizaLogger.debug("Initializing BGE embedding model...");
+            okaiLogger.debug("Initializing BGE embedding model...");
 
             const embeddingModel = await FlagEmbedding.init({
                 cacheDir: cacheDir,
@@ -284,7 +284,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                 maxLength: 512, // BGE's context window
             });
 
-            elizaLogger.debug("Generating embedding for input:", {
+            okaiLogger.debug("Generating embedding for input:", {
                 inputLength: input.length,
                 inputPreview: input.slice(0, 100) + "...",
             });
@@ -293,7 +293,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             const embedding = await embeddingModel.queryEmbed(input);
 
             // Debug the raw embedding
-            elizaLogger.debug("Raw embedding from BGE:", {
+            okaiLogger.debug("Raw embedding from BGE:", {
                 type: typeof embedding,
                 isArray: Array.isArray(embedding),
                 dimensions: Array.isArray(embedding)
@@ -329,7 +329,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
                 );
             }
 
-            elizaLogger.debug("Processed embedding:", {
+            okaiLogger.debug("Processed embedding:", {
                 length: finalEmbedding.length,
                 sample: finalEmbedding.slice(0, 5),
                 allNumbers: finalEmbedding.every((n) => typeof n === "number"),
@@ -350,7 +350,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
 
             // Validate embedding dimensions (should be 384 for BGE-small)
             if (finalEmbedding.length !== 384) {
-                elizaLogger.warn(
+                okaiLogger.warn(
                     `Unexpected embedding dimension: ${finalEmbedding.length} (expected 384)`
                 );
             }
@@ -358,7 +358,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             return finalEmbedding;
         } catch {
             // Browser implementation - fallback to remote embedding
-            elizaLogger.warn(
+            okaiLogger.warn(
                 "Local embedding not supported in browser, falling back to remote embedding"
             );
             throw new Error("Local embedding not supported in browser");
@@ -370,7 +370,7 @@ export async function embed(runtime: IAgentRuntime, input: string) {
         input: string
     ) {
         if (!input) {
-            elizaLogger.log("No input to retrieve cached embedding for");
+            okaiLogger.log("No input to retrieve cached embedding for");
             return null;
         }
 

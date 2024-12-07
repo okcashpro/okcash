@@ -1,4 +1,4 @@
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 import {
     Action,
     HandlerCallback,
@@ -6,7 +6,7 @@ import {
     Memory,
     Plugin,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import fs from "fs";
 import { LUMA_CONSTANTS } from "./constants";
 
@@ -14,7 +14,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
     const API_KEY = runtime.getSetting(LUMA_CONSTANTS.API_KEY_SETTING);
 
     try {
-        elizaLogger.log("Starting video generation with prompt:", prompt);
+        okaiLogger.log("Starting video generation with prompt:", prompt);
 
         const response = await fetch(LUMA_CONSTANTS.API_URL, {
             method: "POST",
@@ -28,7 +28,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
 
         if (!response.ok) {
             const errorText = await response.text();
-            elizaLogger.error("Luma API error:", {
+            okaiLogger.error("Luma API error:", {
                 status: response.status,
                 statusText: response.statusText,
                 error: errorText,
@@ -39,7 +39,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
         }
 
         const data = await response.json();
-        elizaLogger.log(
+        okaiLogger.log(
             "Generation request successful, received response:",
             data
         );
@@ -65,7 +65,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
 
             if (!statusResponse.ok) {
                 const errorText = await statusResponse.text();
-                elizaLogger.error("Status check error:", {
+                okaiLogger.error("Status check error:", {
                     status: statusResponse.status,
                     statusText: statusResponse.statusText,
                     error: errorText,
@@ -76,7 +76,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
             }
 
             const statusData = await statusResponse.json();
-            elizaLogger.log("Status check response:", statusData);
+            okaiLogger.log("Status check response:", statusData);
 
             status = statusData.state;
             if (status === "completed") {
@@ -97,7 +97,7 @@ const generateVideo = async (prompt: string, runtime: IAgentRuntime) => {
             data: videoUrl,
         };
     } catch (error) {
-        elizaLogger.error("Video generation error:", error);
+        okaiLogger.error("Video generation error:", error);
         return {
             success: false,
             error: error.message || "Unknown error occurred",
@@ -120,9 +120,9 @@ const videoGeneration: Action = {
     ],
     description: "Generate a video based on a text prompt",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating video generation action");
+        okaiLogger.log("Validating video generation action");
         const lumaApiKey = runtime.getSetting("LUMA_API_KEY");
-        elizaLogger.log("LUMA_API_KEY present:", !!lumaApiKey);
+        okaiLogger.log("LUMA_API_KEY present:", !!lumaApiKey);
         return !!lumaApiKey;
     },
     handler: async (
@@ -132,7 +132,7 @@ const videoGeneration: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Video generation request:", message);
+        okaiLogger.log("Video generation request:", message);
 
         // Clean up the prompt by removing mentions and commands
         const videoPrompt = message.content.text
@@ -150,7 +150,7 @@ const videoGeneration: Action = {
             return;
         }
 
-        elizaLogger.log("Video prompt:", videoPrompt);
+        okaiLogger.log("Video prompt:", videoPrompt);
 
         callback({
             text: `I'll generate a video based on your prompt: "${videoPrompt}". This might take a few minutes...`,
@@ -191,7 +191,7 @@ const videoGeneration: Action = {
                 });
             }
         } catch (error) {
-            elizaLogger.error(`Failed to generate video. Error: ${error}`);
+            okaiLogger.error(`Failed to generate video. Error: ${error}`);
             callback({
                 text: `Video generation failed: ${error.message}`,
                 error: true,

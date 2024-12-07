@@ -1,11 +1,11 @@
 import {
-    elizaLogger,
+    okaiLogger,
     getEmbeddingZeroVector,
     IAgentRuntime,
     stringToUuid,
     type Memory,
     type UUID,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import type { Cast } from "./types";
 import { toHex } from "viem";
 import { castUuid } from "./utils";
@@ -73,7 +73,7 @@ export async function buildConversationThread({
         const memory = await runtime.messageManager.getMemoryById(roomId);
 
         if (!memory) {
-            elizaLogger.log("Creating memory for cast", currentCast.hash);
+            okaiLogger.log("Creating memory for cast", currentCast.hash);
 
             const userId = stringToUuid(currentCast.profile.username);
 

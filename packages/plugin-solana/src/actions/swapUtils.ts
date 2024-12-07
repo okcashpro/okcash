@@ -9,7 +9,7 @@ import {
     TokenAmount,
     VersionedTransaction,
 } from "@solana/web3.js";
-import { settings } from "@okcashpro/eliza";
+import { settings } from "@okcashpro/okai";
 
 const solAddress = settings.SOL_ADDRESS;
 const SLIPPAGE = settings.SLIPPAGE;

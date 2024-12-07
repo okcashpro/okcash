@@ -6,4 +6,4 @@
 
 ## Defined in
 
-[packages/core/src/parsing.ts:3](https://github.com/monilpat/eliza/blob/main/packages/core/src/parsing.ts#L3)
+[packages/core/src/parsing.ts:3](https://github.com/monilpat/okai/blob/main/packages/core/src/parsing.ts#L3)

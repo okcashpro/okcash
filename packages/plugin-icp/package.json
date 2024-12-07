@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@dfinity/agent": "2.1.3",
         "@dfinity/candid": "2.1.3",
         "@dfinity/identity": "2.1.3",

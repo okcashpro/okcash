@@ -19,11 +19,11 @@ import {
     IDatabaseCacheAdapter,
     ModelProviderName,
     defaultCharacter,
-    elizaLogger,
+    okaiLogger,
     settings,
     stringToUuid,
     validateCharacterConfig,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { zgPlugin } from "@okcashpro/plugin-0g";
 import { goatPlugin } from "@okcashpro/plugin-goat";
 import { bootstrapPlugin } from "@okcashpro/plugin-bootstrap";
@@ -76,7 +76,7 @@ export function parseArguments(): {
             })
             .parseSync();
     } catch (error) {
-        elizaLogger.error("Error parsing arguments:", error);
+        okaiLogger.error("Error parsing arguments:", error);
         return {};
     }
 }
@@ -129,7 +129,7 @@ export async function loadCharacters(
                 ), // relative to project root characters dir
             ];
 
-            elizaLogger.info(
+            okaiLogger.info(
                 "Trying paths:",
                 pathsToTry.map((p) => ({
                     path: p,
@@ -146,11 +146,11 @@ export async function loadCharacters(
             }
 
             if (content === null) {
-                elizaLogger.error(
+                okaiLogger.error(
                     `Error loading character from ${characterPath}: File not found in any of the expected locations`
                 );
-                elizaLogger.error("Tried the following paths:");
-                pathsToTry.forEach((p) => elizaLogger.error(` - ${p}`));
+                okaiLogger.error("Tried the following paths:");
+                pathsToTry.forEach((p) => okaiLogger.error(` - ${p}`));
                 process.exit(1);
             }
 
@@ -160,7 +160,7 @@ export async function loadCharacters(
 
                 // Handle plugins
                 if (isAllStrings(character.plugins)) {
-                    elizaLogger.info("Plugins are: ", character.plugins);
+                    okaiLogger.info("Plugins are: ", character.plugins);
                     const importedPlugins = await Promise.all(
                         character.plugins.map(async (plugin) => {
                             const importedPlugin = await import(plugin);
@@ -171,11 +171,11 @@ export async function loadCharacters(
                 }
 
                 loadedCharacters.push(character);
-                elizaLogger.info(
+                okaiLogger.info(
                     `Successfully loaded character from: ${resolvedPath}`
                 );
             } catch (e) {
-                elizaLogger.error(
+                okaiLogger.error(
                     `Error parsing character from ${resolvedPath}: ${e}`
                 );
                 process.exit(1);
@@ -184,7 +184,7 @@ export async function loadCharacters(
     }
 
     if (loadedCharacters.length === 0) {
-        elizaLogger.info("No characters found, using default character");
+        okaiLogger.info("No characters found, using default character");
         loadedCharacters.push(defaultCharacter);
     }
 
@@ -274,7 +274,7 @@ export function getTokenForProvider(
 
 function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
-        elizaLogger.info("Initializing PostgreSQL connection...");
+        okaiLogger.info("Initializing PostgreSQL connection...");
         const db = new PostgresDatabaseAdapter({
             connectionString: process.env.POSTGRES_URL,
             parseInputs: true,
@@ -283,12 +283,12 @@ function initializeDatabase(dataDir: string) {
         // Test the connection
         db.init()
             .then(() => {
-                elizaLogger.success(
+                okaiLogger.success(
                     "Successfully connected to PostgreSQL database"
                 );
             })
             .catch((error) => {
-                elizaLogger.error("Failed to connect to PostgreSQL:", error);
+                okaiLogger.error("Failed to connect to PostgreSQL:", error);
             });
 
         return db;
@@ -359,8 +359,8 @@ export function createAgent(
     cache: ICacheManager,
     token: string
 ) {
-    elizaLogger.success(
-        elizaLogger.successesTitle,
+    okaiLogger.success(
+        okaiLogger.successesTitle,
         "Creating runtime for character",
         character.name
     );
@@ -464,7 +464,7 @@ async function startAgent(character: Character, directClient) {
 
         return clients;
     } catch (error) {
-        elizaLogger.error(
+        okaiLogger.error(
             `Error starting agent for character ${character.name}:`,
             error
         );
@@ -493,7 +493,7 @@ const startAgents = async () => {
             await startAgent(character, directClient);
         }
     } catch (error) {
-        elizaLogger.error("Error starting agents:", error);
+        okaiLogger.error("Error starting agents:", error);
     }
 
     function chat() {
@@ -506,14 +506,14 @@ const startAgents = async () => {
         });
     }
 
-    elizaLogger.log("Chat started. Type 'exit' to quit.");
+    okaiLogger.log("Chat started. Type 'exit' to quit.");
     if (!args["non-interactive"]) {
         chat();
     }
 };
 
 startAgents().catch((error) => {
-    elizaLogger.error("Unhandled error in startAgents:", error);
+    okaiLogger.error("Unhandled error in startAgents:", error);
     process.exit(1); // Exit the process after logging
 });
 
@@ -545,7 +545,7 @@ async function handleUserInput(input, agentId) {
 
         const data = await response.json();
         data.forEach((message) =>
-            elizaLogger.log(`${"Agent"}: ${message.text}`)
+            okaiLogger.log(`${"Agent"}: ${message.text}`)
         );
     } catch (error) {
         console.error("Error fetching response:", error);
@@ -553,7 +553,7 @@ async function handleUserInput(input, agentId) {
 }
 
 async function gracefulExit() {
-    elizaLogger.log("Terminating and cleaning up resources...");
+    okaiLogger.log("Terminating and cleaning up resources...");
     rl.close();
     process.exit(0);
 }

@@ -1,5 +1,5 @@
 {
-    "name": "eliza-client",
+    "name": "okai-client",
     "private": true,
     "version": "0.1.5-alpha.1",
     "type": "module",
@@ -11,7 +11,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@radix-ui/react-dialog": "1.1.2",
         "@radix-ui/react-separator": "1.1.0",
         "@radix-ui/react-slot": "1.1.0",

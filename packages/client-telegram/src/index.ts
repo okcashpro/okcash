@@ -1,5 +1,5 @@
-import { elizaLogger } from "@okcashpro/eliza";
-import { Client, IAgentRuntime } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
+import { Client, IAgentRuntime } from "@okcashpro/okai";
 import { TelegramClient } from "./telegramClient.ts";
 import { validateTelegramConfig } from "./environment.ts";
 
@@ -14,13 +14,13 @@ export const TelegramClientInterface: Client = {
 
         await tg.start();
 
-        elizaLogger.success(
+        okaiLogger.success(
             `✅ Telegram client successfully started for character ${runtime.character.name}`
         );
         return tg;
     },
     stop: async (_runtime: IAgentRuntime) => {
-        elizaLogger.warn("Telegram client does not support stopping yet");
+        okaiLogger.warn("Telegram client does not support stopping yet");
     },
 };
 

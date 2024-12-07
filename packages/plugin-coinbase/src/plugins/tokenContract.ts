@@ -2,7 +2,7 @@ import { Coinbase, SmartContract } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     HandlerCallback,
@@ -10,7 +10,7 @@ import {
     composeContext,
     generateObjectV2,
     ModelClass,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { initializeWallet } from "../utils";
 import {
     contractInvocationTemplate,
@@ -38,7 +38,7 @@ export const deployTokenContractAction: Action = {
     description:
         "Deploy an ERC20, ERC721, or ERC1155 token contract using the Coinbase SDK",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating runtime for DEPLOY_TOKEN_CONTRACT...");
+        okaiLogger.log("Validating runtime for DEPLOY_TOKEN_CONTRACT...");
         return (
             !!(
                 runtime.character.settings.secrets?.COINBASE_API_KEY ||
@@ -57,7 +57,7 @@ export const deployTokenContractAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Starting DEPLOY_TOKEN_CONTRACT handler...");
+        okaiLogger.log("Starting DEPLOY_TOKEN_CONTRACT handler...");
 
         try {
             Coinbase.configure({
@@ -98,7 +98,7 @@ export const deployTokenContractAction: Action = {
                 modelClass: ModelClass.SMALL,
                 schema: TokenContractSchema,
             });
-            elizaLogger.log("Contract details:", contractDetails.object);
+            okaiLogger.log("Contract details:", contractDetails.object);
 
             if (!isTokenContractContent(contractDetails.object)) {
                 callback(
@@ -118,7 +118,7 @@ export const deployTokenContractAction: Action = {
                 baseURI,
                 totalSupply,
             } = contractDetails.object;
-            elizaLogger.log("Contract details:", contractDetails.object);
+            okaiLogger.log("Contract details:", contractDetails.object);
             const wallet = await initializeWallet(runtime, network);
             let contract: SmartContract;
             let deploymentDetails;
@@ -157,8 +157,8 @@ export const deployTokenContractAction: Action = {
 
             // Wait for deployment to complete
             await contract.wait();
-            elizaLogger.log("Deployment details:", deploymentDetails);
-            elizaLogger.log("Contract deployed successfully:", contract);
+            okaiLogger.log("Deployment details:", deploymentDetails);
+            okaiLogger.log("Contract deployed successfully:", contract);
             // Log deployment to CSV
             const csvWriter = createArrayCsvWriter({
                 path: contractsCsvFilePath,
@@ -207,7 +207,7 @@ Contract deployment has been logged to the CSV file.`,
                 []
             );
         } catch (error) {
-            elizaLogger.error("Error deploying token contract:", error);
+            okaiLogger.error("Error deploying token contract:", error);
             callback(
                 {
                     text: "Failed to deploy token contract. Please check the logs for more details.",
@@ -267,7 +267,7 @@ export const invokeContractAction: Action = {
     description:
         "Invoke a method on a deployed smart contract using the Coinbase SDK",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating runtime for INVOKE_CONTRACT...");
+        okaiLogger.log("Validating runtime for INVOKE_CONTRACT...");
         return (
             !!(
                 runtime.character.settings.secrets?.COINBASE_API_KEY ||
@@ -286,7 +286,7 @@ export const invokeContractAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Starting INVOKE_CONTRACT handler...");
+        okaiLogger.log("Starting INVOKE_CONTRACT handler...");
 
         try {
             Coinbase.configure({
@@ -309,7 +309,7 @@ export const invokeContractAction: Action = {
                 modelClass: ModelClass.LARGE,
                 schema: ContractInvocationSchema,
             });
-            elizaLogger.log("Invocation details:", invocationDetails.object);
+            okaiLogger.log("Invocation details:", invocationDetails.object);
             if (!isContractInvocationContent(invocationDetails.object)) {
                 callback(
                     {
@@ -554,7 +554,7 @@ export const invokeContractAction: Action = {
                 args,
                 ...(amount && assetId ? { amount, assetId } : {}),
             };
-            elizaLogger.log("Invocation options:", invocationOptions);
+            okaiLogger.log("Invocation options:", invocationOptions);
             // Invoke the contract
             const invocation = await wallet.invokeContract(invocationOptions);
 
@@ -604,7 +604,7 @@ Contract invocation has been logged to the CSV file.`,
                 []
             );
         } catch (error) {
-            elizaLogger.error("Error invoking contract method:", error);
+            okaiLogger.error("Error invoking contract method:", error);
             callback(
                 {
                     text: "Failed to invoke contract method. Please check the logs for more details.",

@@ -9,7 +9,7 @@ import {
     PrivateKey,
     PrivateKeyVariants,
 } from "@aptos-labs/ts-sdk";
-import { defaultCharacter } from "@okcashpro/eliza";
+import { defaultCharacter } from "@okcashpro/okai";
 import BigNumber from "bignumber.js";
 import { APT_DECIMALS } from "../constants.ts";
 

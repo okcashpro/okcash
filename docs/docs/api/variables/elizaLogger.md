@@ -1,6 +1,6 @@
-# Variable: elizaLogger
+# Variable: okaiLogger
 
-> `const` **elizaLogger**: `OKaiLogger`
+> `const` **okaiLogger**: `OKaiLogger`
 
 ## Defined in
 

@@ -6,7 +6,7 @@ import {
     ModelClass,
     stringToUuid,
     type IAgentRuntime,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import type { FarcasterClient } from "./client";
 import { toHex } from "viem";
 import { buildConversationThread, createCastMemory } from "./memory";

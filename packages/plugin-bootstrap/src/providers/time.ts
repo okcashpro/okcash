@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 
 const timeProvider: Provider = {
     get: async (_runtime: IAgentRuntime, _message: Memory, _state?: State) => {

@@ -1,6 +1,6 @@
-import { composeContext, elizaLogger } from "@okcashpro/eliza";
-import { generateMessageResponse, generateTrueOrFalse } from "@okcashpro/eliza";
-import { booleanFooter, messageCompletionFooter } from "@okcashpro/eliza";
+import { composeContext, okaiLogger } from "@okcashpro/okai";
+import { generateMessageResponse, generateTrueOrFalse } from "@okcashpro/okai";
+import { booleanFooter, messageCompletionFooter } from "@okcashpro/okai";
 import {
     Action,
     ActionExample,
@@ -10,7 +10,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 const maxContinuesInARow = 3;
 
@@ -122,7 +122,7 @@ export const continueAction: Action = {
 
         const shouldContinue = await _shouldContinue(state);
         if (!shouldContinue) {
-            elizaLogger.log("Not elaborating, returning");
+            okaiLogger.log("Not elaborating, returning");
             return;
         }
 

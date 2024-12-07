@@ -8,7 +8,7 @@
 
 ### Who is behind OKai?
 
-The OKai project is led by the developers of ai16z, an AI-driven DAO founded by an AI version of Marc Andreessen. The lead developer is [Shaw](https://x.com/shawmakesmagic), who is also known for his work on projects like [@pmairca](https://x.com/pmairca) and [@degenspartanai](https://x.com/degenspartanai). The project is open source, and its code is available on GitHub: https://github.com/okcashpro/okai
+The OKai project is led by the developers of OK, an AI-driven DAO founded by an AI version of Marc Andreessen. The lead developer is [Shaw](https://x.com/shawmakesmagic), who is also known for his work on projects like [@pmairca](https://x.com/pmairca) and [@degenspartanai](https://x.com/degenspartanai). The project is open source, and its code is available on GitHub: https://github.com/okcashpro/okai
 
 ### How can I get started with OKai?
 
@@ -16,7 +16,7 @@ To begin building your own AI agents with OKai, follow these steps:
 
 1.  **Install Python, Node.js and pnpm**: Ensure you have the necessary software prerequisites installed on your system. We use node v23.
 2.  **Set up your environment**: Create a `.env` file and populate it with the required API keys, database configuration, and platform-specific tokens.
-3.  **Install OKai**: Use the command `npm install eliza` or `pnpm install eliza` to install the OKai package.
+3.  **Install OKai**: Use the command `npm install okai` or `pnpm install okai` to install the OKai package.
 4.  **Configure your database**: OKai currently relies on Supabase for local development. Follow the instructions in the documentation to set up your Supabase project and database.
 5.  **Define your agent's character**: Create a character file using the provided JSON format to specify your agent's personality, knowledge, and behavior.
 6.  **Run OKai locally**: Use the provided commands to start the OKai framework and interact with your agent.
@@ -63,11 +63,11 @@ The OKai project is continuously evolving, with ongoing development and communit
 
 ---
 
-## ai16z FAQ
+## OK FAQ
 
-### What is ai16z and how is it related to OKai?
+### What is OK and how is it related to OKai?
 
-**ai16z is an AI-driven DAO and fund, conceptualized as being led by an AI version of Marc Andreessen.** It aims to outperform the real Marc Andreeson by leveraging artificial intelligence. The developers of OKai created ai16z to support their work in autonomous AI agents. While ai16z primarily focuses on trading, OKai is a more general-purpose framework that can be used for various applications beyond finance.
+**OK is an AI-driven DAO and fund, conceptualized as being led by an AI version of Marc Andreessen.** It aims to outperform the real Marc Andreeson by leveraging artificial intelligence. The developers of OKai created OK to support their work in autonomous AI agents. While OK primarily focuses on trading, OKai is a more general-purpose framework that can be used for various applications beyond finance.
 
 ### When will token is mintable be fixed?
 
@@ -77,13 +77,13 @@ Token is controlled by DAO community, no single person can unilaterally mint new
 
 The DAOs.fun team is working on a front end to implement voting and liquidity transfer.
 
-### What is the difference between $ai16z and $degenai?
+### What is the difference between $OK and $degenai?
 
-The $ai16z token is the governance token of the ai16z DAO. Holders of the token can participate in governance decisions, propose new initiatives, and influence the direction of the project.
+The $OK token is the governance token of the OK DAO. Holders of the token can participate in governance decisions, propose new initiatives, and influence the direction of the project.
 
 DegenSpartanAI is another AI agent project created by Shaw. The $degenai token is associated with this project. While both projects are led by the same developer and share some technological similarities, they have different goals and strategies.
 
-ai16z is envisioned as a community-driven, PvE (player versus environment) focused fund, while DegenAI is more of a trading agent with a PvP (player versus player), aggressive approach.
+OK is envisioned as a community-driven, PvE (player versus environment) focused fund, while DegenAI is more of a trading agent with a PvP (player versus player), aggressive approach.
 
 ### Will the agent launch pump fund coins?
 
@@ -93,9 +93,9 @@ The capability to do so is there, it's ultimately up to the AI agent on whether 
 
 Yes, if you make a convincing argument.
 
-### Who runs ai16z?
+### Who runs OK?
 
-ai16z is a decentralized autonomous organization (DAO) launched on daos.fun and led by AI agents, specifically AI Marc Andreessen and DegenSpartan AI. Humans will influence these AI agents' decisions to buy and sell memecoins, for now.
+OK is a decentralized autonomous organization (DAO) launched on daos.fun and led by AI agents, specifically AI Marc Andreessen and DegenSpartan AI. Humans will influence these AI agents' decisions to buy and sell memecoins, for now.
 
 ### Do all trade suggestions happen in one place?
 
@@ -103,24 +103,24 @@ Initially, AI Marc Andreessen will gather data and make decisions in a private D
 
 ### What happens when people copy the GitHub?
 
-Many are already creating their own AI agents using the open-source ELIZA framework, but they won't have access to the pre-trained models used by AI Marc and DegenSpartan AI.
+Many are already creating their own AI agents using the open-source OKAI framework, but they won't have access to the pre-trained models used by AI Marc and DegenSpartan AI.
 
-### What are the future plans for ai16z?
+### What are the future plans for OK?
 
 We're developing a **"marketplace of trust"** where AI agents can learn from community insights and adjust their trust scores based on the performance of recommendations. Eventually the goal is to create AI agents that can operate autonomously and securely.
 
-### How can I contribute to ai16z?
+### How can I contribute to OK?
 
-There are several ways to contribute to the ai16z project:
+There are several ways to contribute to the OK project:
 
 - **Participate in community discussions**: Share your memecoin insights, propose new ideas, and engage with other community members.
-- **Contribute to the development of the ai16z platform**: https://github.com/orgs/okcashpro/projects/1/views/3
-- **Help build the ai16z ecosystem**: Create applicatoins / tools, resources, and memes. Give feedback, and spread the word
+- **Contribute to the development of the OK platform**: https://github.com/orgs/okcashpro/projects/1/views/3
+- **Help build the OK ecosystem**: Create applicatoins / tools, resources, and memes. Give feedback, and spread the word
 
 **Other questions:**
 
-- ai16z and a16z are not officially affiliated.
-- ELIZA is an open-source conversational agent framework.
+- OK and a16z are not officially affiliated.
+- OKAI is an open-source conversational agent framework.
 - AI agents will publish thesis and conviction analysis before executing trades.
 - The fund holds donated tokens, which will be distributed among holders on October 24th, 2025.
 - AI Marc is the "shot caller" with a network of assisting agents (human or AI) that can influence its decisions.

@@ -49,7 +49,7 @@ pnpm start
 
 ### ajouter un comportement régulier
 
-Pour éviter les conflits Git dans le répertoire core, nous vous recommandons d’ajouter les actions personnalisées dans le répertoire custom_actions et de les configurer dans le fichier elizaconfig.yaml. Vous pouvez consulter l’exemple dans le fichier elizaconfig.example.yaml.
+Pour éviter les conflits Git dans le répertoire core, nous vous recommandons d’ajouter les actions personnalisées dans le répertoire custom_actions et de les configurer dans le fichier okaiconfig.yaml. Vous pouvez consulter l’exemple dans le fichier okaiconfig.example.yaml.
 
 ## configurez différents grands modèles
 

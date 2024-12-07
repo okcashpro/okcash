@@ -4,8 +4,8 @@ import {
     Memory,
     State,
     HandlerCallback,
-} from "@okcashpro/eliza";
-import { generateObjectV2, composeContext, ModelClass } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { generateObjectV2, composeContext, ModelClass } from "@okcashpro/okai";
 import {
     createPublicClient,
     createWalletClient,

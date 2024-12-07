@@ -1,9 +1,9 @@
 import { Tweet } from "agent-twitter-client";
-import { getEmbeddingZeroVector } from "@okcashpro/eliza";
-import { Content, Memory, UUID } from "@okcashpro/eliza";
-import { stringToUuid } from "@okcashpro/eliza";
+import { getEmbeddingZeroVector } from "@okcashpro/okai";
+import { Content, Memory, UUID } from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
 import { ClientBase } from "./base";
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 
 const MAX_TWEET_LENGTH = 280; // Updated to Twitter's current character limit
 
@@ -37,20 +37,20 @@ export async function buildConversationThread(
     const visited: Set<string> = new Set();
 
     async function processThread(currentTweet: Tweet, depth: number = 0) {
-        elizaLogger.debug("Processing tweet:", {
+        okaiLogger.debug("Processing tweet:", {
             id: currentTweet.id,
             inReplyToStatusId: currentTweet.inReplyToStatusId,
             depth: depth,
         });
 
         if (!currentTweet) {
-            elizaLogger.debug("No current tweet found for thread building");
+            okaiLogger.debug("No current tweet found for thread building");
             return;
         }
 
         // Stop if we've reached our reply limit
         if (depth >= maxReplies) {
-            elizaLogger.debug("Reached maximum reply depth", depth);
+            okaiLogger.debug("Reached maximum reply depth", depth);
             return;
         }
 
@@ -100,14 +100,14 @@ export async function buildConversationThread(
         }
 
         if (visited.has(currentTweet.id)) {
-            elizaLogger.debug("Already visited tweet:", currentTweet.id);
+            okaiLogger.debug("Already visited tweet:", currentTweet.id);
             return;
         }
 
         visited.add(currentTweet.id);
         thread.unshift(currentTweet);
 
-        elizaLogger.debug("Current thread state:", {
+        okaiLogger.debug("Current thread state:", {
             length: thread.length,
             currentDepth: depth,
             tweetId: currentTweet.id,
@@ -115,7 +115,7 @@ export async function buildConversationThread(
 
         // If there's a parent tweet, fetch and process it
         if (currentTweet.inReplyToStatusId) {
-            elizaLogger.debug(
+            okaiLogger.debug(
                 "Fetching parent tweet:",
                 currentTweet.inReplyToStatusId
             );
@@ -125,25 +125,25 @@ export async function buildConversationThread(
                 );
 
                 if (parentTweet) {
-                    elizaLogger.debug("Found parent tweet:", {
+                    okaiLogger.debug("Found parent tweet:", {
                         id: parentTweet.id,
                         text: parentTweet.text?.slice(0, 50),
                     });
                     await processThread(parentTweet, depth + 1);
                 } else {
-                    elizaLogger.debug(
+                    okaiLogger.debug(
                         "No parent tweet found for:",
                         currentTweet.inReplyToStatusId
                     );
                 }
             } catch (error) {
-                elizaLogger.error("Error fetching parent tweet:", {
+                okaiLogger.error("Error fetching parent tweet:", {
                     tweetId: currentTweet.inReplyToStatusId,
                     error,
                 });
             }
         } else {
-            elizaLogger.debug(
+            okaiLogger.debug(
                 "Reached end of reply chain at:",
                 currentTweet.id
             );
@@ -152,7 +152,7 @@ export async function buildConversationThread(
 
     await processThread(tweet, 0);
 
-    elizaLogger.debug("Final thread built:", {
+    okaiLogger.debug("Final thread built:", {
         totalTweets: thread.length,
         tweetIds: thread.map((t) => ({
             id: t.id,

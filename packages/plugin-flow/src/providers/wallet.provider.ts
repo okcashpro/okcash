@@ -1,10 +1,10 @@
 import {
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     Provider,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import NodeCache from "node-cache";
 import * as fcl from "@onflow/fcl";
 import type { CompositeSignature, Account } from "@onflow/typedefs";
@@ -36,7 +36,7 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
 
         const privateKey = runtime.getSetting("FLOW_PRIVATE_KEY");
         if (!privateKey) {
-            elizaLogger.warn(
+            okaiLogger.warn(
                 `The default Flow wallet ${this.address} has no private key`
             );
         } else {
@@ -137,7 +137,7 @@ export class FlowWalletProvider implements IFlowSigner, IFlowScriptExecutor {
         this.account = await this.connector.getAccount(this.address);
         this.maxKeyIndex = this.account.keys.length - 1;
         this.cache.set("balance", this.account.balance / 1e8);
-        elizaLogger.debug("Flow account info synced", {
+        okaiLogger.debug("Flow account info synced", {
             address: this.address,
             balance: this.account.balance,
             maxKeyIndex: this.maxKeyIndex,
@@ -201,7 +201,7 @@ export function isCadenceIdentifier(str: string) {
 function getSignerAddress(runtime: IAgentRuntime): string {
     const signerAddr = runtime.getSetting("FLOW_ADDRESS");
     if (!signerAddr) {
-        elizaLogger.error("No signer address");
+        okaiLogger.error("No signer address");
         throw new Exception(50200, "No signer info");
     }
     return signerAddr;
@@ -218,7 +218,7 @@ const flowWalletProvider: Provider = {
             !runtime.getSetting("FLOW_ADDRESS") ||
             !runtime.getSetting("FLOW_PRIVATE_KEY")
         ) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "FLOW_ADDRESS or FLOW_PRIVATE_KEY not configured, skipping wallet injection"
             );
             return null;
@@ -229,12 +229,12 @@ const flowWalletProvider: Provider = {
             const walletProvider = new FlowWalletProvider(runtime, connector);
             const info = await walletProvider.queryAccountBalanceInfo();
             if (!info || info?.address !== walletProvider.address) {
-                elizaLogger.error("Invalid account info");
+                okaiLogger.error("Invalid account info");
                 return null;
             }
             return `Flow Wallet Address: ${walletProvider.address}\nBalance: ${info.balance} FLOW\nFlow COA(EVM) Address: ${info.coaAddress || "unknown"}\nFLOW COA(EVM) Balance: ${info.coaBalance ?? 0} FLOW`;
         } catch (error) {
-            elizaLogger.error("Error in Flow wallet provider:", error.message);
+            okaiLogger.error("Error in Flow wallet provider:", error.message);
             return null;
         }
     },

@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@okcashpro/plugin-image-generation": "workspace:*",
         "@types/body-parser": "1.19.5",
         "@types/cors": "2.8.17",

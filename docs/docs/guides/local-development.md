@@ -29,7 +29,7 @@ CUDA Toolkit (for GPU acceleration)
 ```bash
 # Clone the repository
 git clone https://github.com/okcashpro/okai.git
-cd eliza
+cd okai
 
 # Install dependencies
 pnpm install
@@ -223,7 +223,7 @@ Create `.vscode/launch.json`:
       "program": "${workspaceFolder}/src/index.ts",
       "runtimeArgs": ["-r", "ts-node/register"],
       "env": {
-        "DEBUG": "eliza:*"
+        "DEBUG": "okai:*"
       }
     }
   ]
@@ -236,13 +236,13 @@ Create `.vscode/launch.json`:
 
 ```bash
 # Add to your .env file
-DEBUG=eliza:*
+DEBUG=okai:*
 ```
 
 2. Use Debug Points
 
 ```typescript
-const debug = require("debug")("eliza:dev");
+const debug = require("debug")("okai:dev");
 
 debug("Operation details: %O", {
   operation: "functionName",

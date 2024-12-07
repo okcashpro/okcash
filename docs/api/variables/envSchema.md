@@ -40,4 +40,4 @@ API Keys with specific formats
 
 ## Defined in
 
-[packages/core/src/environment.ts:5](https://github.com/monilpat/eliza/blob/main/packages/core/src/environment.ts#L5)
+[packages/core/src/environment.ts:5](https://github.com/monilpat/okai/blob/main/packages/core/src/environment.ts#L5)

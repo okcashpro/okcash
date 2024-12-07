@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@octokit/rest": "20.1.1",
         "@octokit/types": "12.6.0",
         "glob": "10.4.5",

@@ -157,7 +157,7 @@ const typedocSidebar = {
           id: "api/variables/defaultCharacter",
           label: "defaultCharacter",
         },
-        { type: "doc", id: "api/variables/elizaLogger", label: "elizaLogger" },
+        { type: "doc", id: "api/variables/okaiLogger", label: "okaiLogger" },
         {
           type: "doc",
           id: "api/variables/embeddingDimension",

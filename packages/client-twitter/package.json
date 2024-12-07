@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "agent-twitter-client": "0.0.16",
         "glob": "11.0.0",
         "zod": "3.23.8"

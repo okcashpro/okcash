@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / updateGoal
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / updateGoal
 
 # Function: updateGoal()
 
@@ -18,4 +18,4 @@
 
 ## Defined in
 
-[packages/core/src/goals.ts:45](https://github.com/monilpat/eliza/blob/main/packages/core/src/goals.ts#L45)
+[packages/core/src/goals.ts:45](https://github.com/monilpat/okai/blob/main/packages/core/src/goals.ts#L45)

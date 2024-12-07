@@ -1,10 +1,10 @@
 import {
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     Provider,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 import { fetchWithRetry, getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
@@ -30,7 +30,7 @@ export class WalletProvider {
         const cachedValues =
             await this.runtime.cacheManager.get<TokenBalances>(cacheKey);
         if (cachedValues) {
-            elizaLogger.debug("Using cached data for getWalletPortfolio()");
+            okaiLogger.debug("Using cached data for getWalletPortfolio()");
             return cachedValues;
         }
 
@@ -56,7 +56,7 @@ export class WalletProvider {
         const cachedValues =
             await this.runtime.cacheManager.get<CoingeckoPrices>(cacheKey);
         if (cachedValues) {
-            elizaLogger.debug("Using cached data for getTokenUsdValues()");
+            okaiLogger.debug("Using cached data for getTokenUsdValues()");
             return cachedValues;
         }
 
@@ -90,7 +90,7 @@ const walletProvider: Provider = {
             walletPortfolio = await provider.getWalletPortfolio();
             tokenUsdValues = await provider.getTokenUsdValues();
         } catch (error) {
-            elizaLogger.error("Error in walletProvider.get():", error);
+            okaiLogger.error("Error in walletProvider.get():", error);
             return "Unable to fetch wallet portfolio. Please try again later.";
         }
 

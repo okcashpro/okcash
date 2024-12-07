@@ -1,4 +1,4 @@
-import { Plugin } from "@okcashpro/eliza";
+import { Plugin } from "@okcashpro/okai";
 import { zgUpload } from "./actions/upload";
 
 export const zgPlugin: Plugin = {

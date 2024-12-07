@@ -1,10 +1,10 @@
 import {
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     Provider,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 import FlowConnector, { NetworkType } from "./utils/flow.connector";
 
@@ -95,7 +95,7 @@ const flowConnectorProvider: Provider = {
             );
             return provider.getConnectorStatus(runtime);
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "Error in Flow connector provider:",
                 error.message
             );

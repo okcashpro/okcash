@@ -6,13 +6,13 @@ import fs from "fs/promises";
 import { existsSync } from "fs";
 import { createHash } from "crypto";
 import {
-    elizaLogger,
+    okaiLogger,
     AgentRuntime,
     Client,
     IAgentRuntime,
     knowledge,
     stringToUuid,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { validateGithubConfig } from "./environment";
 
 export interface GitHubConfig {
@@ -183,7 +183,7 @@ export class GitHubClient {
 export const GitHubClientInterface: Client = {
     start: async (runtime: IAgentRuntime) => {
         await validateGithubConfig(runtime);
-        elizaLogger.log("GitHubClientInterface start");
+        okaiLogger.log("GitHubClientInterface start");
 
         const client = new GitHubClient(runtime as AgentRuntime);
         await client.initialize();
@@ -192,7 +192,7 @@ export const GitHubClientInterface: Client = {
         return client;
     },
     stop: async (_runtime: IAgentRuntime) => {
-        elizaLogger.log("GitHubClientInterface stop");
+        okaiLogger.log("GitHubClientInterface stop");
     },
 };
 

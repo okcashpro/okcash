@@ -1,9 +1,9 @@
-import { generateText, IBrowserService, trimTokens } from "@okcashpro/eliza";
-import { parseJSONObjectFromText } from "@okcashpro/eliza";
-import { Service } from "@okcashpro/eliza";
-import { settings } from "@okcashpro/eliza";
-import { IAgentRuntime, ModelClass, ServiceType } from "@okcashpro/eliza";
-import { stringToUuid } from "@okcashpro/eliza";
+import { generateText, IBrowserService, trimTokens } from "@okcashpro/okai";
+import { parseJSONObjectFromText } from "@okcashpro/okai";
+import { Service } from "@okcashpro/okai";
+import { settings } from "@okcashpro/okai";
+import { IAgentRuntime, ModelClass, ServiceType } from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
 import { PlaywrightBlocker } from "@cliqz/adblocker-playwright";
 import CaptchaSolver from "capsolver-npm";
 import { Browser, BrowserContext, chromium, Page } from "playwright";

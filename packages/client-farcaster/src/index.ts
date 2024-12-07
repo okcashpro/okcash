@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime, elizaLogger } from "@okcashpro/eliza";
+import { Client, IAgentRuntime, okaiLogger } from "@okcashpro/okai";
 import { FarcasterClient } from "./client";
 import { FarcasterPostManager } from "./post";
 import { FarcasterInteractionManager } from "./interactions";
@@ -38,7 +38,7 @@ export class FarcasterAgentClient implements Client {
                 cache,
             });
 
-        elizaLogger.info("Farcaster Neynar client initialized.")
+        okaiLogger.info("Farcaster Neynar client initialized.")
 
         this.posts = new FarcasterPostManager(
             this.client,

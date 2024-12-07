@@ -11,7 +11,7 @@
         "lint": "eslint . --fix"
     },
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "axios": "1.7.8"
     },
     "devDependencies": {

@@ -6,9 +6,9 @@ import {
     State,
     UUID,
     getEmbeddingZeroVector,
-    elizaLogger,
+    okaiLogger,
     stringToUuid,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     QueryTweetsResponse,
     Scraper,
@@ -173,7 +173,7 @@ export class ClientBase extends EventEmitter {
             }
         }
 
-        elizaLogger.log("Waiting for Twitter login");
+        okaiLogger.log("Waiting for Twitter login");
         while (true) {
             await this.twitterClient.login(
                 username,
@@ -188,7 +188,7 @@ export class ClientBase extends EventEmitter {
                 break;
             }
 
-            elizaLogger.error("Failed to login to Twitter trying again...");
+            okaiLogger.error("Failed to login to Twitter trying again...");
 
             await new Promise((resolve) => setTimeout(resolve, 2000));
         }
@@ -197,8 +197,8 @@ export class ClientBase extends EventEmitter {
         this.profile = await this.fetchProfile(username);
 
         if (this.profile) {
-            elizaLogger.log("Twitter user ID:", this.profile.id);
-            elizaLogger.log(
+            okaiLogger.log("Twitter user ID:", this.profile.id);
+            okaiLogger.log(
                 "Twitter loaded:",
                 JSON.stringify(this.profile, null, 10)
             );
@@ -219,7 +219,7 @@ export class ClientBase extends EventEmitter {
     }
 
     async fetchHomeTimeline(count: number): Promise<Tweet[]> {
-        elizaLogger.debug("fetching home timeline");
+        okaiLogger.debug("fetching home timeline");
         const homeTimeline = await this.twitterClient.getUserTweets(
             this.profile.id,
             count
@@ -299,17 +299,17 @@ export class ClientBase extends EventEmitter {
                 );
                 return (result ?? { tweets: [] }) as QueryTweetsResponse;
             } catch (error) {
-                elizaLogger.error("Error fetching search tweets:", error);
+                okaiLogger.error("Error fetching search tweets:", error);
                 return { tweets: [] };
             }
         } catch (error) {
-            elizaLogger.error("Error fetching search tweets:", error);
+            okaiLogger.error("Error fetching search tweets:", error);
             return { tweets: [] };
         }
     }
 
     private async populateTimeline() {
-        elizaLogger.debug("populating timeline...");
+        okaiLogger.debug("populating timeline...");
 
         const cachedTimeline = await this.getCachedTimeline();
 
@@ -358,7 +358,7 @@ export class ClientBase extends EventEmitter {
 
                 // Save the missing tweets as memories
                 for (const tweet of tweetsToSave) {
-                    elizaLogger.log("Saving Tweet", tweet.id);
+                    okaiLogger.log("Saving Tweet", tweet.id);
 
                     const roomId = stringToUuid(
                         tweet.conversationId + "-" + this.runtime.agentId
@@ -400,7 +400,7 @@ export class ClientBase extends EventEmitter {
                             : undefined,
                     } as Content;
 
-                    elizaLogger.log("Creating memory for tweet", tweet.id);
+                    okaiLogger.log("Creating memory for tweet", tweet.id);
 
                     // check if it already exists
                     const memory =
@@ -409,7 +409,7 @@ export class ClientBase extends EventEmitter {
                         );
 
                     if (memory) {
-                        elizaLogger.log(
+                        okaiLogger.log(
                             "Memory already exists, skipping timeline population"
                         );
                         break;
@@ -428,7 +428,7 @@ export class ClientBase extends EventEmitter {
                     await this.cacheTweet(tweet);
                 }
 
-                elizaLogger.log(
+                okaiLogger.log(
                     `Populated ${tweetsToSave.length} missing tweets from the cache.`
                 );
                 return;
@@ -478,7 +478,7 @@ export class ClientBase extends EventEmitter {
                 )
         );
 
-        elizaLogger.debug({
+        okaiLogger.debug({
             processingTweets: tweetsToSave.map((tweet) => tweet.id).join(","),
         });
 
@@ -491,7 +491,7 @@ export class ClientBase extends EventEmitter {
 
         // Save the new tweets as memories
         for (const tweet of tweetsToSave) {
-            elizaLogger.log("Saving Tweet", tweet.id);
+            okaiLogger.log("Saving Tweet", tweet.id);
 
             const roomId = stringToUuid(
                 tweet.conversationId + "-" + this.runtime.agentId
@@ -572,7 +572,7 @@ export class ClientBase extends EventEmitter {
                 recentMessage.length > 0 &&
                 recentMessage[0].content === message.content
             ) {
-                elizaLogger.debug("Message already saved", recentMessage[0].id);
+                okaiLogger.debug("Message already saved", recentMessage[0].id);
             } else {
                 await this.runtime.messageManager.createMemory({
                     ...message,

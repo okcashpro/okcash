@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Content } from "@okcashpro/eliza";
+import { Content } from "@okcashpro/okai";
 
 export const TransferSchema = z.object({
     to: z.string(),

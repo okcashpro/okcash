@@ -1,4 +1,4 @@
-import { elizaLogger, IAgentRuntime } from "@okcashpro/eliza";
+import { okaiLogger, IAgentRuntime } from "@okcashpro/okai";
 import { Fraction, Percent } from "@uniswap/sdk-core";
 import { Account, Contract, RpcProvider } from "starknet";
 
@@ -107,7 +107,7 @@ export async function fetchWithRetry<T>(
 
             return await response.json();
         } catch (error) {
-            elizaLogger.debug(`Error fetching ${url}:`, error);
+            okaiLogger.debug(`Error fetching ${url}:`, error);
             lastError = error as Error;
 
             if (retryCount === maxRetries) break;
@@ -115,7 +115,7 @@ export async function fetchWithRetry<T>(
             await new Promise((resolve) =>
                 setTimeout(resolve, backoff(retryCount, delay, maxDelay))
             );
-            elizaLogger.debug(`Retry #${retryCount + 1} to fetch ${url}...`);
+            okaiLogger.debug(`Retry #${retryCount + 1} to fetch ${url}...`);
         }
     }
 

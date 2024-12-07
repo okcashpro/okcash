@@ -1,7 +1,7 @@
 import { Coinbase, Wallet } from "@coinbase/coinbase-sdk";
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObjectV2,
     ModelClass,
     Action,
@@ -11,7 +11,7 @@ import {
     State,
     HandlerCallback,
     Plugin,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     TransferSchema,
     isTransferContent,
@@ -50,11 +50,11 @@ export const massPayoutProvider: Provider = {
                     runtime.getSetting("COINBASE_PRIVATE_KEY") ??
                     process.env.COINBASE_PRIVATE_KEY,
             });
-            elizaLogger.log("Reading CSV file from:", csvFilePath);
+            okaiLogger.log("Reading CSV file from:", csvFilePath);
 
             // Ensure the CSV file exists
             if (!fs.existsSync(csvFilePath)) {
-                elizaLogger.warn("CSV file not found. Creating a new one.");
+                okaiLogger.warn("CSV file not found. Creating a new one.");
                 const csvWriter = createArrayCsvWriter({
                     path: csvFilePath,
                     header: [
@@ -66,7 +66,7 @@ export const massPayoutProvider: Provider = {
                     ],
                 });
                 await csvWriter.writeRecords([]); // Create an empty file with headers
-                elizaLogger.log("New CSV file created with headers.");
+                okaiLogger.log("New CSV file created with headers.");
             }
 
             // Read and parse the CSV file
@@ -78,9 +78,9 @@ export const massPayoutProvider: Provider = {
 
             const { balances, transactions } = await getWalletDetails(runtime);
 
-            elizaLogger.log("Parsed CSV records:", records);
-            elizaLogger.log("Current Balances:", balances);
-            elizaLogger.log("Last Transactions:", transactions);
+            okaiLogger.log("Parsed CSV records:", records);
+            okaiLogger.log("Current Balances:", balances);
+            okaiLogger.log("Last Transactions:", transactions);
 
             return {
                 currentTransactions: records.map((record: any) => ({
@@ -94,7 +94,7 @@ export const massPayoutProvider: Provider = {
                 transactionHistory: transactions,
             };
         } catch (error) {
-            elizaLogger.error("Error in massPayoutProvider:", error);
+            okaiLogger.error("Error in massPayoutProvider:", error);
             return { csvRecords: [], balances: [], transactions: [] };
         }
     },
@@ -113,11 +113,11 @@ async function executeMassPayout(
     try {
         sendingWallet = await initializeWallet(runtime, networkId);
     } catch (error) {
-        elizaLogger.error("Error initializing sending wallet:", error);
+        okaiLogger.error("Error initializing sending wallet:", error);
         throw error;
     }
     for (const address of receivingAddresses) {
-        elizaLogger.log("Processing payout for address:", address);
+        okaiLogger.log("Processing payout for address:", address);
             if (address) {
                 try {
                     // Check balance before initiating transfer
@@ -125,14 +125,14 @@ async function executeMassPayout(
                     const walletBalance =
                         await sendingWallet.getBalance(assetIdLowercase);
 
-                    elizaLogger.log("Wallet balance for asset:", {
+                    okaiLogger.log("Wallet balance for asset:", {
                         assetId,
                         walletBalance,
                     });
 
                     if (walletBalance.lessThan(transferAmount)) {
                         const insufficientFunds = `Insufficient funds for address ${sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
-                        elizaLogger.error(insufficientFunds);
+                        okaiLogger.error(insufficientFunds);
 
                         transactions.push({
                             address,
@@ -160,7 +160,7 @@ async function executeMassPayout(
                         transactionUrl: transfer.getTransactionLink(),
                     });
                 } catch (error) {
-                    elizaLogger.error(
+                    okaiLogger.error(
                         "Error during transfer for address:",
                         address,
                         error
@@ -174,7 +174,7 @@ async function executeMassPayout(
                     });
                 }
             } else {
-                elizaLogger.log("Skipping invalid or empty address.");
+                okaiLogger.log("Skipping invalid or empty address.");
                 transactions.push({
                     address: "Invalid or Empty",
                     amount: transferAmount,
@@ -198,7 +198,7 @@ async function executeMassPayout(
                 transactionUrl: charityTransfer.getTransactionLink(),
             });
         } catch (error) {
-            elizaLogger.error("Error during charity transfer:", error);
+            okaiLogger.error("Error during charity transfer:", error);
             transactions.push({
                 address: charityAddress,
                 amount: transferAmount * 0.01,
@@ -208,7 +208,7 @@ async function executeMassPayout(
             });
         }
         await appendTransactionsToCsv(transactions);
-        elizaLogger.log("Finished processing mass payouts.");
+        okaiLogger.log("Finished processing mass payouts.");
     return transactions;
 }
 
@@ -219,7 +219,7 @@ export const sendMassPayoutAction: Action = {
     description:
         "Sends mass payouts to a list of receiving addresses using a predefined sending wallet and logs all transactions to a CSV file.",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating runtime and message...");
+        okaiLogger.log("Validating runtime and message...");
         return (
             !!(
                 runtime.character.settings.secrets?.COINBASE_API_KEY ||
@@ -238,7 +238,7 @@ export const sendMassPayoutAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Starting SEND_MASS_PAYOUT handler...");
+        okaiLogger.log("Starting SEND_MASS_PAYOUT handler...");
         try {
             Coinbase.configure({
                 apiKeyName:
@@ -268,7 +268,7 @@ export const sendMassPayoutAction: Action = {
                 schema: TransferSchema,
             });
 
-            elizaLogger.log(
+            okaiLogger.log(
                 "Transfer details generated:",
                 transferDetails.object
             );
@@ -295,7 +295,7 @@ export const sendMassPayoutAction: Action = {
                 transferAmount <= 0 ||
                 !assetId
             ) {
-                elizaLogger.error("Missing or invalid input parameters:", {
+                okaiLogger.error("Missing or invalid input parameters:", {
                     network,
                     receivingAddresses,
                     transferAmount,
@@ -314,7 +314,7 @@ export const sendMassPayoutAction: Action = {
                 return;
             }
 
-            elizaLogger.log("◎ Starting mass payout...");
+            okaiLogger.log("◎ Starting mass payout...");
             const transactions = await executeMassPayout(
                 runtime,
                 network,
@@ -372,7 +372,7 @@ Check the CSV file for full details.`,
                 []
             );
         } catch (error) {
-            elizaLogger.error("Error during mass payouts:", error);
+            okaiLogger.error("Error during mass payouts:", error);
             callback(
                 { text: "Failed to complete payouts. Please try again." },
                 []

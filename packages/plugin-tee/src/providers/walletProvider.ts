@@ -1,5 +1,5 @@
 /* This is an example of how WalletProvider can use DeriveKeyProvider to generate a Solana Keypair */
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";

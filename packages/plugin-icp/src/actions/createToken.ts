@@ -3,7 +3,7 @@ import {
     generateImage,
     generateText,
     generateObject,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     ActionExample,
     HandlerCallback,
@@ -12,7 +12,7 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { idlFactory } from "../canisters/pick-pump/index.did";
 import { _SERVICE } from "../canisters/pick-pump/index.did.d";
 import { ActorCreator, CreateMemeTokenArg } from "../types";

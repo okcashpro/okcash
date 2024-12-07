@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime } from "@okcashpro/eliza";
+import { Client, IAgentRuntime } from "@okcashpro/okai";
 
 export class AutoClient {
     interval: NodeJS.Timeout;

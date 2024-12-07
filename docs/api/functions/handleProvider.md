@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / handleProvider
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / handleProvider
 
 # Function: handleProvider()
 
@@ -20,4 +20,4 @@ Configuration options specific to the provider.
 
 ## Defined in
 
-[packages/core/src/generation.ts:1173](https://github.com/monilpat/eliza/blob/main/packages/core/src/generation.ts#L1173)
+[packages/core/src/generation.ts:1173](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L1173)

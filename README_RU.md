@@ -6,7 +6,7 @@
 
 <div align="center">
 
-  📖 [Документация](https://okcashpro.github.io/okai/) | 🎯 [Примеры](https://github.com/thejoven/awesome-eliza)
+  📖 [Документация](https://okcashpro.github.io/okai/) | 🎯 [Примеры](https://github.com/thejoven/awesome-okai)
 
 </div>
 

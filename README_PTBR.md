@@ -48,7 +48,7 @@ pnpm start
 
 ### Adicionando ações personalizadas
 
-Para evitar conflitos no diretório core, recomendamos adicionar ações personalizadas a um diretório `custom_actions` e depois adicioná-las ao arquivo `elizaConfig.yaml`. Veja o arquivo `elizaConfig.example.yaml` para um exemplo.
+Para evitar conflitos no diretório core, recomendamos adicionar ações personalizadas a um diretório `custom_actions` e depois adicioná-las ao arquivo `okaiConfig.yaml`. Veja o arquivo `okaiConfig.example.yaml` para um exemplo.
 
 ## Executando com diferentes modelos
 

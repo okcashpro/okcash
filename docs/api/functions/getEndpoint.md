@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / getEndpoint
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / getEndpoint
 
 # Function: getEndpoint()
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/models.ts:385](https://github.com/monilpat/eliza/blob/main/packages/core/src/models.ts#L385)
+[packages/core/src/models.ts:385](https://github.com/monilpat/okai/blob/main/packages/core/src/models.ts#L385)

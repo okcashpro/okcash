@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@types/sql.js": "1.4.9",
         "sql.js": "1.12.0",
         "uuid": "11.0.3"

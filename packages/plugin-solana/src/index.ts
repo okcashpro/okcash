@@ -3,7 +3,7 @@ export * from "./providers/wallet.ts";
 export * from "./providers/trustScoreProvider.ts";
 export * from "./evaluators/trust.ts";
 
-import { Plugin } from "@okcashpro/eliza";
+import { Plugin } from "@okcashpro/okai";
 import { executeSwap } from "./actions/swap.ts";
 import take_order from "./actions/takeOrder";
 import pumpfun from "./actions/pumpfun.ts";

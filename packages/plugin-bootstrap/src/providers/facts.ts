@@ -3,8 +3,8 @@ import {
     MemoryManager,
     formatMessages,
     AgentRuntime as IAgentRuntime,
-} from "@okcashpro/eliza";
-import type { Memory, Provider, State } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import type { Memory, Provider, State } from "@okcashpro/okai";
 import { formatFacts } from "../evaluators/fact.ts";
 
 const factsProvider: Provider = {

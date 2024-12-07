@@ -50,8 +50,8 @@ This guide provides instructions for installing and running the OKai chatbot usi
 
 2. **Clone the Repository**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/eliza.git
-   cd eliza
+   git clone https://github.com/YOUR_USERNAME/okai.git
+   cd okai
    ```
 
 3. **Configure Environment**:
@@ -79,7 +79,7 @@ This guide provides instructions for installing and running the OKai chatbot usi
 
 - Remove OKai container:
   ```bash
-  docker rm /eliza
+  docker rm /okai
   ```
 
 - Restart with a different character:
@@ -97,7 +97,7 @@ This guide provides instructions for installing and running the OKai chatbot usi
 
 - If Docker container fails to start, check logs:
   ```bash
-  docker logs eliza
+  docker logs okai
   ```
 - For permission issues, ensure proper file ownership and permissions
 - For script formatting issues, run `dos2unix` on problematic files

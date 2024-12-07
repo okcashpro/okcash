@@ -12,7 +12,7 @@
         "tsup.config.ts"
     ],
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@cliqz/adblocker-playwright": "1.34.0",
         "@echogarden/espeak-ng-emscripten": "0.3.3",
         "@echogarden/kissfft-wasm": "0.2.0",

@@ -9,9 +9,9 @@ import {
 } from "../generation";
 import type { TiktokenModel } from "js-tiktoken";
 
-// Mock the elizaLogger
+// Mock the okaiLogger
 vi.mock("../index.ts", () => ({
-    elizaLogger: {
+    okaiLogger: {
         log: vi.fn(),
         info: vi.fn(),
         error: vi.fn(),

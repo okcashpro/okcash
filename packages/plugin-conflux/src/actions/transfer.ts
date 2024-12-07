@@ -4,13 +4,13 @@ import {
     Memory,
     State,
     HandlerCallback,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     generateObjectV2,
     composeContext,
     ModelClass,
     Content,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { createPublicClient, createWalletClient, http, parseCFX } from "cive";
 import { privateKeyToAccount } from "cive/accounts";
 import { testnet } from "cive/chains";

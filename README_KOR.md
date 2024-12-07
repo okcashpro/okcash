@@ -6,7 +6,7 @@
 
 <div align="center">
 
-  📖 [문서](https://okcashpro.github.io/okai/) | 🎯 [예시](https://github.com/thejoven/awesome-eliza)
+  📖 [문서](https://okcashpro.github.io/okai/) | 🎯 [예시](https://github.com/thejoven/awesome-okai)
 
 </div>
 
@@ -21,7 +21,7 @@
 -   ☁️ 다양한 AI 모델 지원: local Llama, OpenAI, Anthropic, Groq 등 다양한 AI 모델을 지원합니다
 -   📦 즐겁게 개발해 봐요!
 
-## 🎯 eliza로 어떤걸 만들 수 있을까요?
+## 🎯 okai로 어떤걸 만들 수 있을까요?
 
 -   🤖 챗봇 개발
 -   🕵 ️AI가 자율적으로 결과를 만들어줘요!

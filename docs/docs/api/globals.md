@@ -61,7 +61,7 @@
 ## Variables
 
 - [defaultCharacter](variables/defaultCharacter.md)
-- [elizaLogger](variables/elizaLogger.md)
+- [okaiLogger](variables/okaiLogger.md)
 - [embeddingDimension](variables/embeddingDimension.md)
 - [embeddingZeroVector](variables/embeddingZeroVector.md)
 - [evaluationTemplate](variables/evaluationTemplate.md)

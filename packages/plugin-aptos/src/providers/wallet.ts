@@ -4,7 +4,7 @@ import {
     Memory,
     Provider,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     Account,
     Aptos,

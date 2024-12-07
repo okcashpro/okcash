@@ -1,4 +1,4 @@
-import type { IAgentRuntime, Memory, State } from "@okcashpro/eliza";
+import type { IAgentRuntime, Memory, State } from "@okcashpro/okai";
 import {
     ChainId,
     createConfig,
@@ -17,7 +17,7 @@ export class SwapAction {
 
     constructor(private walletProvider: WalletProvider) {
         this.config = createConfig({
-            integrator: "eliza",
+            integrator: "okai",
             chains: Object.values(
                 getChainConfigs(this.walletProvider.runtime)
             ).map((config) => ({

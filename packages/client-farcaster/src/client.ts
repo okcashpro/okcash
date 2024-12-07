@@ -1,4 +1,4 @@
-import { IAgentRuntime } from "@okcashpro/eliza";
+import { IAgentRuntime } from "@okcashpro/okai";
 import { NeynarAPIClient, isApiErrorResponse } from "@neynar/nodejs-sdk";
 import { NeynarCastResponse, Cast, Profile, FidRequest, CastId } from "./types";
 

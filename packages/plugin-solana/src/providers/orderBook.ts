@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 interface Order {
     userId: string;
     ticker: string;

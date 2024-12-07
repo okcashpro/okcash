@@ -100,7 +100,7 @@ Example usage:
 const result = await generateImage(
   {
     prompt:
-      'A cute anime girl with big breasts and straight long black hair wearing orange T-shirt. The T-shirt has "ai16z" texts in the front. The girl is looking at the viewer',
+      'A cute anime girl with big breasts and straight long black hair wearing orange T-shirt. The T-shirt has "OK" texts in the front. The girl is looking at the viewer',
     width: 1024,
     height: 1024,
     numIterations: 20, // optional
@@ -153,7 +153,7 @@ pnpm start --characters="characters/char1.json,characters/char2.json"
 
 1. Create a `custom_actions` directory
 2. Add your action files there
-3. Configure in `elizaConfig.yaml`:
+3. Configure in `okaiConfig.yaml`:
 
 ```yaml
 actions:
@@ -225,7 +225,7 @@ Fine-tune runtime behavior:
 ```typescript
 const settings = {
   // Logging
-  DEBUG: "eliza:*",
+  DEBUG: "okai:*",
   LOG_LEVEL: "info",
 
   // Performance
@@ -240,7 +240,7 @@ const settings = {
 
 ### Plugin Configuration
 
-Enable and configure plugins in `elizaConfig.yaml`:
+Enable and configure plugins in `okaiConfig.yaml`:
 
 ```yaml
 plugins:

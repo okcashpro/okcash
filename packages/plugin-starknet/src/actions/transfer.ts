@@ -6,14 +6,14 @@ import {
     ActionExample,
     composeContext,
     Content,
-    elizaLogger,
+    okaiLogger,
     generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { validateStarknetConfig } from "../environment";
@@ -120,7 +120,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting SEND_TOKEN handler...");
+        okaiLogger.log("Starting SEND_TOKEN handler...");
 
         // Initialize or update state
         if (!state) {
@@ -142,11 +142,11 @@ export default {
             modelClass: ModelClass.MEDIUM,
         });
 
-        elizaLogger.debug("Transfer content:", content);
+        okaiLogger.debug("Transfer content:", content);
 
         // Validate transfer content
         if (!isTransferContent(content)) {
-            elizaLogger.error("Invalid content for TRANSFER_TOKEN action.");
+            okaiLogger.error("Invalid content for TRANSFER_TOKEN action.");
             if (callback) {
                 callback({
                     text: "Not enough information to transfer tokens. Please respond with token address, recipient address or stark name, and amount.",
@@ -170,7 +170,7 @@ export default {
                 (await getAddressFromName(account, content.starkName));
             const transferCall = erc20Token.transferCall(recipient, amountWei);
 
-            elizaLogger.success(
+            okaiLogger.success(
                 "Transferring",
                 amountWei,
                 "of",
@@ -181,7 +181,7 @@ export default {
 
             const tx = await account.execute(transferCall);
 
-            elizaLogger.success(
+            okaiLogger.success(
                 "Transfer completed successfully! tx: " + tx.transaction_hash
             );
             if (callback) {
@@ -195,7 +195,7 @@ export default {
 
             return true;
         } catch (error) {
-            elizaLogger.error("Error during token transfer:", error);
+            okaiLogger.error("Error during token transfer:", error);
             if (callback) {
                 callback({
                     text: `Error transferring tokens: ${error.message}`,

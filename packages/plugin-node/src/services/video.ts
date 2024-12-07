@@ -1,12 +1,12 @@
-import { Service } from "@okcashpro/eliza";
+import { Service } from "@okcashpro/okai";
 import {
     IAgentRuntime,
     ITranscriptionService,
     Media,
     ServiceType,
     IVideoService,
-} from "@okcashpro/eliza";
-import { stringToUuid } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";

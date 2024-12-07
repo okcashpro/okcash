@@ -1,4 +1,4 @@
-[@okcashpro/eliza v0.1.5-alpha.3](../index.md) / stringToUuid
+[@okcashpro/okai v0.1.5-alpha.3](../index.md) / stringToUuid
 
 # Function: stringToUuid()
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/uuid.ts:4](https://github.com/monilpat/eliza/blob/main/packages/core/src/uuid.ts#L4)
+[packages/core/src/uuid.ts:4](https://github.com/monilpat/okai/blob/main/packages/core/src/uuid.ts#L4)

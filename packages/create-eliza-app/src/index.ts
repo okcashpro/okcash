@@ -3,9 +3,9 @@
 import { downloadTemplate } from "giget";
 import { runMain } from "citty";
 
-const DEFAULT_TEMPLATE = "eliza";
+const DEFAULT_TEMPLATE = "okai";
 const DEFAULT_REGISTRY =
-    "https://raw.githubusercontent.com/okcashpro/okai/main/packages/create-eliza-app/registry";
+    "https://raw.githubusercontent.com/okcashpro/okai/main/packages/create-okai-app/registry";
 
 runMain({
     args: {

@@ -2,7 +2,7 @@ import {
     Character,
     messageCompletionFooter,
     shouldRespondFooter,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import type { Cast } from "./types";
 
 export const formatCast = (cast: Cast) => {

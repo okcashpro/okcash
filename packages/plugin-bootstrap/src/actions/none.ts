@@ -3,7 +3,7 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 export const noneAction: Action = {
     name: "NONE",

@@ -2,7 +2,7 @@ import { Coinbase, Webhook } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     HandlerCallback,
@@ -11,7 +11,7 @@ import {
     generateObjectV2,
     ModelClass,
     Provider,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { WebhookSchema, isWebhookContent, WebhookContent } from "../types";
 import { webhookTemplate } from "../templates";
 import { appendWebhooksToCsv } from "../utils";
@@ -29,7 +29,7 @@ export const webhookProvider: Provider = {
 
             // List all webhooks
             const resp = await Webhook.list();
-            elizaLogger.log("Listing all webhooks:", resp.data);
+            okaiLogger.log("Listing all webhooks:", resp.data);
 
             return {
                 webhooks: resp.data.map((webhook: Webhook) => ({
@@ -42,7 +42,7 @@ export const webhookProvider: Provider = {
                 })),
             };
         } catch (error) {
-            elizaLogger.error("Error in webhookProvider:", error);
+            okaiLogger.error("Error in webhookProvider:", error);
             return [];
         }
     },
@@ -52,7 +52,7 @@ export const createWebhookAction: Action = {
     name: "CREATE_WEBHOOK",
     description: "Create a new webhook using the Coinbase SDK.",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating runtime for CREATE_WEBHOOK...");
+        okaiLogger.log("Validating runtime for CREATE_WEBHOOK...");
         return (
             !!(
                 runtime.character.settings.secrets?.COINBASE_API_KEY ||
@@ -75,7 +75,7 @@ export const createWebhookAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Starting CREATE_WEBHOOK handler...");
+        okaiLogger.log("Starting CREATE_WEBHOOK handler...");
 
         try {
             Coinbase.configure({
@@ -121,9 +121,9 @@ export const createWebhookAction: Action = {
                 );
                 return;
             }
-            elizaLogger.log("Creating webhook with details:", {networkId, notificationUri, eventType, eventTypeFilter, eventFilters});
+            okaiLogger.log("Creating webhook with details:", {networkId, notificationUri, eventType, eventTypeFilter, eventFilters});
             const webhook = await Webhook.create({networkId, notificationUri, eventType, eventFilters});
-            elizaLogger.log("Webhook created successfully:", webhook.toString());
+            okaiLogger.log("Webhook created successfully:", webhook.toString());
             callback(
                 {
                     text: `Webhook created successfully: ${webhook.toString()}`,
@@ -131,9 +131,9 @@ export const createWebhookAction: Action = {
                 []
             );
             await appendWebhooksToCsv([webhook]);
-            elizaLogger.log("Webhook appended to CSV successfully");
+            okaiLogger.log("Webhook appended to CSV successfully");
         } catch (error) {
-            elizaLogger.error("Error during webhook creation:", error);
+            okaiLogger.error("Error during webhook creation:", error);
             callback(
                 {
                     text: "Failed to create the webhook. Please check the logs for more details.",

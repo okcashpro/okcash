@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { defaultCharacter } from "@okcashpro/eliza";
+import { defaultCharacter } from "@okcashpro/okai";
 import { getFlowConnectorInstance } from "../providers/connector.provider";
 import { FlowWalletProvider } from "../providers/wallet.provider";
 

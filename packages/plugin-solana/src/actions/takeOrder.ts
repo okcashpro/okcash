@@ -4,9 +4,9 @@ import {
     Memory,
     Content,
     ModelClass,
-} from "@okcashpro/eliza";
-import { composeContext } from "@okcashpro/eliza";
-import { generateText } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { composeContext } from "@okcashpro/okai";
+import { generateText } from "@okcashpro/okai";
 
 interface Order {
     userId: string;

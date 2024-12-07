@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "dompurify": "3.2.2",
         "tsup": "8.3.5",
         "uuid": "11.0.3",

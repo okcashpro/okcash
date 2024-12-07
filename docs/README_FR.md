@@ -52,7 +52,7 @@ pnpm clean
 
 ### Ajouter un des actions personnalisées
 
-Pour éviter les conflits Git dans le répertoire core, nous vous recommandons d’ajouter les actions personnalisées dans un répertoire `custom_actions` et de les configurer dans le fichier `elizaConfig.yaml` . Vous pouvez consulter l’exemple dans le fichier `elizaConfig.example.yaml`.
+Pour éviter les conflits Git dans le répertoire core, nous vous recommandons d’ajouter les actions personnalisées dans un répertoire `custom_actions` et de les configurer dans le fichier `okaiConfig.yaml` . Vous pouvez consulter l’exemple dans le fichier `okaiConfig.example.yaml`.
 
 ## Utiliser les différents modèles
 

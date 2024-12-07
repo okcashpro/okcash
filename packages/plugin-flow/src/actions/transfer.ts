@@ -1,7 +1,7 @@
 import {
     composeContext,
     Content,
-    elizaLogger,
+    okaiLogger,
     generateObject,
     ModelClass,
     type Action,
@@ -10,7 +10,7 @@ import {
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import Exception from "../types/exception";
 import { getFlowConnectorInstance } from "../providers/connector.provider";
 import {
@@ -42,7 +42,7 @@ function isTransferContent(
     runtime: IAgentRuntime,
     content: any
 ): content is TransferContent {
-    elizaLogger.log("Content for transfer", content);
+    okaiLogger.log("Content for transfer", content);
     return (
         (!content.token ||
             (typeof content.token === "string" &&
@@ -95,13 +95,13 @@ export class TransferAction {
 
         // Validate transfer content
         if (!isTransferContent(runtime, content)) {
-            elizaLogger.error("Invalid content for SEND_COIN action.");
+            okaiLogger.error("Invalid content for SEND_COIN action.");
             throw new Exception(50100, "Invalid transfer content");
         }
 
         // Check if the content is matched
         if (!content.matched) {
-            elizaLogger.error("Content does not match the transfer template.");
+            okaiLogger.error("Content does not match the transfer template.");
             throw new Exception(
                 50100,
                 "Content does not match the transfer template"
@@ -114,7 +114,7 @@ export class TransferAction {
         content: TransferContent,
         callback?: HandlerCallback
     ): Promise<TransactionResponse> {
-        elizaLogger.log("Starting Flow Plugin's SEND_COIN handler...");
+        okaiLogger.log("Starting Flow Plugin's SEND_COIN handler...");
 
         const resp: TransactionResponse = {
             signer: {
@@ -142,7 +142,7 @@ export class TransferAction {
 
         // Check if the amount is valid
         if (totalBalance < amount) {
-            elizaLogger.error("Insufficient balance to transfer.");
+            okaiLogger.error("Insufficient balance to transfer.");
             if (callback) {
                 callback({
                     text: `${logPrefix} Unable to process transfer request. Insufficient balance.`,
@@ -162,7 +162,7 @@ export class TransferAction {
 
             // For different token types, we need to handle the token differently
             if (!content.token) {
-                elizaLogger.log(
+                okaiLogger.log(
                     `${logPrefix} Sending ${amount} FLOW to ${recipient}...`
                 );
                 // Transfer FLOW token
@@ -178,7 +178,7 @@ export class TransferAction {
                 // Transfer Fungible Token on Cadence side
                 const [_, tokenAddr, tokenContractName] =
                     content.token.split(".");
-                elizaLogger.log(
+                okaiLogger.log(
                     `${logPrefix} Sending ${amount} A.${tokenAddr}.${tokenContractName} to ${recipient}...`
                 );
                 resp.txid = await this.walletProvider.sendTransaction(
@@ -200,7 +200,7 @@ export class TransferAction {
                 );
                 const adjustedAmount = BigInt(amount * Math.pow(10, decimals));
 
-                elizaLogger.log(
+                okaiLogger.log(
                     `${logPrefix} Sending ${adjustedAmount} ${content.token}(EVM) to ${recipient}...`
                 );
 
@@ -216,7 +216,7 @@ export class TransferAction {
                 );
             }
 
-            elizaLogger.log(`${logPrefix} Sent transaction: ${resp.txid}`);
+            okaiLogger.log(`${logPrefix} Sent transaction: ${resp.txid}`);
 
             // call the callback with the transaction response
             if (callback) {
@@ -238,7 +238,7 @@ export class TransferAction {
                 });
             }
         } catch (e: any) {
-            elizaLogger.error("Error in sending transaction:", e.message);
+            okaiLogger.error("Error in sending transaction:", e.message);
             if (callback) {
                 callback({
                     text: `${logPrefix} Unable to process transfer request. Error in sending transaction.`,
@@ -257,7 +257,7 @@ export class TransferAction {
             }
         }
 
-        elizaLogger.log("Completed Flow Plugin's SEND_COIN handler.");
+        okaiLogger.log("Completed Flow Plugin's SEND_COIN handler.");
 
         return resp;
     }
@@ -284,7 +284,7 @@ export const transferAction = {
             await walletProvider.syncAccountInfo();
             // TODO: We need to check if the key index is valid
         } catch {
-            elizaLogger.error("Failed to sync account info");
+            okaiLogger.error("Failed to sync account info");
             return false;
         }
         return true;
@@ -303,7 +303,7 @@ export const transferAction = {
         try {
             content = await action.processMessages(runtime, message, state);
         } catch (err) {
-            elizaLogger.error("Error in processing messages:", err.message);
+            okaiLogger.error("Error in processing messages:", err.message);
             if (callback) {
                 callback({
                     text:
@@ -319,7 +319,7 @@ export const transferAction = {
 
         try {
             const res = await action.transfer(content, callback);
-            elizaLogger.log(
+            okaiLogger.log(
                 `Transfer action response: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`
             );
         } catch {

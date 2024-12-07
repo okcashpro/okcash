@@ -2,7 +2,7 @@ import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 
-import { Memory, Provider, State, type IAgentRuntime } from "@okcashpro/eliza";
+import { Memory, Provider, State, type IAgentRuntime } from "@okcashpro/okai";
 import { viem } from "@goat-sdk/wallet-viem";
 
 

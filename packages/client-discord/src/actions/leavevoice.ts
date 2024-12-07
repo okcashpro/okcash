@@ -12,7 +12,7 @@ import {
     IAgentRuntime,
     Memory,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 export default {
     name: "LEAVE_VOICE",

@@ -1,4 +1,4 @@
-import { Plugin } from "@okcashpro/eliza";
+import { Plugin } from "@okcashpro/okai";
 import transferToken from "./actions/transfer.ts";
 import { WalletProvider, walletProvider } from "./providers/wallet.ts";
 

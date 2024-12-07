@@ -1,6 +1,6 @@
 # @okcashpro/plugin-0g
 
-A plugin for storing data using the 0G protocol within the AI16Z ecosystem.
+A plugin for storing data using the 0G protocol within the OK ecosystem.
 
 ## Description
 

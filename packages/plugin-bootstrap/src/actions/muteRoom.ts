@@ -1,6 +1,6 @@
-import { composeContext } from "@okcashpro/eliza";
-import { generateTrueOrFalse } from "@okcashpro/eliza";
-import { booleanFooter } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
+import { generateTrueOrFalse } from "@okcashpro/okai";
+import { booleanFooter } from "@okcashpro/okai";
 import {
     Action,
     ActionExample,
@@ -8,7 +8,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 export const shouldMuteTemplate =
     `Based on the conversation so far:

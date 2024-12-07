@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-import { AgentRuntime } from "@okcashpro/eliza";
+import { AgentRuntime } from "@okcashpro/okai";
 
 import { REST, Routes } from "discord.js";
 

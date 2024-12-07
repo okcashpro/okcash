@@ -1,7 +1,7 @@
 export * from "./sqliteTables.ts";
 export * from "./sqlite_vec.ts";
 
-import { DatabaseAdapter, IDatabaseCacheAdapter } from "@okcashpro/eliza";
+import { DatabaseAdapter, IDatabaseCacheAdapter } from "@okcashpro/okai";
 import {
     Account,
     Actor,
@@ -11,7 +11,7 @@ import {
     type Memory,
     type Relationship,
     type UUID,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { Database } from "better-sqlite3";
 import { v4 } from "uuid";
 import { load } from "./sqlite_vec.ts";

@@ -1,7 +1,7 @@
-import { composeContext } from "@okcashpro/eliza";
-import { generateText } from "@okcashpro/eliza";
-import { getGoals } from "@okcashpro/eliza";
-import { parseJsonArrayFromText } from "@okcashpro/eliza";
+import { composeContext } from "@okcashpro/okai";
+import { generateText } from "@okcashpro/okai";
+import { getGoals } from "@okcashpro/okai";
+import { parseJsonArrayFromText } from "@okcashpro/okai";
 import {
     IAgentRuntime,
     Memory,
@@ -10,7 +10,7 @@ import {
     type Goal,
     type State,
     Evaluator,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 
 const goalsTemplate = `TASK: Update Goal
 Analyze the conversation and update the status of the goals based on the new information provided.

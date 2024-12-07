@@ -8,7 +8,7 @@ import {
     IAgentRuntime,
     Memory,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     Channel,
     ChannelType,

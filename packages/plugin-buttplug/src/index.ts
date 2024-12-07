@@ -7,8 +7,8 @@ import type {
     Memory,
     Plugin,
     State,
-} from "@okcashpro/eliza";
-import { Service, ServiceType } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { Service, ServiceType } from "@okcashpro/okai";
 import {
     isPortAvailable,
     startIntifaceEngine,

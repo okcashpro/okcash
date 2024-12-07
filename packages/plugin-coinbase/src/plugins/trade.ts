@@ -2,7 +2,7 @@ import { Coinbase} from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     HandlerCallback,
@@ -11,7 +11,7 @@ import {
     generateObjectV2,
     ModelClass,
     Provider,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { executeTradeAndCharityTransfer, getWalletDetails } from "../utils";
 import { tradeTemplate } from "../templates";
 import { isTradeContent, TradeContent, TradeSchema } from "../types";
@@ -39,11 +39,11 @@ export const tradeProvider: Provider = {
                     runtime.getSetting("COINBASE_PRIVATE_KEY") ??
                     process.env.COINBASE_PRIVATE_KEY,
             });
-            elizaLogger.log("Reading CSV file from:", tradeCsvFilePath);
+            okaiLogger.log("Reading CSV file from:", tradeCsvFilePath);
 
             // Check if the file exists; if not, create it with headers
             if (!fs.existsSync(tradeCsvFilePath)) {
-                elizaLogger.warn("CSV file not found. Creating a new one.");
+                okaiLogger.warn("CSV file not found. Creating a new one.");
                 const csvWriter = createArrayCsvWriter({
                     path: tradeCsvFilePath,
                     header: [
@@ -57,7 +57,7 @@ export const tradeProvider: Provider = {
                     ],
                 });
                 await csvWriter.writeRecords([]); // Create an empty file with headers
-                elizaLogger.log("New CSV file created with headers.");
+                okaiLogger.log("New CSV file created with headers.");
             }
 
             // Read and parse the CSV file
@@ -67,10 +67,10 @@ export const tradeProvider: Provider = {
                 skip_empty_lines: true,
             });
 
-            elizaLogger.log("Parsed CSV records:", records);
+            okaiLogger.log("Parsed CSV records:", records);
             const { balances, transactions } = await getWalletDetails(runtime);
-            elizaLogger.log("Current Balances:", balances);
-            elizaLogger.log("Last Transactions:", transactions);
+            okaiLogger.log("Current Balances:", balances);
+            okaiLogger.log("Last Transactions:", transactions);
             return {
                 currentTrades: records.map((record: any) => ({
                     network: record["Network"] || undefined,
@@ -85,7 +85,7 @@ export const tradeProvider: Provider = {
                 transactions,
             };
         } catch (error) {
-            elizaLogger.error("Error in tradeProvider:", error);
+            okaiLogger.error("Error in tradeProvider:", error);
             return [];
         }
     },
@@ -96,7 +96,7 @@ export const executeTradeAction: Action = {
     description:
         "Execute a trade between two assets using the Coinbase SDK and log the result.",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating runtime for EXECUTE_TRADE...");
+        okaiLogger.log("Validating runtime for EXECUTE_TRADE...");
         return (
             !!(
                 runtime.character.settings.secrets?.COINBASE_API_KEY ||
@@ -115,7 +115,7 @@ export const executeTradeAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Starting EXECUTE_TRADE handler...");
+        okaiLogger.log("Starting EXECUTE_TRADE handler...");
 
         try {
             Coinbase.configure({
@@ -186,7 +186,7 @@ export const executeTradeAction: Action = {
                 []
             );
         } catch (error) {
-            elizaLogger.error("Error during trade execution:", error);
+            okaiLogger.error("Error during trade execution:", error);
             callback(
                 {
                     text: "Failed to execute the trade. Please check the logs for more details.",

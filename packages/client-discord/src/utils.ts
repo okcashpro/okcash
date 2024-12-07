@@ -1,11 +1,11 @@
 import {
     IAgentRuntime,
     ModelClass,
-    elizaLogger,
+    okaiLogger,
     generateText,
     trimTokens,
     parseJSONObjectFromText,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import {
     ChannelType,
     Message as DiscordMessage,
@@ -120,7 +120,7 @@ export async function sendMessageInChunks(
             }
         }
     } catch (error) {
-        elizaLogger.error("Error sending message:", error);
+        okaiLogger.error("Error sending message:", error);
     }
 
     return sentMessages;

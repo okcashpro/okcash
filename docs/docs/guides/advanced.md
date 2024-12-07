@@ -384,7 +384,7 @@ class ResourceManager {
 ### Debugging
 
 ```typescript
-const debug = require("debug")("eliza:advanced");
+const debug = require("debug")("okai:advanced");
 
 debug("Detailed operation info: %O", {
   operation: "complexOperation",

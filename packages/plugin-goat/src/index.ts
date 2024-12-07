@@ -1,4 +1,4 @@
-import type { Plugin } from '@okcashpro/eliza'
+import type { Plugin } from '@okcashpro/okai'
 import { getOnChainActions } from './actions';
 import { erc20, USDC } from '@goat-sdk/plugin-erc20';
 import { chain, getWalletClient, walletProvider } from './provider';

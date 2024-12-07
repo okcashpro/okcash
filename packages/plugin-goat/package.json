@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@goat-sdk/core": "0.3.8",
         "@goat-sdk/plugin-erc20": "0.1.7",
         "@goat-sdk/wallet-viem": "0.1.3",

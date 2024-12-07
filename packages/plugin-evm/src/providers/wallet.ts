@@ -1,4 +1,4 @@
-import type { IAgentRuntime, Provider, Memory, State } from "@okcashpro/eliza";
+import type { IAgentRuntime, Provider, Memory, State } from "@okcashpro/okai";
 import {
     createPublicClient,
     createWalletClient,

@@ -2,14 +2,14 @@ import {
     type Action,
     ActionExample,
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
     State,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import { Percent } from "@uniswap/sdk-core";
 import {
     getStarknetAccount,
@@ -88,7 +88,7 @@ export const deployToken: Action = {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log(
+        okaiLogger.log(
             "Starting DEPLOY_STARKNET_UNRUGGABLE_MEME_TOKEN handler..."
         );
         if (!state) {
@@ -108,8 +108,8 @@ export const deployToken: Action = {
             modelClass: ModelClass.MEDIUM,
         });
 
-        elizaLogger.log("init supply." + response.initialSupply);
-        elizaLogger.log(response);
+        okaiLogger.log("init supply." + response.initialSupply);
+        okaiLogger.log(response);
 
         if (!isDeployTokenContent(response)) {
             callback?.({
@@ -152,7 +152,7 @@ export const deployToken: Action = {
                     amm: AMM.EKUBO,
                     teamAllocations: [
                         {
-                            address: ACCOUNTS.ELIZA,
+                            address: ACCOUNTS.OKAI,
                             amount: new Percent(
                                 2.5,
                                 response.initialSupply
@@ -179,7 +179,7 @@ export const deployToken: Action = {
                 }
             );
 
-            elizaLogger.log(
+            okaiLogger.log(
                 "Deployment has been initiated for coin: " +
                     response.name +
                     " at address: " +
@@ -197,7 +197,7 @@ export const deployToken: Action = {
 
             return true;
         } catch (error) {
-            elizaLogger.error("Error during token deployment:", error);
+            okaiLogger.error("Error during token deployment:", error);
             callback?.({
                 text: `Error during deployment: ${error.message}`,
                 content: { error: error.message },

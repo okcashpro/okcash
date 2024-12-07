@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@okcashpro/plugin-trustdb": "workspace:*",
         "@aptos-labs/ts-sdk": "^1.26.0",
         "bignumber": "1.1.0",

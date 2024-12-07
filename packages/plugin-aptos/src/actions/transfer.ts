@@ -1,4 +1,4 @@
-import { elizaLogger } from "@okcashpro/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 import {
     ActionExample,
     Content,
@@ -8,9 +8,9 @@ import {
     ModelClass,
     State,
     type Action,
-} from "@okcashpro/eliza";
-import { composeContext } from "@okcashpro/eliza";
-import { generateObject } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { composeContext } from "@okcashpro/okai";
+import { generateObject } from "@okcashpro/okai";
 import {
     Account,
     Aptos,
@@ -92,7 +92,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting SEND_TOKEN handler...");
+        okaiLogger.log("Starting SEND_TOKEN handler...");
 
         const walletInfo = await walletProvider.get(runtime, message, state);
         state.walletInfo = walletInfo;

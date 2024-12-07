@@ -18,8 +18,8 @@ import {
     TradePerformance,
     TokenRecommendation,
 } from "@okcashpro/plugin-trustdb";
-import { settings } from "@okcashpro/eliza";
-import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/eliza";
+import { settings } from "@okcashpro/okai";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import { v4 as uuidv4 } from "uuid";
 
 const Wallet = settings.MAIN_WALLET_ADDRESS;

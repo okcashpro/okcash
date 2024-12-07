@@ -4,8 +4,8 @@ import {
     IAgentRuntime,
     ModelClass,
     stringToUuid,
-    elizaLogger
-} from "@okcashpro/eliza";
+    okaiLogger
+} from "@okcashpro/okai";
 import { FarcasterClient } from "./client";
 import { formatTimeline, postTemplate } from "./prompts";
 import { castUuid } from "./utils";
@@ -27,7 +27,7 @@ export class FarcasterPostManager {
             try {
                 await this.generateNewCast();
             } catch (error) {
-                elizaLogger.error(error)
+                okaiLogger.error(error)
                 return;
             }
 
@@ -45,7 +45,7 @@ export class FarcasterPostManager {
     }
 
     private async generateNewCast() {
-        elizaLogger.info("Generating new cast");
+        okaiLogger.info("Generating new cast");
         try {
             const fid = Number(this.runtime.getSetting("FARCASTER_FID")!);
             // const farcasterUserName =
@@ -157,10 +157,10 @@ export class FarcasterPostManager {
                     })
                 );
             } catch (error) {
-                elizaLogger.error("Error sending cast:", error)
+                okaiLogger.error("Error sending cast:", error)
             }
         } catch (error) {
-            elizaLogger.error("Error generating new cast:", error)
+            okaiLogger.error("Error generating new cast:", error)
         }
     }
 }

@@ -5,7 +5,7 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/eliza": "workspace:*",
+        "@okcashpro/okai": "workspace:*",
         "@okcashpro/plugin-trustdb": "workspace:*",
         "@onflow/config": "1.5.1",
         "@onflow/fcl": "1.13.1",

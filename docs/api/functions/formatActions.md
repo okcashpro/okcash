@@ -20,4 +20,4 @@ A detailed string of actions, including names and descriptions.
 
 ## Defined in
 
-[packages/core/src/actions.ts:73](https://github.com/monilpat/eliza/blob/main/packages/core/src/actions.ts#L73)
+[packages/core/src/actions.ts:73](https://github.com/monilpat/okai/blob/main/packages/core/src/actions.ts#L73)

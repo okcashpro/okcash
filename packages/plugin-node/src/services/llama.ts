@@ -1,10 +1,10 @@
 import {
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     ServiceType,
     ModelProviderName,
-} from "@okcashpro/eliza";
-import { Service } from "@okcashpro/eliza";
+} from "@okcashpro/okai";
+import { Service } from "@okcashpro/okai";
 import fs from "fs";
 import https from "https";
 import {
@@ -193,24 +193,24 @@ export class LlamaService extends Service {
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {
-        elizaLogger.info("Initializing LlamaService...");
+        okaiLogger.info("Initializing LlamaService...");
         this.runtime = runtime;
     }
 
     private async ensureInitialized() {
         if (!this.modelInitialized) {
-            elizaLogger.info(
+            okaiLogger.info(
                 "Model not initialized, starting initialization..."
             );
             await this.initializeModel();
         } else {
-            elizaLogger.info("Model already initialized");
+            okaiLogger.info("Model already initialized");
         }
     }
 
     async initializeModel() {
         try {
-            elizaLogger.info("Checking model file...");
+            okaiLogger.info("Checking model file...");
             await this.checkModel();
 
             const systemInfo = await si.graphics();
@@ -219,52 +219,52 @@ export class LlamaService extends Service {
             );
 
             if (hasCUDA) {
-                elizaLogger.info(
+                okaiLogger.info(
                     "LlamaService: CUDA detected, using GPU acceleration"
                 );
             } else {
-                elizaLogger.warn(
+                okaiLogger.warn(
                     "LlamaService: No CUDA detected - local response will be slow"
                 );
             }
 
-            elizaLogger.info("Initializing Llama instance...");
+            okaiLogger.info("Initializing Llama instance...");
             this.llama = await getLlama({
                 gpu: hasCUDA ? "cuda" : undefined,
             });
 
-            elizaLogger.info("Creating JSON schema grammar...");
+            okaiLogger.info("Creating JSON schema grammar...");
             const grammar = new LlamaJsonSchemaGrammar(
                 this.llama,
                 jsonSchemaGrammar as GbnfJsonSchema
             );
             this.grammar = grammar;
 
-            elizaLogger.info("Loading model...");
+            okaiLogger.info("Loading model...");
             this.model = await this.llama.loadModel({
                 modelPath: this.modelPath,
             });
 
-            elizaLogger.info("Creating context and sequence...");
+            okaiLogger.info("Creating context and sequence...");
             this.ctx = await this.model.createContext({ contextSize: 8192 });
             this.sequence = this.ctx.getSequence();
 
             this.modelInitialized = true;
-            elizaLogger.success("Model initialization complete");
+            okaiLogger.success("Model initialization complete");
             this.processQueue();
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "Model initialization failed. Deleting model and retrying:",
                 error
             );
             try {
-                elizaLogger.info(
+                okaiLogger.info(
                     "Attempting to delete and re-download model..."
                 );
                 await this.deleteModel();
                 await this.initializeModel();
             } catch (retryError) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "Model re-initialization failed:",
                     retryError
                 );
@@ -277,7 +277,7 @@ export class LlamaService extends Service {
 
     async checkModel() {
         if (!fs.existsSync(this.modelPath)) {
-            elizaLogger.info("Model file not found, starting download...");
+            okaiLogger.info("Model file not found, starting download...");
             await new Promise<void>((resolve, reject) => {
                 const file = fs.createWriteStream(this.modelPath);
                 let downloadedSize = 0;
@@ -291,7 +291,7 @@ export class LlamaService extends Service {
                                 response.statusCode < 400 &&
                                 response.headers.location
                             ) {
-                                elizaLogger.info(
+                                okaiLogger.info(
                                     `Following redirect to: ${response.headers.location}`
                                 );
                                 downloadModel(response.headers.location);
@@ -311,13 +311,13 @@ export class LlamaService extends Service {
                                 response.headers["content-length"] || "0",
                                 10
                             );
-                            elizaLogger.info(
+                            okaiLogger.info(
                                 `Downloading model: Hermes-3-Llama-3.1-8B.Q8_0.gguf`
                             );
-                            elizaLogger.info(
+                            okaiLogger.info(
                                 `Download location: ${this.modelPath}`
                             );
-                            elizaLogger.info(
+                            okaiLogger.info(
                                 `Total size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`
                             );
 
@@ -337,13 +337,13 @@ export class LlamaService extends Service {
                                     Math.floor(Number(progress) / 5)
                                 );
                                 progressString = `Downloading model: [${dots.padEnd(20, " ")}] ${progress}%`;
-                                elizaLogger.progress(progressString);
+                                okaiLogger.progress(progressString);
                             });
 
                             file.on("finish", () => {
                                 file.close();
-                                elizaLogger.progress(""); // Clear the progress line
-                                elizaLogger.success("Model download complete");
+                                okaiLogger.progress(""); // Clear the progress line
+                                okaiLogger.success("Model download complete");
                                 resolve();
                             });
 
@@ -375,7 +375,7 @@ export class LlamaService extends Service {
                 });
             });
         } else {
-            elizaLogger.warn("Model already exists.");
+            okaiLogger.warn("Model already exists.");
         }
     }
 
@@ -480,7 +480,7 @@ export class LlamaService extends Service {
 
             return await this.localCompletion(prompt);
         } catch (error) {
-            elizaLogger.error("Error in completion:", error);
+            okaiLogger.error("Error in completion:", error);
             throw error;
         }
     }
@@ -495,7 +495,7 @@ export class LlamaService extends Service {
 
             return await this.localEmbedding(text);
         } catch (error) {
-            elizaLogger.error("Error in embedding:", error);
+            okaiLogger.error("Error in embedding:", error);
             throw error;
         }
     }
@@ -513,7 +513,7 @@ export class LlamaService extends Service {
         if (ollamaModel) {
             const ollamaUrl =
                 process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
-            elizaLogger.info(
+            okaiLogger.info(
                 `Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`
             );
 
@@ -573,7 +573,7 @@ export class LlamaService extends Service {
         })) {
             const current = this.model.detokenize([...responseTokens, token]);
             if ([...stop].some((s) => current.includes(s))) {
-                elizaLogger.info("Stop sequence found");
+                okaiLogger.info("Stop sequence found");
                 break;
             }
 
@@ -581,12 +581,12 @@ export class LlamaService extends Service {
             process.stdout.write(this.model!.detokenize([token]));
             if (useGrammar) {
                 if (current.replaceAll("\n", "").includes("}```")) {
-                    elizaLogger.info("JSON block found");
+                    okaiLogger.info("JSON block found");
                     break;
                 }
             }
             if (responseTokens.length > max_tokens) {
-                elizaLogger.info("Max tokens reached");
+                okaiLogger.info("Max tokens reached");
                 break;
             }
         }
@@ -616,7 +616,7 @@ export class LlamaService extends Service {
                 await this.sequence.clearHistory();
                 return parsedResponse;
             } catch (error) {
-                elizaLogger.error("Error parsing JSON:", error);
+                okaiLogger.error("Error parsing JSON:", error);
             }
         } else {
             await this.sequence.clearHistory();
@@ -631,7 +631,7 @@ export class LlamaService extends Service {
                 process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
             const embeddingModel =
                 process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
-            elizaLogger.info(
+            okaiLogger.info(
                 `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
             );
 
@@ -663,7 +663,7 @@ export class LlamaService extends Service {
             process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
         const embeddingModel =
             process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
-        elizaLogger.info(
+        okaiLogger.info(
             `Using Ollama API for embeddings with model ${embeddingModel} (base: ${this.ollamaModel})`
         );
 
@@ -690,7 +690,7 @@ export class LlamaService extends Service {
         const ollamaModel = process.env.OLLAMA_MODEL;
         const ollamaUrl =
             process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
-        elizaLogger.info(
+        okaiLogger.info(
             `Using Ollama API at ${ollamaUrl} with model ${ollamaModel}`
         );
 
@@ -725,7 +725,7 @@ export class LlamaService extends Service {
             process.env.OLLAMA_SERVER_URL || "http://localhost:11434";
         const embeddingModel =
             process.env.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large";
-        elizaLogger.info(
+        okaiLogger.info(
             `Using Ollama API for embeddings with model ${embeddingModel} (base: ${ollamaModel})`
         );
 
@@ -776,14 +776,14 @@ export class LlamaService extends Service {
         })) {
             const current = this.model.detokenize([...responseTokens, token]);
             if (current.includes("\n")) {
-                elizaLogger.info("Stop sequence found");
+                okaiLogger.info("Stop sequence found");
                 break;
             }
 
             responseTokens.push(token);
             process.stdout.write(this.model!.detokenize([token]));
             if (responseTokens.length > 256) {
-                elizaLogger.info("Max tokens reached");
+                okaiLogger.info("Max tokens reached");
                 break;
             }
         }

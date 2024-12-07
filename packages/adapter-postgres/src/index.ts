@@ -20,10 +20,10 @@ import {
     type UUID,
     type IDatabaseCacheAdapter,
     Participant,
-    elizaLogger,
+    okaiLogger,
     getEmbeddingConfig,
     DatabaseAdapter,
-} from "@okcashpro/eliza";
+} from "@okcashpro/okai";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -62,7 +62,7 @@ export class PostgresDatabaseAdapter
         });
 
         this.pool.on("error", (err) => {
-            elizaLogger.error("Unexpected pool error", err);
+            okaiLogger.error("Unexpected pool error", err);
             this.handlePoolError(err);
         });
 
@@ -115,7 +115,7 @@ export class PostgresDatabaseAdapter
                     const jitter = Math.random() * this.jitterMax;
                     const delay = backoffDelay + jitter;
 
-                    elizaLogger.warn(
+                    okaiLogger.warn(
                         `Database operation failed (attempt ${attempt}/${this.maxRetries}):`,
                         {
                             error:
@@ -128,7 +128,7 @@ export class PostgresDatabaseAdapter
 
                     await new Promise((resolve) => setTimeout(resolve, delay));
                 } else {
-                    elizaLogger.error("Max retry attempts reached:", {
+                    okaiLogger.error("Max retry attempts reached:", {
                         error:
                             error instanceof Error
                                 ? error.message
@@ -146,7 +146,7 @@ export class PostgresDatabaseAdapter
     }
 
     private async handlePoolError(error: Error) {
-        elizaLogger.error("Pool error occurred, attempting to reconnect", {
+        okaiLogger.error("Pool error occurred, attempting to reconnect", {
             error: error.message,
         });
 
@@ -161,9 +161,9 @@ export class PostgresDatabaseAdapter
             });
 
             await this.testConnection();
-            elizaLogger.success("Pool reconnection successful");
+            okaiLogger.success("Pool reconnection successful");
         } catch (reconnectError) {
-            elizaLogger.error("Failed to reconnect pool", {
+            okaiLogger.error("Failed to reconnect pool", {
                 error:
                     reconnectError instanceof Error
                         ? reconnectError.message
@@ -223,13 +223,13 @@ export class PostgresDatabaseAdapter
         try {
             client = await this.pool.connect();
             const result = await client.query("SELECT NOW()");
-            elizaLogger.success(
+            okaiLogger.success(
                 "Database connection test successful:",
                 result.rows[0]
             );
             return true;
         } catch (error) {
-            elizaLogger.error("Database connection test failed:", error);
+            okaiLogger.error("Database connection test failed:", error);
             throw new Error(
                 `Failed to connect to database: ${(error as Error).message}`
             );
@@ -241,9 +241,9 @@ export class PostgresDatabaseAdapter
     async cleanup(): Promise<void> {
         try {
             await this.pool.end();
-            elizaLogger.info("Database pool closed");
+            okaiLogger.info("Database pool closed");
         } catch (error) {
-            elizaLogger.error("Error closing database pool:", error);
+            okaiLogger.error("Error closing database pool:", error);
         }
     }
 
@@ -342,12 +342,12 @@ export class PostgresDatabaseAdapter
                 [userId]
             );
             if (rows.length === 0) {
-                elizaLogger.debug("Account not found:", { userId });
+                okaiLogger.debug("Account not found:", { userId });
                 return null;
             }
 
             const account = rows[0];
-            // elizaLogger.debug("Account retrieved:", {
+            // okaiLogger.debug("Account retrieved:", {
             //     userId,
             //     hasDetails: !!account.details,
             // });
@@ -378,12 +378,12 @@ export class PostgresDatabaseAdapter
                         JSON.stringify(account.details),
                     ]
                 );
-                elizaLogger.debug("Account created successfully:", {
+                okaiLogger.debug("Account created successfully:", {
                     accountId,
                 });
                 return true;
             } catch (error) {
-                elizaLogger.error("Error creating account:", {
+                okaiLogger.error("Error creating account:", {
                     error:
                         error instanceof Error ? error.message : String(error),
                     accountId: account.id,
@@ -404,7 +404,7 @@ export class PostgresDatabaseAdapter
                 [params.roomId]
             );
 
-            elizaLogger.debug("Retrieved actors:", {
+            okaiLogger.debug("Retrieved actors:", {
                 roomId: params.roomId,
                 actorCount: rows.length,
             });
@@ -419,7 +419,7 @@ export class PostgresDatabaseAdapter
                                 : row.details,
                     };
                 } catch (error) {
-                    elizaLogger.warn("Failed to parse actor details:", {
+                    okaiLogger.warn("Failed to parse actor details:", {
                         actorId: row.id,
                         error:
                             error instanceof Error
@@ -433,7 +433,7 @@ export class PostgresDatabaseAdapter
                 }
             });
         }, "getActorById").catch((error) => {
-            elizaLogger.error("Failed to get actors:", {
+            okaiLogger.error("Failed to get actors:", {
                 roomId: params.roomId,
                 error: error.message,
             });
@@ -461,7 +461,7 @@ export class PostgresDatabaseAdapter
 
     async createMemory(memory: Memory, tableName: string): Promise<void> {
         return this.withDatabase(async () => {
-            elizaLogger.debug("PostgresAdapter createMemory:", {
+            okaiLogger.debug("PostgresAdapter createMemory:", {
                 memoryId: memory.id,
                 embeddingLength: memory.embedding?.length,
                 contentLength: memory.content?.text?.length,
@@ -571,7 +571,7 @@ export class PostgresDatabaseAdapter
                 values.push(params.count);
             }
 
-            elizaLogger.debug("Fetching memories:", {
+            okaiLogger.debug("Fetching memories:", {
                 roomId: params.roomId,
                 tableName: params.tableName,
                 unique: params.unique,
@@ -652,7 +652,7 @@ export class PostgresDatabaseAdapter
                     ]
                 );
             } catch (error) {
-                elizaLogger.error("Failed to update goal:", {
+                okaiLogger.error("Failed to update goal:", {
                     goalId: goal.id,
                     error:
                         error instanceof Error ? error.message : String(error),
@@ -690,12 +690,12 @@ export class PostgresDatabaseAdapter
                     [goalId]
                 );
 
-                elizaLogger.debug("Goal removal attempt:", {
+                okaiLogger.debug("Goal removal attempt:", {
                     goalId,
                     removed: result?.rowCount ?? 0 > 0,
                 });
             } catch (error) {
-                elizaLogger.error("Failed to remove goal:", {
+                okaiLogger.error("Failed to remove goal:", {
                     goalId,
                     error:
                         error instanceof Error ? error.message : String(error),
@@ -730,7 +730,7 @@ export class PostgresDatabaseAdapter
                 );
 
                 if (checkResult.rowCount === 0) {
-                    elizaLogger.warn("No room found to remove:", { roomId });
+                    okaiLogger.warn("No room found to remove:", { roomId });
                     throw new Error(`Room not found: ${roomId}`);
                 }
 
@@ -754,7 +754,7 @@ export class PostgresDatabaseAdapter
 
                 await client.query("COMMIT");
 
-                elizaLogger.debug(
+                okaiLogger.debug(
                     "Room and related data removed successfully:",
                     {
                         roomId,
@@ -763,7 +763,7 @@ export class PostgresDatabaseAdapter
                 );
             } catch (error) {
                 await client.query("ROLLBACK");
-                elizaLogger.error("Failed to remove room:", {
+                okaiLogger.error("Failed to remove room:", {
                     roomId,
                     error:
                         error instanceof Error ? error.message : String(error),
@@ -794,7 +794,7 @@ export class PostgresDatabaseAdapter
                     [relationshipId, params.userA, params.userB, params.userA]
                 );
 
-                elizaLogger.debug("Relationship created successfully:", {
+                okaiLogger.debug("Relationship created successfully:", {
                     relationshipId,
                     userA: params.userA,
                     userB: params.userB,
@@ -805,7 +805,7 @@ export class PostgresDatabaseAdapter
                 // Check for unique constraint violation or other specific errors
                 if ((error as { code?: string }).code === "23505") {
                     // Unique violation
-                    elizaLogger.warn("Relationship already exists:", {
+                    okaiLogger.warn("Relationship already exists:", {
                         userA: params.userA,
                         userB: params.userB,
                         error:
@@ -814,7 +814,7 @@ export class PostgresDatabaseAdapter
                                 : String(error),
                     });
                 } else {
-                    elizaLogger.error("Failed to create relationship:", {
+                    okaiLogger.error("Failed to create relationship:", {
                         userA: params.userA,
                         userB: params.userB,
                         error:
@@ -846,7 +846,7 @@ export class PostgresDatabaseAdapter
                 );
 
                 if (rows.length > 0) {
-                    elizaLogger.debug("Relationship found:", {
+                    okaiLogger.debug("Relationship found:", {
                         relationshipId: rows[0].id,
                         userA: params.userA,
                         userB: params.userB,
@@ -854,13 +854,13 @@ export class PostgresDatabaseAdapter
                     return rows[0];
                 }
 
-                elizaLogger.debug("No relationship found between users:", {
+                okaiLogger.debug("No relationship found between users:", {
                     userA: params.userA,
                     userB: params.userB,
                 });
                 return null;
             } catch (error) {
-                elizaLogger.error("Error fetching relationship:", {
+                okaiLogger.error("Error fetching relationship:", {
                     userA: params.userA,
                     userB: params.userB,
                     error:
@@ -885,14 +885,14 @@ export class PostgresDatabaseAdapter
                     [params.userId]
                 );
 
-                elizaLogger.debug("Retrieved relationships:", {
+                okaiLogger.debug("Retrieved relationships:", {
                     userId: params.userId,
                     count: rows.length,
                 });
 
                 return rows;
             } catch (error) {
-                elizaLogger.error("Failed to fetch relationships:", {
+                okaiLogger.error("Failed to fetch relationships:", {
                     userId: params.userId,
                     error:
                         error instanceof Error ? error.message : String(error),
@@ -923,7 +923,7 @@ export class PostgresDatabaseAdapter
 
         return this.withDatabase(async () => {
             try {
-                elizaLogger.debug("Fetching cached embeddings:", {
+                okaiLogger.debug("Fetching cached embeddings:", {
                     tableName: opts.query_table_name,
                     fieldName: opts.query_field_name,
                     subFieldName: opts.query_field_sub_name,
@@ -967,7 +967,7 @@ export class PostgresDatabaseAdapter
                     opts.query_threshold,
                 ]);
 
-                elizaLogger.debug("Retrieved cached embeddings:", {
+                okaiLogger.debug("Retrieved cached embeddings:", {
                     count: rows.length,
                     tableName: opts.query_table_name,
                     matchCount: opts.query_match_count,
@@ -999,7 +999,7 @@ export class PostgresDatabaseAdapter
                         } => row !== null
                     );
             } catch (error) {
-                elizaLogger.error("Error in getCachedEmbeddings:", {
+                okaiLogger.error("Error in getCachedEmbeddings:", {
                     error:
                         error instanceof Error ? error.message : String(error),
                     tableName: opts.query_table_name,
@@ -1046,7 +1046,7 @@ export class PostgresDatabaseAdapter
                     ]
                 );
 
-                elizaLogger.debug("Log entry created:", {
+                okaiLogger.debug("Log entry created:", {
                     logId,
                     type: params.type,
                     roomId: params.roomId,
@@ -1054,7 +1054,7 @@ export class PostgresDatabaseAdapter
                     bodyKeys: Object.keys(params.body),
                 });
             } catch (error) {
-                elizaLogger.error("Failed to create log entry:", {
+                okaiLogger.error("Failed to create log entry:", {
                     error:
                         error instanceof Error ? error.message : String(error),
                     type: params.type,
@@ -1078,7 +1078,7 @@ export class PostgresDatabaseAdapter
         }
     ): Promise<Memory[]> {
         return this.withDatabase(async () => {
-            elizaLogger.debug("Incoming vector:", {
+            okaiLogger.debug("Incoming vector:", {
                 length: embedding.length,
                 sample: embedding.slice(0, 5),
                 isArray: Array.isArray(embedding),
@@ -1102,7 +1102,7 @@ export class PostgresDatabaseAdapter
             // Format for Postgres pgvector
             const vectorStr = `[${cleanVector.join(",")}]`;
 
-            elizaLogger.debug("Vector debug:", {
+            okaiLogger.debug("Vector debug:", {
                 originalLength: embedding.length,
                 cleanLength: cleanVector.length,
                 sampleStr: vectorStr.slice(0, 100),
@@ -1118,7 +1118,7 @@ export class PostgresDatabaseAdapter
             const values: any[] = [vectorStr, params.tableName];
 
             // Log the query for debugging
-            elizaLogger.debug("Query debug:", {
+            okaiLogger.debug("Query debug:", {
                 sql: sql.slice(0, 200),
                 paramTypes: values.map((v) => typeof v),
                 vectorStrLength: vectorStr.length,
@@ -1300,7 +1300,7 @@ export class PostgresDatabaseAdapter
                     params.roomId,
                 ]);
 
-                elizaLogger.debug("Retrieved actor details:", {
+                okaiLogger.debug("Retrieved actor details:", {
                     roomId: params.roomId,
                     actorCount: result.rows.length,
                 });
@@ -1315,7 +1315,7 @@ export class PostgresDatabaseAdapter
                                     : row.details,
                         };
                     } catch (parseError) {
-                        elizaLogger.warn("Failed to parse actor details:", {
+                        okaiLogger.warn("Failed to parse actor details:", {
                             actorId: row.id,
                             error:
                                 parseError instanceof Error
@@ -1329,7 +1329,7 @@ export class PostgresDatabaseAdapter
                     }
                 });
             } catch (error) {
-                elizaLogger.error("Failed to fetch actor details:", {
+                okaiLogger.error("Failed to fetch actor details:", {
                     roomId: params.roomId,
                     error:
                         error instanceof Error ? error.message : String(error),
@@ -1354,7 +1354,7 @@ export class PostgresDatabaseAdapter
                 ]);
                 return rows[0]?.value ?? undefined;
             } catch (error) {
-                elizaLogger.error("Error fetching cache", {
+                okaiLogger.error("Error fetching cache", {
                     error:
                         error instanceof Error ? error.message : String(error),
                     key: params.key,
@@ -1386,7 +1386,7 @@ export class PostgresDatabaseAdapter
                     return true;
                 } catch (error) {
                     await client.query("ROLLBACK");
-                    elizaLogger.error("Error setting cache", {
+                    okaiLogger.error("Error setting cache", {
                         error:
                             error instanceof Error
                                 ? error.message
@@ -1399,7 +1399,7 @@ export class PostgresDatabaseAdapter
                     if (client) client.release();
                 }
             } catch (error) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "Database connection error in setCache",
                     error
                 );
@@ -1425,7 +1425,7 @@ export class PostgresDatabaseAdapter
                     return true;
                 } catch (error) {
                     await client.query("ROLLBACK");
-                    elizaLogger.error("Error deleting cache", {
+                    okaiLogger.error("Error deleting cache", {
                         error:
                             error instanceof Error
                                 ? error.message
@@ -1438,7 +1438,7 @@ export class PostgresDatabaseAdapter
                     client.release();
                 }
             } catch (error) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "Database connection error in deleteCache",
                     error
                 );
