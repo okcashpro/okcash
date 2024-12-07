@@ -108,6 +108,38 @@ Here are the recent user messages for context:
 {{recentMessages}}
 `;
 
+export const advancedTradeTemplate = `
+Extract the following details for processing an advanced trade using the Coinbase Advanced Trading API:
+- **productId** (string): The trading pair ID (e.g., "BTC-USD", "ETH-USD", "SOL-USD")
+- **side** (string): The side of the trade (must be either "BUY" or "SELL")
+- **amount** (number): The amount to trade
+- **orderType** (string): The type of order (must be either "MARKET" or "LIMIT")
+- **limitPrice** (number, optional): The limit price for limit orders
+
+Ensure that:
+1. **productId** follows the format "ASSET-USD" (e.g., "BTC-USD")
+2. **side** is either "BUY" or "SELL"
+3. **amount** is a positive number
+4. **orderType** is either "MARKET" or "LIMIT"
+5. **limitPrice** is provided when orderType is "LIMIT"
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "productId": "<product_id>",
+    "side": "<side>",
+    "amount": <amount>,
+    "orderType": "<order_type>",
+    "limitPrice": <limit_price>
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
+
+
 export const tokenContractTemplate = `
 Extract the following details for deploying a token contract using the Coinbase SDK:
 - **contractType** (string): The type of token contract to deploy (ERC20, ERC721, or ERC1155)
