@@ -341,11 +341,11 @@ export const models: Models = {
             repetition_penalty: 0.4,
             temperature: 0.7,
         },
-        endpoint: settings.GAIANET_SERVER_URL || "http://localhost:8080/v1",
+        endpoint: settings.GAIANET_SERVER_URL,
         model: {
-            [ModelClass.SMALL]: settings.GAIANET_MODEL || "llama3.2",
-            [ModelClass.MEDIUM]: settings.GAIANET_MODEL || "llama3.2",
-            [ModelClass.LARGE]: settings.GAIANET_MODEL || "llama3.2",
+            [ModelClass.SMALL]: settings.GAIANET_MODEL || "llama3b",
+            [ModelClass.MEDIUM]: settings.GAIANET_MODEL || "llama",
+            [ModelClass.LARGE]: settings.GAIANET_MODEL || "qwen72b",
             [ModelClass.EMBEDDING]:
                 settings.GAIANET_EMBEDDING_MODEL || "nomic-embed",
         },
