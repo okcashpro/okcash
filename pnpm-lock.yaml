@@ -3751,6 +3751,12 @@ packages:
   '@ethersproject/strings@5.7.0':
     resolution: {integrity: sha512-/9nu+lj0YswRNSH0NXYqrh8775XNyEdUQAuf3f+SmOrnVewcJ5SBNAjF7lpgehKi4abvNNXyf+HX86czCdJ8Mg==}
 
+  '@ethersproject/transactions@5.7.0':
+    resolution: {integrity: sha512-kmcNicCp1lp8qanMTC3RIikGgoJ80ztTyvtsFvCYpSCfkjhD0jZ2LOrnbcuxuToLIUYYf+4XwD1rP+B/erDIhQ==}
+
+  '@ethersproject/web@5.7.1':
+    resolution: {integrity: sha512-Gueu8lSvyjBWL4cYsWsjh6MtMwM0+H4HvqFPZfB6dV8ctbP9zFAO73VG1cMWae0FLPCtz0peKPpZY8/ugJJX2w==}
+
   '@fal-ai/client@1.2.0':
     resolution: {integrity: sha512-MNCnE5icY+OM5ahgYJItmydZ7AxhtzhgA5tQI13jVntzhLT0z+tetHIlAL1VA0XFZgldDzqxeTf9Pr5TW3VErg==}
     engines: {node: '>=18.0.0'}
@@ -4116,6 +4122,12 @@ packages:
 
   '@lifi/types@16.3.0':
     resolution: {integrity: sha512-rYMdXRdNOyJb5tI5CXfqxU4k62GiJrElx0DEZ8ZRFYFtljg69X6hrMKER1wVWkRpcB67Ca8SKebLnufy7qCaTw==}
+
+  '@lit-labs/ssr-dom-shim@1.2.1':
+    resolution: {integrity: sha512-wx4aBmgeGvFmOKucFKY+8VFJSYZxs9poN3SDNQFF6lT6NrQUnHiPB2PWz2sc4ieEcAaYYzN+1uWahEeTq2aRIQ==}
+
+  '@lit/reactive-element@1.6.3':
+    resolution: {integrity: sha512-QuTgnG52Poic7uM1AN5yJ09QMe0O28e10XzSvWDz02TJiiKee4stsiownEIadWm8nYzyDAyT+gKzUoZmiWQtsQ==}
 
   '@lukeed/csprng@1.1.0':
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
@@ -4679,6 +4691,67 @@ packages:
   '@octokit/webhooks@13.4.1':
     resolution: {integrity: sha512-I5YPUtfWidh+OzyrlDahJsUpkpGK0kCTmDRbuqGmlCUzOtxdEkX3R4d6Cd08ijQYwkVXQJanPdbKuZBeV2NMaA==}
     engines: {node: '>= 18'}
+
+  '@onflow/config@1.5.1':
+    resolution: {integrity: sha512-BmD67EhZEqMRePa3y/WIpC5hH/YF9gV9uv5bPSN39P3laYxd93Ojhdf6v0fXkjO/d3WaHylLPoXYgpW/g5seWA==}
+
+  '@onflow/fcl-core@1.13.1':
+    resolution: {integrity: sha512-kXej2sLWjY2MVY42omIKiZz0v13V2MTwZV1dwf4xERqgFX0WvsG5ZGyVY0y4kp8mNiUXe7pZmtRhynu2TJGnJw==}
+
+  '@onflow/fcl-wc@5.5.1':
+    resolution: {integrity: sha512-c83yjATlOTBjGzGlSXUiBJR576L8/oGiiL7b3ymi5jbl47RhubPPiH4Ix+DoJqyDuRtpk5Lim2vodawmH/aiWQ==}
+    peerDependencies:
+      '@onflow/fcl-core': 1.13.1
+
+  '@onflow/fcl@1.13.1':
+    resolution: {integrity: sha512-96Fe2SsnUqPSIaSxsaL7Fuz3wQUxPfV5eexz0JufWhyQ6NvwDu9bvD/ntNk1ACJkIANlEIzP+sq4Nfz93uINfw==}
+
+  '@onflow/interaction@0.0.11':
+    resolution: {integrity: sha512-Xuq1Mmx6Wyba/F/L+QLQs0yJeQDsIDwy5SKk5vrCuVgIj0yD8k506g5L8ODrbM1LWll8i0tQsoOi0F85vNl5sA==}
+
+  '@onflow/rlp@1.2.3':
+    resolution: {integrity: sha512-Mm1jSzDhdTofMGhg3NtUD8uKntj7u1dSMr+Q4VwOw2YQhwGTGJrzsHc7qgkJxwDnjU0Ra8VQfqd54bZzX0R2aQ==}
+
+  '@onflow/sdk@1.5.5':
+    resolution: {integrity: sha512-79h56lYB/4vi1Tn+QrICUpQZ0Jh8O5d8I0IC/3adAf2zU8xfxvkypw7Tfx58Zr03vip+0h83Ri3DwyZpqIM2sw==}
+
+  '@onflow/transport-http@1.10.4':
+    resolution: {integrity: sha512-yZNqNEISnCaP7bsB+pwBjHT7+AYjADxUQpj8SccrTWnWlM6LEDIcNVCr8eBzrANug3o2Y1LuqSOhMiWYtbXs7w==}
+
+  '@onflow/typedefs@1.4.0':
+    resolution: {integrity: sha512-7b4C3F4Ztayx6XdQz/7YoHMzZ6kzy37dLxdVCV/PAsAunq9Jfu32HQaf8a0NCk0L0aM7FS2zT1Om4k7b5KP4Xg==}
+
+  '@onflow/types@1.4.1':
+    resolution: {integrity: sha512-oKKaNTPfb9OJos4C6RoK3sql9Bx8mi+8ytTc7wLJbjv+n6YUov2zRGkGsPzj2QxL2Xf48CLYtPNn7cBNr3v39w==}
+
+  '@onflow/util-actor@1.3.4':
+    resolution: {integrity: sha512-BQeFdy0obs2x+XTEkss7MjuasS7gCfIStwGsgpH0aG3siBu+IsMYPiDdrHOeYS2Jn/pSFXF5R85NYrnMvlDhlA==}
+
+  '@onflow/util-address@1.2.3':
+    resolution: {integrity: sha512-5u1pLQT6MmTlRQLv8zVJP/iOkgytvpzK+32nXcJ29XE0y7YI6GLrFfgKGBIRsiqiSLp7SU6XI5RukEJEblmwOw==}
+
+  '@onflow/util-invariant@1.2.4':
+    resolution: {integrity: sha512-U4D30lrAxSgqTPQsIvC3gPDoXVxuhLS9TZk4WxEvNfcQrI6VYKvWRe4m/5mUrc4kpE+ntXZmnbs+DUM7oLlkcg==}
+
+  '@onflow/util-logger@1.3.3':
+    resolution: {integrity: sha512-eivdbF7cKNjTL2nuvI3pjDavDDfTXRq4pJtJpkI8hJMz0XJb84o7D5CLPcDRId//1Kc/qoqM/driHz5A4J52Qw==}
+    peerDependencies:
+      '@onflow/util-config': '>1.1.1'
+    peerDependenciesMeta:
+      '@onflow/util-config':
+        optional: true
+
+  '@onflow/util-rpc@0.0.2':
+    resolution: {integrity: sha512-UFYT99rdHEFOpfG5A/lFJFQBw4Q0b7MKN7lWTwYf/AU+bVm5zgNJ/V4Z9CXOSnA55ztLauYdk+eWldbhC9pqiw==}
+
+  '@onflow/util-semver@1.0.3':
+    resolution: {integrity: sha512-c604ewWCXUT1WpqeOiblNi3YWOQTGx3UgRWNXbRTD9K17Fh2DaXBTHYVu7FSreGwPGarU0T3iTBWkuuWJXSGwA==}
+
+  '@onflow/util-template@1.2.3':
+    resolution: {integrity: sha512-yNF7mI5L1y6yJHL+HxmTgIdd/oF1HD/kzjzZgjOyAvk+mLXzML+sWkqRSoIYcETbQ0w6cdNg3xvzZgTLuLIK3A==}
+
+  '@onflow/util-uid@1.2.3':
+    resolution: {integrity: sha512-gCTVvBBgDcZFX6SGyHPwoPVbK4e9sp0DC1kaQ0cgAt83YgodqiBiJLlwMBYNKuL03zSI6Ic5/TJVMVsruG7l9w==}
 
   '@openapitools/openapi-generator-cli@2.15.3':
     resolution: {integrity: sha512-2UBnsDlMt36thhdXxisbA1qReVtbCaw+NCvXoslRXlaJBL4qkAmZUhNeDLNu3LCbwA2PASMWhJSqeLwgwMCitw==}
@@ -9445,6 +9518,10 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
+  fast-redact@3.5.0:
+    resolution: {integrity: sha512-dwsoQlS7h9hMeYUq1W++23NDcBLV4KqONnITDV9DjfS3q1SgDGVrBdvvTLUotWtPSD7asWDV9/CmsZPy8Hf70A==}
+    engines: {node: '>=6'}
+
   fast-safe-stringify@2.1.1:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
 
@@ -13779,6 +13856,9 @@ packages:
   proxy-agent@6.4.0:
     resolution: {integrity: sha512-u0piLU+nCOHMgGjRbimiXmA9kM/L9EHh3zL81xCdp7m+Y2pHIsnmbdDoEDoAz5geaonNR6q6+yOPQs6n4T6sBQ==}
     engines: {node: '>= 14'}
+
+  proxy-compare@2.5.1:
+    resolution: {integrity: sha512-oyfc0Tx87Cpwva5ZXezSp5V9vht1c7dZBhvuV/y3ctkgMVUmiAGDVeeB0dKhGSyT0v1ZTEQYpe/RXlBVBNuCLA==}
 
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
@@ -20111,6 +20191,26 @@ snapshots:
       '@ethersproject/constants': 5.7.0
       '@ethersproject/logger': 5.7.0
 
+  '@ethersproject/transactions@5.7.0':
+    dependencies:
+      '@ethersproject/address': 5.7.0
+      '@ethersproject/bignumber': 5.7.0
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/constants': 5.7.0
+      '@ethersproject/keccak256': 5.7.0
+      '@ethersproject/logger': 5.7.0
+      '@ethersproject/properties': 5.7.0
+      '@ethersproject/rlp': 5.7.0
+      '@ethersproject/signing-key': 5.7.0
+
+  '@ethersproject/web@5.7.1':
+    dependencies:
+      '@ethersproject/base64': 5.7.0
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
+      '@ethersproject/properties': 5.7.0
+      '@ethersproject/strings': 5.7.0
+
   '@fal-ai/client@1.2.0':
     dependencies:
       '@msgpack/msgpack': 3.0.0-beta2
@@ -20660,6 +20760,12 @@ snapshots:
       - typescript
 
   '@lifi/types@16.3.0': {}
+
+  '@lit-labs/ssr-dom-shim@1.2.1': {}
+
+  '@lit/reactive-element@1.6.3':
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.2.1
 
   '@lukeed/csprng@1.1.0': {}
 
@@ -21605,6 +21711,7 @@ snapshots:
   '@onflow/util-uid@1.2.3':
     dependencies:
       '@babel/runtime': 7.26.0
+
   '@openapitools/openapi-generator-cli@2.15.3(class-transformer@0.5.1)(encoding@0.1.13)':
     dependencies:
       '@nestjs/axios': 3.1.1(@nestjs/common@10.4.6(class-transformer@0.5.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))(axios@1.7.7)(rxjs@7.8.1)
@@ -27568,6 +27675,8 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
+  fast-redact@3.5.0: {}
+
   fast-safe-stringify@2.1.1: {}
 
   fast-stable-stringify@1.0.0: {}
@@ -33029,6 +33138,8 @@ snapshots:
       socks-proxy-agent: 8.0.4
     transitivePeerDependencies:
       - supports-color
+
+  proxy-compare@2.5.1: {}
 
   proxy-from-env@1.1.0: {}
 
