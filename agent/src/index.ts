@@ -25,7 +25,7 @@ import {
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { zgPlugin } from "@ai16z/plugin-0g";
-import { goatPlugin } from "@ai16z/plugin-goat";
+import createGoatPlugin from "@ai16z/plugin-goat";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 // import { buttplugPlugin } from "@ai16z/plugin-buttplug";
 import {
@@ -359,7 +359,7 @@ function getSecret(character: Character, secret: string) {
 
 let nodePlugin: any | undefined;
 
-export function createAgent(
+export async function createAgent(
     character: Character,
     db: IDatabaseAdapter,
     cache: ICacheManager,
@@ -378,9 +378,15 @@ export function createAgent(
 
     // Validate TEE configuration
     if (teeMode !== TEEMode.OFF && !walletSecretSalt) {
-        elizaLogger.error("WALLET_SECRET_SALT required when TEE_MODE is enabled");
+        elizaLogger.error(
+            "WALLET_SECRET_SALT required when TEE_MODE is enabled"
+        );
         throw new Error("Invalid TEE configuration");
     }
+
+    const goatPlugin = await createGoatPlugin((secret) =>
+        getSecret(character, secret)
+    );
 
     return new AgentRuntime({
         databaseAdapter: db,
@@ -415,7 +421,12 @@ export function createAgent(
                 : null,
             ...(getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY")
-                ? [coinbaseMassPaymentsPlugin, tradePlugin, tokenContractPlugin, advancedTradePlugin]
+                ? [
+                      coinbaseMassPaymentsPlugin,
+                      tradePlugin,
+                      tokenContractPlugin,
+                      advancedTradePlugin,
+                  ]
                 : []),
             ...(teeMode !== TEEMode.OFF && walletSecretSalt
                 ? [teePlugin, solanaPlugin]
@@ -471,7 +482,7 @@ async function startAgent(character: Character, directClient) {
         await db.init();
 
         const cache = intializeDbCache(character, db);
-        const runtime = createAgent(character, db, cache, token);
+        const runtime = await createAgent(character, db, cache, token);
 
         await runtime.initialize();
 
