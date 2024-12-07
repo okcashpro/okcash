@@ -93,6 +93,11 @@ export class TransferAction {
             modelClass: ModelClass.SMALL,
         });
 
+        // Convert array to object
+        if (Array.isArray(content)) {
+            content = content[content.length - 1];
+        }
+
         // Validate transfer content
         if (!isTransferContent(runtime, content)) {
             elizaLogger.error("Invalid content for SEND_COIN action.");
