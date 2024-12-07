@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Character
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Character
 
 # Type Alias: Character
 
@@ -212,6 +212,36 @@ Optional configuration
 
 > `optional` **url**: `string`
 
+### settings.voice.elevenlabs?
+
+> `optional` **elevenlabs**: `object`
+
+### settings.voice.elevenlabs.voiceId
+
+> **voiceId**: `string`
+
+New structured ElevenLabs config
+
+### settings.voice.elevenlabs.model?
+
+> `optional` **model**: `string`
+
+### settings.voice.elevenlabs.stability?
+
+> `optional` **stability**: `string`
+
+### settings.voice.elevenlabs.similarityBoost?
+
+> `optional` **similarityBoost**: `string`
+
+### settings.voice.elevenlabs.style?
+
+> `optional` **style**: `string`
+
+### settings.voice.elevenlabs.useSpeakerBoost?
+
+> `optional` **useSpeakerBoost**: `string`
+
 ### settings.model?
 
 > `optional` **model**: `string`
@@ -312,4 +342,4 @@ Optional Twitter profile
 
 ## Defined in
 
-[packages/core/src/types.ts:601](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L601)
+[packages/core/src/types.ts:609](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L609)

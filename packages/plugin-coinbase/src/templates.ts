@@ -49,7 +49,7 @@ Here are the recent user messages for context:
 export const transferTemplate = `
 Extract the following details for processing a mass payout using the Coinbase SDK:
 - **receivingAddresses** (array): A list of wallet addresses receiving the funds.
-- **transferAmount** (number): The amount to transfer to each address (in the smallest unit, e.g., Wei for ETH).
+- **transferAmount** (number): The amount to transfer to each address.
 - **assetId** (string): The asset ID to transfer (e.g., ETH, BTC).
 - **network** (string): The blockchain network to use. Allowed values are:
     static networks: {
@@ -81,7 +81,7 @@ Here are the recent user messages for context:
 export const tradeTemplate = `
 Extract the following details for processing a trade using the Coinbase SDK:
 - **network** (string): The blockchain network to use (e.g., base, sol, eth, arb, pol).
-- **amount** (number): The amount to trade (in the smallest unit, e.g., Wei for ETH).
+- **amount** (number): The amount to trade.
 - **sourceAsset** (string): The asset ID to trade from (must be one of: ETH, SOL, USDC, WETH, GWEI, LAMPORT).
 - **targetAsset** (string): The asset ID to trade to (must be one of: ETH, SOL, USDC, WETH, GWEI, LAMPORT).
 
@@ -99,6 +99,190 @@ Provide the details in the following JSON format:
     "sourceAsset": "<source_asset_id>",
     "targetAsset": "<target_asset_id>"
 }
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
+
+export const tokenContractTemplate = `
+Extract the following details for deploying a token contract using the Coinbase SDK:
+- **contractType** (string): The type of token contract to deploy (ERC20, ERC721, or ERC1155)
+- **name** (string): The name of the token
+- **symbol** (string): The symbol of the token
+- **network** (string): The blockchain network to deploy on (e.g., base, eth, arb, pol)
+- **baseURI** (string, optional): The base URI for token metadata (required for ERC721 and ERC1155)
+- **totalSupply** (number, optional): The total supply of tokens (only for ERC20)
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "contractType": "<contract_type>",
+    "name": "<token_name>",
+    "symbol": "<token_symbol>",
+    "network": "<network>",
+    "baseURI": "<base_uri>",
+    "totalSupply": <total_supply>
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
+
+// Add to templates.ts
+export const contractInvocationTemplate = `
+Extract the following details for invoking a smart contract using the Coinbase SDK:
+- **contractAddress** (string): The address of the contract to invoke
+- **method** (string): The method to invoke on the contract
+- **abi** (array): The ABI of the contract
+- **args** (object, optional): The arguments to pass to the contract method
+- **amount** (number, optional): The amount of the asset to send to a payable contract method
+- **assetId** (string, optional): The ID of the asset to send to a payable contract method
+- **network** (string): The blockchain network to use (e.g., base, eth, arb, pol)
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "contractAddress": "<contract_address>",
+    "method": "<method_name>",
+    "abi": [<contract_abi>],
+    "args": {
+        "<arg_name>": "<arg_value>"
+    },
+    "amount": <amount>,
+    "assetId": "<asset_id>",
+    "network": "<network>"
+}
+\`\`\`
+
+Example for invoking a transfer method on an ERC20 token contract:
+
+\`\`\`json
+{
+    "contractAddress": "0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
+    "method": "transfer",
+    "abi": [
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "to",
+                    "type": "address"
+                },
+                {
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ],
+    "args": {
+        "to": "0xRecipientAddressHere",
+        "value": 1000
+    },
+    "network": "eth"
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
+
+export const webhookTemplate = `
+Extract the following details for creating a webhook:
+- **networkId** (string): The network ID for which the webhook is created.
+Allowed values are:
+    static networks: {
+        readonly BaseSepolia: "base-sepolia";
+        readonly BaseMainnet: "base-mainnet";
+        readonly EthereumHolesky: "ethereum-holesky";
+        readonly EthereumMainnet: "ethereum-mainnet";
+        readonly PolygonMainnet: "polygon-mainnet";
+        readonly SolanaDevnet: "solana-devnet";
+        readonly SolanaMainnet: "solana-mainnet";
+        readonly ArbitrumMainnet: "arbitrum-mainnet";
+    };
+- **eventType** (string): The type of event for the webhook.
+export declare const WebhookEventType: {
+    readonly Unspecified: "unspecified";
+    readonly Erc20Transfer: "erc20_transfer";
+    readonly Erc721Transfer: "erc721_transfer";
+    readonly WalletActivity: "wallet_activity";
+};
+- **eventTypeFilter** (string, optional): Filter for wallet activity event type.
+export interface WebhookEventTypeFilter {
+    /**
+     * A list of wallet addresses to filter on.
+     * @type {Array<string>}
+     * @memberof WebhookWalletActivityFilter
+     */
+    'addresses'?: Array<string>;
+    /**
+     * The ID of the wallet that owns the webhook.
+     * @type {string}
+     * @memberof WebhookWalletActivityFilter
+     */
+    'wallet_id'?: string;
+}
+- **eventFilters** (array, optional): Filters applied to the events that determine which specific events trigger the webhook.
+export interface Array<WebhookEventFilter> {
+    /**
+     * The onchain contract address of the token for which the events should be tracked.
+     * @type {string}
+     * @memberof WebhookEventFilter
+     */
+    'contract_address'?: string;
+    /**
+     * The onchain address of the sender. Set this filter to track all transfer events originating from your address.
+     * @type {string}
+     * @memberof WebhookEventFilter
+     */
+    'from_address'?: string;
+    /**
+     * The onchain address of the receiver. Set this filter to track all transfer events sent to your address.
+     * @type {string}
+     * @memberof WebhookEventFilter
+     */
+    'to_address'?: string;
+}
+Provide the details in the following JSON format:
+\`\`\`json
+{
+    "networkId": "<networkId>",
+    "eventType": "<eventType>",
+    "eventTypeFilter": "<eventTypeFilter>",
+    "eventFilters": [<eventFilter1>, <eventFilter2>]
+}
+\`\`\`
+
+
+
+Example for creating a webhook on the Sepolia testnet for ERC20 transfers originating from a specific wallet 0x1234567890123456789012345678901234567890 on transfers from 0xbcF7C64B880FA89a015970dC104E848d485f99A3
+
+\`\`\`javascript
+
+    networkId: 'base-sepolia', // Listening on sepolia testnet transactions
+    eventType: 'erc20_transfer',
+    eventTypeFilter: {
+      addresses: ['0x1234567890123456789012345678901234567890']
+    },
+    eventFilters: [{
+      from_address: '0xbcF7C64B880FA89a015970dC104E848d485f99A3',
+    }],
+});
 \`\`\`
 
 Here are the recent user messages for context:

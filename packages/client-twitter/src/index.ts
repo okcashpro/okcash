@@ -2,7 +2,7 @@ import { TwitterPostClient } from "./post.ts";
 import { TwitterSearchClient } from "./search.ts";
 import { TwitterInteractionClient } from "./interactions.ts";
 import { IAgentRuntime, Client, elizaLogger } from "@ai16z/eliza";
-import { validateTwitterConfig } from "./enviroment.ts";
+import { validateTwitterConfig } from "./environment.ts";
 import { ClientBase } from "./base.ts";
 
 class TwitterManager {

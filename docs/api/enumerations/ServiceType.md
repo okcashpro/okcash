@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / ServiceType
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / ServiceType
 
 # Enumeration: ServiceType
 
@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1121](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1121)
+[packages/core/src/types.ts:1138](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1138)
 
 ***
 
@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1122)
+[packages/core/src/types.ts:1139](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1139)
 
 ***
 
@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1123](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1123)
+[packages/core/src/types.ts:1140](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1140)
 
 ***
 
@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1124](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1124)
+[packages/core/src/types.ts:1141](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1141)
 
 ***
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1125)
+[packages/core/src/types.ts:1142](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1142)
 
 ***
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1126](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1126)
+[packages/core/src/types.ts:1143](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1143)
 
 ***
 
@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1127](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1127)
+[packages/core/src/types.ts:1144](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1144)
 
 ***
 
@@ -80,4 +80,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1128](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1128)
+[packages/core/src/types.ts:1145](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1145)

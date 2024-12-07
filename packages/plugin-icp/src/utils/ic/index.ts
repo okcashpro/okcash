@@ -2,8 +2,7 @@ import { getCrc32 } from "@dfinity/principal/lib/esm/utils/getCrc";
 import { sha224 } from "@dfinity/principal/lib/esm/utils/sha224";
 
 import { Principal } from "@dfinity/principal";
-import { array2hex, hex2array } from "../hex";
-import { string2array } from "../arrays";
+import { array2hex, hex2array, string2array } from "../arrays";
 
 // Principal -> string
 export const principal2string = (p: Principal): string => p.toText();

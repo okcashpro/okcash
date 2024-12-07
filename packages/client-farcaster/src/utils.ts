@@ -1,13 +1,12 @@
 import { stringToUuid } from "@ai16z/eliza";
-import type { Hex } from "viem";
 
 const MAX_CAST_LENGTH = 280; // Updated to Twitter's current character limit
 
-export function castId({ hash, agentId }: { hash: Hex; agentId: string }) {
+export function castId({ hash, agentId }: { hash: string; agentId: string }) {
     return `${hash}-${agentId}`;
 }
 
-export function castUuid(props: { hash: Hex; agentId: string }) {
+export function castUuid(props: { hash: string; agentId: string }) {
     return stringToUuid(castId(props));
 }
 
