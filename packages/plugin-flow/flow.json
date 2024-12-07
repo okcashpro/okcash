@@ -1,0 +1,395 @@
+{
+    "dependencies": {
+        "ArrayUtils": {
+            "source": "mainnet://a340dc0a4ec828ab.ArrayUtils",
+            "hash": "9e8f2d3e35be82da42b685045af834e16d23bcef1f322603ff91cedd1c9bbad9",
+            "aliases": {
+                "mainnet": "a340dc0a4ec828ab",
+                "testnet": "31ad40c07a2a9788"
+            }
+        },
+        "Burner": {
+            "source": "mainnet://f233dcee88fe0abe.Burner",
+            "hash": "71af18e227984cd434a3ad00bb2f3618b76482842bae920ee55662c37c8bf331",
+            "aliases": {
+                "emulator": "f8d6e0586b0a20c7",
+                "mainnet": "f233dcee88fe0abe",
+                "testnet": "9a0766d93b6608b7"
+            }
+        },
+        "CapabilityDelegator": {
+            "source": "mainnet://d8a7e05a7ac670c0.CapabilityDelegator",
+            "hash": "ad3bf8671a74a836b428da7840540c0ce419349be5f6410b18546e9a9217a9d2",
+            "aliases": {
+                "mainnet": "d8a7e05a7ac670c0",
+                "testnet": "294e44e1ec6993c6"
+            }
+        },
+        "CapabilityFactory": {
+            "source": "mainnet://d8a7e05a7ac670c0.CapabilityFactory",
+            "hash": "33d6b142c1db548a193cc06ff9828a24ca2ff8726301e292a8b6863dd0e1e73e",
+            "aliases": {
+                "mainnet": "d8a7e05a7ac670c0",
+                "testnet": "294e44e1ec6993c6"
+            }
+        },
+        "CapabilityFilter": {
+            "source": "mainnet://d8a7e05a7ac670c0.CapabilityFilter",
+            "hash": "77b59eb8245102a84a49d47a67e83eeeaafea920b120cdd6aa175d9ff120c388",
+            "aliases": {
+                "mainnet": "d8a7e05a7ac670c0",
+                "testnet": "294e44e1ec6993c6"
+            }
+        },
+        "CrossVMNFT": {
+            "source": "mainnet://1e4aa0b87d10b141.CrossVMNFT",
+            "hash": "a9e2ba34ecffda196c58f5c1439bc257d48d0c81457597eb58eb5f879dd95e5a",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "CrossVMToken": {
+            "source": "mainnet://1e4aa0b87d10b141.CrossVMToken",
+            "hash": "6d5c16804247ab9f1234b06383fa1bed42845211dba22582748abd434296650c",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "EVM": {
+            "source": "mainnet://e467b9dd11fa00df.EVM",
+            "hash": "5c69921fa06088b477e2758e122636b39d3d3eb5316807c206c5680d9ac74c7e",
+            "aliases": {
+                "emulator": "f8d6e0586b0a20c7",
+                "mainnet": "e467b9dd11fa00df",
+                "testnet": "8c5303eaa26202d6"
+            }
+        },
+        "FTViewUtils": {
+            "source": "mainnet://15a918087ab12d86.FTViewUtils",
+            "hash": "ef8343697ebcb455a835bc9f87b8060f574c3d968644de47f6613cebf05d7749",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
+        "FlowEVMBridge": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridge",
+            "hash": "83d4d1f7c715cfe7b1a65241e94ae4b8cb40e6ce135ce4c3981e4d39e59ba33e",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowEVMBridgeConfig": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeConfig",
+            "hash": "279513a6c107da2af4c847a42169f862ee67105e5a56512872fb6b9a9be3305d",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowEVMBridgeHandlerInterfaces": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeHandlerInterfaces",
+            "hash": "fcbcd095c8145acf6fd07c336d44502f2946e32f4a1bf7e9bd0772fdd1bea778",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowEVMBridgeNFTEscrow": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeNFTEscrow",
+            "hash": "ea7054bd06f978d09672ab2d6a1e7ad04df4b46410943088d555dd9ca6e64240",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowEVMBridgeTemplates": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeTemplates",
+            "hash": "8f27b22450f57522d93d3045038ac9b1935476f4216f57fe3bb82929c71d7aa6",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowEVMBridgeTokenEscrow": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeTokenEscrow",
+            "hash": "b5ec7c0a16e1c49004b2ed072c5eadc8c382e43351982b4a3050422f116b8f46",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowEVMBridgeUtils": {
+            "source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeUtils",
+            "hash": "cd17ed82ae6d6f708a8d022d4228e0b53d2349f7f330c18e9c45e777553d2173",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "FlowStorageFees": {
+            "source": "mainnet://e467b9dd11fa00df.FlowStorageFees",
+            "hash": "e38d8a95f6518b8ff46ce57dfa37b4b850b3638f33d16333096bc625b6d9b51a",
+            "aliases": {
+                "emulator": "f8d6e0586b0a20c7",
+                "mainnet": "e467b9dd11fa00df",
+                "testnet": "8c5303eaa26202d6"
+            }
+        },
+        "FlowToken": {
+            "source": "mainnet://1654653399040a61.FlowToken",
+            "hash": "cefb25fd19d9fc80ce02896267eb6157a6b0df7b1935caa8641421fe34c0e67a",
+            "aliases": {
+                "emulator": "0ae53cb6e3f42a79",
+                "mainnet": "1654653399040a61",
+                "testnet": "7e60df042a9c0868"
+            }
+        },
+        "FungibleToken": {
+            "source": "mainnet://f233dcee88fe0abe.FungibleToken",
+            "hash": "050328d01c6cde307fbe14960632666848d9b7ea4fef03ca8c0bbfb0f2884068",
+            "aliases": {
+                "emulator": "ee82856bf20e2aa6",
+                "mainnet": "f233dcee88fe0abe",
+                "testnet": "9a0766d93b6608b7"
+            }
+        },
+        "FungibleTokenMetadataViews": {
+            "source": "mainnet://f233dcee88fe0abe.FungibleTokenMetadataViews",
+            "hash": "dff704a6e3da83997ed48bcd244aaa3eac0733156759a37c76a58ab08863016a",
+            "aliases": {
+                "emulator": "ee82856bf20e2aa6",
+                "mainnet": "f233dcee88fe0abe",
+                "testnet": "9a0766d93b6608b7"
+            }
+        },
+        "HybridCustody": {
+            "source": "mainnet://d8a7e05a7ac670c0.HybridCustody",
+            "hash": "c8a129eec11c57ee25487fcce38efc54c3b12eb539ba61a52f4ee620173bb67b",
+            "aliases": {
+                "mainnet": "d8a7e05a7ac670c0",
+                "testnet": "294e44e1ec6993c6"
+            }
+        },
+        "IBridgePermissions": {
+            "source": "mainnet://1e4aa0b87d10b141.IBridgePermissions",
+            "hash": "431a51a6cca87773596f79832520b19499fe614297eaef347e49383f2ae809af",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "ICrossVM": {
+            "source": "mainnet://1e4aa0b87d10b141.ICrossVM",
+            "hash": "e14dcb25f974e216fd83afdc0d0f576ae7014988755a4777b06562ffb06537bc",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "ICrossVMAsset": {
+            "source": "mainnet://1e4aa0b87d10b141.ICrossVMAsset",
+            "hash": "aa1fbd979c9d7806ea8ea66311e2a4257c5a4051eef020524a0bda4d8048ed57",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "IEVMBridgeNFTMinter": {
+            "source": "mainnet://1e4aa0b87d10b141.IEVMBridgeNFTMinter",
+            "hash": "65ec734429c12b70cd97ad8ea2c2bc4986fab286744921ed139d9b45da92e77e",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "IEVMBridgeTokenMinter": {
+            "source": "mainnet://1e4aa0b87d10b141.IEVMBridgeTokenMinter",
+            "hash": "223adb675415984e9c163d15c5922b5c77dc5036bf6548d0b87afa27f4f0a9d9",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "IFlowEVMNFTBridge": {
+            "source": "mainnet://1e4aa0b87d10b141.IFlowEVMNFTBridge",
+            "hash": "3d5bfa663a7059edee8c51d95bc454adf37f17c6d32be18eb42134b550e537b3",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "IFlowEVMTokenBridge": {
+            "source": "mainnet://1e4aa0b87d10b141.IFlowEVMTokenBridge",
+            "hash": "573a038b1e9c26504f6aa32a091e88168591b7f93feeff9ac0343285488a8eb3",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "MetadataViews": {
+            "source": "mainnet://1d7e57aa55817448.MetadataViews",
+            "hash": "10a239cc26e825077de6c8b424409ae173e78e8391df62750b6ba19ffd048f51",
+            "aliases": {
+                "emulator": "f8d6e0586b0a20c7",
+                "mainnet": "1d7e57aa55817448",
+                "testnet": "631e88ae7f1d7c20"
+            }
+        },
+        "NonFungibleToken": {
+            "source": "mainnet://1d7e57aa55817448.NonFungibleToken",
+            "hash": "b63f10e00d1a814492822652dac7c0574428a200e4c26cb3c832c4829e2778f0",
+            "aliases": {
+                "emulator": "f8d6e0586b0a20c7",
+                "mainnet": "1d7e57aa55817448",
+                "testnet": "631e88ae7f1d7c20"
+            }
+        },
+        "OracleConfig": {
+            "source": "mainnet://cec15c814971c1dc.OracleConfig",
+            "hash": "48c252a858ce1c1fb44a377f338a4e558a70f1c22cecea9b7bf8cb74e9b16b79",
+            "aliases": {
+                "mainnet": "cec15c814971c1dc",
+                "testnet": "2a9b59c3e2b72ee0"
+            }
+        },
+        "OracleInterface": {
+            "source": "mainnet://cec15c814971c1dc.OracleInterface",
+            "hash": "1ca66227b60dcf59e9d84404398c8151b1ff6395408094669ef1251c78ca2465",
+            "aliases": {
+                "mainnet": "cec15c814971c1dc",
+                "testnet": "2a9b59c3e2b72ee0"
+            }
+        },
+        "PublicPriceOracle": {
+            "source": "mainnet://ec67451f8a58216a.PublicPriceOracle",
+            "hash": "3f0b75a98cc8a75835125421bcf602a3f278eaf94001bca7b7a8503b73cbc9a7",
+            "aliases": {
+                "mainnet": "ec67451f8a58216a",
+                "testnet": "8232ce4a3aff4e94"
+            }
+        },
+        "ScopedFTProviders": {
+            "source": "mainnet://a340dc0a4ec828ab.ScopedFTProviders",
+            "hash": "9a143138f5a5f51a5402715f7d84dbe363b5744be153ee09343aed71cf241c42",
+            "aliases": {
+                "mainnet": "a340dc0a4ec828ab",
+                "testnet": "31ad40c07a2a9788"
+            }
+        },
+        "Serialize": {
+            "source": "mainnet://1e4aa0b87d10b141.Serialize",
+            "hash": "d12a5957ab5352024bb08b281c4de4f9a88ecde74b159a7da0c69d0c8ca51589",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "SerializeMetadata": {
+            "source": "mainnet://1e4aa0b87d10b141.SerializeMetadata",
+            "hash": "eb7ec0ab5abfc66dd636c07a5ed2c7a65723a8d876842035bf9bebd6b0060e3a",
+            "aliases": {
+                "mainnet": "1e4aa0b87d10b141",
+                "testnet": "dfc20aee650fcbdf"
+            }
+        },
+        "StableSwapFactory": {
+            "source": "mainnet://b063c16cac85dbd1.StableSwapFactory",
+            "hash": "46318aee6fd29616c8048c23210d4c4f5b172eb99a0ca911fbd849c831a52a0b",
+            "aliases": {
+                "mainnet": "b063c16cac85dbd1",
+                "testnet": "cbed4c301441ded2"
+            }
+        },
+        "StringUtils": {
+            "source": "mainnet://a340dc0a4ec828ab.StringUtils",
+            "hash": "b401c4b0f711344ed9cd02ff77c91e026f5dfbca6045f140b9ca9d4966707e83",
+            "aliases": {
+                "mainnet": "a340dc0a4ec828ab",
+                "testnet": "31ad40c07a2a9788"
+            }
+        },
+        "SwapConfig": {
+            "source": "mainnet://b78ef7afa52ff906.SwapConfig",
+            "hash": "ccafdb89804887e4e39a9b8fdff5c0ff0d0743505282f2a8ecf86c964e691c82",
+            "aliases": {
+                "mainnet": "b78ef7afa52ff906",
+                "testnet": "ddb929038d45d4b3"
+            }
+        },
+        "SwapError": {
+            "source": "mainnet://b78ef7afa52ff906.SwapError",
+            "hash": "7d13a652a1308af387513e35c08b4f9a7389a927bddf08431687a846e4c67f21",
+            "aliases": {
+                "mainnet": "b78ef7afa52ff906",
+                "testnet": "ddb929038d45d4b3"
+            }
+        },
+        "SwapFactory": {
+            "source": "mainnet://b063c16cac85dbd1.SwapFactory",
+            "hash": "6d319e77f5eed0c49c960b1ef887c01dd7c2cce8a0b39f7e31fb2af0113eedc5",
+            "aliases": {
+                "mainnet": "b063c16cac85dbd1",
+                "testnet": "cbed4c301441ded2"
+            }
+        },
+        "SwapInterfaces": {
+            "source": "mainnet://b78ef7afa52ff906.SwapInterfaces",
+            "hash": "570bb4b9c8da8e0caa8f428494db80779fb906a66cc1904c39a2b9f78b89c6fa",
+            "aliases": {
+                "mainnet": "b78ef7afa52ff906",
+                "testnet": "ddb929038d45d4b3"
+            }
+        },
+        "SwapPair": {
+            "source": "mainnet://ecbda466e7f191c7.SwapPair",
+            "hash": "69b99c4a8abc123a0a88b1c354f9da414a32e2f73194403e67e89d51713923c0",
+            "aliases": {
+                "mainnet": "ecbda466e7f191c7",
+                "testnet": "c20df20fabe06457"
+            }
+        },
+        "TokenList": {
+            "source": "mainnet://15a918087ab12d86.TokenList",
+            "hash": "ac9298cfdf02e785e92334858fab0f388e5a72136c3bc4d4ed7f2039ac152bd5",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
+        "ViewResolver": {
+            "source": "mainnet://1d7e57aa55817448.ViewResolver",
+            "hash": "374a1994046bac9f6228b4843cb32393ef40554df9bd9907a702d098a2987bde",
+            "aliases": {
+                "emulator": "f8d6e0586b0a20c7",
+                "mainnet": "1d7e57aa55817448",
+                "testnet": "631e88ae7f1d7c20"
+            }
+        },
+        "ViewResolvers": {
+            "source": "mainnet://15a918087ab12d86.ViewResolvers",
+            "hash": "37ef9b2a71c1b0daa031c261f731466fcbefad998590177c798b56b61a95489a",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
+        "stFlowToken": {
+            "source": "mainnet://d6f80565193ad727.stFlowToken",
+            "hash": "09b1350a55646fdee652fddf7927fc4b305da5a265cb1bd887e112d84fb5e2be",
+            "aliases": {
+                "mainnet": "d6f80565193ad727",
+                "testnet": "e45c64ecfe31e465"
+            }
+        }
+    },
+    "networks": {
+        "emulator": "127.0.0.1:3569",
+        "mainnet": "access.mainnet.nodes.onflow.org:9000",
+        "testing": "127.0.0.1:3569",
+        "testnet": "access.devnet.nodes.onflow.org:9000"
+    }
+}

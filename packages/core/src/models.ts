@@ -102,8 +102,8 @@ export const models: Models = {
         },
         model: {
             [ModelClass.SMALL]: "llama-3.1-8b-instant",
-            [ModelClass.MEDIUM]: "llama-3.1-70b-versatile",
-            [ModelClass.LARGE]: "llama-3.2-90b-text-preview",
+            [ModelClass.MEDIUM]: "llama-3.3-70b-versatile",
+            [ModelClass.LARGE]: "llama-3.2-90b-vision-preview",
             [ModelClass.EMBEDDING]: "llama-3.1-8b-instant",
         },
     },
@@ -179,10 +179,18 @@ export const models: Models = {
             temperature: 0.7,
         },
         model: {
-            [ModelClass.SMALL]: "gemini-1.5-flash-latest",
-            [ModelClass.MEDIUM]: "gemini-1.5-flash-latest",
-            [ModelClass.LARGE]: "gemini-1.5-pro-latest",
-            [ModelClass.EMBEDDING]: "text-embedding-004",
+            [ModelClass.SMALL]: settings.SMALL_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "gemini-1.5-flash-latest",
+            [ModelClass.MEDIUM]: settings.MEDIUM_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "gemini-1.5-flash-latest",
+            [ModelClass.LARGE]: settings.LARGE_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "gemini-1.5-pro-latest",
+            [ModelClass.EMBEDDING]: settings.EMBEDDING_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "text-embedding-004",
         },
     },
     [ModelProviderName.REDPILL]: {

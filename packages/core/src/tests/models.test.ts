@@ -28,7 +28,7 @@ describe("Model Provider Tests", () => {
 
     test("should retrieve the correct model for Groq LARGE", () => {
         const model = getModel(ModelProviderName.GROQ, ModelClass.LARGE);
-        expect(model).toBe("llama-3.2-90b-text-preview");
+        expect(model).toBe("llama-3.2-90b-vision-preview");
     });
 
     test("should retrieve the correct model for OpenRouter SMALL", () => {

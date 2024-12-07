@@ -1,8 +1,6 @@
-import { CastId, FarcasterNetwork, Signer } from "@farcaster/hub-nodejs";
-import { CastType, makeCastAdd } from "@farcaster/hub-nodejs";
 import type { FarcasterClient } from "./client";
 import type { Content, IAgentRuntime, Memory, UUID } from "@ai16z/eliza";
-import type { Cast, Profile } from "./types";
+import type { Cast, CastId, Profile } from "./types";
 import { createCastMemory } from "./memory";
 import { splitPostContent } from "./utils";
 
@@ -12,7 +10,6 @@ export async function sendCast({
     content,
     roomId,
     inReplyTo,
-    signer,
     profile,
 }: {
     profile: Profile;
@@ -20,7 +17,7 @@ export async function sendCast({
     runtime: IAgentRuntime;
     content: Content;
     roomId: UUID;
-    signer: Signer;
+    signerUuid: string;
     inReplyTo?: CastId;
 }): Promise<{ memory: Memory; cast: Cast }[]> {
     const chunks = splitPostContent(content.text);
@@ -28,43 +25,25 @@ export async function sendCast({
     let parentCastId = inReplyTo;
 
     for (const chunk of chunks) {
-        const castAddMessageResult = await makeCastAdd(
-            {
-                text: chunk,
-                embeds: [],
-                embedsDeprecated: [],
-                mentions: [],
-                mentionsPositions: [],
-                type: CastType.CAST, // TODO: check CastType.LONG_CAST
-                parentCastId,
-            },
-            {
-                fid: profile.fid,
-                network: FarcasterNetwork.MAINNET,
-            },
-            signer
-        );
+        const neynarCast = await client.publishCast(chunk, parentCastId);
 
-        if (castAddMessageResult.isErr()) {
-            throw castAddMessageResult.error;
+        if (neynarCast) {
+            const cast: Cast = {
+                hash: neynarCast.hash,
+                authorFid: neynarCast.authorFid,
+                text: neynarCast.text,
+                profile,
+                inReplyTo: parentCastId,
+                timestamp: new Date(),
+            };
+
+            sent.push(cast!);
+
+            parentCastId = {
+                fid: neynarCast?.authorFid!,
+                hash: neynarCast?.hash!,
+            };
         }
-
-        await client.submitMessage(castAddMessageResult.value);
-
-        const cast = await client.loadCastFromMessage(
-            castAddMessageResult.value
-        );
-
-        sent.push(cast);
-
-        parentCastId = {
-            fid: cast.profile.fid,
-            hash: cast.message.hash,
-        };
-
-        // TODO: check rate limiting
-        // Wait a bit between tweets to avoid rate limiting issues
-        // await wait(1000, 2000);
     }
 
     return sent.map((cast) => ({

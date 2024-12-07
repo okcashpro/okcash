@@ -120,7 +120,7 @@ export const bridgeTransfer: Action = {
         const content = await generateObjectV2({
             runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
             schema: TransferSchema,
         });
 

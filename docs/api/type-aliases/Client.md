@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Client
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Client
 
 # Type Alias: Client
 
@@ -38,4 +38,4 @@ Stop client connection
 
 ## Defined in
 
-[packages/core/src/types.ts:561](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L561)
+[packages/core/src/types.ts:563](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L563)

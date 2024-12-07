@@ -144,7 +144,7 @@ async function generateParameters<TWalletClient extends WalletClient>(
     const { object } = await generateObjectV2({
         runtime,
         context,
-        modelClass: ModelClass.SMALL,
+        modelClass: ModelClass.LARGE,
         schema: tool.parameters,
     });
 
@@ -195,6 +195,6 @@ async function generateResponse(
     return generateText({
         runtime,
         context,
-        modelClass: ModelClass.SMALL,
+        modelClass: ModelClass.LARGE,
     });
 }
