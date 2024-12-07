@@ -36,6 +36,7 @@ import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
+import { zksyncEraPlugin } from "@ai16z/plugin-zksync-era";
 import { teePlugin } from "@ai16z/plugin-tee";
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -392,6 +393,7 @@ export function createAgent(
                 : []),
             getSecret(character, "WALLET_SECRET_SALT") ? teePlugin : null,
             getSecret(character, "ALCHEMY_API_KEY") ? goatPlugin : null,
+            getSecret(character, "ZKSYNC_PRIVATE_KEY") ? zksyncEraPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
