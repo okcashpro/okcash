@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.5-alpha.5](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.5) (2024-12-07)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.4...v0.1.5-alpha.5)
+
+**Merged pull requests:**
+
+- feat: working farcaster client with neynar [\#570](https://github.com/ai16z/eliza/pull/570) ([sayangel](https://github.com/sayangel))
+
 ## [v0.1.5-alpha.4](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.4) (2024-12-06)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.3...v0.1.5-alpha.4)
