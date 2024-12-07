@@ -6,7 +6,7 @@
 
 <div align="center">
 
-  📖 [문서](https://ai16z.github.io/eliza/) | 🎯 [예시](https://github.com/thejoven/awesome-eliza)
+  📖 [문서](https://okcashpro.github.io/okai/) | 🎯 [예시](https://github.com/thejoven/awesome-eliza)
 
 </div>
 
@@ -49,7 +49,7 @@ cp .env.example .env
 pnpm i && pnpm start
 ```
 
-[문서](https://ai16z.github.io/eliza/)를 참고하여 Eliza를 커스마이징 방법을 확인하세요.
+[문서](https://okcashpro.github.io/okai/)를 참고하여 Eliza를 커스마이징 방법을 확인하세요.
 
 ### 직접 실행하기 (경험자만 권장)
 

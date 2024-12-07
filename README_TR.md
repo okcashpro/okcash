@@ -6,7 +6,7 @@
 
 <div align="center">
 
-  📖 [Dokümantasyon](https://ai16z.github.io/eliza/) | 🎯 [Örnekler](https://github.com/thejoven/awesome-eliza)
+  📖 [Dokümantasyon](https://okcashpro.github.io/okai/) | 🎯 [Örnekler](https://github.com/thejoven/awesome-eliza)
 
 </div>
 

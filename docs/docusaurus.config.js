@@ -4,7 +4,7 @@ const config = {
   title: "eliza",
   tagline: "Flexible, scalable AI agents for everyone",
   favicon: "img/favicon.ico",
-  url: "https://ai16z.github.io",
+  url: "https://okcashpro.github.io",
   baseUrl: "/eliza/",
   organizationName: "ai16z",
   projectName: "eliza",

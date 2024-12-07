@@ -284,6 +284,6 @@ Once you have your agent running, explore:
 3. ⚡ [Add Custom Actions](./core/actions.md)
 4. 🔧 [Advanced Configuration](./guides/configuration.md)
 
-For detailed API documentation, troubleshooting, and advanced features, check out our [full documentation](https://ai16z.github.io/eliza/).
+For detailed API documentation, troubleshooting, and advanced features, check out our [full documentation](https://okcashpro.github.io/okai/).
 
 Join our [Discord community](https://discord.gg/ai16z) for support and updates!
