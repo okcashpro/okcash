@@ -48,8 +48,6 @@ export class FarcasterPostManager {
         elizaLogger.info("Generating new cast");
         try {
             const fid = Number(this.runtime.getSetting("FARCASTER_FID")!);
-            // const farcasterUserName =
-            //     this.runtime.getSetting("FARCASTER_USERNAME")!;
 
             const profile = await this.client.getProfile(fid);
             await this.runtime.ensureUserExists(
@@ -86,7 +84,7 @@ export class FarcasterPostManager {
                 }
             );
 
-            // Generate new tweet
+            // Generate new cast
             const context = composeContext({
                 state,
                 template:
@@ -105,6 +103,7 @@ export class FarcasterPostManager {
             const contentLength = 240;
 
             let content = slice.slice(0, contentLength);
+
             // if its bigger than 280, delete the last line
             if (content.length > 280) {
                 content = content.slice(0, content.lastIndexOf("\n"));
@@ -121,11 +120,9 @@ export class FarcasterPostManager {
             }
 
             try {
-                // TODO: handle all the casts?
                 const [{ cast }] = await sendCast({
                     client: this.client,
                     runtime: this.runtime,
-                    //: this.signer,
                     signerUuid: this.signerUuid,
                     roomId: generateRoomId,
                     content: { text: content },
