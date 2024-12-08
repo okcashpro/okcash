@@ -719,7 +719,7 @@ export const EchoChamberClientInterface: Client = {
         }
     },
 
-    async stop(runtime: IAgentRuntime) {
+    async stop(_runtime: IAgentRuntime) {
         try {
             elizaLogger.warn("Stopping EchoChambers client...");
             // TODO: Stop clients
