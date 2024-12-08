@@ -15,7 +15,7 @@ import {
     Memory,
     ModelClass,
     State,
-    generateObject,
+    generateObjectDEPRECATED,
     composeContext,
     type Action,
 } from "@ai16z/eliza";
@@ -262,8 +262,8 @@ Example response:
 Given the recent messages, extract or generate (come up with if not included) the following information about the requested token creation:
 - Token name
 - Token symbol
-- Token description 
-- Token image description 
+- Token description
+- Token image description
 - Amount of SOL to buy
 
 Respond with a JSON markdown block containing only the extracted values.`;
@@ -302,7 +302,7 @@ export default {
             template: pumpfunTemplate,
         });
 
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: pumpContext,
             modelClass: ModelClass.LARGE,
@@ -325,7 +325,7 @@ export default {
                         height: 512,
                         count: 1
                     }, runtime);
-        
+
                     if (imageResult.success && imageResult.data && imageResult.data.length > 0) {
                         // Remove the "data:image/png;base64," prefix if present
                         tokenMetadata.file = imageResult.data[0].replace(/^data:image\/[a-z]+;base64,/, '');

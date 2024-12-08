@@ -690,7 +690,7 @@ export async function generateTextArray({
     }
 }
 
-export async function generateObject({
+export async function generateObjectDEPRECATED({
     runtime,
     context,
     modelClass,
@@ -700,7 +700,7 @@ export async function generateObject({
     modelClass: string;
 }): Promise<any> {
     if (!context) {
-        elizaLogger.error("generateObject context is empty");
+        elizaLogger.error("generateObjectDEPRECATED context is empty");
         return null;
     }
     let retryDelay = 1000;
@@ -1129,7 +1129,7 @@ export const generateObjectV2 = async ({
     mode = "json",
 }: GenerationOptions): Promise<GenerateObjectResult<unknown>> => {
     if (!context) {
-        const errorMessage = "generateObject context is empty";
+        const errorMessage = "generateObjectV2 context is empty";
         console.error(errorMessage);
         throw new Error(errorMessage);
     }
@@ -1222,7 +1222,7 @@ export async function handleProvider(
         case ModelProviderName.GROQ:
             return await handleGroq(options);
         case ModelProviderName.LLAMALOCAL:
-            return await generateObject({
+            return await generateObjectDEPRECATED({
                 runtime,
                 context,
                 modelClass,
