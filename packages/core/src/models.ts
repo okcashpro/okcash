@@ -101,10 +101,10 @@ export const models: Models = {
             temperature: 0.7,
         },
         model: {
-            [ModelClass.SMALL]: "llama-3.1-8b-instant",
-            [ModelClass.MEDIUM]: "llama-3.3-70b-versatile",
-            [ModelClass.LARGE]: "llama-3.2-90b-vision-preview",
-            [ModelClass.EMBEDDING]: "llama-3.1-8b-instant",
+            [ModelClass.SMALL]: settings.SMALL_GROQ_MODEL || "llama-3.1-8b-instant",
+            [ModelClass.MEDIUM]: settings.MEDIUM_GROQ_MODEL || "llama-3.3-70b-versatile",
+            [ModelClass.LARGE]: settings.LARGE_GROQ_MODEL || "llama-3.2-90b-vision-preview",
+            [ModelClass.EMBEDDING]: settings.EMBEDDING_GROQ_MODEL || "llama-3.1-8b-instant",
         },
     },
     [ModelProviderName.LLAMACLOUD]: {
