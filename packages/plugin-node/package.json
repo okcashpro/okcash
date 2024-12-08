@@ -1,6 +1,6 @@
 {
     "name": "@okcashpro/plugin-node",
-    "version": "0.1.5-alpha.5",
+    "version": "0.1.5-alpha.6",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
@@ -12,12 +12,12 @@
         "tsup.config.ts"
     ],
     "dependencies": {
-        "@okcashpro/okai": "workspace:*",
         "@cliqz/adblocker-playwright": "1.34.0",
         "@echogarden/espeak-ng-emscripten": "0.3.3",
         "@echogarden/kissfft-wasm": "0.2.0",
         "@echogarden/speex-resampler-wasm": "0.2.1",
         "@huggingface/transformers": "3.0.2",
+        "@okcashpro/okai": "workspace:*",
         "@opendocsg/pdf2md": "0.1.32",
         "@types/uuid": "10.0.0",
         "alawmulaw": "6.0.0",

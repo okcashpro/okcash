@@ -1,13 +1,13 @@
 {
     "name": "@okcashpro/client-github",
-    "version": "0.1.5-alpha.5",
+    "version": "0.1.5-alpha.6",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@okcashpro/okai": "workspace:*",
         "@octokit/rest": "20.1.1",
         "@octokit/types": "12.6.0",
+        "@okcashpro/okai": "workspace:*",
         "glob": "10.4.5",
         "simple-git": "3.27.0"
     },
