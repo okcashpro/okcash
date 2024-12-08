@@ -141,7 +141,7 @@ export class FarcasterPostManager {
                     roomId
                 );
 
-                elizaLogger.info(`%c  [Farcaster Neynar Client] Published cast ${cast.hash}`);
+                elizaLogger.info(`[Farcaster Neynar Client] Published cast ${cast.hash}`);
 
                 await this.runtime.messageManager.createMemory(
                     createCastMemory({
