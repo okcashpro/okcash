@@ -144,10 +144,7 @@ export class FarcasterPostManager {
                     roomId
                 );
 
-                console.log(
-                    `%c  [Farcaster Neynar Client] Published cast ${cast.hash}`,
-                    "color: #8565cb;"
-                );
+                elizaLogger.info(`%c  [Farcaster Neynar Client] Published cast ${cast.hash}`);
 
                 await this.runtime.messageManager.createMemory(
                     createCastMemory({

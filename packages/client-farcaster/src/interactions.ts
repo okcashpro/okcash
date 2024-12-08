@@ -5,6 +5,7 @@ import {
     Memory,
     ModelClass,
     stringToUuid,
+    elizaLogger,
     type IAgentRuntime,
 } from "@ai16z/eliza";
 import type { FarcasterClient } from "./client";
@@ -34,7 +35,7 @@ export class FarcasterInteractionManager {
             try {
                 await this.handleInteractions();
             } catch (error) {
-                console.error(error);
+                elizaLogger.error(error)
                 return;
             }
 
@@ -122,12 +123,12 @@ export class FarcasterInteractionManager {
         thread: Cast[]
     }) {
         if (cast.profile.fid === agent.fid) {
-            console.log("skipping cast from bot itself", cast.hash);
+            elizaLogger.info("skipping cast from bot itself", cast.hash)
             return;
         }
 
         if (!memory.content.text) {
-            console.log("skipping cast with no text", cast.hash);
+            elizaLogger.info("skipping cast with no text", cast.hash);
             return { text: "", action: "IGNORE" };
         }
 
@@ -183,7 +184,7 @@ export class FarcasterInteractionManager {
         });
 
         if (!shouldRespond) {
-            console.log("Not responding to message");
+            elizaLogger.info("Not responding to message");
             return { text: "", action: "IGNORE" };
         }
 
@@ -207,7 +208,7 @@ export class FarcasterInteractionManager {
         if (!response.text) return;
 
         try {
-            console.log(`Replying to cast ${cast.hash}.`);
+            elizaLogger.info(`Replying to cast ${cast.hash}.`);
 
             const results = await sendCast({
                 runtime: this.runtime,
@@ -236,7 +237,7 @@ export class FarcasterInteractionManager {
                 newState
             );
         } catch (error) {
-            console.error(`Error sending response cast: ${error}`);
+            elizaLogger.error(`Error sending response cast: ${error}`);
         }
     }
 }
