@@ -135,15 +135,15 @@ export async function appendTradeToCsv(tradeResult: any) {
 async function hasEnoughBalance(client: RESTClient, currency: string, amount: number, side: string): Promise<boolean> {
     try {
         const response = await client.listAccounts({});
-        const accounts = response;
-        elizaLogger.info("Accounts:", JSON.parse(accounts));
+        const accounts = JSON.parse(response);
+        elizaLogger.info("Accounts:", accounts);
         const checkCurrency = side === "BUY" ? "USD" : currency;
         elizaLogger.info(`Checking balance for ${side} order of ${amount} ${checkCurrency}`);
 
         // Find account with exact currency match
-        const account = JSON.parse(accounts)?.accounts.find(acc =>
-            acc.currency === "USD" &&
-            ("USD" === "USD" ? acc.type === "ACCOUNT_TYPE_FIAT" : acc.type === "ACCOUNT_TYPE_CRYPTO")
+        const account = accounts?.accounts.find(acc =>
+            acc.currency === checkCurrency &&
+            (checkCurrency === "USD" ? acc.type === "ACCOUNT_TYPE_FIAT" : acc.type === "ACCOUNT_TYPE_CRYPTO")
         );
 
         if (!account) {
