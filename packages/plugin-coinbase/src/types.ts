@@ -59,7 +59,7 @@ export const TradeSchema = z.object({
     amount: z.number(),
     sourceAsset: z.enum(assetValues),
     targetAsset: z.enum(assetValues),
-    leverage: z.number().optional(), // Optional leverage for leveraged trades
+    side: z.enum(["BUY", "SELL"]),
 });
 
 export interface TradeContent {
@@ -67,6 +67,8 @@ export interface TradeContent {
     amount: number;
     sourceAsset: string;
     targetAsset: string;
+    side: "BUY" | "SELL";
+
 }
 
 export const isTradeContent = (object: any): object is TradeContent => {
@@ -153,4 +155,24 @@ export type WebhookContent = z.infer<typeof WebhookSchema>;
 
 export const isWebhookContent = (object: any): object is WebhookContent => {
     return WebhookSchema.safeParse(object).success;
+};
+
+export const AdvancedTradeSchema = z.object({
+    productId: z.string(),
+    side: z.enum(["BUY", "SELL"]),
+    amount: z.number(),
+    orderType: z.enum(["MARKET", "LIMIT"]),
+    limitPrice: z.number().optional(),
+});
+
+export interface AdvancedTradeContent {
+    productId: string;
+    side: "BUY" | "SELL";
+    amount: number;
+    orderType: "MARKET" | "LIMIT";
+    limitPrice?: number;
+}
+
+export const isAdvancedTradeContent = (object: any): object is AdvancedTradeContent => {
+    return AdvancedTradeSchema.safeParse(object).success;
 };

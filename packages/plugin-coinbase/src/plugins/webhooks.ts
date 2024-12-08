@@ -15,6 +15,7 @@ import {
 import { WebhookSchema, isWebhookContent, WebhookContent } from "../types";
 import { webhookTemplate } from "../templates";
 import { appendWebhooksToCsv } from "../utils";
+
 export const webhookProvider: Provider = {
     get: async (runtime: IAgentRuntime, _message: Memory) => {
         try {
@@ -95,7 +96,7 @@ export const createWebhookAction: Action = {
             const webhookDetails = await generateObjectV2({
                 runtime,
                 context,
-                modelClass: ModelClass.SMALL,
+                modelClass: ModelClass.LARGE,
                 schema: WebhookSchema,
             });
 
