@@ -340,18 +340,21 @@ export const invokeContractAction: Action = {
                 return;
             }
 
-            const { contractAddress, method, args, amount, assetId, network } =
+            const { contractAddress, method, args, amount, assetId, networkId } =
                 invocationDetails.object;
-
-            const wallet = await initializeWallet(runtime, network);
+            const wallet = await initializeWallet(runtime, networkId);
 
             // Prepare invocation options
             const invocationOptions = {
                 contractAddress,
                 method,
                 abi: ABI,
-                args,
-                ...(amount && assetId ? { amount, assetId } : {}),
+                args: {
+                    ...args,
+                    amount: args.amount || amount // Ensure amount is passed in args
+                },
+                networkId,
+                assetId
             };
             elizaLogger.log("Invocation options:", invocationOptions);
             // Invoke the contract
@@ -379,7 +382,7 @@ export const invokeContractAction: Action = {
                 [
                     contractAddress,
                     method,
-                    network,
+                    networkId,
                     invocation.getStatus(),
                     invocation.getTransactionLink() || "",
                     amount || "",
@@ -392,7 +395,7 @@ export const invokeContractAction: Action = {
                     text: `Contract method invoked successfully:
 - Contract Address: ${contractAddress}
 - Method: ${method}
-- Network: ${network}
+- Network: ${networkId}
 - Status: ${invocation.getStatus()}
 - Transaction URL: ${invocation.getTransactionLink() || "N/A"}
 ${amount ? `- Amount: ${amount}` : ""}
@@ -417,7 +420,7 @@ Contract invocation has been logged to the CSV file.`,
             {
                 user: "{{user1}}",
                 content: {
-                    text: " Call the 'transfer' method on my ERC20 token contract at 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b  with amount 100 to recepient 0xbcF7C64B880FA89a015970dC104E848d485f99A3",
+                    text: "Call the 'transfer' method on my ERC20 token contract at 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 with amount 100 to recepient 0xbcF7C64B880FA89a015970dC104E848d485f99A3",
                 },
             },
             {
