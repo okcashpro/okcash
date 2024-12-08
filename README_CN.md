@@ -1,4 +1,4 @@
-# OKai
+# OKai 🤖
 
 <img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
