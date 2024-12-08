@@ -119,6 +119,14 @@ export class FarcasterPostManager {
                 content = content.slice(0, content.lastIndexOf("."));
             }
 
+
+            if (this.runtime.getSetting("FARCASTER_DRY_RUN") === "true") {
+                elizaLogger.info(
+                    `Dry run: would have cast: ${content}`
+                );
+                return;
+            }
+
             try {
                 const [{ cast }] = await sendCast({
                     client: this.client,
