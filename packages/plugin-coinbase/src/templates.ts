@@ -323,3 +323,40 @@ Example for creating a webhook on the Sepolia testnet for ERC20 transfers origin
 Here are the recent user messages for context:
 {{recentMessages}}
 `;
+
+export const readContractTemplate = `
+Extract the following details for reading from a smart contract using the Coinbase SDK:
+- **contractAddress** (string): The address of the contract to read from
+- **method** (string): The view/pure method to call on the contract
+- **network** (string): The blockchain network to use (e.g., base, eth, arb, pol)
+- **args** (object, optional): The arguments to pass to the contract method
+
+Provide the details in the following JSON format:
+
+\`\`\`json
+{
+    "contractAddress": "<contract_address>",
+    "method": "<method_name>",
+    "network": "<network>",
+    "args": {
+        "<arg_name>": "<arg_value>"
+    }
+}
+\`\`\`
+
+Example for reading the balance of an ERC20 token:
+
+\`\`\`json
+{
+    "contractAddress": "0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
+    "method": "balanceOf",
+    "network": "eth",
+    "args": {
+        "account": "0xbcF7C64B880FA89a015970dC104E848d485f99A3"
+    }
+}
+\`\`\`
+
+Here are the recent user messages for context:
+{{recentMessages}}
+`;
