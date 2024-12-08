@@ -152,8 +152,6 @@ async function hasEnoughBalance(client: RESTClient, currency: string, amount: nu
         }
 
         const available = parseFloat(account.available_balance.value);
-        elizaLogger.info(`Available ${checkCurrency} balance: ${available}`);
-
         // Add buffer for fees only on USD purchases
         const requiredAmount = side === "BUY" ? amount * 1.01 : amount;
         elizaLogger.info(`Required amount (including buffer): ${requiredAmount} ${checkCurrency}`);
